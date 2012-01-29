@@ -1,0 +1,2 @@
+module TransactionTagsHelper
+end

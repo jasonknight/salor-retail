@@ -1,0 +1,11 @@
+<% form_tag do %>
+<%= label('from', t('.start_date')) %><br />
+  <%= select_date(@from, :prefix => 'from') %>
+  <br />
+  <%= label('to', t('.end_date')) %><br />
+  <%= select_date(@to, :prefix => 'to') %>
+  <br />
+  <div class="actions">
+    <%= submit_tag :export %>
+  </div>
+<% end %>

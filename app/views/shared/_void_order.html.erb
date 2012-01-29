@@ -1,0 +1,123 @@
+<script type="text/javascript">
+  var searchId = "";
+  $(document).ready(function () {
+      $('#general').show();
+      $('.link').mousedown(function () {
+          $('.active').removeClass('active');
+          $(this).addClass('active');
+          $('.form-container').hide();
+          $($(this).attr('href')).show();
+      });
+      $("#search_tab").mousedown(function(){
+        focusInput($("#void_order_id"));
+       }).mouseup(function () {
+         focusInput($("#void_order_id"));
+       });
+  });
+
+  function setSearchState() {
+    var btn = $("#search_button");
+    if ($("#void_order_id").val()) {
+      $(btn).removeClass("button-inactive").mousedown(function(){
+        fetch_order();
+      });
+      setOnEnterKey(function(){
+       fetch_order();
+      });
+    } else {
+      $(btn).addClass("button-inactive").unbind('click');
+      setOnEnterKey(function(){});
+    }
+  }
+
+  function fetch_order() {
+    var fetchId = $("#void_order_id").val();
+    $('#addition_link').trigger('mousedown');
+    if (fetchId == searchId) { // alread searched for this id
+
+    } else {
+      searchId = fetchId;
+      $("#iframe_msg").css("display", "block");
+      $(".order-iframe").css("display", "none");
+      $('.order-iframe').src('/orders/void?id=' + $('#void_order_id').val(), function(){
+        $("#iframe_msg").css("display", "none");
+        $(".order-iframe").css("display", "block");
+      });
+      //$('.order-iframe').attr('src','/orders/void?id=' + $('#void_order_id').val());
+      /*
+      $.ajax({
+        url: "/orders/void",
+        data: "id=" + $("#void_order_id").val(),
+        type: "get",
+        dataType: "html",
+        context: "#order_frame",
+        success: function(msg) {
+          clog(msg);
+          $("#order_frame").html(msg);
+        },
+        error: function() {
+          $("#order_frame").html("There was an error finding this order!");
+        }
+      });
+      */
+    }
+  }
+
+  function showVoidOrder() {
+    $('.void-order').show();
+    focusInput($('.void-order-input'));
+    setOnEscKey(function(){
+      hideVoidOrder();
+    });
+    $("#void_order_id").keyup(function() {
+      setSearchState();
+    });
+    setSearchState();
+    handleKeyboardEnter = false;
+    //bindFirstLetter("<%= I18n.t("menu.search") %>", function(){clog('search')}, true);
+  }
+
+  function hideVoidOrder() {
+    $('.void-order').hide();
+    focusInput($('#keyboard_input'));
+    unsetOnEnterKey();
+    unsetOnEscKey();
+    $("#void_order_id").unbind('keyup');
+    handleKeyboardEnter = true;
+    //unbindFirstLetter("<%= I18n.t("menu.search") %>", true);
+  }
+</script>
+<div class="void-order hidden">
+  <div class="general-form">
+    <div class="form-menu">
+        <div id="search_tab" class="link active" href="#general">
+        <%= t("menu.search") %>
+      </div>
+      <div id="addition_link" class="link" href="#additional">
+        <%= t("activerecord.attributes.order_id") %>
+      </div>
+    </div>
+    <div class="tab-container">
+      <div id="general" class="general-form-container form-container">
+        <div class="msgs hidden">
+
+        </div>
+        <div class="void-order-input-container">
+          <span class="label"><%= t("activerecord.attributes.order_id") %></span> <br />
+          <input id="void_order_id" type="text" class="void-order-input keyboardable-int" value="" />
+        </div>
+        <div class="clear">&nbsp;</div>
+
+      </div> <!-- end id=general -->
+      <div id="additional" class="additional-form-container form-container hidden">
+        <div id="iframe_msg" style="margin-top:25px;display:block"><%= I18n.t("views.single_words.searching") %> </div>
+        <iframe id="order_iframe" class="order-iframe" scrolling="auto" overflow="autoscroll"></iframe>
+      </div> <!-- end id=additional -->
+      <div class="button-row" align="right">
+            <div class="button-cancel" onmousedown="hideVoidOrder();"><%= I18n.t("helpers.submit.cancel") %></div>
+            <div class="spacer">&nbsp;</div>
+            <div id="search_button" class="button-confirm"><%= I18n.t("menu.search") %></div>
+        </div>
+    </div>
+  </div>
+</div>

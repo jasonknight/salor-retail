@@ -1,0 +1,48 @@
+<table align="center" width="100%">
+  <tr>
+    <td valign="top" align="center">
+      <%
+      if @location.new_record? then
+        url = ''
+      else
+        url = "/#{@location.id}"
+      end
+      f = nil
+      form_for(StockLocation.new) do |x|
+        f = x
+      end
+      %>
+      <form method="post" action="/stock_locations<%= url %>" accept-charset='utf-8'>
+      <div style="margin: 0pt; padding: 0pt; display: inline;">
+        <input type="hidden" value="✓" name="utf8" class="input" />
+        <% if not @location.new_record?  %>
+        <input type="hidden" value="put" name="_method" class="input" />
+        <% end %>
+        <input type="hidden" value="<%= form_authenticity_token %>" name="authenticity_token" class="input">
+      </div>
+        <% if @location.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @location.errors.count,:model => t("activerecord.models.stock_location.one"))%></h2>
+      
+            <ul>
+            <% @location.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.name") %><br />
+          <input type="text" name="location[name]" class="text-input keyboardable" value="<%= @location.name %>" />
+        </div>
+      
+
+          <input type="hidden" name="location[vendor_id]" class="hidden-input" value="<%= salor_user.meta.vendor_id %>" />
+        <div class="actions">
+          <br />
+          <input type="submit" name="submit" class="submit-input" value="<%= t("helpers.submit.submit") %>" />
+        </div>
+        </form>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,12 @@
+<% for store in GlobalData.vendors do %>
+	<li><%= link_to store.name,store %></a>
+		<ul>
+			<li><%= link_to t("menu.cash_register"),new_order_path(:vendor_id => store.id)%></a></li>
+			<li><%= link_to t("menu.categories"), categories_path(:vendor_id => store.id) %></li>
+			<li><%= link_to t("menu.locations"), locations_path(:vendor_id => store.id) %></li>	
+			<li><%= link_to t("menu.items"), items_path(:vendor_id => store.id) %></li>
+			<li><%= link_to t("menu.orders"), orders_path %></li>
+			<li><%= link_to t("menu.employees"), employees_path %></li>
+		</ul>
+	</li>
+<% end %>

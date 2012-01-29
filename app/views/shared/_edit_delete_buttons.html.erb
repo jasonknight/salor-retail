@@ -1,0 +1,11 @@
+<div class="edit-delete-row" align="right">
+  <div class="edit" onmousedown="window.location = '<%= edit_link %>';">
+    <%= I18n.t("menu.edit") %>
+  </div>
+  <div class="spacer">
+    &nbsp;
+  </div>
+  <div class="delete" onmousedown="confirm_link('<%= delete_link %>','<%= raw escape_javascript(I18n.t("menu.delete_confirm")) %>');">
+    <%= I18n.t("menu.delete") %>
+  </div>
+</div>

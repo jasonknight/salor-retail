@@ -1,0 +1,36 @@
+<%= raw content_box_top(I18n.t("headings.best_sellers"), {:width => '100%',:menu => false, :breadcrumb => false}, true) %>
+<table align="center" width="100%" class="stripe-me">
+        <thead>
+          <tr>
+            <th>
+              <%= I18n.t("activerecord.attributes.name") %>
+            </th>
+            <th align="right">
+              <%= I18n.t("activerecord.attributes.base_price") %>
+            </th>
+            <th align="right">
+              <%= I18n.t("activerecord.attributes.quantity") %>
+            </th>
+            <th align="right">
+              <%= I18n.t("activerecord.attributes.quantity_sold") %>
+            </th>
+          </tr>
+        </thead>
+          <% salor_user.best_sellers.each do |item| %>
+            <tr>
+              <td valign="top">
+                <%=  edit_me(:name,item,item.name,'',item.get_html_id) %>
+              </td>
+              <td valign="top" align="right">
+                <%=  edit_me(:base_price,item,salor_number_to_currency(item.base_price),'',item.get_html_id) %>
+              </td>
+              <td valign="top" align="right">
+                <%=  edit_me(:quantity,item,item.quantity,'',item.get_html_id) %>
+              </td>
+              <td valign="top" align="right">
+                <%=  edit_me(:quantity_sold,item,item.quantity_sold,'',item.get_html_id) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      <%= raw content_box_bottom %>

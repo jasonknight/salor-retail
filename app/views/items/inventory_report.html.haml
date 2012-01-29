@@ -1,0 +1,64 @@
+= raw content_box_top(I18n.t("headings.update_real_quantity"))
+
+- category_items = []
+
+- @categories.each do |c|
+  - category_items[c.id] = []
+  - category_items[0] = []
+
+- category_purchase_price_sum = []
+- category_selling_price_sum = []
+- @items.each do |i|
+  - cid = i.category_id.nil? ? 0 : i.category_id
+  - category_items[cid] << i
+  - category_purchase_price_sum[cid] ||= 0
+  - category_purchase_price_sum[cid] += i.purchase_price * i.real_quantity
+  - category_selling_price_sum[cid] ||= 0
+  - category_selling_price_sum[cid] += i.base_price * i.real_quantity
+
+%div.tools
+  %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
+    = salor_icon(:print, {}, 32)
+
+%div.report-container
+  %div
+    %img.right{ :src => '/images/salor-logo-reports.png'}
+    - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image
+      %img.left{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
+  %div.clear
+  %div
+    %h2= t '.title'
+    %h3= l DateTime.now, :format => :just_day
+
+    - (category_items.size - 1).times do |cid|
+      - next if category_items[cid].nil? or not category_items[cid].any?
+      - cat = Category.scopied.find_by_id(cid)
+      %h4= cat ? cat.name : t('.no_category')
+      %table{ :class => 'striped-table2 has-total' }
+        %tr
+          %th SKU
+          %th= t 'activerecord.attributes.name'
+          %th= t 'activerecord.attributes.quantity'
+          %th= t 'activerecord.attributes.real_quantity'
+          %th= t 'activerecord.attributes.purchase_price'
+          %th= t '.price'
+          %th= t '.total_buying_price'
+          %th= t '.total_selling_price'
+        - category_items[cid].each do |i|
+          %tr
+            %td= i.sku
+            %td= i.name
+            %td.right= i.quantity
+            %td.right= i.real_quantity
+            %td.right= number_to_currency i.purchase_price
+            %td.right= number_to_currency i.base_price
+            %td.right= number_to_currency i.purchase_price * i.real_quantity
+            %td.right= number_to_currency i.base_price * i.real_quantity
+
+        %tr.total
+          %td{ :colspan => 6 }
+          %td.right.colsum= number_to_currency category_purchase_price_sum[cid]
+          %td.right.colsum= number_to_currency category_selling_price_sum[cid]
+
+    %h4== #{ t '.subtotal_purchase_price' }: #{ number_to_currency category_purchase_price_sum.compact.sum }
+    %h4== #{ t '.subtotal_selling_price' }: #{ number_to_currency category_selling_price_sum.compact.sum }

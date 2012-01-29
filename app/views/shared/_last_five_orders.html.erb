@@ -1,0 +1,23 @@
+<div class="last-five-orders hidden">
+<% i = 49  %>
+<% x = 1 %>
+  <% Order.where(['vendor_id = ? and (paid IS NULL or paid = 0)',GlobalData.salor_user.meta.vendor_id]).order("id desc").limit(5).each do |order| %>
+  <%
+    color = order.get_owner.meta.color
+  %>
+  <div location="/orders/<%= order.id %>/edit" 
+         class="last-five-order pointer last-five-orders-<%= i %> <%= 'selected' if order.id == GlobalData.salor_user.meta.order_id %>" 
+         onmousedown="window.location = '/orders/<%= order.id %>/edit';"
+          style="background-color: <%= color %>;"
+         >
+    <script type="text/javascript">
+    
+    </script>
+    <%= image_tag('icons/' + icon(:order,32)) %><br />
+    <span class="id"><%= order.tag and order.tag.empty? ? "#{order.id} - #{order.get_owner.username}" : order.tag %></span> <br />
+    <span class="total"><%= salor_number_to_currency order.total %></span>
+  </div>
+    <% i = i + 1  %>
+    <% x = x + 1  %>
+  <% end %>
+</div>

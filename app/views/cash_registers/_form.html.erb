@@ -1,0 +1,74 @@
+<table align="center" width="100%">
+  <tr>
+    <td valign="top" align="center">
+      <%= form_for(@cash_register) do |f| %>
+        <% if @cash_register.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @cash_register.errors.count,:model => t("activerecord.models.cash_register.one"))%></h2>
+      
+            <ul>
+            <% @cash_register.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.name") %><br />
+          <%= f.text_field :name, :class => "keyboardable"%>
+          <%= f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id %>
+        </div>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.big_buttons") %><br />
+          <%= f.check_box :big_buttons %>
+        </div><br />
+        <div class="field">
+          <%= f.label t("activerecord.attributes.hide_discounts") %><br />
+          <%= f.check_box :hide_discounts %>
+        </div>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.no_print") %><br />
+          <%= f.check_box :no_print %>
+        </div>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.cash_drawer") %><br />
+          <%= f.text_field :cash_drawer_path, :class => "keyboardable"%>
+        </div>
+        <br />
+        <div class="field">
+          <%= f.label t("activerecord.attributes.thermal_printer") %><br />
+          <%= f.text_field :thermal_printer, :class => "keyboardable"%>
+        </div>
+        <br />
+        <div class="field">
+          <%= f.label t("activerecord.attributes.pole_display") %><br />
+          <%= f.text_field :pole_display, :class => "keyboardable"%>
+        </div>
+        <br />
+        <div class="field">
+          <%= f.label t("activerecord.attributes.customer_screen_blurb") %><br />
+          <%= f.text_field :customer_screen_blurb, :class => "keyboardable"%>
+        </div>
+        <br />
+        <div class="field">
+          <%= f.label t("activerecord.attributes.scale") %><br />
+          <%= f.text_field :scale, :class => "keyboardable"%>
+        </div>
+        <br />
+        <div class="field">
+          <%= f.label t("activerecord.attributes.bank_machine_path") %><br />
+          <%= f.text_field :bank_machine_path, :class => "keyboardable"%>
+        </div>
+        <br />
+        <h3><%= I18n.t("headings.bank_machine_types") %></h3>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.artema_hybrid") %><br />
+          <%= f.check_box :artema_hybrid %>
+        </div>
+        <div class="actions">
+          <%= f.submit %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+</table>

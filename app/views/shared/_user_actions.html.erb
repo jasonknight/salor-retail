@@ -1,0 +1,12 @@
+<div id="user_actions_div">
+	<div id="user_actions_list">
+	<ul>
+		<li><%= link_to t("menu.home"), "/" %></li>
+    <li><%= link_to t("menu.tax_profiles"), tax_profiles_path %></li>
+	  <li><%= link_to t("menu.vendors"), vendors_path %></li>
+	  <li><%= link_to t("menu.item_types"), item_types_path %></li>
+		<%= render "shared/stores_li"%>
+    
+	</ul>
+	</div>
+</div>

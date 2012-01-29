@@ -1,0 +1,56 @@
+<%
+  # we need to maintain certain params
+if params[:type] then
+  add_param(:type => params[:type]) if not params[:type].blank?
+end
+if params[:keywords] then
+  #add_param(:keywords => params[:keywords]) if not params[:keywords].blank?
+end
+%>
+<!DOCTYPE html>
+<html>
+<head>
+
+<%= salor_render :partial => 'shared/head'%>
+</head>
+<body id="modal_body">
+<%= salor_render :partial => "shared/notice" %>
+<div id="errors" class="errors hidden"></div>
+<div id="main" class='modal-main'>
+
+<div id="modal_main_content" class="modal-main-content">
+<%= yield %>    
+</div>
+
+<script type="text/javascript">
+$(function () {
+      $('.click-help').click(function (event) {
+          var url = $(this).attr('url');
+          var offset = {'top' : event.pageY, 'left' : event.pageX, 'position' : 'absolute'}
+          $('.help').css(offset);
+          get(url, 'modal.html.erb');
+      });
+});
+</script>
+<div class="help hidden"></div>
+<script type="text/javascript">
+function initErrors() {
+  $('.errors').show();
+  var back = $('<div style="float: left;"><%= image_tag "icons/" + icon(:back,32) %></div>');
+  var del = $('<div align="right"><%= image_tag "icons/" + icon(:delete,32) %></div>');
+  del.click(function () {
+      $(this).parent().hide();
+  });
+  back.click(function () {
+      history.go(-1);
+  });
+  $('.errors').append(back);
+  $('.errors').append(del);
+}
+$(function () {
+    <%= salor_render :partial => "shared/js/global_errors_js" %>
+});
+
+</script>
+</body>
+</html>

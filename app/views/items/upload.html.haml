@@ -1,0 +1,37 @@
+= raw content_box_top(t("views.upload_items"))
+
+%p= t('views.please_test_before_upload')
+
+%img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
+
+%h2 Format: Salor
+= form_tag '/items/upload', :multipart => true do |form|
+  = label_tag 'CSV'
+  = file_field_tag :file, :size => 15
+  %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
+
+%h2 Format: Danczek / Tobaccoland / Plattner / Moosmayer
+= form_tag '/items/upload_danczek_tobaccoland_plattner', :multipart => true do |form|
+  = label_tag 'CSV'
+  = file_field_tag :file, :size => 15
+  %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
+
+%h2 Format: House of Smoke / Dios
+= form_tag '/items/upload_house_of_smoke', :multipart => true do |form|
+  = label_tag 'CSV'
+  = file_field_tag :file, :size => 15
+  %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
+
+%h2 Format: Optimalsoft
+= form_tag '/items/upload_optimalsoft', :multipart => true do |form|
+  = label_tag 'PRD.OPT'
+  = file_field_tag :file, :size => 15
+  %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
+= form_tag '/customers/upload_optimalsoft', :multipart => true do |form|
+  = label_tag 'KNDN.OPT'
+  = file_field_tag :file, :size => 15
+  %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
+
+
+
+= raw content_box_bottom

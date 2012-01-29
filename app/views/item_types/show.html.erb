@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @item_type.name %>
+</p>
+
+<p>
+  <b>Behavior:</b>
+  <%= @item_type.behavior %>
+</p>
+
+
+<%= link_to 'Edit', edit_item_type_path(@item_type) %> |
+<%= link_to 'Back', item_types_path %>

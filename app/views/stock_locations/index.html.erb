@@ -1,0 +1,22 @@
+<%= raw content_box_top(t "views.stock_locations") %>
+  <div class="list master">
+    <% @locations.each do |location| %>
+    <%= render(:partial => "shared/edit_li_wide", :locals => {
+          :path => "/stock_locations/#{location.id}",
+          :image => icon(:location),
+          :text => location.name + "<br />(#{location.shipment_items.count})",
+          :edit_path => "/stock_locations/#{location.id}/edit",
+          :del_path => "/stock_locations/#{location.id}?method=delete"
+    }) %>
+    <% end %>    
+    <div class="widget master">
+      <div align="center">
+        <a href="<%= new_stock_location_path %>">
+          <img src="/images/icons/<%= icon(:add) %>" /><br />
+          <%= t "menu.new_stock_location" %>
+      	</a>
+      </div>
+    </div>
+  </div>
+  <!-- End ul.list -->
+<%= raw content_box_bottom %>

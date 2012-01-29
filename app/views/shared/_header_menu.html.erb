@@ -1,0 +1,74 @@
+<% cache('header_menu/'+user_cache_name) do -%>
+<div id="header" class="header">
+<ul class="header-list">
+  <li>
+    <div align="center" class="first">
+      <a href="/home/user_employee_index">
+        <img src="/images/salor-icon.png" /><br />
+      </a>
+    </div>
+  </li>
+  <li>
+    <div align="center" id="btn-vendors-index" class="">
+      <a href="<%= vendors_path %>">
+        <img src="/images/icons/<%= icon(:vendor,32) %>" /><br /><span class='icon-caption'><%= I18n.t("menu.home") %></span>
+      </a>
+    </div>
+  </li>
+  <% if salor_user.can(:index_items) %>
+  <li>
+    <div align="center" id="btn-items-index" class="">
+      <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => salor_user.meta.vendor_id) %>
+    </div>
+  </li>
+  <% end %>
+  <% if salor_user.can(:cashier) %>
+    <li>
+      <div align="center" class="no-touchy" onmousedown="show_cash_drop();">
+        <%= salor_icon(:cash_drop,{},32) %><br /><span class='icon-caption'><%= I18n.t("menu.cash_drop") %></span>
+      </div>
+    </li>
+  <% end %>
+  <% if salor_user.can(:index_orders) %>
+  <li>
+    <div align="center" id="btn-orders-new" class="">
+      <%= link_to salor_icon(:order,{},32), "/orders/new" %><br /><span class='icon-caption'><%= I18n.t("menu.pos") %></span>
+    </div>
+  </li>
+  <% end %>
+  <% if salor_user.can(:index_customers) %>
+  <li>
+    <div align="center" id="btn-customers-new" class="">
+      <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => salor_user.meta.vendor_id) %><br />
+    </div>
+  </li>
+  <% end %>
+  <li>
+    <div align="center">
+      <a href="/cash_registers/end_of_day">
+        <img src="/images/icons/<%= icon(:logout,32) %>" /><br /><span class='icon-caption'><%= I18n.t("system.logout") %></span>
+      </a>
+    </div>
+  </li>
+<% end -%>
+  <li >
+    <div id="clockbox" class="no-touchy">
+      <%= get_clock_content %>
+    </div>
+  </li>
+  </ul>
+<!-- End ul.list -->
+ <div class="close-window" onmousedown="Salor.shutdown();">
+    &nbsp;X &nbsp;
+  </div>
+<script type="text/javascript">
+	/* Select tab on menu bar */
+	$('#btn-' + params.controller + '-' + params.action).addClass('active');
+        /* Refresh clock */
+        setInterval(function(){ $('#clockbox').load('/home/load_clock'); return false; }, 31000);
+</script>
+<% if salor_user and not curl("orders#new") then  %>
+  <%= salor_render :partial => "shared/generic_search" %>
+<% end %>
+<span class="version">v<%= SalorBase::VERSION %></span>
+</div>

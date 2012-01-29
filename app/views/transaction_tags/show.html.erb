@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @transaction_tag.name %>
+</p>
+
+<p>
+  <b>Vendor:</b>
+  <%= @transaction_tag.vendor_id %>
+</p>
+
+<p>
+  <img src="/transaction_tags/<%= @transaction_tag.id %>/logo">
+</p>
+
+
+<%= link_to 'Edit', edit_transaction_tag_path(@transaction_tag) %> |
+<%= link_to 'Back', transaction_tags_path %>

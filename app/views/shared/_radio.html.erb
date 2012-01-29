@@ -1,0 +1,22 @@
+<%
+  rid = id + "-" + rand(999).to_s
+%>
+<script type="text/javascript">
+$(function () {
+    $('.<%= rid %>-div').each(function () {
+        if (!$(this).hasClass('radio-done')) {
+          $(this).mousedown(function () {
+              var elems = $('input:radio');
+              elems.filter('[name="<%= name %>"]').attr('checked',false).removeClass('radio-checked');
+              $('.<%= rid %>').attr('checked',true).addClass('radio-checked');
+          });
+          $(this).addClass('radio-done');
+        }
+    });
+});
+</script>
+<div align="center">
+  <div class="radio-button <%= rid %>-div" align="center">
+    <input id='<%= id %>' type="radio" name="<%= name %>" class="<%= cls %> secret-radio-cls <%= rid %>" value="<%= v %>" />
+  </div>
+</div>

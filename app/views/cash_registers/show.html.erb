@@ -1,0 +1,26 @@
+<%= raw content_box_top(t("views.cash_register_heading", :name => @cash_register.name, :store => @vendor.name)) %>
+
+<%= raw content_box_top(I18n.t("menu.orders"),{:width => '100%', :small => true}, :hideowner => true) %>
+<table align="center" width="100%" class="stripe-me middle-text">
+<% @orders.each do |order| %>
+  <tr>
+    <td valign="top">
+      <%= order.vendor.name %>
+    </td>
+    <td valign="top">
+      <%= order.employee_id ? order.employee.username : order.user.username %>
+    </td>
+    <td valign="top">
+      <%= I18n.t("views.order_number",:id => order.id) %>
+    </td>
+    <td><%= l(order.created_at,:format => :short) %></td>
+    <td align="right"><%= salor_number_to_currency order.total %></td>
+    <td align="right"><%= link_to image_tag('icons/' + icon(:show,32)), order %></td>
+    <td align="right"><%= link_to image_tag('icons/' + icon(:edit,32)), edit_order_path(order) %></td>
+    <td align="right"><%= link_to image_tag('icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<%= raw content_box_bottom %>
+
+<%= raw content_box_bottom %>

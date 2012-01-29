@@ -1,0 +1,49 @@
+<table class='items report-left striped-table2 has-total' width="100%">
+<h4><%= t Order.human_name %> <%= @order.id %></h4>
+<tr>
+<th class='tax_class left'><%=  I18n.t("reports.tax_class") %></th>
+<th class='description left'><%=  I18n.t("reports.description") %></th>
+<th class='unit_price center'><%=  I18n.t("reports.unit_price") %></th>
+<th class='amount center'><%=  I18n.t("reports.amount") %></th>
+<th class='total xxx center'><%=  I18n.t("reports.total") %></th>
+</tr>
+<%= raw @list_of_items %>
+<tr>
+<% if @order.lc_points? and not @order.refunded
+  @subtotal -= GlobalData.conf.dollar_per_lp * @order.lc_points %>
+  <p>Abzug: - <%= GlobalData.conf.dollar_per_lp * @order.lc_points %> (<%= @order.lc_points %> Punkte)</p>
+<% end %>
+
+<% if not @order.rebate.zero? or not @discount_subtotal.zero? or not @rebate_subtotal.zero? %>
+<p><%= "Zwischensumme                 EUR %8.2f" % @subtotal %></p><% end %>
+<% sum1 = @subtotal
+   if not @discount_subtotal.zero?
+   sum1 = sum1 + @discount_subtotal
+%>
+<p><%= "Preisnachlässe                EUR %8.2f" % @discount_subtotal %></p>
+<p><%= "Zwischensumme                 EUR %8.2f" % [sum1] %></p>
+<% end
+   if not @rebate_subtotal.zero?
+   sum2 = sum1 + @rebate_subtotal
+%>
+<p><%= "Einzelrabatte                 EUR %8.2f" % @rebate_subtotal %></p>
+<p><%= "Zwischensumme                 EUR %8.2f" % [sum2] %></p>
+<% end
+   if not @coupon_subtotal.zero?
+   sum3 = sum2 + @coupon_subtotal
+%>
+<p><%= "Gutscheine                EUR %8.2f" % @coupon_subtotal %></p>
+<p><%= "Zwischensumme                 EUR %8.2f" % [sum2] %></p>
+<% end
+   rebate = 0
+   if @order.rebate_type == 'percent' and not @order.rebate.zero?
+     rebate = - ( @subtotal + @discount_subtotal + @rebate_subtotal + @coupon_subtotal) * @order.rebate / 100 %>
+<p><%= "Rabatt %4.2f%%                 EUR %8.2f" % [ @order.rebate, rebate ] %></p>
+<% elsif @order.rebate_type == 'fixed' and not @order.rebate.zero?
+   rebate = - @order.rebate %>
+<p><%= "Rabatt Fixbetrag              EUR %8.2f" % rebate %></p>
+<% end %>
+<% order_subtotal = @subtotal + @discount_subtotal + @rebate_subtotal + @coupon_subtotal + rebate %>
+<tr><td colspan=4></td><td class='right'><%= I18n.t("reports.total").upcase %> <%= number_to_currency order_subtotal %></td></tr>
+</table>
+

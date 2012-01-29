@@ -1,0 +1,17 @@
+<% @text = raw(I18n.t("#{GlobalData.base_locale}.#{params[:key]}",:locale => :help))  %>
+var text = '';
+<% splitted = @text.split("\n")  %>
+<% if splitted then  %>
+  <% @text.split("\n").each do |line|  %>
+    text = text + "<%= raw line %>";
+  <% end %>
+<% else  %>
+text = "<%= raw @text %>";
+<% end %>
+$('.help').html(text);
+var del = $('<div align="right"><br /><br /><%= image_tag("icons/" + icon(:delete,16)) %></div>');
+    del.click(function () {
+        $(this).parent().hide();
+    });
+$('.help').append(del);
+$('.help').show();

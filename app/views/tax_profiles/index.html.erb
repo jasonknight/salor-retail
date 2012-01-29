@@ -1,0 +1,21 @@
+<%= raw content_box_top(t "menu.tax_profiles") %>
+<div class="list">
+  <% @tax_profiles.each do |tax_profile| %>
+  <%= render(:partial => "shared/edit_li_wide", :locals => {
+      :path => edit_tax_profile_path(tax_profile),
+      :image => icon(:tax_profile),
+      :text => tax_profile.name + '<br />' + tax_profile.value.to_s,
+      :edit_path => edit_tax_profile_path(tax_profile),
+      :del_path => tax_profile 
+    }) %>
+  <% end %>
+  <div class="widget master">
+      <div align="center">
+        <a href="<%= new_tax_profile_path %>">
+          <img src="/images/icons/<%= icon(:add) %>" /><br />
+          <%= t "menu.new_tax_profile" %>
+      	</a>
+      </div>
+    </div>
+</div>
+<%= raw content_box_bottom %>

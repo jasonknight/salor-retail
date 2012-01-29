@@ -1,0 +1,100 @@
+<% if not @items.any? and not @customers.any? and not @orders.any? then %>
+$("#search_results").html("<%= t("views.errors.nothing_found") %>");
+<% else  %>
+$("#search_results").html('<table id="results_table" width="100%"></table>');
+<% end %>
+
+<% if @items.any? then %>
+  $("#results_table").append("<thead><tr><th style='text-align:left'><%= raw I18n.t("views.name") %></th><th style='text-align:left'><%= raw I18n.t("activerecord.attributes.sku") %></th><th style='text-align:left'><%= raw I18n.t("activerecord.attributes.price") %></th><th></th></tr></thead>");
+  <% for item in @items %>
+    var row = $('<tr></tr>');
+    row.addClass('table-row');
+    var n = $('<td></td>');
+    n.addClass('table-cell name');
+    n.html("<%= item.name %>");
+  
+    var sku = $('<td></td>');
+    sku.addClass('table-cell sku');
+    sku.html("<%= item.sku %>");
+  
+    var base_price = $('<td></td>');
+    base_price.addClass('table-cell price');
+    base_price.html("<%= salor_number_to_currency(item.base_price) %>");
+  
+    var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" /></div></td>');
+    btn.mousedown(function () {
+      add_item('<%= item.sku %>');
+      $(this).mask("Bitte Warten");
+      $(this).addClass('masked');
+      setTimeout(function () {
+        $('.masked').unmask();
+        $('.masked').removeClass('masked');
+      },900);
+    });
+    btn.mouseup(function () {
+      $(this).removeClass('active-icon');
+    });
+    btn.addClass('table-cell btn');
+    row.append(n);
+    row.append(sku);
+    row.append(base_price);
+    row.append(btn);
+    $("#results_table").append(row);
+  <% end %>
+<% end %>
+
+<% if @customers.any? then %>
+  $("#results_table").append("<thead><tr><th style='text-align:left'><%= raw I18n.t("views.name") %></th><th style='text-align:left'><%= raw I18n.t("views.loyalty_card") %></th><th></th></tr></thead>");
+  <% for customer in @customers %>
+    var row = $('<tr></tr>');
+    row.addClass('table-row');
+    var cname = $('<td></td>');
+    cname.addClass('table-cell name');
+    cname.html("<%= customer.full_name %>");
+  
+    var sku = $('<td></td>');
+    sku.addClass('table-cell sku');
+    sku.html("<%= customer.loyalty_card.sku %>");
+  
+    var btn = $('<div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" onclick="add_item(\'<%= customer.loyalty_card.sku %>\');" /></div>');
+    btn.addClass('table-cell btn');
+    row.append(cname);
+    row.append(sku);
+    row.append(btn);
+    $("#results_table").append(row);
+  <% end %>
+<% end %>
+
+<% if @orders.any? then %>
+  $("#results_table").append("<thead><tr><th style='text-align:left'><%= raw I18n.t("menu.order") %> #</th><th><%= raw I18n.t("activerecord.attributes.not_paid") %></th><th style='text-align:left'><%= raw I18n.t("activerecord.attributes.tag") %></th><th></th></tr></thead>");
+  <% @orders.each do |order|  %>
+    var row = $('<tr></tr>');
+    row.addClass('table-row');
+    var oname = $('<td></td>');
+    oname.addClass('table-cell id');
+    oname.html("#<%= order.id %>");
+  
+    var notPaid = $('<td></td>');
+  
+    var sku = $('<td></td>');
+    sku.addClass('table-cell order-tag');
+    sku.html("<%= order.tag %>");
+  
+    <% if order.paid == 1 %>
+      notPaid.append(" ");
+      var btn = $('<td></td>');
+      
+    <% else %>
+      notPaid.append("*");
+      var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:edit,32) %>" onmousedown="window.location = \'/orders/new?order_id=<%= order.id %>\';" /></div></td>');
+    <% end %>
+    var btn2 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:printer,32) %>" onmousedown="print_order(\'<%= order.id %>\');" /></div></td>');
+    btn.addClass('table-cell btn');
+    row.append(oname);
+    row.append(notPaid);
+    row.append(sku);
+    row.append(btn);
+    row.append(btn2);
+    $("#results_table").append(row);
+  <% end %>
+<% end %>

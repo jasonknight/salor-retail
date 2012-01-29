@@ -1,0 +1,110 @@
+<%= raw content_box_top(@shipment.name) %>
+
+<div class='tools'>
+  <div class='print_report_button' onmousedown='Salor.printPage();'>
+    <%= salor_icon(:print, {}, 32) %>
+  </div>
+</div>
+
+<div class='shipments-edit-left'>
+      <span style="font-size: 1.6em;font-weight:bold;"> <%= @shipment.name %></span>
+      <div style="display:inline;"><img id='button-move-all-shipment-items' src='/images/icons/left_32.png' onclick="get('/shipments/move_all_to_items?id=<%= @shipment.id %>', 'show.html.erb')"></img></div>
+
+<div class='report-container'>
+  <div>
+    <img class='right' src='/images/salor-logo-reports.png'>
+    <% if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image %>
+      <img class=left src="/vendors/<%= GlobalData.salor_user.meta.vendor_id %>/logo_invoice">
+    <% end %>
+    <div class='clear'></div>
+  </div>
+
+<div class='shipments-edit-right'>
+  <p><strong><%= I18n.t("activerecord.attributes.price") %>:</strong> <%= raw edit_me(:price,@shipment,salor_number_to_currency(@shipment.price)) %></p>
+  <p><strong><%= I18n.t("activerecord.attributes.status") %>:</strong> <%= @shipment.shipment_type.name if @shipment.shipment_type %></p>
+      <% 
+      if @shipment.shipper then
+        shipper_name = @shipment.shipper.name
+      else
+        shipper_name = I18n.t("system.errors.value_not_set")
+      end
+      if @shipment.receiver then
+        receiver_name = @shipment.receiver.name
+      else
+        receiver_name = I18n.t("system.errors.value_not_set")
+      end
+      %>
+      <p><strong><%= I18n.t("views.single_words.from") %>:</strong> <%= edit_me(:the_shipper,@shipment,shipper_name) %></p>
+      <p><strong><%= I18n.t("views.single_words.to") %>:</strong> <%= edit_me(:the_receiver,@shipment,receiver_name) %></p>
+
+      <% if @shipment.notes.any? %>
+        <h2> <%= I18n.t("headings.notes") %> </h2>
+        <% @shipment.notes.each do |note|  %>
+          <div id="note-<%= note.id %>" class="note" align="left">
+            <span class="note-title"><%= note.title %></span><br />
+            <p class="note-body">
+              <%= note.body %>
+            </p>
+         </div>
+       <% end %>
+
+    <% end  %>
+</div>
+<div>
+
+<h3><%= I18n.t("headings.shipment_items") %></h3>
+
+<table class='shipments-edit'>
+<tr>
+<th><%= ShipmentItem.human_attribute_name(:name) %></th>
+<th><%= ShipmentItem.human_attribute_name(:sku) %></th>
+<th><%= ShipmentItem.human_attribute_name(:quantity) %></th>
+<th><%= Location.human_name %></th>
+<th><%= StockLocation.human_name %></th>
+</tr>
+
+          <% @shipment.shipment_items.scopied.each do |item|  %>
+            <tr>
+              <td valign="middle">
+                <%= raw edit_me(:name,item,'','','shipment_item_' + item.id.to_s + 'name') %>
+              </td>
+              <td valign="middle">
+                <%= raw edit_me(:sku,item,'','','shipment_item_' + item.id.to_s + 'sku') %>
+              </td>
+              <td valign="middle">
+                <%= raw edit_me(:quantity,item,'','','shipment_item_' + item.id.to_s + 'quantity') %>
+              </td>
+              <td valign="middle">
+                <% i = Item.scopied.find_by_sku(item.sku) %>
+                <% if item.in_stock %>
+                  <%= i.location.name if i and i.location %>
+                <% else %>
+                  <div align="center">
+                    <img id='button-move-item-<%= item.id %>' class='button-move-item' src='/images/icons/left_32.png' onclick="get('/shipments/move_shipment_item?id=<%= @shipment.id %>&shipment_item_id=<%= item.id %>', 'show.html.erb')"></img>
+                  </div>
+                <% end %>
+              </td>
+              <td valign="middle">
+                <% if not item.in_stock %>
+                  <span class="shipment_item_stock_locations" id="shipment_item_stock_location_<%= item.id %>"><%= item.stock_locations.last.name if item.stock_locations.last %></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+</table>
+        
+</div>
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+<%= raw content_box_bottom %>
+<%= salor_render :partial => "shared/in_place_edit" %>

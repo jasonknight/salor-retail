@@ -1,0 +1,41 @@
+<%= form_for(@configuration) do |f| %>
+  <% if @configuration.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @configuration.errors.count,:model => t("activerecord.models.configuration.one"))%></h2>
+
+      <ul>
+      <% @configuration.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label t("activerecord.models.vendor.one") %><br />
+    <%= f.text_field :vendor_id, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.lp_per_dollar") %><br />
+    <%= f.text_field :lp_per_dollar, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.dollar_per_lp") %><br />
+    <%= f.text_field :dollar_per_lp, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.address") %><br />
+    <%= f.text_area :address %>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.telephone") %><br />
+    <%= f.text_field :telephone, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.receipt_blurb") %><br />
+    <%= f.text_area :receipt_blurb %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

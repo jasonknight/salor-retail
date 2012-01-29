@@ -1,0 +1,10 @@
+<%= salor_render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items} %>
+<script type="text/javascript">
+  $(document).ready(function () {
+		$('.editme').click (function (event) {
+		  in_place_edit($(this).attr('id'),event.pageX, event.pageY);
+		  $(this).addClass('editmedone')
+		});
+		<%= salor_render :partial => "shared/update_pos_js" %>
+});
+</script>

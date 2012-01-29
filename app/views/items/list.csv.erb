@@ -1,0 +1,11 @@
+<% header = "sku;name;price;tax;sales_metric;weight;weight_metric;purchase_price;category" -%>
+<%= header %>
+<% @items.each do |i| -%>
+<%
+categoryname = i.category ? i.category.name : '-'
+tax = i.tax_profile ? i.tax_profile.value/100 : 0
+pp = i.purchase_price ? i.purchase_price : 0
+%>
+<% line = sprintf('%s;%s;%.2f;%.2f;%s;%.2f;%s;%.2f;%s', i.sku, i.name, i.base_price, tax, i.sales_metric, i.weight, i.weight_metric, pp, categoryname) %>
+<%= line %>
+<% end -%>

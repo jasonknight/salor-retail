@@ -1,0 +1,44 @@
+<script type="text/javascript">
+var ready_ran = false;
+$(document).ready(function () {
+
+  if (ready_ran == false) {
+
+    $('.toggle').each(function () {
+        make_toggle($(this));
+    });
+    $('.dt-tag-button').each(function () { make_dt_button($(this));});
+    $(".header-list").children("li").each(function () {
+        var div = $(this).children('div');
+        if (!div.hasClass('no-touchy')) {
+          var link = div.children("a");
+          if (link.hasClass('speedlink-done')) {
+              return;
+          }
+          
+          $(this).mousedown(function () {
+              window.location = link.attr('href');
+          });
+          
+          link.addClass('speedlink-done');
+        }
+    });
+    $('.editme').each(function () {
+      make_in_place_edit($(this));                  
+    });
+    $('table.pretty-table > tbody > tr:even').addClass("even");
+   /* $('select').each(function () {
+       if ($(this).val() == '') {
+        make_select_widget('Choose',$(this));
+       } else if ($(this).find("option:selected").html()) {
+        make_select_widget($(this).find("option:selected").html(),$(this));
+       } else {
+        make_select_widget($(this).find("option:first").html(),$(this));
+       }
+   }); */ 
+
+  } /* end if (!ready_ran) */
+  ready_ran = true;
+
+});
+</script>

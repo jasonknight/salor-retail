@@ -1,0 +1,37 @@
+<table align="center" width="100%">
+  <tr>
+    <td valign="top" align="center">
+      <%= form_for(@tax_profile) do |f| %>
+        <% if @tax_profile.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @tax_profile.errors.count,:model => t("activerecord.models.tax_profile.one"))%></h2>
+      
+            <ul>
+            <% @tax_profile.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+      
+        <div class="field">
+          <%= f.label t("activerecord.attributes.name") %><br />
+          <%= f.text_field :name, :class => "keyboardable"%>
+        </div>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.value") %><br />
+          <%= f.text_field :value, :class => "keyboardable"%>
+        </div>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.default") %><br />
+          <%= f.check_box :default %>
+        </div>
+        <br />
+          <%= f.hidden_field :user_id, :value => salor_user.is_employee? ? salor_user.user.id : salor_user.id %>
+        <div class="actions">
+          <%= f.submit %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+</table>

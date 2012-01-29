@@ -1,0 +1,34 @@
+<script type="text/javascript"> 
+  var _currentSelectTarget = '';
+  var _currentSelectButton;
+  function make_select_widget(name,elem) {
+    elem.hide();
+    var button = div();
+    button.html(name);
+    button.insertAfter(elem);
+    button.attr('select_target',"#" + elem.attr("id"));
+    button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
+    button.mousedown(function () {
+      var pos = $(this).position();
+      var off = $(this).offset();
+      var mdiv = div();
+      _currentSelectTarget = $(this).attr("select_target");
+      _currentSelectButton = $(this);
+      mdiv.addClass("select-widget-display select-widget-display-" + _currentSelectTarget.replace("#",""));
+      $(_currentSelectTarget).children("option").each(function () {
+        var d = div();
+        d.html($(this).html());
+        d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
+        d.mousedown(function () {
+         $(_currentSelectTarget).children("option:selected").attr("selected",""); 
+         $(_currentSelectTarget).children("option:contains("+$(this).html()+")").attr("selected","selected"); 
+         _currentSelectButton.html($(this).html());
+         $('.select-widget-display').hide();
+        });
+        mdiv.append(d);
+      });
+      mdiv.css({position: 'absolute', left: MX - 50, top: MY - 50});
+      $('body').append(mdiv);
+    });
+  }
+</script>

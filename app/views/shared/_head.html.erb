@@ -1,0 +1,29 @@
+  <title>Salor POS</title>
+     <%
+      if salor_user and salor_user.theme then
+        theme = salor_user.theme
+        utname = salor_user.username
+      else
+         theme = "/base"
+         utname = 'main'
+      end
+    %>
+    <script type="text/javascript">
+      function showJsError(err) {
+          txt="There was an error on this page _pos_js.\n\n";
+          txt+="Error description: " + err.description + "\n\n";
+          txt+="Error message: " + err.message + "\n\n";
+          txt+="Error Line: " + err.line + "\n\n";
+          txt+="Click OK to continue.\n\n";
+          alert(txt);
+      }
+    </script>
+    <%= stylesheet_link_tag("jquery-ui.css") %>
+    <%= stylesheet_link_tag 'application', :media => 'screen' %>
+    <%= stylesheet_link_tag 'print', :media => 'print' %>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tag %>
+    <%= salor_render :partial => "shared/application_js" %>
+    <link rel="apple-touch-icon" href="apple-touch-icon-iphone.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-ipad.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon-iphone4.png" />

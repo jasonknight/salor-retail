@@ -1,0 +1,27 @@
+<script type="text/javascript">
+  var selected_item_id = false;
+  function show_item_edit(id) {
+    selected_item_id = id
+    get('<%= items_info_path %>?ajax=true&id=' + selected_item_id, '_item_edit.html.erb');
+  }
+</script>
+<form id="item_edit_form">
+<div id="item_edit" class="item-edit hidden">
+  <div class="field">
+    <label for="name"><%= I18n.t("activerecord.attributes.name") %></label><br />
+    <input type="text" name="item[name]" id="item_name" />
+  </div>
+  <div class="field">
+    <label for="sku"><%= I18n.t("activerecord.attributes.sku") %></label><br />
+    <input type="text" name="item[sku]" id="item_sku" />
+  </div>
+  <div class="field">
+    <label for="base_price"><%= I18n.t("activerecord.attributes.base_price") %></label><br />
+    <input type="text" name="item[base_price]" id="item_base_price" size="7" />
+  </div>
+  <div class="field">
+    <label for="quantity"><%= I18n.t("activerecord.attributes.quantity") %></label><br />
+    <input type="text" name="item[quantity]" id="item_quantity" size="7" />
+  </div>
+</div>
+</form>

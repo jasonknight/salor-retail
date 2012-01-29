@@ -1,0 +1,13 @@
+<% tklss = '' %>
+<% tklss = ' class="'+@styl+'"' unless @styl.nil? %>
+<tr<%= tklss %>>
+  <td><%= item.name %></td>
+  <td><%= item.sku %></td>
+  <td><%= Vendor.find(item.vendor_id).name %></td>
+  <td>
+    <%= salor_number_to_currency item.base_price %>
+  </td>
+  <td><%= link_to image_tag("icons/" + icon(:edit,32)), edit_item_path(item) %></td>
+  <td><%= link_to image_tag("icons/" + icon(:delete,32)), item, :confirm => I18n.t("menu.delete_confirm"), :method => :delete %></td>
+</tr>
+

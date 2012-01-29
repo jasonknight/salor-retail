@@ -1,0 +1,101 @@
+<%= raw content_box_top(t("views.listing_items")) %>
+<script type="text/javascript">
+function wholesaler_update() {
+  var answer = confirm('<%= escape_javascript t('.only_for_tobacco_stores') %>')
+  if (!answer) { return; }
+  $('.wholesaler-refresh').show();
+  $.ajax({
+      type: 'GET',
+      url: '/items/wholesaler_update',
+      dataType: 'script',
+      success: function (data) {
+        $('.wholesaler-refresh').hide();
+      },
+      error: function (data,status,err) {
+        alert(err);
+        var cancel = $("<div class='cancel-button'><%= t("menu.cancel") %></div>");
+        cancel.click(function () {
+            $('.wholesaler-refresh').hide();
+        });
+      }
+  });
+}
+</script>
+
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <div class='tools'>
+        <div class="tool-icon" align="center" onmousedown="window.location = '<%= new_item_path(:vendor_id => params[:vendor_id]) %>'">
+          <%= link_to image_tag('icons/' + icon(:add, 32)), new_item_path(:vendor_id => params[:vendor_id]) %><br /><span class='icon-caption'><%= I18n.t("menu.new_item") %></span>
+        </div>
+        <div class="tool-icon" onmousedown="window.location = '<%= new_broken_item_path(:vendor_id => params[:vendor_id]) %>'">
+          <%= link_to image_tag('icons/' + icon(:broken, 32)), new_broken_item_path(:vendor_id => params[:vendor_id]) %><br /><span class='icon-caption'><%= I18n.t("menu.new_broken_item") %></span>
+        </div>
+        <div class="tool-icon" onmousedown="window.location = '/items/update_location'">
+          <%= link_to salor_icon(:location,{:class => 'pointer'},32),"/items/update_location" %><br /><span class='icon-caption'><%= I18n.t("menu.update_location") %></span>
+        </div>
+        <div class="tool-icon" onmousedown="window.location = '/items/update_real_quantity'">
+          <%= link_to salor_icon(:counter,{:class => 'pointer'},32),"/items/update_real_quantity" %><br /><span class='icon-caption'><%= I18n.t("menu.update_real_quantity") %></span>
+        </div>
+        <% if AppConfig.reorder_csvs  %>
+          <div class="tool-icon" >
+            <%= salor_icon(:reorder,{:class => 'pointer',:onmousedown => "$('#reorder_types').show();"},32)  %><br /><span class='icon-caption'><%= I18n.t("menu.reorder") %></span>
+          </div>
+        <% end %>
+        <div class="tool-icon" onmousedown="window.location = '/items/selection'">
+          <a href='/items/selection'><img src='/images/icons/print_32.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.print") %></span>
+        </div>
+        <div class="tool-icon" onmousedown="window.location = '/items/upload'">
+          <a href='/items/upload'><img src='/images/icons/up_32.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.upload") %></span>
+        </div>
+        <div class="tool-icon" >
+          <%= link_to '/items/download.csv', :confirm => t('views.download_may_last_long') do %>
+            <img src='/images/icons/down_32.png' onmousedown="window.location = '/items/download.csv'">
+          <% end %><br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
+        </div>
+        <div class="hidden wholesaler-refresh">
+        <table>
+          <tr>
+            <td align="center">
+              <%= image_tag('/images/upload.gif') %>
+            </td>
+          </tr>
+        </table>
+          <%= I18n.t("views.wholesaler_refresh") %>
+        </div>
+        <div class="tool-icon">
+        <%= salor_icon(:shipper,{:style => "cursor:pointer;",:onmousedown => "wholesaler_update();"},32) %><br /><span class='icon-caption'><%= I18n.t("menu.wholesaler_update") %></span>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+<% if AppConfig.reorder_csvs  %>
+<div id="reorder_types" class="hidden reorder-types">
+  <table>
+    <% AppConfig.reorder_types.split(",").each do |type| 
+      parts = type.split(":")
+    %>
+      <tr>
+        <td class="reorder_rec">
+          <a href="/items/reorder_recommendation?type=<%= parts[0] %>"> <%= parts[1] %></a>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <td>
+        <div class="button-row" align="right" width="100%">
+            <div class="button-cancel" onclick="$('#reorder_types').hide();"><%= I18n.t("helpers.submit.cancel") %></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+<% end %>
+<%= salor_render :partial => "shared/items_list" %>
+<div class="pagination" align="center">
+  <%= paginate @items if @items %>
+</div>
+<%= raw content_box_bottom %>

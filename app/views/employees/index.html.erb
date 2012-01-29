@@ -1,0 +1,22 @@
+<%= raw content_box_top(t("menu.employees")) %>
+<div class="list">
+    <% @employees.each do |employee| %>
+    <%= render(:partial => "shared/edit_li_wide", :locals => {
+          :path => employee_path(employee),
+          :image => icon(:employee),
+          :text => employee.username,
+          :edit_path => edit_employee_path(employee),
+          :del_path => employee 
+        }) %>
+    <% end %>
+    <div class="widget master">
+      <div align="center">
+        <a href="<%= new_employee_path %>">
+          <img src="/images/icons/<%= icon(:add) %>" /><br />
+          <%= t "menu.new_employee" %>
+      	</a>
+      </div>
+    </div>
+</div>
+<!-- End ul.list -->
+<%= raw content_box_bottom %>

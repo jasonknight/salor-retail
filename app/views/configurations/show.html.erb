@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Vendor:</b>
+  <%= @configuration.vendor_id %>
+</p>
+
+<p>
+  <b>Lp per dollar:</b>
+  <%= @configuration.lp_per_dollar %>
+</p>
+
+<p>
+  <b>Dollar per lp:</b>
+  <%= @configuration.dollar_per_lp %>
+</p>
+
+<p>
+  <b>Address:</b>
+  <%= @configuration.address %>
+</p>
+
+<p>
+  <b>Telephone:</b>
+  <%= @configuration.telephone %>
+</p>
+
+<p>
+  <b>Receipt blurb:</b>
+  <%= @configuration.receipt_blurb %>
+</p>
+
+
+<%= link_to 'Edit', edit_configuration_path(@configuration) %> |
+<%= link_to 'Back', configurations_path %>

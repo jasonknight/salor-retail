@@ -1,0 +1,58 @@
+<%= raw content_box_top(t("menu.orders")) %>
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <div class='tools'>
+        <div class="tool-icon">
+          <a href='orders/report'><img src='/images/icons/book_sum_64.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.report") %></span>
+        </div>
+        <div class="tool-icon">
+          <a href='orders/report_range'><img src='/images/icons/book_detail_64.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.report_range") %></span>
+        </div>
+        <div class="tool-icon">
+          <a href='orders/report_day'><img src='/images/icons/book_sun_64.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.report_day") %></span>
+        </div>
+        <div class="tool-icon">
+          <a href='orders/report_day_range'><img src='/images/icons/book_balance_64.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.report_day_range") %></span>
+        </div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<table width="100%" class="stripe-me">
+<% @orders.each do |order| %>
+  <tr>
+    <td valign="top">
+      <%= order.vendor.name %>
+    </td>
+    <td valign="top">
+      <%= order.employee_id ? order.employee.username : order.user.username %>
+    </td>
+    <td valign="top">
+      <%= I18n.t("views.order_number",:id => order.id) %>
+      <% if order.refunded then  %>
+        *
+      <% end %>
+    </td>
+    <td><%= l(order.created_at,:format => :short) %></td>
+    <td><%= salor_number_to_currency order.total %></td>
+    <td>
+      <%= order.payment_display[0] + ': ' + salor_number_to_currency(order.payment_display[1]) %>
+    </td>
+    <td><%= link_to image_tag('icons/' + icon(:printer,32)), "orders/#{ order.id }/print" %></td>
+    <td><%= link_to image_tag('icons/' + icon(:show,32)), order %></td>
+    <td><%= link_to(image_tag('icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>
+    <td><%= link_to(image_tag('icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete) if not order.paid %></td>
+  </tr>
+<% end %>
+</table>
+<table align="center" width="100%">
+  <tr align="center">
+    <td valign="top" colspan="6">
+      <%= paginate @orders if @orders %>
+    </td>
+  </tr>
+</table>
+<%= raw content_box_bottom %>

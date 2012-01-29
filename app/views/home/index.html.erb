@@ -1,0 +1,7 @@
+<%
+  if AppConfig.standalone then
+%>
+<%= salor_render :partial => "shared/login" %>
+<% else %>
+<%= salor_render :partial => "shared/front_page" %>
+<% end %>

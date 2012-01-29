@@ -1,0 +1,45 @@
+<%= form_for(@node) do |f| %>
+  <% if @node.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@node.errors.count, "error") %> prohibited this node from being saved:</h2>
+
+      <ul>
+      <% @node.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :sku %><br />
+    <%= f.text_field :sku %>
+  </div>
+  <div class="field">
+    <%= f.label :token %><br />
+    <%= f.text_field :token %>
+  </div>
+  <div class="field">
+    <%= f.label :node_type %><br />
+    <%= f.text_field :node_type %>
+  </div>
+  <div class="field">
+    <%= f.label :url %><br />
+    <%= f.text_field :url %>
+  </div>
+  <div class="field">
+    <%= f.label :is_self %><br />
+    <%= f.check_box :is_self %>
+  </div>
+  <div class="field">
+    <%= f.label :accepted_ips %><br />
+    <%= f.text_area :accepted_ips %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

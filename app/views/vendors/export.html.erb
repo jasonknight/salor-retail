@@ -1,0 +1,69 @@
+<%= raw content_box_top(I18n.t("headings.export")) %>
+<script type='text/javascript'>
+function csv_change() {
+  if ($('#csv_type').val() == 'download') {
+    $('#dl_options').show();
+    $('#submit_button').val("<%= I18n.t("views.single_words.download") %>");
+  } else {
+    $('#dl_options').hide();
+    $('#submit_button').val("<%= I18n.t("views.single_words.upload") %>");
+  }
+  dl_change();
+}
+function dl_change() {
+  if ($('#dl_type').val() == 'printcards') {
+    $('#color_option').show();
+  } else {
+    $('#color_option').hide();
+  }
+}
+$(function () {
+    try {
+      csv_change();
+    } catch (err) {
+          txt="There was an error on this page export .\n\n";
+          txt+="Error description: " + err.description + "\n\n";
+          txt+="Click OK to continue.\n\n";
+          alert(txt);
+    }
+});
+</script>
+<style type='text/css'>
+.options_div {
+  display:none;
+}
+</style>
+<form enctype="multipart/form-data" method="post" action="/vendors/export">
+  <div id="" class="table">
+    <div class="table-row">
+      <div class="table-cell">
+        <%= I18n.t("activerecord.attributes.file") %>
+      </div>
+      <div class="table-cell">
+        <input type="file" name="file" class="file-input" />
+      </div>
+    </div>
+    <div class="table-row">
+      <div class="table-cell">
+        <%= I18n.t("activerecord.attributes.do_what") %>
+      </div>
+      <div class="table-cell">
+        <select name="do_what" id="action_select">
+          <option value="download"><%= I18n.t("views.single_words.download") %></option>
+          <option value="add"><%= I18n.t("views.single_words.add") %></option>
+          <option value="edit"><%= I18n.t("views.single_words.edit") %></option>
+          <option value="delete"><%= I18n.t("views.single_words.destroy") %></option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="dl_options" class="hidden">
+    <select name="download_type" onchange="dl_change()" id="dl_type">
+      <option value='' selected>None</option>
+      <option value="code">Export .csv from codes</option>
+      <option value='zeroed'>Export All Zeroed Products</option>
+      <option value="category">Export .csv by categories</option>
+    </select>
+  </div>
+</form>
+<%= raw content_box_bottom %>

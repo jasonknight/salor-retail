@@ -1,0 +1,94 @@
+<%
+  # we need to maintain certain params
+if params[:type] then
+  add_param(:type => params[:type]) if not params[:type].blank?
+end
+if params[:keywords] then
+  #add_param(:keywords => params[:keywords]) if not params[:keywords].blank?
+end
+%>
+<!DOCTYPE html>
+<html>
+<head>
+
+<%= salor_render :partial => 'shared/head'%>
+</head>
+<body id="body">
+<% if salor_signed_in?  %>
+<%= salor_render :partial => "shared/header_menu" if $User.can(:see_header)%>
+<% end %>
+<%= salor_render :partial => "shared/notice" %>
+<div id="errors" class="errors hidden"></div>
+<div id="main" class='main'>
+
+<div id="main_content" class="main-content">
+<!-- BeginViewContent -->
+<%= yield %> 
+<!-- EndViewContent -->
+</div>
+
+<%= salor_render :partial => "shared/current_active_order" %>
+<script type="text/javascript">
+function quick_open_drawer() {
+    if (typeof Salor != 'undefined') {
+      Salor.newOpenCashDrawer('<%= GlobalData.cash_drawer if GlobalData.conf %>');
+    } else {
+      $.get('/vendors/open_cash_drawer');
+    }
+  }
+$(function () {
+    try {
+      $('.click-help').click(function (event) {
+          var url = $(this).attr('url');
+          var offset = {'top' : event.pageY, 'left' : event.pageX, 'position' : 'absolute'}
+          $('.help').css(offset);
+          get(url, 'application.html.erb');
+      });
+    } catch (err) {
+          txt="There was an error on this page application.html.erb.\n\n";
+          txt+="Error description: " + err.description + "\n\n";
+          txt+="Click OK to continue.\n\n";
+          alert(txt);
+    }
+
+  <% if GlobalData.cash_register and ( not GlobalData.cash_register.pole_display.nil? or not GlobalData.cash_register.pole_display.empty?) %>
+    if (typeof(Salor) != 'undefined') {
+      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', '     S A L O R      Next Generation POS' );
+    }
+  <% end %>
+});
+</script>
+<div class="help hidden"></div>
+<%= salor_render :partial => "shared/cash_drop" %>
+<%= salor_render :partial => "shared/coin_calculator" %>
+<script type="text/javascript">
+function initErrors() {
+  $('.errors').show();
+  var back = $('<div style="float: left;"><%= image_tag "icons/" + icon(:back,32) %></div>');
+  var del = $('<div align="right"><%= image_tag "icons/" + icon(:delete,32) %></div>');
+  del.click(function () {
+      $(this).parent().hide();
+  });
+  back.click(function () {
+      history.go(-1);
+  });
+  $('.errors').append(back);
+  $('.errors').append(del);
+}
+$(function () {
+  try {
+    <%= salor_render :partial => "shared/js/global_errors_js" %>
+  } catch (err) {
+        txt="There was an error on this page application.html.erb.2.\n\n";
+        txt+="Error description: " + err.description + "\n\n";
+        txt+="Click OK to continue.\n\n";
+        alert(txt);
+  }
+});
+
+</script>
+<%= salor_render :partial => "shared/dt_tags" %>
+<%= salor_render :partial => "shared/dialog" %>
+<%= salor_render :partial => "shared/js/select_widget" %>
+</body>
+</html>

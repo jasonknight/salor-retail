@@ -1,0 +1,199 @@
+<%= raw(content_box_top(@vendor.name, {:width => '90%'})) %>
+      <div class="list">
+      <% if salor_user.can(:edit_vendors) %>
+        <div class="widget master" onmousedown="window.location = '<%= edit_vendor_path(@vendor) %>';">
+          <div align="center">
+            <a href="<%= edit_vendor_path(@vendor) %>">
+              <img src="/images/icons/<%= icon(:settings) %>" /><br />
+              <%= t("menu.configuration") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_categories) %>
+        <div class="widget master" onmousedown="window.location = '<%= categories_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= categories_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/binder_64.png" /><br />
+              <%= t("menu.categories") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_locations) %>
+        <div class="widget master" onmousedown="window.location = '<%= locations_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= locations_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:locations) %>" /><br />
+              <%= t("menu.locations") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_locations) %>
+        <div class="widget master" onmousedown="window.location = '<%= stock_locations_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= stock_locations_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:stock_locations) %>" /><br />
+              <%= t("menu.stock_locations") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_items) %>
+        <div class="widget master" onmousedown="window.location = '<%= items_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= items_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/bag1_64.png" /><br />
+              <%= t("menu.items") %>
+            </a>
+          </div>
+        </div>
+        <div class="widget master" onmousedown="window.location = '<%= broken_items_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= broken_items_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/broken_64.png" /><br />
+              <%= t("menu.broken_items") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+      <% if salor_user.can(:index_cash_registers) %>
+        <div class="widget master" onmousedown="window.location = '<%= cash_registers_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= cash_registers_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/cashbox_64.png" /><br />
+              <%= t("menu.cash_registers") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_discounts) %>
+        <div class="widget master" onmousedown="window.location = '<%= discounts_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= discounts_path(:vendor_id => @vendor.id) %>">
+              <%= salor_icon(:discount) %><br />
+              <%= t("menu.discounts") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_shipments) %>
+         <div class="widget master" onmousedown="window.location = '<%= shipments_path %>';">
+          <div align="center">
+            <a href="<%= shipments_path %>">
+              <img src="/images/icons/<%= icon(:shipment) %>" /><br />
+              <%= t("menu.shipments") %>
+            </a>
+          </div>
+        </div>
+         <div class="widget master" onmousedown="window.location = '<%= shipment_types_path %>';">
+          <div align="center">
+            <a href="<%= shipment_types_path %>">
+              <img src="/images/icons/<%= icon(:shipment_type) %>" /><br />
+              <%= t("menu.shipment_types") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_shippers) %>
+         <div class="widget master" onmousedown="window.location = '<%= shippers_path %>';">
+          <div align="center">
+            <a href="<%= shippers_path %>">
+              <img src="/images/icons/<%= icon(:shipper) %>" /><br />
+              <%= t("menu.shippers") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_orders) %>
+        <div class="widget master" onmousedown="window.location = '<%= orders_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= orders_path(:vendor_id => @vendor.id) %>">
+              <%= salor_icon(:order)  %><br />
+              <%= t("menu.orders") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_employees) %>
+        <div class="widget master" onmousedown="window.location = '/employees/index?vendor_id=<%= @vendor.id %>';">
+          <div align="center">
+            <a href="/employees/index?vendor_id=<%= @vendor.id %>">
+              <img src="/images/icons/user_info_64.png" /><br />
+              <%= t("menu.employees") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_customers) %>
+         <div class="widget master" onmousedown="window.location = '/customers?vendor_id=<%= @vendor.id %>';">
+          <div align="center">
+            <a href="/customers?vendor_id=<%= @vendor.id %>">
+              <img src="/images/icons/<%= icon(:customer) %>" /><br />
+              <%= t("menu.customers") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:index_transaction_tags) %>
+        <div class="widget master" onmousedown="window.location = '<%= transaction_tags_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= transaction_tags_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/label_64.png" /><br />
+              <%= t("menu.transaction_tags") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:show_actions) %>
+        <div class="widget master" onmousedown="window.location = '<%= actions_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= actions_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:action,64) %>" /><br />
+              <%= t("menu.actions") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:show_tender_methods) %>
+        <div class="widget master" onmousedown="window.location = '<%= tender_methods_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= tender_methods_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:payment,64) %>" /><br />
+              <%= t("menu.tender_methods") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:show_buttons) %>
+        <div class="widget master" onmousedown="window.location = '<%= buttons_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= buttons_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:button,64) %>" /><br />
+              <%= t("menu.buttons") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.is_owner? %>
+        <div class="widget master onmousedown="window.location = '/vendors/spy';"">
+          <div align="center">
+            <a href="/vendors/spy">
+              <img src="/images/icons/<%= icon(:camera,64) %>" /><br />
+              <%= t("menu.cameras") %>
+            </a>
+          </div>
+        </div>
+        <div class="widget master onmousedown="window.location = '/nodes?vendor_id=<%= @vendor.id %>';"">
+          <div align="center">
+            <a href="/nodes?vendor_id=<%= @vendor.id %>">
+              <img src="/images/icons/network_64.png" /><br />
+              <%= t("menu.nodes") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+      </div>    
+<!-- End ul. -->
+<%= raw(content_box_bottom) %>

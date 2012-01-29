@@ -1,0 +1,11 @@
+<% if @shipment.get_salor_errors.any?  %>
+  $(".notice .obtuse").html("");
+  <% @shipment.get_salor_errors.each do |error|  %>
+    $(".notice .obtuse").append("<%= error %><br />");
+  <% end %>
+<% else  %>
+  $(".notice .obtuse").html("<%= I18n.t("notifications.shipments_move_item") %>");
+  $("#button-move-item-<%= @shipment_item.id %>").replaceWith('<%= @item.location.name if @item.location %>');
+  $("#shipment_item_stock_location_<%= @shipment_item.id %>").html('');
+<% end %>
+initNotice();

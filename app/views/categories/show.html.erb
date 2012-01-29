@@ -1,0 +1,19 @@
+<%= raw content_box_top(t("views.category_heading",:name => @category.name, :store => @category.vendor.name)) %>
+<table align="center" width="100%" align="center">
+  <tr>
+    <td valign="top">
+      <table class="stripe-me" align="center" width="100%" cellspacing="0">
+        <% @items = @category.items.scopied.page(params[:page]).per(GlobalData.conf.pagination)  %>
+        <% @items.each do |item|  %>
+          <%= salor_render :partial => "shared/item", :locals => {:item => item, :styl => cycle('even', 'odd')} %>
+        <% end %>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" align="center">
+      <%= paginate @items if @items  %>
+    </td>
+  </tr>
+</table>
+<%= raw content_box_bottom %>

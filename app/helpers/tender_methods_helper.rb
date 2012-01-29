@@ -1,0 +1,2 @@
+module TenderMethodsHelper
+end

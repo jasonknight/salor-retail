@@ -1,0 +1,559 @@
+<% if GlobalData.cash_register.big_buttons then  %>
+  <%= salor_render :partial => "shared/big_buttons_css" %>
+<% end %>
+<script type="text/javascript">
+var filename = "new.html.erb";
+var isBuyOrder = false;
+var highlightAttrs = ['sku','price','total'];
+var timeoutEvent = null; // global var for setTimeout
+var mouseoverEvent = null; // global var for mouseover timeout thing
+var fullNameDiv = null; // global var for the full name rollover div
+
+// Here is the function to validate the totals shown on the screen
+// it is here as an extra check to ensure that the total shown is
+// as correct as possible. This does not mean that it is actually
+// correct. But this is as sure as we can be.
+// First it totals the items shown on the screen and checks with
+// the order total. If it is correct, then it leaves it alone
+// if not, it notifies the user and encourages a refresh of the 
+// page.
+setInterval(function () {
+  $.get('/orders/update_pos_display');    
+},3000);
+function validate_order_totals() {
+  var item_total = 0.0;
+  $('.pos-item-total').each(function () {
+    var total = toFloat($(this).html()); 
+    if ($(this).hasClass('pos-highlight') && total > 0){
+      item_total = item_total - total;
+      $(this).html(toCurrency(total * -1));
+    } else {
+      item_total = item_total + total;
+    }
+   }); 
+  if (!toCurrency(item_total) == $('.pos-order-total').html()) {
+    notify_user("<%= I18n.t("headings.order_validation") %>", 
+                "<%= I18n.t("system.errors.order_totals_validation_failed") %>", function () {
+                  window.location = "/orders/new";
+                });
+  }
+}
+
+
+$(document).ready(function () {
+    //scrollable_div($('.pos-table-left-column-items'));
+    var order = <%= raw @order.to_json %>;
+    updateOrder(order);
+    <%
+      items = []
+      @order.order_items.each do |oi|
+        items << oi.to_json
+      end
+    %>
+    var order_items = [<%= raw items.join(',') %>];
+    updateOrderItems(order_items);
+    setInterval('validate_order_totals();',1000);
+    //var divPos = $(".pos-scrolling-div").position().top;
+    //var docHeight = $(window).height();
+    //$(".pos-scrolling-div").css("height", docHeight - divPos - 50);
+    //setScrollerState();
+    $('#buy_order_button').mousedown(function () {
+       var estring = "field=toggle_buy_order&klass=Order&value=true";
+       get("/vendors/edit_field_on_child?" + estring, "<%= __FILE__ +':'+ __LINE__.to_s %>");                                 
+    });
+});
+
+function scrollItemList(event) {
+  var id = $(event.target).attr('id');
+  var scrollAmt = 0;
+  var curScroll = $(".pos-scrolling-div").scrollTop();
+  switch (id) {
+    case 'scroll_up':
+      scrollAmt = -40;
+      break;
+    case 'scroll_down':
+      scrollAmt = 40;
+      break;
+    case 'scroll_top':
+      scrollAmt = -curScroll;
+      break;
+    case 'scroll_bottom':
+      scrollAmt = $(".pos-scrolling-div").attr("scrollHeight") - $(".pos-scrolling-div").height() - curScroll;
+      break;
+  }
+  $(".pos-scrolling-div").animate({"scrollTop":curScroll + scrollAmt},250);
+}
+
+function setScrollerState() {
+  var active = ($(".pos-scrolling-div").attr("scrollHeight") - $(".pos-scrolling-div").height() > 0) ? true : false;
+  if (!active) {
+    $(".button-scroller").addClass('button-inactive').unbind('click');
+  } else {
+    $(".button-scroller").removeClass('button-inactive').mousedown(function(event){
+      scrollItemList(event);
+    });
+  }
+}
+
+//test
+function upDownButtons(row,col) {
+      var base_id = getOrderItemId(item);
+
+      return row;
+}
+
+
+function getOrderItemId(item) {
+  var id = 'order-item-' + item.id;
+  return id;
+}
+
+function makeItemMenu(item) {
+  try {
+
+    var base_id = getOrderItemId(item);
+    var e = $('.' + base_id + '-sku');
+    //This is because if the SKU gets too big, it messes up the screen
+    //e.html(e.html().substr(0,7));
+    e.html(e.html());
+
+    e.unbind();
+    e.mousedown(function (event) {
+        $('.item-menu-div').remove();
+        var menu = $("<div class='item-menu-div'></div>");
+        $('body').append(menu);
+        menu.css({position: 'absolute', left: event.pageX, top: event.pageY});
+        var dicon = $('<div class="oi-menu-icon"><%= raw salor_icon(:delete,{},32) %></div>');
+        dicon.mousedown(function () {
+            $('.' + base_id).remove();
+            get('/orders/delete_order_item?id=' + item.id, filename);
+            menu.remove();
+            setScrollerState();
+            focusInput($('#keyboard_input'));
+        });
+        menu.append(dicon);
+        if (item.behavior == 'gift_card') {
+          var gc = $('<div class="oi-menu-icon"><%= raw salor_icon(:activate,{},32) %></div>');
+          gc.addClass('pointer');
+          gc.mousedown(function () {
+              get("/orders/activate_gift_card?id="+item.id+"&amount=" + item.amount_remaining, filename);
+              menu.remove();
+              focusInput($('#keyboard_input'));
+          }).mouseup(function () {
+            focusInput($('#keyboard_input'));
+          });
+          menu.append(gc);
+        }
+        /* if (item.locked) {
+          var lock = $('<img src="/images/icons/unlock_32.png" />');
+        } else {
+          var lock = $('<img src="/images/icons/unlock_32.png" />');
+        }
+        lock.addClass('pointer');
+        lock.mousedown(function () {
+            var string = '/vendors/edit_field_on_child?id=' +
+                          item.id +'&klass=OrderItem' +
+                          '&field=toggle_lock'+
+                          '&value=total';
+                          get(string, filename);
+                          menu.remove();
+        });
+        menu.append(lock);
+        */
+
+        var buyback = $('<div class="oi-menu-icon"><%= raw salor_icon(:order,{},32) %></div>');
+        buyback.addClass('pointer');
+        buyback.mousedown(function () {
+            var string = '/vendors/toggle?model_id=' +
+                          item.id +'&klass=OrderItem' +
+                          '&field=toggle_buyback'+
+                          '&value=undefined';
+                          get(string, filename);
+                          menu.remove();
+                          focusInput($('#keyboard_input'));
+        }).mouseup(function () {
+          focusInput($('#keyboard_input'));
+        });
+        menu.append(buyback);
+        <% if not @cash_register.scale.blank? %>
+        var wicon = $('<div class="oi-menu-icon"><%= raw salor_icon(:weight,{},32) %></div>');
+        wicon.mousedown(function () {
+            var string = '/vendors/edit_field_on_child?id=' +
+                          item.id +'&klass=OrderItem' +
+                          '&field=quantity'+
+                          '&value=' + Salor.<%= @cash_register.scale %>;
+                          get(string, filename);
+            menu.remove();
+            focusInput($('#keyboard_input'));
+        }).mouseup(function () {
+          focusInput($('#keyboard_input'));
+        });
+
+        menu.append(wicon);
+        <% end %>
+
+        var btn = $('<div class="oi-menu-icon"><%= t("menu.done") %></div>');
+        btn.mousedown(function () {
+            menu.remove();
+            focusInput($('#keyboard_input'));
+        }).mouseup(function () {
+          focusInput($('#keyboard_input'));
+        });
+    menu.append(btn);
+    });
+
+  } catch (err) {
+    //console.log(err);
+  }
+}
+
+function format_pole(name,price,quantity,weight_metric,total) {
+  if (weight_metric == null) { weight_metric = '' };
+  pole_name     = (name.substring(0,14) + '                ').substring(0,14);
+  pole_price    = sprintf("%6.2f",price);
+  pole_quantity = (quantity + ' ' + weight_metric + '                            ').substring(0,10);
+  pole_total    = '<%= t('number.currency.format.friendly_unit') %>' + sprintf(" %6.2f",total);
+  return pole_name + pole_price + pole_quantity + pole_total;
+}
+
+function updatePosItem(item) {
+  var base_id = getOrderItemId(item);
+  item['price'] = item['price'] - item['discount_amount'];
+  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
+  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
+      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', output );
+    }
+  <% end %>
+  <% if GlobalData.cash_register.hide_discounts == true then  %>
+    var attrs = ['name','sku','quantity','price','total'];
+  <% else  %>
+    var attrs = ['name','sku','quantity','price','coupon_amount','rebate','total'];
+  <% end %>
+  for (var i = 0; i < attrs.length; i++) {
+    var key = attrs[i];
+    var id = '.' + base_id + '-' + key;
+    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && key == 'coupon_amount') { $(id).addClass('discount_applied'); };
+    if (key == 'price' || key == 'coupon_amount' || key == 'total' || key == 'rebate') {
+      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || key == 'rebate') {
+        $(id).html(toPercent(item[key]));
+      } else {
+        $(id).html(toCurrency(item[key]));
+      }
+    } else {
+      if (key == 'sku') {
+        //item[key] = item[key].substr(0,8);
+        item[key] = item[key];
+      }
+      $(id).html(item[key]);
+    }
+    if (item['is_buyback'] && highlightAttrs.indexOf(key) != -1) {
+      highlight($(id));
+    }
+  }
+  makeItemMenu(item);
+  if (item["must_change_price"] == true) {
+    var id = '.' + base_id + '-price';
+    var price = toFloat($(id).html());
+    if (price == 0) {
+      $(id).trigger('mousedown');
+      setTimeout('in_place_edit_select();',300);
+    }
+  }
+}
+
+function showFullItemName()
+{
+  return;
+  var item = $(mouseoverEvent.target);
+  var namePos = $(item).position();
+  var fullName = $(item).text();
+  $("body").append("<div id='full_name' class='pos-item-show'>" + fullName + "</div>");
+  $(".pos-item-show").css("left", namePos.left + 5);
+  $(".pos-item-show").css("top", namePos.top + 10);
+}
+
+function addPosItem(item) {
+  var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
+  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
+      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', output );
+    }
+  <% end %>
+  $(row).mouseover(function(event){
+    mouseoverEvent = event;
+    timeoutEvent = setTimeout("showFullItemName()", 1000);
+    $(".pos-item-show").remove();
+  }).mouseout(function(){
+    if (timeoutEvent)
+    {
+      mouseoverEvent = null;
+      clearTimeout(timeoutEvent);
+    }
+  });
+  var base_id = getOrderItemId(item);
+  row.addClass(base_id);
+  item['price'] = item['price'] - item['discount_amount'];
+  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
+  $('.pos-table-left-column-items').prepend(row);
+  if (item.behavior == 'coupon') {
+    //return;
+  }
+  <% if GlobalData.cash_register.hide_discounts == true then  %>
+    var attrs = ['name','sku','quantity','price','total'];
+  <% else  %>
+    var attrs = ['name','sku','quantity','price','coupon_amount','rebate','total'];
+  <% end %>
+  for (var i = 0; i < attrs.length; i++) {
+    var attr = attrs[i];
+    var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
+    // those need number formatting
+    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate') {
+      // those need special formatting
+      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 2 ) || attr == 'rebate') {
+        col.html(toPercent(item[attr]));
+      } else {
+        col.html(toCurrency(item[attr]));
+      }
+    } else {
+      col.html(item[attr]);
+    }
+    col.addClass('table-column pos-item-attr');
+    col.addClass(base_id + '-' + attr + ' pos-item-' + attr);
+    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
+    if (attr == 'sku' || attr == 'coupon_amount') {
+
+    } else {
+      if (attr == 'name') {
+        col.attr('model_id',item.item_id);
+        col.attr('klass','Item');
+      } else {
+        col.attr('model_id',item.id);
+        col.attr('klass','OrderItem');
+      }
+      col.attr('field',attr);
+      if (attr == "price" || attr == "rebate" || attr == "total") {
+        <% if $User.can(:change_prices) %>
+          make_in_place_edit(col);
+          col.addClass('editme pointer no-select');
+        <% else %>    
+          col.addClass('pointer no-select');
+        <% end -%>
+      } else {
+        make_in_place_edit(col);
+        col.addClass('editme pointer no-select');
+      }
+    }
+    if (attr == 'quantity') {
+      var up = td().removeClass('jtable-cell').addClass('table-cell');
+      
+      up.mousedown(function () {
+          var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
+          var string = '/vendors/edit_field_on_child?id=' +
+                        item.id +'&klass=OrderItem' +
+                        '&field=quantity'+
+                        '&value=' + v;
+                        get(string, filename);
+                        focusInput($('#keyboard_input'));
+      });
+      up.html("<div><img src=\"/images/icons/up_32.png\" />");
+      up.addClass('pointer quantity-button');
+      row.append(up);
+      row.append(col);
+      var d = td().removeClass('jtable-cell').addClass('table-cell');
+      d.mousedown(function () {
+          var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
+          var string = '/vendors/edit_field_on_child?id=' +
+                        item.id +'&klass=OrderItem' +
+                        '&field=quantity'+
+                        '&value=' + v;
+                        get(string, filename);
+                        focusInput($('#keyboard_input'));
+      });
+      d.html("<div><img src=\"/images/icons/down_32.png\" />");
+      d.addClass('pointer quantity-button');
+      row.append(d);
+    } else {
+      row.append(col);
+    }
+    if (item['is_buyback'] && highlightAttrs.indexOf(attr) != -1) {
+      highlight(col);
+    }
+  }
+  makeItemMenu(item);
+  setScrollerState();
+  if (item["must_change_price"] == true) {
+    var id = '.' + base_id + '-price';
+    var price = toFloat($(id).html());
+    if (price == 0) {
+      $(id).trigger('mousedown');
+      setTimeout('in_place_edit_select();',300);
+    }
+  }
+}
+
+function updateOrder(obj) {
+  var button = $('#buy_order_button');
+  if (obj.buy_order) {
+    $(button).addClass('pos-highlight');
+    $(button).removeClass('pos-configuration');
+    $('#pos_order_total').addClass("pos-highlight");
+  } else {
+    $(button).removeClass('pos-highlight');
+    $(button).addClass('pos-configuration');
+    $('#pos_order_total').removeClass("pos-highlight");
+  }
+  if (typeof(CustomerScreen) != 'undefined') {
+    CustomerScreen.refresh("http://salor/orders/"+ obj.id +"/customer_display",800,480);
+  }
+  if (obj.customer) {
+    showCustomer(obj.customer.customer,obj.loyalty_card.loyalty_card);
+  }
+  $('#pos_order_total').html(toCurrency(obj.total));
+  $('.complete-order-total').html(toCurrency(obj.total));
+  $('.order-rebate_type').html(obj.rebate_type);
+  $('.order-rebate').attr('model_id',obj.id);
+  $('.order-tag').attr('model_id',obj.id);
+  $('.order-rebate_type').attr('model_id',obj.id);
+  $('.order-rebate').html(obj.rebate);
+  $('.order-tag').html(obj.tag);
+  $('.order-id').html(obj.id);
+  if (!obj.lc_points > 0) {
+    obj.lc_points = 0;
+  }
+  $('.order-points').html(obj.lc_points);
+
+}
+function showCustomer(obj,lc) {
+  var e = $('.pos-customer');
+  e.html('');
+  var name = $('<div><span class="customer_name"></span></div>');
+  name.html(obj.first_name + ' ' + obj.last_name);
+  var row = $('<div></div>');
+  row.append(name);
+  row.append('<span class=""><%= I18n.t("activerecord.attributes.points") %></span>');
+  if (!lc.points > 0) {
+    lc.points = 0;
+  }
+  var col = $('<span id="pos-loyalty-card-points" class="loyalty-points">'+lc.points+'</span>');
+  col.attr('model_id',lc.id);
+  col.attr('klass','LoyaltyCard');
+  col.attr('field','points');
+  col.addClass('editme');
+  make_in_place_edit(col);
+  row.append(col);
+  row.append('<span class=""><%= I18n.t("activerecord.attributes.lc_points") %></span>');
+  var col = $('<span id="pos-order-points" class="order-points">0</span>');
+  col.attr('model_id',<%= @order.id %>);
+  col.attr('klass','Order');
+  col.attr('field','lc_points');
+  col.addClass('editme');
+  make_in_place_edit(col);
+  row.append(col);
+  e.html(row);
+  if (!e.hasClass('shown')) {
+    e.hide();
+  }
+  if (!$('.pos-customer').hasClass('shown')) {
+    showHideCustomerOrRebate();
+  }
+}
+
+function highlight(elem) {
+  if (!elem.hasClass("pos-highlight")) {
+    elem.addClass("pos-highlight");
+  }
+}
+
+function updateOrderItems(obj) {
+  var items = obj;
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    var id = getOrderItemId(item);
+    if ($('.' + id).length != 0) {
+      /* Item is in list, and we need to update it */
+      updatePosItem(item);
+    } else {
+      /* Item is not in list, we need to add it */
+      addPosItem(item);
+    }
+  }
+}
+
+$(function () {
+  // make sure we can enter items
+  $("#keyboard_input").attr("disabled", false);
+  focusInput($('#keyboard_input'));
+});
+
+<%= salor_render :partial => "shared/pos_js" %>
+</script>
+
+<%= salor_render :partial => "shared/pos/menu", :locals => {:order => @order} %>
+
+<div class='clear'></div>
+
+<div class="pos-customer shown"></div>
+<%= salor_render :partial => "shared/pos/rebates", :locals => {:order => @order} %>
+
+<div class='clear'></div>
+<% if not @cash_register.scale.blank? then  %>
+  <script type="text/javascript">
+    function weigh_last_item() {
+    try {
+      var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
+      var string = '/vendors/edit_field_on_child?id=' +
+              itemid +'&klass=OrderItem' +
+              '&field=quantity'+
+              '&value=' + Salor.<%= @cash_register.scale %>;
+              get(string, filename);
+     } catch (err) {
+     	//don't complain
+     }
+    }
+  </script>
+  <div class="uniscalebutton" align="center" onmousedown="weigh_last_item();">
+    <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32) %>
+  </div>
+<% else %>
+  <div class="uniscalebutton" align="center" onmousedown="">
+  </div>
+<% end %>
+
+  <div class="pos-drawer-button" onmousedown="quick_open_drawer();">
+    <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},16) %>
+  </div>
+
+
+
+
+<div class='center'>
+<% if $User.can(:change_prices) %>
+  <div class="editme pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
+<% else %>
+  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
+<% end -%>
+</div>
+<div class='clear'></div>
+<div class='main_sku'>
+  <input type="text" class="keyboard-input keyboardable" id="keyboard_input" name="keyboard_input" value="" />
+</div>
+
+<div class='clear'></div>
+
+<div id="pos-table-left-column-items" class="pos-table-left-column-items"></div>
+
+<%= salor_render :partial => "shared/last_completed_orders" %>
+<%= salor_render :partial => "shared/void_order" %>
+<%= salor_render :partial => "shared/search" %>
+<%= salor_render :partial => "shared/complete_order" %>
+<%= salor_render :partial => "shared/in_place_edit" %>
+<%= salor_render :partial => "shared/last_five_orders" %>
+<% if Button.scopied.any? then  %>
+  <%= salor_render :partial => "shared/buttons" %>
+<% end %>
+<% if GlobalData.salor_user.meta.cash_register.artema_hybrid %>
+  <%= salor_render :partial => "shared/js/bycard_js" %>
+<% end %>

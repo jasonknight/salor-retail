@@ -1,0 +1,10 @@
+<% if @item  %>
+  <% [:name, :sku, :base_price, :quantity].each do |attr|  %>
+    if ($("#item_<%= attr %>").length != 0) {
+      $("#item_<%= attr %>").val('<%= @item.send(attr) %>');
+    }
+  <% end %>
+  $('#item_edit').css({position: 'absolute', top: MY - 10, left: MX + 20}).show();
+<% else %>
+  $('.notice').html('<%= I18n.t("system.errors.item_not_found") %>');
+<% end %>

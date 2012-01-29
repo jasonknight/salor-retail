@@ -1,0 +1,81 @@
+<script type="text/javascript">
+  var selected_order_item_id = null;
+  var filename = '_order_item_edit.html.erb';
+  
+  function show_order_item_edit(id) {
+    selected_order_item_id = id;
+    $('#order_item_edit_div').css({position: 'absolute', top: MY - 10, left: MX - 350}).show();
+    if ($('#item-' + id).attr('gcard') == 'true') {
+      if ($('#item-' + id).attr('activated') == 'true') {
+        $('#order_item_edit_gift_card').html('<%= t("menu.update_gift_card") %>');
+      } else {
+        $('#order_item_edit_gift_card').html('<%= t("menu.activate_gift_card") %>');
+      }
+      $('#gift_card_amount_row').show();
+      $('#order_item_edit_gift_card').show();
+      $('#order_item_edit_gift_card_amount').val($('#item-' + id).attr('amnt'));
+    }
+  }
+  function hide_order_item_edit() {
+    $('#order_item_edit_div').hide()
+  }
+  function update_order_item() {
+    $('#order_item_edit_div').hide();
+    $('#gift_card_amount_row').hide();
+    var inps = ['quantity','price'];
+    for (var i = 0; i < inps.length; i++) {
+      inps[i] = inps[i] + '=' + $('#order_item_edit_' + inps[i]).val();
+    }
+    var str = 'id=' + selected_order_item_id + "&" + inps.join('&');
+    get('/orders/update_order_item?' + str, filename);
+  }
+  function activate_gift_card() {
+    get('/orders/activate_gift_card?id=' + selected_order_item_id + '&amount=' + $('#order_item_edit_gift_card_amount').val(), filename);
+  }
+  $(function () {
+      try {
+        $('#order_item_edit_div').hide();
+        $('#gift_card_amount_row').hide();
+        $('#order_item_edit_gift_card').hide();
+      } catch (err) {
+            txt="There was an error on this page _order_item_edit.\n\n";
+            txt+="Error description: " + err.description + "\n\n";
+            txt+="Click OK to continue.\n\n";
+            alert(txt);
+      }
+  });
+</script>
+
+<div id="order_item_edit_div" class="hidden ui-widget ui-corner-all ui-widget-content">
+	<table align="left" width="400px">
+    <tr>
+      <td valign="top">
+        <%= t("views.quantity") %>
+      </td>
+       <td valign="top">
+          <input type="text" id="order_item_edit_quantity" name="quantity" class="text-input keyboardable-int" value="" size="5"/>
+       </td>
+       <td valign="top">
+        <%= t("views.price") %>
+      </td>
+       <td valign="top">
+          <input type="text" id="order_item_edit_price" name="price" class="text-input keyboardable-int" value="" size="6"/>
+       </td>
+    </tr>
+       <tr id="gift_card_amount_row" class="hidden">
+       <td valign="top">
+        <%= t("views.gift_card_amount") %>
+      </td>
+       <td valign="top">
+          <input type="text" id="order_item_edit_gift_card_amount" name="gift_card_amount" class="text-input keyboardable-int" value="" size="5"/>
+       </td>
+    </tr>
+    <tr>
+       <td valign="top" colspan="4">
+        <button id="order_item_edit_gift_card" onmousedown="activate_gift_card();" class="hidden"><%= t("menu.activate_gift_card") %></button> &nbsp;
+        <button id="order_item_edit_update_item" onmousedown="update_order_item();"><%= t("menu.edit") %></button>
+        <button id="order_item_edit_update_item" onmousedown="hide_order_item_edit();"><%= t("menu.done") %></button>
+      </td>
+    </tr>
+  </table>
+</div>

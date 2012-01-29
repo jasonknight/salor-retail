@@ -1,0 +1,87 @@
+<% cache('footer_menu/'+user_cache_name) do -%>
+<br /><br />
+
+<ul class="footer-list">
+  <li>
+    <div align="center">
+      <a href="/home/user_employee_index">
+        <img src="/images/icons/<%= icon(:home,32) %>" /><br />
+      </a>
+    </div>
+  </li>
+  <% if salor_user.can(:show_tax_profiles) %>
+  <li>
+    <div align="center">
+      <a href="<%= tax_profiles_path %>">
+        <img src="/images/icons/<%= icon(:tax_profile,32) %>" /><br />
+      </a>
+    </div>
+  </li>
+  <% end %>
+  <li>
+    <div align="center">
+      <a href="<%= vendors_path %>">
+        <img src="/images/icons/<%= icon(:vendor,32) %>" /><br />
+      </a>
+    </div>
+  </li>
+  <% if salor_user.can(:cashier) %>
+    <li>
+      <div align="center">
+        <%= salor_icon(:cash_drop,{:onclick => 'show_cash_drop();'},32) %><br />
+      </div>
+    </li>
+  <% end %>
+  <!-- 
+  <li>
+    <div align="center">
+      <a href="<%= item_types_path %>">
+        <img src="/images/icons/<%= icon(:item_type,32) %>" /><br />
+        <%= t "menu.item_types" %>
+      </a>
+    </div>
+  </li>
+  -->
+  <% if salor_user.can(:index_shipments) %>
+  <li>
+    <div align="center">
+      <a href="<%= shipments_path %>">
+        <img src="/images/icons/<%= icon(:shipment,32) %>" /><br />
+      </a>
+    </div>
+  </li>
+  <% end %>
+  
+  <% if salor_user.can(:index_orders) %>
+  <li>
+    <div align="center">
+      <%= link_to salor_icon(:order,{},32), new_order_path %><br />
+    </div>
+  </li>
+  <% end %>
+  <% if salor_user.can(:new_customers) %>
+  <li>
+    <div align="center">
+      <%= link_to salor_icon(:customer,{},32), new_customer_path(:vendor_id => salor_user.meta.vendor_id) %><br />
+    </div>
+  </li>
+  <% end %>
+  <li>
+    <div align="center">
+      <a href="/vendors/end_day">
+        <img src="/images/icons/<%= icon(:logout,32) %>" /><br />
+      </a>
+    </div>
+  </li>
+  <li>
+    <span class="version">v<%= AppConfig.version %></span>
+  </li>
+<% end -%>
+    <% if salor_user and not curl("orders#new") then  %>
+      <%= render :partial => "shared/generic_search" %>
+    <% end %>
+  
+</ul>
+<!-- End ul.list -->
+
+

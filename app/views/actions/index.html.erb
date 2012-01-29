@@ -1,0 +1,23 @@
+<%= raw content_box_top(t("menu.actions")) %>
+
+<%= link_to salor_icon(:add,{},32),new_action_path %>
+
+<table width="99%" cellspacing="0" align="center">
+  <tr>
+    <th align="left"><%= I18n.t("activerecord.attributes.name") %></th>
+    <th align="left"><%= I18n.t("activerecord.attributes.when") %></th>
+    <th align="left"><%= I18n.t("activerecord.attributes.sku") %></th>
+    <th></th>
+    <th></th>
+  </tr>
+<% @actions.each do |action| %>
+  <tr class="<%= cycle('even','odd') %>">
+    <td><%= action.name %></td>
+    <td><%=I18n.t("when_list.#{action.whento}") if action.whento %></td>
+    <td><%= link_to action.sku, "/items/#{action.sku}/edit" %></td>
+    <td width="40px"><%= link_to salor_icon(:edit,{},16), edit_action_path(action) %></td>
+    <td width="40px"><%= link_to salor_icon(:delete,{},16), action, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+<%= raw content_box_bottom %>

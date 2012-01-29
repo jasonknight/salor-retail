@@ -1,0 +1,52 @@
+<%= raw content_box_top(t("views.order_heading", :store => @order.vendor.name, :id => @order.id)) %>
+<table align="center" width="100%" >
+  <tr>
+    <td valign="top">
+      <table id="order_items_table" width="100%" class="ui-corner-all ui-widget ui-content stripe-me">
+          <tr>
+            <th><%= t("activerecord.attributes.name") %></th>
+            <th>
+              <%= I18n.t("activerecord.attributes.sku") %>
+            </th>
+            <th><%= t("activerecord.attributes.quantity") %></th>
+            <th><%= t("activerecord.attributes.price") %></th>
+            <th><%= t("activerecord.attributes.coupon_total") %></th>
+            <th><%= t("activerecord.attributes.total") %></th>
+          </tr>
+            <%= salor_render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items} %>
+        </table>
+        <table align="center" width="100%">
+          <tr>
+            <td>&nbsp;</td>
+            <td align="right" class='money'><%= t("views.subtotal") %>: <span id="subtotal"><%= salor_number_to_currency(@order.subtotal) %></span></td>
+            <td align="right" class='money'><%= t("views.tax") %>: <span id="tax"><%= salor_number_to_currency(@order.tax) %></span></td>
+            <td align="right" class='money'><%= t("views.total") %>: <span id="total"><%= salor_number_to_currency(@order.total) %></span></td>
+          </tr>
+          <tr>
+            <td colspan="3">&nbsp;</td>
+            <td align="right" class='money'><%= t("activerecord.attributes.refund") %>: <span id="total"><%= salor_number_to_currency(@order.refund_total) %></span></td>
+          </tr>
+        </table>
+    </td>
+  </tr>
+</table>
+<% if GlobalData.salor_user.is_technician? %>
+    <table class="payment-methods-table" width="100%">
+      <% @order.payment_methods.each do |pm|  %>
+      <tr>
+        <td><%= edit_me(:name,pm,pm.name) %></td>
+        <td><%= edit_me(:internal_type,pm,pm.internal_type) %></td>
+        <td><%= edit_me(:amount,pm,pm.amount) %></td>
+        <td>
+          <div class="generic-button" onmousedown="$.get('/orders/remove_payment_method?id=<%= @order.id %>&pid=<%= pm.id %>')">
+            Delete
+          </div>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    <%= salor_render :partial => "shared/in_place_edit" %>
+<% end %>
+<%= raw content_box_bottom %>
+<%= salor_render :partial => "order_menu" %>
+

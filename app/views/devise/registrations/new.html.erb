@@ -1,0 +1,59 @@
+
+<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+<table id="user_signup_table" class="table sign-up" align="center">
+  <tr>
+    <td colspan="2">
+      <h2><%= t "system.sign_up" %></h2>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <%= t "views.username"%>
+    </td>
+    <td>
+     <%= f.text_field :username %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <%= t "views.email" %>
+    </td>
+    <td>
+      <%= f.email_field :email %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+       <%= t "views.language" %>
+    </td>
+    <td>
+      <%= f.select :language,supported_languages.collect {|l| [l[:name],l[:locale]]} %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+       <%= t "views.password" %><br />
+      <%= f.password_field :password %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+       <%= t "views.password_confirm" %><br/>
+       <%= f.password_field :password_confirmation %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <%= f.submit "Sign up" %>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <% unless AppConfig.standalone %>
+        <%= render :partial => "devise/shared/links" %>
+      <% end %>
+    </td>
+  </tr>
+</table>
+<% end %>

@@ -1,0 +1,32 @@
+<%= raw content_box_top(I18n.t("headings.best_selling_category"),{:width => '100%',:menu => false, :breadcrumb => false}, true) %>
+<table align="center" width="100%" class="stripe-me">
+<thead>
+    <tr>
+      <th>
+        <%= I18n.t("activerecord.attributes.name") %>
+      </th>
+      <th align="right">
+        <%= I18n.t("activerecord.attributes.quantity_sold") %>
+      </th>
+      <th align="right">
+        <%= I18n.t("activerecord.attributes.cash_made") %>
+      </th>
+    </tr>
+  </thead>
+  <% salor_user.best_selling_categories.each do |category| %>
+      <tr>
+        <td valign="top">
+          <%=  edit_me(:name,category,category.name,'',category.get_html_id + '_best_category') %>
+        </td>
+        <td valign="top" align="right">
+          <%=  edit_me(:quantity_sold,category,category.quantity_sold,'',category.get_html_id + '_best_category') %>
+        </td>
+        <td valign="top" align="right">
+          <%=  edit_me(:cash_made,category,salor_number_to_currency(category.cash_made),'',category.get_html_id + '_best_category') %>
+        </td>
+      </tr>
+    <% end %>
+</table>
+<%= 
+raw content_box_bottom # end raw content_box_top(I18n.t("headings.best_selling_category")
+%>

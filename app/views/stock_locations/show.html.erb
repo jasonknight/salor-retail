@@ -1,0 +1,42 @@
+<%= raw content_box_top(I18n.t("activerecord.models.stock_location.one") + ' ' + @location.name) %>
+<div id="" class="locations-items-table table">
+
+  <% items = @location.shipment_items.scopied.where("in_stock IS FALSE").page(params[:page]).per(GlobalData.conf.pagination) %>
+
+<div id="" class="salor-pagination">
+  <%= paginate(items) if items %>
+</div>
+  <div id="" class="table-row">
+    <div id="" class="table-cell table-head locations-attribute-name-head">
+      <%= I18n.t("activerecord.attributes.name") %>
+    </div>
+    <div id="" class="table-cell table-head locations-attribute-sku-head">
+      <%= I18n.t("activerecord.attributes.sku") %>
+    </div>
+    <div id="" class="table-cell table-head locations-attribute-quantity-head">
+      <%= I18n.t("activerecord.attributes.quantity") %>
+    </div>
+  </div>
+  <% items.each do |item| %>
+    <div id="" class="table-row">
+      <div id="" class="table-cell locations-items-cell locations-attribute-name-cell">
+        <%= item.name %>
+      </div>
+      <div id="" class="table-cell locations-items-cell locations-attribute-sku-cell">
+        <%= item.sku %>
+      </div>
+      <div id="" class="table-cell locations-items-cell locations-attribute-quantity-cell">
+        <%= item.quantity %>
+      </div>
+      <div id="" class="table-cell locations-items-cell locations-buttons-cell">
+        <% if not item.in_stock  %>
+          <button id="button-move-item" onclick="get('/shipments/move_shipment_item?id=<%= item.shipment.id %>&shipment_item_id=<%= item.id %>', 'show.html.erb');$(this).hide();"><%= I18n.t("menu.move_shipment_item") %></button>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div id="" class="salor-pagination">
+  <%= paginate(items) if items %>
+</div>
+<%= raw content_box_bottom  %>

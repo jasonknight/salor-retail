@@ -1,0 +1,9 @@
+<script type="text/javascript">
+function generic_search() {
+  window.location = '?keywords=' + $('#generic_search_input').val() + '&<%= raw flatten_params %>';
+}
+</script>
+<div id="generic_search" class="generic-search">
+        <input type="text" id="generic_search_input" class="generic-search-input corner-all keyboardable left-kbd" value="<%= params[:keywords] %>" />
+        <div class="generic-search-button" onmousedown="generic_search()" ></div>
+</div>

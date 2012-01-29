@@ -1,0 +1,57 @@
+<script type="text/javascript">
+function showHideCustomerOrRebate() {
+  if ($('.pos-customer').hasClass('shown')) {
+    $('.pos-customer').removeClass('shown');
+    $('.pos-customer').hide();
+    $('.rebate').addClass('shown');
+    $('.rebate').show();
+  } else {
+    $('.rebate').removeClass('shown');
+    $('.rebate').hide();
+    $('.pos-customer').addClass('shown');
+    $('.pos-customer').show();
+  }
+}
+function clearOrder() {
+  $('#main_content').mask('<%= t("views.single_words.saving") %>');
+  $.get('/orders/clear?order_id=' + $('.order-id').html());
+}
+
+function setBuyOrderButton(id) {
+  $("#buy_order_button").unbind('mousedown');
+  $("#buy_order_button").mousedown(function(){
+    get('/vendors/toggle?ajax=true&klass=Order&field=toggle_buy_order&model_id=' + id, 'pos/menu');
+    focusInput($('.void-order-input'));
+  });
+}
+</script>
+<div class="pos-menu">
+        <div id="new_order_button" onmousedown="get('/orders/new_order_ajax', '_menu.html.erb')" class="input pos-button new-order">
+          <%= t("menu.new_order")%>
+        </div>
+        <div id="configuration_button" onmousedown="showVoidOrder()" class="input pos-button pos-configuration">
+        <%= t("menu.void")%>
+        </div>
+        <div id="clear_button" onmousedown="clearOrder();" class="input pos-button pos-configuration" style="width: 3%;background-color: red;">
+        C
+        </div>
+        <div id="buy_order_button" class="input pos-button pos-configuration">
+        <%= t("menu.buy_order")%>
+        </div>
+        <div id="configuration_button" onmousedown="showHideCustomerOrRebate();" class="input pos-button pos-configuration">
+          <%= t("menu.configuration")%>
+        </div>
+        <div id="show_butons" onmousedown="$('.last-five-orders').show();" class="input pos-button">
+          <%= t("activerecord.models.customer.other")%>
+        </div>
+        <div id="show_butons" onmousedown="$('.buttons').show();" class="input pos-button">
+          <%= t("menu.buttons")%>
+        </div>
+        <div id="show_search" onmousedown="showSearch();" class="input pos-button">
+          <%= t("menu.search")%>
+        </div>
+        <div id="print_receipt_button" onmousedown="get('/orders/show_payment_ajax?order_id=' + $('.order-id').html());" class="input pos-button print-receipt">
+          <%= t("system.complete_sale")%>
+        </div>
+
+</div>

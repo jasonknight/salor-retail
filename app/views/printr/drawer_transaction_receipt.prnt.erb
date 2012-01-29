@@ -1,0 +1,39 @@
+<%= "\e@" %>
+<%= "\ea\x01" %>
+<%= "\e!\x38" %>
+<%= DrawerTransaction.human_name %> <%= @dt.id %>
+
+<%= "\ea\x00" %>
+<%= "\e!\x01" %>
+<%= I18n.l(@dt.created_at, :format => :long) %>
+
+
+<%= "\e!\x00" %>
+<%= $User.username %>
+
+
+<%= @dt.tag %>
+
+
+<%= @dt.notes %>
+
+
+<%= "\e!\x38" %>
+<%= SalorBase.to_currency @dt.amount %>
+<%= "\n" %>
+<%= I18n.t @dt.drop ? 'printr.word.drop' : 'printr.word.payout' %>
+<%= "\n\n" %>
+<%= GlobalData.vendor.receipt_logo_footer if GlobalData.vendor.receipt_logo_footer %>
+
+
+
+
+<%= "\e!\x00" %>
+
+
+
+
+
+
+
+<%= "\x1D\x56\x00" %>

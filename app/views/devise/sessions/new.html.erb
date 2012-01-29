@@ -1,0 +1,23 @@
+<table class="table sign-in-form" align="center">
+<tr>
+  <td>
+    <h2><%= t "system.login"%></h2>
+
+    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+      <p><%= t "views.username" %><br />
+      <%= f.text_field :username, :class => 'keyboardable' %></p>
+
+      <p><%= t "views.password" %><br />
+      <%= f.password_field :password, :class => 'keyboardable' %></p>
+
+      <% if devise_mapping.rememberable? -%>
+        <p><%= f.check_box :remember_me %> <%= t "views.remember_me" %></p>
+      <% end -%>
+
+      <p><%= f.submit(t("system.login")) %></p>
+    <% end %>
+
+    
+    </td>
+  </tr>
+</table>

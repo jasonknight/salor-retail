@@ -1,0 +1,72 @@
+<%= form_for(@shipper) do |f| %>
+  <% if @shipper.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @shipper.errors.count,:model => t("activerecord.models.shipper.one"))%></h2>
+
+      <ul>
+      <% @shipper.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<table width="540px">
+  <tr>
+    <td width="270px" style="padding-bottom:10px;">
+      <div class="field">
+        <%= f.label t("activerecord.attributes.name") %><br />
+        <%= f.text_field :name, :class => "keyboardable"%>
+      </div>
+    </td>
+    <td width="270px" style="padding-bottom:10px;">
+      <div class="field" style="padding-left:85px">
+        <%= f.label t("activerecord.attributes.contact_phone") %><br />
+        <%= f.text_field :contact_phone, :class => "keyboardable-int"%>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="270px" style="padding-bottom:10px;">
+      <div class="field">
+        <%= f.label t("activerecord.attributes.contact_person") %><br />
+        <%= f.text_field :contact_person, :class => "keyboardable" %>
+      </div>
+    </td>
+    <td width="270px" style="padding-bottom:10px;">
+      <div class="field" style="padding-left:85px">
+        <%= f.label t("activerecord.attributes.contact_fax") %><br />
+        <%= f.text_field :contact_fax, :class => "keyboardable-int"%>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td width="270px" style="padding-bottom:10px;">
+      <div class="field">
+        <%= f.label t("activerecord.attributes.contact_email") %><br />
+        <%= f.text_field :contact_email, :class => "keyboardable"%>
+      </div>
+    </td>
+    <td width="270px" style="padding-bottom:10px;">
+      &nbsp;
+      <%= f.hidden_field :user_id, :value => salor_user.get_owner.id if salor_user.is_employee? %>
+      <%= f.hidden_field salor_user.is_employee? ? :employee_id : :user_id, :value => salor_user.id%>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" width="540px">
+      <div class="field">
+        <%= f.label t("activerecord.attributes.contact_address") %><br />
+        <%= f.text_area :contact_address, :class => 'keyboardable', :rows => 4, :style => "width:470px;" %>
+      </div>
+      <div class="field">
+        <%= f.label t("activerecord.attributes.reorder_type") %><br />
+        <%= f.select :reorder_type, Item::REORDER_TYPES %>
+      </div>
+    </td>
+  </tr>
+</table>
+<br />
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

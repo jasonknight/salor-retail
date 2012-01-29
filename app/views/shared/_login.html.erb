@@ -1,0 +1,61 @@
+
+<div align="center">
+  <script type="text/javascript">
+  $(document).ready(function () {
+      $('.employee-sign-in-form-container').show();
+      $('#employee').find(".keyboardable:first").focus();
+      $('.link').mousedown(function () {
+          $('.active').removeClass('active');
+          $(this).addClass('active');
+          $('.sign-in-form-container').hide();
+          $($(this).attr('href')).show();
+          
+      }).mouseup(function () {
+        $($(this).attr('href')).find(".keyboardable:first").focus();
+      });
+      $(window).keypress(function(event){
+        if (event.keyCode == 13) {
+          doSubmit();
+        }
+      });
+  });
+  
+  function doSubmit() {
+      $('#new_employee').submit();
+  }
+  </script>
+  <% if AppConfig.logo_check  %>
+    <div class="customer-logo">
+      <img src="/images/logo-300.png"  />
+    </div>
+  <% end %>
+  <div class="sign-in-forms" style="margin-top: 132px;">
+    <div class="sign-in-form-menu">
+      <div class="link active" href="#employee">
+        <%= I18n.t("system.login") %>
+      </div>
+    </div>
+    <div class="tab-container">
+      <div id="employee" class="employee-sign-in-form-container sign-in-form-container">
+        <table class="table sign-in-form" align="center" width="99%">
+            <tr>
+              <td>
+                <%= form_for(Employee.new, :url => '/employees/login') do |f| %>
+                  <br />
+                  <br />
+                  <%= text_field_tag :code, "", :class => "keyboardable big-input"%></p>
+                  <br />
+                  <div class="button-row" align="center">
+                      <div class="spacer">&nbsp;</div>
+                      <div class="button-confirm" onmousedown="doSubmit()"><%= I18n.t("system.login") %></div>
+                  </div>
+                  <br />
+                <% end %>
+                </td>
+              </tr>
+          </table>    
+      </div>
+    </div>
+  </div>
+<!--<span onclick='//CustomerScreen.refresh("http://salor/orders/1/customer_display",800,480);'>test</span>-->
+</div>

@@ -1,0 +1,23 @@
+<% if @inst.class == Order then %>
+  updateOrder(<%= raw @inst.to_json %>);
+<% elsif @inst.class == OrderItem %>
+  <% if not @inst.order.nil? and not @inst.nil? then %>
+    updateOrderItems([<%= raw @inst.to_json %>]);
+    updateOrder(<%= raw @inst.order.to_json %>);
+  <% else %>
+    <% @inst.calculate_total %>
+    <% @inst.order.update_self_and_save %>
+
+    updateOrder(<%= raw @inst.order.to_json %>);
+    <%
+      items = []
+    @inst.order.order_items.each do |oi|
+        items << oi.to_json
+      end
+    %>
+    updateOrderItems([<%= raw items.join(',') %>]);
+  <% end %>
+<% end %>
+$('#main_content').unmask();
+focusInput($('#keyboard_input'));
+<%= salor_render :partial => "shared/js/global_errors_js" %>

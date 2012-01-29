@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @shipper.name %>
+</p>
+
+<p>
+  <b>Contact person:</b>
+  <%= @shipper.contact_person %>
+</p>
+
+<p>
+  <b>Contact phone:</b>
+  <%= @shipper.contact_phone %>
+</p>
+
+<p>
+  <b>Contact fax:</b>
+  <%= @shipper.contact_fax %>
+</p>
+
+<p>
+  <b>Contact email:</b>
+  <%= @shipper.contact_email %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @shipper.user_id %>
+</p>
+
+<p>
+  <b>Employee:</b>
+  <%= @shipper.employee_id %>
+</p>
+
+<p>
+  <b>Contact address:</b>
+  <%= @shipper.contact_address %>
+</p>
+
+
+<%= link_to 'Edit', edit_shipper_path(@shipper) %> |
+<%= link_to 'Back', shippers_path %>

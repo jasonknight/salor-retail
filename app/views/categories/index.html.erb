@@ -1,0 +1,26 @@
+<%= raw content_box_top(t "menu.categories") %>
+<div class="list master">
+  <% @categories.each do |category| %>
+  <%= render(:partial => "shared/edit_li_wide", :locals => {
+      :path => category_path(category),
+      :image => icon(:category),
+      :text => category.name + "<br />(#{category.items.count})",
+      :edit_path => edit_category_path(category),
+      :del_path => category 
+    }) %>
+  <% end %>
+  <div class="master widget">
+      <div align="center">
+        <a href="<%= new_category_path %>">
+          <img src="/images/icons/<%= icon(:add) %>" /><br />
+          <%= t "menu.new_category" %>
+      	</a>
+      </div>
+    </div>
+</div>
+<div class="pagination" align="center">
+  <%= paginate @categories if @categories %>
+</div>
+<%= raw content_box_bottom %>
+
+

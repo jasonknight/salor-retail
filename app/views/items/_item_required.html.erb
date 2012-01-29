@@ -1,0 +1,203 @@
+<style type='text/css'>
+.item-float-left {
+  float: left;
+}
+</style>
+<table align="center">
+<tr>
+  <td >  
+    <div class="new-item-field">
+        <%= f.label I18n.t("activerecord.attributes.name") %><br />
+        <%= f.text_field :name, :class => "keyboardable", :style => "width: 500px;" %>
+      </div>
+       <br />
+      <div class="new-item-field" style=" clear:both;">
+          <%= f.label I18n.t("activerecord.attributes.price_by_qty") %><br />
+          <%= f.check_box :price_by_qty, :onchange => "price_by_qty_change();", :class => "price-by-qty delimit-number" %>
+        </div>
+  </td>
+</tr>
+  <tr>
+    <td valign="top" class='item-form-first'>
+      <div class="new-item-field" class='item-form-second'>
+        <%= f.label I18n.t("activerecord.attributes.sku") %><br />
+        <%= f.text_field :sku, :class => "keyboardable", :style => "width: 300px;" %>
+      </div>
+      <div class="clear">
+        &nbsp;
+      </div>
+      <% if not @item.sku.blank?  %>
+        <div class="new-item-field">
+          <%
+            b = Barcode.new
+            path = b.create(@item.sku)
+          %>
+          <%= link_to "/images/" + b.get_barcode(@item.sku) do %>
+            <%= image_tag path %>
+          <% end %>
+          <br />
+          <%= link_to image_tag("icons/EPS-icon.png", :width => "48"), "/images/" + b.get_barcode(@item.sku).gsub('.png','.eps') %> 
+          &nbsp;&nbsp;&nbsp;
+         <!-- 
+          <%= link_to t(:label), "/items/labels?id=#{ @item.id }&type=label", :remote => true, :method => :post %> |
+          <%= link_to t(:sticker), "/items/labels?id=#{ @item.id }&type=sticker", :remote => true, :method => :post %>
+         -->
+         <%= image_tag "icons/print_sticker_48.png", 
+                       :title => "Print Sticker", 
+                       :class => "class", 
+                       :onclick => "SalorPrinter.printURL('#{GlobalData.cash_register.sticker_printer}','#{GlobalData.conf.url}/items/render_label?id=#{ @item.id }&type=sticker')" %> 
+&nbsp;&nbsp;&nbsp;
+          <%= image_tag "icons/print_48.png", 
+                       :title => "Print Thermal", 
+                       :class => "class", 
+                       :onclick => "SalorPrinter.printURL('#{GlobalData.cash_register.thermal_printer}','#{GlobalData.conf.url}/items/render_label?id=#{ @item.id }&type=label')" %> 
+
+          </div>
+         <div class="clear">
+          &nbsp;
+        </div>
+       <% end %>
+       <% if not @item.ignore_qty  %>
+        <div class="new-item-field">
+          <%= f.label I18n.t("activerecord.attributes.quantity") %><br />
+          <%= f.text_field :quantity, :class => "keyboardable-int delimit-number", :size => 7 %>
+        </div>
+       <% end %>
+         <div class="new-item-field">
+          <%= f.label I18n.t("activerecord.attributes.base_price") %><br />
+          <%= f.text_field salor_number_with_delimiter(:base_price), :class => "keyboardable-int delimit-number" %><br />
+        </div>
+        <div class="clear">
+          &nbsp;
+        </div>
+        <div class="new-item-field">
+          <%= f.label I18n.t("activerecord.attributes.purchase_price") %><br />
+          <%= f.text_field :purchase_price, :class=> "keyboardable-int delimit-number" %>
+        </div>
+        <div class="new-item-field">
+          <%= f.label I18n.t("activerecord.models.vendor.one") %><br />
+          <%= f.collection_select :vendor_id,GlobalData.vendors,:id,:name %>
+        </div>
+        <div class="new-item-field">
+          <%= f.label I18n.t("activerecord.models.location.one") %><br />
+          <select name="item[location_id]">
+            <option value=""></option>
+            <% GlobalData.locations.each do |location| %>
+              <% if @item.location_id == location.id  %>
+                <option value="<%= location.id  %>" selected><%= location.name %></option>
+                <% else %>
+                 <option value="<%= location.id  %>"><%= location.name %></option>
+                <% end %>
+            <% end %>
+          </select>
+        </div>
+    </td>
+  </tr>
+</table>
+
+
+<table align="center" width="99%">
+  <tr>
+    <td valign="top">
+
+<div class="new-item-field">
+  <%= f.label I18n.t("activerecord.attributes.decimal_points") %><br />
+  <%= f.text_field :decimal_points, :class => "keyboardable-int decimal-points" %>
+</div>
+<div class="clear">
+  &nbsp;
+</div>
+        <div class="new-item-field item-float-left">
+          <script type="text/javascript">
+          $(function () {
+              try {
+                $('#item_item_type_id').change(function () {
+                    if ($(this).val() == 3) {
+                      $('#coupon').show();
+                    } else {
+                      $('#coupon').hide();
+                    }
+                    if ($(this).val() == 2) {
+                      $('#gcardamount').show();
+                    } else {
+                      $('#gcardamount').hide();
+                    }
+                });
+                if ($('#item_item_type_id').val() == 3) {$('#coupon').show();}
+                if ($('#item_item_type_id').val() == 2) {$('#gcardamount').show();}
+              } catch (err) {
+                    txt="There was an error on this page item_required_2.\n\n";
+                    txt+="Error description: " + err.description + "\n\n";
+                    txt+="Click OK to continue.\n\n";
+                    alert(txt);
+              }
+          });
+          </script>
+          <%= f.label I18n.t("activerecord.models.item_type.one") %><br />
+          <%= f.collection_select :item_type_id,ItemType.all,:id,:name %>
+        </div>
+        <div class="new-item-field item-float-left">
+          <%= f.label I18n.t("activerecord.models.tax_profile.one") %><br />
+          <%= f.collection_select :tax_profile_id,TaxProfile.scopied.all,:id,:name %>
+        </div>
+        <div class="new-item-field  item-float-left" >
+          <%= f.label I18n.t("activerecord.models.category.one") %><br />
+          <%= f.collection_select :category_id, GlobalData.categories,:id,:name %>
+        </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+         <div class="new-item-field">
+            <%= f.label I18n.t("activerecord.attributes.expires_on") %><br />
+          <%= f.date_select :expires_on%> <br />
+      <%= f.label I18n.t("activerecord.attributes.buyback_price") %><br />
+      <%= f.text_field :buyback_price, :class => 'keyboardable-int delimit-number'%><br />
+      <%= f.label I18n.t("activerecord.attributes.default_buyback") %> <%= f.check_box :default_buyback%>
+         </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">
+      <div class="new-item-field">
+            <%= f.label I18n.t("activerecord.attributes.weigh_compulsory") %><br />
+            <%= f.check_box :weigh_compulsory %>
+          </div> 
+          <div class="new-item-field">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+          </div>
+          <div class="new-item-field">
+            <%= f.label I18n.t("activerecord.attributes.must_change_price") %><br />
+            <%= f.check_box :must_change_price %>
+          </div>
+    </td>
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+  $(".delimit-number").each(function(){
+    $(this).val(toDelimited($(this).val()));
+  })
+});
+
+function price_by_qty_change() {
+  if ($('.price-by-qty').is(':checked')) {
+    $('.decimal-points').val(3);
+  } else {
+    $('.decimal-points').val(2);
+  }
+}
+$(function () {
+    try {
+      price_by_qty_change();
+    } catch (err) {
+      txt="There was an error on this page item_required.\n\n";
+      txt+="Error description: " + err.description + "\n\n";
+      txt+="Click OK to continue.\n\n";
+      alert(txt);
+    }
+});
+</script>

@@ -1,0 +1,36 @@
+<%= raw content_box_top(t("headings.listing_nodes")) %>
+  <table width="80%" align="center">
+  <% @nodes.each do |node| %>
+  <tr>
+    <td> 
+      <div class="node-listing pointer <%= node.is_self == true ? 'node-self' : ''  %>">
+        <div class="name"  onmousedown="window.location = '<%= node.url %>'">
+          <%= link_to node.name, node.url %>
+        </div>
+        <div class="sku">
+          <%= node.sku %>
+        </div>
+        <br />
+        <div class="url">
+          <%= node.url %>
+        </div>
+        <div class="node-type">
+          <%= node.node_type %>
+        </div>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>  
+      <table class="link-menu-table">
+        <td><%= link_to 'Show', node %></td>
+        <td><%= link_to 'Edit', edit_node_path(node) %></td>
+        <td><%= link_to 'Destroy', node, :confirm => 'Are you sure?', :method => :delete %></td>
+      </table>
+    </td>
+  </tr>
+  <% end %>
+  </table>
+  <br />
+  <%= link_to 'New Node', new_node_path %>
+<%= raw content_box_bottom %>

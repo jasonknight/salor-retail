@@ -1,0 +1,38 @@
+en-US:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+  number:
+    currency:
+      format:
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
+      
+de:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+  number:
+    currency:
+      format:
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
+

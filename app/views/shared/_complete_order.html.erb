@@ -1,0 +1,454 @@
+<script type="text/javascript">
+/**
+ * NOTE: Most of the allow_complet_order() calls were commented out for a specific client.
+ * These really should be active.
+ */
+var _called = 0;
+var complete_total = 0;
+var filename = "_complete_order.html.erb";
+var sendingOrder = false;
+var oldPaymentMethod = ""; // used to cache the payment method before change so that if it is invalid, can be set back to original
+var allow_payment_amount = true;
+/*
+  Payment Methods
+
+  This is a model with 2 name, internal_type and amount they need to be
+  passed in as an array: payment_methods[][attr] etc
+
+  They are in array format with the index of one matches the index of another so
+  index = payment_internal_types.indexOf(payment_internal_type)
+  puts payment_external_types[index] etc.
+*/
+// i.e. what needs to be sent in the payment_methods[][internal_type] field
+var payment_internal_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
+// what can be set as the payment_methods[][name] field
+var payment_external_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
+
+function payment_method_options() {
+  var txt = '';
+  for (var i=0; i<payment_internal_types.length; i++) {
+    txt = txt + '<option value="' + payment_internal_types[i] + '">'+payment_external_types[i]+'</option>';
+  }
+  return txt;
+}
+
+function add_payment_method() {
+  if ($(".payment-amount").size() >= payment_internal_types.length) return;
+  var d = div();
+  var numMethods = $(".payment-amount").size();
+  d.addClass('payment-method');
+  var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
+  var opts = payment_method_options();
+  var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  $("#payment_methods").append(sel).append(amount);
+  $('#payment_methods').append('<br />');
+  oldSelectedIndex = null;
+  validatePaymentMethod($(sel));
+  make_keyboardable_with_options(amount, {
+    visible: function () {
+      var cls = $(sel).val() + '-amount';
+      $(".ui-keyboard-preview").removeClass('payment-amount');
+      setTimeout(function () {
+        // to keep this double input from messing up get_payment_amount
+        $("." + cls).select();
+      },150);
+    },
+    accepted: function () {
+      display_change();
+    }
+  });
+  focusInput(amount);
+  display_change();
+}
+
+function validatePaymentMethod(element) {
+  var unusedPaymentTypes = payment_internal_types.slice(0);
+  $.each($(".payment-method"), function(){
+    if ($(element).attr("id") != $(this).attr("id")) {
+      var index = unusedPaymentTypes.indexOf($(this).val());
+      if (index > -1) unusedPaymentTypes[index] = ""; // need to keep all indexes in place
+    }
+  });
+  if (unusedPaymentTypes.indexOf($(element).val()) == -1) {
+    var setIndex;
+    if (oldSelectedIndex === null) {
+      // find first open iundex
+      for (i=0; i<unusedPaymentTypes.length; i++) {
+        if (unusedPaymentTypes[i]) {
+          setIndex = i;
+          i = unusedPaymentTypes.length;
+        }
+      }
+      $(element).attr('selectedIndex');
+    } else {
+      setIndex = oldPaymentMethod;
+    }
+    $(element).attr('selectedIndex', setIndex);
+  }
+  var index = $(element).attr('id').split("_")[2];
+  var pay_input = $("#payment_amount_" + index);
+  // The following var is never used?
+  // var pay_amount = (toFloat($(pay_input).val())) ? 0 : $(pay_input).val();
+
+  // Since cardTotal is the remaining amount, and it's calculated automatically, the 
+  // cardTotal calc will cycle between 0 and the remaining amount for every other
+  // payment-method change! So, we fix it:
+  var cardTotal = Math.round((complete_total - get_payment_total()) * 100);
+  if (cardTotal <= 0) {
+    cardTotal = pay_input.val();
+  } else {
+    cardTotal = parseInt(cardTotal) / 100;
+    if (cardTotal + get_payment_total() > complete_total) {
+      cardTotal = 0;
+    }
+  }
+  // Here we tag the input field, so that it is easily accessible with class access like ByCard-amount, or ByGiftCard-amount etc.
+  // first we remove any classes
+  $(element).find('option').each(function () {$(pay_input).removeClass($(this).val() + '-amount');} );
+  // then we add the currently selected value as a class, i.e. PayBox-amount
+  $(pay_input).addClass($(element).val() + '-amount');
+  if ($(element).val() == "ByCard") {
+    if (typeof bycard_show != 'undefined') {
+      bycard_show();
+    }
+    $(pay_input).val(cardTotal);
+    $(pay_input).addClass('bycard-amount');
+    display_change();
+  } else {
+    $(pay_input).val(cardTotal);
+  }
+}
+
+function complete_order_show() {
+  sendingOrder = false;
+  complete_total = toFloat($('#pos_order_total').text());
+  if (isBuyOrder) complete_total *= -1;
+  $(".complete-order-total").html($('#pos_order_total').html());
+  $("#complete_order_change").html('');
+  $("#recommendation").html('');
+  //allow_complete_order(isBuyOrder); // need to get the total money tended > complete_total before active unless this isBuyOrder
+  $('#complete_order').show();
+
+  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      blurb = ('<%= t('activerecord.attributes.total') %>' + '               ').substring(0,10);
+      currency = '<%= t('number.currency.format.friendly_unit') %>';
+      total = parseFloat(($('#pos_order_total').html()).replace(',','.').substring(1));
+      total = sprintf("%s %6.2f", currency, total);
+      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', blurb + total );
+    }
+  <% end %>
+  
+  var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print_48.png' /></div>");
+  var thermprint = $("<div class='a4-print-button'><img src='/images/icons/print_48.png' /></div>");
+  var left = $('#complete_order').position().left;
+  var width = $('#complete_order').width();
+  var cpos = {x: width + left + 25, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
+  a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
+  thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
+  a4print.mousedown(function () {
+                CustomerScreen.print('http://salor/orders/'+$('.order-id').html().replace('#','')+'/print');          
+  });
+  thermprint.mousedown(function () {
+      <% if $Conf.salor_printer == true then %>
+      if (SalorPrinter != 'undefined') {
+        SalorPrinter.printURL('<%= GlobalData.salor_user.get_meta.cash_register.thermal_printer %>','<%= GlobalData.conf.url %>/orders/render_order_receipt?order_id=' + $('.order-id').html());
+      } else {
+      	$.get('/orders/print_receipt?id=' + $('.order-id').html());   
+      }
+      <% else %>
+      	$.get('/orders/print_receipt?id=' + $('.order-id').html());   
+      <% end %>
+  });
+  $("body").append(a4print);
+  $("body").append(thermprint);
+  bindInplaceEnter(false);
+  handleKeyboardEnter = false;
+  orderCompleteDisplayed = true;
+
+  setOnEnterKey(function(event) {
+    if (event.keyCode == 13 && orderCompleteDisplayed) {
+      var confirmInactive = $("#confirm_complete_order_button").hasClass("button-inactive");
+      if (confirmInactive) {
+        complete_order_hide();
+      } else {
+        <% if @cash_register.no_print == true %>
+          complete_order_send(false);
+        <% else  %>
+          complete_order_send();
+        <% end %>
+        focusInput($("#payment_amount_0"));
+      }
+    }
+  });
+
+  setOnEscKey(function() {
+    complete_order_hide();
+  });
+
+  if (isBuyOrder) {
+    $("#add_payment_method_button").hide();
+    $("#payment_methods").hide();
+  } else {
+    $("#add_payment_method_button").show();
+    $("#payment_methods").show();
+  }
+  $("#payment_methods").html("");
+  add_payment_method();
+  $("#payment_amount_0").val( complete_total );
+  allow_complete_order();
+  display_change();
+  show_denominations();
+  $("#keyboard_input").attr("disabled", true);
+  allow_payment_amount = true;
+}
+
+function show_denominations() {
+   var pieces = [<%= I18n.t("number.currency.format.pieces").split(',').find_all { |piece| piece.to_f > 2.0}.join(',') %>];
+		var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
+		var doc = 99; // radius
+		var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
+		for (var i in pieces) {
+		  p = $('<div id="complete_piece_"'+pieces[1]+'>'+toCurrency(pieces[i])+'</div>');
+		  p.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
+		  p.addClass("pieces-button shadow");
+			cpos = {x: cpos.x, y: cpos.y + 57};
+			p.attr('amount',pieces[i]);
+			p.mousedown(function () {
+			            var val = toFloat($(this).attr('amount'));
+			            $("#payment_amount_0").val( val );
+			            display_change();
+			} );
+			$('body').append(p);
+		}
+}
+
+function allow_complete_order(isAllowed) {
+  if (isAllowed == null) isAllowed = true;
+  //if (complete_total == 0) isAllowed = false;
+  if (isAllowed) {
+    $("#confirm_complete_order_button").removeClass("button-inactive").mousedown(complete_order_send);
+    $("#confirm_complete_order_noprint_button").removeClass("button-inactive").mousedown(function(){complete_order_send(false)});
+    $("#cancel_complete_order_button").html("<%= I18n.t("helpers.submit.cancel") %>");
+  } else {
+    $("#confirm_complete_order_button").addClass("button-inactive").unbind('mousedown');
+    $("#confirm_complete_order_noprint_button").addClass("button-inactive").unbind('mousedown');
+    $("#cancel_complete_order_button").html("<%= I18n.t("menu.done") %>");
+  }
+}
+
+function addCashAmount() {
+  if (complete_total == 0) return;
+  var addAmount = toFloat($(this).val());
+  var curAmount = toFloat($("#complete_in_cash").val());
+  $("#complete_in_cash").val(curAmount + addAmount);
+  display_change();
+  focusInput($("#complete_in_cash"));
+}
+
+function initInput(type) {
+  var input = $("#complete_in_" + type);
+  if (isBuyOrder) {
+    $(input).attr('disabled', true);
+  } else {
+    if ($(input).val() == "0") $(input).val('');
+    $(input).attr('disabled', false);
+ }
+}
+
+function blurInput(type) {
+  var input = $("#complete_in_" + type);
+  if ($(input).val() == "") $(input).val("0");
+}
+
+function complete_order_hide() {
+  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', '<%= GlobalData.cash_register.customer_screen_blurb %>' );
+    }
+  <% end %>
+  //  alert("Called " + _called);
+  //_called = _called + 1;
+  $("#payment_methods").html("");
+  $(".payment-amount").attr("disabled", true);
+  $('#complete_order').hide();
+  bindInplaceEnter(true);
+  handleKeyboardEnter = true;
+  orderCompleteDisplayed = false;
+  unsetOnEnterKey();
+  unsetOnEscKey();
+  $('.a4-print-button').remove();
+  $('.pieces-button ').remove();
+  $("#keyboard_input").attr("disabled", false);
+  if (typeof bycard_hide != 'undefined') {
+    bycard_hide();
+  }
+  focuseKeyboardInput = true;
+}
+
+function get_highest(num) {
+  if (isNaN(num)) num = 0;
+  var pieces = [
+    <%= t("number.currency.format.pieces") %>
+  ];
+  if (num == 0) {
+    return ['<%= t("views.forms.no_change") %>',0];
+  }
+  var highest_piece = 0;
+  for (var i = 0; i < pieces.length; i++) {
+    if (pieces[i] > num) {
+      highest_piece = i - 1;
+      break;
+    }
+  }
+  var times = Math.floor(num / pieces[highest_piece]);
+  var display_line = times + ' x ' + toCurrency(pieces[highest_piece]);
+  var remainder = roundNumber(num - (times * pieces[highest_piece]),2);
+  return [display_line,remainder];
+}
+
+function recommend(num) {
+  var parts = [];
+
+  var ret = get_highest(num);
+
+  parts.push(div_wrap(ret[0],'complete-recommendation-item'));
+  cap = 20;
+  x = 0;
+  while (ret[1] > 0) {
+    var ret = get_highest(ret[1]);
+    parts.push(div_wrap(ret[0],'complete-recommendation-item'));
+    x = x + 1;
+    if (x > cap) {
+      break;
+    }
+  }
+  $('#recommendation').html(parts.join(' '));
+}
+
+function number_to_currency(num) {
+  return '<%= t("number.currency.format.unit") %>' + num;
+}
+
+function get_payment_total() {
+  var paymentTotal = 0;
+  $(".payment-amount").each(
+      function () {
+          paymentTotal += toFloat($(this).val());
+      }
+  );
+  if (isNaN(paymentTotal)) alert("PaymentTotal is not a number!");
+  return paymentTotal;
+}
+
+function display_change() {
+  //if (sendingOrder || !allow_payment_amount) return;
+  var paymentTotal = get_payment_total();
+  //if (complete_total == 0) return;
+  //if (isBuyOrder) return;
+  var change = paymentTotal - complete_total;
+  change = Math.round(change*100);
+  change /= 100;
+  //clog(paymentTotal, complete_total, change);
+  if (change < 0.0) {
+    recommend(0);
+    $('#complete_order_change').html(toCurrency(0));
+    allow_complete_order(false);
+  } else {
+    if (isNaN(change)) change = 0;
+    recommend(change);
+    $('#complete_order_change').html(toCurrency(change));
+    get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
+    allow_complete_order();
+  }
+}
+
+function complete_order_send(print) {
+  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      currency = '<%= t('number.currency.format.friendly_unit') %>';
+      given = parseFloat(get_payment_total());
+      given = sprintf(" %s %6.2f", currency, given);
+      change = parseFloat($('#complete_order_change').html().replace(',','.').substring(1));
+      change = sprintf(" %s %6.2f", currency, change);
+      blurb_line1 = ('<%= t('views.given') %>' + '       ').substring(0,9);
+      blurb_line2 = ('<%= t('views.change') %>' + '       ').substring(0,9);
+      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', blurb_line1 + given + blurb_line2 + change );
+    }
+  <% end %>
+  if (print == false) {
+    print = 'false';
+  } else {
+    print = 'true';
+  }
+  if (sendingOrder) return;
+  allow_payment_amount = false;
+  sendingOrder = true;
+  allow_complete_order(false);
+  serializePayments();
+  <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
+
+}
+
+function serializePayments() {
+  var returnArr = [];
+  $.each($(".payment-method"), function(){
+    var index = $(this).attr('id').split("_")[2];
+    var method = $(this).val();
+    var amount = $("#payment_amount_" + index).val();
+    returnArr.push(method + "=" + amount);
+  });
+  return returnArr.join("&");
+}
+
+// init some stuff
+var orderCompleteDisplayed = false;
+$(document).ready(function() {
+  $(".payment-amount").live('keyup', function(event){
+    display_change();
+  });
+  $(".payment-method").live("change", function(){
+    validatePaymentMethod($(this));
+  });
+  $(".payment-method").live("focus", function(){
+  });
+  $(".currency").mousedown(addCashAmount);
+  $("#cancel_complete_order_button").mousedown(complete_order_hide);
+  $(".payment-amount").live("keydown", function(event){
+    if (!allow_payment_amount && event.which != 13)
+    {
+      //event.preventDefault();
+    }
+  });
+});
+
+</script>
+<div id="complete_order" class="complete-order hidden">
+
+    <p>
+      <span class='complete_order_label'><%= I18n.t("views.total") %></span>
+      <span id="complete_order_total" class="complete-order-total"><%= @order.total %></span>
+      <!--
+      <span class="complete-order-total"><%= salor_number_to_currency(@order.total) %></span>
+      -->
+    </p>
+    <div class="actions" width="300" style="padding-bottom:3px">
+      <input type="submit" id="add_payment_method_button" value="<%= I18n.t("system.add_payment_method") %>" onmousedown="add_payment_method()"/>
+    </div>
+    <div id="payment_methods">
+    </div>
+    <p>
+      <span class='complete_order_label'><%= I18n.t("views.change") %></span>
+      <span id="complete_order_change" class="complete-order-change"></span>
+    </p>
+
+      <div id="recommendation" class="complete-order-change recommendations-container" align="center">
+      </div>
+      <div class="clear">&nbsp;</div>
+      <div class="button-row" align="right" width="100%">
+          <div id="cancel_complete_order_button" class="button-cancel"><%= I18n.t("helpers.submit.cancel") %></div>
+          <div class="spacer">&nbsp;</div>
+          <div id="confirm_complete_order_noprint_button" class="button-print"><%= I18n.t("helpers.submit.complete_sale") %></div>
+          <div id="confirm_complete_order_button" class="button-confirm"><%= I18n.t("helpers.submit.print") %></div>
+      </div>
+</div>

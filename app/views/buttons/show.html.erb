@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @button.name %>
+</p>
+
+<p>
+  <b>Sku:</b>
+  <%= @button.sku %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @button.category %>
+</p>
+
+<p>
+  <b>Weight:</b>
+  <%= @button.weight %>
+</p>
+
+
+<%= link_to 'Edit', edit_button_path(@button) %> |
+<%= link_to 'Back', buttons_path %>

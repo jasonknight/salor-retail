@@ -1,0 +1,3 @@
+<% if GlobalErrors.any? or GlobalErrors.any_fatal?  %>
+<%= render :partial => "shared/global_errors_js" %>
+<% end %>

@@ -1,0 +1,25 @@
+<%= form_for(@shipment_type) do |f| %>
+  <% if @shipment_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@shipment_type.errors.count, "error") %> prohibited this shipment_type from being saved:</h2>
+
+      <ul>
+      <% @shipment_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div style="width:270px;">
+  <div class="field">
+    <br />
+    <strong><%= t(".state") %></strong><br />
+    <%= f.text_field :name, :class => "keyboardable" %>
+  </div>
+    <%= f.hidden_field :user_id, :value => GlobalData.salor_user.get_owner.id %>
+  <div class="actions">
+    <br />
+    <%= f.submit %>
+  </div>
+</div>
+<% end %>

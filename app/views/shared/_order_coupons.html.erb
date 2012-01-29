@@ -1,0 +1,24 @@
+<% coupons.each do |coupon| %>
+<tr id="coupon-<%= coupon.id %>" 
+    class="order-item">
+    <td colspan="2">
+      <%= coupon.item.name %>
+    </td>
+    <td align="right"><%= coupon.quantity %></td>
+    
+    <% if coupon.item.coupon_type == 1  %>
+      <td align="right"><%= number_to_percentage(-1 * coupon.price) %></td>
+    <% else  %>
+      <td align="right"><%= salor_number_to_currency(-1 * coupon.price) %></td>
+    <% end %>
+</tr>
+<% if coupon.get_salor_errors.any?  %>
+<tr>
+  <td valign="top" colspan="4">
+    <% coupon.get_salor_errors.each do |error|  %>
+      <%= error %><br />
+    <% end %>
+  </td>
+</tr>
+<% end %>
+<% end %>

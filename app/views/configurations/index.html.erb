@@ -1,0 +1,33 @@
+<h1>Listing configurations</h1>
+
+<table>
+  <tr>
+    <th>Vendor</th>
+    <th>Lp per dollar</th>
+    <th>Dollar per lp</th>
+    <th>Address</th>
+    <th>Telephone</th>
+    <th>Receipt blurb</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @configurations.each do |configuration| %>
+  <tr>
+    <td><%= configuration.vendor_id %></td>
+    <td><%= configuration.lp_per_dollar %></td>
+    <td><%= configuration.dollar_per_lp %></td>
+    <td><%= configuration.address %></td>
+    <td><%= configuration.telephone %></td>
+    <td><%= configuration.receipt_blurb %></td>
+    <td><%= link_to 'Show', configuration %></td>
+    <td><%= link_to 'Edit', edit_configuration_path(configuration) %></td>
+    <td><%= link_to 'Destroy', configuration, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Configuration', new_configuration_path %>

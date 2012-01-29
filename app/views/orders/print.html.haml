@@ -1,0 +1,87 @@
+= raw content_box_top(t("views.orders"))
+
+%div.tools
+  %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
+    = salor_icon(:print, {}, 32)
+
+- if @order.payment_methods.any? then
+  - ic = @order.payment_methods.find_by_internal_type 'InCash'
+  - if ic then
+    - @in_cash = ic.amount
+  - bc = @order.payment_methods.find_by_internal_type 'ByCard'
+  - if bc then
+    - @by_card = bc.amount
+  - gc = @order.payment_methods.find_by_internal_type 'ByGiftCard'
+  - if gc then
+    - @by_gift_card = gc.amount
+  - oc = @order.payment_methods.find_by_internal_type 'OtherCredit'
+  - if oc then
+    - @other_credit = oc.amount
+
+%div.report-container.invoice
+  %div
+    %img.right{ :src => '/images/salor-logo-reports.png'}
+    - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image
+      %img.left{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
+  %div.clear
+  %div
+    %h2== #{ I18n.t("receipts.invoice") }
+    %h3= I18n.l(@order.created_at, :format => :long)
+
+    %div.company_data= raw Kramdown::Document.new(@vendor.configuration.receipt_blurb).to_html
+
+    %div.customer_data
+    - if @order.customer
+      = @order.customer.company_name
+      %br
+      == #{ @order.customer.first_name } #{ @order.customer.last_name }
+      %br
+      = @order.customer.street1
+      %br
+      == #{ @order.customer.postalcode } #{ @order.customer.city }
+      %br
+      == Punktestand: #{ @order.loyalty_card.points - @order.lc_points.to_i }
+
+    .clear
+
+    - @subtotal, @sum_taxes, @discount_subtotal, @rebate_subtotal, @refund_subtotal, @coupon_subtotal, @list_of_items = calculate_order_sums(@order)
+    = render :partial => 'detailed_list'
+    - pmseen = ['InCash','ByCard','ByGiftCard','OtherCredit']
+    - if @refund_subtotal.zero?
+      %p= "Gegeben Bar:                  EUR %8.2f" % @in_cash unless @in_cash.zero?
+      %p= "Gegeben Karte:                EUR %8.2f" % @by_card unless @by_card.zero?
+      %p= "Gegeben Geschenkkarte:        EUR %8.2f" % @by_gift_card unless @by_gift_card.zero?
+      %p= "Andere Zahlungsweise          EUR %8.2f" % @other_credit unless @other_credit.zero?
+      - @order.payment_methods.each do |pm|
+        %p= "#{pm.name}:                  EUR %8.2f" % pm.amount unless pmseen.include? pm.internal_type
+    - else
+      - if @order.rebate_type == 'percent' and not @order.rebate.zero?
+        %p= "Stornierung                  EUR %8.2f" % [ @refund_subtotal - @refund_subtotal * @order.rebate / 100 ]
+      - elsif @order.rebate_type == 'fixed' and not @order.rebate.zero?
+        %p= "Stornierung                  EUR %8.2f" % [ @refund_subtotal + @order.rebate ]
+      - else
+        %p= "Stornierung                  EUR %8.2f" % [ @refund_subtotal ]
+
+
+    
+
+    %h3 Steuerklassen
+    %table.taxes
+      %tr
+        %th
+        %th
+        %th netto
+        %th USt.
+        %th brutto
+      - list_of_taxes = ''
+      - TaxProfile.all.each do |tax|
+        - next if @sum_taxes[tax.id] == 0
+        - fact = tax.value/100.00
+        - net = @sum_taxes[tax.id] / (1.00+fact)
+        - gro = @sum_taxes[tax.id]
+        - vat = gro-net
+        - list_of_taxes += "<tr><td>#{tax.name}:</td><td>#{ number_to_percentage tax.value }</td><td>#{ number_to_currency net }</td><td>#{ number_to_currency vat }</td><td>#{ number_to_currency gro }</td></tr>"
+      = raw list_of_taxes
+
+
+= raw content_box_bottom

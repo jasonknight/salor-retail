@@ -1,0 +1,45 @@
+<script type="text/javascript">
+function update_location_submit() {
+  $.post('/items/update_location',$('#update_location_form').serialize());
+  $('#sku').val('');
+  focusInput($('#sku'));
+}
+$(function () {
+    try {
+      $('#sku').val('');
+      focusInput($('#sku'));
+    } catch (err) {
+          txt="There was an error on this page update_location.\n\n";
+          txt+="Error description: " + err.description + "\n\n";
+          txt+="Click OK to continue.\n\n";
+          alert(txt);
+    }
+})
+</script>
+<%= raw content_box_top(I18n.t("headings.update_location")) %>
+<form id="update_location_form">
+<input type="hidden" name="format" class="hidden-input" value="js" />
+  <table align="center" width="100%">
+    <tr>
+      <td valign="top">
+        <%= I18n.t("activerecord.models.location.one") %>
+      </td>
+      <td valign="top">
+        <select name="location_id" id="location_id">
+          <% GlobalData.locations.each do |location| %>
+            <option value="<%= location.id %>"><%= location.name %></option>
+          <% end %>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <%= I18n.t("activerecord.attributes.sku") %>
+      </td>
+      <td valign="top">
+        <input type="text" id="sku" name="sku" class="text-input" value="" />
+      </td>
+    </tr>
+  </table>
+</form>
+<%= raw content_box_bottom %>

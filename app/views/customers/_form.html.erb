@@ -1,0 +1,167 @@
+<script type="text/javascript">
+  $(document).ready(function () {
+      $('#general').show();
+      $('.link').click(function () {
+          $('.active').removeClass('active');
+          $(this).addClass('active');
+          $('.form-container').hide();
+          $($(this).attr('href')).show();
+      });
+  });
+</script>
+<div align="center">
+      <%= form_for(@customer) do |f| %>
+        <% if @customer.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @customer.errors.count,:model => t("activerecord.models.customer.one"))%></h2>
+      
+            <ul>
+            <% @customer.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="general-form">
+          <div class="form-menu">
+              <div class="link active" href="#general">
+              <%= t("menu.general_configuration") %>
+            </div>
+            <div class="link" href="#loyalty">
+              <%= t("views.loyalty_card") %>
+            </div>
+          </div>
+          <div class="tab-container">
+        <div id="general" class="general-form-container form-container">
+          <table align="center">
+          <tr>
+            <td valign="top">
+              <div class="field">
+                <label for="customer_company_name"><%= t("activerecord.attributes.company_name") %></label><br />
+                <input class="keyboardable" id="customer_company_name" name="customer[company_name]" value="<%= @customer.company_name %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_first_name"><%= t("activerecord.attributes.first_name") %></label><br />
+                <input class="keyboardable" id="customer_first_name" name="customer[first_name]" value="<%= @customer.first_name %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_last_name"><%= t("activerecord.attributes.last_name") %></label><br />
+                <input class="keyboardable" id="customer_last_name" name="customer[last_name]" value="<%= @customer.last_name %>" size="30" type="text" />
+              </div>
+              <br />
+              <div class="clear">
+                &nbsp;
+              </div>
+            </td>
+            <td valign="top">
+               <div class="field">
+                <label for="customer_telephone"><%= t("activerecord.attributes.telephone") %></label><br />
+                <input class="keyboardable-int" id="customer_telephone" name="customer[telephone]" value="<%= @customer.telephone %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_cell"><%= t("activerecord.attributes.cellphone") %></label><br />
+                <input class="keyboardable-int" id="customer_cellphone" name="customer[cellphone]" value="<%= @customer.cellphone %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_email"><%= t("activerecord.attributes.email") %></label><br />
+                <input class="keyboardable" id="customer_email" name="customer[email]" value="<%= @customer.email %>" size="30" type="text" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td valign="top">
+              <div class="field">
+                <label for="customer_street_street1"><%= t("activerecord.attributes.street1") %></label><br />
+                <input class="keyboardable" id="customer_street1" name="customer[street1]" value="<%= @customer.street1 %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_street2"><%= t("activerecord.attributes.street2") %></label><br />
+                <input class="keyboardable" id="customer_street2" name="customer[street2]" value="<%= @customer.street2 %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_city"><%= t("activerecord.attributes.city") %></label><br />
+                <input class="keyboardable" id="customer_city" name="customer[city]" value="<%= @customer.city %>" size="30" type="text" />
+              </div>
+            </td>
+            <td valign="top">
+              <div class="field">
+                <label for="customer_postalcode"><%= t("activerecord.attributes.postalcode") %></label><br />
+                <input class="keyboardable" id="customer_postalcode" name="customer[postalcode]" value="<%= @customer.postalcode %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_state"><%= t("activerecord.attributes.state") %></label><br />
+                <input class="keyboardable" id="customer_state" name="customer[state]" value="<%= @customer.state %>" size="30" type="text" />
+              </div>
+              <div class="field">
+                <label for="customer_country"><%= t("activerecord.attributes.country") %></label><br />
+                <input class="keyboardable" id="customer_country" name="customer[country]" value="<%= @customer.country %>" size="30" type="text" />
+              </div>
+              <input id="customer_vendor_id" name="customer[vendor_id]" type="hidden" value="<%= GlobalData.salor_user.meta.vendor_id.to_s %>" />
+            </td>
+          </tr>
+          </table>
+        </div> <!-- id="general" -->
+        <div id="loyalty" class="additional-form-container form-container hidden">
+            <table>
+              <tr>
+                <td valign="top" colspan="2">
+                  <h2> <%= t("views.loyalty_card") %> </h2>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top">
+                  <p>
+                    <label for="loyalty_card_points"><%= t("menu.points") %></label><br />
+                    <input class="keyboardable-int" id="loyalty_card_points" name="loyalty_card[points]" value="<%= @customer.loyalty_card.points %>" size="30" type="text" />
+                  </p>
+                  <p>
+                    <label for="loyalty_card_sku">Sku</label><br />
+                    <input class="keyboardable-int" id="loyalty_card_sku" name="loyalty_card[sku]" value="<%= @customer.loyalty_card.sku %>" size="30" type="text" />
+                  </p>
+
+
+
+                  <% if not @customer.loyalty_card.sku.blank?  %>
+                    <div class="new-item-field">
+                      <%
+                        b = Barcode.new
+                        path = b.create(@customer.loyalty_card.sku)
+                      %>
+                      <%= link_to "/images/" + b.get_barcode(@customer.loyalty_card.sku) do %>
+                        <%= image_tag path %>
+                      <% end %>
+                      <br />
+                       <%= link_to image_tag("icons/EPS-icon.png", :width => "48"), "/images/" + b.get_barcode(@customer.loyalty_card.sku).gsub('.png','.eps') %> 
+          &nbsp;&nbsp;&nbsp;
+         <%= image_tag "icons/print_sticker_48.png", 
+                       :title => "Print Sticker", 
+                       :class => "class", 
+                       :onclick => "SalorPrinter.printURL('#{GlobalData.cash_register.sticker_printer}','#{GlobalData.conf.url}/customers/render_label?id=#{ @customer.id }&type=lc_sticker')" %> 
+&nbsp;&nbsp;&nbsp;
+          <%= image_tag "icons/print_48.png", 
+                       :title => "Print Thermal", 
+                       :class => "class", 
+                       :onclick => "SalorPrinter.printURL('#{GlobalData.cash_register.thermal_printer}','#{GlobalData.conf.url}/customers/render_label?id=#{ @customer.id }&type=lc_label')" %> 
+
+                   </div>
+                     <div class="clear">
+                      &nbsp;
+                    </div>
+                   <% end %>
+
+
+
+
+
+
+                </td>
+              </tr>
+            </table>    
+        </div>   <!-- edn id=loyalty -->
+    </div>
+</div> 
+              <div class="actions">
+                <%= f.submit %>
+              </div>     
+      <% end %>
+

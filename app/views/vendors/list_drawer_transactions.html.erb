@@ -1,0 +1,74 @@
+<%= raw content_box_top(t("menu.actions")) %>
+<table align="center" width="90%">
+  <tr>
+    <td>
+      <%= form_tag 'list_drawer_transactions', :method => :get do |f|  %>
+        <%= label 'from', t(".start_date") %>
+        <%= select_date(@from,:prefix => 'from') %>
+        <%= label 'to', t(".end_date") %>
+        <%= select_date(@to,:prefix => 'to') %>
+        <%= submit_tag(t('orders.report.display')) %>
+      <% end %>
+    </td>
+  </tr>
+</table>
+<br />
+<table class="pretty-table" width="99%" cellspacing="0" align="center">
+  <% @transactions.each do |trans|  %>
+  <tr>
+    <td>  
+      <% form_for(trans) do |f| %>
+        <table>
+          <tr>
+            <th></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.amount") %></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.drop") %></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.payout") %></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.created_at") %></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.is_refund") %></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.tag") %></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.owner_id") %></th>
+            <th align="left"><%= I18n.t("activerecord.attributes.owner_type") %></th>
+            <th></th>
+          </tr>
+          <tr>
+            <td style="padding-right: 10px;">
+              <div>
+              <%= link_to image_tag('icons/' + icon(:delete,16)), "/vendors/destroy_drawer_transaction/#{trans.id}", :confirm => 'Are you sure?', :method => :get %>
+            </div>
+            </td>
+            <td align="center">
+              <%= f.text_field :amount, :class => "short-input" %>
+            </td>
+            <td align="center">
+              <%= f.select :drop, true_false_select  %>
+            </td>
+            <td align="center">
+              <%= f.select :payout, true_false_select  %>
+            </td>
+            <td width="475px">
+              <%= f.datetime_select :created_at %>
+            </td>
+            <td align="center">
+              <%= f.select :is_refund, true_false_select  %>
+            </td>
+            <td align="center">
+              <%= f.text_field :tag, :class => "short-input" %>
+            </td>
+            <td align="center">
+              <%= f.text_field :owner_id, :class => "short-input" %>
+            </td>
+            <td align="center">
+              <%= f.text_field :owner_type, :class => "short-input" %>
+            </td>
+            <td align="center">
+              <%= f.submit %>
+            </td>
+          </tr>
+        </table>
+      <% end %>
+    </td>
+  </tr>
+  <% end %>
+</table>
+<%= raw content_box_bottom %>

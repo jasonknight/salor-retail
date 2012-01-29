@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @shipment_type.name %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @shipment_type.user_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_shipment_type_path(@shipment_type) %> |
+<%= link_to 'Back', shipment_types_path %>

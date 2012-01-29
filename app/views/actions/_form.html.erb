@@ -1,0 +1,90 @@
+  <% if @action.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@action.errors.count, "error") %> prohibited this action from being saved:</h2>
+
+      <ul>
+      <% @action.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+ <form id="action_form" method="post" action="/actions/create">
+ <div style="margin:0;padding:0;display:inline;display: none;">
+ <input type="hidden" name="id" value="<%= @action.id %>" />
+  <input name="utf8" type="hidden" value="&#x2713;" />
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" /></div>
+
+  <div class="field">
+    <label> <%= I18n.t("activerecord.attributes.name") %> </label><br />
+    <input type="text" name="item[name]" value="<%= @action.name %>" />
+  </div>
+
+  <div class="field">
+    <label> <%= I18n.t("activerecord.attributes.sku")%> </label><br />
+    <input type="text" name="item[sku]" value="<%= @action.sku %>" />
+  </div>
+
+  <div class="field">
+    <label> <%= I18n.t("views.single_words.ordering") %> </label><br />
+    <input type="text" name="item[weight]" value="<%= @action.weight %>" />
+  </div>
+
+  <div class="field">
+    <label> <%= I18n.t("activerecord.attributes.when") %> </label><br />
+    <select id="action_whento" name="item[whento]">
+      <% Action.when_list.each do |w|  %>
+       <option value="<%= w %>" <%= @action.whento.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("when_list.#{w}") %> </option>
+      <% end %>
+    </select>
+  </div>
+
+
+  <div class="field">
+    <label> <%= I18n.t("activerecord.attributes.behavior")%> </label><br />
+    <select id="action_behavior" name="item[behavior]">
+      <% Action.behavior_list.each do |behavior|  %>
+       <option value="<%= behavior %>" <%= @action.behavior.to_sym == behavior ? 'selected="selected"' : "" %>> <%=I18n.t("behavior_list.#{behavior}") %> </option>
+      <% end %>
+    </select>
+  </div>
+
+
+  <div class="field">
+   <label>  <%= I18n.t("activerecord.attributes.afield")%> </label><br />
+    <select id="action_afield" name="item[afield]">
+      <% Action.afield_list.each do |w|  %>
+       <option value="<%= w %>" <%= @action.afield.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("activerecord.attributes.#{w}") %> </option>
+      <% end %>
+    </select>
+  </div>
+
+
+  <div class="field">
+    <label> <%= I18n.t("activerecord.attributes.value") %> </label><br />
+    <input type="text" name="item[value]" value="<%= @action.value %>" />
+  </div>
+
+
+  <% if AppConfig.standalone == true  %>
+    <div class="warning">
+      <br />
+      <%= I18n.t("views.advanced_field") %>
+    </div>
+    <div class="field">
+     <label> Code </label><br />
+     <textarea name="item[code]" rows="5" cols="80"><%= @action.code %></textarea>
+    </div>
+    <br />
+  <% end %>
+    <div class="actions">
+      <input type="submit" name="submit" value="<%=  I18n.t("helpers.submit.submit") %>" />
+    </div>
+ </form>
+<script type="text/javascript">
+  $(document).ready(function(){
+    setOnEnterKey(function(event){
+      event.preventDefault();
+    });
+  });
+</script>

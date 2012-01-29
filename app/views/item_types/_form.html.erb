@@ -1,0 +1,32 @@
+<table align="center" width="100%">
+  <tr>
+    <td valign="top" align="center">
+      <%= form_for(@item_type) do |f| %>
+        <% if @item_type.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @item_type.errors.count,:model => t("activerecord.models.item_type.one"))%></h2>
+      
+            <ul>
+            <% @item_type.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+      
+        <div class="field">
+          <%= f.label t("activerecord.attributes.name") %><br />
+          <%= f.text_field :name, :class => "keyboardable"%>
+        </div>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.behavior") %><br />
+          <%= f.text_field :behavior, :class => "keyboardable"%>
+        </div>
+        <br />
+        <div class="actions">
+          <%= f.submit %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+</table>

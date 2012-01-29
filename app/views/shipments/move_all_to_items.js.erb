@@ -1,0 +1,10 @@
+<% if @shipment.get_salor_errors.any?  %>
+  $(".notice .obtuse").html("");
+  <% @shipment.get_salor_errors.each do |error|  %>
+    $(".notice .obtuse").append("<%= error %><br />");
+  <% end %>
+<% else  %>
+  $(".notice .obtuse").html("<%= I18n.t("notifications.shipments_move_all_items") %>");
+<% end %>
+initNotice();
+

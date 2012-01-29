@@ -1,0 +1,65 @@
+<script type="text/javascript">
+var search_last_query = '';
+var current_page = 1;
+function initSearch() {
+  setTimeout (showSearch,500);
+}
+function showSearch() {
+  $('#search').show();
+  $('#search').css({'z-index':'1010'});
+  focusInput($('#search_keywords'));
+  $('#search').height($(window).height() - 50);
+  $('.search-results').height($('#search').height() - 125);
+}
+function hideSearch() {
+  $('#search').hide();
+  $('#search_results').html('');
+  focusInput($('#keyboard_input'));
+}
+function search() {
+  search_last_query = '/items/search?keywords=' + $('#search_keywords').val() + '&klass=' + $('#search_models').val() + '&page=' + current_page;
+  get(search_last_query, '_search.html.erb');
+}
+function search_get_next_page() {
+  current_page = current_page + 1;
+  search();
+}
+function search_get_prev_page() {
+  current_page = current_page - 1;
+  search();
+}
+</script>
+<div id="search" class="search hidden">
+<table align="center" width="100%">
+  <tr>
+    <td valign="top" width="50%">
+      <div class="search-div-input-constrainer">
+        <input type="text" id="search_keywords" name="keywords" class="keyboardable" value="" />
+      </div>
+    </td>
+    <td valign="top">
+      <select id="search_models">
+        <% searchable_models.each do |m| %>
+          <option value='<%= m[1] %>'><%= m[0] %></option>
+        <% end %>
+      </select>
+    </td>
+    <td valign="top">
+      <div class="button-up" onmousedown="search()"><%= t("views.forms.search") %></div>
+      <!--
+      <button class="input" onmousedown="search()"> <%= t("views.forms.search") %></button>
+      -->
+    </td>
+  </tr>
+</table>
+  <div id="search_results" class="search-results">
+
+  </div>
+  <br />
+  <div id="" align="right" class="button-row">
+    <div class="button-confirm-left" onmousedown="search_get_prev_page();"><%= raw I18n.t("views.pagination.previous") %></div>
+    <div class="spacer">&nbsp;</div>
+    <div class="button-confirm" onmousedown="search_get_next_page();"><%= raw I18n.t("views.pagination.next") %></div>
+    <div class="button-cancel" onmousedown="hideSearch();"><%= raw I18n.t("menu.done") %></div>
+  </div>
+</div>

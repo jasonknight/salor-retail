@@ -1,0 +1,33 @@
+<%= form_for(@order_item) do |f| %>
+  <% if @order_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @order_item.errors.count,:model => t("activerecord.models.order_item.one"))%></h2>
+
+      <ul>
+      <% @order_item.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label t("activerecord.models.order.one") %><br />
+    <%= f.text_field :order_id, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.models.item.one") %><br />
+    <%= f.text_field :item_id, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.quantity") %><br />
+    <%= f.text_field :quantity, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.price") %><br />
+    <%= f.text_field :price, :class => "keyboardable"%>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

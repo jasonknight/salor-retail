@@ -1,0 +1,21 @@
+<div class="last-completed-orders">
+    <% Order.scopied.where("paid = 1").order("created_at DESC").limit(5).each do |order|  %>
+      <div class="completed-entry">
+        <table>  
+         <tr>
+          <td align="right" colspan="2">
+            <%= salor_number_to_currency(order.total) %>
+            <br />
+            <%= salor_number_to_currency(order.front_end_change) %>
+            <br />
+            <%= order.get_owner.username[0..7] %>
+          </td>
+          <td>
+            Nr. <%= order.id %>
+            <div class="image-button"><img src="/images/icons/<%= icon(:printer,16) %>" onmousedown="print_order('<%= order.id %>');" /></div>
+          </td>
+        </tr>
+       </table>
+      </div>
+    <% end %>
+</div>

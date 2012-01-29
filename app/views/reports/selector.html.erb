@@ -1,0 +1,84 @@
+<header>
+  <%= raw content_box_top(t "views.reports.daily_report") %>
+</header>
+<section id="datepick">
+  <p>
+    Start Date: <input id="from" class="date-picker keyboard-input" size="8"/> End Date: <input id="to" class="date-picker keyboard-input" size="8"/>
+  </p>
+  <p>
+    Report Type:
+    <select id="report_type" name="report_type"></select>
+      <div id="submit_button" class="button-confirm" style="width:100px">Generate</div>
+  </p>
+</section>
+
+<section id="form" style="display:none">
+  <form id="selector_form" action="" method="post">
+    <input type="text" id="from_year" name="from[year]"></input>
+    <input type="text" id="from_month" name="from[month]"></input>
+    <input type="text" id="from_day" name="from[day]"></input>
+    <input type="text" id="to_year" name="to[year]"></input>
+    <input type="text" id="to_month" name="to[month]"></input>
+    <input type="text" id="to_day" name="to[day]"></input>
+  </form>
+</section>
+
+
+<section id="report_data">
+
+</section>
+
+<script type="text/javascript">
+  var report_internal_types = [<%= t("system.report_internal_types").split(',').map {|pm| "'#{pm}'"}.join(',') %>];
+  var report_external_types = [<%= t("system.report_external_types").split(',').map {|pm| "'#{pm}'"}.join(',') %>];
+
+  $(document).ready(function(){
+    /*
+     * need to add default dates
+     * including autocalc of to date when from date is selected, if to date isn't already set
+     * also need to make sure that to date is always >= from date
+     */
+    var datepickerParams = {
+      autoSize: true,
+      currentText: 'Today',
+      altField: '#standard_date',
+      altFormat: 'yy-mm-dd',
+      onClose: function(dateText, inst) {
+        var year = inst.currentYear;
+        var month = inst.currentMonth;
+        var day = inst.currentDay;
+        var id = inst.id;
+        clog(id, year, month, day);
+        formizeDate(id, year, month, day);
+      }
+    };
+    $.datepicker.setDefaults($.datepicker.regional['<%= I18n.locale %>']);
+    $("#from").datepicker(datepickerParams);
+    $("#to").datepicker(datepickerParams);
+    $("#report_type").html(reportTypeOptions());
+    $("#submit_button").click(function(){
+      fetchReport();
+    });
+  });
+
+  function formizeDate(dateId, year, month, day) {
+    $("#" + dateId + "_year").val(year);
+    $("#" + dateId + "_month").val(month);
+    $("#" + dateId + "_day").val(day);
+  }
+
+  function reportTypeOptions() {
+    var txt = '';
+    for (var i=0; i<report_internal_types.length; i++) {
+      txt = txt + '<option value="' + report_internal_types[i] + '">'+report_external_types[i]+'</option>';
+    }
+    return txt;
+  }
+
+  function fetchReport() {
+    var formData = decodeURIComponent($("#selector_form").serialize());
+    get("/reports/"+$("#report_type").val()+"?"+formData, filename, function(data){
+      $("#report_data").html(data);
+    });
+  }
+</script>

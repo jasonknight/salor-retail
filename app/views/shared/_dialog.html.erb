@@ -1,0 +1,36 @@
+<script type="text/javascript">
+function notify_user(title,text,okfunc,cancelfunc) {
+ $('.general-dialog-title').html(title);
+ $('.general-dialog-msg').html(text); 
+ $('.general-dialog').show();
+ if (typeof okfunc == 'function') {
+   $('#general_dialog_ok_button').mousedown(okfunc);
+ } else {
+   $('#general_dialog_ok_button').mousedown(function () {
+     $('.general-dialog').hide();
+   });
+ }
+ if (typeof cancelfunc == 'function') {
+   $('#general_dialog_cancel_button').mousedown(cancelfunc);
+ } else {
+   $('#general_dialog_cancel_button').mousedown(function () {
+     $('.general-dialog').hide();
+   });
+ }
+}
+</script>
+<div class="general-dialog hidden">
+  <h2 class="general-dialog-title">General Notice</h2>
+  <p class="general-dialog-msg"> This is the general notice text.</p>
+  <div class="button-row">
+    <div id="general_dialog_cancel_button" class="cancel-button cool-button-left">
+      <%= I18n.t("helpers.submit.cancel") %>
+    </div>
+    <div class="blank-button-spacer">
+      &nbsp;
+    </div>
+    <div id="general_dialog_ok_button" class="ok-button cool-button-right">
+      <%= I18n.t("helpers.submit.ok") %>
+    </div>
+  </div>
+</div>

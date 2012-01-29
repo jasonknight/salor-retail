@@ -1,0 +1,38 @@
+<%= form_for(@order) do |f| %>
+  <% if @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @order.errors.count,:model => t("activerecord.models.order.one"))%></h2>
+
+      <ul>
+      <% @order.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label t("activerecord.attributes.subtotal") %><br />
+    <%= f.text_field :subtotal,:class => 'keyboardable' %>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.total") %><br />
+    <%= f.text_field :total, :class => "keyboardable"%>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.tax") %><br />
+    <%= f.text_field :tax, :class => "keyboardable"%>
+  </div>
+     <%= f.hidden_field :user_id, :value => current_user.id %>
+  <div class="field">
+  	<%= f.label t("activerecord.models.vendor.one") %>
+	<%= f.collection_select :vendor_id,GlobalData.vendors, :id, :name%>
+  </div>
+  <div class="field">
+  	<%= f.label t("activerecord.models.location.one") %>
+	<%= f.collection_select :location_id,GlobalData.locations, :id, :name%>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

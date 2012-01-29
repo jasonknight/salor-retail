@@ -1,0 +1,14 @@
+<% if salor_user then %>
+  <%= link_to t('menu.home').upcase,'/home/user_employee_index' %> |
+<% else %>
+  <%= link_to t('menu.home').upcase,'/home/index' %> |
+<% end %>
+<%= t('menu.contact').upcase %>: sales@salor.com | 
+<%= t('menu.support').upcase %> 
+<% if not salor_user then %>
+|
+<%= link_to t('menu.sign_up').upcase, new_user_registration_path %> | 
+<%= link_to t('system.login').upcase, new_user_session_path %> | 
+<%= link_to t('menu.employees').upcase + ' ' + t('system.login').upcase, new_employee_session_path %>
+<% end %>
+

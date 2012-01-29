@@ -1,0 +1,31 @@
+<div class='pos_header'>
+<div class='order_top'>
+  <button id="new_order_button" onmousedown="get('/orders/new_order_ajax', '_pos_header.html.erb')" class="input">
+    <%= t("menu.new_order")%>
+  </button>
+  <button id="print_receipt_button" onmousedown="alert('doink');complete_order_show();" class="input">
+    <%= t("system.complete_sale")%>
+  </button>
+
+  <div class='rebate'>
+    <%= edit_me(:rebate_type,order,order.rebate_type_display,'',order.get_html_id + '_rebate_type',true) %>
+  <span class='rebate_label'><%= I18n.t("activerecord.attributes.rebate") %>:</span>
+  <%= edit_me(:rebate,order,order.rebate,'',order.get_html_id + '_rebate','true') %>
+  </div>
+
+  <div class="pos-customer <%= 'hidden' if order.customer.nil? %>">
+    <% if order.customer  %>
+      <span class='customer_name'><%= order.customer.full_name %></span>
+      <%= I18n.t("activerecord.attributes.points") %>: <%= edit_me(:points,order.loyalty_card,order.loyalty_card.points,'',order.loyalty_card.get_html_id,'true') %>
+      <%= I18n.t("activerecord.attributes.lc_points") %>: <%= edit_me(:lc_points, order, order.lc_points,'',order.get_html_id + '_lc_points','true') %>
+    <% end %>
+  </div>
+
+  </div>
+
+<% opts = {:id => 'order-total-lock', :class => 'pos-lock toggle', :field => 'toggle_lock', :value => 'total', :klass => 'Order', :model_id => order.id } %>
+
+<div class='pos-money pos-total ui-corner-all'>
+  <%= order.total_is_locked ? salor_icon(:locked,opts,32) : salor_icon(:unlocked,opts,32)   %><%= edit_me(:total,order,salor_number_to_currency(order.total),'','total',true) %>
+</div>
+

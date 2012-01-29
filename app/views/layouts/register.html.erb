@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<%= salor_render :partial => 'shared/head'%>
+</head>
+<body>
+<div id="main">
+<%= salor_render :partial => "shared/notice" %>
+
+<table width="100%" height="450px">
+  <tr>
+    <td valign="top">
+      <%= yield %>
+    </td>
+  </tr>
+</table>
+<div id="footer" class="footer">
+<%= salor_render :partial => "shared/footer_menu" %>
+</div>
+</div>
+<div id="header">
+  <div class="salor-logo left">
+    <div class="title shadow">salor&reg; </div>
+  </div>
+  <div class="title-menu right shadow"><%= salor_render :partial => "shared/title_menu"%></div>
+</div>
+  <%= salor_render :partial => "shared/logged_in"%>
+</body>
+</html>

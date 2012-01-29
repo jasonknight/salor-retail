@@ -1,0 +1,93 @@
+<table align="center" width="100%">
+  <tr>
+    <td valign="top" align="center">
+      <%= form_for(@employee) do |f| %>
+        <% if @employee.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @employee.errors.count,:model => t("activerecord.models.employee.one"))%></h2>
+      
+            <ul>
+            <% @employee.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+      <table align="center" width="80%">
+        <tr>
+           <td valign="top">
+              <div class="freefield"><%= f.label t("activerecord.attributes.first_name") %><br />
+              <%= f.text_field :first_name, :class => "keyboardable"%></div>
+      
+              <div class="freefield"><%= f.label t("activerecord.attributes.last_name") %><br />
+              <%= f.text_field :last_name, :class => "keyboardable"%></div>
+      
+      
+              <div class="freefield"><%= f.label t("activerecord.attributes.username") %><br />
+              <%= f.text_field :username, :class => "keyboardable"%></div>
+              
+              <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
+              <%= f.email_field :email, :class => 'keyboardable' %></div>
+              <div class="freefield"><%= f.label t("activerecord.attributes.uses_drawer_id") %><br />
+              <%= f.select :uses_drawer_id, Employee.scopied.collect {|e| [e.username,e.get_drawer.id] if not e.username == @employee.username}.unshift(["",""]) %>
+              
+              </div>
+            </td>
+            <td valign="top">
+              <div class="freefield">
+                  <%= t "views.language" %><br />
+                  <%= f.select :language,supported_languages.collect {|l| [l[:name],l[:locale]]} %>
+              </div>
+      
+              <div class="freefield"><%= f.label t("activerecord.attributes.password") %><br />
+              <%= f.text_field :password, :class => 'keyboardable' %></div>
+              
+              
+              <%= f.hidden_field :user_id, :value => @owner.id %>
+              
+              <div class="freefield"><%= f.label t("activerecord.models.vendor.one") %><br />
+              <%= f.collection_select :vendor_id, GlobalData.vendors,:id,:name%></div>
+            </td>
+        </tr>
+      </table>
+      <table valign="top" width="98%">
+        <tr>
+          <td colspan="2">
+            API: <input type="text" name="employee[apitoken]" class="text-input" value="<%= @employee.apitoken.blank? ? @employee.make_token : @employee.apitoken  %>" />
+          </td>
+        </tr>
+        <tr>
+          <td valign="top" colspan="2">
+            <h2> <%= t("views.forms.roles") %> <%= raw get_help('roles') %> </h2>
+            <% 
+              thresh = 4
+              x = 0
+            %>
+            <table align="center" width="100%">
+              <tr>
+              <% for role in Role.order('name asc').all  %>
+                <% if x == thresh then  %>
+                  </tr><tr>
+                  <% x = 0  %>
+                <% end %>
+                <td>
+                  <%= check_box_tag "employee[role_ids][]", role.id, @employee.role_ids.include?(role.id)  %>
+                  <%= t(GlobalData.base_locale + "." + role.name, :locale => :roles) %>
+                </td>
+                <% x = x + 1  %>
+              <% end %>
+              </tr>
+            </table>
+              
+          </td>
+        </tr>
+      </table>
+          
+      
+        <div class="actions">
+          <%= f.submit %>
+        </div>
+      <% end %>      
+    </td>
+  </tr>
+</table>

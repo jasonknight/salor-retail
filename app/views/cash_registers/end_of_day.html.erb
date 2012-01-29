@@ -1,0 +1,186 @@
+<style type='text/css'>
+
+</style>
+<script type="text/javascript">
+var calculator_total = 0;
+var dt = <%= GlobalData.salor_user.get_drawer.amount %>;
+
+function display_calculator_total() {
+  calculator_total = 0;
+  $('.eod-calculator-input').each(function () {
+      var ttl = 0;
+      if (parseInt($(this).val()) > 0) {
+       ttl = parseInt($(this).val()) * parseFloat($(this).attr('amount'));
+      } else {
+        //console.log('not gt 0: ' + $(this).attr('amount'));
+      }
+      calculator_total += ttl;
+  });
+  calculator_total = Math.round(calculator_total * 100) / 100;
+  calculator_total = calculator_total.toFixed(2);
+  $('.eod-calculator-total').html(toCurrency(calculator_total));
+  // Check to see if the cash in the drawer is greater than expected
+  $('.eod-drawer-total').removeClass('eod-error');
+  $('.eod-drawer-total').removeClass('eod-ok');
+  $('.eod-calculator-total').removeClass('eod-error');
+  $('.eod-calculator-total').removeClass('eod-ok');
+  
+  $('.eod-calculator-difference').html(toCurrency(0));
+  if (dt > calculator_total) {
+    $('.eod-calculator-difference').html(toCurrency(dt - calculator_total));
+    if (!$('.eod-calculator-total').hasClass('eod-error')) {
+      $('.eod-calculator-total').addClass('eod-error');
+    }
+  } else {
+    $('.eod-calculator-total').removeClass('eod-error');
+    if (calculator_total > dt) {
+      if (!$('.eod-drawer-total').hasClass('eod-error')) {
+        $('.eod-drawer-total').addClass('eod-error');
+      }
+      $('.eod-calculator-difference').html(toCurrency(calculator_total - dt));
+    } else {
+      $('.eod-drawer-total').removeClass('eod-error');
+    }
+  }
+  if ($('.eod-drawer-total').html() == $('.eod-calculator-total').html()) {
+    $('.eod-drawer-total').removeClass('eod-error').addClass('eod-ok');
+    $('.eod-calculator-total').removeClass('eod-error').addClass('eod-ok');
+  } else {
+    //console.log(calculator_total + " != " + dt);
+  }
+
+
+}
+
+function eod_payout() {
+  $.get('/vendors/open_cash_drawer');
+  $('body').mask('<%= I18n.t("menu.end_of_day_drop") %>');
+  $.ajax({
+      type: 'POST',
+      url: '/vendors/new_drawer_transaction',
+      data: {
+        transaction: {
+          amount: <%= GlobalData.salor_user.get_drawer.amount %>,
+          notes: 'end_of_day_payout',
+          tag: 'end_of_day',
+          trans_type: 'payout'}
+      },
+      dataType: 'script',
+      success: function (data) {
+        $('.eod-drawer-total').html(toCurrency(0));
+        $('.eod-calculator-total').html(toCurrency(0));
+        $('.eod-calculator-difference').html(toCurrency(0));
+        window.location = '/vendors/end_day';
+      },
+      error: function (data,status,err) {
+        alert(err);
+      }
+  });
+}
+
+$(function () {
+    $('.eod-calculator-input').each(function () {
+        if ($(this).hasClass('calculator-done')) {
+          return;
+        } else {
+          $(this).change(function () {
+              display_calculator_total();
+          });
+          $(this).blur(function () {
+              display_calculator_total();
+          });
+          $(this).focus(function () {
+              display_calculator_total();
+          });
+          $(this).addClass('calculator-done');
+        }
+    });
+});
+</script>
+<div class="clear">
+  &nbsp;<br />
+</div>
+      <div class="button-row" align="right" width="100%">
+          <div class="button-cancel" onmousedown="eod_payout();"><%= I18n.t("menu.end_of_day_drop") %></div>
+          <div class='button-print' onmousedown="window.location.href='/orders/report_day';">Bericht</div>
+          <% if GlobalData.cash_register.artema_hybrid then %>
+            <div class="spacer">&nbsp;</div>
+            <div id="tagesende_button" class="input square-button" onmousedown="bycard_endday();">
+              <%= t("menu.paylife_end_day")%>
+            </div>
+            <div class="spacer">&nbsp;</div>
+          <% else  %>
+            <div class="spacer">&nbsp;</div>
+          <% end %>
+          <div class="button-confirm" onmousedown="window.location = '/vendors/end_day';"><%= I18n.t("system.logout") %></div>
+      </div>
+      <br />
+<table class="eod-master-table" align="center">
+  <tr>
+    <td colspan="2" class="even" valign="middle">
+      <!-- Cash Total and Calculator Total -->
+      <div class="eod-drawer-total"><%= number_to_currency(GlobalData.salor_user.get_drawer.amount) %></div>
+      <div class="eod-calculator-total"><%= number_to_currency(0) %></div>
+      <div class="eod-calculator-difference"><%= number_to_currency(0) %></div>
+      <% if GlobalData.conf.open_cash_drawer  %>
+        <div class="eod-drawer-button" onmousedown="quick_open_drawer();">
+          &nbsp;&nbsp;&nbsp;<%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},16) %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td width="150px" class="even" valign="top">
+    <!-- Change Calculator -->
+      <% I18n.t("number.currency.format.pieces").split(',').each do |piece| %>
+        <div class="eod-piece">
+        <table width="99%">
+          <tr>
+            <td width="70px" align="right">
+              <label class="eod-calculator-input-label"><%= raw leftpad(piece.to_s.gsub('0.','.'),3,'&nbsp;') %></label>
+            </td>
+            <td>
+              <input id="eod_piece_<%= num2name(piece) %>"
+                 type="text"
+                 name="eod_piece_<%= num2name(piece) %>"
+                 class="text-input eod-calculator-input"
+                 value=""
+                 amount="<%= piece %>" />
+            </td>
+          </tr>
+        </table>
+        </div> 
+      <% end %>
+      <br />
+
+    </td>
+    <td valign="top">
+      <!-- EOD By Category -->
+      <table width="99%">
+      <tr>
+        <th>
+          <%= I18n.t("activerecord.attributes.name") %>
+        </th>
+        <th>
+          <%= I18n.t("activerecord.attributes.total") %>
+        </th>
+      </tr>
+      <% cats_tags = {}  %>
+        <%  %>
+          <% GlobalData.salor_user.meta.cash_register.end_of_day_report.each do |name,total| %>
+           <tr class="stripe-me2">
+             <td>
+               <%= name %>
+             </td>
+             <td align="right">
+               <%= number_to_currency(total) %>
+             </td>
+           </tr>
+         <% end if GlobalData.salor_user.meta.cash_register %>
+      </table>
+    </td>
+  </tr>
+</table>
+<% if GlobalData.cash_register.artema_hybrid then %>
+  <%= salor_render :partial => "shared/js/bycard_js" %>
+<% end %>

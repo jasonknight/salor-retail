@@ -1,0 +1,419 @@
+<%
+  attrs_list = [:id,:sku, :name, :quantity,:stock_location_ids]
+  js_attrs_list = attrs_list.collect {|a| "'#{a}'"}
+  alist = [:name,:base_price, :sku,:location_id,:vendor_id,:category_id,:tax_profile_id]
+  create_attrs = {}
+  alist.each do |a|
+    create_attrs[a] = I18n.t("activerecord.attributes.#{a}")
+  end
+  js_attrs_list_names = attrs_list.collect {|a| "'#{I18n.t("activerecord.attributes.#{a}")}'"}
+  js_ints_list = [:base_price,:quantity].collect {|a| "'#{a}'"}
+%>
+<script type="text/javascript">
+var id = 0;
+var attrs_list = [ <%= js_attrs_list.join(',') %> ];
+var attrs_list_names = [ <%= js_attrs_list_names.join(',') %> ];
+
+var create_attrs = <%= raw create_attrs.to_json %>
+
+var ints_list = [ <% js_ints_list.join(',')  %> ];
+
+var shipment_items_callbacks = {
+  _delete: function (value) {
+    var e = $("<input type='hidden' />");
+    var name2 = "shipment[set_items][" + id + "][_delete]";
+    e.attr('name',name2);
+    e.addClass("attribute-_delete-" + id);
+    return e;
+  },
+  item_type_id: function (value) {
+    <%
+      item_types = ItemType.all
+      itps = []
+      item_types.each do |itp|
+        itps << "<option value='#{itp.id}'>#{itp.name}</option>"
+      end
+      itps = itps.join(' ')
+      s = "<select id='' >#{itps}</select>"
+    %>
+    s = $("<%= raw s %>");
+    s = set_selected(s,value,0);
+    var name2 = "shipment[set_items][" + id + "][item_type_id]";
+    s.attr('name',name2);
+    s.addClass("attribute-item_type_id-" + id);
+    return s;
+  },
+  tax_profile_id: function (value) {
+    <%
+      tax_profiles = TaxProfile.scopied
+      tps = []
+      tax_profiles.each do |tp|
+        tps << "<option value='#{tp.id}'>#{tp.name}</option>"
+      end
+      tps = tps.join(' ')
+      s = "<select id='' >#{tps}</select>"
+    %>
+    s = $("<%= raw s %>");
+    s = set_selected(s,value,0);
+    var name2 = "item[tax_profile_id]";
+    s.attr('name',name2);
+    s.addClass("attribute-tax_profile_id-" + id);
+    return s;
+  },
+  vendor_id: function (value) {
+      <%
+        vendors = salor_user.get_vendors(nil)
+        stores = []
+        vendors.each do |store|
+          stores << "<option value='#{store.id}'>#{store.name}</option>"
+        end
+        stores = stores.join(' ')
+        s = "<select id='inplaceedit'>#{stores}</select>"
+      %>
+      s = $("<%= raw s %>");
+      s = set_selected(s,value,0);
+      var name2 = "shipment[set_items][" + id + "][vendor_id]";
+      s.attr('name',name2);
+      s.addClass("attribute-vendor_id-" + id);
+      return s;
+   },
+  stock_location_ids: function (value) {
+      var base_id = 'attribute-stock_location_id-' + id;
+      <%
+        locations = StockLocation.scopied
+        locs = []
+        locs << "<option value=''></option>"
+        locations.each do |loc|
+          locs << "<option value='#{loc.id}'>#{loc.name}</option>"
+        end
+        locs = locs.join(' ')
+        s = "<select id=''>#{locs}</select>"
+      %>
+      var s = $("<%= raw s %>");
+      s = set_selected(s,value,0);
+      var name2 = "shipment[set_items][" + id + "][set_stock_location_ids][]";
+      s.attr('name',name2);
+      s.children('option').each(function () {
+          for (var i in value) {
+            if ($(this).attr('value') == value[i]) {
+              //console.log("Setting default value");
+              $(this).attr('selected',true);
+            }
+          }
+      });
+      s.addClass("attribute-stock-location_id-" + id);
+      s.mousedown(function () {
+          $("." + base_id + '-div').hide();
+      });
+
+      $('.shipment-items').append(s);
+
+      return s;
+  },
+  category_id: function (value) {
+      <%
+        categories = GlobalData.salor_user.get_all_categories
+        cats = []
+        categories.each do |cat|
+        cats << "<option value='#{cat.id}'>#{cat.name.gsub('"','\"')}</option>"
+        end
+        cats = cats.join(' ')
+        s = "<select id=''>#{cats}</select>"
+      %>
+      var s = $("<%= raw s %>");
+      s = set_selected(s,value,0);
+      var name2 = "shipment[set_items][" + id + "][category_id]";
+      s.attr('name',name2);
+      s.addClass("attribute-category_id-" + id);
+      return s;
+  },
+  location_id: function (value) {
+      <%
+        locations = Location.scopied
+        locs = []
+        locations.each do |loc|
+          locs << "<option value='#{loc.id}'>#{loc.name}</option>"
+        end
+        locs = locs.join(' ')
+        s = "<select id='inplaceedit' >#{locs}</select>"
+      %>
+      s = $("<%= raw s %>");
+      s = set_selected(s,value,0);
+      var name2 = "item[location_id]";
+      s.attr('name',name2);
+      s.addClass("attribute-location_id-" + id);
+      return s;
+    },
+  quantity: function (value, sku) {
+    var e = shipment_item_input('quantity',{});
+    e.val(value);
+    $(e).addClass('sku-' + sku + '-quantity');
+    e.blur(function () {
+        addItem({});
+    });
+    return e;
+  },
+  name: function(value) {
+    /*var elem = $("<div/>");
+    // Need a hidden element for now to carry this name since the db expects it
+    var elemClass = "attribute-name-" + id;
+    var hidden = makeHiddenInput('name', id, value);
+    $(elem).addClass('stylish-text');
+    $(elem).addClass(elemClass);
+    $(elem).html(value);
+    $(elem).append($(hidden));
+    return elem;*/
+    var elem = shipment_item_input('name');
+    elem.addClass('keyboardable');
+    elem.val(value);
+    elem.addClass("attribute-name-" + id);
+    elem.addClass("attribute-name");
+    var name2 = "shipment[set_items][" + id + "][name]";
+    elem.attr('name',name2);
+    return elem;
+  },
+  sku: function (value) {
+    var elem = shipment_item_input('sku');
+    elem.addClass('keyboardable');
+    elem.val(value);
+    elem.addClass("attribute-sku-" + id);
+    elem.addClass("attribute-sku");
+    var name2 = "shipment[set_items][" + id + "][sku]";
+    elem.attr('name',name2);
+
+    elem.attr('mid',id);
+
+    elem.blur(function () {
+        if ($(this).hasClass('create-sku-input')) {
+          return;
+        }
+        var mid = elem.attr('mid');
+        if ($(this).val() != '') {
+          var sku = $(this).val();
+          sku = sku.toUpperCase();
+          $(this).val(sku);
+          get('/items/item_json?sku=' + sku, '_shipment_item_form.html.erb', function (data) {
+              if ($('.sku-' + sku + '-quantity').length != 0) {
+                var qty = Number($('.sku-' + sku + '-quantity').val()) + 1;
+                $('.sku-' + sku + '-quantity').val(qty);
+                var f = $('.attribute-sku').first();
+                f.val('');
+                focusInput(f);
+              } else {
+                if (data == null) {
+                  showCreateItem({'sku': sku});
+                  return;
+                }
+                for (var key in data.item) {
+                  if (key == 'id') {
+                    continue;
+                  }
+                  var selector = '.attribute-' + key + '-' + mid;
+                  var node = $(selector);
+                  $(node).each(function(){
+                    if (this.nodeName.toLowerCase() == 'input') $(this).val(data.item[key]);
+                    if (this.nodeName.toLowerCase() == 'div') {
+                      var hidden = makeHiddenInput(key, mid, data.item[key]);
+                      $(this).html(data.item[key]);
+                      $(this).append($(hidden));
+                    }
+                  });
+                  //$(selector).val(data.item[key]);
+                }
+                var selector = '.attribute-quantity-' + mid;
+                $(selector).addClass('sku-' + sku + '-quantity');
+                if ($(selector).val() == '') {
+                  $(selector).val(1);
+                }
+                addItem({});
+              }
+          });
+        }
+    });
+    elem.addClass('sku-done');
+    return elem;
+  },
+  id: function (value) {
+    var elem = $('<input />');
+    var e = $("<input />");
+    name = 'id';
+    var name2 = "shipment[set_items][" + id + "][" + name + "]";
+    var eid = "attribute-" + name + "-" + id;
+    e.addClass('attribute-input attribute-input-' + name);
+    e.attr('name',name2);
+    e.attr('type','hidden');
+    e.addClass(eid);
+    e.val(value);
+    return e;
+  }
+};
+
+function makeHiddenInput(attr, id, value) {
+    var hidden = $("<input type='hidden'/>");
+    $(hidden).val(value);
+    $(hidden).addClass("attribute-" + attr + "-" + id);
+    $(hidden).attr('name', 'shipment[set_items][' + id + '][' + attr + ']');
+    return hidden;
+}
+
+function shipment_item_input(name,opts) {
+  var e = $("<input />");
+  var name2 = "shipment[set_items][" + id + "][" + name + "]";
+  var eid = "attribute-" + name + "-" + id;
+  if (opts && opts.classes) {
+    e.addClass(opts.classes.join(' '));
+  }
+  e.addClass('attribute-input attribute-input-' + name);
+  e.attr('name',name2);
+  e.addClass(eid);
+  return e;
+}
+
+function addItem(values) {
+  var found = false;
+  if (values['shipment_item']) {
+    var vs = values["shipment_item"];
+    var vals = {id: vs.id,sku: vs.sku, quantity: vs.quantity, stock_location_ids: vs.stock_location_ids,name: vs.name}
+  } else {
+    vals = values;
+  }
+  $('.attribute-sku').each(function () {
+      if ($(this).val() == '') {
+        found = true;
+        focusInput($(this));
+        return;
+      }
+  });
+  if (found) {
+    return;
+  }
+  var tds = [];
+  for (var i = 0; i < attrs_list.length; i++) {
+    var name = attrs_list[i];
+    if (shipment_items_callbacks[name]) {
+      var inp = shipment_items_callbacks[name].call(this,vals[name], vals['sku']);
+    } else {
+      var inp = shipment_item_input(name,{});
+      if (vals[name]) {
+        inp.val(vals[name]);
+      }
+      if (ints_list.indexOf(name) != -1) {
+        inp.addClass('keyboardable-int');
+      } else {
+        inp.addClass('keyboardable');
+      }
+    }
+    inp.addClass('shipment-items-input');
+    var col = td(inp,{});
+    tds.push(col);
+  }
+  var del = $('<%= salor_icon(:delete,{},32) %>');
+  del.addClass('pointer');
+  del.attr('del_id',id);
+  del.mousedown(function () {
+      var id = $(this).attr('del_id');
+      var selector = ".attribute-_delete-" + id;
+      $(selector).val(1);
+      $('.item-' + id).remove();
+  });
+  var col = td(del);
+  tds.push(col);
+  var row = tr(tds,{classes: ['item item-' + id]});
+  $('#shipment_items').prepend(row);
+  $('.keyboardable').each(function () {
+      make_keyboardable($(this));
+  });
+  $('.keyboardable-int').each(function () {
+      make_keyboardable($(this));
+  });
+  focusInput($('.attribute-sku-' + id));
+  id = id + 1;
+}
+
+function showCreateItem(values) {
+  if ($('.shipment-create-item').length != 0) {
+    return;
+  }
+  var d = div();
+  var rows = [];
+
+  d.addClass('shipment-create-item');
+  $('body').append(d);
+  d.append("<form class='shipment-create-item-form'></form>");
+  for (var name in create_attrs) {
+    var label = $("<label></label>");
+    var n = 'create-' + name;
+    label.addClass(n + '-label');
+    label.html(create_attrs[name]);
+    var ntd = td(label,{});
+    if (shipment_items_callbacks[name]) {
+      var inp = shipment_items_callbacks[name].call(this,values[name]);
+    } else {
+      var inp = shipment_item_input(name,{});
+      if (values[name]) {
+        inp.val(values[name]);
+      }
+      if (ints_list.indexOf(name) != -1) {
+        inp.addClass('keyboardable-int');
+      } else {
+        inp.addClass('keyboardable');
+      }
+    }
+    inp.attr('name','item['+name+']');
+    inp.addClass(n + '-input');
+    var inptd = td(inp,{});
+    var row = tr([ntd,inptd],{});
+    rows.push(row);
+  }
+  var form = $('.shipment-create-item-form');
+  for (var i = 0; i < rows.length; i++) {
+    form.append(rows[i]);
+  }
+  var brow = cancel_confirm(function () { //this func in application_js
+      $('.shipment-create-item').remove();
+  },
+  function () {
+      $.post('/items/create_ajax',$('.shipment-create-item-form').serialize(),function (data) {
+          $('.shipment-create-item').remove();
+          $('.attribute-sku').each(function () {
+              if ($(this).val() == data['item']['sku']) {
+                $(this).trigger('blur');
+              }
+          });
+      }, 'json');
+  });
+
+  form.append(brow);
+  focusInput($('.create-name-input'));
+}
+function shipments_edit_handler(t) {
+  $(t).trigger('blur');
+}
+$(function () {
+    if ($('body').hasClass('shipment-items-ready-done')) {
+      return;
+    }
+    <% items.each do |item|  %>
+      var values = <%= raw item.to_json %>;
+      values.shipment_item.stock_location_ids = [<%= item.stock_location_ids.join(',') %>];
+      addItem(values);
+    <% end %>
+    $('body').addClass('shipment-items-ready-done');
+});
+</script>
+
+
+<table align="center" width="90%">
+  <tr>
+    <td valign="top" align="left">
+      <h2> <%= I18n.t("views.forms.items") %> </h2>
+    </td>
+    <td valign="middle" class="shipment-item-add">
+      <%= salor_icon(:add, {:class => 'pointer', :onclick => "addItem({});"},32) %>
+    </td>
+  </tr>
+</table>
+<div id="shipment_items" class="shipment-items">
+
+</div>
+<%= salor_render :partial => "shared/in_place_edit" %>

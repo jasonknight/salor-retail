@@ -1,0 +1,39 @@
+<%= raw content_box_top(t("menu.shippers")) %>
+
+     <% if salor_user.can(:index_shippers) %>
+        <table width="375px" align="center">
+          <tr valign="top">
+            <td align="center" width="125px">
+              <%= link_to image_tag('icons/' + icon(:add, 32)), new_shipper_path(:vendor_id => params[:vendor_id]) %>
+            </td>
+            <td align="center" width="125px">
+              <a class='shippers_index' href="<%= shipments_path %>">
+                <img src="/images/icons/<%= icon(:shipment,32) %>" /><br />
+                <%= t "menu.shipments" %>
+              </a>
+            </td>
+            <td align="center" width="125px">
+              <a class='shippers_index' href="<%= shipment_types_path %>">
+                <img src="/images/icons/<%= icon(:shipment_type,32) %>" /><br />
+                <%= t "menu.shipment_types" %>
+              </a>
+            </td>
+          </tr>
+        </table>
+      <% end %>
+      <br />
+      <br />
+    <div class="list">
+      <% @shippers.each do |shipper| %>
+        <%= render(:partial => "shared/edit_li", :locals => {
+            :path => edit_shipper_path(shipper),
+            :image => icon(:shipper),
+            :text => shipper.name,
+            :edit_path => edit_shipper_path(shipper),
+            :del_path => shipper 
+        }) %>
+      <% end  %>
+    </div>  
+
+
+    <%= paginate @shippers if @shippers %>

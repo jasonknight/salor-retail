@@ -1,0 +1,15 @@
+<br />
+<table align="center" width="100%">
+  <tr>
+    <td valign="top">
+      <% opts = "model_id='#{crd.id}' klass='CashRegisterDaily' field='start_amount' data_type='Float' id='in_place_edit_start_amount_#{crd.id}'"  %>
+      <%= I18n.t("activerecord.attributes.start_amount") %>: <span class="editme crd-start-amount" <%= opts %>><%= salor_number_to_currency(crd.start_amount) %></span>
+    </td>
+    <td valign="top">
+      <%= I18n.t("activerecord.attributes.end_amount") %>: <span class="crd-end-amount"><%= salor_number_to_currency(crd.end_amount) %></span>
+    </td>
+    <td valign="top">
+      <a class="button key widekey ui-corner-all widget" href="/vendors/end_day"><%= I18n.t("menu.end_day") %></a>
+    </td>
+  </tr>
+</table>

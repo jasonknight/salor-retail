@@ -1,0 +1,45 @@
+<%= raw content_box_top(I18n.t("headings.shipment_types")) %>
+
+      <% if salor_user.can(:index_shippers) %>
+        <table width="375px" align="center">
+          <tr valign="top">
+            <td align="center" width="125px">
+              <%= link_to(image_tag("icons/" + icon(:add,32)), new_shipment_type_path) %>              
+            </td>
+            <td align="center" width="125px">
+              <a class='shippers_index' href="<%= shippers_path %>">
+                <img src="/images/icons/<%= icon(:shipper,32) %>" /><br />
+                <%= t "menu.shippers" %>
+              </a>
+            </td>
+            <td align="center" width="125px">
+              <a class='shippers_index' href="<%= shipment_types_path %>">
+                <img src="/images/icons/<%= icon(:shipment_type,32) %>" /><br />
+                <%= t "menu.shipment_types" %>
+              </a>
+            </td>
+          </tr>
+        </table>
+      <% end %>
+      <br>
+      <br>
+<table class='shipments_index'>
+   
+<% @shipment_types.each do |shipment_type| %>
+<%
+  if shipment_type.name.nil? then
+    sname = I18n.t("system.errors.value_not_set")
+  else
+    sname = shipment_type.name
+  end
+%>
+  <tr>
+    <td><%= link_to shipment_type.name, shipment_type_path(shipment_type) %></td>
+    <td><%= link_to image_tag("icons/" + icon(:edit,32)), edit_shipment_type_path(shipment_type) %></td>
+    <td><%= link_to image_tag("icons/" + icon(:delete,32)), :confirm => I18n.t("menu.delete_confirm"), :method => :delete %></td>
+  </tr>
+<% end %>
+
+</table>
+<%= raw content_box_bottom %>
+<%= salor_render :partial => "shared/in_place_edit" %>
