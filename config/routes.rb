@@ -2,121 +2,97 @@ Salor::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
-  resources :tender_methods
-  resources :transaction_tags
-  resources :buttons
-  resources :broken_items
-  resources :shipment_types
-  resources :discounts
-  resources :shippers
-  resources :shipments
-  resources :configurations
-  resources :customers
-  resources :cash_registers
-  resources :item_types
-  resources :tax_profiles
-  resources :employees
-  resources :actions
-  resources :order_items
-  resources :orders
-  resources :items
-  resources :locations
-  resources :stock_locations
-  resources :categories
-  resources :vendors
-  resources :nodes
-
-  get "home/index"
-  get "home/set_user_theme_ajax"
-  get "home/user_employee_index"
-  get "home/set_language"
-  get "categories/categories_json"
-  get "categories/items_json"
-  get "orders/add_item_ajax"
-  get "orders/update_order_item"
-  put "orders/set_weight"
-  get "orders/recently_tagged"
-  get "orders/print_order_receipt"
-  get "orders/render_order_receipt"
-  get "orders/refund_item"
-  get "orders/refund_order"
-  get "orders/last_five_orders"
-  get "orders/clear"
-  get "orders/remove_payment_method"
-  post "orders/bancomat"
-  get "items/search"
-  get "items/export_broken_items"
-  post "items/export_broken_items"
-  get "items/update_location"
-  get "items/reorder_recommendation"
-  post "items/update_location"
-  get "items/update_real_quantity"
-  post "items/update_real_quantity"
-  get "items/move_real_quantity"
-  post "items/labels"
-  post "customers/labels"
-  get "items/selection"
-  get "items/upload"
-  post "items/upload"
-  post "items/upload_house_of_smoke"
-  post "items/upload_danczek_tobaccoland_plattner"
-  post "items/upload_optimalsoft"
+  match "home/index" => "home#index"
+  match "home/set_user_theme_ajax" => "home#set_user_theme_ajax"
+  match "home/user_employee_index" => "home#user_employee_index"
+  match "home/set_language" => "home#set_language"
+  match "categories/categories_json" => "categories#categories_json"
+  match "categories/items_json" => "categories#items_json"
+  match "orders/add_item_ajax" => "orders#add_item_ajax"
+  match "orders/update_order_item" => "orders#update_order_item"
+  match "orders/set_weight" => "orders#set_weight"
+  match "orders/recently_tagged" => "orders#recently_tagged"
+  match "orders/print_order_receipt" => "orders#print_order_receipt"
+  match "orders/render_order_receipt" => "orders#render_order_receipt"
+  match "orders/refund_item" => "orders#refund_item"
+  match "orders/refund_order" => "orders#refund_order"
+  match "orders/last_five_orders" => "orders#last_five_orders"
+  match "orders/clear" => "orders#clear"
+  match "orders/remove_payment_method" => "orders#remove_payment_method"
+  match "orders/bancomat" => "orders#bancomat"
+  match "items/search" => "items#search"
+  match "items/export_broken_items" => "items#export_broken_items"
+  match "items/export_broken_items" => "items#export_broken_items"
+  match "items/update_location" => "items#update_location"
+  match "items/reorder_recommendation" => "items#reorder_recommendation"
+  match "items/update_location" => "items#update_location"
+  match "items/update_real_quantity" => "items#update_real_quantity"
+  match "items/update_real_quantity" => "items#update_real_quantity"
+  match "items/move_real_quantity" => "items#move_real_quantity"
+  match "items/labels" => "items#labels"
+  match "customers/labels" => "customers#labels"
+  match "items/selection" => "items#selection"
+  match "items/upload" => "items#upload"
+  match "items/upload" => "items#upload"
+  match "items/upload_house_of_smoke" => "items#upload_house_of_smoke"
+  match "items/upload_danczek_tobaccoland_plattner" => "items#upload_danczek_tobaccoland_plattner"
+  match "items/upload_optimalsoft" => "items#upload_optimalsoft"
   get 'items/inventory_report'
-  get "items/download"
-  get "orders/new_pos"
-  get "orders/swap"
-  get "orders/prev_order"
-  get "orders/show_payment_ajax"
-  get "orders/complete_order_ajax"
-  get "orders/new_order_ajax"
-  get "orders/activate_gift_card"
-  get "orders/update_order_items"
-  get "orders/update_pos_display"
-  get "orders/delete_order_item"
-  get "orders/connect_loyalty_card"
-  get "orders/split_order_item"
-  get "orders/print_receipt"
-  get "orders/void"
-  get "orders/report"
-  get "orders/report_range"
-  get "orders/report_day"
-  get "orders/report_day_range"
-  get "orders/:id/print" => "orders#print"
-  get "orders/print"
-  get "orders/:id/customer_display" => 'orders#customer_display'
-  get "employees/index"
-  get "items/info"
-  get "items/item_json"
-  get "items/wholesaler_update"
-  get "cash_registers/end_of_day"
+  match "items/download" => "items#download"
+  match "orders/new_pos" => "orders#new_pos"
+  match "orders/swap" => "orders#swap"
+  match "orders/prev_order" => "orders#prev_order"
+  match "orders/show_payment_ajax" => "orders#show_payment_ajax"
+  match "orders/complete_order_ajax" => "orders#complete_order_ajax"
+  match "orders/new_order_ajax" => "orders#new_order_ajax"
+  match "orders/activate_gift_card" => "orders#activate_gift_card"
+  match "orders/update_order_items" => "orders#update_order_items"
+  match "orders/update_pos_display" => "orders#update_pos_display"
+  match "orders/delete_order_item" => "orders#delete_order_item"
+  match "orders/connect_loyalty_card" => "orders#connect_loyalty_card"
+  match "orders/split_order_item" => "orders#split_order_item"
+  match "orders/print_receipt" => "orders#print_receipt"
+  match "orders/void" => "orders#void"
+  match "orders/report" => "orders#report"
+  match "orders/report_range" => "orders#report_range"
+  match "orders/report_day" => "orders#report_day"
+  match "orders/report_day_range" => "orders#report_day_range"
+  match "orders/:id/print" => "orders#print"
+  match "orders/print" => "orders#print"
+  match "orders/:id/customer_display" => 'orders#customer_display'
+  match "employees/index" => "employees#index"
+  match "items/info" => "items#info"
+  match "items/item_json" => "items#item_json"
+  match "items/wholesaler_update" => "items#wholesaler_update"
+  match "cash_registers/end_of_day" => "cash_registers#end_of_day"
 
-  post "items/create_ajax"
-  post "vendors/edit_drawer_transaction"
-  get "vendors/edit_field_on_child"
-  get "vendors/toggle"
-  get "vendors/end_day"
-  post "vendors/end_day"
-  get "vendors/open_cash_drawer"
-  get "vendors/export"
-  get "vendors/clearcache"
-  get "vendors/list_drawer_transactions"
-  post "vendors/export"
-  post "vendors/new_drawer_transaction"
-  post "vendors/edit_drawer_transaction"
+  match "items/create_ajax" => "items#create_ajax"
+  match "vendors/edit_drawer_transaction" => "vendors#edit_drawer_transaction"
+  match "vendors/edit_field_on_child" => "vendors#edit_field_on_child"
+  match "vendors/toggle" => "vendors#toggle"
+  match "vendors/end_day" => "vendors#end_day"
+  match "vendors/end_day" => "vendors#end_day"
+  match "vendors/open_cash_drawer" => "vendors#open_cash_drawer"
+  match "vendors/export" => "vendors#export"
+  match "vendors/clearcache" => "vendors#clearcache"
+  match "vendors/list_drawer_transactions" => "vendors#list_drawer_transactions"
+  match "vendors/export" => "vendors#export"
+  match "vendors/new_drawer_transaction" => "vendors#new_drawer_transaction"
+  match "vendors/edit_drawer_transaction" => "vendors#edit_drawer_transaction"
   delete  "vendors/destroy_drawer_transaction"
-  get  "vendors/labels"
-  get "vendors/spy"
-  get "api/order"
-  get "vendors/help"
-  get "shipments/move_all_to_items"
-  get "shipments/move_shipment_item"
-  get "home/load_clock"
-  get "home/backup_database"
-  get "home/backup_logfile"
-  get "reports/selector"
-  get "reports/daily"
-  get "reports/cash_account"
-  post "actions/create"
+  match "vendors/labels"
+  match "vendors/spy" => "vendors#spy"
+  match "api/order" => "api#order"
+  match "vendors/help" => "vendors#help"
+  match "shipments/move_all_to_items" => "shipments#move_all_to_items"
+  match "shipments/move_shipment_item" => "shipments#move_shipment_item"
+  match "home/load_clock" => "home#load_clock"
+  match "home/backup_database" => "home#backup_database"
+  match "home/backup_logfile" => "home#backup_logfile"
+  match "reports/selector" => "reports#selector"
+  match "reports/daily" => "reports#daily"
+  match "reports/cash_account" => "reports#cash_account"
+  match "actions/create" => "actions#create"
 
   "authenticate,create,update,destroy,add_item".split(',').each do |u|
     post "api/#{u}"
@@ -141,7 +117,29 @@ Salor::Application.routes.draw do
   match 'home/edit_owner' => 'home#edit_owner'
   match 'home/update_owner' => 'home#update_owner'
   match 'home/you_have_to_pay' => 'home#you_have_to_pay'
-
+  resources :tender_methods
+  resources :transaction_tags
+  resources :buttons
+  resources :broken_items
+  resources :shipment_types
+  resources :discounts
+  resources :shippers
+  resources :shipments
+  resources :configurations
+  resources :customers
+  resources :cash_registers
+  resources :item_types
+  resources :tax_profiles
+  resources :employees
+  resources :actions
+  resources :order_items
+  resources :orders
+  resources :items
+  resources :locations
+  resources :stock_locations
+  resources :categories
+  resources :vendors
+  resources :nodes
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action

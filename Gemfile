@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.1'
-
+gem 'therubyracer'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
@@ -37,7 +37,6 @@ gem 'nokogiri'
 
 group :test, :development do
   gem "rspec-rails", "2.7"
-  gem 'jay_unit'
   gem 'guard-rspec'
   gem 'capybara'
   gem 'capybara-webkit'
