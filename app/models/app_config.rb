@@ -2,7 +2,7 @@ class AppConfig
   def self.config
     return @@config
   end 
-  if ENV["RAILS_ENV"] == 'development' then
+  if ::Rails.env == 'development' then
     @@config = YAML::load_file("#{::Rails.root.to_s}/config/config.yml")
   else
     # This lets us have multiple salors on the same machine.

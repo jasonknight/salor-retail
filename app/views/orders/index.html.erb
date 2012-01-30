@@ -25,7 +25,7 @@
 <% @orders.each do |order| %>
   <tr>
     <td valign="top">
-      <%= order.vendor.name %>
+      <%= order.vendor.name %> #<%= order.id %>
     </td>
     <td valign="top">
       <%= order.employee_id ? order.employee.username : order.user.username %>

@@ -28,7 +28,7 @@ NilClass.class_eval do
         return 0 #if RAILS_ENV == 'production'
       end
       if ''.respond_to? method or args.first.class == String then
-        return 'NilString' #if RAILS_ENV == 'production'
+        return '' #if RAILS_ENV == 'production'
       end
       if AppConfig.standalone == true and method == :get_owner then
         return User.first

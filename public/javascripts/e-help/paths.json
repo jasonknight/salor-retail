@@ -1,0 +1,147 @@
+[{
+		"rel":"search_base",
+		"link":"Search databases",
+		"method":"static",
+		"path": [{
+			"element": "input[name*=\"chckid[]\"]:first",
+			"desc": "First, check all bases on which You wont to preform search",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker",
+			"extf": ""
+		},
+		{
+			"element": "#search",
+			"desc": "Then, type a phrase You wont to find",
+			"duration": 2500,
+			"align": "R",
+			"marker": "EHmarker",
+			"extf": "userValueF",
+			"ftriger": "B",
+			"value": "value for input"
+		},
+		{
+			"element": "input[name=dosearch]",
+			"desc": "And then click on Search button",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		}]},
+		{
+		"rel":"generate_report",
+		"link":"Generate report",
+		"method":"animated",
+		"path": [{
+			"element": "input[name*=\"chckid[]\"]:first",
+			"desc": "First, check all bases on which You wont to preform search",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		},
+		{
+			"element": "#search",
+			"desc": "Then, type a phrase You wont to find",
+			"duration": 2500,
+			"align": "R",
+			"marker": "EHmarker",
+			"extf": "userValueF",
+			"ftriger": "E",
+			"value": "some string to find"
+
+		},
+		{
+			"element": "input[name=dosearch]",
+			"desc": "And then click on Search button",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker",
+			"extf": "userClickF"
+		},
+		{
+			"element": "#resultsection",
+			"desc": "Whait for the results to appeare under here",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		},
+		{
+			"element": "input[name=doreport]",
+			"desc": "Then click on this button to generate report",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		}]},
+		{
+		"rel":"generate_full_report",
+		"link":"Generate full report",
+		"method":"animated",
+		"path": [{
+			"element": "input[name=dorefresh]",
+			"desc": "Make sure to clear all previus search",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		},
+		{
+			"element": "input[name*=\"chckid[]\"]:first",
+			"desc": "Check all bases from which You wont to generate full report",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker",
+			"userf": ""
+		},
+		{
+			"element": "input[name=doreport]",
+			"desc": "Then click on this button to generate report",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		}]},
+		{
+		"rel":"generate_report_static",
+		"link":"Generate report (static method)",
+		"method":"static",
+		"path": [{
+			"element": "input[name*=\"chckid[]\"]:first",
+			"desc": "First, check all bases on which You wont to preform search",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		},
+		{
+			"element": "#search",
+			"desc": "Then, type a phrase You wont to find",
+			"duration": 2500,
+			"align": "R",
+			"marker": "EHmarker",
+			"extf": "diferentWay('#search','My phrase')"
+		},
+		{
+			"element": "input[name=dosearch]",
+			"desc": "And then click on Search button",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		},
+		{
+			"element": "input[name=doNewReport]",
+			"desc": "Then click on this button to generate new report",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		},
+		{
+			"element": "#resultsection",
+			"desc": "Whait for the results to appeare under here",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		},
+		{
+			"element": "input[name=doreport]",
+			"desc": "Then click on this button to generate report",
+			"duration": 2000,
+			"align": "R",
+			"marker": "EHmarker"
+		}]}
+	]

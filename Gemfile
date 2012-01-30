@@ -32,11 +32,12 @@ gem "escper"
 gem "kramdown"
 gem 'exception_notification', :require => 'exception_notifier'
 gem 'nokogiri'
+gem 'mechanize'
 
 
 
 group :test, :development do
-  gem "rspec-rails", "2.7"
+  gem "rspec-rails"
   gem 'guard-rspec'
   gem 'capybara'
   gem 'capybara-webkit'

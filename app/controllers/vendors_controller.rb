@@ -57,16 +57,24 @@ class VendorsController < ApplicationController
   # GET /vendors
   # GET /vendors.xml
   def index
+    if not check_license() then
+      redirect_to :controller => "home", :action => "index" and return
+    end
     @vendors = salor_user.get_vendors(params[:page])
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @vendors }
     end
+    
   end
 
   # GET /vendors/1
   # GET /vendors/1.xml
   def show
+    if not check_license() then
+      redirect_to :controller => "home", :action => "index" and return
+    end
     @vendor = salor_user.get_vendor(params[:id])
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     respond_to do |format|

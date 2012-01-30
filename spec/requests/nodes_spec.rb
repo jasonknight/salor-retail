@@ -15,6 +15,7 @@ describe "Nodes" do
   end
   def create_local_node(user,name,sku,type,is_self=false)
       visit nodes_path
+      save_and_open_page
       click_link "New Node"
       within("#new_node") do
         fill_in "node[name]", :with => name

@@ -24,6 +24,9 @@ class ButtonsController < ApplicationController
   # GET /buttons
   # GET /buttons.xml
   def index
+    if not check_license() then
+      redirect_to :controller => "home", :action => "index" and return
+    end
     @buttons = Button.where(:vendor_id => $User.get_meta.vendor_id).order("weight ASC")
     respond_to do |format|
       format.html # index.html.erb

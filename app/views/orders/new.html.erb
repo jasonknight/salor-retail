@@ -8,6 +8,7 @@ var highlightAttrs = ['sku','price','total'];
 var timeoutEvent = null; // global var for setTimeout
 var mouseoverEvent = null; // global var for mouseover timeout thing
 var fullNameDiv = null; // global var for the full name rollover div
+var updating_pos_display = false;
 
 // Here is the function to validate the totals shown on the screen
 // it is here as an extra check to ensure that the total shown is
@@ -18,8 +19,18 @@ var fullNameDiv = null; // global var for the full name rollover div
 // if not, it notifies the user and encourages a refresh of the 
 // page.
 setInterval(function () {
-  $.get('/orders/update_pos_display');    
-},3000);
+if (!updating_pos_display) {
+	updating_pos_display = true;
+	$.get('/orders/update_pos_display', function () {
+		updating_pos_display = false;
+	});
+}
+},10000);
+setInterval(function () {
+  if (!$('#cash_drop').is(":visible") && !$('#complete_order').is(":visible") && !$('#inplaceedit-div').is(":visible")) {
+    focusInput($("#keyboard_input"));
+  } 
+},400);
 function validate_order_totals() {
   var item_total = 0.0;
   $('.pos-item-total').each(function () {
@@ -531,7 +542,7 @@ $(function () {
 
 <div class='center'>
 <% if $User.can(:change_prices) %>
-  <div class="editme pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
+  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
 <% else %>
   <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
 <% end -%>

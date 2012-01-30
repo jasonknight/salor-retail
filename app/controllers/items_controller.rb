@@ -57,7 +57,12 @@ class ItemsController < ApplicationController
   
   # GET /items
   # GET /items.xml
+  def index
+    if not check_license() then
+      redirect_to :controller => "home", :action => "index" and return
+    end
     @items = salor_user.get_items
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @items }
@@ -67,7 +72,11 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.xml
   def show
+    if not check_license() then
+      redirect_to :controller => "home", :action => "index" and return
+    end
     @item = salor_user.get_item(params[:id])
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @item }

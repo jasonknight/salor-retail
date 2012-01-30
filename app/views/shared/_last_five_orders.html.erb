@@ -14,7 +14,7 @@
     
     </script>
     <%= image_tag('icons/' + icon(:order,32)) %><br />
-    <span class="id"><%= order.tag and order.tag.empty? ? "#{order.id} - #{order.get_owner.username}" : order.tag %></span> <br />
+    <span class="id"><%= order.tag.empty? ? "#{order.id} - #{order.get_owner.username}" : order.tag %></span> <br />
     <span class="total"><%= salor_number_to_currency order.total %></span>
   </div>
     <% i = i + 1  %>

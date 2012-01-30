@@ -263,6 +263,9 @@ class ApplicationController < ActionController::Base
     return salor_user.can(p[:action] + '_' + p[:controller])
   end
   
+  def check_license()
+    return true
+  end
   def assign_from_to(p)
     begin
       f = Date.civil( p[:from][:year ].to_i,

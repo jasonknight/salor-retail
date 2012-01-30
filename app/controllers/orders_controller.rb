@@ -86,7 +86,11 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.xml
   def index
+    if not check_license() then
+      redirect_to :controller => "home", :action => "index" and return
+    end
     @orders = salor_user.get_orders
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @orders }
@@ -107,6 +111,9 @@ class OrdersController < ApplicationController
   # GET /orders/new
   # GET /orders/new.xml
   def new
+    if not check_license() then
+      redirect_to :controller => "home", :action => "index" and return
+    end
     if not salor_user.meta.vendor_id then
       redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
     end

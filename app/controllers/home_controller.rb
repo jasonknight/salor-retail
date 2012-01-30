@@ -52,9 +52,18 @@ class HomeController < ApplicationController
   before_filter :check_role, :only => [:edit_owner, :update_owner]
 
   def index
+    if not check_license() then
+      render :action => "402", :status => 402 and return
+    end
+    if AppConfig.standalone and User.count == 0 then
+      redirect_to new_user_registration_path and return
+    end
   end
   def user_employee_index
     Session.sweep
+    if not check_license() then
+      render :action => "402", :status => 402 and return
+    end
     r = salor_user.get_root
     if r then
       redirect_to r and return
