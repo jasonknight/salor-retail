@@ -21,23 +21,7 @@
     <%= stylesheet_link_tag("jquery-ui.css") %>
     <%= stylesheet_link_tag("application.css") %>
     <%= stylesheet_link_tag 'print', :media => 'print' %>
-    <%= javascript_include_tag(
-                                'jquery.min',
-                                'jquery-ui.min',
-                                'i18n/jquery-ui-i18n.js',
-                                'jquery.keyboard',
-                                'mousewheel.min',
-                                'rails',
-                                'application',
-                                'loadmask',
-                                'jscrollpane',
-                                'jquery.number_format',
-                                'jquery.iframe',
-                                'bycard',
-                                'e-help/jquery.ehelp.functions',
-                                'jquery.checkbox.js',
-                                'sprintf.js',
-                                :cache => "salor_cache") %>
+    <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tag %>
     <%= salor_render :partial => "shared/application_js" %>
     <link rel="apple-touch-icon" href="apple-touch-icon-iphone.png" />
