@@ -5,22 +5,22 @@
 
 <%= @vendor.configuration.receipt_blurb %><%= "\n\e!\x01" + "\ea\x00" %>
 
-<%= I18n.t("receipts.report_at_time", :datetime => I18n.l(@report.date, :format => :long)) %>
+<%= I18n.t("receipts.report_at_time", :datetime => I18n.l(@report[:date], :format => :long)) %>
 
 <%= "\e!\x00" %>
-<%= @report.username %>
+<%= @report[:username] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t("activerecord.models.drawer.one"), @report.drawer_amount] %>
+<%= "%20.20s EUR %5.2f" % [I18n.t("activerecord.models.drawer.one"), @report[:drawer_amount]] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.sold"), @report.orders_total] %>
+<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.sold"), @report[:orders_total]] %>
 
 ------------------------------
 
-<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.drop"), @report.drop_total ] %>
+<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.drop"), @report[:drop_total] ] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.payout"), @report.payout_total + @report.refund_total ] %>
+<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.payout"), @report[:payout_total] + @report[:refund_total] ] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.cancelled"), - @report.refund_total ] %>
+<%= "%20.20s EUR %5.2f" % [I18n.t("printr.word.cancelled"), - @report[:refund_total] ] %>
 
 <%= "\e!\x08" %>
 <%= I18n.t("printr.formats.advert") %>
