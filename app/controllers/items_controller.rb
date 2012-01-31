@@ -117,7 +117,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if salor_user.owns_vendor?(@item.vendor_id) and @item.save
         @item.set_model_owner(salor_user)
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Item.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Item.model_name.human)) }
         format.xml  { render :xml => @item, :status => :created, :location => @item }
       else
         format.html { render :action => "new" }
@@ -167,7 +167,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if saved
         @item.set_model_owner(salor_user)
-        format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_edit", :model => Item.human_name)) }
+        format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_edit", :model => Item.model_name.human)) }
         format.xml  { head :ok }
       else
         format.html { flash[:notice] = "There was an error!";render :action => "edit" }

@@ -95,7 +95,7 @@ class OrderItemsController < ApplicationController
 
     respond_to do |format|
       if @order_item.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => OrderItem.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => OrderItem.model_name.human)) }
         format.xml  { render :xml => @order_item, :status => :created, :location => @order_item }
       else
         format.html { render :action => "new" }

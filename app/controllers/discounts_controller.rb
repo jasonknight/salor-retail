@@ -96,7 +96,7 @@ class DiscountsController < ApplicationController
     OrderItem.reload_discounts
     respond_to do |format|
       if @discount.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Discount.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Discount.model_name.human)) }
         format.xml  { render :xml => @discount, :status => :created, :location => @discount }
       else
         format.html { render :action => "new" }

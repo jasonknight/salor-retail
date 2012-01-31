@@ -59,8 +59,8 @@
 <th><%= ShipmentItem.human_attribute_name(:name) %></th>
 <th><%= ShipmentItem.human_attribute_name(:sku) %></th>
 <th><%= ShipmentItem.human_attribute_name(:quantity) %></th>
-<th><%= Location.human_name %></th>
-<th><%= StockLocation.human_name %></th>
+<th><%= Location.model_name.human %></th>
+<th><%= StockLocation.model_name.human %></th>
 </tr>
 
           <% @shipment.shipment_items.scopied.each do |item|  %>

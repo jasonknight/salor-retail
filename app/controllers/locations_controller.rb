@@ -102,7 +102,7 @@ class LocationsController < ApplicationController
     respond_to do |format|
       if @location.save
         GlobalData.reload(:locations)
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Location.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Location.model_name.human)) }
         format.xml  { render :xml => @location, :status => :created, :location => @location }
       else
         format.html { render :action => "new" }
@@ -119,7 +119,7 @@ class LocationsController < ApplicationController
     respond_to do |format|
       if @location.update_attributes(params[:location])
         GlobalData.reload(:locations)
-        format.html { render :action => 'edit', :notice => I18n.t("views.notice.model_edit", :model => Location.human_name) }
+        format.html { render :action => 'edit', :notice => I18n.t("views.notice.model_edit", :model => Location.model_name.human) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

@@ -141,7 +141,7 @@ class EmployeesController < ApplicationController
     @employee.make_valid
     respond_to do |format|
       if @employee.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Employee.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Employee.model_name.human)) }
         format.xml  { render :xml => @employee, :status => :created, :location => @employee }
       else
         format.html { render :action => "new" }

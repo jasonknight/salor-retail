@@ -114,7 +114,7 @@ class VendorsController < ApplicationController
 
     respond_to do |format|
       if @vendor.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Vendor.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Vendor.model_name.human)) }
         format.xml  { render :xml => @vendor, :status => :created, :location => @vendor }
       else
         format.html { render :action => "new" }

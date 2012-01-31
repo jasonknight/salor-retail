@@ -92,7 +92,7 @@ class CustomersController < ApplicationController
         @lc = LoyaltyCard.new params[:loyalty_card]
         @lc.customer_id = @customer.id
         @lc.save
-        format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_create", :model => Customer.human_name)) }
+        format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_create", :model => Customer.model_name.human)) }
         format.xml  { render :xml => @customer, :status => :created, :location => @customer }
       else
         format.html { render :action => "new" }

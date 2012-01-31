@@ -99,7 +99,7 @@ class CashRegistersController < ApplicationController
     respond_to do |format|
       if @cash_register.save
         @cash_register.set_model_owner(salor_user)
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => CashRegister.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => CashRegister.model_name.human)) }
         format.xml  { render :xml => @cash_register, :status => :created, :location => @cash_register }
       else
         format.html { render :action => "new" }

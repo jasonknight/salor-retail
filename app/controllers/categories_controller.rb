@@ -100,7 +100,7 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       if @category.save
         GlobalData.reload(:categories)
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Category.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Category.model_name.human)) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
       else
         format.html { render :action => "new" }
@@ -117,7 +117,7 @@ class CategoriesController < ApplicationController
     respond_to do |format|
       if @category.update_attributes(params[:category])
         GlobalData.reload(:categories)
-        format.html { render :action => 'edit', :notice => I18n.t("views.notice.model_edit", :model => Category.human_name) }
+        format.html { render :action => 'edit', :notice => I18n.t("views.notice.model_edit", :model => Category.model_name.human) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

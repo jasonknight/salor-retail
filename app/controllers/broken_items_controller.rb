@@ -96,7 +96,7 @@ class BrokenItemsController < ApplicationController
     @broken_item.set_model_owner
     respond_to do |format|
       if @broken_item.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => BrokenItem.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => BrokenItem.model_name.human)) }
         format.xml  { render :xml => @broken_item, :status => :created, :location => @broken_item }
       else
         format.html { render :action => "new" }
@@ -112,7 +112,7 @@ class BrokenItemsController < ApplicationController
 
     respond_to do |format|
       if @broken_item.update_attributes(params[:broken_item])
-        format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_edit", :model => BrokenItem.human_name)) }
+        format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_edit", :model => BrokenItem.model_name.human)) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

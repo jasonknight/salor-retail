@@ -99,7 +99,7 @@ class TaxProfilesController < ApplicationController
 
     respond_to do |format|
       if @tax_profile.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => TaxProfile.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => TaxProfile.model_name.human)) }
         format.xml  { render :xml => @tax_profile, :status => :created, :location => @tax_profile }
       else
         format.html { render :action => "new" }
@@ -115,10 +115,10 @@ class TaxProfilesController < ApplicationController
     
     respond_to do |format|
       if @tax_profile.update_attributes(params[:tax_profile]) and not @tax_profile.order_items.any?
-        format.html { render :action => 'edit', :notice => I18n.t("views.notice.model_edit", :model => TaxProfile.human_name) }
+        format.html { render :action => 'edit', :notice => I18n.t("views.notice.model_edit", :model => TaxProfile.model_name.human) }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit",:notice => I18n.t("system.errors.no_longer_editable", :model => TaxProfile.human_name) }
+        format.html { render :action => "edit",:notice => I18n.t("system.errors.no_longer_editable", :model => TaxProfile.model_name.human) }
         format.xml  { render :xml => @tax_profile.errors, :status => :unprocessable_entity }
       end
     end

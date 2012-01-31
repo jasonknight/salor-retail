@@ -100,7 +100,7 @@ class ShippersController < ApplicationController
 
     respond_to do |format|
       if @shipper.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Shipper.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Shipper.model_name.human)) }
         format.xml  { render :xml => @shipper, :status => :created, :location => @shipper }
       else
         format.html { render :action => "new" }

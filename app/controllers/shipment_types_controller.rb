@@ -97,7 +97,7 @@ class ShipmentTypesController < ApplicationController
     @shipment_type.set_model_owner
     respond_to do |format|
       if @shipment_type.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => ShipmentType.human_name))}
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => ShipmentType.model_name.human))}
         format.xml  { render :xml => @shipment_type, :status => :created, :location => @shipment_type }
       else
         format.html { render :action => "new" }
@@ -113,7 +113,7 @@ class ShipmentTypesController < ApplicationController
 
     respond_to do |format|
       if @shipment_type.update_attributes(params[:shipment_type])
-        format.html { redirect_to :action => 'index', :notice => I18n.t("views.notice.model_edit", :model => ShipmentType.human_name) and return}
+        format.html { redirect_to :action => 'index', :notice => I18n.t("views.notice.model_edit", :model => ShipmentType.model_name.human) and return}
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

@@ -96,7 +96,7 @@ class ItemTypesController < ApplicationController
 
     respond_to do |format|
       if @item_type.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => ItemType.human_name)) }
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => ItemType.model_name.human)) }
         format.xml  { render :xml => @item_type, :status => :created, :location => @item_type }
       else
         format.html { render :action => "new" }
