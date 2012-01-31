@@ -36,8 +36,8 @@ $(function () {
 <script type="text/javascript">
 function initErrors() {
   $('.errors').show();
-  var back = $('<div style="float: left;"><%= image_tag "icons/" + icon(:back,32) %></div>');
-  var del = $('<div align="right"><%= image_tag "icons/" + icon(:delete,32) %></div>');
+  var back = $('<div style="float: left;"><%= image_tag "/images/icons/" + icon(:back,32) %></div>');
+  var del = $('<div align="right"><%= image_tag "/images/icons/" + icon(:delete,32) %></div>');
   del.click(function () {
       $(this).parent().hide();
   });

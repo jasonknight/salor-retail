@@ -5,7 +5,7 @@ function addNote() {
   elem.append($('<input type="text" name="<%= model %>[<%= method %>][][title]" class="text-input" style="width: 300px;" value="" /><br />'));
   elem.append($('<%= label_tag I18n.t("views.single_words.body") %><br />'));
   elem.append($('<textarea rows="5" name="<%= model %>[<%= method %>][][body]" class="text-input" style="width: 300px;" /><br />'));
-  var del = $('<div align="right"><%= image_tag "icons/" + icon(:delete,16) %></div>');
+  var del = $('<div align="right"><%= image_tag "/images/icons/" + icon(:delete,16) %></div>');
   del.mousedown(function () {
       $(this).parent().remove();
   });
@@ -15,7 +15,7 @@ function addNote() {
 </script>
 <h2> <%= I18n.t("views.forms.notes") %> </h2>
 <div id="" class="" align="center">
-  <%= image_tag "icons/" + icon(:add,32), :onclick => "addNote();" %> <br />
+  <%= image_tag "/images/icons/" + icon(:add,32), :onclick => "addNote();" %> <br />
 </div>
 <div id="notes" class="notes">
   <% if notes then  %>
@@ -29,7 +29,7 @@ function addNote() {
           <%= note.body %>
         </p>
         <div id="" class="" align="right">
-          <%= image_tag("icons/" + icon(:delete,16), :onclick => "$('#note-#{note.id}').remove();") if salor_user.owns_this?(note) %>
+          <%= image_tag("/images/icons/" + icon(:delete,16), :onclick => "$('#note-#{note.id}').remove();") if salor_user.owns_this?(note) %>
         </div>
       </div>
   <% end %>

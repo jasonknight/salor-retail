@@ -25,13 +25,13 @@
     <tr>
     <td width="200px">
        <div class="tool-icon" style="width: 100px;">
-          <%= link_to image_tag('icons/' + icon(:broken, 32)), new_broken_item_path(:sku => @item.sku, :name => @item.name, :base_price => @item.base_price) %><br />
+          <%= link_to image_tag('/images/icons/' + icon(:broken, 32)), new_broken_item_path(:sku => @item.sku, :name => @item.name, :base_price => @item.base_price) %><br />
          <span class="icon-caption"> <%= I18n.t("menu.new_broken_item") %></span>
         </div>
     </td>
       <td>
         <div class="tool-icon" style="width: 100px;">
-          <%= link_to image_tag('icons/' + icon(:action, 32)), new_action_path(:item => { :sku => @item.sku, :name => @item.name + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
+          <%= link_to image_tag('/images/icons/' + icon(:action, 32)), new_action_path(:item => { :sku => @item.sku, :name => @item.name + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
           <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
         </div>
       </td>
@@ -43,7 +43,7 @@
                 cat_name = ''
               end
           %>
-          <%= link_to image_tag('icons/' + icon(:button, 32)), new_button_path(:item => { :sku => @item.sku, :name => @item.name, :category => cat_name}) %><br />
+          <%= link_to image_tag('/images/icons/' + icon(:button, 32)), new_button_path(:item => { :sku => @item.sku, :name => @item.name, :category => cat_name}) %><br />
           <span class="icon-caption"><%= I18n.t("menu.new_button") %></span>
         </div>
       </td>
@@ -119,7 +119,7 @@
                     <%= f.label t("activerecord.attributes.coupon_applies"),t('views.forms.applies_to_item') %><br />
                     <%= f.text_field :coupon_applies, :class => "keyboardable"%>
                     <br />
-                    <%= f.label t("activerecord.attributes.coupon_type"),%><br />
+                    <%= f.label t("activerecord.attributes.coupon_type") %><br />
                     <%= f.select :coupon_type, coupon_types.collect {|ct| [ct[:text],ct[:value]]} %>
                   </div>
                   <div id="gcardamount" class="field hidden">
@@ -226,7 +226,7 @@
                           <%= f.check_box :calculate_part_price %>
                       </div>
                       <div >
-                        <%= image_tag "icons/" + icon(:add,32), :onclick => "addPart();" %> <br />
+                        <%= image_tag "/images/icons/" + icon(:add,32), :onclick => "addPart();" %> <br />
                       </div>
                     </td>
                   </tr>
@@ -244,7 +244,7 @@
 
 
                   elem.append(qinp);
-                  var del = $('<div align="right" style="padding-top: 10px;"><%= image_tag "icons/" + icon(:delete,16) %></div>');
+                  var del = $('<div align="right" style="padding-top: 10px;"><%= image_tag "/images/icons/" + icon(:delete,16) %></div>');
                   del.click(function () {
                       $(this).parent().remove();
                   });
@@ -263,7 +263,7 @@
                         <%= label_tag I18n.t("activerecord.attributes.part_quantity") %> <br />
                         <%= text_field_tag "item[part_skus][][part_quantity]", part.part_quantity, :class => 'keyboardable-int delimit-number' %><br />
                         <div id="" class="" align="right" style="padding-top: 10px;">
-                          <%= image_tag("icons/" + icon(:delete,16), :onclick => "$('#part-#{part.id}').remove();") %>
+                          <%= image_tag("/images/icons/" + icon(:delete,16), :onclick => "$('#part-#{part.id}').remove();") %>
                         </div>
                       </div>
                     <% end %>
@@ -279,7 +279,7 @@
               </td>
               <td class="batches-options" align="right">
                 <div >
-                  <%= image_tag "icons/" + icon(:add,32), :onclick => "addBatch();" %> <br />
+                  <%= image_tag "/images/icons/" + icon(:add,32), :onclick => "addBatch();" %> <br />
                 </div>
               </td>
             </tr>
@@ -299,7 +299,7 @@
 
           elem.append(qinp);
           elem.append("<br />");
-          var del = $('<div align="right" style="padding-top: 10px;"><%= image_tag "icons/" + icon(:delete,16) %></div>');
+          var del = $('<div align="right" style="padding-top: 10px;"><%= image_tag "/images/icons/" + icon(:delete,16) %></div>');
           del.click(function () {
               $(this).parent().remove();
           });
@@ -318,7 +318,7 @@
                 <%= label_tag I18n.t("activerecord.attributes.expires_on") %> <br />
                 <%= text_field_tag "item[batch_skus][][expires_on]", batch.expires_on, :class => 'keyboardable' %>
                 <div id="" class="" align="right" style="padding-top: 10px;">
-                  <%= image_tag("icons/" + icon(:delete,16), :onclick => "$('#batch-#{batch.id}').remove();") %>
+                  <%= image_tag("/images/icons/" + icon(:delete,16), :onclick => "$('#batch-#{batch.id}').remove();") %>
                 </div>
               </div>
             <% end %>
@@ -347,7 +347,7 @@
             </td>
             <td>
               <div>
-              <%= link_to image_tag('icons/' + icon(:delete,16)), action,:confirm => 'Are you sure?', :method => :delete %>
+              <%= link_to image_tag('/images/icons/' + icon(:delete,16)), action,:confirm => 'Are you sure?', :method => :delete %>
             </div>
             </td>
           </tr>

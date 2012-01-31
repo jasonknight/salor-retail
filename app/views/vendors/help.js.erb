@@ -9,7 +9,7 @@ var text = '';
 text = "<%= raw @text %>";
 <% end %>
 $('.help').html(text);
-var del = $('<div align="right"><br /><br /><%= image_tag("icons/" + icon(:delete,16)) %></div>');
+var del = $('<div align="right"><br /><br /><%= image_tag("/images/icons/" + icon(:delete,16)) %></div>');
     del.click(function () {
         $(this).parent().hide();
     });

@@ -4,7 +4,7 @@
         <table width="375px" align="center">
           <tr valign="top">
             <td align="center" width="125px">
-              <%= link_to(image_tag("icons/" + icon(:add,32)), new_shipment_type_path) %>              
+              <%= link_to(image_tag("/images/icons/" + icon(:add,32)), new_shipment_type_path) %>              
             </td>
             <td align="center" width="125px">
               <a class='shippers_index' href="<%= shippers_path %>">
@@ -35,8 +35,8 @@
 %>
   <tr>
     <td><%= link_to shipment_type.name, shipment_type_path(shipment_type) %></td>
-    <td><%= link_to image_tag("icons/" + icon(:edit,32)), edit_shipment_type_path(shipment_type) %></td>
-    <td><%= link_to image_tag("icons/" + icon(:delete,32)), :confirm => I18n.t("menu.delete_confirm"), :method => :delete %></td>
+    <td><%= link_to image_tag("/images/icons/" + icon(:edit,32)), edit_shipment_type_path(shipment_type) %></td>
+    <td><%= link_to image_tag("/images/icons/" + icon(:delete,32)), :confirm => I18n.t("menu.delete_confirm"), :method => :delete %></td>
   </tr>
 <% end %>
 

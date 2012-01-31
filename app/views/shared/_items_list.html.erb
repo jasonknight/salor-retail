@@ -14,11 +14,11 @@
         </td>
         <td>
         <div onmousedown="window.location ='<%= edit_item_path(item)%>';" style="padding: 5px;">
-          <%= link_to(image_tag('icons/' + icon(:edit,32)), edit_item_path(item)) %>
+          <%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_item_path(item)) %>
           </div>
         </td>
         <td>
-          <%= link_to(image_tag('icons/' + icon(:delete,32)), item, :confirm => 'Are you sure?', :method => :delete) %>
+          <%= link_to(image_tag('/images/icons/' + icon(:delete,32)), item, :confirm => 'Are you sure?', :method => :delete) %>
         </td>
       </tr>
     <% end %>
@@ -36,7 +36,7 @@
           </a>
             <div class="list slave">
               <div>
-                <%= link_to image_tag('icons/' + icon(:delete,16)), item , :confirm => 'Are you sure?', :method => :delete %>
+                <%= link_to image_tag('/images/icons/' + icon(:delete,16)), item , :confirm => 'Are you sure?', :method => :delete %>
               </div>
             </div>
             <!-- End ul.list -->

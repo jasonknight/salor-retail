@@ -131,14 +131,14 @@
                         <%= image_tag path %>
                       <% end %>
                       <br />
-                       <%= link_to image_tag("icons/EPS-icon.png", :width => "48"), "/images/" + b.get_barcode(@customer.loyalty_card.sku).gsub('.png','.eps') %> 
+                       <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), "/images/" + b.get_barcode(@customer.loyalty_card.sku).gsub('.png','.eps') %> 
           &nbsp;&nbsp;&nbsp;
-         <%= image_tag "icons/print_sticker_48.png", 
+         <%= image_tag "/images/icons/print_sticker_48.png", 
                        :title => "Print Sticker", 
                        :class => "class", 
                        :onclick => "SalorPrinter.printURL('#{GlobalData.cash_register.sticker_printer}','#{GlobalData.conf.url}/customers/render_label?id=#{ @customer.id }&type=lc_sticker')" %> 
 &nbsp;&nbsp;&nbsp;
-          <%= image_tag "icons/print_48.png", 
+          <%= image_tag "/images/icons/print_48.png", 
                        :title => "Print Thermal", 
                        :class => "class", 
                        :onclick => "SalorPrinter.printURL('#{GlobalData.cash_register.thermal_printer}','#{GlobalData.conf.url}/customers/render_label?id=#{ @customer.id }&type=lc_label')" %> 
