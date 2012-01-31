@@ -33,7 +33,7 @@
             path = b.create(@item.sku)
           %>
           <%= link_to "/images/" + b.get_barcode(@item.sku) do %>
-            <%= image_tag path %>
+            <%= image_tag File.join('/images/',path) %>
           <% end %>
           <br />
           <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), "/images/" + b.get_barcode(@item.sku).gsub('.png','.eps') %> 

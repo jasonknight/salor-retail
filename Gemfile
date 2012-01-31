@@ -33,6 +33,7 @@ gem "kramdown"
 gem 'exception_notification', :require => 'exception_notifier'
 gem 'nokogiri'
 gem 'mechanize'
+gem 'barcode'
 
 
 

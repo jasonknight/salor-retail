@@ -1,7 +1,10 @@
 <% if @order_item then %>
-<% @order_item.reload if @order_item.behavior == 'coupon'  %>
-   updateOrderItems([<%= raw @order_item.to_json %>]);
-   updateOrder(<%= raw @order.to_json %>);
+  <% @order_item.reload if @order_item.behavior == 'coupon'  %>
+  <% json = raw @order_item.to_json %>
+   updateOrderItems([<%= json %>]);
+   updateOrder(<%= json %>);
+   writeToPole(<%= json %>);
+
    try {
     display_change();
    } catch (err) {

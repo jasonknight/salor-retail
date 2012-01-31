@@ -173,9 +173,9 @@ function complete_order_show() {
         complete_order_hide();
       } else {
         <% if @cash_register.no_print == true %>
-          complete_order_send(false);
+          //complete_order_send(false);
         <% else  %>
-          complete_order_send();
+          //complete_order_send();
         <% end %>
         focusInput($("#payment_amount_0"));
       }
@@ -228,8 +228,8 @@ function allow_complete_order(isAllowed) {
   if (isAllowed == null) isAllowed = true;
   //if (complete_total == 0) isAllowed = false;
   if (isAllowed) {
-    $("#confirm_complete_order_button").removeClass("button-inactive").mousedown(complete_order_send);
-    $("#confirm_complete_order_noprint_button").removeClass("button-inactive").mousedown(function(){complete_order_send(false)});
+    $("#confirm_complete_order_button").removeClass("button-inactive").unbind('mousedown').mousedown(complete_order_send);
+    $("#confirm_complete_order_noprint_button").removeClass("button-inactive").unbind('mousedown').mousedown(function(){complete_order_send(false)});
     $("#cancel_complete_order_button").html("<%= I18n.t("helpers.submit.cancel") %>");
   } else {
     $("#confirm_complete_order_button").addClass("button-inactive").unbind('mousedown');
@@ -377,9 +377,25 @@ function display_change() {
     get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
     allow_complete_order();
   }
+  if(change > 0) { displayChangeOnPole(); }
 }
 
 function complete_order_send(print) {
+  if (print == false) {
+    print = 'false';
+  } else {
+    print = 'true';
+  }
+  if (sendingOrder) return;
+  allow_payment_amount = false;
+  sendingOrder = true;
+  allow_complete_order(false);
+  serializePayments();
+  <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
+  displayChangeOnPole();
+}
+
+function displayChangeOnPole() {
   <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
     if (typeof(Salor) != 'undefined') {
       currency = '<%= t('number.currency.format.friendly_unit') %>';
@@ -392,18 +408,6 @@ function complete_order_send(print) {
       Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', blurb_line1 + given + blurb_line2 + change );
     }
   <% end %>
-  if (print == false) {
-    print = 'false';
-  } else {
-    print = 'true';
-  }
-  if (sendingOrder) return;
-  allow_payment_amount = false;
-  sendingOrder = true;
-  allow_complete_order(false);
-  serializePayments();
-  <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
-
 }
 
 function serializePayments() {

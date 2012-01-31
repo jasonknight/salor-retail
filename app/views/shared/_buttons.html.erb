@@ -47,11 +47,11 @@ function buttons_tabs() {
 }
 $(function () {
 	$.getJSON('/buttons', function (data) {
-	          for (i in data) {
-              if ( categories.indexOf(data[i]['button']['category']) == -1) {
-                make_category(data[i]['button']['category']);
+          for (i in data) { 
+                if ( categories.indexOf(data[i].category) == -1) {
+                make_category(data[i].category);
               }
-              $("#" + data[i]['button']['category'].replace(/[^a-zA-Z]+/g,'')).append(make_button(data[i]['button']));
+              $("#" + data[i]['category'].replace(/[^a-zA-Z]+/g,'')).append(make_button(data[i]));
 	          }
 	          buttons_tabs();
 	 });

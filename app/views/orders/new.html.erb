@@ -227,16 +227,19 @@ function format_pole(name,price,quantity,weight_metric,total) {
   return pole_name + pole_price + pole_quantity + pole_total;
 }
 
-function updatePosItem(item) {
-  var base_id = getOrderItemId(item);
-  item['price'] = item['price'] - item['discount_amount'];
-  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
+function writeToPole(item) {
   <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
     if (typeof(Salor) != 'undefined') {
       output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
       Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', output );
     }
   <% end %>
+}
+
+function updatePosItem(item) {
+  var base_id = getOrderItemId(item);
+  item['price'] = item['price'] - item['discount_amount'];
+  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   <% if GlobalData.cash_register.hide_discounts == true then  %>
     var attrs = ['name','sku','quantity','price','total'];
   <% else  %>
@@ -287,12 +290,6 @@ function showFullItemName()
 
 function addPosItem(item) {
   var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
-  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
-      output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
-      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', output );
-    }
-  <% end %>
   $(row).mouseover(function(event){
     mouseoverEvent = event;
     timeoutEvent = setTimeout("showFullItemName()", 1000);
