@@ -93,19 +93,23 @@
               </td>
               <td valign="top">
                 <% current = @item %>
+                <% ancestorcount = 0 %>
                 <% begin %>
                   <% parent = current.parent %>
                   <% if parent %>
-                    <p><%= link_to parent.name, edit_item_path(parent) %></p>
+                    <% ancestorcount += 1 %>
+                    <p>Parent <%= ancestorcount %>: <%= link_to parent.name, edit_item_path(parent) %></p>
                     <p><%= t 'activerecord.attributes.quantity' %>: <%= parent.quantity %> | <%= t 'activerecord.attributes.price' %>: <%= number_to_currency parent.base_price %></p>
                   <% end %>
                   <% current = parent %>
                 <% end while parent %>
                 <% current = @item %>
+                <% ancestorcount = 0 %>
                 <% begin %>
                   <% child = current.child %>
                   <% if child %>
-                    <p><%= link_to child.name, edit_item_path(child) %></p>
+                    <% ancestorcount += 1 %>
+                    <p>Child <%= ancestorcount %>: <%= link_to child.name, edit_item_path(child) %></p>
                     <p><%= t 'activerecord.attributes.quantity' %>: <%= child.quantity %> | <%= t 'activerecord.attributes.price' %>: <%= number_to_currency child.base_price %></p>
                   <% end %>
                   <% current = child %>
