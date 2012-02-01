@@ -27,7 +27,10 @@ if (!updating_pos_display) {
 }
 },10000);
 setInterval(function () {
-  if (!$('#cash_drop').is(":visible") && !$('#complete_order').is(":visible") && !$('#inplaceedit-div').is(":visible")) {
+    if (!$('#cash_drop').is(":visible") && 
+      !$('#complete_order').is(":visible") && 
+      !$('#inplaceedit-div').is(":visible") && 
+      !$('#search').is(":visible")) {
     focusInput($("#keyboard_input"));
   } 
 },400);
