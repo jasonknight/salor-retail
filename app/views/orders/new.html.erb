@@ -513,11 +513,14 @@ $(function () {
     function weigh_last_item() {
     try {
       var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
+      var weight = Salor.<%= @cash_register.scale %>;
       var string = '/vendors/edit_field_on_child?id=' +
               itemid +'&klass=OrderItem' +
               '&field=quantity'+
-              '&value=' + Salor.<%= @cash_register.scale %>;
+              '&value=' + weight;
               get(string, filename);
+if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
+
      } catch (err) {
      	//don't complain
      }

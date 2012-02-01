@@ -173,9 +173,9 @@ function complete_order_show() {
         complete_order_hide();
       } else {
         <% if @cash_register.no_print == true %>
-          //complete_order_send(false);
+          complete_order_send(false);
         <% else  %>
-          //complete_order_send();
+          complete_order_send();
         <% end %>
         focusInput($("#payment_amount_0"));
       }
@@ -381,7 +381,7 @@ function display_change() {
 }
 
 function complete_order_send(print) {
-  if (print == false) {
+  if (print === false) {
     print = 'false';
   } else {
     print = 'true';
