@@ -295,6 +295,9 @@ class VendorsController < ApplicationController
       if klass == Order and not params[:id] then
         params[:id] = GlobalData.salor_user.meta.order_id
       end
+      if not params[:id] and params[:order_id] then
+        params[:id] = params[:order_id]
+      end
       if klass.exists? params[:id] then
         # puts  "### Class Exists"
         @inst = klass.find(params[:id])
