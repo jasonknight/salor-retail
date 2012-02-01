@@ -143,9 +143,9 @@ class ApplicationController < ActionController::Base
     end
     GlobalData.vendor = @vendor
     $Vendor = @vendor
-    GlobalData.conf = @vendor.configuration if @vendor
+    GlobalData.conf = @vendor.salor_configuration if @vendor
     if @vendor then 
-      $Conf = @vendor.configuration
+      $Conf = @vendor.salor_configuration
     end
   end
   def layout_by_response

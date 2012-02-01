@@ -429,15 +429,16 @@ class OrdersController < ApplicationController
   def split_order_item
     @oi = OrderItem.find_by_id(params[:id])
     if @oi then
-      noi = @oi.clone
+      noi = OrderItem.new(@oi.attributes)
       @oi.quantity -= 1
       @oi.total = @oi.price * @oi.quantity
+      noi.order_id = @oi.order_id
       noi.quantity = 1
       noi.total = noi.quantity * noi.price
       OrderItem.connection.execute("update order_items set quantity = '#{@oi.quantity}', total = '#{@oi.total}' where id = #{@oi.id}")
       noi.save
     end
-    redirect_to :controller => :orders, :action => :show, :id => params[:order_id]
+    redirect_to "/orders/#{@oi.order.id}"
   end
   def void
     @order = Order.scopied.find_by_id params[:id]

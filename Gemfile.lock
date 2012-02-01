@@ -66,6 +66,8 @@ GEM
     factory_girl_rails (1.6.0)
       factory_girl (~> 2.5.0)
       railties (>= 3.0.0)
+    faker (1.0.1)
+      i18n (~> 0.4)
     ffi (1.0.11)
     guard (0.8.8)
       thor (~> 0.14.6)
@@ -141,24 +143,17 @@ GEM
     rspec-expectations (2.8.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.8.0)
-    rspec-prof (0.0.3)
-      rspec
-      ruby-prof
-      sc-core-ext (>= 1.2.1)
     rspec-rails (2.8.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.8.0)
-    ruby-prof (0.10.8)
     rubyzip (0.9.5)
     sass (3.1.12)
     sass-rails (3.2.4)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    sc-core-ext (1.2.1)
-      activesupport (>= 2.3.5)
     selenium-webdriver (2.18.0)
       childprocess (>= 0.2.5)
       ffi (~> 1.0.9)
@@ -199,6 +194,7 @@ DEPENDENCIES
   escper
   exception_notification
   factory_girl_rails
+  faker
   guard (= 0.8.8)
   guard-rspec
   guard-spork
@@ -213,7 +209,6 @@ DEPENDENCIES
   printr (= 0.6.1)
   rails (= 3.2.1)
   rmagick
-  rspec-prof
   rspec-rails
   sass-rails
   serialport

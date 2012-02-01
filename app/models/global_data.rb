@@ -92,7 +92,7 @@ class GlobalData
             return self.categories
           elsif osym == :conf then
             if self.params.vendor_id then
-              self.conf = Configuration.find_by_vendor_id(self.params.vendor_id)
+              self.conf = SalorConfiguration.find_by_vendor_id(self.params.vendor_id)
               return self.conf
             end
             return nil

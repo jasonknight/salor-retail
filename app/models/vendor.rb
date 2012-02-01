@@ -50,7 +50,7 @@ class Vendor < ActiveRecord::Base
 	include SalorScope
   include SalorModel
 	belongs_to :user
-	has_one :configuration
+	has_one :salor_configuration
 	has_many :orders
 	has_many :categories
 	has_many :items
@@ -71,20 +71,27 @@ class Vendor < ActiveRecord::Base
 	has_many :shipment_items, :through => :shipments
   has_many :tax_profiles, :through => :user
 	
-	accepts_nested_attributes_for :configuration
-	
-	def set_vendor_printers=(printers)
-	  self.connection.execute("delete from vendor_printers where vendor_id = '#{self.id}'")
-	  ps = []
-	  printers.each do |printer|
-	    p = VendorPrinter.new(printer)
-	    p.vendor_id = self.id
-	    p.save
-	    ps << p.id
+  
+	def salor_configuration_attributes=(hash)
+	  if self.salor_configuration.nil? then
+	    self.salor_configuration = SalorConfiguration.new hash
+	    self.salor_configuration.save
+	    return
 	  end
-	  self.vendor_printer_ids = ps
+	  self.salor_configuration.update_attributes(hash)
 	end
-	def open_cash_drawer
+  def set_vendor_printers=(printers)
+    self.connection.execute("delete from vendor_printers where vendor_id = '#{self.id}'")
+    ps = []
+    printers.each do |printer|
+      p = VendorPrinter.new(printer)
+      p.vendor_id = self.id
+      p.save
+      ps << p.id
+    end
+    self.vendor_printer_ids = ps
+  end
+  def open_cash_drawer
 	  cash_register_id = GlobalData.salor_user.meta.cash_register_id
     vendor_id = self.id
     if cash_register_id and vendor_id

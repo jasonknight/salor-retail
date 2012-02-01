@@ -47,6 +47,7 @@ group :test, :development do
   gem 'database_cleaner'
   #gem 'rails-erd'
   gem 'launchy'
+  gem 'faker'
 end
 
 

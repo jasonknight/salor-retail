@@ -5,7 +5,7 @@
 <%= @vendor.receipt_logo_header if @vendor.receipt_logo_header 
 %>
 
-<%= @vendor.configuration.receipt_blurb.to_s %>
+<%= @vendor.salor_configuration.receipt_blurb.to_s %>
 <%= "\n\e!\x01" + "\ea\x00" %>
 <%= I18n.t("receipts.invoice_numer_X_at_time", :number => @order.id, :datetime => I18n.l(@order.created_at, :format => :iso)) %>
 

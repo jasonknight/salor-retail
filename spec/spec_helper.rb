@@ -55,6 +55,7 @@ RSpec.configure do |config|
   require 'rack/handler/webrick'
   require 'capybara/rspec'
   require 'mechanize'
+  require 'faker'
 
 end
 
@@ -88,8 +89,8 @@ def single_store_setup
     GlobalData.salor_user = @user
     GlobalData.vendor = @vendor
     GlobalData.vendor_id = @vendor.id
-    GlobalData.conf = @vendor.configuration
-    $Conf = @vendor.configuration
+    GlobalData.conf = @vendor.salor_configuration
+    $Conf = @vendor.salor_configuration
     $User = @user 
 
     @enter_event = 'e = jQuery.Event("keypress");e.which = 13;e.keyCode = 13;$("INPUT").trigger(e);';

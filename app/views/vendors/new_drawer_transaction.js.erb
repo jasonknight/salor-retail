@@ -1,5 +1,6 @@
 updateDrawer({amount:'<%= GlobalData.salor_user.drawer.amount %>'});
 hide_cash_drop();
+$('.pos-cash-register-amount').html(toCurrency(<%= $User.get_drawer.amount %>));
 <% if $Conf.salor_printer == true %>
   SalorPrinter.printURL('<%= $Register.thermal_printer %>','<%= $Conf.url %>/vendors/render_drawer_transaction_receipt?id=<%= @drawer_transaction.id %>');
   SalorPrinter.printURL('<%= $Register.thermal_printer %>','<%= $Conf.url %>/vendors/render_open_cashdrawer');

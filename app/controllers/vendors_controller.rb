@@ -87,7 +87,7 @@ class VendorsController < ApplicationController
   # GET /vendors/new.xml
   def new
     @vendor = Vendor.new
-    @vendor.configuration = Configuration.new
+    @vendor.salor_configuration = SalorConfiguration.new
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @vendor }
@@ -97,8 +97,8 @@ class VendorsController < ApplicationController
   # GET /vendors/1/edit
   def edit
     @vendor = Vendor.find(params[:id])
-    if @vendor.configuration.nil? then
-      @vendor.configuration = Configuration.new
+    if @vendor.salor_configuration.nil? then
+      @vendor.salor_configuration = SalorConfiguration.new
     end
     
     if not @vendor.vendor_printers.any? then

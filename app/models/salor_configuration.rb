@@ -46,23 +46,15 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
-class ConfigurationSweeper < ActionController::Caching::Sweeper
-	observe SalorConfiguration
-
-  def after_create(configuration)
-    expire_cache_for(configuration)
-  end
-
-  def after_update(configuration)
-    expire_cache_for(configuration)
-  end
-
-  def after_destroy(configuration)
-    expire_cache_for(configuration)
-  end
-
-private
-  def expire_cache_for(configuration)
-    SalorBase.expire_directory("views")
+class SalorConfiguration < ActiveRecord::Base
+  include SalorScope
+  include SalorModel
+  belongs_to :vendor
+  def make_valid
+    [:dollar_per_lp,:lp_per_dollar].each do |f|
+      if self.send(f) == nil then
+        self.update_attribute(f,0)
+      end
+    end
   end
 end

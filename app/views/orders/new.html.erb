@@ -19,18 +19,11 @@ var updating_pos_display = false;
 // if not, it notifies the user and encourages a refresh of the 
 // page.
 setInterval(function () {
-if (!updating_pos_display) {
-	updating_pos_display = true;
-	$.get('/orders/update_pos_display', function () {
-		updating_pos_display = false;
-	});
-}
-},10000);
-setInterval(function () {
     if (!$('#cash_drop').is(":visible") && 
       !$('#complete_order').is(":visible") && 
       !$('#inplaceedit-div').is(":visible") && 
-      !$('#search').is(":visible")) {
+      !$('#search').is(":visible") &&
+      !$('.void-order').is(":visible")) {
     focusInput($("#keyboard_input"));
   } 
 },400);

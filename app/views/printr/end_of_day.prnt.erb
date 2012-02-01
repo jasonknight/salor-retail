@@ -3,7 +3,7 @@
 <%= "\ea\x01" %><%= "\e!\x38" %><%= @vendor.name %>
 <%= "\e!\x01" %>
 
-<%= @vendor.configuration.receipt_blurb %><%= "\n\e!\x01" + "\ea\x00" %>
+<%= @vendor.salor_configuration.receipt_blurb %><%= "\n\e!\x01" + "\ea\x00" %>
 
 <%= I18n.t("receipts.report_at_time", :datetime => I18n.l(@report[:date], :format => :long)) %>
 

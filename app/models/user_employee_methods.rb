@@ -124,7 +124,7 @@ module UserEmployeeMethods
   	  v = Vendor.new(:name => name)
   	  v.user = self if self.class == User
   	  v.user = self.user if self.class == Employee
-  	  v.configuration = Configuration.new
+  	  v.salor_configuration = SalorConfiguration.new
   	  v.save!
   	  return v
   end

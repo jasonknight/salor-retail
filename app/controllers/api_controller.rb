@@ -309,7 +309,7 @@ class ApiController < ApplicationController
      :location,:order,:order_item,:discount,
      :customer, :table,:settlement, :quantity,
      :option, :order_items_printoption, :order_items_option,
-     :vendor, :configuration, :item
+     :vendor, :config, :item
     ]
   end
   def auth
