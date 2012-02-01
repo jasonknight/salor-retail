@@ -165,6 +165,8 @@ class VendorsController < ApplicationController
       @drawer_transaction.drawer_amount = GlobalData.salor_user.get_drawer.amount
       if @drawer_transaction.amount == 0 then
         render :nothing => true and return
+      elsif @drawer_transaction.amount > 15000.00 then
+        render :nothing => true and return
       end
       if params[:employee_id] and salor_user.can(:edit_users) then
         if params[:employee_id] == 'self' then
@@ -292,6 +294,9 @@ class VendorsController < ApplicationController
       klass = Kernel.const_get(params[:klass])
       if klass == Order and not params[:id] then
         params[:id] = GlobalData.salor_user.meta.order_id
+      end
+      if not params[:id] and params[:order_id] then
+        params[:id] = params[:order_id]
       end
       if klass.exists? params[:id] then
         # puts  "### Class Exists"

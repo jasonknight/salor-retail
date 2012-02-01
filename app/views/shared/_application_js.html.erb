@@ -119,6 +119,10 @@ var calledFrom = 'TopOfAppJS';
     var Conf = {};
     var Meta = {};
   <% end %>
+  <% if $User then %>
+    var User = <%= raw $User.attributes.to_json %>
+    window.Drawer = <%= raw $User.get_drawer.attributes.to_json %>
+  <% end -%>
   var params = {
     action: "<%= params[:action] %>",
     controller: "<%= params[:controller] %>",
