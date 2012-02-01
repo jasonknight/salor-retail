@@ -301,11 +301,8 @@ class OrdersController < ApplicationController
       @order.reload
     end
   end
-  def offline
-    
-  end
   def print_receipt
-    order = Order.scopied.find_by_id(params[:id])
+    order = Order.scopied.find_by_id(params[:order_id])
     if not order.order_items.any? then
       order = Order.scopied.find_by_id GlobalData.salor_user.meta.last_order_id
     end

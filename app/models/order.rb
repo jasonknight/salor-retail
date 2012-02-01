@@ -578,7 +578,7 @@ class Order < ActiveRecord::Base
     return t
   end
   def print_receipt
-    begin
+    #begin
       @order = self
       @vendor = self.vendor
       @in_cash = 0
@@ -592,9 +592,9 @@ class Order < ActiveRecord::Base
         printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
         Printr.new.send(printers.first.name.to_sym,'item',binding) if printers.first
       end
-    rescue
-      GlobalErrors.append("system.errors.order_print_failure",self)
-    end
+    #rescue
+    #  GlobalErrors.append("system.errors.order_print_failure",self)
+    #end
   end
   def to_json
     self.total = 0 if self.total.nil?

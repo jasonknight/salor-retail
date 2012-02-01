@@ -180,8 +180,12 @@ ActiveRecord::Schema.define(:version => 20120129140512) do
   add_index "discounts", ["location_id"], :name => "index_discounts_on_location_id"
   add_index "discounts", ["vendor_id"], :name => "index_discounts_on_vendor_id"
 
-# Could not dump table "discounts_order_items" because of following Errno::ENOENT
-#   No such file or directory - /etc/salor.yml
+  create_table "discounts_order_items", :id => false, :force => true do |t|
+    t.integer "order_item_id"
+    t.integer "discount_id"
+  end
+
+  add_index "discounts_order_items", ["order_item_id", "discount_id"], :name => "index_discounts_order_items_on_order_item_id_and_discount_id"
 
   create_table "discounts_orders", :id => false, :force => true do |t|
     t.integer "order_id"
@@ -665,13 +669,13 @@ ActiveRecord::Schema.define(:version => 20120129140512) do
     t.string   "name"
     t.float    "value"
     t.integer  "default"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.integer  "user_id"
     t.integer  "hidden",     :default => 0
     t.string   "sku"
     t.integer  "vendor_id"
-    t.string   "letter"
+    t.string   "letter",     :default => "A"
   end
 
   add_index "tax_profiles", ["hidden"], :name => "index_tax_profiles_on_hidden"
