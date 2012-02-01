@@ -6,5 +6,5 @@ Printr.setup do |config|
   }}
   #config.sanitize_tokens = ['$','\$']
   config.debug = false
-  #config.logger = File.open("/tmp/printr.txt",'a')
+  config.logger = File.open("/tmp/printr.txt",'a')
 end

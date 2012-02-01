@@ -24,7 +24,7 @@ gem 'sass-rails'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'rmagick'
-gem 'printr'
+gem 'printr', '0.6.1'
 gem 'serialport'
 gem 'haml'
 gem 'unicode_utils'
@@ -33,7 +33,6 @@ gem "kramdown"
 gem 'exception_notification', :require => 'exception_notifier'
 gem 'nokogiri'
 gem 'mechanize'
-gem 'barcode'
 
 
 
@@ -49,7 +48,6 @@ group :test, :development do
   gem 'database_cleaner'
   #gem 'rails-erd'
   gem 'rspec-prof'
-  #gem 'ruby-debug'
   gem 'launchy'
 end
 
