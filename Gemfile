@@ -46,7 +46,6 @@ group :test, :development do
   gem 'guard','0.8.8'
   gem 'database_cleaner'
   #gem 'rails-erd'
-  gem 'rspec-prof'
   gem 'launchy'
 end
 
