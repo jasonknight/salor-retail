@@ -271,8 +271,8 @@ function shipment_item_input(name,opts) {
 
 function addItem(values) {
   var found = false;
-  if (values['shipment_item']) {
-    var vs = values["shipment_item"];
+  if (values) {
+    var vs = values;
     var vals = {id: vs.id,sku: vs.sku, quantity: vs.quantity, stock_location_ids: vs.stock_location_ids,name: vs.name}
   } else {
     vals = values;
@@ -395,7 +395,7 @@ $(function () {
     }
     <% items.each do |item|  %>
       var values = <%= raw item.to_json %>;
-      values.shipment_item.stock_location_ids = [<%= item.stock_location_ids.join(',') %>];
+      values.stock_location_ids = [<%= item.stock_location_ids.join(',') %>];
       addItem(values);
     <% end %>
     $('body').addClass('shipment-items-ready-done');
