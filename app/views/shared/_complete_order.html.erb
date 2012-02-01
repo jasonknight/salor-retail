@@ -147,7 +147,7 @@ function complete_order_show() {
   a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
   thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
   a4print.mousedown(function () {
-                CustomerScreen.print('http://salor/orders/'+$('.order-id').html().replace('#','')+'/print');          
+    Salor.printPage('http://salor/orders/'+$('.order-id').html().replace('#','')+'/print');          
   });
   thermprint.mousedown(function () {
       <% if $Conf.salor_printer == true then %>
@@ -172,11 +172,7 @@ function complete_order_show() {
       if (confirmInactive) {
         complete_order_hide();
       } else {
-        <% if @cash_register.no_print == true %>
-          complete_order_send(false);
-        <% else  %>
-          complete_order_send();
-        <% end %>
+        complete_order_send(false);
         focusInput($("#payment_amount_0"));
       }
     }

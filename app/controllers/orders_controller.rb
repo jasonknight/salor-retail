@@ -71,9 +71,9 @@ class OrdersController < ApplicationController
       if not salor_user.meta.cash_register_id then
         redirect_to :controller => 'cash_registers', :notice => I18n.t("system.errors.must_choose_register") and return
       end
-      if salor_user.get_drawer.amount <= 0 then
-        GlobalErrors.append("system.errors.must_cash_drop")
-      end
+      #if salor_user.get_drawer.amount <= 0 then
+      #  GlobalErrors.append("system.errors.must_cash_drop")
+      #end
       @order = initialize_order
 
       add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
@@ -123,9 +123,9 @@ class OrdersController < ApplicationController
     
     $User.auto_drop
     
-    if $User.get_drawer.amount <= 0 then
-      GlobalErrors.append("system.errors.must_cash_drop")
-    end
+    #if $User.get_drawer.amount <= 0 then
+    #  GlobalErrors.append("system.errors.must_cash_drop")
+    #end
     @order = initialize_order
     if @order.order_items.any? then
       @order.update_self_and_save
