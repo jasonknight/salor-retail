@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120129140512) do
+ActiveRecord::Schema.define(:version => 20120201152312) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -584,10 +584,11 @@ ActiveRecord::Schema.define(:version => 20120129140512) do
     t.integer  "item_type_id"
     t.string   "sku"
     t.integer  "shipment_id"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.boolean  "in_stock",     :default => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.boolean  "in_stock",       :default => false
     t.float    "quantity"
+    t.float    "purchase_price"
   end
 
   add_index "shipment_items", ["category_id"], :name => "index_shipment_items_on_category_id"
