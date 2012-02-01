@@ -33,11 +33,6 @@ gem "kramdown"
 gem 'exception_notification', :require => 'exception_notifier'
 gem 'nokogiri'
 gem 'mechanize'
-<<<<<<< HEAD
-
-
-=======
->>>>>>> bf314e1f06bf97c20d71be255c2e2dd59c12c9f3
 
 group :test, :development do
   gem "rspec-rails"
