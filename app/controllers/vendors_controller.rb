@@ -165,6 +165,8 @@ class VendorsController < ApplicationController
       @drawer_transaction.drawer_amount = GlobalData.salor_user.get_drawer.amount
       if @drawer_transaction.amount == 0 then
         render :nothing => true and return
+      elsif @drawer_transaction.amount > 15000.00 then
+        render :nothing => true and return
       end
       if params[:employee_id] and salor_user.can(:edit_users) then
         if params[:employee_id] == 'self' then
