@@ -172,11 +172,7 @@ function complete_order_show() {
       if (confirmInactive) {
         complete_order_hide();
       } else {
-        <% if @cash_register.no_print == true %>
-          complete_order_send(false);
-        <% else  %>
-          complete_order_send();
-        <% end %>
+        complete_order_send(false);
         focusInput($("#payment_amount_0"));
       }
     }

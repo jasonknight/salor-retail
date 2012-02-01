@@ -416,7 +416,7 @@ function updateOrder(obj) {
   }
   <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
     Salor.mimoRefresh("http://salor/orders/"+ obj.id +"/customer_display",800,480);
-  %>
+  <% end %>
   if (obj.customer) { showCustomer(obj.customer.customer,obj.loyalty_card.loyalty_card); }
   $('#pos_order_total').html(toCurrency(obj.total));
   $('.complete-order-total').html(toCurrency(obj.total));
