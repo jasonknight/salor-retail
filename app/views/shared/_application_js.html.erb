@@ -796,7 +796,7 @@ var calledFrom = 'TopOfAppJS';
     }
 
     function add_item(sku) {
-      if (sku.match(/^31\d{9}/)) {
+      if (sku.match(/^31\d{8}.{1,2}$/)) {
         var oid = $('.order-id').html();
         var cid = Meta['cash_register_id'];
         var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
