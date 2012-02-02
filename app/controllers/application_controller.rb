@@ -282,4 +282,25 @@ class ApplicationController < ActionController::Base
     t ||= 0.day.ago
     return f, t
   end
+  def time_from_to(p)
+    begin
+      f = DateTime.civil( p[:from][:year ].to_i,
+                      p[:from][:month].to_i,
+                      p[:from][:day  ].to_i,
+                      p[:from][:hour  ].to_i,
+                      p[:from][:minute  ].to_i,0) if p[:from]
+      t = DateTime.civil( p[:to  ][:year ].to_i,
+                      p[:to  ][:month].to_i,
+                      p[:to  ][:day  ].to_i,
+                      p[:to][:hour  ].to_i,
+                      p[:to][:minute  ].to_i,0) if p[:to]
+    rescue
+      f = t = nil
+    end
+
+    f ||= 0.day.ago
+    t ||= 0.day.ago
+    return f, t
+  end
+
 end

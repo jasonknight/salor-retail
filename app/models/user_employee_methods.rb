@@ -92,6 +92,32 @@ module UserEmployeeMethods
       
     end # end class_eval
   end
+  def employee_select(opts={})
+    user = self.get_owner
+    emps = Employee.scopied.all
+    if opts[:name] then
+      name = "#{opts[:name]}[set_owner_to]"
+    else
+      name = "set_owner_to"
+    end
+    opts[:id] ||= "set_owner_to"
+    opts[:class] ||= "set-owner-to"
+    txt = "<select name='#{name}' id='#{opts[:id]}' class='#{opts[:class]}'>"
+    options = []
+    if self == user then
+      options << "<option value='#{self.class}:#{self.id}' selected='selected'>#{self.username}</option>"
+    else
+      options << "<option value='#{user.class}:#{user.id}'>#{user.username}</option>"
+    end
+    emps.each do |emp|
+      if self == emp then
+        options << "<option value='#{emp.class}:#{emp.id}' selected='selected'>#{emp.username}</option>"
+      else
+        options << "<option value='#{emp.class}:#{emp.id}'>#{emp.username}</option>"
+      end
+    end
+    return txt + options.join("\n") + "</select>"
+  end
   def make_valid
     if self.drawer.nil? then
       self.drawer = Drawer.new

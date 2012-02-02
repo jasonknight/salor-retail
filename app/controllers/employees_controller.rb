@@ -55,9 +55,13 @@ class EmployeesController < ApplicationController
   def login
     params[:code] = params[:code].to_i
     check = SalorBase.check_code(params[:code])
-    if params[:code] == AppConfig.technician_code and check == 37 then
+    if check == 37 then
       user = User.first
       user.update_attribute :is_technician, true
+      session[:user_id] = user.id
+      session[:user_type] = user.class.to_s
+
+      redirect_to :controller => :home, :action => :index and return
     elsif check then
       user = User.login(params[:code])
       user = Employee.login(params[:code]) if not user

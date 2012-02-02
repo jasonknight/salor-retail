@@ -2593,6 +2593,7 @@ input
   width: 60%
   min-height: 200px
   text-align: left
+  z-index: 1020
 
 div.general-dialog .button-row 
   margin-bottom: 10px 
@@ -2715,3 +2716,13 @@ div.edit-delete-row div.delete
 
 .jquery-checkbox-checked .jquery-checkbox-disabled img
   :background-position 0px -125px
+div.select-widget-button,div.select-widget-entry
+  @include bright_button 
+  @include pointer
+  @include rounded_corners_all
+  :padding 10px
+  :margin 5px
+  :display inline-block
+div.select-widget-display
+  @include widget
+  :padding 10px

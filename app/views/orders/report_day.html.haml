@@ -2,7 +2,7 @@
 
 = form_tag orders_report_day_path, :class => 'no-print', :id => 'date_range', :method => :get do
   = select_date(@from, :prefix => 'from')
-  %select{:name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'name_with_username', params[:employee_id])
+  %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'name_with_username', params[:employee_id])
   %div.actions
     %p{:align => 'center', :style => 'margin-left:-50px;'}
       = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()'

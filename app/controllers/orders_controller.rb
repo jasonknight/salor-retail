@@ -227,6 +227,7 @@ class OrdersController < ApplicationController
   end
 
   def add_item_ajax
+
     @error = nil
     @order = initialize_order
     if @order.paid == 1 then

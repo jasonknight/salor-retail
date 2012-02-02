@@ -170,25 +170,21 @@ module SalorBase
       if string =~ /^.*[\.,]\d{1}$/
         string = string + "0"
       end
-      unless string =~ /^.*[\.,]\d{2}$/
+      unless string =~ /^.*[\.,]\d{2,3}$/
         string = string + "00"
       end
       return string if string.class == Float or string.class == Fixnum or string == 0
-      string.gsub!(/[\.,]/,'')
-      string.to_f / 100
+      if string =~ /^.*[\.,]\d{3}$/ then
+         string.gsub!(/[\.,]/,'')
+         string = string.to_f / 1000
+      else
+        string.gsub!(/[\.,]/,'')
+        string = string.to_f / 100
+      end
+      return string
    end
    def string_to_float(string)
-    return string if string.class == Float or string.class == Fixnum
-      string.gsub!(/[^\d.,]/,'')
-      if string =~ /^.*[\.,]\d{1}$/
-        string = string + "0"
-      end
-      unless string =~ /^.*[\.,]\d{2}$/
-        string = string + "00"
-      end
-      return string if string.class == Float or string.class == Fixnum or string == 0
-      string.gsub!(/[\.,]/,'')
-      string.to_f / 100
+      return SalorBase.string_to_float(string)
    end
    def get_gs1_price(code, item=nil)
      m = code.match(/\d{2}(\d{5})(\d{5})\d{0,1}/)

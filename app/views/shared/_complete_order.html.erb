@@ -44,6 +44,7 @@ function add_payment_method() {
   $('#payment_methods').append('<br />');
   oldSelectedIndex = null;
   validatePaymentMethod($(sel));
+  make_select_widget($(sel).find("option:selected"),$(sel));
   make_keyboardable_with_options(amount, {
     visible: function () {
       var cls = $(sel).val() + '-amount';
@@ -281,6 +282,7 @@ function complete_order_hide() {
     bycard_hide();
   }
   focuseKeyboardInput = true;
+  window.location = "/orders/new";
 }
 
 function get_highest(num) {

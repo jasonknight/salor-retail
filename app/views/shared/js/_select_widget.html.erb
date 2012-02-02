@@ -15,20 +15,29 @@
       _currentSelectTarget = $(this).attr("select_target");
       _currentSelectButton = $(this);
       mdiv.addClass("select-widget-display select-widget-display-" + _currentSelectTarget.replace("#",""));
+      var x = 0;
       $(_currentSelectTarget).children("option").each(function () {
         var d = div();
         d.html($(this).html());
         d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
+        d.attr("value", $(this).attr('value'))
         d.mousedown(function () {
          $(_currentSelectTarget).children("option:selected").attr("selected",""); 
-         $(_currentSelectTarget).children("option:contains("+$(this).html()+")").attr("selected","selected"); 
+         $(_currentSelectTarget).children("option[value='"+$(this).attr('value')+"']").attr("selected","selected"); 
          _currentSelectButton.html($(this).html());
          $('.select-widget-display').hide();
         });
         mdiv.append(d);
+        x++;
+        if (x == 4) {
+          x = 0;
+          mdiv.append("<br />");
+        }
+
       });
       mdiv.css({position: 'absolute', left: MX - 50, top: MY - 50});
       $('body').append(mdiv);
+      mdiv.show();
     });
   }
 </script>

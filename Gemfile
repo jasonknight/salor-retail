@@ -36,12 +36,16 @@ gem 'mechanize'
 gem 'coffee-filter'
 
 group :test, :development do
+  gem 'turn', '< 0.8.3'
   gem "rspec-rails"
-  gem 'guard-rspec'
+  gem 'rspec'
+  gem 'rb-fsevent'
+  gem 'rb-inotify'
+  gem 'guard-rspec', '0.5.2'
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'factory_girl_rails'
-  gem 'spork', '> 0.9.0.rc'
+  gem 'spork', '0.9.0.rc9'
   gem 'guard-spork'
   gem 'guard','0.8.8'
   gem 'database_cleaner'
@@ -52,6 +56,7 @@ end
 
 
 # To use ActiveModel has_secure_password
+#
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # To use Jbuilder templates for JSON

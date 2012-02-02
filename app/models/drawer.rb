@@ -51,4 +51,8 @@ class Drawer < ActiveRecord::Base
   include SalorModel
   belongs_to :owner, :polymorphic => true
   has_many :drawer_transactions
+  def add(num)
+    self.update_attribute :amount, self.amount + num
+  end
+
 end
