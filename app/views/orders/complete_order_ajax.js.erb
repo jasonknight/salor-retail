@@ -1,4 +1,4 @@
-/*$('.pos-table-left-column-items').html('');
+$('.pos-table-left-column-items').html('');
 updateOrder(<%= raw @order.to_json %>);
 $('.pos-customer').html('');
 focusInput($('#keyboard_input'));
@@ -6,5 +6,4 @@ $('.pos-cash-register-amount').html('<%= salor_number_to_currency(GlobalData.sal
 $('.pos-rebates').show();
 $('.last-five-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_five_orders" %>');
 $('.last-completed-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_completed_orders" %>');
-*/
-window.location = "/orders/new"
+

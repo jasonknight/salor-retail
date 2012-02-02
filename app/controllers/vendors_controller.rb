@@ -292,9 +292,6 @@ class VendorsController < ApplicationController
     if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
       # puts  "### Class is allowed"
       klass = Kernel.const_get(params[:klass])
-      if klass == Order and not params[:id] then
-        params[:id] = GlobalData.salor_user.meta.order_id
-      end
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
@@ -454,13 +451,13 @@ class VendorsController < ApplicationController
           # Else update attribute for other classes
           @inst.update_attribute(params[:field].to_sym,params[:value])
         else
-          raise "ModelKnowsNot"
+          #raise "ModelKnowsNot"
         end # @inst.responds_to?
       else
-        raise "ModelNotFound"
+        #raise "ModelNotFound"
       end #end klass.exists?
     else
-      raise "ModelNotAllowed!"
+      #raise "ModelNotAllowed!"
     end #end allowed_klass
     render :layout => false
   end
