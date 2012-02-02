@@ -4,7 +4,7 @@
   function make_select_widget(name,elem) {
     elem.hide();
     var button = div();
-    button.html(name);
+    button.html($(name).text());
     button.insertAfter(elem);
     button.attr('select_target',"#" + elem.attr("id"));
     button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
@@ -18,7 +18,7 @@
       var x = 0;
       $(_currentSelectTarget).children("option").each(function () {
         var d = div();
-        d.html($(this).html());
+        d.html($(this).text());
         d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
         d.attr("value", $(this).attr('value'))
         d.mousedown(function () {
