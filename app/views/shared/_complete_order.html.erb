@@ -388,9 +388,8 @@ function complete_order_send(print) {
   allow_payment_amount = false;
   sendingOrder = true;
   allow_complete_order(false);
-  serializePayments();
-  <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
   displayChangeOnPole();
+  <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
 }
 
 function displayChangeOnPole() {

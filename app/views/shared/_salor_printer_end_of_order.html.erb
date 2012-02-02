@@ -1,3 +1,8 @@
+<% if $Conf.open_cash_drawer or not @cash_register.cash_drawer_path.blank?  %>
+  if (!$('.bycard-amount').val()) {
+    quick_open_drawer();
+  }
+<% end %>
 if (print == 'true') {
   print_order($('.order-id').html());
 }
@@ -6,11 +11,6 @@ get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&ch
         bycard_hide_waiting();
       <% end %>
     sendingOrder = false;
-    <% if $Conf.open_cash_drawer or not @cash_register.cash_drawer_path.blank?  %>
-      if (!$('.bycard-amount').val()) {
-        quick_open_drawer();
-      }
-    <% end %>
   }, 'get', function() {
     sendingOrder = false;
     allow_complete_order();
