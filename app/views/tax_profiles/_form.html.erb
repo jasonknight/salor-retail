@@ -23,6 +23,10 @@
           <%= f.text_field :value, :class => "keyboardable"%>
         </div>
         <div class="field">
+          <%= f.label t("activerecord.attributes.letter") %><br />
+          <%= f.text_field :letter, :class => "keyboardable"%>
+        </div>
+        <div class="field">
           <%= f.label t("activerecord.attributes.default") %><br />
           <%= f.check_box :default %>
         </div>
