@@ -31,7 +31,6 @@ User.delete_all
     :password => '31202003285',
     :language => 'en-US',
     :email => 'admin@salor.com',
-    :meta => Meta.new
   }
 )
 if not @user.save then
@@ -67,7 +66,6 @@ Employee.delete_all
     :user_id => @user.id,
     :vendor_id => @vendor.id,
     :role_ids => [Role.find_by_name(:cashier).id],
-    :meta => Meta.new
   }
 )
 @cashier.save()
@@ -82,7 +80,6 @@ Employee.delete_all
     :user_id => @user.id,
     :vendor_id => @vendor.id,
     :role_ids => [Role.find_by_name(:head_cashier).id],
-    :meta => Meta.new
   }
 )
 @head_cashier.save()
@@ -97,7 +94,6 @@ Employee.delete_all
     :user_id => @user.id,
     :vendor_id => @vendor.id,
     :role_ids => [Role.find_by_name(:manager).id],
-    :meta => Meta.new
   }
 )
 @manager.save()
@@ -112,7 +108,6 @@ Employee.delete_all
     :user_id => @user.id,
     :vendor_id => @vendor.id,
     :role_ids => [Role.find_by_name(:stockboy).id],
-    :meta => Meta.new
   }
 )
 @stockboy .save()

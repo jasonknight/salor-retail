@@ -54,7 +54,6 @@ class DrawerTransaction < ActiveRecord::Base
   validate :validify
   belongs_to :cash_register
   belongs_to :owner, :polymorphic => true
-  
   def trans_type=(x)
     if x == 'drop' then
       self.drop = true

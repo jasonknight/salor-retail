@@ -1,0 +1,9 @@
+window.fetchShipmentItem = (elem) ->
+  $.ajax
+    type: 'GET'
+    url: '/items/item_json?sku=' + $(elem).val()
+    success: (data) ->
+      console.log($(elem).closest(".shipment-item").find("input"));
+      for sib in $(elem).closest(".shipment-item").find("input")
+        console.log($(sib).attr("name"))
+        

@@ -23,7 +23,7 @@ describe "Nodes" do
         fill_in "node[token]", :with => sku
         fill_in "node[node_type]", :with => type
         check "node[is_self]" if is_self
-        click_button "Create Node"
+        click_button "create"
       end
   end
 

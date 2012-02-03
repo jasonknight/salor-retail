@@ -46,13 +46,15 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
-class Drawer < ActiveRecord::Base
-  include SalorBase
+class SalorConfiguration < ActiveRecord::Base
+  include SalorScope
   include SalorModel
-  belongs_to :owner, :polymorphic => true
-  has_many :drawer_transactions
-  def add(num)
-    self.update_attribute :amount, self.amount + num
+  belongs_to :vendor
+  def make_valid
+    [:dollar_per_lp,:lp_per_dollar].each do |f|
+      if self.send(f) == nil then
+        self.update_attribute(f,0)
+      end
+    end
   end
-
 end

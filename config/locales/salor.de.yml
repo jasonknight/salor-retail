@@ -193,6 +193,8 @@ de:
       afield: Feld
       order_id: Verkaufs-Id
       scale: Waage
+      no_print: Don't Print On Enter
+      salor_printer: Print Client Side
       
   api:
     user_does_not_exist: Dieser Benutzer existiert nicht oder darf die API nicht benutzen.

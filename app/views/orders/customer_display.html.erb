@@ -44,7 +44,7 @@
       </td>
     <% end %>
       <% if not @order.lc_points.nil?%>
-        <% points = @order.vendor.configuration.dollar_per_lp * @order.lc_points %> 
+        <% points = @order.vendor.salor_configuration.dollar_per_lp * @order.lc_points %> 
         <% if not points.nil? then  %>
           <td>
             <p class='lc_points'>Abzug: <%= @order.lc_points %> Punkte bzw. <%= number_to_currency points %></p>

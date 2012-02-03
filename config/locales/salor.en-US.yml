@@ -193,6 +193,8 @@ en-US:
       afield: field
       order_id: order
       scale: scale
+      no_print: Don't Print on Enter
+      salor_printer: Print Client Side
       
   api:
     user_does_not_exist: user does not exist

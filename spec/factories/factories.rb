@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :user do
     username 'admin'
-    email "salor@salorpos.com"
+    sequence(:email){|n| "#{Faker::Name::first_name}#{n}@factory.com" }
     password "31202053297"
     after_create do |u|
       u.meta = Factory :meta, :ownable_id => u.id
@@ -10,7 +10,7 @@ FactoryGirl.define do
   end
   factory :user2, :class => User do
     username 'admin2'
-    email "salor2@salorpos.com"
+    sequence(:email){|n| "#{Faker::Name::first_name}#{n}@factory.com" }
     password "31202053297"
     after_create do |u|
       u.meta = Factory :meta, :ownable_id => u.id
@@ -20,7 +20,7 @@ FactoryGirl.define do
 
   factory :employee do
     username 'employee'
-    email "salor@salorpos.com"
+    sequence(:email){|n| "#{Faker::Name::first_name}#{n}@factory.com" }
     password "31202023287"
     after_create do |u|
       u.meta = Factory :meta, :ownable_id => u.id
@@ -29,7 +29,7 @@ FactoryGirl.define do
   end
   factory :cashier, :class => Employee do
     username 'cashier'
-    email "cashier@salorpos.com"
+    sequence(:email){|n| "#{Faker::Name::first_name}#{n}@factory.com" }
     password "31202003285"
     association :vendor
     association :user
@@ -44,7 +44,7 @@ FactoryGirl.define do
   end
   factory :manager, :class => Employee do
     username 'manager'
-    email "manager@salorpos.com"
+    sequence(:email){|n| "#{Faker::Name::first_name}#{n}@factory.com" }
     password "31202053295"
     association :vendor
     association :user
@@ -69,7 +69,7 @@ FactoryGirl.define do
     association :vendor
     association :category
   end
-  factory :configuration do
+  factory :salor_configuration do
     association :vendor
     address "None"
   end
@@ -97,7 +97,7 @@ FactoryGirl.define do
     calculate_tax false
     multi_currency false
     after_create do |v|
-      v.configuration = Factory(:configuration, :vendor => v)
+      v.salor_configuration = Factory(:salor_configuration, :vendor => v)
       v.save
     end
   end

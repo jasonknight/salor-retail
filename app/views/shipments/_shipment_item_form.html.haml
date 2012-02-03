@@ -1,0 +1,10 @@
+:coffeescript
+  window.addShipmentItem = ->
+    $('.shipment_items').prepend('#{ escape_javascript render :partial => "shipments/shipment_item" }');
+.shipment-items-container
+  .shipment-items-menu
+    = salor_icon(:add, {:class => 'pointer', :onclick => "addShipmentItem();"},32)
+  .shipment_items
+    - @shipment.shipment_items.each do |item|
+      = salor_render :partial => "shipment_item", :locals => {:item => item }
+  

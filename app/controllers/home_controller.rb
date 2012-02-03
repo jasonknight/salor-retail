@@ -58,6 +58,8 @@ class HomeController < ApplicationController
     if AppConfig.standalone and User.count == 0 then
       redirect_to new_user_registration_path and return
     end
+    @from = Time.now
+    @to = Time.now
   end
   def user_employee_index
     Session.sweep

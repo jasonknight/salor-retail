@@ -35,7 +35,7 @@
         <div id="general" class="general-form-container form-container">
           
             <%= f.hidden_field :user_id, :value => salor_user.is_employee? ? salor_user.user.id : salor_user.id %> <br />
-              <%= f.fields_for :configuration do |conf| %>
+              <%= f.fields_for :salor_configuration do |conf| %>
               <table>
                 <tr>
                   <td valign="top" width="260px">

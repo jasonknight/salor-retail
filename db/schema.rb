@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120129140512) do
+ActiveRecord::Schema.define(:version => 20120201212000) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -107,35 +107,6 @@ ActiveRecord::Schema.define(:version => 20120129140512) do
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
-
-  create_table "configurations", :force => true do |t|
-    t.integer  "vendor_id"
-    t.float    "lp_per_dollar"
-    t.float    "dollar_per_lp"
-    t.text     "address"
-    t.string   "telephone"
-    t.text     "receipt_blurb"
-    t.datetime "created_at",                                        :null => false
-    t.datetime "updated_at",                                        :null => false
-    t.integer  "pagination",            :default => 12
-    t.string   "stylesheets"
-    t.string   "cash_drawer"
-    t.boolean  "open_cash_drawer",      :default => false
-    t.datetime "last_wholesaler_check"
-    t.text     "csv_imports"
-    t.string   "csv_imports_url"
-    t.string   "paylife_sa",            :default => "E"
-    t.string   "paylife_version",       :default => "1"
-    t.string   "paylife_euro"
-    t.string   "paylife_konto",         :default => "01"
-    t.string   "paylife_ind",           :default => "U"
-    t.boolean  "auto_drop",             :default => false
-    t.boolean  "items_view_list",       :default => true
-    t.string   "url",                   :default => "http://salor"
-    t.boolean  "salor_printer",         :default => false
-  end
-
-  add_index "configurations", ["vendor_id"], :name => "index_configurations_on_vendor_id"
 
   create_table "customers", :force => true do |t|
     t.string   "first_name"
@@ -566,6 +537,35 @@ ActiveRecord::Schema.define(:version => 20120129140512) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "salor_configurations", :force => true do |t|
+    t.integer  "vendor_id"
+    t.float    "lp_per_dollar"
+    t.float    "dollar_per_lp"
+    t.text     "address"
+    t.string   "telephone"
+    t.text     "receipt_blurb"
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
+    t.integer  "pagination",            :default => 12
+    t.string   "stylesheets"
+    t.string   "cash_drawer"
+    t.boolean  "open_cash_drawer",      :default => false
+    t.datetime "last_wholesaler_check"
+    t.text     "csv_imports"
+    t.string   "csv_imports_url"
+    t.string   "paylife_sa",            :default => "E"
+    t.string   "paylife_version",       :default => "1"
+    t.string   "paylife_euro"
+    t.string   "paylife_konto",         :default => "01"
+    t.string   "paylife_ind",           :default => "U"
+    t.boolean  "auto_drop",             :default => false
+    t.boolean  "items_view_list",       :default => true
+    t.string   "url",                   :default => "http://salor"
+    t.boolean  "salor_printer",         :default => false
+  end
+
+  add_index "salor_configurations", ["vendor_id"], :name => "index_configurations_on_vendor_id"
+
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
@@ -584,10 +584,11 @@ ActiveRecord::Schema.define(:version => 20120129140512) do
     t.integer  "item_type_id"
     t.string   "sku"
     t.integer  "shipment_id"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.boolean  "in_stock",     :default => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.boolean  "in_stock",       :default => false
     t.float    "quantity"
+    t.float    "purchase_price"
   end
 
   add_index "shipment_items", ["category_id"], :name => "index_shipment_items_on_category_id"

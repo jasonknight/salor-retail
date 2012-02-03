@@ -28,7 +28,7 @@
     %h2== #{ I18n.t("receipts.invoice") }
     %h3= I18n.l(@order.created_at, :format => :long)
 
-    %div.company_data= raw Kramdown::Document.new(@vendor.configuration.receipt_blurb).to_html
+    %div.company_data= raw Kramdown::Document.new(@vendor.salor_configuration.receipt_blurb).to_html
 
     %div.customer_data
     - if @order.customer

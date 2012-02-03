@@ -39,11 +39,11 @@
       searchId = fetchId;
       $("#iframe_msg").css("display", "block");
       $(".order-iframe").css("display", "none");
-      $('.order-iframe').src('/orders/void?id=' + $('#void_order_id').val(), function(){
-        $("#iframe_msg").css("display", "none");
-        $(".order-iframe").css("display", "block");
-      });
-      //$('.order-iframe').attr('src','/orders/void?id=' + $('#void_order_id').val());
+      //$('.order-iframe').src('/orders/void?id=' + $('#void_order_id').val(), function(){
+      //  $("#iframe_msg").css("display", "none");
+      //  $(".order-iframe").css("display", "block");
+      //});
+      $('.order-iframe').attr('src','/orders/void?id=' + $('#void_order_id').val()).show();
       /*
       $.ajax({
         url: "/orders/void",

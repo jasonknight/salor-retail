@@ -47,7 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class ConfigurationSweeper < ActionController::Caching::Sweeper
-  observe Configuration
+	observe SalorConfiguration
 
   def after_create(configuration)
     expire_cache_for(configuration)

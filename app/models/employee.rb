@@ -55,7 +55,6 @@ class Employee < ActiveRecord::Base
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   include UserEmployeeMethods
   
-  validates_uniqueness_of :username
   validate :validify
   belongs_to :user
   belongs_to :vendor

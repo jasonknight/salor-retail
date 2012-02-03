@@ -48,6 +48,9 @@ describe "Orders" do
         fill_in "keyboard_input", :with => @item.sku
         page.execute_script(@enter_event.gsub("INPUT","#keyboard_input"));
         page.find(".pos-order-total").should have_content(SalorBase.number_to_currency(@item.base_price * 2))
+        fill_in "keyboard_input", :with => @item2.sku
+        page.execute_script(@enter_event.gsub("INPUT","#keyboard_input"));
+        page.find(".pos-order-total").should have_content(SalorBase.number_to_currency((@item.base_price * 2) + @item2.base_price))
       end
    end
 end

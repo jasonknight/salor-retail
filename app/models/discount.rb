@@ -87,6 +87,11 @@ class Discount < ActiveRecord::Base
       return Item.scopied.find_by_sku(self.item_sku)
     end
   end
+  def add(num)
+    self.update_attribute :amount, self.amount + num
+  end
+  # WTF? I have no idea what this is even doing here...
+  # REMOVE ME SOON
   def simulate(item)
     price = item.base_price
     damount = 0

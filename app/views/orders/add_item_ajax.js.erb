@@ -2,7 +2,7 @@
   <% @order_item.reload if @order_item.behavior == 'coupon'  %>
    order_item_json = <%= raw @order_item.to_json %>;
    updateOrderItems([order_item_json]);
-   updateOrder(order_item_json);
+   updateOrder(<%= raw @order.to_json %>);
    writeToPole(order_item_json);
    if (order_item_json.price == 0 ) {
      playSound('medium_warning');

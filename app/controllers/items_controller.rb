@@ -344,7 +344,7 @@ class ItemsController < ApplicationController
       begin
       file = a.get(GlobalData.conf.csv_imports_url + "/" + parts[0])
       uploader.send(parts[1].to_sym, file.body.split("\n")) # i.e. we dynamically call the function to process
-      # this .csv file, this is set in the vendor config as filename.csv,type1|type2 ...
+      # this .csv file, this is set in the vendor.salor_configuration as filename.csv,type1|type2 ...
       rescue
         GlobalErrors << ["WholeSaleImportError",$!.to_s + " For " + parts[0].to_s,nil]
       end

@@ -46,8 +46,8 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
-class Configuration < ActiveRecord::Base
-	include SalorScope
+class SalorConfiguration < ActiveRecord::Base
+  include SalorScope
   include SalorModel
   belongs_to :vendor
   def make_valid

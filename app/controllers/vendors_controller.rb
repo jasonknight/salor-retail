@@ -53,7 +53,43 @@ class VendorsController < ApplicationController
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
     before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
-
+  def move_transactions
+    @from, @to = time_from_to(params)
+    parts = params[:from_emp][:set_owner_to].split(":")
+    from_user = Kernel.const_get(parts[0]).find_by_id parts[1]
+    parts = params[:to_emp][:set_owner_to].split(":")
+    to_user = Kernel.const_get(parts[0]).find_by_id parts[1]
+    # Stats variables
+    orders_moved = 0
+    dts_moved = 0
+    orders = from_user.orders.where(:created_at => @from..@to)
+    dts = from_user.drawer_transactions.where(:created_at => @from..@to)
+    from_user.transaction do
+        orders.each do |o|
+          o.user_id = nil
+          o.employee_id = nil
+          o.set_model_owner(to_user)
+          o.drawer_id = to_user.get_drawer.id
+          o.save
+          orders_moved += 1
+        end
+        dts.each do |dt|
+          dt.owner_id = nil
+          dt.owner_type = nil
+          dt.set_model_owner to_user
+          if dt.drop then
+            from_user.get_drawer.add(dt.amount * -1)
+            to_user.get_drawer.add(dt.amount)
+          elsif dt.payout then
+            from_user.get_drawer.add(dt.amount)
+            to_user.get_drawer.add(dt.amount * -1)
+          end
+          dt.save
+          dts_moved += 1
+        end
+      end #from_user.transaction
+    redirect_to :controller => :home, :action => :index, :notice => "Orders Found: #{orders.length} Orders moved: #{orders_moved} DTs Found: #{dts.length} DTs moved: #{dts_moved}"
+  end
   # GET /vendors
   # GET /vendors.xml
   def index
@@ -87,7 +123,7 @@ class VendorsController < ApplicationController
   # GET /vendors/new.xml
   def new
     @vendor = Vendor.new
-    @vendor.configuration = Configuration.new
+    @vendor.salor_configuration = SalorConfiguration.new
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @vendor }
@@ -97,8 +133,8 @@ class VendorsController < ApplicationController
   # GET /vendors/1/edit
   def edit
     @vendor = Vendor.find(params[:id])
-    if @vendor.configuration.nil? then
-      @vendor.configuration = Configuration.new
+    if @vendor.salor_configuration.nil? then
+      @vendor.salor_configuration = SalorConfiguration.new
     end
     
     if not @vendor.vendor_printers.any? then
@@ -289,12 +325,14 @@ class VendorsController < ApplicationController
     # for ORDER and ORDER_ITEM operations. Calling above funcs recalculates everything
     # puts  "### Begining edit_field_on_child"
     # and takes up to 2s for lots of items!!
+    if params[:field] == "front_end_change" then
+      o = Order.scopied.find_by_id params[:order_id]
+      o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value])
+      render :nothing => true and return
+    end
     if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
       # puts  "### Class is allowed"
       klass = Kernel.const_get(params[:klass])
-      if klass == Order and not params[:id] then
-        params[:id] = GlobalData.salor_user.meta.order_id
-      end
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
@@ -454,13 +492,13 @@ class VendorsController < ApplicationController
           # Else update attribute for other classes
           @inst.update_attribute(params[:field].to_sym,params[:value])
         else
-          raise "ModelKnowsNot"
+          #raise "ModelKnowsNot"
         end # @inst.responds_to?
       else
-        raise "ModelNotFound"
+        #raise "ModelNotFound"
       end #end klass.exists?
     else
-      raise "ModelNotAllowed!"
+      #raise "ModelNotAllowed!"
     end #end allowed_klass
     render :layout => false
   end

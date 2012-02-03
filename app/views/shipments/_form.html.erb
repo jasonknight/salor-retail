@@ -64,7 +64,7 @@
             <%= f.hidden_field(:employee_id, :value => salor_user.id) if salor_user.is_employee? %>
     </div> <!-- end id="general" -->
     <div id="items" class="hidden form-container shipment-items-form-container">
-      <%= salor_render :partial => "shared/shipment_item_form", :locals => {:f => f,:model => 'shipment', :items => @shipment.shipment_items} %>
+       <%= salor_render :partial => "shared/shipment_item_form", :locals => {:f => f,:model => 'shipment', :items => @shipment.shipment_items} %>
     </div>
     <div id="notes" class="hidden form-container shipment-notes-form-container">
       <%= salor_render :partial => "shared/notes_form", :locals => {:model => 'shipment', :method => 'set_notes', :notes => @shipment.notes} %>
