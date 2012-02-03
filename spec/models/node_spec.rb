@@ -97,10 +97,10 @@ describe Node do
     end # should parse the params and convert the special relations
     it "should have an item klass" do
       @params[:record][:base_price] = 44.50
+      @mnode.record[:base_price].should_not == @item.base_price
       @mnode.handle(@params)
       @mnode.klass.should == Item
       @mnode.inst.should == @item
-      @mnode.record[:base_price].should_not == @item.base_price
       @item.reload.base_price.should == 44.50
       @mnode.target.vendor.should == @vendor2
       @vendor2.items.first.should == @item
@@ -135,6 +135,7 @@ describe Node do
       @mnode.verify?.should == false
     end
     it "should return true or false to see if record has been changed" do
+      @item.save!
       @mnode.verify_changed?(@item).should == false 
     end
     it "should return true when the model has been changed" do

@@ -1,11 +1,7 @@
 <%
   if AppConfig.standalone then
 %>
-  <% if $User and $User.is_technician? %>
-    <%= salor_render :partial => "shared/technician_control_panel" %>
-  <% else %>    
-    <%= salor_render :partial => "shared/login" %>
-  <% end -%>
+  <%= salor_render :partial => "shared/login" %>
 <% else %>
-<%= salor_render :partial => "shared/front_page" %>
+  <%= salor_render :partial => "shared/front_page" %>
 <% end %>

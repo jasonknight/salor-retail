@@ -356,7 +356,7 @@ function display_change() {
   var change = paymentTotal - complete_total;
   change = Math.round(change*100);
   change /= 100;
-  if ((change / 10) > complete_total) {
+  if ((change / 100) > complete_total) {
     notify_user("<%= I18n.t("headings.order_validation") %>", 
                 "<%= I18n.t("system.errors.change_validation_failed") %>", function () {
                   window.location = "/orders/new";

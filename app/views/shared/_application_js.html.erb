@@ -2,9 +2,8 @@
 
 var blank_function = function(){};
 if (typeof Salor == 'undefined') {
-  Salor = { playSound: blank_function, toperScale: blank_function, mimoRefresh: blank_function, poleDancer: blank_function, printPage: blank_function  };
+  //Salor = { playSound: blank_function, toperScale: blank_function, mimoRefresh: blank_function, poleDancer: blank_function, printPage: blank_function  };
 }
-
 function playSound(file) {
   Salor.playSound(file);
 }
@@ -390,7 +389,7 @@ var calledFrom = 'TopOfAppJS';
         success: sFunc,
         error: function(jqXHR, textStatus, errorThrown) {
           eFunc();
-          alert(textStatus + "--" + errorThrown + "\nCalled from: " + calledFrom + "\nURL: " + url);
+         // alert(textStatus + "--" + errorThrown + "\nCalled from: " + calledFrom + "\nURL: " + url);
         }
       });
     }
