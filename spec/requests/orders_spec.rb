@@ -29,7 +29,7 @@ describe "Orders" do
         visit "/orders/new?cash_register_id=#{@cash_register.id}"
         page.should have_no_selector('.header')
       end
-      it "should not show the menu bar for managers", :js => true, :driver => :webkit do
+      it "should show the menu bar for managers", :js => true, :driver => :webkit do
         single_store_setup
         login_employee('31202053295')
         visit "/cash_registers?vendor_id=#{@vendor.id}"
@@ -51,6 +51,24 @@ describe "Orders" do
         fill_in "keyboard_input", :with => @item2.sku
         page.execute_script(@enter_event.gsub("INPUT","#keyboard_input"));
         page.find(".pos-order-total").should have_content(SalorBase.number_to_currency((@item.base_price * 2) + @item2.base_price))
+      end
+      it "should store calculated change on the order", {:focus => true} do
+        single_store_setup
+        login_employee('31202053295')
+        visit "/cash_registers?vendor_id=#{@vendor.id}"
+        visit "/orders/new?cash_register_id=#{@cash_register.id}"
+        change = "46,68"
+        url = "/vendors/edit_field_on_child?order_id=#{@order.id}&klass=Order&field=front_end_change&value=#{change}"
+        visit url
+        Order.find(@order.id).front_end_change.should == 46.68
+        change = "$346.68"
+        url = "/vendors/edit_field_on_child?order_id=#{@order.id}&klass=Order&field=front_end_change&value=#{change}"
+        visit url
+        Order.find(@order.id).front_end_change.should == 346.68
+        change = "abc"
+        url = "/vendors/edit_field_on_child?order_id=#{@order.id}&klass=Order&field=front_end_change&value=#{change}"
+        visit url
+        Order.find(@order.id).front_end_change.should == 0
       end
    end
 end
