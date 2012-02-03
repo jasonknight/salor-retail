@@ -11,7 +11,7 @@ end
 <html>
 <head>
 
-<%= salor_render :partial => 'shared/head'%>
+<%= salor_render :partial => 'layouts/head'%>
 </head>
 <body id="body">
 <% if salor_signed_in?  %>
@@ -27,7 +27,6 @@ end
 <!-- EndViewContent -->
 </div>
 
-<%= salor_render :partial => "shared/current_active_order" %>
 <script type="text/javascript">
 function quick_open_drawer() {
     if (typeof Salor != 'undefined') {
@@ -60,7 +59,6 @@ $(function () {
 </script>
 <div class="help hidden"></div>
 <%= salor_render :partial => "shared/cash_drop" %>
-<%= salor_render :partial => "shared/coin_calculator" %>
 <script type="text/javascript">
 function initErrors() {
   $('.errors').show();

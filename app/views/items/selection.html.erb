@@ -12,7 +12,7 @@
   }
 </script>
 <div style="text-align: center;" >
-<% form_tag '/items/labels', :remote => true do %>
+<%= form_tag '/items/labels', :remote => true do %>
   <p><%= text_area_tag 'skus', nil, :class => 'labels-snag-me', :cols => 20, :rows => 15 %></p>
   <p>
     <input type="radio" name="type" value="label" checked>Regaletikett<br>
