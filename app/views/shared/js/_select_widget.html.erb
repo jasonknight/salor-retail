@@ -4,7 +4,11 @@
   function make_select_widget(name,elem) {
     elem.hide();
     var button = div();
-    button.html($(elem).find("option:first").text());
+    button.html($(elem).find("option:selected").text());
+    if (button.html() == "")
+      button.html($(elem).find("option:first").text());
+    if (button.html() == "")
+      button.html("Choose");
     button.insertAfter(elem);
     button.attr('select_target',"#" + elem.attr("id"));
     button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));

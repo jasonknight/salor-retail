@@ -232,21 +232,20 @@ class OrdersController < ApplicationController
     @order = initialize_order
     if @order.paid == 1 then
       @order = GlobalData.salor_user.get_new_order 
-    else
-      @order_item = @order.order_items.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
-      unless @order_item.nil? then
-        unless @order_item.activated or @order_item.is_buyback then
-          @order_item.total += @order_item.price
-          @order_item.is_valid = true
-          @order_item.quantity += 1
-          @order.total += @order_item.price
-          newtax = @order_item.calculate_tax(true)
-          @order_item.connection.execute("update order_items set quantity = quantity + 1, total = total + #{@order_item.price}, tax = #{newtax} where id = '#{@order_item.id}'")
-          @order.connection.execute("update orders set total = total + #{@order_item.price} where id = #{@order.id}")
-          render and return
-        end
+    end
+    @order_item = @order.order_items.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+    unless @order_item.nil? then
+      unless @order_item.activated or @order_item.is_buyback then
+        @order_item.total += @order_item.price
+        @order_item.is_valid = true
+        @order_item.quantity += 1
+        @order.total += @order_item.price
+        newtax = @order_item.calculate_tax(true)
+        @order_item.connection.execute("update order_items set quantity = quantity + 1, total = total + #{@order_item.price}, tax = #{newtax} where id = '#{@order_item.id}'")
+        @order.connection.execute("update orders set total = total + #{@order_item.price} where id = #{@order.id}")
+        render and return
       end
-    end # order.paid?
+    end
     @item = Item.get_by_code(params[:sku])
     if @item.class == LoyaltyCard and @item.customer then
       @loyalty_card = @item
