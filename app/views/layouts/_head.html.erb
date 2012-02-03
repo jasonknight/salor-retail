@@ -18,9 +18,11 @@
           alert(txt);
       }
     </script>
-    <%= stylesheet_link_tag("application.css") %>
+    <%= stylesheet_link_tag 'application' %>
+    <%= stylesheet_link_tag params[:controller] %>
     <%= stylesheet_link_tag 'print', :media => 'print' %>
     <%= javascript_include_tag 'application' %>
+    <%= javascript_include_tag params[:controller] %>
     <%= csrf_meta_tag %>
     <%= salor_render :partial => "shared/application_js" %>
     <link rel="apple-touch-icon" href="apple-touch-icon-iphone.png" />

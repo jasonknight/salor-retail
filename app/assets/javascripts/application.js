@@ -13,4 +13,9 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require_tree .
+//= require shared
+//= require sprintf
+//= require loadmask
+//= require jquery.keyboard
+//= require jquery.checkbox
+//= #require_tree .
