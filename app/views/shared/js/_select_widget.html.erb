@@ -22,8 +22,8 @@
         d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
         d.attr("value", $(this).attr('value'))
         d.mousedown(function () {
-         $(_currentSelectTarget).children("option:selected").attr("selected",""); 
-         $(_currentSelectTarget).children("option[value='"+$(this).attr('value')+"']").attr("selected","selected"); 
+         $(_currentSelectTarget).find("option:selected").removeAttr("selected"); 
+         $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected"); 
          _currentSelectButton.html($(this).html());
          $('.select-widget-display').hide();
         });
