@@ -54,7 +54,7 @@
               <%= crd.drop ? I18n.t("activerecord.attributes.drop") : I18n.t("activerecord.attributes.payout") %>
             </div>
             <div class="table-cell">
-              <%= raw textilize crd.notes %>
+              <%= raw crd.notes %>
             </div>
           </div>
         <% end if @employee.drawer %>
