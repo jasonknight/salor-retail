@@ -36,7 +36,7 @@ describe "Orders" do
         visit "/orders/new?cash_register_id=#{@cash_register.id}"
         page.should have_selector('.header')
       end
-      it "allow a cashier to enter an item", :js => true, :driver => :webkit do
+      it "allow a cashier to enter an item", {:js => true, :driver => :webkit} do
         single_store_setup
         login_employee('31202003285')
         visit "/cash_registers?vendor_id=#{@vendor.id}"
@@ -47,12 +47,14 @@ describe "Orders" do
         page.should have_content(@item.sku)
         fill_in "keyboard_input", :with => @item.sku
         page.execute_script(@enter_event.gsub("INPUT","#keyboard_input"));
+        sleep(1)
+        save_and_open_page
         page.find(".pos-order-total").should have_content(SalorBase.number_to_currency(@item.base_price * 2))
         fill_in "keyboard_input", :with => @item2.sku
         page.execute_script(@enter_event.gsub("INPUT","#keyboard_input"));
         page.find(".pos-order-total").should have_content(SalorBase.number_to_currency((@item.base_price * 2) + @item2.base_price))
       end
-      it "should store calculated change on the order", {:focus => true} do
+      it "should store calculated change on the order" do
         single_store_setup
         login_employee('31202053295')
         visit "/cash_registers?vendor_id=#{@vendor.id}"
