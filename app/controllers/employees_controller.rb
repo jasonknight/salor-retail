@@ -60,25 +60,25 @@ class EmployeesController < ApplicationController
       user.update_attribute :is_technician, true
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s
-
       redirect_to :controller => :home, :action => :index and return
     elsif check then
-      user = User.login(params[:code])
-      user = Employee.login(params[:code]) if not user
+      user = Employee.login(params[:code]) 
+      user = User.login(params[:code]) if not user
     else
       redirect_to :controller => :home, :action => :index, :notice => "Check failed" and return
     end
 
-    if session[:user_id] == user.id and session[:user_type] == user.class.to_s then
-      redirect_to :controller => :vendors, :action => :end_day and return
-    end
-    
+        
     if user then
       if check == 41 then
         t = Time.now - 31.days
         if user.created_at <= t then
           redirect_to :controller => :home, :action => "you_have_to_pay" and return
         end
+      end
+      #:w
+      if session[:user_id].to_i == user.id and session[:user_type] == user.class.to_s then
+        #redirect_to :controller => :vendors, :action => :end_day and return
       end
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s

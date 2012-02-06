@@ -50,8 +50,8 @@ class ApplicationController < ActionController::Base
   include SalorBase
   helper :all
   protect_from_forgery
-  before_filter :loadup, :except => [:load_clock, :add_item_ajax]
-  before_filter :setup_global_data, :except => [:load_clock]
+  before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login]
+  before_filter :setup_global_data, :except => [:load_clock, :login]
   layout :layout_by_response
   helper_method [:user_cache_name]
   def render_csv(filename = nil,text = nil)
@@ -95,7 +95,7 @@ class ApplicationController < ActionController::Base
   def salor_user
     if session[:user_id] then
       if session[:user_type] == "User" then
-        return User.find session[:user_id]
+        return User.find(session[:user_id].to_i)
       else
         return Employee.find session[:user_id]
       end

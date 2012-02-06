@@ -164,8 +164,9 @@ module SalorBase
       f.write "[#{Time.now}] [FROM: #{from}] " + txt + "\n"
     end
   end
-  def self.string_to_float(string)
-    return string if string.class == Float or string.class == Fixnum
+  def self.string_to_float(str)
+    return str if str.class == Float or str.class == Fixnum
+      string = "#{str}"
       string.gsub!(/[^\d.,]/,'')
       if string =~ /^.*[\.,]\d{1}$/
         string = string + "0"

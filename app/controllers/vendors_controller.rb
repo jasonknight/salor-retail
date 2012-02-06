@@ -316,6 +316,8 @@ class VendorsController < ApplicationController
       end
       session[:user_id] = nil
       session[:user_type] = nil
+      cookies[:user_id] = nil
+      cookies[:user_type] = nil
       redirect_to :controller => :home, :action => :index
     end
   end
@@ -357,17 +359,17 @@ class VendorsController < ApplicationController
           end
           # Replace , with . for for float calcs to work properly
           # puts  " --- " + params[:value].to_s
-          params[:value] = params[:value].gsub(',','.') if ['quantity','price','base_price'].include? params[:field]
+          params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
           # puts  " --- " + params[:value].to_s
           if klass == OrderItem then
             # puts  "### klass is OrderItem"
             if params[:field] == 'quantity' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and (not @inst.weigh_compulsory == true) then
               # puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
-              unless @inst.activated then
+              unless @inst.activated and nil == nil then
                 # puts  "### inst is not activated."
                 # Takes into account ITEM rebate and ORDER rebate.
                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
-                newval = params[:value].to_f
+                newval = params[:value]
                 origttl = @inst.total
                 @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
                 @inst.quantity = newval

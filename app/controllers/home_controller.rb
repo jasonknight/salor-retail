@@ -50,7 +50,9 @@ class HomeController < ApplicationController
   before_filter :authify, :except => [:index, :load_clock,:you_have_to_pay]
   before_filter :initialize_instance_variables, :only => [:user_employee_index, :edit_owner, :update_owner]
   before_filter :check_role, :only => [:edit_owner, :update_owner]
-
+  def errors_display
+    @exception = $!
+  end
   def index
     if not check_license() then
       render :action => "402", :status => 402 and return

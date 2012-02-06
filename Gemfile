@@ -19,7 +19,7 @@ group :assets do
 
   gem 'uglifier'
 end
-
+gem 'i18n-js'
 gem 'sass-rails'
 gem 'jquery-rails'
 gem 'kaminari'

@@ -79,10 +79,48 @@
              </td>
            </tr>
          <% end if GlobalData.salor_user.meta.cash_register %>
-      </table>
+       </table>
+<% if true then %>
+<h2> Cute Credit</h2>
+<table width="100%">
+  <% cute_total = 0 %>
+  <% cute_eod_total = 0 %>
+  <% $User.cute_credit_messages.each(:symbolize_keys => true) do |msg|  %>
+    <% next if msg[:sa] != "P" %>
+    <% cute_eod_total = 0 if msg[:ind].to_i == 2%>
+    <tr>
+      <td>
+        Nr. <%= msg[:ref_id] %>
+      </td>
+      <td>
+          <%= msg[:x_text] %>
+          <% tmp = msg[:x_text] %>
+          <% cute_total += SalorBase.string_to_float(tmp) %>
+          <% cute_eod_total += SalorBase.string_to_float(tmp) %>
+          <% ref_id = msg[:ref_id] %>
+      </td>
+    </tr>
+  <% end -%>
+  <tr>
+    <td colspan="2" align="right" id="cute_credit_total">
+       <%= I18n.t("paylife.total") %> <%= SalorBase.number_to_currency(cute_total) %>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="right" id="cute_credit_eod_total" eod_total="" ref_id="">
+       <%= I18n.t("paylife.eod_total") %> <%= SalorBase.number_to_currency(cute_eod_total) %>
+    </td>
+  </tr>
+  </table>
+  <script type="text/css">
+  <% if cute_eod_total > 0 then %>
+    $(function () {
+      $('body').trigger({type: "CuteCreditEODNeeded"});
+    });
+  <% end -%>
+  </script>
+<% end %>
     </td>
   </tr>
 </table>
-<% if GlobalData.cash_register.artema_hybrid then %>
-  <%= salor_render :partial => "shared/js/bycard_js" %>
-<% end %>
+

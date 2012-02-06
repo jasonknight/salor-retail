@@ -70,46 +70,6 @@ $(document).ready(function () {
     });
 });
 
-function scrollItemList(event) {
-  var id = $(event.target).attr('id');
-  var scrollAmt = 0;
-  var curScroll = $(".pos-scrolling-div").scrollTop();
-  switch (id) {
-    case 'scroll_up':
-      scrollAmt = -40;
-      break;
-    case 'scroll_down':
-      scrollAmt = 40;
-      break;
-    case 'scroll_top':
-      scrollAmt = -curScroll;
-      break;
-    case 'scroll_bottom':
-      scrollAmt = $(".pos-scrolling-div").attr("scrollHeight") - $(".pos-scrolling-div").height() - curScroll;
-      break;
-  }
-  $(".pos-scrolling-div").animate({"scrollTop":curScroll + scrollAmt},250);
-}
-
-function setScrollerState() {
-  var active = ($(".pos-scrolling-div").attr("scrollHeight") - $(".pos-scrolling-div").height() > 0) ? true : false;
-  if (!active) {
-    $(".button-scroller").addClass('button-inactive').unbind('click');
-  } else {
-    $(".button-scroller").removeClass('button-inactive').mousedown(function(event){
-      scrollItemList(event);
-    });
-  }
-}
-
-//test
-function upDownButtons(row,col) {
-      var base_id = getOrderItemId(item);
-
-      return row;
-}
-
-
 function getOrderItemId(item) {
   var id = 'order-item-' + item.id;
   return id;
@@ -135,7 +95,7 @@ function makeItemMenu(item) {
             $('.' + base_id).remove();
             get('/orders/delete_order_item?id=' + item.id, filename);
             menu.remove();
-            setScrollerState();
+            //setScrollerState();
             focusInput($('#keyboard_input'));
         });
         menu.append(dicon);
@@ -387,7 +347,7 @@ function addPosItem(item) {
     }
   }
   makeItemMenu(item);
-  setScrollerState();
+  //setScrollerState();
   if (item["must_change_price"] == true) {
     var id = '.' + base_id + '-price';
     var price = toFloat($(id).html());
