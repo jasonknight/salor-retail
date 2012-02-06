@@ -4,5 +4,7 @@ class AddCategoryIdToButton < ActiveRecord::Migration
 
     add_column :buttons, :color, :string
 
+    rename_column :buttons, :weight, :position
+
   end
 end

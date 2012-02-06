@@ -497,6 +497,7 @@ $(function () {
 </script>
 
 <%= salor_render :partial => "shared/pos/menu", :locals => {:order => @order} %>
+<%= render :partial => "buttons/popup", :layout => false %>
 
 <div class='clear'></div>
 
@@ -559,9 +560,6 @@ if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('med
 <%= salor_render :partial => "shared/complete_order" %>
 <%= salor_render :partial => "shared/in_place_edit" %>
 <%= salor_render :partial => "shared/last_five_orders" %>
-<% if Button.scopied.any? then  %>
-  <%= salor_render :partial => "shared/buttons" %>
-<% end %>
 <% if GlobalData.salor_user.meta.cash_register.artema_hybrid %>
   <%= salor_render :partial => "shared/js/bycard_js" %>
 <% end %>

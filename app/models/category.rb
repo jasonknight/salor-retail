@@ -46,22 +46,26 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+
 class Category < ActiveRecord::Base
-	include SalorScope
-	include SalorBase
+  include SalorScope
+  include SalorBase
   include SalorModel
-	has_many :items
-	has_many :shipment_items
-	has_many :discounts
-	belongs_to :vendor
-	has_many :order_items
-	before_create :set_model_owner
-	def get_tag
-	  if not self.tag or self.tag == '' then
+  has_many :items
+  has_many :shipment_items
+  has_many :discounts
+  has_many :buttons, :order => :position
+  belongs_to :vendor
+  has_many :order_items
+  before_create :set_model_owner
+  acts_as_list
+
+  def get_tag
+    if not self.tag or self.tag == '' then
       return self.name.gsub(" ",'')
     end
     self.tag.gsub(' ','')
-	end
+  end
 	# We don't really call this function directly, it is called by @cash_register.end_of_day_report, which
 	# returns a hash that is merged with this one. This way, we delegate the reponsibilities up the chain
 	# so that in the view, we can just call: hash = @cash_register.end_of_day_report and then loop over the

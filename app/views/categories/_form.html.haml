@@ -1,0 +1,27 @@
+= form_for(@category) do |f| 
+  - if @category.errors.any? 
+    #error_explanation
+      %h2= I18n.t("activerecord.errors.template.header.other", :count => @category.errors.count,:model => t("activerecord.models.category.one"))
+      - @category.errors.full_messages.each do |msg|
+        %p msg
+
+  = f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id
+  .field
+    = f.label :name
+    = f.text_field :name, :class => 'keyboardable'
+  .field
+    = f.label :eod_show
+    = f.check_box :eod_show
+  .field
+    = f.label :tag
+    = f.collection_select :tag, @tags, :name, :name
+  .field
+    = f.label :color
+    = f.text_field :color
+  .field
+    = f.label :button_category
+    = f.check_box :button_category
+  .field
+    = f.label :position
+    = f.text_field :position
+  .actions= f.submit

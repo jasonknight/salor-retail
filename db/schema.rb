@@ -51,7 +51,7 @@ ActiveRecord::Schema.define(:version => 20120206104442) do
     t.string   "name"
     t.string   "sku"
     t.string   "category"
-    t.integer  "weight"
+    t.integer  "position"
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
     t.integer  "vendor_id"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(:version => 20120206104442) do
     t.boolean  "eod_show",        :default => false
     t.string   "tag"
     t.boolean  "button_category"
-    t.integer  "order"
+    t.integer  "position"
     t.string   "color"
   end
 

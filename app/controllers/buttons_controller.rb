@@ -21,49 +21,25 @@ class ButtonsController < ApplicationController
   before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
-  # GET /buttons
-  # GET /buttons.xml
+  
   def index
-    if not check_license() then
-      redirect_to :controller => "home", :action => "index" and return
-    end
-    @buttons = Button.where(:vendor_id => $User.get_meta.vendor_id).order("weight ASC")
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @buttons }
-      format.json { render :text => @buttons.to_json }
-    end
+    @button_categories = Category.where(:button_category => true).order(:position)
   end
-
-  # GET /buttons/1
-  # GET /buttons/1.xml
+  #
   def show
     @button = Button.scopied.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @button }
-    end
   end
 
-  # GET /buttons/new
-  # GET /buttons/new.xml
   def new
     @button = Button.new(params[:item])
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @button }
-    end
+    @button_categories = Category.where(:button_category => true).order(:position)
   end
 
-  # GET /buttons/1/edit
   def edit
     @button = Button.scopied.find_by_id(params[:id])
+    @button_categories = Category.where(:button_category => true).order(:position)
   end
 
-  # POST /buttons
-  # POST /buttons.xml
   def create
     @button = Button.new(params[:button])
     @button.set_model_owner
@@ -78,24 +54,13 @@ class ButtonsController < ApplicationController
     end
   end
 
-  # PUT /buttons/1
-  # PUT /buttons/1.xml
   def update
     @button = Button.scopied.find_by_id(params[:id])
 
-    respond_to do |format|
-      if @button.update_attributes(params[:button])
-        format.html { redirect_to(buttons_url, :notice => 'Button was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @button.errors, :status => :unprocessable_entity }
-      end
-    end
+    @button.update_attributes params[:button]
+    redirect_to buttons_path
   end
 
-  # DELETE /buttons/1
-  # DELETE /buttons/1.xml
   def destroy
     @button = Button.scopied.find_by_id(params[:id])
     @button.destroy if @button
@@ -105,7 +70,15 @@ class ButtonsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  #
+  def position
+    @buttons = Button.scopied.where("id IN (#{params[:button].join(',')})")
+    Button.sort(@buttons,params[:button])
+    render :nothing => true
+  end
+
   private 
+
   def crumble
     @vendor = salor_user.get_vendor(salor_user.meta.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'

@@ -6,6 +6,7 @@ Salor::Application.routes.draw do
   match "home/set_user_theme_ajax" => "home#set_user_theme_ajax"
   match "home/user_employee_index" => "home#user_employee_index"
   match "home/set_language" => "home#set_language"
+  match "buttons/position" => "buttons#position"
   match "categories/categories_json" => "categories#categories_json"
   match "categories/items_json" => "categories#items_json"
   match "orders/add_item_ajax" => "orders#add_item_ajax"
