@@ -22,8 +22,8 @@
     <%= stylesheet_link_tag params[:controller] %>
     <%= stylesheet_link_tag 'print', :media => 'print' %>
     <%= javascript_include_tag 'application' %>
-    <%= salor_render :partial => "shared/application_js" %>
     <%= javascript_include_tag params[:controller] %>
+    <%= salor_render :partial => "shared/application_js" %>
     <%= csrf_meta_tag %>
     <link rel="apple-touch-icon" href="apple-touch-icon-iphone.png" />
     <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-ipad.png" />

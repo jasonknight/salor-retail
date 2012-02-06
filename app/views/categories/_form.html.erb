@@ -24,6 +24,12 @@
           <br />
           <%= f.label t("activerecord.attributes.tag") %><br />
           <%= f.collection_select :tag, TransactionTag.scopied.all.unshift(TransactionTag.new(:name => '')),:name, :name %>
+          <br />
+          <%= f.label Category.human_attribute_name(:color) %><br />
+          <%= f.text_field :color %>
+          <br />
+          <%= f.label Category.human_attribute_name(:order) %><br />
+          <%= f.text_field :order %>
         </div>
         <br />
         <div class="actions">
