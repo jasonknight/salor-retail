@@ -37,3 +37,4 @@ nbproject/*
 /rake/
 *_cache*
 .sass-cache
+public/assets

@@ -50,15 +50,22 @@ class Button < ActiveRecord::Base
   include SalorScope
   include SalorBase
   include SalorModel
+
+  belongs_to :category
   before_save :set_flags
+  acts_as_list
   
   def set_flags
     i = Item.find_by_sku self.sku
-    if i and i.default_buyback then
-      self.is_buyback = true
+    self.is_buyback = true if i and i.default_buyback
+  end
+
+  def self.sort(buttons,type)
+    type.map! {|t| t.to_i}
+    buttons.each do |b|
+      b.position ||= 0
+      b.update_attribute :position, type.index(b.id) + 1 if type.index(b.id)
     end
-    if self.category.empty? then
-      self.category = "Misc"
-    end
+    return buttons
   end
 end

@@ -51,11 +51,15 @@
         name = oi.item.name
 
         if oi.item_type_id == 3 and oi.item.coupon_type == 1 # percent coupon
-          list_of_items += "%s %20.20s %7.1f%% %3u %7.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
+          list_of_items += "%s %19.19s %6.1f%% %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
         elsif oi.item_type_id == 3 and oi.item.coupon_type == 3 # oi habtm oi relation needed otherwise b1g1 coupon rules are too complex here
-          list_of_items += "%s %20.20s\n" % [oi.item.tax_profile.letter, name]
-        else
-          list_of_items += "%s %20.20s %7.2f %3u %7.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items += "%s %19.19s\n" % [oi.item.tax_profile.letter, name]
+        else # normal item
+          if oi.quantity == Integer(oi.quantity) # integer quantity
+            list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          else # float quantity (e.g. weighed OrderItem)
+            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          end
         end
 
         if oi.discount_applied
@@ -66,7 +70,7 @@
             discount_price = 0
             discount_total = 0
           end
-          list_of_items += "%s %20.20s %7.2f %3u %7.2f\n" % [oi.item.tax_profile.letter, "Preisnachlass", discount_price, oi.quantity, discount_total]
+          list_of_items += "%s %19.19s %6.2f %6u %6.2f\n" % [oi.item.tax_profile.letter, "Preisnachlass", discount_price, oi.quantity, discount_total]
           discount_subtotal += discount_total
         end
 
@@ -78,7 +82,7 @@
             rebate_price = 0
             rebate_total = 0
           end
-          list_of_items += "%s %20.20s %7.2f %3u %7.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+          list_of_items += "%s %19.19s %6.2f %6u %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
           rebate_subtotal += rebate_total
         end
 

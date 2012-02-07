@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120201212000) do
+ActiveRecord::Schema.define(:version => 20120206104442) do
 
   create_table "actions", :force  # i.e. if handle_message returns false, then we just exit out and hope everything went according to plan.=> true do |t|
     t.string   "name"
@@ -51,11 +51,13 @@ ActiveRecord::Schema.define(:version => 20120201212000) do
     t.string   "name"
     t.string   "sku"
     t.string   "category"
-    t.integer  "weight"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.integer  "position"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "vendor_id"
-    t.boolean  "is_buyback", :default => false
+    t.boolean  "is_buyback",  :default => false
+    t.integer  "category_id"
+    t.string   "color"
   end
 
   create_table "cash_register_dailies", :force => true do |t|
@@ -98,12 +100,15 @@ ActiveRecord::Schema.define(:version => 20120201212000) do
   create_table "categories", :force => true do |t|
     t.integer  "vendor_id"
     t.string   "name"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
-    t.float    "quantity_sold", :default => 0.0
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.float    "quantity_sold",   :default => 0.0
     t.float    "cash_made"
-    t.boolean  "eod_show",      :default => false
+    t.boolean  "eod_show",        :default => false
     t.string   "tag"
+    t.boolean  "button_category"
+    t.integer  "position"
+    t.string   "color"
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"

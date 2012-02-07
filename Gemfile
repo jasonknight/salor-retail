@@ -33,6 +33,7 @@ gem 'exception_notification', :require => 'exception_notifier'
 gem 'nokogiri'
 gem 'mechanize'
 gem 'coffee-filter'
+gem 'acts_as_list'
 
 group :test, :development do
   gem 'turn', '< 0.8.3'
@@ -69,4 +70,4 @@ end
 # gem 'capistrano'
 
 # To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+gem 'ruby-debug19' #, :require => 'ruby-debug'

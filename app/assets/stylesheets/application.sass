@@ -768,9 +768,6 @@ div.header > span.version
 div.main 
   margin: 20px 0px 100px 0px
 
-div.modal-main 
-
-div.main > div.main-content 
 
 div.content-box > div.title-container 
   @include center
@@ -2435,12 +2432,22 @@ div.item-button
   font-size: 100%
   text-transform: uppercase
 
-div.buttons 
+div#buttons 
+  display: none
   position: absolute
-  left: 1%
-  width: 99%
-  top: 60px
+  top: 0px
+  width: 100%
+  height: 100%
+  z-index: 102
 
+div.button-category
+  display: inline-block
+
+div.button-category-container
+  display: none
+
+div.button-category-containers div:first-child
+  display: inline-block
 
 div.last-five-orders 
   @include dialog
@@ -2532,10 +2539,6 @@ table.taxes td
 
 div.backup 
   text-align: center
-
-
-div#main_content 
-  padding: 0px 20px
 
 
 div.rebate 

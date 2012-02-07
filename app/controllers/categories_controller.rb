@@ -47,14 +47,10 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class CategoriesController < ApplicationController
-  before_filter :authify
-  before_filter :initialize_instance_variables
+  before_filter :authify, :initialize_instance_variables, :crumble, :get_tags
   before_filter :check_role, :except => [:crumble]
-  before_filter :crumble
   cache_sweeper :category_sweeper, :only => [:create, :update, :destroy]
   
-  # GET /categories
-  # GET /categories.xml
   def index
     @categories = GlobalData.salor_user.get_categories(params[:page])
     
@@ -64,8 +60,6 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # GET /categories/1
-  # GET /categories/1.xml
   def show
     @category = Category.by_vendor(GlobalData.session.vendor_id).visible.find_by_id(params[:id])
 
@@ -75,25 +69,19 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # GET /categories/new
-  # GET /categories/new.xml
   def new
     @category = Category.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @category }
     end
   end
 
-  # GET /categories/1/edit
   def edit
     @category = GlobalData.salor_user.get_category(params[:id])
     add_breadcrumb @category.name,'edit_category_path(@category)'
   end
 
-  # POST /categories
-  # POST /categories.xml
   def create
     @category = Category.new(params[:category])
 
@@ -109,8 +97,6 @@ class CategoriesController < ApplicationController
     end
   end
 
-  # PUT /categories/1
-  # PUT /categories/1.xml
   def update
     @category = GlobalData.salor_user.get_category(params[:id])
 
@@ -134,8 +120,6 @@ class CategoriesController < ApplicationController
     render :text => @items.to_json
   end
 
-  # DELETE /categories/1
-  # DELETE /categories/1.xml
   def destroy
     @category = GlobalData.salor_user.get_category(params[:id])
     @category.destroy
@@ -145,10 +129,16 @@ class CategoriesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
   private 
+
   def crumble
     @vendor = GlobalData.salor_user.get_vendor(GlobalData.salor_user.meta.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.categories"),'categories_path(:vendor_id => params[:vendor_id])'
+  end
+
+  def get_tags
+    @tags = TransactionTag.scopied.all.unshift(TransactionTag.new(:name => ''))
   end
 end

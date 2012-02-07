@@ -11,7 +11,7 @@ function hideNotice() {
 function initNotice() {
   setTimeout (showNotice,500);
   setTimeout (hideNotice,4000);
-  Salor.playSound('notice');
+  if (typeof Salor != 'undefined'){ Salor.playSound('notice');}
 }
 <%
   if not flash[:notice].blank? or not params[:notice].blank? then

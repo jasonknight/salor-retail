@@ -108,12 +108,7 @@ class OrdersController < ApplicationController
     end
   end
 
-  # GET /orders/new
-  # GET /orders/new.xml
   def new
-    if not check_license() then
-      redirect_to :controller => "home", :action => "index" and return
-    end
     if not salor_user.meta.vendor_id then
       redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
     end
@@ -123,19 +118,13 @@ class OrdersController < ApplicationController
     
     $User.auto_drop
     
-    #if $User.get_drawer.amount <= 0 then
-    #  GlobalErrors.append("system.errors.must_cash_drop")
-    #end
     @order = initialize_order
     if @order.order_items.any? then
       @order.update_self_and_save
     end
     add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
-	  add_breadcrumb t("menu.order"),'new_order_path(:vendor_id => salor_user.meta.vendor_id)'
-    respond_to do |format|
-      format.html {render :layout => "application"}
-      format.xml  { render :xml => @order }
-    end
+    add_breadcrumb t("menu.order"),'new_order_path(:vendor_id => salor_user.meta.vendor_id)'
+    @button_categories = Category.where(:button_category => true).order(:position)
 
   end
 
