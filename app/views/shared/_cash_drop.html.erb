@@ -104,6 +104,7 @@ function show_coin_calculator() {
 </script>
 
 <div id="cash_drop" class="cash-drop hidden">
+<%= salor_render :partial => "shared/dt_tags" %>
 <div class="cash-drop-error"></div>
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>

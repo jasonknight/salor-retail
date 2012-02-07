@@ -134,12 +134,10 @@ module ApplicationHelper
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
 
       <div class="title-container">
-        <div>
           #{bbutton} <div class="title-box #{classes.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
           <div class="breadcrumb-container">
             #{crumbs}
           </div>
-        </div>
       </div>
       <div class="content-container content-container-#{params[:controller]}-#{params[:action]}">
     <!-- end content_box_top -->
@@ -251,9 +249,9 @@ module ApplicationHelper
       options.each do |k,v|
         o << "#{k}=\"#{v}\""
       end
-      return raw("<img src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span>")
+      return raw("<div class=\"salor-icon\"><img src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
     else
-      return raw(image_tag('/images/icons/' + icon(name,size),options))
+      return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }")
     end
   end
   def get_day(i)

@@ -1,8 +1,8 @@
+//=require genericjs
+
 window.showButtonCategoryContainer = (id) ->
   $('.button-category-container').hide()
   $('#' + id).show()
-
-
 
 window.showJsError = (err) ->
   txt="There was an error on this page _pos_js.\n\n"
@@ -11,4 +11,3 @@ window.showJsError = (err) ->
   txt+="Error Line: " + err.line + "\n\n"
   txt+="Click OK to continue.\n\n"
   alert(txt)
-
