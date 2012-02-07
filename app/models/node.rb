@@ -53,8 +53,8 @@ class Node < ActiveRecord::Base
   belongs_to :vendor
   before_create :set_model_owner
   after_create :broadcast_add_me
-  attr_accessor :record, :target, :klass, :inst, :hash, :params
-  @@a = ["Item","TaxProfile","Discount"]
+  attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
+  @@a = ["Button", "Category","Customer","Item","TaxProfile"]
   def handle(params)
     log_action "Node receiving object"
     if params.class == String then
@@ -65,7 +65,9 @@ class Node < ActiveRecord::Base
     @target = Node.where(:sku => @params[:target][:sku], :token => @params[:target][:token]).first
     if @params[:message] then
       log_action "Handling message param"
-      handle_message(@params)
+      if not handle_message(@params) then
+        return # i.e. if handle_message returns false, then we just exit out and hope everything went according to plan.
+      end
     end
     if not @params[:record] then
       log_action "Params has no record attached."
@@ -83,8 +85,15 @@ class Node < ActiveRecord::Base
       GlobalData.salor_user = @target.vendor.user
       GlobalData.vendor = @target.vendor
       GlobalData.vendor_id = @target.vendor.id
-      new_record = parse(@record)
-      create_or_update_record(new_record)
+      if @record.class == Array then
+        @record.each do |rec|
+          new_record = parse(@record)
+          create_or_update_record(new_record)
+        end
+      else
+        new_record = parse(@record)
+        create_or_update_record(new_record)
+      end
     else
       # puts "Failed to verify"
       log_action "node failed to verify"
@@ -94,10 +103,34 @@ class Node < ActiveRecord::Base
     if params[:message] == "AddMe" and @target.nil? and params[:target][:node_type].downcase == 'pull' then
       @target = Node.new(params[:target])
       @target.is_self = false
+      @target.vendor_id = self.vendor_id
       @target.save
+      # now we need to do an initial sync of tax profiles, buttons, categories
+      # and customers
+      @hash = {}
+      @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
+      @hash.merge!({:node => {:token => self.token, :sku => self.sku}, :message => "Sync"})
+      [Category,TaxProfile,Item,Button,Customer].each do |klass|
+        x = 0 # we want to send them in small blocks
+        models = []
+        klass.scopied.all.each do |model|
+          models << all_attributes_of(model)
+          x = x + 1
+          if x > 20 then
+            @hash[:record] = models
+            send!
+            x = 0
+            models = []
+          end
+        end
+        send! if models.any? # finally, send off the last amount
+      end
+      return false #just quit out
     else
       log_action "You cannot create an identical node." + params.inspect
+      return false # just quit out
     end
+    return true # I.E. handle the record object as normal
   end
   def create_or_update_record(new_record)
     # puts "Creating record"
@@ -120,15 +153,9 @@ class Node < ActiveRecord::Base
     @klass = Kernel.const_get(record[:class])
     new_record = record.clone
     if record.key? :category then
-      c = Category.find_or_create_by_name(record[:category])
+      c = Category.find_or_create_by_sku(record[:category])
       new_record[:category_id] = c.id
       new_record.delete(:category)
-      c.update_attribute :vendor_id, @target.vendor_id
-    end
-    if record.key? :location then
-      c = Location.find_or_create_by_name(record[:location])
-      new_record[:location_id] = c.id
-      new_record.delete(:location)
       c.update_attribute :vendor_id, @target.vendor_id
     end
     if record.key? :tax_profile_sku then
@@ -148,15 +175,23 @@ class Node < ActiveRecord::Base
       end
     end
     allowed_classes = @@a 
-    if not allowed_classes.include? @record[:class] and not allowed_classes.include? @record.class.to_s then
-      log_action "Wrong class: " + @record[:class].to_s
-      return false
+    if @record.class == Array then
+      @record.each do |rec|
+        if not allowed_classes.include? rec[:class] then
+          return false
+        end
+      end
+    else
+      if not allowed_classes.include? @record[:class] then
+        log_action "Wrong class: " + @record[:class].to_s
+       return false
+      end
     end
     if @target.nil? then
       log_action "Target is nil..."
       return false
     end
-    true
+    return true
   end
   def prepare(model,target,force=false)
     return {} if not @@a.include? model.class.to_s
@@ -191,23 +226,21 @@ class Node < ActiveRecord::Base
   end
   def iggy?(attr,model)
     item_ignore = ["tax_profile_id","shipper_id","location_id","vendor_id", "created_at", "updated_at","category_id","child_id"]
-    if model.class == Item and item_ignore.include?(attr.to_s) and
+   if item_ignore.include?(attr.to_s) and
       return true
     end
   end
   def all_attributes_of(item)
-    @hash ||= {}
     record = {:class => item.class.to_s}
     item.attributes.each do |k,v|
       record[k.to_sym] = v if not iggy?(k,item)
     end
-    record[:sku] = item.sku
+    record[:sku] = item.sku if item.respond_to? :sku
     if item.class == Item then
       record[:tax_profile_sku] = item.tax_profile.sku
     end
     record[:class] = item.class.to_s
-    @hash[:record] = record
-    @hash
+    record
   end
   def payload
     return @hash.to_json
@@ -230,23 +263,25 @@ class Node < ActiveRecord::Base
       # puts "Could not verify on send..."
       return nil
     end
-    req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
-    url = URI.parse(@target.url)
-    req.body = self.payload
-    response = Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
-    # puts response.body
-    response
+    send!   
   end
+  # need to rethinkt his part, see handle_message above, cloning 
+  # is currently done at that point...
   def clone_to_node(item,target)
     prepare(item,target,true)
     if not verify? then
       log_action "clone_to_node: Could not verify on send..."
       return nil
     end
+    send!  
+  end
+  #
+  def send!
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(@target.url)
     req.body = self.payload
-    response = Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+    @request ||= Net::HTTP.new(url.host, url.port)
+    response = @request.start {|http| http.request(req) }
     # puts response.body
     response
   end
@@ -259,6 +294,7 @@ class Node < ActiveRecord::Base
         :sku => self.sku,
         :token => self.token
       },
+       # this is a special case, where the target is the record...
       :target => SalorBase.symbolize_keys(node.attributes),
       :message => "AddMe"
     }
@@ -266,9 +302,9 @@ class Node < ActiveRecord::Base
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(self.url)
     req.body = params.to_json
-    response = Net::HTTP.new(url.host, url.port).start {|http| http.request(req) }
+    @request ||= Net::HTTP.new(url.host, url.port)
+    response = @request.start {http| http.request(req) }
     # puts response.body
     response
   end
-
 end

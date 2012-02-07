@@ -19,7 +19,6 @@ group :assets do
 
   gem 'uglifier'
 end
-gem 'i18n-js'
 gem 'sass-rails'
 gem 'jquery-rails'
 gem 'kaminari'
@@ -39,6 +38,7 @@ group :test, :development do
   gem 'turn', '< 0.8.3'
   gem "rspec-rails"
   gem 'rspec'
+  gem 'rspec-mocks'
   gem 'rb-fsevent'
   gem 'rb-inotify'
   gem 'guard-rspec', '0.5.2'

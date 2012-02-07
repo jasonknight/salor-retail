@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(:version => 20120201212000) do
 
-  create_table "actions", :force => true do |t|
+  create_table "actions", :force  # i.e. if handle_message returns false, then we just exit out and hope everything went according to plan.=> true do |t|
     t.string   "name"
     t.text     "code"
     t.integer  "vendor_id"

@@ -80,8 +80,6 @@ GEM
     haml (3.1.4)
     hike (1.2.1)
     i18n (0.6.0)
-    i18n-js (2.1.2)
-      i18n
     journey (1.0.1)
     jquery-rails (2.0.0)
       railties (>= 3.2.0.beta, < 5.0)
@@ -207,7 +205,6 @@ DEPENDENCIES
   guard-rspec (= 0.5.2)
   guard-spork
   haml
-  i18n-js
   jquery-rails
   kaminari
   kramdown
@@ -221,6 +218,7 @@ DEPENDENCIES
   rb-inotify
   rmagick
   rspec
+  rspec-mocks
   rspec-rails
   sass-rails
   serialport
