@@ -403,9 +403,9 @@ class Order < ActiveRecord::Base
   def gross
     if self.vendor.calculate_tax then
       taxttl = OrderItem.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false").sum(:tax)
-      return self.total + taxttl
+      return self.subtotal + taxttl
     else
-      return self.total
+      return self.subtotal
     end
   end
   #
@@ -561,13 +561,13 @@ class Order < ActiveRecord::Base
       self.update_attribute(:refunded, true)
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
+      opts = {:tag => I18n.t("activerecord.models.drawer_transaction.refund"),:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
+      create_drawer_transaction(self.subtotal,:payout,opts)
       self.order_items.each do |oi|
         if not oi.refunded then
           oi.toggle_refund(nil)
         end
-      end
-      opts = {:tag => I18n.t("activerecord.models.drawer_transaction.refund"),:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
-      create_drawer_transaction(self.total,:payout,opts)
+      end  
     end
   end
   def refund_total

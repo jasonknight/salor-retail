@@ -8,6 +8,7 @@ describe Node do
     GlobalData.salor_user = @user
     GlobalData.vendor = @vendor
     GlobalData.vendor_id = @vendor.id
+    GlobalData.salor_user.get_meta.vendor_id = @vendor.id
     @vendor2 = Factory :vendor, :user => @user2
     @cash_register = Factory :cash_register, :vendor => @vendor
     @tax_profile = Factory :tax_profile, :user => @user
@@ -26,7 +27,7 @@ describe Node do
         :sku => @snode.sku,
         :token => @snode.token
       },
-      :record => @mnode.all_attributes_of(@item)[:record]
+      :record => @mnode.all_attributes_of(@item)
     }
     @params2 = {
       :node => {
@@ -37,7 +38,7 @@ describe Node do
         :sku => @snode.sku,
         :token => @snode.token
       },
-      :record => @mnode.all_attributes_of(@tax_profile)[:record]
+      :record => @mnode.all_attributes_of(@tax_profile)
     } 
     @params3 = {
       :node => {
@@ -47,6 +48,17 @@ describe Node do
       :target => SalorBase.symbolize_keys(@snode.attributes),
       :message => "AddMe"
     }
+    @params4 = {
+      :node => {
+        :sku => "MASTER",
+        :token => "MASTER"
+      },
+      :target => {
+        :sku => @snode.sku,
+        :token => @snode.token
+      },
+      :record => @mnode.all_attributes_of(@category)
+    } 
 
     
 
@@ -92,7 +104,7 @@ describe Node do
     end # verifies that the target node exists
     it "should parse the params and convert the special relations" do
       @mnode.handle(@params)
-      @mnode.parse(@mnode.record).key?(:category).should be_false
+      @mnode.parse(@mnode.record).key?(:category_sku).should be_false
       @mnode.parse(@mnode.record)[:tax_profile_sku].should == @tax_profile.sku
     end # should parse the params and convert the special relations
     it "should have an item klass" do
@@ -130,9 +142,9 @@ describe Node do
       @mnode.prepare(@item,@snode)
       @mnode.verify?.should == true
     end
-    it "should fail to verify when sending the wrong model" do
+    it "should verify categories too..." do
       @mnode.prepare(@category,@snode)
-      @mnode.verify?.should == false
+      @mnode.verify?.should_not == false
     end
     it "should return true or false to see if record has been changed" do
       @item.save!
@@ -161,15 +173,25 @@ describe Node do
     end
     it "should handle tax_profiles as well" do
       @vendor2.tax_profiles.length.should == 0
-      @params2[:record]
       @mnode.handle(@params2)
       @mnode.klass.should == TaxProfile
       @mnode.inst.should == @tax_profile 
       @mnode.target.vendor.should == @vendor2
       # @vendor2.tax_profiles.first.should == @tax_profile
     end
+    it "should handle categories as well" do
+      @vendor2.categories.length.should == 0
+      @mnode.handle(@params4)
+      @mnode.klass.should == Category
+      @mnode.inst.should == @category 
+      @mnode.target.vendor.should == @vendor2
+      # @vendor2.tax_profiles.first.should == @tax_profile
+    end
+
     it "should handle special message cases" do
       @params3[:target][:sku] = "NEWSLAVE"
+      @mnode.request = mock(Net::HTTP)
+      @mnode.request.should_receive(:start).at_least(:twice)
       @mnode.handle(@params3)  
       @target = Node.where(:sku => @params3[:target][:sku], :token => @params3[:target][:token]).first.should be
     end

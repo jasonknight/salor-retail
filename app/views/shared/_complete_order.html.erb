@@ -151,15 +151,11 @@ function complete_order_show() {
     Salor.printPage('http://salor/orders/'+$('.order-id').html().replace('#','')+'/print');          
   });
   thermprint.mousedown(function () {
-      <% if $Conf.salor_printer == true then %>
-      if (SalorPrinter != 'undefined') {
+      if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
         SalorPrinter.printURL('<%= GlobalData.salor_user.get_meta.cash_register.thermal_printer %>','<%= GlobalData.conf.url %>/orders/render_order_receipt?order_id=' + $('.order-id').html());
       } else {
       	$.get('/orders/print_receipt?id=' + $('.order-id').html());   
       }
-      <% else %>
-      	$.get('/orders/print_receipt?id=' + $('.order-id').html());   
-      <% end %>
   });
   $("body").append(a4print);
   $("body").append(thermprint);

@@ -71,4 +71,21 @@ class Customer < ActiveRecord::Base
       :points => self.loyalty_card.points
     }.to_json
   end
+  def loyalty_card_sku=(sku)
+    if not self.loyalty_card then
+      lc = LoyaltyCard.new(:sku => sku)
+      self.loyalty_card = lc
+    else
+      self.loyalty_card.update_attribute(:sku, sku)
+    end
+  end
+  def loyalty_card_points=(points)
+    if not self.loyalty_card then
+      lc = LoyaltyCard.new(:sku => rand(1000001),:points => points)
+      self.loyalty_card = lc
+    else
+      self.loyalty_card.update_attribute(:points, points)
+    end
+  end
+
 end

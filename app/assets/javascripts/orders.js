@@ -1,4 +1,3 @@
-//= require paylife 
 function getByCardAmount() {
   var val = 0;
   $(".payment-method").each(function () {

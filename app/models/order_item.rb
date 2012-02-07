@@ -101,6 +101,8 @@ class OrderItem < ActiveRecord::Base
     dt.amount = amount
     dt.drawer_id = GlobalData.salor_user.get_drawer.id
     dt.drawer_amount = GlobalData.salor_user.get_drawer.amount
+    dt.order_id = self.order.id
+    dt.order_item_id = self.id
     if dt.save then
       if type == :payout then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)

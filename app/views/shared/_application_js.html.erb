@@ -11,6 +11,13 @@ var calledFrom = 'TopOfAppJS';
   jQuery.expr[':'].focus = function( elem ) {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
+function Round(Number, DecimalPlaces) {
+   return Math.round(parseFloat(Number) * Math.pow(10, DecimalPlaces)) / Math.pow(10, DecimalPlaces);
+}
+
+function RoundFixed(Number, DecimalPlaces) {
+   return Round(Number, DecimalPlaces).toFixed(DecimalPlaces);
+}
  function dbg(obj) {
     var str = '';
     alert(obj.width);
@@ -20,11 +27,11 @@ var calledFrom = 'TopOfAppJS';
     alert(str);
   }
    function print_order(id) {
-    <% if $Conf and $Conf.salor_printer == true %>
+    if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
       SalorPrinter.printURL('<%= $Register.thermal_printer %>','<%= $Conf.url %>/orders/render_order_receipt?order_id=' + id);
-    <% else %>
+    } else {
       $.get('/orders/print_receipt?order_id=' + id);
-    <% end -%>
+    }
   }
   if (typeof Salor != 'undefined') {
     function snapCam() {

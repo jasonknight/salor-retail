@@ -19,7 +19,7 @@
     <input type="radio" name="type" value="sticker">Klebeetikett<br>
   </p>
   <p><%= label_tag 'all', 'Alle' %><%= check_box_tag 'all' %></p>
-  <% if $Conf.salor_printer then  %>
+  <% if $Register.salor_printer then  %>
     <button onclick="run_salor_printer();">OK</button>
   <% else  %>
     <p><%= submit_tag %></p>
