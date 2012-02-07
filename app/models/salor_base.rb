@@ -153,19 +153,17 @@ module SalorBase
     GlobalData.salor_user.meta.cash_register_id = CashRegister.first.id
   end
   def log_action(txt)
-    return
-    File.open("#{::Rails.root.to_s}/log/#{RAILS_ENV}-history.log","a") do |f|
-      f.write "[#{Time.now}] [FROM: #{self.class}] " + txt + "\n"
-    end
+    SalorBase.log_action(self.class.to_s,txt)
   end
   def self.log_action(from="unk",txt)
-  return
-    File.open("#{::Rails.root.to_s}/log/#{RAILS_ENV}-history.log","a") do |f|
+    puts txt
+    File.open("#{::Rails.root.to_s}/log/#{Rails.env}}-history.log","a") do |f|
       f.write "[#{Time.now}] [FROM: #{from}] " + txt + "\n"
     end
   end
-  def self.string_to_float(string)
-    return string if string.class == Float or string.class == Fixnum
+  def self.string_to_float(str)
+    return str if str.class == Float or str.class == Fixnum
+      string = "#{str}"
       string.gsub!(/[^\d.,]/,'')
       if string =~ /^.*[\.,]\d{1}$/
         string = string + "0"
@@ -254,6 +252,7 @@ module SalorBase
       end
       if self.respond_to? :vendor_id and self.vendor_id.nil? then
        self.vendor_id = user.get_meta.vendor_id
+       self.set_sku if self.class == Category
       end
       if self.respond_to? :cash_register_id and self.cash_register_id.nil? then
         self.cash_register_id = user.get_meta.cash_register_id

@@ -38,12 +38,12 @@
       <td>
          <div class="tool-icon" style="width: 100px;">
          <% if @item.category then
-                cat_name = @item.category.name 
+                cat_name = @item.category.sku
               else
                 cat_name = ''
               end
           %>
-          <%= link_to image_tag('/images/icons/' + icon(:button, 32)), new_button_path(:item => { :sku => @item.sku, :name => @item.name, :category => cat_name}) %><br />
+          <%= link_to image_tag('/images/icons/' + icon(:button, 32)), new_button_path(:item => { :sku => @item.sku, :name => @item.name, :category_sku => cat_name}) %><br />
           <span class="icon-caption"><%= I18n.t("menu.new_button") %></span>
         </div>
       </td>

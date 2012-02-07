@@ -304,18 +304,22 @@ class Order < ActiveRecord::Base
         # Coupons are not handled here, they are handled at the end of the order.
         if oi.item_type.behavior == 'normal' or oi.item_type.behavior == 'gift_card' then
           price = oi.calculate_total
+          puts "price from #{oi.item.sku} is #{price}"
           if oi.is_buyback and not self.buy_order then
             if price > 0 then
               oi.update_attribute(:price, price * -1)
-              self.subtotal -= price
+              self.subtotal = self.subtotal - price
             else
-              self.subtotal += price  
+              self.subtotal = self.subtotal + price  
             end
           else
             if oi.behavior == 'gift_card' and oi.item.activated then
-              self.subtotal -= oi.price
+              self.subtotal = self.subtotal - oi.price
             else
-              self.subtotal += price
+              b = self.subtotal
+              self.subtotal = self.subtotal + price
+              a = self.subtotal
+              puts "Check:  #{b} + #{price} = #{a}"
             end
           end
           # regular items are never activated, 
@@ -323,16 +327,13 @@ class Order < ActiveRecord::Base
           # counts as a normal item, if it is
           # activated, then it is not a taxable item, 
           # as it is not being sold.
-          begin
             if not oi.item.activated then
               self.tax ||= 0
               self.tax += oi.calculate_tax unless self.tax_is_locked or oi.is_buyback == true
             end
-          rescue
-
-          end
         end
       end
+              puts "Here I am in order, #{self.subtotal}"
       # Now let's consider Store Wide Discounts, for item/location/percent specific discounts,
       # see Item.price    
       if not self.subtotal_is_locked then
@@ -363,6 +364,7 @@ class Order < ActiveRecord::Base
       #if self.subtotal < 0 then
         #self.subtotal = 0
       #end
+      puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
       self.total = self.subtotal unless self.total_is_locked
     else
       # Here we do speedy version calculations for show_payment_ajax processing
@@ -401,9 +403,9 @@ class Order < ActiveRecord::Base
   def gross
     if self.vendor.calculate_tax then
       taxttl = OrderItem.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false").sum(:tax)
-      return self.total + taxttl
+      return self.subtotal + taxttl
     else
-      return self.total
+      return self.subtotal
     end
   end
   #
@@ -559,13 +561,13 @@ class Order < ActiveRecord::Base
       self.update_attribute(:refunded, true)
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
+      opts = {:tag => I18n.t("activerecord.models.drawer_transaction.refund"),:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
+      create_drawer_transaction(self.subtotal,:payout,opts)
       self.order_items.each do |oi|
         if not oi.refunded then
           oi.toggle_refund(nil)
         end
-      end
-      opts = {:tag => I18n.t("activerecord.models.drawer_transaction.refund"),:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
-      create_drawer_transaction(self.total,:payout,opts)
+      end  
     end
   end
   def refund_total

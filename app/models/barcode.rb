@@ -56,7 +56,6 @@ class Barcode
     begin
       system("barcode -c -b #{string} -o #{eps_path(string)} -e #{type} -E")
       bc = Magick::ImageList.new(eps_path(string))
-      bc.density = "300x300"
       bc.write(png_path(string))
       return get_barcode(string)
     rescue

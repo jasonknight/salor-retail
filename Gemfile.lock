@@ -234,6 +234,7 @@ DEPENDENCIES
   rb-inotify
   rmagick
   rspec
+  rspec-mocks
   rspec-rails
   ruby-debug19
   sass-rails

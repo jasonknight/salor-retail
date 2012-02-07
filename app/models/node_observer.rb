@@ -70,11 +70,11 @@ class NodeObserver < ActiveRecord::Observer
     end
   end
   def after_update(record)
-    log_action "after_update called for: " + record.changes.inspect
+    #log_action "after_update called for: " + record.changes.inspect
     send_json(record)
   end
   def after_create(record)
-    log_action "after_create called for: " + record.changes.inspect
+    #log_action "after_create called for: " + record.changes.inspect
     send_json(record)
   end
 end

@@ -91,7 +91,22 @@ module UserEmployeeMethods
       end
       
     end # end class_eval
+  end # end self.included
+  #
+  #
+  def cute_credit_messages
+    config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
+    conn = Mysql2::Client.new(config)
+    oids = []
+    self.orders.select(:id).where(:paid => 1, :created_at => Time.now.beginning_of_day..Time.now).each do |o|
+      oids << o.id
+    end
+    sql = "SELECT * FROM cute_credit.cute_credit_messages WHERE ref_id IN (#{oids.join(',')})"
+    messages = conn.query(sql)
+    return messages
   end
+  #
+  #
   def employee_select(opts={})
     user = self.get_owner
     emps = Employee.scopied.all

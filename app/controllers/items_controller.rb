@@ -266,15 +266,15 @@ class ItemsController < ApplicationController
       @items = Item.where :sku => params[:skus].split("\r\n")
     end
     vendor_id = GlobalData.salor_user.meta.vendor_id
-    if vendor_id
       if params[:type] == 'label'
         type = 'escpos'
       elsif params[:type] == 'sticker'
         type = 'slcs'
       end
-      printer = VendorPrinter.where( :vendor_id => vendor_id, :printer_type => type ).first
-      Printr.new.send(printer.name.to_sym, params[:type], binding) if printer
-    end
+      text = Printr.new.sane_template(params[:type],binding)
+      File.open($Register.thermal_printer,'w') do |f|
+        f.write text
+      end
     render :nothing => true
   end
   def export_broken_items

@@ -109,25 +109,6 @@
                       <%= conf.label t("activerecord.attributes.auto_drop") %><br />
                       <%= conf.check_box :auto_drop %>
                     </div>
-                    <div class="field">
-                      <%= conf.label t("activerecord.attributes.salor_printer") %><br />
-                      <%= conf.check_box :salor_printer %>
-                    </div>
-                    <div class="field paylife-settings-icon pointer" >
-                      <br /><br />
-                      <img src="/images/icons/paylife.png" onclick="$('.paylife-settings').toggle();"/>
-                    </div>
-                    <div class="field paylife-settings hidden" style="width: 80%;">
-                    <h2><%= I18n.t("headings.paylife") %></h2>
-                      <%= conf.label t("activerecord.attributes.paylife_sa") %><br />
-                      <%= conf.text_field :paylife_sa, :class => "keyboardable" %><br />
-                      <%= conf.label t("activerecord.attributes.paylife_version") %><br />
-                      <%= conf.text_field :paylife_version, :class => "keyboardable-int" %><br />
-                      <%= conf.label t("activerecord.attributes.paylife_euro") %><br />
-                      <%= conf.text_field :paylife_euro, :class => "keyboardable-int" %><br />
-                      <%= conf.label t("activerecord.attributes.paylife_konto") %><br />
-                      <%= conf.text_field :paylife_konto, :class => "keyboardable-int" %><br />
-                    </div>  
                   </td>
                 </tr>
               </table>

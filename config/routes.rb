@@ -90,6 +90,7 @@ Salor::Application.routes.draw do
   match "home/load_clock" => "home#load_clock"
   match "vendors/move_transactions" => "vendors#move_transactions"
   match "home/backup_database" => "home#backup_database"
+  match "home/errors_display" => "home#errors_display"
   match "home/backup_logfile" => "home#backup_logfile"
   match "reports/selector" => "reports#selector"
   match "reports/daily" => "reports#daily"

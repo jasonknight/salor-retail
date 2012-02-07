@@ -11,4 +11,4 @@
               %script== makeSortable('button-category-container-#{ cat.id }')
             - cat.buttons.each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
-              %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => "addSkuViaButton('#{ b.sku }')" }= b.name
+              %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => "add_item('#{ b.sku }');$('#buttons').hide();" }= b.name

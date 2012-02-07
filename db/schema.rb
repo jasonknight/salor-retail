@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120206104442) do
+ActiveRecord::Schema.define(:version => 20120207204126) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20120206104442) do
     t.string   "a4_printer"
     t.string   "pole_display"
     t.string   "customer_screen_blurb"
+    t.boolean  "salor_printer",         :default => false
   end
 
   add_index "cash_registers", ["vendor_id"], :name => "index_cash_registers_on_vendor_id"
@@ -109,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20120206104442) do
     t.boolean  "button_category"
     t.integer  "position"
     t.string   "color"
+    t.string   "sku"
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
@@ -185,6 +187,7 @@ ActiveRecord::Schema.define(:version => 20120206104442) do
     t.integer  "owner_id"
     t.string   "owner_type"
     t.integer  "order_id"
+    t.integer  "order_item_id"
   end
 
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"

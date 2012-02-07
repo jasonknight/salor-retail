@@ -139,7 +139,7 @@ function complete_order_show() {
       Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', blurb + total );
     }
   <% end %>
-  
+  $('.a4-print-button').remove(); 
   var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print_48.png' /></div>");
   var thermprint = $("<div class='a4-print-button'><img src='/images/icons/print_48.png' /></div>");
   var left = $('#complete_order').position().left;
@@ -151,15 +151,11 @@ function complete_order_show() {
     Salor.printPage('http://salor/orders/'+$('.order-id').html().replace('#','')+'/print');          
   });
   thermprint.mousedown(function () {
-      <% if $Conf.salor_printer == true then %>
-      if (SalorPrinter != 'undefined') {
+      if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
         SalorPrinter.printURL('<%= GlobalData.salor_user.get_meta.cash_register.thermal_printer %>','<%= GlobalData.conf.url %>/orders/render_order_receipt?order_id=' + $('.order-id').html());
       } else {
       	$.get('/orders/print_receipt?id=' + $('.order-id').html());   
       }
-      <% else %>
-      	$.get('/orders/print_receipt?id=' + $('.order-id').html());   
-      <% end %>
   });
   $("body").append(a4print);
   $("body").append(thermprint);
@@ -199,6 +195,7 @@ function complete_order_show() {
   show_denominations();
   $("#keyboard_input").attr("disabled", true);
   allow_payment_amount = true;
+  $('body').triggerHandler({type: "CompleteOrderShow"});
 }
 
 function show_denominations() {
@@ -282,6 +279,7 @@ function complete_order_hide() {
     bycard_hide();
   }
   focuseKeyboardInput = true;
+  $('body').triggerHandler({type: "CompleteOrderHide"});
   window.location = "/orders/new";
 }
 
@@ -356,13 +354,6 @@ function display_change() {
   var change = paymentTotal - complete_total;
   change = Math.round(change*100);
   change /= 100;
-  if ((change / 100) > complete_total) {
-    notify_user("<%= I18n.t("headings.order_validation") %>", 
-                "<%= I18n.t("system.errors.change_validation_failed") %>", function () {
-                  window.location = "/orders/new";
-                });
-
-  }
   //clog(paymentTotal, complete_total, change);
   if (change < 0.0) {
     recommend(0);
@@ -453,7 +444,11 @@ $(document).ready(function() {
       <input type="submit" id="add_payment_method_button" value="<%= I18n.t("system.add_payment_method") %>" onmousedown="add_payment_method()"/>
     </div>
     <div id="payment_methods">
+      </div>
+    <div id="complete_order_plugin_panel" class="plugin-panel">
     </div>
+
+
     <p>
       <span class='complete_order_label'><%= I18n.t("views.change") %></span>
       <span id="complete_order_change" class="complete-order-change"></span>

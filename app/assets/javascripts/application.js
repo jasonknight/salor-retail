@@ -15,3 +15,5 @@
 //= require jquery_ujs
 //= require sprintf
 //= require jquery.checkbox
+//= require i18n
+//= require i18n/translations

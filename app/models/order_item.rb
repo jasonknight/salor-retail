@@ -101,6 +101,8 @@ class OrderItem < ActiveRecord::Base
     dt.amount = amount
     dt.drawer_id = GlobalData.salor_user.get_drawer.id
     dt.drawer_amount = GlobalData.salor_user.get_drawer.amount
+    dt.order_id = self.order.id
+    dt.order_item_id = self.id
     if dt.save then
       if type == :payout then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)
@@ -197,7 +199,6 @@ class OrderItem < ActiveRecord::Base
   end
   
 	def set_item(item,qty=1)
-	  self.class.benchmark("SetItem") do
 	  item.make_valid
 		if item.item_type.behavior == 'gift_card' then
 		  if item.activated and item.amount_remaining <= 0 then
@@ -253,7 +254,6 @@ class OrderItem < ActiveRecord::Base
       return oi
     end
 		self.save!
-	end # bench
 		return self
 	end
 	#
@@ -289,26 +289,33 @@ class OrderItem < ActiveRecord::Base
       ttl = ttl * self.quantity
     else
       ttl = self.price * self.quantity
+      puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
     end
     
     if self.refunded and ttl > 0 then
       ttl = ttl * -1
     end
+    puts "ttl at this point is: #{ttl}"
     # i.e. sometimes the order hasn't been saved yet..
     if self.order and self.order.coupon_for(self.item.sku) then
       cttl = 0
       self.order.coupon_for(self.item.sku).each do |c|
         cttl += c.coupon_total(ttl,self)
       end
+      puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
       ttl -= cttl
     end
     if self.rebate then
       ttl -= (ttl * (self.rebate / 100.0))
+      puts "self.rebate: #{ttl}"
     end
+    puts "ttl at this point is: #{ttl}"
     if not self.total == ttl and not self.total_is_locked then
-      self.total = ttl
+      self.total = ttl.round(2)
+      puts "In update, ttl is #{ttl} and self.total is #{self.total}"
       self.update_attribute(:total,ttl)
     end
+    puts "Returning total of: #{self.total}"
     return self.total
   end
   

@@ -59,7 +59,11 @@ class Category < ActiveRecord::Base
   has_many :order_items
   before_create :set_model_owner
   acts_as_list
-
+  def set_sku
+    if self.sku.blank? then
+      self.sku = "#{self.vendor.name}:#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
+    end
+  end
   def get_tag
     if not self.tag or self.tag == '' then
       return self.name.gsub(" ",'')

@@ -120,6 +120,34 @@ describe Order do
       @order.remove_order_item(@order.order_items.first)
       @order.order_items.reload.first.should be
     end # should not allow you to remove and item once paid
+    it "should allow you to refund a single item" do
+      @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
+      @order.add_item(@item)
+      @order.complete
+      DrawerTransaction.last.amount.should == @order.get_drawer_add
+      DrawerTransaction.last.tag.should == 'CompleteOrder'
+      @order.order_items.first.toggle_refund(true)
+      @order.total.should == 0
+      @order.gross.should == @order.subtotal
+      DrawerTransaction.last.amount.should == @order.order_items.first.total
+      DrawerTransaction.last.order_id.should == @order.id
+      DrawerTransaction.last.order_item_id.should == @order.order_items.first.id
+      DrawerTransaction.last.is_refund.should == true
+    end
+    it "should allow you to refund an entire order",:focus => true do
+      @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
+      @order.add_item(@item)
+      @order.update_self_and_save
+      @order.complete
+      DrawerTransaction.last.amount.should == @order.get_drawer_add
+      DrawerTransaction.last.tag.should == 'CompleteOrder'
+      @order.toggle_refund(true)
+      DrawerTransaction.last.amount.should == @order.subtotal
+      DrawerTransaction.last.order_id.should == @order.id
+      DrawerTransaction.last.order_item_id.should_not == @order.order_items.first.id
+      DrawerTransaction.last.is_refund.should == true
+
+    end
   end # when creating an order
   context "when using coupons" do
     it "should accept coupons" do
@@ -209,9 +237,9 @@ describe Order do
       create_taxable_order
       @order.add_item(@item)
       @order.update_self_and_save
-      @order.total.should be_within(0.005).of(@item.base_price)
+      @order.subtotal.should be_within(0.005).of(@item.base_price)
       @order.gross.should be_within(0.005).of(@order.order_items.first.tax + @order.total)
-      @order.total.should_not == @order.gross
+      @order.subtotal.should_not == @order.gross
     end # should return the total + tax
   end # when vendor.calculate_tax is set to true
   context "when working with parent/child items" do

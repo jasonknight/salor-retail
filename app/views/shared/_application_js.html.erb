@@ -11,6 +11,13 @@ var calledFrom = 'TopOfAppJS';
   jQuery.expr[':'].focus = function( elem ) {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
+function Round(Number, DecimalPlaces) {
+   return Math.round(parseFloat(Number) * Math.pow(10, DecimalPlaces)) / Math.pow(10, DecimalPlaces);
+}
+
+function RoundFixed(Number, DecimalPlaces) {
+   return Round(Number, DecimalPlaces).toFixed(DecimalPlaces);
+}
  function dbg(obj) {
     var str = '';
     alert(obj.width);
@@ -20,11 +27,11 @@ var calledFrom = 'TopOfAppJS';
     alert(str);
   }
    function print_order(id) {
-    <% if $Conf and $Conf.salor_printer == true %>
+    if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
       SalorPrinter.printURL('<%= $Register.thermal_printer %>','<%= $Conf.url %>/orders/render_order_receipt?order_id=' + id);
-    <% else %>
+    } else {
       $.get('/orders/print_receipt?order_id=' + id);
-    <% end -%>
+    }
   }
   if (typeof Salor != 'undefined') {
     function snapCam() {
@@ -107,18 +114,29 @@ var calledFrom = 'TopOfAppJS';
   };
   var filename = "_application_js.html.erb";
   var MX,MY;
+  /*
+    Prefer using these global JS variables instead of having erb all over the place so that js code can more easily be moved to the assets directory.
+   */
   <% if $Conf  %>
-    var Conf = <%= raw $Conf.attributes.to_json %>;
-    var Meta = <%= raw $User.get_meta.attributes.to_json %>;
+    window.Conf = <%= raw $Conf.attributes.to_json %>;
     <% else  %>
-    var Conf = {};
-    var Meta = {};
+    window.Conf = {};
   <% end %>
   <% if $User then %>
-    var User = <%= raw $User.attributes.to_json %>
+    window.User = <%= raw $User.attributes.to_json %>
     window.Drawer = <%= raw $User.get_drawer.attributes.to_json %>
+    window.Meta = <%= raw $User.get_meta.attributes.to_json %>;
+  <% else %>
+    window.User = {};  
+    window.Meta = {};
+    window.Drawer = {};
   <% end -%>
-  var params = {
+  <% if $Register then %>
+    window.Register = <%= raw $Register.attributes.to_json %>;
+  <% else %>
+    window.Register = {};
+  <% end -%>
+    window.params = {
     action: "<%= params[:action] %>",
     controller: "<%= params[:controller] %>",
 <% cache('application_js/'+user_cache_name) do -%>
