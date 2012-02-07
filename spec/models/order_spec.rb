@@ -146,7 +146,6 @@ describe Order do
       DrawerTransaction.last.order_id.should == @order.id
       DrawerTransaction.last.order_item_id.should_not == @order.order_items.first.id
       DrawerTransaction.last.is_refund.should == true
-
     end
   end # when creating an order
   context "when using coupons" do
