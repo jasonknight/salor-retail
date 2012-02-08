@@ -282,13 +282,18 @@ class OrderItem < ActiveRecord::Base
       end
     end
     ttl = 0
+    self.quantity = 0 if self.quantity.nil?
     if self.item.parts.any? and self.item.calculate_part_price then
       self.item.parts.each do |part|
         ttl += part.base_price * part.part_quantity
       end
-      ttl = ttl * self.quantity
+        ttl = ttl * self.quantity
     else
-      ttl = self.price * self.quantity
+      begin
+        ttl = self.price * self.quantity
+      rescue
+        puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
+      end
       puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
     end
     

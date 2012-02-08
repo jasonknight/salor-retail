@@ -280,7 +280,6 @@ function complete_order_hide() {
   }
   focuseKeyboardInput = true;
   $('body').triggerHandler({type: "CompleteOrderHide"});
-  window.location = "/orders/new";
 }
 
 function get_highest(num) {
@@ -331,7 +330,7 @@ function get_payment_total() {
   var paymentTotal = 0;
   $(".payment-amount:visible").each(
       function () {
-                    paymentTotal += toFloat($(this).val());
+          paymentTotal += toFloat($(this).val());
       }
   );
   if (isNaN(paymentTotal)) alert("PaymentTotal is not a number!");
