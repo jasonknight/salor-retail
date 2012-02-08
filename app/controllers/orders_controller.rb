@@ -498,8 +498,8 @@ class OrdersController < ApplicationController
     @employee ||= @employees.first
     @orders = @employee.orders.where({ :created_at => @from..@to, :paid => 1 }).order("created_at ASC")
     @categories = Category.scopied
-    @taxes = TaxProfile.scopied.where( :hidden => 0)
-    @drawertransactions = @employee.drawer_transactions.where({ :created_at => @from..@to, :is_refund => false }).where("tag != 'CompleteOrder'")
+    @taxes = TaxProfile.scopied.where( :hidden => 0 )
+    @drawertransactions = @employee.drawer_transactions.where({ :created_at => @from..@to }).where("tag != 'CompleteOrder'")
     @payouttypes = AppConfig.dt_tags_values.split(",")
   end
 

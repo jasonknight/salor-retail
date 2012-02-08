@@ -58,7 +58,6 @@
     - item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
     - item_price = -oi.price if o.buy_order
     - item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
-    - item_total = 0 if oi.refunded or o.refunded
     - if item_total > 0.0
       - category_sums_positive_gro[cid] += item_total
       - category_sums_positive_net[cid] += item_total / ( 1 + oi.tax_profile_amount / 100 )
@@ -76,13 +75,11 @@
 - total_payout = 0
 
 - @drawertransactions.each do |d|
-  - next if d.is_refund
   - payout_types_drop_sums[d.tag.to_sym] = 0
   - payout_types_payout_sums[d.tag.to_sym] = 0
 
 - @drawertransactions.each do |d|
-  - next if d.is_refund or d.tag == 'CompleteOrder'
-  - key = d.tag ? d.tag.to_sym : 'Barbewegung'
+  - key = d.tag ? d.tag.to_sym : 'Bar'
   - if d.drop
     - payout_types_drop_sums[key] += d.amount
     - total_drop += d.amount
@@ -145,6 +142,8 @@
     %p== Summe brutto: #{ number_to_currency category_sums_positive_gro.compact.sum }
 
     %p== Summe netto: #{ number_to_currency category_sums_positive_net.compact.sum }
+
+    %p== Rabatte auf Verkäufe brutto: #{ number_to_currency rebate_total }
 
 
 
@@ -249,4 +248,3 @@
 
     %p== Differenz: #{ number_to_currency total_drop - total_payout + category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum }
 
-    %p== Rabatte auf Verkäufe: #{ number_to_currency rebate_total }
