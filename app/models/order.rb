@@ -656,35 +656,7 @@ class Order < ActiveRecord::Base
   end
   
   def paylife_blurb
-    text = ''
-    sa = nil
-    if not self.m_struct.blank? then
-      pattern = /STX (M)\d\d(.)(\d)(.{20})(.{21})(.{5})(.)(.{16})(.{8})(.{6})(.{6})(.{20})(\d{8})(.{8})(.{6})(.{16}).+ ETX/
-      text = self.m_struct
-      sa = 'M'
-    elsif not self.p_struct.blank? then
-      pattern = /STX (P)\d\d(\d)(.{40})(.{16})(.{3})(.+) ETX/
-      text = self.p_struct
-      sa = 'P'
-    end
-    return '' if not sa
-    match = text.match(pattern)
-    jts = []
-    jt = self.j_text
-    jt ||= ''
-    begin
-      x = jt.utf8_safe_split(33)
-      jts << x[0]
-      jt = x[1]
-    end while jt.length.to_i >= 33
-    jt = jts.join("\n")
-    if sa == 'P' then
-      parts = match[6].split(" ")
-      return "#{match[4]}\n#{parts[0]}\n#{parts[2]}\n\n#{jt}"
-    elsif sa == 'M' then
-      t = match[13].to_f / 100
-      return "#{match[4]}\n#{match[5]}\n#{match[12]} #{match[9]}\nNr. #{match[10]}\nEUR #{t}\n\n#{jt}"
-    end
+    
   end
   
   
