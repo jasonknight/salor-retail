@@ -28,7 +28,7 @@ function RoundFixed(Number, DecimalPlaces) {
   }
    function print_order(id) {
     if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
-      SalorPrinter.printURL('<%= $Register.thermal_printer %>','<%= $Conf.url %>/orders/render_order_receipt?order_id=' + id);
+      SalorPrinter.printURL(Register.thermal_printer,Conf.url + /orders/render_order_receipt?order_id=' + id);
     } else {
       $.get('/orders/print_receipt?order_id=' + id);
     }
