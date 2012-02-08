@@ -108,9 +108,13 @@
       - 0.upto(category_sums_positive_gro.size) do |i|
         - next if category_sums_positive_gro[i].zero?
         %tr
-          %td.left= Category.scopied.find_by_id(i).name unless i.zero?
-          %td.table-center= number_to_currency category_sums_positive_gro[i]
-          %td.table-center= number_to_currency category_sums_positive_net[i]
+          %td.left= i.zero? ? t('.no_category') : Category.scopied.find_by_id(i).name
+          %td.table-center
+            = number_to_currency category_sums_positive_gro[i]
+            = text_field_tag "category_sums_positive_gro_#{i}", category_sums_positive_gro[i]
+          %td.table-center
+            = number_to_currency category_sums_positive_net[i]
+            = text_field_tag "category_sums_positive_net#{i}", category_sums_positive_net[i]
 
     %table.striped-table2
       %tr

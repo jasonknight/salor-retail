@@ -112,6 +112,7 @@ def login_user(user)
   visit '/employees/login?code=31202053297'
 end
 def login_employee(code)
+  GlobalData.salor_user = Employee.login(code)
   visit '/employees/login?code=' + code.to_s
 end
 

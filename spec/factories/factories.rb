@@ -107,7 +107,7 @@ FactoryGirl.define do
   end
   factory :tax_profile do
     name "Test Tax Profile"
-    value 7
+    value 20
     sku "TP1234"
     association :user
   end
