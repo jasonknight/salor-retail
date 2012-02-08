@@ -1,7 +1,8 @@
 %div#buttons
   %div.general-form
     %div.tab-container
-      .generic-button-cool.popup-hide-button{ :onclick => '$("#buttons").hide()'} X
+      - if params[:controller] == 'orders'
+        .generic-button-cool.popup-hide-button{ :onclick => '$("#buttons").hide()'} X
       - @button_categories.each do |cat|
         .button-category.generic-button-cool{ :onclick => "showButtonCategoryContainer('button-category-container-#{ cat.id }')" }= cat.name
       %div.button-category-containers
@@ -11,4 +12,5 @@
               %script== makeSortable('button-category-container-#{ cat.id }')
             - cat.buttons.each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
-              %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => "add_item('#{ b.sku }');$('#buttons').hide();" }= b.name
+              - onmousedown = "add_item('#{ b.sku }');$('#buttons').hide();" if params[:controller] == 'orders'
+              %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }= b.name
