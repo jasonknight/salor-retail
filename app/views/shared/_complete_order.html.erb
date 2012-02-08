@@ -331,15 +331,7 @@ function get_payment_total() {
   var paymentTotal = 0;
   $(".payment-amount:visible").each(
       function () {
-          if ($(this).val().match(/[^0-9\,\.]/)) {
-                notify_user("<%= I18n.t("headings.order_validation") %>", 
-                    "<%= I18n.t("system.errors.payment_method_validation") %>", function () {
-                    window.location = "/orders/new";
-                }); 
-                complete_order_hide();
-                complete_order_show();
-          }
-          paymentTotal += toFloat($(this).val());
+                    paymentTotal += toFloat($(this).val());
       }
   );
   if (isNaN(paymentTotal)) alert("PaymentTotal is not a number!");
@@ -363,7 +355,7 @@ function display_change() {
     if (isNaN(change)) change = 0;
     recommend(change);
     $('#complete_order_change').html(toCurrency(change));
-    get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
+    //get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
     allow_complete_order();
   }
   if(change > 0) { displayChangeOnPole(); }
