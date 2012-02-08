@@ -156,8 +156,7 @@ describe Node do
     end
     it "should produce a record hash with only the changed attributes" do
       @item.base_price = 10.95
-      @mnode.update_hash(@item)
-      @mnode.hash[:record].keys.include?(:base_price).should == true
+      @mnode.update_hash(@item).keys.include?(:base_price).should == true
     end
     it "should return a json payload for the current hash" do
       @item.base_price = 10.95
