@@ -69,7 +69,7 @@ describe Order do
     end # should be valid
     it "should accept internationalized price input" do
       @order.total = "10,95"
-      @order.gross.should == 10.95
+      @order.total.should == 10.95
       @order.rebate = "1,2"
       @order.rebate.should == 1.2
       @order.subtotal = "3,95"
@@ -134,7 +134,7 @@ describe Order do
       DrawerTransaction.last.order_item_id.should == @order.order_items.first.id
       DrawerTransaction.last.is_refund.should == true
     end
-    it "should allow you to refund an entire order",:focus => true do
+    it "should allow you to refund an entire order" do
       @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
       @order.add_item(@item)
       @order.update_self_and_save
@@ -146,7 +146,6 @@ describe Order do
       DrawerTransaction.last.order_id.should == @order.id
       DrawerTransaction.last.order_item_id.should_not == @order.order_items.first.id
       DrawerTransaction.last.is_refund.should == true
-
     end
   end # when creating an order
   context "when using coupons" do

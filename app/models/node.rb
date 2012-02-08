@@ -227,9 +227,9 @@ class Node < ActiveRecord::Base
     @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
     @hash.merge!({:node => {:token => self.token, :sku => self.sku}})
     if not force then
-      update_hash(@record)
+      @hash[:record] = update_hash(@record)
     else
-      all_attributes_of(@record)
+      @hash[:record] = all_attributes_of(@record)
     end
     @hash
   end
@@ -251,6 +251,7 @@ class Node < ActiveRecord::Base
       record[:loyalty_card_sku] = item.loyalty_card.sku
       record[:loyalty_card_points] = item.loyalty_card.points
     end
+    record
   end
   def iggy?(attr,model)
     item_ignore = ["tax_profile_id","shipper_id","location_id","vendor_id", "created_at", "updated_at","category_id","child_id"]
@@ -271,7 +272,6 @@ class Node < ActiveRecord::Base
       record[:loyalty_card_sku] = item.loyalty_card.sku
       record[:loyalty_card_points] = item.loyalty_card.points
     end
-
     record
   end
   def payload
