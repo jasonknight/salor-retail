@@ -119,6 +119,9 @@ class Order < ActiveRecord::Base
     write_attribute(:total,self.string_to_float(p)) 
   end
   def front_end_change=(p)
+    if self.paid == 1 then
+      return
+    end
     write_attribute(:front_end_change,self.string_to_float(p)) 
   end
   def rebate=(p)

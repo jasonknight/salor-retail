@@ -29,7 +29,11 @@
         </div>
         <div class="link" href="#additional">
           <%= t("menu.additional") %>
+          </div>
+        <div class="link" href="#features">
+          <%= t("menu.features_used") %>
         </div>
+
       </div>
       <div class="tab-container">
         <div id="general" class="general-form-container form-container">
@@ -190,6 +194,20 @@
               </script>
             <% end %> <!-- End If AppConfig.standalone -->
         </div><!-- end id="additional" -->
+        <div id="features" class="additional-form-container form-container hidden">
+          <table width="100%">
+            <% @vendor.get_stats.each do |k,v|%>
+              <tr>
+                <td>
+                  <%= k.to_s.titlecase %>
+                </td>
+                <td>
+                  <%= v %>
+                </td>
+              </tr>
+            <% end -%>
+          </table>
+        </div>
       </div>
   </div>
 <div class="actions">

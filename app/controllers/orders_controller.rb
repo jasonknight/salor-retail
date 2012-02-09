@@ -461,7 +461,7 @@ class OrdersController < ApplicationController
   def customer_display
     @order = Order.find_by_id params[:id]
     GlobalData.salor_user = @order.get_user
-    GlobalData.conf = Vendor.find(GlobalData.salor_user.meta.vendor_id).configuration
+    GlobalData.conf = Vendor.find(GlobalData.salor_user.meta.vendor_id).salor_configuration
     @order_items = @order.order_items.order('id ASC')
     if @order_items
       render :layout => 'customer_display', :nothing => :true
@@ -496,10 +496,10 @@ class OrdersController < ApplicationController
     @employees = @vendor.employees
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
-    @orders = @employee.orders.where({ :created_at => @from..@to, :paid => 1 }).order("created_at ASC")
+    @orders = Order.where({ :vendor_id => @employee.get_meta.vendor_id, :drawer_id => @employee.get_drawer.id,:created_at => @from..@to, :paid => 1 }).order("created_at ASC")
     @categories = Category.scopied
     @taxes = TaxProfile.scopied.where( :hidden => 0 )
-    @drawertransactions = @employee.drawer_transactions.where({ :created_at => @from..@to }).where("tag != 'CompleteOrder'")
+    @drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id, :created_at => @from..@to }).where("tag != 'CompleteOrder'")
     @payouttypes = AppConfig.dt_tags_values.split(",")
   end
 

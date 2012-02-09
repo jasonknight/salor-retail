@@ -117,4 +117,21 @@ class Vendor < ActiveRecord::Base
     write_attribute :logo_invoice_image_content_type, data.content_type.chomp
     write_attribute :logo_invoice_image, data.read
   end
+  def get_stats
+    # this method shows what features are being used, and how often.
+    features = Hash.new
+    features[:actions] = true if Action.scopied.count > 0
+    features[:coupons] = true if OrderItem.scopied.where('coupon_amount > 0').count > 0
+    features[:discounts] = true if Discount.by_vendor.all_seeing.count > 0
+    features[:item_level_rebates] = true if OrderItem.scopied.where('rebate > 0').count > 0
+      if features[:item_level_rebates] == true then
+        features[:item_level_rebates_count] = OrderItem.scopied.where('rebate IS NOT NULL AND rebate != 0.0').count
+      end
+    features[:order_level_rebates] = true if Order.scopied.where('rebate > 0').count > 0
+    if features[:order_level_rebates] == true then
+      features[:order_level_rebates_count] = Order.scopied.where('rebate IS NOT NULL AND rebate != 0.0').count
+    end
+    @features = features
+  end
+
 end

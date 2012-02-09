@@ -52,26 +52,9 @@
         <% end %>
       <% end %>
   </tr>
-  <% if @order.paid? %>
-   <tr>
-     <td> 
-      <p>Gegeben: <%= number_to_currency @order.get_in_cash_amount %></p>
-      <p>Retour: <%= number_to_currency (@order.in_cash - @order.total) %></p>
-     </td>
-   </tr>
-   <% else  %>
-   <tr>
+     <tr>
      <td align="right" colspan="2"> 
       <p id="complete_order_change" align="right">Retour: <%= number_to_currency (@order.front_end_change) %></p>
      </td>
    </tr>
-  <% end %>
-  <% if not @order.p_text.blank? or not @order.p_result.blank? then  %>
-    <tr>
-       <td> 
-        <p><%= @order.p_result %></p>
-        <p><%= @order.p_text %></p>
-       </td>
-     </tr>
-  <% end %>
-</table>
+  </table>
