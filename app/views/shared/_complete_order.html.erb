@@ -354,7 +354,7 @@ function display_change() {
     if (isNaN(change)) change = 0;
     recommend(change);
     $('#complete_order_change').html(toCurrency(change));
-    //get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
+    get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
     allow_complete_order();
   }
   if(change > 0) { displayChangeOnPole(); }

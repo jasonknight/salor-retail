@@ -32,6 +32,7 @@ window.eodPayout = ->
     dataType: 'script'
     success: (data) ->
       $(cls).html(toCurrency(0)) for cls in ['.eod-drawer-total','.eod-calculator-total','.eod-calculator-difference']
+      window.location = '/vendors/end_day';
     error: (data,status,err) ->
       alert(err)
  $ ->

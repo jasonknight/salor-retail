@@ -309,7 +309,7 @@ class VendorsController < ApplicationController
       #GlobalErrors.append_fatal("system.errors.must_cash_drop")
     end
     if not GlobalErrors.any_fatal? then
-      salor_user.end_day #see method defined in user_employee_methods for printing
+      $User.end_day #see method defined in user_employee_methods for printing
       atomize(ISDIR, 'cash_drop')
       if $User.class == User then
         $User.update_attribute :is_technician, false
