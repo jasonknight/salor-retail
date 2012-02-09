@@ -461,7 +461,7 @@ class OrdersController < ApplicationController
   def customer_display
     @order = Order.find_by_id params[:id]
     GlobalData.salor_user = @order.get_user
-    GlobalData.conf = Vendor.find(GlobalData.salor_user.meta.vendor_id).salor_configuration
+    @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
     @order_items = @order.order_items.order('id ASC')
     if @order_items
       render :layout => 'customer_display', :nothing => :true

@@ -3,7 +3,7 @@
    order_item_json = <%= raw @order_item.to_json %>;
    updateOrderItems([order_item_json]);
    updateOrder(<%= raw @order.to_json %>);
-   writeToPole(order_item_json);
+   updateCustomerView(order_item_json,<%= @order.id %>);
    if (order_item_json.price == 0 ) {
      playSound('medium_warning');
    } else {

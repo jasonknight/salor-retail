@@ -61,6 +61,7 @@ Salor::Application.routes.draw do
   match "orders/:id/print" => "orders#print"
   match "orders/print" => "orders#print"
   match "orders/:id/customer_display" => 'orders#customer_display'
+  match "vendors/:id/display_logo" => 'vendors#display_logo'
   match "employees/index" => "employees#index"
   match "items/info" => "items#info"
   match "items/item_json" => "items#item_json"

@@ -183,8 +183,12 @@ function format_pole(name,price,quantity,weight_metric,total) {
   return pole_name + pole_price + pole_quantity + pole_total;
 }
 
-function writeToPole(item) {
-  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+function updateCustomerView(item,order_id) {
+  <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      Salor.mimoRefresh(Conf.url+"/orders/"+order_id+"/customer_display",800,480);
+    }
+  <% else %>
     if (typeof(Salor) != 'undefined') {
       output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
       Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', output );
@@ -370,11 +374,6 @@ function updateOrder(obj) {
     $(button).addClass('pos-configuration');
     $('#pos_order_total').removeClass("pos-highlight");
   }
-  <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
-      if (typeof Salor != 'undefined') {
-        Salor.mimoRefresh("http://localhost:3000/orders/"+ obj.id +"/customer_display",800,480);
-      }
-  <% end %>
   if (obj.customer) { showCustomer(obj.customer,obj.loyalty_card); }
   $('#pos_order_total').html(toCurrency(obj.total));
   $('.complete-order-total').html(toCurrency(obj.total));

@@ -48,10 +48,10 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class VendorsController < ApplicationController
-    before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer]
-    before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer]
+    before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
+    before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
-    before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer]
+    before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
   def move_transactions
     @from, @to = time_from_to(params)
@@ -565,6 +565,11 @@ class VendorsController < ApplicationController
   def logo_invoice
     @vendor = Vendor.find(params[:id])
     send_data @vendor.logo_invoice_image, :type => @vendor.logo_invoice_image_content_type, :filename => 'abc', :disposition => 'inline'
+  end
+  #
+  def display_logo
+    @vendor = Vendor.find(params[:id])
+    render :layout => 'customer_display'
   end
 
 

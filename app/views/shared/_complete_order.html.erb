@@ -256,8 +256,16 @@ function blurInput(type) {
   if ($(input).val() == "") $(input).val("0");
 }
 
+function displayAdvertising() {
+  
+}
+
 function complete_order_hide() {
-  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+  <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      Salor.mimoRefresh(Conf.url + "/vendors/"+Meta.vendor_id+"/display_logo",800,480);
+    }
+  <% else %>
     if (typeof(Salor) != 'undefined') {
       Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', '<%= GlobalData.cash_register.customer_screen_blurb %>' );
     }
@@ -371,15 +379,14 @@ function complete_order_send(print) {
   sendingOrder = true;
   allow_complete_order(false);
   displayChangeToCustomer();
+  if (typeof(Salor) != 'undefined') {
+    Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
+  }
   <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
 }
 
 function displayChangeToCustomer() {
-  <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
-     Salor.mimoRefresh("http://localhost:3000/orders/<%= @order.id %>/customer_display?display_change=1",800,480);
-    }
-  <% else %>
+  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
     if (typeof(Salor) != 'undefined') {
       currency = '<%= t('number.currency.format.friendly_unit') %>';
       given = parseFloat(get_payment_total());

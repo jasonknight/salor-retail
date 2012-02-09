@@ -1,3 +1,69 @@
+<style>
+body {
+  font-family: Verdana,Tahoma,Segoe,sans-serif;
+  font-size: 25px;
+}
+span.qty {
+  display: inline-block;
+  text-align: center;
+  width: 10%;
+}
+span.name {
+  display: inline-block;
+  width: 45%;
+}
+span.price {
+  display: inline-block;
+  width: 20%;
+  text-align: right;
+}
+span.total {
+  display: inline-block;
+  width: 20%;
+  text-align: right;
+}
+p.subtotal {
+  text-align: right;
+}
+span.subtotal {
+  font-weight: bold;
+  font-size: 60px;
+}
+p.lc_points,
+p.rebate {
+  text-align: right;
+}
+table.customer {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+}
+p {
+  margin: 15px 0px;
+}
+.customer-screen-total {
+  text-transform: uppercase;
+  background-color: #663172;
+  width: 40%;
+  -webkit-border-radius: 10px;
+  float: right;
+  margin-right: 15px;
+  padding-right: 15px;
+}
+p#complete_order_change {
+  display: inline-block;
+  width: 60%;
+  float: right;
+  clear: both;
+}
+</style>
+
+<div class="customer-logo" align="center" style="padding-top: 30px; padding-bottom: 10px;">
+  <% if @vendor.logo_image %>
+    <img src="/vendors/<%= @vendor.id %>/logo" />
+  <% end %>
+</div>
+
 <% total = 0 %>
 <% @order_items.reverse[0..2].each do |oi| %>
   <%
@@ -23,7 +89,11 @@
 
 <p class='subtotal customer-screen-total'><span class='subtotal'><%= number_to_currency @order.total %></span></p>
 
-<table class="clear" align="right">
+<% if params[:display_change] == '1' %>
+  <p id="complete_order_change" align="right">Retour: <%= number_to_currency (@order.front_end_change) %></p>
+<% end %>
+
+<table class="clear customer">
   <tr class="stripe-me2">
     <% if @order.customer %>
     <td>
@@ -52,11 +122,4 @@
         <% end %>
       <% end %>
   </tr>
-     <tr>
-     <td align="right" colspan="2"> 
-      <% if params[:display_change] == '1' %>
-        <p id="complete_order_change" align="right">Retour: <%= number_to_currency (@order.front_end_change) %></p>
-      <% end %>
-     </td>
-   </tr>
   </table>
