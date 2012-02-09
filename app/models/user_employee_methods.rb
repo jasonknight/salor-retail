@@ -466,14 +466,10 @@ module UserEmployeeMethods
     cash_register_id = self.meta.cash_register_id
     printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
     # puts printers.inspect
-    if printers.first then
+    if $Register.salor_printer != true and printers.first then
       @vendor = Vendor.find_by_id(self.meta.vendor_id)
       @report = get_end_of_day_report #see function below
       user = GlobalData.salor_user
-      @paylife_struct = PaylifeStructs.scopied.where(["sa = 'P' and ind = 2 and created_at between ? and ? and owner_type = ? and owner_id = ?",Time.now.beginning_of_day, Time.now, user.class.to_s, user.id])
-      if @paylife_struct then
-        @paylife_struct = @paylife_struct.first
-      end
       begin
         Printr.new.send(printers.first.name.to_sym,'end_of_day',binding) if printers.first
       rescue
