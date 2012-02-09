@@ -1,7 +1,9 @@
 <script type="text/javascript">
 
 function playSound(file) {
-  Salor.playSound(file);
+  if (typeof Salor != 'undefined') {
+    Salor.playSound(file);
+  }
 }
 
 var focuseKeyboardInput = false;

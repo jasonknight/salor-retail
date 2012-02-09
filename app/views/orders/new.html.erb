@@ -372,7 +372,7 @@ function updateOrder(obj) {
   }
   <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
       if (typeof Salor != 'undefined') {
-        Salor.mimoRefresh("http://salor/orders/"+ obj.id +"/customer_display",800,480);
+        Salor.mimoRefresh("http://localhost:3000/orders/"+ obj.id +"/customer_display",800,480);
       }
   <% end %>
   if (obj.customer) { showCustomer(obj.customer,obj.loyalty_card); }

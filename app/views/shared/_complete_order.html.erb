@@ -357,7 +357,7 @@ function display_change() {
     //get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
     allow_complete_order();
   }
-  if(change > 0) { displayChangeOnPole(); }
+  if(change > 0) { displayChangeToCustomer(); }
 }
 
 function complete_order_send(print) {
@@ -370,12 +370,16 @@ function complete_order_send(print) {
   allow_payment_amount = false;
   sendingOrder = true;
   allow_complete_order(false);
-  displayChangeOnPole();
+  displayChangeToCustomer();
   <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
 }
 
-function displayChangeOnPole() {
-  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+function displayChangeToCustomer() {
+  <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+     Salor.mimoRefresh("http://localhost:3000/orders/<%= @order.id %>/customer_display?display_change=1",800,480);
+    }
+  <% else %>
     if (typeof(Salor) != 'undefined') {
       currency = '<%= t('number.currency.format.friendly_unit') %>';
       given = parseFloat(get_payment_total());

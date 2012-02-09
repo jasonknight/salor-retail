@@ -54,7 +54,9 @@
   </tr>
      <tr>
      <td align="right" colspan="2"> 
-      <p id="complete_order_change" align="right">Retour: <%= number_to_currency (@order.front_end_change) %></p>
+      <% if params[:display_change] == '1' %>
+        <p id="complete_order_change" align="right">Retour: <%= number_to_currency (@order.front_end_change) %></p>
+      <% end %>
      </td>
    </tr>
   </table>
