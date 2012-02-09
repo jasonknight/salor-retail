@@ -4,6 +4,10 @@ describe "Report Day" do
   before(:each) do
     single_store_setup
     login_employee "31202053295"
+    @tax_profile1 = Factory :tax_profile, :user => @user, :value => 10
+    @tax_profile2 = Factory :tax_profile, :user => @user, :value => 20
+    @item1 = Factory :item, :sku => "IT1", :base_price => 29.95, :vendor => @vendor, :tax_profile => @tax_profile1, :category => @category
+    @item2 = Factory :item, :sku => "IT2", :base_price => 10, :vendor => @vendor, :tax_profile => @tax_profile1, :category => @category
     @order.add_item @item
     @order.set_model_owner @manager
     @order.update_self_and_save
