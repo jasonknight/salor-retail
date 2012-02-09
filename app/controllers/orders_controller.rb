@@ -344,9 +344,10 @@ class OrdersController < ApplicationController
       # methods, so we put them into an array before saving them and the order
       # This is kind of a validator, but we need to do it here for right now...
       payment_methods_total = 0.0
+      payment_methods_seen = []
       PaymentMethod.types_list.each do |pmt|
         pt = pmt[1]
-        if params[pt.to_sym] and not params[pt.to_sym].blank? then
+        if params[pt.to_sym] and not params[pt.to_sym].blank? and SalorBase.string_to_float(params[pt.to_sym]) > 0 then
           pm = PaymentMethod.new(:name => pmt[0],:internal_type => pt, :amount => SalorBase.string_to_float(params[pt.to_sym]))
           if pm.amount > @order.total then
             # puts  "## Entering Sanity Check"
@@ -367,7 +368,7 @@ class OrdersController < ApplicationController
       @order.reload
       
       if payment_methods_total.round(2) < @order.total.round(2) then
-        GlobalErrors.append_fatal("system.errors.sanity_check",@order)
+        GlobalErrors.append_fatal("system.errors.sanity_check2" + payment_methods_total.inspect,@order)
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return
