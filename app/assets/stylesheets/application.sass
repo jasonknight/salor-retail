@@ -706,21 +706,15 @@ div.header > ul > li > div > a > img
 div.header > div.generic-search 
   position: absolute
   top: 10px
-  right: 63px
-  width: 200px
-
-div.header > div.generic-search 
-  position: absolute
-  top: 10px
-  right: 63px
+  right: -40px
   width: 200px
 
 div.header div.close-window 
   @include attention_button
-  @include rounded_corners_right
-  position: absolute
-  right: 10px
-  top: 13px
+  @include rounded_corners_left
+  position: fixed
+  right: 0px
+  bottom: 0px
   width: 30px
   padding: 3px
   text-transform: uppercase
@@ -755,15 +749,17 @@ div.header > div.generic-search > div.generic-search-button
   cursor: pointer
 
 div.header > span.version 
-  position: absolute
-  right: 5px
-  top: 2px
+  position: fixed
+  left: 0px
+  bottom: 0px
   font-size: 50%
 
 /* Main and Main Content Divs */
 
 #body 
   height: 100%
+  margin: 0px
+  padding: 0px
 
 div.main 
   margin: 20px 0px 100px 0px
