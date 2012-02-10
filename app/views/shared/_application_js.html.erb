@@ -28,11 +28,18 @@ function RoundFixed(Number, DecimalPlaces) {
     }
     alert(str);
   }
-   function print_order(id) {
-    if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
-      SalorPrinter.printURL(Register.thermal_printer,Conf.url + '/orders/render_order_receipt?order_id=' + id);
+  function print_order(id) {
+    if (typeof SalorPrinter != 'undefined') {
+      print_url(Conf.url + '/orders/render_order_receipt?order_id=' + id);
     } else {
-      $.get('/orders/print_receipt?order_id=' + id);
+      print_url('/orders/print_receipt?order_id=' + id);
+    }
+  }
+  function print_url(url) {
+    if (typeof SalorPrinter != 'undefined') {
+      SalorPrinter.printURL(Register.thermal_printer,url);
+    } else {
+      $.get(url);
     }
   }
   if (typeof Salor != 'undefined') {

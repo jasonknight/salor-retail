@@ -7,7 +7,7 @@
   	var skus = $('.labels-snag-me').val().split("\n");
   	for (i in skus) {
   		var sku = skus[i];
-  		SalorPrinter.printURL('<%= $User.get_meta.cash_register.thermal_printer %>','<%= $Conf.url %>/items/render_label?type=label&skus=' + sku);
+  		print_url(Conf.url + '/items/render_label?type=label&skus=' + sku);
   	}
   }
 </script>
@@ -19,7 +19,7 @@
     <input type="radio" name="type" value="sticker">Klebeetikett<br>
   </p>
   <p><%= label_tag 'all', 'Alle' %><%= check_box_tag 'all' %></p>
-  <% if $Register.salor_printer then  %>
+  <% if $Register.salor_printer == true then  %>
     <button onclick="run_salor_printer();">OK</button>
   <% else  %>
     <p><%= submit_tag %></p>
