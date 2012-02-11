@@ -41,7 +41,7 @@ end
 @tp.save
 @begin_day_tag = TransactionTag.new(:name => "beginning_of_day", :vendor_id => @vendor.id)
 @begin_day_tag.save
-@end_day_tag = TransactionTag.new(:name => "end_of_day", :vendor_id => @vendor.id
+@end_day_tag = TransactionTag.new(:name => "end_of_day", :vendor_id => @vendor.id)
 #Add in some cash registers
 
 registers = []
