@@ -615,6 +615,7 @@ module UserEmployeeMethods
     end
   end
   def auto_drop
+    return
     if $Conf and $Conf.auto_drop then
       bod = DrawerTransaction.where(:tag => 'beginning_of_day', :drawer_id => GlobalData.salor_user.get_drawer.id).order("id desc").limit(1)
       last_eod = DrawerTransaction.where(:tag => 'end_of_day', :drawer_id => GlobalData.salor_user.get_drawer.id).order("id desc").limit(1)

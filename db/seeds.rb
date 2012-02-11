@@ -39,7 +39,9 @@ end
 @vendor = @user.add_vendor("TestVendor")
 @tp = TaxProfile.new(:name => "Default",:sku => "DEFAUTLTaxProfile", :value => 7, :user_id => @user.id)
 @tp.save
-
+@begin_day_tag = TransactionTag.new(:name => "beginning_of_day", :vendor_id => @vendor.id)
+@begin_day_tag.save
+@end_day_tag = TransactionTag.new(:name => "end_of_day", :vendor_id => @vendor.id
 #Add in some cash registers
 
 registers = []
