@@ -54,13 +54,13 @@ class Node < ActiveRecord::Base
   before_create :set_model_owner
   after_create :broadcast_add_me
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
-  @@a = ["Button", "Category","Customer","Item","TaxProfile"]
+  @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
   def handle(params)
     log_action "Node receiving object"
     if params.class == String then
       params = JSON.parse(params)
     end
-    @md5 = Digest::SHA2.hexdigest("#{params}")
+    @md5 = Digest::SHA2.hexdigest("#{params[:record].to_json}")
     @params = SalorBase.symbolize_keys(params)
     @target = Node.where(:sku => @params[:target][:sku], :token => @params[:target][:token]).first
     if @params[:message] then
@@ -311,6 +311,19 @@ class Node < ActiveRecord::Base
   def send!
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(@target.url)
+     
+    @md5 = Digest::SHA2.hexdigest("#{@hash[:record].to_json}")
+    if NodeMessage.where(:dest_sku => @target.sku, :mdhash => @md5).any? then
+      log_action "I've sent this before"
+      return
+    elsif NodeMessage.where(:source_sku => @target.sku, :mdhash => @md5).any? then
+      log_action "Node already knows about changes"
+      return
+    else
+      n = NodeMessage.new(:source_sku => self.sku, :dest_sku => @target.sku, :mdhash => @md5)
+      n.save
+    end
+
     req.body = self.payload
     @request ||= Net::HTTP.new(url.host, url.port)
     response = @request.start {|http| http.request(req) }
