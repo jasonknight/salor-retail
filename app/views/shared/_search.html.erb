@@ -28,6 +28,11 @@ function search_get_prev_page() {
   current_page = current_page - 1;
   search();
 }
+$(document).ready(function() {
+  $("input[name=key_accept]").live('mousedown', function(){
+    search();
+  });
+});
 </script>
 <div id="search" class="search hidden">
 <table align="center" width="100%">
