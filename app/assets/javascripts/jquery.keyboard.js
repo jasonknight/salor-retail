@@ -587,7 +587,7 @@ $.keyboard = function(el, options){
 	// keyName = name added to key, name = display option name (e.g. tab or t),
 	// doAction = what is done/added when the button is clicked, regKey = true when it is not an action key
 	base.addKey = function(keyName, name, regKey ){
-		var t, keyType, m, map, nm,
+		var t, keyType, m, map, nm, tbtn,
 			n = (regKey === true) ? keyName : base.options.display[name] || keyName;
 		// map defined keys - format "key(A):Label_for_key"
 		// "key" = key that is seen (can any character; but it might need to be escaped using "\" or entered as unicode "\u####"
@@ -612,7 +612,7 @@ $.keyboard = function(el, options){
 		// '\u2190'.length = 1 because the unicode is converted, so if more than one character, add the wide class
 		keyType = (n.length > 1) ? ' ui-keyboard-widekey' : '';
 		keyType += (regKey !== true) ? ' ui-keyboard-actionkey' : '';
-		return base.keyBtn
+		tbtn = base.keyBtn
 			.clone()
 			.attr({ 'name': 'key_' + keyName, 'title' : t })
 			.data('key', { action: keyName, original: n, curTxt : n, curNum: 0 })
@@ -620,6 +620,11 @@ $.keyboard = function(el, options){
 			// add "ui-keyboard-" + keyName, if this is an action key (e.g. "Bksp" will have 'ui-keyboard-bskp' class)
 			// add "ui-keyboard-" + unicode of 1st character (e.g. "~" is a regular key, class = 'ui-keyboard-126' (126 is the unicode value - same as typing &#126;)
 			.addClass('ui-keyboard-' + ((regKey === true) ? keyName.charCodeAt(0) : keyName) + keyType );
+    // SCOTTIE: Add special class for larger buttons only on numpad keyboard
+    if (base.options.layout === 'num') {
+      tbtn.addClass('ui-keyboard-button-num');
+    }
+    return tbtn;
 	};
 
 	base.buildKeyboard = function(){
@@ -640,6 +645,10 @@ $.keyboard = function(el, options){
 				.removeClass('placeholder')
 				.addClass('ui-widget-content ui-keyboard-preview ui-corner-all')
 				.show(); // for hidden inputs
+        // SCOTTIE: For larger numpad display box
+        if (base.options.layout === 'num') {
+          base.$preview.addClass('ui-keyboard-preview-num');
+        }
 		} else {
 			// No preview display, use element and reposition the keyboard under it.
 			base.$preview = base.$el;
