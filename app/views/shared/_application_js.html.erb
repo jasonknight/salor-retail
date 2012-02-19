@@ -232,7 +232,8 @@ function RoundFixed(Number, DecimalPlaces) {
             }
             if ($('#keyboard_input').val()) {
               if (handleKeyboardEnter) {
-                keypad_callbacks['Enter'].call(this);
+                //keypad_callbacks['Enter'].call(this);
+                add_item($('#keyboard_input').val());
                 handled = true;
               } else {
                 event.preventDefault();
@@ -925,7 +926,8 @@ function RoundFixed(Number, DecimalPlaces) {
           return false;
         }
         if ($('#keyboard_input').val()) {
-          keypad_callbacks['Enter'].call(this);
+          //keypad_callbacks['Enter'].call(this);
+          add_item($('#keyboard_input').val());
           handled = true;
         } else {
           //we aren't on the pos screen, so we should have some generic behaviors

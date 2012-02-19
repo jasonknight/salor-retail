@@ -15,15 +15,15 @@ var updating_pos_display = false;
 // the order total. If it is correct, then it leaves it alone
 // if not, it notifies the user and encourages a refresh of the 
 // page.
-setInterval(function () {
-    if (!$('#cash_drop').is(":visible") && 
-      !$('#complete_order').is(":visible") && 
-      !$('#inplaceedit-div').is(":visible") && 
-      !$('#search').is(":visible") &&
-      !$('.void-order').is(":visible")) {
-    focusInput($("#keyboard_input"));
-  } 
-},400);
+//setInterval(function () {
+//    if (!$('#cash_drop').is(":visible") && 
+//      !$('#complete_order').is(":visible") && 
+//      !$('#inplaceedit-div').is(":visible") && 
+//      !$('#search').is(":visible") &&
+//      !$('.void-order').is(":visible")) {
+//    focusInput($("#keyboard_input"));
+//  } 
+//},400);
 function validate_order_totals() {
   var item_total = 0.0;
   $('.pos-item-total').each(function () {
