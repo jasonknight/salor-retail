@@ -193,9 +193,14 @@ var shipment_items_callbacks = {
           sku = sku.toUpperCase();
           $(this).val(sku);
           get('/items/item_json?sku=' + sku, '_shipment_item_form.html.erb', function (data) {
-              if ($('.sku-' + sku + '-quantity').length != 0) {
-                var qty = Number($('.sku-' + sku + '-quantity').val()) + 1;
-                $('.sku-' + sku + '-quantity').val(qty);
+              var tRow = $('.sku-' + sku + '-quantity');
+              if (tRow.length != 0) {
+                var qty = Number(tRow.val()) + 1;
+                tRow.val(qty);
+                // SCOTTIE: move this row to the top
+                var sRow = tRow.parents(':eq(1)').detach();
+                $('#shipment_items > div.item:nth-child(2)').before(sRow);
+                // END
                 var f = $('.attribute-sku').first();
                 f.val('');
                 focusInput(f);
