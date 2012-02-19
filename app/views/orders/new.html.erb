@@ -52,10 +52,10 @@ $(document).ready(function () {
     //var docHeight = $(window).height();
     //$(".pos-scrolling-div").css("height", docHeight - divPos - 50);
     //setScrollerState();
-    $('#buy_order_button').mousedown(function () {
-       var estring = "field=toggle_buy_order&klass=Order&value=true";
-       get("/vendors/edit_field_on_child?" + estring, "<%= __FILE__ +':'+ __LINE__.to_s %>");                                 
-    });
+    //$('#buy_order_button').mousedown(function () {
+    //   var estring = "field=toggle_buy_order&klass=Order&value=true";
+    //   get("/vendors/edit_field_on_child?" + estring, "<%= __FILE__ +':'+ __LINE__.to_s %>");                                 
+    //});
 });
 
 function getOrderItemId(item) {
@@ -210,8 +210,10 @@ function updatePosItem(item) {
       }
       $(id).html(item[key]);
     }
-    if (item['is_buyback'] && highlightAttrs.indexOf(key) != -1) {
+    if (item['is_buyback'] & highlightAttrs.indexOf(key) != -1) {
       highlight($(id));
+    } else {
+      $(id).removeClass("pos-highlight");
     }
   }
   makeItemMenu(item);

@@ -116,7 +116,9 @@ class Order < ActiveRecord::Base
     end
   end
   def total=(p)
-    write_attribute(:total,self.string_to_float(p)) 
+    p = self.string_to_float(p)
+    p = p * -1 if self.buy_order == true and p > 0
+    write_attribute(:total,p) 
   end
   def front_end_change=(p)
     if self.paid == 1 then

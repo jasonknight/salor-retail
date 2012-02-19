@@ -9,7 +9,7 @@ function hideNotice() {
   $('.notice').fadeOut();
 }
 function initNotice() {
-  showNotice;
+  showNotice();
   setTimeout (hideNotice,4000);
   if (typeof Salor != 'undefined'){ Salor.playSound('notice');}
 }

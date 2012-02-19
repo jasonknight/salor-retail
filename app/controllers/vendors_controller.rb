@@ -369,7 +369,7 @@ class VendorsController < ApplicationController
           # puts  " --- " + params[:value].to_s
           if klass == OrderItem then
             # puts  "### klass is OrderItem"
-            if params[:field] == 'quantity' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and (not @inst.weigh_compulsory == true) then
+            if params[:field] == 'quantity' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false and (not @inst.weigh_compulsory == true) then
               # puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
               unless @inst.activated and nil == nil then
                 # puts  "### inst is not activated."
@@ -391,7 +391,7 @@ class VendorsController < ApplicationController
                 @inst.is_valid = true
                 render :layout => false and return
               end
-            elsif params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false then
+            elsif params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
               # puts  "### field is price"
               unless @inst.activated then
                 # Takes into account ITEM rebate and ORDER rebate.
@@ -414,7 +414,7 @@ class VendorsController < ApplicationController
                 @inst.is_valid = true
                 render :layout => false and return
               end
-            elsif params[:field] == 'rebate'and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false then
+            elsif params[:field] == 'rebate'and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
               # puts  "### field is rebate"
               # Takes into account ITEM rebate and ORDER rebate.
               # ORDER and ITEM totals are updated in DB and in instance vars for JS
@@ -512,7 +512,6 @@ class VendorsController < ApplicationController
   end
   #
   def toggle
-    
     if allowed_klasses.include? params[:klass]
       klass = Kernel.const_get(params[:klass])
       if klass.exists? params[:model_id] then

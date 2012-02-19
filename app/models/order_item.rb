@@ -168,6 +168,9 @@ class OrderItem < ActiveRecord::Base
     if self.item.base_price == 0.0 or self.item.base_price == nil then
       self.item.update_attribute :base_price,p
     end
+    if self.is_buyback == true and p > 0 then
+      p = p * -1
+    end
     write_attribute(:price,self.string_to_float(p)) #string_to_float SalorBase
   end
   # Proxy methods so that actions work
@@ -178,7 +181,11 @@ class OrderItem < ActiveRecord::Base
     self.price
   end
   def total=(p)
-    write_attribute(:total,self.string_to_float(p)) 
+    p = self.string_to_float(p)
+    if self.is_buyback == true and p > 0 then
+      p = p * -1
+    end
+    write_attribute(:total,p) 
   end
   def tax=(p)
     write_attribute(:tax,self.string_to_float(p)) 
