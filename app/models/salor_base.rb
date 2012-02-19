@@ -47,7 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 module SalorBase
-  VERSION = 'SALOR_VERSION SALOR_NAME rSALOR_RUBY_VERSION sSALOR_SUPPORT_VERSION gSALOR_GUI_VERSION mSALOR_MANAGER_VERSION'
+  VERSION = 'SALOR-SRC SALOR-NAME rSALOR-RUBY sSALOR-SUPPORT gSALOR-BIN mSALOR-MANAGER'
   def self.symbolize_keys arg
     case arg
     when Array
