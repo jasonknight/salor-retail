@@ -179,10 +179,14 @@ var receiver_shipper_select = function (value) {
 
 
 	if (field[0].tagName != 'SELECT') {
-	  field = make_keyboardable_with_options(field, {accepted: function () {
-        in_place_edit_go(id);    
-      }
-    });
+          field.keyboard({
+            openOn   : 'focus',
+            stayOpen : true,
+            layout       : field.hasClass('keyboardable-int') ? 'num' : '<%= I18n.locale %>',
+            customLayout : null,
+            visible : function(){$('.ui-keyboard-preview').select();},
+            accepted: function(){ in_place_edit_go(id); }
+          });
 	}
 
 	$('#inplaceedit-div').css(offset);

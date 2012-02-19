@@ -791,7 +791,7 @@ function RoundFixed(Number, DecimalPlaces) {
       }
       var kbd = $('<div class="kbd-show-button">&crarr;</div>');
       kbd.attr('target_id',"#" + elem.attr('id'));
-      kbd.mousedown(function () {
+      kbd.click(function () {
         var target = $(this).attr('target_id');
         $(target).getkeyboard().reveal();
       });
@@ -805,6 +805,7 @@ function RoundFixed(Number, DecimalPlaces) {
       for (opt in opts) {
         options[opt] = opts[opt];
       }
+      options["visible"]=function(){ $('.ui-keyboard-preview').select(); };
       if (elem.hasClass('keyboardable-int')) {
         options['layout'] = 'num';    
       }
