@@ -1,4 +1,3 @@
-<% cache('header_menu/'+user_cache_name) do -%>
 <div id="header" class="header">
 <ul class="header-list">
   <li>
@@ -21,7 +20,6 @@
       <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => salor_user.meta.vendor_id) %>
     </div>
   </li>
-  <% end %>
   <% if salor_user.can(:cashier) %>
     <li>
       <div align="center" class="no-touchy" onmousedown="show_cash_drop();">
@@ -57,18 +55,14 @@
     </div>
   </li>
   </ul>
-<!-- End ul.list -->
- <div class="close-window" onmousedown="Salor.shutdown();">
-    &nbsp;X &nbsp;
-  </div>
-<script type="text/javascript">
-	/* Select tab on menu bar */
-	$('#btn-' + params.controller + '-' + params.action).addClass('active');
-        /* Refresh clock */
-        setInterval(function(){ $('#clockbox').load('/home/load_clock'); return false; }, 31000);
-</script>
-<% if salor_user and not curl("orders#new") then  %>
-  <%= salor_render :partial => "shared/generic_search" %>
-<% end %>
-<span class="version">v<%= SalorBase::VERSION %></span>
+  <% if salor_user and not curl("orders#new") then  %>
+    <%= salor_render :partial => "shared/generic_search" %>
+  <% end %>
 </div>
+<!-- End ul.list -->
+<script type="text/javascript">
+  /* Select tab on menu bar */
+  $('#btn-' + params.controller + '-' + params.action).addClass('active');
+  /* Refresh clock */
+  setInterval(function(){ $('#clockbox').load('/home/load_clock'); return false; }, 31000);
+</script>

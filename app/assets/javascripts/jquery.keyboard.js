@@ -295,10 +295,10 @@ $.keyboard = function(el, options){
 
 					case 13:
 						// Accept content - shift-enter
-						if (e.shiftKey) {
+						//if (e.shiftKey) {
 							base.close(true);
 							e.preventDefault();
-						}
+						//}
 						break;
 
 					case 86:

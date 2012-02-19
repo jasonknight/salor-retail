@@ -587,11 +587,9 @@ function RoundFixed(Number, DecimalPlaces) {
       if (elem.hasClass('editmedone')) {
         return;    
       }
-      elem.mousedown(function (event) {
-                 in_place_edit($(this).attr('id'),event.pageX,event.pageY);
-     }).mouseup(function () {
-       $('#inplaceedit').select();
-     });
+      elem.click(function (event) {
+        in_place_edit($(this).attr('id'),event.pageX,event.pageY);
+      });
       elem.addClass('editmedone');
     }
     function td(elem,opts) {

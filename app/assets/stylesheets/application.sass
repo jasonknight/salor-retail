@@ -70,7 +70,7 @@ $wide_key: 3em
 $extra_wide_key: 5em
 $key_side_pad: .3em
 $key_margin: .2em
-$key_width: 2em
+$key_width: 47px 
 $key_input_width: 9em
 
 $images: "/images"
@@ -703,23 +703,32 @@ div.header > ul > li > div > a > img
   border: none
   @include no_select
 
-div.header > div.generic-search 
-  position: absolute
-  top: 10px
-  right: -40px
-  width: 200px
 
-div.header div.close-window 
+div.close-window 
   @include attention_button
   @include rounded_corners_left
   position: fixed
   right: 0px
-  bottom: 0px
-  width: 30px
-  padding: 3px
+  bottom: 15px
+  padding: 18px
+  font-weight: bold
   text-transform: uppercase
   @include left_right_pad_wide
   @include pointer
+
+a.reload-window
+  @include attention_button
+  @include rounded_corners_right
+  position: fixed
+  left: 0px
+  bottom: 15px
+  padding: 18px
+  text-decoration: none
+  font-weight: bold
+  text-transform: uppercase
+  @include left_right_pad_wide
+  @include pointer
+  
 
 div.header #clockbox 
   width: 65px
@@ -738,17 +747,24 @@ div.header #clockbox:hover
   background: $middleground
   cursor: default
 
-div.header > div.generic-search > div.generic-search-button 
+div.generic-search 
+  display: inline-block
+  padding: 10px 0px
+  float: right
+  width: 180px
+
+div.generic-search-button 
   background: url(/images/icons/tick_32.png) no-repeat
+  float: right
   width: 32px
   height: 32px
-  position: relative
   top: -30px
   left: 120px
   z-index: 101
   cursor: pointer
+  display: inline-block
 
-div.header > span.version 
+span.version 
   position: fixed
   left: 0px
   bottom: 0px
@@ -1071,9 +1087,12 @@ input.ui-keyboard-button
   @include no_select
   color: $background
 
+div.ui-keyboard input
+  font-size: 190%
+
 input.ui-keyboard-button
   float: none
-  width: 50px
+  width: 47px
   @include no_select
 
 input.ui-keyboard-button-num
@@ -1229,7 +1248,7 @@ div.square-button
 
 div.pos-menu div.new-order 
   @include rounded_corners_left
-  width: 15%
+  width: 10%
 
 div.pos-menu div.print-receipt 
   @include rounded_corners_right
@@ -1698,7 +1717,7 @@ div.scrollable-button-row
 
 
 input#generic_search_input 
-  width: 100px
+  width: 90px
 
 
 div.content-box > div.content-container-home-user_employee_index 
@@ -2456,8 +2475,8 @@ div.last-five-orders
   @include dialog
   @include rounded_corners_all
   position: absolute
-  left: 10%
-  width: 80%
+  left: 5%
+  width: 90%
   top: 100px
   div.last-five-order 
     @include widget

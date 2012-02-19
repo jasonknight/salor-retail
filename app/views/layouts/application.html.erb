@@ -88,5 +88,14 @@ $(function () {
 <%= salor_render :partial => "shared/dt_tags" %>
 <%= salor_render :partial => "shared/dialog" %>
 <%= salor_render :partial => "shared/js/select_widget" %>
+
+<div class="close-window" onmousedown="Salor.shutdown();">
+  &nbsp;X &nbsp;
+</div>
+
+<span class="version">v<%= SalorBase::VERSION %></span>
+
+
+<a href="/orders/new" class='reload-window'>R</a>
 </body>
 </html>
