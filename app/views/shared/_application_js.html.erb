@@ -769,6 +769,7 @@ function RoundFixed(Number, DecimalPlaces) {
           stayOpen    : true,
           layout       : 'num',
           customLayout : null,
+          visible: function(){ $('.ui-keyboard-preview').select(); }
         });
       }
       elem.addClass("keyboardable-done");
