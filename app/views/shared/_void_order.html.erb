@@ -13,6 +13,9 @@
        }).mouseup(function () {
          focusInput($("#void_order_id"));
        });
+      $("input[name=key_accept]").live('mousedown', function(){
+        fetch_order();
+      });
   });
 
   function setSearchState() {

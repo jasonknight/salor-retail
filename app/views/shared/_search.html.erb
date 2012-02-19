@@ -1,9 +1,6 @@
 <script type="text/javascript">
 var search_last_query = '';
 var current_page = 1;
-function initSearch() {
-  setTimeout (showSearch,500);
-}
 function showSearch() {
   $('#search').show();
   $('#search').css({'z-index':'1010'});
@@ -28,6 +25,11 @@ function search_get_prev_page() {
   current_page = current_page - 1;
   search();
 }
+$(document).ready(function() {
+  $("input[name=key_accept]").live('mousedown', function(){
+    search();
+  });
+});
 </script>
 <div id="search" class="search hidden">
 <table align="center" width="100%">

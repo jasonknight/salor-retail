@@ -5,9 +5,6 @@
 var filename = "new.html.erb";
 var isBuyOrder = false;
 var highlightAttrs = ['sku','price','total'];
-var timeoutEvent = null; // global var for setTimeout
-var mouseoverEvent = null; // global var for mouseover timeout thing
-var fullNameDiv = null; // global var for the full name rollover div
 var updating_pos_display = false;
 
 // Here is the function to validate the totals shown on the screen
@@ -18,15 +15,6 @@ var updating_pos_display = false;
 // the order total. If it is correct, then it leaves it alone
 // if not, it notifies the user and encourages a refresh of the 
 // page.
-setInterval(function () {
-    if (!$('#cash_drop').is(":visible") && 
-      !$('#complete_order').is(":visible") && 
-      !$('#inplaceedit-div').is(":visible") && 
-      !$('#search').is(":visible") &&
-      !$('.void-order').is(":visible")) {
-    focusInput($("#keyboard_input"));
-  } 
-},400);
 function validate_order_totals() {
   var item_total = 0.0;
   $('.pos-item-total').each(function () {
@@ -232,43 +220,18 @@ function updatePosItem(item) {
     var price = toFloat($(id).html());
     if (price == 0) {
       $(id).trigger('mousedown');
-      setTimeout('in_place_edit_select();',300);
+      $(".inplaceeditinput").select();
     }
   }
 }
 
-function showFullItemName()
-{
-  return;
-  var item = $(mouseoverEvent.target);
-  var namePos = $(item).position();
-  var fullName = $(item).text();
-  $("body").append("<div id='full_name' class='pos-item-show'>" + fullName + "</div>");
-  $(".pos-item-show").css("left", namePos.left + 5);
-  $(".pos-item-show").css("top", namePos.top + 10);
-}
-
 function addPosItem(item) {
   var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
-  $(row).mouseover(function(event){
-    mouseoverEvent = event;
-    timeoutEvent = setTimeout("showFullItemName()", 1000);
-    $(".pos-item-show").remove();
-  }).mouseout(function(){
-    if (timeoutEvent)
-    {
-      mouseoverEvent = null;
-      clearTimeout(timeoutEvent);
-    }
-  });
   var base_id = getOrderItemId(item);
   row.addClass(base_id);
   item['price'] = item['price'] - item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   $('.pos-table-left-column-items').prepend(row);
-  if (item.behavior == 'coupon') {
-    //return;
-  }
   <% if GlobalData.cash_register.hide_discounts == true then  %>
     var attrs = ['name','sku','quantity','price','total'];
   <% else  %>
@@ -357,7 +320,7 @@ function addPosItem(item) {
     var price = toFloat($(id).html());
     if (price == 0) {
       $(id).trigger('mousedown');
-      setTimeout('in_place_edit_select();',300);
+      $(".inplaceeditinput").select();
     }
   }
   if(item['quantity']==0 && item['weigh_compulsory']) { weigh_last_item(); }

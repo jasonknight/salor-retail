@@ -54,13 +54,13 @@ function RoundFixed(Number, DecimalPlaces) {
       $.get(url);
     }
   }
-  if (typeof Salor != 'undefined') {
-    function snapCam() {
-      Salor.captureCam(0,'<%= ::Rails.root.to_s  %>/public/images/cameras/camera-0.png',1);
-      setTimeout("snapCam()",2000);
-    }
-    //setTimeout("snapCam()",2000);
-  }
+  //if (typeof Salor != 'undefined') {
+  //  function snapCam() {
+  //    Salor.captureCam(0,'<%= ::Rails.root.to_s  %>/public/images/cameras/camera-0.png',1);
+  //    setTimeout("snapCam()",2000);
+  //  }
+  //  //setTimeout("snapCam()",2000);
+  //}
     function salorGetOffset( el ) {
         var _x = 0;
         var _y = 0;
@@ -172,14 +172,14 @@ function RoundFixed(Number, DecimalPlaces) {
       MY = e.pageY;
     });
 
-    $.fn.idle = function(time){
-      var i = $(this);
-      i.queue(function(){
-        setTimeout(function(){
-          i.dequeue();
-        }, time);
-      });
-    };
+    //$.fn.idle = function(time){
+    //  var i = $(this);
+    //  i.queue(function(){
+    //    setTimeout(function(){
+    //      i.dequeue();
+    //    }, time);
+    //  });
+    //};
     function confirm_link(link,message) {
       var answer = confirm(message)
       if (answer){
@@ -232,7 +232,8 @@ function RoundFixed(Number, DecimalPlaces) {
             }
             if ($('#keyboard_input').val()) {
               if (handleKeyboardEnter) {
-                keypad_callbacks['Enter'].call(this);
+                //keypad_callbacks['Enter'].call(this);
+                add_item($('#keyboard_input').val());
                 handled = true;
               } else {
                 event.preventDefault();
@@ -752,7 +753,8 @@ function RoundFixed(Number, DecimalPlaces) {
               customLayout : null,
               accepted    : function () {
                 add_item($("#keyboard_input").val());
-              }
+              },
+              visible: function(){ $('.ui-keyboard-preview').select(); }
             });
         } else {
           elem.keyboard({
@@ -760,6 +762,7 @@ function RoundFixed(Number, DecimalPlaces) {
             stayOpen : true,
             layout       : '<%= I18n.locale %>',
             customLayout : null,
+            visible: function(){ $('.ui-keyboard-preview').select(); }
           });
         }
       } else {
@@ -768,6 +771,7 @@ function RoundFixed(Number, DecimalPlaces) {
           stayOpen    : true,
           layout       : 'num',
           customLayout : null,
+          visible: function(){ $('.ui-keyboard-preview').select(); }
         });
       }
       elem.addClass("keyboardable-done");
@@ -791,7 +795,7 @@ function RoundFixed(Number, DecimalPlaces) {
       }
       var kbd = $('<div class="kbd-show-button">&crarr;</div>');
       kbd.attr('target_id',"#" + elem.attr('id'));
-      kbd.mousedown(function () {
+      kbd.click(function () {
         var target = $(this).attr('target_id');
         $(target).getkeyboard().reveal();
       });
@@ -805,6 +809,7 @@ function RoundFixed(Number, DecimalPlaces) {
       for (opt in opts) {
         options[opt] = opts[opt];
       }
+      options["visible"]=function(){ $('.ui-keyboard-preview').select(); };
       if (elem.hasClass('keyboardable-int')) {
         options['layout'] = 'num';    
       }
@@ -924,7 +929,8 @@ function RoundFixed(Number, DecimalPlaces) {
           return false;
         }
         if ($('#keyboard_input').val()) {
-          keypad_callbacks['Enter'].call(this);
+          //keypad_callbacks['Enter'].call(this);
+          add_item($('#keyboard_input').val());
           handled = true;
         } else {
           //we aren't on the pos screen, so we should have some generic behaviors

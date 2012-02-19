@@ -13,4 +13,7 @@
             - cat.buttons.each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
               - onmousedown = "add_item('#{ b.sku }');$('#buttons').hide();" if params[:controller] == 'orders'
-              %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }= b.name
+              %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }
+                = b.name
+                - if params[:controller] == 'buttons'
+                  = link_to 'edit', edit_button_path(b)
