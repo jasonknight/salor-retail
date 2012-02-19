@@ -13,7 +13,6 @@ function showHideCustomerOrRebate() {
   }
 }
 function clearOrder() {
-  $('#main_content').mask('<%= t("views.single_words.saving") %>');
   $.get('/orders/clear?order_id=' + $('.order-id').html());
 }
 

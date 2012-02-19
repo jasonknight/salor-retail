@@ -235,7 +235,6 @@ function in_place_edit_go(id) {
   var final_value = $('#inplaceedit').val();
   final_value = final_value.replace("%",'');
   var string = '/vendors/edit_field_on_child?id='+ $('#' + id).attr('model_id') +'&klass='+klass+'&field='+type+'&value=' + final_value + '&' + withstring
-  $('#main_content').mask('<%= t("views.single_words.saving") %>');
   get(string, '_in_place_edit.html.erb', function () {
   });
   if ($('#' + id).attr('update_pos_display') == 'true') {

@@ -436,15 +436,12 @@ function RoundFixed(Number, DecimalPlaces) {
     }
 
     function void_item(id) {
-      $('body').mask();
       get('/orders/split_order_item?id=' + id, filename, function () {
         window.location.reload();
       });
     }
 
     function refund_item(id) {
-      $('body').mask();
-
       get('/vendors/toggle?' +
         'field=toggle_refund' +
         '&klass=OrderItem' +
@@ -623,16 +620,12 @@ function RoundFixed(Number, DecimalPlaces) {
       elem.css({ cursor: 'pointer'});
       elem.mousedown(function () {
         var elem = $(this);
-        $('#main_content').mask('<%= t("views.single_words.saving ")%>');
         get('/vendors/toggle?' +
           'field=' + elem.attr('field') +
           '&klass=' + elem.attr('klass') +
           '&value=' + elem.attr('value') +
           '&model_id=' + elem.attr('model_id'),
-        filename,
-        function () {
-          $('#main_content').unmask();
-        }
+        filename
       );
         if (elem.attr('rev')) {
           elem.attr('src',elem.attr('rev'));
@@ -652,16 +645,12 @@ function RoundFixed(Number, DecimalPlaces) {
         $('#order_items_table tr:even').addClass('even');
         $('.pos-lock-small').each(function () {
           make_toggle($(this));
-          $('#main_content').unmask();
         });
       });
     }
     function update_pos_display() {
       return;
-      get('/orders/update_pos_display?ajax=true', filename, function () {
-        $('#main_content').unmask();
-      });
-
+      get('/orders/update_pos_display?ajax=true', filename);
     }
     function roundNumber(num, dec) {
       var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
@@ -701,10 +690,7 @@ function RoundFixed(Number, DecimalPlaces) {
       }
       elem.mousedown(function () {
         var elem = $(this);
-        $('#main_content').mask('<%= t("views.single_words.processing") %>');
-        get($(this).attr('url'), filename, function () {
-          $('#main_content').unmask();
-        });
+        get($(this).attr('url'), filename );
         if ($(this).attr('update_pos_display') == 'true') {
           update_pos_display();
           update_order_items();

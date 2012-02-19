@@ -15,7 +15,6 @@
 //= require jquery_ujs
 //= require shared
 //= require sprintf
-//= require loadmask
 //= require jquery.keyboard
 //= require jquery.checkbox
 //= require i18n
