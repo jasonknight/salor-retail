@@ -172,14 +172,14 @@ function RoundFixed(Number, DecimalPlaces) {
       MY = e.pageY;
     });
 
-    $.fn.idle = function(time){
-      var i = $(this);
-      i.queue(function(){
-        setTimeout(function(){
-          i.dequeue();
-        }, time);
-      });
-    };
+    //$.fn.idle = function(time){
+    //  var i = $(this);
+    //  i.queue(function(){
+    //    setTimeout(function(){
+    //      i.dequeue();
+    //    }, time);
+    //  });
+    //};
     function confirm_link(link,message) {
       var answer = confirm(message)
       if (answer){
