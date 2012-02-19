@@ -136,12 +136,6 @@ var receiver_shipper_select = function (value) {
     the_shipper: receiver_shipper_select,
     the_receiver: receiver_shipper_select
   };
-  function in_place_edit_select() {
-    setTimeout(function () {
-      $(".inplaceeditinput").select();
-    }, 
-    125);
-  }
   function in_place_edit(id,x,y) {
 	$('#inplaceedit-div').remove();
 	var type = $('#' + id).attr('field');
@@ -187,8 +181,7 @@ var receiver_shipper_select = function (value) {
 	if (field[0].tagName != 'SELECT') {
 	  field = make_keyboardable_with_options(field, {accepted: function () {
         in_place_edit_go(id);    
-      },
-      visible: in_place_edit_select
+      }
     });
 	}
 
@@ -257,7 +250,7 @@ function in_place_edit_go(id) {
   }
 }
 function inpselect() {
-  $('#inplaceedit').select();
+  //MF$('#inplaceedit').select();
 }
 </script>
 <% end -%>
