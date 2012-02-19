@@ -6,4 +6,4 @@ $('.pos-cash-register-amount').html('<%= salor_number_to_currency(GlobalData.sal
 $('.pos-rebates').show();
 $('.last-five-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_five_orders" %>');
 $('.last-completed-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_completed_orders" %>');
-
+if(<%= @order.id.to_s[-1].chr == '0' %>){ window.location = '/orders/new'; }
