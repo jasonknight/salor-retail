@@ -17,7 +17,18 @@ FactoryGirl.define do
       u.save
     end
   end
-
+  factory :customer do
+    first_name Faker::Name::first_name
+    last_name Faker::Name::last_name
+    association :vendor
+    after_create do |c|
+      lc = LoyaltyCard.new
+      lc.points = 300
+      lc.sku = Faker::Name::first_name.gsub(/[^a-zA-Z]/,'')
+      lc.customer_id = c.id
+      lc.save
+    end
+  end
   factory :employee do
     username 'employee'
     sequence(:email){|n| "#{Faker::Name::first_name}#{n}@factory.com" }
@@ -62,8 +73,8 @@ FactoryGirl.define do
 
   factory :discount do
     name "test discount"
-    start_date Time.now - 1.day
-    end_date Time.now + 1.day
+    start_date (Time.now - 2.days)
+    end_date (Time.now + 2.days)
     amount 50
     amount_type 'percent'
     association :vendor
@@ -117,7 +128,7 @@ FactoryGirl.define do
   end
   factory :item do
     name "Test Item"
-    sku "TEST"
+    sequence(:sku){|n| "#{Faker::Name::first_name.gsub(/[^a-zA-Z]/,'')}#{n}factory.com" }
     base_price 5.95
     quantity 100
     quantity_sold 0

@@ -13,6 +13,7 @@ describe Node do
     @cash_register = Factory :cash_register, :vendor => @vendor
     @tax_profile = Factory :tax_profile, :user => @user
     @category = Factory :category, :vendor => @vendor
+    @customer = Factory :customer, :vendor => @vendor
     @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
     @mnode = Factory :node, :vendor => @vendor
     @snode = Factory :node, :node_type => 'pull', :is_self => true, :vendor => @vendor2, :name => "Slave",:sku => "SLAVE", :token => "SLAVE"
@@ -59,8 +60,28 @@ describe Node do
       },
       :record => @mnode.all_attributes_of(@category)
     } 
-
-    
+    @params5 = {
+      :node => {
+        :sku => "MASTER",
+        :token => "MASTER"
+      },
+      :target => {
+        :sku => @snode.sku,
+        :token => @snode.token
+      },
+      :record => @mnode.all_attributes_of(@customer)
+    }
+    @params6 = {
+      :node => {
+        :sku => "MASTER",
+        :token => "MASTER"
+      },
+      :target => {
+        :sku => @snode.sku,
+        :token => @snode.token
+      },
+      :record => @mnode.all_attributes_of(@customer.loyalty_card)
+    }
 
   end
   def create_pc_items
@@ -186,8 +207,24 @@ describe Node do
       @mnode.target.vendor.should == @vendor2
       # @vendor2.tax_profiles.first.should == @tax_profile
     end
-
+    it "should handle sending customers" do
+      @vendor2.discounts.length.should == 0
+      @mnode.handle(@params5)
+      @mnode.klass.should == Customer
+      @mnode.inst.should == @customer 
+      @mnode.target.vendor.should == @vendor2
+      # @vendor2.tax_profiles.first.should == @tax_profile
+    end
+    it "should handle sending loyalty cards" do
+      @vendor2.discounts.length.should == 0
+      @mnode.handle(@params6)
+      @mnode.klass.should == LoyaltyCard
+      @mnode.inst.sku.should == @customer.loyalty_card.sku
+      @mnode.target.vendor.should == @vendor2
+      # @vendor2.tax_profiles.first.should == @tax_profile
+    end
     it "should handle special message cases" do
+      NodeMessage.delete_all
       @params3[:target][:sku] = "NEWSLAVE"
       @mnode.request = mock(Net::HTTP)
       @mnode.request.should_receive(:start).at_least(:twice)
