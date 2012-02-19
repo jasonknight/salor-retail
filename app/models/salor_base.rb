@@ -63,6 +63,10 @@ module SalorBase
       arg
     end
   end
+  def self.random
+    str = Digest::SHA2.hexdigest("#{rand(1001)}")
+    return str[5..8] + str[0..rand(str.length/2).to_i]
+  end
   def self.check_code(str)
     odds = str.to_s.scan(/(\d{2})\d(\d{2})\d\d(\d)\d\d(\d)/)
     good = true
@@ -252,7 +256,7 @@ module SalorBase
       end
       if self.respond_to? :vendor_id and self.vendor_id.nil? then
        self.vendor_id = user.get_meta.vendor_id
-       self.set_sku if self.class == Category
+       self.set_sku if self.class == Category or self.class == Customer
       end
       if self.respond_to? :cash_register_id and self.cash_register_id.nil? then
         self.cash_register_id = user.get_meta.cash_register_id

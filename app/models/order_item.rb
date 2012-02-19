@@ -64,13 +64,10 @@ class OrderItem < ActiveRecord::Base
   scope :sorted_by_modified, order('updated_at ASC')
   
   # To speed things up, we cache the discounts
-  @@discounts ||= Discount.scopied.select("name,amount,item_sku,id,location_id,category_id,applies_to,amount_type")
   def self.reload_discounts
-    @@discounts = nil
-    @@discounts ||= Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type")
   end
-  def self.get_discounts
-    @@discounts
+  def OrderItem.get_discounts
+    Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type")
   end
   def toggle_buyback(x)
     if self.is_buyback then
@@ -456,8 +453,8 @@ class OrderItem < ActiveRecord::Base
       p = item.base_price
     end
     pstart = p
-    if not self.is_buyback and not @@discounts.nil? then
-      @@discounts.each do |discount|
+    if not self.is_buyback and not OrderItem.get_discounts.nil? then
+      OrderItem.get_discounts.each do |discount|
         if not (discount.item_sku == item.sku and discount.applies_to == 'Item') and
             not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
             not (discount.category_id == item.category_id and discount.applies_to == 'Category') and

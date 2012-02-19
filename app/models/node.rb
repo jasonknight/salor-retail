@@ -54,13 +54,13 @@ class Node < ActiveRecord::Base
   before_create :set_model_owner
   after_create :broadcast_add_me
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
-  @@a = ["Button", "Category","Customer","Item","TaxProfile"]
+  @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
   def handle(params)
     log_action "Node receiving object"
     if params.class == String then
       params = JSON.parse(params)
     end
-    @md5 = Digest::SHA2.hexdigest("#{params}")
+    @md5 = Digest::SHA2.hexdigest("#{params[:record].to_json}")
     @params = SalorBase.symbolize_keys(params)
     @target = Node.where(:sku => @params[:target][:sku], :token => @params[:target][:token]).first
     if @params[:message] then
@@ -87,7 +87,7 @@ class Node < ActiveRecord::Base
       GlobalData.vendor_id = @target.vendor.id
       if @record.class == Array then
         @record.each do |rec|
-          new_record = parse(@record)
+          new_record = parse(rec)
           create_or_update_record(new_record)
         end
       else
@@ -109,6 +109,11 @@ class Node < ActiveRecord::Base
       end
       attrs[:part_skus] = pskus
     end
+    if item.category and item.category.sku.nil? then
+      item.category.set_sku
+      item.category.save
+    end
+    attrs[:category_sku] = model.category.sku if model.respond_to? :category and model.category.respond_to? :sku
     if model.parent then
       models << all_attributes_of(model.parent)
       attrs[:parent_sku] = model.parent.sku
@@ -144,6 +149,7 @@ class Node < ActiveRecord::Base
             models = []
           end
         end
+        @hash[:record] = models
         send! if models.any? # finally, send off the last amount
       end
       return false #just quit out
@@ -188,7 +194,7 @@ class Node < ActiveRecord::Base
       end
     end
     new_record.delete(:class)
-    new_record[:vendor_id] = @target.vendor_id
+    new_record[:vendor_id] = @target.vendor_id if klass != LoyaltyCard
     new_record
   end
   def verify?
@@ -260,6 +266,12 @@ class Node < ActiveRecord::Base
     end
   end
   def all_attributes_of(item)
+    if item.class == Item then
+      if item.category and item.category.sku.nil? then
+        item.category.set_sku
+        item.category.save
+      end
+    end
     record = {:class => item.class.to_s}
     item.attributes.each do |k,v|
       record[k.to_sym] = v if not iggy?(k,item)
@@ -311,7 +323,21 @@ class Node < ActiveRecord::Base
   def send!
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(@target.url)
+     
+    @md5 = Digest::SHA2.hexdigest("#{@hash[:record].to_json}")
+    if NodeMessage.where(:dest_sku => @target.sku, :mdhash => @md5).any? then
+      log_action "I've sent this before" + @hash[:record].to_json 
+      return
+    elsif NodeMessage.where(:source_sku => @target.sku, :mdhash => @md5).any? then
+      log_action "Node already knows about changes"
+      return
+    else
+      n = NodeMessage.new(:source_sku => self.sku, :dest_sku => @target.sku, :mdhash => @md5)
+      n.save
+    end
+
     req.body = self.payload
+    log_action "Sending: " + req.body.inspect
     @request ||= Net::HTTP.new(url.host, url.port)
     response = @request.start {|http| http.request(req) }
     # puts response.body

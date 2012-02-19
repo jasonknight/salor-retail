@@ -137,6 +137,7 @@ def single_store_setup
     GlobalData.salor_user = @user
     GlobalData.vendor = @vendor
     GlobalData.vendor_id = @vendor.id
+    GlobalData.salor_user.get_meta.update_attribute :vendor_id,@vendor.id
     GlobalData.conf = @vendor.salor_configuration
     $Conf = @vendor.salor_configuration
     $User = @user 

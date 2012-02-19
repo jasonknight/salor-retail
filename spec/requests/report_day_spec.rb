@@ -15,7 +15,7 @@ describe "Report Day" do
     @single_order_item = @order.order_items.first
     visit "/orders/report_day?vendor_id=#{ @vendor.id }&employee_id=#{ @manager.id }"
   end
-  describe "category statistics"
+  describe "category statistics" do
     it "calculates positive gross correctly" do
       #save_and_open_page
       fieldname = "category_sums_positive_gro_#{ @single_order_item.category.id }"
@@ -35,5 +35,7 @@ describe "Report Day" do
       item = @order.order_items.first
       find_field(fieldname).value.should == (@single_order_item.price / (1 + @tax_profile.value / 100 )).to_s
     end
-  end
+    #
+ end
+  #
 end

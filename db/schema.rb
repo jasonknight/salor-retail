@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120207204126) do
+ActiveRecord::Schema.define(:version => 20120212140238) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -131,6 +131,7 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.datetime "updated_at",   :null => false
     t.integer  "vendor_id"
     t.string   "company_name"
+    t.string   "sku"
   end
 
   add_index "customers", ["vendor_id"], :name => "index_customers_on_vendor_id"
@@ -349,9 +350,10 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.integer  "num_swipes"
     t.integer  "num_used"
     t.integer  "customer_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.string   "sku"
+    t.string   "customer_sku"
   end
 
   add_index "loyalty_cards", ["customer_id"], :name => "index_loyalty_cards_on_customer_id"

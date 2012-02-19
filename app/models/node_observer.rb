@@ -51,12 +51,17 @@ require 'uri'
 
 class NodeObserver < ActiveRecord::Observer
   include SalorBase
-  observe :item,:tax_profile
+  observe :item,:tax_profile,:button, :customer, :category, :loyalty_card
   def send_json(record)
     snode = Node.scopied.where(:is_self => true).limit(1).first
     return if not snode
-    child_nodes = Node.scopied.where(:is_self => false, :node_type => "Pull")
+    if record.class == Customer or record.class == LoyaltyCard then
+      child_nodes = Node.scopied.where(:is_self => false)
+    else
+      child_nodes = Node.scopied.where(:is_self => false, :node_type => 'pull')
+    end
     log_action "Sending to children: #{child_nodes.length}"
+    NodeMessage.where(["created_at < ?", Time.now - 5.minutes]).delete_all
     child_nodes.each do |c|
       log_action "Sending to child: " + c.inspect
       begin
