@@ -49,10 +49,7 @@ function add_payment_method() {
     visible: function () {
       var cls = $(sel).val() + '-amount';
       $(".ui-keyboard-preview").removeClass('payment-amount');
-      setTimeout(function () {
-        // to keep this double input from messing up get_payment_amount
-        $("." + cls).select();
-      },150);
+      $("." + cls).select();
     },
     accepted: function () {
       display_change();

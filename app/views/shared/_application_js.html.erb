@@ -753,7 +753,8 @@ function RoundFixed(Number, DecimalPlaces) {
               customLayout : null,
               accepted    : function () {
                 add_item($("#keyboard_input").val());
-              }
+              },
+              visible: function(){ $('.ui-keyboard-preview').select(); }
             });
         } else {
           elem.keyboard({
@@ -761,6 +762,7 @@ function RoundFixed(Number, DecimalPlaces) {
             stayOpen : true,
             layout       : '<%= I18n.locale %>',
             customLayout : null,
+            visible: function(){ $('.ui-keyboard-preview').select(); }
           });
         }
       } else {
