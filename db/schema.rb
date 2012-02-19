@@ -50,12 +50,12 @@ ActiveRecord::Schema.define(:version => 20120212140238) do
   create_table "buttons", :force => true do |t|
     t.string   "name"
     t.string   "sku"
-    t.string   "old_category_name"
+    t.string   "category"
     t.integer  "position"
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "vendor_id"
-    t.boolean  "is_buyback",        :default => false
+    t.boolean  "is_buyback",  :default => false
     t.integer  "category_id"
     t.string   "color"
   end

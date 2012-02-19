@@ -40,6 +40,8 @@ function add_payment_method() {
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   var opts = payment_method_options();
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  $(sel)[0].selectedIndex = numMethods;
+  console.log(numMethods);
   $("#payment_methods").append(sel).append(amount);
   $('#payment_methods').append('<br />');
   oldSelectedIndex = null;
@@ -332,7 +334,6 @@ function get_payment_total() {
   $(".payment-amount:visible").each(
       function () {
           if ($(this).attr("id")) {
-            console.log($(this).attr('id'));
             paymentTotal += toFloat($(this).val());
           }
       }
