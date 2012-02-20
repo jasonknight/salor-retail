@@ -70,6 +70,11 @@ de:
         other: Tags
 
     attributes:
+      url: URL
+      letter: Letter
+      default: Default
+      csv_imports: CSV Imports
+      csv_imports_url: CSV Imports URL
       customer_screen_blurb: Standardtext Verkaufsanzeige
       pole_display: Verkaufsanzeige
       auto_drop: Auto-Buchung Tagesbeginn
@@ -555,6 +560,8 @@ de:
       logo: Logo
 
   views:
+    eticket: Regaletikett
+    sticky_ticket: Klebeetikett
     wholesaler_refresh: Großhändlerdaten werden aktualisiert. Dies kann einige Minuten dauern.
     advanced_field: Achtung, nur für fortgeschrittene Benutzer!
     by_card: Mit Karte
@@ -658,6 +665,7 @@ de:
     shipments:
       state: State
     single_words:
+      all: Alle
       camera: Kamera
       ordering: Reihenfolge
       body: Körper

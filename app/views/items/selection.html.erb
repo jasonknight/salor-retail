@@ -15,10 +15,10 @@
 <%= form_tag '/items/labels', :remote => true do %>
   <p><%= text_area_tag 'skus', nil, :class => 'labels-snag-me', :cols => 20, :rows => 15 %></p>
   <p>
-    <input type="radio" name="type" value="label" checked>Regaletikett<br>
-    <input type="radio" name="type" value="sticker">Klebeetikett<br>
+  <input type="radio" name="type" value="label" checked><%= I18n.t("views.eticket") %><br>
+  <input type="radio" name="type" value="sticker"><%= I18n.t("views.sticky_ticket") %><br>
   </p>
-  <p><%= label_tag 'all', 'Alle' %><%= check_box_tag 'all' %></p>
+  <p><%= label_tag 'all', t('views.single_words.all') %><%= check_box_tag 'all' %></p>
   <% if $Register.salor_printer == true then  %>
     <button onclick="run_salor_printer();">OK</button>
   <% else  %>

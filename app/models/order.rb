@@ -549,6 +549,11 @@ class Order < ActiveRecord::Base
     dt.drawer_id = GlobalData.salor_user.get_drawer.id
     dt.drawer_amount = GlobalData.salor_user.get_drawer.amount
     dt.order_id = self.id
+    if dt.amount < 0 then
+      dt.payout = true
+      dt.drop = false
+      dt.amount *= -1
+    end
     if dt.save then
       if type == :payout then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)

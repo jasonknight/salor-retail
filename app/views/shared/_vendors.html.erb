@@ -7,19 +7,19 @@
               <%= t("menu.tax_profiles") %>
             </a>
           </div>
-        </div>
-        <% end %>
+          </div>
+          <% end %>
 
-  <% GlobalData.vendors.each do |store| %>
-    <div class="widget master-wide" >
-      <div align="center">
+    <% GlobalData.vendors.each do |store| %>
+      <div class="widget master-wide" >
+        <div align="center">
         <a href="/vendors/<%= store.id %>">
           <img src="/images/icons/<%= icon(:vendor) %>" onmousedown="window.location = '/vendors/<%= store.id %>';"/><br />
           <%= store.name %>
       	</a>
       	<br /> <br />
       	
-      <%= salor_render :partial => "shared/edit_delete_buttons", :locals => {:edit_link => edit_vendor_path(store), :delete_link => vendors_path(store, :method => :delete) } %>
+        <%= salor_render :partial => "shared/edit_delete_buttons", :locals => {:edit_link => edit_vendor_path(store), :delete_link => "/vendors/destroy/#{store.id}" } %>
           <!-- End ul.list -->
       </div>
     </div>

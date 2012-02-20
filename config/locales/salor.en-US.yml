@@ -70,6 +70,11 @@ en-US:
         other: Tags
 
     attributes:
+      url: URL
+      letter: Letter
+      default: Default
+      csv_imports: CSV Imports
+      csv_imports_url: CSV Imports URL
       customer_screen_blurb: Standard text customer screen
       pole_display: Pole display
       auto_drop: "Automatically Begin Day"
@@ -555,6 +560,8 @@ en-US:
       logo: logo
 
   views:
+    eticket: Ticket
+    sticky_ticket: Sticker
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
     advanced_field: advanced field
     by_card: by card
@@ -658,6 +665,7 @@ en-US:
     shipments:
       state: State
     single_words:
+      all: All
       camera: camera
       ordering: ordering
       body: body
