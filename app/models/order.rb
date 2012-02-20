@@ -456,7 +456,7 @@ class Order < ActiveRecord::Base
       update_self_and_save
   
       if self.buy_order then
-        create_drawer_transaction(ottl,:payout,{:tag => "CompleteOrder"})
+        create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
         #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - self.total)
       elsif self.total < 0 then
         create_drawer_transaction(self.total,:payout,{:tag => "CompleteOrder"})
@@ -482,6 +482,7 @@ class Order < ActiveRecord::Base
       self.update_attribute :paid, 0
       GlobalErrors.append_fatal("system.errors.order_failed",self)
       log_action $!.to_s
+      puts $!.to_s
     end
     log_action "Ending complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
   end

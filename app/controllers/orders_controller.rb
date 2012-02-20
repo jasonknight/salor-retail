@@ -538,6 +538,9 @@ class OrdersController < ApplicationController
       end
       @order.customer_id = nil
       @order.tag = 'NotSet'
+      @order.subtotal = 0
+      @order.total = 0
+      @order.tax = 0
       @order.update_self_and_save
     else
       GlobalErrors.append_fatal("system.errors.no_role",@order,{})
