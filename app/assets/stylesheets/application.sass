@@ -6,11 +6,11 @@ $border_width: 1px
 $foreground: #f2f2f2
 $foreground2: #d6d6d6
 $middleground: #7a607e
-$middleground2: #513356
+$middleground2: #a572ae //#513356
 $middleground3: #3e2242
 $middleground4: #1c0f1e
-$background: #170c16
-$light_background: #663172
+$background: #291627 //#170c16
+$light_background: #7d5285 //#663172
 $inactive_background: #808080
 
 $text_color: #dddddd
@@ -157,7 +157,7 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 
 @mixin dialog 
-  border: 5px solid $middleground2
+  border: 5px solid $middleground3
   background-color: $middleground4
   color: $foreground
   opacity: .95
@@ -194,7 +194,6 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 body 
   @include no_select
   font-family: $font_family
-  text-rendering: optimizeLegibility
   letter-spacing: 1.5px
 
 @mixin bright_button 
@@ -602,7 +601,7 @@ body
   font-family: $font_family
   font-size: $text_size_normal
   color: $foreground
-  background: $background
+  background-color: $background
   padding: 0px
   margin: 0px
 
@@ -650,6 +649,7 @@ div.header
   background: $middleground
   @include rounded_corners_bottom
   height: $header_height
+  margin-bottom: 17px
 
 div.header > ul 
   list-style: none
@@ -772,13 +772,9 @@ span.version
 
 /* Main and Main Content Divs */
 
-#body 
-  height: 100%
-  margin: 0px
-  padding: 0px
-
 div.main 
-  margin: 20px 0px 100px 0px
+  margin: 20px 0px 200px 0px
+  background-color: $background
 
 
 div.content-box > div.title-container 
@@ -2498,11 +2494,11 @@ div.last-completed-orders
   bottom: 5px
   text-align: center
   div.completed-entry 
-    background-color: black
+    background-color: #170c16
     display: inline-block
     padding: 5px
     margin-right: 5px
-    border: 1px solid $light_background
+    border: 1px solid $middleground3
   
   
 
