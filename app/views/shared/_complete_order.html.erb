@@ -41,7 +41,6 @@ function add_payment_method() {
   var opts = payment_method_options();
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
   $(sel)[0].selectedIndex = numMethods;
-  console.log(numMethods);
   $("#payment_methods").append(sel).append(amount);
   $('#payment_methods').append('<br />');
   oldSelectedIndex = null;
@@ -121,6 +120,7 @@ function validatePaymentMethod(element) {
 
 function complete_order_show() {
   sendingOrder = false;
+  $(".payment-amount").remove();
   complete_total = toFloat($('#pos_order_total').text());
   if (isBuyOrder) complete_total *= -1;
   $(".complete-order-total").html($('#pos_order_total').html());
