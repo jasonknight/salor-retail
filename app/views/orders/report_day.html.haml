@@ -67,7 +67,7 @@
       - category_sums_negative_net[cid] += item_total / ( 1 + oi.tax_profile_amount / 100 )
       - taxes_sums_negative_gro[tid] += item_total
 
-  - rebate_total += o.rebate
+  - rebate_total += o.rebate_type == 'percent' ? o.rebate / 100.0 * o.order_items.sum(:price) : o.rebate
 
 - payout_types_drop_sums = Hash.new
 - payout_types_payout_sums = Hash.new
@@ -147,7 +147,7 @@
 
     %p== Summe netto: #{ number_to_currency category_sums_positive_net.compact.sum }
 
-    %p== Rabatte auf Verkäufe brutto: #{ number_to_currency rebate_total }
+    %p== Rabatte auf Verkäufe brutto (Bar): #{ number_to_currency rebate_total }
 
 
 
@@ -250,6 +250,6 @@
 
     %p== Summe Buchungen: #{ number_to_currency total_drop - total_payout }
 
-    %p== Differenz zwischen Buchungen und Bargeldsaldo: #{ number_to_currency total_drop - total_payout + category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum }
+    %p== Differenz zwischen Buchungen und Bargeldsaldo: #{ number_to_currency total_drop - total_payout + category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum - rebate_total }
     %p Hinweis: Eine Differenz bedeutet lediglich, dass Buchungen nicht genau vorgenommen wurden oder bei den Verkäufen falsche Zahlungsmethoden angegeben wurden.
 
