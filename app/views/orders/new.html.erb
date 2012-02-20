@@ -34,6 +34,17 @@ function validate_order_totals() {
   }
 }
 
+setInterval(function () {
+    if (!$('#cash_drop').is(":visible") && 
+      !$('#complete_order').is(":visible") && 
+      !$('#inplaceedit-div').is(":visible") && 
+      !$('#search').is(":visible") &&
+      !$('.void-order').is(":visible") &&
+      !$('.ui-keyboard').is(":visible")) {
+    focusInput($("#keyboard_input"));
+  } 
+},2000);
+
 
 $(document).ready(function () {
     //scrollable_div($('.pos-table-left-column-items'));
