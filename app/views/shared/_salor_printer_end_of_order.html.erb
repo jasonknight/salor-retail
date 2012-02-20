@@ -1,12 +1,11 @@
 <% if $Conf.open_cash_drawer or not @cash_register.cash_drawer_path.blank?  %>
-  if (!$('.bycard-amount').val()) {
     quick_open_drawer();
-  }
 <% end %>
-if (print == 'true') {
-  print_order($('.order-id').html());
-}
+
+print_order_id = $('.order-id').html(); // the order id needs to be saved here so that is isn't overwritten by the complete_order_ajax rendering
+
 get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
+      if (print == 'true') {  print_order(print_order_id); }
       <% if $Register.artema_hybrid then  %>
         bycard_hide_waiting();
       <% end %>
