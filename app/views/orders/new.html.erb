@@ -39,7 +39,8 @@ setInterval(function () {
       !$('#complete_order').is(":visible") && 
       !$('#inplaceedit-div').is(":visible") && 
       !$('#search').is(":visible") &&
-      !$('.void-order').is(":visible")) {
+      !$('.void-order').is(":visible") &&
+      !$('.ui-keyboard').is(":visible")) {
     focusInput($("#keyboard_input"));
   } 
 },2000);
