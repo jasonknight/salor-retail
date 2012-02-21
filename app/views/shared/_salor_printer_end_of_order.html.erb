@@ -6,9 +6,6 @@ print_order_id = $('.order-id').html(); // the order id needs to be saved here s
 
 get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
       if (print == 'true') {  print_order(print_order_id); }
-      <% if $Register.artema_hybrid then  %>
-        bycard_hide_waiting();
-      <% end %>
     sendingOrder = false;
   }, 'get', function() {
     sendingOrder = false;

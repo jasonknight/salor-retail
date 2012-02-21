@@ -5,15 +5,7 @@
       <div class="button-row" align="right" width="100%">
           <div class="button-cancel" onmousedown="eodPayout();"><%= I18n.t("menu.end_of_day_drop") %></div>
           <div class='button-print' onmousedown="window.location.href='/orders/report_day';"><%= t('views.report')%></div>
-          <% if GlobalData.cash_register.artema_hybrid then %>
-            <div class="spacer">&nbsp;</div>
-            <div id="tagesende_button" class="input square-button" onmousedown="bycard_endday();">
-              <%= t("menu.paylife_end_day")%>
-            </div>
-            <div class="spacer">&nbsp;</div>
-          <% else  %>
-            <div class="spacer">&nbsp;</div>
-          <% end %>
+          <div class="spacer">&nbsp;</div>
           <div class="button-confirm" onmousedown="window.location = '/vendors/end_day';"><%= I18n.t("system.logout") %></div>
       </div>
       <br />
@@ -80,7 +72,7 @@
            </tr>
          <% end if GlobalData.salor_user.meta.cash_register %>
        </table>
-<% if false then %>
+<% if $Register.paylife then %>
 <h2> Cute Credit</h2>
 <table width="100%">
   <% cute_total = 0 %>
@@ -107,7 +99,7 @@
     </td>
   </tr>
   <tr>
-    <td colspan="2" align="right" id="cute_credit_eod_total" eod_total="" ref_id="">
+    <td colspan="2" align="right" id="cute_credit_eod_total" eod_total="<%= cute_eod_total%>" ref_id="<%= ref_id %>">
        <%= I18n.t("paylife.eod_total") %> <%= SalorBase.number_to_currency(cute_eod_total) %>
     </td>
   </tr>

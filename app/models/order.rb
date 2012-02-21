@@ -71,6 +71,29 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.percent_off'),'percent'],
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
+  def has_cute_credit_message?
+    config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
+    conn = Mysql2::Client.new(config)
+    sql = "SELECT count(*) as num FROM cute_credit.cute_credit_messages where ref_id = '#{self.id}'"
+    cnt = conn.query(sql).first
+    if cnt then
+      num = cnt["num"]
+    else
+      num = 0
+    end
+    if num > 0 then
+      return true
+    else
+      return false
+    end
+  end
+  def cute_credit_message
+    config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
+    conn = Mysql2::Client.new(config)
+    sql = "SELECT * FROM cute_credit.cute_credit_messages where ref_id = '#{self.id}'"
+    rec = conn.query(sql).first
+    return rec
+  end
   def add_payment_methods(params)
     if params[:payment_methods] then
       npms = []

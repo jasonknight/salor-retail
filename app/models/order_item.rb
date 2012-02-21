@@ -67,7 +67,7 @@ class OrderItem < ActiveRecord::Base
   def self.reload_discounts
   end
   def OrderItem.get_discounts
-    Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type")
+    Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type").where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
   end
   def toggle_buyback(x)
     if self.is_buyback then

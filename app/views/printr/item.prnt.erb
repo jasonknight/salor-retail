@@ -137,7 +137,14 @@ Abzug: - <%= GlobalData.conf.dollar_per_lp * @order.lc_points %> (<%= @order.lc_
 <% order_subtotal = subtotal + discount_subtotal + rebate_subtotal + coupon_subtotal + rebate %>
 <%= "SUMME                         EUR %8.2f\n" % order_subtotal %>
 <%= "==========================================\n" %>
-
+<% if $Register.paylife == true and @order.has_cute_credit_message? then %>
+  <% rec = @order.cute_credit_message %>
+<%= rec["x_text"] %>
+<% if @signature == true %>
+<%= "Unterschrift: \n\n_______________________________________________\n\n" %>
+<% end -%>
+<%= rec["result"] %>
+<% end -%>
 <%
 if @order.payment_methods.any? then
   ic = @order.payment_methods.find_by_internal_type 'InCash'

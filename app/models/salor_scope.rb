@@ -59,11 +59,7 @@ module SalorScope
          if inst.respond_to? :hidden
            return {:conditions => "hidden = 0 or hidden is null"}
          end
-         if inst.class == Discount then
-           t = Time.now
-           return {:conditions => ["end_date > ?",t]}
-         end
-      })
+               })
       klass.scope(:invisible, lambda { |*args|
          if inst.respond_to? :hidden
            return {:conditions => 'hidden = 1'}
