@@ -13,7 +13,7 @@
 </script>
 <div style="text-align: center;" >
 <%= form_tag '/items/labels', :remote => true do %>
-  <p><%= text_area_tag 'skus', nil, :class => 'labels-snag-me', :cols => 20, :rows => 15 %></p>
+  <p><%= text_area_tag 'skus', nil, :class => 'labels-snag-me keyboardable', :cols => 20, :rows => 15, :style => 'width:245px;height:245px;' %></p>
   <p>
   <input type="radio" name="type" value="label" checked><%= I18n.t("views.eticket") %><br>
   <input type="radio" name="type" value="sticker"><%= I18n.t("views.sticky_ticket") %><br>
