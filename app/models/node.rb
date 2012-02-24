@@ -361,7 +361,7 @@ class Node < ActiveRecord::Base
     url = URI.parse(self.url)
     req.body = params.to_json
     @request ||= Net::HTTP.new(url.host, url.port)
-    response = @request.start {http| http.request(req) }
+    response = @request.start {|http| http.request(req) }
     # puts response.body
     response
   end
