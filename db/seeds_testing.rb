@@ -45,6 +45,7 @@ locs = []
   l.save()
   locs << l
 end
+
 puts "Creating 10 test items"
 Item.delete_all
 items = []

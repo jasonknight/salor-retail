@@ -94,7 +94,7 @@ class NodesController < ApplicationController
         SalorBase.log_action("NodesController","node found, handling")
         render :json => @node.handle(SalorBase.symbolize_keys(JSON.parse(request.body.read))).to_json and return
       else
-        SalorBase.log_action("NodesController","Node Could Not Be Found")
+        SalorBase.log_action("NodesController","Node #{params[:node][:sku]} Could Not Be Found")
         render :json => {:error => "Node could not be found"}.to_json
       end
     else
