@@ -154,7 +154,7 @@ class Node < ActiveRecord::Base
       return false #just quit out
     else
       log_action "You cannot create an identical node." + params.inspect
-      return false # just quit out
+      return true # just quit out
     end
     return true # I.E. handle the record object as normal
   end
