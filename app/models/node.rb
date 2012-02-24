@@ -356,12 +356,14 @@ class Node < ActiveRecord::Base
       :message => "AddMe"
     }
     return if not params[:target]
+    self.update_attribute :is_busy, true
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(self.url)
     req.body = params.to_json
     @request ||= Net::HTTP.new(url.host, url.port)
     response = @request.start {|http| http.request(req) }
     # puts response.body
+    self.update_attribute :is_busy, false
     response
   end
 end

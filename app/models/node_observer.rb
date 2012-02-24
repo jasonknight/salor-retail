@@ -56,9 +56,9 @@ class NodeObserver < ActiveRecord::Observer
     snode = Node.scopied.where(:is_self => true).limit(1).first
     return if not snode
     if record.class == Customer or record.class == LoyaltyCard then
-      child_nodes = Node.scopied.where(:is_self => false)
+      child_nodes = Node.scopied.where(:is_self => false,:is_busy => false)
     else
-      child_nodes = Node.scopied.where(:is_self => false, :node_type => 'pull')
+      child_nodes = Node.scopied.where(:is_self => false, :node_type => 'pull', :is_busy => false)
     end
     log_action "Sending to children: #{child_nodes.length}"
     NodeMessage.where(["created_at < ?", Time.now - 5.minutes]).delete_all
