@@ -48,6 +48,7 @@ class NodesController < ApplicationController
 
     respond_to do |format|
       if @node.save
+        @node.broadcast_add_me
         format.html { redirect_to(@node, :notice => 'Node was successfully created.') }
         format.xml  { render :xml => @node, :status => :created, :location => @node }
       else

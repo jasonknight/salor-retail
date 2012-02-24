@@ -52,7 +52,6 @@ class Node < ActiveRecord::Base
   include SalorModel
   belongs_to :vendor
   before_create :set_model_owner
-  after_create :broadcast_add_me
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
   @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
   def handle(params)
