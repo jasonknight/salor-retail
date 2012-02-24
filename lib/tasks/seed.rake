@@ -6,15 +6,15 @@ namespace :salor do
     system("rake db:seed --trace")
   end
   task :refresh => [:environment] do
-    require "#{RAILS_ROOT}/db/seeds_testing.rb"
+    require "#{Rails.root}/db/seeds_testing.rb"
   end
   task :update => [:environment] do
-    require "#{RAILS_ROOT}/db/update_seeds.rb"
+    require "#{Rails.root}/db/update_seeds.rb"
   end
   task :upgrade => [:environment] do
-    require "#{RAILS_ROOT}/db/update_seeds.rb"
+    require "#{Rails.root}/db/update_seeds.rb"
   end
   task :barcode => [:environment] do
-    require "#{RAILS_ROOT}/db/barcode_sheet.rb"
+    require "#{Rails.root}/db/barcode_sheet.rb"
   end
 end

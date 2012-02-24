@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120212140238) do
+ActiveRecord::Schema.define(:version => 20120222135549) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -50,12 +50,12 @@ ActiveRecord::Schema.define(:version => 20120212140238) do
   create_table "buttons", :force => true do |t|
     t.string   "name"
     t.string   "sku"
-    t.string   "category"
+    t.string   "old_category_name"
     t.integer  "position"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.integer  "vendor_id"
-    t.boolean  "is_buyback",  :default => false
+    t.boolean  "is_buyback",        :default => false
     t.integer  "category_id"
     t.string   "color"
   end
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(:version => 20120212140238) do
     t.integer  "vendor_id"
     t.string   "scale"
     t.boolean  "hidden",                :default => false
-    t.boolean  "artema_hybrid",         :default => false
+    t.boolean  "paylife",               :default => false
     t.string   "bank_machine_path"
     t.string   "cash_drawer_path"
     t.boolean  "big_buttons",           :default => false
@@ -316,7 +316,7 @@ ActiveRecord::Schema.define(:version => 20120212140238) do
     t.string   "shipper_sku"
     t.float    "packaging_unit",       :default => 1.0
     t.boolean  "ignore_qty",           :default => false
-    t.integer  "child_id"
+    t.integer  "child_id",             :default => 0
     t.boolean  "must_change_price",    :default => false
   end
 

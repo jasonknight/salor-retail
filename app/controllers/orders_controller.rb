@@ -58,6 +58,8 @@ class OrdersController < ApplicationController
         render :nothing => true and return
       end
       @vendor = @order.vendor
+      $Register = CashRegister.scopied.find @order.cash_register_id
+      $Register = CashRegister.scopied.first if $Register.nil?
       @in_cash = 0
       @by_card = 0
       @by_gift_card = 0

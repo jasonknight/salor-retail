@@ -5,8 +5,10 @@ GlobalData.session = {:vendor_id => @vendor.id}
 GlobalData.params = {:no_inc => nil}
 @tp = TaxProfile.first
 @cashier = Employee.find_by_username('cashier')
+$User = @cashier
 GlobalData.user_id = @cashier.user.id
 @register = CashRegister.where("vendor_id = ?",@vendor.id).first
+$Register = @register
 @cashier.drawer = Drawer.new(:amount => 500)
 @cashier.drawer.save
 if not @cashier.meta then
