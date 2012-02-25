@@ -198,9 +198,14 @@ class VendorsController < ApplicationController
       # Normally, it is important to ensure that the total shown represents 100%
       # real, physically present money. You cannot half use Dts, you either track
       # everything with Dts, or you track nothing with them.
-      @drawer_transaction.drawer_amount = GlobalData.salor_user.get_drawer.amount
-      if @drawer_transaction.amount == 0 then
-        render :nothing => true and return
+      @drawer_transaction.drawer_amount = $User.get_drawer.amount
+      if @drawer_transaction.amount > $User.get_drawer.amount then
+        @drawer_transaction.amount = $User.get_drawer.amount
+      end
+      if @drawer_transaction.amount < 0 then
+         @drawer_transaction.amount *= -1
+         @drawer_transaction.drop = false
+         @drawer_transaction.payout = true
       elsif @drawer_transaction.amount > 15000.00 then
         render :nothing => true and return
       end

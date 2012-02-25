@@ -665,6 +665,7 @@ de:
     shipments:
       state: State
     single_words:
+      new: Neu
       all: Alle
       camera: Kamera
       ordering: Reihenfolge

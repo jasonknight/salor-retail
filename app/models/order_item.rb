@@ -276,6 +276,9 @@ class OrderItem < ActiveRecord::Base
         if self.price > self.amount_remaining then
           self.price = self.amount_remaining
         end
+        if self.price > self.order.total then
+          self.price = self.order.total
+        end
         self.update_attribute(:total,self.price) if self.price != self.total
         if self.price > 0 then
           p = self.price * -1

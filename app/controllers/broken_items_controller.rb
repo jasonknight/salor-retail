@@ -77,7 +77,9 @@ class BrokenItemsController < ApplicationController
   # GET /broken_items/new.xml
   def new
     @broken_item = BrokenItem.new
-
+    @broken_item.name = params[:name]
+    @broken_item.sku = params[:sku]
+    @broken_item.base_price = params[:base_price]
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @broken_item }

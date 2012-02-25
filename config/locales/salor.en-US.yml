@@ -665,6 +665,7 @@ en-US:
     shipments:
       state: State
     single_words:
+      new: New
       all: All
       camera: camera
       ordering: ordering

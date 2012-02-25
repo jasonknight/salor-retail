@@ -52,7 +52,14 @@ class BrokenItem < ActiveRecord::Base
   include SalorModel
   belongs_to :vendor
   belongs_to :shipper
-  
+  after_create :decrement_item_quantity
+  def decrement_item_quantity
+    if not self.is_shipment_item then
+      item = Item.scopied.find_by_sku self.sku
+      item.quantity -= self.quantity
+      item.save
+    end
+  end
   def owner
     if self.owner_type == 'User' then
       return User.where(["id = ?", self.owner_id]).first
