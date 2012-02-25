@@ -209,17 +209,17 @@ var shipment_items_callbacks = {
                   showCreateItem({'sku': sku});
                   return;
                 }
-                for (var key in data.item) {
+                for (var key in data) {
                   if (key == 'id') {
                     continue;
                   }
                   var selector = '.attribute-' + key + '-' + mid;
                   var node = $(selector);
                   $(node).each(function(){
-                    if (this.nodeName.toLowerCase() == 'input') $(this).val(data.item[key]);
+                    if (this.nodeName.toLowerCase() == 'input') $(this).val(data[key]);
                     if (this.nodeName.toLowerCase() == 'div') {
-                      var hidden = makeHiddenInput(key, mid, data.item[key]);
-                      $(this).html(data.item[key]);
+                      var hidden = makeHiddenInput(key, mid, data[key]);
+                      $(this).html(data[key]);
                       $(this).append($(hidden));
                     }
                   });
