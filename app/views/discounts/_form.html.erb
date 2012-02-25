@@ -45,8 +45,7 @@
           <%= f.label t("activerecord.attributes.amount") %> &nbsp;&nbsp; <br />
           <%= f.text_field :amount, :size => 7, :class => 'keyboardable-int' %>
           <br /><br />
-          <%= f.label t("activerecord.attributes.amount_type")%><br />
-          <%= f.select :amount_type, Discount::TYPES.collect {|ct| [ct[:text],ct[:value]]} %>
+          <%= f.hidden_field :amount_type,  :value => 'percent' %>
           <br /><br />
         </div>
         <div class="actions">
