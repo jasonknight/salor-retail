@@ -70,6 +70,7 @@ en-US:
         other: Tags
 
     attributes:
+      reorder_type: Reorder Type
       big_buttons: Big Buttons
       hide_discounts: Hide Discounts
       thermal_printer: Thermal Printer
