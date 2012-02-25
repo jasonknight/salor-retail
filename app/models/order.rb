@@ -321,7 +321,7 @@ class Order < ActiveRecord::Base
       self.total = 0 unless self.total_is_locked and not self.total.nil?
       self.subtotal = 0 unless self.subtotal_is_locked and not self.subtotal.nil?
       self.tax = 0 unless self.tax_is_locked and not self.tax.nil?
-      self.order_items.reload.each do |oi|
+      self.order_items.reload.order("id ASC").each do |oi|
         if oi.item.nil? then
           remove_order_item(oi)
           next
@@ -331,7 +331,7 @@ class Order < ActiveRecord::Base
         end
         # Coupons are not handled here, they are handled at the end of the order.
         if oi.item_type.behavior == 'normal' or oi.item_type.behavior == 'gift_card' then
-          price = oi.calculate_total
+          price = oi.calculate_total self.subtotal
           puts "price from #{oi.item.sku} is #{price}"
           if oi.is_buyback and not self.buy_order then
             if price > 0 then

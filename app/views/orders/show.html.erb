@@ -30,7 +30,7 @@
     </td>
   </tr>
 </table>
-<% if GlobalData.salor_user.is_technician? %>
+<% if $User.is_technician? %>
     <table class="payment-methods-table" width="100%">
       <% @order.payment_methods.each do |pm|  %>
       <tr>

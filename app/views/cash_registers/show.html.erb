@@ -16,8 +16,6 @@
     <td><%= l(order.created_at,:format => :short) %></td>
     <td align="right"><%= salor_number_to_currency order.total %></td>
     <td align="right"><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
-    <td align="right"><%= link_to image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order) %></td>
-    <td align="right"><%= link_to image_tag('/images/icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

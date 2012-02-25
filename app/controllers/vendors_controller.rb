@@ -53,6 +53,11 @@ class VendorsController < ApplicationController
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
     before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
+  def technician_control_panel
+    if not $User.is_technician? then
+      redirect_to :action => :index
+    end
+  end
   def move_transactions
     @from, @to = time_from_to(params)
     parts = params[:from_emp][:set_owner_to].split(":")

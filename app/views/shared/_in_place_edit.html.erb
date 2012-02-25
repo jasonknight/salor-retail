@@ -188,6 +188,7 @@ var receiver_shipper_select = function (value) {
             accepted: function(){ in_place_edit_go(id); }
           });
           field.getkeyboard().reveal();
+          $('#inplaceedit-div').hide();
 	}
 
 	$('#inplaceedit-div').css(offset);
@@ -204,7 +205,6 @@ var receiver_shipper_select = function (value) {
 		$('#inplaceedit').datepicker();
 	}
   inplaceEditBindEnter(true, id);
-  $('#inplaceedit-div').hide();
   //div.children('.kbd-show-button').trigger('mousedown');
   //focusInput($('#inplaceedit'));
 }

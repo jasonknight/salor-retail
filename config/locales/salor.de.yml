@@ -70,6 +70,10 @@ de:
         other: Tags
 
     attributes:
+      big_buttons: grosser Tasten
+      hide_discounts: Hide Discounts
+      thermal_printer: Thermal Druker
+      paylife: Paylife
       url: URL
       letter: Letter
       default: Default
@@ -587,11 +591,11 @@ de:
     locations: Orte
     loyalty_card: Kundenkarte
     name: Name
-    new_item_heading: Neuer Artikel für %{store}
-    new_sale_for: Neuer Einkauf für %{store}
+    new_item_heading: "Neuer Artikel für %{store}"
+    new_sale_for: "Neuer Einkauf für %{store}"
     new_stock_location: Neues Lager
-    order_heading: Verkauf #%{id} für %{store}
-    order_number: Verkauf #%{id}
+    order_heading: "Verkauf Nr. %{id} für %{store}"
+    order_number: "Verkauf Nr. %{id}"
     order_summary: Verkäufe der letzten 7 Tage
     owner_language: Sprache des Eigentümers
     password: Passwort
@@ -648,7 +652,7 @@ de:
       model_create: "%{model} wurde erfolgreich angelegt."
       model_edit: "%{model} wurde erfolgreich bearbeitet."
       new_order: Neuer Verkauf angelegt
-      order_refund_dt: Automatic refund drawer transaction \Verkauf #%{id}\:http://salor/orders/%{id}
+      order_refund_dt: "Automatic refund drawer transaction Verkauf #%{id} : http://salor/orders/%{id}"
       please_wait: "Bitte warten..."
       transaction_succeeded: "Bezahlt!"
       artema_hybrid_lost: "Artema Hybrid Anschluss prufen! Terminal abstecken und wieder anstecken."

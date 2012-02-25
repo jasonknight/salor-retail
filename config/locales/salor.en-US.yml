@@ -70,6 +70,10 @@ en-US:
         other: Tags
 
     attributes:
+      big_buttons: Big Buttons
+      hide_discounts: Hide Discounts
+      thermal_printer: Thermal Printer
+      paylife: Paylife
       url: URL
       letter: Letter
       default: Default
@@ -587,11 +591,11 @@ en-US:
     locations: locations
     loyalty_card: loyalty card
     name: name
-    new_item_heading: New item for %{store}
-    new_sale_for: New sale for %{store}
+    new_item_heading: "New item for %{store}"
+    new_sale_for: "New sale for %{store}"
     new_stock_location: New stock location
-    order_heading: Order #%{id} for %{store}
-    order_number: Order #%{id}
+    order_heading: "Order #%{id} for %{store}"
+    order_number: "Order #%{id}"
     order_summary: Orders of the last 7 days
     owner_language: Owner language
     password: password
@@ -648,7 +652,7 @@ en-US:
       model_create: "%{model} was created successfully"
       model_edit: "%{model} was edited successfully"
       new_order: new order created
-      order_refund_dt: Automatic refund drawer transaction \Verkauf #%{id}\:http://salor/orders/%{id}
+      order_refund_dt: "Automatic refund drawer transaction Order #%{id} :http://salor/orders/%{id}"
       please_wait: "Please wait..."
       transaction_succeeded: "Paid!"
       artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.

@@ -72,6 +72,7 @@ Salor::Application.routes.draw do
   match "vendors/edit_drawer_transaction" => "vendors#edit_drawer_transaction"
   match "vendors/edit_field_on_child" => "vendors#edit_field_on_child"
   match "vendors/toggle" => "vendors#toggle"
+  match "vendors/technician_control_panel" => "vendors#technician_control_panel"
   match "vendors/destroy/:id" => "vendors#destroy"
   match "vendors/end_day" => "vendors#end_day"
   match "vendors/end_day" => "vendors#end_day"

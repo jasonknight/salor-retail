@@ -24,11 +24,10 @@
             <td class='order_table_item_name'><%= salor_icon(:delete,{:class => 'pointer', :onclick => "get('/orders/delete_order_item?id=#{oi.id}', '_order_line_items.html.erb')"},16) if not oi.order.paid %>&nbsp;&nbsp;&nbsp;<span class="editme item-name" <%= opts %>><%= oi.item.name %></span></td>
             <td>
               <%= oi.item.sku %>
-              <% if GlobalData.salor_user.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
+              <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
                 <% topts = {:rev => reverse, :refresh => 'true',:class => "order-item-refund-small toggle pointer refund-#{oi.id}", :field => 'toggle_refund', :value => 'nil', :klass => 'OrderItem', :model_id => oi.id } %>
-               <%= oi.refunded ? link_to(salor_icon(:refunded,{},32),'/orders/refund_item?id=' + oi.id.to_s) : link_to(salor_icon(:refund,{},32),'/orders/refund_item?id=' + oi.id.to_s) %>
+               <%= oi.refunded ? salor_icon(:refunded,{},32) : link_to(salor_icon(:refund,{},32),'/orders/refund_item?id=' + oi.id.to_s) %>
               <% end %>
-              <%= action_button("/orders/activate_gift_card?id=#{oi.id}&amount=#{oi.amount_remaining}",salor_icon(:activate,{},32), {:update_pos_display => true}) if oi.behavior == 'gift_card' %>
               <%
                 if params[:action] == 'show' then
                   refresh = true
@@ -49,11 +48,9 @@
             
             <td align="right" class="order-item-coupon-total "><%= salor_number_to_currency(oi.coupon_amount) %></td>
                         
-            <% topts = {:class => 'pos-lock-small toggle', :field => 'toggle_lock', :value => 'total', :klass => 'OrderItem', :model_id => oi.id } %>
             <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='total' data_type='Float' id='in_place_edit_total_#{oi.id}'"  %>
             <td align="right">
-              <%= oi.total_is_locked ? salor_icon(:locked,topts,32) : salor_icon(:unlocked,topts,32) %>
-              <span class="order-item-total editme" <%= opts %>><%= salor_number_to_currency(total) %></span>
+              <span class="order-item-total"><%= salor_number_to_currency(total) %></span>
             </td>
         </tr>
         

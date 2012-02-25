@@ -261,7 +261,7 @@ class OrderItem < ActiveRecord::Base
 		return self
 	end
 	#
-  def calculate_total
+  def calculate_total(order_subtotal=0)
     if self.order and self.order.buy_order or self.is_buyback then
       ttl = self.price * self.quantity
       if not ttl == self.total then
@@ -272,19 +272,32 @@ class OrderItem < ActiveRecord::Base
     # Gift Card Processing
     if self.behavior == 'gift_card' then
       if self.item.activated then
-        return 0 if self.amount_remaining <= 0
+        puts "Item is an activated gift_card"
+        if self.amount_remaining <= 0 then
+          puts "Amount remaining is 0"
+          return 0
+        end
+        if self.price == 0 then
+          self.price = self.amount_remaining
+        end
+        if self.price < 0 then
+          self.price *= -1 # we do this so we can better set the price later
+          # it will be reconverted to negative later on
+        end
         if self.price > self.amount_remaining then
           self.price = self.amount_remaining
         end
-        if self.price > self.order.total then
-          self.price = self.order.total
+        puts "Price: #{self.price} Subtotal: #{order_subtotal}"
+        if self.price > order_subtotal then
+          self.price = order_subtotal
         end
-        self.update_attribute(:total,self.price) if self.price != self.total
         if self.price > 0 then
           p = self.price * -1
         else
           p = self.price
         end
+        self.update_attribute(:price, self.price)
+        self.update_attribute(:total,self.price) 
         return p
       end
     end
