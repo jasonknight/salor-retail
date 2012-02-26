@@ -204,7 +204,8 @@ class VendorsController < ApplicationController
       # real, physically present money. You cannot half use Dts, you either track
       # everything with Dts, or you track nothing with them.
       @drawer_transaction.drawer_amount = $User.get_drawer.amount
-      if @drawer_transaction.amount > $User.get_drawer.amount then
+      # Ideally, we don't allow a payout of more than is in the drawer.
+      if @drawer_transaction.amount > $User.get_drawer.amount and @drawer_transaction.payout == true then
         @drawer_transaction.amount = $User.get_drawer.amount
       end
       if @drawer_transaction.amount < 0 then
