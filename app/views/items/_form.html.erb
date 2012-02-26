@@ -96,7 +96,7 @@
                 <% ancestorcount = 0 %>
                 <% begin %>
                   <% parent = current.parent %>
-                  <% if parent %>
+                  <% if parent and not parent.child_id.nil? %>
                     <% ancestorcount += 1 %>
                     <p><b>Parent <%= ancestorcount %>: <%= link_to parent.name, edit_item_path(parent) %></b></p>
                     <p><%= t 'activerecord.attributes.quantity' %>: <%= parent.quantity %><br/>

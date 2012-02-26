@@ -92,9 +92,9 @@
         </div>
         <div class="new-item-field">
           <%= f.label I18n.t("activerecord.models.location.one") %><br />
-          <select name="item[location_id]">
+          <select name="item[location_id]" id="item_location_id">
             <option value=""></option>
-            <% GlobalData.locations.each do |location| %>
+            <% Location.scopied.all.each do |location| %>
               <% if @item.location_id == location.id  %>
                 <option value="<%= location.id  %>" selected><%= location.name %></option>
                 <% else %>
@@ -151,6 +151,9 @@
         <div class="new-item-field item-float-left">
           <%= f.label I18n.t("activerecord.models.tax_profile.one") %><br />
           <%= f.collection_select :tax_profile_id,TaxProfile.scopied.all,:id,:name %>
+        </div>
+        <div class="new-item-field item-float-left">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
         <div class="new-item-field  item-float-left" >
           <%= f.label I18n.t("activerecord.models.category.one") %><br />

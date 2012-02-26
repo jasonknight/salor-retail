@@ -60,8 +60,7 @@
         </th>
       </tr>
       <% cats_tags = {}  %>
-        <%  %>
-          <% GlobalData.salor_user.meta.cash_register.end_of_day_report.each do |name,total| %>
+          <% $User.get_meta.cash_register.end_of_day_report.each do |name,total| %>
            <tr class="stripe-me2">
              <td>
                <%= name %>

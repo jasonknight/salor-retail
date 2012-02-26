@@ -122,6 +122,10 @@ module SalorScope
          if inst.respond_to? :email then
            conds << "email LIKE '#{words}%'"
          end
+        if inst.respond_to? :tag then
+           conds << "tag LIKE '%#{words}%'"
+         end
+
          return {:conditions => conds.join(" OR ")}
       })
       klass.scope(:scopied, lambda { |*args|

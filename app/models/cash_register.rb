@@ -58,7 +58,7 @@ class CashRegister < ActiveRecord::Base
   has_many :drawer_transactions
   def end_of_day_report
     table = {}
-    cats_tags = Category.cats_report(self.id)
+    cats_tags = Category.cats_report($User.get_drawer.id)
     @orders = Order.by_vendor.by_user.where(:refunded => false,:drawer_id => $User.get_drawer.id,:paid => true,:created_at => Time.now.beginning_of_day..Time.now)
     paymentmethod_sums = Hash.new
     cashtotal = 0.0

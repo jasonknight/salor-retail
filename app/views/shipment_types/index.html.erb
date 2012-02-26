@@ -36,7 +36,7 @@
   <tr>
     <td><%= link_to shipment_type.name, shipment_type_path(shipment_type) %></td>
     <td><%= link_to image_tag("/images/icons/" + icon(:edit,32)), edit_shipment_type_path(shipment_type) %></td>
-    <td><%= link_to image_tag("/images/icons/" + icon(:delete,32)), :confirm => I18n.t("menu.delete_confirm"), :method => :delete %></td>
+    <td><%= link_to image_tag("/images/icons/" + icon(:delete,32)),"/shipment_types/#{shipment_type.id}", :confirm => I18n.t("menu.delete_confirm"), :method => :delete %></td>
   </tr>
 <% end %>
 
