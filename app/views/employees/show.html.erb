@@ -42,7 +42,7 @@
         <% transactions.each do |crd|  %>
           <div class="table-row">
             <div class="table-cell">
-            <% if GlobalData.salor_user.can(:edit_employees) then  %>
+            <% if $User.is_technician? then  %>
               <%= link_to image_tag('/images/icons/' + icon(:delete,16)), "/vendors/destroy_drawer_transaction?id=#{crd.id}", :confirm => 'Are you sure?', :method => :delete %>
             <% end %>
               <%= l crd.created_at, :format => :salor %>

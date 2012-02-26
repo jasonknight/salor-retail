@@ -345,7 +345,7 @@ module UserEmployeeMethods
   end
   
   def can(action)
-    # puts "Called for: #{action}"
+    puts "Called for: #{action}"
     if self.class == User or AppConfig.roleless == true then
       return true
     else

@@ -18,12 +18,14 @@
           <%= store.name %>
       	</a>
       	<br /> <br />
-      	
+      <% if $User.can(:edit_vendors) %>	
         <%= salor_render :partial => "shared/edit_delete_buttons", :locals => {:edit_link => edit_vendor_path(store), :delete_link => "/vendors/destroy/#{store.id}" } %>
+        <% end -%>
           <!-- End ul.list -->
       </div>
     </div>
   <% end %>
+  <% if $User.can(:create_vendors) %>
   <div class="widget master">
       <div align="center">
         <a href="<%= new_vendor_path %>">
@@ -32,4 +34,5 @@
       	</a>
       </div>
     </div>
+    <% end -%>
 </div>

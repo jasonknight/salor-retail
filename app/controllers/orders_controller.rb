@@ -50,7 +50,7 @@
 class OrdersController < ApplicationController
    before_filter :authify, :except => [:customer_display,:print, :render_order_receipt]
    before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print, :render_order_receipt]
-   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy]
+   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day]
    before_filter :crumble, :except => [:customer_display,:print, :render_order_receipt]
    def render_order_receipt
       @order = Order.find_by_id(params[:order_id])
