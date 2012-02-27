@@ -433,6 +433,7 @@ function RoundFixed(Number, DecimalPlaces) {
 
     function updateDrawer(obj) {
       $('.pos-cash-register-amount').html(toCurrency(obj.amount));
+      $('.eod-drawer-total').html(toCurrency(obj.amount));
     }
 
     function void_item(id) {

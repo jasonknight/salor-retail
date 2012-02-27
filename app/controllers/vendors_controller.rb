@@ -249,6 +249,7 @@ class VendorsController < ApplicationController
       else
         raise "Failed to save..."
       end
+    $User.get_drawer.reload
   end
 
   def open_cash_drawer
