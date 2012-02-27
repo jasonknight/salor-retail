@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120224191537) do
+ActiveRecord::Schema.define(:version => 20120227081453) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -385,6 +385,20 @@ ActiveRecord::Schema.define(:version => 20120224191537) do
     t.string   "mdhash"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "node_queues", :force => true do |t|
+    t.boolean  "handled",         :default => false
+    t.boolean  "send",            :default => false
+    t.boolean  "receive",         :default => false
+    t.text     "payload"
+    t.string   "url"
+    t.string   "source_sku"
+    t.string   "destination_sku"
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
   end
 
   create_table "nodes", :force => true do |t|
