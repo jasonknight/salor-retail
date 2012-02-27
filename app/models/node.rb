@@ -320,8 +320,8 @@ class Node < ActiveRecord::Base
   end
   #
   def send!
-    req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
-    url = URI.parse(@target.url)
+    # req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+    # url = URI.parse(@target.url)
      
     @md5 = Digest::SHA2.hexdigest("#{@hash[:record].to_json}")
     if NodeMessage.where(:dest_sku => @target.sku, :mdhash => @md5).any? then
@@ -334,13 +334,14 @@ class Node < ActiveRecord::Base
       n = NodeMessage.new(:source_sku => self.sku, :dest_sku => @target.sku, :mdhash => @md5)
       n.save
     end
-
-    req.body = self.payload
-    log_action "Sending: " + req.body.inspect
-    @request ||= Net::HTTP.new(url.host, url.port)
-    response = @request.start {|http| http.request(req) }
+    n = NodeQueue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :send => true, :payload => self.payload)
+    n.save
+    # req.body = self.payload
+    #log_action "Sending: " + req.body.inspect
+#   @request ||= Net::HTTP.new(url.host, url.port)
+#    response = @request.start {|http| http.request(req) }
     # puts response.body
-    response
+#   response
   end
   def broadcast_add_me
     return if self.is_self == true

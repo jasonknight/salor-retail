@@ -29,31 +29,30 @@
   %div
     %h2= t '.title'
     %h3= l DateTime.now, :format => :just_day
-
-    - (category_items.size - 1).times do |cid|
-      - next if category_items[cid].nil? or not category_items[cid].any?
-      - cat = Category.scopied.find_by_id(cid)
-      %h4= cat ? cat.name : t('.no_category')
-      %table{ :class => 'striped-table2 has-total' }
+    %table{ :class => 'striped-table2 has-total' }
+      %tr
+        %th SKU
+        %th= t 'activerecord.attributes.name'
+        %th= t 'activerecord.attributes.quantity'
+        %th= t 'activerecord.attributes.real_quantity'
+        %th= t 'activerecord.attributes.purchase_price'
+        %th= t '.price'
+        %th= t '.total_buying_price'
+        %th= t '.total_selling_price'
+      - @items.each do |i|
+        - cid = i.category_id
         %tr
-          %th SKU
-          %th= t 'activerecord.attributes.name'
-          %th= t 'activerecord.attributes.quantity'
-          %th= t 'activerecord.attributes.real_quantity'
-          %th= t 'activerecord.attributes.purchase_price'
-          %th= t '.price'
-          %th= t '.total_buying_price'
-          %th= t '.total_selling_price'
-        - category_items[cid].each do |i|
-          %tr
-            %td= i.sku
-            %td= i.name
-            %td.right= i.quantity
-            %td.right= i.real_quantity
-            %td.right= number_to_currency i.purchase_price
-            %td.right= number_to_currency i.base_price
-            %td.right= number_to_currency i.purchase_price * i.real_quantity
-            %td.right= number_to_currency i.base_price * i.real_quantity
+          %td{ :colspan => 8 }
+            %h4= i.category.name if i.category
+        %tr
+          %td= i.sku
+          %td= i.name
+          %td.right= i.quantity
+          %td.right= i.real_quantity
+          %td.right= number_to_currency i.purchase_price
+          %td.right= number_to_currency i.base_price
+          %td.right= number_to_currency i.purchase_price * i.real_quantity
+          %td.right= number_to_currency i.base_price * i.real_quantity
 
         %tr.total
           %td{ :colspan => 6 }
