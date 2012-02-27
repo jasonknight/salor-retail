@@ -360,7 +360,7 @@ function updateOrder(obj) {
   $('.order-rebate').html(obj.rebate);
   $('.order-tag').html(obj.tag);
   $('.order-id').html(obj.id);
-  $('#current_completable_order').html(obj.id + '0000');
+  $('#current_completable_order').html(obj.id);
   if (!obj.lc_points > 0) {
     obj.lc_points = 0;
   }

@@ -67,6 +67,9 @@ class CashRegister < ActiveRecord::Base
       o.payment_methods.each do |pm|
         paymentmethod_sums[pm.name] ||= 0 if not pm.internal_type == 'InCash'
         paymentmethod_sums[pm.name] += pm.amount if not pm.internal_type == 'InCash'
+        if pm.amount < 0 then
+          #cash_total += pm.amount if pm.internal_type != 'InCash'
+        end
       end
     end
     paymentmethod_sums[I18n.t("InCash")] = cashtotal

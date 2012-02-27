@@ -477,12 +477,12 @@ class Order < ActiveRecord::Base
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
         #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - self.total)
       elsif self.total < 0 then
-        create_drawer_transaction(self.total,:payout,{:tag => "CompleteOrder"})
+        create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
         ottl = self.get_drawer_add
-        GlobalData.salor_user.meta.update_attribute :last_order_id, self.id
+        $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
-        log_action("OID: #{self.id} USER: #{GlobalData.salor_user.username} OTTL: #{ottl} DRW: #{GlobalData.salor_user.get_drawer.amount}")
+        log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
         #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + ottl)
       end
       lc = self.loyalty_card
@@ -517,12 +517,13 @@ class Order < ActiveRecord::Base
     end
   end
   def get_drawer_add
-    if self.total < 0 then
-      return self.total
-    end
     ottl = self.total
+    puts ottl
     self.payment_methods.each do |pm|
+      puts pm.inspect
       next if pm.internal_type == 'InCash'
+      if pm.amount < 0 and pm.internal_type != 'InCash' then
+      end
       ottl -= pm.amount
     end
     return ottl
