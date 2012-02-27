@@ -1,4 +1,5 @@
-updateDrawer({amount:'<%= GlobalData.salor_user.drawer.amount %>'});
+updateDrawer({amount:'<%= $User.get_drawer.amount %>'});
+window.Drawer = <%= raw $User.get_drawer.attributes.to_json %>;
 if (typeof SalorPrinter != 'undefined') {
   print_url(Conf.url + '/vendors/render_drawer_transaction_receipt?id=<%= @drawer_transaction.id %>');
   quick_open_drawer();
