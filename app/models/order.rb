@@ -522,8 +522,6 @@ class Order < ActiveRecord::Base
     self.payment_methods.each do |pm|
       puts pm.inspect
       next if pm.internal_type == 'InCash'
-      if pm.amount < 0 and pm.internal_type != 'InCash' then
-      end
       ottl -= pm.amount
     end
     return ottl
