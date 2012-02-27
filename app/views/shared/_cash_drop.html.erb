@@ -69,15 +69,6 @@ function cash_drop_save() {
     return;
   }
   $("transButtonRow").removeClass('error-input');
-  /*
-  if ($('#cash_drop_form .radio-checked').length == 0) {
-    $('.cash-drop-radios').addClass('error-input');
-    return;
-  }
-  $('.cash-drop-radios').removeClass('error-input');
-  $('#cash_drop_form .radio-checked').removeClass('radio-checked');
-  */
-  $.get('/vendors/open_cash_drawer');
   $.ajax({
       type: 'POST',
       url: '/vendors/new_drawer_transaction',
@@ -92,11 +83,6 @@ function cash_drop_save() {
   });
   focusInput($('#keyboard_input'));
 }
-<% if GlobalErrors.has_error("system.errors.must_cash_drop")  %>
-$(function () {
-      //show_cash_drop();
-});
-<% end %>
 
 function show_coin_calculator() {
   $('#coincalculator').slideToggle();
