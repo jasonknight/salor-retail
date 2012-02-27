@@ -13,7 +13,7 @@
   <tr>
     <td colspan="2" class="even" valign="middle">
       <!-- Cash Total and Calculator Total -->
-      <div class="eod-drawer-total"><%= SalorBase.number_to_currency(GlobalData.salor_user.get_drawer.amount) %></div>
+      <div class="eod-drawer-total"><%= $User.get_drawer.reload.amount %></div>
       <div class="eod-calculator-total"><%= SalorBase.number_to_currency(0) %></div>
       <div class="eod-calculator-difference"><%= SalorBase.number_to_currency(0) %></div>
       <% if GlobalData.conf.open_cash_drawer  %>
