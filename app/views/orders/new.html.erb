@@ -232,8 +232,11 @@ function updatePosItem(item) {
     var id = '.' + base_id + '-price';
     var price = toFloat($(id).html());
     if (price == 0) {
-      $(id).trigger('mousedown');
-      $(".inplaceeditinput").select();
+      $(id).trigger('click');
+      setTimeout( function () {
+      $(".ui-keyboard-preview").select();
+      },100);
+
     }
   }
 }
@@ -332,8 +335,10 @@ function addPosItem(item) {
     var id = '.' + base_id + '-price';
     var price = toFloat($(id).html());
     if (price == 0) {
-      $(id).trigger('mousedown');
-      $(".inplaceeditinput").select();
+      $(id).trigger('click');
+      setTimeout( function () {
+      $(".ui-keyboard-preview").select();
+      },100);
     }
   }
   if(item['quantity']==0 && item['weigh_compulsory']) { weigh_last_item(); }
