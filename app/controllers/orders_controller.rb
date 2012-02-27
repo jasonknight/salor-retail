@@ -121,6 +121,9 @@ class OrdersController < ApplicationController
     $User.auto_drop
     
     @order = initialize_order
+    if @order.paid == 1 then
+      @order = $User.get_new_order
+    end
     if @order.order_items.any? then
       @order.update_self_and_save
     end
@@ -349,7 +352,8 @@ class OrdersController < ApplicationController
       payment_methods_seen = []
       PaymentMethod.types_list.each do |pmt|
         pt = pmt[1]
-        if params[pt.to_sym] and not params[pt.to_sym].blank? and SalorBase.string_to_float(params[pt.to_sym]) > 0 then
+        puts pt
+        if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0 then
           pm = PaymentMethod.new(:name => pmt[0],:internal_type => pt, :amount => SalorBase.string_to_float(params[pt.to_sym]))
           if pm.amount > @order.total then
             # puts  "## Entering Sanity Check"

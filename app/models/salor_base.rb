@@ -168,21 +168,28 @@ module SalorBase
   def self.string_to_float(str)
     return str if str.class == Float or str.class == Fixnum
       string = "#{str}"
-      string.gsub!(/[^\d.,]/,'')
+      puts string
+      string.gsub!(/[^-\d.,]/,'')
+      puts string
       if string =~ /^.*[\.,]\d{1}$/
         string = string + "0"
       end
+      puts string
       unless string =~ /^.*[\.,]\d{2,3}$/
         string = string + "00"
       end
+      puts string
       return string if string.class == Float or string.class == Fixnum or string == 0
       if string =~ /^.*[\.,]\d{3}$/ then
          string.gsub!(/[\.,]/,'')
          string = string.to_f / 1000
+         puts string
       else
         string.gsub!(/[\.,]/,'')
         string = string.to_f / 100
+        puts string
       end
+      puts string
       return string
    end
    def string_to_float(string)

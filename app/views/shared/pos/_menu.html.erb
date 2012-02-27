@@ -47,6 +47,7 @@ function clickBuyOrderButton(id) {
           <%= t("menu.search")%>
         </div>
         <div id="print_receipt_button" onmousedown="get('/orders/show_payment_ajax?order_id=' + $('.order-id').html());" class="input pos-button print-receipt">
+          <div id="current_completable_order" style="float: left;font-size: 8px; margin-bottom: -12px;"><%= @order.id %></div>
           <%= t("system.complete_sale")%>
         </div>
 
