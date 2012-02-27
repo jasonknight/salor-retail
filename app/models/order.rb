@@ -150,7 +150,6 @@ class Order < ActiveRecord::Base
     write_attribute(:front_end_change,self.string_to_float(p)) 
   end
   def rebate=(p)
-    
     write_attribute(:rebate,self.string_to_float(p)) 
   end
   def subtotal=(p)
@@ -440,11 +439,7 @@ class Order < ActiveRecord::Base
 	def calculate_rebate
 	  amnt = 0.0
 	  if self.subtotal.nil? then self.subtotal = 0 end
-    if self.rebate_type == 'fixed' then
-      amnt = self.rebate
-    elsif self.rebate_type == 'percent' then
-      amnt = (self.subtotal * (self.rebate/100))
-    end
+    amnt = (self.subtotal * (self.rebate/100))
     return amnt
 	end
 	#
