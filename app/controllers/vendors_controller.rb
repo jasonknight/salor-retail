@@ -185,7 +185,7 @@ class VendorsController < ApplicationController
   # DELETE /vendors/1.xml
   def destroy
     @vendor = salor_user.get_vendor(params[:id])
-    @vendor.destroy
+    @vendor.update_attribute :hidden, true
 
     respond_to do |format|
       format.html { redirect_to(vendors_url) }
