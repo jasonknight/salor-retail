@@ -79,10 +79,10 @@ class DrawerTransaction < ActiveRecord::Base
   end
 
   def print
-    if GlobalData.cash_register.id and GlobalData.vendor.id
-      printers = VendorPrinter.where( :vendor_id => GlobalData.vendor.id, :cash_register_id => GlobalData.cash_register.id )
+    if $Register.id
       @dt = self
-      Printr.new.send(printers.first.name.to_sym,'drawer_transaction_receipt',binding) if printers.first
+      text = Printr.new.sane_template("drawer_transaction_receipt",binding)
+      Printr.new.direct_write($Register.thermal_printer,text)
     end
   end
 

@@ -308,26 +308,7 @@ module SalorBase
     end
     return obj
   end
-  def has_relations?
-    return true if self.class == Item and self.order_items.any?
-    return true if self.class == Order and self.order_items.any?
-    return true if self.class == Shipment and self.shipment_items.any?
-    return true if self.class == Vendor
-    if self.class == Discount then
-      if self.order_items or self.orders then
-        return true
-      end
-    end
-    return false
-  end
-  def kill
-    if self.has_relations? and self.respond_to? :hidden then
-      self.update_attribute(:hidden,true)
-    else
-      self.destroy
-    end
-  end
-  # Converts all accented chars in txt into normal ASCII
+      # Converts all accented chars in txt into normal ASCII
   def normaleyes(txt)
     return UnicodeUtils.nfkd(txt.to_s).gsub(/[^\x00-\x7F]/,'').to_s
   end
@@ -452,4 +433,5 @@ module SalorBase
       return self.meta
     end
   end
+  
 end

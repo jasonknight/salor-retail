@@ -101,7 +101,7 @@ class VendorsController < ApplicationController
     if not check_license() then
       redirect_to :controller => "home", :action => "index" and return
     end
-    @vendors = salor_user.get_vendors(params[:page])
+    @vendors = $User.get_vendors(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -185,7 +185,7 @@ class VendorsController < ApplicationController
   # DELETE /vendors/1.xml
   def destroy
     @vendor = salor_user.get_vendor(params[:id])
-    @vendor.update_attribute :hidden, true
+    @vendor.kill
 
     respond_to do |format|
       format.html { redirect_to(vendors_url) }

@@ -126,7 +126,7 @@ class TenderMethodsController < ApplicationController
   # DELETE /tender_methods/1.xml
   def destroy
     @tender_method = TenderMethod.scopied.find(params[:id])
-    @tender_method.destroy
+    @tender_method.kill
 
     respond_to do |format|
       format.html { redirect_to(tender_methods_url) }

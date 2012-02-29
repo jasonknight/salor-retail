@@ -194,7 +194,7 @@ class ItemsController < ApplicationController
   # DELETE /items/1.xml
   def destroy
     @item = Item.find_by_id(params[:id])
-    if salor_user.owns_this?(@item) then
+    if $User.owns_this?(@item) then
       if @item.order_items.any? then
         @item.update_attribute(:hidden,1)
         @item.update_attribute(:sku, rand(999).to_s + 'OLD:' + @item.sku)

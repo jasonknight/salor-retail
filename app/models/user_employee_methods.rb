@@ -294,9 +294,9 @@ module UserEmployeeMethods
   # Vendors related functions
   def get_vendors(page)
     if page.nil? then
-      return self.vendors
+      return self.vendors.visible
     else
-      return self.vendors.page(page).per(GlobalData.conf.pagination)
+      return self.vendors.visible.page(page).per($Conf.pagination)
     end
   end
   def get_vendor(id)
@@ -464,14 +464,13 @@ module UserEmployeeMethods
     end
     vendor_id = self.meta.vendor_id
     cash_register_id = self.meta.cash_register_id
-    printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
-    # puts printers.inspect
-    if $Register.salor_printer != true and printers.first then
+    if not $Register.salor_printer == true then
       @vendor = Vendor.find_by_id(self.meta.vendor_id)
       @report = get_end_of_day_report #see function below
-      user = GlobalData.salor_user
+      user = self
       begin
-        Printr.new.send(printers.first.name.to_sym,'end_of_day',binding) if printers.first
+        text = Printr.new.sane_template("end_of_day",binding)
+        Printr.new.direct_write($Register.thermal_printer,text)
       rescue
         GlobalErrors.append("system.errors.failed_to_print",nil,{:template => 'end_of_day'})
       end

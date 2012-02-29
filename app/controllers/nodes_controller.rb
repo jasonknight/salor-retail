@@ -78,7 +78,7 @@ class NodesController < ApplicationController
   # DELETE /nodes/1.xml
   def destroy
     @node = Node.scopied.find(params[:id])
-    @node.destroy
+    @node.kill
 
     respond_to do |format|
       format.html { redirect_to(nodes_url) }

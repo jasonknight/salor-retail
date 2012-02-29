@@ -164,7 +164,11 @@ function complete_order_show() {
       if (confirmInactive) {
         complete_order_hide();
       } else {
-        complete_order_send(false);
+        <% if $Register.no_print == true then %>
+          complete_order_send(false);
+        <% else %>
+          complete_order_send(true);
+        <% end -%>
         focusInput($("#payment_amount_0"));
       }
     }

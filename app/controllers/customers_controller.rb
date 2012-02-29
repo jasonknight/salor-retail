@@ -122,8 +122,8 @@ class CustomersController < ApplicationController
   # DELETE /customers/1.xml
   def destroy
     @customer = Customer.find(params[:id])
-    @customer.loyalty_card.destroy
-    @customer.destroy
+    @customer.loyalty_card.kill 
+    @customer.kill
 
     respond_to do |format|
       format.html { redirect_to(customers_url) }
@@ -149,15 +149,20 @@ class CustomersController < ApplicationController
     elsif params[:skus]
       @customers = Customer.where :id => params[:ids].split("\r\n")
     end
-    vendor_id = GlobalData.salor_user.meta.vendor_id
+    vendor_id = $User.get_meta.vendor_id
     if vendor_id
       if params[:type] == 'lc_label'
         type = 'escpos'
       elsif params[:type] == 'lc_sticker'
         type = 'slcs'
       end
-      printer = VendorPrinter.where( :vendor_id => vendor_id, :printer_type => type ).first
-      Printr.new.send(printer.name.to_sym, params[:type], binding) if printer
+      if params[:type] == 'label' then
+        text = Printr.new.sane_template("lc_label",binding)
+        Printr.new.direct_write($Register.thermal_printer,text)
+      else
+        text = Printr.new.sane_template("lc_sticker",binding)
+        Printr.new.direct_write($Register.sticker_printer,text)
+      end
     end
     render :nothing => true
   end

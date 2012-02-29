@@ -65,6 +65,32 @@ module SalorModel
           self.update_attribute :tax_profile_id,model.id
         end
       end
-    end
-  end
+#
+      def has_relations?
+        return true if self.class == Item and self.order_items.any?
+        return true if self.class == Order and self.order_items.any?
+        return true if self.class == Shipment and self.shipment_items.any?
+        return true if self.class == Vendor
+        if self.class == Discount then
+          if self.order_items or self.orders then
+            return true
+          end
+        end
+        return false
+      end
+#
+      def kill
+        if self.has_relations? and self.respond_to? :hidden then
+          self.update_attribute(:hidden,true)
+        else
+          if self.respond_to? :hidden then
+            self.update_attribute :hidden, 1
+          else
+            self.destroy
+          end
+        end
+      end
+#
+    end # mod.class_eval
+  end # self.included
 end

@@ -121,7 +121,7 @@ class OrdersController < ApplicationController
     $User.auto_drop
     
     @order = initialize_order
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       @order = $User.get_new_order
     end
     if @order.order_items.any? then
@@ -136,10 +136,10 @@ class OrdersController < ApplicationController
   # GET /orders/1/edit
   def edit
     @order = Order.scopied.find_by_id(params[:id])
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       redirect_to :action => :new, :notice => I18n.t("system.errors.cannot_edit_completed_order") and return
     end
-    if @order and not @order.paid == 1
+    if @order and (not @order.paid == 1 or $User.is_technician?) then
       session[:prev_order_id] = salor_user.meta.order_id
       salor_user.meta.update_attributes(:cash_register_id => @order.cash_register.id, :order_id => @order.id)
     end
@@ -147,7 +147,7 @@ class OrdersController < ApplicationController
   end
   def swap
     @order = Order.scopied.find_by_id(params[:id])
-    if @order and not @order.paid == 1 then
+    if @order and (not @order.paid == 1 or $User.is_technician?) then
       GlobalData.salor_user.meta.update_attribute(:order_id,@order.id)
     end
     redirect_to :action => "new"
@@ -171,11 +171,11 @@ class OrdersController < ApplicationController
   # PUT /orders/1.xml
   def update
     @order = Order.find(params[:id])
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       GlobalErrors.append("system.errors.cannot_edit_completed_order",@order)
     end
     respond_to do |format|
-      if not @order.paid == 1 and @order.update_attributes(params[:order])
+      if (not @order.paid == 1 or $User.is_technician?) and @order.update_attributes(params[:order])
         format.html { redirect_to(@order, :notice => 'Order was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -189,11 +189,7 @@ class OrdersController < ApplicationController
   # DELETE /orders/1.xml
   def destroy
     @order = Order.by_vendor(salor_user.meta.vendor_id).find(params[:id])
-    if @order.order_items.any?
-        @order.update_attribute(:hidden,1)
-    else
-      @order.destroy
-    end
+    @order.kill
     respond_to do |format|
       format.html { redirect_to(orders_url) }
       format.xml  { head :ok }
@@ -224,7 +220,7 @@ class OrdersController < ApplicationController
 
     @error = nil
     @order = initialize_order
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       @order = GlobalData.salor_user.get_new_order 
     end
     @order_item = @order.order_items.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
@@ -394,7 +390,7 @@ class OrdersController < ApplicationController
   end
   def print_order_receipt
     @order = Order.scopied.find_by_id(params[:id])
-    @order.print_receipt if @order
+    @order.print_receipt if @order and not $Register.salor_printer == true
     render :nothing => true
   end
   def new_order_ajax
@@ -419,7 +415,7 @@ class OrdersController < ApplicationController
   end
   def update_pos_display
     @order = initialize_order
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       @order = GlobalData.salor_user.get_new_order
     end
   end

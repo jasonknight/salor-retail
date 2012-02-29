@@ -258,7 +258,7 @@ class Order < ActiveRecord::Base
 	#end
 	#
 	def remove_order_item(oi)
-	  if self.paid == 1 then
+	  if self.paid == 1 and not $User.is_technicia? then
 	    GlobalErrors.append("system.errors.cannot_edit_completed_order")
 	    return
 	  end
@@ -310,7 +310,7 @@ class Order < ActiveRecord::Base
 	end
 	#
 	def calculate_totals(speedy = false)
-	  if self.paid == 1 then
+	  if self.paid == 1 and not $User.is_technician? then
 	    #GlobalErrors.append("system.errors.cannot_edit_completed_order",self)
 	    return
 	  end
@@ -618,9 +618,9 @@ class Order < ActiveRecord::Base
       cash_register_id = GlobalData.salor_user.meta.cash_register_id
       vendor_id = GlobalData.salor_user.meta.vendor_id
       salor_user = GlobalData.salor_user
-      if cash_register_id and vendor_id
-        printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
-        Printr.new.send(printers.first.name.to_sym,'item',binding) if printers.first
+      if not $Register.salor_printer == true
+        text = Printr.new.sane_template("item",binding) 
+        Printr.new.direct_write($Register.thermal_printer,text)
       end
     #rescue
     #  GlobalErrors.append("system.errors.order_print_failure",self)
