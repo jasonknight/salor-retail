@@ -18,7 +18,7 @@ class NodeQueue < ActiveRecord::Base
  def self.receive_all_pending
      NodeQueue.where(:receive => true, :handled => false).all.each do |msg|
        params = JSON.parse(SalorBase.symbolize_keys(msg.payload))
-       node = Node.where(:sku = params[:node][:sku]).first
+       node = Node.where(:sku => params[:node][:sku]).first
        node.handle(params)
        msg.update_attribute :handled, true
      end

@@ -156,7 +156,7 @@ class CustomersController < ApplicationController
       elsif params[:type] == 'lc_sticker'
         type = 'slcs'
       end
-      if params[:type] == 'label' then
+      if params[:type] == 'lc_label' then
         text = Printr.new.sane_template("lc_label",binding)
         Printr.new.direct_write($Register.thermal_printer,text)
       else
