@@ -379,9 +379,6 @@ class OrdersController < ApplicationController
       end
       params[:print].nil? ? print = 'true' : print = params[:print].to_s
       # Receipt printing moved into Order.rb, line 497
-      if print == 'true'
-        @order.print_receipt
-      end
       @order.complete
       atomize(ISDIR, 'cash_drop')
       GlobalData.salor_user.meta.order_id = nil

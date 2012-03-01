@@ -232,7 +232,7 @@ class VendorsController < ApplicationController
         @drawer_transaction.drawer_id = salor_user.get_drawer.id
       end
       if @drawer_transaction.save then
-        @drawer_transaction.print
+        @drawer_transaction.print if not $Register.salor_printer == true
         if @drawer_transaction.drop then
           @drawer_transaction.owner.get_drawer.update_attribute(:amount,@drawer_transaction.owner.get_drawer.amount + @drawer_transaction.amount)
         elsif @drawer_transaction.payout then
