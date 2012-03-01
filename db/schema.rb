@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120228190234) do
+ActiveRecord::Schema.define(:version => 20120301132648) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -296,7 +296,7 @@ ActiveRecord::Schema.define(:version => 20120228190234) do
     t.float    "height",               :default => 0.0
     t.float    "weight",               :default => 0.0
     t.string   "height_metric"
-    t.string   "weight_metric"
+    t.string   "weight_metric",        :default => "g"
     t.float    "length",               :default => 0.0
     t.float    "width",                :default => 0.0
     t.string   "length_metric"
