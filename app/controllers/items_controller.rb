@@ -274,7 +274,7 @@ class ItemsController < ApplicationController
       text = Printr.new.sane_template(params[:type],binding)
       File.open($Register.thermal_printer,'w') do |f|
         f.write text
-      end
+      end if not $Register.salor_printer == true
     render :nothing => true
   end
   def export_broken_items
