@@ -380,14 +380,15 @@ function complete_order_send(print) {
   if (typeof(Salor) != 'undefined') {
     Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
   }
-  <% if $Conf.open_cash_drawer and not @cash_register.cash_drawer_path.blank?  %>
-    quick_open_drawer();
-  <% end %>
 
   print_order_id = $('.order-id').html();
 
   get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
-    if (print == 'true') {  print_order(print_order_id); }
+    if (print == 'true') {
+      print_order(print_order_id);
+    } else {
+      quick_open_drawer();
+    }
     sendingOrder = false;
   }, 'get', function() {
     sendingOrder = false;
