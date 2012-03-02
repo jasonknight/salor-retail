@@ -106,7 +106,6 @@ class OrderItem < ActiveRecord::Base
       elsif type == :drop then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
-      GlobalData.vendor.open_cash_drawer
     else
       raise dt.errors.full_messages.inspect
     end

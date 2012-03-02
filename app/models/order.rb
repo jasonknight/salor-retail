@@ -578,7 +578,6 @@ class Order < ActiveRecord::Base
       elsif type == :drop then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
-      GlobalData.vendor.open_cash_drawer
     end
   end
   def toggle_refund(x)
