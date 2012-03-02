@@ -92,13 +92,13 @@ class Vendor < ActiveRecord::Base
     self.vendor_printer_ids = ps
   end
   def open_cash_drawer
-	  cash_register_id = $User.meta.cash_register_id
+    cash_register_id = $User.meta.cash_register_id
     vendor_id = self.id
     if cash_register_id and vendor_id
       text = Printr.new.sane_template("drawer_transaction",binding)
       Printr.new.direct_write($Register.thermal_printer,text)
     end
-	end
+  end
 
   def receipt_logo_header=(data)
     write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s 
