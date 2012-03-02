@@ -442,21 +442,13 @@ class OrdersController < ApplicationController
     @oi = OrderItem.scopied.find_by_id(params[:id])
     @oi.toggle_refund(true)
     @oi.save
-    if params[:void] then
-      redirect_to :action => :void, :id => @oi.order.id and return
-    else
-      redirect_to :action => :show, :id => @oi.order.id and return
-    end
+    redirect_to :action => :void, :id => @oi.order.id and return
   end
   def refund_order
     @order = Order.scopied.find_by_id(params[:id])
     @order.toggle_refund(true)
     @order.save
-    if params[:void] then
-      redirect_to :action => :void, :id => @order.id and return
-    else
-      redirect_to :action => :show, :id => @order.id and return
-    end
+    redirect_to :action => :void, :id => @order.id and return
   end
   def customer_display
     @order = Order.find_by_id params[:id]
