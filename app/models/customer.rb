@@ -55,6 +55,7 @@ class Customer < ActiveRecord::Base
   has_many :orders
   accepts_nested_attributes_for :loyalty_card
   before_create :set_model_owner
+
   def set_sku
     if self.sku.blank? then
       if self.vendor.nil? then
