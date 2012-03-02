@@ -93,7 +93,7 @@ class NodesController < ApplicationController
       @node = Node.where(:sku => params[:node][:sku]).first
       if @node then
         SalorBase.log_action("NodesController","node found, handling")
-        n = NodeQueue.new(:source_sku =>params[:node][:sku], :destination_sku => params[:target][:sku],:receive => true, :payload => request.body.read)
+        n = Cue.new(:source_sku =>params[:node][:sku], :destination_sku => params[:target][:sku],:to_receive => true, :payload => request.body.read)
         n.save
         #render :json => @node.handle(SalorBase.symbolize_keys(JSON.parse(request.body.read))).to_json and return
         render :json => {:success => true}.to_json and return

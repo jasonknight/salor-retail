@@ -334,7 +334,7 @@ class Node < ActiveRecord::Base
       n = NodeMessage.new(:source_sku => self.sku, :dest_sku => @target.sku, :mdhash => @md5)
       n.save
     end
-    n = NodeQueue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :send => true, :payload => self.payload)
+    n = Cue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :to_send => true, :payload => self.payload)
     n.save
     # req.body = self.payload
     #log_action "Sending: " + req.body.inspect
@@ -357,6 +357,12 @@ class Node < ActiveRecord::Base
       :message => "AddMe"
     }
     return if not params[:target]
+
+    @md5 = Digest::SHA2.hexdigest("#{@hash[:record].to_json}")
+    
+    n = Cue.new(:to_send => true,:url => self.url, :destination_sku => self.sku, :source_sku => self.sku, :payload => params.to_json) 
+    n.save
+    return
     self.update_attribute :is_busy, true
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(self.url)
