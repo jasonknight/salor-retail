@@ -24,7 +24,7 @@ class NodesController < ApplicationController
 
   def receive_msg
     msg = Cue.find_by_id params[:id]
-    p = SalorBase.stringify_keys(JSON.parse(msg.payload))
+    p = SalorBase.symbolize_keys(JSON.parse(msg.payload))
     @node = Node.where(:sku => p[:node][:sku]).first
     if @node then
       @node.handle(p)
