@@ -7,7 +7,7 @@ class NodesController < ApplicationController
   before_filter :authify, :except => [:receive]
   before_filter :initialize_instance_variables, :except => [:receive]
   def send_msg
-     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+    req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     node = Cue.find_by_id params[:id]
     if node then
       url = URI.parse(node.url)
@@ -23,7 +23,12 @@ class NodesController < ApplicationController
   end
 
   def receive_msg
-
+    msg = Cue.find_by_id params[:id]
+    p = SalorBase.stringify_keys(JSON.parse(msg.payload))
+    @node = Node.where(:sku => p[:node][:sku]).first
+    if @node then
+      @node.handle(p)
+    end
     redirect_to request.referer
   end
   def index
