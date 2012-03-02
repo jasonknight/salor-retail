@@ -1,3 +1,10 @@
+<script>
+  function refund_item(id) {
+    quick_open_drawer();
+    window.location = '/orders/refund_item?void=true&id=' + id;
+  }
+</script>
+
 <% order_items.reverse.each do |oi|%>
       <%
         price = oi.price
@@ -25,7 +32,7 @@
             <td>
               <%= oi.item.sku %>
               <% if GlobalData.salor_user.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
-                <%= oi.refunded ? salor_icon(:refunded,{:onclick => 'quick_open_drawer();'},32) : link_to(salor_icon(:refund,{},32),'/orders/refund_item?void=true&id=' + oi.id.to_s, :onclick => 'quick_open_drawer();') %>
+                <%= oi.refunded ? salor_icon(:refunded,{},32) : salor_icon(:refund,{:onclick=>"refund_item('#{oi.id}');"},32) %>
               <% end %>
               <%= action_button("/orders/activate_gift_card?id=#{oi.id}&amount=#{oi.amount_remaining}",salor_icon(:activate,{},32), {:update_pos_display => true}) if oi.behavior == 'gift_card' %>
               <%
@@ -37,10 +44,7 @@
             <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='quantity' data_type='Float' id='in_place_edit_quantity_#{oi.id}'"  %>
             <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
             
-            <% topts = {:class => 'pos-lock-small toggle', :field => 'toggle_lock', :value => 'total', :klass => 'OrderItem', :model_id => oi.id } %>
-            <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='total' data_type='Float' id='in_place_edit_total_#{oi.id}'"  %>
             <td align="right">
-              <%= oi.total_is_locked ? salor_icon(:locked,topts,32) : salor_icon(:unlocked,topts,32) %>
               <span class="order-item-total editme" <%= opts %>><%= salor_number_to_currency(total) %></span>
             </td>
         </tr>
