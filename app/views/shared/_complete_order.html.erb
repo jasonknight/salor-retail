@@ -148,7 +148,10 @@ function complete_order_show() {
   //thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
   relevant_order_id = $('.order-id').html();
   a4print.mousedown(function () {
-    Salor.printPage(Conf.url + '/orders/' + relevant_order_id + '/print');          
+    window.location = '/orders/' + relevant_order_id + '/print';
+    //if (typeof(Salor) != 'undefined') {
+    //  Salor.printPage(Conf.url + '/orders/' + relevant_order_id + '/print');   
+    //}       
   });
   //thermprint.mousedown(function () {
   //      print_order( $('.order-id').html() );
