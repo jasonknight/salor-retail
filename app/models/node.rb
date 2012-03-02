@@ -247,12 +247,18 @@ class Node < ActiveRecord::Base
     item.changes.each do |k,v|
       record[k.to_sym] = v[1]
     end
+    if item.respond_to? :sku and item.sku.nil? then
+      item.set_sku if item.respond_to? :set_sku
+    end
     record[:sku] = item.sku if item.respond_to? :sku
     record[:tax_profile_sku] = item.tax_profile.sku if item.respond_to? :tax_profile
     record[:category_sku] = item.category.sku if item.respond_to? :category and item.category.respond_to? :sku
     record[:class] = item.class.to_s
     record[:name] = item.name if item.respond_to? :name
     if item.class == Customer then
+      if item.sku.blank? or item.sku.nil? then
+        item.sku = "ICANTBELIEVETHISSHIT"
+      end
       record[:loyalty_card_sku] = item.loyalty_card.sku
       record[:loyalty_card_points] = item.loyalty_card.points
     end
@@ -274,6 +280,9 @@ class Node < ActiveRecord::Base
     record = {:class => item.class.to_s}
     item.attributes.each do |k,v|
       record[k.to_sym] = v if not iggy?(k,item)
+    end
+    if item.respond_to? :sku and item.sku.nil? then
+      item.set_sku if item.respond_to? :set_sku
     end
     record[:sku] = item.sku if item.respond_to? :sku
     record[:tax_profile_sku] = item.tax_profile.sku if item.respond_to? :tax_profile

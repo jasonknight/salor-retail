@@ -177,14 +177,6 @@
         </div>
         <% end %>
         <% if salor_user.is_owner? %>
-        <div class="widget master onmousedown="window.location = '/vendors/spy';"">
-          <div align="center">
-            <a href="/vendors/spy">
-              <img src="/images/icons/<%= icon(:camera,64) %>" /><br />
-              <%= t("menu.cameras") %>
-            </a>
-          </div>
-        </div>
         <div class="widget master onmousedown="window.location = '/nodes?vendor_id=<%= @vendor.id %>';"">
           <div align="center">
             <a href="/nodes?vendor_id=<%= @vendor.id %>">
