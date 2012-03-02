@@ -300,7 +300,7 @@ class OrdersController < ApplicationController
     if not order then
       render :nothing => true and return
     end
-    order.print_receipt if not $Register.salor_printer == true
+    order.print_receipt unless $Register.salor_printer == true
     render :nothing => true
   end
   def show_payment_ajax
