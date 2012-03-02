@@ -372,6 +372,7 @@ function complete_order_send(print) {
   } else {
     print = 'true';
   }
+  quick_open_drawer();
   if (sendingOrder) return;
   allow_payment_amount = false;
   sendingOrder = true;
@@ -384,11 +385,7 @@ function complete_order_send(print) {
   print_order_id = $('.order-id').html();
 
   get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
-    if (print == 'true') {
-      print_order(print_order_id);
-    } else {
-      quick_open_drawer();
-    }
+    if (print == 'true') { print_order(print_order_id); }
     sendingOrder = false;
   }, 'get', function() {
     sendingOrder = false;
