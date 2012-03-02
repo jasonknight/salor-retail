@@ -1,10 +1,31 @@
 require 'yaml'
 YAML::ENGINE.yamler = 'syck'
 class NodesController < ApplicationController
+  include SalorBase
   # GET /nodes
   # GET /nodes.xml
   before_filter :authify, :except => [:receive]
   before_filter :initialize_instance_variables, :except => [:receive]
+  def send_msg
+     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+    node = Cue.find_by_id params[:id]
+    if node then
+      url = URI.parse(node.url)
+      req.body = node.payload
+      log_action "Sending Single MSG #{node.id}"
+      req2 = Net::HTTP.new(url.host, url.port)
+      response = req2.start {|http| http.request(req) }
+      response_parse = JSON.parse(response.body)
+      log_action("Received From Node: " + response.body)
+      node.update_attribute :is_handled, true
+    end
+    redirect_to request.referer
+  end
+
+  def receive_msg
+
+    redirect_to request.referer
+  end
   def index
     @nodes = Node.scopied
 

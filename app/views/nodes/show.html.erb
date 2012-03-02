@@ -50,6 +50,7 @@
       <td>
         <%= l msg.created_at %>
       </td>
+      <td> <%= msg.is_handled %></td>
       <td>
         <%= link_to "Send Now", "/nodes/send_msg?id=#{msg.id}" %>
       </td>
@@ -65,7 +66,7 @@
 </table>
 <h2> Receiving </h2>
 <table>
-  <% Cue.where(:to_receive => true, :destination_sku => @node.sku).limit(10).order("created_at desc").each do |msg| %>
+  <% Cue.where(:to_receive => true).where("destination_sku = '#{@node.sku}' OR source_sku = '#{@node.sku}'").limit(10).order("created_at desc").each do |msg| %>
     <tr>
       <td class="pointer" onclick="$('#<%= msg.id %>_payload').toggle();">  
          <h4> Source: <%= msg.source_sku %></h4>
@@ -73,8 +74,9 @@
       <td>
         <%= l msg.created_at %>
       </td>
+      <td> <%= msg.is_handled %></td>
       <td>
-        <%= link_to "Send Now", "/nodes/send_msg?id=#{msg.id}" %>
+        <%= link_to "Receive Now", "/nodes/receive_msg?id=#{msg.id}" %>
       </td>
     </tr>
     <tr id="<%= msg.id %>_payload" style="display:none;">
