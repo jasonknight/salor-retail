@@ -50,10 +50,10 @@
 require 'rubygems'
 require 'mechanize'
 class ItemsController < ApplicationController
-  before_filter :authify, :except => [:wholesaler_update]
-  before_filter :initialize_instance_variables
+  before_filter :authify, :except => [:wholesaler_update, :labels]
+  before_filter :initialize_instance_variables, :except => [:labels]
   before_filter :check_role, :except => [:info, :search, :labels, :crumble, :wholesaler_update]
-  before_filter :crumble, :except => [:wholesaler_update]
+  before_filter :crumble, :except => [:wholesaler_update, :labels]
   
   # GET /items
   # GET /items.xml

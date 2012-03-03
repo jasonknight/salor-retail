@@ -47,10 +47,10 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class CustomersController < ApplicationController
-  before_filter :authify
-  before_filter :initialize_instance_variables
-  before_filter :check_role
-  before_filter :crumble
+  before_filter :authify, :except => [:labels]
+  before_filter :initialize_instance_variables, :except => [:labels]
+  before_filter :check_role, :except => [:labels]
+  before_filter :crumble, :except => [:labels]
   # GET /customers
   # GET /customers.xml
   def index
