@@ -255,6 +255,7 @@ class VendorsController < ApplicationController
   def open_cash_drawer
     @vendor ||= Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id)
     @vendor.open_cash_drawer
+    render :nothing => true
   end
   def render_open_cashdrawer
     text = Printr.new.sane_template('drawer_transaction',binding)

@@ -300,7 +300,7 @@ class OrdersController < ApplicationController
     if not order then
       render :nothing => true and return
     end
-    order.print_receipt if not $Register.salor_printer == true
+    order.print_receipt unless $Register.salor_printer == true
     render :nothing => true
   end
   def show_payment_ajax
@@ -430,33 +430,17 @@ class OrdersController < ApplicationController
     end
     redirect_to "/orders/#{@oi.order.id}"
   end
-  def void
-    @order = Order.scopied.find_by_id params[:id]
-    if not @order then
-      @order = Order.new
-      flash[:notice] = I18n.t("system.errors.order_not_found")
-    end
-    render :layout => 'modal'
-  end
   def refund_item
     @oi = OrderItem.scopied.find_by_id(params[:id])
     @oi.toggle_refund(true)
     @oi.save
-    if params[:void] then
-      redirect_to :action => :void, :id => @oi.order.id and return
-    else
-      redirect_to :action => :show, :id => @oi.order.id and return
-    end
+    redirect_to order_path(@oi.order)
   end
   def refund_order
     @order = Order.scopied.find_by_id(params[:id])
     @order.toggle_refund(true)
     @order.save
-    if params[:void] then
-      redirect_to :action => :void, :id => @order.id and return
-    else
-      redirect_to :action => :show, :id => @order.id and return
-    end
+    redirect_to order_path(@order)
   end
   def customer_display
     @order = Order.find_by_id params[:id]

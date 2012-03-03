@@ -75,7 +75,6 @@ function cash_drop_save() {
       data: $('#cash_drop_form').serialize(),
       dataType: 'script',
       success: function (data) {
-        if (typeof SalorPrinter != 'undefined') { print_url(Conf.url + '/vendors/render_drawer_transaction_receipt?id=<%= @drawer_transaction.id %>'); }
         hide_cash_drop();
       },
       error: function (data,status,err) {

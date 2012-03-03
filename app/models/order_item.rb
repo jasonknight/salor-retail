@@ -129,6 +129,7 @@ class OrderItem < ActiveRecord::Base
       update_location_category_item(t * -1,q * -1)
       self.order.update_attribute(:total, self.order.total - t)
       create_refund_transaction(t,:payout, {:is_refund => true}) if not x.nil?
+      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
     end
   end
   def update_location_category_item(t,q)
