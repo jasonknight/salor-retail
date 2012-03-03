@@ -232,7 +232,7 @@ class VendorsController < ApplicationController
         @drawer_transaction.drawer_id = salor_user.get_drawer.id
       end
       if @drawer_transaction.save then
-        @drawer_transaction.print if not $Register.salor_printer == true
+        # @drawer_transaction.print if not $Register.salor_printer == true
         if @drawer_transaction.drop then
           @drawer_transaction.owner.get_drawer.update_attribute(:amount,@drawer_transaction.owner.get_drawer.amount + @drawer_transaction.amount)
         elsif @drawer_transaction.payout then
@@ -261,6 +261,7 @@ class VendorsController < ApplicationController
     text = Printr.new.sane_template('drawer_transaction',binding)
     render :text => text
   end
+
   def render_drawer_transaction_receipt
     @dt = DrawerTransaction.find_by_id params[:id]
     GlobalData.vendor = @dt.owner.get_meta.vendor
@@ -269,12 +270,14 @@ class VendorsController < ApplicationController
       render :text => "Could not find drawer_transaction" and return
     end
     text = Printr.new.sane_template('drawer_transaction_receipt',binding)
-    render :text => text
+    if $Register.salor_printer
+      render :text => text
+    else
+      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      render :nothing => true
+    end
   end
 
-
-
-  #
   def list_drawer_transactions
     render :nothing => true and return if not GlobalData.salor_user.is_technician?
     @from, @to = assign_from_to(params)

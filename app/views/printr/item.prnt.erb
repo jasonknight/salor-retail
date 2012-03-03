@@ -3,8 +3,7 @@
 <%= "\x1D\x61\x01" %>
 <%= "\e!\x38" %><%= @vendor.name if @vendor.receipt_logo_header.nil? %>
 <%= "\e!\x01" %>
-<%= @vendor.receipt_logo_header if @vendor.receipt_logo_header 
-%>
+<%= @vendor.receipt_logo_header if @vendor.receipt_logo_header %>
 
 <%= @vendor.salor_configuration.receipt_blurb.to_s %>
 <%= "\n\e!\x01" + "\ea\x00" %>
@@ -91,7 +90,9 @@
       end %>
 <%= "------------------------------------------\n" %>
 <%= list_of_items %>
+
 <% if @order.lc_points? and not @order.refunded %>
+
   <% subtotal -= GlobalData.conf.dollar_per_lp * @order.lc_points %>
 Abzug: - <%= GlobalData.conf.dollar_per_lp * @order.lc_points %> (<%= @order.lc_points %> Punkte)
 <% end %>
