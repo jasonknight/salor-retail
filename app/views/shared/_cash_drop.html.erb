@@ -94,7 +94,7 @@ function show_coin_calculator() {
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>
   <span class='cash_drop_label'><%= I18n.t("menu.cash_register") %>:</span>
-  <span class="pos-cash-register-amount"><%= salor_number_to_currency(GlobalData.salor_user.get_drawer.amount) if GlobalData.salor_user %></span>
+  <span class="pos-cash-register-amount" style="font-weight:bold;font-size:1.5em;"><%= salor_number_to_currency(GlobalData.salor_user.get_drawer.amount) if GlobalData.salor_user %></span>
 
   <% if GlobalData.salor_user and GlobalData.salor_user.can(:manager)  %>
       <p>
@@ -109,13 +109,13 @@ function show_coin_calculator() {
   <% end %>
 
       <p>
-        <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.amount") %></span>
-        <input type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="" size=3 />
-      </p>
-      <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
         <textarea name="transaction[notes]" class="keyboardable" rows="2" size=2></textarea>
-       </p>
+      </p>
+      <p style="background:#683870;padding:5px;">
+        <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
+        <input type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="" size=3 />
+      </p>
 
             <% if TransactionTag.scopied.any? then %>
             <div align="center">
@@ -126,12 +126,9 @@ function show_coin_calculator() {
             </div>
             <% end %>
 
-
-           <div id="transButtonRow" class="button-row" align="center">
-              <div class="button-confirm-left trans-button" name="drop" style="margin-left: auto;margin-right: auto;"><%= I18n.t("activerecord.attributes.drop") %></div>
-              <div class="spacer-wide">&nbsp;&nbsp;&nbsp;</div>
-              <div class="spacer-wide">&nbsp;&nbsp;&nbsp;</div>
-              <div class="button-confirm trans-button" name="payout" style="margin-left: auto;margin-right: auto;"><%= I18n.t("activerecord.attributes.payout") %></div>
+            <div align="center" style="width:186px;margin:0 auto;">
+              <div class="button-confirm-left trans-button" name="drop" style="margin-left:0;margin-right:10px;width:64px;height:64px;background-color:#26ad74;display:block;float:left;padding-right:10px;color: white;font-size: 60px;line-height: 60px;">+</div>
+              <div class="button-confirm trans-button" name="payout" style="margin-left:10px;margin-right:0;width:64px;height:64px;background-color:#db422b;display:block;float:left;padding-left:10px;color: white;font-size: 60px;line-height: 60px;">&ndash;</div>
             </div>
 
 </form>
