@@ -418,7 +418,7 @@ ActiveRecord::Schema.define(:version => 20120302131319) do
     t.string   "source_sku"
     t.string   "destination_sku"
     t.string   "owner_type"
-    t.integer  "owner_ir"
+    t.integer  "owner_id"
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
   end

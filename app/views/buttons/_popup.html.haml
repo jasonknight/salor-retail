@@ -10,10 +10,12 @@
           %div.button-category-container{ :id => "button-category-container-#{ cat.id }" }
             - if params[:controller] == 'buttons'
               %script== makeSortable('button-category-container-#{ cat.id }')
-            - cat.buttons.each do |b|
+            - cat.buttons.where(:hidden => 0).each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
               - onmousedown = "add_item('#{ b.sku }');$('#buttons').hide();" if params[:controller] == 'orders'
               %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }
                 = b.name
                 - if params[:controller] == 'buttons'
-                  = link_to 'edit', edit_button_path(b)
+                  %div{:style => 'width:74px;height:32px;padding-top:12px;'}
+                    = link_to image_tag('/images/icons/' + icon(:edit,32), :style => 'float:left; padding-right:5px;'), edit_button_path(b)
+                    = link_to image_tag('/images/icons/' + icon(:delete,32), :style => 'float:left; padding-left:5px;'), b, :confirm => 'Are you sure?', :method => :delete
