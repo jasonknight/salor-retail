@@ -6,7 +6,7 @@ window.makeSortable = (id) ->
   $('#' + id).sortable
     dropOnEmpty: false
     cursor: 'crosshair'
-    items: 'div'
+    items: 'div.item-button'
     opacity: 0.4
     scroll: true
     update: () ->

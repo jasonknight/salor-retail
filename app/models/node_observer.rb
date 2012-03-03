@@ -58,6 +58,7 @@ class NodeObserver < ActiveRecord::Observer
     if record.class == Customer or record.class == LoyaltyCard then
       child_nodes = Node.scopied.where(:is_self => false,:is_busy => false)
     else
+      log_action Node.scopied.where(:is_self => false, :node_type => 'pull', :is_busy => false).to_sql
       child_nodes = Node.scopied.where(:is_self => false, :node_type => 'pull', :is_busy => false)
     end
     log_action "Sending to children: #{child_nodes.length}"

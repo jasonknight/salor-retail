@@ -390,7 +390,7 @@ function showCustomer(obj,lc) {
   row.append(col);
   row.append('<span class=""><%= I18n.t("activerecord.attributes.lc_points") %></span>');
   var col = $('<span id="pos-order-points" class="order-points">0</span>');
-  col.attr('model_id',<%= @order.id %>);
+  col.attr('model_id',$('.order-id').html());
   col.attr('klass','Order');
   col.attr('field','lc_points');
   col.addClass('editme');

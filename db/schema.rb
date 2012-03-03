@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120302131319) do
+ActiveRecord::Schema.define(:version => 20120302192024) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -418,7 +418,7 @@ ActiveRecord::Schema.define(:version => 20120302131319) do
     t.string   "source_sku"
     t.string   "destination_sku"
     t.string   "owner_type"
-    t.integer  "owner_ir"
+    t.integer  "owner_id"
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
   end
@@ -432,10 +432,10 @@ ActiveRecord::Schema.define(:version => 20120302131319) do
     t.boolean  "is_self"
     t.text     "accepted_ips"
     t.integer  "vendor_id"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.string   "status"
-    t.boolean  "is_busy"
+    t.boolean  "is_busy",      :default => false
     t.integer  "hidden",       :default => 0
   end
 

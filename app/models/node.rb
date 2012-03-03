@@ -54,6 +54,9 @@ class Node < ActiveRecord::Base
   before_create :set_model_owner
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
   @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
+  def node_type=(t)
+    write_atrribute(:node_type,t.downcase)
+  end
   def handle(params)
     log_action "Node receiving object"
     if params.class == String then
@@ -125,13 +128,15 @@ class Node < ActiveRecord::Base
       @target = Node.new(params[:target])
       @target.is_self = false
       @target.vendor_id = self.vendor_id
+      @target.hidden = 0
       @target.save
+      @target.update_attribute :hidden,0
       # now we need to do an initial sync of tax profiles, buttons, categories
       # and customers
       @hash = {}
       @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
       @hash.merge!({:node => {:token => self.token, :sku => self.sku}, :message => "Sync"})
-      [Category,TaxProfile,Item,Button,Customer].each do |klass|
+      [Category,TaxProfilerb,Item,Button,Customer].each do |klass|
         x = 0 # we want to send them in small blocks
         models = []
         klass.scopied.all.each do |model|
@@ -161,7 +166,14 @@ class Node < ActiveRecord::Base
   def create_or_update_record(new_record)
     # puts "Creating record"
     log_action "CREATE OR UPDATE RECORD"
-    @inst = @klass.find_by_sku new_record[:sku]
+    if new_record[:loyalt_card_sku] then
+      lc = LoyaltyCard.find_by_sku new_record[:loyalty_card_sku]
+      if lc then
+        @inst = lc.customer
+      end
+    else
+      @inst = @klass.find_by_sku new_record[:sku]
+    end
     if @inst then 
       # puts "Updating record"
       @inst.update_attributes(new_record)
