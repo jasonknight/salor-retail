@@ -183,16 +183,14 @@ function format_pole(name,price,quantity,weight_metric,total) {
 }
 
 function updateCustomerView(item,order_id) {
-  <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
+  if (typeof(Salor) != 'undefined') {
+    if(Register.pole_display == "") {
       Salor.mimoRefresh(Conf.url+"/orders/"+order_id+"/customer_display",800,480);
-    }
-  <% else %>
-    if (typeof(Salor) != 'undefined') {
+    } else {
       output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
-      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', output );
+      Salor.poleDancer(Register.pole_display, output );
     }
-  <% end %>
+  }
 }
 
 function updatePosItem(item) {

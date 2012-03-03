@@ -41,16 +41,12 @@ function RoundFixed(Number, DecimalPlaces) {
     alert(str);
   }
   function print_order(id) {
-    if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
-      print_url(Conf.url + '/orders/render_order_receipt?order_id=' + id);
-    } else {
-      print_url('/orders/print_receipt?order_id=' + id);
-    }
+     print_url(Register.thermal_printer,'/orders/print_receipt?order_id=' + id);
   }
-  function print_url(url) {
+  function print_url(printer_path,url) {
     if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
       Salor.stopDrawerObserver(Register.cash_drawer_path);
-      SalorPrinter.printURL(Register.thermal_printer,url);
+      SalorPrinter.printURL(printer_path, Conf.url + url);
     } else {
       $.get(url);
     }

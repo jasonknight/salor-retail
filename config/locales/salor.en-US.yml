@@ -169,6 +169,8 @@ en-US:
         name: name
         quantity: quantity
         sku: SKU
+      cash_register:
+        sticker_printer: Etikettendrucker
       sku: SKU
       start_amount: start amount
       start_date: start date

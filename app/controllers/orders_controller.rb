@@ -48,24 +48,10 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class OrdersController < ApplicationController
-   before_filter :authify, :except => [:customer_display,:print, :render_order_receipt]
-   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print, :render_order_receipt]
+   before_filter :authify, :except => [:customer_display,:print, :print_receipt]
+   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print, :print_receipt]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day]
-   before_filter :crumble, :except => [:customer_display,:print, :render_order_receipt]
-   def render_order_receipt
-      @order = Order.find_by_id(params[:order_id])
-      if not @order then
-        render :nothing => true and return
-      end
-      @vendor = @order.vendor
-      $Register = CashRegister.scopied.find @order.cash_register_id
-      $Register = CashRegister.scopied.first if $Register.nil?
-      @in_cash = 0
-      @by_card = 0
-      @by_gift_card = 0
-      @other_credit = 0
-      render :text => Printr.new.sane_template('item',binding) 
-   end
+   before_filter :crumble, :except => [:customer_display,:print, :print_receipt]
    def new_pos
       if not salor_user.meta.vendor_id then
         redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
@@ -292,17 +278,21 @@ class OrdersController < ApplicationController
       @order.reload
     end
   end
+
   def print_receipt
-    order = Order.scopied.find_by_id(params[:order_id])
-    if not order.order_items.any? then
-      order = Order.scopied.find_by_id GlobalData.salor_user.meta.last_order_id
-    end
-    if not order then
+    @order = Order.find_by_id(params[:order_id])
+    if not @order then
       render :nothing => true and return
     end
-    order.print_receipt unless $Register.salor_printer == true
-    render :nothing => true
+    text = Printr.new.sane_template('item',binding)
+    if $Register.salor_printer
+      render :text => text
+    else
+      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      render :nothing => true
+    end
   end
+
   def show_payment_ajax
     # Recalculate everything and then show Payment Popup
     @order = initialize_order
@@ -384,11 +374,6 @@ class OrdersController < ApplicationController
       GlobalData.salor_user.meta.order_id = nil
       @order = GlobalData.salor_user.get_new_order
     end
-  end
-  def print_order_receipt
-    @order = Order.scopied.find_by_id(params[:id])
-    @order.print_receipt if @order and not $Register.salor_printer == true
-    render :nothing => true
   end
   def new_order_ajax
     GlobalData.salor_user.meta.order_id = nil

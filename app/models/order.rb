@@ -607,25 +607,7 @@ class Order < ActiveRecord::Base
     t -= self.calculate_rebate
     return t
   end
-  def print_receipt
-    #begin
-      @order = self
-      @vendor = self.vendor
-      @in_cash = 0
-      @by_card = 0
-      @by_gift_card = 0
-      @other_credit = 0
-      cash_register_id = GlobalData.salor_user.meta.cash_register_id
-      vendor_id = GlobalData.salor_user.meta.vendor_id
-      salor_user = GlobalData.salor_user
-      if not $Register.salor_printer == true
-        text = Printr.new.sane_template("item",binding) 
-        Printr.new.direct_write($Register.thermal_printer,text)
-      end
-    #rescue
-    #  GlobalErrors.append("system.errors.order_print_failure",self)
-    #end
-  end
+
   def to_json
     self.total = 0 if self.total.nil?
     attrs = {
