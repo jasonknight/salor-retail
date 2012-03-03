@@ -49,6 +49,7 @@ function RoundFixed(Number, DecimalPlaces) {
   }
   function print_url(url) {
     if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
+      Salor.stopDrawerObserver(Register.cash_drawer_path);
       SalorPrinter.printURL(Register.thermal_printer,url);
     } else {
       $.get(url);
