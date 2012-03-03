@@ -190,8 +190,9 @@ class Node < ActiveRecord::Base
   def parse(record)
     @klass = Kernel.const_get(record[:class])
     new_record = record.clone
+    log_action "Considering: " + new_record.inspect
     if record.key? :category_sku then
-      c = Category.find_or_create_by_sku(record[:category])
+      c = Category.find_by_sku(record[:category_sku])
       new_record[:category_id] = c.id
       new_record.delete(:category_sku)
       c.update_attribute :vendor_id, @target.vendor_id
@@ -257,7 +258,7 @@ class Node < ActiveRecord::Base
     @hash ||= {}
     record = {:class => item.class.to_s}
     item.changes.each do |k,v|
-      record[k.to_sym] = v[1]
+      record[k.to_sym] = v[1] unless iggy(k,item)
     end
     if item.respond_to? :sku and item.sku.nil? then
       item.set_sku if item.respond_to? :set_sku
