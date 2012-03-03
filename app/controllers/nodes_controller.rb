@@ -28,6 +28,8 @@ class NodesController < ApplicationController
     @node = Node.where(:sku => p[:node][:sku]).first
     if @node then
       @node.handle(p)
+    else
+      raise "NoNodeFound(#{p[:node][:sku]})"
     end
     redirect_to request.referer
   end

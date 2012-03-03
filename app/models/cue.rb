@@ -4,12 +4,12 @@ class Cue < ActiveRecord::Base
          req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
          Cue.where(:to_send => true, :is_handled => false).all.each do |msg|
            url = URI.parse(msg.url)
-           req.body = self.payload
-           log_action "Sending: " + req.body.inspect
+           req.body = msg.payload
+           SalorBase.log_action self, "Sending: " + req.body.inspect
            request = Net::HTTP.new(url.host, url.port)
            response = request.start {|http| http.request(req) }
            response_parse = JSON.parse(response.body)
-           log_action("Received From Node: " + response.body)
+           SalorBase.log_action(self,"Received From Node: " + response.body)
            msg.update_attribute :is_handled, true
          end
      end
