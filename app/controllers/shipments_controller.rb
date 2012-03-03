@@ -126,7 +126,7 @@ class ShipmentsController < ApplicationController
   # DELETE /shipments/1.xml
   def destroy
     @shipment = Shipment.find(params[:id])
-    @shipment.destroy
+    @shipment.kill
 
     respond_to do |format|
       format.html { redirect_to(shipments_url) }

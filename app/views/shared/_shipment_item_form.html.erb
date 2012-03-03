@@ -199,8 +199,7 @@ var shipment_items_callbacks = {
                 tRow.val(qty);
                 // SCOTTIE: move this row to the top
                 var sRow = tRow.parents(':eq(1)').detach();
-                // $('#shipment_items > div.item:nth-child(2)').before(sRow);
-                $('#shipment_items > div.item:eq(1)').before(sRow);
+                $(sRow).insertAfter('#shipment_items > div.item:first');
                 // END
                 var f = $('.attribute-sku').first();
                 f.val('');

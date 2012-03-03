@@ -92,13 +92,13 @@ class Vendor < ActiveRecord::Base
     self.vendor_printer_ids = ps
   end
   def open_cash_drawer
-	  cash_register_id = GlobalData.salor_user.meta.cash_register_id
+    cash_register_id = $User.meta.cash_register_id
     vendor_id = self.id
     if cash_register_id and vendor_id
-      printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
-      Printr.new.send(printers.first.name.to_sym,'drawer_transaction',binding) if printers.first
+      text = Printr.new.sane_template("drawer_transaction",binding)
+      Printr.new.direct_write($Register.thermal_printer,text)
     end
-	end
+  end
 
   def receipt_logo_header=(data)
     write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s 

@@ -41,14 +41,14 @@ function RoundFixed(Number, DecimalPlaces) {
     alert(str);
   }
   function print_order(id) {
-    if (typeof SalorPrinter != 'undefined') {
+    if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
       print_url(Conf.url + '/orders/render_order_receipt?order_id=' + id);
     } else {
       print_url('/orders/print_receipt?order_id=' + id);
     }
   }
   function print_url(url) {
-    if (typeof SalorPrinter != 'undefined') {
+    if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
       SalorPrinter.printURL(Register.thermal_printer,url);
     } else {
       $.get(url);

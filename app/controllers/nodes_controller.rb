@@ -1,10 +1,36 @@
 require 'yaml'
 YAML::ENGINE.yamler = 'syck'
 class NodesController < ApplicationController
+  include SalorBase
   # GET /nodes
   # GET /nodes.xml
   before_filter :authify, :except => [:receive]
   before_filter :initialize_instance_variables, :except => [:receive]
+  def send_msg
+    req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+    node = Cue.find_by_id params[:id]
+    if node then
+      url = URI.parse(node.url)
+      req.body = node.payload
+      log_action "Sending Single MSG #{node.id}"
+      req2 = Net::HTTP.new(url.host, url.port)
+      response = req2.start {|http| http.request(req) }
+      response_parse = JSON.parse(response.body)
+      log_action("Received From Node: " + response.body)
+      node.update_attribute :is_handled, true
+    end
+    redirect_to request.referer
+  end
+
+  def receive_msg
+    msg = Cue.find_by_id params[:id]
+    p = SalorBase.symbolize_keys(JSON.parse(msg.payload))
+    @node = Node.where(:sku => p[:node][:sku]).first
+    if @node then
+      @node.handle(p)
+    end
+    redirect_to request.referer
+  end
   def index
     @nodes = Node.scopied
 
@@ -49,6 +75,7 @@ class NodesController < ApplicationController
     respond_to do |format|
       if @node.save
         @node.broadcast_add_me
+        Cue.send_all_pending
         format.html { redirect_to(@node, :notice => 'Node was successfully created.') }
         format.xml  { render :xml => @node, :status => :created, :location => @node }
       else
@@ -78,7 +105,7 @@ class NodesController < ApplicationController
   # DELETE /nodes/1.xml
   def destroy
     @node = Node.scopied.find(params[:id])
-    @node.destroy
+    @node.kill
 
     respond_to do |format|
       format.html { redirect_to(nodes_url) }
@@ -93,7 +120,7 @@ class NodesController < ApplicationController
       @node = Node.where(:sku => params[:node][:sku]).first
       if @node then
         SalorBase.log_action("NodesController","node found, handling")
-        n = NodeQueue.new(:source_sku =>params[:node][:sku], :destination_sku => params[:target][:sku],:receive => true, :payload => request.body.read)
+        n = Cue.new(:source_sku =>params[:node][:sku], :destination_sku => params[:target][:sku],:to_receive => true, :payload => request.body.read)
         n.save
         #render :json => @node.handle(SalorBase.symbolize_keys(JSON.parse(request.body.read))).to_json and return
         render :json => {:success => true}.to_json and return

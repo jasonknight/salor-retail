@@ -124,7 +124,7 @@ class OrderItemsController < ApplicationController
   # DELETE /order_items/1.xml
   def destroy
     @order_item = OrderItem.find(params[:id])
-    @order_item.destroy
+    @order_item.kill
 
     respond_to do |format|
       format.html { redirect_to(order_items_url) }

@@ -122,7 +122,7 @@ class CategoriesController < ApplicationController
 
   def destroy
     @category = GlobalData.salor_user.get_category(params[:id])
-    @category.destroy
+    @category.kill
     GlobalData.reload(:categories)
     respond_to do |format|
       format.html { redirect_to(categories_url) }

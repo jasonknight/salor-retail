@@ -49,6 +49,7 @@
 class Role < ActiveRecord::Base
 	include SalorScope
   include SalorModel
+  include SalorBase
   has_and_belongs_to_many :employees
   # This is a role black list, if it isn't here
   # it means they can do it. Only put roles here

@@ -247,12 +247,18 @@ class Node < ActiveRecord::Base
     item.changes.each do |k,v|
       record[k.to_sym] = v[1]
     end
+    if item.respond_to? :sku and item.sku.nil? then
+      item.set_sku if item.respond_to? :set_sku
+    end
     record[:sku] = item.sku if item.respond_to? :sku
     record[:tax_profile_sku] = item.tax_profile.sku if item.respond_to? :tax_profile
     record[:category_sku] = item.category.sku if item.respond_to? :category and item.category.respond_to? :sku
     record[:class] = item.class.to_s
     record[:name] = item.name if item.respond_to? :name
     if item.class == Customer then
+      if item.sku.blank? or item.sku.nil? then
+        item.sku = "ICANTBELIEVETHISSHIT"
+      end
       record[:loyalty_card_sku] = item.loyalty_card.sku
       record[:loyalty_card_points] = item.loyalty_card.points
     end
@@ -274,6 +280,9 @@ class Node < ActiveRecord::Base
     record = {:class => item.class.to_s}
     item.attributes.each do |k,v|
       record[k.to_sym] = v if not iggy?(k,item)
+    end
+    if item.respond_to? :sku and item.sku.nil? then
+      item.set_sku if item.respond_to? :set_sku
     end
     record[:sku] = item.sku if item.respond_to? :sku
     record[:tax_profile_sku] = item.tax_profile.sku if item.respond_to? :tax_profile
@@ -334,7 +343,7 @@ class Node < ActiveRecord::Base
       n = NodeMessage.new(:source_sku => self.sku, :dest_sku => @target.sku, :mdhash => @md5)
       n.save
     end
-    n = NodeQueue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :send => true, :payload => self.payload)
+    n = Cue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :to_send => true, :payload => self.payload)
     n.save
     # req.body = self.payload
     #log_action "Sending: " + req.body.inspect
@@ -357,6 +366,12 @@ class Node < ActiveRecord::Base
       :message => "AddMe"
     }
     return if not params[:target]
+
+    @md5 = Digest::SHA2.hexdigest("#{@hash[:record].to_json}")
+    
+    n = Cue.new(:to_send => true,:url => self.url, :destination_sku => self.sku, :source_sku => self.sku, :payload => params.to_json) 
+    n.save
+    return
     self.update_attribute :is_busy, true
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(self.url)

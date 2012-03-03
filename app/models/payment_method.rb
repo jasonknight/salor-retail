@@ -50,6 +50,7 @@ class PaymentMethod < ActiveRecord::Base
   belongs_to :order
   before_save :process
   include SalorModel
+  include SalorBase
   def self.types_list
     types = []
     pmx = I18n.t("system.payment_external_types").split(',')

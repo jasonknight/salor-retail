@@ -1,40 +1,93 @@
 <p id="notice"><%= notice %></p>
+<table width="90%" align="center">
+  <tr>
+    <td>
+        <p>
+          <b>Name:</b>
+          <%= @node.name %>
+        </p>
 
-<p>
-  <b>Name:</b>
-  <%= @node.name %>
-</p>
+        <p>
+          <b>Sku:</b>
+          <%= @node.sku %>
+        </p>
 
-<p>
-  <b>Sku:</b>
-  <%= @node.sku %>
-</p>
+        <p>
+          <b>Token:</b>
+          <%= @node.token %>
+        </p>
 
-<p>
-  <b>Token:</b>
-  <%= @node.token %>
-</p>
+        <p>
+          <b>Node type:</b>
+          <%= @node.node_type %>
+        </p>
 
-<p>
-  <b>Node type:</b>
-  <%= @node.node_type %>
-</p>
+        <p>
+          <b>Url:</b>
+          <%= @node.url %>
+        </p>
+      </td>
+      <td>
+          <p>
+            <b>Is self:</b>
+            <%= @node.is_self %>
+          </p>
 
-<p>
-  <b>Url:</b>
-  <%= @node.url %>
-</p>
-
-<p>
-  <b>Is self:</b>
-  <%= @node.is_self %>
-</p>
-
-<p>
-  <b>Accepted ips:</b>
-  <%= @node.accepted_ips %>
-</p>
-
+          <p>
+              <b>Accepted ips:</b>
+            <%= @node.accepted_ips %>
+          </p>
+      </td>
+  </tr>
+</table>
+<h2> Sending</h2>
+<table>
+  <% Cue.where(:to_send => true, :source_sku => @node.sku).limit(10).order("created_at desc").each do |msg| %>
+    <tr>
+      <td class="pointer" onclick="$('#<%= msg.id %>_payload').toggle();">  
+         <h4> Destination: <%= msg.destination_sku %></h4>
+      </td>
+      <td>
+        <%= l msg.created_at %>
+      </td>
+      <td> <%= msg.is_handled %></td>
+      <td>
+        <%= link_to "Send Now", "/nodes/send_msg?id=#{msg.id}" %>
+      </td>
+    </tr>
+    <tr id="<%= msg.id %>_payload" style="display:none;">
+      <td colspan="3">
+      <pre>
+<%= JSON.pretty_generate(JSON.parse(msg.payload)) %>
+      </pre>
+      </td>
+    </tr>
+  <% end -%>
+</table>
+<h2> Receiving </h2>
+<table>
+  <% Cue.where(:to_receive => true).where("destination_sku = '#{@node.sku}' OR source_sku = '#{@node.sku}'").limit(10).order("created_at desc").each do |msg| %>
+    <tr>
+      <td class="pointer" onclick="$('#<%= msg.id %>_payload').toggle();">  
+         <h4> Source: <%= msg.source_sku %></h4>
+      </td>
+      <td>
+        <%= l msg.created_at %>
+      </td>
+      <td> <%= msg.is_handled %></td>
+      <td>
+        <%= link_to "Receive Now", "/nodes/receive_msg?id=#{msg.id}" %>
+      </td>
+    </tr>
+    <tr id="<%= msg.id %>_payload" style="display:none;">
+      <td colspan="3">
+      <pre>
+<%= JSON.pretty_generate(JSON.parse(msg.payload)) %>
+      </pre>
+      </td>
+    </tr>
+  <% end -%>
+</table>
 
 <%= link_to 'Edit', edit_node_path(@node) %> |
 <%= link_to 'Back', nodes_path %>

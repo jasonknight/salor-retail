@@ -25,13 +25,7 @@ end
 </div>
 
 <script type="text/javascript">
-function quick_open_drawer() {
-    if (typeof Salor != 'undefined') {
-      Salor.newOpenCashDrawer('<%= GlobalData.cash_drawer if GlobalData.conf %>');
-    } else {
-      $.get('/vendors/open_cash_drawer');
-    }
-  }
+
 $(function () {
     try {
       $('.click-help').click(function (event) {

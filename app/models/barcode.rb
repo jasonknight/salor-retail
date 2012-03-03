@@ -91,10 +91,13 @@ class Barcode
   end
   def user_key_codes(fname,name)
     codes = []
+    puts "Starting: " + fname
     File.open(fname,'r').each_line do |line|
       parts = line.split("\t")
-      codes << parts[0].gsub("U","")
+      puts "Line: " + line
+      create(parts[0].gsub("U",""),'upc')
     end
+    return
     i = 0
     while not codes.empty? do
     page do |p|

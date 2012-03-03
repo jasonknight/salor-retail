@@ -137,7 +137,7 @@ class CashRegistersController < ApplicationController
       if @cash_register.id == salor_user.meta.cash_register_id then
         salor_user.meta.cash_register_id = nil
       end
-      @cash_register.destroy
+      @cash_register.kill
     end
     
     respond_to do |format|

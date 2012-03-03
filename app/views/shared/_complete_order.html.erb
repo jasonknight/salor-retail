@@ -140,20 +140,24 @@ function complete_order_show() {
   <% end %>
   $('.a4-print-button').remove(); 
   var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print_48.png' /></div>");
-  var thermprint = $("<div class='a4-print-button'><img src='/images/icons/print_48.png' /></div>");
+  //var thermprint = $("<div class='a4-print-button'><img src='/images/icons/print_48.png' /></div>");
   var left = $('#complete_order').position().left;
   var width = $('#complete_order').width();
   var cpos = {x: width + left + 25, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
   a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
-  thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
+  //thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
+  relevant_order_id = $('.order-id').html();
   a4print.mousedown(function () {
-    Salor.printPage('http://salor/orders/'+$('.order-id').html().replace('#','')+'/print');          
+    window.location = '/orders/' + relevant_order_id + '/print';
+    //if (typeof(Salor) != 'undefined') {
+    //  Salor.printPage(Conf.url + '/orders/' + relevant_order_id + '/print');   
+    //}       
   });
-  thermprint.mousedown(function () {
-        print_order( $('.order-id').html() );
-  });
+  //thermprint.mousedown(function () {
+  //      print_order( $('.order-id').html() );
+  //});
   $("body").append(a4print);
-  $("body").append(thermprint);
+  //$("body").append(thermprint);
   bindInplaceEnter(false);
   handleKeyboardEnter = false;
   orderCompleteDisplayed = true;
@@ -164,7 +168,11 @@ function complete_order_show() {
       if (confirmInactive) {
         complete_order_hide();
       } else {
-        complete_order_send(false);
+        <% if $Register.no_print == true then %>
+          complete_order_send(false);
+        <% else %>
+          complete_order_send(true);
+        <% end -%>
         focusInput($("#payment_amount_0"));
       }
     }
@@ -368,6 +376,7 @@ function complete_order_send(print) {
   } else {
     print = 'true';
   }
+  quick_open_drawer();
   if (sendingOrder) return;
   allow_payment_amount = false;
   sendingOrder = true;
@@ -376,7 +385,17 @@ function complete_order_send(print) {
   if (typeof(Salor) != 'undefined') {
     Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
   }
-  <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
+
+  print_order_id = $('.order-id').html();
+
+  get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
+    if (print == 'true') { print_order(print_order_id); }
+    sendingOrder = false;
+  }, 'get', function() {
+    sendingOrder = false;
+    allow_complete_order();
+    allow_payment_amount = true;
+  });
 }
 
 function displayChangeToCustomer() {

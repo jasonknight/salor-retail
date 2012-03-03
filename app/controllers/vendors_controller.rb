@@ -101,7 +101,7 @@ class VendorsController < ApplicationController
     if not check_license() then
       redirect_to :controller => "home", :action => "index" and return
     end
-    @vendors = salor_user.get_vendors(params[:page])
+    @vendors = $User.get_vendors(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -185,7 +185,7 @@ class VendorsController < ApplicationController
   # DELETE /vendors/1.xml
   def destroy
     @vendor = salor_user.get_vendor(params[:id])
-    @vendor.destroy
+    @vendor.kill
 
     respond_to do |format|
       format.html { redirect_to(vendors_url) }
@@ -232,7 +232,7 @@ class VendorsController < ApplicationController
         @drawer_transaction.drawer_id = salor_user.get_drawer.id
       end
       if @drawer_transaction.save then
-        @drawer_transaction.print
+        @drawer_transaction.print if not $Register.salor_printer == true
         if @drawer_transaction.drop then
           @drawer_transaction.owner.get_drawer.update_attribute(:amount,@drawer_transaction.owner.get_drawer.amount + @drawer_transaction.amount)
         elsif @drawer_transaction.payout then
@@ -255,6 +255,7 @@ class VendorsController < ApplicationController
   def open_cash_drawer
     @vendor ||= Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id)
     @vendor.open_cash_drawer
+    render :nothing => true
   end
   def render_open_cashdrawer
     text = Printr.new.sane_template('drawer_transaction',binding)

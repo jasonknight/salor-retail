@@ -258,7 +258,7 @@ class Order < ActiveRecord::Base
 	#end
 	#
 	def remove_order_item(oi)
-	  if self.paid == 1 then
+	  if self.paid == 1 and not $User.is_technicia? then
 	    GlobalErrors.append("system.errors.cannot_edit_completed_order")
 	    return
 	  end
@@ -310,7 +310,7 @@ class Order < ActiveRecord::Base
 	end
 	#
 	def calculate_totals(speedy = false)
-	  if self.paid == 1 then
+	  if self.paid == 1 and not $User.is_technician? then
 	    #GlobalErrors.append("system.errors.cannot_edit_completed_order",self)
 	    return
 	  end
@@ -578,7 +578,6 @@ class Order < ActiveRecord::Base
       elsif type == :drop then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
-      GlobalData.vendor.open_cash_drawer
     end
   end
   def toggle_refund(x)
@@ -591,6 +590,7 @@ class Order < ActiveRecord::Base
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
       opts = {:tag => I18n.t("activerecord.models.drawer_transaction.refund"),:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
       create_drawer_transaction(self.subtotal,:payout,opts)
+      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer # this is handled now by an onclick event in orders/_order_menu.html.erb
       self.order_items.each do |oi|
         if not oi.refunded then
           oi.toggle_refund(nil)
@@ -618,9 +618,9 @@ class Order < ActiveRecord::Base
       cash_register_id = GlobalData.salor_user.meta.cash_register_id
       vendor_id = GlobalData.salor_user.meta.vendor_id
       salor_user = GlobalData.salor_user
-      if cash_register_id and vendor_id
-        printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
-        Printr.new.send(printers.first.name.to_sym,'item',binding) if printers.first
+      if not $Register.salor_printer == true
+        text = Printr.new.sane_template("item",binding) 
+        Printr.new.direct_write($Register.thermal_printer,text)
       end
     #rescue
     #  GlobalErrors.append("system.errors.order_print_failure",self)

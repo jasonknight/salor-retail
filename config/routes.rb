@@ -2,6 +2,8 @@ Salor::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
+  match "nodes/send_msg" => "nodes#send_msg"
+  match "nodes/receive_msg" => "nodes#receive_msg"
   match "home/index" => "home#index"
   match "home/set_user_theme_ajax" => "home#set_user_theme_ajax"
   match "home/user_employee_index" => "home#user_employee_index"

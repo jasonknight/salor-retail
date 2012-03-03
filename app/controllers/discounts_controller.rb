@@ -126,7 +126,7 @@ class DiscountsController < ApplicationController
   def destroy
     @discount = salor_user.get_discount(params[:id])
     if @discount then
-      @discount.destroy
+      @discount.kill
     end
 
     respond_to do |format|

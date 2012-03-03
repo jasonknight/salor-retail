@@ -26,7 +26,7 @@
               <%= oi.item.sku %>
               <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
                 <% topts = {:rev => reverse, :refresh => 'true',:class => "order-item-refund-small toggle pointer refund-#{oi.id}", :field => 'toggle_refund', :value => 'nil', :klass => 'OrderItem', :model_id => oi.id } %>
-               <%= oi.refunded ? salor_icon(:refunded,{},32) : link_to(salor_icon(:refund,{},32),'/orders/refund_item?id=' + oi.id.to_s) %>
+               <%= oi.refunded ? salor_icon(:refunded,{},32) : link_to(salor_icon(:refund,{:onclick => 'quick_open_drawer();'},32),'/orders/refund_item?id=' + oi.id.to_s) %>
               <% end %>
               <%
                 if params[:action] == 'show' then
