@@ -59,9 +59,9 @@ class Customer < ActiveRecord::Base
   def set_sku
     if self.sku.blank? then
       if self.vendor.nil? then
-        self.sku = "VENDORLESS:#{self.first_name}:#{self.last_name}:#{rand(1000)}".gsub(/[^a-zA-Z0-9]/,'')
+        self.sku = "VENDORLESS:#{self.first_name}:#{self.last_name}".gsub(/[^a-zA-Z0-9]/,'')
       else
-        self.sku = "#{self.vendor.name}:#{self.first_name}:#{self.last_name}:#{rand(1000)}".gsub(/[^a-zA-Z0-9]/,'')
+        self.sku = "#{self.vendor.name}:#{self.first_name}:#{self.last_name}".gsub(/[^a-zA-Z0-9]/,'')
       end
     end
   end
