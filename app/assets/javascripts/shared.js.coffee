@@ -1,3 +1,7 @@
+$ ->
+  if typeof(Salor) != 'undefined'
+    Salor.stopDrawerObserver()
+
 window.showButtonCategoryContainer = (id) ->
   $('.button-category-container').hide()
   $('#' + id).show()
