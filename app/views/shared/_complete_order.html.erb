@@ -264,17 +264,16 @@ function displayAdvertising() {
 }
 
 function complete_order_hide() {
-  <% if GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
+  if (typeof Salor != 'undefined') {
+    if (Register.cash_drawer_path != "" ) {
+      Salor.stopDrawerObserver();
+    }
+    if (Register.pole_display == "") {
       Salor.mimoRefresh(Conf.url + "/vendors/"+Meta.vendor_id+"/display_logo",800,480);
+    } else {
+      Salor.poleDancer(Register.pole_display, Register.customer_screen_blurb);
     }
-  <% else %>
-    if (typeof(Salor) != 'undefined') {
-      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', '<%= GlobalData.cash_register.customer_screen_blurb %>' );
-    }
-  <% end %>
-  //  alert("Called " + _called);
-  //_called = _called + 1;
+  }
   $("#payment_methods").html("");
   $(".payment-amount").attr("disabled", true);
   $('#complete_order').hide();
@@ -291,6 +290,7 @@ function complete_order_hide() {
   }
   focuseKeyboardInput = true;
   $('body').triggerHandler({type: "CompleteOrderHide"});
+  if(parseInt($('.order-id').html())%20 == 0) {window.location = '/orders/new'; } // trigger intensified garbage collection regularly
 }
 
 function get_highest(num) {
@@ -376,14 +376,16 @@ function complete_order_send(print) {
   } else {
     print = 'true';
   }
-  quick_open_drawer();
   if (sendingOrder) return;
   allow_payment_amount = false;
   sendingOrder = true;
   allow_complete_order(false);
   displayChangeToCustomer();
+  quick_open_drawer();
   if (typeof(Salor) != 'undefined') {
-    Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
+    if (Register.pole_display == "") {
+      Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
+    }
   }
 
   print_order_id = $('.order-id').html();
@@ -391,6 +393,9 @@ function complete_order_send(print) {
   get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
     if (print == 'true') { print_order(print_order_id); }
     sendingOrder = false;
+    if (Register.cash_drawer_path != "" ) {
+      setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path)",2000);
+    }
   }, 'get', function() {
     sendingOrder = false;
     allow_complete_order();
