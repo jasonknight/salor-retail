@@ -1,4 +1,3 @@
-//= require jquery.modcoder.excolor.js
 $ ->
   $("#button_color").modcoder_excolor()
 
