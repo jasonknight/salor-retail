@@ -94,7 +94,7 @@
 <% if @order.lc_points? and not @order.refunded %>
 
   <% subtotal -= @order.vendor.salor_configuration.dollar_per_lp * @order.lc_points %>
-Abzug: - <%= @order.vendor.salor_configuration.dollar_per_lp * @order.lc_points %> (<%= @order.lc_points %> Punkte)
+Abzug: - <%= number_with_precision(@order.vendor.salor_configuration.dollar_per_lp * @order.lc_points, :precision => 2) %> (<%= @order.lc_points %> Punkte)
 <% end %>
 
 <%= "------------------------------------------" %>
