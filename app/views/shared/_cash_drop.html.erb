@@ -94,7 +94,7 @@ function show_coin_calculator() {
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>
   <span class='cash_drop_label'><%= I18n.t("menu.cash_register") %>:</span>
-  <span class="pos-cash-register-amount" style="font-weight:bold;font-size:1.5em;"><%= salor_number_to_currency(GlobalData.salor_user.get_drawer.amount) if GlobalData.salor_user %></span>
+  <span class="pos-cash-register-amount"><%= salor_number_to_currency(GlobalData.salor_user.get_drawer.amount) if GlobalData.salor_user %></span>
 
   <% if GlobalData.salor_user and GlobalData.salor_user.can(:manager)  %>
       <p>

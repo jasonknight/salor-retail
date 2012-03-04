@@ -1,11 +1,11 @@
 <%= "\e@" %>
 <%= "\ea\x01" %>
 <%= "\x1D\x61\x01" %>
-<%= "\e!\x38" %><%= @vendor.name if @vendor.receipt_logo_header.nil? %>
+<%= "\e!\x38" %><%= @order.vendor.name if @order.vendor and @order.vendor.receipt_logo_header.nil? %>
 <%= "\e!\x01" %>
-<%= @vendor.receipt_logo_header if @vendor.receipt_logo_header %>
+<%= @order.vendor.receipt_logo_header if @order.vendor %>
 
-<%= @vendor.salor_configuration.receipt_blurb.to_s %>
+<%= @order.vendor.salor_configuration.receipt_blurb.to_s if @order.vendor %>
 <%= "\n\e!\x01" + "\ea\x00" %>
 <%= I18n.t("receipts.invoice_numer_X_at_time", :number => @order.id, :datetime => I18n.l(@order.created_at, :format => :iso)) %>
 
@@ -92,9 +92,8 @@
 <%= list_of_items %>
 
 <% if @order.lc_points? and not @order.refunded %>
-
-  <% subtotal -= GlobalData.conf.dollar_per_lp * @order.lc_points %>
-Abzug: - <%= GlobalData.conf.dollar_per_lp * @order.lc_points %> (<%= @order.lc_points %> Punkte)
+<% subtotal -= @order.vendor.salor_configuration.dollar_per_lp * @order.lc_points %>
+Abzug: - <%= number_with_precision(@order.vendor.salor_configuration.dollar_per_lp * @order.lc_points, :precision => 2) %> (<%= @order.lc_points %> Punkte)
 <% end %>
 
 <%= "------------------------------------------" %>
@@ -139,14 +138,7 @@ Abzug: - <%= GlobalData.conf.dollar_per_lp * @order.lc_points %> (<%= @order.lc_
 <% order_subtotal = subtotal + discount_subtotal + rebate_subtotal + coupon_subtotal + rebate %>
 <%= "SUMME                         EUR %8.2f\n" % order_subtotal %>
 <%= "==========================================\n" %>
-<% if $Register.paylife == true and @order.has_cute_credit_message? then %>
-  <% rec = @order.cute_credit_message %>
-<%= rec["x_text"] %>
-<% if @signature == true %>
-<%= "Unterschrift: \n\n_______________________________________________\n\n" %>
-<% end -%>
-<%= rec["result"] %>
-<% end -%>
+
 <%
 if @order.payment_methods.any? then
   ic = @order.payment_methods.find_by_internal_type 'InCash'
@@ -234,7 +226,7 @@ Treuepunkte: <%= @order.loyalty_card.points.to_f - @order.lc_points.to_f %>
 <% else
   @order.update_attribute :was_printed,true
 end %>
-<%= @vendor.receipt_logo_footer if @vendor.receipt_logo_footer %>
+<%= @order.vendor.receipt_logo_footer if @order.vendor and @order.vendor.receipt_logo_footer %>
 
 
 
