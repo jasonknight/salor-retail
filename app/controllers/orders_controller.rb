@@ -285,7 +285,7 @@ class OrdersController < ApplicationController
       render :nothing => true and return
     end
     text = Printr.new.sane_template('item',binding)
-    if $Register.salor_printer
+    if not $Register #$Register.salor_printer # no authification
       render :text => text
     else
       File.open($Register.thermal_printer,'w') { |f| f.write text }
