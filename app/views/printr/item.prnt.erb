@@ -93,8 +93,8 @@
 
 <% if @order.lc_points? and not @order.refunded %>
 
-  <% subtotal -= @order.vendor.dollar_per_lp * @order.lc_points %>
-Abzug: - <%= @order.vendor.dollar_per_lp * @order.lc_points %> (<%= @order.lc_points %> Punkte)
+  <% subtotal -= @order.vendor.salor_configuration.dollar_per_lp * @order.lc_points %>
+Abzug: - <%= @order.vendor.salor_configuration.dollar_per_lp * @order.lc_points %> (<%= @order.lc_points %> Punkte)
 <% end %>
 
 <%= "------------------------------------------" %>
