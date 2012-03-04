@@ -49,7 +49,7 @@
 # functioning of your business.
 class OrdersController < ApplicationController
    before_filter :authify, :except => [:customer_display,:print, :print_receipt]
-   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print, :print_receipt]
+   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day]
    before_filter :crumble, :except => [:customer_display,:print, :print_receipt]
    def new_pos
