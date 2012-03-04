@@ -3,7 +3,7 @@
 <%= "\x1D\x61\x01" %>
 <%= "\e!\x38" %><%= @order.vendor.name if @order.vendor and @order.vendor.receipt_logo_header.nil? %>
 <%= "\e!\x01" %>
-<%= @order.vendor.receipt_logo_header if @order.vendor and @order.vendor.receipt_logo_header %>
+<%= @order.vendor.receipt_logo_header if @order.vendor %>
 
 <%= @order.vendor.salor_configuration.receipt_blurb.to_s if @order.vendor %>
 <%= "\n\e!\x01" + "\ea\x00" %>
