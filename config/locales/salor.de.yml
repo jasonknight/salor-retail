@@ -169,6 +169,8 @@ de:
         name: Name
         quantity: Menge
         sku: SKU
+      cash_register:
+        sticker_printer: Etikettendrucker
       sku: SKU
       start_amount: Startbetrag
       start_date: Beginn
@@ -356,7 +358,7 @@ de:
     update_gift_card: Gutschein aktualisieren
     vendors: Filialen
     void: Storno
-    end_of_day_drop: Tagessumme entnehmen
+    end_of_day_drop: Gesamtsumme entnehmen
     transaction_tags: Buchungen
     update_location: Orte
     update_real_quantity: Inventur

@@ -5,7 +5,7 @@ class AddCategoryIdToButton < ActiveRecord::Migration
 
     add_column :buttons, :color, :string
 
-    rename_column :buttons, :weight, :position
+    add_column :buttons, :position, :integer
     Button.all.each do |b|
        cat = Category.find_or_create_by_name(b.old_category_name)
        cat.update_attribute :vendor_id, b.vendor_id

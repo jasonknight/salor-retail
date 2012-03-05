@@ -170,7 +170,7 @@ en-US:
         quantity: quantity
         sku: SKU
       cash_register:
-        sticker_printer: Etikettendrucker
+        sticker_printer: Sticker printer
       sku: SKU
       start_amount: start amount
       start_date: start date
