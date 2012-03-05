@@ -1,8 +1,22 @@
 <script type="text/javascript">
 
 function playSound(file) {
-  Salor.playSound(file);
+  if (typeof Salor != 'undefined') {
+    Salor.playSound(file);
+  }
 }
+  function add_item(sku) {
+      if (sku.match(/^31\d{8}.{1,2}$/)) {
+        var oid = $('.order-id').html();
+        var cid = Meta['cash_register_id'];
+        var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
+        window.location = "/employees/login?" + p.join("&");
+        return;
+      }
+      var user_line = "&user_id=<%= $User.id %>&user_type=<%= $User.class%>";
+      get('/orders/add_item_ajax?order_id='+$('.order-id').html()+'&sku=' + sku + user_line, filename);
+      $('#keyboard_input').val('');
+    }
 
 var focuseKeyboardInput = false;
 var calledFrom = 'TopOfAppJS';
@@ -25,21 +39,27 @@ function RoundFixed(Number, DecimalPlaces) {
       str = str + " " + prop + ":" +obj[prop];
     }
     alert(str);
+}
+
+  function print_order(id) {
+     print_url(Register.thermal_printer,'/orders/print_receipt?order_id=' + id);
   }
-   function print_order(id) {
-    if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
-      SalorPrinter.printURL(Register.thermal_printer,Conf.url+'/orders/render_order_receipt?order_id=' + id);
+
+  function print_url(printer_path,url) {
+    if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
+      Salor.stopDrawerObserver(Register.cash_drawer_path);
+      SalorPrinter.printURL(printer_path, Conf.url + url);
     } else {
-      $.get('/orders/print_receipt?order_id=' + id);
+      $.get(url);
     }
   }
-  if (typeof Salor != 'undefined') {
-    function snapCam() {
-      Salor.captureCam(0,'<%= ::Rails.root.to_s  %>/public/images/cameras/camera-0.png',1);
-      setTimeout("snapCam()",2000);
-    }
-    //setTimeout("snapCam()",2000);
-  }
+  //if (typeof Salor != 'undefined') {
+  //  function snapCam() {
+  //    Salor.captureCam(0,'<%= ::Rails.root.to_s  %>/public/images/cameras/camera-0.png',1);
+  //    setTimeout("snapCam()",2000);
+  //  }
+  //  //setTimeout("snapCam()",2000);
+  //}
     function salorGetOffset( el ) {
         var _x = 0;
         var _y = 0;
@@ -139,25 +159,26 @@ function RoundFixed(Number, DecimalPlaces) {
     window.params = {
     action: "<%= params[:action] %>",
     controller: "<%= params[:controller] %>",
-<% cache('application_js/'+user_cache_name) do -%>
-      user: {
+    user: {
         name: "<%= salor_user.username if salor_user %>"
       }
     };
 
+<% cache('application_js/'+user_cache_name) do -%>
+ 
     $(document).mousemove(function(e){
       MX = e.pageX;
       MY = e.pageY;
     });
 
-    $.fn.idle = function(time){
-      var i = $(this);
-      i.queue(function(){
-        setTimeout(function(){
-          i.dequeue();
-        }, time);
-      });
-    };
+    //$.fn.idle = function(time){
+    //  var i = $(this);
+    //  i.queue(function(){
+    //    setTimeout(function(){
+    //      i.dequeue();
+    //    }, time);
+    //  });
+    //};
     function confirm_link(link,message) {
       var answer = confirm(message)
       if (answer){
@@ -201,7 +222,8 @@ function RoundFixed(Number, DecimalPlaces) {
             }
             if ($('#keyboard_input').val()) {
               if (handleKeyboardEnter) {
-                keypad_callbacks['Enter'].call(this);
+                //keypad_callbacks['Enter'].call(this);
+                add_item($('#keyboard_input').val());
                 handled = true;
               } else {
                 event.preventDefault();
@@ -401,18 +423,16 @@ function RoundFixed(Number, DecimalPlaces) {
 
     function updateDrawer(obj) {
       $('.pos-cash-register-amount').html(toCurrency(obj.amount));
+      $('.eod-drawer-total').html(toCurrency(obj.amount));
     }
 
     function void_item(id) {
-      $('body').mask();
       get('/orders/split_order_item?id=' + id, filename, function () {
         window.location.reload();
       });
     }
 
     function refund_item(id) {
-      $('body').mask();
-
       get('/vendors/toggle?' +
         'field=toggle_refund' +
         '&klass=OrderItem' +
@@ -558,11 +578,9 @@ function RoundFixed(Number, DecimalPlaces) {
       if (elem.hasClass('editmedone')) {
         return;    
       }
-      elem.mousedown(function (event) {
-                 in_place_edit($(this).attr('id'),event.pageX,event.pageY);
-     }).mouseup(function () {
-       $('#inplaceedit').select();
-     });
+      elem.click(function (event) {
+        in_place_edit($(this).attr('id'),event.pageX,event.pageY);
+      });
       elem.addClass('editmedone');
     }
     function td(elem,opts) {
@@ -591,16 +609,12 @@ function RoundFixed(Number, DecimalPlaces) {
       elem.css({ cursor: 'pointer'});
       elem.mousedown(function () {
         var elem = $(this);
-        $('#main_content').mask('<%= t("views.single_words.saving ")%>');
         get('/vendors/toggle?' +
           'field=' + elem.attr('field') +
           '&klass=' + elem.attr('klass') +
           '&value=' + elem.attr('value') +
           '&model_id=' + elem.attr('model_id'),
-        filename,
-        function () {
-          $('#main_content').unmask();
-        }
+        filename
       );
         if (elem.attr('rev')) {
           elem.attr('src',elem.attr('rev'));
@@ -620,16 +634,12 @@ function RoundFixed(Number, DecimalPlaces) {
         $('#order_items_table tr:even').addClass('even');
         $('.pos-lock-small').each(function () {
           make_toggle($(this));
-          $('#main_content').unmask();
         });
       });
     }
     function update_pos_display() {
       return;
-      get('/orders/update_pos_display?ajax=true', filename, function () {
-        $('#main_content').unmask();
-      });
-
+      get('/orders/update_pos_display?ajax=true', filename);
     }
     function roundNumber(num, dec) {
       var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
@@ -669,10 +679,7 @@ function RoundFixed(Number, DecimalPlaces) {
       }
       elem.mousedown(function () {
         var elem = $(this);
-        $('#main_content').mask('<%= t("views.single_words.processing") %>');
-        get($(this).attr('url'), filename, function () {
-          $('#main_content').unmask();
-        });
+        get($(this).attr('url'), filename );
         if ($(this).attr('update_pos_display') == 'true') {
           update_pos_display();
           update_order_items();
@@ -721,7 +728,8 @@ function RoundFixed(Number, DecimalPlaces) {
               customLayout : null,
               accepted    : function () {
                 add_item($("#keyboard_input").val());
-              }
+              },
+              visible: function(){ $('.ui-keyboard-preview').select(); }
             });
         } else {
           elem.keyboard({
@@ -729,6 +737,7 @@ function RoundFixed(Number, DecimalPlaces) {
             stayOpen : true,
             layout       : '<%= I18n.locale %>',
             customLayout : null,
+            visible: function(){ $('.ui-keyboard-preview').select(); }
           });
         }
       } else {
@@ -737,6 +746,7 @@ function RoundFixed(Number, DecimalPlaces) {
           stayOpen    : true,
           layout       : 'num',
           customLayout : null,
+          visible: function(){ $('.ui-keyboard-preview').select(); }
         });
       }
       elem.addClass("keyboardable-done");
@@ -760,7 +770,7 @@ function RoundFixed(Number, DecimalPlaces) {
       }
       var kbd = $('<div class="kbd-show-button">&crarr;</div>');
       kbd.attr('target_id',"#" + elem.attr('id'));
-      kbd.mousedown(function () {
+      kbd.click(function () {
         var target = $(this).attr('target_id');
         $(target).getkeyboard().reveal();
       });
@@ -774,6 +784,7 @@ function RoundFixed(Number, DecimalPlaces) {
       for (opt in opts) {
         options[opt] = opts[opt];
       }
+      options["visible"]=function(){ $('.ui-keyboard-preview').select(); };
       if (elem.hasClass('keyboardable-int')) {
         options['layout'] = 'num';    
       }
@@ -799,17 +810,6 @@ function RoundFixed(Number, DecimalPlaces) {
       get('/home/set_user_theme_ajax?theme=' + tname, filename);
     }
 
-    function add_item(sku) {
-      if (sku.match(/^31\d{8}.{1,2}$/)) {
-        var oid = $('.order-id').html();
-        var cid = Meta['cash_register_id'];
-        var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
-        window.location = "/employees/login?" + p.join("&");
-        return;
-      }
-      get('/orders/add_item_ajax?order_id='+$('.order-id').html()+'&sku=' + sku, filename);
-      $('#keyboard_input').val('');
-    }
     function checkFocusInput() {
       if (focuseKeyboardInput) {
         focusInput($('#keyboard_input'));
@@ -904,7 +904,8 @@ function RoundFixed(Number, DecimalPlaces) {
           return false;
         }
         if ($('#keyboard_input').val()) {
-          keypad_callbacks['Enter'].call(this);
+          //keypad_callbacks['Enter'].call(this);
+          add_item($('#keyboard_input').val());
           handled = true;
         } else {
           //we aren't on the pos screen, so we should have some generic behaviors
@@ -966,21 +967,21 @@ function RoundFixed(Number, DecimalPlaces) {
       'default' : [
         "\u0302 1 2 3 4 5 6 7 8 9 0 \u00df \u0301 {b}",
         "{tab} q w e r t z u i o p \u00fc +",
-        "a s d f g h j k l \u00f6 \u00e4 #",
+        "a s d f g h j k l \u00f6 \u00e4 # {e}",
         "{shift} < y x c v b n m , . - {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'shift' : [
         '\u00b0 ! " \u00a7 $ % & / ( ) = ? \u0300 {b}',
         "{tab} Q W E R T Z U I O P \u00dc *",
-        "A S D F G H J K L \u00d6 \u00c4 '",
+        "A S D F G H J K L \u00d6 \u00c4 ' {e}",
         "{shift} > Y X C V B N M ; : _ {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'alt' : [
         '\u0302 1 \u00b2 \u00b3 4 5 6 { [ ] } \\ \u0301 {b}',
         "{tab} @ w \u20ac r t z u i o p \u00fc \u0303",
-        "a s d f g h j k l \u00f6 \u00e4 #",
+        "a s d f g h j k l \u00f6 \u00e4 # {e}",
         "{shift} \u007c y x c v b n \u00b5 , . - {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ]
@@ -989,21 +990,21 @@ function RoundFixed(Number, DecimalPlaces) {
       'default' : [
         "` 1 2 3 4 5 6 7 8 9 0 - = {b}",
         "{tab} q w e r t y u i o p [ ]",
-        "a s d f g h j k l ; ' \\",
+        "a s d f g h j k l ; ' \\ {e}",
         "{shift} z x c v b n m , . / {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'shift' : [
         "~ ! @ # $ % ^ & * ( ) _ + {b}",
         "{tab} Q W E R T Y U I O P { }",
-        'A S D F G H J K L : " |',
+        'A S D F G H J K L : " | {e}',
         "{shift} Z X C V B N M < > ? {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'alt' : [
         '~ ! " \u00a3 \u20ac \u00b2 \u00b3 & * ( ) _ + {b}',
         "{tab} q w e r t y u i o p { }",
-        'a s d f g h j k l : " |',
+        'a s d f g h j k l : " | {e}',
         "{shift} z x c v b n m < > ? {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ]
@@ -1012,21 +1013,21 @@ function RoundFixed(Number, DecimalPlaces) {
       'default' : [
         "` 1 2 3 4 5 6 7 8 9 0 - = {b}",
         "{tab} q w e r t y u i o p [ ]",
-        "a s d f g h j k l ; ' #",
+        "a s d f g h j k l ; ' # {e}",
         "{shift} \\ z x c v b n m , . / {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'shift' : [
         '\u00ac ! " \u00a3 $ % ^ & * ( ) _ + {b}',
         "{tab} Q W E R T Y U I O P { }",
-        "A S D F G H J K L : @ ~",
+        "A S D F G H J K L : @ ~ {e}",
         "{shift} | Z X C V B N M < > ? {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'alt' : [
         '\u00a6 ! " \u00a3 \u20ac \u00b2 \u00b3 7 8 9 0 - = {b}',
         "{tab} q w e r t y u i o p [ ]",
-        "a s d f g h j k l ; ' #",
+        "a s d f g h j k l ; ' # {e}",
         "{shift} \\ z x c v b n m , . / {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ]
@@ -1036,21 +1037,21 @@ function RoundFixed(Number, DecimalPlaces) {
       'default' : [
         "\u00b2 & \u00e9 \" ' ( - \u00e8 _ \u00e7 \u00e0 ) = {b}",
         "{tab} a z e r t y u i o p \u02c4 $",
-        "q s d f g h j k l m \u00f9 *",
+        "q s d f g h j k l m \u00f9 * {e}",
         "{shift} < w x c v b n , ; : ! {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'shift' : [
         "\u00b2 1 2 3 4 5 6 7 8 9 0 \u00b0 + {b}",
         "{tab} A Z E R T Y U I O P \u00a8 \u00a3",
-        "Q S D F G H J K L M % \u00b5",
+        "Q S D F G H J K L M % \u00b5 {e}",
         "{shift} > W X C V B N ? . / \u00a7 {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ],
       'alt' : [
         "\u00b2 & \u00e9 # { [ \u00a6 ` \\ ^ @ ] } {b}",
         "{tab} a z \u20ac r t y u i o p \u00a4 $",
-        "q s d f g h j k l m \u00f9 *",
+        "q s d f g h j k l m \u00f9 * {e}",
         "{shift} < w x c v b n , ; : ! {shift}",
         "{c} {clear} {alt} {space} {alt} {a}"
       ]

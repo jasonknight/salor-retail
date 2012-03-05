@@ -47,7 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 module SalorBase
-  VERSION = '2.1.40'
+  VERSION = 'SALOR-SRC SALOR-NAME rSALOR-RUBY sSALOR-SUPPORT gSALOR-BIN mSALOR-MANAGER'
   def self.symbolize_keys arg
     case arg
     when Array
@@ -62,6 +62,10 @@ module SalorBase
     else
       arg
     end
+  end
+  def self.random
+    str = Digest::SHA2.hexdigest("#{rand(1001)}")
+    return str[5..8] + str[0..rand(str.length/2).to_i]
   end
   def self.check_code(str)
     odds = str.to_s.scan(/(\d{2})\d(\d{2})\d\d(\d)\d\d(\d)/)
@@ -164,21 +168,28 @@ module SalorBase
   def self.string_to_float(str)
     return str if str.class == Float or str.class == Fixnum
       string = "#{str}"
-      string.gsub!(/[^\d.,]/,'')
+      puts string
+      string.gsub!(/[^-\d.,]/,'')
+      puts string
       if string =~ /^.*[\.,]\d{1}$/
         string = string + "0"
       end
+      puts string
       unless string =~ /^.*[\.,]\d{2,3}$/
         string = string + "00"
       end
+      puts string
       return string if string.class == Float or string.class == Fixnum or string == 0
       if string =~ /^.*[\.,]\d{3}$/ then
          string.gsub!(/[\.,]/,'')
          string = string.to_f / 1000
+         puts string
       else
         string.gsub!(/[\.,]/,'')
         string = string.to_f / 100
+        puts string
       end
+      puts string
       return string
    end
    def string_to_float(string)
@@ -252,7 +263,7 @@ module SalorBase
       end
       if self.respond_to? :vendor_id and self.vendor_id.nil? then
        self.vendor_id = user.get_meta.vendor_id
-       self.set_sku if self.class == Category
+       self.set_sku if self.class == Category or self.class == Customer
       end
       if self.respond_to? :cash_register_id and self.cash_register_id.nil? then
         self.cash_register_id = user.get_meta.cash_register_id
@@ -297,26 +308,7 @@ module SalorBase
     end
     return obj
   end
-  def has_relations?
-    return true if self.class == Item and self.order_items.any?
-    return true if self.class == Order and self.order_items.any?
-    return true if self.class == Shipment and self.shipment_items.any?
-    return true if self.class == Vendor
-    if self.class == Discount then
-      if self.order_items or self.orders then
-        return true
-      end
-    end
-    return false
-  end
-  def kill
-    if self.has_relations? and self.respond_to? :hidden then
-      self.update_attribute(:hidden,true)
-    else
-      self.destroy
-    end
-  end
-  # Converts all accented chars in txt into normal ASCII
+      # Converts all accented chars in txt into normal ASCII
   def normaleyes(txt)
     return UnicodeUtils.nfkd(txt.to_s).gsub(/[^\x00-\x7F]/,'').to_s
   end
@@ -441,4 +433,5 @@ module SalorBase
       return self.meta
     end
   end
+  
 end

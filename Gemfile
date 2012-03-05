@@ -23,7 +23,7 @@ gem 'sass-rails'
 gem 'jquery-rails'
 gem 'kaminari'
 gem 'rmagick'
-gem 'printr', '0.6.1'
+gem 'printr', '0.6.2'
 gem 'serialport'
 gem 'haml'
 gem 'unicode_utils'
@@ -54,6 +54,7 @@ group :test, :development do
   #gem 'rails-erd'
   gem 'launchy'
   gem 'faker'
+  gem 'ruby-debug19' #, :require => 'ruby-debug'
 end
 
 
@@ -69,6 +70,3 @@ end
 
 # Deploy with Capistrano
 # gem 'capistrano'
-
-# To use debugger
-gem 'ruby-debug19' #, :require => 'ruby-debug'

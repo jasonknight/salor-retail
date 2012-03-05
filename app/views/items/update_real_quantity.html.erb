@@ -84,7 +84,7 @@ function fetchItem() {
     enteredSku = $("#sku").val();
     if (data) {
       $("#quantity").attr('disabled', false);
-      $("#item_name").text(data.item.name);
+      $("#item_name").text(data.name);
       focusInput($("#quantity"));
     } else {
       $("#msg").html('<%= I18n.t("system.errors.no_such_item") %>');

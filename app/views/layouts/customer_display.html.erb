@@ -1,49 +1,8 @@
 <html>
 <head>
-<%= salor_render :partial => 'shared/head'%>
-<style>
-body {
-  font-family: Verdana,Tahoma,Segoe,sans-serif;
-  font-size: 25px;
-}
-span.qty {
-  display: inline-block;
-  text-align: center;
-  width: 10%;
-}
-span.name {
-  display: inline-block;
-  width: 45%;
-}
-span.price {
-  display: inline-block;
-  width: 20%;
-  text-align: right;
-}
-span.total {
-  display: inline-block;
-  width: 20%;
-  text-align: right;
-}
-p.subtotal {
-  text-align: right;
-}
-span.subtotal {
-  font-weight: bold;
-  font-size: 60px;
-}
-p.lc_points,
-p.rebate {
-  text-align: right;
-}
-</style>
+<%= stylesheet_link_tag 'application' %>
 </head>
 <body>
-    <div class="customer-logo" align="center" style="padding-top: 30px; padding-bottom: 10px;">
-      <% if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image %>
-        <img src="/vendors/<%= GlobalData.salor_user.meta.vendor_id %>/logo" />
-      <% end %>
-    </div>
 <%= yield %>
 </body>
 </html>

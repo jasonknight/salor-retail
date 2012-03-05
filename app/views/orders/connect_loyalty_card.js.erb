@@ -1,4 +1,4 @@
 <% if @order.customer %>
-//CustomerScreen.refresh("http://localhost:3000/orders/<%= @order.id %>/customer_display",800,480);
 updateOrder(<%= raw @order.to_json %>);
+updateCustomerView({},<%= @order.id %>);
 <% end %>

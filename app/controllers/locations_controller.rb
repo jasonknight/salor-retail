@@ -131,8 +131,8 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.xml
   def destroy
-    @location = salor_user.get_location(params[:id])
-    @location.destroy
+    @location = $User.get_location(params[:id])
+    @location.kill
     GlobalData.reload(:locations)
     respond_to do |format|
       format.html { redirect_to('/locations') }

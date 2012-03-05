@@ -13,37 +13,27 @@ function showHideCustomerOrRebate() {
   }
 }
 function clearOrder() {
-  $('#main_content').mask('<%= t("views.single_words.saving") %>');
   $.get('/orders/clear?order_id=' + $('.order-id').html());
 }
 
-function setBuyOrderButton(id) {
-  $("#buy_order_button").unbind('mousedown');
-  $("#buy_order_button").mousedown(function(){
-    get('/vendors/toggle?ajax=true&klass=Order&field=toggle_buy_order&model_id=' + id, 'pos/menu');
-    focusInput($('.void-order-input'));
-  });
+function clickBuyOrderButton(id) {
+  get('/vendors/toggle?ajax=true&klass=Order&field=toggle_buy_order&model_id=' + id, 'pos/menu');
+  //focusInput($('.void-order-input'));
 }
 </script>
 <div class="pos-menu">
         <div id="new_order_button" onmousedown="get('/orders/new_order_ajax', '_menu.html.erb')" class="input pos-button new-order">
           <%= t("menu.new_order")%>
         </div>
-        <div id="configuration_button" onmousedown="showVoidOrder()" class="input pos-button pos-configuration">
-        <%= t("menu.void")%>
-        </div>
         <div id="clear_button" onmousedown="clearOrder();" class="input pos-button pos-configuration" style="width: 3%;background-color: red;">
         C
         </div>
-        <div id="buy_order_button" class="input pos-button pos-configuration">
+        <div id="buy_order_button" class="input pos-button pos-configuration" onclick="clickBuyOrderButton($('.order-id').html())">
         <%= t("menu.buy_order")%>
         </div>
         <div id="configuration_button" onmousedown="showHideCustomerOrRebate();" class="input pos-button pos-configuration">
           <%= t("menu.configuration")%>
-        </div> <a href="/orders/new" style="font-size: 20px; font-weight: bolder; padding: 2px;">
-         <div id="configuration_button" class="input pos-button pos-configuration" style="width: 3%; background-color: red;">
-           RR          </div></a>
-
+        </div> 
         <div id="show_butons" onmousedown="$('.last-five-orders').show();" class="input pos-button">
           <%= t("activerecord.models.customer.other")%>
         </div>
@@ -54,6 +44,7 @@ function setBuyOrderButton(id) {
           <%= t("menu.search")%>
         </div>
         <div id="print_receipt_button" onmousedown="get('/orders/show_payment_ajax?order_id=' + $('.order-id').html());" class="input pos-button print-receipt">
+          <div id="current_completable_order" style="float: left;font-size: 8px; margin-bottom: -12px;"><%= @order.id %></div>
           <%= t("system.complete_sale")%>
         </div>
 

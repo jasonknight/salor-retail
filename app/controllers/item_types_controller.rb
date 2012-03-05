@@ -125,8 +125,7 @@ class ItemTypesController < ApplicationController
   # DELETE /item_types/1.xml
   def destroy
     @item_type = ItemType.find(params[:id])
-    # @item_type.destroy
-
+    # You cannot destroy item types
     respond_to do |format|
       format.html { redirect_to(item_types_url) }
       format.xml  { head :ok }

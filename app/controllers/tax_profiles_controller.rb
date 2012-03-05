@@ -128,11 +128,7 @@ class TaxProfilesController < ApplicationController
   # DELETE /tax_profiles/1.xml
   def destroy
     @tax_profile = salor_user.get_tax_profile(params[:id])
-    if @tax_profile.order_items.any? then
-      @tax_profile.update_attribute(:hidden,1)
-    else
-      @tax_profile.destroy
-    end
+    @tax_profile.kill
 
     respond_to do |format|
       format.html { redirect_to(tax_profiles_url) }

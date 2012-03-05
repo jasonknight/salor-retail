@@ -70,6 +70,16 @@ en-US:
         other: Tags
 
     attributes:
+      reorder_type: Reorder Type
+      big_buttons: Big Buttons
+      hide_discounts: Hide Discounts
+      thermal_printer: Thermal Printer
+      paylife: Paylife
+      url: URL
+      letter: Letter
+      default: Default
+      csv_imports: CSV Imports
+      csv_imports_url: CSV Imports URL
       customer_screen_blurb: Standard text customer screen
       pole_display: Pole display
       auto_drop: "Automatically Begin Day"
@@ -159,6 +169,8 @@ en-US:
         name: name
         quantity: quantity
         sku: SKU
+      cash_register:
+        sticker_printer: Sticker printer
       sku: SKU
       start_amount: start amount
       start_date: start date
@@ -555,6 +567,8 @@ en-US:
       logo: logo
 
   views:
+    eticket: Ticket
+    sticky_ticket: Sticker
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
     advanced_field: advanced field
     by_card: by card
@@ -580,11 +594,11 @@ en-US:
     locations: locations
     loyalty_card: loyalty card
     name: name
-    new_item_heading: New item for %{store}
-    new_sale_for: New sale for %{store}
+    new_item_heading: "New item for %{store}"
+    new_sale_for: "New sale for %{store}"
     new_stock_location: New stock location
-    order_heading: Order #%{id} for %{store}
-    order_number: Order #%{id}
+    order_heading: "Order #%{id} for %{store}"
+    order_number: "Order #%{id}"
     order_summary: Orders of the last 7 days
     owner_language: Owner language
     password: password
@@ -641,7 +655,7 @@ en-US:
       model_create: "%{model} was created successfully"
       model_edit: "%{model} was edited successfully"
       new_order: new order created
-      order_refund_dt: Automatic refund drawer transaction \Verkauf #%{id}\:http://salor/orders/%{id}
+      order_refund_dt: "Automatic refund drawer transaction Order #%{id} :http://salor/orders/%{id}"
       please_wait: "Please wait..."
       transaction_succeeded: "Paid!"
       artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
@@ -658,6 +672,8 @@ en-US:
     shipments:
       state: State
     single_words:
+      new: New
+      all: All
       camera: camera
       ordering: ordering
       body: body

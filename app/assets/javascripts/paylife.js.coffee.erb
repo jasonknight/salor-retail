@@ -13,9 +13,9 @@ window.paylifeCompleteOrder = ->
 #
 window.paylifeMain = ->
   paylifeRemove()
-  button = $('<div id="paylife_button"></div>');
-  button.append($("<img id='paylife_logo' src='<%= asset_path('paylife.png')%>' />"));
-  $('#complete_order_plugin_panel').append(button);
+  button = $('<div id="paylife_button"></div>')
+  button.append($("<img id='paylife_logo' src='<%= asset_path('paylife.png')%>' />"))
+  $('#complete_order_plugin_panel').append(button)
   button.mousedown ->
     paylifeSendAmount()
 window.paylifeRemove = ->
@@ -32,7 +32,7 @@ window.paylifeDataRead = (str) ->
       parts = /([\w]+) ([\w]+) ([\d\,\.]+) (.*)/.exec(str)
       complete_order_send(true)
       window.paylifePoleWrite(parts[4]) # please format me in orders.js function
-      $('.general-dialog').hide();
+      $('.general-dialog').hide()
       return
   if (parts[1] == "FAIL")
     if (parts[3].indexOf("*") isnt -1)
@@ -53,7 +53,9 @@ paylifeEodButton = ->
   button = $("<div id='paylife_eod_button'></div>")
   button.append($("<img id='paylife_logo' src='<%= asset_path('paylife.png')%>' />"));
   button.mousedown ->
-    window.paylifeWriteData()
+    notify_user(window.I18n.t("paylife.headings.sending"),"")
+    window.paylifeWriteData("EOD " + $("#cute_credit_eod_total").attr('ref_id') + " 0000")
+  $('#cute_credit_eod_total').prepend(button)
 $ ->
   # These are plugin events for js, they are home brewed.
   # see complete_order_show for how to trigger them.

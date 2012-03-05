@@ -112,6 +112,7 @@ def login_user(user)
   visit '/employees/login?code=31202053297'
 end
 def login_employee(code)
+  GlobalData.salor_user = Employee.login(code)
   visit '/employees/login?code=' + code.to_s
 end
 
@@ -136,6 +137,7 @@ def single_store_setup
     GlobalData.salor_user = @user
     GlobalData.vendor = @vendor
     GlobalData.vendor_id = @vendor.id
+    GlobalData.salor_user.get_meta.update_attribute :vendor_id,@vendor.id
     GlobalData.conf = @vendor.salor_configuration
     $Conf = @vendor.salor_configuration
     $User = @user 

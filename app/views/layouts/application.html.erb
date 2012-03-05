@@ -19,22 +19,13 @@ end
 <% end %>
 <%= salor_render :partial => "shared/notice" %>
 <div id="errors" class="errors hidden"></div>
-<div id="main" class='main'>
 
-<div id="main_content" class="main-content">
-<!-- BeginViewContent -->
+<div class='main'>
 <%= yield %> 
-<!-- EndViewContent -->
 </div>
 
 <script type="text/javascript">
-function quick_open_drawer() {
-    if (typeof Salor != 'undefined') {
-      Salor.newOpenCashDrawer('<%= GlobalData.cash_drawer if GlobalData.conf %>');
-    } else {
-      $.get('/vendors/open_cash_drawer');
-    }
-  }
+
 $(function () {
     try {
       $('.click-help').click(function (event) {
@@ -56,10 +47,6 @@ $(function () {
     }
   <% end %>
 });
-</script>
-<div class="help hidden"></div>
-<%= salor_render :partial => "shared/cash_drop" %>
-<script type="text/javascript">
 function initErrors() {
   $('.errors').show();
   var back = $('<div style="float: left;"><%= image_tag "/images/icons/" + icon(:back,32) %></div>');
@@ -85,5 +72,16 @@ $(function () {
 });
 
 </script>
+
+<div class="help hidden"></div>
+<%= salor_render :partial => "shared/cash_drop" %>
+<%= salor_render :partial => "shared/dt_tags" %>
+<% #salor_render :partial => "shared/dialog" %>
+<%= salor_render :partial => "shared/js/select_widget" %>
+
+<div class="close-window" onmousedown="Salor.shutdown();">&nbsp;X &nbsp;</div>
+<span class="version">v<%= SalorBase::VERSION %></span>
+<a href="/orders/new" class='reload-window'>R</a>
+
 </body>
 </html>

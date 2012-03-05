@@ -35,32 +35,32 @@ describe Order do
     coupon_item_type = Factory(:item_type, :behavior => 'coupon')
     @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
     @poff = Factory(:item, 
-                    :sku => "CTEST",
+                    :sku => "CTESTpoff",
                     :base_price => 50,
                     :vendor => @vendor, 
                     :tax_profile => @tax_profile, 
                     :category => @category,
                     :item_type => coupon_item_type,
                     :coupon_type => 1,
-                    :coupon_applies => "TEST")
+                    :coupon_applies => @item.sku)
     @b1g1 = Factory(:item, 
-                    :sku => "CTEST",
+                    :sku => "CTESTb1g1",
                     :base_price => 50,
                     :vendor => @vendor, 
                     :tax_profile => @tax_profile, 
                     :category => @category,
                     :item_type => coupon_item_type,
                     :coupon_type => 3,
-                    :coupon_applies => "TEST")
+                    :coupon_applies => @item.sku)
     @fixed = Factory(:item, 
-                    :sku => "CTEST",
+                    :sku => "CTESTFixed",
                     :base_price => 0.95,
                     :vendor => @vendor, 
                     :tax_profile => @tax_profile, 
                     :category => @category,
                     :item_type => coupon_item_type,
                     :coupon_type => 2,
-                    :coupon_applies => "TEST")
+                    :coupon_applies => @item.sku)
     
   end
   context "when creating an order" do
@@ -69,7 +69,7 @@ describe Order do
     end # should be valid
     it "should accept internationalized price input" do
       @order.total = "10,95"
-      @order.gross.should == 10.95
+      @order.total.should == 10.95
       @order.rebate = "1,2"
       @order.rebate.should == 1.2
       @order.subtotal = "3,95"
@@ -134,7 +134,7 @@ describe Order do
       DrawerTransaction.last.order_item_id.should == @order.order_items.first.id
       DrawerTransaction.last.is_refund.should == true
     end
-    it "should allow you to refund an entire order",:focus => true do
+    it "should allow you to refund an entire order" do
       @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
       @order.add_item(@item)
       @order.update_self_and_save
@@ -146,7 +146,6 @@ describe Order do
       DrawerTransaction.last.order_id.should == @order.id
       DrawerTransaction.last.order_item_id.should_not == @order.order_items.first.id
       DrawerTransaction.last.is_refund.should == true
-
     end
   end # when creating an order
   context "when using coupons" do

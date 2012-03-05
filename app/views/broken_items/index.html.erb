@@ -27,6 +27,7 @@
   </tr>
 <% end %>
 </table>
+<%= link_to I18n.t('views.single_words.new'),'/broken_items/new' %>
 <div class="pagination" align="center">
   <%= paginate @broken_items if @broken_items %>
 </div>

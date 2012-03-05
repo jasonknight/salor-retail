@@ -48,11 +48,16 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class VendorsController < ApplicationController
-    before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer]
-    before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer]
+    before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
+    before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
-    before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer]
+    before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
+  def technician_control_panel
+    if not $User.is_technician? then
+      redirect_to :action => :index
+    end
+  end
   def move_transactions
     @from, @to = time_from_to(params)
     parts = params[:from_emp][:set_owner_to].split(":")
@@ -96,7 +101,7 @@ class VendorsController < ApplicationController
     if not check_license() then
       redirect_to :controller => "home", :action => "index" and return
     end
-    @vendors = salor_user.get_vendors(params[:page])
+    @vendors = $User.get_vendors(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -180,7 +185,7 @@ class VendorsController < ApplicationController
   # DELETE /vendors/1.xml
   def destroy
     @vendor = salor_user.get_vendor(params[:id])
-    @vendor.destroy
+    @vendor.kill
 
     respond_to do |format|
       format.html { redirect_to(vendors_url) }
@@ -198,9 +203,15 @@ class VendorsController < ApplicationController
       # Normally, it is important to ensure that the total shown represents 100%
       # real, physically present money. You cannot half use Dts, you either track
       # everything with Dts, or you track nothing with them.
-      @drawer_transaction.drawer_amount = GlobalData.salor_user.get_drawer.amount
-      if @drawer_transaction.amount == 0 then
-        render :nothing => true and return
+      @drawer_transaction.drawer_amount = $User.get_drawer.amount
+      # Ideally, we don't allow a payout of more than is in the drawer.
+      if @drawer_transaction.amount > $User.get_drawer.amount and @drawer_transaction.payout == true then
+        @drawer_transaction.amount = $User.get_drawer.amount
+      end
+      if @drawer_transaction.amount < 0 then
+         @drawer_transaction.amount *= -1
+         @drawer_transaction.drop = false
+         @drawer_transaction.payout = true
       elsif @drawer_transaction.amount > 15000.00 then
         render :nothing => true and return
       end
@@ -221,7 +232,7 @@ class VendorsController < ApplicationController
         @drawer_transaction.drawer_id = salor_user.get_drawer.id
       end
       if @drawer_transaction.save then
-        @drawer_transaction.print
+        # @drawer_transaction.print if not $Register.salor_printer == true
         if @drawer_transaction.drop then
           @drawer_transaction.owner.get_drawer.update_attribute(:amount,@drawer_transaction.owner.get_drawer.amount + @drawer_transaction.amount)
         elsif @drawer_transaction.payout then
@@ -238,16 +249,19 @@ class VendorsController < ApplicationController
       else
         raise "Failed to save..."
       end
+    $User.get_drawer.reload
   end
 
   def open_cash_drawer
     @vendor ||= Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id)
     @vendor.open_cash_drawer
+    render :nothing => true
   end
   def render_open_cashdrawer
     text = Printr.new.sane_template('drawer_transaction',binding)
     render :text => text
   end
+
   def render_drawer_transaction_receipt
     @dt = DrawerTransaction.find_by_id params[:id]
     GlobalData.vendor = @dt.owner.get_meta.vendor
@@ -256,12 +270,14 @@ class VendorsController < ApplicationController
       render :text => "Could not find drawer_transaction" and return
     end
     text = Printr.new.sane_template('drawer_transaction_receipt',binding)
-    render :text => text
+    if $Register.salor_printer
+      render :text => text
+    else
+      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      render :nothing => true
+    end
   end
 
-
-
-  #
   def list_drawer_transactions
     render :nothing => true and return if not GlobalData.salor_user.is_technician?
     @from, @to = assign_from_to(params)
@@ -309,7 +325,7 @@ class VendorsController < ApplicationController
       #GlobalErrors.append_fatal("system.errors.must_cash_drop")
     end
     if not GlobalErrors.any_fatal? then
-      salor_user.end_day #see method defined in user_employee_methods for printing
+      $User.end_day #see method defined in user_employee_methods for printing
       atomize(ISDIR, 'cash_drop')
       if $User.class == User then
         $User.update_attribute :is_technician, false
@@ -333,40 +349,49 @@ class VendorsController < ApplicationController
       render :nothing => true and return
     end
     if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
-      # puts  "### Class is allowed"
+       puts  "### Class is allowed"
       klass = Kernel.const_get(params[:klass])
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
       if klass.exists? params[:id] then
-        # puts  "### Class Exists"
+         puts  "### Class Exists"
         @inst = klass.find(params[:id])
+        if @inst.class == OrderItem and @inst.order.paid == 1 then
+          puts "## Order is Paid"
+          render :layout => false and return
+        end
+        if @inst.class == Order and @inst.paid == 1 then
+          @order = $User.get_new_order
+          puts "## Order is paid 2"
+          render :layout => false and return
+        end
         if @inst.respond_to? params[:field]
-          # puts  "### Inst responds_to field #{params[:field]}"
+           puts  "### Inst responds_to field #{params[:field]}"
           if not salor_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
-            # puts  "### User doesn't own resource"
+             puts  "### User doesn't own resource"
             raise I18n.t("views.errors.no_access_right")
           end
-          # Locked stuff
+          puts "## Locked stuff"
           if @inst.class == Order or @inst.class == OrderItem then
-            # puts  "### Checking for locked ..."
+             puts  "### Checking for locked ..."
             meth = "#{params[:field]}_is_locked"
             if @inst.respond_to? meth.to_sym then
-              # puts  "### inst responds_to #{meth}"
+               puts  "### inst responds_to #{meth}"
               @inst.update_attribute(meth.to_sym,true)
               render :layout => false and return
             end
           end
           # Replace , with . for for float calcs to work properly
-          # puts  " --- " + params[:value].to_s
+           puts  " --- " + params[:value].to_s
           params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
-          # puts  " --- " + params[:value].to_s
+           puts  " --- " + params[:value].to_s
           if klass == OrderItem then
-            # puts  "### klass is OrderItem"
-            if params[:field] == 'quantity' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and (not @inst.weigh_compulsory == true) then
-              # puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
+             puts  "### klass is OrderItem"
+            if params[:field] == 'quantity' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false and (not @inst.weigh_compulsory == true) then
+               puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
               unless @inst.activated and nil == nil then
-                # puts  "### inst is not activated."
+                 puts  "### inst is not activated."
                 # Takes into account ITEM rebate and ORDER rebate.
                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
                 newval = params[:value]
@@ -385,8 +410,8 @@ class VendorsController < ApplicationController
                 @inst.is_valid = true
                 render :layout => false and return
               end
-            elsif params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false then
-              # puts  "### field is price"
+            elsif params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
+               puts  "### field is price"
               unless @inst.activated then
                 # Takes into account ITEM rebate and ORDER rebate.
                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
@@ -408,8 +433,8 @@ class VendorsController < ApplicationController
                 @inst.is_valid = true
                 render :layout => false and return
               end
-            elsif params[:field] == 'rebate'and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false then
-              # puts  "### field is rebate"
+            elsif params[:field] == 'rebate'and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
+               puts  "### field is rebate"
               # Takes into account ITEM rebate and ORDER rebate.
               # ORDER and ITEM totals are updated in DB and in instance vars for JS
               rebate = params[:value].gsub(',','.').to_f
@@ -427,7 +452,7 @@ class VendorsController < ApplicationController
               @inst.rebate = rebate
               render :layout => false and return
             else
-              # puts  "### Other OrderItem updates executing"
+               puts  "### Other OrderItem updates executing"
               # For all other OrderItem updates
               # puts  "### update(#{params[:field].to_sym},#{params[:value]})"
               @inst.update_attribute(params[:field].to_sym,params[:value])
@@ -438,8 +463,11 @@ class VendorsController < ApplicationController
           end
  
           if klass == Order then
+            puts "klass is Order"
             # Tax for order is calculated before payment
-            if params[:field] == 'rebate' then
+            if params[:field] == 'rebate' and false == true then
+
+              puts "Updating scotty on order"
               # ORDER rebate updating
               old_rebate = @inst.rebate
               newvalue = params[:value].gsub(',','.').to_f
@@ -485,6 +513,7 @@ class VendorsController < ApplicationController
               end
             else
               # For all other Order updates
+              puts "Updating directly on order"
               @inst.update_attribute(params[:field].to_sym,params[:value])
               @inst.calculate_totals
               @inst.update_self_and_save
@@ -506,7 +535,6 @@ class VendorsController < ApplicationController
   end
   #
   def toggle
-    
     if allowed_klasses.include? params[:klass]
       klass = Kernel.const_get(params[:klass])
       if klass.exists? params[:model_id] then
@@ -565,6 +593,11 @@ class VendorsController < ApplicationController
   def logo_invoice
     @vendor = Vendor.find(params[:id])
     send_data @vendor.logo_invoice_image, :type => @vendor.logo_invoice_image_content_type, :filename => 'abc', :disposition => 'inline'
+  end
+  #
+  def display_logo
+    @vendor = Vendor.find(params[:id])
+    render :layout => 'customer_display'
   end
 
 

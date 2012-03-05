@@ -1,36 +1,27 @@
 <%= raw content_box_top(I18n.t("headings.item_selection")) %>
 <script type="text/javascript">
-  function repup(str) {
-    return encodeURI(str); 
+  window.setTimeout("set_focus()", 1000);
+    function set_focus(){
+    $('#skus')[0].focus();
   }
-  function run_salor_printer() {
-  	var skus = $('.labels-snag-me').val().split("\n");
-  	for (i in skus) {
-  		var sku = skus[i];
-  		SalorPrinter.printURL('<%= $User.get_meta.cash_register.thermal_printer %>','<%= $Conf.url %>/items/render_label?type=label&skus=' + sku);
-  	}
+  function print() {
+    var skus = $('#skus').val().split("\n");
+    if($("#label:checked").val() == 'label') {
+      print_url(Register.thermal_printer,'/items/labels?type=label&skus=' + skus);
+    }
+    if($("#sticker:checked").val() == 'sticker') {
+      print_url(Register.sticker_printer,'/items/labels?type=sticker&skus=' + skus);
+    }
   }
 </script>
 <div style="text-align: center;" >
 <%= form_tag '/items/labels', :remote => true do %>
-  <p><%= text_area_tag 'skus', nil, :class => 'labels-snag-me', :cols => 20, :rows => 15 %></p>
+  <p><%= text_area_tag 'skus', nil, :class => 'labels-snag-me keyboardable', :cols => 20, :rows => 15, :style => 'width:245px;height:245px;' %></p>
   <p>
-    <input type="radio" name="type" value="label" checked>Regaletikett<br>
-    <input type="radio" name="type" value="sticker">Klebeetikett<br>
+  <input id='label' type="radio" name="type" value="label" checked><%= I18n.t("views.eticket") %><br>
+  <input id='sticker' type="radio" name="type" value="sticker"><%= I18n.t("views.sticky_ticket") %><br>
   </p>
-  <p><%= label_tag 'all', 'Alle' %><%= check_box_tag 'all' %></p>
-  <% if $Register.salor_printer then  %>
-    <button onclick="run_salor_printer();">OK</button>
-  <% else  %>
-    <p><%= submit_tag %></p>
-  <% end -%>
+  <button onclick="print();">Print</button>
 <% end %>
 </div>
 <%= raw content_box_bottom %>
-
-<script>
-window.setTimeout("set_focus()", 1000);
-function set_focus(){
-$('#skus')[0].focus();
-}
-</script>

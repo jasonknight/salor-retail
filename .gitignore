@@ -29,7 +29,8 @@ tmp/
 *~
 *.swp
 #*#
-public/images/barcodes
+public/images/barcodes/*.png
+public/images/barcodes/*.eps
 *database.yml
 *#
 nbproject

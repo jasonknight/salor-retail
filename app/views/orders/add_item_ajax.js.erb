@@ -1,9 +1,9 @@
 <% if @order_item then %>
-  <% @order_item.reload if @order_item.behavior == 'coupon'  %>
+  <% @order_item.reload if @order_item.behavior == 'coupon' or @order_item.behavior == 'gift_card'  %>
    order_item_json = <%= raw @order_item.to_json %>;
    updateOrderItems([order_item_json]);
    updateOrder(<%= raw @order.to_json %>);
-   writeToPole(order_item_json);
+   updateCustomerView(order_item_json,<%= @order.id %>);
    if (order_item_json.price == 0 ) {
      playSound('medium_warning');
    } else {
@@ -33,3 +33,4 @@
 <% end %>
 <%= render :partial => "shared/js/global_errors_js" %>
 focusInput($('#keyboard_input'));
+$('.last-completed-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_completed_orders" %>');

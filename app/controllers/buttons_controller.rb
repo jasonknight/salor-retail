@@ -63,7 +63,7 @@ class ButtonsController < ApplicationController
 
   def destroy
     @button = Button.scopied.find_by_id(params[:id])
-    @button.destroy if @button
+  @button.kill if @button
 
     respond_to do |format|
       format.html { redirect_to(buttons_url) }

@@ -4,8 +4,8 @@ stylesheets: 'darker'
 version: "1.6.10"
 standalone: true
 roleless: false
-locale: 'en-US'
-base_locale: 'en-US'
+locale: 'de'
+base_locale: 'de'
 license: "M"
 dt_tags: true
 dt_tags_values: Lotto,Toto

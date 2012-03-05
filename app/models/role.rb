@@ -49,6 +49,7 @@
 class Role < ActiveRecord::Base
 	include SalorScope
   include SalorModel
+  include SalorBase
   has_and_belongs_to_many :employees
   # This is a role black list, if it isn't here
   # it means they can do it. Only put roles here
@@ -62,6 +63,11 @@ class Role < ActiveRecord::Base
       :any_cash_registers,
       :any_tax_profiles,
       :any_customers,
+      :any_actions,
+      :any_actions,
+      :any_buttons,
+      :any_transaction_tags,
+      :any_tender_methods,
       :edit_vendors,
       :new_vendors,
       :create_vendors,
@@ -73,7 +79,8 @@ class Role < ActiveRecord::Base
       :head_cashier,
       :cashier,
       :clear_orders,
-      :destroy_order_items
+      :destroy_order_items,
+      :report_day_orders
     ],
     :head_cashier => [
       :any_shippers,
@@ -84,6 +91,10 @@ class Role < ActiveRecord::Base
       :any_locations,
       :any_discounts,
       :any_shipment_items,
+      :any_employees,
+      :create_transaction_tags,
+      :create_tender_methods,
+      :edit_tender_methods,
       :destroy_items,
       :any_tax_profiles,
       :new_items,
@@ -131,7 +142,10 @@ class Role < ActiveRecord::Base
       :clear_orders,
       :destroy_order_items,
       :change_prices,
-      :see_header
+      :see_header,
+      :create_transaction_tags,
+      :create_tender_methods,
+      :edit_tender_methods
     ]
   }
 end

@@ -71,7 +71,7 @@ class EmployeesController < ApplicationController
         
     if user then
       if check == 41 then
-        t = Time.now - 31.days
+        t = Time.now - 61.days
         if user.created_at <= t then
           redirect_to :controller => :home, :action => "you_have_to_pay" and return
         end
@@ -184,12 +184,8 @@ class EmployeesController < ApplicationController
   # DELETE /employees/1
   # DELETE /employees/1.xml
   def destroy
-    @employee = salor_user.get_employee(params[:id])
-    if @employee.orders.any? then
-      @employee.update_attribute(:hidden, 1)
-    else
-      @employee.destroy
-    end
+    @employee = Employee.scopied.find(params[:id])
+    @employee.kill
 
     respond_to do |format|
       format.html { redirect_to :action => 'index' }

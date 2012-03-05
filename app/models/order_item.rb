@@ -64,13 +64,10 @@ class OrderItem < ActiveRecord::Base
   scope :sorted_by_modified, order('updated_at ASC')
   
   # To speed things up, we cache the discounts
-  @@discounts ||= Discount.scopied.select("name,amount,item_sku,id,location_id,category_id,applies_to,amount_type")
   def self.reload_discounts
-    @@discounts = nil
-    @@discounts ||= Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type")
   end
-  def self.get_discounts
-    @@discounts
+  def OrderItem.get_discounts
+    Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type").where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
   end
   def toggle_buyback(x)
     if self.is_buyback then
@@ -109,7 +106,6 @@ class OrderItem < ActiveRecord::Base
       elsif type == :drop then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
-      GlobalData.vendor.open_cash_drawer
     else
       raise dt.errors.full_messages.inspect
     end
@@ -133,6 +129,7 @@ class OrderItem < ActiveRecord::Base
       update_location_category_item(t * -1,q * -1)
       self.order.update_attribute(:total, self.order.total - t)
       create_refund_transaction(t,:payout, {:is_refund => true}) if not x.nil?
+      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
     end
   end
   def update_location_category_item(t,q)
@@ -168,8 +165,11 @@ class OrderItem < ActiveRecord::Base
   end
   def price=(p)
     p = self.string_to_float(p)
-    if self.item.base_price == 0.0 or self.item.base_price == nil then
+    if (self.item.base_price == 0.0 or self.item.base_price == nil) and not self.item.must_change_price == true then
       self.item.update_attribute :base_price,p
+    end
+    if self.is_buyback == true and p > 0 then
+      p = p * -1
     end
     write_attribute(:price,self.string_to_float(p)) #string_to_float SalorBase
   end
@@ -181,7 +181,11 @@ class OrderItem < ActiveRecord::Base
     self.price
   end
   def total=(p)
-    write_attribute(:total,self.string_to_float(p)) 
+    p = self.string_to_float(p)
+    if self.is_buyback == true and p > 0 then
+      p = p * -1
+    end
+    write_attribute(:total,p) 
   end
   def tax=(p)
     write_attribute(:tax,self.string_to_float(p)) 
@@ -257,7 +261,7 @@ class OrderItem < ActiveRecord::Base
 		return self
 	end
 	#
-  def calculate_total
+  def calculate_total(order_subtotal=0)
     if self.order and self.order.buy_order or self.is_buyback then
       ttl = self.price * self.quantity
       if not ttl == self.total then
@@ -268,27 +272,48 @@ class OrderItem < ActiveRecord::Base
     # Gift Card Processing
     if self.behavior == 'gift_card' then
       if self.item.activated then
-        return 0 if self.amount_remaining <= 0
+        puts "Item is an activated gift_card"
+        if self.amount_remaining <= 0 then
+          puts "Amount remaining is 0"
+          return 0
+        end
+        if self.price == 0 then
+          self.price = self.amount_remaining
+        end
+        if self.price < 0 then
+          self.price *= -1 # we do this so we can better set the price later
+          # it will be reconverted to negative later on
+        end
         if self.price > self.amount_remaining then
           self.price = self.amount_remaining
         end
-        self.update_attribute(:total,self.price) if self.price != self.total
+        puts "Price: #{self.price} Subtotal: #{order_subtotal}"
+        if self.price > order_subtotal then
+          self.price = order_subtotal
+        end
         if self.price > 0 then
           p = self.price * -1
         else
           p = self.price
         end
+        self.update_attribute(:price, self.price)
+        self.update_attribute(:total,self.price) 
         return p
       end
     end
     ttl = 0
+    self.quantity = 0 if self.quantity.nil?
     if self.item.parts.any? and self.item.calculate_part_price then
       self.item.parts.each do |part|
         ttl += part.base_price * part.part_quantity
       end
-      ttl = ttl * self.quantity
+        ttl = ttl * self.quantity
     else
-      ttl = self.price * self.quantity
+      begin
+        ttl = self.price * self.quantity
+      rescue
+        puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
+      end
       puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
     end
     
@@ -451,8 +476,8 @@ class OrderItem < ActiveRecord::Base
       p = item.base_price
     end
     pstart = p
-    if not self.is_buyback and not @@discounts.nil? then
-      @@discounts.each do |discount|
+    if not self.is_buyback and not OrderItem.get_discounts.nil? then
+      OrderItem.get_discounts.each do |discount|
         if not (discount.item_sku == item.sku and discount.applies_to == 'Item') and
             not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
             not (discount.category_id == item.category_id and discount.applies_to == 'Category') and

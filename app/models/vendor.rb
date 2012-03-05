@@ -92,13 +92,13 @@ class Vendor < ActiveRecord::Base
     self.vendor_printer_ids = ps
   end
   def open_cash_drawer
-	  cash_register_id = GlobalData.salor_user.meta.cash_register_id
+    cash_register_id = $User.meta.cash_register_id
     vendor_id = self.id
     if cash_register_id and vendor_id
-      printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
-      Printr.new.send(printers.first.name.to_sym,'drawer_transaction',binding) if printers.first
+      text = Printr.new.sane_template("drawer_transaction",binding)
+      Printr.new.direct_write($Register.thermal_printer,text)
     end
-	end
+  end
 
   def receipt_logo_header=(data)
     write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s 
@@ -117,4 +117,21 @@ class Vendor < ActiveRecord::Base
     write_attribute :logo_invoice_image_content_type, data.content_type.chomp
     write_attribute :logo_invoice_image, data.read
   end
+  def get_stats
+    # this method shows what features are being used, and how often.
+    features = Hash.new
+    features[:actions] = true if Action.scopied.count > 0
+    features[:coupons] = true if OrderItem.scopied.where('coupon_amount > 0').count > 0
+    features[:discounts] = true if Discount.by_vendor.all_seeing.count > 0
+    features[:item_level_rebates] = true if OrderItem.scopied.where('rebate > 0').count > 0
+      if features[:item_level_rebates] == true then
+        features[:item_level_rebates_count] = OrderItem.scopied.where('rebate IS NOT NULL AND rebate != 0.0').count
+      end
+    features[:order_level_rebates] = true if Order.scopied.where('rebate > 0').count > 0
+    if features[:order_level_rebates] == true then
+      features[:order_level_rebates_count] = Order.scopied.where('rebate IS NOT NULL AND rebate != 0.0').count
+    end
+    @features = features
+  end
+
 end

@@ -59,11 +59,7 @@ module SalorScope
          if inst.respond_to? :hidden
            return {:conditions => "hidden = 0 or hidden is null"}
          end
-         if inst.class == Discount then
-           t = Time.now
-           return {:conditions => ["end_date > ?",t]}
-         end
-      })
+               })
       klass.scope(:invisible, lambda { |*args|
          if inst.respond_to? :hidden
            return {:conditions => 'hidden = 1'}
@@ -126,6 +122,10 @@ module SalorScope
          if inst.respond_to? :email then
            conds << "email LIKE '#{words}%'"
          end
+        if inst.respond_to? :tag then
+           conds << "tag LIKE '%#{words}%'"
+         end
+
          return {:conditions => conds.join(" OR ")}
       })
       klass.scope(:scopied, lambda { |*args|

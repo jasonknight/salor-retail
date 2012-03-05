@@ -48,22 +48,10 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class OrdersController < ApplicationController
-   before_filter :authify, :except => [:customer_display,:print, :render_order_receipt]
-   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print, :render_order_receipt]
-   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy]
-   before_filter :crumble, :except => [:customer_display,:print, :render_order_receipt]
-   def render_order_receipt
-      @order = Order.find_by_id(params[:order_id])
-      if not @order then
-        render :nothing => true and return
-      end
-      @vendor = @order.vendor
-      @in_cash = 0
-      @by_card = 0
-      @by_gift_card = 0
-      @other_credit = 0
-      render :text => Printr.new.sane_template('item',binding) 
-   end
+   before_filter :authify, :except => [:customer_display,:print, :print_receipt]
+   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print]
+   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day]
+   before_filter :crumble, :except => [:customer_display,:print, :print_receipt]
    def new_pos
       if not salor_user.meta.vendor_id then
         redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
@@ -119,6 +107,9 @@ class OrdersController < ApplicationController
     $User.auto_drop
     
     @order = initialize_order
+    if @order.paid == 1 and not $User.is_technician? then
+      @order = $User.get_new_order
+    end
     if @order.order_items.any? then
       @order.update_self_and_save
     end
@@ -131,10 +122,10 @@ class OrdersController < ApplicationController
   # GET /orders/1/edit
   def edit
     @order = Order.scopied.find_by_id(params[:id])
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       redirect_to :action => :new, :notice => I18n.t("system.errors.cannot_edit_completed_order") and return
     end
-    if @order and not @order.paid == 1
+    if @order and (not @order.paid == 1 or $User.is_technician?) then
       session[:prev_order_id] = salor_user.meta.order_id
       salor_user.meta.update_attributes(:cash_register_id => @order.cash_register.id, :order_id => @order.id)
     end
@@ -142,7 +133,7 @@ class OrdersController < ApplicationController
   end
   def swap
     @order = Order.scopied.find_by_id(params[:id])
-    if @order and not @order.paid == 1 then
+    if @order and (not @order.paid == 1 or $User.is_technician?) then
       GlobalData.salor_user.meta.update_attribute(:order_id,@order.id)
     end
     redirect_to :action => "new"
@@ -166,11 +157,11 @@ class OrdersController < ApplicationController
   # PUT /orders/1.xml
   def update
     @order = Order.find(params[:id])
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       GlobalErrors.append("system.errors.cannot_edit_completed_order",@order)
     end
     respond_to do |format|
-      if not @order.paid == 1 and @order.update_attributes(params[:order])
+      if (not @order.paid == 1 or $User.is_technician?) and @order.update_attributes(params[:order])
         format.html { redirect_to(@order, :notice => 'Order was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -184,11 +175,7 @@ class OrdersController < ApplicationController
   # DELETE /orders/1.xml
   def destroy
     @order = Order.by_vendor(salor_user.meta.vendor_id).find(params[:id])
-    if @order.order_items.any?
-        @order.update_attribute(:hidden,1)
-    else
-      @order.destroy
-    end
+    @order.kill
     respond_to do |format|
       format.html { redirect_to(orders_url) }
       format.xml  { head :ok }
@@ -219,7 +206,7 @@ class OrdersController < ApplicationController
 
     @error = nil
     @order = initialize_order
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       @order = GlobalData.salor_user.get_new_order 
     end
     @order_item = @order.order_items.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
@@ -291,17 +278,21 @@ class OrdersController < ApplicationController
       @order.reload
     end
   end
+
   def print_receipt
-    order = Order.scopied.find_by_id(params[:order_id])
-    if not order.order_items.any? then
-      order = Order.scopied.find_by_id GlobalData.salor_user.meta.last_order_id
-    end
-    if not order then
+    @order = Order.find_by_id(params[:order_id])
+    if not @order then
       render :nothing => true and return
     end
-    order.print_receipt
-    render :nothing => true
+    text = Printr.new.sane_template('item',binding)
+    if not $Register #$Register.salor_printer # no authification
+      render :text => text
+    else
+      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      render :nothing => true
+    end
   end
+
   def show_payment_ajax
     # Recalculate everything and then show Payment Popup
     @order = initialize_order
@@ -344,9 +335,11 @@ class OrdersController < ApplicationController
       # methods, so we put them into an array before saving them and the order
       # This is kind of a validator, but we need to do it here for right now...
       payment_methods_total = 0.0
+      payment_methods_seen = []
       PaymentMethod.types_list.each do |pmt|
         pt = pmt[1]
-        if params[pt.to_sym] and not params[pt.to_sym].blank? then
+        puts pt
+        if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0 then
           pm = PaymentMethod.new(:name => pmt[0],:internal_type => pt, :amount => SalorBase.string_to_float(params[pt.to_sym]))
           if pm.amount > @order.total then
             # puts  "## Entering Sanity Check"
@@ -367,7 +360,7 @@ class OrdersController < ApplicationController
       @order.reload
       
       if payment_methods_total.round(2) < @order.total.round(2) then
-        GlobalErrors.append_fatal("system.errors.sanity_check",@order)
+        GlobalErrors.append_fatal("system.errors.sanity_check2" + payment_methods_total.inspect,@order)
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return
@@ -376,19 +369,11 @@ class OrdersController < ApplicationController
       end
       params[:print].nil? ? print = 'true' : print = params[:print].to_s
       # Receipt printing moved into Order.rb, line 497
-      if print == 'true'
-        @order.print_receipt
-      end
       @order.complete
       atomize(ISDIR, 'cash_drop')
       GlobalData.salor_user.meta.order_id = nil
       @order = GlobalData.salor_user.get_new_order
     end
-  end
-  def print_order_receipt
-    @order = Order.scopied.find_by_id(params[:id])
-    @order.print_receipt if @order
-    render :nothing => true
   end
   def new_order_ajax
     GlobalData.salor_user.meta.order_id = nil
@@ -412,7 +397,7 @@ class OrdersController < ApplicationController
   end
   def update_pos_display
     @order = initialize_order
-    if @order.paid == 1 then
+    if @order.paid == 1 and not $User.is_technician? then
       @order = GlobalData.salor_user.get_new_order
     end
   end
@@ -430,38 +415,22 @@ class OrdersController < ApplicationController
     end
     redirect_to "/orders/#{@oi.order.id}"
   end
-  def void
-    @order = Order.scopied.find_by_id params[:id]
-    if not @order then
-      @order = Order.new
-      flash[:notice] = I18n.t("system.errors.order_not_found")
-    end
-    render :layout => 'modal'
-  end
   def refund_item
     @oi = OrderItem.scopied.find_by_id(params[:id])
     @oi.toggle_refund(true)
     @oi.save
-    if params[:void] then
-      redirect_to :action => :void, :id => @oi.order.id and return
-    else
-      redirect_to :action => :show, :id => @oi.order.id and return
-    end
+    redirect_to order_path(@oi.order)
   end
   def refund_order
     @order = Order.scopied.find_by_id(params[:id])
     @order.toggle_refund(true)
     @order.save
-    if params[:void] then
-      redirect_to :action => :void, :id => @order.id and return
-    else
-      redirect_to :action => :show, :id => @order.id and return
-    end
+    redirect_to order_path(@order)
   end
   def customer_display
     @order = Order.find_by_id params[:id]
     GlobalData.salor_user = @order.get_user
-    GlobalData.conf = Vendor.find(GlobalData.salor_user.meta.vendor_id).configuration
+    @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
     @order_items = @order.order_items.order('id ASC')
     if @order_items
       render :layout => 'customer_display', :nothing => :true
@@ -496,10 +465,10 @@ class OrdersController < ApplicationController
     @employees = @vendor.employees
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
-    @orders = @employee.orders.where({ :created_at => @from..@to, :paid => 1 }).order("created_at ASC")
+    @orders = Order.where({ :vendor_id => @employee.get_meta.vendor_id, :drawer_id => @employee.get_drawer.id,:created_at => @from..@to, :paid => 1 }).order("created_at ASC")
     @categories = Category.scopied
-    @taxes = TaxProfile.scopied.where( :hidden => 0)
-    @drawertransactions = @employee.drawer_transactions.where({ :created_at => @from..@to, :is_refund => false }).where("tag != 'CompleteOrder'")
+    @taxes = TaxProfile.scopied.where( :hidden => 0 )
+    @drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id, :created_at => @from..@to }).where("tag != 'CompleteOrder'")
     @payouttypes = AppConfig.dt_tags_values.split(",")
   end
 
@@ -537,6 +506,9 @@ class OrdersController < ApplicationController
       end
       @order.customer_id = nil
       @order.tag = 'NotSet'
+      @order.subtotal = 0
+      @order.total = 0
+      @order.tax = 0
       @order.update_self_and_save
     else
       GlobalErrors.append_fatal("system.errors.no_role",@order,{})

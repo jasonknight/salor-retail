@@ -60,8 +60,10 @@ class Category < ActiveRecord::Base
   before_create :set_model_owner
   acts_as_list
   def set_sku
-    if self.sku.blank? then
+    if self.sku.blank? and self.vendor then
       self.sku = "#{self.vendor.name}:#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
+    else
+      self.sku = "VENDORLESS:#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
     end
   end
   def get_tag

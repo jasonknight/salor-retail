@@ -22,14 +22,8 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     base_price.html("<%= salor_number_to_currency(item.base_price) %>");
   
     var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" /></div></td>');
-    btn.mousedown(function () {
+    btn.click(function () {
       add_item('<%= item.sku %>');
-      $(this).mask("Bitte Warten");
-      $(this).addClass('masked');
-      setTimeout(function () {
-        $('.masked').unmask();
-        $('.masked').removeClass('masked');
-      },900);
     });
     btn.mouseup(function () {
       $(this).removeClass('active-icon');
@@ -66,7 +60,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
 <% end %>
 
 <% if @orders.any? then %>
-  $("#results_table").append("<thead><tr><th style='text-align:left'><%= raw I18n.t("menu.order") %> #</th><th><%= raw I18n.t("activerecord.attributes.not_paid") %></th><th style='text-align:left'><%= raw I18n.t("activerecord.attributes.tag") %></th><th></th></tr></thead>");
+  $("#results_table").append("<thead><tr><th style='text-align:left'><%= raw I18n.t("menu.order") %> #</th><th style='text-align:left'><%= raw I18n.t("activerecord.attributes.tag") %></th><th></th></tr></thead>");
   <% @orders.each do |order|  %>
     var row = $('<tr></tr>');
     row.addClass('table-row');
@@ -74,27 +68,24 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     oname.addClass('table-cell id');
     oname.html("#<%= order.id %>");
   
-    var notPaid = $('<td></td>');
-  
     var sku = $('<td></td>');
     sku.addClass('table-cell order-tag');
     sku.html("<%= order.tag %>");
   
     <% if order.paid == 1 %>
-      notPaid.append(" ");
       var btn = $('<td></td>');
-      
     <% else %>
-      notPaid.append("*");
       var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:edit,32) %>" onmousedown="window.location = \'/orders/new?order_id=<%= order.id %>\';" /></div></td>');
     <% end %>
+
     var btn2 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:printer,32) %>" onmousedown="print_order(\'<%= order.id %>\');" /></div></td>');
+    var btn3 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:show,32) %>" onmousedown="window.location= \'/orders/<%= order.id %>\';" /></div></td>');
     btn.addClass('table-cell btn');
     row.append(oname);
-    row.append(notPaid);
     row.append(sku);
-    row.append(btn);
+    row.append(btn3);
     row.append(btn2);
+    row.append(btn);
     $("#results_table").append(row);
   <% end %>
 <% end %>

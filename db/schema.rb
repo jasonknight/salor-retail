@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120207204126) do
+ActiveRecord::Schema.define(:version => 20120302192024) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.integer  "weight",     :default => 0
     t.string   "afield"
     t.float    "value",      :default => 0.0
+    t.integer  "hidden",     :default => 0
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"
@@ -45,19 +46,21 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.datetime "created_at",                          :null => false
     t.datetime "updated_at",                          :null => false
     t.boolean  "is_shipment_item", :default => false
+    t.integer  "hidden",           :default => 0
   end
 
   create_table "buttons", :force => true do |t|
     t.string   "name"
     t.string   "sku"
-    t.string   "category"
+    t.string   "old_category_name"
     t.integer  "position"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.integer  "vendor_id"
-    t.boolean  "is_buyback",  :default => false
+    t.boolean  "is_buyback",        :default => false
     t.integer  "category_id"
     t.string   "color"
+    t.integer  "hidden",            :default => 0
   end
 
   create_table "cash_register_dailies", :force => true do |t|
@@ -82,7 +85,7 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.integer  "vendor_id"
     t.string   "scale"
     t.boolean  "hidden",                :default => false
-    t.boolean  "artema_hybrid",         :default => false
+    t.boolean  "paylife",               :default => false
     t.string   "bank_machine_path"
     t.string   "cash_drawer_path"
     t.boolean  "big_buttons",           :default => false
@@ -111,9 +114,24 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.integer  "position"
     t.string   "color"
     t.string   "sku"
+    t.integer  "hidden",          :default => 0
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
+
+  create_table "cues", :force => true do |t|
+    t.boolean  "is_handled",      :default => false
+    t.boolean  "to_send",         :default => false
+    t.boolean  "to_receive",      :default => false
+    t.text     "payload"
+    t.string   "url"
+    t.string   "source_sku"
+    t.string   "destination_sku"
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
 
   create_table "customers", :force => true do |t|
     t.string   "first_name"
@@ -127,10 +145,12 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.string   "telephone"
     t.string   "cellphone"
     t.string   "email"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.integer  "vendor_id"
     t.string   "company_name"
+    t.string   "sku"
+    t.integer  "hidden",       :default => 0
   end
 
   add_index "customers", ["vendor_id"], :name => "index_customers_on_vendor_id"
@@ -198,6 +218,7 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.string   "owner_type"
     t.datetime "created_at",                  :null => false
     t.datetime "updated_at",                  :null => false
+    t.integer  "hidden",     :default => 0
   end
 
   add_index "drawers", ["owner_id"], :name => "index_drawers_on_owner_id"
@@ -289,7 +310,7 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.float    "height",               :default => 0.0
     t.float    "weight",               :default => 0.0
     t.string   "height_metric"
-    t.string   "weight_metric"
+    t.string   "weight_metric",        :default => "g"
     t.float    "length",               :default => 0.0
     t.float    "width",                :default => 0.0
     t.string   "length_metric"
@@ -315,7 +336,7 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.string   "shipper_sku"
     t.float    "packaging_unit",       :default => 1.0
     t.boolean  "ignore_qty",           :default => false
-    t.integer  "child_id"
+    t.integer  "child_id",             :default => 0
     t.boolean  "must_change_price",    :default => false
   end
 
@@ -340,6 +361,7 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.string   "applies_to"
     t.float    "quantity_sold", :default => 0.0
     t.float    "cash_made",     :default => 0.0
+    t.integer  "hidden",        :default => 0
   end
 
   add_index "locations", ["vendor_id"], :name => "index_locations_on_vendor_id"
@@ -349,9 +371,11 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.integer  "num_swipes"
     t.integer  "num_used"
     t.integer  "customer_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.string   "sku"
+    t.string   "customer_sku"
+    t.integer  "hidden",       :default => 0
   end
 
   add_index "loyalty_cards", ["customer_id"], :name => "index_loyalty_cards_on_customer_id"
@@ -385,6 +409,20 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "node_queues", :force => true do |t|
+    t.boolean  "handled",         :default => false
+    t.boolean  "send",            :default => false
+    t.boolean  "receive",         :default => false
+    t.text     "payload"
+    t.string   "url"
+    t.string   "source_sku"
+    t.string   "destination_sku"
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+  end
+
   create_table "nodes", :force => true do |t|
     t.string   "name"
     t.string   "sku"
@@ -394,9 +432,11 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.boolean  "is_self"
     t.text     "accepted_ips"
     t.integer  "vendor_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.string   "status"
+    t.boolean  "is_busy",      :default => false
+    t.integer  "hidden",       :default => 0
   end
 
   create_table "notes", :force => true do |t|
@@ -614,8 +654,9 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
   create_table "shipment_types", :force => true do |t|
     t.string   "name"
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.integer  "hidden",     :default => 0
   end
 
   add_index "shipment_types", ["name"], :name => "index_shipment_types_on_name"
@@ -694,8 +735,9 @@ ActiveRecord::Schema.define(:version => 20120207204126) do
     t.string   "name"
     t.string   "internal_type"
     t.integer  "vendor_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.integer  "hidden",        :default => 0
   end
 
   create_table "transaction_tags", :force => true do |t|

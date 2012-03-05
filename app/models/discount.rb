@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class Discount < ActiveRecord::Base
+  include SalorBase
 	include SalorScope
   include SalorModel
   belongs_to :vendor

@@ -1,10 +1,4 @@
-updateDrawer({amount:'<%= GlobalData.salor_user.drawer.amount %>'});
-hide_cash_drop();
-$('.pos-cash-register-amount').html(toCurrency(<%= $User.get_drawer.amount %>));
-  if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
-    SalorPrinter.printURL(Register.thermal_printer, Conf.url + '/vendors/render_drawer_transaction_receipt?id=<%= @drawer_transaction.id %>');
-    SalorPrinter.printURL(Register.thermal_printer, Conf.url + '/vendors/render_open_cashdrawer');
-  } else {
-  
-  }
+print_url(Register.thermal_printer,'/vendors/render_drawer_transaction_receipt?id=<%= @drawer_transaction.id %>');
+updateDrawer({amount:'<%= $User.get_drawer.amount %>'});
+window.Drawer = <%= raw $User.get_drawer.attributes.to_json %>;
 <%= render :partial => "shared/js/global_errors_js" %>

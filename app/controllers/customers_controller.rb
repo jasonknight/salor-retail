@@ -47,10 +47,10 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class CustomersController < ApplicationController
-  before_filter :authify, :except => [:render_label]
-  before_filter :initialize_instance_variables, :except => [:render_label]
-  before_filter :check_role, :except => [:crumble, :render_label]
-  before_filter :crumble, :except => [:render_label]
+  before_filter :authify, :except => [:labels]
+  before_filter :initialize_instance_variables, :except => [:labels]
+  before_filter :check_role, :except => [:labels]
+  before_filter :crumble, :except => [:labels]
   # GET /customers
   # GET /customers.xml
   def index
@@ -122,44 +122,25 @@ class CustomersController < ApplicationController
   # DELETE /customers/1.xml
   def destroy
     @customer = Customer.find(params[:id])
-    @customer.loyalty_card.destroy
-    @customer.destroy
+    @customer.loyalty_card.kill 
+    @customer.kill
 
     respond_to do |format|
       format.html { redirect_to(customers_url) }
       format.xml  { head :ok }
     end
   end
-  def render_label
-    if params[:id]
-      @customers = Customer.find_all_by_id params[:id]
-    elsif params[:all]
-      @customers = Customer.find_all_by_hidden :false
-    elsif params[:skus]
-      @customers = Customer.where :id => params[:ids].split("\r\n")
-    end
-    render :text => Printr.new.sane_template(params[:type],binding)
-  end
 
   def labels
-    if params[:id]
-      @customers = Customer.find_all_by_id params[:id]
-    elsif params[:all]
-      @customers = Customer.find_all_by_hidden :false
-    elsif params[:skus]
-      @customers = Customer.where :id => params[:ids].split("\r\n")
+    @customers = Customer.find_all_by_id params[:id]
+    text = Printr.new.sane_template(params[:type],binding)
+    if $Register.salor_printer
+      render :text => text
+    else
+      printer_path = params[:type] == 'lc_sticker' ? $Register.sticker_printer : $Register.thermal_printer
+      File.open(printer_path,'w') { |f| f.write text }
+      render :nothing => true
     end
-    vendor_id = GlobalData.salor_user.meta.vendor_id
-    if vendor_id
-      if params[:type] == 'lc_label'
-        type = 'escpos'
-      elsif params[:type] == 'lc_sticker'
-        type = 'slcs'
-      end
-      printer = VendorPrinter.where( :vendor_id => vendor_id, :printer_type => type ).first
-      Printr.new.send(printer.name.to_sym, params[:type], binding) if printer
-    end
-    render :nothing => true
   end
 
   def upload_optimalsoft

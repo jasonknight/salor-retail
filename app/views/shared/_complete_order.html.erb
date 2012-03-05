@@ -40,6 +40,7 @@ function add_payment_method() {
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   var opts = payment_method_options();
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  $(sel)[0].selectedIndex = numMethods;
   $("#payment_methods").append(sel).append(amount);
   $('#payment_methods').append('<br />');
   oldSelectedIndex = null;
@@ -49,10 +50,7 @@ function add_payment_method() {
     visible: function () {
       var cls = $(sel).val() + '-amount';
       $(".ui-keyboard-preview").removeClass('payment-amount');
-      setTimeout(function () {
-        // to keep this double input from messing up get_payment_amount
-        $("." + cls).select();
-      },150);
+      $("." + cls).select();
     },
     accepted: function () {
       display_change();
@@ -122,6 +120,7 @@ function validatePaymentMethod(element) {
 
 function complete_order_show() {
   sendingOrder = false;
+  $(".payment-amount").remove();
   complete_total = toFloat($('#pos_order_total').text());
   if (isBuyOrder) complete_total *= -1;
   $(".complete-order-total").html($('#pos_order_total').html());
@@ -141,24 +140,24 @@ function complete_order_show() {
   <% end %>
   $('.a4-print-button').remove(); 
   var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print_48.png' /></div>");
-  var thermprint = $("<div class='a4-print-button'><img src='/images/icons/print_48.png' /></div>");
+  //var thermprint = $("<div class='a4-print-button'><img src='/images/icons/print_48.png' /></div>");
   var left = $('#complete_order').position().left;
   var width = $('#complete_order').width();
   var cpos = {x: width + left + 25, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
   a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
-  thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
+  //thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
+  relevant_order_id = $('.order-id').html();
   a4print.mousedown(function () {
-    Salor.printPage('http://salor/orders/'+$('.order-id').html().replace('#','')+'/print');          
+    window.location = '/orders/' + relevant_order_id + '/print';
+    //if (typeof(Salor) != 'undefined') {
+    //  Salor.printPage(Conf.url + '/orders/' + relevant_order_id + '/print');   
+    //}       
   });
-  thermprint.mousedown(function () {
-      if (Register.salor_printer && typeof SalorPrinter != 'undefined') {
-        SalorPrinter.printURL('<%= GlobalData.salor_user.get_meta.cash_register.thermal_printer %>','<%= GlobalData.conf.url %>/orders/render_order_receipt?order_id=' + $('.order-id').html());
-      } else {
-      	$.get('/orders/print_receipt?id=' + $('.order-id').html());   
-      }
-  });
+  //thermprint.mousedown(function () {
+  //      print_order( $('.order-id').html() );
+  //});
   $("body").append(a4print);
-  $("body").append(thermprint);
+  //$("body").append(thermprint);
   bindInplaceEnter(false);
   handleKeyboardEnter = false;
   orderCompleteDisplayed = true;
@@ -169,7 +168,11 @@ function complete_order_show() {
       if (confirmInactive) {
         complete_order_hide();
       } else {
-        complete_order_send(false);
+        <% if $Register.no_print == true then %>
+          complete_order_send(false);
+        <% else %>
+          complete_order_send(true);
+        <% end -%>
         focusInput($("#payment_amount_0"));
       }
     }
@@ -256,14 +259,21 @@ function blurInput(type) {
   if ($(input).val() == "") $(input).val("0");
 }
 
+function displayAdvertising() {
+  
+}
+
 function complete_order_hide() {
-  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
-      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', '<%= GlobalData.cash_register.customer_screen_blurb %>' );
+  if (typeof Salor != 'undefined') {
+    if (Register.cash_drawer_path != "" ) {
+      Salor.stopDrawerObserver();
     }
-  <% end %>
-  //  alert("Called " + _called);
-  //_called = _called + 1;
+    if (Register.pole_display == "") {
+      Salor.mimoRefresh(Conf.url + "/vendors/"+Meta.vendor_id+"/display_logo",800,480);
+    } else {
+      Salor.poleDancer(Register.pole_display, Register.customer_screen_blurb);
+    }
+  }
   $("#payment_methods").html("");
   $(".payment-amount").attr("disabled", true);
   $('#complete_order').hide();
@@ -280,7 +290,7 @@ function complete_order_hide() {
   }
   focuseKeyboardInput = true;
   $('body').triggerHandler({type: "CompleteOrderHide"});
-  window.location = "/orders/new";
+  if(parseInt($('.order-id').html())%20 == 0) {window.location = '/orders/new'; } // trigger intensified garbage collection regularly
 }
 
 function get_highest(num) {
@@ -331,18 +341,12 @@ function get_payment_total() {
   var paymentTotal = 0;
   $(".payment-amount:visible").each(
       function () {
-          if ($(this).val().match(/[^0-9\,\.]/)) {
-                notify_user("<%= I18n.t("headings.order_validation") %>", 
-                    "<%= I18n.t("system.errors.payment_method_validation") %>", function () {
-                    window.location = "/orders/new";
-                }); 
-                complete_order_hide();
-                complete_order_show();
+          if ($(this).attr("id")) {
+            paymentTotal += toFloat($(this).val());
           }
-          paymentTotal += toFloat($(this).val());
       }
   );
-  if (isNaN(paymentTotal)) alert("PaymentTotal is not a number!");
+  //if (isNaN(paymentTotal)) alert("PaymentTotal is not a number!");
   return paymentTotal;
 }
 
@@ -352,21 +356,18 @@ function display_change() {
   //if (complete_total == 0) return;
   //if (isBuyOrder) return;
   var change = paymentTotal - complete_total;
-  change = Math.round(change*100);
-  change /= 100;
-  //clog(paymentTotal, complete_total, change);
+  change = Round(change,2);
   if (change < 0.0) {
     recommend(0);
     $('#complete_order_change').html(toCurrency(0));
     allow_complete_order(false);
   } else {
-    if (isNaN(change)) change = 0;
     recommend(change);
     $('#complete_order_change').html(toCurrency(change));
     get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
     allow_complete_order();
   }
-  if(change > 0) { displayChangeOnPole(); }
+  if(change > 0) { displayChangeToCustomer(); }
 }
 
 function complete_order_send(print) {
@@ -379,11 +380,30 @@ function complete_order_send(print) {
   allow_payment_amount = false;
   sendingOrder = true;
   allow_complete_order(false);
-  displayChangeOnPole();
-  <%= salor_render :partial => "shared/salor_printer_end_of_order"%>
+  displayChangeToCustomer();
+  quick_open_drawer();
+  if (typeof(Salor) != 'undefined') {
+    if (Register.pole_display == "") {
+      Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
+    }
+  }
+
+  print_order_id = $('.order-id').html();
+
+  get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
+    if (print == 'true') { print_order(print_order_id); }
+    sendingOrder = false;
+    if (Register.cash_drawer_path != "" ) {
+      setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path)",2000);
+    }
+  }, 'get', function() {
+    sendingOrder = false;
+    allow_complete_order();
+    allow_payment_amount = true;
+  });
 }
 
-function displayChangeOnPole() {
+function displayChangeToCustomer() {
   <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
     if (typeof(Salor) != 'undefined') {
       currency = '<%= t('number.currency.format.friendly_unit') %>';

@@ -50,10 +50,10 @@
 require 'rubygems'
 require 'mechanize'
 class ItemsController < ApplicationController
-  before_filter :authify, :except => [:wholesaler_update, :render_label]
-  before_filter :initialize_instance_variables, :except => [:render_label]
-  before_filter :check_role, :except => [:info, :search, :labels,:render_label, :crumble, :wholesaler_update]
-  before_filter :crumble, :except => [:wholesaler_update, :render_label]
+  before_filter :authify, :except => [:wholesaler_update, :labels]
+  before_filter :initialize_instance_variables, :except => [:labels]
+  before_filter :check_role, :except => [:info, :search, :labels, :crumble, :wholesaler_update]
+  before_filter :crumble, :except => [:wholesaler_update, :labels]
   
   # GET /items
   # GET /items.xml
@@ -194,7 +194,7 @@ class ItemsController < ApplicationController
   # DELETE /items/1.xml
   def destroy
     @item = Item.find_by_id(params[:id])
-    if salor_user.owns_this?(@item) then
+    if $User.owns_this?(@item) then
       if @item.order_items.any? then
         @item.update_attribute(:hidden,1)
         @item.update_attribute(:sku, rand(999).to_s + 'OLD:' + @item.sku)
@@ -245,38 +245,23 @@ class ItemsController < ApplicationController
       format.js { render :content_type => 'text/javascript',:layout => false}
     end
   end
-  def render_label
-     if params[:id]
-      @items = Item.find_all_by_id params[:id]
-    elsif params[:all]
-      @items = Item.find_all_by_hidden :false
-    elsif params[:skus]
-       @items = Item.where :sku => CGI.unescape(params[:skus]).split("\n")
-    end
-    text = Printr.new.sane_template(params[:type],binding)
-    render :text => text
-  end
 
   def labels
     if params[:id]
       @items = Item.find_all_by_id params[:id]
-    elsif params[:all]
-      @items = Item.find_all_by_hidden :false
     elsif params[:skus]
-      @items = Item.where :sku => params[:skus].split("\r\n")
+      @items = Item.where :sku => params[:skus].split(",")
     end
-    vendor_id = GlobalData.salor_user.meta.vendor_id
-      if params[:type] == 'label'
-        type = 'escpos'
-      elsif params[:type] == 'sticker'
-        type = 'slcs'
-      end
-      text = Printr.new.sane_template(params[:type],binding)
-      File.open($Register.thermal_printer,'w') do |f|
-        f.write text
-      end
-    render :nothing => true
+    text = Printr.new.sane_template(params[:type],binding)
+    if $Register.salor_printer
+      render :text => text
+    else
+      printer_path = params[:type] == 'sticker' ? $Register.sticker_printer : $Register.thermal_printer
+      File.open(printer_path,'w') { |f| f.write text }
+      render :nothing => true
+    end
   end
+
   def export_broken_items
     @from, @to = assign_from_to(params)
     if params[:from] then
@@ -364,6 +349,7 @@ class ItemsController < ApplicationController
     add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
     add_breadcrumb I18n.t("menu.inventory_report"), items_inventory_report_path
     @items = Item.scopied.where 'real_quantity > 0'
+    @items.inspect
     @categories = Category.scopied
   end
 

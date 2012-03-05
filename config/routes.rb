@@ -2,6 +2,8 @@ Salor::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
+  match "nodes/send_msg" => "nodes#send_msg"
+  match "nodes/receive_msg" => "nodes#receive_msg"
   match "home/index" => "home#index"
   match "home/set_user_theme_ajax" => "home#set_user_theme_ajax"
   match "home/user_employee_index" => "home#user_employee_index"
@@ -61,6 +63,7 @@ Salor::Application.routes.draw do
   match "orders/:id/print" => "orders#print"
   match "orders/print" => "orders#print"
   match "orders/:id/customer_display" => 'orders#customer_display'
+  match "vendors/:id/display_logo" => 'vendors#display_logo'
   match "employees/index" => "employees#index"
   match "items/info" => "items#info"
   match "items/item_json" => "items#item_json"
@@ -71,6 +74,8 @@ Salor::Application.routes.draw do
   match "vendors/edit_drawer_transaction" => "vendors#edit_drawer_transaction"
   match "vendors/edit_field_on_child" => "vendors#edit_field_on_child"
   match "vendors/toggle" => "vendors#toggle"
+  match "vendors/technician_control_panel" => "vendors#technician_control_panel"
+  match "vendors/destroy/:id" => "vendors#destroy"
   match "vendors/end_day" => "vendors#end_day"
   match "vendors/end_day" => "vendors#end_day"
   match "vendors/open_cash_drawer" => "vendors#open_cash_drawer"

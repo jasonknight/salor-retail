@@ -6,11 +6,11 @@ $border_width: 1px
 $foreground: #f2f2f2
 $foreground2: #d6d6d6
 $middleground: #7a607e
-$middleground2: #513356
+$middleground2: #a572ae //#513356
 $middleground3: #3e2242
 $middleground4: #1c0f1e
-$background: #170c16
-$light_background: #663172
+$background: #291627 //#170c16
+$light_background: #7d5285 //#663172
 $inactive_background: #808080
 
 $text_color: #dddddd
@@ -70,7 +70,7 @@ $wide_key: 3em
 $extra_wide_key: 5em
 $key_side_pad: .3em
 $key_margin: .2em
-$key_width: 2em
+$key_width: 47px 
 $key_input_width: 9em
 
 $images: "/images"
@@ -157,7 +157,7 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 
 @mixin dialog 
-  border: 5px solid $middleground2
+  border: 5px solid $middleground3
   background-color: $middleground4
   color: $foreground
   opacity: .95
@@ -194,7 +194,6 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 body 
   @include no_select
   font-family: $font_family
-  text-rendering: optimizeLegibility
   letter-spacing: 1.5px
 
 @mixin bright_button 
@@ -602,7 +601,7 @@ body
   font-family: $font_family
   font-size: $text_size_normal
   color: $foreground
-  background: $background
+  background-color: $background
   padding: 0px
   margin: 0px
 
@@ -650,6 +649,7 @@ div.header
   background: $middleground
   @include rounded_corners_bottom
   height: $header_height
+  margin-bottom: 17px
 
 div.header > ul 
   list-style: none
@@ -703,29 +703,32 @@ div.header > ul > li > div > a > img
   border: none
   @include no_select
 
-div.header > div.generic-search 
-  position: absolute
-  top: 10px
-  right: 63px
-  width: 200px
 
-div.header > div.generic-search 
-  position: absolute
-  top: 10px
-  right: 63px
-  width: 200px
-
-div.header div.close-window 
+div.close-window 
   @include attention_button
-  @include rounded_corners_right
-  position: absolute
-  right: 10px
-  top: 13px
-  width: 30px
-  padding: 3px
+  @include rounded_corners_left
+  position: fixed
+  right: 0px
+  bottom: 15px
+  padding: 18px
+  font-weight: bold
   text-transform: uppercase
   @include left_right_pad_wide
   @include pointer
+
+a.reload-window
+  @include attention_button
+  @include rounded_corners_right
+  position: fixed
+  left: 0px
+  bottom: 15px
+  padding: 18px
+  text-decoration: none
+  font-weight: bold
+  text-transform: uppercase
+  @include left_right_pad_wide
+  @include pointer
+  
 
 div.header #clockbox 
   width: 65px
@@ -744,29 +747,34 @@ div.header #clockbox:hover
   background: $middleground
   cursor: default
 
-div.header > div.generic-search > div.generic-search-button 
+div.generic-search 
+  display: inline-block
+  padding: 10px 0px
+  float: right
+  width: 180px
+
+div.generic-search-button 
   background: url(/images/icons/tick_32.png) no-repeat
+  float: right
   width: 32px
   height: 32px
-  position: relative
   top: -30px
   left: 120px
   z-index: 101
   cursor: pointer
+  display: inline-block
 
-div.header > span.version 
-  position: absolute
-  right: 5px
-  top: 2px
+span.version 
+  position: fixed
+  left: 0px
+  bottom: 0px
   font-size: 50%
 
 /* Main and Main Content Divs */
 
-#body 
-  height: 100%
-
 div.main 
-  margin: 20px 0px 100px 0px
+  margin: 20px 0px 250px 0px
+  background-color: $background
 
 
 div.content-box > div.title-container 
@@ -1075,11 +1083,21 @@ input.ui-keyboard-button
   @include no_select
   color: $background
 
-input.ui-keyboard-button 
+div.ui-keyboard input
+  font-size: 190%
+
+input.ui-keyboard-button
   float: none
-  width: 50px
+  width: 47px
   @include no_select
 
+input.ui-keyboard-button-num
+  width: 70px
+  height: 70px
+  font-size: 25px
+
+input.ui-keyboard-preview-num
+  font-size: 200%
 
 div.keys div.key-active 
   background-color: $middleground3
@@ -1136,52 +1154,44 @@ td.keyboard-input
   color: $background
   @include rounded_corners_all
   padding: 5px
+  margin: 5px 15px 0px 0px
 
-.customer-screen-total 
-  text-transform: uppercase
-  background-color: $light_background
-  @include rounded_corners_all
-  width: 320px
-  float: right
-  margin-right: 15px
-  padding-right: 15px
+
 
 .eod-master-table 
-  width: 99%
+  width: 33%
 
-.eod-drawer-total 
-  width: 190px
+div#eod-drawer-total 
+  width: 500px
   height: 30px
-  float: left
-  margin-left: 15%
   margin-right: 10px
   text-transform: uppercase
   text-align: center
-  font-size: $text_size_normal
+  font-weight: bold
+  font-size: 200%
+  padding: 10px
   background-color: $light_background
   @include rounded_corners_all
 
-.eod-calculator-total,.eod-calculator-difference 
+div#eod-calculator-total, div#eod-calculator-difference 
   width: 190px
   height: 30px
-  float: left
   margin-right: 10px
   text-transform: uppercase
   text-align: center
-  font-size: $text_size_normal
+  font-weight: bold
+  padding: 10px
+  font-size: 200%
   background-color: $light_background
   @include rounded_corners_all
 
 .eod-piece 
+  display: inline-block
   margin: 5px
   width: 75px
 
 .eod-calculator-input 
   width: 30px
-
-.eod-error 
-  background-color: red
-  color: black
 
 .eod-ok 
   background-color: darkgreen
@@ -1232,13 +1242,17 @@ div.square-button
 
 div.pos-menu div.new-order 
   @include rounded_corners_left
-  width: 15%
+  width: 10%
 
 div.pos-menu div.print-receipt 
   @include rounded_corners_right
   @include bright_button
   width: 15%
   text-align: right
+
+span.pos-cash-register-amount
+  font-size: 300%
+  font-weight: bold
 
 div.pos-menu div.pos-configuration 
   @include cool_button
@@ -1375,6 +1389,9 @@ div.shipment-create-item div.table-cell
 
 div.cash-drop textarea 
   width: 160px
+
+input.cash-drop-amount
+  font-size: 300%
 
 table.cash-drop-radios 
   width: 100px
@@ -1622,7 +1639,7 @@ div.spacer-rmargin
 
 div.field 
   text-align: left
-  width: 300px
+  width: 370px
   margin-bottom: 10px
 
 div.form-container div.field 
@@ -1701,7 +1718,7 @@ div.scrollable-button-row
 
 
 input#generic_search_input 
-  width: 100px
+  width: 90px
 
 
 div.content-box > div.content-container-home-user_employee_index 
@@ -2034,6 +2051,8 @@ div.void-order-input-container
   color: black
   margin-bottom: 20px
   //font-size: 2em
+  input
+    display: none
 
 
 .customer_data 
@@ -2430,6 +2449,7 @@ div.item-button
   text-align: center
   font-size: 100%
   text-transform: uppercase
+  margin: 5px
 
 div#buttons 
   display: none
@@ -2441,6 +2461,9 @@ div#buttons
 
 div.button-category
   display: inline-block
+  width: 80px
+  padding: 10px
+  margin: 0px 5px 10px 5px
 
 div.button-category-container
   display: none
@@ -2452,8 +2475,8 @@ div.last-five-orders
   @include dialog
   @include rounded_corners_all
   position: absolute
-  left: 10%
-  width: 80%
+  left: 5%
+  width: 90%
   top: 100px
   div.last-five-order 
     @include widget
@@ -2475,11 +2498,11 @@ div.last-completed-orders
   bottom: 5px
   text-align: center
   div.completed-entry 
-    background-color: black
+    background-color: #170c16
     display: inline-block
     padding: 5px
     margin-right: 5px
-    border: 1px solid $light_background
+    border: 1px solid $middleground3
   
   
 
@@ -2499,6 +2522,7 @@ div.dt-tags
 
 div.dt-tag-target 
   font-size: 1em
+  padding: 15px
 
 div.void-order 
   width: 95%

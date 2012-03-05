@@ -70,6 +70,16 @@ de:
         other: Tags
 
     attributes:
+      reorder_type: Reorder Type
+      big_buttons: grosser Tasten
+      hide_discounts: Preisnachlässe ausblenden
+      thermal_printer: Thermal Druker
+      paylife: Paylife
+      url: URL
+      letter: Letter
+      default: Default
+      csv_imports: CSV Imports
+      csv_imports_url: CSV Imports URL
       customer_screen_blurb: Standardtext Verkaufsanzeige
       pole_display: Verkaufsanzeige
       auto_drop: Auto-Buchung Tagesbeginn
@@ -159,6 +169,8 @@ de:
         name: Name
         quantity: Menge
         sku: SKU
+      cash_register:
+        sticker_printer: Etikettendrucker
       sku: SKU
       start_amount: Startbetrag
       start_date: Beginn
@@ -193,8 +205,8 @@ de:
       afield: Feld
       order_id: Verkaufs-Id
       scale: Waage
-      no_print: Don't Print On Enter
-      salor_printer: Print Client Side
+      no_print: Nicht drucken aus Enter
+      salor_printer: Client-Seite Drüker
       
   api:
     user_does_not_exist: Dieser Benutzer existiert nicht oder darf die API nicht benutzen.
@@ -346,7 +358,7 @@ de:
     update_gift_card: Gutschein aktualisieren
     vendors: Filialen
     void: Storno
-    end_of_day_drop: Tagessumme entnehmen
+    end_of_day_drop: Gesamtsumme entnehmen
     transaction_tags: Buchungen
     update_location: Orte
     update_real_quantity: Inventur
@@ -555,6 +567,8 @@ de:
       logo: Logo
 
   views:
+    eticket: Regaletikett
+    sticky_ticket: Klebeetikett
     wholesaler_refresh: Großhändlerdaten werden aktualisiert. Dies kann einige Minuten dauern.
     advanced_field: Achtung, nur für fortgeschrittene Benutzer!
     by_card: Mit Karte
@@ -580,11 +594,11 @@ de:
     locations: Orte
     loyalty_card: Kundenkarte
     name: Name
-    new_item_heading: Neuer Artikel für %{store}
-    new_sale_for: Neuer Einkauf für %{store}
+    new_item_heading: "Neuer Artikel für %{store}"
+    new_sale_for: "Neuer Einkauf für %{store}"
     new_stock_location: Neues Lager
-    order_heading: Verkauf #%{id} für %{store}
-    order_number: Verkauf #%{id}
+    order_heading: "Verkauf Nr. %{id} für %{store}"
+    order_number: "Verkauf Nr. %{id}"
     order_summary: Verkäufe der letzten 7 Tage
     owner_language: Sprache des Eigentümers
     password: Passwort
@@ -641,7 +655,7 @@ de:
       model_create: "%{model} wurde erfolgreich angelegt."
       model_edit: "%{model} wurde erfolgreich bearbeitet."
       new_order: Neuer Verkauf angelegt
-      order_refund_dt: Automatic refund drawer transaction \Verkauf #%{id}\:http://salor/orders/%{id}
+      order_refund_dt: "Automatic refund drawer transaction Verkauf #%{id} : http://salor/orders/%{id}"
       please_wait: "Bitte warten..."
       transaction_succeeded: "Bezahlt!"
       artema_hybrid_lost: "Artema Hybrid Anschluss prufen! Terminal abstecken und wieder anstecken."
@@ -658,6 +672,8 @@ de:
     shipments:
       state: State
     single_words:
+      new: Neu
+      all: Alle
       camera: Kamera
       ordering: Reihenfolge
       body: Körper

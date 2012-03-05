@@ -128,7 +128,7 @@ class TransactionTagsController < ApplicationController
   # DELETE /transaction_tags/1.xml
   def destroy
     @transaction_tag = TransactionTag.scopied.find(params[:id])
-    @transaction_tag.destroy
+    @transaction_tag.kill
     atomize(ISDIR, 'cash_drop')
     respond_to do |format|
       format.html { redirect_to(transaction_tags_url) }

@@ -67,7 +67,7 @@
       - category_sums_negative_net[cid] += item_total / ( 1 + oi.tax_profile_amount / 100 )
       - taxes_sums_negative_gro[tid] += item_total
 
-  - rebate_total += o.rebate
+  - rebate_total += o.rebate_type == 'percent' ? o.rebate / 100.0 * o.order_items.sum(:price) : o.rebate
 
 - payout_types_drop_sums = Hash.new
 - payout_types_payout_sums = Hash.new
@@ -79,7 +79,6 @@
   - payout_types_payout_sums[d.tag.to_sym] = 0
 
 - @drawertransactions.each do |d|
-  - next if d.tag == 'CompleteOrder'
   - key = d.tag ? d.tag.to_sym : 'Bar'
   - if d.drop
     - payout_types_drop_sums[key] += d.amount
@@ -109,9 +108,13 @@
       - 0.upto(category_sums_positive_gro.size) do |i|
         - next if category_sums_positive_gro[i].zero?
         %tr
-          %td.left= Category.scopied.find_by_id(i).name unless i.zero?
-          %td.table-center= number_to_currency category_sums_positive_gro[i]
-          %td.table-center= number_to_currency category_sums_positive_net[i]
+          %td.left= i.zero? ? t('.no_category') : Category.scopied.find_by_id(i).name
+          %td.table-center
+            = number_to_currency category_sums_positive_gro[i]
+            = text_field_tag "category_sums_positive_gro_#{i}", category_sums_positive_gro[i]
+          %td.table-center
+            = number_to_currency category_sums_positive_net[i]
+            = text_field_tag "category_sums_positive_net#{i}", category_sums_positive_net[i]
 
     %table.striped-table2
       %tr
@@ -143,6 +146,8 @@
     %p== Summe brutto: #{ number_to_currency category_sums_positive_gro.compact.sum }
 
     %p== Summe netto: #{ number_to_currency category_sums_positive_net.compact.sum }
+
+    %p== Rabatte auf Verkäufe brutto (Bar): #{ number_to_currency rebate_total }
 
 
 
@@ -246,6 +251,6 @@
 
     %p== Summe Buchungen: #{ number_to_currency total_drop - total_payout }
 
-    %p== Differenz: #{ number_to_currency total_drop - total_payout + category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum }
+    %p== Differenz zwischen Buchungen und Bargeldsaldo: #{ number_to_currency total_drop - total_payout + category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum - rebate_total }
+    %p Hinweis: Eine Differenz bedeutet lediglich, dass Buchungen nicht genau vorgenommen wurden oder bei den Verkäufen falsche Zahlungsmethoden angegeben wurden.
 
-    %p== Rabatte auf Verkäufe: #{ number_to_currency rebate_total }

@@ -54,6 +54,17 @@ class Customer < ActiveRecord::Base
   belongs_to :vendor
   has_many :orders
   accepts_nested_attributes_for :loyalty_card
+  before_create :set_model_owner
+
+  def set_sku
+    if self.sku.blank? then
+      if self.vendor.nil? then
+        self.sku = "VENDORLESS:#{self.first_name}:#{self.last_name}".gsub(/[^a-zA-Z0-9]/,'')
+      else
+        self.sku = "#{self.vendor.name}:#{self.first_name}:#{self.last_name}".gsub(/[^a-zA-Z0-9]/,'')
+      end
+    end
+  end
   def full_name
     self.first_name = 'NotSet' if self.first_name.blank?
     

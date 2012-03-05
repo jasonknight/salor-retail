@@ -128,7 +128,7 @@ class StockLocationsController < ApplicationController
   # DELETE /locations/1.xml
   def destroy
     @location = StockLocation.scopied.find_by_id(params[:id])
-    @location.destroy
+    @location.kill
     respond_to do |format|
       format.html { redirect_to('/stock_locations') }
       format.xml  { head :ok }

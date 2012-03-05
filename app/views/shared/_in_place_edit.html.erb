@@ -136,12 +136,6 @@ var receiver_shipper_select = function (value) {
     the_shipper: receiver_shipper_select,
     the_receiver: receiver_shipper_select
   };
-  function in_place_edit_select() {
-    setTimeout(function () {
-      $(".inplaceeditinput").select();
-    }, 
-    125);
-  }
   function in_place_edit(id,x,y) {
 	$('#inplaceedit-div').remove();
 	var type = $('#' + id).attr('field');
@@ -185,11 +179,16 @@ var receiver_shipper_select = function (value) {
 
 
 	if (field[0].tagName != 'SELECT') {
-	  field = make_keyboardable_with_options(field, {accepted: function () {
-        in_place_edit_go(id);    
-      },
-      visible: in_place_edit_select
-    });
+          field.keyboard({
+            openOn   : 'focus',
+            stayOpen : true,
+            layout       : field.hasClass('keyboardable-int') ? 'num' : '<%= I18n.locale %>',
+            customLayout : null,
+            visible : function(){ $('.ui-keyboard-preview').select();},
+            accepted: function(){ in_place_edit_go(id); }
+          });
+          field.getkeyboard().reveal();
+          $('#inplaceedit-div').hide();
 	}
 
 	$('#inplaceedit-div').css(offset);
@@ -207,7 +206,7 @@ var receiver_shipper_select = function (value) {
 	}
   inplaceEditBindEnter(true, id);
   //div.children('.kbd-show-button').trigger('mousedown');
-  focusInput($('#inplaceedit'));
+  //focusInput($('#inplaceedit'));
 }
 
 /**
@@ -238,7 +237,6 @@ function in_place_edit_go(id) {
   var final_value = $('#inplaceedit').val();
   final_value = final_value.replace("%",'');
   var string = '/vendors/edit_field_on_child?id='+ $('#' + id).attr('model_id') +'&klass='+klass+'&field='+type+'&value=' + final_value + '&' + withstring
-  $('#main_content').mask('<%= t("views.single_words.saving") %>');
   get(string, '_in_place_edit.html.erb', function () {
   });
   if ($('#' + id).attr('update_pos_display') == 'true') {
@@ -255,9 +253,6 @@ function in_place_edit_go(id) {
   if ($('#keyboard_input').length != 0) {
     focuseKeyboardInput = true;
   }
-}
-function inpselect() {
-  $('#inplaceedit').select();
 }
 </script>
 <% end -%>

@@ -1,13 +1,8 @@
 require 'spec_helper'
 describe OrderItem do
-  before(:each) do
-    @user = Factory :user
-    @vendor = Factory :vendor, :user => @user
-    @tax_profile = Factory :tax_profile, :user => @user
-    @category = Factory :category, :vendor => @vendor
-  end
   context "when being created" do
       it "accepts a normal item" do
+        single_store_setup
         @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
         @order_item = OrderItem.new
         @order_item.should be_valid
@@ -15,6 +10,7 @@ describe OrderItem do
         @order_item.price.should == @item.price.first
       end # accepts an item
       it "decrements item quantities when set_sold" do
+        single_store_setup
         @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
         @item.category.should be
         qty = @item.quantity
@@ -24,6 +20,7 @@ describe OrderItem do
         @order_item.item.quantity.should == qty - @order_item.quantity
       end # decrements item quantities when set_sold
       it "accepts a parts item" do
+        single_store_setup
         @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
         @order_item = OrderItem.new
         @parts_item = Factory :item,:sku => "PART", :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
@@ -38,15 +35,22 @@ describe OrderItem do
         @order_item.item.parts.first.quantity.should == 90
       end # accepts a parts item
       it "should have a list of discounts" do
+       single_store_setup
        @discount = Factory :discount, :vendor => @vendor, :category => @category
        @discount.save
+       Discount.count.should == 1
+       puts Discount.first.inspect
        OrderItem.reload_discounts
        @order_item = OrderItem.new
        OrderItem.get_discounts.length.should == 1
       end 
       it "should should consider discounts that apply to the categor of an item" do
+        single_store_setup
         @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
         @discount = Factory :discount, :vendor => @vendor, :category => @category
+        @discount.save
+        Discount.count.should_not == 0
+        puts Discount.first.inspect
         @discount.update_attribute :applies_to, 'Category'
         @discount.update_attribute :category_id, @item.category_id
         OrderItem.reload_discounts

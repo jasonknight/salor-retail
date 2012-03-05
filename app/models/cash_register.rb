@@ -58,7 +58,7 @@ class CashRegister < ActiveRecord::Base
   has_many :drawer_transactions
   def end_of_day_report
     table = {}
-    cats_tags = Category.cats_report(self.id)
+    cats_tags = Category.cats_report($User.get_drawer.id)
     @orders = Order.by_vendor.by_user.where(:refunded => false,:drawer_id => $User.get_drawer.id,:paid => true,:created_at => Time.now.beginning_of_day..Time.now)
     paymentmethod_sums = Hash.new
     cashtotal = 0.0
@@ -67,6 +67,9 @@ class CashRegister < ActiveRecord::Base
       o.payment_methods.each do |pm|
         paymentmethod_sums[pm.name] ||= 0 if not pm.internal_type == 'InCash'
         paymentmethod_sums[pm.name] += pm.amount if not pm.internal_type == 'InCash'
+        if pm.amount < 0 then
+          #cash_total += pm.amount if pm.internal_type != 'InCash'
+        end
       end
     end
     paymentmethod_sums[I18n.t("InCash")] = cashtotal

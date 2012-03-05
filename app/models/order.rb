@@ -71,6 +71,29 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.percent_off'),'percent'],
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
+  def has_cute_credit_message?
+    config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
+    conn = Mysql2::Client.new(config)
+    sql = "SELECT count(*) as num FROM cute_credit.cute_credit_messages where ref_id = '#{self.id}'"
+    cnt = conn.query(sql).first
+    if cnt then
+      num = cnt["num"]
+    else
+      num = 0
+    end
+    if num > 0 then
+      return true
+    else
+      return false
+    end
+  end
+  def cute_credit_message
+    config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
+    conn = Mysql2::Client.new(config)
+    sql = "SELECT * FROM cute_credit.cute_credit_messages where ref_id = '#{self.id}'"
+    rec = conn.query(sql).first
+    return rec
+  end
   def add_payment_methods(params)
     if params[:payment_methods] then
       npms = []
@@ -116,13 +139,17 @@ class Order < ActiveRecord::Base
     end
   end
   def total=(p)
-    write_attribute(:total,self.string_to_float(p)) 
+    p = self.string_to_float(p)
+    p = p * -1 if self.buy_order == true and p > 0
+    write_attribute(:total,p) 
   end
   def front_end_change=(p)
+    if self.paid == 1 then
+      return
+    end
     write_attribute(:front_end_change,self.string_to_float(p)) 
   end
   def rebate=(p)
-    
     write_attribute(:rebate,self.string_to_float(p)) 
   end
   def subtotal=(p)
@@ -231,7 +258,7 @@ class Order < ActiveRecord::Base
 	#end
 	#
 	def remove_order_item(oi)
-	  if self.paid == 1 then
+	  if self.paid == 1 and not $User.is_technicia? then
 	    GlobalErrors.append("system.errors.cannot_edit_completed_order")
 	    return
 	  end
@@ -283,7 +310,7 @@ class Order < ActiveRecord::Base
 	end
 	#
 	def calculate_totals(speedy = false)
-	  if self.paid == 1 then
+	  if self.paid == 1 and not $User.is_technician? then
 	    #GlobalErrors.append("system.errors.cannot_edit_completed_order",self)
 	    return
 	  end
@@ -293,7 +320,7 @@ class Order < ActiveRecord::Base
       self.total = 0 unless self.total_is_locked and not self.total.nil?
       self.subtotal = 0 unless self.subtotal_is_locked and not self.subtotal.nil?
       self.tax = 0 unless self.tax_is_locked and not self.tax.nil?
-      self.order_items.reload.each do |oi|
+      self.order_items.reload.order("id ASC").each do |oi|
         if oi.item.nil? then
           remove_order_item(oi)
           next
@@ -303,7 +330,7 @@ class Order < ActiveRecord::Base
         end
         # Coupons are not handled here, they are handled at the end of the order.
         if oi.item_type.behavior == 'normal' or oi.item_type.behavior == 'gift_card' then
-          price = oi.calculate_total
+          price = oi.calculate_total self.subtotal
           puts "price from #{oi.item.sku} is #{price}"
           if oi.is_buyback and not self.buy_order then
             if price > 0 then
@@ -412,11 +439,7 @@ class Order < ActiveRecord::Base
 	def calculate_rebate
 	  amnt = 0.0
 	  if self.subtotal.nil? then self.subtotal = 0 end
-    if self.rebate_type == 'fixed' then
-      amnt = self.rebate
-    elsif self.rebate_type == 'percent' then
-      amnt = (self.subtotal * (self.rebate/100))
-    end
+    amnt = (self.subtotal * (self.rebate/100))
     return amnt
 	end
 	#
@@ -451,15 +474,15 @@ class Order < ActiveRecord::Base
       update_self_and_save
   
       if self.buy_order then
-        create_drawer_transaction(ottl,:payout,{:tag => "CompleteOrder"})
+        create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
         #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - self.total)
       elsif self.total < 0 then
-        create_drawer_transaction(self.total,:payout,{:tag => "CompleteOrder"})
+        create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
         ottl = self.get_drawer_add
-        GlobalData.salor_user.meta.update_attribute :last_order_id, self.id
+        $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
-        log_action("OID: #{self.id} USER: #{GlobalData.salor_user.username} OTTL: #{ottl} DRW: #{GlobalData.salor_user.get_drawer.amount}")
+        log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
         #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + ottl)
       end
       lc = self.loyalty_card
@@ -477,6 +500,7 @@ class Order < ActiveRecord::Base
       self.update_attribute :paid, 0
       GlobalErrors.append_fatal("system.errors.order_failed",self)
       log_action $!.to_s
+      puts $!.to_s
     end
     log_action "Ending complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
   end
@@ -493,11 +517,10 @@ class Order < ActiveRecord::Base
     end
   end
   def get_drawer_add
-    if self.total < 0 then
-      return self.total
-    end
     ottl = self.total
+    puts ottl
     self.payment_methods.each do |pm|
+      puts pm.inspect
       next if pm.internal_type == 'InCash'
       ottl -= pm.amount
     end
@@ -544,13 +567,17 @@ class Order < ActiveRecord::Base
     dt.drawer_id = GlobalData.salor_user.get_drawer.id
     dt.drawer_amount = GlobalData.salor_user.get_drawer.amount
     dt.order_id = self.id
+    if dt.amount < 0 then
+      dt.payout = true
+      dt.drop = false
+      dt.amount *= -1
+    end
     if dt.save then
       if type == :payout then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)
       elsif type == :drop then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
-      GlobalData.vendor.open_cash_drawer
     end
   end
   def toggle_refund(x)
@@ -563,6 +590,7 @@ class Order < ActiveRecord::Base
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
       opts = {:tag => I18n.t("activerecord.models.drawer_transaction.refund"),:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
       create_drawer_transaction(self.subtotal,:payout,opts)
+      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer # this is handled now by an onclick event in orders/_order_menu.html.erb
       self.order_items.each do |oi|
         if not oi.refunded then
           oi.toggle_refund(nil)
@@ -579,25 +607,7 @@ class Order < ActiveRecord::Base
     t -= self.calculate_rebate
     return t
   end
-  def print_receipt
-    #begin
-      @order = self
-      @vendor = self.vendor
-      @in_cash = 0
-      @by_card = 0
-      @by_gift_card = 0
-      @other_credit = 0
-      cash_register_id = GlobalData.salor_user.meta.cash_register_id
-      vendor_id = GlobalData.salor_user.meta.vendor_id
-      salor_user = GlobalData.salor_user
-      if cash_register_id and vendor_id
-        printers = VendorPrinter.where( :vendor_id => vendor_id, :cash_register_id => cash_register_id )
-        Printr.new.send(printers.first.name.to_sym,'item',binding) if printers.first
-      end
-    #rescue
-    #  GlobalErrors.append("system.errors.order_print_failure",self)
-    #end
-  end
+
   def to_json
     self.total = 0 if self.total.nil?
     attrs = {
@@ -656,35 +666,7 @@ class Order < ActiveRecord::Base
   end
   
   def paylife_blurb
-    text = ''
-    sa = nil
-    if not self.m_struct.blank? then
-      pattern = /STX (M)\d\d(.)(\d)(.{20})(.{21})(.{5})(.)(.{16})(.{8})(.{6})(.{6})(.{20})(\d{8})(.{8})(.{6})(.{16}).+ ETX/
-      text = self.m_struct
-      sa = 'M'
-    elsif not self.p_struct.blank? then
-      pattern = /STX (P)\d\d(\d)(.{40})(.{16})(.{3})(.+) ETX/
-      text = self.p_struct
-      sa = 'P'
-    end
-    return '' if not sa
-    match = text.match(pattern)
-    jts = []
-    jt = self.j_text
-    jt ||= ''
-    begin
-      x = jt.utf8_safe_split(33)
-      jts << x[0]
-      jt = x[1]
-    end while jt.length.to_i >= 33
-    jt = jts.join("\n")
-    if sa == 'P' then
-      parts = match[6].split(" ")
-      return "#{match[4]}\n#{parts[0]}\n#{parts[2]}\n\n#{jt}"
-    elsif sa == 'M' then
-      t = match[13].to_f / 100
-      return "#{match[4]}\n#{match[5]}\n#{match[12]} #{match[9]}\nNr. #{match[10]}\nEUR #{t}\n\n#{jt}"
-    end
+    
   end
   
   

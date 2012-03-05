@@ -9,16 +9,16 @@ function getByCardAmount() {
   return val;
 }
 function paylifeWriteData(str) {
-  alert("Sending data:: " + str)
-  Salor.cuteWriteData(str);
+ // alert("Sending data:: " + str)
+  //Salor.cuteWriteData(str);
 }
 function paylifePoleWrite(text) {
   if (typeof Salor != 'undefined' && window.Register.pole_display != '') {
-      Salor.poleDancer(window.Register.pole_display, text );
+      //Salor.poleDancer(window.Register.pole_display, text );
   }
 }
 $(function () {
   if (typeof Salor != 'undefined') {
-    Salor.cuteDataRead.connect(window.paylifeDataRead);
+    //Salor.cuteDataRead.connect(window.paylifeDataRead);
   }
 });

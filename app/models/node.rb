@@ -52,15 +52,17 @@ class Node < ActiveRecord::Base
   include SalorModel
   belongs_to :vendor
   before_create :set_model_owner
-  after_create :broadcast_add_me
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
-  @@a = ["Button", "Category","Customer","Item","TaxProfile"]
+  @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
+  def node_type=(t)
+    write_atrribute(:node_type,t.downcase)
+  end
   def handle(params)
     log_action "Node receiving object"
     if params.class == String then
       params = JSON.parse(params)
     end
-    @md5 = Digest::SHA2.hexdigest("#{params}")
+    @md5 = Digest::SHA2.hexdigest("#{params[:record].to_json}")
     @params = SalorBase.symbolize_keys(params)
     @target = Node.where(:sku => @params[:target][:sku], :token => @params[:target][:token]).first
     if @params[:message] then
@@ -87,7 +89,7 @@ class Node < ActiveRecord::Base
       GlobalData.vendor_id = @target.vendor.id
       if @record.class == Array then
         @record.each do |rec|
-          new_record = parse(@record)
+          new_record = parse(rec)
           create_or_update_record(new_record)
         end
       else
@@ -109,6 +111,11 @@ class Node < ActiveRecord::Base
       end
       attrs[:part_skus] = pskus
     end
+    if item.category and item.category.sku.nil? then
+      item.category.set_sku
+      item.category.save
+    end
+    attrs[:category_sku] = model.category.sku if model.respond_to? :category and model.category.respond_to? :sku
     if model.parent then
       models << all_attributes_of(model.parent)
       attrs[:parent_sku] = model.parent.sku
@@ -121,13 +128,15 @@ class Node < ActiveRecord::Base
       @target = Node.new(params[:target])
       @target.is_self = false
       @target.vendor_id = self.vendor_id
+      @target.hidden = 0
       @target.save
+      @target.update_attribute :hidden,0
       # now we need to do an initial sync of tax profiles, buttons, categories
       # and customers
       @hash = {}
       @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
       @hash.merge!({:node => {:token => self.token, :sku => self.sku}, :message => "Sync"})
-      [Category,TaxProfile,Item,Button,Customer].each do |klass|
+      [Category,TaxProfilerb,Item,Button,Customer].each do |klass|
         x = 0 # we want to send them in small blocks
         models = []
         klass.scopied.all.each do |model|
@@ -144,19 +153,27 @@ class Node < ActiveRecord::Base
             models = []
           end
         end
+        @hash[:record] = models
         send! if models.any? # finally, send off the last amount
       end
       return false #just quit out
     else
       log_action "You cannot create an identical node." + params.inspect
-      return false # just quit out
+      return true # just quit out
     end
     return true # I.E. handle the record object as normal
   end
   def create_or_update_record(new_record)
     # puts "Creating record"
     log_action "CREATE OR UPDATE RECORD"
-    @inst = @klass.find_by_sku new_record[:sku]
+    if new_record[:loyalt_card_sku] then
+      lc = LoyaltyCard.find_by_sku new_record[:loyalty_card_sku]
+      if lc then
+        @inst = lc.customer
+      end
+    else
+      @inst = @klass.find_by_sku new_record[:sku]
+    end
     if @inst then 
       # puts "Updating record"
       @inst.update_attributes(new_record)
@@ -173,8 +190,9 @@ class Node < ActiveRecord::Base
   def parse(record)
     @klass = Kernel.const_get(record[:class])
     new_record = record.clone
+    log_action "Considering: " + new_record.inspect
     if record.key? :category_sku then
-      c = Category.find_or_create_by_sku(record[:category])
+      c = Category.find_by_sku(record[:category_sku])
       new_record[:category_id] = c.id
       new_record.delete(:category_sku)
       c.update_attribute :vendor_id, @target.vendor_id
@@ -188,7 +206,7 @@ class Node < ActiveRecord::Base
       end
     end
     new_record.delete(:class)
-    new_record[:vendor_id] = @target.vendor_id
+    new_record[:vendor_id] = @target.vendor_id if klass != LoyaltyCard
     new_record
   end
   def verify?
@@ -227,9 +245,9 @@ class Node < ActiveRecord::Base
     @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
     @hash.merge!({:node => {:token => self.token, :sku => self.sku}})
     if not force then
-      update_hash(@record)
+      @hash[:record] = update_hash(@record)
     else
-      all_attributes_of(@record)
+      @hash[:record] = all_attributes_of(@record)
     end
     @hash
   end
@@ -240,7 +258,10 @@ class Node < ActiveRecord::Base
     @hash ||= {}
     record = {:class => item.class.to_s}
     item.changes.each do |k,v|
-      record[k.to_sym] = v[1]
+      record[k.to_sym] = v[1] unless iggy(k,item)
+    end
+    if item.respond_to? :sku and item.sku.nil? then
+      item.set_sku if item.respond_to? :set_sku
     end
     record[:sku] = item.sku if item.respond_to? :sku
     record[:tax_profile_sku] = item.tax_profile.sku if item.respond_to? :tax_profile
@@ -248,9 +269,13 @@ class Node < ActiveRecord::Base
     record[:class] = item.class.to_s
     record[:name] = item.name if item.respond_to? :name
     if item.class == Customer then
+      if item.sku.blank? or item.sku.nil? then
+        item.sku = "ICANTBELIEVETHISSHIT"
+      end
       record[:loyalty_card_sku] = item.loyalty_card.sku
       record[:loyalty_card_points] = item.loyalty_card.points
     end
+    record
   end
   def iggy?(attr,model)
     item_ignore = ["tax_profile_id","shipper_id","location_id","vendor_id", "created_at", "updated_at","category_id","child_id"]
@@ -259,9 +284,18 @@ class Node < ActiveRecord::Base
     end
   end
   def all_attributes_of(item)
+    if item.class == Item then
+      if item.category and item.category.sku.nil? then
+        item.category.set_sku
+        item.category.save
+      end
+    end
     record = {:class => item.class.to_s}
     item.attributes.each do |k,v|
       record[k.to_sym] = v if not iggy?(k,item)
+    end
+    if item.respond_to? :sku and item.sku.nil? then
+      item.set_sku if item.respond_to? :set_sku
     end
     record[:sku] = item.sku if item.respond_to? :sku
     record[:tax_profile_sku] = item.tax_profile.sku if item.respond_to? :tax_profile
@@ -271,7 +305,6 @@ class Node < ActiveRecord::Base
       record[:loyalty_card_sku] = item.loyalty_card.sku
       record[:loyalty_card_points] = item.loyalty_card.points
     end
-
     record
   end
   def payload
@@ -309,13 +342,28 @@ class Node < ActiveRecord::Base
   end
   #
   def send!
-    req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
-    url = URI.parse(@target.url)
-    req.body = self.payload
-    @request ||= Net::HTTP.new(url.host, url.port)
-    response = @request.start {|http| http.request(req) }
+    # req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+    # url = URI.parse(@target.url)
+     
+    @md5 = Digest::SHA2.hexdigest("#{@hash[:record].to_json}")
+    if NodeMessage.where(:dest_sku => @target.sku, :mdhash => @md5).any? then
+      log_action "I've sent this before" + @hash[:record].to_json 
+      return
+    elsif NodeMessage.where(:source_sku => @target.sku, :mdhash => @md5).any? then
+      log_action "Node already knows about changes"
+      return
+    else
+      n = NodeMessage.new(:source_sku => self.sku, :dest_sku => @target.sku, :mdhash => @md5)
+      n.save
+    end
+    n = Cue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :to_send => true, :payload => self.payload)
+    n.save
+    # req.body = self.payload
+    #log_action "Sending: " + req.body.inspect
+#   @request ||= Net::HTTP.new(url.host, url.port)
+#    response = @request.start {|http| http.request(req) }
     # puts response.body
-    response
+#   response
   end
   def broadcast_add_me
     return if self.is_self == true
@@ -331,12 +379,20 @@ class Node < ActiveRecord::Base
       :message => "AddMe"
     }
     return if not params[:target]
+
+    @md5 = Digest::SHA2.hexdigest("#{@hash[:record].to_json}")
+    
+    n = Cue.new(:to_send => true,:url => self.url, :destination_sku => self.sku, :source_sku => self.sku, :payload => params.to_json) 
+    n.save
+    return
+    self.update_attribute :is_busy, true
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     url = URI.parse(self.url)
     req.body = params.to_json
     @request ||= Net::HTTP.new(url.host, url.port)
-    response = @request.start {http| http.request(req) }
+    response = @request.start {|http| http.request(req) }
     # puts response.body
+    self.update_attribute :is_busy, false
     response
   end
 end
