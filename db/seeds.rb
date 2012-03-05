@@ -14,7 +14,7 @@ end
 [ :orders,:items,:categories, 
   :locations,:shippers,:shipments, 
   :vendors, :employees, :discounts,:tax_profiles,:customers,
-  :transaction_tags, :buttons, :stock_locations].each do |r|
+  :transaction_tags, :buttons, :stock_locations,:actions,:shipment_items].each do |r|
   [:index,:edit,:destroy,:create,:update,:show].each do |a|
     role = Role.new(:name => a.to_s + '_' + r.to_s)
     role.save

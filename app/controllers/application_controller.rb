@@ -228,6 +228,8 @@ class ApplicationController < ActionController::Base
     
     GlobalData.session = vars
     GlobalData.request = request
+    $Request = request
+    $Params = params
     vars = {}
     var_names = [:no_inc,:sku,:controller,:action,:page,:vendor_id,:keywords]
     var_names.each do |var|

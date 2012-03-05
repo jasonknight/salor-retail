@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120302192024) do
+ActiveRecord::Schema.define(:version => 20120305163324) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -277,6 +277,21 @@ ActiveRecord::Schema.define(:version => 20120302192024) do
     t.string   "referer"
   end
 
+  create_table "histories", :force => true do |t|
+    t.string   "url"
+    t.string   "owner_type"
+    t.integer  "owner_id"
+    t.string   "action_taken"
+    t.string   "model_type"
+    t.string   "ip"
+    t.integer  "sensitivity"
+    t.integer  "model_id"
+    t.text     "changes_made"
+    t.text     "params"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "item_types", :force => true do |t|
     t.string   "name"
     t.string   "behavior"
@@ -418,7 +433,7 @@ ActiveRecord::Schema.define(:version => 20120302192024) do
     t.string   "source_sku"
     t.string   "destination_sku"
     t.string   "owner_type"
-    t.integer  "owner_id"
+    t.integer  "owner_ir"
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
   end
