@@ -70,6 +70,7 @@ de:
         other: Tags
 
     attributes:
+      uses_drawer_id: Uses Drawer of
       reorder_type: Reorder Type
       big_buttons: grosser Tasten
       hide_discounts: Preisnachlässe ausblenden

@@ -29,7 +29,7 @@
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
               <div class="freefield"><%= f.label t("activerecord.attributes.uses_drawer_id") %><br />
-              <%= f.select :uses_drawer_id, Employee.scopied.collect {|e| [e.username,e.get_drawer.id] if not e.username == @employee.username}.unshift(["",""]) %>
+              <%= f.select :uses_drawer_id, Employee.scopied.collect {|e| e.username == @employee.username ? ["N/A",""] : [e.username,e.get_drawer.id]} %>
               
               </div>
             </td>
@@ -85,7 +85,7 @@
               <% for role in Role.order('name asc').all  %>
                 <div class="role-check" name="<%= role.name.titleize%>">
                   <%= check_box_tag "employee[role_ids][]", role.id, @employee.role_ids.include?(role.id)  %>
-                  <%= t(GlobalData.base_locale + "." + role.name, :locale => :roles) %>
+                  <%= I18n.t(role.name) %>
                 </div>
               <% end %>
           </td>

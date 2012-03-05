@@ -73,9 +73,9 @@ module ApplicationHelper
     [
       {:name => "Deutsch", :locale => 'de'},
       {:name => "US English", :locale => 'en-US'},
-      {:name => "GB English", :locale => 'en-GB'},
-      {:name => "AU English", :locale => 'en-AU'},
-      {:name => "Français", :locale => 'fr'}
+      {:name => "Français", :locale => 'fr'},
+      {:name => "Espagnole", :locale => 'es'},
+      {:name => "Türkçe", :locale => 'tr'}
     ]
   end
   def salor_number_to_currency(amnt)
