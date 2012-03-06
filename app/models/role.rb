@@ -107,7 +107,8 @@ class Role < ActiveRecord::Base
       :edit_transaction_tags,
       :stockboy,
       :manager,
-      :clear_orders
+      :clear_orders,
+      :change_prices
     ],
     :cashier => [
       :destroy_orders, # except their own orders
@@ -142,7 +143,6 @@ class Role < ActiveRecord::Base
       :clear_orders,
       :destroy_order_items,
       :change_prices,
-      :see_header,
       :create_transaction_tags,
       :create_tender_methods,
       :edit_tender_methods

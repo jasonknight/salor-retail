@@ -29,7 +29,7 @@
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
               <div class="freefield"><%= f.label t("activerecord.attributes.uses_drawer_id") %><br />
-              <%= f.select :uses_drawer_id, Employee.scopied.collect {|e| [e.username,e.get_drawer.id] if not e.username == @employee.username}.unshift(["",""]) %>
+              <%= f.select :uses_drawer_id, Employee.scopied.collect {|e| e.username == @employee.username ? ["N/A",""] : [e.username,e.get_drawer.id]} %>
               
               </div>
             </td>
@@ -53,32 +53,41 @@
       <table valign="top" width="98%">
         <tr>
           <td colspan="2">
-            API: <input type="text" name="employee[apitoken]" class="text-input" value="<%= @employee.apitoken.blank? ? @employee.make_token : @employee.apitoken  %>" />
+          <!--
+            API: <input type="text" name="employee[apitoken]" class="text-input" value="<%= @employee.apitoken.blank? ? @employee.make_token : @employee.apitoken  %>" /> -->
           </td>
         </tr>
         <tr>
           <td valign="top" colspan="2">
             <h2> <%= t("views.forms.roles") %> <%= raw get_help('roles') %> </h2>
-            <% 
-              thresh = 4
-              x = 0
-            %>
-            <table align="center" width="100%">
-              <tr>
+            <div id="role_search">
+              <input id="role_search_input" type="text" class="keyboardable" />
+              <script type="text/javascript">
+                $(function () {
+                  $('#role_search_input').keyup(function () {
+                    
+                      $(".role-check").each( function () {
+                            if ($('#role_search_input').val() == '') {
+                              $(this).show();
+                            } else if ($(this).attr('name').indexOf($('#role_search_input').val()) != -1) {
+                              $(this).show();
+                            } else {
+                              $(this).hide();
+                            }
+                        }
+                      );
+                    } 
+                  );   
+                 });
+              </script>
+            </div>
+            <br />
               <% for role in Role.order('name asc').all  %>
-                <% if x == thresh then  %>
-                  </tr><tr>
-                  <% x = 0  %>
-                <% end %>
-                <td>
+                <div class="role-check" name="<%= role.name.titleize%>">
                   <%= check_box_tag "employee[role_ids][]", role.id, @employee.role_ids.include?(role.id)  %>
-                  <%= t(GlobalData.base_locale + "." + role.name, :locale => :roles) %>
-                </td>
-                <% x = x + 1  %>
+                  <%= I18n.t(role.name) %>
+                </div>
               <% end %>
-              </tr>
-            </table>
-              
           </td>
         </tr>
       </table>

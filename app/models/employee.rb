@@ -66,6 +66,7 @@ class Employee < ActiveRecord::Base
   has_one :meta, :as => :ownable
   has_one :drawer, :as => :owner
   has_many :drawer_transactions, :as => :owner
+  has_many :histories, :as => :owner
   # Setup accessible (or protected) attributes for your model
   attr_accessible :uses_drawer_id,:apitoken,:js_keyboard,:role_ids,:language,:vendor_id,:user_id,:first_name,:last_name,:username, :email, :password, :password_confirmation, :remember_me
   attr_accessible :auth_code
