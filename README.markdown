@@ -34,4 +34,4 @@ If this above gives you errors, try futzing!
 
 export RAILS_ENV=production # if you want to run in production
 
-bundle exec rake salor:seed [seriously, sometimes rake acts funny for no real reason]
+bundle exec rake salor:seed
