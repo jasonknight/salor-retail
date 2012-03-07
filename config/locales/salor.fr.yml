@@ -2,57 +2,57 @@ fr:
   activerecord:
     models:
       button:
-        one: Button
-        other: Buttons
+        one: Bouton
+        other: Bouton
       tender_method:
-        one: Tender Method
-        other: Tender Methods
+        one: Méthodes tendres
+        other: Méthodes tendres
       action: 
         one: Action
         other: Actions
       broken_item:
-        one: Broken item
-        other: Broken items
+        one: Articles abîmés
+        other: Articles abîmés
       category:
-        one: Category
-        other: Categories
+        one: Catégorie
+        other: Catégories
       customer:
-        one: Customer
-        other: Customers
+        one: Client
+        other: Clients
       discount:
-        one: Discount
-        other: Discounts
+        one: Réduction
+        other: Réductions
       drawer:
-        one: Drawer
-        other: Drawers
+        one: Caisse
+        other: Caisses
       drawer_transaction:
-        one: Drawer Transaction
-        other: Drawer Transactions
+        one: Transaction de caisse
+        other: Transactions de caisse
       employee:
-        one: Employee
-        other: Employees
+        one: Employé
+        other: Employés
       item:
-        one: Item
-        other: Items
+        one: Article
+        other: Articles
       item_type:
-        one: Item Type
-        other: Item Types
+        one: Type d'article
+        other: Types d'article
       location:
-        one: Location
-        other: Locations
+        one: Emplacement
+        other: Emplacements
       order:
-        one: Order
-        other: Orders
+        one: Commande
+        other: Commandes
       order_item:
-        one: Order Item
-        other: Order Items
+        one: Article commande
+        other: Articles commande
       shipment:
-        one: Shipment
-        other: Shipments
+        one: Envoi
+        other: Envois
       shipment_type:
-        one: Shipment Type
-        other: Shipment Types
-        default_name: Auto Nachbestellung
+        one: Type d'envoi
+        other: Types d'envoi
+        default_name: Nouvelle commande automatique
       shipper:
         one: Shipper
         other: Shippers
