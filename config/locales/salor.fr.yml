@@ -563,13 +563,13 @@ fr:
     clear_cache_button: effacer les caches
     clear_cache_header: cache
     form:
-      receipt_logo_header: en-tête du logo du reçu
-      receipt_logo_footer: pied-receipt logo footer
+      receipt_logo_header: logo en-tête du reçu
+      receipt_logo_footer: logo au pied du reçu
       logo: logo
 
   views:
     eticket: Ticket
-    sticky_ticket: Sticker
+    sticky_ticket: Etiquette
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
     advanced_field: advanced field
     by_card: by card
