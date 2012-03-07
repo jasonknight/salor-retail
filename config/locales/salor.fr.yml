@@ -518,16 +518,16 @@ fr:
       action_error: "L'action n'a pas pu être effectuée car %{error}"
       not_enough_in_drawer: pas assez dans la caisse
       cash_drop_amount_must_be_positive: le montant du retrait doit être positif
-      coupon_cannot_be_buy_one_get_one: "Le coupon %{sku} ne oeut pas être achetez_un_pcannot be_buy_one_get_one when applied to %{applies}"
-      coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
-      coupon_not_enough_items: You have not purchased enough items for this to apply
-      coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
-      csv_item_exists: "Item %{sku} exists!"
-      csv_item_failed: "%{id} %{i} failed."
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
-      gift_card_amount_remaining: The amount specified was greater than the amount remaining on this gift card, the new amount is %{amt}
-      gift_card_amount_to_high: The gift card amount exceeds the order subtotal, the amount has been adjusted, only activate gift cards at the end of a transaction!
-      gift_card_empty: Gift Card is Empty, notify client, and destroy card.
+      coupon_cannot_be_buy_one_get_one: "Le coupon %{sku} ne peut pas être achetez_un_pour_le_prix_d_un lorsqu'il s'applique à %{applies}"
+      coupon_fixed_amount_greater_than_total: "Le montant du coupon %{sku} dépasse le prix de l'article %{item}"
+      coupon_not_enough_items: vous n'avez pas acheté assez d'articles pour que cela soit applicable
+      coupon_total_returned_nil: "Le total du coupon %{sku} a donné zéro, annulation en cours"
+      csv_item_exists: "L'article %{sku} existe déjà !"
+      csv_item_failed: "%{id} %{i} a échoué."
+      failed_to_save_parts: L'ensemble des parts n'ont pas pu être enregistrées. Veuillez vérifier qu'il existe bien des articles avec parts.
+      gift_card_amount_remaining: Le montant spéficié dépasse celui restant dans la carte cadeau. Le nouveau montant est de %{amt}
+      gift_card_amount_to_high: Le montant de la carte cadeau dépasse le sous-total de la commande. Le montant a été ajusté. Veuillez n'activer les cartes cadeaux qu'à la fin d'une transaction !
+      gift_card_empty: La carte cadeau est videGift Card is Empty, notify client, and destroy card.
       gift_card_not_found: Could not find that gift card attached to this order...
       gs1_item_not_found: "Item marked as gs1, but %{sku} is not in the correct format."
       insufficient_quantity_on_item: "Warning, Item %{sku} quantity is insufficient, time to update your stock levels!"
