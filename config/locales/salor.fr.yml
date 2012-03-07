@@ -222,14 +222,14 @@ fr:
     best_selling_category: catégorie la plus vendue
     best_selling_location: emplacement le plus vendu
     crd: Heure,Montant,Type,Notes
-    discount_for: remise de %{magazin}
-    discounts_for: remises de %{magazin}
+    discount_for: remise de %{magasin}
+    discounts_for: remises de %{magasin}
     edit_shipper: editer livreur %{nom}
     employees: employés
     expiring_soon: périme bientôt
     export: exporter
     item_selection: sélection d'articles
-    new_discount_for: nouvelle remise de %{magazin}
+    new_discount_for: nouvelle remise de %{magasin}
     notes: notes
     shipment_items: articles envoi
     shipment_items_header: Nom,UGS,prix,catégorie,emplacement
@@ -376,135 +376,135 @@ fr:
     
     
   notifications:
-    shipments_item_could_not_be_saved: shipments item could not be saved
-    shipments_move_all_items: all items were successfully moved
-    shipments_move_item: item was successfully moved
+    shipments_item_could_not_be_saved: article livraisons n'a pas pu être enregistré
+    shipments_move_all_items: Tous les articles ont été déplacés avec succès
+    shipments_move_item: L'article a été déplacé avec succès
 
   orders:
     report:
-      title: Sums
-      display: display
-      end_date: end date
-      gross: gross
+      title: Additions
+      display: afficher
+      end_date: date fin
+      gross: gros
       net: net
-      sum: sum
-      rebate: rebate
+      sum: somme
+      rebate: remise
       points: points
-      start_date: start date
-      sum_total: sum total
+      start_date: date début
+      sum_total: somme totale
     report_range:
       title: journal
-      display: display
-      end_date: end date
-      gross: gross
+      display: afficher
+      end_date: date fin
+      gross: gros
       net: net
-      sum: sum
-      rebate: rebate
+      sum: somme
+      rebate: remise
       points: points
-      start_date: start date
-      sum_total: sum total
+      start_date: date fin
+      sum_total: somme totale
     report_day_range:
-      title: monthly report
-      display: display
-      end_date: end date
-      gross: gross
+      title: rapport mensuel
+      display: afficher
+      end_date: date fin
+      gross: gros
       net: net
-      sum: sum
-      rebate: rebate
+      sum: somme
+      rebate: remise
       points: points
-      start_date: start date
-      sum_total: sum total
+      start_date: date début
+      sum_total: somme totale
     report_day:
-      title: day report
-      sums_by_category: sums by category
-      sums_by_tax_profile: sums by tax profile
-      sums_by_payment_methods: sums by payment methods
-      sum: sum
-      sums_by_transaction_types: sums by transaction types
+      title: rapport journée
+      sums_by_category: sommes par catégorie
+      sums_by_tax_profile: sommes par type de taxe
+      sums_by_payment_methods: sommes par moyens de paiement
+      sum: somme
+      sums_by_transaction_types: sommes par type transaction
       transactions: transactions
-      transaction_tag: transaction tag
-      drops: drops
-      drop: drop
-      payouts: payouts
-      payout: payout
-      transaction_total: transaction total
-      transaction_journal: transaction journal
-      time: time
+      transaction_tag: étiquette transaction
+      drops: retraits caisse
+      drop: retrait caisse
+      payouts: remboursements caisse
+      payout: remboursement caisse
+      transaction_total: total de la transaction
+      transaction_journal: journal de la transaction
+      time: heure
       
 
   printr:
     formats:
       advert: |-
-          The Innovative Point of Sale
+          Le point de vente innovateur
           www.salorpos.com
       b1g1_coupon: "%c %20.20s"
-      by_card: "By Card:                  EUR %8.2f"
-      by_cash: "In Cash:                  EUR %8.2f"
-      cancel: Cancel                  EUR %8.2f
-      change: "Change:                       EUR %8.2f"
+      by_card: "Par carte:                  EUR %8.2f"
+      by_cash: "En espèces:                  EUR %8.2f"
+      cancel: Annuler                  EUR %8.2f
+      change: "Changer:                       EUR %8.2f"
       coupon_subtotal: Coupon                   EUR %8.2f
-      discount_subtotal: Discount                       EUR %8.2f
+      discount_subtotal: Remise                       EUR %8.2f
       discounted_item: "%c %20.20s %7.2f %3u %7.2f"
       end_of_day: "%20.20s EUR %5.2f"
-      fixed_rebate: Rebate                         EUR %8.2f
+      fixed_rebate: Remise                         EUR %8.2f
       item: "%c %20.20s %7.2f %3u %7.2f"
       percent_coupon: "%c %20.20s %7.1f%% %3u %7.2f"
-      rebate_amount: Rebate %4.2f%%                 EUR %8.2f
+      rebate_amount: Remise %4.2f%%                 EUR %8.2f
       rebate_item: "%c %20.20s %7.2f %3u %7.2f"
-      rebate_subtotal: Rebate Total                  EUR %8.2f
-      subtotal: Subtotal                      EUR %8.2f
-      thanks: Thank you for shopping with us!
+      rebate_subtotal: Remise Totale                  EUR %8.2f
+      subtotal: Sous-total                      EUR %8.2f
+      thanks: Merci de votre achat !
       total: TOTAL                         EUR %8.2f
 
     word:
-      cancelled: cancelled
-      drop: drop
-      payout: payout
-      sold: sold
+      cancelled: annulé
+      drop: retrait caisse
+      payout: remboursement caisse
+      sold: vendu
 
   receipts:
-    invoice: Rechnung
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
-    report_at_time: Report %{datetime}
+    invoice: facture
+    invoice_numer_X_at_time: Commande Nro. %{number} at %{datetime}
+    report_at_time: Rapport %{datetime}
     x_sum: |+
-        %{type} SUM:   EUR %.2f
-    you_were_served_by: "You were served by %{name}"
+        %{type} TOTAL:   EUR %.2f
+    you_were_served_by: "Vous avez été servi par %{name}"
     
   reports:
-    item_zero: Sold out items
-    tax_class: tax class
+    item_zero: Articles épuisés
+    tax_class: type de taxe
     description: description
-    unit_price: unit price
-    amount: amount
+    unit_price: prix unitaire
+    amount: montant
     total: total
 
   roles:
-    cashier: cashier
-    header_cashier: header cashier
-    manager: manager
-    stockboy: stockboy
+    cashier: caissière
+    header_cashier: caissière supérieure
+    manager: gérant
+    stockboy: magasinier
     
   system:
-    add_payment_method: add payment method
-    complete_sale: Complete
-    employee_login: employee login
-    inventory_updated: inventory updated
-    logged_in_as: logged in as
-    login: login
-    logout: logout
-    not_you: not you?
-    owner_login: owner login
-    owner_mode: OWNER MODE
-    owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    add_payment_method: ajouter moyen de paiement
+    complete_sale: Finir
+    employee_login: nom d'utilisateur de l'employé
+    inventory_updated: inventaie mis à jour
+    logged_in_as: connecté en tant que
+    login: se donnecter
+    logout: se déconnecter
+    not_you: Ce n'est pas vous ?
+    owner_login: connexion propriétaire
+    owner_mode: MODE PROPRIÉTAIRE
+    owner_success: Les propriétés du propriétaire ont été mise à jour avec succès
+    payment_external_types: espèces,carte bleue,cart cadeau,autre
+    payment_internal_types: EnEspèces,ParCarte,ParCarteCadeau,AutreCrédit
     rebate_types:
       fixed: $
       percent: "%"
-    register_today: register today
+    register_today: enregistrer aujourd'hui
     report_external_types: XXX
     report_internal_types: XXX
-    sign_up: sign up
+    sign_up: s'inscrire
     errors:
       auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
       order_totals_validation_failed: "Order total validation failed, refreshing the order may repair the issue. Press OK to refresh."
