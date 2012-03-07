@@ -506,19 +506,19 @@ fr:
     report_internal_types: XXX
     sign_up: s'inscrire
     errors:
-      auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
-      order_totals_validation_failed: "Order total validation failed, refreshing the order may repair the issue. Press OK to refresh."
-      parent_sku_must_exist: "Parent Item Must Exist!"
-      child_sku_must_exist: "Child Item Must Exist!"
-      cannot_edit_completed_order: "That order is completed and cannot be modified."
-      limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
-      sanity_check: Requested action is insane, verify order total and notify customer of correction.
-      cannot_reorder: No items must be reordered.
-      action_code_error: "Code could not be executed because %{error}"
-      action_error: "Action could not complute because %{error}"
-      not_enough_in_drawer: not enough in drawer
-      cash_drop_amount_must_be_positive: cash drop amount must be positive
-      coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
+      auto_drop_failed: "Le système n'a pas pu effectuer un retrait automatique. Veuillez créer manuellement un retrait d'espèces de début de journée"
+      order_totals_validation_failed: "La validation du total de la commande a échoué. En rafraichissant la page, la commande pourrait corriger l'erreur. Appuyer sur OK pour rafraichir."
+      parent_sku_must_exist: "L'article parent doit exister !"
+      child_sku_must_exist: "L'article enfant doit exister !"
+      cannot_edit_completed_order: "cette commande-là a été finalisée et ne peut pas être modifiée."
+      limited_alphabet: "Les seuls caractères possibles sont a-z. Espaces et accents ne sont pas permis."
+      sanity_check: L'action demandée est impossible. Vérifiez le total de la commande et notifier le client de la correction.
+      cannot_reorder: Pas d'articles à commander de nouveau.
+      action_code_error: "Le code n'a pas pu être exécuté car %{error}"
+      action_error: "L'action n'a pas pu être effectuée car %{error}"
+      not_enough_in_drawer: pas assez dans la caisse
+      cash_drop_amount_must_be_positive: le montant du retrait doit être positif
+      coupon_cannot_be_buy_one_get_one: "Le coupon %{sku} ne oeut pas être achetez_un_pcannot be_buy_one_get_one when applied to %{applies}"
       coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
       coupon_not_enough_items: You have not purchased enough items for this to apply
       coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
