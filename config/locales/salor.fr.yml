@@ -20,8 +20,8 @@ fr:
         one: Client
         other: Clients
       discount:
-        one: Réduction
-        other: Réductions
+        one: Remise
+        other: Remises
       drawer:
         one: Caisse
         other: Caisses
@@ -54,150 +54,150 @@ fr:
         other: Types d'envoi
         default_name: Nouvelle commande automatique
       shipper:
-        one: Shipper
-        other: Shippers
+        one: Livreur
+        other: Livreurs
       stock_location:
-        one: Stock Location
-        other: Stock Locations
+        one: Emplacement du stock
+        other: Emplacements du stock
       tax_profile:
-        one: Tax Profile
-        other: Tax Profiles
+        one: Taxe
+        other: Taxes
       vendor:
-        one: Store
-        other: Stores
+        one: Magazin
+        other: Magazins
       transaction_tag:
-        one: Tag
-        other: Tags
+        one: Etiquette
+        other: Etiquettes
 
     attributes:
-      uses_drawer_id: Uses Drawer of
-      reorder_type: Reorder Type
-      big_buttons: Big Buttons
-      hide_discounts: Hide Discounts
-      thermal_printer: Thermal Printer
+      uses_drawer_id: Utilise la caisse de
+      reorder_type: Type de nouvelle commande
+      big_buttons: Grands boutons
+      hide_discounts: Cacher remises
+      thermal_printer: Imprimante thermique
       paylife: Paylife
-      url: URL
-      letter: Letter
-      default: Default
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standard text customer screen
-      pole_display: Pole display
-      auto_drop: "Automatically Begin Day"
-      must_change_price: Must Change Price
-      created_at: Created
-      is_refund: Is Refund?
-      owner_id: Owner
-      owner_type: Owner Type
-      parent_sku: Parent SKU
-      child_sku: Child SKU
-      ignore_qty: Ignore Qty
-      bank_machine_path: ATM
-      artema_hybrid: Artema Hybrid
+      url: Lien
+      letter: Lettre
+      default: Par défaut
+      csv_imports: Importations CSV
+      csv_imports_url: Lien d'importations CSV
+      customer_screen_blurb: Ecran de texte client standard
+      pole_display: affichage pôle
+      auto_drop: "Commencer journée automatiquement"
+      must_change_price: Changement obligatoire du prix
+      created_at: Créé
+      is_refund: Est-ce un remboursement?
+      owner_id: Propriétaire
+      owner_type: Type de propriétaire
+      parent_sku: UGS parent
+      child_sku: UGS enfant
+      ignore_qty: Ignorer Qté
+      bank_machine_path: Retrait banque
+      artema_hybrid: Hybride Artema
       type: type
-      active: active
-      address: address
-      amount: amount
-      amount_remaining: amount remaining
-      amount_type: amount type
-      applies_to: applies to
-      base_price: base price
-      behavior: behavior
-      body: body
-      buyback_price: buyback price
-      calculate_part_price: calculate part price
-      cash_made: cash made
-      category_id: Category
-      cellphone: cell phone
-      city: city
-      company_name: company name
-      contact_address: contact address
-      contact_email: contact email
-      contact_fax: contact fax
-      contact_person: contact person
-      contact_phone: contact phone
-      country: country
-      coupon_applies: coupon applies
-      coupon_total: coupon total
-      coupon_type: coupon type
-      decimal_points: decimal points
-      default_buyback: default buyback
-      dollar_per_lp: dollar per loyalty point
-      drop: drop
+      active: actif
+      address: adresse
+      amount: montant
+      amount_remaining: montant restant
+      amount_type: type de montant
+      applies_to: s'applique à
+      base_price: prix de base
+      behavior: comportement
+      body: corps
+      buyback_price: prix rachat
+      calculate_part_price: calculer prix des parts
+      cash_made: espèces obtenues
+      category_id: Catégorie
+      cellphone: portable
+      city: ville
+      company_name: nom de la société
+      contact_address: adresse à contacter
+      contact_email: email à contacter
+      contact_fax: fax à contacter
+      contact_person: personne à contacter
+      contact_phone: téléphone à contacter
+      country: pays
+      coupon_applies: coupon s'applique
+      coupon_total: total du coupon
+      coupon_type: type de coupon
+      decimal_points: points décimaux 
+      default_buyback: rachat par défaut
+      dollar_per_lp: dollar par point fidélité
+      drop: retrait caisse
       email: email
-      end_amount: end amount
-      end_date: end date
-      expires_on: expires on
-      first_name: first name
-      height: height
-      is_shipment_item: is shipment item
-      item_sku: item sku
-      itemsviewlist: "List View for Items"
-      last_name: last name
-      lc_points: loyalty card points
-      length: length
-      location_id: location id
-      lp_per_dollar: loyalty points per dollar
-      min_quantity: min quantity
-      name: name
-      not_paid: not paid
+      end_amount: montant fin
+      end_date: date fin
+      expires_on: valable jusqu'à
+      first_name: prénom
+      height: hauteur
+      is_shipment_item: est un article pour envoi
+      item_sku: ugs article
+      itemsviewlist: "Liste d'articles"
+      last_name: Nom
+      lc_points: Points carte fidélité
+      length: longueur
+      location_id: identité emplacement
+      lp_per_dollar: points fidélité par dollar
+      min_quantity: quantité mini
+      name: nom
+      not_paid: impayé
       notes: notes
-      packaging_unit: packaging unit
+      packaging_unit: unité emballage
       pagination: pagination
-      paid: paid
-      part_quantity: part quantity
+      paid: payé
+      part_quantity: quantité de parts
       parts: parts
-      password: password
-      payout: payout
+      password: mot de passe
+      payout: remboursement caisse
       points: points
-      postalcode: postal code
-      price: price
-      price_by_qty: price by quantity
-      purchase_price: purchase price
-      quantity: quantity
-      real_quantity: real quantity
-      quantity_sold: quantity sold
-      rebate: rebate
-      rebate_type: rebate type
-      receipt_blurb: receipt blurb
-      sales_metric: sales metric
+      postalcode: code postal
+      price: prix
+      price_by_qty: prix par quantité
+      purchase_price: prix d'achat
+      quantity: quantité
+      real_quantity: quantité réelle
+      quantity_sold: quantité vendue
+      rebate: remise
+      rebate_type: type de remise
+      receipt_blurb: texte reçu
+      sales_metric: syst.métrique vente
       shipment:
-        from: from
-        paid: paid
-        price: price
-        to: to
+        from: de
+        paid: payé
+        price: prix
+        to: à
       shipment_item:
-        name: name
-        quantity: quantity
-        sku: SKU
+        name: nom
+        quantity: quantité
+        sku: UGS
       cash_register:
-        sticker_printer: Sticker printer
-      sku: SKU
-      start_amount: start amount
-      start_date: start date
-      state: state
-      status: status
-      stock_location_ids: Stock location
-      street1: Address 1
-      street2: Address 2
-      subtotal: subtotal
-      tag: tag
-      tax: tax
-      tax_profile_id: tax
-      telephone: telephone
-      the_receiver: the receiver
-      the_shipper: the shipper
-      title: title
+        sticker_printer: Imprimante étiquette
+      sku: UGS
+      start_amount: montant initial
+      start_date: date initiale
+      state: état
+      status: statut
+      stock_location_ids: Emplacement du stock
+      street1: Adresse 1
+      street2: Adresse 2
+      subtotal: sous-total
+      tag: étiquette
+      tax: taxe
+      tax_profile_id: taxe
+      telephone: téléphone
+      the_receiver: le destinataire
+      the_shipper: le livreur
+      title: titre
       total: total
-      username: username
-      value: value
-      vendor_id: Vendor
-      vendor_printers: printers
-      weigh_compulsory: compulsory weighing
-      weight: weight
-      width: width
-      open_cash_drawer: open cash drawer
-      cash_drawer: cash drawer
+      username: nom d'utilisateur
+      value: valeur
+      vendor_id: Vendeur
+      vendor_printers: imprimantes
+      weigh_compulsory: pesée obligatoire
+      weight: poids
+      width: largeur
+      open_cash_drawer: ouvrir caisse
+      cash_drawer: caisse
       stylesheets: stylesheets
       eod_show: show at end of day
       shipper_sku: Shipper SKU
