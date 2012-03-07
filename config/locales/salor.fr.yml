@@ -549,22 +549,22 @@ fr:
       order_register_required: vous devez spécifier une caisse pour cette commande.
       order_vendor_required: vous devez fournir un vendeur pour cette commande.
       payment_required: "Erreur 402: le paiement complet est requis"
-      payment_required_explanation: Nous regrettons de vous informer que votre système a acessé de fonctionner We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: "Item %{sku} failed to move with error: %{error}"
+      payment_required_explanation: Nous regrettons de vous informer que votre système a automatiquement cessé de fonctionner car votre license de pré-paiement a périmé. Vous devez règler le montant dû pour Salor afin de continuer d'en bénéficier.  veuillez contacter votre représentant du support technique de Salor.
+      shipment_item_already_in_stock: L'article %{sku} est déjà en stock
+      shipment_item_move_failed: "L'article %{sku} n'a pas été déplacé. Erreur : %{error}"
       shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: must be unique
-      uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
-      value_not_set: NotSet
-      order_failed: Order could not be finished.
-      order_print_failure: Failure during printing of order.
+      sku_must_be_unique: doit être unique
+      uspecified_error: Un problème est survenu. Veuillez contacter le support technique ! Essayer de rafraichir cette page.
+      value_not_set: PasDéfini
+      order_failed: La commande n'a pas pu être finalisée.
+      order_print_failure: Erreur pendant l'impression de la commmande.
     
   vendors:
-    clear_cache_button: clear cache
+    clear_cache_button: effacer les caches
     clear_cache_header: cache
     form:
-      receipt_logo_header: receipt logo header
-      receipt_logo_footer: receipt logo footer
+      receipt_logo_header: en-tête du logo du reçu
+      receipt_logo_footer: pied-receipt logo footer
       logo: logo
 
   views:
