@@ -627,11 +627,11 @@ fr:
       buy_one_get_one: achetez deux pour le prix d'un
       cashier: caissière
       category_editor: éditeur de catégorie
-      fixed_amount_off: montant fixe  off
-      item_editor: item editor
-      items: items
-      location_editor: location editor
-      manager: Manager
+      fixed_amount_off: montant fixe annulé
+      item_editor: éditeur d'articles
+      items: articles
+      location_editor: éditeur d'emplacements
+      manager: Gérant
       no_change: no change
       notes: notes
       order_editor: order editor
