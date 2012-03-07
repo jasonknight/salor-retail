@@ -535,21 +535,21 @@ fr:
       item_not_found: L'article que vous recherchez est introuvable. Utiliser le moteur de recherche.
       item_price_is_zero: "Attention: Le prix de l'article est de 0"
       lp_calculation_failed: Les points fidélité n'ont pas pu être appliqués. Êtes-vous sûr d'avoir configuré ceci dans les configurations de votre magazin ?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
+      must_cash_drop: Votre caisse n'a pas d'argent. Veuillez faire un versement d'espèces !
+      must_choose_register: vous devez vous connecter à une caisse !
       must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Store
-      must_specify_drop_or_payout: You must specify either drop or payout!
-      no_class: "There is no class for %{model} at line %{i}"
-      no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no item with this SKU
-      not_on_buy_orders: You cannot add this item to a Buy Order
-      order_must_have_user: You cannot save an order without a User or Employee assigned to it.
-      order_not_found: Order not found
-      order_register_required: You must specify a register for this order
-      order_vendor_required: You must supply a vendor for this order
-      payment_required: "Error 402: Full Payment is Required"
-      payment_required_explanation: We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
+      must_set_receiver_to_vendor: vous devez attributer ce champ du destinataire de la livraison à un magazin valide.
+      must_specify_drop_or_payout: Vous devez spécifiez soit Versement, soit Retrait !
+      no_class: "Il n'y a pas de classed pour %{model} dans la ligne %{i}"
+      no_role: Votre rôle ne vous donne pas accès à cette ressource.
+      no_such_item: Il n'existe pas d'article avc cet UGS
+      not_on_buy_orders: Vous ne pouvez pas ajouter cet article à une commande achat
+      order_must_have_user: vous ne pouvez pas enregistrer une commande sans lui assigner un utilisateur ou un employé.
+      order_not_found: Commande introuvable.
+      order_register_required: vous devez spécifier une caisse pour cette commande.
+      order_vendor_required: vous devez fournir un vendeur pour cette commande.
+      payment_required: "Erreur 402: le paiement complet est requis"
+      payment_required_explanation: Nous regrettons de vous informer que votre système a acessé de fonctionner We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
       shipment_item_already_in_stock: Item %{sku} is already in stock
       shipment_item_move_failed: "Item %{sku} failed to move with error: %{error}"
       shipment_item_nil: Item returned from_shipment_item was nil?
