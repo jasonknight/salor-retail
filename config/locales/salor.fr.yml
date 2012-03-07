@@ -2,509 +2,509 @@ fr:
   activerecord:
     models:
       button:
-        one: Button
-        other: Buttons
+        one: Bouton
+        other: Boutons
       tender_method:
-        one: Tender Method
-        other: Tender Methods
+        one: Méthode d'offre
+        other: Méthodes d'offre
       action: 
         one: Action
         other: Actions
       broken_item:
-        one: Broken item
-        other: Broken items
+        one: Articles abîmés
+        other: Articles abîmés
       category:
-        one: Category
-        other: Categories
+        one: Catégorie
+        other: Catégories
       customer:
-        one: Customer
-        other: Customers
+        one: Client
+        other: Clients
       discount:
-        one: Discount
-        other: Discounts
+        one: Remise
+        other: Remises
       drawer:
-        one: Drawer
-        other: Drawers
+        one: Caisse
+        other: Caisses
       drawer_transaction:
-        one: Drawer Transaction
-        other: Drawer Transactions
+        one: Transaction de caisse
+        other: Transactions de caisse
       employee:
-        one: Employee
-        other: Employees
+        one: Employé
+        other: Employés
       item:
-        one: Item
-        other: Items
+        one: Article
+        other: Articles
       item_type:
-        one: Item Type
-        other: Item Types
+        one: Type d'article
+        other: Types d'article
       location:
-        one: Location
-        other: Locations
+        one: Emplacement
+        other: Emplacements
       order:
-        one: Order
-        other: Orders
+        one: Commande
+        other: Commandes
       order_item:
-        one: Order Item
-        other: Order Items
+        one: Article commande
+        other: Articles commande
       shipment:
-        one: Shipment
-        other: Shipments
+        one: Envoi
+        other: Envois
       shipment_type:
-        one: Shipment Type
-        other: Shipment Types
-        default_name: Auto Nachbestellung
+        one: Type d'envoi
+        other: Types d'envoi
+        default_name: Nouvelle commande automatique
       shipper:
-        one: Shipper
-        other: Shippers
+        one: Livreur
+        other: Livreurs
       stock_location:
-        one: Stock Location
-        other: Stock Locations
+        one: Emplacement du stock
+        other: Emplacements du stock
       tax_profile:
-        one: Tax Profile
-        other: Tax Profiles
+        one: Taxe
+        other: Taxes
       vendor:
-        one: Store
-        other: Stores
+        one: Magazin
+        other: Magazins
       transaction_tag:
-        one: Tag
-        other: Tags
+        one: Etiquette
+        other: Etiquettes
 
     attributes:
-      uses_drawer_id: Uses Drawer of
-      reorder_type: Reorder Type
-      big_buttons: Big Buttons
-      hide_discounts: Hide Discounts
-      thermal_printer: Thermal Printer
+      uses_drawer_id: Utilise la caisse de
+      reorder_type: Type de nouvelle commande
+      big_buttons: Grands boutons
+      hide_discounts: Cacher remises
+      thermal_printer: Imprimante thermique
       paylife: Paylife
-      url: URL
-      letter: Letter
-      default: Default
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standard text customer screen
-      pole_display: Pole display
-      auto_drop: "Automatically Begin Day"
-      must_change_price: Must Change Price
-      created_at: Created
-      is_refund: Is Refund?
-      owner_id: Owner
-      owner_type: Owner Type
-      parent_sku: Parent SKU
-      child_sku: Child SKU
-      ignore_qty: Ignore Qty
-      bank_machine_path: ATM
-      artema_hybrid: Artema Hybrid
+      url: Lien
+      letter: Lettre
+      default: Par défaut
+      csv_imports: Importations CSV
+      csv_imports_url: Lien d'importations CSV
+      customer_screen_blurb: Ecran de texte client standard
+      pole_display: affichage pôle
+      auto_drop: "Commencer journée automatiquement"
+      must_change_price: Changement obligatoire du prix
+      created_at: Créé
+      is_refund: Est-ce un remboursement?
+      owner_id: Propriétaire
+      owner_type: Type de propriétaire
+      parent_sku: UGS parent
+      child_sku: UGS enfant
+      ignore_qty: Ignorer Qté
+      bank_machine_path: Retrait banque
+      artema_hybrid: Hybride Artema
       type: type
-      active: active
-      address: address
-      amount: amount
-      amount_remaining: amount remaining
-      amount_type: amount type
-      applies_to: applies to
-      base_price: base price
-      behavior: behavior
-      body: body
-      buyback_price: buyback price
-      calculate_part_price: calculate part price
-      cash_made: cash made
-      category_id: Category
-      cellphone: cell phone
-      city: city
-      company_name: company name
-      contact_address: contact address
-      contact_email: contact email
-      contact_fax: contact fax
-      contact_person: contact person
-      contact_phone: contact phone
-      country: country
-      coupon_applies: coupon applies
-      coupon_total: coupon total
-      coupon_type: coupon type
-      decimal_points: decimal points
-      default_buyback: default buyback
-      dollar_per_lp: dollar per loyalty point
-      drop: drop
+      active: actif
+      address: adresse
+      amount: montant
+      amount_remaining: montant restant
+      amount_type: type de montant
+      applies_to: s'applique à
+      base_price: prix de base
+      behavior: comportement
+      body: corps
+      buyback_price: prix rachat
+      calculate_part_price: calculer prix des parts
+      cash_made: espèces obtenues
+      category_id: Catégorie
+      cellphone: portable
+      city: ville
+      company_name: nom de la société
+      contact_address: adresse à contacter
+      contact_email: email à contacter
+      contact_fax: fax à contacter
+      contact_person: personne à contacter
+      contact_phone: téléphone à contacter
+      country: pays
+      coupon_applies: coupon s'applique
+      coupon_total: total du coupon
+      coupon_type: type de coupon
+      decimal_points: points décimaux 
+      default_buyback: rachat par défaut
+      dollar_per_lp: dollar par point fidélité
+      drop: retrait caisse
       email: email
-      end_amount: end amount
-      end_date: end date
-      expires_on: expires on
-      first_name: first name
-      height: height
-      is_shipment_item: is shipment item
-      item_sku: item sku
-      itemsviewlist: "List View for Items"
-      last_name: last name
-      lc_points: loyalty card points
-      length: length
-      location_id: location id
-      lp_per_dollar: loyalty points per dollar
-      min_quantity: min quantity
-      name: name
-      not_paid: not paid
+      end_amount: montant fin
+      end_date: date fin
+      expires_on: valable jusqu'à
+      first_name: prénom
+      height: hauteur
+      is_shipment_item: est un article pour envoi
+      item_sku: ugs article
+      itemsviewlist: "Liste d'articles"
+      last_name: Nom
+      lc_points: Points carte fidélité
+      length: longueur
+      location_id: identité emplacement
+      lp_per_dollar: points fidélité par dollar
+      min_quantity: quantité mini
+      name: nom
+      not_paid: impayé
       notes: notes
-      packaging_unit: packaging unit
+      packaging_unit: unité emballage
       pagination: pagination
-      paid: paid
-      part_quantity: part quantity
+      paid: payé
+      part_quantity: quantité de parts
       parts: parts
-      password: password
-      payout: payout
+      password: mot de passe
+      payout: remboursement caisse
       points: points
-      postalcode: postal code
-      price: price
-      price_by_qty: price by quantity
-      purchase_price: purchase price
-      quantity: quantity
-      real_quantity: real quantity
-      quantity_sold: quantity sold
-      rebate: rebate
-      rebate_type: rebate type
-      receipt_blurb: receipt blurb
-      sales_metric: sales metric
+      postalcode: code postal
+      price: prix
+      price_by_qty: prix par quantité
+      purchase_price: prix d'achat
+      quantity: quantité
+      real_quantity: quantité réelle
+      quantity_sold: quantité vendue
+      rebate: remise
+      rebate_type: type de remise
+      receipt_blurb: texte reçu
+      sales_metric: syst.métrique vente
       shipment:
-        from: from
-        paid: paid
-        price: price
-        to: to
+        from: de
+        paid: payé
+        price: prix
+        to: à
       shipment_item:
-        name: name
-        quantity: quantity
-        sku: SKU
+        name: nom
+        quantity: quantité
+        sku: UGS
       cash_register:
-        sticker_printer: Sticker printer
-      sku: SKU
-      start_amount: start amount
-      start_date: start date
-      state: state
-      status: status
-      stock_location_ids: Stock location
-      street1: Address 1
-      street2: Address 2
-      subtotal: subtotal
-      tag: tag
-      tax: tax
-      tax_profile_id: tax
-      telephone: telephone
-      the_receiver: the receiver
-      the_shipper: the shipper
-      title: title
+        sticker_printer: Imprimante étiquette
+      sku: UGS
+      start_amount: montant initial
+      start_date: date initiale
+      state: état
+      status: statut
+      stock_location_ids: Emplacement du stock
+      street1: Adresse 1
+      street2: Adresse 2
+      subtotal: sous-total
+      tag: étiquette
+      tax: taxe
+      tax_profile_id: taxe
+      telephone: téléphone
+      the_receiver: le destinataire
+      the_shipper: le livreur
+      title: titre
       total: total
-      username: username
-      value: value
-      vendor_id: Vendor
-      vendor_printers: printers
-      weigh_compulsory: compulsory weighing
-      weight: weight
-      width: width
-      open_cash_drawer: open cash drawer
-      cash_drawer: cash drawer
-      stylesheets: stylesheets
-      eod_show: show at end of day
-      shipper_sku: Shipper SKU
+      username: nom d'utilisateur
+      value: valeur
+      vendor_id: Vendeur
+      vendor_printers: imprimantes
+      weigh_compulsory: pesée obligatoire
+      weight: poids
+      width: largeur
+      open_cash_drawer: ouvrir caisse
+      cash_drawer: caisse
+      stylesheets: fueilles de style
+      eod_show: afficher à la fin de la journée
+      shipper_sku: UGS livreur
       code: code 
-      when: when
-      afield: field
-      order_id: order
-      scale: scale
-      no_print: Don't Print on Enter
-      salor_printer: Print Client Side
+      when: quand
+      afield: champ
+      order_id: commande
+      scale: balance
+      no_print: Ne pas imprimer avec Entrer
+      salor_printer: imprimer côté client
       
   api:
-    user_does_not_exist: user does not exist
+    user_does_not_exist: l'utilisateur n'existe pas
         
    
   headings:
-    order_validation: "Order Validation"
-    paylife: "Paylife(Artema Hybrid)"
-    bank_machine_types: supported bank machines
-    almost_out: almost out
+    order_validation: "Validation de la commande"
+    paylife: "Paylife(Hybrid Artema)"
+    bank_machine_types: machines banque acceptées
+    almost_out: presque épuisé
     best_sellers: bestsellers
-    best_selling_category: best selling category
-    best_selling_location: best selling location
-    crd: Time,Amount,Type,Notes
-    discount_for: rebate for %{store}
-    discounts_for: rebates for %{store}
-    edit_shipper: edit shipper %{name}
-    employees: employees
-    expiring_soon: expiring soon
-    export: export
-    item_selection: item selection
-    new_discount_for: new discount for %{store}
+    best_selling_category: catégorie la plus vendue
+    best_selling_location: emplacement le plus vendu
+    crd: Heure,Montant,Type,Notes
+    discount_for: remise de %{magasin}
+    discounts_for: remises de %{magasin}
+    edit_shipper: editer livreur %{nom}
+    employees: employés
+    expiring_soon: périme bientôt
+    export: exporter
+    item_selection: sélection d'articles
+    new_discount_for: nouvelle remise de %{magasin}
     notes: notes
-    shipment_items: shipment items
-    shipment_items_header: Name,SKU,price,category,location
-    shipment_types: shipment types
-    shipment_types_header: state,added by, , 
-    shipments: shipments
-    shipments_header: name,from,to,price,paid?,added by,status, , , 
-    update_location: update location
-    update_real_quantity: update real quantity
+    shipment_items: articles envoi
+    shipment_items_header: Nom,UGS,prix,catégorie,emplacement
+    shipment_types: types de livraison
+    shipment_types_header: état,ajouté par, , 
+    shipments: livraisons
+    shipments_header: nom,de,à,prix,payé?,ajouté par,statut, , , 
+    update_location: mettre à jour emplacement
+    update_real_quantity: mettre à jour quantité réelle
 
   helpers:
     select:
-      prompt: please select
+      prompt: choisissez
     submit:
-      cancel: cancel
-      clear: clear
-      create: create
-      get_item: get item
-      print: print
-      complete_sale: complete sale
-      submit: submit
-      save: Save
-      update: update
+      cancel: annuler
+      clear: effacer
+      create: créer
+      get_item: prendre article
+      print: imprimer
+      complete_sale: finaliser vente
+      submit: soumettre
+      save: Enregistrer
+      update: Mettre à jour
       ok: OK
 
   when_list:
-    always: always
-    on_save: on save
-    on_import: on import
-    on_export: on export
-    add_to_order: on add to order
+    always: toujours
+    on_save: lors de la sauvegarde
+    on_import: lors de l'importation
+    on_export: lors de l'exportation
+    add_to_order: lors de l'ajout à une commande
     
   behavior_list:
-    add: add
-    subtract: subtract
-    multiply: multiply
-    divide: divide
-    assign: assign
+    add: additionner
+    subtract: soustraire
+    multiply: multiplier
+    divide: diviser
+    assign: assigner
 
   menu:
-    clear_order: Clear
-    inventory_report: Inventory report
+    clear_order: Effacer
+    inventory_report: Raport inventaire
     ok: OK
-    buttons: buttons
-    cameras: cameras
-    tender_methods: tender methods
-    new_tender_method: new tender method
-    edit_tender_method: edit tender method
+    buttons: boutons
+    cameras: caméras
+    tender_methods: méthodes d'offre
+    new_tender_method: nouvelle méthode d'offre
+    edit_tender_method: editer méthode d'offre
     actions: actions
-    new_broken_item: new broken item
-    activate_gift_card: activate gift card
-    add_to_current_order: add to current order
-    additional: additional
-    back: back
-    broken_items: broken items
-    buy_order: Buy
-    cancel: cancel
-    cash_drop: cash drop
-    cash_register: cash register
-    cash_registers: cash registers
-    categories: categories
+    new_broken_item: nouvel article abîmé
+    activate_gift_card: activer carte cadeau
+    add_to_current_order: ajouter à cette commande
+    additional: supplément
+    back: retour
+    broken_items: articles abîmés
+    buy_order: Acheter
+    cancel: annuler
+    cash_drop: retrait espèces caisse
+    cash_register: caisse
+    cash_registers: caisses
+    categories: catégories
     configuration: Config.
     contact: contact
-    current_order: "current order: #%{id}"
-    customer: customer
-    customers: customers
-    delete: delete
-    delete_confirm: Are you sure?
-    destroy: destroy
-    discounts: discounts
-    done: done
-    edit: edit
-    edit_cash_register: edit cash register
-    edit_category: edit category
-    edit_customer: edit customer
-    edit_discount: edit discount
-    edit_employee: edit employee
-    edit_item: edit item
-    edit_location: edit location
-    edit_shipment: edit shipment
-    edit_shipment_type: edit shipment type
-    edit_shipper: edit shipper %{name}
-    edit_tax_profile: edit tax profile
-    edit_vendor: edit vendor
-    employees: employees
-    end_day: end day
-    general_configuration: general configuration
-    home: home
-    item_types: item types
-    items: items
-    locations: locations
-    loyalty_cards: loyalty cards
-    move_all_shipment_items: move all shipment items
-    move_shipment_item: move shipment item
-    new_action: new action
-    new_cash_register: new cash register
-    new_category: new category
-    new_customer: new customer
-    new_discount: new discount
-    new_employee: new employee
-    new_item: new item
-    new_location: new location
-    new_order: New
-    new_shipment: new shipment
-    new_shipment_type: new shipment type
-    new_shipper: new shipper
-    new_stock_location: new stock location
-    new_tax_profile: new tax profile
-    new_vendor: new vendor
-    new_button: new button
-    order: order
+    current_order: "commande actuelle: #%{id}"
+    customer: client
+    customers: clients
+    delete: effacer
+    delete_confirm: Êtes-vous sûr ?
+    destroy: détruire
+    discounts: remises
+    done: fini
+    edit: éditer
+    edit_cash_register: éditer caisse
+    edit_category: éditer catégorie
+    edit_customer: éditer client
+    edit_discount: éditer remise
+    edit_employee: éditer employé
+    edit_item: éditer article
+    edit_location: éditer emplacement
+    edit_shipment: éditer livraison
+    edit_shipment_type: éditer type de livraison
+    edit_shipper: éditer livreur %{nom}
+    edit_tax_profile: éditer taxe
+    edit_vendor: éditer vendeur
+    employees: employés
+    end_day: fin journée
+    general_configuration: configuration générale
+    home: accueil
+    item_types: types d'articles
+    items: articles
+    locations: emplacements
+    loyalty_cards: cartes de fidélité
+    move_all_shipment_items: déplacer tous les articles de la livraison
+    move_shipment_item: déplacer article de la livraison
+    new_action: nouvelle action
+    new_cash_register: nouvelle caisse
+    new_category: nouvelle catégorie
+    new_customer: nouveau client
+    new_discount: nouvelle remise
+    new_employee: nouvel employé
+    new_item: nouvel article
+    new_location: nouvel emplacement
+    new_order: Nouveau
+    new_shipment: Nouvelle livraison
+    new_shipment_type: Nouveau type de livraison
+    new_shipper: Nouveau livreur
+    new_stock_location: Nouvel emplacement de stock
+    new_tax_profile: nouvelle taxe
+    new_vendor: nouveau vendeur
+    new_button: nouveau bouton
+    order: commande
     points: points
-    pos: POS
-    orders: orders
-    overview: overview
-    pretext: pretext
-    reports: reports
-    search: search
-    shipment_types: shipment types
-    shipments: shipments
-    shippers: shippers
-    show: show
-    split: split
-    stock_locations: stock locations
+    pos: PDV
+    orders: commandes
+    overview: vue d'ensemble
+    pretext: prétexte
+    reports: rapports
+    search: rechercher
+    shipment_types: types de livraison
+    shipments: livraisons
+    shippers: livreurs
+    show: afficher
+    split: diviser
+    stock_locations: emplacements de stock
     support: support
-    tax_profiles: tax profiles
-    update_gift_card: update gift card
-    vendors: vendors
-    void: void
-    end_of_day_drop: end of day payout
-    transaction_tags: transaction tags
-    update_location: update location
-    update_real_quantity: update real quantity
-    print: print
-    upload: upload
-    download: download
-    reorder: reorder
-    report: report
-    report_range: report detail
-    report_day: report day
-    report_accounting: report accounting
-    report_day_range: monthly report
-    wholesaler_update: wholesaler update
+    tax_profiles: taxes
+    update_gift_card: mettre à jour carte cadeau
+    vendors: vendeurs
+    void: détruire
+    end_of_day_drop: remboursement caisse fin de journée
+    transaction_tags: étiquettes de transaction
+    update_location: mettre à jour emplacement
+    update_real_quantity: mettre à jour quantité réelle
+    print: imprimer
+    upload: mettre en ligne
+    download: télécharger
+    reorder: passer nouvelle commande
+    report: rapport
+    report_range: détail rapport 
+    report_day: rapport journée
+    report_accounting: rapport comptabilité
+    report_day_range: rapport mensuel
+    wholesaler_update: mettre à jour distributeur
     
     
   notifications:
-    shipments_item_could_not_be_saved: shipments item could not be saved
-    shipments_move_all_items: all items were successfully moved
-    shipments_move_item: item was successfully moved
+    shipments_item_could_not_be_saved: article livraisons n'a pas pu être enregistré
+    shipments_move_all_items: Tous les articles ont été déplacés avec succès
+    shipments_move_item: L'article a été déplacé avec succès
 
   orders:
     report:
-      title: Sums
-      display: display
-      end_date: end date
-      gross: gross
+      title: Additions
+      display: afficher
+      end_date: date fin
+      gross: gros
       net: net
-      sum: sum
-      rebate: rebate
+      sum: somme
+      rebate: remise
       points: points
-      start_date: start date
-      sum_total: sum total
+      start_date: date début
+      sum_total: somme totale
     report_range:
       title: journal
-      display: display
-      end_date: end date
-      gross: gross
+      display: afficher
+      end_date: date fin
+      gross: gros
       net: net
-      sum: sum
-      rebate: rebate
+      sum: somme
+      rebate: remise
       points: points
-      start_date: start date
-      sum_total: sum total
+      start_date: date fin
+      sum_total: somme totale
     report_day_range:
-      title: monthly report
-      display: display
-      end_date: end date
-      gross: gross
+      title: rapport mensuel
+      display: afficher
+      end_date: date fin
+      gross: gros
       net: net
-      sum: sum
-      rebate: rebate
+      sum: somme
+      rebate: remise
       points: points
-      start_date: start date
-      sum_total: sum total
+      start_date: date début
+      sum_total: somme totale
     report_day:
-      title: day report
-      sums_by_category: sums by category
-      sums_by_tax_profile: sums by tax profile
-      sums_by_payment_methods: sums by payment methods
-      sum: sum
-      sums_by_transaction_types: sums by transaction types
+      title: rapport journée
+      sums_by_category: sommes par catégorie
+      sums_by_tax_profile: sommes par type de taxe
+      sums_by_payment_methods: sommes par moyens de paiement
+      sum: somme
+      sums_by_transaction_types: sommes par type transaction
       transactions: transactions
-      transaction_tag: transaction tag
-      drops: drops
-      drop: drop
-      payouts: payouts
-      payout: payout
-      transaction_total: transaction total
-      transaction_journal: transaction journal
-      time: time
+      transaction_tag: étiquette transaction
+      drops: retraits caisse
+      drop: retrait caisse
+      payouts: remboursements caisse
+      payout: remboursement caisse
+      transaction_total: total de la transaction
+      transaction_journal: journal de la transaction
+      time: heure
       
 
   printr:
     formats:
       advert: |-
-          The Innovative Point of Sale
+          Le point de vente innovateur
           www.salorpos.com
       b1g1_coupon: "%c %20.20s"
-      by_card: "By Card:                  EUR %8.2f"
-      by_cash: "In Cash:                  EUR %8.2f"
-      cancel: Cancel                  EUR %8.2f
-      change: "Change:                       EUR %8.2f"
+      by_card: "Par carte:                  EUR %8.2f"
+      by_cash: "En espèces:                  EUR %8.2f"
+      cancel: Annuler                  EUR %8.2f
+      change: "Changer:                       EUR %8.2f"
       coupon_subtotal: Coupon                   EUR %8.2f
-      discount_subtotal: Discount                       EUR %8.2f
+      discount_subtotal: Remise                       EUR %8.2f
       discounted_item: "%c %20.20s %7.2f %3u %7.2f"
       end_of_day: "%20.20s EUR %5.2f"
-      fixed_rebate: Rebate                         EUR %8.2f
+      fixed_rebate: Remise                         EUR %8.2f
       item: "%c %20.20s %7.2f %3u %7.2f"
       percent_coupon: "%c %20.20s %7.1f%% %3u %7.2f"
-      rebate_amount: Rebate %4.2f%%                 EUR %8.2f
+      rebate_amount: Remise %4.2f%%                 EUR %8.2f
       rebate_item: "%c %20.20s %7.2f %3u %7.2f"
-      rebate_subtotal: Rebate Total                  EUR %8.2f
-      subtotal: Subtotal                      EUR %8.2f
-      thanks: Thank you for shopping with us!
+      rebate_subtotal: Remise Totale                  EUR %8.2f
+      subtotal: Sous-total                      EUR %8.2f
+      thanks: Merci de votre achat !
       total: TOTAL                         EUR %8.2f
 
     word:
-      cancelled: cancelled
-      drop: drop
-      payout: payout
-      sold: sold
+      cancelled: annulé
+      drop: retrait caisse
+      payout: remboursement caisse
+      sold: vendu
 
   receipts:
-    invoice: Rechnung
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
-    report_at_time: Report %{datetime}
+    invoice: facture
+    invoice_numer_X_at_time: Commande Nro. %{number} at %{datetime}
+    report_at_time: Rapport %{datetime}
     x_sum: |+
-        %{type} SUM:   EUR %.2f
-    you_were_served_by: "You were served by %{name}"
+        %{type} TOTAL:   EUR %.2f
+    you_were_served_by: "Vous avez été servi par %{name}"
     
   reports:
-    item_zero: Sold out items
-    tax_class: tax class
+    item_zero: Articles épuisés
+    tax_class: type de taxe
     description: description
-    unit_price: unit price
-    amount: amount
+    unit_price: prix unitaire
+    amount: montant
     total: total
 
   roles:
-    cashier: cashier
-    header_cashier: header cashier
-    manager: manager
-    stockboy: stockboy
+    cashier: caissière
+    header_cashier: caissière supérieure
+    manager: gérant
+    stockboy: magasinier
     
   system:
-    add_payment_method: add payment method
-    complete_sale: Complete
-    employee_login: employee login
-    inventory_updated: inventory updated
-    logged_in_as: logged in as
-    login: login
-    logout: logout
-    not_you: not you?
-    owner_login: owner login
-    owner_mode: OWNER MODE
-    owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    add_payment_method: ajouter moyen de paiement
+    complete_sale: Finir
+    employee_login: nom d'utilisateur de l'employé
+    inventory_updated: inventaie mis à jour
+    logged_in_as: connecté en tant que
+    login: se donnecter
+    logout: se déconnecter
+    not_you: Ce n'est pas vous ?
+    owner_login: connexion propriétaire
+    owner_mode: MODE PROPRIÉTAIRE
+    owner_success: Les propriétés du propriétaire ont été mise à jour avec succès
+    payment_external_types: espèces,carte bleue,cart cadeau,autre
+    payment_internal_types: EnEspèces,ParCarte,ParCarteCadeau,AutreCrédit
     rebate_types:
       fixed: $
       percent: "%"
-    register_today: register today
+    register_today: enregistrer aujourd'hui
     report_external_types: XXX
     report_internal_types: XXX
-    sign_up: sign up
+    sign_up: s'inscrire
     errors:
       auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
       order_totals_validation_failed: "Order total validation failed, refreshing the order may repair the issue. Press OK to refresh."
