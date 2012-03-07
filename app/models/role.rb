@@ -146,6 +146,9 @@ class Role < ActiveRecord::Base
       :create_transaction_tags,
       :create_tender_methods,
       :edit_tender_methods
-    ]
+    ],
+    :employee => [
+      :anything
+      ]
   }
 end
