@@ -3,10 +3,10 @@ fr:
     models:
       button:
         one: Bouton
-        other: Bouton
+        other: Boutons
       tender_method:
-        one: Méthodes tendres
-        other: Méthodes tendres
+        one: Méthode d'offre
+        other: Méthodes d'offre
       action: 
         one: Action
         other: Actions
@@ -198,181 +198,181 @@ fr:
       width: largeur
       open_cash_drawer: ouvrir caisse
       cash_drawer: caisse
-      stylesheets: stylesheets
-      eod_show: show at end of day
-      shipper_sku: Shipper SKU
+      stylesheets: fueilles de style
+      eod_show: afficher à la fin de la journée
+      shipper_sku: UGS livreur
       code: code 
-      when: when
-      afield: field
-      order_id: order
-      scale: scale
-      no_print: Don't Print on Enter
-      salor_printer: Print Client Side
+      when: quand
+      afield: champ
+      order_id: commande
+      scale: balance
+      no_print: Ne pas imprimer avec Entrer
+      salor_printer: imprimer côté client
       
   api:
-    user_does_not_exist: user does not exist
+    user_does_not_exist: l'utilisateur n'existe pas
         
    
   headings:
-    order_validation: "Order Validation"
-    paylife: "Paylife(Artema Hybrid)"
-    bank_machine_types: supported bank machines
-    almost_out: almost out
+    order_validation: "Validation de la commande"
+    paylife: "Paylife(Hybrid Artema)"
+    bank_machine_types: machines banque acceptées
+    almost_out: presque épuisé
     best_sellers: bestsellers
-    best_selling_category: best selling category
-    best_selling_location: best selling location
-    crd: Time,Amount,Type,Notes
-    discount_for: rebate for %{store}
-    discounts_for: rebates for %{store}
-    edit_shipper: edit shipper %{name}
-    employees: employees
-    expiring_soon: expiring soon
-    export: export
-    item_selection: item selection
-    new_discount_for: new discount for %{store}
+    best_selling_category: catégorie la plus vendue
+    best_selling_location: emplacement le plus vendu
+    crd: Heure,Montant,Type,Notes
+    discount_for: remise de %{magazin}
+    discounts_for: remises de %{magazin}
+    edit_shipper: editer livreur %{nom}
+    employees: employés
+    expiring_soon: périme bientôt
+    export: exporter
+    item_selection: sélection d'articles
+    new_discount_for: nouvelle remise de %{magazin}
     notes: notes
-    shipment_items: shipment items
-    shipment_items_header: Name,SKU,price,category,location
-    shipment_types: shipment types
-    shipment_types_header: state,added by, , 
-    shipments: shipments
-    shipments_header: name,from,to,price,paid?,added by,status, , , 
-    update_location: update location
-    update_real_quantity: update real quantity
+    shipment_items: articles envoi
+    shipment_items_header: Nom,UGS,prix,catégorie,emplacement
+    shipment_types: types de livraison
+    shipment_types_header: état,ajouté par, , 
+    shipments: livraisons
+    shipments_header: nom,de,à,prix,payé?,ajouté par,statut, , , 
+    update_location: mettre à jour emplacement
+    update_real_quantity: mettre à jour quantité réelle
 
   helpers:
     select:
-      prompt: please select
+      prompt: choisissez
     submit:
-      cancel: cancel
-      clear: clear
-      create: create
-      get_item: get item
-      print: print
-      complete_sale: complete sale
-      submit: submit
-      save: Save
-      update: update
+      cancel: annuler
+      clear: effacer
+      create: créer
+      get_item: prendre article
+      print: imprimer
+      complete_sale: finaliser vente
+      submit: soumettre
+      save: Enregistrer
+      update: Mettre à jour
       ok: OK
 
   when_list:
-    always: always
-    on_save: on save
-    on_import: on import
-    on_export: on export
-    add_to_order: on add to order
+    always: toujours
+    on_save: lors de la sauvegarde
+    on_import: lors de l'importation
+    on_export: lors de l'exportation
+    add_to_order: lors de l'ajout à une commande
     
   behavior_list:
-    add: add
-    subtract: subtract
-    multiply: multiply
-    divide: divide
-    assign: assign
+    add: additionner
+    subtract: soustraire
+    multiply: multiplier
+    divide: diviser
+    assign: assigner
 
   menu:
-    clear_order: Clear
-    inventory_report: Inventory report
+    clear_order: Effacer
+    inventory_report: Raport inventaire
     ok: OK
-    buttons: buttons
-    cameras: cameras
-    tender_methods: tender methods
-    new_tender_method: new tender method
-    edit_tender_method: edit tender method
+    buttons: boutons
+    cameras: caméras
+    tender_methods: méthodes d'offre
+    new_tender_method: nouvelle méthode d'offre
+    edit_tender_method: editer méthode d'offre
     actions: actions
-    new_broken_item: new broken item
-    activate_gift_card: activate gift card
-    add_to_current_order: add to current order
-    additional: additional
-    back: back
-    broken_items: broken items
-    buy_order: Buy
-    cancel: cancel
-    cash_drop: cash drop
-    cash_register: cash register
-    cash_registers: cash registers
-    categories: categories
+    new_broken_item: nouvel article abîmé
+    activate_gift_card: activer carte cadeau
+    add_to_current_order: ajouter à cette commande
+    additional: supplément
+    back: retour
+    broken_items: articles abîmés
+    buy_order: Acheter
+    cancel: annuler
+    cash_drop: retrait espèces caisse
+    cash_register: caisse
+    cash_registers: caisses
+    categories: catégories
     configuration: Config.
     contact: contact
-    current_order: "current order: #%{id}"
-    customer: customer
-    customers: customers
-    delete: delete
-    delete_confirm: Are you sure?
-    destroy: destroy
-    discounts: discounts
-    done: done
-    edit: edit
-    edit_cash_register: edit cash register
-    edit_category: edit category
-    edit_customer: edit customer
-    edit_discount: edit discount
-    edit_employee: edit employee
-    edit_item: edit item
-    edit_location: edit location
-    edit_shipment: edit shipment
-    edit_shipment_type: edit shipment type
-    edit_shipper: edit shipper %{name}
-    edit_tax_profile: edit tax profile
-    edit_vendor: edit vendor
-    employees: employees
-    end_day: end day
-    general_configuration: general configuration
-    home: home
-    item_types: item types
-    items: items
-    locations: locations
-    loyalty_cards: loyalty cards
-    move_all_shipment_items: move all shipment items
-    move_shipment_item: move shipment item
-    new_action: new action
-    new_cash_register: new cash register
-    new_category: new category
-    new_customer: new customer
-    new_discount: new discount
-    new_employee: new employee
-    new_item: new item
-    new_location: new location
-    new_order: New
-    new_shipment: new shipment
-    new_shipment_type: new shipment type
-    new_shipper: new shipper
-    new_stock_location: new stock location
-    new_tax_profile: new tax profile
-    new_vendor: new vendor
-    new_button: new button
-    order: order
+    current_order: "commande actuelle: #%{id}"
+    customer: client
+    customers: clients
+    delete: effacer
+    delete_confirm: Êtes-vous sûr ?
+    destroy: détruire
+    discounts: remises
+    done: fini
+    edit: éditer
+    edit_cash_register: éditer caisse
+    edit_category: éditer catégorie
+    edit_customer: éditer client
+    edit_discount: éditer remise
+    edit_employee: éditer employé
+    edit_item: éditer article
+    edit_location: éditer emplacement
+    edit_shipment: éditer livraison
+    edit_shipment_type: éditer type de livraison
+    edit_shipper: éditer livreur %{nom}
+    edit_tax_profile: éditer taxe
+    edit_vendor: éditer vendeur
+    employees: employés
+    end_day: fin journée
+    general_configuration: configuration générale
+    home: accueil
+    item_types: types d'articles
+    items: articles
+    locations: emplacements
+    loyalty_cards: cartes de fidélité
+    move_all_shipment_items: déplacer tous les articles de la livraison
+    move_shipment_item: déplacer article de la livraison
+    new_action: nouvelle action
+    new_cash_register: nouvelle caisse
+    new_category: nouvelle catégorie
+    new_customer: nouveau client
+    new_discount: nouvelle remise
+    new_employee: nouvel employé
+    new_item: nouvel article
+    new_location: nouvel emplacement
+    new_order: Nouveau
+    new_shipment: Nouvelle livraison
+    new_shipment_type: Nouveau type de livraison
+    new_shipper: Nouveau livreur
+    new_stock_location: Nouvel emplacement de stock
+    new_tax_profile: nouvelle taxe
+    new_vendor: nouveau vendeur
+    new_button: nouveau bouton
+    order: commande
     points: points
-    pos: POS
-    orders: orders
-    overview: overview
-    pretext: pretext
-    reports: reports
-    search: search
-    shipment_types: shipment types
-    shipments: shipments
-    shippers: shippers
-    show: show
-    split: split
-    stock_locations: stock locations
+    pos: PDV
+    orders: commandes
+    overview: vue d'ensemble
+    pretext: prétexte
+    reports: rapports
+    search: rechercher
+    shipment_types: types de livraison
+    shipments: livraisons
+    shippers: livreurs
+    show: afficher
+    split: diviser
+    stock_locations: emplacements de stock
     support: support
-    tax_profiles: tax profiles
-    update_gift_card: update gift card
-    vendors: vendors
-    void: void
-    end_of_day_drop: end of day payout
-    transaction_tags: transaction tags
-    update_location: update location
-    update_real_quantity: update real quantity
-    print: print
-    upload: upload
-    download: download
-    reorder: reorder
-    report: report
-    report_range: report detail
-    report_day: report day
-    report_accounting: report accounting
-    report_day_range: monthly report
-    wholesaler_update: wholesaler update
+    tax_profiles: taxes
+    update_gift_card: mettre à jour carte cadeau
+    vendors: vendeurs
+    void: détruire
+    end_of_day_drop: remboursement caisse fin de journée
+    transaction_tags: étiquettes de transaction
+    update_location: mettre à jour emplacement
+    update_real_quantity: mettre à jour quantité réelle
+    print: imprimer
+    upload: mettre en ligne
+    download: télécharger
+    reorder: passer nouvelle commande
+    report: rapport
+    report_range: détail rapport 
+    report_day: rapport journée
+    report_accounting: rapport comptabilité
+    report_day_range: rapport mensuel
+    wholesaler_update: mettre à jour distributeur
     
     
   notifications:
