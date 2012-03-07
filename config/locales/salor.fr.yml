@@ -527,13 +527,13 @@ fr:
       failed_to_save_parts: L'ensemble des parts n'ont pas pu être enregistrées. Veuillez vérifier qu'il existe bien des articles avec parts.
       gift_card_amount_remaining: Le montant spéficié dépasse celui restant dans la carte cadeau. Le nouveau montant est de %{amt}
       gift_card_amount_to_high: Le montant de la carte cadeau dépasse le sous-total de la commande. Le montant a été ajusté. Veuillez n'activer les cartes cadeaux qu'à la fin d'une transaction !
-      gift_card_empty: La carte cadeau est videGift Card is Empty, notify client, and destroy card.
-      gift_card_not_found: Could not find that gift card attached to this order...
-      gs1_item_not_found: "Item marked as gs1, but %{sku} is not in the correct format."
-      insufficient_quantity_on_item: "Warning, Item %{sku} quantity is insufficient, time to update your stock levels!"
-      inventory_update_error: inventory update error
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: "Warning: Item price is 0"
+      gift_card_empty: La carte cadeau est vide. Veuillez notifier votre client et détruire la carte.
+      gift_card_not_found: La carte attachée à cette commnde est introuvable...
+      gs1_item_not_found: "Article marqué gs1, mais %{sku} n'est pas un format correct."
+      insufficient_quantity_on_item: "Attention, la quantite de l'article %{sku} est insuffisante. Il est temps de renouveller vos niveaux de stock !"
+      inventory_update_error: erreur de mise à jour de l'inventaire
+      item_not_found: L'article que vous recherchez est introuvable. Utiliser le moteur de recherche.
+      item_price_is_zero: "Attention: Le prix de l'article est de 0"
       lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your store configuration?
       must_cash_drop: Your drawer does not have any money, please add a cash drop!
       must_choose_register: You must login to a cash register!
