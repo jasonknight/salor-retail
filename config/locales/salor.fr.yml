@@ -534,7 +534,7 @@ fr:
       inventory_update_error: erreur de mise à jour de l'inventaire
       item_not_found: L'article que vous recherchez est introuvable. Utiliser le moteur de recherche.
       item_price_is_zero: "Attention: Le prix de l'article est de 0"
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your store configuration?
+      lp_calculation_failed: Les points fidélité n'ont pas pu être appliqués. Êtes-vous sûr d'avoir configuré ceci dans les configurations de votre magazin ?
       must_cash_drop: Your drawer does not have any money, please add a cash drop!
       must_choose_register: You must login to a cash register!
       must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
