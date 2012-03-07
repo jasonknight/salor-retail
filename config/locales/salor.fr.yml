@@ -570,64 +570,64 @@ fr:
   views:
     eticket: Ticket
     sticky_ticket: Etiquette
-    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
-    advanced_field: advanced field
-    by_card: by card
-    cash_register_heading: "%{name} for %{store}"
-    cash_registers: cash registers
-    category_heading: category %{name} for %{store}
-    given: given
-    change: change
-    customers: customers
-    download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy item
-    dummy_part: dummy part
-    edit_item_heading: edit item heading
+    wholesaler_refresh: Recherche des mises à jour du distributeur. Ceci peut prendre quelques minutes.
+    advanced_field: champ avancé
+    by_card: par carte bleue
+    cash_register_heading: "%{name} pour %{store}"
+    cash_registers: caisses
+    category_heading: catégorie %{name} pour %{store}
+    given: donné
+    change: monnaie
+    customers: clients
+    download_may_last_long: Ce téléchargement peut durer longtemps. Désirez-vous continuer ?
+    dummy_item: article factice
+    dummy_part: part factice
+    edit_item_heading: éditer le titre de l'article
     email: email
-    forgot_password: forgot password?
-    gift_card: gift card
-    gift_card_amount: gift card amount
-    in_cash: in cash
-    item: item
-    language: language
-    listing: listing
-    listing_items: listing items
-    locations: locations
-    loyalty_card: loyalty card
-    name: name
-    new_item_heading: "New item for %{store}"
-    new_sale_for: "New sale for %{store}"
-    new_stock_location: New stock location
-    order_heading: "Order #%{id} for %{store}"
-    order_number: "Order #%{id}"
-    order_summary: Orders of the last 7 days
-    owner_language: Owner language
-    password: password
-    password_confirm: confirm password
-    please_test_before_upload: "WARNING: You are about to overwrite data in the database."
-    price: price
-    quantity: quantity
-    rebate: rebate
-    remember_me: remember me
-    report: report
-    stock_locations: stock_locations
-    subtotal: subtotal
-    tax_profile: tax profile
-    three_easy_ways: three easy ways
+    forgot_password: Avez-vous oublié votre mot de passe ?
+    gift_card: carte cadeau
+    gift_card_amount: montant de la carte cadeau
+    in_cash: en espèces
+    item: article
+    language: langue
+    listing: liste
+    listing_items: liste d'articles
+    locations: emplacements
+    loyalty_card: carte de fidélité
+    name: nom
+    new_item_heading: "Nouvel article pour %{store}"
+    new_sale_for: "Nouvelle vente pour %{store}"
+    new_stock_location: Nouvel emplacement de stock
+    order_heading: "Commande #%{id} pour %{store}"
+    order_number: "Commande #%{id}"
+    order_summary: Commandes des 7 derniers jours
+    owner_language: Langue du propriétaire
+    password: mot de passe
+    password_confirm: confirmer mot de passe
+    please_test_before_upload: "ATTENTION: Vous êtes sur le point de réécrire des données dans la base de données."
+    price: prix
+    quantity: quantité
+    rebate: remise
+    remember_me: se souvenir de moi
+    report: rapport
+    stock_locations: emplacements_de_stock
+    subtotal: sous-total
+    tax_profile: type de taxe
+    three_easy_ways: trois façons faciles
     total: total
-    username: username
-    vendor: vendor
-    shape: shape
+    username: nom d'utilisateur
+    vendor: vendeur
+    shape: forme
     errors:
-      no_access_right: You do not have the right to access this resource. This error has been logged.
-      nothing_found: Nothing found
-      unknown_vendor: Unknown
+      no_access_right: Vous n'avez pas le droit d'accéder à cette ressource. Cette erreur a été enregistrée.
+      nothing_found: Rien n'a été trouvé.
+      unknown_vendor: Inconnu
     forms:
-      applies_to_item: applies to item with SKU
-      buy_one_get_one: buy one get one
-      cashier: cashier
-      category_editor: category editor
-      fixed_amount_off: fixed amount off
+      applies_to_item: s'applique à un article aved UGS
+      buy_one_get_one: achetez deux pour le prix d'un
+      cashier: caissière
+      category_editor: éditeur de catégorie
+      fixed_amount_off: montant fixe  off
       item_editor: item editor
       items: items
       location_editor: location editor
