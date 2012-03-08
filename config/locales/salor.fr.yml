@@ -123,7 +123,7 @@ fr:
       decimal_points: points décimaux 
       default_buyback: rachat par défaut
       dollar_per_lp: dollar par point fidélité
-      drop: retrait caisse
+      drop: versement caisse
       email: email
       end_amount: montant fin
       end_date: date fin
@@ -148,7 +148,7 @@ fr:
       part_quantity: quantité de parts
       parts: parts
       password: mot de passe
-      payout: remboursement caisse
+      payout: retrait caisse
       points: points
       postalcode: code postal
       price: prix
@@ -287,7 +287,7 @@ fr:
     broken_items: articles abîmés
     buy_order: Acheter
     cancel: annuler
-    cash_drop: retrait espèces caisse
+    cash_drop: versement espèces caisse
     cash_register: caisse
     cash_registers: caisses
     categories: catégories
@@ -359,7 +359,7 @@ fr:
     update_gift_card: mettre à jour carte cadeau
     vendors: vendeurs
     void: détruire
-    end_of_day_drop: remboursement caisse fin de journée
+    end_of_day_drop: versement caisse fin de journée
     transaction_tags: étiquettes de transaction
     update_location: mettre à jour emplacement
     update_real_quantity: mettre à jour quantité réelle
@@ -423,10 +423,10 @@ fr:
       sums_by_transaction_types: sommes par type transaction
       transactions: transactions
       transaction_tag: étiquette transaction
-      drops: retraits caisse
-      drop: retrait caisse
-      payouts: remboursements caisse
-      payout: remboursement caisse
+      drops: versements caisse
+      drop: versement caisse
+      payouts: retraits caisse
+      payout: retrait caisse
       transaction_total: total de la transaction
       transaction_journal: journal de la transaction
       time: heure
@@ -458,8 +458,8 @@ fr:
 
     word:
       cancelled: annulé
-      drop: retrait caisse
-      payout: remboursement caisse
+      drop: versement caisse
+      payout: retrait caisse
       sold: vendu
 
   receipts:
@@ -506,7 +506,7 @@ fr:
     report_internal_types: XXX
     sign_up: s'inscrire
     errors:
-      auto_drop_failed: "Le système n'a pas pu effectuer un retrait automatique. Veuillez créer manuellement un retrait d'espèces de début de journée"
+      auto_drop_failed: "Le système n'a pas pu effectuer un versement caisse automatique. Veuillez créer manuellement un versement d'espèces de début de journée"
       order_totals_validation_failed: "La validation du total de la commande a échoué. En rafraichissant la page, la commande pourrait corriger l'erreur. Appuyer sur OK pour rafraichir."
       parent_sku_must_exist: "L'article parent doit exister !"
       child_sku_must_exist: "L'article enfant doit exister !"
@@ -517,7 +517,7 @@ fr:
       action_code_error: "Le code n'a pas pu être exécuté car %{error}"
       action_error: "L'action n'a pas pu être effectuée car %{error}"
       not_enough_in_drawer: pas assez dans la caisse
-      cash_drop_amount_must_be_positive: le montant du retrait doit être positif
+      cash_drop_amount_must_be_positive: le montant du versement doit être positif
       coupon_cannot_be_buy_one_get_one: "Le coupon %{sku} ne peut pas être achetez_un_pour_le_prix_d_un lorsqu'il s'applique à %{applies}"
       coupon_fixed_amount_greater_than_total: "Le montant du coupon %{sku} dépasse le prix de l'article %{item}"
       coupon_not_enough_items: vous n'avez pas acheté assez d'articles pour que cela soit applicable
@@ -537,9 +537,9 @@ fr:
       lp_calculation_failed: Les points fidélité n'ont pas pu être appliqués. Êtes-vous sûr d'avoir configuré ceci dans les configurations de votre magazin ?
       must_cash_drop: Votre caisse n'a pas d'argent. Veuillez faire un versement d'espèces !
       must_choose_register: vous devez vous connecter à une caisse !
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
+      must_choose_vendor: Vous devez choisir un magazin !
       must_set_receiver_to_vendor: vous devez attributer ce champ du destinataire de la livraison à un magazin valide.
-      must_specify_drop_or_payout: Vous devez spécifiez soit Versement, soit Retrait !
+      must_specify_drop_or_payout: Vous devez spécifiez soit Versement, soit Retrait!
       no_class: "Il n'y a pas de classed pour %{model} dans la ligne %{i}"
       no_role: Votre rôle ne vous donne pas accès à cette ressource.
       no_such_item: Il n'existe pas d'article avc cet UGS
@@ -552,7 +552,7 @@ fr:
       payment_required_explanation: Nous regrettons de vous informer que votre système a automatiquement cessé de fonctionner car votre license de pré-paiement a périmé. Vous devez règler le montant dû pour Salor afin de continuer d'en bénéficier.  veuillez contacter votre représentant du support technique de Salor.
       shipment_item_already_in_stock: L'article %{sku} est déjà en stock
       shipment_item_move_failed: "L'article %{sku} n'a pas été déplacé. Erreur : %{error}"
-      shipment_item_nil: Item returned from_shipment_item was nil?
+      shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
       sku_must_be_unique: doit être unique
       uspecified_error: Un problème est survenu. Veuillez contacter le support technique ! Essayer de rafraichir cette page.
       value_not_set: PasDéfini
