@@ -47,11 +47,11 @@ fr:
         one: Article commande
         other: Articles commande
       shipment:
-        one: Envoi
-        other: Envois
+        one: Livraison
+        other: Livraisons
       shipment_type:
-        one: Type d'envoi
-        other: Types d'envoi
+        one: Type de livraison
+        other: Types de livraison
         default_name: Nouvelle commande automatique
       shipper:
         one: Livreur
