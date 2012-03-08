@@ -60,8 +60,8 @@ fr:
         one: Emplacement du stock
         other: Emplacements du stock
       tax_profile:
-        one: Taxe
-        other: Taxes
+        one: Type de taxe
+        other: Type de taxes
       vendor:
         one: Magazin
         other: Magazins
@@ -130,7 +130,7 @@ fr:
       expires_on: valable jusqu'à
       first_name: prénom
       height: hauteur
-      is_shipment_item: est un article pour envoi
+      is_shipment_item: est un article pour livraison
       item_sku: ugs article
       itemsviewlist: "Liste d'articles"
       last_name: Nom
@@ -231,7 +231,7 @@ fr:
     item_selection: sélection d'articles
     new_discount_for: nouvelle remise de %{magasin}
     notes: notes
-    shipment_items: articles envoi
+    shipment_items: articles livraison
     shipment_items_header: Nom,UGS,prix,catégorie,emplacement
     shipment_types: types de livraison
     shipment_types_header: état,ajouté par, , 
