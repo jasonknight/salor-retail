@@ -92,7 +92,7 @@ fr:
       parent_sku: UGS parent
       child_sku: UGS enfant
       ignore_qty: Ignorer Qté
-      bank_machine_path: Retrait banque
+      bank_machine_path: chemin lecteur CB
       artema_hybrid: Hybride Artema
       type: type
       active: actif
@@ -131,7 +131,7 @@ fr:
       first_name: prénom
       height: hauteur
       is_shipment_item: est un article pour livraison
-      item_sku: ugs article
+      item_sku: UGS article
       itemsviewlist: "Liste d'articles"
       last_name: Nom
       lc_points: Points carte fidélité
@@ -206,7 +206,7 @@ fr:
       afield: champ
       order_id: commande
       scale: balance
-      no_print: Ne pas imprimer avec Entrer
+      no_print: Ne pas imprimer en appuyant sur Entrer
       salor_printer: imprimer côté client
       
   api:
