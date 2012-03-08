@@ -686,34 +686,34 @@ fr:
       download: télécharger
       edit: éditer
       from: de
-      loading: téléchargement en cours
+      loading: téléchargement en cours...
       order: commande
       processing: traitement en cours...
-      saving: saving...
-      searching: searching...
-      sku: SKU
-      title: title
-      to: to
-      top: top
-      waiting: waiting...
+      saving: enregistrement en cours...
+      searching: recherche en cours...
+      sku: UGS
+      title: titre
+      to: à
+      top: haut de la page
+      waiting: en attente....
 
 
   items:
     index:
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
+      only_for_tobacco_stores: Cette fonction s'applique uniquement aux bureaux de tabac. Des articles Tabac seront créés et téléchargés et mis à jour. ceci peut prendre jusau'à 20 minutes. Êtes-vous sûr de vouloir continuer ?
     upload:
-      upload: upload
+      upload: mettre en ligne
     inventory_report:
-      title: Inventory Report
-      price: Selling price
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
+      title: rapport inventaire
+      price: Prix de vente
+      total_buying_price: Prix d'achat total
+      total_selling_price: Prix de vente total
+      subtotal_purchase_price: Sous-total du prix d'achat
+      subtotal_selling_price: Sous-total du prix de vente
     update_real_quantity:
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
-      are_you_sure: This will copy the inventory quantities into the database and reset the inventory report. Continue?
+      inventory_report: Rapport inventaire
+      update_quantity: Mettre à jour quantités inventaire
+      are_you_sure: Ceci copiéra les quantités d'inventaire dans la base de données, et This will copy the inventory quantities into the database and reset the inventory report. Continue?
 
   home:
     user_employee_index:
