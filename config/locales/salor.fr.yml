@@ -632,63 +632,63 @@ fr:
       items: articles
       location_editor: éditeur d'emplacements
       manager: Gérant
-      no_change: no change
+      no_change: pas de changement
       notes: notes
-      order_editor: order editor
+      order_editor: éditeur de commande
       parts: parts
-      percent_off: "% off"
-      roles: roles
-      search: search
-      stocker: stocker
+      percent_off: "remise du %"
+      roles: rôles
+      search: rechercher
+      stocker: responsable du stock
       shipment:
         types:
-          canceled: canceled
-          complete: complete
-          in_stock: in stock
-          new: new
-          returned: returned
-          shipped: shipped
+          canceled: annulé
+          complete: achevé
+          in_stock: en stock
+          new: nouveau
+          returned: retourné
+          shipped: envoyé
     notice:
-      move_real_quantities_success: Item quantities were successfully updated
-      wholesaler_upload_report: "Updated items: %{updated_items}, Created items: %{created_items}, Created categories: %{created_categories}, Created Tax Profiles %{created_tax_profiles}"
-      cache_was_cleared: Cache files deleted.
-      csv_edit_starting: csv edit starting
-      model_create: "%{model} was created successfully"
-      model_edit: "%{model} was edited successfully"
-      new_order: new order created
-      order_refund_dt: "Automatic refund drawer transaction Order #%{id} :http://salor/orders/%{id}"
-      please_wait: "Please wait..."
-      transaction_succeeded: "Paid!"
-      artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
-      paylife_ending_day: Ending day
-      paylife_endday_complete: Ending day complete
+      move_real_quantities_success: Les quantités d'articles ont été mises à jour avec succès.
+      wholesaler_upload_report: "Articles mis à jour: %{updated_items}, Articles créés: %{created_items}, Catégories créées: %{created_categories}, Types de taxe créés %{created_tax_profiles}"
+      cache_was_cleared: Fichiers cache effacés.
+      csv_edit_starting: Début de l'édition des csv
+      model_create: "%{model} a été créé avec succès"
+      model_edit: "%{model} a été édité avec succès"
+      new_order: nouvelle commande créée
+      order_refund_dt: "Transaction de caisse pour remboursement automatique, commande #%{id} :http://salor/orders/%{id}"
+      please_wait: "Veuillez attendre..."
+      transaction_succeeded: "Payé !"
+      artema_hybrid_lost: Connexion à Hybride Artema Hybrid interrompue. Déconnectez, puis reconnecter la machine.
+      paylife_ending_day: Clôture de la journée en cours
+      paylife_endday_complete: Clôture de la journée effectuée
     pagination:
-      last: last
-      next: next &gt;
-      previous: "&lt; previous"
+      last: dernier
+      next: suivant &gt;
+      previous: "&lt; précédent"
       truncate: ...
     reports:
       cash_account: XXX
       daily: XXX
     shipments:
-      state: State
+      state: état
     single_words:
-      new: New
-      all: All
-      camera: camera
-      ordering: ordering
-      body: body
-      bottom: bottom
-      continue: continue
+      new: Nouveau
+      all: Tous
+      camera: caméra
+      ordering: commande en cours
+      body: corps
+      bottom: bas de page
+      continue: continuer
       coupons: Coupons
-      delete: delete
-      destroy: destroy
-      download: download
-      edit: edit
-      from: from
-      loading: loading
-      order: order
-      processing: processing...
+      delete: effacer
+      destroy: détruire
+      download: télécharger
+      edit: éditer
+      from: de
+      loading: téléchargement en cours
+      order: commande
+      processing: traitement en cours...
       saving: saving...
       searching: searching...
       sku: SKU
