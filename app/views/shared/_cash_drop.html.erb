@@ -75,6 +75,10 @@ function cash_drop_save() {
       data: $('#cash_drop_form').serialize(),
       dataType: 'script',
       success: function (data) {
+        $('textarea#cash-drop-notes-id').val('');
+        $('.dt-tag-button').removeClass("highlight");
+        $('input#dt_tag').val('None');
+        $('div.dt-tag-target').html(' Tag ');
         hide_cash_drop();
       },
       error: function (data,status,err) {
@@ -110,7 +114,7 @@ function show_coin_calculator() {
 
       <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
-        <textarea name="transaction[notes]" class="keyboardable" rows="2" size=2></textarea>
+        <textarea name="transaction[notes]" id="cash-drop-notes-id" class="keyboardable" rows="2" size=2></textarea>
       </p>
       <p style="background:#683870;padding:5px;">
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
