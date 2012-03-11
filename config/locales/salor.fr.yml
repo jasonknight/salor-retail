@@ -68,6 +68,9 @@ fr:
       transaction_tag:
         one: Etiquette
         other: Etiquettes
+      payment_method:
+        one: Payment Method
+        other: Payment Methods
 
     attributes:
       uses_drawer_id: Utilise la caisse de

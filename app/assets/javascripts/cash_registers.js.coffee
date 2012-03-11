@@ -22,6 +22,14 @@ window.displayCalculatorTotal = ->
   $('.eod-calculator-difference').html(toCurrency(diff));
   $('.eod-calculator-total').html(toCurrency(calculator_total));
 
+window.logout = ->
+  if Drawer.amount > 0
+    show_cash_drop()
+    return
+  else
+    window.location = '/vendors/end_day'
+
+
 
 window.eodPayout = ->
   $.ajax

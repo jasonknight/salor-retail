@@ -68,6 +68,9 @@ de:
       transaction_tag:
         one: Tag
         other: Tags
+      payment_method:
+        one: Zahlungsmethode
+        other: Zahlungsmethoden
 
     attributes:
       uses_drawer_id: Uses Drawer of
@@ -455,6 +458,16 @@ de:
       subtotal: Subtotal                      EUR %8.2f
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
+    eod_report:
+      orders_total: Verkäufe Total
+      refunded_orders_total: Stornierungen Verkäufe Total
+      refunded_items_total: Stornierungen Artikel Total
+      refunded_total: Stornierungen Gesamt
+      buyback_total: Pfand bzw. Auszahlungen
+      drop_total: Einzahlungen Summe
+      payout_total: Auszahlungen Summe
+      payout_refunds: Stornierungen Summe
+
 
     word:
       cancelled: storniert

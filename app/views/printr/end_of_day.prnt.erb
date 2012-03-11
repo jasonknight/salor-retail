@@ -2,7 +2,9 @@
 <%= "\ea\x01" %><%= "\e!\x38" %><%= @vendor.name %>
 <%= "\e!\x01" %>
 
+
 <%= @vendor.salor_configuration.receipt_blurb %><%= "\n\e!\x01" + "\ea\x00" %>
+
 
 <%= @report[:date] %>
 
@@ -10,57 +12,59 @@
 
 <%= @report[:username] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t("activerecord.models.drawer.one"), @report[:drawer_amount]] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t(".orders_total"), @report[:orders_total]] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t(".refunded_orders_total"), @report[:refunded_orders_total]] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t(".refunded_items_total"), @report[:refunded_items_total]] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t(".refund_total"), @report[:refund_total]] %>
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.orders_total"), t('number.currency.format.friendly_unit'), @report[:orders_total]] %>
 
-<%= "%20.20s EUR %5.2f" % [I18n.t(".buyback_total"), @report[:buyback_total]] %>
-
-------------------------------
-
-<%= t 'activerecord.models.drawer_transactions.other' %>
-
-<%= "%20.20s EUR %5.2f" % [I18n.t(".drop_total"), @report[:drop_total]] %>
-
-<%= "%20.20s EUR %5.2f" % [I18n.t(".payout_total"), @report[:payout_total]] %>
-
-<%= "%20.20s EUR %5.2f" % [I18n.t(".payout_refunds"), @report[:payout_refunds]] %>
-
-------------------------------
-
-<%= t 'activerecord.models.drawer_transactions.other' %>
-
-<% @report[:dt_payout_list].to_a.each do |dt| %>
-<%= "%5.5s%10.10s%10.10s%7.2s" % [dt[1][:time], dt[1][:tag], dt[1][:notes], dt[1][:amount]] %>
-
-<% end %>
-
-<% @report[:dt_drop_list].to_a.each do |dt| %>
-<%= "%5.5s%10.10s%10.10s%7.2s" % [dt[1][:time], dt[1][:tag], dt[1][:notes], dt[1][:amount]] %>
-
-<% end %>
-
-------------------------------
+------------------------------------------
 
 <%= t 'activerecord.models.payment_method.other' %>
 
+
+<%= t 'printr.eod_report.incoming' %>
+
+
 <% @report[:pm_pos].to_a.each do |pm| %>
-<%= "%15.15s %7.2s" % [t(pm[0]), pm[1]] %>
+<%= "%29.29s %s %7.2f" % [t(pm[0]), t('number.currency.format.friendly_unit'), pm[1]] %>
 
 <% end %>
+
+
+<%= t 'printr.eod_report.outgoing' %>
+
 
 <% @report[:pm_neg].to_a.each do |pm| %>
-<%= "%15.15s %7.2s" % [t(pm[0]), pm[1]] %>
+<%= "%29.29s %s %7.2f" % [t(pm[0]), t('number.currency.format.friendly_unit'), pm[1]] %>
 
 <% end %>
 
 
+<%= t 'activerecord.models.drawer_transaction.other' %>
+
+
+<% @report[:dt_drop_list].to_a.each do |dt| %>
+<%= "%5.5s %11.11s %11.11s  %s %7.2f" % [dt[1][:time], dt[1][:tag], dt[1][:notes], t('number.currency.format.friendly_unit'), dt[1][:amount]] %>
+
+<% end %>
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.drop_total"), t('number.currency.format.friendly_unit'), @report[:drop_total]] %>
+
+
+<% @report[:dt_payout_list].to_a.each do |dt| %>
+<%= "%5.5s %11.11s %11.11s  %s %7.2f" % [dt[1][:time], dt[1][:tag], dt[1][:notes], t('number.currency.format.friendly_unit'), dt[1][:amount]] %>
+
+<% end %>
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.payout_total"), t('number.currency.format.friendly_unit'), @report[:payout_total]] %>
+
+
+
+<%= "%29.29s %s %7.2f" % [I18n.t("activerecord.models.drawer.one"), t('number.currency.format.friendly_unit'), @report[:drawer_amount]] %>
+
+
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.refunded_total"), t('number.currency.format.friendly_unit'), @report[:refund_total]] %>
+
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.buyback_total"), t('number.currency.format.friendly_unit'), @report[:buyback_total]] %>
 
 <%= "\e!\x08" %>
 

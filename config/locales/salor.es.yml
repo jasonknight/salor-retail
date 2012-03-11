@@ -68,6 +68,9 @@ es:
       transaction_tag:
         one: Tag
         other: Tags
+      payment_method:
+        one: Payment Method
+        other: Payment Methods
 
     attributes:
       uses_drawer_id: Uses Drawer of
