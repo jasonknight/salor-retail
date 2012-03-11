@@ -1,6 +1,3 @@
-<% if GlobalData.cash_register.big_buttons then  %>
-  <%= salor_render :partial => "shared/big_buttons_css" %>
-<% end %>
 <script type="text/javascript">
 var filename = "new.html.erb";
 var isBuyOrder = false;
@@ -431,8 +428,6 @@ $(function () {
   $("#keyboard_input").attr("disabled", false);
   focusInput($('#keyboard_input'));
 });
-
-<%= salor_render :partial => "shared/pos_js" %>
 </script>
 
 <%= salor_render :partial => "shared/pos/menu", :locals => {:order => @order} %>
@@ -441,7 +436,13 @@ $(function () {
 <div class='clear'></div>
 
 <div class="pos-customer shown"></div>
-<%= salor_render :partial => "shared/pos/rebates", :locals => {:order => @order} %>
+
+<div class='rebate'>
+  <p><b>#<span class="order-id"><%= @order.id %></span></b></p>
+  <!-- <%= edit_me(:rebate,@order,@order.rebate,'','pos_order_rebate','true') %> -->
+  <!-- <%= edit_me(:rebate_type,@order,@order.rebate_type_display,'','pos_order_rebate_type',true) %> --> 
+  <%= edit_me(:tag,@order,@order.tag,'','pos_order_tag','true') %>
+</div>
 
 <div class='clear'></div>
 <% if not @cash_register.scale.blank? then  %>
