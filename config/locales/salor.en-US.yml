@@ -462,10 +462,13 @@ en-US:
       orders_total: Orders total
       refunded_total: Refunded total
       buyback_total: Buyback total
-      drop_total: Drop total
-      payout_total: Payout total
-      incoming: incoming
-      outgoing: outgoing
+      drop_total: TOTAL
+      payout_total: TOTAL
+      payment_method_total: TOTAL
+      incoming: Incoming
+      outgoing: Outgoing
+      drops: Drops
+      payouts: Payouts
 
     word:
       cancelled: cancelled

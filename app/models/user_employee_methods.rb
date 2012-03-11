@@ -522,6 +522,7 @@ module UserEmployeeMethods
     totals = Hash.new()
     totals[:date] = I18n.l(DateTime.now, :format => :long)
     totals[:drawer_amount] = self.get_drawer.amount
+    totals[:unit] = I18n.t('number.currency.format.friendly_unit')
     today = Time.now.beginning_of_day.strftime("%Y-%m-%d 01:01:01")
     #begin
 
@@ -570,8 +571,8 @@ module UserEmployeeMethods
       totals[:payout_total] = 0
       totals[:payout_refunds] = 0
       self.get_drawer.drawer_transactions.where(["is_refund = false and tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
-        totals[:drop_total] = totals[:drop_total] + dt.amount if dt.drop
-        totals[:payout_total] = totals[:payout_total] + dt.amount if dt.payout
+        totals[:drop_total] += dt.amount if dt.drop
+        totals[:payout_total] -= dt.amount if dt.payout
         #totals[:payout_refunds] = totals[:payout_refunds] + dt.amount if dt.payout and dt.is_refund
       end
 
@@ -590,16 +591,23 @@ module UserEmployeeMethods
 
       # Get a list of all positive payment methods for today
       totals[:pm_pos] = Hash.new
+      totals[:pm_pos_sum] = 0
       I18n.t("system.payment_internal_types").split(',').each do |pmtype|
-
-        totals[:pm_pos].merge! pmtype.to_sym => PaymentMethod.where(["internal_type = ? and amount > 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+        pmsum = PaymentMethod.where(["internal_type = ? and amount > 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+        totals[:pm_pos_sum] += pmsum
+        totals[:pm_pos].merge! pmtype.to_sym => pmsum
       end
 
       # Get a list of all negative payment methods for today
       totals[:pm_neg] = Hash.new
+      totals[:pm_neg_sum] = 0
       I18n.t("system.payment_internal_types").split(',').each do |pmtype|
-        totals[:pm_neg].merge! pmtype.to_sym => PaymentMethod.where(["internal_type = ? and amount < 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+        pmsum = PaymentMethod.where(["internal_type = ? and amount < 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+        totals[:pm_neg_sum] += pmsum
+        totals[:pm_neg].merge! pmtype.to_sym => pmsum
       end
+
+      totals[:pm_sum] = totals[:pm_pos_sum] + totals[:pm_neg_sum]
     #rescue
     #end
     return totals
