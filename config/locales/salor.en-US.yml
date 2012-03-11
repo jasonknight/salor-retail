@@ -461,14 +461,17 @@ en-US:
     eod_report:
       orders_total: Orders total
       refunded_total: Refunded total
-      buyback_total: Buyback total
+      buyback_item_total: Buyback item total
+      buyback_order_total: Buyback order total
       drop_total: TOTAL
       payout_total: TOTAL
       payment_method_total: TOTAL
+      transaction_total: TOTAL
       incoming: Incoming
       outgoing: Outgoing
       drops: Drops
       payouts: Payouts
+      refund: Refund
 
     word:
       cancelled: cancelled
