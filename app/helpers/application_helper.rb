@@ -130,57 +130,17 @@ module ApplicationHelper
     end
 
     %Q[
-    <!-- content_box_top -->
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
-
       <div class="title-container">
-        <div>
           #{bbutton} <div class="title-box #{classes.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
           <div class="breadcrumb-container">
             #{crumbs}
           </div>
-        </div>
       </div>
-      <div class="content-container content-container-#{params[:controller]}-#{params[:action]}">
-    <!-- end content_box_top -->
     ]
-  end
-  def scrollable_table_top(headers = false)
-    c = []
-    h = ''
-    if headers then
-      headers.each do |th|
-        if th.class == Hash then
-          txt = th[:text]
-          attrs = []
-          th.each do |attr,value|
-            attrs << "#{attr}=\"#{value}\"" if not attr == :text
-          end
-          c << "<th #{attrs.join(' ')}>#{txt}</th>"
-        else
-          c << "<th>#{th}</th>"
-        end
-      end
-      h = '<thead class="fixedHeader"><tr>' + c.join("\n")+ '</tr></thead>'
-    end
-    %Q[
-    <!-- scrollable_table_top -->
-      <div id="table_container" class='tableContainer'>
-        <table id="order_items_table" width="100%" class="ui-corner-all ui-widget ui-content stripe-me scrollTable">
-        #{h}
-        <tbody id="scroll_content" class='scrollContent'>
-        <!-- end scrollable_table_top -->
-    ]
-  end
-  def scrollable_table_bottom
-    return "</tbody></table></div>\n <!-- end scrollable_table_bottom --> "
   end
   def content_box_bottom
-    %q[
-          </div>
-        </div>
-        <!-- content_box_bottom -->
-    ]
+    ''
   end
   def icon(name, size = '64')
     size = 32 if size == 16
@@ -251,9 +211,9 @@ module ApplicationHelper
       options.each do |k,v|
         o << "#{k}=\"#{v}\""
       end
-      return raw("<img src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span>")
+      return raw("<div class=\"salor-icon\"><img src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
     else
-      return raw(image_tag('/images/icons/' + icon(name,size),options))
+      return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }</div>")
     end
   end
   def get_day(i)

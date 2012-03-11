@@ -311,21 +311,23 @@ class VendorsController < ApplicationController
   end
   #
   def render_end_of_day_receipt
-    @vendor = GlobalData.vendor
-    @report = GlobalData.salor_user.get_end_of_day_report
-    render :text => Printr.new.template('end_of_day',binding)
+    @report = $User.get_end_of_day_report
+    text = Printr.new.sane_template('end_of_day',binding)
+    if $Register.salor_printer
+      render :text => text
+    else
+      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      render :nothing => true
+    end
   end
+  #
   def end_day
     begin
       @order = initialize_order if salor_user.meta.order_id
     rescue
-      
-    end
-    if @order and GlobalData.salor_user.get_drawer.amount <= 0 then
-      #GlobalErrors.append_fatal("system.errors.must_cash_drop")
     end
     if not GlobalErrors.any_fatal? then
-      $User.end_day #see method defined in user_employee_methods for printing
+      $User.end_day
       atomize(ISDIR, 'cash_drop')
       if $User.class == User then
         $User.update_attribute :is_technician, false
@@ -337,7 +339,8 @@ class VendorsController < ApplicationController
       redirect_to :controller => :home, :action => :index
     end
   end
-  
+
+ 
   def edit_field_on_child
     # If possible, this tries to avoid calling calculate_totals / update_self_and_save
     # for ORDER and ORDER_ITEM operations. Calling above funcs recalculates everything

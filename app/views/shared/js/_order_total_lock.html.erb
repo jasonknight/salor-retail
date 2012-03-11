@@ -1,5 +1,0 @@
-<%
-  opts = {:id => 'order-total-lock', :class => 'pos-lock toggle', :field => 'toggle_lock', :value => 'total', :klass => 'Order', :model_id => order.id }
-%>
-/* <%= order.total_is_locked %> */
-$('.pos-total img').replaceWith(make_toggle($('<%= order.total_is_locked ? salor_icon(:locked, opts,32) : salor_icon(:unlocked,opts,32)   %>')));

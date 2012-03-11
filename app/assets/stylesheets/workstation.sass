@@ -786,7 +786,7 @@ div.content-box > div.title-container
 
 
 
-div.content-box > div.title-container > div > div.title-box 
+div.content-box > div.title-container > div.title-box 
   height: 29px
   padding-top: 3px
   float: left
@@ -794,7 +794,7 @@ div.content-box > div.title-container > div > div.title-box
   background-color: $middleground
   text-transform: uppercase
 
-div.content-box > div.title-container > div > div.title-box-admin 
+div.content-box > div.title-container > div.title-box-admin 
   background-color: #CC5757
   float: left
   font-weight: bold
@@ -832,9 +832,9 @@ div.button-row-admin > div.button-admin
   margin-top: -3px
   padding: 3px 10px 0
 
-div.content-box > div.title-container > div > div.back-button,
-div.content-box > div.title-container > div > div.back-button-admin,
-div.content-box > div.title-container > div > div.left-blank 
+div.content-box > div.title-container > div.back-button,
+div.content-box > div.title-container > div.back-button-admin,
+div.content-box > div.title-container > div.left-blank 
   width: 7%
   height: 32px
   float: left
@@ -849,9 +849,9 @@ div.content-box > div.title-container > div > div.left-blank
   @include bright_button
   @include pointer
 
-div.content-box > div.title-container > div > div.reload-button,
-div.content-box > div.title-container > div > div.reload-button-admin,
-div.content-box > div.title-container > div > div.right-blank 
+div.content-box > div.title-container > div.reload-button,
+div.content-box > div.title-container > div.reload-button-admin,
+div.content-box > div.title-container > div.right-blank 
   width: 7%
   height: 32px
   float: left
@@ -866,10 +866,10 @@ div.content-box > div.title-container > div > div.right-blank
   @include cool_button
   @include pointer
 
-div.content-box > div.title-container > div > div.back-button-admin 
+div.content-box > div.title-container  > div.back-button-admin 
   height: 64px
 
-div.content-box > div.title-container > div > div.reload-button-admin 
+div.content-box > div.title-container  > div.reload-button-admin 
   height: 64px
   position: relative
   top: -32px
@@ -1388,7 +1388,7 @@ div.shipment-create-item div.table-cell
   padding-bottom: 20px
 
 div.cash-drop textarea 
-  width: 160px
+  width: 125px
 
 input.cash-drop-amount
   font-size: 300%
@@ -1543,6 +1543,11 @@ span.order-lc_points,.order-points,.loyalty-points
   text-align: center
   @include dialog
 
+.rounded-corners-left
+  @include rounded_corners_left
+
+.rounded-corners-right
+  @include rounded_corners_right
 
 .button-cancel 
   @include rounded_corners_left
@@ -1766,8 +1771,7 @@ div.pagination
 
 
 div.tools 
-  margin: 10px 0px
-  text-align: center
+  margin: 10px 5px
 
 
 div.tools a 
@@ -2762,3 +2766,13 @@ div.role-check
   :float left
   :padding 3px
   :width 25%
+
+div#header_drawer_amount
+  :position absolute
+  :padding 32px 0px 0px 0px
+  :font-weight bold
+  :font-size 90%
+  :width 65px
+  :text-align center
+  :text-shadow white 0px 0px 5px
+  :color black

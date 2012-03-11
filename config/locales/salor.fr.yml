@@ -567,6 +567,11 @@ fr:
       receipt_logo_footer: logo au pied du reçu
       logo: logo
 
+  cash_registers:
+    end_of_day:
+      end_of_day_thermal_report: Print Report
+      paper_report: Detail Report
+
   views:
     eticket: Ticket
     sticky_ticket: Etiquette
