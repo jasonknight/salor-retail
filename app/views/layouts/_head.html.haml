@@ -1,0 +1,21 @@
+%title Salor POS
+
+- if mobile?
+  %meta{ 'name' => "viewport", :content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" }
+  %meta{ 'name' => "apple-mobile-web-app-capable", :content => "yes" }
+
+%link{ :rel => "apple-touch-icon", :href => "apple-touch-icon-iphone.png" }
+%link{ :rel => "apple-touch-icon", :sizes => '72x72', :href => "apple-touch-icon-ipad.png" }
+%link{ :rel => "apple-touch-icon", :sizes => '114x114', :href => "apple-touch-icon-iphone4.png" }
+
+= stylesheet_link_tag 'print', :media => 'print'
+= stylesheet_link_tag 'generic'
+= stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
+= stylesheet_link_tag params[:controller]
+
+= javascript_include_tag 'application'
+= javascript_include_tag 'generic'
+= javascript_include_tag workstation? ? 'workstation' : 'mobile'
+= javascript_include_tag params[:controller]
+= salor_render :partial => "shared/application_js"
+= csrf_meta_tag

@@ -49,6 +49,7 @@
 class ApplicationController < ActionController::Base
   include SalorBase
   helper :all
+  helper_method :workstation?, :mobile?
   protect_from_forgery
   before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login]
   before_filter :setup_global_data, :except => [:load_clock, :login]
@@ -73,6 +74,14 @@ class ApplicationController < ActionController::Base
     else
       render :layout => false
     end
+  end
+
+  def workstation?
+    request.user_agent.nil? or request.user_agent.include?('Firefox') or request.user_agent.include?('MSIE') or request.user_agent.include?('Macintosh') or request.user_agent.include?('Chrom') or request.user_agent.include?('iPad') or request.user_agent.include?('Qt/4.7')
+  end
+
+  def mobile?
+    not workstation?
   end
 
   def salor_signed_in?

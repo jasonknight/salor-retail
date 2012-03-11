@@ -68,6 +68,9 @@ en-US:
       transaction_tag:
         one: Tag
         other: Tags
+      payment_method:
+        one: Payment Method
+        other: Payment Methods
 
     attributes:
       uses_drawer_id: Uses Drawer of
@@ -455,6 +458,17 @@ en-US:
       subtotal: Subtotal                      EUR %8.2f
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
+    eod_report:
+      orders_total: Orders total
+      refunded_total: Refunded total
+      buyback_total: Buyback total
+      drop_total: TOTAL
+      payout_total: TOTAL
+      payment_method_total: TOTAL
+      incoming: Incoming
+      outgoing: Outgoing
+      drops: Drops
+      payouts: Payouts
 
     word:
       cancelled: cancelled
@@ -566,6 +580,11 @@ en-US:
       receipt_logo_header: receipt logo header
       receipt_logo_footer: receipt logo footer
       logo: logo
+
+  cash_registers:
+    end_of_day:
+      end_of_day_thermal_report: Print Report
+      paper_report: Detail Report
 
   views:
     eticket: Ticket

@@ -4,6 +4,7 @@ var filename = "_cash_drop.html.erb";
 $(document).ready(function(){
   $(".trans-button").mousedown(selectTransButton);
   $(".cash-drop-amount").keyup(checkDropAmount);
+  $('#header_drawer_amount').html(toCurrency(Drawer.amount));
 });
 
 function selectTransButton() {
@@ -63,6 +64,10 @@ function cash_drop_save() {
     focusInput($('.cash-drop-amount'));
     return;
   }
+  if ( ($("#transaction_type").val() == 'payout') && (Drawer.amount - parseFloat($('.cash-drop-amount').val())) < 0) {
+    $(".cash-drop-amount").addClass('error-input');
+    return;
+  }
   $('.cash-drop-amount').removeClass('error-input');
   if($("#transaction_type").val() == '') {
     $("#transButtonRow").addClass('error-input');
@@ -75,6 +80,10 @@ function cash_drop_save() {
       data: $('#cash_drop_form').serialize(),
       dataType: 'script',
       success: function (data) {
+        $('textarea#cash-drop-notes-id').val('');
+        $('.dt-tag-button').removeClass("highlight");
+        $('input#dt_tag').val('None');
+        $('div.dt-tag-target').html(' Tag ');
         hide_cash_drop();
       },
       error: function (data,status,err) {
@@ -90,6 +99,7 @@ function show_coin_calculator() {
 </script>
 
 <div id="cash_drop" class="cash-drop hidden">
+<%= salor_render :partial => "shared/dt_tags" %>
 <div class="cash-drop-error"></div>
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>
@@ -107,14 +117,13 @@ function show_coin_calculator() {
         </select>
       </p>
   <% end %>
-
-      <p>
-        <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
-        <textarea name="transaction[notes]" class="keyboardable" rows="2" size=2></textarea>
-      </p>
       <p style="background:#683870;padding:5px;">
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
         <input type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="" size=3 />
+      </p>
+      <p>
+        <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
+        <textarea name="transaction[notes]" id="cash-drop-notes-id" class="keyboardable" rows="2" size=1></textarea>
       </p>
 
             <% if TransactionTag.scopied.any? then %>

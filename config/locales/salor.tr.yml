@@ -68,6 +68,9 @@ tr:
       transaction_tag:
         one: Tag
         other: Tags
+      payment_method:
+        one: Payment Method
+        other: Payment Methods
 
     attributes:
       uses_drawer_id: Uses Drawer of
@@ -566,6 +569,11 @@ tr:
       receipt_logo_header: receipt logo header
       receipt_logo_footer: receipt logo footer
       logo: logo
+
+  cash_registers:
+    end_of_day:
+      end_of_day_thermal_report: Print Report
+      paper_report: Detail Report
 
   views:
     eticket: Ticket

@@ -53,13 +53,14 @@ ActiveRecord::Schema.define(:version => 20120307142107) do
     t.string   "name"
     t.string   "sku"
     t.string   "old_category_name"
-    t.integer  "position"
+    t.integer  "weight"
     t.datetime "created_at",                           :null => false
     t.datetime "updated_at",                           :null => false
     t.integer  "vendor_id"
     t.boolean  "is_buyback",        :default => false
     t.integer  "category_id"
     t.string   "color"
+    t.integer  "position"
     t.integer  "hidden",            :default => 0
   end
 

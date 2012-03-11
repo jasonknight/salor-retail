@@ -241,6 +241,7 @@
         %th.right= t '.drop'
         %th.right= t '.payout'
       - @drawertransactions.each do |d|
+        - next if d.tag == 'CompleteOrder'
         %tr
           %td.left= t d.tag.to_sym
           %td.left= d.notes

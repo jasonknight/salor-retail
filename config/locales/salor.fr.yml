@@ -47,11 +47,11 @@ fr:
         one: Article commande
         other: Articles commande
       shipment:
-        one: Envoi
-        other: Envois
+        one: Livraison
+        other: Livraisons
       shipment_type:
-        one: Type d'envoi
-        other: Types d'envoi
+        one: Type de livraison
+        other: Types de livraison
         default_name: Nouvelle commande automatique
       shipper:
         one: Livreur
@@ -60,14 +60,17 @@ fr:
         one: Emplacement du stock
         other: Emplacements du stock
       tax_profile:
-        one: Taxe
-        other: Taxes
+        one: Type de taxe
+        other: Type de taxes
       vendor:
         one: Magazin
         other: Magazins
       transaction_tag:
         one: Etiquette
         other: Etiquettes
+      payment_method:
+        one: Payment Method
+        other: Payment Methods
 
     attributes:
       uses_drawer_id: Utilise la caisse de
@@ -92,7 +95,7 @@ fr:
       parent_sku: UGS parent
       child_sku: UGS enfant
       ignore_qty: Ignorer Qté
-      bank_machine_path: Retrait banque
+      bank_machine_path: chemin lecteur CB
       artema_hybrid: Hybride Artema
       type: type
       active: actif
@@ -123,15 +126,15 @@ fr:
       decimal_points: points décimaux 
       default_buyback: rachat par défaut
       dollar_per_lp: dollar par point fidélité
-      drop: retrait caisse
+      drop: versement caisse
       email: email
       end_amount: montant fin
       end_date: date fin
       expires_on: valable jusqu'à
       first_name: prénom
       height: hauteur
-      is_shipment_item: est un article pour envoi
-      item_sku: ugs article
+      is_shipment_item: est un article pour livraison
+      item_sku: UGS article
       itemsviewlist: "Liste d'articles"
       last_name: Nom
       lc_points: Points carte fidélité
@@ -148,7 +151,7 @@ fr:
       part_quantity: quantité de parts
       parts: parts
       password: mot de passe
-      payout: remboursement caisse
+      payout: retrait caisse
       points: points
       postalcode: code postal
       price: prix
@@ -206,7 +209,7 @@ fr:
       afield: champ
       order_id: commande
       scale: balance
-      no_print: Ne pas imprimer avec Entrer
+      no_print: Ne pas imprimer en appuyant sur Entrer
       salor_printer: imprimer côté client
       
   api:
@@ -231,7 +234,7 @@ fr:
     item_selection: sélection d'articles
     new_discount_for: nouvelle remise de %{magasin}
     notes: notes
-    shipment_items: articles envoi
+    shipment_items: articles livraison
     shipment_items_header: Nom,UGS,prix,catégorie,emplacement
     shipment_types: types de livraison
     shipment_types_header: état,ajouté par, , 
@@ -287,7 +290,7 @@ fr:
     broken_items: articles abîmés
     buy_order: Acheter
     cancel: annuler
-    cash_drop: retrait espèces caisse
+    cash_drop: versement espèces caisse
     cash_register: caisse
     cash_registers: caisses
     categories: catégories
@@ -359,7 +362,7 @@ fr:
     update_gift_card: mettre à jour carte cadeau
     vendors: vendeurs
     void: détruire
-    end_of_day_drop: remboursement caisse fin de journée
+    end_of_day_drop: versement caisse fin de journée
     transaction_tags: étiquettes de transaction
     update_location: mettre à jour emplacement
     update_real_quantity: mettre à jour quantité réelle
@@ -423,10 +426,10 @@ fr:
       sums_by_transaction_types: sommes par type transaction
       transactions: transactions
       transaction_tag: étiquette transaction
-      drops: retraits caisse
-      drop: retrait caisse
-      payouts: remboursements caisse
-      payout: remboursement caisse
+      drops: versements caisse
+      drop: versement caisse
+      payouts: retraits caisse
+      payout: retrait caisse
       transaction_total: total de la transaction
       transaction_journal: journal de la transaction
       time: heure
@@ -458,8 +461,8 @@ fr:
 
     word:
       cancelled: annulé
-      drop: retrait caisse
-      payout: remboursement caisse
+      drop: versement caisse
+      payout: retrait caisse
       sold: vendu
 
   receipts:
@@ -506,226 +509,231 @@ fr:
     report_internal_types: XXX
     sign_up: s'inscrire
     errors:
-      auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
-      order_totals_validation_failed: "Order total validation failed, refreshing the order may repair the issue. Press OK to refresh."
-      parent_sku_must_exist: "Parent Item Must Exist!"
-      child_sku_must_exist: "Child Item Must Exist!"
-      cannot_edit_completed_order: "That order is completed and cannot be modified."
-      limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
-      sanity_check: Requested action is insane, verify order total and notify customer of correction.
-      cannot_reorder: No items must be reordered.
-      action_code_error: "Code could not be executed because %{error}"
-      action_error: "Action could not complute because %{error}"
-      not_enough_in_drawer: not enough in drawer
-      cash_drop_amount_must_be_positive: cash drop amount must be positive
-      coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
-      coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
-      coupon_not_enough_items: You have not purchased enough items for this to apply
-      coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
-      csv_item_exists: "Item %{sku} exists!"
-      csv_item_failed: "%{id} %{i} failed."
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
-      gift_card_amount_remaining: The amount specified was greater than the amount remaining on this gift card, the new amount is %{amt}
-      gift_card_amount_to_high: The gift card amount exceeds the order subtotal, the amount has been adjusted, only activate gift cards at the end of a transaction!
-      gift_card_empty: Gift Card is Empty, notify client, and destroy card.
-      gift_card_not_found: Could not find that gift card attached to this order...
-      gs1_item_not_found: "Item marked as gs1, but %{sku} is not in the correct format."
-      insufficient_quantity_on_item: "Warning, Item %{sku} quantity is insufficient, time to update your stock levels!"
-      inventory_update_error: inventory update error
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: "Warning: Item price is 0"
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your store configuration?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Store
-      must_specify_drop_or_payout: You must specify either drop or payout!
-      no_class: "There is no class for %{model} at line %{i}"
-      no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no item with this SKU
-      not_on_buy_orders: You cannot add this item to a Buy Order
-      order_must_have_user: You cannot save an order without a User or Employee assigned to it.
-      order_not_found: Order not found
-      order_register_required: You must specify a register for this order
-      order_vendor_required: You must supply a vendor for this order
-      payment_required: "Error 402: Full Payment is Required"
-      payment_required_explanation: We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: "Item %{sku} failed to move with error: %{error}"
-      shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: must be unique
-      uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
-      value_not_set: NotSet
-      order_failed: Order could not be finished.
-      order_print_failure: Failure during printing of order.
+      auto_drop_failed: "Le système n'a pas pu effectuer un versement caisse automatique. Veuillez créer manuellement un versement d'espèces de début de journée"
+      order_totals_validation_failed: "La validation du total de la commande a échoué. En rafraichissant la page, la commande pourrait corriger l'erreur. Appuyer sur OK pour rafraichir."
+      parent_sku_must_exist: "L'article parent doit exister !"
+      child_sku_must_exist: "L'article enfant doit exister !"
+      cannot_edit_completed_order: "cette commande-là a été finalisée et ne peut pas être modifiée."
+      limited_alphabet: "Les seuls caractères possibles sont a-z. Espaces et accents ne sont pas permis."
+      sanity_check: L'action demandée est impossible. Vérifiez le total de la commande et notifier le client de la correction.
+      cannot_reorder: Pas d'articles à commander de nouveau.
+      action_code_error: "Le code n'a pas pu être exécuté car %{error}"
+      action_error: "L'action n'a pas pu être effectuée car %{error}"
+      not_enough_in_drawer: pas assez dans la caisse
+      cash_drop_amount_must_be_positive: le montant du versement doit être positif
+      coupon_cannot_be_buy_one_get_one: "Le coupon %{sku} ne peut pas être achetez_un_pour_le_prix_d_un lorsqu'il s'applique à %{applies}"
+      coupon_fixed_amount_greater_than_total: "Le montant du coupon %{sku} dépasse le prix de l'article %{item}"
+      coupon_not_enough_items: vous n'avez pas acheté assez d'articles pour que cela soit applicable
+      coupon_total_returned_nil: "Le total du coupon %{sku} a donné zéro, annulation en cours"
+      csv_item_exists: "L'article %{sku} existe déjà !"
+      csv_item_failed: "%{id} %{i} a échoué."
+      failed_to_save_parts: L'ensemble des parts n'ont pas pu être enregistrées. Veuillez vérifier qu'il existe bien des articles avec parts.
+      gift_card_amount_remaining: Le montant spéficié dépasse celui restant dans la carte cadeau. Le nouveau montant est de %{amt}
+      gift_card_amount_to_high: Le montant de la carte cadeau dépasse le sous-total de la commande. Le montant a été ajusté. Veuillez n'activer les cartes cadeaux qu'à la fin d'une transaction !
+      gift_card_empty: La carte cadeau est vide. Veuillez notifier votre client et détruire la carte.
+      gift_card_not_found: La carte attachée à cette commnde est introuvable...
+      gs1_item_not_found: "Article marqué gs1, mais %{sku} n'est pas un format correct."
+      insufficient_quantity_on_item: "Attention, la quantite de l'article %{sku} est insuffisante. Il est temps de renouveller vos niveaux de stock !"
+      inventory_update_error: erreur de mise à jour de l'inventaire
+      item_not_found: L'article que vous recherchez est introuvable. Utiliser le moteur de recherche.
+      item_price_is_zero: "Attention: Le prix de l'article est de 0"
+      lp_calculation_failed: Les points fidélité n'ont pas pu être appliqués. Êtes-vous sûr d'avoir configuré ceci dans les configurations de votre magazin ?
+      must_cash_drop: Votre caisse n'a pas d'argent. Veuillez faire un versement d'espèces !
+      must_choose_register: vous devez vous connecter à une caisse !
+      must_choose_vendor: Vous devez choisir un magazin !
+      must_set_receiver_to_vendor: vous devez attributer ce champ du destinataire de la livraison à un magazin valide.
+      must_specify_drop_or_payout: Vous devez spécifiez soit Versement, soit Retrait!
+      no_class: "Il n'y a pas de classed pour %{model} dans la ligne %{i}"
+      no_role: Votre rôle ne vous donne pas accès à cette ressource.
+      no_such_item: Il n'existe pas d'article avc cet UGS
+      not_on_buy_orders: Vous ne pouvez pas ajouter cet article à une commande achat
+      order_must_have_user: vous ne pouvez pas enregistrer une commande sans lui assigner un utilisateur ou un employé.
+      order_not_found: Commande introuvable.
+      order_register_required: vous devez spécifier une caisse pour cette commande.
+      order_vendor_required: vous devez fournir un vendeur pour cette commande.
+      payment_required: "Erreur 402: le paiement complet est requis"
+      payment_required_explanation: Nous regrettons de vous informer que votre système a automatiquement cessé de fonctionner car votre license de pré-paiement a périmé. Vous devez règler le montant dû pour Salor afin de continuer d'en bénéficier.  veuillez contacter votre représentant du support technique de Salor.
+      shipment_item_already_in_stock: L'article %{sku} est déjà en stock
+      shipment_item_move_failed: "L'article %{sku} n'a pas été déplacé. Erreur : %{error}"
+      shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
+      sku_must_be_unique: doit être unique
+      uspecified_error: Un problème est survenu. Veuillez contacter le support technique ! Essayer de rafraichir cette page.
+      value_not_set: PasDéfini
+      order_failed: La commande n'a pas pu être finalisée.
+      order_print_failure: Erreur pendant l'impression de la commmande.
     
   vendors:
-    clear_cache_button: clear cache
+    clear_cache_button: effacer les caches
     clear_cache_header: cache
     form:
-      receipt_logo_header: receipt logo header
-      receipt_logo_footer: receipt logo footer
+      receipt_logo_header: logo en-tête du reçu
+      receipt_logo_footer: logo au pied du reçu
       logo: logo
+
+  cash_registers:
+    end_of_day:
+      end_of_day_thermal_report: Print Report
+      paper_report: Detail Report
 
   views:
     eticket: Ticket
-    sticky_ticket: Sticker
-    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
-    advanced_field: advanced field
-    by_card: by card
-    cash_register_heading: "%{name} for %{store}"
-    cash_registers: cash registers
-    category_heading: category %{name} for %{store}
-    given: given
-    change: change
-    customers: customers
-    download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy item
-    dummy_part: dummy part
-    edit_item_heading: edit item heading
+    sticky_ticket: Etiquette
+    wholesaler_refresh: Recherche des mises à jour du distributeur. Ceci peut prendre quelques minutes.
+    advanced_field: champ avancé
+    by_card: par carte bleue
+    cash_register_heading: "%{name} pour %{store}"
+    cash_registers: caisses
+    category_heading: catégorie %{name} pour %{store}
+    given: donné
+    change: monnaie
+    customers: clients
+    download_may_last_long: Ce téléchargement peut durer longtemps. Désirez-vous continuer ?
+    dummy_item: article factice
+    dummy_part: part factice
+    edit_item_heading: éditer le titre de l'article
     email: email
-    forgot_password: forgot password?
-    gift_card: gift card
-    gift_card_amount: gift card amount
-    in_cash: in cash
-    item: item
-    language: language
-    listing: listing
-    listing_items: listing items
-    locations: locations
-    loyalty_card: loyalty card
-    name: name
-    new_item_heading: "New item for %{store}"
-    new_sale_for: "New sale for %{store}"
-    new_stock_location: New stock location
-    order_heading: "Order #%{id} for %{store}"
-    order_number: "Order #%{id}"
-    order_summary: Orders of the last 7 days
-    owner_language: Owner language
-    password: password
-    password_confirm: confirm password
-    please_test_before_upload: "WARNING: You are about to overwrite data in the database."
-    price: price
-    quantity: quantity
-    rebate: rebate
-    remember_me: remember me
-    report: report
-    stock_locations: stock_locations
-    subtotal: subtotal
-    tax_profile: tax profile
-    three_easy_ways: three easy ways
+    forgot_password: Avez-vous oublié votre mot de passe ?
+    gift_card: carte cadeau
+    gift_card_amount: montant de la carte cadeau
+    in_cash: en espèces
+    item: article
+    language: langue
+    listing: liste
+    listing_items: liste d'articles
+    locations: emplacements
+    loyalty_card: carte de fidélité
+    name: nom
+    new_item_heading: "Nouvel article pour %{store}"
+    new_sale_for: "Nouvelle vente pour %{store}"
+    new_stock_location: Nouvel emplacement de stock
+    order_heading: "Commande #%{id} pour %{store}"
+    order_number: "Commande #%{id}"
+    order_summary: Commandes des 7 derniers jours
+    owner_language: Langue du propriétaire
+    password: mot de passe
+    password_confirm: confirmer mot de passe
+    please_test_before_upload: "ATTENTION: Vous êtes sur le point de réécrire des données dans la base de données."
+    price: prix
+    quantity: quantité
+    rebate: remise
+    remember_me: se souvenir de moi
+    report: rapport
+    stock_locations: emplacements_de_stock
+    subtotal: sous-total
+    tax_profile: type de taxe
+    three_easy_ways: trois façons faciles
     total: total
-    username: username
-    vendor: vendor
-    shape: shape
+    username: nom d'utilisateur
+    vendor: vendeur
+    shape: forme
     errors:
-      no_access_right: You do not have the right to access this resource. This error has been logged.
-      nothing_found: Nothing found
-      unknown_vendor: Unknown
+      no_access_right: Vous n'avez pas le droit d'accéder à cette ressource. Cette erreur a été enregistrée.
+      nothing_found: Rien n'a été trouvé.
+      unknown_vendor: Inconnu
     forms:
-      applies_to_item: applies to item with SKU
-      buy_one_get_one: buy one get one
-      cashier: cashier
-      category_editor: category editor
-      fixed_amount_off: fixed amount off
-      item_editor: item editor
-      items: items
-      location_editor: location editor
-      manager: Manager
-      no_change: no change
+      applies_to_item: s'applique à un article aved UGS
+      buy_one_get_one: achetez deux pour le prix d'un
+      cashier: caissière
+      category_editor: éditeur de catégorie
+      fixed_amount_off: montant fixe annulé
+      item_editor: éditeur d'articles
+      items: articles
+      location_editor: éditeur d'emplacements
+      manager: Gérant
+      no_change: pas de changement
       notes: notes
-      order_editor: order editor
+      order_editor: éditeur de commande
       parts: parts
-      percent_off: "% off"
-      roles: roles
-      search: search
-      stocker: stocker
+      percent_off: "remise du %"
+      roles: rôles
+      search: rechercher
+      stocker: responsable du stock
       shipment:
         types:
-          canceled: canceled
-          complete: complete
-          in_stock: in stock
-          new: new
-          returned: returned
-          shipped: shipped
+          canceled: annulé
+          complete: achevé
+          in_stock: en stock
+          new: nouveau
+          returned: retourné
+          shipped: envoyé
     notice:
-      move_real_quantities_success: Item quantities were successfully updated
-      wholesaler_upload_report: "Updated items: %{updated_items}, Created items: %{created_items}, Created categories: %{created_categories}, Created Tax Profiles %{created_tax_profiles}"
-      cache_was_cleared: Cache files deleted.
-      csv_edit_starting: csv edit starting
-      model_create: "%{model} was created successfully"
-      model_edit: "%{model} was edited successfully"
-      new_order: new order created
-      order_refund_dt: "Automatic refund drawer transaction Order #%{id} :http://salor/orders/%{id}"
-      please_wait: "Please wait..."
-      transaction_succeeded: "Paid!"
-      artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
-      paylife_ending_day: Ending day
-      paylife_endday_complete: Ending day complete
+      move_real_quantities_success: Les quantités d'articles ont été mises à jour avec succès.
+      wholesaler_upload_report: "Articles mis à jour: %{updated_items}, Articles créés: %{created_items}, Catégories créées: %{created_categories}, Types de taxe créés %{created_tax_profiles}"
+      cache_was_cleared: Fichiers cache effacés.
+      csv_edit_starting: Début de l'édition des csv
+      model_create: "%{model} a été créé avec succès"
+      model_edit: "%{model} a été édité avec succès"
+      new_order: nouvelle commande créée
+      order_refund_dt: "Transaction de caisse pour remboursement automatique, commande #%{id} :http://salor/orders/%{id}"
+      please_wait: "Veuillez attendre..."
+      transaction_succeeded: "Payé !"
+      artema_hybrid_lost: Connexion à Hybride Artema Hybrid interrompue. Déconnectez, puis reconnecter la machine.
+      paylife_ending_day: Clôture de la journée en cours
+      paylife_endday_complete: Clôture de la journée effectuée
     pagination:
-      last: last
-      next: next &gt;
-      previous: "&lt; previous"
+      last: dernier
+      next: suivant &gt;
+      previous: "&lt; précédent"
       truncate: ...
     reports:
       cash_account: XXX
       daily: XXX
     shipments:
-      state: State
+      state: état
     single_words:
-      new: New
-      all: All
-      camera: camera
-      ordering: ordering
-      body: body
-      bottom: bottom
-      continue: continue
+      new: Nouveau
+      all: Tous
+      camera: caméra
+      ordering: commande en cours
+      body: corps
+      bottom: bas de page
+      continue: continuer
       coupons: Coupons
-      delete: delete
-      destroy: destroy
-      download: download
-      edit: edit
-      from: from
-      loading: loading
-      order: order
-      processing: processing...
-      saving: saving...
-      searching: searching...
-      sku: SKU
-      title: title
-      to: to
-      top: top
-      waiting: waiting...
+      delete: effacer
+      destroy: détruire
+      download: télécharger
+      edit: éditer
+      from: de
+      loading: téléchargement en cours...
+      order: commande
+      processing: traitement en cours...
+      saving: enregistrement en cours...
+      searching: recherche en cours...
+      sku: UGS
+      title: titre
+      to: à
+      top: haut de la page
+      waiting: en attente....
 
 
   items:
     index:
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
+      only_for_tobacco_stores: Cette fonction s'applique uniquement aux bureaux de tabac. Des articles Tabac seront créés et téléchargés et mis à jour. ceci peut prendre jusau'à 20 minutes. Êtes-vous sûr de vouloir continuer ?
     upload:
-      upload: upload
+      upload: mettre en ligne
     inventory_report:
-      title: Inventory Report
-      price: Selling price
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
+      title: rapport inventaire
+      price: Prix de vente
+      total_buying_price: Prix d'achat total
+      total_selling_price: Prix de vente total
+      subtotal_purchase_price: Sous-total du prix d'achat
+      subtotal_selling_price: Sous-total du prix de vente
     update_real_quantity:
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
-      are_you_sure: This will copy the inventory quantities into the database and reset the inventory report. Continue?
+      inventory_report: Rapport inventaire
+      update_quantity: Mettre à jour quantités inventaire
+      are_you_sure: Ceci copiéra les quantités d'inventaire dans la base de données, et réinitialisera le rapport d'inventaire. Désirez-vous continuer ?
 
   home:
     user_employee_index:
-      backup_database: Backup Database
-      backup_logfile: Backup Logfile
+      backup_database: Créer une copie de sauvergarde de la BDD
+      backup_logfile: Créer une copie de sauvergarde du journal
       
-  InCash: In Cash
-  ByCard: By Card
-  ByGiftCard: By Gift Card
-  OtherCredit: Other Credit
-  end_of_day: End of Day
-  None: Unbenannt
-  label: label
-  sticker: sticker
+  InCash: En espèces
+  ByCard: Par carte bleue
+  ByGiftCard: Par carte cadeau
+  OtherCredit: autre crédit
+  end_of_day: Fin de journée
+  None: Sans titre
+  label: étiquette
+  sticker: autocollant
   support: XXX

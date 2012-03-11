@@ -13,10 +13,9 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require shared
 //= require sprintf
 //= require jquery.keyboard
 //= require jquery.checkbox
 //= require i18n
 //= require i18n/translations
-//= #require_tree .
+//= require shared
