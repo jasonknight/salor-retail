@@ -4,6 +4,7 @@ var filename = "_cash_drop.html.erb";
 $(document).ready(function(){
   $(".trans-button").mousedown(selectTransButton);
   $(".cash-drop-amount").keyup(checkDropAmount);
+  $('#header_drawer_amount').html(toCurrency(Drawer.amount));
 });
 
 function selectTransButton() {
@@ -63,6 +64,10 @@ function cash_drop_save() {
     focusInput($('.cash-drop-amount'));
     return;
   }
+  if ( ($("#transaction_type").val() == 'payout') && (Drawer.amount - parseFloat($('.cash-drop-amount').val())) < 0) {
+    $(".cash-drop-amount").addClass('error-input');
+    return;
+  }
   $('.cash-drop-amount').removeClass('error-input');
   if($("#transaction_type").val() == '') {
     $("#transButtonRow").addClass('error-input');
@@ -109,13 +114,13 @@ function show_coin_calculator() {
       </p>
   <% end %>
 
-      <p>
-        <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
-        <textarea name="transaction[notes]" class="keyboardable" rows="2" size=2></textarea>
-      </p>
       <p style="background:#683870;padding:5px;">
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
         <input type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="" size=3 />
+      </p>
+      <p>
+        <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
+        <textarea name="transaction[notes]" class="keyboardable" rows="2" size=1></textarea>
       </p>
 
             <% if TransactionTag.scopied.any? then %>
