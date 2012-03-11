@@ -567,6 +567,11 @@ de:
       receipt_logo_footer: Rechnungslogo Fuß
       logo: Logo
 
+  cash_registers:
+    end_of_day:
+      end_of_day_thermal_report: Bericht drucken
+      paper_report: Detailbericht
+
   views:
     eticket: Regaletikett
     sticky_ticket: Klebeetikett

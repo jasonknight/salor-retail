@@ -464,17 +464,6 @@ module UserEmployeeMethods
     end
     vendor_id = self.meta.vendor_id
     cash_register_id = self.meta.cash_register_id
-    if not $Register.salor_printer == true then
-      @vendor = Vendor.find_by_id(self.meta.vendor_id)
-      @report = get_end_of_day_report #see function below
-      user = self
-      begin
-        text = Printr.new.sane_template("end_of_day",binding)
-        Printr.new.direct_write($Register.thermal_printer,text)
-      rescue
-        GlobalErrors.append("system.errors.failed_to_print",nil,{:template => 'end_of_day'})
-      end
-    end
     self.meta.order_id = nil
     self.meta.last_order_id = nil
     self.meta.cash_register_id = nil
@@ -531,23 +520,24 @@ module UserEmployeeMethods
   end
   def get_end_of_day_report
     totals = Hash.new()
-    totals[:username] = self.username
-    totals[:date] = Time.now
+    totals[:date] = I18n.l(DateTime.now, :format => :long)
     totals[:drawer_amount] = self.drawer.amount
     today = Time.now.beginning_of_day.strftime("%Y-%m-%d 01:01:01")
-    begin 
+    #begin
+
       # Get the orders total
       if self.class == User then
         total_today = Order.where("user_id = #{self.id} and refunded = 0 and created_at > '#{today}' and buy_order != 1 and (paid = 1 or paid IS TRUE)").sum(:total)
+        totals[:username] = self.username
       else
         total_today = Order.where("employee_id = #{self.id} and refunded = 0 and created_at > '#{today}' and buy_order != 1 and (paid = 1 or paid IS TRUE)").sum(:total)
+        totals[:username] = "#{ self.first_name } + #{ self.last_name } + (#{ self.username })"
       end
-      
       t = total_today
       t = 0 if t.nil?
       totals[:orders_total] = t
+
       # Get the total of refunded orders
-      # puts "Get the total of refunded orders"
       total_today = Order.where("refunded_by = #{self.id} and refunded_by_type = '#{self.class.to_s}' and refunded = 1 and created_at > '#{today}' and buy_order != 1 and (paid = 1 or paid IS TRUE)").sum(:total)
       t = total_today
       t = 0 if t.nil?
@@ -555,37 +545,62 @@ module UserEmployeeMethods
         t = t * -1
       end
       totals[:refunded_orders_total] = t
+
       # Get the total of refunded order_items
       t = 0
       OrderItem.where("created_at >= '#{today}' and refunded = 1 and refunded_by = #{self.id} and refunded_by_type = '#{self.class}'").each do |oi|
-          #refunded order_items prices are saved negative, but we want positive
           t = t + (-1 * oi.total)
       end
       totals[:refunded_items_total] = t - totals[:refunded_orders_total]
       totals[:refund_total] = totals[:refunded_items_total] + totals[:refunded_orders_total]
-      totals[:drop_total] = 0
-      totals[:payout_total] = 0
-      totals[:payout_refunds] = 0
+
+      # Get the total of buyback OrderItems
       bback_total = 0.0
       OrderItem.where("created_at >= '#{today}' and refunded != 1 and (is_buyback is TRUE or is_buyback = 1)").each do |oi|
         if oi.total < 0 then
-          tmp_bback_ttl = -1 * oi.total
+          bback_total -= oi.total
         else
-          tmp_bback_ttl = -1 * oi.total
+          bback_total += oi.total
         end
-        bback_total += tmp_bback_ttl
       end
       totals[:buyback_total] = bback_total
-      # Get the total of all drops for today
-      self.drawer.drawer_transactions.where(["created_at > ?",Time.now.beginning_of_day]).each do |dt|
+
+      # Get the total of all drawer transactions for today
+      totals[:drop_total] = 0
+      totals[:payout_total] = 0
+      totals[:payout_refunds] = 0
+      self.get_drawer.drawer_transactions.where(["created_at > ?",Time.now.beginning_of_day]).each do |dt|
         totals[:drop_total] = totals[:drop_total] + dt.amount if dt.drop
         totals[:payout_total] = totals[:payout_total] + dt.amount if dt.payout
         totals[:payout_refunds] = totals[:payout_refunds] + dt.amount if dt.payout and dt.is_refund
       end
-      #now return the struct for consumption
-    rescue
-      return totals
-    end
+
+      # Get a list of all payout drawer transactions for today
+      totals[:dt_payout_list] = Hash.new
+      self.get_drawer.drawer_transactions.where(["payout = true and created_at > ?",Time.now.beginning_of_day]).each do |dt|
+        totals[:dt_payout_list].merge! dt.id => { :tag => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => - dt.amount }
+      end
+
+      # Get a list of all drop drawer transactions for today
+      totals[:dt_drop_list] = Hash.new
+      self.get_drawer.drawer_transactions.where(["'drop' = true and created_at > ?",Time.now.beginning_of_day]).each do |dt|
+        totals[:dt_drop_list].merge! dt.id => { :name => dt.tag, :time => dt.created_at, :amount => dt.amount }
+      end
+
+      # Get a list of all positive payment methods for today
+      totals[:pm_pos] = Hash.new
+      I18n.t("system.payment_internal_types").split(',').each do |pmtype|
+
+        totals[:pm_pos].merge! pmtype.to_sym => PaymentMethod.where(["internal_type = ? and amount > 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+      end
+
+      # Get a list of all negative payment methods for today
+      totals[:pm_neg] = Hash.new
+      I18n.t("system.payment_internal_types").split(',').each do |pmtype|
+        totals[:pm_neg].merge! pmtype.to_sym => PaymentMethod.where(["internal_type = ? and amount < 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+      end
+    #rescue
+    #end
     return totals
   end
   def report
