@@ -433,6 +433,9 @@ fr:
       transaction_total: total de la transaction
       transaction_journal: journal de la transaction
       time: heure
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      None: Not specified
       
 
   printr:
@@ -458,6 +461,20 @@ fr:
       subtotal: Sous-total                      EUR %8.2f
       thanks: Merci de votre achat !
       total: TOTAL                         EUR %8.2f
+    eod_report:
+      orders_total: Orders total
+      refunded_total: Refunded total
+      buyback_item_total: Buyback item total
+      buyback_order_total: Buyback order total
+      drop_total: TOTAL
+      payout_total: TOTAL
+      payment_method_total: TOTAL
+      transaction_total: TOTAL
+      incoming: Incoming
+      outgoing: Outgoing
+      drops: Drops
+      payouts: Payouts
+      refund: Refund
 
     word:
       cancelled: annulé
@@ -664,7 +681,7 @@ fr:
       model_create: "%{model} a été créé avec succès"
       model_edit: "%{model} a été édité avec succès"
       new_order: nouvelle commande créée
-      order_refund_dt: "Transaction de caisse pour remboursement automatique, commande #%{id} :http://salor/orders/%{id}"
+      order_refund_dt: "#%{id}"
       please_wait: "Veuillez attendre..."
       transaction_succeeded: "Payé !"
       artema_hybrid_lost: Connexion à Hybride Artema Hybrid interrompue. Déconnectez, puis reconnecter la machine.
@@ -733,7 +750,6 @@ fr:
   ByGiftCard: Par carte cadeau
   OtherCredit: autre crédit
   end_of_day: Fin de journée
-  None: Sans titre
   label: étiquette
   sticker: autocollant
   support: XXX

@@ -433,6 +433,9 @@ en-US:
       transaction_total: transaction total
       transaction_journal: transaction journal
       time: time
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      None: Not specified
       
 
   printr:
@@ -678,7 +681,7 @@ en-US:
       model_create: "%{model} was created successfully"
       model_edit: "%{model} was edited successfully"
       new_order: new order created
-      order_refund_dt: "Automatic refund drawer transaction Order #%{id} :http://salor/orders/%{id}"
+      order_refund_dt: "#%{id}"
       please_wait: "Please wait..."
       transaction_succeeded: "Paid!"
       artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
@@ -747,7 +750,6 @@ en-US:
   ByGiftCard: By Gift Card
   OtherCredit: Other Credit
   end_of_day: End of Day
-  None: Unbenannt
   label: label
   sticker: sticker
   support: XXX

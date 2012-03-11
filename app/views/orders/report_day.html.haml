@@ -149,7 +149,6 @@
 
 
 
-
     %h3 Zahlungen
 
     %table.striped-table2
@@ -183,7 +182,6 @@
         %th.left= t '.sums_by_payment_methods'
         %th.table-center
       - paymentmethod_negative_sums.keys.each do |k|
-        - next if paymentmethod_negative_sums[k].zero?
         %tr
           %td.left= t k
           %td.table-center= number_to_currency paymentmethod_negative_sums[k]
@@ -240,7 +238,7 @@
       - @drawertransactions.each do |d|
         - next if d.tag == 'CompleteOrder'
         %tr
-          %td.left= t d.tag.to_sym
+          %td.left= t ('.' + d.tag)
           %td.left= d.notes
           %td.left= l d.created_at, :format => :just_time
           %td.right= number_to_currency d.amount if d.drop

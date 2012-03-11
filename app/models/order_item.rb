@@ -128,7 +128,7 @@ class OrderItem < ActiveRecord::Base
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
       update_location_category_item(t * -1,q * -1)
       self.order.update_attribute(:total, self.order.total - t)
-      create_refund_transaction(t,:payout, {:is_refund => true}) if not x.nil?
+      create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
       # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
     end
   end
