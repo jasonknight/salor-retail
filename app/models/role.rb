@@ -108,7 +108,7 @@ class Role < ActiveRecord::Base
       :stockboy,
       :manager,
       :clear_orders,
-      :change_prices
+      :report_day_orders
     ],
     :cashier => [
       :destroy_orders, # except their own orders
