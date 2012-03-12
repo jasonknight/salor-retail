@@ -371,6 +371,7 @@ function showCreateItem(values) {
     rows.push(row);
   }
   var form = $('.shipment-create-item-form');
+  form.append($('<h3>Neuen Artikel anlegen</h3>'));
   for (var i = 0; i < rows.length; i++) {
     form.append(rows[i]);
   }
