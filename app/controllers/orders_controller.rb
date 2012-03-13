@@ -49,8 +49,8 @@
 # functioning of your business.
 class OrdersController < ApplicationController
    before_filter :authify, :except => [:customer_display,:print, :print_receipt]
-   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print]
-   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day]
+   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt]
+   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt]
    before_filter :crumble, :except => [:customer_display,:print, :print_receipt]
    def new_pos
       if not salor_user.meta.vendor_id then
@@ -285,7 +285,7 @@ class OrdersController < ApplicationController
       render :nothing => true and return
     end
     text = Printr.new.sane_template('item',binding)
-    if not $Register #$Register.salor_printer # no authification
+    if $Register and $Register.salor_printer
       render :text => text
     else
       File.open($Register.thermal_printer,'w') { |f| f.write text }
