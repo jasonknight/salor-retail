@@ -98,14 +98,11 @@ class VendorsController < ApplicationController
   # GET /vendors
   # GET /vendors.xml
   def index
-    redirect_to :controller => "home", :action => "index" and return
     @vendors = $User.get_vendors(params[:page])
-
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @vendors }
     end
-    
   end
 
   # GET /vendors/1
