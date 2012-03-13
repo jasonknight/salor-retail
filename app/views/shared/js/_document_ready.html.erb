@@ -27,7 +27,8 @@ $(document).ready(function () {
       make_in_place_edit($(this));                  
     });
     $('table.pretty-table > tbody > tr:even').addClass("even");
-    $('select').each(function () {
+    if (<%= workstation? %>) {
+      $('select').each(function () {
        if ($(this).val() == '') {
         make_select_widget('Choose',$(this));
        } else if ($(this).find("option:selected").html()) {
@@ -35,7 +36,8 @@ $(document).ready(function () {
        } else {
         make_select_widget($(this).find("option:first").html(),$(this));
        }
-   }); 
+     }); 
+   }
 
   } /* end if (!ready_ran) */
   ready_ran = true;

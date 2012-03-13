@@ -15,6 +15,7 @@
 ==========================================
 
 ~~~
+
 <%= I18n.t("printr.eod_report.orders_total") %>
 
 ---------------
@@ -66,12 +67,18 @@
 
   <%= t 'printr.eod_report.payouts' %>
 
-<% @report[:dt_payout_list].to_a.each do |dt| %>
-<%= "    %5.5s %9.9s %9.9s %s %7.2f" % [dt[1][:time], dt[1][:tag], dt[1][:notes], @report[:unit], dt[1][:amount]] %>
+<% @report[:dt_payout_list].to_a.each do |dt|
+     tag = dt[1][:refund] ? t('printr.eod_report.refund') : dt[1][:tag]
+%>
+<%= "    %5.5s %9.9s %9.9s %s %7.2f" % [dt[1][:time], tag, dt[1][:notes], @report[:unit], dt[1][:amount]] %>
 
 <% end %>
                                    ------
 <%= "    %25.25s %s %7.2f" % [I18n.t("printr.eod_report.payout_total"), @report[:unit], @report[:payout_total]] %>
+
+
+                                   ======
+<%= "%29.29s %s %7.2f" % [t('printr.eod_report.transaction_total'), @report[:unit], @report[:transaction_total]] %>
 
 
 ==========================================
@@ -81,7 +88,9 @@
 
 <%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.refunded_total"), @report[:unit], @report[:refund_total]] %>
 
-<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.buyback_total"), @report[:unit], @report[:buyback_total]] %>
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.buyback_item_total"), @report[:unit], @report[:buyback_item_total]] %>
+
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.buyback_order_total"), @report[:unit], @report[:buyback_order_total]] %>
 
 ~~~
 

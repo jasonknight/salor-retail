@@ -54,9 +54,6 @@ class HomeController < ApplicationController
     @exception = $!
   end
   def index
-    if not check_license() then
-      render :action => "402", :status => 402 and return
-    end
     if AppConfig.standalone and User.count == 0 then
       redirect_to new_user_registration_path and return
     end

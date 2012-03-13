@@ -253,7 +253,7 @@ class ItemsController < ApplicationController
       @items = Item.where :sku => params[:skus].split(",")
     end
     text = Printr.new.sane_template(params[:type],binding)
-    if $Register.salor_printer
+    if $Register and $Register.salor_printer
       render :text => text
     else
       printer_path = params[:type] == 'sticker' ? $Register.sticker_printer : $Register.thermal_printer

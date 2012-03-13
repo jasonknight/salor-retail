@@ -433,6 +433,9 @@ es:
       transaction_total: transaction total
       transaction_journal: transaction journal
       time: time
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      None: Not specified
       
 
   printr:
@@ -458,6 +461,20 @@ es:
       subtotal: Subtotal                      EUR %8.2f
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
+    eod_report:
+      orders_total: Orders total
+      refunded_total: Refunded total
+      buyback_item_total: Buyback item total
+      buyback_order_total: Buyback order total
+      drop_total: TOTAL
+      payout_total: TOTAL
+      payment_method_total: TOTAL
+      transaction_total: TOTAL
+      incoming: Incoming
+      outgoing: Outgoing
+      drops: Drops
+      payouts: Payouts
+      refund: Refund
 
     word:
       cancelled: cancelled
@@ -664,7 +681,7 @@ es:
       model_create: "%{model} was created successfully"
       model_edit: "%{model} was edited successfully"
       new_order: new order created
-      order_refund_dt: "Automatic refund drawer transaction Order #%{id} :http://salor/orders/%{id}"
+      order_refund_dt: "#%{id}"
       please_wait: "Please wait..."
       transaction_succeeded: "Paid!"
       artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
@@ -733,7 +750,6 @@ es:
   ByGiftCard: By Gift Card
   OtherCredit: Other Credit
   end_of_day: End of Day
-  None: Unbenannt
   label: label
   sticker: sticker
   support: XXX

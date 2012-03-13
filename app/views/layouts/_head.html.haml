@@ -10,12 +10,18 @@
 
 = stylesheet_link_tag 'print', :media => 'print'
 = stylesheet_link_tag 'generic'
+
 = stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
 = stylesheet_link_tag params[:controller]
 
 = javascript_include_tag 'application'
 = javascript_include_tag 'generic'
-= javascript_include_tag workstation? ? 'workstation' : 'mobile'
+- if mobile?
+  = javascript_include_tag 'mobile'
+- else
+  = javascript_include_tag 'workstation'
+  = javascript_include_tag 'jquery.checkbox'
+
 = javascript_include_tag params[:controller]
 = salor_render :partial => "shared/application_js"
 = csrf_meta_tag

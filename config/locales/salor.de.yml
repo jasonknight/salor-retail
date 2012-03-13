@@ -433,6 +433,9 @@ de:
       transaction_total: Gesamtbewegung
       transaction_journal: Buchungsjournal
       time: Zeit
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      None: Unbenannt
       
 
   printr:
@@ -459,14 +462,19 @@ de:
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
     eod_report:
-      orders_total: Verkäufe Total
-      refunded_orders_total: Stornierungen Verkäufe Total
-      refunded_items_total: Stornierungen Artikel Total
-      refunded_total: Stornierungen Gesamt
-      buyback_total: Pfand bzw. Auszahlungen
-      drop_total: Einzahlungen Summe
-      payout_total: Auszahlungen Summe
-      payout_refunds: Stornierungen Summe
+      orders_total: Verkäufe gesamt
+      refunded_total: Stornierungen gesamt
+      buyback_item_total: Pfand- bzw. Auszahlungsartikel
+      buyback_order_total: Pfand- bzw. Auszahlungsverkäufe
+      drop_total: GESAMT
+      payout_total: GESAMT
+      payment_method_total: GESAMT
+      transaction_total: GESAMT
+      incoming: Eingang
+      outgoing: Ausgang
+      drops: Einzahlungen
+      payouts: Auszahlungen
+      refund: Stornierung
 
 
     word:
@@ -743,7 +751,6 @@ de:
   ByGiftCard: Gutschein
   OtherCredit: Andere Bezahlmethode
   end_of_day: Kassensaldo
-  None: Unbenannt
   label: Etikett
   sticker: Aufkleber
   support: Support

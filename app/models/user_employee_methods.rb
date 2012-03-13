@@ -528,15 +528,15 @@ module UserEmployeeMethods
 
       # Get the orders total
       if self.class == User then
-        total_today = Order.where("user_id = #{self.id} and refunded = 0 and created_at > '#{today}' and buy_order != 1 and (paid = 1 or paid IS TRUE)").sum(:total)
+        totals[:orders_total] = Order.where("user_id = #{self.id} and refunded = 0 and created_at > '#{today}' and (paid = 1 or paid IS TRUE)").sum(:total)
         totals[:username] = self.username
       else
-        total_today = Order.where("employee_id = #{self.id} and refunded = 0 and created_at > '#{today}' and buy_order != 1 and (paid = 1 or paid IS TRUE)").sum(:total)
+        totals[:orders_total] = Order.where("employee_id = #{self.id} and refunded = 0 and created_at > '#{today}' and (paid = 1 or paid IS TRUE)").sum(:total)
         totals[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
       end
-      t = total_today
-      t = 0 if t.nil?
-      totals[:orders_total] = t
+
+      # Get the buyback orders total
+        totals[:buyback_order_total] = Order.where("employee_id = #{self.id} and refunded = 0 and created_at > '#{today}' and buy_order = 1 and (paid = 1 or paid IS TRUE)").sum(:total)
 
       # Get the total of refunded orders
       total_today = Order.where("refunded_by = #{self.id} and refunded_by_type = '#{self.class.to_s}' and refunded = 1 and created_at > '#{today}' and buy_order != 1 and (paid = 1 or paid IS TRUE)").sum(:total)
@@ -558,35 +558,36 @@ module UserEmployeeMethods
       # Get the total of buyback OrderItems
       bback_total = 0.0
       OrderItem.where("created_at >= '#{today}' and refunded != 1 and (is_buyback is TRUE or is_buyback = 1)").each do |oi|
-        if oi.total < 0 then
+        if oi.total > 0 then
           bback_total -= oi.total
         else
           bback_total += oi.total
         end
       end
-      totals[:buyback_total] = bback_total
+      totals[:buyback_item_total] = bback_total
 
       # Get the total of all drawer transactions for today
       totals[:drop_total] = 0
       totals[:payout_total] = 0
       totals[:payout_refunds] = 0
-      self.get_drawer.drawer_transactions.where(["is_refund = false and tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
+      self.get_drawer.drawer_transactions.where(["tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
         totals[:drop_total] += dt.amount if dt.drop
         totals[:payout_total] -= dt.amount if dt.payout
         #totals[:payout_refunds] = totals[:payout_refunds] + dt.amount if dt.payout and dt.is_refund
       end
+      totals[:transaction_total] = totals[:payout_total] + totals[:drop_total]
 
       # Get a list of all payout drawer transactions for today
       totals[:dt_payout_list] = Hash.new
-      self.get_drawer.drawer_transactions.where(["payout = true and is_refund = false and tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
-        totals[:dt_payout_list].merge! dt.id => { :tag => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => - dt.amount }
+      self.get_drawer.drawer_transactions.where(["payout = true and tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
+        totals[:dt_payout_list].merge! dt.id => { :tag => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => - dt.amount, :refund => dt.is_refund }
       end
 
       # Get a list of all drop drawer transactions for today
       totals[:dt_drop_list] = Hash.new
       # ToDo: Can't get the SQL query to work with the word 'drop'
       self.get_drawer.drawer_transactions.where(["(payout = false or payout IS NULL) and is_refund = false and tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
-        totals[:dt_drop_list].merge! dt.id => { :name => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => dt.amount }
+        totals[:dt_drop_list].merge! dt.id => { :name => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => dt.amount, :refund => dt.is_refund }
       end
 
       # Get a list of all positive payment methods for today

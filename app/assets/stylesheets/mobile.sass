@@ -1,5 +1,22 @@
-div#cash_drop, div#notice, div.close-window, div#errors, div.help, span.version, div.breadcrumb
+div#cash_drop, div#notice, div.close-window, div#errors, div.help, span.version, div.breadcrumb, span.version, a.reload-window, div.title-container, div.cash-drop-header, div#btn-orders-new, div.wholesaler-refresh, div#reorder_types
   display: none
+
+body
+  :background-color #291627
+  :color white
+  font-family: Arial
+  :margin 0px
+  :padding 0px
+
+a
+  :color white
+  :text-decoration none
+  :text-transform uppercase
+  :font-size 70%
+
+div#header
+  :background-color #7A607E
+  :padding 5px
 
 div.widget
   display: inline-block
@@ -8,11 +25,9 @@ ul.header-list
   li
     display: inline-block
     list-style-type: none
+    margin: 5px
   li:last-child, li:first-child
     display: none
-
-div.title-container div
-  display: inline-block
 
 div.title-container
   div.back-button
@@ -31,4 +46,56 @@ ul.header-list
   padding: 0px
 
 div.tools
-  margin: 0px 3px
+  margin: 20px 0px
+
+div#cash_drop
+  background-color: #DDD
+
+div.tool-icon
+  display: inline-block
+
+ul.header-list
+  margin: 0px 0px 20px 0px
+
+div.form-menu
+  display: none
+
+input.attribute-input-sku
+  font-size: 150%
+
+input.attribute-input-quantity
+  font-size: 150%
+  width: 100px
+
+input.attribute-input-name
+  width: 100px
+
+input.jtable-cell
+  display: inline-block
+
+div.shipment-create-item
+  background-color: #DDD
+  position: absolute
+  top: 400px
+
+select
+  font-size: 150%
+
+div.button-confirm,
+div.button-cancel
+  width: 100px
+  font-size: 150%
+  background-color: #999
+
+input#shipment_name
+  :width 200px
+
+input
+  :font-size 120%
+  :background-color #DDD
+
+div#generic_search
+  text-align: center
+  margin: 5px 0px
+  input#generic_search_input
+    :font-size 90%

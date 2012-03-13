@@ -134,7 +134,7 @@ class CustomersController < ApplicationController
   def labels
     @customers = Customer.find_all_by_id params[:id]
     text = Printr.new.sane_template(params[:type],binding)
-    if $Register.salor_printer
+    if $Register and $Register.salor_printer
       render :text => text
     else
       printer_path = params[:type] == 'lc_sticker' ? $Register.sticker_printer : $Register.thermal_printer

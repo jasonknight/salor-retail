@@ -108,7 +108,7 @@ class Role < ActiveRecord::Base
       :stockboy,
       :manager,
       :clear_orders,
-      :change_prices
+      :report_day_orders
     ],
     :cashier => [
       :destroy_orders, # except their own orders
@@ -148,7 +148,12 @@ class Role < ActiveRecord::Base
       :edit_tender_methods
     ],
     :employee => [
-      :anything
-      ]
+      :anything,
+      :edit_tender_methods,
+      :edit_items,
+      :show_orders,
+      :index_customers,
+      :report_day_orders
+    ]
   }
 end
