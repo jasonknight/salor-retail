@@ -164,6 +164,7 @@ class EmployeesController < ApplicationController
       if not @employee.errors.any? and @employee.save then
         saved = true
         params[:employee] = ''
+        redirect_to(:action => 'edit', :id => @employee.id, :notice => 'Employee was successfully updated.') and return
       else
         saved = false
       end

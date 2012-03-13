@@ -328,6 +328,9 @@ class Order < ActiveRecord::Base
         if oi.refunded then
           next
         end
+        if self.buy_order and oi.is_buyback then
+          oi.update_attribute :is_buyback, false
+        end
         # Coupons are not handled here, they are handled at the end of the order.
         if oi.item_type.behavior == 'normal' or oi.item_type.behavior == 'gift_card' then
           price = oi.calculate_total self.subtotal
@@ -592,7 +595,7 @@ class Order < ActiveRecord::Base
       create_drawer_transaction(self.subtotal,:payout,opts)
       # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer # this is handled now by an onclick event in orders/_order_menu.html.erb
       self.order_items.each do |oi|
-        if not oi.refunded then
+        if not oi.refunded == true then
           oi.toggle_refund(nil)
         end
       end  
