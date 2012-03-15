@@ -370,7 +370,7 @@ module UserEmployeeMethods
         self.roles.each do |role|
           cnts = Role::CANNOTDO[role.name.to_sym]          
           if cnts then
-            if cnts.include? action.to_sym or cnts.include? any.name.to_sym then
+            if cnts.include? action.to_sym or cnts.include? any.name.to_sym or cnts.include? :anything then
               return false
             end
           end            

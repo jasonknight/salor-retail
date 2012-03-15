@@ -70,6 +70,7 @@ class OrderItem < ActiveRecord::Base
     Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type").where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
   end
   def toggle_buyback(x)
+    puts "Order.buy_order #{self.order.buy_order}"
     if self.is_buyback then
       self.update_attribute(:is_buyback,false)
       self.price = discover_price(self.item)
@@ -78,8 +79,8 @@ class OrderItem < ActiveRecord::Base
       if self.quantity > 1 then
         oi = self.clone
         oi.quantity = 1
-        oi.is_buyback = true
-        oi.order = self.order
+        oi.order = self.order 
+        oi.is_buyback = true if not self.order.buy_order == true
         oi.item = self.item
         oi.price = oi.discover_price(oi.item)
         oi.save
@@ -87,7 +88,7 @@ class OrderItem < ActiveRecord::Base
         self.save
         return
       end
-      self.update_attribute(:is_buyback,true)
+      self.update_attribute(:is_buyback,true) if not self.order.buy_order == true
       self.price = discover_price(self.item)
       calculate_total
     end
@@ -157,6 +158,7 @@ class OrderItem < ActiveRecord::Base
   end
 
   def toggle_lock(type)
+    return # we no longer support locking
     if type == 'total' then
       self.update_attribute(:total_is_locked,!self.total_is_locked)
     elsif type == 'tax' then
@@ -194,11 +196,9 @@ class OrderItem < ActiveRecord::Base
     if q.nil? or q.blank? then
       q = 0
     end
-    if self.total_is_locked then
-      return
-    end
     q = q.to_s.gsub(',','.')
     q = q.to_f.round(3)
+    q = 0 if q < 0
     write_attribute(:quantity,q)
   end
   
@@ -507,6 +507,9 @@ class OrderItem < ActiveRecord::Base
   end
   def to_json
     obj = {}
+    if self.order and self.order.buy_order and self.is_buyback then
+      self.update_attribute :is_buyback, false
+    end
     if self.item then
       obj = {
         :name => self.item.name[0..20],

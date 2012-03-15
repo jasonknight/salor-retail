@@ -145,6 +145,10 @@ class Role < ActiveRecord::Base
       :change_prices,
       :create_transaction_tags,
       :create_tender_methods,
+      :edit_tender_methods
+    ],
+    :employee => [
+      :anything,
       :edit_tender_methods,
       :edit_items,
       :show_orders,

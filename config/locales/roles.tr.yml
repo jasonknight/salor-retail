@@ -1,4 +1,5 @@
 tr:
+  :employee: Employee
   :manager: Manager
   :head_cashier: Head Cashier
   :cashier: Cashier
