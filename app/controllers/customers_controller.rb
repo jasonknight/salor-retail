@@ -138,7 +138,7 @@ class CustomersController < ApplicationController
       render :text => text
     else
       printer_path = params[:type] == 'lc_sticker' ? $Register.sticker_printer : $Register.thermal_printer
-      File.open(printer_path,'w') { |f| f.write text }
+      File.open(printer_path,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
