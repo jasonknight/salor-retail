@@ -268,7 +268,7 @@ class VendorsController < ApplicationController
     if $Register.salor_printer
       render :text => text
     else
-      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      File.open($Register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
