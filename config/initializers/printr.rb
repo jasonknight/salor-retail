@@ -6,7 +6,7 @@ Printr.setup do |config|
   }}
   #config.sanitize_tokens = ['$','\$']
   config.debug = false
-  config.sanitize = true
+  #config.sanitize = true
   config.encoding = 'ISO-8859-15'
   config.logger = File.open("/tmp/printr.txt",'a')
 end

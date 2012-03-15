@@ -218,7 +218,7 @@
 
 <br>
 <br>
-<% if $User.is_technician? then %>
+<% if $User.class == User then %>
 <form accept-charset="UTF-8" action="/vendors/1" class="edit_vendor" enctype="multipart/form-data" id="edit_vendor_1" method="post">
 <div style="margin:0;padding:0;display:inline">
   <input name="utf8" type="hidden" value="&#x2713;" />
