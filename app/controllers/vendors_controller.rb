@@ -308,11 +308,10 @@ class VendorsController < ApplicationController
   def render_end_of_day_receipt
     @report = $User.get_end_of_day_report
     text = Printr.new.sane_template('end_of_day',binding)
-puts text
     if $Register.salor_printer
       render :text => text
     else
-      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      File.open($Register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
