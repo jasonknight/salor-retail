@@ -48,10 +48,10 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class VendorsController < ApplicationController
-    before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
-    before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
+    before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
+    before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
-    before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo]
+    before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
   def technician_control_panel
     if not $User.is_technician? then
@@ -258,6 +258,16 @@ class VendorsController < ApplicationController
   end
 
   def render_drawer_transaction_receipt
+    if params[:user_type] == 'User'
+      @user = User.find_by_id params[:user_id]
+    else
+      @user = Employee.find_by_id params[:user_id]
+    end
+    @register = CashRegister.find_by_id params[:cash_register_id]
+    @vendor = @register.vendor if @register
+    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
+
     @dt = DrawerTransaction.find_by_id params[:id]
     GlobalData.vendor = @dt.owner.get_meta.vendor
     $User = @dt.owner
@@ -265,10 +275,11 @@ class VendorsController < ApplicationController
       render :text => "Could not find drawer_transaction" and return
     end
     text = Printr.new.sane_template('drawer_transaction_receipt',binding)
-    if $Register.salor_printer
+    if @register.salor_printer
+      #`beep -f 2000 -l 10 -r 3`
       render :text => text
     else
-      File.open($Register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
@@ -306,12 +317,24 @@ class VendorsController < ApplicationController
   end
   #
   def render_end_of_day_receipt
-    @report = $User.get_end_of_day_report
+    if params[:user_type] == 'User'
+      @user = User.find_by_id params[:user_id]
+    else
+      @user = Employee.find_by_id params[:user_id]
+    end
+    @register = CashRegister.find_by_id params[:cash_register_id]
+    @vendor = @register.vendor if @register
+    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
+
+    @report = @user.get_end_of_day_report
     text = Printr.new.sane_template('end_of_day',binding)
-    if $Register.salor_printer
+    if @register.salor_printer
+      #`beep -f 4000`
       render :text => text
     else
-      File.open($Register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      #`beep -f 440`
+      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end

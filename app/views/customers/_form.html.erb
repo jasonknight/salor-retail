@@ -134,9 +134,9 @@
                        <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), "/images/" + b.get_barcode(@customer.loyalty_card.sku).gsub('.png','.eps') %> 
           &nbsp;&nbsp;&nbsp;
 
-            <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer,'/customers/labels?id=#{ @customer.id }&type=lc_sticker')" %> 
+            <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer,'/customers/labels', '&id=#{ @customer.id }&type=lc_sticker')" %> 
                          &nbsp;&nbsp;&nbsp;
-            <%= image_tag "/images/icons/print_48.png", :onclick => "print_url(Register.thermal_printer,'/customers/labels?id=#{ @customer.id }&type=lc_label')" %>
+            <%= image_tag "/images/icons/print_48.png", :onclick => "print_url(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=lc_label')" %>
                    </div>
                      <div class="clear">
                       &nbsp;

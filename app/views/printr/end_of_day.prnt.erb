@@ -97,7 +97,9 @@
 <%= "\e!\x08" %>
 
 
-<%= GlobalData.vendor.receipt_logo_footer if GlobalData and GlobalData.vendor.receipt_logo_footer %>
+<%= @vendor.receipt_logo_footer %>
+
+<%= @register.salor_printer ? '' : 'Printed with Rails' %>
 
 
 

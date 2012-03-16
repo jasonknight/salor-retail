@@ -280,15 +280,25 @@ class OrdersController < ApplicationController
   end
 
   def print_receipt
+    if params[:user_type] == 'User'
+      @user = User.find_by_id params[:user_id]
+    else
+      @user = Employee.find_by_id params[:user_id]
+    end
+    @register = CashRegister.find_by_id params[:cash_register_id]
+    @vendor = @register.vendor if @register
+    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
+
     @order = Order.find_by_id(params[:order_id])
     if not @order then
       render :nothing => true and return
     end
     text = Printr.new.sane_template('item',binding)
-    if $Register and $Register.salor_printer
+    if @register.salor_printer
       render :text => text
     else
-      File.open($Register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end

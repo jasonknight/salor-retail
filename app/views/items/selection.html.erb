@@ -7,10 +7,10 @@
   function print() {
     var skus = $('#skus').val().split("\n");
     if($("#label:checked").val() == 'label') {
-      print_url(Register.thermal_printer,'/items/labels?type=label&skus=' + skus);
+      print_url(Register.thermal_printer,'/items/labels', '&type=label&skus=' + skus);
     }
     if($("#sticker:checked").val() == 'sticker') {
-      print_url(Register.sticker_printer,'/items/labels?type=sticker&skus=' + skus);
+      print_url(Register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus);
     }
   }
 </script>

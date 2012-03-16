@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
   helper_method :workstation?, :mobile?
   protect_from_forgery
   before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login]
-  before_filter :setup_global_data, :except => [:load_clock, :login]
+  before_filter :setup_global_data, :except => [:login]
   layout :layout_by_response
   helper_method [:user_cache_name]
   def render_csv(filename = nil,text = nil)
