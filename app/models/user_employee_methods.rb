@@ -531,6 +531,7 @@ module UserEmployeeMethods
         totals[:orders_total] = Order.where("user_id = #{self.id} and refunded = 0 and created_at > '#{today}' and (paid = 1 or paid IS TRUE)").sum(:total)
         totals[:username] = self.username
       else
+
         totals[:orders_total] = Order.where("employee_id = #{self.id} and refunded = 0 and created_at > '#{today}' and (paid = 1 or paid IS TRUE)").sum(:total)
         totals[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
       end
@@ -594,7 +595,7 @@ module UserEmployeeMethods
       totals[:pm_pos] = Hash.new
       totals[:pm_pos_sum] = 0
       I18n.t("system.payment_internal_types").split(',').each do |pmtype|
-        pmsum = PaymentMethod.where(["internal_type = ? and amount > 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+        pmsum = PaymentMethod.where(["order_id is not NULL and internal_type = ? and amount > 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
         totals[:pm_pos_sum] += pmsum
         totals[:pm_pos].merge! pmtype.to_sym => pmsum
       end
@@ -603,7 +604,7 @@ module UserEmployeeMethods
       totals[:pm_neg] = Hash.new
       totals[:pm_neg_sum] = 0
       I18n.t("system.payment_internal_types").split(',').each do |pmtype|
-        pmsum = PaymentMethod.where(["internal_type = ? and amount < 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
+        pmsum = PaymentMethod.where(["order_id is not NULL and internal_type = ? and amount < 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
         totals[:pm_neg_sum] += pmsum
         totals[:pm_neg].merge! pmtype.to_sym => pmsum
       end
