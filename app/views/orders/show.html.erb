@@ -1,7 +1,5 @@
 <%= raw content_box_top(t("views.order_heading", :store => @order.vendor.name, :id => @order.id)) %>
-
-
-      <table id="order_items_table" width="100%" class="ui-corner-all ui-widget ui-content stripe-me">
+      <table id="order_items_table" width="50%" align=center class="ui-corner-all ui-widget ui-content stripe-me">
         <tr>
           <th><%= t("activerecord.attributes.name") %></th>
           <th><%= I18n.t("activerecord.attributes.sku") %></th>
@@ -10,6 +8,12 @@
           <th><%= t("activerecord.attributes.coupon_total") %></th>
           <th><%= t("activerecord.attributes.total") %></th>
         </tr>
+        <tr>
+          <td align=center colspan=6>
+            <select id='refund_payment_method'>
+            <%= options_for_select PaymentMethod.types_list %>
+            </select>
+          </td>
         <%= salor_render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items} %>
       </table>
 
@@ -17,14 +21,44 @@
       <p><%= t("activerecord.attributes.refund") %>: <%= salor_number_to_currency(@order.refund_total) %></p>
 
 
-    <table>
+    <table width='30%'  class="ui-corner-all ui-widget ui-content stripe-me">
       <% @order.payment_methods.each do |pm|  %>
       <tr>
-        <td><%= pm.name %></td>
-        <td><%= pm.amount %></td>
+        <td><%= t pm.internal_type %></td>
+        <td><%= number_to_currency pm.amount %></td>
       </tr>
       <% end %>
     </table>
+
+<%
+  if @order.refunded then
+    reverse = "/images/icons/#{icon(:refund,32)}"
+  else
+    reverse = "/images/icons/#{icon(:refunded,32)}"
+  end
+%>
+<table align="center">
+  <tr>
+    <td>
+      <%  if GlobalData.salor_user.can(:edit_orders) then %>
+        <%= @order.refunded? ? salor_icon(:refunded,{},32) : link_to(salor_icon(:refund,{:onclick => 'quick_open_drawer();'},32),'/orders/refund_order?id=' + @order.id.to_s) %>
+      <% end %>
+    </td>
+    <td>
+      &nbsp; &nbsp;<%= salor_icon(:printer,{:style => "cursor:pointer;", :onclick => "print_order('#{@order.id }');"},32) %>
+    </td>
+  </tr>
+</table>
+
+
+
+<script>
+var payment_internal_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
+var payment_external_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
+</script>
+
+
+
 
 <% if $User.is_technician? %>
     <table class="payment-methods-table" width="100%">
@@ -43,5 +77,3 @@
     </table>
     <%= salor_render :partial => "shared/in_place_edit" %>
 <% end %>
-<%= raw content_box_bottom %>
-<%= salor_render :partial => "order_menu" %>

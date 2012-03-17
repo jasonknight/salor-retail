@@ -427,13 +427,13 @@ class OrdersController < ApplicationController
   end
   def refund_item
     @oi = OrderItem.scopied.find_by_id(params[:id])
-    @oi.toggle_refund(true)
+    @oi.toggle_refund(true, params[:pm])
     @oi.save
     redirect_to order_path(@oi.order)
   end
   def refund_order
     @order = Order.scopied.find_by_id(params[:id])
-    @order.toggle_refund(true)
+    @order.toggle_refund(true, params[:pm])
     @order.save
     redirect_to order_path(@order)
   end

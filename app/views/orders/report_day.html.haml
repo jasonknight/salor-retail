@@ -29,22 +29,25 @@
   - taxes_sums_positive_gro[t.id] = 0.0
   - taxes_sums_negative_gro[t.id] = 0.0
 
+- rebate_total = 0.0
+
 - paymentmethod_positive_sums = Hash.new
 - paymentmethod_negative_sums = Hash.new
-- I18n.t("system.payment_internal_types").split(',').each do |p|
-  - next if p == 'InCash'
-  - paymentmethod_positive_sums[p.to_sym] = 0.0
-  - paymentmethod_negative_sums[p.to_sym] = 0.0
-
-
-- rebate_total = 0.0
 
 - @orders.each do |o|
   - o.payment_methods.each do |p|
     - next if p.internal_type == 'InCash'
     - ptype = p.internal_type.to_sym
-    - paymentmethod_positive_sums[ptype] += p.amount if p.amount > 0
-    - paymentmethod_negative_sums[ptype] += p.amount if p.amount < 0
+    - if p.amount > 0
+      - if not paymentmethod_positive_sums.has_key?(ptype)
+        - paymentmethod_positive_sums.merge! ptype => p.amount
+      - else
+        - paymentmethod_positive_sums[ptype] += p.amount
+    - if p.amount < 0
+      - if not paymentmethod_negative_sums.has_key?(ptype)
+        - paymentmethod_negative_sums.merge! ptype => p.amount
+      - else
+        - paymentmethod_negative_sums[ptype] += p.amount
 
   - o.order_items.each do |oi|
     - cid = oi.category_id

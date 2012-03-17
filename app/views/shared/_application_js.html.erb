@@ -434,18 +434,18 @@ function RoundFixed(Number, DecimalPlaces) {
       });
     }
 
-    function refund_item(id) {
-      get('/vendors/toggle?' +
-        'field=toggle_refund' +
-        '&klass=OrderItem' +
-        '&value=true' +
-        '&model_id=' + id,
-      filename,
-      function () {
-        window.location.reload();
-      }
-    );
-    }
+    //function refund_item(id) {
+    //  get('/vendors/toggle?' +
+    //    'field=toggle_refund' +
+    //    '&klass=OrderItem' +
+    //    '&value=true' +
+    //    '&model_id=' + id,
+    //  filename,
+    //  function () {
+    //    window.location.reload();
+    //  }
+    //);
+    //}
 
     /*
     function toDelimited(number) {

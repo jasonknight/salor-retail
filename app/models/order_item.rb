@@ -111,25 +111,38 @@ class OrderItem < ActiveRecord::Base
       raise dt.errors.full_messages.inspect
     end
   end
-  def toggle_refund(x)
+
+  #
+  def create_refund_payment_method(amount,refund_payment_method)
+    PaymentMethod.create :internal_type => (refund_payment_method + 'Refund'), :name => (refund_payment_method + 'Refund'), :amount => - amount, :order_id => self.order.id
+  end
+  
+  #
+  def toggle_refund(x, refund_payment_method)
     t = (self.calculate_total)
     q = self.quantity
     if self.refunded then
-      self.update_attribute(:refunded,false)
-      update_location_category_item(t,q)
-      opts = {:tag => I18n.t("activerecord.models.drawer_transaction.unrefund"),
-              :is_refund => true, 
-              :notes => I18n.t("views.notice.order_refund_dt",:id => self.order.id)
-      }
-      create_refund_transaction(self.total,:drop,opts) if not x.nil?
-      self.order.update_attribute(:total, self.order.total + t)
+      # this should never happen right now since it's blocked by the orders#show view
+      #self.update_attribute(:refunded,false)
+      #update_location_category_item(t,q)
+      #opts = {:tag => I18n.t("activerecord.models.drawer_transaction.unrefund"),
+      #        :is_refund => true, 
+      #        :notes => I18n.t("views.notice.order_refund_dt",:id => self.order.id)
+      #}
+      #create_refund_transaction(self.total,:drop,opts) if not x.nil?
+      #self.order.update_attribute(:total, self.order.total + t)
     else
       self.update_attribute(:refunded,true)
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
       update_location_category_item(t * -1,q * -1)
       self.order.update_attribute(:total, self.order.total - t)
-      create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
+      if refund_payment_method == 'InCash'
+        create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
+      else
+        create_refund_payment_method(t,refund_payment_method)
+      end
+
       # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
     end
   end

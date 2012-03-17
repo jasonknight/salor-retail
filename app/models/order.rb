@@ -563,6 +563,8 @@ class Order < ActiveRecord::Base
     end
     return oi
   end
+
+  #
   def create_drawer_transaction(amount,type,opts={})
     dt = DrawerTransaction.new(opts)
     dt.amount = amount
@@ -584,18 +586,27 @@ class Order < ActiveRecord::Base
       $User.reload
     end
   end
-  def toggle_refund(x)
+
+  #
+  def create_refund_payment_method(amount, refund_payment_method)
+    PaymentMethod.create :internal_type => (refund_payment_method + 'Refund'), :name => (refund_payment_method + 'Refund'), :amount => - amount, :order_id => self.id
+  end
+
+  def toggle_refund(x, refund_payment_method)
     if self.refunded then
       # this is disabled in the view currently
-      self.update_attribute(:refunded, false)
+      #self.update_attribute(:refunded, false)
       #create_drawer_transaction(self.total,:drop)
     else
       self.update_attribute(:refunded, true)
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
-      opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
-      create_drawer_transaction(self.total,:payout,opts)
-      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer # this is handled now by an onclick event in orders/_order_menu.html.erb
+      if refund_payment_method == 'InCash'
+        opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
+        create_drawer_transaction(self.total, :payout, opts)
+      else
+        create_refund_payment_method(self.total, refund_payment_method)
+      end
       self.order_items.each do |oi|
         if not oi.refunded == true then
           oi.toggle_refund(nil)
