@@ -39,13 +39,15 @@ function add_payment_method() {
   d.addClass('payment-method');
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   var opts = payment_method_options();
-  var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  //var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  var sel = $('<div class="select-widget-button payment-method" internal_type="' + payment_internal_types[numMethods] + '" id="' + "payment_type_" + numMethods + '">' + payment_external_types[numMethods] + '</div>');
+
   $(sel)[0].selectedIndex = numMethods;
   $("#payment_methods").append(sel).append(amount);
   $('#payment_methods').append('<br />');
   oldSelectedIndex = null;
   validatePaymentMethod($(sel));
-  make_select_widget($(sel).find("option:selected"),$(sel));
+  //make_select_widget($(sel).find("option:selected"),$(sel));
   make_keyboardable_with_options(amount, {
     visible: function () {
       var cls = $(sel).val() + '-amount';
@@ -421,8 +423,8 @@ function displayChangeToCustomer() {
 function serializePayments() {
   var returnArr = [];
   $.each($(".payment-method"), function(){
-    var index = $(this).attr('id').split("_")[2];
-    var method = $(this).val();
+    var index = $(this)[0].id.split("_")[2];
+    var method = $(this).attr('internal_type');
     var amount = $("#payment_amount_" + index).val();
     returnArr.push(method + "=" + amount);
   });
