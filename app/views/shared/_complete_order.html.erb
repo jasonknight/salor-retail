@@ -397,7 +397,7 @@ function complete_order_send(print) {
   get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
     if (print == 'true') { print_order(print_order_id); }
     sendingOrder = false;
-    if (Register.cash_drawer_path != "" ) {
+    if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
       setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path)",2000);
     }
   }, 'get', function() {

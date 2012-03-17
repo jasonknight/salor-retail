@@ -581,6 +581,7 @@ class Order < ActiveRecord::Base
       elsif type == :drop then
         GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
+      $User.reload
     end
   end
   def toggle_refund(x)
@@ -593,7 +594,7 @@ class Order < ActiveRecord::Base
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
       opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
-      create_drawer_transaction(self.subtotal,:payout,opts)
+      create_drawer_transaction(self.total,:payout,opts)
       # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer # this is handled now by an onclick event in orders/_order_menu.html.erb
       self.order_items.each do |oi|
         if not oi.refunded == true then

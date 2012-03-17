@@ -57,6 +57,7 @@ CashRegister.delete_all
   registers << r
 end
 Employee.delete_all
+Drawer.delete_all
 @cashier = Employee.new(
   {
     :username => 'cashier',
@@ -71,6 +72,8 @@ Employee.delete_all
   }
 )
 @cashier.save()
+Drawer.create :amount => 0, :owner_id => @cashier.id, :owner_type => 'Employee'
+
 @head_cashier = Employee.new(
   {
     :username => 'head_cashier',
@@ -85,6 +88,8 @@ Employee.delete_all
   }
 )
 @head_cashier.save()
+Drawer.create :amount => 0, :owner_id => @head_cashier.id, :owner_type => 'Employee'
+
 @manager = Employee.new(
   {
     :username => 'manager',
@@ -99,6 +104,8 @@ Employee.delete_all
   }
 )
 @manager.save()
+Drawer.create :amount => 0, :owner_id => @manager.id, :owner_type => 'Employee'
+
 @stockboy = Employee.new(
   {
     :username => 'stockboy',
@@ -112,6 +119,7 @@ Employee.delete_all
     :role_ids => [Role.find_by_name(:stockboy).id],
   }
 )
-@stockboy .save()
+@stockboy.save()
+Drawer.create :amount => 0, :owner_id => @stockboy.id, :owner_type => 'Employee'
 
 
