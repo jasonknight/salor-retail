@@ -52,32 +52,7 @@
 <br/>
 <br/>
 
-<table class="eod-master-table" align="center">
-  
-  <tr>
-    <td valign="top">
-      <!-- EOD By Category -->
-      <table width="99%">
-      <tr>
-        <th>
-          <%= I18n.t("activerecord.attributes.name") %>
-        </th>
-        <th>
-          <%= I18n.t("activerecord.attributes.total") %>
-        </th>
-      </tr>
-      <% cats_tags = {}  %>
-          <% $User.get_meta.cash_register.end_of_day_report.each do |name,total| %>
-           <tr class="stripe-me2">
-             <td>
-               <%= name %>
-             </td>
-             <td align="right">
-               <%= number_to_currency(total) %>
-             </td>
-           </tr>
-         <% end if GlobalData.salor_user.meta.cash_register %>
-</table>
+
 <% if $Register.paylife then %>
 <h2> Cute Credit</h2>
 <table width="100%">

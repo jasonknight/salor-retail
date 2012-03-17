@@ -46,7 +46,7 @@ window.eodPayout = ->
  $ ->
    for elem in $('.eod-calculator-input')
      if not $(elem).hasClass('calculator-done')
-       $(elem).blur -> 
+       $(elem).on 'keyup', -> 
          displayCalculatorTotal()
        $(elem).addClass('calculator-done')
          
