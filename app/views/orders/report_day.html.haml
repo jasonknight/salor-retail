@@ -41,7 +41,7 @@
 
 - @orders.each do |o|
   - o.payment_methods.each do |p|
-    - next if p.internal_type == 'InCash'
+    - #next if p.internal_type == 'InCash'
     - ptype = p.internal_type.to_sym
     - paymentmethod_positive_sums[ptype] += p.amount if p.amount > 0
     - paymentmethod_negative_sums[ptype] += p.amount if p.amount < 0

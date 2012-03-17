@@ -330,6 +330,7 @@ class VendorsController < ApplicationController
     @report = @user.get_end_of_day_report
 
     text = Printr.new.sane_template('end_of_day',binding)
+    puts text
     if @register.salor_printer
       #`beep -f 4000`
       render :text => text

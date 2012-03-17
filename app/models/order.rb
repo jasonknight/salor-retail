@@ -585,6 +585,7 @@ class Order < ActiveRecord::Base
   end
   def toggle_refund(x)
     if self.refunded then
+      # this is disabled in the view currently
       self.update_attribute(:refunded, false)
       #create_drawer_transaction(self.total,:drop)
     else
