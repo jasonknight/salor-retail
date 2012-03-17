@@ -328,6 +328,7 @@ class VendorsController < ApplicationController
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @report = @user.get_end_of_day_report
+puts @report.inspect
 
     text = Printr.new.sane_template('end_of_day',binding)
     puts text

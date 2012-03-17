@@ -11,7 +11,7 @@
 <br/>
 <div  align="center" width="100%">
 
-      <div id="eod-drawer-total"><span class='eod-drawer-total'>Kassenlade: <%= number_to_currency $User.get_drawer.reload.amount %></span></div>
+      <div id="eod-drawer-total"><span class='eod-drawer-total'><%= t '.cash_drawer' %>: <%= number_to_currency $User.get_drawer.reload.amount %></span></div>
           
 
 </div>
@@ -42,8 +42,9 @@
 
 
 <div class="button-row" align="center">
-      <div id="eod-calculator-difference">Gezählt: <span class='eod-calculator-difference'><%= SalorBase.number_to_currency(0) %></span></div>
-      <div id="eod-calculator-total">Differenz: <span class='eod-calculator-total'><%= SalorBase.number_to_currency(0) %></span></div>
+      <div id="eod-calculator-total"><%= t '.counted' %>: <span class='eod-calculator-total'><%= SalorBase.number_to_currency(0) %></span></div>
+      <div id="eod-calculator-difference"><%= t '.differece' %>: <span class='eod-calculator-difference'><%= SalorBase.number_to_currency(0) %></span></div>
+
 
 </div>
 

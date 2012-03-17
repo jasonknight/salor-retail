@@ -95,9 +95,9 @@
   %div
     %h2== #{ t '.title' } #{ l @from, :format => :just_day } #{ l Time.now, :format => :time }<br />#{ @vendor.name }<br />#{ @employee.name_with_username }
 
-    %p== Anzahl Verkäufe: #{ @orders.count }
+    %p== #{ t '.count_of_orders' }: #{ @orders.count }
 
-    %h3 Einnahmen
+    %h3= t '.sales'
 
     %table.striped-table2
       %tr
@@ -142,14 +142,14 @@
         %td.left= t 'InCash'
         %td.table-center= number_to_currency category_sums_positive_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum
 
-    %p== Summe brutto: #{ number_to_currency category_sums_positive_gro.compact.sum }
+    %p== #{ t '.sum_gross' }: #{ number_to_currency category_sums_positive_gro.compact.sum }
 
-    %p== Summe netto: #{ number_to_currency category_sums_positive_net.compact.sum }
-
-
+    %p== #{ t '.sum_net' }: #{ number_to_currency category_sums_positive_net.compact.sum }
 
 
-    %h3 Zahlungen
+
+
+    %h3= t '.payments'
 
     %table.striped-table2
       %tr
@@ -189,18 +189,18 @@
         %td.left= t 'InCash'
         %td.table-center= number_to_currency category_sums_negative_gro.compact.sum - paymentmethod_negative_sums.to_a.collect{ |i| i[1] }.sum
 
-    %p== Summe brutto: #{ number_to_currency category_sums_negative_gro.compact.sum }
+    %p== #{ t '.sum_gross' }: #{ number_to_currency category_sums_negative_gro.compact.sum }
 
-    %p== Summe netto: #{ number_to_currency category_sums_negative_net.compact.sum }
-
-
+    %p== #{ t '.sum_net' }: #{ number_to_currency category_sums_negative_net.compact.sum }
 
 
-    %h3 Umsätze
 
-    %p== Brutto: #{ number_to_currency category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum }
 
-    %p== Netto: #{ number_to_currency category_sums_positive_net.compact.sum + category_sums_negative_net.compact.sum }
+    %h3= t '.revenue'
+
+    %p== #{ t '.gross' }: #{ number_to_currency category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum }
+
+    %p== #{ t '.net' }: #{ number_to_currency category_sums_positive_net.compact.sum + category_sums_negative_net.compact.sum }
 
 
 
@@ -244,7 +244,18 @@
           %td.right= number_to_currency d.amount if d.drop
           %td.right= number_to_currency d.amount if d.payout
 
-    %p== Summe Buchungen: #{ number_to_currency total_drop - total_payout }
+    %p== #{ t '.sum_transactions' }: #{ number_to_currency total_drop - total_payout }
 
-    %p== (Differenz zwischen Buchungen und Bargeldsaldo: #{ number_to_currency total_drop - total_payout + category_sums_positive_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum + category_sums_negative_gro.compact.sum - paymentmethod_negative_sums.to_a.collect{ |i| i[1] }.sum })
+
+    %h3= t '.cash_drawer'
+
+    %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency $User.get_drawer.amount }
+
+    - calculated_drawer_amount = total_drop - total_payout + category_sums_positive_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum + category_sums_negative_gro.compact.sum - paymentmethod_negative_sums.to_a.collect{ |i| i[1] }.sum
+
+    %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
+
+    - if $User.get_drawer.amount != 0 or calculated_drawer_amount != 0
+      %p
+        %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
 

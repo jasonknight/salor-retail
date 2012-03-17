@@ -436,6 +436,16 @@ de:
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
       None: Unbenannt
+      count_orders: Anzahl Verkäufe
+      sales: Verkäufe
+      payments: Zahlungen
+      cash_drawer: Kassenlade
+      revenue: Umsatz
+      sum_gross: Summe brutto
+      sum_net: Summe netto
+      gross: brutto
+      net: netto
+      sum_transactions: Summe Buchungen
       
 
   printr:
@@ -475,6 +485,9 @@ de:
       drops: Einzahlungen
       payouts: Auszahlungen
       refund: Stornierung
+      system_drawer_amount: Kassenlade System
+      calculated_drawer_amount: Kassenlade Bericht
+      warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, jeden Tag mit einem Kassenbetrag von 0 zu beginnen und zu beenden, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor, drucken Sie diesen Bericht erneut und loggen Sie sich aus.
 
 
     word:
@@ -592,6 +605,9 @@ de:
     end_of_day:
       end_of_day_thermal_report: Bericht drucken
       paper_report: Detailbericht
+      cash_drawer: Kassenlade
+      counted: Gezählt
+      difference: Differenz
 
   views:
     eticket: Regaletikett

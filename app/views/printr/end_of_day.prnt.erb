@@ -84,10 +84,22 @@
 
 ==========================================
 
-<%= "%29.29s %s %7.2f" % [I18n.t("activerecord.models.drawer.one"), @report[:unit], @report[:drawer_amount]] %>
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.system_drawer_amount"), @report[:unit], @report[:drawer_amount]] %>
+
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.calculated_drawer_amount"), @report[:unit], @report[:calculated_drawer_amount]] %>
 
 
 (<%= "%27.27s %s %7.2f" % [I18n.t("printr.eod_report.buyback_item_total"), @report[:unit], @report[:buyback_item_total]] %>)
+
+
+<% if @report[:drawer_amount] != 0 or @report[:calculated_drawer_amount] != 0 %>
+******************************************
+******************************************
+<%= t 'printr.eod_report.warning_drawer_amount_not_zero' %>
+
+******************************************
+******************************************
+<% end %>
 
 ~~~
 

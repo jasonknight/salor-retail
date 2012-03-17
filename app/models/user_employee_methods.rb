@@ -602,6 +602,8 @@ module UserEmployeeMethods
       end 
     end
     totals[:pm_sum] = totals[:pm_pos_sum] + totals[:pm_neg_sum]
+
+    totals[:calculated_drawer_amount] = totals[:pm_neg][:InCash] + totals[:pm_pos][:InCash] + totals[:transaction_total]
     return totals
   end
   def report
