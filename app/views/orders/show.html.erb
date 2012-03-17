@@ -1,7 +1,6 @@
 <%= raw content_box_top(t("views.order_heading", :store => @order.vendor.name, :id => @order.id)) %>
-<table align="center" width="100%" >
-  <tr>
-    <td valign="top">
+
+
       <table id="order_items_table" width="100%" class="ui-corner-all ui-widget ui-content stripe-me">
         <tr>
           <th><%= t("activerecord.attributes.name") %></th>
@@ -14,13 +13,18 @@
         <%= salor_render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items} %>
       </table>
 
-      <p><%= t("views.subtotal") %>: <%= salor_number_to_currency(@order.subtotal) %></p>
-      <p><%= t("views.tax") %>: <%= salor_number_to_currency(@order.tax) %></p>
       <p><%= t("views.total") %>: <%= salor_number_to_currency(@order.total) %></p>
       <p><%= t("activerecord.attributes.refund") %>: <%= salor_number_to_currency(@order.refund_total) %></p>
-    </td>
-  </tr>
-</table>
+
+
+    <table>
+      <% @order.payment_methods.each do |pm|  %>
+      <tr>
+        <td><%= pm.name %></td>
+        <td><%= pm.amount %></td>
+      </tr>
+      <% end %>
+    </table>
 
 <% if $User.is_technician? %>
     <table class="payment-methods-table" width="100%">

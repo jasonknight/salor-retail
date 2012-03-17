@@ -38,6 +38,8 @@ function add_payment_method() {
   var numMethods = $(".payment-amount").size();
   d.addClass('payment-method');
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
+  $(amount).val($("#payment_amount_" + (numMethods-1)).val()); // if a new methods is added, this should get the orders total
+  $("#payment_amount_" + (numMethods - 1)).val(''); // clear the input field because mostly this will be 0
   var opts = payment_method_options();
   //var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
   var sel = $('<div class="select-widget-button payment-method" internal_type="' + payment_internal_types[numMethods] + '" id="' + "payment_type_" + numMethods + '">' + payment_external_types[numMethods] + '</div>');
