@@ -274,7 +274,7 @@ class ItemsController < ApplicationController
   end
 
   def database_distiller
-    @used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }
+    @used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }.uniq
     @relevant_item_ids = Item.where('quantity = 0 and quantity_sold = 0 and hidden = 0 and hidden_by_distiller = 0').collect{ |i| i.id }
     @unused_item_ids = @relevant_item_ids - @used_item_ids
     @hidden = Item.where('hidden = 1')
@@ -283,7 +283,7 @@ class ItemsController < ApplicationController
   end
 
   def distill_database
-    used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }
+    used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }.uniq
     relevant_item_ids = Item.where('quantity = 0 and quantity_sold = 0').collect{ |i| i.id }
     unused_item_ids = relevant_item_ids - used_item_ids
     unused_item_ids.each do |ui|

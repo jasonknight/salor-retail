@@ -420,8 +420,8 @@ function serializePayments() {
   $.each($(".payment-method"), function(){
     //MFvar index = $(this)[0].id.split("_")[2];
     //MFvar method = $(this).attr('internal_type');
-    var index = $(this)[0].id.split("_")[2];
-    var method = $(this).attr('internal_type');
+    var index = $(this).attr('id').split("_")[2];
+    var method = $(this).val();
     var amount = $("#payment_amount_" + index).val();
     returnArr.push(method + "=" + amount);
   });
