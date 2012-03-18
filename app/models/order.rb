@@ -475,14 +475,16 @@ class Order < ActiveRecord::Base
       activate_gift_cards
       
       update_self_and_save
-  
+      ottl = self.get_drawer_add
       if self.buy_order then
+        ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
         #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - self.total)
       elsif self.total < 0 then
+        ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
-        ottl = self.get_drawer_add
+
         $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
@@ -521,9 +523,7 @@ class Order < ActiveRecord::Base
   end
   def get_drawer_add
     ottl = self.total
-    puts ottl
     self.payment_methods.each do |pm|
-      puts pm.inspect
       next if pm.internal_type == 'InCash'
       ottl -= pm.amount
     end
@@ -563,6 +563,8 @@ class Order < ActiveRecord::Base
     end
     return oi
   end
+
+  #
   def create_drawer_transaction(amount,type,opts={})
     dt = DrawerTransaction.new(opts)
     dt.amount = amount
@@ -581,26 +583,42 @@ class Order < ActiveRecord::Base
       elsif type == :drop then
         $User.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
+      $User.reload
     end
   end
-  def toggle_refund(x)
+    
+  #
+  def create_refund_payment_method(amount, refund_payment_method)
+    PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
+                         :name => (refund_payment_method + 'Refund'), 
+                         :amount => - amount, 
+                         :order_id => self.id
+    ) # end of PaymentMethod.create
+  end
+
+  def toggle_refund(x, refund_payment_method)
     if not $User.get_drawer.amount >= self.total then
       GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
       return
     end
     if self.refunded then
-      self.update_attribute(:refunded, false)
+      # this is disabled in the view currently
+      #self.update_attribute(:refunded, false)
       #create_drawer_transaction(self.total,:drop)
     else
+      return if (GlobalData.salor_user.get_drawer.amount - self.total) < 0
       self.update_attribute(:refunded, true)
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
-      opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
-      create_drawer_transaction(self.subtotal,:payout,opts)
-      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer # this is handled now by an onclick event in orders/_order_menu.html.erb
+      if refund_payment_method == 'InCash'
+        opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
+        create_drawer_transaction(self.total, :payout, opts)
+      else
+        create_refund_payment_method(self.total, refund_payment_method)
+      end
       self.order_items.each do |oi|
         if not oi.refunded == true then
-          oi.toggle_refund(nil)
+          oi.toggle_refund(nil, refund_payment_method)
         end
       end  
     end

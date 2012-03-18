@@ -46,6 +46,8 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+
+#
 class FileUpload
   def type1(file_lines) #danczek_tobaccoland_plattner
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
@@ -104,17 +106,18 @@ class FileUpload
       category_id = category.id
 
       # carton
-      sku_carton = columns[8].strip
-      sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
-      attributes = { :sku => sku_carton, :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
       carton_item = Item.find_by_name(name + " Karton")
       if carton_item
-        attributes[:sku] = carton_item.sku # use original SKU
+        #attributes[:sku] = carton_item.sku # use original SKU
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
         updated_items += 1
       else
+        sku_carton = columns[8].strip
+        sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
+        attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         carton_item.set_model_owner
         Action.run(carton_item,:on_import)
@@ -123,18 +126,19 @@ class FileUpload
       end
 
       # pack
-      sku_pack = columns[9].strip
-      sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
-      attributes = { :sku => sku_pack, :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
       pack_item = Item.find_by_name(name + " Packung")
       if pack_item
-        attributes[:sku] = pack_item.sku # use original SKU
+        #attributes[:sku] = pack_item.sku # use original SKU
         pack_item.attributes = attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item
         pack_item.save
         updated_items += 1
       else
+        sku_pack = columns[9].strip
+        sku_pack = 'C' + rand(999999).to_s if sku_pack.empty?
+        attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
         pack_item.set_model_owner
         Action.run(pack_item,:on_import)
@@ -144,18 +148,19 @@ class FileUpload
       end
 
       # piece
-      sku_piece = columns[19].strip if columns[19]
-      sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
-      attributes = { :sku => sku_piece, :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
       piece_item = Item.find_by_name(name + " Stk.")
       if piece_item
-        attributes[:sku] = piece_item.sku # use original SKU
+        #attributes[:sku] = piece_item.sku # use original SKU
         piece_item.attributes = attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item
         piece_item.save
         updated_items += 1
       else
+        sku_piece = columns[19].strip if columns[19]
+        sku_piece = 'C' + rand(999999).to_s if sku_piece.empty?
+        attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
         piece_item.set_model_owner
         Action.run(piece_item,:on_import)
@@ -166,6 +171,8 @@ class FileUpload
     end
     GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
   end
+
+  #
   def type2(file_lines) #house of smoke, dios
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
     if file_lines.first.include? '#' then
@@ -226,17 +233,18 @@ class FileUpload
       category_id = category.id
 
       # carton
-      sku_carton = columns[8].strip
-      sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
-      attributes = { :sku => sku_carton, :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
       carton_item = Item.find_by_name(name + " Karton")
       if carton_item
-        attributes[:sku] = carton_item.sku # use original SKU
+        #attributes[:sku] = carton_item.sku # use original SKU
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
         updated_items += 1
       else
+        sku_carton = columns[8].strip
+        sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
+        attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         carton_item.set_model_owner
         Action.run(carton_item,:on_import)
@@ -245,18 +253,19 @@ class FileUpload
       end
 
       # pack
-      sku_pack = columns[9].strip
-      sku_pack = 'C' + rand(999999).to_s if sku_pack.empty?
-      attributes = { :sku => sku_pack, :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
       pack_item = Item.find_by_name(name + " Packung")
       if pack_item
-        attributes[:sku] = pack_item.sku # use original SKU
+        #attributes[:sku] = pack_item.sku # use original SKU
         pack_item.update_attributes attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item
         pack_item.save
         updated_items += 1
       else
+        sku_pack = columns[9].strip
+        sku_pack = 'C' + rand(999999).to_s if sku_pack.empty?
+        attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
         pack_item.set_model_owner
         Action.run(pack_item,:on_import)
@@ -266,18 +275,19 @@ class FileUpload
       end
 
       # piece
-      sku_piece = columns[19].strip if columns[19]
-      sku_piece = 'C' + rand(999999).to_s if sku_piece.nil? or sku_piece.empty?
-      attributes = { :sku => sku_piece, :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
       piece_item = Item.find_by_name(name + " Stk.")
       if piece_item
-        attributes[:sku] = piece_item.sku # use original SKU
+        #attributes[:sku] = piece_item.sku # use original SKU
         piece_item.update_attributes attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item
         piece_item.save
         updated_items += 1
       else
+        sku_piece = columns[19].strip if columns[19]
+        sku_piece = 'C' + rand(999999).to_s if sku_piece.nil? or sku_piece.empty?
+        attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
         piece_item.set_model_owner
         Action.run(piece_item,:on_import)
@@ -288,6 +298,8 @@ class FileUpload
     end
     GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
   end
+
+  #
   def type3(file_lines) #Optimalsoft Items
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
     file_lines.each do |row|
@@ -355,6 +367,7 @@ class FileUpload
     GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
   end
 
+  #
   def type4(file_lines) #Optimalsoft Customers
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
     file_lines.each do |row|
@@ -376,6 +389,7 @@ class FileUpload
     end
   end
 
+  #
   def salor(file_lines)
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
     if file_lines.first.include? '#' then

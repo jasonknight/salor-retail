@@ -2,6 +2,9 @@ window.Drawer ||= {}
 calculator_total = 0
 dt = Drawer.amount
 
+$ ->
+  $("#cash_register_color").modcoder_excolor()
+
 
 window.displayCalculatorTotal = ->
   calculator_total = 0
@@ -23,11 +26,7 @@ window.displayCalculatorTotal = ->
   $('.eod-calculator-total').html(toCurrency(calculator_total));
 
 window.logout = ->
-  if Drawer.amount > 0
-    show_cash_drop()
-    return
-  else
-    window.location = '/vendors/end_day'
+  window.location = '/vendors/end_day'
 
 
 
@@ -50,7 +49,7 @@ window.eodPayout = ->
  $ ->
    for elem in $('.eod-calculator-input')
      if not $(elem).hasClass('calculator-done')
-       $(elem).blur -> 
+       $(elem).on 'keyup', -> 
          displayCalculatorTotal()
        $(elem).addClass('calculator-done')
          

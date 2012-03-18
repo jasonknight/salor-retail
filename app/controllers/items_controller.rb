@@ -247,17 +247,28 @@ class ItemsController < ApplicationController
   end
 
   def labels
+    if params[:user_type] == 'User'
+      @user = User.find_by_id params[:user_id]
+    else
+      @user = Employee.find_by_id params[:user_id]
+    end
+    @register = CashRegister.find_by_id params[:cash_register_id]
+    @vendor = @register.vendor if @register
+    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
+
     if params[:id]
       @items = Item.find_all_by_id params[:id]
     elsif params[:skus]
       @items = Item.where :sku => params[:skus].split(",")
     end
     text = Printr.new.sane_template(params[:type],binding)
-    if $Register and $Register.salor_printer
+    if @register.salor_printer
       render :text => text
+      #`beep -f 2000 -l 10 -r 3`
     else
-      printer_path = params[:type] == 'sticker' ? $Register.sticker_printer : $Register.thermal_printer
-      File.open(printer_path,'w') { |f| f.write text }
+      printer_path = params[:type] == 'sticker' ? @register.sticker_printer : @register.thermal_printer
+      File.open(printer_path,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end

@@ -1,3 +1,5 @@
+<script type="text/javascript" src="/assets/jquery.modcoder.excolor.js"></script>
+
 <table align="center" width="100%">
   <tr>
     <td valign="top" align="center">
@@ -22,10 +24,6 @@
                   <%= f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id %>
                 </div>
                 <div class="field">
-                  <%= f.label t("activerecord.attributes.big_buttons") %><br />
-                  <%= f.check_box :big_buttons %>
-                </div><br />
-                <div class="field">
                   <%= f.label t("activerecord.attributes.hide_discounts") %><br />
                   <%= f.check_box :hide_discounts %>
                 </div>
@@ -40,6 +38,10 @@
                 <div class="field">
                   <%= f.label t("activerecord.attributes.cash_drawer") %><br />
                   <%= f.text_field :cash_drawer_path, :class => "keyboardable"%>
+                </div>
+                <div class="field">
+                  <%= f.label :color %> 
+                  <%= f.hidden_field :color %>
                 </div>
         </td>
         <td>

@@ -4,20 +4,6 @@
   %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
     = salor_icon(:print, {}, 32)
 
-- if @order.payment_methods.any? then
-  - ic = @order.payment_methods.find_by_internal_type 'InCash'
-  - if ic then
-    - @in_cash = ic.amount
-  - bc = @order.payment_methods.find_by_internal_type 'ByCard'
-  - if bc then
-    - @by_card = bc.amount
-  - gc = @order.payment_methods.find_by_internal_type 'ByGiftCard'
-  - if gc then
-    - @by_gift_card = gc.amount
-  - oc = @order.payment_methods.find_by_internal_type 'OtherCredit'
-  - if oc then
-    - @other_credit = oc.amount
-
 %div.report-container.invoice
   %div
     %img.right{ :src => '/images/salor-logo-reports.png'}
@@ -46,27 +32,29 @@
 
     - @subtotal, @sum_taxes, @discount_subtotal, @rebate_subtotal, @refund_subtotal, @coupon_subtotal, @list_of_items = calculate_order_sums(@order)
     = render :partial => 'detailed_list'
-    - pmseen = ['InCash','ByCard','ByGiftCard','OtherCredit']
-    - if @refund_subtotal.zero?
-      %p= "Gegeben Bar:                  EUR %8.2f" % @in_cash unless @in_cash.zero?
-      %p= "Gegeben Karte:                EUR %8.2f" % @by_card unless @by_card.zero?
-      %p= "Gegeben Geschenkkarte:        EUR %8.2f" % @by_gift_card unless @by_gift_card.zero?
-      %p= "Andere Zahlungsweise          EUR %8.2f" % @other_credit unless @other_credit.zero?
+
+
+
+    %h3 Zahlungsmethoden
+    %table.taxes.striped-table2
+      %tr
+        %th.left Methode
+        %th.right Betrag
       - @order.payment_methods.each do |pm|
-        %p= "#{pm.name}:                  EUR %8.2f" % pm.amount unless pmseen.include? pm.internal_type
-    - else
-      - if @order.rebate_type == 'percent' and not @order.rebate.zero?
-        %p= "Stornierung                  EUR %8.2f" % [ @refund_subtotal - @refund_subtotal * @order.rebate / 100 ]
-      - elsif @order.rebate_type == 'fixed' and not @order.rebate.zero?
-        %p= "Stornierung                  EUR %8.2f" % [ @refund_subtotal + @order.rebate ]
-      - else
-        %p= "Stornierung                  EUR %8.2f" % [ @refund_subtotal ]
+        %tr
+          %td= t pm.internal_type
+          %td= number_to_currency pm.amount
+
+    - if @refund_subtotal.zero?
+      %p= "Retour: EUR %8.2f" % [ @order.change_given ]
+
+    %p= "Stornierung in Bar: EUR %8.2f" % [ @order.refund_total ]
 
 
     
 
     %h3 Steuerklassen
-    %table.taxes
+    %table.taxes.striped-table2
       %tr
         %th
         %th

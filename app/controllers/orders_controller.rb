@@ -281,15 +281,25 @@ class OrdersController < ApplicationController
   end
 
   def print_receipt
+    if params[:user_type] == 'User'
+      @user = User.find_by_id params[:user_id]
+    else
+      @user = Employee.find_by_id params[:user_id]
+    end
+    @register = CashRegister.find_by_id params[:cash_register_id]
+    @vendor = @register.vendor if @register
+    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
+
     @order = Order.find_by_id(params[:order_id])
     if not @order then
       render :nothing => true and return
     end
     text = Printr.new.sane_template('item',binding)
-    if $Register and $Register.salor_printer
+    if @register.salor_printer
       render :text => text
     else
-      File.open($Register.thermal_printer,'w') { |f| f.write text }
+      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
@@ -339,7 +349,6 @@ class OrdersController < ApplicationController
       payment_methods_seen = []
       PaymentMethod.types_list.each do |pmt|
         pt = pmt[1]
-        puts pt
         if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0 then
           pm = PaymentMethod.new(:name => pmt[0],:internal_type => pt, :amount => SalorBase.string_to_float(params[pt.to_sym]))
           if pm.amount > @order.total then
@@ -418,13 +427,13 @@ class OrdersController < ApplicationController
   end
   def refund_item
     @oi = OrderItem.scopied.find_by_id(params[:id])
-    @oi.toggle_refund(true)
+    @oi.toggle_refund(true, params[:pm])
     @oi.save
     redirect_to order_path(@oi.order)
   end
   def refund_order
     @order = Order.scopied.find_by_id(params[:id])
-    @order.toggle_refund(true)
+    @order.toggle_refund(true, params[:pm])
     @order.save
     redirect_to order_path(@order)
   end
@@ -467,9 +476,11 @@ class OrdersController < ApplicationController
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
     @orders = Order.where({ :vendor_id => @employee.get_meta.vendor_id, :drawer_id => @employee.get_drawer.id,:created_at => @from..@to, :paid => 1 }).order("created_at ASC")
+    #@orders = Order.where({ :vendor_id => @employee.vendor_id, :drawer_id => @employee.get_drawer.id, :paid => 1 }).order("created_at ASC")
     @categories = Category.scopied
     @taxes = TaxProfile.scopied.where( :hidden => 0 )
     @drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id, :created_at => @from..@to }).where("tag != 'CompleteOrder'")
+    #@drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id }).where("tag != 'CompleteOrder'")
     @payouttypes = AppConfig.dt_tags_values.split(",")
   end
 

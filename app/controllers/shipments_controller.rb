@@ -139,6 +139,7 @@ class ShipmentsController < ApplicationController
       @shipment.move_all_to_items
       @shipment.save
     end
+    redirect_to shipment_path(params[:id])
   end
   def move_shipment_item
     @shipment = Shipment.find(params[:id])

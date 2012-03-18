@@ -436,6 +436,18 @@ fr:
       OrderItemRefund: Item Refund
       OrderRefund: Order Refund
       None: Not specified
+      count_orders: Count of orders
+      sales: Sales
+      payments: Payments
+      cash_drawer: Cash drawer
+      revenue: Revenue
+      sum_gross: Sum gross
+      sum_net: Sum net
+      gross: gross
+      net: net
+      sum_transactions: Sum transactions
+      noncash-refunds: Noncash-Refunds
+      cash-refunds: Cash-Refunds
       
 
   printr:
@@ -475,6 +487,9 @@ fr:
       drops: Drops
       payouts: Payouts
       refund: Refund
+      system_drawer_amount: System drawer amount
+      calculated_drawer_amount: Calculated drawer amount
+      warning_drawer_amount_not_zero: Warning! Your system drawer amount is not zero. You are strongly advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly, print this report again and log out.
 
     word:
       cancelled: annulé
@@ -591,6 +606,9 @@ fr:
     end_of_day:
       end_of_day_thermal_report: Print Report
       paper_report: Detail Report
+      cash_drawer: Cash Drawer
+      counted: Counted
+      difference: Difference
 
   views:
     eticket: Ticket
@@ -749,6 +767,9 @@ fr:
   ByCard: Par carte bleue
   ByGiftCard: Par carte cadeau
   OtherCredit: autre crédit
+  ByCardRefund: By Card Refund
+  ByGiftCardRefund: By Gift Card Refund
+  OtherCreditRefund: Other Credit Refund
   end_of_day: Fin de journée
   label: étiquette
   sticker: autocollant

@@ -518,99 +518,92 @@ module UserEmployeeMethods
     totals[1] = 0 if totals[1].nil?
     return totals
   end
+
+  #
   def get_end_of_day_report
     totals = Hash.new()
     totals[:date] = I18n.l(DateTime.now, :format => :long)
     totals[:drawer_amount] = self.get_drawer.amount
     totals[:unit] = I18n.t('number.currency.format.friendly_unit')
-    today = Time.now.beginning_of_day.strftime("%Y-%m-%d 01:01:01")
-    #begin
+    today = Time.now.beginning_of_day.strftime("%Y-%m-%d %H:%M:%S")
+    totals[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
 
-      # Get the orders total
-      if self.class == User then
-        totals[:orders_total] = Order.where("user_id = #{self.id} and refunded = 0 and created_at > '#{today}' and (paid = 1 or paid IS TRUE)").sum(:total)
-        totals[:username] = self.username
-      else
-        totals[:orders_total] = Order.where("employee_id = #{self.id} and refunded = 0 and created_at > '#{today}' and (paid = 1 or paid IS TRUE)").sum(:total)
-        totals[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
+    # Get the orders total
+    all_orders = Order.where("employee_id = #{self.id} and created_at > '#{today}' and (paid = 1 or paid IS TRUE)")
+    totals[:orders_total] = all_orders.sum(:total)
+
+
+    # Get the total of refunded order_items
+    totals[:refund_total] = 0
+    OrderItem.where("created_at > '#{today}' and refunded = 1 and refunded_by = #{self.id}").each do |oi|
+      totals[:refund_total] += oi.total
+    end
+
+    # Get the total of buyback OrderItems
+    bback_total = 0.0
+    all_orders.each do |o|
+      o.order_items.each do |oi|
+        next if oi.refunded or not oi.is_buyback # is_buyback is true
+        bback_total += oi.total
       end
+    end
+    totals[:buyback_item_total] = bback_total
 
-      # Get the buyback orders total
-        totals[:buyback_order_total] = Order.where("employee_id = #{self.id} and refunded = 0 and created_at > '#{today}' and buy_order = 1 and (paid = 1 or paid IS TRUE)").sum(:total)
+    # Get the total of all drawer transactions for today
+    totals[:drop_total] = 0
+    totals[:payout_total] = 0
+    totals[:payout_refunds] = 0
+    self.get_drawer.drawer_transactions.where(["tag <> 'CompleteOrder' and created_at > ? and owner_id = ?",Time.now.beginning_of_day, self.id]).each do |dt|
+      totals[:drop_total] += dt.amount if dt.drop
+      totals[:payout_total] -= dt.amount if dt.payout
+      #totals[:payout_refunds] = totals[:payout_refunds] + dt.amount if dt.payout and dt.is_refund
+    end
+    totals[:transaction_total] = totals[:payout_total] + totals[:drop_total]
 
-      # Get the total of refunded orders
-      total_today = Order.where("refunded_by = #{self.id} and refunded_by_type = '#{self.class.to_s}' and refunded = 1 and created_at > '#{today}' and buy_order != 1 and (paid = 1 or paid IS TRUE)").sum(:total)
-      t = total_today
-      t = 0 if t.nil?
-      if t < 0 then
-        t = t * -1
-      end
-      totals[:refunded_orders_total] = t
+    # Get a LIST of all payout drawer transactions for today
+    totals[:dt_payout_list] = Hash.new
+    self.get_drawer.drawer_transactions.where(["payout = true and tag <> 'CompleteOrder' and created_at > ? and owner_id = ?", Time.now.beginning_of_day, self.id]).each do |dt|
+      totals[:dt_payout_list].merge! dt.id => { :tag => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => - dt.amount, :refund => dt.is_refund }
+    end
 
-      # Get the total of refunded order_items
-      t = 0
-      OrderItem.where("created_at >= '#{today}' and refunded = 1 and refunded_by = #{self.id} and refunded_by_type = '#{self.class}'").each do |oi|
-          t = t + (-1 * oi.total)
-      end
-      totals[:refunded_items_total] = t - totals[:refunded_orders_total]
-      totals[:refund_total] = totals[:refunded_items_total] + totals[:refunded_orders_total]
+    # Get a LIST of all drop drawer transactions for today
+    totals[:dt_drop_list] = Hash.new
+    # ToDo: Can't get the SQL query to work with the word 'drop'
+    self.get_drawer.drawer_transactions.where(["(payout = false or payout IS NULL) and is_refund = false and tag <> 'CompleteOrder' and created_at > ? and owner_id = ?", Time.now.beginning_of_day, self.id]).each do |dt|
+      totals[:dt_drop_list].merge! dt.id => { :name => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => dt.amount, :refund => dt.is_refund }
+    end
 
-      # Get the total of buyback OrderItems
-      bback_total = 0.0
-      OrderItem.where("created_at >= '#{today}' and refunded != 1 and (is_buyback is TRUE or is_buyback = 1)").each do |oi|
-        if oi.total > 0 then
-          bback_total -= oi.total
-        else
-          bback_total += oi.total
+    # Get a GROUPED LIST of all positive payment methods for today
+    totals[:pm_pos] = Hash.new
+    totals[:pm_neg] = Hash.new
+    totals[:pm_pos_sum] = 0
+    totals[:pm_neg_sum] = 0
+    #I18n.t("system.payment_internal_types").split(',').each do |pmtype|
+    all_orders.each do |o|
+      o.payment_methods.each do |pm|
+        next if pm.order_id.nil?
+        key = pm.internal_type.to_sym
+        if pm.amount > 0
+          if not totals[:pm_pos].has_key?(key)
+            totals[:pm_pos].merge! key => pm.amount
+          else
+            totals[:pm_pos][key] += pm.amount
+          end
+          totals[:pm_pos_sum] += pm.amount
         end
-      end
-      totals[:buyback_item_total] = bback_total
+        if pm.amount < 0
+          if not totals[:pm_neg].has_key?(key)
+            totals[:pm_neg].merge! key => pm.amount
+          else
+            totals[:pm_neg][key] += pm.amount
+          end
+          totals[:pm_neg_sum] += pm.amount
+        end
+      end 
+    end
+    totals[:pm_sum] = totals[:pm_pos_sum] + totals[:pm_neg_sum]
 
-      # Get the total of all drawer transactions for today
-      totals[:drop_total] = 0
-      totals[:payout_total] = 0
-      totals[:payout_refunds] = 0
-      self.get_drawer.drawer_transactions.where(["tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
-        totals[:drop_total] += dt.amount if dt.drop
-        totals[:payout_total] -= dt.amount if dt.payout
-        #totals[:payout_refunds] = totals[:payout_refunds] + dt.amount if dt.payout and dt.is_refund
-      end
-      totals[:transaction_total] = totals[:payout_total] + totals[:drop_total]
-
-      # Get a list of all payout drawer transactions for today
-      totals[:dt_payout_list] = Hash.new
-      self.get_drawer.drawer_transactions.where(["payout = true and tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
-        totals[:dt_payout_list].merge! dt.id => { :tag => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => - dt.amount, :refund => dt.is_refund }
-      end
-
-      # Get a list of all drop drawer transactions for today
-      totals[:dt_drop_list] = Hash.new
-      # ToDo: Can't get the SQL query to work with the word 'drop'
-      self.get_drawer.drawer_transactions.where(["(payout = false or payout IS NULL) and is_refund = false and tag <> 'CompleteOrder' and created_at > ?",Time.now.beginning_of_day]).each do |dt|
-        totals[:dt_drop_list].merge! dt.id => { :name => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => dt.amount, :refund => dt.is_refund }
-      end
-
-      # Get a list of all positive payment methods for today
-      totals[:pm_pos] = Hash.new
-      totals[:pm_pos_sum] = 0
-      I18n.t("system.payment_internal_types").split(',').each do |pmtype|
-        pmsum = PaymentMethod.where(["internal_type = ? and amount > 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
-        totals[:pm_pos_sum] += pmsum
-        totals[:pm_pos].merge! pmtype.to_sym => pmsum
-      end
-
-      # Get a list of all negative payment methods for today
-      totals[:pm_neg] = Hash.new
-      totals[:pm_neg_sum] = 0
-      I18n.t("system.payment_internal_types").split(',').each do |pmtype|
-        pmsum = PaymentMethod.where(["internal_type = ? and amount < 0 and created_at > ?", pmtype, Time.now.beginning_of_day]).sum(:amount)
-        totals[:pm_neg_sum] += pmsum
-        totals[:pm_neg].merge! pmtype.to_sym => pmsum
-      end
-
-      totals[:pm_sum] = totals[:pm_pos_sum] + totals[:pm_neg_sum]
-    #rescue
-    #end
+    totals[:calculated_drawer_amount] = totals[:pm_neg][:InCash] + totals[:pm_pos][:InCash] + totals[:transaction_total]
     return totals
   end
   def report
