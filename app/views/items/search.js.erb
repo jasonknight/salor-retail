@@ -64,10 +64,20 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
   <% @orders.each do |order|  %>
     var row = $('<tr></tr>');
     row.addClass('table-row');
+    row.css({ 'background-color': "<%= order.cash_register.color %>"});
     var oname = $('<td></td>');
     oname.addClass('table-cell id');
     oname.html("#<%= order.id %>");
-  
+    
+    var user_name = $('<td></td>');
+    user_name.addClass('table-cell id');
+    user_name.html("<%= order.employee.username %>");
+    
+    var order_total = $('<td></td>');
+    order_total.addClass('table-cell id');
+    order_total.html(toCurrency("<%= order.total %>"));
+
+    
     var sku = $('<td></td>');
     sku.addClass('table-cell order-tag');
     sku.html("<%= order.tag %>");
@@ -82,6 +92,8 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     var btn3 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:show,32) %>" onmousedown="window.location= \'/orders/<%= order.id %>\';" /></div></td>');
     btn.addClass('table-cell btn');
     row.append(oname);
+    row.append(user_name);
+    row.append(order_total);
     row.append(sku);
     row.append(btn3);
     row.append(btn2);
