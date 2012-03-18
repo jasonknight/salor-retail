@@ -220,6 +220,7 @@ de:
         
    
   headings:
+    database_distiller: Datenbank-Reiniger
     order_validation: "Order Validation"
     paylife: "Paylife(Artema Hybrid)"
     bank_machine_types: Typ unterstützen
@@ -276,6 +277,7 @@ de:
     assign: setze zu
 
   menu:
+    database_distiller: Datenbank-Reiniger
     clear_order: Löschen
     inventory_report: Bericht Inventur
     ok: OK

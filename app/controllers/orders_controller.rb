@@ -356,7 +356,7 @@ class OrdersController < ApplicationController
             sanity_check = pm.amount - @order.total
             # puts  "#{sanity_check}"
             if sanity_check > 500 then
-              GlobalErrors.append_fatal("system.errors.sanity_check",pm)
+              GlobalErrors.append_fatal("system.errors.sanity_check")
               render :action => :update_pos_display and return
             end
           end
@@ -370,7 +370,7 @@ class OrdersController < ApplicationController
       @order.reload
       
       if payment_methods_total.round(2) < @order.total.round(2) then
-        GlobalErrors.append_fatal("system.errors.sanity_check2" + payment_methods_total.inspect,@order)
+        GlobalErrors.append_fatal("system.errors.sanity_check")
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return

@@ -68,6 +68,8 @@ Salor::Application.routes.draw do
   match "items/info" => "items#info"
   match "items/item_json" => "items#item_json"
   match "items/wholesaler_update" => "items#wholesaler_update"
+  match "items/database_distiller" => "items#database_distiller"
+  match "items/distill_database" => "items#distill_database"
   match "cash_registers/end_of_day" => "cash_registers#end_of_day"
 
   match "items/create_ajax" => "items#create_ajax"
