@@ -90,12 +90,13 @@ class EmployeesController < ApplicationController
        elsif not user.last_path.empty?
           redirect_to user.last_path and return 
        else
-          r = user.get_root
-          if user.class == Employee then
-            redirect_to r.merge!({:notice => "Logged In",:vendor_id => user.vendor_id}) and return
-          else
-            redirect_to r.merge!({:notice => "Logged In"}) and return
-          end
+          #r = user.get_root
+          #if user.class == Employee then
+          #  redirect_to r.merge!({:notice => "Logged In",:vendor_id => user.vendor_id}) and return
+          #else
+          #  redirect_to r.merge!({:notice => "Logged In"}) and return
+          #end
+          redirect_to '/vendors'
        end
     else
       redirect_to :controller => :home, :action => :index, :notice => "could not find a user with code" and return
