@@ -154,6 +154,7 @@
         %th.table-center
       - paymentmethod_positive_sums.keys.each do |k|
         - # next if paymentmethod_positive_sums[k].zero?
+        - next unless regular_payment_methods.include?(k.to_s)
         %tr
           %td.left= t k
           %td.table-center= number_to_currency paymentmethod_positive_sums[k]
@@ -177,7 +178,7 @@
       - 0.upto(category_sums_negative_gro.size) do |i|
         - next if category_sums_negative_gro[i].zero?
         %tr
-          %td.left= Category.scopied.find_by_id(i).name unless i.zero?
+          %td.left= i.zero? ? t('.no_category') : Category.scopied.find_by_id(i).name
           %td.table-center= number_to_currency category_sums_negative_gro[i]
           %td.table-center= number_to_currency category_sums_negative_net[i]
 
@@ -200,7 +201,7 @@
         %th.left= t '.sums_by_payment_methods'
         %th.table-center
       - paymentmethod_negative_sums.keys.each do |k|
-        - next unless regular_payment_methods.include?(k)
+        - next unless regular_payment_methods.include?(k.to_s)
         %tr
           %td.left= t k
           %td.table-center= number_to_currency paymentmethod_negative_sums[k]
@@ -220,8 +221,13 @@
       %tr
         %th.left= t '.type'
         %th.table-center= t '.gross'
+      - paymentmethod_positive_sums.keys.each do |k|
+        - next if regular_payment_methods.include?(k.to_s)
+        %tr
+          %td.left= t k
+          %td.table-center= number_to_currency paymentmethod_positive_sums[k]
       - paymentmethod_negative_sums.keys.each do |k|
-        - next if regular_payment_methods.include?(k)
+        - next if regular_payment_methods.include?(k.to_s)
         %tr
           %td.left= t k
           %td.table-center= number_to_currency paymentmethod_negative_sums[k]
@@ -242,7 +248,7 @@
         %tr
           %td.left= t ('.' + d.tag)
           %td.left= d.notes
-          %td.right= number_to_currency d.amount if d.payout
+          %td.right= number_to_currency d.amount
     %p== #{ t '.sum_gross' }: #{ number_to_currency refunded_sum_cash_gro }
     %p== #{ t '.sum_net' }: #{ number_to_currency refunded_sum_cash_net }
 

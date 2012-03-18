@@ -475,14 +475,16 @@ class Order < ActiveRecord::Base
       activate_gift_cards
       
       update_self_and_save
-  
+      ottl = self.get_drawer_add
       if self.buy_order then
+        ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
         #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - self.total)
       elsif self.total < 0 then
+        ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
-        ottl = self.get_drawer_add
+
         $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
@@ -521,9 +523,7 @@ class Order < ActiveRecord::Base
   end
   def get_drawer_add
     ottl = self.total
-    puts ottl
     self.payment_methods.each do |pm|
-      puts pm.inspect
       next if pm.internal_type == 'InCash'
       ottl -= pm.amount
     end

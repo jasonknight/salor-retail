@@ -2,7 +2,7 @@
       <%
         price = oi.price
         total = oi.gross
-        if oi.item.item_type.behavior == 'gift_card' and oi.item.activated then
+        if (oi.item.item_type.behavior == 'gift_card' and oi.item.activated) or oi.is_buyback then
           price = price * -1 unless price < 0
           total = total * -1 unless total < 0
         end

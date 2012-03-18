@@ -140,7 +140,11 @@ class OrderItem < ActiveRecord::Base
       update_location_category_item(t * -1,q * -1)
       self.order.update_attribute(:total, self.order.total - t)
       if refund_payment_method == 'InCash'
-        create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
+        if t < 0
+          create_refund_transaction(-t,:drop, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
+        else
+          create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
+        end
       else
         create_refund_payment_method(t,refund_payment_method) if not x.nil?
       end
