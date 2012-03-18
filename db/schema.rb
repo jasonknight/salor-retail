@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120307142107) do
+ActiveRecord::Schema.define(:version => 20120317235942) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -474,35 +474,36 @@ ActiveRecord::Schema.define(:version => 20120307142107) do
     t.integer  "order_id"
     t.integer  "item_id"
     t.float    "quantity"
-    t.float    "price",              :default => 0.0
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.float    "price",                 :default => 0.0
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.integer  "tax_profile_id"
     t.integer  "item_type_id"
-    t.boolean  "activated",          :default => false
-    t.boolean  "total_is_locked",    :default => false
-    t.boolean  "tax_is_locked",      :default => false
-    t.float    "total",              :default => 0.0
-    t.float    "tax",                :default => 0.0
-    t.float    "coupon_amount",      :default => 0.0
+    t.boolean  "activated",             :default => false
+    t.boolean  "total_is_locked",       :default => false
+    t.boolean  "tax_is_locked",         :default => false
+    t.float    "total",                 :default => 0.0
+    t.float    "tax",                   :default => 0.0
+    t.float    "coupon_amount",         :default => 0.0
     t.string   "behavior"
-    t.float    "tax_profile_amount", :default => 0.0
+    t.float    "tax_profile_amount",    :default => 0.0
     t.integer  "category_id"
     t.integer  "location_id"
-    t.float    "amount_remaining",   :default => 0.0
-    t.boolean  "refunded",           :default => false
-    t.boolean  "discount_applied",   :default => false
-    t.boolean  "coupon_applied",     :default => false
+    t.float    "amount_remaining",      :default => 0.0
+    t.boolean  "refunded",              :default => false
+    t.boolean  "discount_applied",      :default => false
+    t.boolean  "coupon_applied",        :default => false
     t.datetime "refunded_at"
     t.integer  "refunded_by"
     t.string   "refunded_by_type"
-    t.float    "discount_amount",    :default => 0.0
+    t.float    "discount_amount",       :default => 0.0
     t.float    "rebate"
-    t.integer  "coupon_id",          :default => 0
-    t.boolean  "is_buyback",         :default => false
+    t.integer  "coupon_id",             :default => 0
+    t.boolean  "is_buyback",            :default => false
     t.string   "sku"
-    t.boolean  "weigh_compulsory",   :default => false
-    t.boolean  "no_inc",             :default => false
+    t.boolean  "weigh_compulsory",      :default => false
+    t.boolean  "no_inc",                :default => false
+    t.string   "refund_payment_method"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"

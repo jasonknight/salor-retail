@@ -446,6 +446,8 @@ de:
       gross: brutto
       net: netto
       sum_transactions: Summe Buchungen
+      noncash-refunds: Nichtbargeld-Stornierungen
+      cash-refunds: Bargeld-Stornierungen
       
 
   printr:
@@ -698,7 +700,7 @@ de:
       model_create: "%{model} wurde erfolgreich angelegt."
       model_edit: "%{model} wurde erfolgreich bearbeitet."
       new_order: Neuer Verkauf angelegt
-      order_refund_dt: "Automatic refund drawer transaction Verkauf #%{id} : http://salor/orders/%{id}"
+      order_refund_dt: "#%{id}"
       please_wait: "Bitte warten..."
       transaction_succeeded: "Bezahlt!"
       artema_hybrid_lost: "Artema Hybrid Anschluss prufen! Terminal abstecken und wieder anstecken."
@@ -766,6 +768,9 @@ de:
   ByCard: Karte
   ByGiftCard: Gutschein
   OtherCredit: Andere Bezahlmethode
+  ByCardRefund: Karte Stornierung
+  ByGiftCardRefund: Gutschein Stornierung
+  OtherCreditRefund: Andere Bezahlmethode Stornierung
   end_of_day: Kassensaldo
   label: Etikett
   sticker: Aufkleber

@@ -446,6 +446,8 @@ fr:
       gross: gross
       net: net
       sum_transactions: Sum transactions
+      noncash-refunds: Noncash-Refunds
+      cash-refunds: Cash-Refunds
       
 
   printr:
@@ -765,6 +767,9 @@ fr:
   ByCard: Par carte bleue
   ByGiftCard: Par carte cadeau
   OtherCredit: autre crédit
+  ByCardRefund: By Card Refund
+  ByGiftCardRefund: By Gift Card Refund
+  OtherCreditRefund: Other Credit Refund
   end_of_day: Fin de journée
   label: étiquette
   sticker: autocollant

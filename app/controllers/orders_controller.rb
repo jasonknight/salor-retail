@@ -476,9 +476,11 @@ class OrdersController < ApplicationController
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
     @orders = Order.where({ :vendor_id => @employee.get_meta.vendor_id, :drawer_id => @employee.get_drawer.id,:created_at => @from..@to, :paid => 1 }).order("created_at ASC")
+    #@orders = Order.where({ :vendor_id => @employee.vendor_id, :drawer_id => @employee.get_drawer.id, :paid => 1 }).order("created_at ASC")
     @categories = Category.scopied
     @taxes = TaxProfile.scopied.where( :hidden => 0 )
     @drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id, :created_at => @from..@to }).where("tag != 'CompleteOrder'")
+    #@drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id }).where("tag != 'CompleteOrder'")
     @payouttypes = AppConfig.dt_tags_values.split(",")
   end
 

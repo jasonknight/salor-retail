@@ -120,6 +120,7 @@ class OrderItem < ActiveRecord::Base
   #
   def toggle_refund(x, refund_payment_method)
     t = (self.calculate_total)
+    return if (GlobalData.salor_user.get_drawer.amount - t) < 0
     q = self.quantity
     if self.refunded then
       # this should never happen right now since it's blocked by the orders#show view
@@ -135,12 +136,13 @@ class OrderItem < ActiveRecord::Base
       self.update_attribute(:refunded,true)
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
+      self.update_attribute(:refund_payment_method, refund_payment_method)
       update_location_category_item(t * -1,q * -1)
       self.order.update_attribute(:total, self.order.total - t)
       if refund_payment_method == 'InCash'
         create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
       else
-        create_refund_payment_method(t,refund_payment_method)
+        create_refund_payment_method(t,refund_payment_method) if not x.nil?
       end
 
       # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
