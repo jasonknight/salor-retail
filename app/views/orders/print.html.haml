@@ -4,20 +4,6 @@
   %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
     = salor_icon(:print, {}, 32)
 
-- if @order.payment_methods.any? then
-  - ic = @order.payment_methods.find_by_internal_type 'InCash'
-  - if ic then
-    - @in_cash = ic.amount
-  - bc = @order.payment_methods.find_by_internal_type 'ByCard'
-  - if bc then
-    - @by_card = bc.amount
-  - gc = @order.payment_methods.find_by_internal_type 'ByGiftCard'
-  - if gc then
-    - @by_gift_card = gc.amount
-  - oc = @order.payment_methods.find_by_internal_type 'OtherCredit'
-  - if oc then
-    - @other_credit = oc.amount
-
 %div.report-container.invoice
   %div
     %img.right{ :src => '/images/salor-logo-reports.png'}
@@ -61,6 +47,8 @@
 
     - if @refund_subtotal.zero?
       %p= "Retour: EUR %8.2f" % [ @order.change_given ]
+
+    %p= "Stornierung in Bar: EUR %8.2f" % [ @order.refund_total ]
 
 
     
