@@ -6,9 +6,6 @@
   </div>
 </div>
 
-<div class='shipments-edit-left'>
-      <span style="font-size: 1.6em;font-weight:bold;"> <%= @shipment.name %></span>
-      <div style="display:inline;"><img id='button-move-all-shipment-items' src='/images/icons/left_32.png' onclick="get('/shipments/move_all_to_items?id=<%= @shipment.id %>', 'show.html.erb')"></img></div>
 
 <div class='report-container'>
   <div>
@@ -18,6 +15,7 @@
     <% end %>
     <div class='clear'></div>
   </div>
+  <h2> <%= @shipment.name %></h2>
 
 <div class='shipments-edit-right'>
   <p><strong><%= I18n.t("activerecord.attributes.price") %>:</strong> <%= raw edit_me(:price,@shipment,salor_number_to_currency(@shipment.price)) %></p>
@@ -50,47 +48,69 @@
 
     <% end  %>
 </div>
-<div>
 
+<div>
 <h3><%= I18n.t("headings.shipment_items") %></h3>
 
-<table class='shipments-edit'>
-<tr>
-<th><%= ShipmentItem.human_attribute_name(:name) %></th>
-<th><%= ShipmentItem.human_attribute_name(:sku) %></th>
-<th><%= ShipmentItem.human_attribute_name(:quantity) %></th>
-<th><%= Location.model_name.human %></th>
-<th><%= StockLocation.model_name.human %></th>
-</tr>
+<div style="display:inline;"><a href="/shipments/move_all_to_items?id=<%= @shipment.id %>"><img id='button-move-all-shipment-items' src='/images/icons/left_32.png'></img></a></div>
 
-          <% @shipment.shipment_items.scopied.each do |item|  %>
-            <tr>
-              <td valign="middle">
-                <%= raw edit_me(:name,item,'','','shipment_item_' + item.id.to_s + 'name') %>
-              </td>
-              <td valign="middle">
-                <%= raw edit_me(:sku,item,'','','shipment_item_' + item.id.to_s + 'sku') %>
-              </td>
-              <td valign="middle">
-                <%= raw edit_me(:quantity,item,'','','shipment_item_' + item.id.to_s + 'quantity') %>
-              </td>
-              <td valign="middle">
-                <% i = Item.scopied.find_by_sku(item.sku) %>
-                <% if item.in_stock %>
-                  <%= i.location.name if i and i.location %>
-                <% else %>
-                  <div align="center">
-                    <img id='button-move-item-<%= item.id %>' class='button-move-item' src='/images/icons/left_32.png' onclick="get('/shipments/move_shipment_item?id=<%= @shipment.id %>&shipment_item_id=<%= item.id %>', 'show.html.erb')"></img>
-                  </div>
-                <% end %>
-              </td>
-              <td valign="middle">
-                <% if not item.in_stock %>
-                  <span class="shipment_item_stock_locations" id="shipment_item_stock_location_<%= item.id %>"><%= item.stock_locations.last.name if item.stock_locations.last %></span>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
+<table class='shipments-edit'>
+  <tr>
+    <th><%= ShipmentItem.human_attribute_name(:name) %></th>
+    <th><%= ShipmentItem.human_attribute_name(:sku) %></th>
+    <th><%= Item.human_attribute_name(:quantity) %></th>
+    <th><%= ShipmentItem.human_attribute_name(:quantity) %></th>
+    <th><%= Item.human_attribute_name(:purchase_price) %></th>
+    <th><%= Location.model_name.human %></th>
+    <th><%= StockLocation.model_name.human %></th>
+  </tr>
+
+  <% purchase_price_sum = 0 %>
+  <% @shipment.shipment_items.scopied.each do |sitem|  %>
+    <% item = Item.scopied.find_by_sku(sitem.sku) %>
+    <tr>
+      <td valign="middle">
+        <%= raw edit_me(:name,item,'','','item_' + item.id.to_s + 'name') %>
+      </td>
+      <td valign="middle">
+        <%= raw edit_me(:sku,sitem,'','','shipment_item_' + sitem.id.to_s + 'sku') %>
+      </td>
+      <td valign="middle">
+        <%= raw edit_me(:quantity, item, '', '', 'item_' + item.id.to_s + 'quantity') %>
+      </td>
+      <td valign="middle">
+        <%= raw edit_me(:quantity,sitem,'','','shipment_item_' + sitem.id.to_s + 'quantity') %>
+      </td>
+      <td valign="middle">
+        <% purchase_price = item.purchase_price ? item.purchase_price : 0 %>
+        <% purchase_price_sum += purchase_price %>
+        <%= raw edit_me(:purchase_price, item, '', '', 'item_' + item.id.to_s + 'purchase_price')  %>
+      </td>
+      <td valign="middle">
+        <% if sitem.in_stock %>
+          <%= item.location.name if item and item.location %>
+        <% else %>
+          <div align="center">
+            <img id='button-move-item-<%= sitem.id %>' class='button-move-item' src='/images/icons/left_32.png' onclick="get('/shipments/move_shipment_item?id=<%= @shipment.id %>&shipment_item_id=<%= sitem.id %>', 'show.html.erb')"></img>
+          </div>
+        <% end %>
+      </td>
+      <td valign="middle">
+        <% if not sitem.in_stock %>
+          <span class="shipment_item_stock_locations" id="shipment_item_stock_location_<%= sitem.id %>"><%= sitem.stock_locations.last.name if sitem.stock_locations.last %></span>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><b><%= number_to_currency purchase_price_sum %></b></td>
+    <td></td>
+    <td></td>
+  </tr>
 </table>
         
 </div>

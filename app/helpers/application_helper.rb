@@ -201,7 +201,8 @@ module ApplicationHelper
       :camera => "camera",
       :button => 'button',
       :card => 'credit_card',
-      :print => 'print'
+      :print => 'print',
+      :document => 'document'
     }
     return icons[name] + '_' + size.to_s + '.png'
   end

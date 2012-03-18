@@ -908,6 +908,8 @@ div.content-box > div.content-container
 div.list 
   list-style: none
   text-align: center
+  width: 80%
+  margin: auto
   font-size: $text_size_big
 
 div.list > div 
@@ -2048,14 +2050,13 @@ div.void-order-input-container
   
 
 
-.report-container 
+div.report-container 
   padding: 10px
-  width: 95%
+  width: 75%
+  margin: auto
   background-color: white
   line-break: strict
   color: black
-  margin-bottom: 20px
-  //font-size: 2em
   input
     display: none
 
@@ -2154,12 +2155,16 @@ div.metric-input
 div#additional div.metric-input input 
   width: 50px
 
+table.shipments-edit
+  width: 70%
+  margin: auto
+  font-size: 120%
 
 
 table.shipments_index td,
 table.shipments-edit td 
   padding: 5px
-  background-color: $middleground4
+  background-color: $middleground3
   color: white
 
 
@@ -2486,6 +2491,7 @@ div.last-five-orders
   div.last-five-order 
     @include widget
     @include no_select
+    @include rounded_corners_all
     float: left
     margin: 20px
     width: 150px
@@ -2493,8 +2499,11 @@ div.last-five-orders
     text-align: center
   span.id 
     font-size: $text_size_big
+  span.total
+    font-size: $text_size_big
+    font-weight: bold
   div.selected 
-    border: 2px solid red
+    border: 4px solid red
   
 
 div.last-completed-orders 

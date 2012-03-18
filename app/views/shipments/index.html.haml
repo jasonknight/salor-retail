@@ -5,7 +5,7 @@
   = link_to salor_icon(:shipper, {}, 32, Shipper.model_name.human), shippers_path
   = link_to salor_icon(:shipment_type, {}, 32, ShipmentType.model_name.human), shipment_types_path
 
-%table
+%table.shipments-edit
   %th= Shipment.human_attribute_name(:name)
   %th= Shipment.human_attribute_name(:from)
   %th= Shipment.human_attribute_name(:to)
@@ -17,13 +17,14 @@
     - sname = shipment.shipper.nil? ? t("system.errors.value_not_set") : shipment.shipper.name
     - rname = shipment.receiver.nil? ? t("system.errors.value_not_set") : shipment.receiver.name
     %tr
-      %td= link_to shipment.name, shipment
+      %td= shipment.name
       %td= edit_me(:the_shipper,shipment,sname)
       %td= edit_me(:the_receiver,shipment,rname)
       %td= salor_number_to_currency(shipment.price)
       %td= shipment.paid
       %td= shipment.shipment_type.name if shipment.shipment_type
       %td= link_to salor_icon(:edit,{},32,t(:edit)), edit_shipment_path(shipment)
+      %td= link_to salor_icon(:document,{},32,t('.report')), shipment
       %td= link_to salor_icon(:delete,{},32,t(:delete)), shipment, :confirm => t("menu.delete_confirm"), :method => :delete
 = raw content_box_bottom 
 = salor_render :partial => "shared/in_place_edit"

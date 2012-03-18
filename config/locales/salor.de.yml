@@ -77,7 +77,7 @@ de:
       reorder_type: Reorder Type
       big_buttons: grosser Tasten
       hide_discounts: Preisnachlässe ausblenden
-      thermal_printer: Thermal Druker
+      thermal_printer: Thermodrucker
       paylife: Paylife
       url: URL
       letter: Letter
@@ -171,10 +171,13 @@ de:
         to: an
       shipment_item:
         name: Name
-        quantity: Menge
+        quantity: Liefermenge
         sku: SKU
       cash_register:
         sticker_printer: Etikettendrucker
+      item:
+        purchase_price: Einkaufspreis
+        quantity: Lagermenge
       sku: SKU
       start_amount: Startbetrag
       start_date: Beginn
@@ -209,8 +212,8 @@ de:
       afield: Feld
       order_id: Verkaufs-Id
       scale: Waage
-      no_print: Nicht drucken aus Enter
-      salor_printer: Client-Seite Drüker
+      no_print: Nicht drucken bei Enter
+      salor_printer: Client-seitiges Drucken
       
   api:
     user_does_not_exist: Dieser Benutzer existiert nicht oder darf die API nicht benutzen.
@@ -611,6 +614,10 @@ de:
       counted: Gezählt
       difference: Differenz
 
+  shipments:
+    index:
+      report: Bericht
+
   views:
     eticket: Regaletikett
     sticky_ticket: Klebeetikett
@@ -752,7 +759,7 @@ de:
       price: Verkaufspreis
       total_buying_price: Summe Kaufpreis
       total_selling_price: Summe Verkaufspreis
-      subtotal_purchase_price: Gesamtsumme Kaufpreis
+      subtotal_purchase_price: Gesamtsumme Einkaufspreis
       subtotal_selling_price: Gesamtsumme Verkaufspreis
     update_real_quantity:
       inventory_report: Bericht Inventur
@@ -775,3 +782,5 @@ de:
   label: Etikett
   sticker: Aufkleber
   support: Support
+  edit: Bearbeiten
+  delete: Löschen

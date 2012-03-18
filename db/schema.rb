@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120317235942) do
+ActiveRecord::Schema.define(:version => 20120318092027) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(:version => 20120317235942) do
     t.string   "pole_display"
     t.string   "customer_screen_blurb"
     t.boolean  "salor_printer",         :default => false
+    t.string   "color"
   end
 
   add_index "cash_registers", ["vendor_id"], :name => "index_cash_registers_on_vendor_id"
@@ -339,7 +340,7 @@ ActiveRecord::Schema.define(:version => 20120317235942) do
     t.string   "behavior"
     t.float    "tax_profile_amount",   :default => 0.0
     t.string   "sales_metric"
-    t.float    "purchase_price"
+    t.float    "purchase_price",       :default => 0.0
     t.date     "expires_on"
     t.float    "buyback_price",        :default => 0.0
     t.integer  "quantity_buyback",     :default => 0
