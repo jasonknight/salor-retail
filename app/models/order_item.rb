@@ -112,6 +112,10 @@ class OrderItem < ActiveRecord::Base
     end
   end
   def toggle_refund(x)
+    if not $User.get_drawer.amount >= self.total then
+      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
+      return
+    end
     t = (self.calculate_total)
     q = self.quantity
     if self.refunded then

@@ -127,7 +127,8 @@ class OrdersController < ApplicationController
     end
     if @order and (not @order.paid == 1 or $User.is_technician?) then
       session[:prev_order_id] = salor_user.meta.order_id
-      salor_user.meta.update_attributes(:cash_register_id => @order.cash_register.id, :order_id => @order.id)
+      $User.meta.update_attributes(:order_id => @order.id)
+      @order.update_attributes(:cash_register_id => $User.get_meta.cash_register_id)
     end
     redirect_to :action => :new, :order_id => @order.id
   end

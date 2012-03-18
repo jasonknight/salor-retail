@@ -567,8 +567,8 @@ class Order < ActiveRecord::Base
     dt = DrawerTransaction.new(opts)
     dt.amount = amount
     dt[type] = true
-    dt.drawer_id = GlobalData.salor_user.get_drawer.id
-    dt.drawer_amount = GlobalData.salor_user.get_drawer.amount
+    dt.drawer_id = $User.get_drawer.id
+    dt.drawer_amount = $User.get_drawer.amount
     dt.order_id = self.id
     if dt.amount < 0 then
       dt.payout = true
@@ -577,13 +577,17 @@ class Order < ActiveRecord::Base
     end
     if dt.save then
       if type == :payout then
-        GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)
+        $User.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)
       elsif type == :drop then
-        GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
+        $User.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
     end
   end
   def toggle_refund(x)
+    if not $User.get_drawer.amount >= self.total then
+      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
+      return
+    end
     if self.refunded then
       self.update_attribute(:refunded, false)
       #create_drawer_transaction(self.total,:drop)
