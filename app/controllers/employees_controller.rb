@@ -82,6 +82,9 @@ class EmployeesController < ApplicationController
       end
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s
+      if cr = CashRegister.find_by_ip(request.ip) then
+        user.get_meta.update_attribute :cash_register_id, cr.id
+      end
        if params[:redirect]
           redirect_to CGI.unescape(params[:redirect]) and return
        elsif not user.last_path.empty?
