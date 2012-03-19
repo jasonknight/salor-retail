@@ -472,7 +472,7 @@ class OrdersController < ApplicationController
     @from = @from.beginning_of_day
     @to = @from.beginning_of_day + 1.day
     @vendor = GlobalData.vendor
-    @employees = @vendor.employees
+    @employees = @vendor.employees.where(:hidden => 0)
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
     @orders = Order.where({ :vendor_id => @employee.get_meta.vendor_id, :drawer_id => @employee.get_drawer.id,:created_at => @from..@to, :paid => 1 }).order("created_at ASC")

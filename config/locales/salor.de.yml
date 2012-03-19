@@ -494,7 +494,7 @@ de:
       refund: Stornierung
       system_drawer_amount: Kassenlade System
       calculated_drawer_amount: Kassenlade Bericht
-      warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, jeden Tag mit einem Kassenbetrag von 0 zu beginnen und zu beenden, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor, drucken Sie diesen Bericht erneut und loggen Sie sich aus.
+      warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor und laden Sie diese Seite neu.
 
 
     word:

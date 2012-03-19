@@ -529,7 +529,7 @@ module UserEmployeeMethods
     totals[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
 
     # Get the orders total
-    all_orders = Order.where("employee_id = #{self.id} and created_at > '#{today}' and (paid = 1 or paid IS TRUE)")
+    all_orders = Order.where("vendor_id = #{ self.get_meta.vendor_id } and drawer_id = #{self.get_drawer.id} and created_at > '#{today}' and (paid = 1 or paid IS TRUE)")
     totals[:orders_total] = all_orders.sum(:total)
 
 
