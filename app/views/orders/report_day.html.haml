@@ -313,7 +313,7 @@
 
     %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
 
-    - if calculated_drawer_amount != 0
+    - if calculated_drawer_amount.round(2) != 0
       %p
         %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
 
