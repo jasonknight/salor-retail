@@ -202,7 +202,8 @@ module ApplicationHelper
       :button => 'button',
       :card => 'credit_card',
       :print => 'print',
-      :document => 'document'
+      :document => 'document',
+      :trash => 'trash'
     }
     return icons[name] + '_' + size.to_s + '.png'
   end

@@ -2,7 +2,7 @@
 <br />
 </div>
 <div class="button-row" align='right'>
-          <div class='button-print rounded-corners-left' onmousedown="print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt');"><%= t('.end_of_day_thermal_report')%></div>
+          <div class='button-print rounded-corners-left' onmousedown="print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt','');"><%= t('.end_of_day_thermal_report')%></div>
           <div class='button-print' onmousedown="window.location.href='/orders/report_day';"><%= t('.paper_report')%></div>
           <div class="spacer">&nbsp;</div>
           <div class="button-confirm rounded-corners-right" onmousedown="logout();"><%= I18n.t("system.logout") %></div>

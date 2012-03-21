@@ -327,7 +327,8 @@ class VendorsController < ApplicationController
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
-    @report = @user.get_end_of_day_report
+    @report = @user.get_end_of_day_report(DateTime.now)
+
 
     text = Printr.new.sane_template('end_of_day',binding)
     if @register.salor_printer

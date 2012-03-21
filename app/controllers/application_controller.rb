@@ -104,9 +104,9 @@ class ApplicationController < ActionController::Base
   def salor_user
     if session[:user_id] then
       if session[:user_type] == "User" then
-        return User.find(session[:user_id].to_i)
+        user= User.find_by_id(session[:user_id].to_i)
       else
-        return Employee.find session[:user_id]
+        user= Employee.find_by_id(session[:user_id])
       end
     end
   end
@@ -169,7 +169,7 @@ class ApplicationController < ActionController::Base
 	  I18n.locale = AppConfig.locale
 	  Job.run # Cron jobs for the application
 	  GlobalData.base_locale = AppConfig.base_locale
-	  if salor_signed_in? then
+	  if salor_signed_in? and salor_user then
       I18n.locale = salor_user.language
 		  @owner = salor_user.get_owner
 		  if salor_user.meta.nil? then

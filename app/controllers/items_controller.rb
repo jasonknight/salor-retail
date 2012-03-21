@@ -273,6 +273,27 @@ class ItemsController < ApplicationController
     end
   end
 
+  def database_distiller
+    @used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }.uniq
+    @relevant_item_ids = Item.where('quantity = 0 and quantity_sold = 0 and hidden = 0 and hidden_by_distiller = 0').collect{ |i| i.id }
+    @unused_item_ids = @relevant_item_ids - @used_item_ids
+    @hidden = Item.where('hidden = 1')
+    @hidden_by_distiller = Item.where('hidden_by_distiller = 1')
+    @unused_item_ids = @relevant_item_ids - @used_item_ids
+  end
+
+  def distill_database
+    used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }.uniq
+    relevant_item_ids = Item.where('quantity = 0 and quantity_sold = 0').collect{ |i| i.id }
+    unused_item_ids = relevant_item_ids - used_item_ids
+    unused_item_ids.each do |ui|
+      item = Item.find_by_id(ui)
+      item.update_attributes :hidden_by_distiller => true, :hidden => true, :sku => (1000 + rand(99999)).to_s[0..3] + 'OLD:' + item.sku
+    end
+    GlobalErrors << unused_item_ids.count
+    redirect_to '/items/database_distiller'
+  end
+
   def export_broken_items
     @from, @to = assign_from_to(params)
     if params[:from] then

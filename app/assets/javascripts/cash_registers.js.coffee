@@ -2,9 +2,6 @@ window.Drawer ||= {}
 calculator_total = 0
 dt = Drawer.amount
 
-$ ->
-  $("#cash_register_color").modcoder_excolor()
-
 
 window.displayCalculatorTotal = ->
   calculator_total = 0

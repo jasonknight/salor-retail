@@ -71,7 +71,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     
     var user_name = $('<td></td>');
     user_name.addClass('table-cell id');
-    user_name.html("<%= order.employee.username %>");
+    user_name.html("<%= order.employee.username if order.employee %>");
     
     var order_total = $('<td></td>');
     order_total.addClass('table-cell id');

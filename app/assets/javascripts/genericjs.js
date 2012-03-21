@@ -26,7 +26,8 @@ function make_select_widget(name,elem) {
       d.attr("value", $(this).attr('value'))
       d.mousedown(function () {
        $(_currentSelectTarget).find("option:selected").removeAttr("selected"); 
-       $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected"); 
+       $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected");
+       $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").change(); 
        _currentSelectButton.html($(this).html());
        $('.select-widget-display').hide();
       });

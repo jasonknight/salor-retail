@@ -204,7 +204,6 @@ class OrdersController < ApplicationController
   end
 
   def add_item_ajax
-
     @error = nil
     @order = initialize_order
     if @order.paid == 1 and not $User.is_technician? then
@@ -356,7 +355,7 @@ class OrdersController < ApplicationController
             sanity_check = pm.amount - @order.total
             # puts  "#{sanity_check}"
             if sanity_check > 500 then
-              GlobalErrors.append_fatal("system.errors.sanity_check",pm)
+              GlobalErrors.append_fatal("system.errors.sanity_check")
               render :action => :update_pos_display and return
             end
           end
@@ -370,7 +369,7 @@ class OrdersController < ApplicationController
       @order.reload
       
       if payment_methods_total.round(2) < @order.total.round(2) then
-        GlobalErrors.append_fatal("system.errors.sanity_check2" + payment_methods_total.inspect,@order)
+        GlobalErrors.append_fatal("system.errors.sanity_check")
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return
@@ -470,18 +469,11 @@ class OrdersController < ApplicationController
   def report_day
     @from, @to = assign_from_to(params)
     @from = @from.beginning_of_day
-    @to = @from.beginning_of_day + 1.day
     @vendor = GlobalData.vendor
-    @employees = @vendor.employees
+    @employees = @vendor.employees.where(:hidden => 0)
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
-    @orders = Order.where({ :vendor_id => @employee.get_meta.vendor_id, :drawer_id => @employee.get_drawer.id,:created_at => @from..@to, :paid => 1 }).order("created_at ASC")
-    #@orders = Order.where({ :vendor_id => @employee.vendor_id, :drawer_id => @employee.get_drawer.id, :paid => 1 }).order("created_at ASC")
-    @categories = Category.scopied
-    @taxes = TaxProfile.scopied.where( :hidden => 0 )
-    @drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id, :created_at => @from..@to }).where("tag != 'CompleteOrder'")
-    #@drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id }).where("tag != 'CompleteOrder'")
-    @payouttypes = AppConfig.dt_tags_values.split(",")
+    @report = @employee.get_end_of_day_report(@from)
   end
 
   def report_day_range

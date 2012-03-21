@@ -1,6 +1,8 @@
 <%= raw content_box_top(I18n.t("headings.discounts_for", :store => @vendor.name)) %>
 
+<div class='tools'>
 <%= link_to salor_icon(:add,{},32),new_discount_path(:vendor_id => salor_user.meta.vendor_id) %>
+</div>
 
 <table width="99%" cellspacing="0">
 <% @discounts.each do |discount| %>

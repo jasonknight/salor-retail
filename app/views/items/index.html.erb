@@ -68,6 +68,9 @@ function wholesaler_update() {
         <div class="tool-icon">
         <%= salor_icon(:shipper,{:style => "cursor:pointer;",:onmousedown => "wholesaler_update();"},32) %><br /><span class='icon-caption'><%= I18n.t("menu.wholesaler_update") %></span>
         </div>
+        <div class="tool-icon">
+        <%= link_to salor_icon(:trash,{:style => "cursor:pointer;"},32), '/items/database_distiller' %><br /><span class='icon-caption'><%= I18n.t("menu.database_distiller") %></span>
+        </div>
       </div>
     </td>
   </tr>

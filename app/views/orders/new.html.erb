@@ -246,15 +246,15 @@ function addPosItem(item) {
   <% if GlobalData.cash_register.hide_discounts == true then  %>
     var attrs = ['name','sku','quantity','price','total'];
   <% else  %>
-    var attrs = ['name','sku','quantity','price','coupon_amount','rebate','total'];
+    var attrs = ['name','sku','quantity','price','coupon_amount','rebate','total','tax_profile_amount'];
   <% end %>
   for (var i = 0; i < attrs.length; i++) {
     var attr = attrs[i];
     var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
     // those need number formatting
-    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate') {
+    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax_profile_amount') {
       // those need special formatting
-      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 2 ) || attr == 'rebate') {
+      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 2 ) || attr == 'rebate' || attr == 'tax_profile_amount' ) {
         col.html(toPercent(item[attr]));
       } else {
         col.html(toCurrency(item[attr]));
@@ -265,6 +265,16 @@ function addPosItem(item) {
     col.addClass('table-column pos-item-attr');
     col.addClass(base_id + '-' + attr + ' pos-item-' + attr);
     if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
+    if ( attr == 'tax_profile_amount') {
+      //MF: these percentages are hard coded for Austria since I don't have a quick possibility to fetch a TaxProfile color. Items having right taxes is important for the Fisc, so we give the users the opportunity to see them and change if necessary.
+      if (item['tax_profile_amount'] == 0) {
+        col.css('backgroundColor', '#9a809e');
+      } else if ( item['tax_profile_amount'] == 10 ) {
+        col.css('backgroundColor', '#7a607e');
+      } else if (item['tax_profile_amount'] == 20 ) {
+        col.css('backgroundColor', '#7D5285');
+      };
+    };
     if (attr == 'sku' || attr == 'coupon_amount') {
 
     } else {
@@ -276,19 +286,18 @@ function addPosItem(item) {
         col.attr('klass','OrderItem');
       }
       col.attr('field',attr);
-      if (attr == "price" || attr == "rebate" || attr == "total") {
+      if (attr == "price" || attr == "rebate" || attr == "name" || attr == "tax_profile_amount") {
         <% if $User.can(:change_prices) %>
           make_in_place_edit(col);
           col.addClass('editme pointer no-select');
-        <% else %>    
-          col.addClass('pointer no-select');
-        <% end -%>
-      } else {
-        make_in_place_edit(col);
-        col.addClass('editme pointer no-select');
+        <% end %>
+      } else if (attr == "quantity") {
+         make_in_place_edit(col);
+         col.addClass('editme pointer no-select');
       }
     }
     if (attr == 'quantity') {
+      //MF: Why is this special in editing? Why not use just class editme for editing?
       var up = td().removeClass('jtable-cell').addClass('table-cell');
       
       up.mousedown(function () {

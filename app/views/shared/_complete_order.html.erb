@@ -38,18 +38,18 @@ function add_payment_method() {
   var numMethods = $(".payment-amount").size();
   d.addClass('payment-method');
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
-  $(amount).val($("#payment_amount_" + (numMethods-1)).val()); // if a new methods is added, this should get the orders total
-  $("#payment_amount_" + (numMethods - 1)).val(''); // clear the input field because mostly this will be 0
+  //MF $(amount).val($("#payment_amount_" + (numMethods-1)).val()); // if a new methods is added, this should get the orders total
+  //MF $("#payment_amount_" + (numMethods - 1)).val(''); // clear the input field because mostly this will be 0
   var opts = payment_method_options();
-  //var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
-  var sel = $('<div class="select-widget-button payment-method" internal_type="' + payment_internal_types[numMethods] + '" id="' + "payment_type_" + numMethods + '">' + payment_external_types[numMethods] + '</div>');
+  var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  //MF var sel = $('<div class="select-widget-button payment-method" internal_type="' + payment_internal_types[numMethods] + '" id="' + "payment_type_" + numMethods + '">' + payment_external_types[numMethods] + '</div>');
 
   $(sel)[0].selectedIndex = numMethods;
   $("#payment_methods").append(sel).append(amount);
   $('#payment_methods').append('<br />');
   oldSelectedIndex = null;
   validatePaymentMethod($(sel));
-  //make_select_widget($(sel).find("option:selected"),$(sel));
+  make_select_widget($(sel).find("option:selected"),$(sel));
   make_keyboardable_with_options(amount, {
     visible: function () {
       var cls = $(sel).val() + '-amount';
@@ -144,24 +144,15 @@ function complete_order_show() {
   <% end %>
   $('.a4-print-button').remove(); 
   var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print_48.png' /></div>");
-  //var thermprint = $("<div class='a4-print-button'><img src='/images/icons/print_48.png' /></div>");
   var left = $('#complete_order').position().left;
   var width = $('#complete_order').width();
   var cpos = {x: width + left + 25, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
   a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
-  //thermprint.css({width: '125px',position: 'absolute',top: cpos.y - 80, left: cpos.x});
   relevant_order_id = $('.order-id').html();
   a4print.mousedown(function () {
-    window.location = '/orders/' + relevant_order_id + '/print';
-    //if (typeof(Salor) != 'undefined') {
-    //  Salor.printPage(Conf.url + '/orders/' + relevant_order_id + '/print');   
-    //}       
+    window.location = '/orders/' + relevant_order_id + '/print';      
   });
-  //thermprint.mousedown(function () {
-  //      print_order( $('.order-id').html() );
-  //});
   $("body").append(a4print);
-  //$("body").append(thermprint);
   bindInplaceEnter(false);
   handleKeyboardEnter = false;
   orderCompleteDisplayed = true;
@@ -385,7 +376,9 @@ function complete_order_send(print) {
   sendingOrder = true;
   allow_complete_order(false);
   displayChangeToCustomer();
-  quick_open_drawer();
+  if ( $('#payment_amount_0').val() != '' ) {
+    quick_open_drawer();
+  }
   if (typeof(Salor) != 'undefined') {
     if (Register.pole_display == "") {
       Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
@@ -425,8 +418,10 @@ function displayChangeToCustomer() {
 function serializePayments() {
   var returnArr = [];
   $.each($(".payment-method"), function(){
-    var index = $(this)[0].id.split("_")[2];
-    var method = $(this).attr('internal_type');
+    //MFvar index = $(this)[0].id.split("_")[2];
+    //MFvar method = $(this).attr('internal_type');
+    var index = $(this).attr('id').split("_")[2];
+    var method = $(this).val();
     var amount = $("#payment_amount_" + index).val();
     returnArr.push(method + "=" + amount);
   });

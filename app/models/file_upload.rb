@@ -142,6 +142,7 @@ class FileUpload
         pack_item = Item.new attributes
         pack_item.set_model_owner
         Action.run(pack_item,:on_import)
+        pack_item.save
         pack_item.parent = carton_item
         pack_item.save
         created_items += 1
@@ -164,6 +165,7 @@ class FileUpload
         piece_item = Item.new attributes
         piece_item.set_model_owner
         Action.run(piece_item,:on_import)
+        piece_item.save
         piece_item.parent = pack_item
         piece_item.save
         created_items += 1
@@ -180,7 +182,7 @@ class FileUpload
     elsif file_lines.first.include? ';'
      delim = ';'
     else
-      raise "Could not detect delimiter in house of smoke"
+      raise "Could not detect delimiter in House Of Smoke or Dios"
     end
     file_lines.each do |row|
       i += 1
@@ -269,6 +271,7 @@ class FileUpload
         pack_item = Item.new attributes
         pack_item.set_model_owner
         Action.run(pack_item,:on_import)
+        pack_item.save
         pack_item.parent = carton_item
         pack_item.save
         created_items += 1
@@ -291,6 +294,7 @@ class FileUpload
         piece_item = Item.new attributes
         piece_item.set_model_owner
         Action.run(piece_item,:on_import)
+        piece_item.save
         piece_item.parent = pack_item
         piece_item.save
         created_items += 1

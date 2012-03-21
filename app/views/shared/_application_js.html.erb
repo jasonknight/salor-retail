@@ -5,7 +5,7 @@ function playSound(file) {
     Salor.playSound(file);
   }
 }
-  function add_item(sku) {
+  function add_item(sku, additional_params) {
       if (sku.match(/^31\d{8}.{1,2}$/)) {
         var oid = $('.order-id').html();
         var cid = Meta['cash_register_id'];
@@ -14,7 +14,7 @@ function playSound(file) {
         return;
       }
       var user_line = "&user_id=<%= $User.id %>&user_type=<%= $User.class%>";
-      get('/orders/add_item_ajax?order_id='+$('.order-id').html()+'&sku=' + sku + user_line, filename);
+      get('/orders/add_item_ajax?order_id='+$('.order-id').html()+'&sku=' + sku + user_line + additional_params, filename);
       $('#keyboard_input').val('');
     }
 
@@ -495,7 +495,7 @@ function RoundFixed(Number, DecimalPlaces) {
 
     function toPercent(number) {
       var match, property, integerPart, fractionalPart;
-      var settings = {         precision: 2,
+      var settings = {         precision: 0,
         unit: "%",
         separator: "<%= I18n.t("number.currency.format.separator") %>",
         delimiter : "<%= I18n.t("number.currency.format.delimiter") %>"

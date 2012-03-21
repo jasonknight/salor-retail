@@ -220,6 +220,7 @@ de:
         
    
   headings:
+    database_distiller: Datenbank-Reiniger
     order_validation: "Order Validation"
     paylife: "Paylife(Artema Hybrid)"
     bank_machine_types: Typ unterstützen
@@ -276,6 +277,7 @@ de:
     assign: setze zu
 
   menu:
+    database_distiller: Datenbank-Reiniger
     clear_order: Löschen
     inventory_report: Bericht Inventur
     ok: OK
@@ -485,14 +487,20 @@ de:
       payout_total: GESAMT
       payment_method_total: GESAMT
       transaction_total: GESAMT
-      incoming: Eingang
-      outgoing: Ausgang
-      drops: Einzahlungen
-      payouts: Auszahlungen
+      cash_refunds_total: GESAMT
+      revenue_total: GESAMT
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      sales: Verkäufe
+      payments: Auszahlungen
       refund: Stornierung
-      system_drawer_amount: Kassenlade System
-      calculated_drawer_amount: Kassenlade Bericht
-      warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, jeden Tag mit einem Kassenbetrag von 0 zu beginnen und zu beenden, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor, drucken Sie diesen Bericht erneut und loggen Sie sich aus.
+      None: Unbenannt
+      noncash-refunds: Nichtbargeld-Stornierungen
+      cash-refunds: Bargeld-Stornierungen
+      revenue: Umsatz
+      calculated_drawer_amount: Kassenlade
+      system_drawer_amount: Kassenlade derzeitiger Stand
+      warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor und laden Sie diese Seite neu.
 
 
     word:
