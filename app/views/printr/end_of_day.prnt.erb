@@ -29,7 +29,7 @@ categories_sum = @report['categories_sum'] %>
 
 <% [[:pos,'.sales'], [:neg,'.payments']].each do |i| %>
 
-<%= "\e!\x18"%><%= t "printr.eod_report#{i[1]}" %><%= "\e!\x01" %>
+<%= "\e!\x18"%><%= t "printr.eod_report#{i[1]}" %><%= "\e!\x00" %>
 
 <% paymentmethods[i[0]].to_a.each do |p| %>
 <%= "%29.29s %s %7.2f" % [t(p[0]), @report[:unit], p[1]] %>
@@ -42,7 +42,7 @@ categories_sum = @report['categories_sum'] %>
 
 
 
-<%= "\e!\x18"%><%= t 'printr.eod_report.noncash-refunds' %><%= "\e!\x01" %>
+<%= "\e!\x18"%><%= t 'printr.eod_report.noncash-refunds' %><%= "\e!\x00" %>
 
 <% paymentmethods[:refund].to_a.each do |p| %>
 <% next if regular_payment_methods.include?(p[0].to_s) %>
@@ -55,7 +55,7 @@ categories_sum = @report['categories_sum'] %>
 
 
 
-<%= "\e!\x18"%><%= t 'printr.eod_report.cash-refunds' %><%= "\e!\x01" %>
+<%= "\e!\x18"%><%= t 'printr.eod_report.cash-refunds' %><%= "\e!\x00" %>
 <% transactions.to_a.each do |d| %>
 <% next unless d[1][:is_refund] %>
 
@@ -67,13 +67,13 @@ categories_sum = @report['categories_sum'] %>
 
 
 
-<%= "\e!\x18"%><%= t 'printr.eod_report.revenue' %><%= "\e!\x01" %>
+<%= "\e!\x18"%><%= t 'printr.eod_report.revenue' %><%= "\e!\x00" %>
 
 <%= "%29.29s %s %7.2f" % [t('printr.eod_report.revenue_total'), @report[:unit], revenue[:gro]] %>
 
 
 
-<%= "\e!\x18"%><%= t 'activerecord.models.drawer_transaction.other' %><%= "\e!\x01" %>
+<%= "\e!\x18"%><%= t 'activerecord.models.drawer_transaction.other' %><%= "\e!\x00" %>
 
 ---------------
 
