@@ -70,7 +70,11 @@
             discount_price = 0
             discount_total = 0
           end
-          list_of_items += "%s %19.19s %6.2f %6u %6.2f\n" % [oi.item.tax_profile.letter, "Preisnachlass", discount_price, oi.quantity, discount_total]
+          if oi.quantity == Integer(oi.quantity) # integer quantity
+            list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Preisnachlass", discount_price, oi.quantity, discount_total]
+          else
+            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, "Preisnachlass", discount_price, oi.quantity, discount_total]
+          end
           discount_subtotal += discount_total
         end
 
