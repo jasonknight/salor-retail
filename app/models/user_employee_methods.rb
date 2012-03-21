@@ -525,28 +525,38 @@ module UserEmployeeMethods
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
     drawertransactions = DrawerTransaction.where({:drawer_id => self.get_drawer.id, :created_at => day.beginning_of_day..Time.now }).where("tag != 'CompleteOrder'")
+    regular_payment_methods = PaymentMethod.types_list.collect{|pm| pm[1].to_s }
 
     categories = {:pos => {}, :neg => {}}
     taxes = {:pos => {}, :neg => {}}
-    paymentmethods = {:pos => {}, :neg => {}}
+    paymentmethods = {:pos => {}, :neg => {}, :refund => {}}
     refunds = { :cash => { :gro => 0, :net => 0 }, :noncash => { :gro => 0, :net => 0 }}
 
     orders.each do |o|
       o.payment_methods.each do |p|
-        next if p.internal_type == 'InCash'
         ptype = p.internal_type.to_sym
-        if p.amount > 0
-          if not paymentmethods[:pos].has_key?(ptype)
-            paymentmethods[:pos][ptype] = p.amount
+        if not regular_payment_methods.include?(p.internal_type)
+          if not paymentmethods[:refund].has_key?(ptype)
+            paymentmethods[:refund][ptype] = p.amount
           else
-            paymentmethods[:pos][ptype] += p.amount
+            paymentmethods[:refund][ptype] += p.amount
           end
-        end
-        if p.amount < 0
-          if not paymentmethods[:neg].has_key?(ptype)
-            paymentmethods[:neg][ptype] = p.amount
-          else
-            paymentmethods[:neg][ptype] += p.amount
+        elsif p.internal_type == 'InCash'
+          #ignore those. cash will be calculated as difference between category sum and other normal payment methods
+        else
+          if p.amount > 0
+            if not paymentmethods[:pos].has_key?(ptype)
+              paymentmethods[:pos][ptype] = p.amount
+            else
+              paymentmethods[:pos][ptype] += p.amount
+            end
+          end
+          if p.amount < 0
+            if not paymentmethods[:neg].has_key?(ptype)
+              paymentmethods[:neg][ptype] = p.amount
+            else
+              paymentmethods[:neg][ptype] += p.amount
+            end
           end
         end
       end
@@ -597,7 +607,7 @@ module UserEmployeeMethods
             refunds[:cash][:net] -= net
           else
             refunds[:noncash][:gro] -= gro
-            refunds[:noncash][:gro] -= net
+            refunds[:noncash][:net] -= net
           end
         end
       end
@@ -628,14 +638,13 @@ module UserEmployeeMethods
     revenue = Hash.new
     revenue[:gro] = categories[:pos].to_a.map{|x| x[1][:gro]}.sum + categories[:neg].to_a.map{|x| x[1][:gro]}.sum + refunds[:cash][:gro] + refunds[:noncash][:gro]
     revenue[:net] = categories[:pos].to_a.map{|x| x[1][:net]}.sum + categories[:neg].to_a.map{|x| x[1][:net]}.sum + refunds[:cash][:net] + refunds[:noncash][:net]
-
-    calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:noncash][:gro] + refunds[:cash][:gro] + paymentmethods[:pos]['InCash'] + paymentmethods[:neg]['InCash']
+    calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:cash][:gro] + paymentmethods[:pos]['InCash'] + paymentmethods[:neg]['InCash']
 
     report = Hash.new
     report['categories'] = categories
     report['taxes'] = taxes
     report['paymentmethods'] = paymentmethods
-    report['regular_payment_methods'] = PaymentMethod.types_list.collect{|pm| pm[1].to_s }
+    report['regular_payment_methods'] = regular_payment_methods
     report['refunds'] = refunds
     report['revenue'] = revenue
     report['transactions'] = transactions
@@ -643,7 +652,6 @@ module UserEmployeeMethods
     report['calculated_drawer_amount'] = calculated_drawer_amount
     report['orders_count'] = orders.count
     report['categories_sum'] = categories_sum
-
     return report
   end
 

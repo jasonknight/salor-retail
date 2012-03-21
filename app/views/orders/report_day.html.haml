@@ -88,7 +88,7 @@
       %tr
         %th.left= t '.type'
         %th.table-center= t '.gross'
-      - (paymentmethods[:pos].to_a + paymentmethods[:neg].to_a).each do |p|
+      - paymentmethods[:refund].to_a.each do |p|
         - next if regular_payment_methods.include?(p[0].to_s)
         %tr
           %td.left= t p[0]
@@ -110,7 +110,7 @@
         %tr
           %td.left= t ('.' + d[1][:tag])
           %td.left= d[1][:notes]
-          %td.right= number_to_currency d[1][:amount]
+          %td.right= number_to_currency( -d[1][:amount])
 
     %p== #{ t '.sum_gross' }: #{ number_to_currency refunds[:cash][:gro] }
     %p== #{ t '.sum_net' }: #{ number_to_currency refunds[:cash][:net] }
