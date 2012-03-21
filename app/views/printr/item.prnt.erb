@@ -110,7 +110,7 @@ Abzug: - <%= number_with_precision(@order.vendor.salor_configuration.dollar_per_
    if not discount_subtotal.zero?
    sum1 = sum1 + discount_subtotal
 %>
-<%= "Aktionen Summe               EUR %8.2f" % discount_subtotal %>
+<%= "Aktionen Summe                EUR %8.2f" % discount_subtotal %>
 <%= "Zwischensumme                 EUR %8.2f" % [sum1] %>
 <% end %>
 <%
