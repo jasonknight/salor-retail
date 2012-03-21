@@ -557,7 +557,8 @@ class OrderItem < ActiveRecord::Base
         :is_buyback => self.is_buyback,
         :weigh_compulsory => self.item.weigh_compulsory,
         :must_change_price => self.item.must_change_price,
-        :weight_metric => self.item.weight_metric
+        :weight_metric => self.item.weight_metric,
+        :tax_profile_amount => self.tax_profile_amount
       }
     end
     if self.behavior == 'gift_card' and self.activated then

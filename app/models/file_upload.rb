@@ -182,7 +182,7 @@ class FileUpload
     elsif file_lines.first.include? ';'
      delim = ';'
     else
-      raise "Could not detect delimiter in house of smoke"
+      raise "Could not detect delimiter in House Of Smoke or Dios"
     end
     file_lines.each do |row|
       i += 1

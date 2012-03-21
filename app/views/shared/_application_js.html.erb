@@ -495,7 +495,7 @@ function RoundFixed(Number, DecimalPlaces) {
 
     function toPercent(number) {
       var match, property, integerPart, fractionalPart;
-      var settings = {         precision: 2,
+      var settings = {         precision: 0,
         unit: "%",
         separator: "<%= I18n.t("number.currency.format.separator") %>",
         delimiter : "<%= I18n.t("number.currency.format.delimiter") %>"
