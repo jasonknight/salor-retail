@@ -46,7 +46,6 @@ categories_sum = @report['categories_sum'] %>
 
 <% paymentmethods[:refund].to_a.each do |p| %>
 <% next if regular_payment_methods.include?(p[0].to_s) %>
-
 <%= "%29.29s %s %7.2f" % [t(p[0]), @report[:unit], p[1]] %>
 
 <% end %>

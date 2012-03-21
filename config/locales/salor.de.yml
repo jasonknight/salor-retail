@@ -499,6 +499,7 @@ de:
       cash-refunds: Bargeld-Stornierungen
       revenue: Umsatz
       calculated_drawer_amount: Kassenlade
+      system_drawer_amount: Kassenlade derzeitiger Stand
       warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor und laden Sie diese Seite neu.
 
 
