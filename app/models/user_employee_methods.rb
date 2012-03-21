@@ -632,7 +632,7 @@ module UserEmployeeMethods
       elsif d.payout and not d.is_refund
         transactions_sum[:payout] -= d.amount
       end
-        transactions_sum[:total] = transactions_sum[:drop] - transactions_sum[:payout]
+        transactions_sum[:total] = transactions_sum[:drop] + transactions_sum[:payout]
     end
 
     revenue = Hash.new
@@ -652,6 +652,10 @@ module UserEmployeeMethods
     report['calculated_drawer_amount'] = calculated_drawer_amount
     report['orders_count'] = orders.count
     report['categories_sum'] = categories_sum
+    report[:date] = I18n.l(DateTime.now, :format => :long)
+    report[:drawer_amount] = self.get_drawer.amount
+    report[:unit] = I18n.t('number.currency.format.friendly_unit')
+    report[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
     return report
   end
 

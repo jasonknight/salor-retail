@@ -1,3 +1,14 @@
+<% categories = @report['categories']
+taxes = @report['taxes']
+paymentmethods = @report['paymentmethods']
+regular_payment_methods = @report['regular_payment_methods']
+refunds  =  @report['refunds']
+revenue =   @report['revenue']
+transactions   = @report['transactions']
+transactions_sum   = @report['transactions_sum']
+calculated_drawer_amount =   @report['calculated_drawer_amount']
+orders_count = @report['orders_count']
+categories_sum = @report['categories_sum'] %>
 <%= "\e@" %>
 <%= "\ea\x01" %><%= "\e!\x38" %><%= @vendor.name %>
 <%= "\e!\x01" %>
@@ -16,83 +27,73 @@
 
 ~~~
 
-<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.orders_total"), @report[:unit], @report[:orders_total] + @report[:refund_total]] %>
+<% [[:pos,'.sales'], [:neg,'.payments']].each do |i| %>
 
-<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.refunded_total"), @report[:unit], - @report[:refund_total]] %>
+<%= "\e!\x18"%><%= t "printr.eod_report#{i[1]}" %><%= "\e!\x01" %>
 
-                                   ======
-<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.orders_total"), @report[:unit], @report[:orders_total]] %>
+<% paymentmethods[i[0]].to_a.each do |p| %>
+<%= "%29.29s %s %7.2f" % [t(p[0]), @report[:unit], p[1]] %>
+
+<% end %>
+                                   ------
+<%= "%29.29s %s %7.2f" % [t('printr.eod_report.payment_method_total'), @report[:unit], categories_sum[i[0]][:gro]] %>
+
+<% end %>
 
 
-<%= t 'activerecord.models.payment_method.other' %>
+
+<%= "\e!\x18"%><%= t 'printr.eod_report.noncash-refunds' %><%= "\e!\x01" %>
+
+<% paymentmethods[:refund].to_a.each do |p| %>
+<% next if regular_payment_methods.include?(p[0].to_s) %>
+
+<%= "%29.29s %s %7.2f" % [t(p[0]), @report[:unit], p[1]] %>
+
+<% end %>
+                                   ------
+<%= "%29.29s %s %7.2f" % [t('printr.eod_report.payment_method_total'), @report[:unit], refunds[:noncash][:gro]] %>
+
+
+
+<%= "\e!\x18"%><%= t 'printr.eod_report.cash-refunds' %><%= "\e!\x01" %>
+<% transactions.to_a.each do |d| %>
+<% next unless d[1][:is_refund] %>
+
+<%= "%29.29s %s %7.2f" % [t('printr.eod_report.'+d[1][:tag]), @report[:unit], -d[1][:amount]] %>
+<% end %>
+
+                                   ------
+<%= "%29.29s %s %7.2f" % [t('printr.eod_report.cash_refunds_total'), @report[:unit], refunds[:cash][:gro]] %>
+
+
+
+<%= "\e!\x18"%><%= t 'printr.eod_report.revenue' %><%= "\e!\x01" %>
+
+<%= "%29.29s %s %7.2f" % [t('printr.eod_report.revenue_total'), @report[:unit], revenue[:gro]] %>
+
+
+
+<%= "\e!\x18"%><%= t 'activerecord.models.drawer_transaction.other' %><%= "\e!\x01" %>
 
 ---------------
 
-  <%= t 'printr.eod_report.incoming' %>
-
-<% @report[:pm_pos].to_a.each do |pm| %>
-<%= "%29.29s %s %7.2f" % [t(pm[0]), @report[:unit], pm[1]] %>
-
-<% end %>
-                                   ------
-<%= "%29.29s %s %7.2f" % [t('printr.eod_report.payment_method_total'), @report[:unit], @report[:pm_pos_sum]] %>
-
-
-  <%= t 'printr.eod_report.outgoing' %>
-
-<% @report[:pm_neg].to_a.each do |pm| %>
-<%= "%29.29s %s %7.2f" % [t(pm[0]), @report[:unit], pm[1]] %>
+<% transactions.to_a.each do |d| %>
+<% next if d[1][:is_refund] %>
+<% transactionamount = d[1][:drop] ? d[1][:amount] : (- d[1][:amount]) %>
+<% transactiontag = d[1][:tag] == 'None' ? '' : d[1][:tag] %>
+<%= " %5.5s  %9.9s %9.9s  %s %8.2f" % [l(d[1][:time], :format => :just_time), transactiontag, d[1][:notes], @report[:unit], transactionamount] %>
 
 <% end %>
                                    ------
-<%= "%29.29s %s %7.2f" % [t('printr.eod_report.payment_method_total'), @report[:unit], @report[:pm_neg_sum]] %>
-
-
-                                   ======
-<%= "%29.29s %s %7.2f" % [t('printr.eod_report.payment_method_total'), @report[:unit], @report[:pm_sum]] %>
-
-
-<%= t 'activerecord.models.drawer_transaction.other' %>
-
----------------
-
-  <%= t 'printr.eod_report.drops' %>
-
-<% @report[:dt_drop_list].to_a.each do |dt| %>
-<%= "    %5.5s %9.9s %9.9s %s %7.2f" % [dt[1][:time], dt[1][:tag], dt[1][:notes], @report[:unit], dt[1][:amount]] %>
-
-<% end %>
-                                   ------
-<%= "    %25.25s %s %7.2f" % [I18n.t("printr.eod_report.drop_total"), @report[:unit], @report[:drop_total]] %>
-
-
-  <%= t 'printr.eod_report.payouts' %>
-
-<% @report[:dt_payout_list].to_a.each do |dt|
-     tag = dt[1][:refund] ? t('printr.eod_report.refund') : dt[1][:tag]
-%>
-<%= "    %5.5s %9.9s %9.9s %s %7.2f" % [dt[1][:time], tag, dt[1][:notes], @report[:unit], dt[1][:amount]] %>
-
-<% end %>
-                                   ------
-<%= "    %25.25s %s %7.2f" % [I18n.t("printr.eod_report.payout_total"), @report[:unit], @report[:payout_total]] %>
-
-
-                                   ======
-<%= "%29.29s %s %7.2f" % [t('printr.eod_report.transaction_total'), @report[:unit], @report[:transaction_total]] %>
+<%= "%29.29s %s %7.2f" % [t('printr.eod_report.transaction_total'), @report[:unit], transactions_sum[:total]] %>
 
 
 ==========================================
 
-<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.system_drawer_amount"), @report[:unit], @report[:drawer_amount]] %>
-
-<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.calculated_drawer_amount"), @report[:unit], @report[:calculated_drawer_amount]] %>
+<%= "%29.29s %s %7.2f" % [I18n.t("printr.eod_report.calculated_drawer_amount"), @report[:unit], calculated_drawer_amount] %>
 
 
-(<%= "%27.27s %s %7.2f" % [I18n.t("printr.eod_report.buyback_item_total"), @report[:unit], @report[:buyback_item_total]] %>)
-
-
-<% if @report[:drawer_amount] != 0 or @report[:calculated_drawer_amount] != 0 %>
+<% if calculated_drawer_amount.round(2) != 0 %>
 ******************************************
 ******************************************
 <%= t 'printr.eod_report.warning_drawer_amount_not_zero' %>

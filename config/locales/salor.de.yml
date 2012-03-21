@@ -487,13 +487,18 @@ de:
       payout_total: GESAMT
       payment_method_total: GESAMT
       transaction_total: GESAMT
-      incoming: Eingang
-      outgoing: Ausgang
-      drops: Einzahlungen
-      payouts: Auszahlungen
+      cash_refunds_total: GESAMT
+      revenue_total: GESAMT
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      sales: Verkäufe
+      payments: Auszahlungen
       refund: Stornierung
-      system_drawer_amount: Kassenlade System
-      calculated_drawer_amount: Kassenlade Bericht
+      None: Unbenannt
+      noncash-refunds: Nichtbargeld-Stornierungen
+      cash-refunds: Bargeld-Stornierungen
+      revenue: Umsatz
+      calculated_drawer_amount: Kassenlade
       warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor und laden Sie diese Seite neu.
 
 
