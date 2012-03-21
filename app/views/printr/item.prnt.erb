@@ -71,9 +71,9 @@
             discount_total = 0
           end
           if oi.quantity == Integer(oi.quantity) # integer quantity
-            list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Preisnachlass", discount_price, oi.quantity, discount_total]
+            list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
           else
-            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, "Preisnachlass", discount_price, oi.quantity, discount_total]
+            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
           end
           discount_subtotal += discount_total
         end
@@ -110,7 +110,7 @@ Abzug: - <%= number_with_precision(@order.vendor.salor_configuration.dollar_per_
    if not discount_subtotal.zero?
    sum1 = sum1 + discount_subtotal
 %>
-<%= "Preisnachlaesse               EUR %8.2f" % discount_subtotal %>
+<%= "Aktionen Summe               EUR %8.2f" % discount_subtotal %>
 <%= "Zwischensumme                 EUR %8.2f" % [sum1] %>
 <% end %>
 <%
