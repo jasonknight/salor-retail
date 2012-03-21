@@ -1,109 +1,28 @@
+- categories = @report['categories']
+- taxes = @report['taxes']
+- paymentmethods = @report['paymentmethods']
+- regular_payment_methods = @report['regular_payment_methods']
+- refunds  =  @report['refunds']
+- revenue =   @report['revenue']
+- transactions   = @report['transactions']
+- transactions_sum   = @report['transactions_sum']
+- calculated_drawer_amount =   @report['calculated_drawer_amount']
+- orders_count = @report['orders_count']
+- categories_sum = @report['categories_sum']
+
 = raw content_box_top(t("menu.reports"))
 
 = form_tag orders_report_day_path, :class => 'no-print', :id => 'date_range', :method => :get do
   = select_date(@from, :prefix => 'from')
   %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'name_with_username', params[:employee_id])
+
   %div.actions
     %p{:align => 'center', :style => 'margin-left:-50px;'}
       = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()'
 
-%img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
-
 %div.tools
   %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
     = salor_icon(:print, {}, 32)
-
-- category_sums_positive_gro = [0]
-- category_sums_positive_net = [0]
-- category_sums_negative_gro = [0]
-- category_sums_negative_net = [0]
-- @categories.each do |c|
-  - category_sums_positive_gro[c.id] = 0.0
-  - category_sums_positive_net[c.id] = 0.0
-  - category_sums_negative_gro[c.id] = 0.0
-  - category_sums_negative_net[c.id] = 0.0
-
-- taxes_sums_positive_gro = [0]
-- taxes_sums_negative_gro = [0]
-- @taxes.each do |t|
-  - taxes_sums_positive_gro[t.id] = 0.0
-  - taxes_sums_negative_gro[t.id] = 0.0
-
-- refunded_sum_cash_gro = 0
-- refunded_sum_cash_net = 0
-- refunded_sum_noncash_gro = 0
-- refunded_sum_noncash_net = 0
-
-- rebate_total = 0.0
-
-- regular_payment_methods = PaymentMethod.types_list.collect{|pm| pm[1].to_s }
-
-- paymentmethod_positive_sums = Hash.new
-- paymentmethod_negative_sums = Hash.new
-
-- @orders.each do |o|
-  - o.payment_methods.each do |p|
-    - next if p.internal_type == 'InCash'
-    - ptype = p.internal_type.to_sym
-    - if p.amount > 0
-      - if not paymentmethod_positive_sums.has_key?(ptype)
-        - paymentmethod_positive_sums.merge! ptype => p.amount
-      - else
-        - paymentmethod_positive_sums[ptype] += p.amount
-    - if p.amount < 0
-      - if not paymentmethod_negative_sums.has_key?(ptype)
-        - paymentmethod_negative_sums.merge! ptype => p.amount
-      - else
-        - paymentmethod_negative_sums[ptype] += p.amount
-
-  - o.order_items.each do |oi|
-    - cid = oi.category_id
-    - cid = 0 if cid.nil?
-    - tid = oi.tax_profile_id
-    - tid = 0 if tid.nil?
-    - item_price = case oi.behavior
-      - when 'normal' then oi.price
-      - when 'gift_card' then oi.activated ? - oi.total : oi.total
-      - when 'coupon' then oi.order_item ? - oi.order_item.coupon_amount : 0
-    - item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
-    - item_price = -oi.price if o.buy_order
-    - item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
-    - if item_total > 0.0
-      - category_sums_positive_gro[cid] += item_total
-      - category_sums_positive_net[cid] += item_total / ( 1 + oi.tax_profile_amount / 100 )
-      - taxes_sums_positive_gro[tid] += item_total
-    - elsif item_total < 0.0
-      - category_sums_negative_gro[cid] += item_total
-      - category_sums_negative_net[cid] += item_total / ( 1 + oi.tax_profile_amount / 100 )
-      - taxes_sums_negative_gro[tid] += item_total
-    - if oi.refunded
-      - if oi.refund_payment_method == 'InCash'
-        - refunded_sum_cash_gro -= item_total
-        - refunded_sum_cash_net -= item_total / ( 1 + oi.tax_profile_amount / 100 )
-      - else
-        - refunded_sum_noncash_gro -= item_total
-        - refunded_sum_noncash_net -= item_total / ( 1 + oi.tax_profile_amount / 100 )
-
-
-- payout_types_drop_sums = Hash.new
-- payout_types_payout_sums = Hash.new
-- total_drop = 0
-- total_payout = 0
-
-- @drawertransactions.each do |d|
-  - next if d.is_refund
-  - payout_types_drop_sums[d.tag.to_sym] = 0
-  - payout_types_payout_sums[d.tag.to_sym] = 0
-
-- @drawertransactions.each do |d|
-  - next if d.is_refund
-  - key = d.tag ? d.tag.to_sym : 'Bar'
-  - if d.drop
-    - payout_types_drop_sums[key] += d.amount
-    - total_drop += d.amount
-  - elsif d.payout
-    - payout_types_payout_sums[key] += d.amount
-    - total_payout += d.amount
 
 %div.report-container
   %div
@@ -111,108 +30,56 @@
     - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image
       %img.left{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
   %div.clear
+
   %div
     %h2== #{ t '.title' } #{ l @from, :format => :just_day } #{ l Time.now, :format => :time }<br />#{ @vendor.name }<br />#{ @employee.name_with_username }
 
-    %p== #{ t '.count_orders' }: #{ @orders.count }
+    %p== #{ t '.count_orders' }: #{ orders_count }
 
-    %h3= t '.sales'
 
-    %table.striped-table2
-      %tr
-        %th.left= t '.sums_by_category'
-        %th.table-center brutto
-        %th.table-center netto
-      - 0.upto(category_sums_positive_gro.size) do |i|
-        - next if category_sums_positive_gro[i].zero?
+
+    - [[:pos,'.sales'], [:neg,'.payments']].each do |i|
+
+      %h3= t i[1]
+
+      %table.striped-table2
         %tr
-          %td.left= i.zero? ? t('.no_category') : Category.scopied.find_by_id(i).name
-          %td.table-center
-            = number_to_currency category_sums_positive_gro[i]
-            = text_field_tag "category_sums_positive_gro_#{i}", category_sums_positive_gro[i]
-          %td.table-center
-            = number_to_currency category_sums_positive_net[i]
-            = text_field_tag "category_sums_positive_net#{i}", category_sums_positive_net[i]
+          %th.left= t '.sums_by_category'
+          %th.table-center= t '.gross'
+          %th.table-center= t '.net'
+          %th.table-center= t '.tax'
+        - categories[i[0]].to_a.each do |c|
+          %tr
+            %td.left= c[0].empty? ? t('.no_category') : c[0]
+            %td.table-center= number_to_currency c[1][:gro]
+            %td.table-center= number_to_currency c[1][:net]
+            %td.table-center= number_to_currency c[1][:gro] - c[1][:net]
 
-    %table.striped-table2
-      %tr
-        %th.left= t '.sums_by_tax_profile'
-        %th.table-center brutto
-        %th.table-center netto
-        %th.table-center Steuer
-      - @taxes.each do |t|
-        - next if taxes_sums_positive_gro[t.id].zero?
+      %table.striped-table2
         %tr
-          %td.left= t.name
-          %td.table-center= number_to_currency taxes_sums_positive_gro[t.id]
-          %td.table-center= number_to_currency taxes_sums_positive_gro[t.id] / (1 + t.value / 100 )
-          %td.table-center= number_to_currency taxes_sums_positive_gro[t.id] - taxes_sums_positive_gro[t.id] / (1 + t.value / 100 )
+          %th.left= t '.sums_by_tax_profile'
+          %th.table-center= t '.gross'
+          %th.table-center= t '.net'
+          %th.table-center= t '.tax'
+        - taxes[i[0]].to_a.each do |t|
+          %tr
+            %td.left= t[0]
+            %td.table-center= number_to_currency t[1][:gro]
+            %td.table-center= number_to_currency t[1][:net]
+            %td.table-center= number_to_currency t[1][:gro] - t[1][:net]
 
-    %table.striped-table2
-      %tr
-        %th.left= t '.sums_by_payment_methods'
-        %th.table-center
-      - paymentmethod_positive_sums.keys.each do |k|
-        - # next if paymentmethod_positive_sums[k].zero?
-        - next unless regular_payment_methods.include?(k.to_s)
+      %table.striped-table2
         %tr
-          %td.left= t k
-          %td.table-center= number_to_currency paymentmethod_positive_sums[k]
-      %tr
-        %td.left= t 'InCash'
-        %td.table-center= number_to_currency category_sums_positive_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum
+          %th.left= t '.sums_by_payment_methods'
+          %th.table-center
+        - paymentmethods[i[0]].to_a.each do |p|
+          - next unless regular_payment_methods.include?(p[0].to_s)
+          %tr
+            %td.left= t p[0]
+            %td.table-center= number_to_currency p[1]
 
-    %p== #{ t '.sum_gross' }: #{ number_to_currency category_sums_positive_gro.compact.sum }
-    %p== #{ t '.sum_net' }: #{ number_to_currency category_sums_positive_net.compact.sum }
-
-
-
-
-    %h3= t '.payments'
-
-    %table.striped-table2
-      %tr
-        %th.left= t '.sums_by_category'
-        %th.table-center brutto
-        %th.table-center netto
-      - 0.upto(category_sums_negative_gro.size) do |i|
-        - next if category_sums_negative_gro[i].zero?
-        %tr
-          %td.left= i.zero? ? t('.no_category') : Category.scopied.find_by_id(i).name
-          %td.table-center= number_to_currency category_sums_negative_gro[i]
-          %td.table-center= number_to_currency category_sums_negative_net[i]
-
-    %table.striped-table2
-      %tr
-        %th.left= t '.sums_by_tax_profile'
-        %th.table-center brutto
-        %th.table-center netto
-        %th.table-center Steuer
-      - @taxes.each do |t|
-        - next if taxes_sums_negative_gro[t.id].zero?
-        %tr
-          %td.left= t.name
-          %td.table-center= number_to_currency taxes_sums_negative_gro[t.id]
-          %td.table-center= number_to_currency taxes_sums_negative_gro[t.id] / (1 + t.value / 100 )
-          %td.table-center= number_to_currency taxes_sums_negative_gro[t.id] - taxes_sums_negative_gro[t.id] / (1 + t.value / 100 )
-
-    %table.striped-table2
-      %tr
-        %th.left= t '.sums_by_payment_methods'
-        %th.table-center
-      - paymentmethod_negative_sums.keys.each do |k|
-        - next unless regular_payment_methods.include?(k.to_s)
-        %tr
-          %td.left= t k
-          %td.table-center= number_to_currency paymentmethod_negative_sums[k]
-      %tr
-        %td.left= t 'InCash'
-        - regular_payment_method_sums = regular_payment_methods.collect{ |it| paymentmethod_negative_sums[it.to_sym] }.compact.sum
-
-        %td.table-center= number_to_currency category_sums_negative_gro.compact.sum - regular_payment_method_sums
-
-    %p== #{ t '.sum_gross' }: #{ number_to_currency category_sums_negative_gro.compact.sum }
-    %p== #{ t '.sum_net' }: #{ number_to_currency category_sums_negative_net.compact.sum }
+      %p== #{ t '.sum_gross' }: #{ number_to_currency categories_sum[i[0]][:gro] }
+      %p== #{ t '.sum_net' }: #{ number_to_currency categories_sum[i[0]][:net] }
 
 
 
@@ -221,19 +88,14 @@
       %tr
         %th.left= t '.type'
         %th.table-center= t '.gross'
-      - paymentmethod_positive_sums.keys.each do |k|
-        - next if regular_payment_methods.include?(k.to_s)
+      - (paymentmethods[:pos].to_a + paymentmethods[:neg].to_a).each do |p|
+        - next if regular_payment_methods.include?(p[0].to_s)
         %tr
-          %td.left= t k
-          %td.table-center= number_to_currency paymentmethod_positive_sums[k]
-      - paymentmethod_negative_sums.keys.each do |k|
-        - next if regular_payment_methods.include?(k.to_s)
-        %tr
-          %td.left= t k
-          %td.table-center= number_to_currency paymentmethod_negative_sums[k]
-    %p== #{ t '.sum_gross' }: #{ number_to_currency refunded_sum_noncash_gro }
-    %p== #{ t '.sum_net' }: #{ number_to_currency refunded_sum_noncash_net }
+          %td.left= t p[0]
+          %td.table-center= number_to_currency p[1]
 
+    %p== #{ t '.sum_gross' }: #{ number_to_currency refunds[:noncash][:gro] }
+    %p== #{ t '.sum_net' }: #{ number_to_currency refunds[:noncash][:net] }
 
 
 
@@ -243,48 +105,23 @@
         %th.left= t '.type'
         %th.left= t '.id'
         %th.table-center= t '.gross'
-      - @drawertransactions.each do |d|
-        - next if d.tag == 'CompleteOrder' or not d.is_refund
+      - transactions.to_a.each do |d|
+        - next unless d[1][:is_refund]
         %tr
-          %td.left= t ('.' + d.tag)
-          %td.left= d.notes
-          %td.right= number_to_currency d.amount
-    %p== #{ t '.sum_gross' }: #{ number_to_currency refunded_sum_cash_gro }
-    %p== #{ t '.sum_net' }: #{ number_to_currency refunded_sum_cash_net }
+          %td.left= t ('.' + d[1][:tag])
+          %td.left= d[1][:notes]
+          %td.right= number_to_currency d[1][:amount]
 
-
-
+    %p== #{ t '.sum_gross' }: #{ number_to_currency refunds[:cash][:gro] }
+    %p== #{ t '.sum_net' }: #{ number_to_currency refunds[:cash][:net] }
 
 
     %h3= t '.revenue'
-    %p== #{ t '.gross' }: #{ number_to_currency category_sums_positive_gro.compact.sum + category_sums_negative_gro.compact.sum + refunded_sum_cash_gro + refunded_sum_noncash_gro}
-    %p== #{ t '.net' }: #{ number_to_currency category_sums_positive_net.compact.sum + category_sums_negative_net.compact.sum + refunded_sum_cash_net + refunded_sum_noncash_net}
+    %p== #{ t '.gross' }: #{ number_to_currency revenue[:gro] }
+    %p== #{ t '.net' }: #{ number_to_currency revenue[:net] }
 
 
-
-          
     %h3= t '.transactions'
-    %table.striped-table2
-      %tr
-        %th.left= t '.drops'
-        %th.right
-      - payout_types_drop_sums.keys.each do |k|
-        - next if payout_types_drop_sums[k].zero?
-        %tr
-          %td.left= t ('.' + k.to_s)
-          %td.right= number_to_currency payout_types_drop_sums[k]
-
-
-    %table.striped-table2
-      %tr
-        %th.left= t '.payouts'
-        %th.right
-      - payout_types_payout_sums.keys.each do |k|
-        - next if payout_types_payout_sums[k].zero?
-        %tr
-          %td.left= t ('.' + k.to_s)
-          %td.right= number_to_currency payout_types_payout_sums[k]
-
 
     %table.striped-table2
       %tr
@@ -293,23 +130,22 @@
         %th.left= t '.time'
         %th.right= t '.drop'
         %th.right= t '.payout'
-      - @drawertransactions.each do |d|
-        - next if d.tag == 'CompleteOrder' or d.is_refund
+      - transactions.to_a.each do |d|
+        - next if d[1][:is_refund]
         %tr
-          %td.left= t ('.' + d.tag)
-          %td.left= d.notes
-          %td.left= l d.created_at, :format => :just_time
-          %td.right= number_to_currency d.amount if d.drop
-          %td.right= number_to_currency d.amount if d.payout
-    %p== #{ t '.sum_transactions' }: #{ number_to_currency total_drop - total_payout }
+          %td.left= t ('.' + d[1][:tag])
+          %td.left= d[1][:notes]
+          %td.left= l d[1][:time], :format => :just_time
+          %td.right= number_to_currency d[1][:amount] if d[1][:drop]
+          %td.right= number_to_currency d[1][:amount] unless d[1][:drop]
+
+    %p== #{ t '.sum_transactions' }: #{ number_to_currency transactions_sum[:total] }
 
 
     %h3= t '.cash_drawer'
 
     - if (@employee.get_drawer.id == $User.get_drawer.id) and (@from.beginning_of_day == Time.now.beginning_of_day)
       %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency $User.get_drawer.amount }
-
-    - calculated_drawer_amount = total_drop - total_payout + refunded_sum_noncash_gro + refunded_sum_cash_gro + category_sums_positive_gro.compact.sum - paymentmethod_positive_sums.to_a.collect{ |i| i[1] }.sum + category_sums_negative_gro.compact.sum - paymentmethod_negative_sums.to_a.collect{ |i| i[1] }.sum
 
     %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
 

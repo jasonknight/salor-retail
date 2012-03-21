@@ -204,7 +204,6 @@ class OrdersController < ApplicationController
   end
 
   def add_item_ajax
-
     @error = nil
     @order = initialize_order
     if @order.paid == 1 and not $User.is_technician? then
@@ -470,18 +469,11 @@ class OrdersController < ApplicationController
   def report_day
     @from, @to = assign_from_to(params)
     @from = @from.beginning_of_day
-    @to = @from.beginning_of_day + 1.day
     @vendor = GlobalData.vendor
     @employees = @vendor.employees.where(:hidden => 0)
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
-    @orders = Order.where({ :vendor_id => @employee.get_meta.vendor_id, :drawer_id => @employee.get_drawer.id,:created_at => @from..@to, :paid => 1 }).order("created_at ASC")
-    #@orders = Order.where({ :vendor_id => @employee.vendor_id, :drawer_id => @employee.get_drawer.id, :paid => 1 }).order("created_at ASC")
-    @categories = Category.scopied
-    @taxes = TaxProfile.scopied.where( :hidden => 0 )
-    @drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id, :created_at => @from..@to }).where("tag != 'CompleteOrder'")
-    #@drawertransactions = DrawerTransaction.where({:drawer_id => @employee.get_drawer.id }).where("tag != 'CompleteOrder'")
-    @payouttypes = AppConfig.dt_tags_values.split(",")
+    @report = @employee.get_end_of_day_report(@from)
   end
 
   def report_day_range
