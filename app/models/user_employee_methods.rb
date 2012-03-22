@@ -521,10 +521,10 @@ module UserEmployeeMethods
 
   #
   def get_end_of_day_report(day)
-    orders = Order.scopied.where({ :vendor_id => self.get_meta.vendor_id, :drawer_id => self.get_drawer.id,:created_at => day.beginning_of_day..Time.now, :paid => 1 }).order("created_at ASC")
+    orders = Order.scopied.where({ :vendor_id => self.get_meta.vendor_id, :drawer_id => self.get_drawer.id,:created_at => day.beginning_of_day..day.end_of_day, :paid => 1 }).order("created_at ASC")
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
-    drawertransactions = DrawerTransaction.where({:drawer_id => self.get_drawer.id, :created_at => day.beginning_of_day..Time.now }).where("tag != 'CompleteOrder'")
+    drawertransactions = DrawerTransaction.where({:drawer_id => self.get_drawer.id, :created_at => day.beginning_of_day..day.end_of_day }).where("tag != 'CompleteOrder'")
     regular_payment_methods = PaymentMethod.types_list.collect{|pm| pm[1].to_s }
 
     categories = {:pos => {}, :neg => {}}
@@ -569,7 +569,7 @@ module UserEmployeeMethods
           when 'gift_card' then oi.activated ? oi.total : oi.total
           when 'coupon' then oi.order_item ? oi.order_item.coupon_amount : 0
         end
-        item_price = oi.price * ( oi.rebate / 100.0 ) if oi.rebate
+        item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
         item_price = -oi.price if o.buy_order
         item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
         gro = item_total
