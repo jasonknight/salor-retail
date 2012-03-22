@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 # ------------------- Salor Point of Sale ----------------------- 
 # An innovative multi-user, multi-store application for managing
 # small to medium sized retail stores.
@@ -64,7 +66,14 @@ class FileUpload
       columns = row.split(delim)
 
       shipper_sku = columns[0].strip
-      name = columns[1].strip
+
+      #begin
+#name = columns[1].strip.encode('UTF-8').gsub(/[^0-9A-Za-z .öäüßÖÄÜ*\'+-=?!"~§$%&\(\)\\:,<>\[\]]\{\}/, '')
+name = Iconv.new('UTF-8//IGNORE', 'UTF-8').iconv(columns[1].strip)
+
+#rescue Exception => e
+#debugger
+#end
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f
       packaging_unit_carton = columns[11].gsub(',','.').to_f
@@ -107,16 +116,16 @@ class FileUpload
 
       # carton
       attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
-      carton_item = Item.find_by_name(name + " Karton")
+      sku_carton = columns[8].strip
+      carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
+      carton_item = Item.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
-        #attributes[:sku] = carton_item.sku # use original SKU
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
         updated_items += 1
       else
-        sku_carton = columns[8].strip
-        sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
+        sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         carton_item.set_model_owner
@@ -127,17 +136,17 @@ class FileUpload
 
       # pack
       attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
-      pack_item = Item.find_by_name(name + " Packung")
+      sku_pack = columns[9].strip
+      pack_item = Item.where( :name => name + " Packung", :hidden => false).first
+      pack_item = Item.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
-        #attributes[:sku] = pack_item.sku # use original SKU
         pack_item.attributes = attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item
         pack_item.save
         updated_items += 1
       else
-        sku_pack = columns[9].strip
-        sku_pack = 'C' + rand(999999).to_s if sku_pack.empty?
+        sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
         pack_item.set_model_owner
@@ -150,17 +159,17 @@ class FileUpload
 
       # piece
       attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
-      piece_item = Item.find_by_name(name + " Stk.")
+      sku_piece = columns[19].strip if columns[19]
+      piece_item = Item.where( :name => name + " Stk.", :hidden => false).first
+      piece_item = Item.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
-        #attributes[:sku] = piece_item.sku # use original SKU
         piece_item.attributes = attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item
         piece_item.save
         updated_items += 1
       else
-        sku_piece = columns[19].strip if columns[19]
-        sku_piece = 'C' + rand(999999).to_s if sku_piece.empty?
+        sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
         piece_item.set_model_owner
@@ -177,9 +186,9 @@ class FileUpload
   #
   def type2(file_lines) #house of smoke, dios
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
-    if file_lines.first.include? '#' then
+    if file_lines[0].include?('#') or file_lines[1].include?('#') then
      delim = '#'
-    elsif file_lines.first.include? ';'
+    elsif file_lines[0].include?(';') or file_lines[1].include?(';')
      delim = ';'
     else
       raise "Could not detect delimiter in House Of Smoke or Dios"
@@ -187,6 +196,7 @@ class FileUpload
     file_lines.each do |row|
       i += 1
       next if i == 1 # skip headers
+      next if row.strip.empty? # dios has an empty first line
       columns = row.chomp.split(delim)
 
       shipper_sku = columns[0].strip
@@ -236,16 +246,16 @@ class FileUpload
 
       # carton
       attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
-      carton_item = Item.find_by_name(name + " Karton")
+      sku_carton = columns[8].strip
+      carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
+      carton_item = Item.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
-        #attributes[:sku] = carton_item.sku # use original SKU
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
         updated_items += 1
       else
-        sku_carton = columns[8].strip
-        sku_carton = 'C' + rand(999999).to_s if sku_carton.empty?
+        sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         carton_item.set_model_owner
@@ -256,17 +266,17 @@ class FileUpload
 
       # pack
       attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
-      pack_item = Item.find_by_name(name + " Packung")
+      sku_pack = columns[9].strip
+      pack_item = Item.where( :name => name + " Packung", :hidden => false ).first
+      pack_item = Item.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
-        #attributes[:sku] = pack_item.sku # use original SKU
         pack_item.update_attributes attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item
         pack_item.save
         updated_items += 1
       else
-        sku_pack = columns[9].strip
-        sku_pack = 'C' + rand(999999).to_s if sku_pack.empty?
+        sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
         pack_item.set_model_owner
@@ -279,17 +289,17 @@ class FileUpload
 
       # piece
       attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
-      piece_item = Item.find_by_name(name + " Stk.")
+      sku_piece = columns[19].strip if columns[19]
+      piece_item = Item.where( :name => name + " Stk.", :hidden => false ).first
+      carton_item = Item.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
-        #attributes[:sku] = piece_item.sku # use original SKU
         piece_item.update_attributes attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item
         piece_item.save
         updated_items += 1
       else
-        sku_piece = columns[19].strip if columns[19]
-        sku_piece = 'C' + rand(999999).to_s if sku_piece.nil? or sku_piece.empty?
+        sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.nil? or sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
         piece_item.set_model_owner

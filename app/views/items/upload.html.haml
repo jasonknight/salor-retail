@@ -10,17 +10,26 @@
   = file_field_tag :file, :size => 15
   %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
 
+%br
+%br
+
 %h2 Format: Danczek / Tobaccoland / Plattner / Moosmayer
 = form_tag '/items/upload_danczek_tobaccoland_plattner', :multipart => true do |form|
   = label_tag 'CSV'
   = file_field_tag :file, :size => 15
   %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
 
+%br
+%br
+
 %h2 Format: House of Smoke / Dios
 = form_tag '/items/upload_house_of_smoke', :multipart => true do |form|
   = label_tag 'CSV'
   = file_field_tag :file, :size => 15
   %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}
+
+%br
+%br
 
 %h2 Format: Optimalsoft
 = form_tag '/items/upload_optimalsoft', :multipart => true do |form|
