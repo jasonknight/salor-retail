@@ -288,7 +288,7 @@ class ItemsController < ApplicationController
     unused_item_ids = relevant_item_ids - used_item_ids
     unused_item_ids.each do |ui|
       item = Item.find_by_id(ui)
-      item.update_attributes :hidden_by_distiller => true, :hidden => true, :sku => (1000 + rand(99999)).to_s[0..3] + 'OLD:' + item.sku
+      item.update_attributes :child_id => nil, :hidden_by_distiller => true, :hidden => true, :sku => (1000 + rand(99999)).to_s[0..3] + 'OLD:' + item.sku
     end
     GlobalErrors << unused_item_ids.count
     redirect_to '/items/database_distiller'

@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 # ------------------- Salor Point of Sale ----------------------- 
 # An innovative multi-user, multi-store application for managing
 # small to medium sized retail stores.
@@ -67,13 +65,7 @@ class FileUpload
 
       shipper_sku = columns[0].strip
 
-      #begin
-#name = columns[1].strip.encode('UTF-8').gsub(/[^0-9A-Za-z .öäüßÖÄÜ*\'+-=?!"~§$%&\(\)\\:,<>\[\]]\{\}/, '')
-name = Iconv.new('UTF-8//IGNORE', 'UTF-8').iconv(columns[1].strip)
-
-#rescue Exception => e
-#debugger
-#end
+      name = Iconv.new('UTF-8//IGNORE', 'UTF-8').iconv(columns[1].strip)
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f
       packaging_unit_carton = columns[11].gsub(',','.').to_f
