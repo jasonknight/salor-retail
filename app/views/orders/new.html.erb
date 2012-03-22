@@ -369,7 +369,6 @@ function updateOrder(obj) {
   $('.order-rebate').html(obj.rebate);
   $('.order-tag').html(obj.tag);
   $('.order-id').html(obj.id);
-  $('#current_completable_order').html(obj.id);
   if (!obj.lc_points > 0) {
     obj.lc_points = 0;
   }
@@ -447,7 +446,6 @@ $(function () {
 <div class="pos-customer shown"></div>
 
 <div class='rebate'>
-  <p><b>#<span class="order-id"><%= @order.id %></span></b></p>
   <!-- <%= edit_me(:rebate,@order,@order.rebate,'','pos_order_rebate','true') %> -->
   <!-- <%= edit_me(:rebate_type,@order,@order.rebate_type_display,'','pos_order_rebate_type',true) %> --> 
   <%= edit_me(:tag,@order,@order.tag,'','pos_order_tag','true') %>
