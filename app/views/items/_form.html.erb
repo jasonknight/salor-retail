@@ -100,6 +100,7 @@
                     <% ancestorcount += 1 %>
                     <p><b>Parent <%= ancestorcount %>: <%= link_to parent.name, edit_item_path(parent) %></b></p>
                     <p><%= t 'activerecord.attributes.quantity' %>: <%= parent.quantity %><br/>
+                       <%= t 'activerecord.attributes.sku' %>: <%= parent.sku %><br/>
                        <%= t 'activerecord.attributes.packaging_unit' %>: <%= parent.packaging_unit %><br/>
                        <%= t 'activerecord.attributes.price' %>: <%= number_to_currency parent.base_price %></p>
                   <% end %>
@@ -113,6 +114,7 @@
                     <% ancestorcount += 1 %>
                     <p><b>Child <%= ancestorcount %>: <%= link_to child.name, edit_item_path(child) %></b></p>
                     <p><%= t 'activerecord.attributes.quantity' %>: <%= child.quantity %><br/>
+                       <%= t 'activerecord.attributes.sku' %>: <%= child.sku %><br/>
                        <%= t 'activerecord.attributes.packaging_unit' %>: <%= child.packaging_unit %><br/>
                        <%= t 'activerecord.attributes.price' %>: <%= number_to_currency child.base_price %></p>
                   <% end %>

@@ -70,21 +70,21 @@
     <% item = Item.scopied.find_by_sku(sitem.sku) %>
     <tr>
       <td valign="middle">
-        <%= raw edit_me(:name,item,'','','item_' + item.id.to_s + 'name') %>
+        <%= item ? raw(edit_me(:name,item,'','','item_' + item.id.to_s + 'name')) : t('.item_was_deleted') %>
       </td>
       <td valign="middle">
         <%= raw edit_me(:sku,sitem,'','','shipment_item_' + sitem.id.to_s + 'sku') %>
       </td>
       <td valign="middle">
-        <%= raw edit_me(:quantity, item, '', '', 'item_' + item.id.to_s + 'quantity') %>
+        <%= raw edit_me(:quantity, item, '', '', 'item_' + item.id.to_s + 'quantity') if item %>
       </td>
       <td valign="middle">
         <%= raw edit_me(:quantity,sitem,'','','shipment_item_' + sitem.id.to_s + 'quantity') %>
       </td>
       <td valign="middle">
-        <% purchase_price = item.purchase_price ? item.purchase_price : 0 %>
+        <% purchase_price = (item and item.purchase_price) ? item.purchase_price : 0 %>
         <% purchase_price_sum += purchase_price %>
-        <%= raw edit_me(:purchase_price, item, '', '', 'item_' + item.id.to_s + 'purchase_price')  %>
+        <%= raw edit_me(:purchase_price, item, '', '', 'item_' + item.id.to_s + 'purchase_price') if item %>
       </td>
       <td valign="middle">
         <% if sitem.in_stock %>

@@ -502,7 +502,6 @@ de:
       system_drawer_amount: Kassenlade derzeitiger Stand
       warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor und laden Sie diese Seite neu.
 
-
     word:
       cancelled: storniert
       drop: einbezahlt
@@ -760,6 +759,15 @@ de:
   items:
     index:
       only_for_tobacco_stores: Diese Funktion ist nur für Trafiken. Tabak-Artikel werden nun angelegt bzw. aktualisiert. Diese Aktion dauert etwa 20 Minuten. Sind Sie wirklich sicher, dass Sie fortfahren möchten?
+      database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
+    database_distiller:
+      used_item_ids: Bisher verwendete Artikel
+      relevant_item_ids: Artikel, die zur Löschung in Frage kommen
+      unused_item_ids: Nicht verwendete Artikel
+      hidden: Bereits Gelöschte Artikel
+      hidden_by_distiller: Durch den Datenbank-Reiniger gelöschte Artikel
+      delete_unused_items: Nicht verwendete Artikel löschen!
+      are_you_sure: Durch diese Aktion werden alle nicht verwendeten Artikel gelöscht. Dies kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren möchten?
     upload:
       upload: Importieren
     inventory_report:
@@ -787,7 +795,7 @@ de:
   ByGiftCardRefund: Gutschein Stornierung
   OtherCreditRefund: Andere Bezahlmethode Stornierung
   end_of_day: Kassensaldo
-  label: Etikett
+  label: Regaletikett
   sticker: Aufkleber
   support: Support
   edit: Bearbeiten

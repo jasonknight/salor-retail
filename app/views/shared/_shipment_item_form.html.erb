@@ -203,7 +203,7 @@ var shipment_items_callbacks = {
                 // END
                 var f = $('.attribute-sku').first();
                 f.val('');
-                focusInput(f);
+                $('.attribute-input-quantity')[1].select();
               } else {
                 if (data == null) {
                   showCreateItem({'sku': sku});
@@ -231,6 +231,7 @@ var shipment_items_callbacks = {
                   $(selector).val(1);
                 }
                 addItem({});
+                $('.attribute-input-quantity')[1].select();
               }
           });
         }
