@@ -377,7 +377,7 @@ class ItemsController < ApplicationController
   end
 
   def download
-    @items = Item.scopied
+    @items = Item.scopied.where(:hidden => false)
     render 'list.csv'
   end
 

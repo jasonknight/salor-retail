@@ -175,6 +175,9 @@ tr:
         sku: SKU
       cash_register:
         sticker_printer: Sticker printer
+      item:
+        purchase_price: XXXPurchase Price
+        quantity: XXXQuantity
       sku: SKU
       start_amount: start amount
       start_date: start date
@@ -217,6 +220,7 @@ tr:
         
    
   headings:
+    database_distiller: XXX Database distiller
     order_validation: "Order Validation"
     paylife: "Paylife(Artema Hybrid)"
     bank_machine_types: supported bank machines
@@ -273,6 +277,7 @@ tr:
     assign: assign
 
   menu:
+    database_distiller: XXX Database Distiller
     clear_order: Clear
     inventory_report: Inventory report
     ok: OK
@@ -482,14 +487,20 @@ tr:
       payout_total: TOTAL
       payment_method_total: TOTAL
       transaction_total: TOTAL
-      incoming: Incoming
-      outgoing: Outgoing
-      drops: Drops
-      payouts: Payouts
+      cash_refunds_total: TOTAL
+      revenue_total: TOTAL
+      OrderItemRefund: Order Item Refund
+      OrderRefund: Order Refund
+      sales: Sales
+      payments: Payments
       refund: Refund
-      system_drawer_amount: System drawer amount
+      None: Not named
+      noncash-refunds: Noncash-Refunds
+      cash-refunds: Cash-Refunds
+      revenue: Revenue
       calculated_drawer_amount: Calculated drawer amount
-      warning_drawer_amount_not_zero: Warning! Your system drawer amount is not zero. You are strongly advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly, print this report again and log out.
+      system_drawer_amount: System drawer amount
+      warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
 
     word:
       cancelled: cancelled
@@ -744,6 +755,7 @@ tr:
   items:
     index:
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
+      database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
     upload:
       upload: upload
     inventory_report:
@@ -774,3 +786,5 @@ tr:
   label: label
   sticker: sticker
   support: XXX
+  edit: XXXEdit
+  delete: XXXDelete

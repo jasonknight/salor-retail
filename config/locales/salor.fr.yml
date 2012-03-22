@@ -175,6 +175,9 @@ fr:
         sku: UGS
       cash_register:
         sticker_printer: Imprimante étiquette
+      item:
+        purchase_price: XXXPurchase Price
+        quantity: XXXQuantity
       sku: UGS
       start_amount: montant initial
       start_date: date initiale
@@ -217,6 +220,7 @@ fr:
         
    
   headings:
+    database_distiller: XXX Database distiller
     order_validation: "Validation de la commande"
     paylife: "Paylife(Hybrid Artema)"
     bank_machine_types: machines banque acceptées
@@ -273,6 +277,7 @@ fr:
     assign: assigner
 
   menu:
+    database_distiller: XXX Database Distiller
     clear_order: Effacer
     inventory_report: Raport inventaire
     ok: OK
@@ -474,22 +479,28 @@ fr:
       thanks: Merci de votre achat !
       total: TOTAL                         EUR %8.2f
     eod_report:
-      orders_total: Orders total
-      refunded_total: Refunded total
-      buyback_item_total: Buyback item total
-      buyback_order_total: Buyback order total
-      drop_total: TOTAL
-      payout_total: TOTAL
-      payment_method_total: TOTAL
-      transaction_total: TOTAL
-      incoming: Incoming
-      outgoing: Outgoing
-      drops: Drops
-      payouts: Payouts
-      refund: Refund
-      system_drawer_amount: System drawer amount
-      calculated_drawer_amount: Calculated drawer amount
-      warning_drawer_amount_not_zero: Warning! Your system drawer amount is not zero. You are strongly advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly, print this report again and log out.
+      orders_total: XXXOrders total
+      refunded_total: XXXRefunded total
+      buyback_item_total: XXXBuyback item total
+      buyback_order_total: XXXBuyback order total
+      drop_total: XXXTOTAL
+      payout_total: XXXTOTAL
+      payment_method_total: XXXTOTAL
+      transaction_total: XXXTOTAL
+      cash_refunds_total: XXXTOTAL
+      revenue_total: XXXTOTAL
+      OrderItemRefund: XXXOrder Item Refund
+      OrderRefund: XXXOrder Refund
+      sales: XXXSales
+      payments: XXXPayments
+      refund: XXXRefund
+      None: XXXNot named
+      noncash-refunds: XXXNoncash-Refunds
+      cash-refunds: XXXCash-Refunds
+      revenue: XXXRevenue
+      calculated_drawer_amount: XXXCalculated drawer amount
+      system_drawer_amount: XXXSystem drawer amount
+      warning_drawer_amount_not_zero: XXXWarning! Your drawer amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
 
     word:
       cancelled: annulé
@@ -604,14 +615,14 @@ fr:
 
   cash_registers:
     end_of_day:
-      end_of_day_thermal_report: Print Report
-      paper_report: Detail Report
-      cash_drawer: Cash Drawer
-      counted: Counted
-      difference: Difference
+      end_of_day_thermal_report: XXX Print Report
+      paper_report: XXX Detail Report
+      cash_drawer: XXX Cash Drawer
+      counted: XXX Counted
+      difference: XXX Difference
 
   views:
-    eticket: Ticket
+    eticket: XXX Shelf label
     sticky_ticket: Etiquette
     wholesaler_refresh: Recherche des mises à jour du distributeur. Ceci peut prendre quelques minutes.
     advanced_field: champ avancé
@@ -744,6 +755,7 @@ fr:
   items:
     index:
       only_for_tobacco_stores: Cette fonction s'applique uniquement aux bureaux de tabac. Des articles Tabac seront créés et téléchargés et mis à jour. ceci peut prendre jusau'à 20 minutes. Êtes-vous sûr de vouloir continuer ?
+      database_distiller_warning: XXX Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
     upload:
       upload: mettre en ligne
     inventory_report:
@@ -767,10 +779,12 @@ fr:
   ByCard: Par carte bleue
   ByGiftCard: Par carte cadeau
   OtherCredit: autre crédit
-  ByCardRefund: By Card Refund
-  ByGiftCardRefund: By Gift Card Refund
-  OtherCreditRefund: Other Credit Refund
+  ByCardRefund: XXX By Card Refund
+  ByGiftCardRefund: XXX By Gift Card Refund
+  OtherCreditRefund: XXX Other Credit Refund
   end_of_day: Fin de journée
   label: étiquette
   sticker: autocollant
   support: XXX
+  edit: XXXEdit
+  delete: XXXDelete

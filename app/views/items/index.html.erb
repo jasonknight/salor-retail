@@ -30,9 +30,6 @@ function wholesaler_update() {
         <div class="tool-icon" align="center" onmousedown="window.location = '<%= new_item_path(:vendor_id => params[:vendor_id]) %>'">
           <%= link_to image_tag('/images/icons/' + icon(:add, 32)), new_item_path(:vendor_id => params[:vendor_id]) %><br /><span class='icon-caption'><%= I18n.t("menu.new_item") %></span>
         </div>
-        <div class="tool-icon" onmousedown="window.location = '<%= new_broken_item_path(:vendor_id => params[:vendor_id]) %>'">
-          <%= link_to image_tag('/images/icons/' + icon(:broken, 32)), new_broken_item_path(:vendor_id => params[:vendor_id]) %><br /><span class='icon-caption'><%= I18n.t("menu.new_broken_item") %></span>
-        </div>
         <div class="tool-icon" onmousedown="window.location = '/items/update_location'">
           <%= link_to salor_icon(:location,{:class => 'pointer'},32),"/items/update_location" %><br /><span class='icon-caption'><%= I18n.t("menu.update_location") %></span>
         </div>
@@ -69,7 +66,7 @@ function wholesaler_update() {
         <%= salor_icon(:shipper,{:style => "cursor:pointer;",:onmousedown => "wholesaler_update();"},32) %><br /><span class='icon-caption'><%= I18n.t("menu.wholesaler_update") %></span>
         </div>
         <div class="tool-icon">
-        <%= link_to salor_icon(:trash,{:style => "cursor:pointer;"},32), '/items/database_distiller' %><br /><span class='icon-caption'><%= I18n.t("menu.database_distiller") %></span>
+        <%= link_to salor_icon(:trash,{:style => "cursor:pointer;"},32), '/items/database_distiller', :confirm => "#{t('.database_distiller_warning')}" %><br /><span class='icon-caption'><%= I18n.t("menu.database_distiller") %></span>
         </div>
       </div>
     </td>

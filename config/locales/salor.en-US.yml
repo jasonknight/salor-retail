@@ -175,6 +175,9 @@ en-US:
         sku: SKU
       cash_register:
         sticker_printer: Sticker printer
+      item:
+        purchase_price: Purchase Price
+        quantity: Quantity
       sku: SKU
       start_amount: start amount
       start_date: start date
@@ -217,6 +220,7 @@ en-US:
         
    
   headings:
+    database_distiller: Database distiller
     order_validation: "Order Validation"
     paylife: "Paylife(Artema Hybrid)"
     bank_machine_types: supported bank machines
@@ -273,6 +277,7 @@ en-US:
     assign: assign
 
   menu:
+    database_distiller: Database Distiller
     clear_order: Clear
     inventory_report: Inventory report
     ok: OK
@@ -482,14 +487,20 @@ en-US:
       payout_total: TOTAL
       payment_method_total: TOTAL
       transaction_total: TOTAL
-      incoming: Incoming
-      outgoing: Outgoing
-      drops: Drops
-      payouts: Payouts
+      cash_refunds_total: TOTAL
+      revenue_total: TOTAL
+      OrderItemRefund: Order Item Refund
+      OrderRefund: Order Refund
+      sales: Sales
+      payments: Payments
       refund: Refund
-      system_drawer_amount: System drawer amount
+      None: Not named
+      noncash-refunds: Noncash-Refunds
+      cash-refunds: Cash-Refunds
+      revenue: Revenue
       calculated_drawer_amount: Calculated drawer amount
-      warning_drawer_amount_not_zero: Warning! Your system drawer amount is not zero. You are strongly advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly, print this report again and log out.
+      system_drawer_amount: System drawer amount
+      warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
 
     word:
       cancelled: cancelled
@@ -610,9 +621,13 @@ en-US:
       counted: Counted
       difference: Difference
 
+  shipments:
+    index:
+      report: Bericht
+
   views:
-    eticket: Ticket
-    sticky_ticket: Sticker
+    eticket: Shelf label
+    sticky_ticket: Sticky label
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
     advanced_field: advanced field
     by_card: by card
@@ -744,6 +759,15 @@ en-US:
   items:
     index:
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
+      database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
+    database_distiller:
+      used_item_ids: Used Items
+      relevant_item_ids: Items relevant for deletion
+      unused_item_ids: Unused Items
+      hidden: Bereits Deleted Items
+      hidden_by_distiller: Items deleted by Database Distiller
+      delete_unused_items: Delete unused Items!
+      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you sure you want to proceed?
     upload:
       upload: upload
     inventory_report:
@@ -774,3 +798,5 @@ en-US:
   label: label
   sticker: sticker
   support: XXX
+  edit: Edit
+  delete: Delete
