@@ -99,4 +99,14 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  #
+  def get_sales_statistics
+    item = Hash.new
+    orders = self.orders
+    orders.each do |o|
+      o.order_items.each do |oi|
+      end
+    end 
+  end
+
 end

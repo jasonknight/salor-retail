@@ -23,7 +23,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
   
     var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" /></div></td>');
     btn.click(function () {
-      add_item('<%= item.sku %>');
+      add_item('<%= item.sku %>','');
     });
     btn.mouseup(function () {
       $(this).removeClass('active-icon');
@@ -50,7 +50,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     sku.addClass('table-cell sku');
     sku.html("<%= customer.loyalty_card.sku %>");
   
-    var btn = $('<div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" onclick="add_item(\'<%= customer.loyalty_card.sku %>\');" /></div>');
+    var btn = $('<div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" onclick="add_item(\'<%= customer.loyalty_card.sku %>\',\'\');" /></div>');
     btn.addClass('table-cell btn');
     row.append(cname);
     row.append(sku);

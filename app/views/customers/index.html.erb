@@ -9,7 +9,7 @@
 <div class="list master">
   <% @customers.each do |customer| %>
   <%= render(:partial => "shared/edit_li_wide", :locals => {
-          :path => edit_customer_path(customer),
+          :path => customer_path(customer),
           :image => icon(:customer),
           :text => customer.full_name,
           :edit_path => edit_customer_path(customer),

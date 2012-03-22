@@ -73,6 +73,11 @@ class CustomersController < ApplicationController
     end
   end
 
+  def show
+    @customer = Customer.scopied.find_by_id params[:id]
+    @report = @customer.get_sales_statistics
+  end
+
   # GET /customers/1/edit
   def edit
     @customer = Customer.find(params[:id])

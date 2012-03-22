@@ -31,7 +31,7 @@
       </div>
       <div id="" class="table-cell locations-items-cell locations-buttons-cell">
         <% if item.class == Item  %>
-          <button id="button-add-to-order" class="big-button" onclick="add_item('<%= item.sku %>')"><%= I18n.t("menu.add_to_current_order", :id => GlobalData.salor_user.meta.order_id) %></button>
+          <button id="button-add-to-order" class="big-button" onclick="add_item('<%= item.sku %>','')"><%= I18n.t("menu.add_to_current_order", :id => GlobalData.salor_user.meta.order_id) %></button>
           <button id="button-add-to-order" class="big-button" onclick="window.location = '/items/<%= item.id %>/edit'"><%= I18n.t("menu.edit_item") %></button>
         <% end %>
       </div>
