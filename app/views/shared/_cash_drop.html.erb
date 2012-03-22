@@ -64,7 +64,7 @@ function cash_drop_save() {
     focusInput($('.cash-drop-amount'));
     return;
   }
-  if ( ($("#transaction_type").val() == 'payout') && (Drawer.amount - parseFloat($('.cash-drop-amount').val())) < 0) {
+  if ( ($("#transaction_type").val() == 'payout') && ( Drawer.amount - parseFloat($('.cash-drop-amount').val()) ) < 0) {
     $(".cash-drop-amount").addClass('error-input');
     return;
   }
