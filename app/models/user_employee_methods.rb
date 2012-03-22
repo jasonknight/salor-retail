@@ -597,8 +597,8 @@ module UserEmployeeMethods
           if not taxes[:neg].has_key?(taxname)
             taxes[:neg].merge! taxname => { :gro => gro, :net => net }
           else
-            taxes_[:neg][taxname][:gro] += gro
-            taxes_[:neg][taxname][:net] += net
+            taxes[:neg][taxname][:gro] += gro
+            taxes[:neg][taxname][:net] += net
           end
         end
         if oi.refunded
