@@ -55,7 +55,7 @@ class ShipmentsController < ApplicationController
   # GET /shipments
   # GET /shipments.xml
   def index
-    @shipments = Shipment.scopied.page(params[:page]).per(GlobalData.conf.pagination)
+    @shipments = Shipment.scopied
 
     respond_to do |format|
       format.html # index.html.erb

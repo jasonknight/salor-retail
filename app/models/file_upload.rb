@@ -65,7 +65,7 @@ class FileUpload
 
       shipper_sku = columns[0].strip
 
-      name = Iconv.new('UTF-8//IGNORE', 'UTF-8').iconv(columns[1].strip)
+      name = Iconv.new('UTF-8//TRANSLIT', 'ISO-8859-15').iconv(columns[1].strip)
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f
       packaging_unit_carton = columns[11].gsub(',','.').to_f
@@ -192,7 +192,7 @@ class FileUpload
       columns = row.chomp.split(delim)
 
       shipper_sku = columns[0].strip
-      name = columns[1].strip
+      name = Iconv.new('UTF-8//TRANSLIT', 'ISO-8859-15').iconv(columns[1].strip)
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f
       packaging_unit_pack = 1 if packaging_unit_pack.zero?
