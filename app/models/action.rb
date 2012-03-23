@@ -60,6 +60,9 @@ class Action < ActiveRecord::Base
               eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply 
               eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide
               eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign
+              if item.class == OrderItem then
+               item.update_attribute :action_applied, true
+              end
             rescue
               # puts "Error: #{$!}"
               GlobalErrors.append("system.errors.action_error",action,{:error => $!})
@@ -79,6 +82,7 @@ class Action < ActiveRecord::Base
         end
       end
       # puts "At the end of actions, #{item.price}"
+      
     return item
   end
   def self.simulate(item,action)

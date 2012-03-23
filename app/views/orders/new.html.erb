@@ -238,7 +238,7 @@ function updatePosItem(item) {
 
 function addPosItem(item) {
   var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
-  var base_id = getOrderItemId(item);
+    var base_id = getOrderItemId(item);
   row.addClass(base_id);
   item['price'] = item['price'] - item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
@@ -253,6 +253,10 @@ function addPosItem(item) {
     var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
     // those need number formatting
     if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax_profile_amount') {
+      if (item["action_applied"] == true) {
+        col.addClass("pos-action-applied");
+      }
+
       // those need special formatting
       if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 2 ) || attr == 'rebate' || attr == 'tax_profile_amount' ) {
         col.html(toPercent(item[attr]));
