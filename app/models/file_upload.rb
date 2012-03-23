@@ -134,7 +134,7 @@ class FileUpload
       if pack_item
         pack_item.attributes = attributes
         Action.run(pack_item,:on_import)
-        pack_item.parent = carton_item
+        pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
         updated_items += 1
       else
@@ -144,7 +144,7 @@ class FileUpload
         pack_item.set_model_owner
         Action.run(pack_item,:on_import)
         pack_item.save
-        pack_item.parent = carton_item
+        pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
         created_items += 1
       end
@@ -157,7 +157,7 @@ class FileUpload
       if piece_item
         piece_item.attributes = attributes
         Action.run(piece_item,:on_import)
-        piece_item.parent = pack_item
+        piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
         updated_items += 1
       else
@@ -167,7 +167,7 @@ class FileUpload
         piece_item.set_model_owner
         Action.run(piece_item,:on_import)
         piece_item.save
-        piece_item.parent = pack_item
+        piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
         created_items += 1
       end
@@ -264,7 +264,7 @@ class FileUpload
       if pack_item
         pack_item.update_attributes attributes
         Action.run(pack_item,:on_import)
-        pack_item.parent = carton_item
+        pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
         updated_items += 1
       else
@@ -274,7 +274,7 @@ class FileUpload
         pack_item.set_model_owner
         Action.run(pack_item,:on_import)
         pack_item.save
-        pack_item.parent = carton_item
+        pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
         created_items += 1
       end
@@ -287,7 +287,7 @@ class FileUpload
       if piece_item
         piece_item.update_attributes attributes
         Action.run(piece_item,:on_import)
-        piece_item.parent = pack_item
+        piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
         updated_items += 1
       else
@@ -297,7 +297,7 @@ class FileUpload
         piece_item.set_model_owner
         Action.run(piece_item,:on_import)
         piece_item.save
-        piece_item.parent = pack_item
+        piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
         created_items += 1
       end
