@@ -92,11 +92,14 @@
                   <%= salor_render :partial => "item_required", :locals => {:f => f} %>
               </td>
               <td valign="top">
-                <% current = @item %>
+                <% current = @item 
+                  cap = 10
+                  i = 0
+                %>
                 <% ancestorcount = 0 %>
                 <% begin %>
                   <% parent = current.parent %>
-                  <% if parent and not parent.child_id.nil? %>
+                  <% if parent.class == Item and not parent.child_id.nil? %>
                     <% ancestorcount += 1 %>
                     <p><b>Parent <%= ancestorcount %>: <%= link_to parent.name, edit_item_path(parent) %></b></p>
                     <p><%= t 'activerecord.attributes.quantity' %>: <%= parent.quantity %><br/>
@@ -104,10 +107,16 @@
                        <%= t 'activerecord.attributes.packaging_unit' %>: <%= parent.packaging_unit %><br/>
                        <%= t 'activerecord.attributes.price' %>: <%= number_to_currency parent.base_price %></p>
                   <% end %>
-                  <% current = parent %>
-                <% end while parent %>
+                  <% 
+                    current = parent 
+                    i = i + 1
+                  %>
+                <% end while parent.class == Item and i < cap %>
                 <% current = @item %>
-                <% ancestorcount = 0 %>
+                <% 
+                  ancestorcount = 0 
+                  i = 0
+                %>
                 <% begin %>
                   <% child = current.child %>
                   <% if child %>
@@ -118,8 +127,11 @@
                        <%= t 'activerecord.attributes.packaging_unit' %>: <%= child.packaging_unit %><br/>
                        <%= t 'activerecord.attributes.price' %>: <%= number_to_currency child.base_price %></p>
                   <% end %>
-                  <% current = child %>
-                <% end while child %>
+                  <% 
+                    current = child 
+                    i = i + 1
+                  %>
+                <% end while child.class == Item and i < cap%>
               </td>
             </tr>
             <tr>

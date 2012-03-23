@@ -160,7 +160,8 @@ class ItemsController < ApplicationController
       else
         params[:item][:price_by_qty] = false
       end
-      if @item.update_attributes(params[:item]) then
+      @item.attributes = params[:item]
+      if @item.save then
         saved = true
       end
     end

@@ -111,8 +111,17 @@ class Item < ActiveRecord::Base
       self.parent = nil
       return
     end
+    if string == self.sku then
+      errors.add(:child_sku,I18n.t("system.errors.parent_sku"))
+      GlobalErrors.append_fatal("system.errors.parent_sku")
+      return
+    end
     p = Item.find_by_sku(string)
     if p then
+      if self.child.id == p.id then
+        errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
+        GlobalErrors.append_fatal("system.errors.parent_sku")
+      end
       # puts "Updating child_id of parent" + p.sku;
       p.update_attribute(:child_id,self.id)
     else
@@ -123,10 +132,19 @@ class Item < ActiveRecord::Base
   def child_sku=(string)
     if string.empty? then
       self.child = nil
+      return 
+    end
+    if self.sku == string then
+      errors.add(:child_sku,I18n.t("system.errors.child_sku"))
+        GlobalErrors.append_fatal("system.errors.child_sku")
       return
     end
     c = Item.find_by_sku(string)
     if c then
+      if self.parent and self.parent.id == c.id then
+        errors.add(:child_sku, I18n.t("system.errors.child_sku"))
+        GlobalErrors.append_fatal("system.errors.child_sku")
+      end
       self.update_attribute(:child_id,c.id)
     else
       errors.add(:child_sku, I18n.t('system.errors.child_sku_must_exist'))
@@ -342,6 +360,12 @@ class Item < ActiveRecord::Base
         GlobalErrors.append_fatal('views.item_must_exist');
       end
     end
+    if self.parent_sku == self.sku then
+        errors.add(:coupon_applies,I18n.t('system.errors.parent_sku'))
+    end
+    if self.child_sku == self.sku then
+        errors.add(:coupon_applies,I18n.t('system.errors.child_sku'))
+    end 
   end
   def set_amount_remaining
     self.update_attribute(:amount_remaining,self.base_price)
@@ -422,7 +446,7 @@ class Item < ActiveRecord::Base
     difference.to_i.abs.times do
       i = self.quantity - 1
       if i == -1
-        if self.parent
+        if self.parent.class == Item
           # puts "Updating parent qty";
           before = self.parent.quantity
           self.parent.update_attribute :quantity, self.parent.quantity - 1
