@@ -558,7 +558,8 @@ class OrderItem < ActiveRecord::Base
         :weigh_compulsory => self.item.weigh_compulsory,
         :must_change_price => self.item.must_change_price,
         :weight_metric => self.item.weight_metric,
-        :tax_profile_amount => self.tax_profile_amount
+        :tax_profile_amount => self.tax_profile_amount,
+        :action_applied => self.action_applied
       }
     end
     if self.behavior == 'gift_card' and self.activated then
