@@ -192,6 +192,7 @@ class FileUpload
       columns = row.chomp.split(delim)
 
       shipper_sku = columns[0].strip
+
       name = Iconv.new('UTF-8//TRANSLIT', 'UTF-8').iconv(columns[1].strip)
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f
