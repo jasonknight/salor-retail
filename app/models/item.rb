@@ -83,6 +83,27 @@ class Item < ActiveRecord::Base
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
+  def self.repair_items
+    Item.where('child_id IS NOT NULL and child_id != 0').each do |item|
+      if item.parent or item.child then
+        if item.child then
+          if item.parent and item.child.id == item.parent.id then
+            puts "#{item.sku} parent.id == child.id"
+            item.parent.update_attribute :child_id, 0
+          end
+          if item.child_sku == item.sku then
+            puts "#{item.sku} == child_sku"
+            item.update_attribute :child_id, 0
+          end
+        end
+        if item.parent_sku == item.sku then
+          puts "#{item.sku} == parent_sku"
+          item.parent.update_attribute :child_id,0
+        end
+      end # end if item.parent or item.child
+    end
+  end
+  #
   def run_actions
     if self.actions.any? then
       Action.run(self, :on_save)

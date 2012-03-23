@@ -292,6 +292,24 @@ class ItemsController < ApplicationController
       item.update_attributes :child_id => nil, :hidden_by_distiller => true, :hidden => true, :sku => (1000 + rand(99999)).to_s[0..3] + 'OLD:' + item.sku
     end
     GlobalErrors << unused_item_ids.count
+    
+    Item.scopied.where('child_id IS NOT NULL and child_id != 0').each do |item|
+      if item.parent or item.child then
+        if item.child then
+          if item.parent and item.child.id == item.parent.id then
+            item.parent = nil
+          end
+          if item.child_sku == item.sku then
+            item.child_sku = ''
+          end
+        end
+        if item.parent_sku == item.sku then
+          item.parent_sku = ''
+        end
+        item.save
+      end
+    end
+
     redirect_to '/items/database_distiller'
   end
 
