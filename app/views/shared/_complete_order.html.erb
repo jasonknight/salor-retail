@@ -203,9 +203,9 @@ function show_denominations() {
 		var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
 		for (var i in pieces) {
 		  p = $('<div id="complete_piece_"'+pieces[1]+'>'+toCurrency(pieces[i])+'</div>');
-		  p.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
+		  p.css({height: '35px',width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
 		  p.addClass("pieces-button shadow");
-			cpos = {x: cpos.x, y: cpos.y + 57};
+			cpos = {x: cpos.x, y: cpos.y + 54};
 			p.attr('amount',pieces[i]);
 			p.mousedown(function () {
 			            var val = toFloat($(this).attr('amount'));
