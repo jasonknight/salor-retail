@@ -621,6 +621,12 @@ es:
       counted: Counted
       difference: Difference
 
+  shipments:
+    index:
+      report: Report
+    show:
+      purchase_price_sum: Purchase price sum
+
   views:
     eticket: Ticket
     sticky_ticket: Sticker

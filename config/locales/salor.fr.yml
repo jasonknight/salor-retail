@@ -621,6 +621,12 @@ fr:
       counted: XXX Counted
       difference: XXX Difference
 
+  shipments:
+    index:
+      report: XXX Report
+    show:
+      purchase_price_sum: XXX Purchase price sum
+
   views:
     eticket: XXX Shelf label
     sticky_ticket: Etiquette

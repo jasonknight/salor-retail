@@ -623,7 +623,9 @@ en-US:
 
   shipments:
     index:
-      report: Bericht
+      report: Report
+    show:
+      purchase_price_sum: Purchase price sum
 
   views:
     eticket: Shelf label
