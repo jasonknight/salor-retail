@@ -397,7 +397,7 @@ class Item < ActiveRecord::Base
       #if si.shipment.shipper == i.vendor # this is advanced stuff and needs more thinking
       #  i.quantity = i.quantity - si.quantity
       #else
-        i.quantity = i.quantity + si.quantity
+        i.quantity += si.quantity if si.quantity
       #end
       return i
     else

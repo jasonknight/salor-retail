@@ -601,7 +601,7 @@ de:
       shipment_item_nil: Artikel aus from_shipment_item war nil?
       sku_must_be_unique: muss einzigartig sein.
       uspecified_error: Etwas Schlimmes ist passiert. Bitte kontaktieren Sie den technischen Support! Versuchen Sie, diese Seite neu zu laden.
-      value_not_set: Tag
+      value_not_set: Nicht gesetzt
       order_failed: Verkauf konnte nicht abgeschlossen werden.
       order_print_failure: Kann nicht drucken
     
@@ -624,6 +624,8 @@ de:
   shipments:
     index:
       report: Bericht
+    show:
+      purchase_price_sum: Einkaufspreis gesamt
 
   views:
     eticket: Regaletikett
