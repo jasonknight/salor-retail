@@ -10,7 +10,9 @@
       </ul>
     </div>
   <% end %>
-
+<table width="80%" align="center">
+  <tr>
+    <td valign="top">
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name %>
@@ -35,11 +37,63 @@
     <%= f.label :is_self %><br />
     <%= f.check_box :is_self %>
   </div>
+    </td>
+    <td>
+  <div class="field">
+    <%= f.label :accepts_tax_profiles %><br />
+    <%= f.check_box :accepts_tax_profiles %>
+  </div>
+      
+  <div class="field">
+    <%= f.label :accepts_buttons %><br />
+    <%= f.check_box :accepts_buttons %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :accepts_categories %><br />
+    <%= f.check_box :accepts_categories %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :accepts_items %><br />
+    <%= f.check_box :accepts_items %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :accepts_customers %><br />
+    <%= f.check_box :accepts_customers %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :accepts_loyalty_cards %><br />
+    <%= f.check_box :accepts_loyalty_cards %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :accepts_discounts %><br />
+    <%= f.check_box :accepts_discounts %>
+  </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
   <div class="field">
     <%= f.label :accepted_ips %><br />
-    <%= f.text_area :accepted_ips %>
+    <%= f.text_area :accepted_ips, :rows => 5 %>
   </div>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="right">
   <div class="actions">
     <%= f.submit %>
   </div>
+    </td>
+  </tr>
+</table>
 <% end %>

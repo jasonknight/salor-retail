@@ -55,6 +55,9 @@ class TaxProfile < ActiveRecord::Base
   belongs_to :user
   before_create :set_model_owner
   validates_presence_of :name,:value
+  def set_sku
+    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
+  end
   def value=(v)
     v = v.gsub(',','.').to_f if v.class == String and v.include?(',')
     write_attribute(:value,v)

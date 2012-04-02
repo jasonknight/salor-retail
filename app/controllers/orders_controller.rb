@@ -97,7 +97,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    if not salor_user.meta.vendor_id then
+    if not salor_user or not salor_user.meta.vendor_id then
       redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
     end
     if not salor_user.meta.cash_register_id then
@@ -522,6 +522,7 @@ class OrdersController < ApplicationController
 
   private
   def crumble
+    return if not salor_user
     @vendor = salor_user.get_vendor(salor_user.meta.vendor_id) if @vendor.nil?
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.orders"),'orders_path(:vendor_id => params[:vendor_id])'

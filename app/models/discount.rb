@@ -70,6 +70,9 @@ class Discount < ActiveRecord::Base
   after_save :refresh_discounts
   after_update :refresh_discounts
   after_destroy :refresh_discounts
+  def set_sku
+    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
+  end
   def refresh_discounts
     
   end

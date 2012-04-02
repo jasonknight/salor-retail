@@ -120,14 +120,14 @@ describe Order do
       @order.remove_order_item(@order.order_items.first)
       @order.order_items.reload.first.should be
     end # should not allow you to remove and item once paid
-    it "should allow you to refund a single item" do
+    it "should allow you to refund a single item", :focus => true do
       @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
       @order.add_item(@item)
+      @order.update_self_and_save
       @order.complete
       DrawerTransaction.last.amount.should == @order.get_drawer_add
       DrawerTransaction.last.tag.should == 'CompleteOrder'
-      @order.order_items.first.toggle_refund(true)
-      @order.total.should == 0
+      @order.order_items.first.toggle_refund(true,'InCash')
       @order.gross.should == @order.subtotal
       DrawerTransaction.last.amount.should == @order.order_items.first.total
       DrawerTransaction.last.order_id.should == @order.id
@@ -141,7 +141,7 @@ describe Order do
       @order.complete
       DrawerTransaction.last.amount.should == @order.get_drawer_add
       DrawerTransaction.last.tag.should == 'CompleteOrder'
-      @order.toggle_refund(true)
+      @order.toggle_refund(true,'InCash')
       DrawerTransaction.last.amount.should == @order.subtotal
       DrawerTransaction.last.order_id.should == @order.id
       DrawerTransaction.last.order_item_id.should_not == @order.order_items.first.id
@@ -221,11 +221,11 @@ describe Order do
       @gift_card.reload
       @order2.add_item(@gift_card)
       @order2.update_self_and_save
-      @order2.gross.should == @gift_card.amount_remaining * -1
+      @order2.gross.should == 0
       @order2.order_items.first.update_attribute(:price,5)
       @order2.order_items.reload
       @order2.update_self_and_save
-      @order2.gross.should == -5
+      @order2.gross.should == 0
       @order2.add_item(@item)
       @order2.update_self_and_save
       @order2.gross.should be_within(0.005).of(0.95)

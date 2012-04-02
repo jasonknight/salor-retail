@@ -14,6 +14,7 @@ class History < ActiveRecord::Base
     self.ip = $Request.ip
   end
   def self.record(action,object,sen=5)
+    # sensitivity is from 5 (least sensitive) to 1 (most sensitive)
     h = History.new
     h.sensitivity = sen
     h.model = object if object

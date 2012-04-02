@@ -52,9 +52,12 @@ class ApplicationController < ActionController::Base
   helper_method :workstation?, :mobile?
   protect_from_forgery
   before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login]
+  before_filter :pre_load
   before_filter :setup_global_data, :except => [:login]
   layout :layout_by_response
   helper_method [:user_cache_name]
+  def pre_load
+  end
   def render_csv(filename = nil,text = nil)
     filename ||= params[:action]
     filename += '.csv'
@@ -85,7 +88,7 @@ class ApplicationController < ActionController::Base
   end
 
   def salor_signed_in?
-    if session[:user_id] and session[:user_type] then
+    if session[:user_id] and session[:user_type] and Employee.exists? session[:user_id] then
       return true
     else
       return false
@@ -128,7 +131,7 @@ class ApplicationController < ActionController::Base
     if params[:vendor_id] and not params[:vendor_id].blank? then
       salor_user.meta.update_attribute(:vendor_id,params[:vendor_id])
     end
-    if salor_user.meta.vendor_id.nil? then
+    if salor_user and salor_user.meta.vendor_id.nil? then
       salor_user.meta.update_attribute(:vendor_id,salor_user.get_default_vendor.id)
     end
     if params[:cash_register_id] then

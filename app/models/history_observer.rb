@@ -46,47 +46,43 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
-
-class Category < ActiveRecord::Base
-  include SalorScope
+class HistoryObserver < ActiveRecord::Observer
   include SalorBase
-  include SalorModel
-  has_many :items
-  has_many :shipment_items
-  has_many :discounts
-  has_many :buttons, :order => :position
-  belongs_to :vendor
-  has_many :order_items
-  before_create :set_model_owner
-  acts_as_list
-  def set_sku
-    # This might cause issues down the line with a SAAS version so we need to make sure
-    # that the request for a category by sku is scopied.
-    # the reason we do it like this is for reproducibility across systems.
-    # Note that this algorithm should not support special chars, so if you have a
-    # category named stüff then the sku would come out: stff
-    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
-  end
-  def get_tag
-    if not self.tag or self.tag == '' then
-      return self.name.gsub(" ",'')
-    end
-    self.tag.gsub(' ','')
-  end
-	# We don't really call this function directly, it is called by @cash_register.end_of_day_report, which
-	# returns a hash that is merged with this one. This way, we delegate the reponsibilities up the chain
-	# so that in the view, we can just call: hash = @cash_register.end_of_day_report and then loop over the
-	# key value pairs to make a pretty table
-	def self.cats_report(drawer_id=nil)
-	  cats_tags = {}
-	  drawer_id = GlobalData.salor_user.get_drawer_id if drawer_id.nil?
-	  Category.scopied.where(:eod_show => true).each do |category|  
-      tag = category.get_tag
-      category.order_items.where(:refunded => false,:created_at => Time.now.beginning_of_day..Time.now).joins(:order).where("`orders`.`drawer_id` = #{drawer_id}").each do |oi|
-        cats_tags[tag] = 0 if cats_tags[tag].nil?
-        cats_tags[tag] += oi.total if oi.order.paid == 1
+  observe :order_item, :item, :order, :employee, :customer, :loyalty_card
+  def after_update(object)
+    if object.class == Order then
+      #order rules go here
+      object.changes.keys.each do |k|
+        if [:hidden, :total, :paid].include? k.to_sym then
+          History.record('order_edit_' + k,object,2)
+        end
       end
+    elsif object.class == OrderItem then
+      object.changes.keys.each do |k|
+        if [:price, :hidden, :total].include? k.to_sym then
+          History.record('order_item_edit_' + k,object,3)
+        end
+      end
+    elsif object.class == LoyaltyCard then
+      # i.e. we should only track point changes that are very large
+      # FIXME this should be relative to the stores setting in some way
+      if object.changes['points'] and (object.changes['points'][1].to_i - object.changes['points'][0].to_i) > 200 then
+        History.record("loyalty_card_points",object,4)
+      end
+    else
+      object.changes.keys.each do |k|
+        if [:base_price, :price, :hidden, :value, :sku, :name, :amount].include? k.to_sym then
+          History.record("#{object.class.to_s.downcase}_edit_#{k}",object,5)
+        end
+      end
+    end 
+  end
+  def before_destroy(object)
+    sen = 2
+    if [:order,:order_item,:employee].include? object.class.to_sym then
+      sen = 1
     end
-    return cats_tags
-	end
+    History.record("destroy_#{object.class.to_s}",object,sen)
+  end
 end
+

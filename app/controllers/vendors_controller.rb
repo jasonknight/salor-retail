@@ -352,6 +352,7 @@ class VendorsController < ApplicationController
       if $User.class == User then
         $User.update_attribute :is_technician, false
       end
+      History.record("employee_sign_out",$User,5)
       session[:user_id] = nil
       session[:user_type] = nil
       cookies[:user_id] = nil

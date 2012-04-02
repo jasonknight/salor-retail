@@ -55,7 +55,7 @@ class Node < ActiveRecord::Base
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
   @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
   def node_type=(t)
-    write_atrribute(:node_type,t.downcase)
+    write_attribute(:node_type,t.downcase)
   end
   def handle(params)
     log_action "Node receiving object"
@@ -176,14 +176,22 @@ class Node < ActiveRecord::Base
     end
     if @inst then 
       # puts "Updating record"
-      @inst.update_attributes(new_record)
-      log_action "UPDATING ATTRS OF #{@inst.class} with id of #{@inst.id}"
+      if @inst.send("accepts_#{@inst.class.table_name}") then
+        @inst.update_attributes(new_record)
+        log_action "UPDATING ATTRS OF #{@inst.class} with id of #{@inst.id}"
+      else
+        log_action "REJECTING #{@inst.class}"
+      end
     else
       # puts "Creating new record"
-      log_action "CREATING A NEW RECORD"
       @inst = @klass.new(new_record)
-      if @inst.save then
-        log_action "Saved item to database " + @inst.inspect
+      if @inst.send("accepts_#{@inst.class.table_name}") then
+        log_action "CREATING A NEW RECORD"
+        if @inst.save then
+          log_action "Saved item to database " + @inst.inspect
+        end
+      else
+        log_action "REJECTING #{@inst.class}"
       end
     end
   end

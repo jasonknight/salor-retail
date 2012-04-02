@@ -454,7 +454,7 @@ module UserEmployeeMethods
       if not o.nil? then
         o.total = 0 if o.total.nil? 
         if o.total == 0 and not o.order_items.any? then
-          o.destroy
+          #o.destroy Removed to comply with FISC laws, orders can no longer be destroyed in the system.
         else
           # puts "##Order.total = #{o.total} and has #{o.order_items.any?}"
         end

@@ -258,7 +258,7 @@ class Order < ActiveRecord::Base
 	#end
 	#
 	def remove_order_item(oi)
-	  if self.paid == 1 and not $User.is_technicia? then
+	  if self.paid == 1 and not $User.is_technician? then
 	    GlobalErrors.append("system.errors.cannot_edit_completed_order")
 	    return
 	  end
@@ -522,11 +522,12 @@ class Order < ActiveRecord::Base
     end
   end
   def get_drawer_add
-    ottl = self.total
+    ottl = self.subtotal
     self.payment_methods.each do |pm|
       next if pm.internal_type == 'InCash'
       ottl -= pm.amount
     end
+    puts "get_drawer_add returning #{ottl}"
     return ottl
   end
   def get_in_cash_amount
