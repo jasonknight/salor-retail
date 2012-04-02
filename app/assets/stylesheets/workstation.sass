@@ -350,7 +350,6 @@ div.table > div.table-row > div.table-cell
   display: inline-block
   text-align: left
   margin: 6px 1px
-  width: 6%
   height: 30px
   text-align: center
   padding-top: 10px
@@ -1197,6 +1196,7 @@ div#eod-calculator-total, div#eod-calculator-difference
   display: inline-block
   text-transform: uppercase
   text-align: center
+  font-weight: bold
   font-size: 200%
   padding: 5px
   width: 50%
@@ -1253,7 +1253,7 @@ div.pos-menu div.pos-configuration
   @include cool_button
 
 .rebate_label,.pos-item-attr 
-  font-size: 120%
+  font-size: 140%
 
 .pos-item-show 
   position: absolute
@@ -1273,20 +1273,27 @@ div.pos-menu div.pos-configuration
   text-transform: uppercase
   text-align: center
   white-space: wrap
+  width: 8%
   text-overflow: ellipsis
   overflow: hidden
   @include pointer
   background-color: $light_background
 
 .pos-item-sku 
-  width: 140px
+  width: 18%
+
+.pos-item-rebate
+  width: 7%
+
+.pos-item-tax_profile_amount
+  width: 6%
 
 .quantity-button 
   padding: 4px 0px 6px 0px
 
 .pos-item-name 
   text-align: left
-  width: 150px
+  width: 18%
   overflow: hidden
   white-space: nowrap
   float: none
@@ -1297,11 +1304,11 @@ div.pos-menu div.pos-configuration
   white-space: wrap
   text-overflow: ellipsis
   overflow: hidden
-  width: 120px
   @include pointer
   background-color: $text_color_highlight
 
-.pos-item-quantity 
+.pos-item-quantity
+  width: 6%
   text-align: center
   text-transform: uppercase
   background-color: $light_background
@@ -1311,9 +1318,13 @@ div.pos-menu div.pos-configuration
   text-transform: uppercase
   @include left_right_pad_wide
 
-.pos-item-price 
+.pos-item-price
+  width: 9%
   text-transform: uppercase
   background-color: $light_background
+
+.pos-item-coupon_amount
+  width: 9%
 
 .pos-item-price-highlight 
   text-transform: uppercase
