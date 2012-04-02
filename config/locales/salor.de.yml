@@ -173,6 +173,7 @@ de:
         name: Name
         quantity: Liefermenge
         sku: SKU
+        stock_location_id: Lagerort
       cash_register:
         sticker_printer: Etikettendrucker
       item:

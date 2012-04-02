@@ -173,6 +173,7 @@ fr:
         name: nom
         quantity: quantité
         sku: UGS
+        stock_location_id: XXX Stock location
       cash_register:
         sticker_printer: Imprimante étiquette
       item:

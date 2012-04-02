@@ -173,6 +173,7 @@ es:
         name: name
         quantity: quantity
         sku: SKU
+        stock_location_id: Stock location
       cash_register:
         sticker_printer: Sticker printer
       item:
