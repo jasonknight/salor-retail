@@ -73,7 +73,8 @@ fr:
         other: Payment Methods
 
     attributes:
-      uses_drawer_id: Utilise la caisse de
+      employee:
+        uses_drawer_id: Utilise la caisse de
       reorder_type: Type de nouvelle commande
       big_buttons: Grands boutons
       hide_discounts: Cacher remises

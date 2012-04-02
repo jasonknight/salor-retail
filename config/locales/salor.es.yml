@@ -73,7 +73,8 @@ es:
         other: Payment Methods
 
     attributes:
-      uses_drawer_id: Uses Drawer of
+      employee:
+        uses_drawer_id: Uses drawer of
       reorder_type: Reorder Type
       big_buttons: Big Buttons
       hide_discounts: Hide Discounts

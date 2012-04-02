@@ -73,15 +73,16 @@ de:
         other: Zahlungsmethoden
 
     attributes:
-      uses_drawer_id: Uses Drawer of
+      employee:
+        uses_drawer_id: Kassenlade von
       reorder_type: Reorder Type
-      big_buttons: grosser Tasten
+      big_buttons: Große Tasten
       hide_discounts: Preisnachlässe ausblenden
       thermal_printer: Thermodrucker
       paylife: Paylife
       url: URL
-      letter: Letter
-      default: Default
+      letter: Brief
+      default: Standard
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
       customer_screen_blurb: Standardtext Verkaufsanzeige
