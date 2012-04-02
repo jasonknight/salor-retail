@@ -13,6 +13,7 @@
             - cat.buttons.where(:hidden => 0).each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
               - item = Item.find_by_sku(b.sku)
+              - next unless item
               - additional_params = (item.must_change_price or item.default_buyback) ? '&no_inc=true' : ''
               - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }'); $('#buttons').hide();" if params[:controller] == 'orders'
               %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }
