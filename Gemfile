@@ -54,7 +54,7 @@ group :test, :development do
   #gem 'rails-erd'
   gem 'launchy'
   gem 'faker'
-  #gem 'ruby-debug19' #, :require => 'ruby-debug'
+  gem 'ruby-debug19' #, :require => 'ruby-debug'
 end
 
 
