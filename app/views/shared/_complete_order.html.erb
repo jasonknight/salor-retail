@@ -376,7 +376,7 @@ function complete_order_send(print) {
   sendingOrder = true;
   allow_complete_order(false);
   displayChangeToCustomer();
-  if ( $('#payment_amount_0').val() != '' ) {
+  if ( serializePayments().indexOf('InCash') != -1 ) {
     quick_open_drawer();
   }
   if (typeof(Salor) != 'undefined') {
