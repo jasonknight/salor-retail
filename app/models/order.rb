@@ -51,7 +51,7 @@ class Order < ActiveRecord::Base
   include SalorError
   include SalorBase
   include SalorModel
-	has_many :order_items, :dependent => :delete_all
+	has_many :order_items
 	has_many :payment_methods
 	has_many :paylife_structs
   belongs_to :user
@@ -63,8 +63,8 @@ class Order < ActiveRecord::Base
   has_and_belongs_to_many :discounts
   scope :last_seven_days, lambda { where(:created_at => 7.days.ago.utc...Time.now.utc) }
   # These two associations are here for eager loading to speed things up
-  has_many :coupons, :class_name => "OrderItem", :conditions => {:behavior => "coupon" }
-  has_many :gift_cards, :class_name => "OrderItem", :conditions => {:behavior => "gift_card" }
+  has_many :coupons, :class_name => "OrderItem", :conditions => "behavior = 'coupon' and hidden != 1" 
+  has_many :gift_cards, :class_name => "OrderItem", :conditions => "behavior = 'gift_card' and hidden != 1"
   validate :validify
   
   REBATE_TYPES = [
@@ -267,6 +267,7 @@ class Order < ActiveRecord::Base
 	  order_items.each do |oo|
 	    if oo == oi
 	      # so we won't add it, but now we need to do some magic if it is a coupon
+        oo.update_attribute :hidden, 1
 	      if oi.behavior == 'coupon' then
 	        roi = self.order_items.joins(:item).where("items.sku = '#{oi.item.coupon_applies}'")
 	        if roi then
@@ -275,11 +276,8 @@ class Order < ActiveRecord::Base
 	          roi.update_attribute(:coupon_applied, false) if roi
 	        end
 	      end
-	      next
 	    end
-	    nl << oo
 	  end
-	  self.order_items = nl
 	  @cs = nil
 	  @gfs = nil
 	  update_self_and_save
@@ -320,7 +318,7 @@ class Order < ActiveRecord::Base
       self.total = 0 unless self.total_is_locked and not self.total.nil?
       self.subtotal = 0 unless self.subtotal_is_locked and not self.subtotal.nil?
       self.tax = 0 unless self.tax_is_locked and not self.tax.nil?
-      self.order_items.reload.order("id ASC").each do |oi|
+      self.order_items.visible.reload.order("id ASC").each do |oi|
         if oi.item.nil? then
           remove_order_item(oi)
           next
@@ -465,7 +463,7 @@ class Order < ActiveRecord::Base
     self.update_attribute :drawer_id, $User.get_drawer.id
     begin # so if all this doesn't work, then the order won't complete...
       log_action "Updating quantities"
-      order_items.each do |oi|
+      order_items.visible.each do |oi|
         # These methods are defined on OrderItem model.
         oi.set_sold
         oi.update_quantity_sold
@@ -541,7 +539,7 @@ class Order < ActiveRecord::Base
     if id.class == OrderItem then
       oi = id
     else
-      oi = self.order_items.find_by_id(id)
+      oi = self.order_items.visible.find_by_id(id)
     end
     if not oi then
       log_action"## not oi, returning"
@@ -617,7 +615,7 @@ class Order < ActiveRecord::Base
       else
         create_refund_payment_method(self.total, refund_payment_method)
       end
-      self.order_items.each do |oi|
+      self.order_items.visible.each do |oi|
         if not oi.refunded == true then
           oi.toggle_refund(nil, refund_payment_method)
         end
@@ -654,7 +652,7 @@ class Order < ActiveRecord::Base
   end
   def order_items_as_array
     items = []
-    self.order_items.each do |oi|
+    self.order_items.visible.each do |oi|
       items << oi.to_json
     end
     return items

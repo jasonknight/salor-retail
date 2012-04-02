@@ -68,7 +68,7 @@ module SalorModel
 #
       def has_relations?
         return true if self.class == Item and self.order_items.any?
-        return true if self.class == Order and self.order_items.any?
+        return true if self.class == Order and self.order_items.visible.any?
         return true if self.class == Shipment and self.shipment_items.any?
         return true if self.class == Vendor
         if self.class == Discount then

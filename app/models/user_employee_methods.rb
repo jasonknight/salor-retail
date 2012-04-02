@@ -453,7 +453,7 @@ module UserEmployeeMethods
       o = Order.find_by_id(self.meta.order_id)
       if not o.nil? then
         o.total = 0 if o.total.nil? 
-        if o.total == 0 and not o.order_items.any? then
+        if o.total == 0 and not o.order_items.visible.any? then
           #o.destroy Removed to comply with FISC laws, orders can no longer be destroyed in the system.
         else
           # puts "##Order.total = #{o.total} and has #{o.order_items.any?}"
@@ -561,7 +561,7 @@ module UserEmployeeMethods
         end
       end
 
-      o.order_items.each do |oi|
+      o.order_items.visible.each do |oi|
         catname = oi.category ? oi.category.name : ''
         taxname = oi.tax_profile.name
         item_price = case oi.behavior
@@ -682,7 +682,7 @@ module UserEmployeeMethods
     # Get the total of buyback OrderItems
     bback_total = 0.0
     all_orders.each do |o|
-      o.order_items.each do |oi|
+      o.order_items.visible.each do |oi|
         next if oi.refunded or not oi.is_buyback # is_buyback is true
         bback_total += oi.total
       end
@@ -753,7 +753,7 @@ module UserEmployeeMethods
     begin
       total = 0
       Vendor.scopied.each do |v|
-        r[:order_items_count] = v.orders.each.inject(0) {|x,o| x += o.order_items.where('refunded = 0').count}
+        r[:order_items_count] = v.orders.each.inject(0) {|x,o| x += o.order_items.visible.where('refunded = 0').count}
       end
       #r[:order_items_count] = OrderItem.connection.execute("select count(oi.id) from order_items as oi, orders as o, vendors as v where v.id IN (#{self.get_owner.vendor_ids.join(',')}) and o.vendor_id = v.id and oi.order_id = o.id").to_a.first.first
     rescue

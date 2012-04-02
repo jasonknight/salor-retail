@@ -110,7 +110,7 @@ class OrdersController < ApplicationController
     if @order.paid == 1 and not $User.is_technician? then
       @order = $User.get_new_order
     end
-    if @order.order_items.any? then
+    if @order.order_items.visible.any? then
       @order.update_self_and_save
     end
     add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
@@ -209,7 +209,7 @@ class OrdersController < ApplicationController
     if @order.paid == 1 and not $User.is_technician? then
       @order = GlobalData.salor_user.get_new_order 
     end
-    @order_item = @order.order_items.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+    @order_item = @order.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
     unless @order_item.nil? then
       unless @order_item.activated or @order_item.is_buyback then
         @order_item.total += @order_item.price
@@ -332,7 +332,7 @@ class OrdersController < ApplicationController
     # twice. Because of the recalculate change magic, it's difficult to know
     # in javascript if an order is completable or not.
     
-    if not @order.order_items.any? then
+    if not @order.order_items.visible.any? then
       render :js => " complete_order_hide(); " and return
     end
     
@@ -340,7 +340,7 @@ class OrdersController < ApplicationController
     #  GlobalErrors.append_fatal("system.errors.must_cash_drop")
     #end
     
-    if @order.total > 0 or @order.order_items.any? and not GlobalErrors.any_fatal? then
+    if @order.total > 0 or @order.order_items.visible.any? and not GlobalErrors.any_fatal? then
       payment_methods_array = [] # We need to do some checks on the payment
       # methods, so we put them into an array before saving them and the order
       # This is kind of a validator, but we need to do it here for right now...
@@ -440,7 +440,7 @@ class OrdersController < ApplicationController
     @order = Order.find_by_id params[:id]
     GlobalData.salor_user = @order.get_user
     @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
-    @order_items = @order.order_items.order('id ASC')
+    @order_items = @order.order_items.visible.order('id ASC')
     if @order_items
       render :layout => 'customer_display', :nothing => :true
     else
@@ -505,7 +505,7 @@ class OrdersController < ApplicationController
       render :action => :update_pos_display and return
     end
     if not @order.paid then
-      @order.order_items.each do |oi|
+      @order.order_items.visible.each do |oi|
         oi.destroy
       end
       @order.customer_id = nil

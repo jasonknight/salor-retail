@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
     report[:registers] = 0
     Vendor.scopied.each do |vendor|
       report[:orders] += vendor.orders.count
-      report[:order_items] += vendor.orders.each.inject(0) {|x,o| x+= o.order_items.count}
+      report[:order_items] += vendor.orders.each.inject(0) {|x,o| x+= o.order_items.visible.count}
       report[:employees] += vendor.employees.count
       report[:registers] += vendor.cash_registers.count
     end
