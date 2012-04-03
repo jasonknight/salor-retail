@@ -49,7 +49,7 @@ $(document).ready(function () {
     updateOrder(order);
     <%
       items = []
-      @order.order_items.each do |oi|
+      @order.order_items.visible.each do |oi|
         items << oi.to_json
       end
     %>

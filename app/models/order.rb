@@ -222,7 +222,7 @@ class Order < ActiveRecord::Base
       update_self_and_save
       return oi
     end
-    oi = self.order_items.find_by_item_id(item.id)
+    oi = self.order_items.visible.find_by_item_id(item.id)
     if oi and not oi.is_buyback and not oi.no_inc then
       oi.update_attribute(:quantity, oi.quantity + 1)
       update_self_and_save

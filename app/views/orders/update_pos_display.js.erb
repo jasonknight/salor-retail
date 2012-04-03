@@ -1,7 +1,7 @@
 updateOrder(<%= raw @order.to_json %>);
     <%
       items = []
-      @order.order_items.reload.each do |oi|
+      @order.order_items.visible.reload.each do |oi|
         items << oi.to_json
       end
     %>
