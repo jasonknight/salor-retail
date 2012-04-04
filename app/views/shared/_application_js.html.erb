@@ -1,5 +1,16 @@
 <script type="text/javascript">
 
+$(function () {
+  try {
+    <%= salor_render :partial => "shared/js/global_errors_js" %>
+  } catch (err) {
+        txt="There was an error on this page application.html.erb.2.\n\n";
+        txt+="Error description: " + err.description + "\n\n";
+        txt+="Click OK to continue.\n\n";
+        alert(txt);
+  }
+});
+
 function playSound(file) {
   if (typeof Salor != 'undefined') {
     Salor.playSound(file);

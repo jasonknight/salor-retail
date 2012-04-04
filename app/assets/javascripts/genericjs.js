@@ -44,3 +44,37 @@ function make_select_widget(name,elem) {
     mdiv.show();
   });
 }
+
+$(function () {
+  try {
+    $('.click-help').click(function (event) {
+      var url = $(this).attr('url');
+      var offset = {'top' : event.pageY, 'left' : event.pageX, 'position' : 'absolute'}
+      $('.help').css(offset);
+      get(url, 'application.html.erb');
+    });
+  } catch (err) {
+    txt="There was an error on this page application.html.erb.\n\n";
+    txt+="Error description: " + err.description + "\n\n";
+    txt+="Click OK to continue.\n\n";
+    alert(txt);
+  }
+
+  if (typeof(Salor) != 'undefined' && $Register.pole_display != '') {
+    Salor.poleDancer($Register.pole_display, '     S A L O R      Next Generation POS' );
+  }
+});
+
+function initErrors() {
+  $('.errors').show();
+  var back = $('<div style="float: left;"><%= image_tag "/images/icons/" + icon(:back,32) %></div>');
+  var del = $('<div align="right"><%= image_tag "/images/icons/" + icon(:delete,32) %></div>');
+  del.click(function () {
+    $(this).parent().hide();
+  });
+  back.click(function () {
+    history.go(-1);
+  });
+  $('.errors').append(back);
+  $('.errors').append(del);
+}

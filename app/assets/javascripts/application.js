@@ -16,4 +16,4 @@
 //= require sprintf
 //= require i18n
 //= require i18n/translations
-//= require shared
+//= require generic
