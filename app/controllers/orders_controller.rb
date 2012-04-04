@@ -295,6 +295,7 @@ class OrdersController < ApplicationController
       render :nothing => true and return
     end
     text = Printr.new.sane_template('item',binding)
+    Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @cash_register.id, :content => text)
     if @register.salor_printer
       render :text => text
     else

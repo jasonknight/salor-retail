@@ -17,7 +17,12 @@
             </th>
           </tr>
         </thead>
-        <% GlobalData.salor_user.expiring.each do |item| %>
+        <% 
+        cap = Time.now.beginning_of_day + 5.days
+        bcap = Time.now.beginning_of_day - 5.days
+        Item.scopied.where("expires_on between '#{bcap.strftime("%Y-%m-%d")}' and '#{cap.strftime("%Y-%m-%d")}' and (active IS TRUE or active = 1) and track_expiry IS TRUE").limit(25).each do |item| 
+        
+        %>
           <tr>
               <td valign="top">
                  <%=  link_to item.name, "/items/#{item.id}/edit" %>

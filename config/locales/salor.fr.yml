@@ -73,6 +73,7 @@ fr:
         other: Payment Methods
 
     attributes:
+      track_expiry: Track Expiry
       uses_drawer_id: Utilise la caisse de
       reorder_type: Type de nouvelle commande
       big_buttons: Grands boutons
@@ -277,6 +278,7 @@ fr:
     assign: assigner
 
   menu:
+    usb_device: Usb Stick
     database_distiller: XXX Database Distiller
     clear_order: Effacer
     inventory_report: Raport inventaire

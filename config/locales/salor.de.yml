@@ -73,6 +73,7 @@ de:
         other: Zahlungsmethoden
 
     attributes:
+      track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       reorder_type: Reorder Type
       big_buttons: grosser Tasten
@@ -277,6 +278,7 @@ de:
     assign: setze zu
 
   menu:
+    usb_device: Usb Stick
     database_distiller: Datenbank-Reiniger
     clear_order: Löschen
     inventory_report: Bericht Inventur

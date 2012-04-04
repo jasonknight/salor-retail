@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120402124325) do
+ActiveRecord::Schema.define(:version => 20120403145426) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -357,6 +357,7 @@ ActiveRecord::Schema.define(:version => 20120402124325) do
     t.integer  "child_id",             :default => 0
     t.boolean  "must_change_price",    :default => false
     t.boolean  "hidden_by_distiller",  :default => false
+    t.boolean  "track_expiry",         :default => false
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
@@ -607,6 +608,15 @@ ActiveRecord::Schema.define(:version => 20120402124325) do
   end
 
   add_index "payment_methods", ["order_id"], :name => "index_payment_methods_on_order_id"
+
+  create_table "receipts", :force => true do |t|
+    t.string   "ip"
+    t.integer  "employee_id"
+    t.integer  "cash_register_id"
+    t.text     "content"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
 
   create_table "roles", :force => true do |t|
     t.string   "name"

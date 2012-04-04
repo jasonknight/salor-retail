@@ -176,7 +176,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.is_owner? %>
+        <% if salor_user.can(:show_nodes) %>
         <div class="widget master onmousedown="window.location = '/nodes?vendor_id=<%= @vendor.id %>';"">
           <div align="center">
             <a href="/nodes?vendor_id=<%= @vendor.id %>">
@@ -186,6 +186,17 @@
           </div>
         </div>
         <% end %>
+        <% if salor_user.can(:show_reports) %>
+        <div class="widget master onmousedown="window.location = '/reports?vendor_id=<%= @vendor.id %>';"">
+          <div align="center">
+            <a href="/reports?vendor_id=<%= @vendor.id %>">
+              <img src="/images/icons/book_balance_64.png" /><br />
+              <%= t("menu.reports") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+
       </div>    
 <!-- End ul. -->
 <%= raw(content_box_bottom) %>

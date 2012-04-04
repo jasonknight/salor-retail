@@ -140,6 +140,14 @@
   </tr>
   <tr>
     <td colspan="2">
+          <div class="new-item-field">
+            <%= f.label I18n.t("activerecord.attributes.track_expiry") %><br />
+            <%= f.check_box :track_expiry %>
+          </div> 
+          <div class="new-item-field">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+          </div>
+
          <div class="new-item-field">
             <%= f.label I18n.t("activerecord.attributes.expires_on") %><br />
           <%= f.date_select :expires_on%> <br />
@@ -151,13 +159,14 @@
   </tr>
   <tr>
     <td colspan="3">
-      <div class="new-item-field">
+          <div class="new-item-field">
             <%= f.label I18n.t("activerecord.attributes.weigh_compulsory") %><br />
             <%= f.check_box :weigh_compulsory %>
           </div> 
           <div class="new-item-field">
             &nbsp;&nbsp;&nbsp;&nbsp;
           </div>
+          
           <div class="new-item-field">
             <%= f.label I18n.t("activerecord.attributes.must_change_price") %><br />
             <%= f.check_box :must_change_price %>

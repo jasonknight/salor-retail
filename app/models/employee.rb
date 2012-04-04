@@ -59,6 +59,7 @@ class Employee < ActiveRecord::Base
   belongs_to :user
   belongs_to :vendor
   has_many :orders
+  has_many :receipts
   has_many :vendors, :through => :user
   has_many :paylife_structs, :as => :owner
   has_many :cash_register_dailies

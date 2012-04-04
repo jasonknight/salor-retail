@@ -217,7 +217,11 @@ class ItemsController < ApplicationController
       @item = Item.find(params[:id]) if Item.exists? params[:id]
     end
   end
-  
+  #
+  def report
+
+  end
+  #
   def search
     if not salor_user.owns_vendor? salor_user.meta.vendor_id then
       salor_user.meta.vendor_id = salor_user.get_default_vendor.id

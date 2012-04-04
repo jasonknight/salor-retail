@@ -23,9 +23,11 @@ Salor::Application.routes.draw do
   match "orders/clear" => "orders#clear"
   match "orders/remove_payment_method" => "orders#remove_payment_method"
   match "orders/bancomat" => "orders#bancomat"
+  match "reports/index" => "reports#selector"
+  match "reports" => "reports#selector"
   match "items/search" => "items#search"
   match "items/export_broken_items" => "items#export_broken_items"
-  match "items/export_broken_items" => "items#export_broken_items"
+  match "items/report" => "items#report"
   match "items/update_location" => "items#update_location"
   match "items/reorder_recommendation" => "items#reorder_recommendation"
   match "items/update_location" => "items#update_location"
@@ -128,6 +130,7 @@ Salor::Application.routes.draw do
   match 'home/update_owner' => 'home#update_owner'
   match 'home/you_have_to_pay' => 'home#you_have_to_pay'
   resources :tender_methods
+  resources :reports
   resources :transaction_tags
   resources :buttons
   resources :broken_items
