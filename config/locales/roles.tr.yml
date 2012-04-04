@@ -1,4 +1,11 @@
 tr:
+  any_reports: XXX Any Reports
+  index_reports: XXX Index Reports
+  edit_reports: XXX Edit Reports
+  show_reports: XXX Show Reports
+  create_reports: XXX Create Reports
+  destroy_reports: XXX Destroy Reports
+  update_reports: XXX Update Reports
   :employee: Employee
   :manager: Manager
   :head_cashier: Head Cashier

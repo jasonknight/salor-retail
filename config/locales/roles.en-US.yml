@@ -1,4 +1,11 @@
 en-US:
+  any_reports: Any Reports
+  index_reports: Index Reports
+  edit_reports: Edit Reports
+  show_reports: Show Reports
+  create_reports: Create Reports
+  destroy_reports: Destroy Reports
+  update_reports: Update Reports
   :employee: Employee
   :manager: Manager
   :head_cashier: Head Cashier
