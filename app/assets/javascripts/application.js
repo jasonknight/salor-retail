@@ -17,3 +17,15 @@
 //= require i18n
 //= require i18n/translations
 //= require generic
+//= require math
+//= require camera
+//= require cutecredit
+//= require debug
+//= require documentready
+//= require focus
+//= require helpers
+//= require inplace_edit
+//= require keypress
+//= require onscreenkeyboard
+//= require salor_bin
+//= require style
