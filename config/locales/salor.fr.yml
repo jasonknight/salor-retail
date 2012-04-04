@@ -279,6 +279,8 @@ fr:
     assign: assigner
 
   menu:
+    salortrainer: XXX Salor Trainer
+    salorlive: XXX Salor Live!
     database_distiller: XXX Database Distiller
     clear_order: Effacer
     inventory_report: Raport inventaire

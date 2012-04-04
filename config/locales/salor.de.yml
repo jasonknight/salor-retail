@@ -279,6 +279,8 @@ de:
     assign: setze zu
 
   menu:
+    salortrainer: Salor Trainer
+    salorlive: Salor Live!
     database_distiller: Datenbank-Reiniger
     clear_order: Löschen
     inventory_report: Bericht Inventur

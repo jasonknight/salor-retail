@@ -514,7 +514,7 @@ div.general-form
 div.general-form > div.tab-container 
   clear: both
   background-color: $middleground
-  @include rounded_corners_bottom
+  @include rounded_corners_all
 
 div.general-form > div.form-menu > div.link 
   float: left
@@ -606,7 +606,7 @@ body
   position: relative
   bottom: -5px
 
-.header a, .header a:hover, .header a:visited 
+.header a
   text-decoration: none
 
 div.tool-icon 
@@ -671,14 +671,7 @@ div.header > ul > li > div.active
   height: 45px
   cursor: pointer
   background-color: $background
-  @include rounded_corners_top
-  \:hover
-    background-color: $middleground2
-    //@include rounded_corners_top
-  
-  :active 
-    background-color: $background
-  
+  @include rounded_corners_top  
   @include no_select
 
 div.header > ul > li > div.first 
@@ -764,9 +757,13 @@ span.version
 
 /* Main and Main Content Divs */
 
-div.main 
+div.main
   margin: 20px 0px 250px 0px
+
+div.background
   background-color: $background
+  width: 100%
+  min-height: 1000px
 
 
 div.content-box > div.title-container 
@@ -869,7 +866,6 @@ div.content-box > div.title-container  > div.reload-button-admin
 div.content-box * div.breadcrumb-container 
   font-size: $text_size_normal
   clear: both
-  padding: 15px 0px
   background-color: none
 
 div.content-box * div.breadcrumb-container > a 
@@ -912,27 +908,25 @@ div.list > div
   padding: 4px
 
 div.list > div.master 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   border-color: $foreground
   background-color: $middleground
-  width: 130px
   margin-top: 15px
+  padding: 0px 10px
   @include no_select
 
 div.list > div.master-wide 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   border-color: $foreground
   background-color: $middleground
-  width: 200px
   margin-top: 15px
+  padding: 0px 10px
   @include no_select
   font-size: $text_size_massive
   text-transform: uppercase
 
 div.list img 
   border: none
-
-div.list img:hover 
 
 div.list a, div.list a:visited, div.list a:hover 
   text-decoration: none
@@ -943,12 +937,16 @@ div.list a, div.list a:visited, div.list a:hover
 div.sign-in-forms 
   width: 600px
   height: 450px
+  padding: 40px
   color: $background
 
 div.sign-in-forms > div.tab-container 
   clear: both
   background-color: $middleground
-  @include rounded_corners_bottom
+  @include rounded_corners_all
+
+input#code
+  text-align: center
 
 div.sign-in-forms > div.sign-in-form-menu > div.link 
   float: left
@@ -972,8 +970,6 @@ div.sign-in-forms > div.sign-in-form-menu > div.active
   background-color: $middleground
   color: $background
 
-div.sign-in-form-container,div.sign-in-form-container * input 
-
 
 div.sign-in-form-container * input[type=text],
 div.sign-in-form-container * input[type=password] 
@@ -993,7 +989,7 @@ div.sign-in-form-container * div.button-row
 
 div.sign-in-form-container 
   height: 150px
-  padding: 50px
+  padding: 20px
 
 div.content-container * div.pagination 
   clear: both
@@ -1564,7 +1560,7 @@ span.order-lc_points,.order-points,.loyalty-points
   @include pointer
 
 .button-confirm 
-  @include rounded_corners_top_right
+  @include rounded_corners_right
   @include bright_button
   padding: 10px
   @include left_right_pad_wide

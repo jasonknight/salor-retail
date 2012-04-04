@@ -279,6 +279,8 @@ es:
     assign: assign
 
   menu:
+    salortrainer: Salor Trainer
+    salorlive: Salor Live!
     database_distiller: XXX Database Distiller
     clear_order: Clear
     inventory_report: Inventory report

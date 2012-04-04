@@ -14,15 +14,17 @@ end
 <%= salor_render :partial => 'layouts/head'%>
 </head>
 <body id="body">
+<div class='background'>
 <% if salor_signed_in?  %>
 <%= salor_render :partial => "shared/header_menu" if $User.can(:see_header)%>
 <% end %>
 <%= salor_render :partial => "shared/notice" %>
 <div id="errors" class="errors hidden"></div>
 
-<div class='main'>
+<% if request.url.include? 'salortrainer' %>
+<div class='salortrainer'>Salor Trainer</div>
+<% end %>
 <%= yield %> 
-</div>
 
 <script type="text/javascript">
 
@@ -80,6 +82,6 @@ $(function () {
 <div class="close-window" onmousedown="Salor.shutdown();">&nbsp;X &nbsp;</div>
 <span class="version">v<%= SalorBase::VERSION %></span>
 <a href="/orders/new" class='reload-window'>R</a>
-
+</div>
 </body>
 </html>

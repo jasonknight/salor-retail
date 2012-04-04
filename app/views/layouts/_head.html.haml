@@ -14,6 +14,9 @@
 = stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
 = stylesheet_link_tag params[:controller]
 
+- if request.url.include? 'salortrainer'
+  = stylesheet_link_tag 'salortrainer'
+
 = javascript_include_tag 'application'
 = javascript_include_tag 'generic'
 - if mobile?
