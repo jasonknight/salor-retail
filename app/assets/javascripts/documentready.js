@@ -17,8 +17,8 @@ $(function () {
     alert(txt);
   }
 
-  if (typeof(Salor) != 'undefined' && $Register.pole_display != '') {
-    Salor.poleDancer($Register.pole_display, '     S A L O R      Next Generation POS' );
+  if (typeof(Salor) != 'undefined' && Register.pole_display != '') {
+    Salor.poleDancer(Register.pole_display, '     S A L O R      Next Generation POS' );
   }
 
   jQuery.expr[':'].focus = function( elem ) {
