@@ -420,7 +420,10 @@ $(function () {
     </td>
   </tr>
 </table>
-<div id="shipment_items" class="shipment-items">
-
+<div>
+<div class='shipment_item_attr_header shipment_item_attr_header_sku'><%= ShipmentItem.human_attribute_name :sku %></div>
+<div class='shipment_item_attr_header shipment_item_attr_header_name'><%= ShipmentItem.human_attribute_name :name %></div>
+<div class='shipment_item_attr_header shipment_item_attr_header_quantity'><%= ShipmentItem.human_attribute_name :quantity %></div>
+<div class='shipment_item_attr_header shipment_item_attr_header_stock_location_id'><%= ShipmentItem.human_attribute_name :stock_location_id %></div>
 </div>
-<%= salor_render :partial => "shared/in_place_edit" %>
+<div id="shipment_items" class="shipment-items"></div>

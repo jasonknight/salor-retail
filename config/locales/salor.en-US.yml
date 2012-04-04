@@ -75,6 +75,8 @@ en-US:
     attributes:
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
+      employee:
+        uses_drawer_id: Uses drawer of
       reorder_type: Reorder Type
       big_buttons: Big Buttons
       hide_discounts: Hide Discounts
@@ -174,6 +176,7 @@ en-US:
         name: name
         quantity: quantity
         sku: SKU
+        stock_location_id: Stock location
       cash_register:
         sticker_printer: Sticker printer
       item:
@@ -279,6 +282,8 @@ en-US:
 
   menu:
     usb_device: Usb Stick
+    salortrainer: Salor Trainer
+    salorlive: Salor Live!
     database_distiller: Database Distiller
     clear_order: Clear
     inventory_report: Inventory report
@@ -625,7 +630,9 @@ en-US:
 
   shipments:
     index:
-      report: Bericht
+      report: Report
+    show:
+      purchase_price_sum: Purchase price sum
 
   views:
     eticket: Shelf label

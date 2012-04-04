@@ -60,7 +60,7 @@ class EmployeesController < ApplicationController
       user.update_attribute :is_technician, true
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s
-      redirect_to :controller => :home, :action => :index and return
+      redirect_to vendors_path and return
     elsif check then
       user = Employee.login(params[:code]) 
       user = User.login(params[:code]) if not user
@@ -98,7 +98,7 @@ class EmployeesController < ApplicationController
           #else
           #  redirect_to r.merge!({:notice => "Logged In"}) and return
           #end
-          redirect_to '/vendors'
+          redirect_to vendors_path
        end
     else
       redirect_to :controller => :home, :action => :index, :notice => "could not find a user with code" and return

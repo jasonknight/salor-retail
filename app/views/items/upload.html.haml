@@ -4,7 +4,7 @@
 
 %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 
-%h2 Format: Salor
+%h2 Format: Salor (UTF-8)
 = form_tag '/items/upload', :multipart => true do |form|
   = label_tag 'CSV'
   = file_field_tag :file, :size => 15
@@ -13,7 +13,7 @@
 %br
 %br
 
-%h2 Format: Danczek / Tobaccoland / Plattner / Moosmayer
+%h2 Format: Danczek / Tobaccoland / Plattner / Moosmayer (ISO-8859-15)
 = form_tag '/items/upload_danczek_tobaccoland_plattner', :multipart => true do |form|
   = label_tag 'CSV'
   = file_field_tag :file, :size => 15
@@ -22,7 +22,7 @@
 %br
 %br
 
-%h2 Format: House of Smoke / Dios
+%h2 Format: House of Smoke / Dios (UTF-8)
 = form_tag '/items/upload_house_of_smoke', :multipart => true do |form|
   = label_tag 'CSV'
   = file_field_tag :file, :size => 15

@@ -75,6 +75,8 @@ fr:
     attributes:
       track_expiry: Track Expiry
       uses_drawer_id: Utilise la caisse de
+      employee:
+        uses_drawer_id: Utilise la caisse de
       reorder_type: Type de nouvelle commande
       big_buttons: Grands boutons
       hide_discounts: Cacher remises
@@ -174,6 +176,7 @@ fr:
         name: nom
         quantity: quantité
         sku: UGS
+        stock_location_id: XXX Stock location
       cash_register:
         sticker_printer: Imprimante étiquette
       item:
@@ -279,6 +282,8 @@ fr:
 
   menu:
     usb_device: Usb Stick
+    salortrainer: XXX Salor Trainer
+    salorlive: XXX Salor Live!
     database_distiller: XXX Database Distiller
     clear_order: Effacer
     inventory_report: Raport inventaire
@@ -622,6 +627,12 @@ fr:
       cash_drawer: XXX Cash Drawer
       counted: XXX Counted
       difference: XXX Difference
+
+  shipments:
+    index:
+      report: XXX Report
+    show:
+      purchase_price_sum: XXX Purchase price sum
 
   views:
     eticket: XXX Shelf label

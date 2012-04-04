@@ -191,6 +191,7 @@ module UserEmployeeMethods
   def get_shippers(page)
     return Shipper.scopied.order("id DESC").page(GlobalData.params.page).per(GlobalData.conf.pagination)
   end
+
   def get_default_vendor
     if self.vendors.any? then
       return self.vendors.first

@@ -75,14 +75,16 @@ de:
     attributes:
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
+      employee:
+        uses_drawer_id: Kassenlade von
       reorder_type: Reorder Type
-      big_buttons: grosser Tasten
+      big_buttons: Große Tasten
       hide_discounts: Preisnachlässe ausblenden
       thermal_printer: Thermodrucker
       paylife: Paylife
       url: URL
-      letter: Letter
-      default: Default
+      letter: Brief
+      default: Standard
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
       customer_screen_blurb: Standardtext Verkaufsanzeige
@@ -174,6 +176,7 @@ de:
         name: Name
         quantity: Liefermenge
         sku: SKU
+        stock_location_id: Lagerort
       cash_register:
         sticker_printer: Etikettendrucker
       item:
@@ -279,6 +282,8 @@ de:
 
   menu:
     usb_device: Usb Stick
+    salortrainer: Salor Trainer
+    salorlive: Salor Live!
     database_distiller: Datenbank-Reiniger
     clear_order: Löschen
     inventory_report: Bericht Inventur
@@ -603,7 +608,7 @@ de:
       shipment_item_nil: Artikel aus from_shipment_item war nil?
       sku_must_be_unique: muss einzigartig sein.
       uspecified_error: Etwas Schlimmes ist passiert. Bitte kontaktieren Sie den technischen Support! Versuchen Sie, diese Seite neu zu laden.
-      value_not_set: Tag
+      value_not_set: Nicht gesetzt
       order_failed: Verkauf konnte nicht abgeschlossen werden.
       order_print_failure: Kann nicht drucken
     
@@ -626,6 +631,8 @@ de:
   shipments:
     index:
       report: Bericht
+    show:
+      purchase_price_sum: Einkaufspreis gesamt
 
   views:
     eticket: Regaletikett

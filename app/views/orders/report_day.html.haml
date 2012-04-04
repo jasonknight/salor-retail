@@ -144,8 +144,8 @@
 
     %h3= t '.cash_drawer'
 
-    - if (@employee.get_drawer.id == $User.get_drawer.id) and (@from.beginning_of_day == Time.now.beginning_of_day)
-      %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency $User.get_drawer.amount }
+    - if @from.beginning_of_day == Time.now.beginning_of_day
+      %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency @employee.get_drawer.amount }
 
     %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
 

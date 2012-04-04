@@ -28,7 +28,7 @@
               
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
-              <div class="freefield"><%= f.label t("activerecord.attributes.uses_drawer_id") %><br />
+              <div class="freefield"><%= f.label Employee.human_attribute_name :uses_drawer_id %><br />
               <%= f.select :uses_drawer_id, Employee.scopied.collect {|e| e.username == @employee.username ? ["N/A",""] : [e.username,e.get_drawer.id]} %>
               
               </div>

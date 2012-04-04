@@ -110,7 +110,7 @@ class FileUpload
       attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
       sku_carton = columns[8].strip
       carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
-      carton_item = Item.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
+      carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
@@ -130,7 +130,7 @@ class FileUpload
       attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
       sku_pack = columns[9].strip
       pack_item = Item.where( :name => name + " Packung", :hidden => false).first
-      pack_item = Item.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
+      pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
         pack_item.attributes = attributes
         Action.run(pack_item,:on_import)
@@ -153,7 +153,7 @@ class FileUpload
       attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
       sku_piece = columns[19].strip if columns[19]
       piece_item = Item.where( :name => name + " Stk.", :hidden => false).first
-      piece_item = Item.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
+      piece_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
         piece_item.attributes = attributes
         Action.run(piece_item,:on_import)
@@ -192,6 +192,7 @@ class FileUpload
       columns = row.chomp.split(delim)
 
       shipper_sku = columns[0].strip
+
       name = Iconv.new('UTF-8//TRANSLIT', 'UTF-8').iconv(columns[1].strip)
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f
@@ -240,7 +241,7 @@ class FileUpload
       attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
       sku_carton = columns[8].strip
       carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
-      carton_item = Item.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
+      carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
@@ -260,7 +261,7 @@ class FileUpload
       attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
       sku_pack = columns[9].strip
       pack_item = Item.where( :name => name + " Packung", :hidden => false ).first
-      pack_item = Item.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
+      pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
         pack_item.update_attributes attributes
         Action.run(pack_item,:on_import)
@@ -283,7 +284,7 @@ class FileUpload
       attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
       sku_piece = columns[19].strip if columns[19]
       piece_item = Item.where( :name => name + " Stk.", :hidden => false ).first
-      carton_item = Item.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
+      carton_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
         piece_item.update_attributes attributes
         Action.run(piece_item,:on_import)

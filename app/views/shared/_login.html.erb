@@ -28,14 +28,11 @@
       <img src="/images/logo-300.png"  />
     </div>
   <% end %>
-  <div class="sign-in-forms" style="margin-top: 132px;">
-    <div class="sign-in-form-menu">
-    </div>
+  <div class="sign-in-forms">
     <div class="tab-container">
-      <div id="employee" class="employee-sign-in-form-container sign-in-form-container">
-        <table class="table sign-in-form" align="center" width="99%">
-            <tr>
-              <td>
+  <img src='/images/salor-logo-reports.png'>
+
+
                 <%= form_for(Employee.new, :url => '/employees/login') do |f| %>
                   <br />
                   <br />
@@ -46,11 +43,7 @@
                       <div class="button-confirm" onmousedown="doSubmit()"><%= I18n.t("system.login") %></div>
                   </div>
                   <br />
-                <% end %>
-                </td>
-              </tr>
-          </table>    
-      </div>
+                <% end %>  
     </div>
   </div>
 </div>

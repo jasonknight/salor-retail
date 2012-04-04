@@ -78,6 +78,8 @@ class ShipmentsController < ApplicationController
   # GET /shipments/new.xml
   def new
     @shipment = Shipment.new
+    @shipment.receiver_id = $Vendor.id
+    @shipment.receiver_type = 'Vendor'
 
     respond_to do |format|
       format.html # new.html.erb

@@ -61,11 +61,12 @@
     <th><%= Item.human_attribute_name(:quantity) %></th>
     <th><%= ShipmentItem.human_attribute_name(:quantity) %></th>
     <th><%= Item.human_attribute_name(:purchase_price) %></th>
+    <th><%= t('.purchase_price_sum') %></th>
     <th><%= Location.model_name.human %></th>
     <th><%= StockLocation.model_name.human %></th>
   </tr>
 
-  <% purchase_price_sum = 0 %>
+  <% purchase_price_total = 0 %>
   <% @shipment.shipment_items.scopied.each do |sitem|  %>
     <% item = Item.scopied.find_by_sku(sitem.sku) %>
     <tr>
@@ -83,8 +84,12 @@
       </td>
       <td valign="middle">
         <% purchase_price = (item and item.purchase_price) ? item.purchase_price : 0 %>
-        <% purchase_price_sum += purchase_price %>
         <%= raw edit_me(:purchase_price, item, '', '', 'item_' + item.id.to_s + 'purchase_price') if item %>
+      </td>
+      <td valign="middle">
+        <% purchase_price_sum = (purchase_price and sitem.quantity) ? (purchase_price * sitem.quantity) : 0 %>
+        <% purchase_price_total += purchase_price_sum %>
+        <%= number_to_currency purchase_price_sum %>
       </td>
       <td valign="middle">
         <% if sitem.in_stock %>
@@ -107,7 +112,8 @@
     <td></td>
     <td></td>
     <td></td>
-    <td><b><%= number_to_currency purchase_price_sum %></b></td>
+    <td></td>
+    <td><b><%= number_to_currency purchase_price_total %></b></td>
     <td></td>
     <td></td>
   </tr>
@@ -118,13 +124,3 @@
 
 </div>
 </div>
-
-
-
-
-
-
-
-
-<%= raw content_box_bottom %>
-<%= salor_render :partial => "shared/in_place_edit" %>

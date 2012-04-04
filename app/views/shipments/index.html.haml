@@ -26,5 +26,4 @@
       %td= link_to salor_icon(:edit,{},32,t(:edit)), edit_shipment_path(shipment)
       %td= link_to salor_icon(:document,{},32,t('.report')), shipment
       %td= link_to salor_icon(:delete,{},32,t(:delete)), shipment, :confirm => t("menu.delete_confirm"), :method => :delete
-= raw content_box_bottom 
-= salor_render :partial => "shared/in_place_edit"
+= raw content_box_bottom
