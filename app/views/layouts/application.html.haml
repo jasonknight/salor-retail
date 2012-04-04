@@ -24,6 +24,7 @@
       = stylesheet_link_tag 'salortrainer'
 
     = javascript_include_tag 'application'
+    = salor_render :partial => "shared/application_js"
     - if mobile?
       = javascript_include_tag 'mobile'
     - else
@@ -31,7 +32,6 @@
       = javascript_include_tag 'jquery.checkbox'
 
     = javascript_include_tag params[:controller]
-    = salor_render :partial => "shared/application_js"
     = csrf_meta_tag
 
   %body#body
@@ -47,15 +47,3 @@
       .close-window{ :onclick => "Salor.shutdown();" } &nbsp;X &nbsp;
       %span.version= SalorBase::VERSION
       %a.reload-window{ :href => '/orders/new' } R
-
-:javascript
-  $(function () {
-    try {
-      #{ salor_render :partial => "shared/js/global_errors_js" }
-    } catch (err) {
-      txt="There was an error on this page.\n\n";
-      txt+="Error description: " + err.description + "\n\n";
-      txt+="Click OK to continue.\n\n";
-      alert(txt);
-    }
-  });
