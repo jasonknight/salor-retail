@@ -78,7 +78,7 @@ class Report
     end
   end
   def history_csv(histories)
-   cols = [:created_at,:ip, :action_taken, :model_type, :owner_type,:owner_id, :sensitivity,:url] 
+   cols = [:created_at,:ip, :action_taken, :model_type,:model_id, :owner_type,:owner_id, :sensitivity,:url] 
    lines = []
    lines << cols.join("\t")
    histories.each do |h|
@@ -115,10 +115,7 @@ class Report
     return lines.join("\n")
   end
   def items_csv(items)
-    cols = Item.content_columns
-    cols.map! {|c| c.name}
-    cols.unshift(:class)
-    cols.unshift(:id)
+    cols = [:id,:class,:active,:hidden,:sku,:name,:behavior,:created_at,:updated_at,:quantity,:sales_metric,:base_price,:purchase_price,:buyback_price,:default_buyback,:tax_profile_amount,:packaging_unit,:child_id,:track_expiry,:expires_on,:shipper_id,:shipper_sku,:min_quantity, :is_part, :part_id,:part_quantity, :calculate_part_price,:coupon_type,:coupon_applies, :activated, :amount_remaining, :category_id,:location_id,:vendor_id]
     lines = []
     lines << cols.join("\t")
     items.each do |item|
@@ -132,15 +129,8 @@ class Report
   end
   def orders_csv(orders)
     # FIXME add in payment methods
-    cols = Order.content_columns
-    cols.map! {|c| c.name}
-    cols.unshift(:class)
-    cols.unshift(:id)
-    oi_cols = OrderItem.content_columns
-    oi_cols.map! {|c| c.name}
-    oi_cols.unshift(:order_id)
-    oi_cols.unshift(:class)
-    oi_cols.unshift(:id)
+    cols = [:id,:class,:hidden,:created_at,:updated_at,:employee_id,:rebate,:rebate_type,:discount_amount,:buy_order,:drawer_id,:subtotal,:tax,:total,:front_end_change,:vendor_id,:cash_register_id, :customer_id, :lc_points, :lc_discount_amount,:tag]
+    oi_cols = [:id,:class,:order_id,:hidden,:created_at,:updated_at,:item_id,:sku,:behavior,:quantity,:price,:tax,:total,:coupon_applied,:coupon_amount,:discount_applied, :discount_amount,:rebate,:is_buyback,:tax_profile_amount,:amount_remaining,:refunded,:refund_payment_method,:action_applied] 
     pm_cols = PaymentMethod.content_columns
     pm_cols.map! {|c| c.name}
     pm_cols.unshift(:order_id)

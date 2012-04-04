@@ -21,8 +21,3 @@
         = submit_tag t('helpers.submit.save'), :onclick => '$("#progress").show()'
 
 %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
-
-%div.tools
-  %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
-    = salor_icon(:print, {}, 32)
-

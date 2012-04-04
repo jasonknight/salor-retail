@@ -275,6 +275,7 @@ class VendorsController < ApplicationController
       render :text => "Could not find drawer_transaction" and return
     end
     text = Printr.new.sane_template('drawer_transaction_receipt',binding)
+    Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
     if @register.salor_printer
       #`beep -f 2000 -l 10 -r 3`
       render :text => text
@@ -331,6 +332,7 @@ class VendorsController < ApplicationController
 
 
     text = Printr.new.sane_template('end_of_day',binding)
+    Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
     if @register.salor_printer
       #`beep -f 4000`
       render :text => text

@@ -140,7 +140,7 @@ function RoundFixed(Number, DecimalPlaces) {
    */
   <% if $Conf  %>
     window.Conf = <%= raw $Conf.attributes.to_json %>;
-    <% else  %>
+  <% else  %>
     window.Conf = {};
   <% end %>
   <% if $User then %>
