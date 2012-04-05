@@ -155,13 +155,13 @@ function make_action_button(elem) {
   return elem;
 }
 
-/*
+
 var MX,MY;
 $(document).mousemove(function(e){
   MX = e.pageX;
   MY = e.pageY;
 });
-*/
+
 
 function make_dt_button(btn) {
   if (btn.hasClass("btn-done")) {

@@ -42,16 +42,16 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
   <% for customer in @customers %>
     var row = $('<tr></tr>');
     row.addClass('table-row');
-    var cname = $('<td></td>');
-    cname.addClass('table-cell name');
+    var cname = $('<td width="30%"></td>');
+    cname.addClass('name');
     cname.html("<%= customer.full_name %>");
   
     var sku = $('<td></td>');
-    sku.addClass('table-cell sku');
+    sku.addClass('sku');
     sku.html("<%= customer.loyalty_card.sku %>");
   
     var btn = $('<div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" onclick="add_item(\'<%= customer.loyalty_card.sku %>\',\'\');" /></div>');
-    btn.addClass('table-cell btn');
+    btn.addClass('btn');
     row.append(cname);
     row.append(sku);
     row.append(btn);

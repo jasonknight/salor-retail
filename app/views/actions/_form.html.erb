@@ -9,12 +9,16 @@
       </ul>
     </div>
   <% end %>
+<div class="form-container" width="90%" align="center">
  <form id="action_form" method="post" action="/actions/create">
- <div style="margin:0;padding:0;display:inline;display: none;">
- <input type="hidden" name="id" value="<%= @action.id %>" />
-  <input name="utf8" type="hidden" value="&#x2713;" />
-  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" /></div>
-
+   <div style="margin:0;padding:0;display:inline;display: none;">
+     <input type="hidden" name="id" value="<%= @action.id %>" />
+     <input name="utf8" type="hidden" value="&#x2713;" />
+     <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+   </div>
+  <table width="90%" align="center">
+    <tr>
+      <td>
   <div class="field">
     <label> <%= I18n.t("activerecord.attributes.name") %> </label><br />
     <input type="text" name="item[name]" value="<%= @action.name %>" />
@@ -29,7 +33,10 @@
     <label> <%= I18n.t("views.single_words.ordering") %> </label><br />
     <input type="text" name="item[weight]" value="<%= @action.weight %>" />
   </div>
-
+      </td>
+    </tr>
+    <tr>
+      <td>
   <div class="field">
     <label> <%= I18n.t("activerecord.attributes.when") %> </label><br />
     <select id="action_whento" name="item[whento]">
@@ -58,6 +65,10 @@
       <% end %>
     </select>
   </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
 
 
   <div class="field">
@@ -80,7 +91,11 @@
     <div class="actions">
       <input type="submit" name="submit" value="<%=  I18n.t("helpers.submit.submit") %>" />
     </div>
+        </td>
+      </tr>
+    </table>
  </form>
+ </div>
 <script type="text/javascript">
   $(document).ready(function(){
     setOnEnterKey(function(event){
