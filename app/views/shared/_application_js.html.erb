@@ -113,16 +113,4 @@ window.params = {
   controller: "<%= params[:controller] %>",
   user: { name: "<%= salor_user.username if salor_user %>" }
 };
-
-// ERRORS RELATED
-
-<% if GlobalErrors.any? or GlobalErrors.any_fatal? %>
-  $('.notice-container').html('');
-  <% GlobalErrors.get_errors.each do |error| %>
-    var error = $('<div class="error"><%= error[1] %></div><br />');
-    $('.notice-container').append(error);
-  <% end %>
-  initNotice();
-  <% GlobalErrors.flush  %>
-<% end %>
 </script>
