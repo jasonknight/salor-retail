@@ -567,13 +567,13 @@ module UserEmployeeMethods
         taxname = oi.tax_profile.name
         item_price = case oi.behavior
           when 'normal' then oi.price
-          when 'gift_card' then oi.activated ? oi.total : oi.total
+          when 'gift_card' then oi.activated ? -oi.total : oi.total
           when 'coupon' then oi.order_item ? oi.order_item.coupon_amount : 0
         end
         item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
         item_price = -oi.price if o.buy_order
         item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
-        item_total = oi.total * ( 1 - o.rebate / 100.0 )
+        item_total = item_total * ( 1 - o.rebate / 100.0 )
         gro = item_total
         net = item_total / ( 1 + oi.tax_profile_amount / 100 )
         if item_total > 0.0
