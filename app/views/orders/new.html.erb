@@ -258,7 +258,7 @@ function addPosItem(item) {
       }
 
       // those need special formatting
-      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 2 ) || attr == 'rebate' || attr == 'tax_profile_amount' ) {
+      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || attr == 'rebate' || attr == 'tax_profile_amount' ) {
         col.html(toPercent(item[attr]));
       } else {
         col.html(toCurrency(item[attr]));
