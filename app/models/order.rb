@@ -442,7 +442,8 @@ class Order < ActiveRecord::Base
 	def calculate_rebate
 	  amnt = 0.0
 	  if self.subtotal.nil? then self.subtotal = 0 end
-    amnt = (self.subtotal * (self.rebate/100))
+    amnt = (self.subtotal * (self.rebate/100)) if self.rebate_type == 'percent'
+    amnt = self.rebate if self.rebate_type == 'fixed'
     return amnt
 	end
 	#
