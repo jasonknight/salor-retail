@@ -166,6 +166,7 @@ fr:
       rebate: remise
       rebate_type: type de remise
       receipt_blurb: texte reçu
+      receipt_blurb_footer: XXXReceipt footer
       sales_metric: syst.métrique vente
       shipment:
         from: de

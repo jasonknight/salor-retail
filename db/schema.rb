@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120404100404) do
+ActiveRecord::Schema.define(:version => 20120406164925) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -649,6 +649,7 @@ ActiveRecord::Schema.define(:version => 20120404100404) do
     t.boolean  "items_view_list",       :default => true
     t.string   "url",                   :default => "http://salor"
     t.boolean  "salor_printer",         :default => false
+    t.string   "receipt_blurb_footer"
   end
 
   add_index "salor_configurations", ["vendor_id"], :name => "index_configurations_on_vendor_id"

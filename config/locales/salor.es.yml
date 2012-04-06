@@ -164,8 +164,8 @@ es:
       real_quantity: real quantity
       quantity_sold: quantity sold
       rebate: rebate
-      rebate_type: rebate type
-      receipt_blurb: receipt blurb
+      receipt_blurb: Receipt header
+      receipt_blurb_footer: Receipt footer
       sales_metric: sales metric
       shipment:
         from: from

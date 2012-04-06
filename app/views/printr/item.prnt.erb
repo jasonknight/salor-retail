@@ -231,7 +231,9 @@ Treuepunkte: <%= @order.loyalty_card.points.to_f - @order.lc_points.to_f %>
   @order.update_attribute :was_printed,true
 end %>
 
-<%= @order.vendor.receipt_logo_footer if @order.vendor and @order.vendor.receipt_logo_footer %>
+<%= @order.vendor.salor_configuration.receipt_blurb.to_s if @order.vendor %>
+
+<%= "\e!\x01" %><%= @order.vendor.receipt_logo_footer if @order.vendor and @order.vendor.receipt_logo_footer %>
 
 
 <%= @register.salor_printer ? '' : 'Printed with Rails' %>

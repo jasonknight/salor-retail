@@ -165,7 +165,8 @@ de:
       quantity_sold: Menge verkauft
       rebate: Rabatt
       rebate_type: Rabatt-Typ
-      receipt_blurb: Rechnungsmitteilung
+      receipt_blurb: Rechnung Kopf
+      receipt_blurb_footer: Rechnung Fuß
       sales_metric: Verkaufseinheit
       shipment:
         from: von
