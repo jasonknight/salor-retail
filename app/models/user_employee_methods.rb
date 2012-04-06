@@ -574,6 +574,7 @@ module UserEmployeeMethods
         item_price = -oi.price if o.buy_order
         item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
         item_total = item_total * ( 1 - o.rebate / 100.0 )
+        item_total -= o.lc_discount_amount / o.order_items.visible.count
         gro = item_total
         net = item_total / ( 1 + oi.tax_profile_amount / 100 )
         if item_total > 0.0
