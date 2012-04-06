@@ -13,16 +13,15 @@
 = raw content_box_top(t("menu.reports"))
 
 = form_tag orders_report_day_path, :class => 'no-print', :id => 'date_range', :method => :get do
-  = select_date(@from, :prefix => 'from')
-  %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'name_with_username', params[:employee_id])
-
-  %div.actions
-    %p{:align => 'center', :style => 'margin-left:-50px;'}
-      = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()'
-
-%div.tools
-  %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
-    = salor_icon(:print, {}, 32)
+  %div.tools
+    = label 'from', t('.from')
+    = select_date(@from, :prefix => 'from')
+    %br
+    %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'name_with_username', params[:employee_id])
+    %br
+    = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()'
+    %br
+    %div.print_report_button{ :onmousedown => 'Salor.printPage();' }= salor_icon(:print, {}, 32)
 
 %div.report-container
   %div
@@ -32,7 +31,7 @@
   %div.clear
 
   %div
-    %h2== #{ t '.title' } #{ l @from, :format => :just_day } #{ l Time.now, :format => :time }<br />#{ @vendor.name }<br />#{ @employee.name_with_username }
+    %h2== #{ t '.title' } #{ l @from, :format => :just_day }<br />#{ @vendor.name }<br />#{ @employee.name_with_username }
 
     %p== #{ t '.count_orders' }: #{ orders_count }
 

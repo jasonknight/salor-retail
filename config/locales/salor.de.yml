@@ -460,6 +460,8 @@ de:
       sum_transactions: Summe Buchungen
       noncash-refunds: Nichtbargeld-Stornierungen
       cash-refunds: Bargeld-Stornierungen
+      from: von
+      to: bis
       
 
   printr:

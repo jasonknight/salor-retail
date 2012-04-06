@@ -521,11 +521,11 @@ module UserEmployeeMethods
   end
 
   #
-  def get_end_of_day_report(day)
-    orders = Order.scopied.where({ :vendor_id => self.get_meta.vendor_id, :drawer_id => self.get_drawer.id,:created_at => day.beginning_of_day..day.end_of_day, :paid => 1 }).order("created_at ASC")
+  def get_end_of_day_report(from,to)
+    orders = Order.scopied.where({ :vendor_id => self.get_meta.vendor_id, :drawer_id => self.get_drawer.id,:created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
-    drawertransactions = DrawerTransaction.where({:drawer_id => self.get_drawer.id, :created_at => day.beginning_of_day..day.end_of_day }).where("tag != 'CompleteOrder'")
+    drawertransactions = DrawerTransaction.where({:drawer_id => self.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
     regular_payment_methods = PaymentMethod.types_list.collect{|pm| pm[1].to_s }
 
     categories = {:pos => {}, :neg => {}}
@@ -660,93 +660,8 @@ module UserEmployeeMethods
     return report
   end
 
+
   #
-  def get_end_of_day_report_old
-    totals = Hash.new()
-    totals[:date] = I18n.l(DateTime.now, :format => :long)
-    totals[:drawer_amount] = self.get_drawer.amount
-    totals[:unit] = I18n.t('number.currency.format.friendly_unit')
-    today = Time.now.beginning_of_day.strftime("%Y-%m-%d %H:%M:%S")
-    totals[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
-
-    # Get the orders total
-    all_orders = Order.where("vendor_id = #{ self.get_meta.vendor_id } and drawer_id = #{self.get_drawer.id} and created_at > '#{today}' and (paid = 1 or paid IS TRUE)")
-    totals[:orders_total] = all_orders.sum(:total)
-
-
-    # Get the total of refunded order_items
-    totals[:refund_total] = 0
-    OrderItem.where("created_at > '#{today}' and refunded = 1 and refunded_by = #{self.id}").each do |oi|
-      totals[:refund_total] += oi.total
-    end
-
-    # Get the total of buyback OrderItems
-    bback_total = 0.0
-    all_orders.each do |o|
-      o.order_items.visible.each do |oi|
-        next if oi.refunded or not oi.is_buyback # is_buyback is true
-        bback_total += oi.total
-      end
-    end
-    totals[:buyback_item_total] = bback_total
-
-    # Get the total of all drawer transactions for today
-    totals[:drop_total] = 0
-    totals[:payout_total] = 0
-    totals[:payout_refunds] = 0
-    self.get_drawer.drawer_transactions.where(["tag <> 'CompleteOrder' and created_at > ? and owner_id = ?",Time.now.beginning_of_day, self.id]).each do |dt|
-      totals[:drop_total] += dt.amount if dt.drop
-      totals[:payout_total] -= dt.amount if dt.payout
-      #totals[:payout_refunds] = totals[:payout_refunds] + dt.amount if dt.payout and dt.is_refund
-    end
-    totals[:transaction_total] = totals[:payout_total] + totals[:drop_total]
-
-    # Get a LIST of all payout drawer transactions for today
-    totals[:dt_payout_list] = Hash.new
-    self.get_drawer.drawer_transactions.where(["payout = true and tag <> 'CompleteOrder' and created_at > ? and owner_id = ?", Time.now.beginning_of_day, self.id]).each do |dt|
-      totals[:dt_payout_list].merge! dt.id => { :tag => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => - dt.amount, :refund => dt.is_refund }
-    end
-
-    # Get a LIST of all drop drawer transactions for today
-    totals[:dt_drop_list] = Hash.new
-    # ToDo: Can't get the SQL query to work with the word 'drop'
-    self.get_drawer.drawer_transactions.where(["(payout = false or payout IS NULL) and is_refund = false and tag <> 'CompleteOrder' and created_at > ? and owner_id = ?", Time.now.beginning_of_day, self.id]).each do |dt|
-      totals[:dt_drop_list].merge! dt.id => { :name => dt.tag, :notes => dt.notes, :time => I18n.l(dt.created_at, :format => :just_time), :amount => dt.amount, :refund => dt.is_refund }
-    end
-
-    # Get a GROUPED LIST of all positive payment methods for today
-    totals[:pm_pos] = Hash.new
-    totals[:pm_neg] = Hash.new
-    totals[:pm_pos_sum] = 0
-    totals[:pm_neg_sum] = 0
-    #I18n.t("system.payment_internal_types").split(',').each do |pmtype|
-    all_orders.each do |o|
-      o.payment_methods.each do |pm|
-        next if pm.order_id.nil?
-        key = pm.internal_type.to_sym
-        if pm.amount > 0
-          if not totals[:pm_pos].has_key?(key)
-            totals[:pm_pos].merge! key => pm.amount
-          else
-            totals[:pm_pos][key] += pm.amount
-          end
-          totals[:pm_pos_sum] += pm.amount
-        end
-        if pm.amount < 0
-          if not totals[:pm_neg].has_key?(key)
-            totals[:pm_neg].merge! key => pm.amount
-          else
-            totals[:pm_neg][key] += pm.amount
-          end
-          totals[:pm_neg_sum] += pm.amount
-        end
-      end 
-    end
-    totals[:pm_sum] = totals[:pm_pos_sum] + totals[:pm_neg_sum]
-
-    totals[:calculated_drawer_amount] = totals[:pm_neg][:InCash] + totals[:pm_pos][:InCash] + totals[:transaction_total]
-    return totals
-  end
   def report
     r = {}
     r[:orders_total] = Order.scopied.where("paid = 1 and refunded = 0").sum(:total)

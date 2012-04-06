@@ -470,11 +470,12 @@ class OrdersController < ApplicationController
   def report_day
     @from, @to = assign_from_to(params)
     @from = @from.beginning_of_day
+    @to = @to.end_of_day
     @vendor = GlobalData.vendor
     @employees = @vendor.employees.where(:hidden => 0)
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
-    @report = @employee.get_end_of_day_report(@from)
+    @report = @employee.get_end_of_day_report(@from,@to)
   end
 
   def report_day_range
