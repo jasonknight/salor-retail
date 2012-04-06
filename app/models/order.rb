@@ -66,11 +66,13 @@ class Order < ActiveRecord::Base
   has_many :coupons, :class_name => "OrderItem", :conditions => "behavior = 'coupon' and hidden != 1" 
   has_many :gift_cards, :class_name => "OrderItem", :conditions => "behavior = 'gift_card' and hidden != 1"
   validate :validify
-  
+
+  I18n.locale = AppConfig.locale
   REBATE_TYPES = [
     [I18n.t('views.forms.percent_off'),'percent'],
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
+
   def has_cute_credit_message?
     config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
     conn = Mysql2::Client.new(config)
