@@ -1,5 +1,10 @@
 //=require genericjs
 
+$ ->
+  if typeof(Salor) != 'undefined'
+    Salor.stopDrawerObserver()
+    $('#salorbinversion').html(Salor.version());
+
 window.showButtonCategoryContainer = (id) ->
   $('.button-category-container').hide()
   $('#' + id).show()
@@ -11,10 +16,6 @@ window.showJsError = (err) ->
   txt+="Error Line: " + err.line + "\n\n"
   txt+="Click OK to continue.\n\n"
   alert(txt)
-
-$ ->
-  if typeof(Salor) != 'undefined'
-    Salor.stopDrawerObserver()
 
 window.showButtonCategoryContainer = (id) ->
   $('.button-category-container').hide()
