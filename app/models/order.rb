@@ -606,6 +606,7 @@ class Order < ActiveRecord::Base
       #create_drawer_transaction(self.total,:drop)
     else
       return if (GlobalData.salor_user.get_drawer.amount - self.total) < 0
+
       self.update_attribute(:refunded, true)
       self.update_attribute(:refunded_by, GlobalData.salor_user.id)
       self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
