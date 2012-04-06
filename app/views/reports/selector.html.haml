@@ -1,23 +1,23 @@
 = raw content_box_top(t("menu.reports"))
 %div.centered-contents
   = form_tag '/reports/selector', :class => 'no-print', :method => :get do
-    %div.from.extra-right-margin
-      = label('from', t('orders.report.start_date'))
-      %br
-      = select_date(@from, :prefix => 'from')
-    %div.to.extra-right-margin
-      = label('to', t('orders.report.end_date'))
-      %br
-      = select_date(@to, :prefix => 'to')
-    %div.to
-      = label('usb_device',t("menu.usb_device"))
-      %br
-      %select{:name => 'usb_device', :id => 'usb_device_select'}
-        - Dir.entries("/media").each do |d|
-          - if not d == '.' and not d == '..'
-            %option{ :value => "/media/" + d }= d
-    %div.actions
-      %p{:align => 'center', :style => 'margin-left:-50px;'}
-        = submit_tag t('helpers.submit.save'), :onclick => '$("#progress").show()'
+    = label('from', t('orders.report.start_date'))
+    %br
+    = select_date(@from, :prefix => 'from')
+    %br
+    = label('to', t('orders.report.end_date'))
+    %br
+    = select_date(@to, :prefix => 'to')
+    %br
+    = label('usb_device',t("menu.usb_device"))
+    %br
+    %select{:name => 'usb_device', :id => 'usb_device_select'}
+      - Dir.entries("/media").each do |d|
+        - if not d == '.' and not d == '..'
+          %option{ :value => "/media/" + d }= d
+      %option{ :value => "#{ Dir['/home/*'].first }/Desktop" } Desktop
+    %br
+    %br
+    = submit_tag t('helpers.submit.save'), :onclick => '$("#progress").show()'
 
 %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
