@@ -19,49 +19,72 @@
       coupon_subtotal = 0
       list_of_items = ''
       @order.order_items.each do |oi|
-        item_price = case oi.item_type_id
-          when 1 then   oi.price # normal item
-          when 2 then - oi.total # gift card item
-          when 3 then - oi.price # coupon item
-        end
 
-        item_price = -oi.price if @order.buy_order
+        # for the taxes table, take the pre-calculated totals from the DB
+        sum_taxes[oi.tax_profile.id] += oi.total
 
-        if oi.item_type_id == 3 and oi.item.coupon_type == 1 # percent coupon
-          item_price = - Item.scopied.find_by_sku(oi.item.coupon_applies).base_price * oi.price / 100.0
-          item_total = item_price * oi.quantity
-        elsif oi.item_type_id == 3 and oi.item.coupon_type == 3 # b1g1 coupon
-          item_total = 0
-        else
-          item_price = oi.item.base_price if oi.discount_applied
+        # for the receipt, we need to re-calculate all totals so that customers get more info about their purchase
+
+        # Price calculation for normal items
+        if oi.item_type_id == 1
+
+          item_price = oi.item.base_price # Customers need to see the original price before any substractions
+          item_price *= -1 if @order.buy_order
           item_total = item_price * oi.quantity
         end
 
+        # Price calculation for gift card items
+        if oi.item_type_id == 2
+          item_price = - oi.total
+        end
+
+        # Price calculation for coupon items
+        if oi.item_type_id == 3
+          if oi.item.coupon_type == 1 # percent
+            item_price = - Item.scopied.find_by_sku(oi.item.coupon_applies).base_price * oi.price / 100.0
+            item_total = item_price * oi.quantity
+          elsif oi.item.coupon_type == 3 # b1g1
+            item_total = 0
+          end
+        end
+
+        # Price modification for refunds
         if oi.refunded then
           refund_subtotal -= item_total
           item_price = 0
           item_total = 0
         end
+
         item_total = 0 if item_total.nil?
         oi.price = 0 if oi.price.nil?
         oi.quantity = 0 if oi.quantity.nil?
         item_price = 0 if item_price.nil?
-        sum_taxes[oi.tax_profile.id] += item_total
 
         name = oi.item.name
 
-        if oi.item_type_id == 3 and oi.item.coupon_type == 1 # percent coupon
-          list_of_items += "%s %19.19s %6.1f%% %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
-        elsif oi.item_type_id == 3 and oi.item.coupon_type == 3 # oi habtm oi relation needed otherwise b1g1 coupon rules are too complex here
-          list_of_items += "%s %19.19s\n" % [oi.item.tax_profile.letter, name]
-        else # normal item
-          if oi.quantity == Integer(oi.quantity) # integer quantity
+        # NORMAL ITEMS
+        if oi.item_type_id == 1
+          if oi.quantity == Integer(oi.quantity)
+            # integer quantity
             list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          else # float quantity (e.g. weighed OrderItem)
-            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          else
+            # float quantity (e.g. weighed OrderItem)
+            list_of_items += "%s %19.19s %6.2f %5.3f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
           end
         end
 
+        # COUPONS
+        if oi.item_type_id == 3
+          if oi.item.coupon_type == 1
+            # percent coupon
+            list_of_items += "%s %19.19s %6.1f%% %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
+          elsif oi.item.coupon_type == 3
+            # oi habtm oi relation needed otherwise b1g1 coupon rules are too complex here
+            list_of_items += "%s %19.19s\n" % [oi.item.tax_profile.letter, name]
+          end
+        end
+
+        # ADD ADDITIONAL LINES FOR DISCOUNTS
         if oi.discount_applied
           discount_price = - oi.discount_amount # ( oi.item.base_price * oi.quantity - oi.total ) / oi.quantity
           discount_total = discount_price * oi.quantity
@@ -70,14 +93,17 @@
             discount_price = 0
             discount_total = 0
           end
-          if oi.quantity == Integer(oi.quantity) # integer quantity
+          if oi.quantity == Integer(oi.quantity)
+            # integer quantity
             list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
           else
-            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
+            # float quantity
+            list_of_items += "%s %19.19s %6.2f %5.3f %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
           end
           discount_subtotal += discount_total
         end
 
+        # REBATES
         if oi.rebate and oi.rebate > 0
           rebate_price = - ( oi.price * oi.rebate / 100.0)
           rebate_total = rebate_price * oi.quantity
@@ -86,7 +112,13 @@
             rebate_price = 0
             rebate_total = 0
           end
-          list_of_items += "%s %19.19s %6.2f %6u %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+          if oi.quantity == Integer(oi.quantity)
+            # integer quantity
+            list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+          else
+            # float quantity
+            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+          end
           rebate_subtotal += rebate_total
         end
 
@@ -231,9 +263,7 @@ Treuepunkte: <%= @order.loyalty_card.points.to_f - @order.lc_points.to_f %>
   @order.update_attribute :was_printed,true
 end %>
 
-<%= @order.vendor.salor_configuration.receipt_blurb.to_s if @order.vendor %>
-
-<%= "\e!\x01" %><%= @order.vendor.receipt_logo_footer if @order.vendor and @order.vendor.receipt_logo_footer %>
+<%= @order.vendor.receipt_logo_footer if @order.vendor and @order.vendor.receipt_logo_footer %>
 
 
 <%= @register.salor_printer ? '' : 'Printed with Rails' %>

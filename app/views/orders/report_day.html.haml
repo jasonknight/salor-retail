@@ -22,6 +22,8 @@
     = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()'
     %br
     %div.print_report_button{ :onmousedown => 'Salor.printPage();' }= salor_icon(:print, {}, 32)
+    %br
+    %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 
 %div.report-container
   %div

@@ -57,8 +57,6 @@ class ApplicationController < ActionController::Base
   layout :layout_by_response
   helper_method [:user_cache_name]
 
-  I18n.locale = AppConfig.locale
-
   def pre_load
   end
   def render_csv(filename = nil,text = nil)
@@ -174,6 +172,7 @@ class ApplicationController < ActionController::Base
     GlobalData.refresh # Because classes are cached across requests
 	  Job.run # Cron jobs for the application
 	  GlobalData.base_locale = AppConfig.base_locale
+    I18n.locale = AppConfig.locale
 	  if salor_signed_in? and salor_user then
       I18n.locale = salor_user.language
 		  @owner = salor_user.get_owner

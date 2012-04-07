@@ -459,12 +459,19 @@ class OrdersController < ApplicationController
   end
 
   def report_range
+    #@from, @to = assign_from_to(params)
+    #from2 = @from.beginning_of_day
+    #to2 = @to.beginning_of_day + 1.day
+    #@orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
+    #@orders.reverse!
+    #@taxes = TaxProfile.scopied.where( :hidden => 0)
     @from, @to = assign_from_to(params)
-    from2 = @from.beginning_of_day
-    to2 = @to.beginning_of_day + 1.day
-    @orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
-    @orders.reverse!
-    @taxes = TaxProfile.scopied.where( :hidden => 0)
+    @from = @from.beginning_of_day
+    @to = @to.end_of_day
+    @vendor = GlobalData.vendor
+    @employees = @vendor.employees.where(:hidden => 0)
+    @employee ||= @employees.first
+    @report = @employee.get_end_of_day_report(@from,@to)
   end
 
   def report_day

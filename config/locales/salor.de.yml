@@ -464,6 +464,39 @@ de:
       cash-refunds: Bargeld-Stornierungen
       from: von
       to: bis
+    report_range:
+      title: Tagesbericht
+      sums_by_category: nach Kategorie
+      sums_by_tax_profile: nach Steuern
+      sums_by_payment_methods: nach Zahlungsmethoden
+      sum: Summe
+      sums_by_transaction_types: pro Buchungsart
+      transactions: Buchungen
+      transaction_tag: Journal
+      drops: Einzahlungen
+      drop: Einzahlung
+      payouts: Auszahlungen
+      payout: Auszahlung
+      transaction_total: Gesamtbewegung
+      transaction_journal: Buchungsjournal
+      time: Zeit
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      None: Unbenannt
+      count_orders: Anzahl Verkäufe
+      sales: Verkäufe
+      payments: Zahlungen
+      cash_drawer: Kassenlade
+      revenue: Umsatz
+      sum_gross: Summe brutto
+      sum_net: Summe netto
+      gross: brutto
+      net: netto
+      sum_transactions: Summe Buchungen
+      noncash-refunds: Nichtbargeld-Stornierungen
+      cash-refunds: Bargeld-Stornierungen
+      from: von
+      to: bis
       
 
   printr:
