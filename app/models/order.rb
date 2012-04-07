@@ -73,6 +73,10 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
 
+  def nonrefunded_item_count
+    self.order_items.visible.where(:refunded => false).count
+  end
+
   def has_cute_credit_message?
     config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
     conn = Mysql2::Client.new(config)
@@ -697,7 +701,218 @@ class Order < ActiveRecord::Base
     
   end
   
-  
+  def get_report
+    sum_taxes = Hash.new
+    TaxProfile.scopied.each { |t| sum_taxes[t.id] = 0 }
+    subtotal1 = 0
+    discount_subtotal = 0
+    rebate_subtotal = 0
+    refund_subtotal = 0
+    coupon_subtotal = 0
+    list_of_items = ''
+    self.order_items.visible.each do |oi|
+
+      item_total = 0 if item_total.nil?
+      oi.price = 0 if oi.price.nil?
+      oi.quantity = 0 if oi.quantity.nil?
+      item_price = 0 if item_price.nil?
+      name = oi.item.name
+
+      # for the taxes table, distribute order rebates equally to all items
+      # Gotcha: If there is a fixed order rebate and all items are refunded, the customer must pay back the fixed rebate
+      if not oi.refunded
+        if self.rebate_type == 'percent'
+          sum_taxes[oi.tax_profile.id] += oi.total * (1 - self.rebate / 100.0)
+        elsif self.rebate_type == 'fixed'
+          sum_taxes[oi.tax_profile.id] += oi.total - (self.rebate / self.nonrefunded_item_count )
+        end
+      end
+
+      # Price calculation for normal items
+      if oi.item_type_id == 1
+        item_price = oi.price # Customers need to see the original price before any substractions
+        item_price *= -1 if self.buy_order
+        item_total = item_price * oi.quantity
+      end
+
+      # Price calculation for gift card items
+      if oi.item_type_id == 2
+        item_price = - oi.total
+      end
+
+      # Price calculation for coupon items
+      if oi.item_type_id == 3
+        if oi.item.coupon_type == 1 # percent
+          item_price = - Item.scopied.find_by_sku(oi.item.coupon_applies).base_price * oi.price / 100.0
+          item_total = item_price * oi.quantity
+        elsif oi.item.coupon_type == 3 # b1g1
+          item_total = 0
+        end
+      end
+
+      # Price modification for refunds
+      if oi.refunded then
+        refund_subtotal -= item_total
+        item_price = 0
+        item_total = 0
+      end
+
+      # NORMAL ITEMS
+      if oi.item_type_id == 1
+        if oi.quantity == Integer(oi.quantity)
+          # integer quantity
+          list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+        else
+          # float quantity (e.g. weighed OrderItem)
+          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+        end
+      end
+
+      # COUPONS
+      if oi.item_type_id == 3
+        if oi.item.coupon_type == 1
+          # percent coupon
+          list_of_items += "%s %19.19s %6.1f%% %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
+        elsif oi.item.coupon_type == 3
+          # oi habtm oi relation needed otherwise b1g1 coupon rules are too complex here
+          list_of_items += "%s %19.19s\n" % [oi.item.tax_profile.letter, name]
+        end
+      end
+
+      # ADD ADDITIONAL LINES FOR DISCOUNTS
+      if oi.discount_applied
+        discount_price = - oi.discount_amount # ( oi.item.base_price * oi.quantity - oi.total ) / oi.quantity
+        discount_total = discount_price * oi.quantity
+        if oi.refunded then
+          refund_subtotal -= discount_total
+          discount_price = 0
+          discount_total = 0
+        end
+        if oi.quantity == Integer(oi.quantity)
+          # integer quantity
+          list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
+        else
+          # float quantity
+          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
+        end
+        discount_subtotal += discount_total
+      end
+
+      # REBATES
+      if oi.rebate and oi.rebate > 0
+        rebate_price = - ( oi.price * oi.rebate / 100.0)
+        rebate_total = rebate_price * oi.quantity
+        if oi.refunded then
+          refund_subtotal -= rebate_total
+          rebate_price = 0
+          rebate_total = 0
+        end
+        if oi.quantity == Integer(oi.quantity)
+          # integer quantity
+          list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+        else
+          # float quantity
+          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+        end
+        rebate_subtotal += rebate_total
+      end
+
+      subtotal1 += item_total
+    end
+
+    if self.lc_points? and not self.refunded
+      lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
+      subtotal1 += lc_points_discount
+    end
+
+    display_subtotal1 = not(self.rebate.zero? and discount_subtotal.zero? and rebate_subtotal.zero?)
+
+    subtotal2 = subtotal1
+    if not discount_subtotal.zero?
+      display_subtotal2 = true
+      subtotal2 += discount_subtotal
+    end
+
+    subtotal3 = subtotal2
+    if not rebate_subtotal.zero?
+      display_subtotal3 = true
+      subtotal3 += rebate_subtotal
+    end
+
+    subtotal4 = subtotal3
+    if not coupon_subtotal.zero?
+      display_subtotal4 = true
+      subtotal4 += coupon_subtotal
+    end
+
+    order_rebate = 0
+    if self.rebate_type == 'percent' and not self.rebate.zero?
+      percent_rebate_amount = - subtotal4 * self.rebate / 100.0
+      percent_rebate = self.rebate
+      order_rebate = percent_rebate_amount
+    elsif self.rebate_type == 'fixed' and not self.rebate.zero?
+      fixed_rebate_amount = - self.rebate
+      order_rebate = fixed_rebate_amount
+    end
+    subsubtotal = subtotal4 + order_rebate
+
+    paymentmethods = Hash.new
+    self.payment_methods.each do |pm|
+      next if pm.amount.zero?
+      paymentmethods[pm.name] = pm.amount
+    end
+
+    list_of_taxes = ''
+    TaxProfile.scopied.each do |tax|
+      next if sum_taxes[tax.id] == 0
+      fact = tax.value / 100.00
+      net = sum_taxes[tax.id] / (1.00 + fact)
+      gro = sum_taxes[tax.id]
+      vat = gro - net
+      list_of_taxes += "%s: %2i%% %7.2f %7.2f %8.2f\n" % [tax.letter,tax.value,net,vat,gro]
+    end
+
+    if self.customer
+      customer = Hash.new
+      customer[:company_name] = self.customer.company_name
+      customer[:first_name] = self.customer.first_name
+      customer[:last_name] = self.customer.last_name
+      customer[:street1] = self.customer.street1
+      customer[:street2] = self.customer.street2
+      customer[:postalcode] = self.customer.postalcode
+      customer[:city] = self.customer.city
+      customer[:current_loyalty_points] = self.loyalty_card.points.to_f
+      customer[:paid_loyalty_points] = self.lc_points.to_f
+    end
+
+    report = Hash.new
+    report[:discount_subtotal] = discount_subtotal
+    report[:rebate_subtotal] = rebate_subtotal
+    report[:refund_subtotal] = refund_subtotal
+    report[:coupon_subtotal] = coupon_subtotal
+    report[:list_of_items] = list_of_items
+    report[:lc_points_discount] = lc_points_discount
+    report[:lc_points] = lc_points
+    report[:subtotal1] = subtotal1
+    report[:display_subtotal1] = display_subtotal1
+    report[:subtotal2] = subtotal2
+    report[:display_subtotal2] = display_subtotal2
+    report[:subtotal3] = subtotal3
+    report[:display_subtotal3] = display_subtotal3
+    report[:subtotal4] = subtotal4
+    report[:display_subtotal4] = display_subtotal4
+    report[:percent_rebate_amount] = percent_rebate_amount
+    report[:percent_rebate] = percent_rebate
+    report[:fixed_rebate_amount] = fixed_rebate_amount
+    report[:subsubtotal] = subsubtotal
+    report[:paymentmethods] = paymentmethods
+    report[:change_given] = self.change_given
+    report[:list_of_taxes] = list_of_taxes
+    report[:customer] = customer
+    report[:unit] = I18n.t('number.currency.format.friendly_unit')
+
+    return report
+  end
   
   # new methods from test
   

@@ -294,12 +294,13 @@ class OrdersController < ApplicationController
     if not @order then
       render :nothing => true and return
     end
+    @report = @order.get_report
     text = Printr.new.sane_template('item',binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @cash_register.id, :content => text)
     if @register.salor_printer
       render :text => text
     else
-      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      puts File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
