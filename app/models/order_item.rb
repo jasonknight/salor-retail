@@ -383,6 +383,10 @@ class OrderItem < ActiveRecord::Base
     return self.total
   end
 
+  def calculate_rebate_amount
+    self.rebate_amount = (self.price * self.quantity * (self.rebate / 100.0)).round(2)
+  end
+
   def calculate_oi_order_rebate
     # This calculates ORDER rebate for % only for a given OrderItem
 	  amnt = 0.0

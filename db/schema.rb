@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120406164925) do
+ActiveRecord::Schema.define(:version => 20120407102012) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -517,6 +517,7 @@ ActiveRecord::Schema.define(:version => 20120406164925) do
     t.string   "refund_payment_method"
     t.boolean  "action_applied",        :default => false
     t.integer  "hidden",                :default => 0
+    t.float    "rebate_amount",         :default => 0.0
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
