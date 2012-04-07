@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class Order < ActiveRecord::Base
+ # {START}
 	include SalorScope
   include SalorError
   include SalorBase
@@ -722,5 +723,5 @@ class Order < ActiveRecord::Base
     end
     return true
   end
-  
+  # {END}
 end
