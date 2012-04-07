@@ -56,6 +56,7 @@ class ApplicationController < ActionController::Base
   before_filter :setup_global_data, :except => [:login]
   layout :layout_by_response
   helper_method [:user_cache_name]
+
   def pre_load
   end
   def render_csv(filename = nil,text = nil)
@@ -169,9 +170,9 @@ class ApplicationController < ActionController::Base
   def loadup
     SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
     GlobalData.refresh # Because classes are cached across requests
-	  I18n.locale = AppConfig.locale
 	  Job.run # Cron jobs for the application
 	  GlobalData.base_locale = AppConfig.base_locale
+    I18n.locale = AppConfig.locale
 	  if salor_signed_in? and salor_user then
       I18n.locale = salor_user.language
 		  @owner = salor_user.get_owner

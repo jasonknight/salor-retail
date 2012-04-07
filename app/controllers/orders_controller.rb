@@ -294,12 +294,13 @@ class OrdersController < ApplicationController
     if not @order then
       render :nothing => true and return
     end
+    @report = @order.get_report
     text = Printr.new.sane_template('item',binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @cash_register.id, :content => text)
     if @register.salor_printer
       render :text => text
     else
-      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      puts File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
@@ -459,22 +460,30 @@ class OrdersController < ApplicationController
   end
 
   def report_range
+    #@from, @to = assign_from_to(params)
+    #from2 = @from.beginning_of_day
+    #to2 = @to.beginning_of_day + 1.day
+    #@orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
+    #@orders.reverse!
+    #@taxes = TaxProfile.scopied.where( :hidden => 0)
     @from, @to = assign_from_to(params)
-    from2 = @from.beginning_of_day
-    to2 = @to.beginning_of_day + 1.day
-    @orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
-    @orders.reverse!
-    @taxes = TaxProfile.scopied.where( :hidden => 0)
+    @from = @from.beginning_of_day
+    @to = @to.end_of_day
+    @vendor = GlobalData.vendor
+    @employees = @vendor.employees.where(:hidden => 0)
+    @employee ||= @employees.first
+    @report = @employee.get_end_of_day_report(@from,@to)
   end
 
   def report_day
     @from, @to = assign_from_to(params)
     @from = @from.beginning_of_day
+    @to = @to.end_of_day
     @vendor = GlobalData.vendor
     @employees = @vendor.employees.where(:hidden => 0)
     @employee = Employee.scopied.find_by_id(params[:employee_id])
     @employee ||= @employees.first
-    @report = @employee.get_end_of_day_report(@from)
+    @report = @employee.get_end_of_day_report(@from,@to)
   end
 
   def report_day_range

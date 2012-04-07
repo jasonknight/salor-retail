@@ -45,5 +45,8 @@
         .salortrainer Salor Trainer
       = yield
       .close-window{ :onclick => "Salor.shutdown();" } &nbsp;X &nbsp;
-      %span.version= SalorBase::VERSION
+      %span.version= "Salor Version: #{ SalorBase::VERSION }"
+      %span.salorbinversion
+        Salor-bin Version: 
+        %span#salorbinversion Non-salor-bin browser
       %a.reload-window{ :href => '/orders/new' } R

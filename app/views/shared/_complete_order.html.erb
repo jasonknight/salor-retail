@@ -379,7 +379,7 @@ function complete_order_send(print) {
   if ( serializePayments().indexOf('InCash') != -1 ) {
     quick_open_drawer();
     if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-      Salor.startDrawerObserver(Register.cash_drawer_path);
+      setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
     }
   }
   if (typeof(Salor) != 'undefined') {

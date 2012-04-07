@@ -425,13 +425,14 @@ class VendorsController < ApplicationController
                 @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
                 @inst.quantity = newval
                 @inst.calculate_total_with_rebate
+                @inst.calculate_rebate_amount
                 # Calculate OI tax, but update DB below instead
                 @inst.calculate_tax(true)
                 # Only include ORDER rebate in calculation if type = 'percent'
                 @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
                 @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-                @inst.connection.execute("update order_items set total = #{@inst.total}, quantity = #{newval}, tax = #{@inst.tax} where id = #{@inst.id}")
+                @inst.connection.execute("update order_items set total = #{@inst.total}, quantity = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
                 @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
                 @inst.is_valid = true
                 render :layout => false and return
@@ -446,6 +447,7 @@ class VendorsController < ApplicationController
                 @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
                 @inst.price = newval
                 @inst.calculate_total_with_rebate
+                @inst.calculate_rebate_amount
                 # Calculate OI tax, but update DB below instead
                 @inst.calculate_tax(true)
                 # Only include ORDER rebate in calculation if type = 'percent'
@@ -466,13 +468,14 @@ class VendorsController < ApplicationController
               rebate = params[:value].gsub(',','.').to_f
               origttl = @inst.total
               @inst.calculate_total_with_rebate(rebate)
+              @inst.calculate_rebate_amount
               # Calculate OI tax, but update DB below instead
               @inst.calculate_tax(true)
               # Only include ORDER rebate in calculation if type = 'percent'
               @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
               # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
               @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-              @inst.connection.execute("update order_items set total = #{@inst.total}, rebate = #{rebate}, tax = #{@inst.tax} where id = #{@inst.id}")
+              @inst.connection.execute("update order_items set total = #{@inst.total}, rebate = #{rebate}, rebate_amount = #{ @inst.rebate_amount }, tax = #{@inst.tax} where id = #{@inst.id}")
               @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
               @inst.is_valid = true
               @inst.rebate = rebate

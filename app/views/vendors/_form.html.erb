@@ -79,8 +79,14 @@
                     </div>
                     <div class="field">
                       <%= conf.label t("activerecord.attributes.receipt_blurb") %><br />
-                      <%= conf.text_area :receipt_blurb, :rows => 3, :class => "keyboardable" %>
+                      <%= conf.text_area :receipt_blurb, :rows => 7, :class => "keyboardable" %>
                     </div>
+                    <div class="field">
+                      <%= conf.label t("activerecord.attributes.receipt_blurb_footer") %><br />
+                      <%= conf.text_area :receipt_blurb_footer, :rows => 3, :class => "keyboardable" %>
+                    </div>
+                  </td>
+                  <td>
                     <div class="field">
                       <%= conf.label t("activerecord.attributes.pagination") %><br />
                       <%= conf.text_field :pagination, :class => "keyboardable-int" %>
@@ -122,7 +128,7 @@
                       <%= conf.label t("activerecord.attributes.csv_imports_url") %><br />
                       <%= conf.text_field :csv_imports_url, :style => "width: 80%;" %><br />
                       <%= conf.label t("activerecord.attributes.csv_imports") %><br />
-                      <%= conf.text_area :csv_imports, :rows => 7, :cols => 45, :class => "keyboardable" %> 
+                      <%= conf.text_area :csv_imports, :rows => 7, :cols => 90, :class => "keyboardable" %> 
                   </td>
                 </tr>
               </table>

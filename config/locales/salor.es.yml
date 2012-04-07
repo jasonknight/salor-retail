@@ -164,8 +164,8 @@ es:
       real_quantity: real quantity
       quantity_sold: quantity sold
       rebate: rebate
-      rebate_type: rebate type
-      receipt_blurb: receipt blurb
+      receipt_blurb: Receipt header
+      receipt_blurb_footer: Receipt footer
       sales_metric: sales metric
       shipment:
         from: from
@@ -388,6 +388,7 @@ es:
     report_accounting: report accounting
     report_day_range: monthly report
     wholesaler_update: wholesaler update
+    law_reports: Report Download
     
     
   notifications:
@@ -430,6 +431,37 @@ es:
       start_date: start date
       sum_total: sum total
     report_day:
+      title: day report
+      sums_by_category: sums by category
+      sums_by_tax_profile: sums by tax profile
+      sums_by_payment_methods: sums by payment methods
+      sum: sum
+      sums_by_transaction_types: sums by transaction types
+      transactions: transactions
+      transaction_tag: transaction tag
+      drops: drops
+      drop: drop
+      payouts: payouts
+      payout: payout
+      transaction_total: transaction total
+      transaction_journal: transaction journal
+      time: time
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      None: Not specified
+      count_orders: Count of orders
+      sales: Sales
+      payments: Payments
+      cash_drawer: Cash drawer
+      revenue: Revenue
+      sum_gross: Sum gross
+      sum_net: Sum net
+      gross: gross
+      net: net
+      sum_transactions: Sum transactions
+      noncash-refunds: Noncash-Refunds
+      cash-refunds: Cash-Refunds
+    report_range:
       title: day report
       sums_by_category: sums by category
       sums_by_tax_profile: sums by tax profile

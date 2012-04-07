@@ -7,222 +7,76 @@
 
 <%= @order.vendor.salor_configuration.receipt_blurb.to_s if @order.vendor %>
 <%= "\n\e!\x01" + "\ea\x00" %>
-<%= I18n.t("receipts.invoice_numer_X_at_time", :number => @order.id, :datetime => I18n.l(@order.created_at, :format => :iso)) %>
-
+<%= t("receipts.invoice_numer_X_at_time", :number => @order.id, :datetime => l(@order.created_at, :format => :iso)) %> <%= @order.cash_register.name %>
 <%= "\e!\x00" %>
-<%    sum_taxes = Hash.new
-      TaxProfile.all.each { |t| sum_taxes[t.id] = 0 }
-      subtotal = 0
-      discount_subtotal = 0
-      rebate_subtotal = 0
-      refund_subtotal = 0
-      coupon_subtotal = 0
-      list_of_items = ''
-      @order.order_items.each do |oi|
-        item_price = case oi.item_type_id
-          when 1 then   oi.price # normal item
-          when 2 then - oi.total # gift card item
-          when 3 then - oi.price # coupon item
-        end
 
-        item_price = -oi.price if @order.buy_order
-
-        if oi.item_type_id == 3 and oi.item.coupon_type == 1 # percent coupon
-          item_price = - Item.scopied.find_by_sku(oi.item.coupon_applies).base_price * oi.price / 100.0
-          item_total = item_price * oi.quantity
-        elsif oi.item_type_id == 3 and oi.item.coupon_type == 3 # b1g1 coupon
-          item_total = 0
-        else
-          item_price = oi.item.base_price if oi.discount_applied
-          item_total = item_price * oi.quantity
-        end
-
-        if oi.refunded then
-          refund_subtotal -= item_total
-          item_price = 0
-          item_total = 0
-        end
-        item_total = 0 if item_total.nil?
-        oi.price = 0 if oi.price.nil?
-        oi.quantity = 0 if oi.quantity.nil?
-        item_price = 0 if item_price.nil?
-        sum_taxes[oi.tax_profile.id] += item_total
-
-        name = oi.item.name
-
-        if oi.item_type_id == 3 and oi.item.coupon_type == 1 # percent coupon
-          list_of_items += "%s %19.19s %6.1f%% %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
-        elsif oi.item_type_id == 3 and oi.item.coupon_type == 3 # oi habtm oi relation needed otherwise b1g1 coupon rules are too complex here
-          list_of_items += "%s %19.19s\n" % [oi.item.tax_profile.letter, name]
-        else # normal item
-          if oi.quantity == Integer(oi.quantity) # integer quantity
-            list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          else # float quantity (e.g. weighed OrderItem)
-            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          end
-        end
-
-        if oi.discount_applied
-          discount_price = - oi.discount_amount # ( oi.item.base_price * oi.quantity - oi.total ) / oi.quantity
-          discount_total = discount_price * oi.quantity
-          if oi.refunded then
-            refund_subtotal -= discount_total
-            discount_price = 0
-            discount_total = 0
-          end
-          if oi.quantity == Integer(oi.quantity) # integer quantity
-            list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
-          else
-            list_of_items += "%s %19.19s %6.2f %6.2f %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
-          end
-          discount_subtotal += discount_total
-        end
-
-        if oi.rebate and oi.rebate > 0
-          rebate_price = - ( oi.price * oi.rebate / 100.0)
-          rebate_total = rebate_price * oi.quantity
-          if oi.refunded then
-            refund_subtotal -= rebate_total
-            rebate_price = 0
-            rebate_total = 0
-          end
-          list_of_items += "%s %19.19s %6.2f %6u %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
-          rebate_subtotal += rebate_total
-        end
-
-        subtotal += item_total
-      end %>
 <%= "------------------------------------------\n" %>
-<%= list_of_items %>
+<%= @report[:list_of_items] %>
 
-<% if @order.lc_points? and not @order.refunded %>
-<% subtotal -= @order.vendor.salor_configuration.dollar_per_lp * @order.lc_points %>
-Abzug: - <%= number_with_precision(@order.vendor.salor_configuration.dollar_per_lp * @order.lc_points, :precision => 2) %> (<%= @order.lc_points %> Punkte)
+<% unless @report[:lc_points_discount].zero? %>
+<%= "  %19.19s       %4u  %8.2f\n" % [t('printr.order_receipt.lc_points_substracted'), @report[:lc_points], @report[:lc_points_discount]] %>
 <% end %>
-
 <%= "------------------------------------------" %>
 
-<% if not @order.rebate.zero? or not discount_subtotal.zero? or not rebate_subtotal.zero? %>
-<%= "Zwischensumme                 EUR %8.2f" % subtotal %>
+<% if @report[:display_subtotal1] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal1'), @report[:unit], @report[:subtotal1]] %>
 <% end %>
-<%
-   sum1 = subtotal
-   if not discount_subtotal.zero?
-   sum1 = sum1 + discount_subtotal
-%>
-<%= "Aktionen Summe                EUR %8.2f" % discount_subtotal %>
-<%= "Zwischensumme                 EUR %8.2f" % [sum1] %>
+<% if @report[:display_subtotal2] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.discount_subtotal'), @report[:unit], @report[:discount_subtotal]] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal2'), @report[:unit], @report[:subtotal2]] %>
 <% end %>
-<%
-   if not rebate_subtotal.zero?
-   sum2 = sum1 + rebate_subtotal
-%>
-<%= "Einzelrabatte                 EUR %8.2f" % rebate_subtotal %>
-<%= "Zwischensumme                 EUR %8.2f" % [sum2] %>
+<% if @report[:display_subtotal3] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.rebate_subtotal'), @report[:unit], @report[:rebate_subtotal]] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal3'), @report[:unit], @report[:subtotal3]] %>
 <% end %>
-<%
-   if not coupon_subtotal.zero?
-   sum3 = sum2 + coupon_subtotal
-%>
-<%= "Gutscheine                EUR %8.2f" % coupon_subtotal %>
-<%= "Zwischensumme                 EUR %8.2f" % [sum2] %>
+<% if @report[:display_subtotal4] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.coupon_subtotal'), @report[:unit], @report[:coupon_subtotal]] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal4'), @report[:unit], @report[:subtotal4]] %>
 <% end %>
-<% rebate = 0 %>
-<% if @order.rebate_type == 'percent' and not @order.rebate.zero?    
-     rebate = - ( subtotal + discount_subtotal + rebate_subtotal + coupon_subtotal) * @order.rebate / 100
-%>
-<%= "Rabatt %4.2f%%                 EUR %8.2f" % [ @order.rebate, rebate ] %>
-<% elsif @order.rebate_type == 'fixed' and not @order.rebate.zero?
-   rebate = - @order.rebate %>
-<%= "Rabatt Fixbetrag              EUR %8.2f" % rebate %>
-
+<% if @report[:percent_rebate_amount] %>
+<%= "%10s %4.2f%% %s %8.2f\n" % [t('printr.order_receipt.rebate_percent'), @report[:percent_rebate], @report[:unit], @report[:percent_rebate_amount] ] %>
+<% elsif @report[:fixed_rebate_amount] %>
+<%= "%10s %s %8.2f\n" % [t('.rebate_fixed'), @report[:unit], @report[:fixed_rebate_amount]] %>
 <% end %>
 
-
-<% order_subtotal = subtotal + discount_subtotal + rebate_subtotal + coupon_subtotal + rebate %>
-<%= "SUMME                         EUR %8.2f\n" % order_subtotal %>
+<%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.subsubtotal'), @report[:unit], @report[:subsubtotal]] %>
 <%= "==========================================\n" %>
 
-<%
-if @order.payment_methods.any? then
-  ic = @order.payment_methods.find_by_internal_type 'InCash'
-  if ic then
-    @in_cash = ic.amount
-  end
-  bc = @order.payment_methods.find_by_internal_type 'ByCard'
-  if bc then
-    @by_card = bc.amount
-  end
-  gc = @order.payment_methods.find_by_internal_type 'ByGiftCard'
-  if gc then
-    @by_gift_card = gc.amount
-  end
-  oc = @order.payment_methods.find_by_internal_type 'OtherCredit'
-  if oc then
-    @other_credit = oc.amount
-  end
-  @in_cash ||= 0
-  @by_card ||= 0
-  @by_gift_card ||= 0
-  @other_credit ||= 0
-end
-pmseen = ['InCash','ByCard','ByGiftCard','OtherCredit']
-%>
-<% if refund_subtotal.zero? %>
-<%= "Gegeben Bar:                  EUR %8.2f" % @in_cash unless @in_cash.zero? %>
-<%= "Gegeben Karte:                EUR %8.2f" % @by_card unless @by_card.zero? %>
-<%= "Gegeben Geschenkkarte:        EUR %8.2f" % @by_gift_card unless @by_gift_card.zero? %>
-<%= "Andere Zahlungsweise          EUR %8.2f" % @other_credit unless @other_credit.zero? %>
-<% @order.payment_methods.each do |pm|  %>
-<%= "#{pm.name[0..5]}:                       EUR %8.2f\n" % pm.amount unless pmseen.include? pm.internal_type %>
+<% if @report[:refund_subtotal].zero? %>
+<% @report[:paymentmethods].to_a.each do |pm| %>
+<%= "%9.9s %19.19s %s %8.2f\n" % [t('printr.order_receipt.given'), pm[0], @report[:unit], pm[1]] %>
 <% end %>
-<%= "Retour:                       EUR %8.2f" % [@order.change_given] %>
+
+<%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.change'), @report[:unit], @report[:change_given]] %>
 <% else %>
-<% if @order.rebate_type == 'percent' and not @order.rebate.zero? %>
-<%= "Stornierung                   EUR %8.2f" % [ refund_subtotal - refund_subtotal * @order.rebate / 100 ] %>
-<% elsif @order.rebate_type == 'fixed' and not @order.rebate.zero? %>
-<%= "Stornierung                   EUR %8.2f" % [ refund_subtotal + @order.rebate ] %>
-<% else %>
-<%= "Stornierung                   EUR %8.2f" % [ refund_subtotal ] %>
-<% end %>
+
+<%= "%10s %s %8.2f\n" % [t('printr.order_receipt.refunds'), @report[:unit], @report[:refund_subtotal]] %>
 <% end %>
 
 
 <%= "\ea\x01" %>
 <%= "\e!\x01" %>
           netto     USt.  brutto
-<% 
-      list_of_taxes = ''
-      TaxProfile.all.each do |tax|
-        next if sum_taxes[tax.id] == 0
-        fact = tax.value/100.00
-        net = sum_taxes[tax.id] / (1.00+fact)
-        gro = sum_taxes[tax.id]
-        vat = gro-net
-        list_of_taxes += "%s: %2i%% %7.2f %7.2f %8.2f\n" % [tax.letter,tax.value,net,vat,gro]
-      end
-%>
-<%= list_of_taxes %>
+
+<%= @report[:list_of_taxes] %>
 <%= "\ea\x01" %><%= "\e!\x00" %>
-<% if @order.customer %>
 
 
+<% if @report[:customer] %>
+<%= @report[:customer][:company_name] %>
 
-<%= @order.customer.company_name %>
+<%= @report[:customer][:first_name] %> <%= @report[:customer][:last_name] %>
 
-<%= @order.customer.first_name %> <%= @order.customer.last_name %>
+<%= @report[:customer][:street1] %>
 
-<%= @order.customer.street1 %>
+<%= @report[:customer][:street2] %>
 
-<%= @order.customer.street2 %>
+<%= @report[:customer][:postalcode] %> <%= @report[:customer][:city] %>
 
-<%= @order.customer.postalcode %> <%= @order.customer.city %>
+Eingesetzte Treuepunkte: <%= @report[:customer][:paid_loyalty_points] %>
 
-Treuepunkte: <%= @order.loyalty_card.points.to_f - @order.lc_points.to_f %>
+Aktuelle Treuepunkte: <%= @report[:customer][:current_loyalty_points] %>
 <% end %>
-
-<%=  @order.paylife_blurb %>
-<%= "\n" %>
 
 <%= "\e!\x08" %>
 <% if @order.was_printed == true  %>
@@ -235,7 +89,6 @@ end %>
 
 
 <%= @register.salor_printer ? '' : 'Printed with Rails' %>
-
 
 
 

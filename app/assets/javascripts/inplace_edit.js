@@ -1,3 +1,72 @@
+var field_types = {
+  category_id: function (value) {
+    s = $(inplace_cats);
+    s = set_selected(s,value,0);
+    return s;
+  },
+  vendor_id: function (value) {
+    s = $(inplace_stores);
+    s = set_selected(s,value,0);
+    return s;
+  },
+  location_id: function (value) {
+    s = $(inplace_locations);
+    s = set_selected(s,value,0);
+    return s;
+  },
+  item_type_id: function (value) {
+    s = $(inplace_itemtypes);
+    s = set_selected(s,value,0);
+    return s;
+  },
+  status: function (value) {
+    s = $(inplace_shipmentstatuses);
+    s = set_selected(s,value,0);
+    return s;
+  },
+  rebate_type: function (value) {
+    s = $(inplace_rebatetypes);
+    s = set_selected(s,value,1);
+    return s;
+  },
+  the_shipper: receiver_shipper_select,
+  the_receiver: receiver_shipper_select
+};
+
+var fields_callbacks = {
+  rebate: function (elem) {
+    elem.addClass("keyboardable-int");
+    elem.addClass("rebate-amount");
+  },
+  price: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  quantity: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  tax: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  subtotal: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  total: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  points: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  lc_points: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  tax_profile_amount: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  rebate_type: function (elem) {
+    //make_select_widget('xxx',elem);
+  }
+};
+
 function make_in_place_edit(elem) {
   if (elem.hasClass('editmedone')) {
     return;    
@@ -119,41 +188,15 @@ function in_place_edit(id,x,y) {
   if (type == 'datepicker') {
 	  $('#inplaceedit').datepicker();
   }
+  if (field[0].tagName == 'SELECT') {
+    make_select_widget('', $('#inplaceedit'));
+  }
   inplaceEditBindEnter(true, id);
   //div.children('.kbd-show-button').trigger('mousedown');
   //focusInput($('#inplaceedit'));
 }
 
-var fields_callbacks = {
-  rebate: function (elem) {
-    elem.addClass("keyboardable-int");
-    elem.addClass("rebate-amount");
-  },
-  price: function (elem) {
-    elem.addClass("keyboardable-int");
-  },
-  quantity: function (elem) {
-    elem.addClass("keyboardable-int");
-  },
-  tax: function (elem) {
-    elem.addClass("keyboardable-int");
-  },
-  subtotal: function (elem) {
-    elem.addClass("keyboardable-int");
-  },
-  total: function (elem) {
-    elem.addClass("keyboardable-int");
-  },
-  points: function (elem) {
-    elem.addClass("keyboardable-int");
-  },
-  lc_points: function (elem) {
-    elem.addClass("keyboardable-int");
-  },
-  tax_profile_amount: function (elem) {
-    elem.addClass("keyboardable-int");
-  }
-};
+
 
 
 var receiver_shipper_select = function (value) {
@@ -161,38 +204,3 @@ var receiver_shipper_select = function (value) {
   s = set_selected(s,value,0);
   return s;
 }
-
-var field_types = {
-  category_id: function (value) {
-    s = $(inplace_cats);
-    s = set_selected(s,value,0);
-    return s;
-  },
-  vendor_id: function (value) {
-    s = $(inplace_stores);
-    s = set_selected(s,value,0);
-    return s;
-  },
-  location_id: function (value) {
-    s = $(inplace_locations);
-    s = set_selected(s,value,0);
-    return s;
-  },
-  item_type_id: function (value) {
-    s = $(inplace_itemtypes);
-    s = set_selected(s,value,0);
-    return s;
-  },
-  status: function (value) {
-    s = $(inplace_shipmentstatuses);
-    s = set_selected(s,value,0);
-    return s;
-  },
-  rebate_type: function (value) {
-    s = $("inplace_rebatetypes");
-    s = set_selected(s,value,1);
-    return s;
-  },
-  the_shipper: receiver_shipper_select,
-  the_receiver: receiver_shipper_select
-};

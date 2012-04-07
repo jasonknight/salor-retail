@@ -57,12 +57,12 @@ module SalorScope
       })
       klass.scope(:visible, lambda { |*args|
          if inst.respond_to? :hidden
-           return {:conditions => "hidden = 0 or hidden is null"}
+           return {:conditions => "`#{ inst.class.table_name}`.`hidden` = 0 or `#{ inst.class.table_name}`.`hidden` is null"}
          end
                })
       klass.scope(:invisible, lambda { |*args|
          if inst.respond_to? :hidden
-           return {:conditions => 'hidden = 1'}
+           return {:conditions => "`#{ inst.class.table_name }`.`hidden` = 1"}
          end
       })
       klass.scope(:by_user, lambda { |*args|

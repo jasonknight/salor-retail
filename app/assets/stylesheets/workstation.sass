@@ -753,7 +753,14 @@ span.version
   position: fixed
   left: 0px
   bottom: 0px
-  font-size: 50%
+  font-size: 70%
+
+span.salorbinversion
+  position: fixed
+  right: 0px
+  bottom: 0px
+  font-size: 70%
+
 
 /* Main and Main Content Divs */
 
@@ -866,6 +873,7 @@ div.content-box > div.title-container  > div.reload-button-admin
 div.content-box * div.breadcrumb-container 
   font-size: $text_size_normal
   clear: both
+  padding: 10px 0px
   background-color: none
 
 div.content-box * div.breadcrumb-container > a 
@@ -1365,6 +1373,7 @@ div.pos-menu div.pos-configuration
 
 div.cash-drop, div#coincalculator
   padding: 10px
+  z-index: 10
 
 .error-input 
   border: 2px solid red
@@ -2765,6 +2774,7 @@ div.select-widget-button,div.select-widget-entry
   :display inline-block
 div.select-widget-display
   @include widget
+  :background-color $middleground2
   :padding 10px
   :z-index 1025
 div.plugin-panel div

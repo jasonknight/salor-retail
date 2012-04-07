@@ -1,5 +1,10 @@
 //=require genericjs
 
+$ ->
+  if typeof(Salor) != 'undefined'
+    Salor.stopDrawerObserver()
+    $('#salorbinversion').html(Salor.version());
+
 window.showButtonCategoryContainer = (id) ->
   $('.button-category-container').hide()
   $('#' + id).show()
@@ -12,10 +17,6 @@ window.showJsError = (err) ->
   txt+="Click OK to continue.\n\n"
   alert(txt)
 
-$ ->
-  if typeof(Salor) != 'undefined'
-    Salor.stopDrawerObserver()
-
 window.showButtonCategoryContainer = (id) ->
   $('.button-category-container').hide()
   $('#' + id).show()
@@ -24,6 +25,6 @@ window.quick_open_drawer = () ->
   if Register.cash_drawer_path != ''
     if typeof Salor != 'undefined'
       Salor.stopDrawerObserver(Register.cash_drawer_path)
-      Salor.newOpenCashDrawer(Register.cash_drawer_path)
+      setTimeout("Salor.newOpenCashDrawer(Register.cash_drawer_path);",150);
     else
       $.get('/vendors/open_cash_drawer')

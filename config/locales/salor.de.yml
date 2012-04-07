@@ -165,7 +165,8 @@ de:
       quantity_sold: Menge verkauft
       rebate: Rabatt
       rebate_type: Rabatt-Typ
-      receipt_blurb: Rechnungsmitteilung
+      receipt_blurb: Rechnung Kopf
+      receipt_blurb_footer: Rechnung Fuß
       sales_metric: Verkaufseinheit
       shipment:
         from: von
@@ -388,6 +389,7 @@ de:
     report_accounting: Transaktionen
     report_day_range: Monatsbericht
     wholesaler_update: Artikelupdate Großhändler
+    law_reports: "§131 Abs. 2, 3 BAO<br>Bericht-Download"
     
     
   notifications:
@@ -460,6 +462,41 @@ de:
       sum_transactions: Summe Buchungen
       noncash-refunds: Nichtbargeld-Stornierungen
       cash-refunds: Bargeld-Stornierungen
+      from: von
+      to: bis
+    report_range:
+      title: Tagesbericht
+      sums_by_category: nach Kategorie
+      sums_by_tax_profile: nach Steuern
+      sums_by_payment_methods: nach Zahlungsmethoden
+      sum: Summe
+      sums_by_transaction_types: pro Buchungsart
+      transactions: Buchungen
+      transaction_tag: Journal
+      drops: Einzahlungen
+      drop: Einzahlung
+      payouts: Auszahlungen
+      payout: Auszahlung
+      transaction_total: Gesamtbewegung
+      transaction_journal: Buchungsjournal
+      time: Zeit
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      None: Unbenannt
+      count_orders: Anzahl Verkäufe
+      sales: Verkäufe
+      payments: Zahlungen
+      cash_drawer: Kassenlade
+      revenue: Umsatz
+      sum_gross: Summe brutto
+      sum_net: Summe netto
+      gross: brutto
+      net: netto
+      sum_transactions: Summe Buchungen
+      noncash-refunds: Nichtbargeld-Stornierungen
+      cash-refunds: Bargeld-Stornierungen
+      from: von
+      to: bis
       
 
   printr:
@@ -508,6 +545,12 @@ de:
       calculated_drawer_amount: Kassenlade
       system_drawer_amount: Kassenlade derzeitiger Stand
       warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor und laden Sie diese Seite neu.
+    order_receipt:
+      lc_points_substracted: Treuepunkte Abzug
+      subsubtotal: GESAMTSUMME
+      change: Wechselgeld
+      refund: Rabatte auf gesamten Einkauf
+      given: Gegeben
 
     word:
       cancelled: storniert

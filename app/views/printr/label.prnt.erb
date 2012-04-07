@@ -1,5 +1,5 @@
 <%= "\x1B\x40" %><%= "\x1D\x68\x25" %><%= "\x1D\x48\x01" %><%= "\x1D\x77\x02" %><% @items.each do |i| %>
-<%= "\e!\x18" %><%= i.name[0..15] %>
+<%= "\e!\x18" %><%= i.name[0..30] %>
 <% if i.weight_metric == 'GR'
      factor = 1000
      base_metric = 'KG'
@@ -11,11 +11,13 @@
      base_metric = i.weight_metric
    end
 %>
-<%= (i.weight.nil? or i.weight.zero?) ? '' : " #{ i.weight } #{ i.weight_metric } (EUR #{ "%.2f" % [i.base_price * factor / i.weight] }/#{ base_metric })" %>
+<%= (i.weight.nil? or i.weight.zero?) ? '' : " #{ i.weight } #{ i.weight_metric }" %>
 
+<%= "\x1B\x61\x02" %><%= "\x1D\x21\x00" %><%= "(EUR #{ "%.2f" % [i.base_price * factor / i.weight] }/#{ base_metric })" %>
 
-<%= "\x1B\x61\x02" %><%= "\x1D\x21\x00" %><%= "per " if i.sales_metric %><%= i.sales_metric %> <%= "\x1D\x21\x22" %>EUR  <%= "%.2f" % [i.base_price] %>
 <%= "\x1D\x56\x00" %>
+<%= "\x1B\x61\x02" %><%= "\x1D\x21\x00" %><%= "per " if i.sales_metric %><%= i.sales_metric %> <%= "\x1D\x21\x22" %>EUR  <%= "%.2f" % [i.base_price] %>
+
 <%= "\x1B\x61\x00" %><%= "\x1D\x6B\x04#{ i.sku.upcase }\x00" %>
 
 

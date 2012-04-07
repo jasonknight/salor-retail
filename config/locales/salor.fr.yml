@@ -166,6 +166,7 @@ fr:
       rebate: remise
       rebate_type: type de remise
       receipt_blurb: texte reçu
+      receipt_blurb_footer: XXXReceipt footer
       sales_metric: syst.métrique vente
       shipment:
         from: de
@@ -388,6 +389,7 @@ fr:
     report_accounting: rapport comptabilité
     report_day_range: rapport mensuel
     wholesaler_update: mettre à jour distributeur
+    law_reports: XXX Report Download
     
     
   notifications:
@@ -445,21 +447,53 @@ fr:
       transaction_total: total de la transaction
       transaction_journal: journal de la transaction
       time: heure
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      None: Not specified
-      count_orders: Count of orders
-      sales: Sales
-      payments: Payments
-      cash_drawer: Cash drawer
-      revenue: Revenue
-      sum_gross: Sum gross
-      sum_net: Sum net
-      gross: gross
-      net: net
-      sum_transactions: Sum transactions
-      noncash-refunds: Noncash-Refunds
-      cash-refunds: Cash-Refunds
+      OrderItemRefund: XXX Item Refund
+      OrderRefund: XXX Order Refund
+      None: XXX Not specified
+      count_orders: XXX Count of orders
+      sales: XXX Sales
+      payments: XXX Payments
+      cash_drawer: XXX Cash drawer
+      revenue: XXX Revenue
+      sum_gross: XXX Sum gross
+      sum_net: XXX Sum net
+      gross: XXX gross
+      net: XXX net
+      sum_transactions: XXX Sum transactions
+      noncash-refunds: XXX Noncash-Refunds
+      cash-refunds: XXX Cash-Refunds
+    report_range:
+      title: rapport journée
+      sums_by_category: sommes par catégorie
+      sums_by_tax_profile: sommes par type de taxe
+      sums_by_payment_methods: sommes par moyens de paiement
+      sum: somme
+      sums_by_transaction_types: sommes par type transaction
+      transactions: transactions
+      transaction_tag: étiquette transaction
+      drops: versements caisse
+      drop: versement caisse
+      payouts: retraits caisse
+      payout: retrait caisse
+      transaction_total: total de la transaction
+      transaction_journal: journal de la transaction
+      time: heure
+      OrderItemRefund: XXX Item Refund
+      OrderRefund: XXX Order Refund
+      None: XXX Not specified
+      count_orders: XXX Count of orders
+      sales: XXX Sales
+      payments: XXX Payments
+      cash_drawer: XXX Cash drawer
+      revenue: XXX Revenue
+      sum_gross: XXX Sum gross
+      sum_net: XXX Sum net
+      gross: XXX gross
+      net: XXX net
+      sum_transactions: XXX Sum transactions
+      noncash-refunds: XXX Noncash-Refunds
+      cash-refunds: XXX Cash-Refunds
+
       
 
   printr:
