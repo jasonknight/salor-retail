@@ -1,3 +1,4 @@
+require 'zlib'
 # ------------------- Salor Point of Sale ----------------------- 
 # An innovative multi-user, multi-store application for managing
 # small to medium sized retail stores.
