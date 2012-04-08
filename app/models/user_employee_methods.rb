@@ -567,7 +567,7 @@ module UserEmployeeMethods
         taxname = oi.tax_profile.name
         item_price = case oi.behavior
           when 'normal' then oi.price
-          when 'gift_card' then oi.activated ? -oi.total : oi.total
+          when 'gift_card' then oi.activated ? - oi.total : oi.total
           when 'coupon' then oi.order_item ? - oi.order_item.coupon_amount / oi.quantity  : 0
         end
         item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
