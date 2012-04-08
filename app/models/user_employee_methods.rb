@@ -57,7 +57,6 @@ module UserEmployeeMethods
       return Digest::SHA2.hexdigest("#{string}")
     end
     mod.class_eval do
-      # {START}
       def generate_password(string)
         return Digest::SHA2.hexdigest("#{string}")
       end
@@ -92,7 +91,6 @@ module UserEmployeeMethods
       def password
         ""
       end
-      # {END}
     end # end class_eval
   end # end self.included
   #
