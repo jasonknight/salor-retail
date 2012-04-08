@@ -497,6 +497,7 @@ module UserEmployeeMethods
   def best_selling_locations
     return Location.scopied.order("cash_made DESC").limit(10)
   end
+  # {END}
   def expiring
     items = []
     cap = Time.now.beginning_of_day + 5.days
@@ -508,6 +509,7 @@ module UserEmployeeMethods
     end
     return items
   end
+  # {START}
   def get_order_totals
     totals = []
     begin
