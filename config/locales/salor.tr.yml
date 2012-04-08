@@ -469,6 +469,8 @@ tr:
       sum_transactions: Sum transactions
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
+      from: From
+      to: To
     report_range:
       title: day report
       sums_by_category: sums by category
@@ -500,6 +502,8 @@ tr:
       sum_transactions: Sum transactions
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
+      from: From
+      to: To
       
 
   printr:

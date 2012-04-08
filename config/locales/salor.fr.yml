@@ -469,6 +469,8 @@ fr:
       sum_transactions: XXX Sum transactions
       noncash-refunds: XXX Noncash-Refunds
       cash-refunds: XXX Cash-Refunds
+      from: XXXFrom
+      to: XXXTo
     report_range:
       title: rapport journée
       sums_by_category: sommes par catégorie
@@ -500,6 +502,8 @@ fr:
       sum_transactions: XXX Sum transactions
       noncash-refunds: XXX Noncash-Refunds
       cash-refunds: XXX Cash-Refunds
+      from: XXXFrom
+      to: XXXTo
 
       
 

@@ -398,12 +398,12 @@ de:
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
     shipments_move_item: Artikel erfolgreich verschoben ...
 
-
   exception_page:
     oops_an_error_occurred: "Oops! Es ist leider ein Fehler aufgetreten"
     exception_description: "Fehlerbeschreibung:"
     exception_in_files: "Der Fehler trat in diesen Dateien auf:"
     assistance_text: 'Bitte klicken Sie auf den Button "Filialen" und versuchen Sie es nochmals. Falls der Fehler erneut auftritt, rufen Sie den Kundensupport und verbinden Sie sich mit dem Button "Fernwartung". Wir sind umgehend um Sie bemüht.'
+
   orders:
     report:
       title: Verkaufsbericht
