@@ -362,6 +362,9 @@ class OrderItem < ActiveRecord::Base
       puts "self.rebate: #{ttl}"
     end
     puts "ttl at this point is: #{ttl}"
+    if self.discount_amount > 0 then
+      ttl -= self.discount_amount
+    end
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
       puts "In update, ttl is #{ttl} and self.total is #{self.total}"
@@ -529,7 +532,7 @@ class OrderItem < ActiveRecord::Base
     else
       # puts "Not Applying Discounts at all..."
     end
-    p -= damount
+    #p -= damount
     self.update_attribute(:discount_applied,true) if self.discounts.any?
     self.update_attribute(:discount_amount,damount) if self.discounts.any?
     p = p.round(2)
