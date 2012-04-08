@@ -206,6 +206,7 @@ module ApplicationHelper
       :trash => 'trash',
       :user6 => 'user6',
       :user7 => 'user7',
+      :nurse => 'user2',
       :save => 'save'
     }
     return icons[name] + '_' + size.to_s + '.png'

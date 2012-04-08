@@ -47,9 +47,9 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class HomeController < ApplicationController
-  before_filter :authify, :except => [:index, :load_clock,:you_have_to_pay]
-  before_filter :initialize_instance_variables, :only => [:user_employee_index, :edit_owner, :update_owner]
-  before_filter :check_role, :only => [:edit_owner, :update_owner]
+  before_filter :authify, :except => [:index, :load_clock,:you_have_to_pay, :remote_service, :connect_remote_service, :get_connection_status]
+  before_filter :initialize_instance_variables, :only => [:user_employee_index, :edit_owner, :update_owner, :remote_service, :connect_remote_service, :get_connection_status]
+  before_filter :check_role, :only => [:edit_owner, :update_owner], :except => [:remote_service, :connect_remote_service, :get_connection_status]
   def errors_display
     @exception = $!
   end
@@ -105,6 +105,8 @@ class HomeController < ApplicationController
       end
     end
   end
+
+  #
   def backup_database
     dbconfig = YAML::load(File.open('config/database.yml'))
     mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
@@ -114,7 +116,26 @@ class HomeController < ApplicationController
     `mysqldump -u #{username} -p#{password} #{database} > tmp/backup.sql`
     send_file 'tmp/backup.sql', :filename => "salor-backup-#{ l Time.now, :format => :datetime_iso2 }.sql"
   end
+
+  #
   def backup_logfile
     send_file 'log/production.log', :filename => "salor-logfile-#{ l Time.now, :format => :datetime_iso2 }.log"
+  end
+
+  #
+  def get_connection_status
+    @status = `netstat -pna | grep :26`
+  end
+
+  #
+  def connect_remote_service
+    @status = `netstat -pna | grep :26`
+    if @status.empty? # don't create more process than one, otherwise the remote disconnection won't stop the additional processes
+      connection_thread = fork do
+        exec "expect #{ File.join(Rails.root, 'salor_ssh_reverse_connect.expect').to_s } #{ params[:pw] }"
+      end
+    end
+    render :nothing => true
+    #Process.detach(job1)
   end
 end

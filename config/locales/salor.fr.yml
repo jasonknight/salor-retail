@@ -282,6 +282,7 @@ fr:
     assign: assigner
 
   menu:
+    remote_service: XXX Remote Service
     usb_device: Usb Stick
     salortrainer: XXX Salor Trainer
     salorlive: XXX Salor Live!
@@ -821,6 +822,14 @@ fr:
     user_employee_index:
       backup_database: Créer une copie de sauvergarde de la BDD
       backup_logfile: Créer une copie de sauvergarde du journal
+    remote_service:
+      title: Remote XXX Service
+      enter_password: XXX Password
+      connect: XXX Connect!
+      requesting_connection_status: XXX Requesting connection status ...
+    get_connection_status:
+      connected: XXX connected
+      disconnected: XXX disconnected
       
   InCash: En espèces
   ByCard: Par carte bleue

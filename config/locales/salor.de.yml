@@ -282,6 +282,7 @@ de:
     assign: setze zu
 
   menu:
+    remote_service: Fernwartung
     usb_device: Usb Stick
     salortrainer: Salor Trainer
     salorlive: Salor Live!
@@ -854,6 +855,14 @@ de:
     user_employee_index:
       backup_database: Datenbank herunterladen
       backup_logfile: Logdatei herunterladen
+    remote_service:
+      title: Fernwartung
+      enter_password: Passwort
+      connect: Verbinden!
+      requesting_connection_status: Verbindungsstatus wird angefragt...
+    get_connection_status:
+      connected: verbunden
+      disconnected: getrennt
       
   InCash: In Bar
   ByCard: Karte

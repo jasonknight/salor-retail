@@ -639,8 +639,9 @@ span.link, a
 
 div.header 
   background: $middleground
-  @include rounded_corners_bottom
+  @include rounded_corners_all
   height: $header_height
+  padding: 5px 0px -3px 0px
   margin-bottom: 17px
 
 div.header > ul 
@@ -2807,3 +2808,20 @@ div.shipment_item_attr_header_quantity
 
 div.shipment_item_attr_header_stock_location_id
   :width 100px
+
+div.request_service
+  :padding-top 100px
+  text-align: center
+  input#service_connect_password
+    font-size: 200%
+    width: 200px
+  div.generic-button
+    display: inline-block
+  div#connection_status
+    font-size: 140%
+    text-align: center
+    padding: 20px
+    width: 600px
+    margin: auto
+    background-color: #7A607E
+    @include rounded_corners_all
