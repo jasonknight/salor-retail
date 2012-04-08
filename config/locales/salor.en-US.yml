@@ -398,6 +398,12 @@ en-US:
     shipments_move_all_items: all items were successfully moved
     shipments_move_item: item was successfully moved
 
+  exception_page:
+    oops_an_error_occurred: "Oops! An Error occurred"
+    exception_description: "Error description:"
+    exception_in_files: "The Error occurred in the following files:"
+    assistance_text: 'Please click on the button "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the button "Remote Service". We will help you immediately.'
+
   orders:
     report:
       title: Sums

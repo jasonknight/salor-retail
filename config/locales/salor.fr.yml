@@ -398,6 +398,12 @@ fr:
     shipments_move_all_items: Tous les articles ont été déplacés avec succès
     shipments_move_item: L'article a été déplacé avec succès
 
+  exception_page:
+    oops_an_error_occurred: "XXX Oops! An Error occurred"
+    exception_description: "XXX Error description:"
+    exception_in_files: "XXX The Error occurred in the following files:"
+    assistance_text: 'XXX Please click on the button "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the button "Remote Service". We will help you immediately.'
+
   orders:
     report:
       title: Additions
