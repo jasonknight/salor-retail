@@ -227,6 +227,10 @@ class OrdersController < ApplicationController
       flash[:notice] = I18n.t("system.errors.gift_card_empty")
       render :action => :update_pos_display and return
     end
+    if @item.class == Item and @item.behavior == 'coupon' and not @order.order_items.visible.where(:sku => @item.coupon_applies).any? then
+      flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
+      render :action => :update_pos_display and return
+    end
     if @item.class == LoyaltyCard and @item.customer then
       @loyalty_card = @item
       @order.customer = @loyalty_card.customer
