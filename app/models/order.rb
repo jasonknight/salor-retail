@@ -523,7 +523,7 @@ class Order < ActiveRecord::Base
         gc.item.save
       else
         gc.item.update_attribute(:activated,true)
-        gc.item.update_attribute(:amount_remaining, gc.price)
+        gc.item.update_attribute(:amount_remaining, gc.item.base_price)
       end
     end
   end

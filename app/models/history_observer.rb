@@ -79,7 +79,7 @@ class HistoryObserver < ActiveRecord::Observer
   end
   def before_destroy(object)
     sen = 2
-    if [:order,:order_item,:employee].include? object.class.to_sym then
+    if [:order,:order_item,:employee].include? "#{object.class}".to_sym then
       sen = 1
     end
     History.record("destroy_#{object.class.to_s}",object,sen)

@@ -1,9 +1,14 @@
-<% if GlobalErrors.any? or GlobalErrors.any_fatal? %>
+<% if GlobalErrors.any? or GlobalErrors.any_fatal? or flash[:notice] %>
   $('.notice-container').html('');
   <% GlobalErrors.get_errors.each do |error| %>
     var error = $('<div class="error"><%= error[1] %></div><br />');
     $('.notice-container').append(error);
   <% end %>
+  <% if flash[:notice] %>
+    var error = $('<div class="error"><%= flash[:notice] %></div><br />');
+    $('.notice-container').append(error);
+
+  <% end -%>
   initNotice();
   <% GlobalErrors.flush  %>
 <% end %>

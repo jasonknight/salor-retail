@@ -223,6 +223,10 @@ class OrdersController < ApplicationController
       end
     end
     @item = Item.get_by_code(params[:sku])
+    if @item.class == Item and @item.activated == true and @item.behavior == 'gift_card' and @item.amount_remaining <= 0 then
+      flash[:notice] = I18n.t("system.errors.gift_card_empty")
+      render :action => :update_pos_display and return
+    end
     if @item.class == LoyaltyCard and @item.customer then
       @loyalty_card = @item
       @order.customer = @loyalty_card.customer

@@ -9,9 +9,9 @@ class History < ActiveRecord::Base
     if self.owner_id.nil? then
       self.owner = $User
     end
-    self.url = $Request.url
-    self.params = $Params.to_json
-    self.ip = $Request.ip
+    self.url = $Request.url if $Request
+    self.params = $Params.to_json if $Params
+    self.ip = $Request.ip if $Request
   end
   def self.record(action,object,sen=5)
     # sensitivity is from 5 (least sensitive) to 1 (most sensitive)
