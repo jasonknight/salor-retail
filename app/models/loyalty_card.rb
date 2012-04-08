@@ -54,6 +54,14 @@ class LoyaltyCard < ActiveRecord::Base
   has_many :orders, :through => :customer
   before_save :clean_model
   before_update :clean_model
+  validate :validify
+  def validify
+    clean_model
+    if LoyaltyCard.find_by_sku(self.sku) then
+      errors.add(:sku, I18n.t('system.errors.sku_must_be_unique'))
+      GlobalErrors.append_fatal('system.errors.sku_must_be_unique');
+    end
+  end
   def clean_model
     self.sku = self.sku.gsub(' ','')
   end

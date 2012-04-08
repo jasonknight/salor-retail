@@ -372,8 +372,8 @@ class Item < ActiveRecord::Base
     make_valid
     @item = Item.all_seeing.find_by_sku(self.sku)
     if not @item.nil? and not self.id == @item.id then
-      errors.add(:sku, I18n.t('system.errors.sku_must_be_unique'))
-      GlobalErrors.append_fatal('system.errors.sku_must_be_unique');
+      errors.add(:sku, I18n.t('system.errors.sku_must_be_unique',:sku => self.sku))
+      GlobalErrors.append_fatal('system.errors.sku_must_be_unique',self,{:sku => self.sku});
     end
     if self.item_type.behavior == 'coupon' then
       unless Item.find_by_sku(self.coupon_applies) then

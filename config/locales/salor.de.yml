@@ -665,7 +665,7 @@ de:
       shipment_item_already_in_stock: "Artikel %{sku} liegt bereits auf Lager."
       shipment_item_move_failed: "Artikel %{sku} weist folgenden Fehler auf: %{error}"
       shipment_item_nil: Artikel aus from_shipment_item war nil?
-      sku_must_be_unique: muss einzigartig sein.
+      sku_must_be_unique: "%{sku} muss einzigartig sein."
       uspecified_error: Etwas Schlimmes ist passiert. Bitte kontaktieren Sie den technischen Support! Versuchen Sie, diese Seite neu zu laden.
       value_not_set: Nicht gesetzt
       order_failed: Verkauf konnte nicht abgeschlossen werden.

@@ -639,7 +639,7 @@ en-US:
       shipment_item_already_in_stock: Item %{sku} is already in stock
       shipment_item_move_failed: "Item %{sku} failed to move with error: %{error}"
       shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: must be unique
+      sku_must_be_unique: "%{sku} must be unique"
       uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
       value_not_set: NotSet
       order_failed: Order could not be finished.
