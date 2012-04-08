@@ -276,7 +276,7 @@ class Order < ActiveRecord::Base
 	      # so we won't add it, but now we need to do some magic if it is a coupon
         oo.update_attribute :hidden, 1
 	      if oi.behavior == 'coupon' then
-	        roi = self.order_items.joins(:item).where("items.sku = '#{oi.item.coupon_applies}'")
+	        roi = self.order_items.joins(:item).readonly(false).where("items.sku = '#{oi.item.coupon_applies}'")
 	        if roi then
 	          roi = roi.first
 	          roi.update_attribute(:coupon_amount,0) if roi

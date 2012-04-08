@@ -308,6 +308,11 @@ class OrderItem < ActiveRecord::Base
     if self.order and self.order.paid == 1 then
       return self.total
     end
+    if self.behavior == 'coupon' then
+      self.update_attribute :total,self.price
+      return self.price
+    end
+
     #return self.total if self.order and self.order.paid == 1
     if self.order and self.order.buy_order or self.is_buyback then
       ttl = self.price * self.quantity
@@ -348,7 +353,7 @@ class OrderItem < ActiveRecord::Base
         return p
       end
     end
-    ttl = 0
+        ttl = 0
     self.quantity = 0 if self.quantity.nil?
     if self.item.parts.any? and self.item.calculate_part_price then
       self.item.parts.each do |part|
@@ -457,12 +462,14 @@ class OrderItem < ActiveRecord::Base
     return 0 if ttl <= 0
     
     if self.item.coupon_type == 1 then #percent off self type
-      if self.quantity >= oi.quantity then
-        q = oi.quantity
-      else
-        q = self.quantity
+      puts "!!! coupon is percent"
+      if self.quantity > oi.quantity then
+        puts "!!! updating quantity"
+        self.update_attribute :quantity,oi.quantity
+        self.quantity = oi.quantity
       end
-      amnt = (((self.item.base_price / 100) * oi.price) * q)
+      q = self.quantity
+      amnt = (oi.price * quantity) * (self.price / 100)
     elsif self.item.coupon_type == 2 then #fixed amount off
       # puts "Coupon is fixed"
       if self.price > ttl then
@@ -473,6 +480,7 @@ class OrderItem < ActiveRecord::Base
         amnt = self.item.base_price * self.quantity
         # puts "Setting to self.total " + self.item.base_price.to_s
       end
+      self.update_attribute(:price,amnt)
       # puts "Fixed amnt = " + amnt.to_s
     elsif self.item.coupon_type == 3 then #buy 1 get 1 free
       if oi.quantity > 1 then
@@ -490,13 +498,13 @@ class OrderItem < ActiveRecord::Base
       else
         add_salor_error("system.errors.coupon_not_enough_items")
       end
+      self.update_attribute(:price,amnt)
     else
       # puts "couldn't figure out coupon type"
     end
     oi.update_attribute(:coupon_amount,amnt)
     oi.update_attribute(:coupon_applied, true)
     # puts "## Updating Attribute to #{amnt}"
-    self.update_attribute(:price,amnt)
     if amnt > 0 then
       oi.coupons << self
       oi.save
