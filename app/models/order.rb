@@ -46,6 +46,9 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+# {VOCABULARY} order price total quantity order_item gift_card item hidden behavior
+# {VOCABULARY} cash_register tax vendor customer paid pay transfer undo
+# {VOCABULARY} payment_method payment_type salor appconfig coupon
 class Order < ActiveRecord::Base
  # {START}
 	include SalorScope
