@@ -289,6 +289,7 @@ class OrderItem < ActiveRecord::Base
 	end
 	#
   def calculate_total(order_subtotal=0)
+    return self.total if self.order and self.order.paid == 1
     if self.order and self.order.buy_order or self.is_buyback then
       ttl = self.price * self.quantity
       if not ttl == self.total then
@@ -323,8 +324,8 @@ class OrderItem < ActiveRecord::Base
         else
           p = self.price
         end
-        self.update_attribute(:price, self.price)
-        self.update_attribute(:total,self.price) 
+        self.update_attribute(:price, self.price) if self.order and self.order.paid == 1
+        self.update_attribute(:total,self.price)  if self.order and self.order.paid == 1
         return p
       end
     end
@@ -368,7 +369,7 @@ class OrderItem < ActiveRecord::Base
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
       puts "In update, ttl is #{ttl} and self.total is #{self.total}"
-      self.update_attribute(:total,ttl)
+      self.update_attribute(:total,ttl) if self.order and not self.order.paid == 1
     end
     puts "Returning total of: #{self.total}"
     return self.total
