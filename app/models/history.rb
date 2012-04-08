@@ -1,4 +1,5 @@
 class History < ActiveRecord::Base
+  # {START}
   belongs_to :owner, :polymorphic => true
   belongs_to :model, :polymorphic => true
   include SalorBase
@@ -24,4 +25,5 @@ class History < ActiveRecord::Base
     end
     h.save
   end
+  # {END}
 end

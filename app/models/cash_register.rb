@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class CashRegister < ActiveRecord::Base
+  # {START}
 	include SalorScope
 	include SalorBase
   include SalorModel
@@ -76,4 +77,5 @@ class CashRegister < ActiveRecord::Base
     cats_tags.merge!(paymentmethod_sums)
     return cats_tags
   end
+  # {END}
 end

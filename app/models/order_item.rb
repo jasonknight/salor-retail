@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class OrderItem < ActiveRecord::Base
+  # {START}
   include SalorScope
   include SalorBase
   include SalorError
@@ -652,4 +653,5 @@ class OrderItem < ActiveRecord::Base
       the_item.location.update_attribute(:cash_made, the_item.location.cash_made + self.total)
     end
   end
+  # {END}
 end

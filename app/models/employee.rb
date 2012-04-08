@@ -48,6 +48,7 @@
 # functioning of your business.
 require 'digest/sha2'
 class Employee < ActiveRecord::Base
+  # {START}
 	include SalorScope
 	include SalorBase
   include SalorModel
@@ -109,4 +110,5 @@ class Employee < ActiveRecord::Base
   def name_with_username
     "#{ first_name } #{ last_name } (#{ username })"
   end
+  # {END}
 end
