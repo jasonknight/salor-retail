@@ -7,7 +7,9 @@
 
 <%= @order.vendor.salor_configuration.receipt_blurb.to_s if @order.vendor %>
 <%= "\n\e!\x01" + "\ea\x00" %>
-<%= t("receipts.invoice_numer_X_at_time", :number => @order.id, :datetime => l(@order.created_at, :format => :iso)) %> <%= @order.cash_register.name %>
+<%= t("receipts.invoice_numer_X_at_time", :number => @order.id, :datetime => l(@order.created_at, :format => :iso)) %>
+
+<%= @order.cash_register.name %>
 <%= "\e!\x00" %>
 
 <%= "------------------------------------------\n" %>
@@ -34,9 +36,9 @@
 <%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal4'), @report[:unit], @report[:subtotal4]] %>
 <% end %>
 <% if @report[:percent_rebate_amount] %>
-<%= "%10s %4.2f%% %s %8.2f\n" % [t('printr.order_receipt.rebate_percent'), @report[:percent_rebate], @report[:unit], @report[:percent_rebate_amount] ] %>
+<%= "%25.25s %2i%% %s %8.2f\n" % [t('printr.order_receipt.rebate_percent'), @report[:percent_rebate], @report[:unit], @report[:percent_rebate_amount] ] %>
 <% elsif @report[:fixed_rebate_amount] %>
-<%= "%10s %s %8.2f\n" % [t('.rebate_fixed'), @report[:unit], @report[:fixed_rebate_amount]] %>
+<%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.rebate_fixed'), @report[:unit], @report[:fixed_rebate_amount]] %>
 <% end %>
 
 <%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.subsubtotal'), @report[:unit], @report[:subsubtotal]] %>
@@ -50,13 +52,13 @@
 <%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.change'), @report[:unit], @report[:change_given]] %>
 <% else %>
 
-<%= "%10s %s %8.2f\n" % [t('printr.order_receipt.refunds'), @report[:unit], @report[:refund_subtotal]] %>
+<%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.refunded'), @report[:unit], @report[:refund_subtotal]] %>
 <% end %>
 
 
 <%= "\ea\x01" %>
 <%= "\e!\x01" %>
-          netto     USt.  brutto
+<%= "          %5.5s     %4.4s  %6.6s" % [t('printr.order_receipt.net'), t('printr.order_receipt.tax'), t('printr.order_receipt.gross')] %>
 
 <%= @report[:list_of_taxes] %>
 <%= "\ea\x01" %><%= "\e!\x00" %>
@@ -73,10 +75,11 @@
 
 <%= @report[:customer][:postalcode] %> <%= @report[:customer][:city] %>
 
-Eingesetzte Treuepunkte: <%= @report[:customer][:paid_loyalty_points] %>
-
-Aktuelle Treuepunkte: <%= @report[:customer][:current_loyalty_points] %>
+<%= t('printr.order_receipt.current_loyalty_points') %>: **<%= @report[:customer][:current_loyalty_points] %>**
 <% end %>
+
+<%= @order.vendor.salor_configuration.receipt_blurb_footer.to_s if @order.vendor %>
+
 
 <%= "\e!\x08" %>
 <% if @order.was_printed == true  %>

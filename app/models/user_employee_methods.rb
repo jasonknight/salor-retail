@@ -572,7 +572,7 @@ module UserEmployeeMethods
         end
         item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
         item_price = -oi.price if o.buy_order
-        item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
+        item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity # this is depreciated elsewhere and should never happen
         item_total = item_total * ( 1 - o.rebate / 100.0 ) if o.rebate_type == 'percent'
         item_total -= o.rebate / o.order_items.visible.count if o.rebate_type == 'fixed'
         item_total -= o.lc_discount_amount / o.order_items.visible.count

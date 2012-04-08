@@ -761,7 +761,7 @@ class Order < ActiveRecord::Base
       if oi.item_type_id == 1
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
         else
           # float quantity (e.g. weighed OrderItem)
           list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
@@ -774,14 +774,13 @@ class Order < ActiveRecord::Base
           # percent coupon
           list_of_items += "%s %19.19s %6.1f%% %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
         elsif oi.item.coupon_type == 3
-          # oi habtm oi relation needed otherwise b1g1 coupon rules are too complex here
           list_of_items += "%s %19.19s\n" % [oi.item.tax_profile.letter, name]
         end
       end
 
-      # ADD ADDITIONAL LINES FOR DISCOUNTS
+      # DISCOUNTS
       if oi.discount_applied
-        discount_price = - oi.discount_amount # ( oi.item.base_price * oi.quantity - oi.total ) / oi.quantity
+        discount_price = - oi.discount_amount
         discount_total = discount_price * oi.quantity
         if oi.refunded then
           refund_subtotal -= discount_total
@@ -790,10 +789,10 @@ class Order < ActiveRecord::Base
         end
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
+          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name, discount_price, oi.quantity, discount_total]
         else
           # float quantity
-          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, "Aktion", discount_price, oi.quantity, discount_total]
+          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name, discount_price, oi.quantity, discount_total]
         end
         discount_subtotal += discount_total
       end
@@ -809,10 +808,10 @@ class Order < ActiveRecord::Base
         end
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += "%s %19.19s %6.2f %3u    %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
         else
           # float quantity
-          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, "Rabatt", rebate_price, oi.quantity, rebate_total]
+          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
         end
         rebate_subtotal += rebate_total
       end
@@ -869,7 +868,7 @@ class Order < ActiveRecord::Base
       net = sum_taxes[tax.id] / (1.00 + fact)
       gro = sum_taxes[tax.id]
       vat = gro - net
-      list_of_taxes += "%s: %2i%% %7.2f %7.2f %8.2f\n" % [tax.letter,tax.value,net,vat,gro]
+      list_of_taxes += "       %s: %2i%% %7.2f %7.2f %8.2f\n" % [tax.letter,tax.value,net,vat,gro]
     end
 
     if self.customer
@@ -881,8 +880,7 @@ class Order < ActiveRecord::Base
       customer[:street2] = self.customer.street2
       customer[:postalcode] = self.customer.postalcode
       customer[:city] = self.customer.city
-      customer[:current_loyalty_points] = self.loyalty_card.points.to_f
-      customer[:paid_loyalty_points] = self.lc_points.to_f
+      customer[:current_loyalty_points] = self.loyalty_card.points
     end
 
     report = Hash.new

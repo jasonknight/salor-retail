@@ -551,6 +551,22 @@ de:
       change: Wechselgeld
       refund: Rabatte auf gesamten Einkauf
       given: Gegeben
+      net: netto
+      tax: USt.
+      gross: brutto
+      current_loyalty_points: Aktueller Punktestand
+      subtotal1: Zwischensumme
+      subtotal2: Zwischensumme
+      subtotal3: Zwischensumme
+      subtotal4: Zwischensumme
+      rebate_subtotal: Summe Rabatte
+      rebate: Einzelrabatt
+      coupon_subtotal: Summe Geschenkkarte
+      discount_subtotal: Summe Aktionen
+      discount: Aktion
+      rebate_percent: Prozent-Rabatt
+      rebate_fixed: Fix-Rabatt
+      refunded: STORNIERUNG
 
     word:
       cancelled: storniert
