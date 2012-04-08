@@ -193,6 +193,9 @@ class OrderItem < ActiveRecord::Base
     end
   end
   def price=(p)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     p = self.string_to_float(p)
     if (self.item.base_price == 0.0 or self.item.base_price == nil) and not self.item.must_change_price == true then
       self.item.update_attribute :base_price,p
@@ -210,6 +213,9 @@ class OrderItem < ActiveRecord::Base
     self.price
   end
   def total=(p)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     p = self.string_to_float(p)
     if self.is_buyback == true and p > 0 then
       p = p * -1
@@ -217,9 +223,15 @@ class OrderItem < ActiveRecord::Base
     write_attribute(:total,p) 
   end
   def tax=(p)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     write_attribute(:tax,self.string_to_float(p)) 
   end
   def quantity=(q)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     if q.nil? or q.blank? then
       q = 0
     end
@@ -230,6 +242,9 @@ class OrderItem < ActiveRecord::Base
   end
   
 	def set_item(item,qty=1)
+    if self.order and self.order.paid == 1 then
+      return false
+    end
 	  item.make_valid
 		if item.item_type.behavior == 'gift_card' then
 		  if item.activated and item.amount_remaining <= 0 then
@@ -289,6 +304,15 @@ class OrderItem < ActiveRecord::Base
 	end
 	#
   def calculate_total(order_subtotal=0)
+    # i.e. we should not be able to alter the total of an order item once the order is marked as paid.
+    if self.order and self.order.paid == 1 then
+      return self.total
+    end
+    if self.behavior == 'coupon' then
+      self.update_attribute :total,self.price
+      return self.price
+    end
+
     #return self.total if self.order and self.order.paid == 1
     if self.order and self.order.buy_order or self.is_buyback then
       ttl = self.price * self.quantity
@@ -329,7 +353,7 @@ class OrderItem < ActiveRecord::Base
         return p
       end
     end
-    ttl = 0
+        ttl = 0
     self.quantity = 0 if self.quantity.nil?
     if self.item.parts.any? and self.item.calculate_part_price then
       self.item.parts.each do |part|
@@ -369,7 +393,7 @@ class OrderItem < ActiveRecord::Base
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
       puts "In update, ttl is #{ttl} and self.total is #{self.total}"
-      self.update_attribute(:total,ttl) if self.order and not self.order.paid == 1
+      self.update_attribute(:total,ttl) #if self.order and not self.order.paid == 1
     end
     puts "Returning total of: #{self.total}"
     return self.total
@@ -407,7 +431,7 @@ class OrderItem < ActiveRecord::Base
   #
   def calculate_tax(no_update = false)
     return 0 if self.refunded
-    if self.activated == 1 and self.behavior == 'gift_card' then
+    if self.activated and self.behavior == 'gift_card' then
       self.update_attribute(:tax,0) if self.tax != 0
       return 0
     end
@@ -438,12 +462,14 @@ class OrderItem < ActiveRecord::Base
     return 0 if ttl <= 0
     
     if self.item.coupon_type == 1 then #percent off self type
-      if self.quantity >= oi.quantity then
-        q = oi.quantity
-      else
-        q = self.quantity
+      puts "!!! coupon is percent"
+      if self.quantity > oi.quantity then
+        puts "!!! updating quantity"
+        self.update_attribute :quantity,oi.quantity
+        self.quantity = oi.quantity
       end
-      amnt = (((self.item.base_price / 100) * oi.price) * q)
+      q = self.quantity
+      amnt = (oi.price * quantity) * (self.price / 100)
     elsif self.item.coupon_type == 2 then #fixed amount off
       # puts "Coupon is fixed"
       if self.price > ttl then
@@ -454,6 +480,7 @@ class OrderItem < ActiveRecord::Base
         amnt = self.item.base_price * self.quantity
         # puts "Setting to self.total " + self.item.base_price.to_s
       end
+      self.update_attribute(:price,amnt)
       # puts "Fixed amnt = " + amnt.to_s
     elsif self.item.coupon_type == 3 then #buy 1 get 1 free
       if oi.quantity > 1 then
@@ -471,13 +498,13 @@ class OrderItem < ActiveRecord::Base
       else
         add_salor_error("system.errors.coupon_not_enough_items")
       end
+      self.update_attribute(:price,amnt)
     else
       # puts "couldn't figure out coupon type"
     end
     oi.update_attribute(:coupon_amount,amnt)
     oi.update_attribute(:coupon_applied, true)
     # puts "## Updating Attribute to #{amnt}"
-    self.update_attribute(:price,amnt)
     if amnt > 0 then
       oi.coupons << self
       oi.save

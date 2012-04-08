@@ -5,14 +5,13 @@
     updateOrderItems([<%= raw @inst.to_json %>]);
     updateOrder(<%= raw @inst.order.to_json %>);
     updateCustomerView(<%= raw @inst.to_json %>,<%= @inst.order.id %>);
-  <% else %>
     <% @inst.calculate_total %>
     <% @inst.order.update_self_and_save %>
 
     updateOrder(<%= raw @inst.order.to_json %>);
     <%
       items = []
-    @inst.order.order_items.each do |oi|
+    @inst.order.order_items.visible.reload.each do |oi|
         items << oi.to_json
       end
     %>

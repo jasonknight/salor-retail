@@ -90,16 +90,18 @@ class CustomersController < ApplicationController
   # POST /customers
   # POST /customers.xml
   def create
+    
     @customer = Customer.new(params[:customer])
+    @loyalty_card = LoyaltyCard.new params[:loyalty_card]
 
     respond_to do |format|
-      if @customer.save
-        @lc = LoyaltyCard.new params[:loyalty_card]
-        @lc.customer_id = @customer.id
-        @lc.save
+      if @loyalty_card.save and @customer.save
+        @loyalty_card.update_attribute(:customer_id,@customer.id)
         format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_create", :model => Customer.model_name.human)) }
         format.xml  { render :xml => @customer, :status => :created, :location => @customer }
       else
+        flash[:notice] = I18n.t("system.errors.sku_must_be_unique",:sku => @loyalty_card.sku)
+        @customer.loyalty_card = @loyalty_card
         format.html { render :action => "new" }
         format.xml  { render :xml => @customer.errors, :status => :unprocessable_entity }
       end

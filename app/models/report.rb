@@ -87,11 +87,15 @@ class Report
       line << h.send(col.to_sym)
     end
     if not h.changes_made.empty? then
-      changes = JSON.parse(h.changes_made)
-      changes.each do |k,v|
-        line << "#{h.model_type}[#{k}]"
-        line << v[0].to_s.gsub("\n","<CR>")
-        line << v[1].to_s.gsub("\n","<CR>")
+      begin
+        changes = JSON.parse(h.changes_made)
+        changes.each do |k,v|
+          line << "#{h.model_type}[#{k}]"
+          line << v[0].to_s.gsub("\n","<CR>")
+          line << v[1].to_s.gsub("\n","<CR>")
+        end
+      rescue
+        line << "Failed to parse JSON #{$!.inspect}"
       end
     end
     lines << line.join("\t")

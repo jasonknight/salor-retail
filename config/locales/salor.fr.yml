@@ -641,7 +641,7 @@ fr:
       shipment_item_already_in_stock: L'article %{sku} est déjà en stock
       shipment_item_move_failed: "L'article %{sku} n'a pas été déplacé. Erreur : %{error}"
       shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
-      sku_must_be_unique: doit être unique
+      sku_must_be_unique: "%{sku} doit être unique"
       uspecified_error: Un problème est survenu. Veuillez contacter le support technique ! Essayer de rafraichir cette page.
       value_not_set: PasDéfini
       order_failed: La commande n'a pas pu être finalisée.
