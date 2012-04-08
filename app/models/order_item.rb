@@ -193,6 +193,9 @@ class OrderItem < ActiveRecord::Base
     end
   end
   def price=(p)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     p = self.string_to_float(p)
     if (self.item.base_price == 0.0 or self.item.base_price == nil) and not self.item.must_change_price == true then
       self.item.update_attribute :base_price,p
@@ -210,6 +213,9 @@ class OrderItem < ActiveRecord::Base
     self.price
   end
   def total=(p)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     p = self.string_to_float(p)
     if self.is_buyback == true and p > 0 then
       p = p * -1
@@ -217,9 +223,15 @@ class OrderItem < ActiveRecord::Base
     write_attribute(:total,p) 
   end
   def tax=(p)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     write_attribute(:tax,self.string_to_float(p)) 
   end
   def quantity=(q)
+    if self.order and self.order.paid == 1 then
+      return
+    end
     if q.nil? or q.blank? then
       q = 0
     end
@@ -230,6 +242,9 @@ class OrderItem < ActiveRecord::Base
   end
   
 	def set_item(item,qty=1)
+    if self.order and self.order.paid == 1 then
+      return false
+    end
 	  item.make_valid
 		if item.item_type.behavior == 'gift_card' then
 		  if item.activated and item.amount_remaining <= 0 then
@@ -289,6 +304,10 @@ class OrderItem < ActiveRecord::Base
 	end
 	#
   def calculate_total(order_subtotal=0)
+    # i.e. we should not be able to alter the total of an order item once the order is marked as paid.
+    if self.order and self.order.paid == 1 then
+      return self.total
+    end
     #return self.total if self.order and self.order.paid == 1
     if self.order and self.order.buy_order or self.is_buyback then
       ttl = self.price * self.quantity
@@ -369,7 +388,7 @@ class OrderItem < ActiveRecord::Base
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
       puts "In update, ttl is #{ttl} and self.total is #{self.total}"
-      self.update_attribute(:total,ttl) if self.order and not self.order.paid == 1
+      self.update_attribute(:total,ttl) #if self.order and not self.order.paid == 1
     end
     puts "Returning total of: #{self.total}"
     return self.total
@@ -407,7 +426,7 @@ class OrderItem < ActiveRecord::Base
   #
   def calculate_tax(no_update = false)
     return 0 if self.refunded
-    if self.activated == 1 and self.behavior == 'gift_card' then
+    if self.activated and self.behavior == 'gift_card' then
       self.update_attribute(:tax,0) if self.tax != 0
       return 0
     end
