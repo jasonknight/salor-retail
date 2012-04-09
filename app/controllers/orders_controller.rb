@@ -267,6 +267,8 @@ class OrdersController < ApplicationController
       SalorBase.beep(1500, 100, 3, 10)
     end
   end
+
+  #
   def delete_order_item
     @order = initialize_order
     if not $User.can(:destroy_order_items) then

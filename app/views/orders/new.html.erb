@@ -192,7 +192,7 @@ function updateCustomerView(item,order_id) {
 
 function updatePosItem(item) {
   var base_id = getOrderItemId(item);
-  item['price'] = item['price'] - item['discount_amount'];
+  //item['price'] = item['price'] - item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   <% if GlobalData.cash_register.hide_discounts == true then  %>
     var attrs = ['name','sku','quantity','price','total'];
@@ -240,7 +240,7 @@ function addPosItem(item) {
   var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
     var base_id = getOrderItemId(item);
   row.addClass(base_id);
-  item['price'] = item['price'] - item['discount_amount'];
+  //item['price'] = item['price'] + item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   $('.pos-table-left-column-items').prepend(row);
   <% if GlobalData.cash_register.hide_discounts == true then  %>

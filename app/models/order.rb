@@ -213,6 +213,7 @@ class Order < ActiveRecord::Base
       end #if item
     end # end list.each
   end
+
   #
 	def add_item(item)
 	  if not item then
@@ -231,13 +232,16 @@ class Order < ActiveRecord::Base
     end
     oi = self.order_items.visible.find_by_item_id(item.id)
     if oi and not oi.is_buyback and not oi.no_inc then
+      # just increment OrderItem
       oi.update_attribute(:quantity, oi.quantity + 1)
       update_self_and_save
       return oi
     end
+
+    # create new OrderItem
 	  oi = OrderItem.new
 	  if oi.nil? then
-	    oi = OrderItem.new
+	    oi = OrderItem.new # MF: doesn't make sense?
 	  end
 	  oi.order_id = self.id
 	  oi.no_inc = true if GlobalData.params and GlobalData.params.no_inc
@@ -247,6 +251,8 @@ class Order < ActiveRecord::Base
 	  # update_self_and_save
 	  return oi
 	end
+
+  #
 	def change_given
 	  ttl = 0.0
 	  self.payment_methods.each do |pm|
@@ -368,7 +374,7 @@ class Order < ActiveRecord::Base
             end
         end
       end
-              puts "Here I am in order, #{self.subtotal}"
+      # puts "Here I am in order, #{self.subtotal}"
       # Now let's consider Store Wide Discounts, for item/location/percent specific discounts,
       # see Item.price    
       if not self.subtotal_is_locked then
@@ -425,6 +431,7 @@ class Order < ActiveRecord::Base
     self.update_attribute(:total, self.total)
     # puts "End of calculate_totals, total is: #{self.total}"
 	end
+
 	#
   def calculate_tax
     # Add together tax for all items in order
@@ -753,7 +760,11 @@ class Order < ActiveRecord::Base
 
       # Price modification for refunds
       if oi.refunded then
-        refund_subtotal -= item_total
+        if self.rebate_type == 'percent'
+          refund_subtotal -= oi.total * (1 - self.rebate / 100.0)
+        elsif self.rebate_type == 'fixed'
+          refund_subtotal -= oi.total
+        end
         item_price = 0
         item_total = 0
       end
@@ -781,7 +792,7 @@ class Order < ActiveRecord::Base
 
       # DISCOUNTS
       if oi.discount_applied
-        discount_price = - oi.discount_amount
+        discount_price = - oi.discount_amount / oi.quantity
         discount_total = discount_price * oi.quantity
         if oi.refunded then
           refund_subtotal -= discount_total
