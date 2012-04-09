@@ -726,26 +726,21 @@ class Order < ActiveRecord::Base
       item_price = 0 if item_price.nil?
       name = oi.item.name
 
-      # for the taxes table, distribute order rebates equally to all items
-      # Gotcha: If there is a fixed order rebate and all items are refunded, the customer must pay back the fixed rebate
-      if not oi.refunded
-        if self.rebate_type == 'percent'
-          sum_taxes[oi.tax_profile.id] += oi.total * (1 - self.rebate / 100.0)
-        elsif self.rebate_type == 'fixed'
-          sum_taxes[oi.tax_profile.id] += oi.total - (self.rebate / self.nonrefunded_item_count )
-        end
-      end
-
       # Price calculation for normal items
       if oi.item_type_id == 1
-        item_price = oi.price # Customers need to see the original price before any substractions
+        item_price = oi.price
         item_price *= -1 if self.buy_order
         item_total = item_price * oi.quantity
       end
 
       # Price calculation for gift card items
       if oi.item_type_id == 2
-        item_price = - oi.total
+        if oi.activated
+          item_price = - oi.total
+        else
+          item_price = oi.total
+        end
+        item_total = item_price * oi.quantity
       end
 
       # Price calculation for coupon items
@@ -758,16 +753,53 @@ class Order < ActiveRecord::Base
         end
       end
 
-      # Price modification for refunds
-      if oi.refunded then
-        if self.rebate_type == 'percent'
-          refund_subtotal -= oi.total * (1 - self.rebate / 100.0)
-        elsif self.rebate_type == 'fixed'
-          refund_subtotal -= oi.total
+      # Price calculation for discounts
+      if oi.discount_applied
+        if not oi.refunded
+          discount_price = - oi.discount_amount / oi.quantity
+          discount_total = - oi.discount_amount
+        else
+          discount_price = 0
+          discount_total = 0
         end
+      end
+
+      # Price calculation for rebates
+      rebate_total = 0
+      if oi.rebate and oi.rebate > 0
+        rebate_price = - ( oi.price * oi.rebate / 100.0)
+        rebate_total = rebate_price * oi.quantity
+        rebate_subtotal += rebate_total
+      end
+
+      # Price calculation for refunds
+      if oi.refunded then
+        if self.rebate > 0 and self.rebate_type == 'percent'
+          refund_subtotal -= item_total * (1 - self.rebate / 100.0)
+        elsif
+          refund_subtotal -= item_total
+        end
+        refund_subtotal -= rebate_total
+        rebate_price = 0
+        rebate_total = 0
         item_price = 0
         item_total = 0
+      else
+        # Sum up taxes
+        if self.rebate > 0
+          if self.rebate_type == 'percent'
+            sum_taxes[oi.tax_profile.id] += item_total * (1 - self.rebate / 100.0)
+          elsif self.rebate_type == 'fixed'
+            sum_taxes[oi.tax_profile.id] += item_total - (self.rebate / self.nonrefunded_item_count )
+          end
+        else
+          sum_taxes[oi.tax_profile.id] += item_total
+        end
       end
+
+      subtotal1 += item_total
+
+      # THE FOLLOWING IS THE LINE GENERATION
 
       # NORMAL ITEMS
       if oi.item_type_id == 1
@@ -778,6 +810,11 @@ class Order < ActiveRecord::Base
           # float quantity (e.g. weighed OrderItem)
           list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
         end
+      end
+
+      # GIFT CARDS
+      if oi.item_type_id == 2
+        list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
       end
 
       # COUPONS
@@ -792,13 +829,6 @@ class Order < ActiveRecord::Base
 
       # DISCOUNTS
       if oi.discount_applied
-        discount_price = - oi.discount_amount / oi.quantity
-        discount_total = discount_price * oi.quantity
-        if oi.refunded then
-          refund_subtotal -= discount_total
-          discount_price = 0
-          discount_total = 0
-        end
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
           list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name, discount_price, oi.quantity, discount_total]
@@ -811,13 +841,6 @@ class Order < ActiveRecord::Base
 
       # REBATES
       if oi.rebate and oi.rebate > 0
-        rebate_price = - ( oi.price * oi.rebate / 100.0)
-        rebate_total = rebate_price * oi.quantity
-        if oi.refunded then
-          refund_subtotal -= rebate_total
-          rebate_price = 0
-          rebate_total = 0
-        end
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
           list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
@@ -825,11 +848,10 @@ class Order < ActiveRecord::Base
           # float quantity
           list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
         end
-        rebate_subtotal += rebate_total
       end
 
-      subtotal1 += item_total
-    end
+    end # order_items.each do
+
 
     if self.lc_points? and not self.refunded
       lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
