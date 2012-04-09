@@ -30,8 +30,8 @@
       	</a>
       </div>
     </div>
-    <% end -%>
-
+  <% end %>
+  <br />
   <div class="widget master">
       <div align="center">
         <%if request.url.include? 'salortrainer' %>
@@ -47,6 +47,15 @@
             <%= t "menu.salortrainer" %>
         	</a>
         <% end %>
+      </div>
+    </div>
+  <div class="widget master">
+      <div align="center">
+        <a href="/home/remote_service">
+          <%= salor_icon :nurse %>
+          <br />
+          <%= t "menu.remote_service" %>
+      	</a>
       </div>
     </div>
 </div>

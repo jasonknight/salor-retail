@@ -282,6 +282,7 @@ en-US:
     assign: assign
 
   menu:
+    remote_service: Remote Service
     usb_device: Usb Stick
     salortrainer: Salor Trainer
     salorlive: Salor Live!
@@ -397,6 +398,12 @@ en-US:
     shipments_move_all_items: all items were successfully moved
     shipments_move_item: item was successfully moved
 
+  exception_page:
+    oops_an_error_occurred: "Oops! An Error occurred"
+    exception_description: "Error description:"
+    exception_in_files: "The Error occurred in the following files:"
+    assistance_text: 'Please click on the button "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the button "Remote Service". We will help you immediately.'
+
   orders:
     report:
       title: Sums
@@ -410,7 +417,7 @@ en-US:
       start_date: start date
       sum_total: sum total
     report_range:
-      title: journal
+      title: Sums
       display: display
       end_date: end date
       gross: gross
@@ -462,6 +469,8 @@ en-US:
       sum_transactions: Sum transactions
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
+      from: From
+      to: To
     report_range:
       title: day report
       sums_by_category: sums by category
@@ -493,6 +502,8 @@ en-US:
       sum_transactions: Sum transactions
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
+      from: From
+      to: To
       
 
   printr:
@@ -828,6 +839,14 @@ en-US:
     user_employee_index:
       backup_database: Backup Database
       backup_logfile: Backup Logfile
+    remote_service:
+      title: Remote Service
+      enter_password: Password
+      connect: Connect!
+      requesting_connection_status: Requesting connection status ...
+    get_connection_status:
+      connected: connected
+      disconnected: disconnected
       
   InCash: In Cash
   ByCard: By Card

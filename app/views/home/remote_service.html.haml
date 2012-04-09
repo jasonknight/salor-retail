@@ -1,0 +1,11 @@
+= javascript_include_tag 'request_service'
+
+= raw content_box_top(t(".title"))
+
+.request_service
+  = text_field_tag 'service_connect_password', t('.enter_password')
+  %br
+  .generic-button{ :onclick => 'connect_service();' }= t('.connect')
+  #connection_status= t('.requesting_connection_status')
+  %br
+  %img{ :id => 'progress', :src => '/images/upload.gif' }

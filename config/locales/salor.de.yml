@@ -282,6 +282,7 @@ de:
     assign: setze zu
 
   menu:
+    remote_service: Fernwartung
     usb_device: Usb Stick
     salortrainer: Salor Trainer
     salorlive: Salor Live!
@@ -396,7 +397,13 @@ de:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
     shipments_move_item: Artikel erfolgreich verschoben ...
-    
+
+  exception_page:
+    oops_an_error_occurred: "Oops! Es ist leider ein Fehler aufgetreten"
+    exception_description: "Fehlerbeschreibung:"
+    exception_in_files: "Der Fehler trat in diesen Dateien auf:"
+    assistance_text: 'Bitte klicken Sie auf den Button "Filialen" und versuchen Sie es nochmals. Falls der Fehler erneut auftritt, rufen Sie den Kundensupport und verbinden Sie sich mit dem Button "Fernwartung". Wir sind umgehend um Sie bemüht.'
+
   orders:
     report:
       title: Verkaufsbericht
@@ -854,6 +861,14 @@ de:
     user_employee_index:
       backup_database: Datenbank herunterladen
       backup_logfile: Logdatei herunterladen
+    remote_service:
+      title: Fernwartung
+      enter_password: Passwort
+      connect: Verbinden!
+      requesting_connection_status: Verbindungsstatus wird angefragt...
+    get_connection_status:
+      connected: verbunden
+      disconnected: getrennt
       
   InCash: In Bar
   ByCard: Karte

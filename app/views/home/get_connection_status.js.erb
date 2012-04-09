@@ -1,0 +1,15 @@
+<% if @status.empty? %>
+  $('#connection_status').fadeOut(function(){
+    $('#connection_status').css('background', '#CC5757');
+    $('#connection_status').html('<%= escape_javascript t('.disconnected') %>');
+    $('#connection_status').fadeIn();
+  });
+
+<% else %>
+  $('#connection_status').fadeOut(function(){
+    $('#connection_status').css('background', '#3c8522');
+    $('#connection_status').fadeIn();
+    $('#connection_status').html('<%= escape_javascript t('.connected') %>');
+  });
+<% end %>
+$('img#progress').hide();
