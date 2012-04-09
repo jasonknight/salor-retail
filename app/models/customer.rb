@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class Customer < ActiveRecord::Base
+  # {START}
   include SalorScope
   include SalorModel
   include SalorBase
@@ -102,5 +103,5 @@ class Customer < ActiveRecord::Base
       end
     end 
   end
-
+  # {END}
 end

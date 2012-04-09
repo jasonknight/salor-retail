@@ -48,6 +48,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class VendorsController < ApplicationController
+    # {START}
     before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
@@ -259,16 +260,16 @@ class VendorsController < ApplicationController
 
   def render_drawer_transaction_receipt
     if params[:user_type] == 'User'
-      @user = User.find_by_id params[:user_id]
+      @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id params[:user_id]
+      @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id params[:cash_register_id]
+    @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
-    @dt = DrawerTransaction.find_by_id params[:id]
+    @dt = DrawerTransaction.find_by_id(params[:id])
     GlobalData.vendor = @dt.owner.get_meta.vendor
     $User = @dt.owner
     if not @dt then
@@ -319,11 +320,11 @@ class VendorsController < ApplicationController
   #
   def render_end_of_day_receipt
     if params[:user_type] == 'User'
-      @user = User.find_by_id params[:user_id]
+      @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id params[:user_id]
+      @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id params[:cash_register_id]
+    @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
@@ -362,27 +363,26 @@ class VendorsController < ApplicationController
       redirect_to :controller => :home, :action => :index
     end
   end
-
- 
+  # {END}
   def edit_field_on_child
     # If possible, this tries to avoid calling calculate_totals / update_self_and_save
     # for ORDER and ORDER_ITEM operations. Calling above funcs recalculates everything
     # puts  "### Begining edit_field_on_child"
     # and takes up to 2s for lots of items!!
     if params[:field] == "front_end_change" then
-      o = Order.scopied.find_by_id params[:order_id]
+      o = Order.scopied.find_by_id(params[:order_id])
       o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value])
       render :nothing => true and return
     end
     if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
        puts  "### Class is allowed"
-      klass = Kernel.const_get(params[:klass])
+      kls = Kernel.const_get(params[:klass])
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
-      if klass.exists? params[:id] then
+      if kls.exists? params[:id] then
          puts  "### Class Exists"
-        @inst = klass.find(params[:id])
+        @inst = kls.find(params[:id])
         if @inst.class == OrderItem and @inst.order.paid == 1 then
           puts "## Order is Paid"
           render :layout => false and return
@@ -412,7 +412,7 @@ class VendorsController < ApplicationController
            puts  " --- " + params[:value].to_s
           params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
            puts  " --- " + params[:value].to_s
-          if klass == OrderItem then
+          if kls == OrderItem then
              puts  "### klass is OrderItem"
             if params[:field] == 'quantity' and 
                @inst.behavior == 'normal' and 
@@ -436,8 +436,8 @@ class VendorsController < ApplicationController
                 @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
                 @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-                @inst.connection.execute("update order_items set total = #{@inst.total}, quantity = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
-                @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
+                @inst.connection.execute("update `order_items` set total = #{@inst.total},`quantity` = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
                 @inst.is_valid = true
                 render :layout => false and return
               end
@@ -461,7 +461,7 @@ class VendorsController < ApplicationController
                 # @inst.connection.execute("update order_items set total = #{@inst.total}, price = #{@inst.price}, tax = #{@inst.tax} where id = #{@inst.id}")
                 @inst.save
 
-                @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
                 @inst.is_valid = true
                 render :layout => false and return
               end
@@ -479,8 +479,8 @@ class VendorsController < ApplicationController
               @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
               # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
               @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-              @inst.connection.execute("update order_items set total = #{@inst.total}, rebate = #{rebate}, rebate_amount = #{ @inst.rebate_amount }, tax = #{@inst.tax} where id = #{@inst.id}")
-              @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
+              @inst.connection.execute("update `order_items` set total = #{@inst.total}, rebate = #{rebate}, rebate_amount = #{ @inst.rebate_amount }, tax = #{@inst.tax} where id = #{@inst.id}")
+              @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
               @inst.is_valid = true
               @inst.rebate = rebate
               render :layout => false and return
@@ -499,7 +499,7 @@ class VendorsController < ApplicationController
             end
           end
  
-          if klass == Order then
+          if kls == Order then
             puts "klass is Order"
             # Tax for order is calculated before payment
             if params[:field] == 'rebate' and false == true then
@@ -513,13 +513,13 @@ class VendorsController < ApplicationController
                 @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
                 # Subtract new % rebate from order total
                 @inst.total = @inst.total - (@inst.total * (newvalue / 100.0))
-                @inst.connection.execute("update orders set total = #{@inst.total}, rebate = #{newvalue} where id = #{@inst.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
                 @inst.rebate = newvalue
                 render :layout => false and return
               else
                 # Fixed rebate is easier: + old, - new
                 @inst.total = @inst.total + old_rebate - newvalue
-                @inst.connection.execute("update orders set total = #{@inst.total}, rebate = #{newvalue} where id = #{@inst.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
                 @inst.rebate = newvalue
                 render :layout => false and return
               end
@@ -536,14 +536,14 @@ class VendorsController < ApplicationController
                   @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
                   # Subtract fixed rebate
                   @inst.total -= old_rebate
-                  @inst.connection.execute("update orders set total = #{@inst.total}, rebate_type = '#{newvalue}' where id = #{@inst.id}")
+                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
                   @inst.rebate_type = newvalue
                   render :layout => false and return
                 else
                   # fixed rebate
                   @inst.total += old_rebate
                   @inst.total = @inst.total - (@inst.total * (old_rebate / 100.0))
-                  @inst.connection.execute("update orders set total = #{@inst.total}, rebate_type = '#{newvalue}' where id = #{@inst.id}")
+                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
                   @inst.rebate_type = newvalue
                   render :layout => false and return
                 end
@@ -571,11 +571,12 @@ class VendorsController < ApplicationController
     render :layout => false
   end
   #
+  # {START}
   def toggle
     if allowed_klasses.include? params[:klass]
-      klass = Kernel.const_get(params[:klass])
-      if klass.exists? params[:model_id] then
-        @inst = klass.find(params[:model_id])
+      kls = Kernel.const_get(params[:klass])
+      if kls.exists? params[:model_id] then
+        @inst = kls.find(params[:model_id])
         if @inst.respond_to? params[:field]
           if not salor_user.owns_this?(@inst) then
             raise I18n.t("views.errors.no_access_right")
@@ -648,4 +649,5 @@ class VendorsController < ApplicationController
     ftype = 'tsv'
     send_data(lines, :filename => "#{name}_#{Time.now.year}#{Time.now.month}#{Time.now.day}-#{Time.now.hour}#{Time.now.min}.#{ftype}", :type => 'application-x/csv') and return
 	end
+	# {END}
 end

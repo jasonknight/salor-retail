@@ -50,6 +50,7 @@
 require 'rubygems'
 require 'mechanize'
 class ItemsController < ApplicationController
+  # {START}
   before_filter :authify, :except => [:wholesaler_update, :labels]
   before_filter :initialize_instance_variables, :except => [:labels]
   before_filter :check_role, :except => [:info, :search, :labels, :crumble, :wholesaler_update]
@@ -86,7 +87,7 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.xml
   def new
-    @item = Item.new :vendor_id => GlobalData.salor_user.meta.vendor_id
+    @item = Item.new(:vendor_id => GlobalData.salor_user.meta.vendor_id)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @item }
@@ -253,19 +254,19 @@ class ItemsController < ApplicationController
 
   def labels
     if params[:user_type] == 'User'
-      @user = User.find_by_id params[:user_id]
+      @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id params[:user_id]
+      @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id params[:cash_register_id]
+    @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     if params[:id]
-      @items = Item.find_all_by_id params[:id]
+      @items = Item.find_all_by_id(params[:id])
     elsif params[:skus]
-      @items = Item.where :sku => params[:skus].split(",")
+      @items = Item.where(:sku => params[:skus].split(","))
     end
     text = Printr.new.sane_template(params[:type],binding)
     if @register.salor_printer
@@ -389,7 +390,7 @@ class ItemsController < ApplicationController
   def inventory_report
     add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
     add_breadcrumb I18n.t("menu.inventory_report"), items_inventory_report_path
-    @items = Item.scopied.where 'real_quantity > 0'
+    @items = Item.scopied.where('real_quantity > 0')
     @items.inspect
     @categories = Category.scopied
   end
@@ -400,4 +401,5 @@ class ItemsController < ApplicationController
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.items"),'items_path(:vendor_id => params[:vendor_id])'
   end
+  # {END}
 end

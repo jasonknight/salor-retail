@@ -48,6 +48,7 @@
 # functioning of your business.
 
 class Category < ActiveRecord::Base
+  # {START}
   include SalorScope
   include SalorBase
   include SalorModel
@@ -89,4 +90,5 @@ class Category < ActiveRecord::Base
     end
     return cats_tags
 	end
+  # {END}
 end

@@ -49,6 +49,7 @@
 module SalorScope
   def self.included(klass)
     begin
+      # {START}
       inst = klass.new
       klass.scope(:by_vendor, lambda { |*args|
          if inst.respond_to? :vendor_id and not inst.class == TaxProfile
@@ -57,7 +58,7 @@ module SalorScope
       })
       klass.scope(:visible, lambda { |*args|
          if inst.respond_to? :hidden
-           return {:conditions => "`#{ inst.class.table_name}`.`hidden` = 0 or `#{ inst.class.table_name}`.`hidden` is null"}
+           return { :conditions => "`#{ inst.class.table_name}`.`hidden` = 0 or `#{ inst.class.table_name}`.`hidden` is null"}
          end
                })
       klass.scope(:invisible, lambda { |*args|
@@ -65,7 +66,7 @@ module SalorScope
            return {:conditions => "`#{ inst.class.table_name }`.`hidden` = 1"}
          end
       })
-      klass.scope(:by_user, lambda { |*args|
+      klass.scope( :by_user , lambda { |*args|
           if inst.class == Order and 
              GlobalData.salor_user and 
              GlobalData.salor_user.is_employee? and
@@ -77,7 +78,7 @@ module SalorScope
             return {:conditions => 'user_id = ' + GlobalData.salor_user.get_owner.id.to_s}
          end
       })
-      klass.scope(:by_keywords, lambda {|*args|
+      klass.scope( :by_keywords , lambda {|*args|
          conds = []
          vals = []
          words = GlobalData.params.keywords if GlobalData.params
@@ -138,5 +139,6 @@ module SalorScope
       rescue Exception => e
         # puts "Something bad happend..."
       end
+      # {END}
   end
 end

@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class CategoriesController < ApplicationController
+  # {START}
   before_filter :authify, :initialize_instance_variables, :crumble, :get_tags
   before_filter :check_role, :except => [:crumble]
   cache_sweeper :category_sweeper, :only => [:create, :update, :destroy]
@@ -141,4 +142,5 @@ class CategoriesController < ApplicationController
   def get_tags
     @tags = TransactionTag.scopied.all.unshift(TransactionTag.new(:name => ''))
   end
+  # {END}
 end

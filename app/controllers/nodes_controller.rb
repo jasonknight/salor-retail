@@ -1,6 +1,7 @@
 require 'yaml'
 YAML::ENGINE.yamler = 'syck'
 class NodesController < ApplicationController
+  # {START}
   include SalorBase
   # GET /nodes
   # GET /nodes.xml
@@ -8,7 +9,7 @@ class NodesController < ApplicationController
   before_filter :initialize_instance_variables, :except => [:receive]
   def send_msg
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
-    node = Cue.find_by_id params[:id]
+    node = Cue.find_by_id(params[:id])
     if node then
       url = URI.parse(node.url)
       req.body = node.payload
@@ -23,7 +24,7 @@ class NodesController < ApplicationController
   end
 
   def receive_msg
-    msg = Cue.find_by_id params[:id]
+    msg = Cue.find_by_id(params[:id])
     p = SalorBase.symbolize_keys(JSON.parse(msg.payload))
     @node = Node.where(:sku => p[:node][:sku]).first
     if @node then
@@ -138,4 +139,5 @@ class NodesController < ApplicationController
       render :text => "Error:" + e.message + e.backtrace.join("\n")
     end
   end
+  # {END}
 end

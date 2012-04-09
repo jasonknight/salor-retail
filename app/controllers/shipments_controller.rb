@@ -48,6 +48,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class ShipmentsController < ApplicationController
+  # {START}
   before_filter :authify
   before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble, :move_all_to_items, :move_shipment_item]
@@ -159,4 +160,5 @@ class ShipmentsController < ApplicationController
     add_breadcrumb @vendor.name,'vendor_path(@vendor)' if @vendor
     add_breadcrumb I18n.t("menu.shipments"),'shipments_path'
   end
+  # {END}
 end

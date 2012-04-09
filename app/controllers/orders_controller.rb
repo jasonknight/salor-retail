@@ -47,7 +47,9 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+# {VOCABULARY} orders_item item_price oi_price customer_payments payments_type payments_method paying_agent agent_has_paid agent_will_pay_later gift_card_applies coupon_percentage coupon_updated gift_cards_used item_price_update item_discount_percentage cash_register_used cash_register_inc include_register_codes employee_vendor
 class OrdersController < ApplicationController
+# {START}
    before_filter :authify, :except => [:customer_display,:print, :print_receipt]
    before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt]
@@ -291,12 +293,14 @@ class OrdersController < ApplicationController
 
   def print_receipt
     if params[:user_type] == 'User'
-      @user = User.find_by_id params[:user_id]
+      @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id params[:user_id]
+      @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id params[:cash_register_id]
-    @vendor = @register.vendor if @register
+    @register = CashRegister.find_by_id(params[:cash_register_id])
+    if @register then
+      @vendor = @register.vendor 
+    end
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
@@ -449,7 +453,7 @@ class OrdersController < ApplicationController
     redirect_to order_path(@order)
   end
   def customer_display
-    @order = Order.find_by_id params[:id]
+    @order = Order.find_by_id(params[:id])
     GlobalData.salor_user = @order.get_user
     @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
     @order_items = @order.order_items.visible.order('id ASC')
@@ -461,7 +465,9 @@ class OrdersController < ApplicationController
   end
 
   def report
-    @from, @to = assign_from_to(params)
+    f, t = assign_from_to(params)
+    @from = f
+    @to = t
     from2 = @from.beginning_of_day
     to2 = @to.beginning_of_day + 1.day
     @orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
@@ -476,7 +482,9 @@ class OrdersController < ApplicationController
     #@orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
     #@orders.reverse!
     #@taxes = TaxProfile.scopied.where( :hidden => 0)
-    @from, @to = assign_from_to(params)
+    f, t = assign_from_to(params)
+    @from = f
+    @to = t
     @from = @from.beginning_of_day
     @to = @to.end_of_day
     @vendor = GlobalData.vendor
@@ -486,7 +494,9 @@ class OrdersController < ApplicationController
   end
 
   def report_day
-    @from, @to = assign_from_to(params)
+    f, t = assign_from_to(params)
+    @from = f
+    @to = t
     @from = @from.beginning_of_day
     @to = @to.end_of_day
     @vendor = GlobalData.vendor
@@ -497,7 +507,9 @@ class OrdersController < ApplicationController
   end
 
   def report_day_range
-    @from, @to = assign_from_to(params)
+    f, t = assign_from_to(params)
+    @from = f
+    @to = t
     from2 = @from.beginning_of_day
     to2 = @to.beginning_of_day + 1.day
     @taxes = TaxProfile.scopied.where( :hidden => 0)
@@ -622,4 +634,5 @@ class OrdersController < ApplicationController
     parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{options[:delimiter]}")
     return parts.join(options[:separator])
   end
+  # {END}
 end

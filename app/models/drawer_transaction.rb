@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class DrawerTransaction < ActiveRecord::Base
+  # {START}
   include SalorBase
   include SalorScope
   include SalorModel
@@ -85,5 +86,5 @@ class DrawerTransaction < ActiveRecord::Base
       Printr.new.direct_write($Register.thermal_printer,text)
     end
   end
-
+  # {END}
 end

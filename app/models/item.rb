@@ -46,7 +46,10 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+# {VOCABULARY} item_price item_category item_location_id tax_profile_info info foreign_key_constraint logging_time coupon_amount_paid paying_agent reimburseable unknown_item
+# {VOCABULARY} location_reversed info_on_category real_category_name part_ident part_qty2 quantity_of_sale gift_card_remainder coupon_b1g1 gift_card_owner
 class Item < ActiveRecord::Base
+  # {START}
 	include SalorScope
   include SalorError
   include SalorBase
@@ -498,4 +501,5 @@ class Item < ActiveRecord::Base
     end
     attrs
   end
+  # {END}
 end

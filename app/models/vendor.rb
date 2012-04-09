@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class Vendor < ActiveRecord::Base
+ # {START}
 	include SalorScope
   include SalorModel
 	belongs_to :user
@@ -133,5 +134,5 @@ class Vendor < ActiveRecord::Base
     end
     @features = features
   end
-
+  # {END}
 end

@@ -1,4 +1,7 @@
+# {VOCABULARY} actions_done roles_completed owner_info on_import_new on_import_old
+# {VOCABULARY} added multiplied subtracted deferred code_completed action_report
 class Action < ActiveRecord::Base
+  # {START}
   include SalorScope
   include SalorBase
   include SalorModel
@@ -99,4 +102,5 @@ class Action < ActiveRecord::Base
       end
       return item
   end
+  # {END}
 end

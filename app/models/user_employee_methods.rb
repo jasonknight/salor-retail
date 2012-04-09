@@ -46,6 +46,8 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+# {VOCABULARY} employee_info user_info user_deeds user_can_do user_cannot_do employee_can_do
+# {VOCABULARY} generate_encrypted_password decrypt_password digest_password
 module UserEmployeeMethods
   def self.included(mod)
     def User.generate_password(string)
@@ -89,7 +91,6 @@ module UserEmployeeMethods
       def password
         ""
       end
-      
     end # end class_eval
   end # end self.included
   #
@@ -107,6 +108,7 @@ module UserEmployeeMethods
   end
   #
   #
+  # {START}
   def employee_select(opts={})
     user = self.get_owner
     emps = Employee.scopied.all
@@ -495,6 +497,7 @@ module UserEmployeeMethods
   def best_selling_locations
     return Location.scopied.order("cash_made DESC").limit(10)
   end
+  # {END}
   def expiring
     items = []
     cap = Time.now.beginning_of_day + 5.days
@@ -506,6 +509,7 @@ module UserEmployeeMethods
     end
     return items
   end
+  # {START}
   def get_order_totals
     totals = []
     begin
@@ -718,4 +722,5 @@ module UserEmployeeMethods
       # puts "Autodrop not set"
     end
   end
+  # {END}
 end
