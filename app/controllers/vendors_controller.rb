@@ -364,7 +364,7 @@ class VendorsController < ApplicationController
     end
   end
 
- 
+  # {END}
   def edit_field_on_child
     # If possible, this tries to avoid calling calculate_totals / update_self_and_save
     # for ORDER and ORDER_ITEM operations. Calling above funcs recalculates everything
@@ -572,6 +572,7 @@ class VendorsController < ApplicationController
     render :layout => false
   end
   #
+  # {START}
   def toggle
     if allowed_klasses.include? params[:klass]
       kls = Kernel.const_get(params[:klass])
