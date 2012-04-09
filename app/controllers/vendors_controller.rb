@@ -437,8 +437,8 @@ class VendorsController < ApplicationController
                 @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
                 @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-                @inst.connection.execute("update order_items set total = #{@inst.total}, quantity = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
-                @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
+                @inst.connection.execute("update '`order_items` set total = #{@inst.total},`quantity` = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
                 @inst.is_valid = true
                 render :layout => false and return
               end
@@ -462,7 +462,7 @@ class VendorsController < ApplicationController
                 # @inst.connection.execute("update order_items set total = #{@inst.total}, price = #{@inst.price}, tax = #{@inst.tax} where id = #{@inst.id}")
                 @inst.save
 
-                @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
                 @inst.is_valid = true
                 render :layout => false and return
               end
@@ -480,8 +480,8 @@ class VendorsController < ApplicationController
               @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
               # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
               @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-              @inst.connection.execute("update order_items set total = #{@inst.total}, rebate = #{rebate}, rebate_amount = #{ @inst.rebate_amount }, tax = #{@inst.tax} where id = #{@inst.id}")
-              @inst.connection.execute("update orders set total = #{@inst.order.total} where id = #{@inst.order.id}")
+              @inst.connection.execute("update `order_items` set total = #{@inst.total}, rebate = #{rebate}, rebate_amount = #{ @inst.rebate_amount }, tax = #{@inst.tax} where id = #{@inst.id}")
+              @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
               @inst.is_valid = true
               @inst.rebate = rebate
               render :layout => false and return
@@ -514,13 +514,13 @@ class VendorsController < ApplicationController
                 @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
                 # Subtract new % rebate from order total
                 @inst.total = @inst.total - (@inst.total * (newvalue / 100.0))
-                @inst.connection.execute("update orders set total = #{@inst.total}, rebate = #{newvalue} where id = #{@inst.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
                 @inst.rebate = newvalue
                 render :layout => false and return
               else
                 # Fixed rebate is easier: + old, - new
                 @inst.total = @inst.total + old_rebate - newvalue
-                @inst.connection.execute("update orders set total = #{@inst.total}, rebate = #{newvalue} where id = #{@inst.id}")
+                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
                 @inst.rebate = newvalue
                 render :layout => false and return
               end
@@ -537,14 +537,14 @@ class VendorsController < ApplicationController
                   @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
                   # Subtract fixed rebate
                   @inst.total -= old_rebate
-                  @inst.connection.execute("update orders set total = #{@inst.total}, rebate_type = '#{newvalue}' where id = #{@inst.id}")
+                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
                   @inst.rebate_type = newvalue
                   render :layout => false and return
                 else
                   # fixed rebate
                   @inst.total += old_rebate
                   @inst.total = @inst.total - (@inst.total * (old_rebate / 100.0))
-                  @inst.connection.execute("update orders set total = #{@inst.total}, rebate_type = '#{newvalue}' where id = #{@inst.id}")
+                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
                   @inst.rebate_type = newvalue
                   render :layout => false and return
                 end
