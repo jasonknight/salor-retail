@@ -463,7 +463,9 @@ class OrdersController < ApplicationController
   end
 
   def report
-    @from, @to = assign_from_to(params)
+    f, t = assign_from_to(params)
+    @from = f
+    @to = t
     from2 = @from.beginning_of_day
     to2 = @to.beginning_of_day + 1.day
     @orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
