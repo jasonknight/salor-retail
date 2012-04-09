@@ -437,7 +437,7 @@ class VendorsController < ApplicationController
                 @instance_of_klass.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @instance_of_klass.order.rebate
                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
                 @instance_of_klass.order.total = @instance_of_klass.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @instance_of_klass.total - @instance_of_klass.calculate_oi_order_rebate
-                @instance_of_klass.connection.execute("update '`order_items` set total = #{@instance_of_klass.total},`quantity` = #{newval}, tax = #{@instance_of_klass.tax}, rebate_amount = #{ @instance_of_klass.rebate_amount } where id = #{@instance_of_klass.id}")
+                @instance_of_klass.connection.execute("update `order_items` set total = #{@instance_of_klass.total},`quantity` = #{newval}, tax = #{@instance_of_klass.tax}, rebate_amount = #{ @instance_of_klass.rebate_amount } where id = #{@instance_of_klass.id}")
                 @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.order.total} where `id` = #{@instance_of_klass.order.id}")
                 @instance_of_klass.is_valid = true
                 render :layout => false and return
