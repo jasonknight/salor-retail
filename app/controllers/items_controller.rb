@@ -50,6 +50,7 @@
 require 'rubygems'
 require 'mechanize'
 class ItemsController < ApplicationController
+  # {START}
   before_filter :authify, :except => [:wholesaler_update, :labels]
   before_filter :initialize_instance_variables, :except => [:labels]
   before_filter :check_role, :except => [:info, :search, :labels, :crumble, :wholesaler_update]
@@ -400,4 +401,5 @@ class ItemsController < ApplicationController
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.items"),'items_path(:vendor_id => params[:vendor_id])'
   end
+  # {END}
 end
