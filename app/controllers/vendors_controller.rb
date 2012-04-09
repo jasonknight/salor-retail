@@ -383,29 +383,29 @@ class VendorsController < ApplicationController
       end
       if kls.exists? params[:id] then
          puts  "### Class Exists"
-        @inst = kls.find(params[:id])
-        if @inst.class == OrderItem and @inst.order.paid == 1 then
+        @instance_of_klass = kls.find(params[:id])
+        if @instance_of_klass.class == OrderItem and @instance_of_klass.order.paid == 1 then
           puts "## Order is Paid"
           render :layout => false and return
         end
-        if @inst.class == Order and @inst.paid == 1 then
+        if @instance_of_klass.class == Order and @instance_of_klass.paid == 1 then
           @order = $User.get_new_order
           puts "## Order is paid 2"
           render :layout => false and return
         end
-        if @inst.respond_to? params[:field]
+        if @instance_of_klass.respond_to? params[:field]
            puts  "### Inst responds_to field #{params[:field]}"
-          if not salor_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
+          if not salor_user.owns_this?(@instance_of_klass) and not GlobalData.salor_user.is_technician? then
              puts  "### User doesn't own resource"
             raise I18n.t("views.errors.no_access_right")
           end
           puts "## Locked stuff"
-          if @inst.class == Order or @inst.class == OrderItem then
+          if @instance_of_klass.class == Order or @instance_of_klass.class == OrderItem then
              puts  "### Checking for locked ..."
             meth = "#{params[:field]}_is_locked"
-            if @inst.respond_to? meth.to_sym then
+            if @instance_of_klass.respond_to? meth.to_sym then
                puts  "### inst responds_to #{meth}"
-              @inst.update_attribute(meth.to_sym,true)
+              @instance_of_klass.update_attribute(meth.to_sym,true)
               render :layout => false and return
             end
           end
@@ -416,84 +416,84 @@ class VendorsController < ApplicationController
           if kls == OrderItem then
              puts  "### klass is OrderItem"
             if params[:field] == 'quantity' and 
-               @inst.behavior == 'normal' and 
-               @inst.coupon_applied == false and 
-               @inst.is_buyback == false and 
-               @inst.order.buy_order == false and (not @inst.weigh_compulsory == true) then
+               @instance_of_klass.behavior == 'normal' and 
+               @instance_of_klass.coupon_applied == false and 
+               @instance_of_klass.is_buyback == false and 
+               @instance_of_klass.order.buy_order == false and (not @instance_of_klass.weigh_compulsory == true) then
                puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
-              unless @inst.activated and true == false then
+              unless @instance_of_klass.activated and true == false then
                  puts  "### inst is not activated."
                 # Takes into account ITEM rebate and ORDER rebate.
                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
                 newval = params[:value]
-                origttl = @inst.total
-                @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
-                @inst.quantity = newval
-                @inst.calculate_total_with_rebate
-                @inst.calculate_rebate_amount
+                origttl = @instance_of_klass.total
+                @instance_of_klass.rebate.nil? ? oi_rebate = 0 : oi_rebate = @instance_of_klass.rebate
+                @instance_of_klass.quantity = newval
+                @instance_of_klass.calculate_total_with_rebate
+                @instance_of_klass.calculate_rebate_amount
                 # Calculate OI tax, but update DB below instead
-                @inst.calculate_tax(true)
+                @instance_of_klass.calculate_tax(true)
                 # Only include ORDER rebate in calculation if type = 'percent'
-                @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
+                @instance_of_klass.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @instance_of_klass.order.rebate
                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
-                @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-                @inst.connection.execute("update '`order_items` set total = #{@inst.total},`quantity` = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
-                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
-                @inst.is_valid = true
+                @instance_of_klass.order.total = @instance_of_klass.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @instance_of_klass.total - @instance_of_klass.calculate_oi_order_rebate
+                @instance_of_klass.connection.execute("update '`order_items` set total = #{@instance_of_klass.total},`quantity` = #{newval}, tax = #{@instance_of_klass.tax}, rebate_amount = #{ @instance_of_klass.rebate_amount } where id = #{@instance_of_klass.id}")
+                @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.order.total} where `id` = #{@instance_of_klass.order.id}")
+                @instance_of_klass.is_valid = true
                 render :layout => false and return
               end
-            elsif params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
+            elsif params[:field] == 'price' and @instance_of_klass.behavior == 'normal' and @instance_of_klass.coupon_applied == false and @instance_of_klass.is_buyback == false and @instance_of_klass.order.buy_order == false then
                puts  "### field is price"
-              unless @inst.activated then
+              unless @instance_of_klass.activated then
                 # Takes into account ITEM rebate and ORDER rebate.
                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
                 newval = params[:value].to_s.gsub(/[^\d\.]/,'').to_f.round(2)
-                origttl = @inst.total
-                @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
-                @inst.price = newval
-                @inst.calculate_total_with_rebate
-                @inst.calculate_rebate_amount
+                origttl = @instance_of_klass.total
+                @instance_of_klass.rebate.nil? ? oi_rebate = 0 : oi_rebate = @instance_of_klass.rebate
+                @instance_of_klass.price = newval
+                @instance_of_klass.calculate_total_with_rebate
+                @instance_of_klass.calculate_rebate_amount
                 # Calculate OI tax, but update DB below instead
-                @inst.calculate_tax(true)
+                @instance_of_klass.calculate_tax(true)
                 # Only include ORDER rebate in calculation if type = 'percent'
-                @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
+                @instance_of_klass.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @instance_of_klass.order.rebate
                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
-                @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-                # @inst.connection.execute("update order_items set total = #{@inst.total}, price = #{@inst.price}, tax = #{@inst.tax} where id = #{@inst.id}")
-                @inst.save
+                @instance_of_klass.order.total = @instance_of_klass.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @instance_of_klass.total - @instance_of_klass.calculate_oi_order_rebate
+                # @instance_of_klass.connection.execute("update order_items set total = #{@instance_of_klass.total}, price = #{@instance_of_klass.price}, tax = #{@instance_of_klass.tax} where id = #{@instance_of_klass.id}")
+                @instance_of_klass.save
 
-                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
-                @inst.is_valid = true
+                @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.order.total} where `id` = #{@instance_of_klass.order.id}")
+                @instance_of_klass.is_valid = true
                 render :layout => false and return
               end
-            elsif params[:field] == 'rebate'and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
+            elsif params[:field] == 'rebate'and @instance_of_klass.behavior == 'normal' and @instance_of_klass.coupon_applied == false and @instance_of_klass.is_buyback == false and @instance_of_klass.order.buy_order == false then
                puts  "### field is rebate"
               # Takes into account ITEM rebate and ORDER rebate.
               # ORDER and ITEM totals are updated in DB and in instance vars for JS
               rebate = params[:value].gsub(',','.').to_f
-              origttl = @inst.total
-              @inst.calculate_total_with_rebate(rebate)
-              @inst.calculate_rebate_amount
+              origttl = @instance_of_klass.total
+              @instance_of_klass.calculate_total_with_rebate(rebate)
+              @instance_of_klass.calculate_rebate_amount
               # Calculate OI tax, but update DB below instead
-              @inst.calculate_tax(true)
+              @instance_of_klass.calculate_tax(true)
               # Only include ORDER rebate in calculation if type = 'percent'
-              @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
+              @instance_of_klass.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @instance_of_klass.order.rebate
               # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
-              @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-              @inst.connection.execute("update `order_items` set total = #{@inst.total}, rebate = #{rebate}, rebate_amount = #{ @inst.rebate_amount }, tax = #{@inst.tax} where id = #{@inst.id}")
-              @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
-              @inst.is_valid = true
-              @inst.rebate = rebate
+              @instance_of_klass.order.total = @instance_of_klass.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @instance_of_klass.total - @instance_of_klass.calculate_oi_order_rebate
+              @instance_of_klass.connection.execute("update `order_items` set total = #{@instance_of_klass.total}, rebate = #{rebate}, rebate_amount = #{ @instance_of_klass.rebate_amount }, tax = #{@instance_of_klass.tax} where id = #{@instance_of_klass.id}")
+              @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.order.total} where `id` = #{@instance_of_klass.order.id}")
+              @instance_of_klass.is_valid = true
+              @instance_of_klass.rebate = rebate
               render :layout => false and return
             else
                puts  "### Other OrderItem updates executing"
               # For all other OrderItem updates
               # puts  "### update(#{params[:field].to_sym},#{params[:value]})"
-              @inst.update_attribute(params[:field].to_sym,params[:value])
-              @inst.calculate_total
-              @inst.order.update_self_and_save
-              @inst.reload
-              if @inst.behavior == 'coupon' then
+              @instance_of_klass.update_attribute(params[:field].to_sym,params[:value])
+              @instance_of_klass.calculate_total
+              @instance_of_klass.order.update_self_and_save
+              @instance_of_klass.reload
+              if @instance_of_klass.behavior == 'coupon' then
                 
               end
               render :layout => false and return
@@ -507,62 +507,62 @@ class VendorsController < ApplicationController
 
               puts "Updating scotty on order"
               # ORDER rebate updating
-              old_rebate = @inst.rebate
+              old_rebate = @instance_of_klass.rebate
               newvalue = params[:value].gsub(',','.').to_f
-              if @inst.rebate_type == 'percent' then
+              if @instance_of_klass.rebate_type == 'percent' then
                 # Add old % rebate back to order total
-                @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
+                @instance_of_klass.total = @instance_of_klass.total + ((@instance_of_klass.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
                 # Subtract new % rebate from order total
-                @inst.total = @inst.total - (@inst.total * (newvalue / 100.0))
-                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
-                @inst.rebate = newvalue
+                @instance_of_klass.total = @instance_of_klass.total - (@instance_of_klass.total * (newvalue / 100.0))
+                @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.total}, `rebate` = #{newvalue} where `id` = #{@instance_of_klass.id}")
+                @instance_of_klass.rebate = newvalue
                 render :layout => false and return
               else
                 # Fixed rebate is easier: + old, - new
-                @inst.total = @inst.total + old_rebate - newvalue
-                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
-                @inst.rebate = newvalue
+                @instance_of_klass.total = @instance_of_klass.total + old_rebate - newvalue
+                @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.total}, `rebate` = #{newvalue} where `id` = #{@instance_of_klass.id}")
+                @instance_of_klass.rebate = newvalue
                 render :layout => false and return
               end
             elsif params[:field] == "front_end_change" then
-              @inst.front_end_change = params[:value]
+              @instance_of_klass.front_end_change = params[:value]
             elsif params[:field] == 'rebate_type' then
               # Changing rebate type means recalculating ORDER total
-              old_rebate = @inst.rebate
-              old_rebate_type = @inst.rebate_type
+              old_rebate = @instance_of_klass.rebate
+              old_rebate_type = @instance_of_klass.rebate_type
               newvalue = params[:value]
               unless newvalue == old_rebate_type then
                 if old_rebate_type == 'percent' then
                   # Add old % rebate back to order total
-                  @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
+                  @instance_of_klass.total = @instance_of_klass.total + ((@instance_of_klass.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
                   # Subtract fixed rebate
-                  @inst.total -= old_rebate
-                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
-                  @inst.rebate_type = newvalue
+                  @instance_of_klass.total -= old_rebate
+                  @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.total}, `rebate_type` = '#{newvalue}' where `id` = #{@instance_of_klass.id}")
+                  @instance_of_klass.rebate_type = newvalue
                   render :layout => false and return
                 else
                   # fixed rebate
-                  @inst.total += old_rebate
-                  @inst.total = @inst.total - (@inst.total * (old_rebate / 100.0))
-                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
-                  @inst.rebate_type = newvalue
+                  @instance_of_klass.total += old_rebate
+                  @instance_of_klass.total = @instance_of_klass.total - (@instance_of_klass.total * (old_rebate / 100.0))
+                  @instance_of_klass.connection.execute("update `orders` set `total` = #{@instance_of_klass.total}, `rebate_type` = '#{newvalue}' where `id` = #{@instance_of_klass.id}")
+                  @instance_of_klass.rebate_type = newvalue
                   render :layout => false and return
                 end
               end
             else
               # For all other Order updates
               puts "Updating directly on order"
-              @inst.update_attribute(params[:field].to_sym,params[:value])
-              @inst.calculate_totals
-              @inst.update_self_and_save
+              @instance_of_klass.update_attribute(params[:field].to_sym,params[:value])
+              @instance_of_klass.calculate_totals
+              @instance_of_klass.update_self_and_save
               render :layout => false and return
             end
           end
           # Else update attribute for other classes
-          @inst.update_attribute(params[:field].to_sym,params[:value])
+          @instance_of_klass.update_attribute(params[:field].to_sym,params[:value])
         else
           #raise "ModelKnowsNot"
-        end # @inst.responds_to?
+        end # @instance_of_klass.responds_to?
       else
         #raise "ModelNotFound"
       end #end klass.exists?
@@ -576,19 +576,19 @@ class VendorsController < ApplicationController
     if allowed_klasses.include? params[:klass]
       kls = Kernel.const_get(params[:klass])
       if kls.exists? params[:model_id] then
-        @inst = kls.find(params[:model_id])
-        if @inst.respond_to? params[:field]
-          if not salor_user.owns_this?(@inst) then
+        @instance_of_klass = kls.find(params[:model_id])
+        if @instance_of_klass.respond_to? params[:field]
+          if not salor_user.owns_this?(@instance_of_klass) then
             raise I18n.t("views.errors.no_access_right")
           end
-          @inst.send(params[:field].to_sym,params[:value])
-        end # @inst.responds_to?
+          @instance_of_klass.send(params[:field].to_sym,params[:value])
+        end # @instance_of_klass.responds_to?
       else
         raise "RecordNotFound"
       end # klass.exists?
     end # allowed_klasses
     render(:nothing => true) and return if params[:field] == 'toggle_refund'
-    @inst.reload
+    @instance_of_klass.reload
     render :layout => false
   end
   
