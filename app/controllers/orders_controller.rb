@@ -47,7 +47,9 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+# {VOCABULARY} orders_item item_price oi_price customer_payments payments_type payments_method paying_agent agent_has_paid agent_will_pay_later gift_card_applies coupon_percentage coupon_updated gift_cards_used item_price_update item_discount_percentage cash_register_used cash_register_inc include_register_codes employee_vendor
 class OrdersController < ApplicationController
+# {START}
    before_filter :authify, :except => [:customer_display,:print, :print_receipt]
    before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt]
@@ -620,4 +622,5 @@ class OrdersController < ApplicationController
     parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{options[:delimiter]}")
     return parts.join(options[:separator])
   end
+  # {END}
 end

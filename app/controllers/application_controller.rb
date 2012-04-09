@@ -47,22 +47,16 @@
 # functioning of your business.
 
 class ApplicationController < ActionController::Base
+  #{START}
   include SalorBase
   helper :all
   helper_method :workstation?, :mobile?
   protect_from_forgery
-  before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login, :render_error]
-  before_filter :pre_load, :except => [:render_error]
-  before_filter :setup_global_data, :except => [:login, :render_error]
+  before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login]
+  before_filter :pre_load
+  before_filter :setup_global_data, :except => [:login]
   layout :layout_by_response
   helper_method [:user_cache_name]
-
-  unless Salor::Application.config.consider_all_requests_local
-    rescue_from Exception, :with => :render_error
-  end 
-
-
-
 
   def pre_load
   end
@@ -132,11 +126,9 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
   def allowed_klasses
     ['LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem','CashRegisterDaily']
   end
-
   def initialize_instance_variables
     if params[:vendor_id] and not params[:vendor_id].blank? then
       salor_user.meta.update_attribute(:vendor_id,params[:vendor_id])
@@ -170,14 +162,12 @@ class ApplicationController < ActionController::Base
       $Conf = @vendor.salor_configuration
     end
   end
-
   def layout_by_response
     if params[:ajax] then
        return false
     end
     return "application"
   end
-
   def loadup
     SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
     GlobalData.refresh # Because classes are cached across requests
@@ -198,12 +188,6 @@ class ApplicationController < ActionController::Base
     add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
     @page_title = "Salor"
     @page_title_options = {}
-  end
-
-  def render_error(exception)
-    #log_error(exception)
-    @exception = exception
-    render :template => '/errors/error.html.haml', :layout => 'customer_display'
   end
 
   protected
@@ -334,5 +318,5 @@ class ApplicationController < ActionController::Base
     t ||= 0.day.ago
     return f, t
   end
-
+  # {END}
 end
