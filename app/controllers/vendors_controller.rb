@@ -260,11 +260,11 @@ class VendorsController < ApplicationController
 
   def render_drawer_transaction_receipt
     if params[:user_type] == 'User'
-      @user = User.find_by_id params[:user_id]
+      @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id params[:user_id]
+      @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id params[:cash_register_id]
+    @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
@@ -320,11 +320,11 @@ class VendorsController < ApplicationController
   #
   def render_end_of_day_receipt
     if params[:user_type] == 'User'
-      @user = User.find_by_id params[:user_id]
+      @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id params[:user_id]
+      @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id params[:cash_register_id]
+    @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
@@ -371,7 +371,7 @@ class VendorsController < ApplicationController
     # puts  "### Begining edit_field_on_child"
     # and takes up to 2s for lots of items!!
     if params[:field] == "front_end_change" then
-      o = Order.scopied.find_by_id params[:order_id]
+      o = Order.scopied.find_by_id(params[:order_id])
       o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value])
       render :nothing => true and return
     end
