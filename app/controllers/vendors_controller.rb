@@ -48,7 +48,6 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class VendorsController < ApplicationController
-  # {START}
     before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
@@ -364,7 +363,6 @@ class VendorsController < ApplicationController
     end
   end
 
-  # {END}
   def edit_field_on_child
     # If possible, this tries to avoid calling calculate_totals / update_self_and_save
     # for ORDER and ORDER_ITEM operations. Calling above funcs recalculates everything
@@ -572,7 +570,6 @@ class VendorsController < ApplicationController
     render :layout => false
   end
   #
-  # {START}
   def toggle
     if allowed_klasses.include? params[:klass]
       kls = Kernel.const_get(params[:klass])
@@ -650,5 +647,4 @@ class VendorsController < ApplicationController
     ftype = 'tsv'
     send_data(lines, :filename => "#{name}_#{Time.now.year}#{Time.now.month}#{Time.now.day}-#{Time.now.hour}#{Time.now.min}.#{ftype}", :type => 'application-x/csv') and return
 	end
-	# {END}
 end
