@@ -375,9 +375,9 @@ class VendorsController < ApplicationController
       o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value])
       render :nothing => true and return
     end
-    if allowed_klses.include? params[:kls] or GlobalData.salor_user.is_technician?
+    if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
        puts  "### Class is allowed"
-      kls = Kernel.const_get(params[:kls])
+      kls = Kernel.const_get(params[:klass])
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
@@ -414,7 +414,7 @@ class VendorsController < ApplicationController
           params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
            puts  " --- " + params[:value].to_s
           if kls == OrderItem then
-             puts  "### kls is OrderItem"
+             puts  "### klass is OrderItem"
             if params[:field] == 'quantity' and 
                @inst.behavior == 'normal' and 
                @inst.coupon_applied == false and 
@@ -501,7 +501,7 @@ class VendorsController < ApplicationController
           end
  
           if kls == Order then
-            puts "kls is Order"
+            puts "klass is Order"
             # Tax for order is calculated before payment
             if params[:field] == 'rebate' and false == true then
 
@@ -565,16 +565,16 @@ class VendorsController < ApplicationController
         end # @inst.responds_to?
       else
         #raise "ModelNotFound"
-      end #end kls.exists?
+      end #end klass.exists?
     else
       #raise "ModelNotAllowed!"
-    end #end allowed_kls
+    end #end allowed_klass
     render :layout => false
   end
   #
   def toggle
-    if allowed_klses.include? params[:kls]
-      kls = Kernel.const_get(params[:kls])
+    if allowed_klasses.include? params[:klass]
+      kls = Kernel.const_get(params[:klass])
       if kls.exists? params[:model_id] then
         @inst = kls.find(params[:model_id])
         if @inst.respond_to? params[:field]
@@ -585,8 +585,8 @@ class VendorsController < ApplicationController
         end # @inst.responds_to?
       else
         raise "RecordNotFound"
-      end # kls.exists?
-    end # allowed_klses
+      end # klass.exists?
+    end # allowed_klasses
     render(:nothing => true) and return if params[:field] == 'toggle_refund'
     @inst.reload
     render :layout => false
