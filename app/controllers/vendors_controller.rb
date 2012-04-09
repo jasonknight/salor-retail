@@ -375,15 +375,15 @@ class VendorsController < ApplicationController
       o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value])
       render :nothing => true and return
     end
-    if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
+    if allowed_klses.include? params[:kls] or GlobalData.salor_user.is_technician?
        puts  "### Class is allowed"
-      klass = Kernel.const_get(params[:klass])
+      kls = Kernel.const_get(params[:kls])
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
-      if klass.exists? params[:id] then
+      if kls.exists? params[:id] then
          puts  "### Class Exists"
-        @inst = klass.find(params[:id])
+        @inst = kls.find(params[:id])
         if @inst.class == OrderItem and @inst.order.paid == 1 then
           puts "## Order is Paid"
           render :layout => false and return
@@ -413,8 +413,8 @@ class VendorsController < ApplicationController
            puts  " --- " + params[:value].to_s
           params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
            puts  " --- " + params[:value].to_s
-          if klass == OrderItem then
-             puts  "### klass is OrderItem"
+          if kls == OrderItem then
+             puts  "### kls is OrderItem"
             if params[:field] == 'quantity' and 
                @inst.behavior == 'normal' and 
                @inst.coupon_applied == false and 
@@ -500,8 +500,8 @@ class VendorsController < ApplicationController
             end
           end
  
-          if klass == Order then
-            puts "klass is Order"
+          if kls == Order then
+            puts "kls is Order"
             # Tax for order is calculated before payment
             if params[:field] == 'rebate' and false == true then
 
@@ -565,18 +565,18 @@ class VendorsController < ApplicationController
         end # @inst.responds_to?
       else
         #raise "ModelNotFound"
-      end #end klass.exists?
+      end #end kls.exists?
     else
       #raise "ModelNotAllowed!"
-    end #end allowed_klass
+    end #end allowed_kls
     render :layout => false
   end
   #
   def toggle
-    if allowed_klasses.include? params[:klass]
-      klass = Kernel.const_get(params[:klass])
-      if klass.exists? params[:model_id] then
-        @inst = klass.find(params[:model_id])
+    if allowed_klses.include? params[:kls]
+      kls = Kernel.const_get(params[:kls])
+      if kls.exists? params[:model_id] then
+        @inst = kls.find(params[:model_id])
         if @inst.respond_to? params[:field]
           if not salor_user.owns_this?(@inst) then
             raise I18n.t("views.errors.no_access_right")
@@ -585,8 +585,8 @@ class VendorsController < ApplicationController
         end # @inst.responds_to?
       else
         raise "RecordNotFound"
-      end # klass.exists?
-    end # allowed_klasses
+      end # kls.exists?
+    end # allowed_klses
     render(:nothing => true) and return if params[:field] == 'toggle_refund'
     @inst.reload
     render :layout => false
