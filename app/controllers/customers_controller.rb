@@ -46,7 +46,10 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
+# {VOCABULARY} customer_object customer_info customer_sku customer_loyalty_card customer_pagination customer_undefined
+# {VOCABULARY} customer_orders customer_order_items customer_points customer_rebates customer_order_items
 class CustomersController < ApplicationController
+  # {START}
   before_filter :authify, :except => [:labels]
   before_filter :initialize_instance_variables, :except => [:labels]
   before_filter :check_role, :except => [:labels]
@@ -74,7 +77,7 @@ class CustomersController < ApplicationController
   end
 
   def show
-    @customer = Customer.scopied.find_by_id params[:id]
+    @customer = Customer.scopied.find_by_id(params[:id])
     @report = @customer.get_sales_statistics
   end
 
@@ -92,7 +95,7 @@ class CustomersController < ApplicationController
   def create
     
     @customer = Customer.new(params[:customer])
-    @loyalty_card = LoyaltyCard.new params[:loyalty_card]
+    @loyalty_card = LoyaltyCard.new(params[:loyalty_card])
 
     respond_to do |format|
       if @loyalty_card.save and @customer.save
@@ -149,7 +152,7 @@ class CustomersController < ApplicationController
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
-    @customers = Customer.find_all_by_id params[:id]
+    @customers = Customer.find_all_by_id(params[:id])
     text = Printr.new.sane_template(params[:type],binding)
     if @register.salor_printer
       render :text => text
@@ -177,4 +180,5 @@ class CustomersController < ApplicationController
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.customers"),'customers_path(:vendor_id => params[:vendor_id])'
   end
+  # {END}
 end

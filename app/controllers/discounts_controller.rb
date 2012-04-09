@@ -47,6 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class DiscountsController < ApplicationController
+  # {START}
   before_filter :authify
   before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
@@ -140,4 +141,5 @@ class DiscountsController < ApplicationController
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.discounts"),'discounts_path(:vendor_id => params[:vendor_id])'
   end
+  # {END}
 end

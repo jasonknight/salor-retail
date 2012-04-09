@@ -48,6 +48,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class VendorsController < ApplicationController
+  # {START}
     before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
@@ -268,7 +269,7 @@ class VendorsController < ApplicationController
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
-    @dt = DrawerTransaction.find_by_id params[:id]
+    @dt = DrawerTransaction.find_by_id(params[:id])
     GlobalData.vendor = @dt.owner.get_meta.vendor
     $User = @dt.owner
     if not @dt then
@@ -648,4 +649,5 @@ class VendorsController < ApplicationController
     ftype = 'tsv'
     send_data(lines, :filename => "#{name}_#{Time.now.year}#{Time.now.month}#{Time.now.day}-#{Time.now.hour}#{Time.now.min}.#{ftype}", :type => 'application-x/csv') and return
 	end
+	# {END}
 end
