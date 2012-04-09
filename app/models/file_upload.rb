@@ -47,7 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 
-#
+# {VOCABULARY} file_upload_line lines_to_do doing_line current_line line_separator2 created_items_in_db created_taxprofiles createdcategories
 class FileUpload
   # {START}
   def type1(file_lines) #danczek_tobaccoland_plattner
