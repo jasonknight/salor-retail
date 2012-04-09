@@ -47,7 +47,7 @@
 # functioning of your business.
 
 class ApplicationController < ActionController::Base
-  #{START}
+  # {START}
   include SalorBase
   helper :all
   helper_method :workstation?, :mobile?
