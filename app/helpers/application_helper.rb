@@ -104,7 +104,7 @@ module ApplicationHelper
   end
   def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :breadcrumb => true, :classes => []}, hideowner = false)
     classes = ['box-title','shadow']
-    bbutton = '<div class="left-blank"></div>'
+    bbt = '<div class="left-blank"></div>'
     rbtn = '<div class="right-blank"></div>'
     crumbs = ''
     options[:classes] ||= []
@@ -124,7 +124,7 @@ module ApplicationHelper
       classes = ['small-title','shadow']
     else
       unless options[:menu] == false
-        bbutton = '<div onclick="history.go(-1);" class="back-button' + adminclass + '"> &lt; </div>'
+        bbt = '<div onclick="history.go(-1);" class="back-button' + adminclass + '"> &lt; </div>'
         rbtn = '<div onclick="window.location.reload();" class="reload-button' + adminclass + '"> &#x267A; </div>'
         crumbs = breadcrumbs
       end
@@ -133,7 +133,7 @@ module ApplicationHelper
     %Q[
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
       <div class="title-container">
-          #{bbutton} <div class="title-box #{classes.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
+          #{bbt} <div class="title-box #{classes.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
           <div class="breadcrumb-container">
             #{crumbs}
           </div>
