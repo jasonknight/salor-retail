@@ -209,9 +209,18 @@ class OrdersController < ApplicationController
     @error = nil
     @order = initialize_order
     if @order.paid == 1 and not $User.is_technician? then
-      @order = GlobalData.salor_user.get_new_order 
+      @order = $User.get_new_order 
+      @order_item = @order.add_item(@item)
+      @order.update_self_and_save
+      @order_item.reload
+      render and return
     end
     @order_item = @order.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+    # We cannot sell multiples of gift cards.
+    if @order_item and @order_item.behavior == 'gift_card' then
+      flash[:notice] = I18n.t("system.errors.insufficient_quantity_on_item", :sku => @order_item.sku)
+      render :action => :update_pos_display and return
+    end
     unless @order_item.nil? then
       unless @order_item.activated or @order_item.is_buyback then
         @order_item.total += @order_item.price
