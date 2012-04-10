@@ -1,4 +1,3 @@
-require 'zlib'
 # ------------------- Salor Point of Sale ----------------------- 
 # An innovative multi-user, multi-store application for managing
 # small to medium sized retail stores.
@@ -47,9 +46,6 @@ require 'zlib'
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
-# {VOCABULARY} order price total quantity order_item gift_card item hidden behavior discount discounts remainder location category node technician
-# {VOCABULARY} cash_register tax vendor customer paid pay transfer undo
-# {VOCABULARY} payment_method payment_type salor appconfig coupon
 class Order < ActiveRecord::Base
  # {START}
 	include SalorScope
@@ -734,14 +730,16 @@ class Order < ActiveRecord::Base
       if oi.item_type_id == 1
         item_price = oi.price
         item_price *= -1 if self.buy_order
-        item_total = item_price * oi.quantity
-      end
+        item_total = item_price * oi.quantity # total cannot be changed and locked any more
+      end # passing
 
       # Price calculation for gift card items
       if oi.item_type_id == 2
         if oi.activated
+          # gift card as payment
           item_price = - oi.total
         else
+          # gift card sold
           item_price = oi.total
         end
         item_total = item_price * oi.quantity
@@ -749,30 +747,53 @@ class Order < ActiveRecord::Base
 
       # Price calculation for coupon items
       if oi.item_type_id == 3
-        if oi.item.coupon_type == 1 # percent
-          item_price = - Item.scopied.find_by_sku(oi.item.coupon_applies).base_price * oi.price / 100.0
+        # current OrderItem is a coupon
+        if oi.item.coupon_type == 1
+          # parent item has a % coupon set
+          item_price = oi.price
+          item_total = (- oi.order_item.price * oi.price / 100.0) * oi.quantity # calculation does not rely on other model code, so this is a test
+        elsif oi.item.coupon_type == 2
+          # parent item has a fixed price coupon set
+          item_price = - oi.price # calculation does not rely on other model code, so this is a test
+          # item_price = oi.coupon_amount # second possibility to get item_price
           item_total = item_price * oi.quantity
-        elsif oi.item.coupon_type == 3 # b1g1
-          item_total = 0
+        elsif oi.item.coupon_type == 3
+          # parent item has a b1g1 price coupon set
+          item_price = - (oi.order_item.price)
+          item_total = Integer(oi.order_item.quantity / 2) * item_price
         end
       end
 
-      # Price calculation for discounts
-      if oi.discount_applied
+      # these will accumulate discounts and rebates further down and are needed for tax and refund total calculation
+      new_item_price = item_price
+      new_item_total = item_total
+
+      # Price calculation for discounts, a separate line will be added below so no modification of item_total
+      if oi.discount_applied and not self.buy_order
         if not oi.refunded
           discount_price = - oi.discount_amount / oi.quantity
           discount_total = - oi.discount_amount
+          new_item_price += rebate_price
+          new_item_total += rebate_total
         else
           discount_price = 0
           discount_total = 0
         end
+        discount_subtotal += discount_total
       end
 
-      # Price calculation for rebates
-      rebate_total = 0
+      # Price calculation for rebates, a separate line will be added below so no modification of item_total
       if oi.rebate and oi.rebate > 0
-        rebate_price = - ( oi.price * oi.rebate / 100.0)
-        rebate_total = rebate_price * oi.quantity
+        rebate_total = 0
+        if not oi.refunded
+          rebate_price = - ( oi.price * oi.rebate / 100.0)
+          rebate_total = rebate_price * oi.quantity
+          new_item_price += rebate_price
+          new_item_total += rebate_total
+        else
+          rebate_price = 0
+          rebate_total = 0
+        end
         rebate_subtotal += rebate_total
       end
 
@@ -783,21 +804,23 @@ class Order < ActiveRecord::Base
         elsif
           refund_subtotal -= item_total
         end
-        refund_subtotal -= rebate_total
-        rebate_price = 0
-        rebate_total = 0
         item_price = 0
         item_total = 0
-      else
-        # Sum up taxes
+        new_item_price = 0
+        new_item_total = 0
+      end
+
+      # Price calculation for taxes
+      if not oi.refunded
+        sum_taxes[oi.tax_profile.id] += new_item_total # start with unmodified price
+
         if self.rebate > 0
           if self.rebate_type == 'percent'
-            sum_taxes[oi.tax_profile.id] += item_total * (1 - self.rebate / 100.0)
-          elsif self.rebate_type == 'fixed'
-            sum_taxes[oi.tax_profile.id] += item_total - (self.rebate / self.nonrefunded_item_count )
+            sum_taxes[oi.tax_profile.id] -= new_item_total * ( 1 - ( 1 - self.rebate / 100.0 ))
           end
-        else
-          sum_taxes[oi.tax_profile.id] += item_total
+          if self.rebate_type == 'fixed'
+            sum_taxes[oi.tax_profile.id] -= self.rebate / self.nonrefunded_item_count # dividing works because it's inside of not oi.refunded
+          end
         end
       end
 
@@ -825,14 +848,18 @@ class Order < ActiveRecord::Base
       if oi.item_type_id == 3
         if oi.item.coupon_type == 1
           # percent coupon
-          list_of_items += "%s %19.19s %6.1f%% %3u    %6.2f\n" % [oi.item.tax_profile.letter, name, oi.price, oi.quantity, item_total]
+          list_of_items += "%s %19.19s %6.1f%% %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+        elsif oi.item.coupon_type == 2
+          # fixed amount coupon
+          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
         elsif oi.item.coupon_type == 3
-          list_of_items += "%s %19.19s\n" % [oi.item.tax_profile.letter, name]
+          # b1g1 coupon
+          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
         end
       end
 
       # DISCOUNTS
-      if oi.discount_applied
+      if oi.discount_applied and not self.buy_order
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
           list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name, discount_price, oi.quantity, discount_total]
@@ -840,7 +867,6 @@ class Order < ActiveRecord::Base
           # float quantity
           list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name, discount_price, oi.quantity, discount_total]
         end
-        discount_subtotal += discount_total
       end
 
       # REBATES
