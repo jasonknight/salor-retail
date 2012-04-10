@@ -379,7 +379,6 @@ class Item < ActiveRecord::Base
       return
     end
     make_valid
-      raise "debug" 
     if self.item_type.behavior == 'coupon' then
       unless Item.find_by_sku(self.coupon_applies) then
         errors.add(:coupon_applies,I18n.t('views.item_must_exist'))

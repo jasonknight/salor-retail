@@ -539,9 +539,7 @@ class OrderItem < ActiveRecord::Base
           # this takes place when you have more than one b1g1 coupon and mored
           # than one target item.l
           q = self.quantity
-          begin
-            q -= 1  
-          end until q == oi.quantity / 2 or q <= 1
+          q = (oi.quantity / 2).to_i
           amnt = (oi.price * q)
         else
           amnt = (oi.price * self.quantity)
