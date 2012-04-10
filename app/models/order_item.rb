@@ -123,15 +123,24 @@ class OrderItem < ActiveRecord::Base
   
   #
   def toggle_refund(x, refund_payment_method)
-    if not $User.get_drawer.amount >= self.total then
-      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self) # MF: Why doesn't this show up?
-      return
+    # -1 = Not Enough in Drawer
+    # false is general failure
+    # true is everything went according to plan  
+    if not $User.get_drawer.amount >= self.total and refund_payment_method == 'InCash' then
+      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
+      return -1
     end
 
     t = (self.calculate_total)
-    return if (GlobalData.salor_user.get_drawer.amount - t) < 0
+    if self.order and not self.order.rebate == 0
+      if self.order.rebate_type == "percent" then
+        t -= t * (self.order.rebate / 100)
+      end
+    end
+    return -1 if ($User.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash'
     q = self.quantity
     if self.refunded then
+      return false
       # this should never happen right now since it's blocked by the orders#show view
       #self.update_attribute(:refunded,false)
       #update_location_category_item(t,q)
@@ -143,8 +152,8 @@ class OrderItem < ActiveRecord::Base
       #self.order.update_attribute(:total, self.order.total + t)
     else
       self.update_attribute(:refunded,true)
-      self.update_attribute(:refunded_by, GlobalData.salor_user.id)
-      self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
+      self.update_attribute(:refunded_by, $User.id)
+      self.update_attribute(:refunded_by_type, $User.class.to_s)
       self.update_attribute(:refund_payment_method, refund_payment_method)
       update_location_category_item(t * -1,q * -1)
       self.order.update_attribute(:total, self.order.total - t)
@@ -159,7 +168,9 @@ class OrderItem < ActiveRecord::Base
       end
 
       # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
+     return true
     end
+    return false
   end
   def update_location_category_item(t,q)
     self.item.update_attribute(:quantity_sold, self.item.quantity_sold + q)

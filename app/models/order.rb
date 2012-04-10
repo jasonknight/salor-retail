@@ -735,14 +735,14 @@ class Order < ActiveRecord::Base
       name = oi.item.name
 
       # Price calculation for normal items
-      if oi.item_type_id == 1
+      if oi.behavior == 'normal'
         item_price = oi.price
         item_price *= -1 if self.buy_order
         item_total = item_price * oi.quantity # total cannot be changed and locked any more
       end # passing
 
       # Price calculation for gift card items
-      if oi.item_type_id == 2
+      if oi.behavior == 'gift_card'
         if oi.activated
           # gift card as payment
           item_price = - oi.total
@@ -754,7 +754,7 @@ class Order < ActiveRecord::Base
       end
 
       # Price calculation for coupon items
-      if oi.item_type_id == 3
+      if oi.behavior == 'coupon'
         # current OrderItem is a coupon
         if oi.item.coupon_type == 1
           # parent item has a % coupon set
@@ -845,7 +845,7 @@ class Order < ActiveRecord::Base
       # THE FOLLOWING IS THE LINE GENERATION
 
       # NORMAL ITEMS
-      if oi.item_type_id == 1
+      if oi.behavior == 'normal'
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
           list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
@@ -856,12 +856,12 @@ class Order < ActiveRecord::Base
       end
 
       # GIFT CARDS
-      if oi.item_type_id == 2
+      if oi.behavior == 'gift_card'
         list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
       end
 
       # COUPONS
-      if oi.item_type_id == 3
+      if oi.behavior == 'coupon'
         if oi.item.coupon_type == 1
           # percent coupon
           list_of_items += "%s %19.19s %6.1f%% %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]

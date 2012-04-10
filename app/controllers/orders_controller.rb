@@ -451,9 +451,16 @@ class OrdersController < ApplicationController
   end
   def refund_item
     @oi = OrderItem.scopied.find_by_id(params[:id])
-    @oi.toggle_refund(true, params[:pm])
+    x = @oi.toggle_refund(true, params[:pm])
+    if x == -1 then
+      flash[:notice] = I18n.t("system.errors.not_enough_in_drawer")
+    end
+    if x == false then
+      flash[:notice] = I18n.t("system.errors.unspecified_error")
+    end
     @oi.save
-    redirect_to order_path(@oi.order)
+    redirect_to request.referer
+    
   end
   def refund_order
     @order = Order.scopied.find_by_id(params[:id])
