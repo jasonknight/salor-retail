@@ -574,12 +574,13 @@ module UserEmployeeMethods
           when 'gift_card' then oi.activated ? - oi.total : oi.total
           when 'coupon' then oi.order_item ? - oi.order_item.coupon_amount / oi.quantity  : 0
         end
-        item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate # calculate in item rebates
-        item_price = - oi.price if o.buy_order # consider buy orders
-        item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity # this is depreciated elsewhere and should never happen
+        item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
+        item_price = - oi.price if o.buy_order
+        item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
         item_total = item_total * ( 1 - o.rebate / 100.0 ) if o.rebate_type == 'percent' # spread order percent rebate equally
         item_total -= o.rebate / o.order_items.visible.count if o.rebate_type == 'fixed' # spread order fixed rebate equally
         item_total -= o.lc_discount_amount / o.order_items.visible.count  # spread order lc discount amount equally
+        item_total -= oi.discount_amount if oi.discount_applied
         gro = item_total
         net = item_total / ( 1 + oi.tax_profile_amount / 100 )
         if item_total > 0.0

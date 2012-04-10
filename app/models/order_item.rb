@@ -124,7 +124,7 @@ class OrderItem < ActiveRecord::Base
   #
   def toggle_refund(x, refund_payment_method)
     if not $User.get_drawer.amount >= self.total then
-      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
+      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self) # MF: Why doesn't this show up?
       return
     end
 

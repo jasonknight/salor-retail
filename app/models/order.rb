@@ -834,6 +834,10 @@ class Order < ActiveRecord::Base
             sum_taxes[oi.tax_profile.id] -= self.rebate / self.nonrefunded_item_count # dividing is safe because it's inside of not oi.refunded
           end
         end
+        if self.lc_points?
+          lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
+          sum_taxes[oi.tax_profile.id] += lc_points_discount / self.nonrefunded_item_count
+        end
       end
 
       subtotal1 += item_total
