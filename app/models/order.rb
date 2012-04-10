@@ -778,12 +778,11 @@ class Order < ActiveRecord::Base
 
       # Price calculation for discounts, a separate line will be added below so no modification of item_total
       if oi.discount_applied and not self.buy_order
-        if not oi.refunded
-          discount_price = - oi.discount_amount / oi.quantity
-          discount_total = - oi.discount_amount
-          new_item_price += rebate_price
-          new_item_total += rebate_total
-        else
+        discount_price = - oi.discount_amount / oi.quantity
+        discount_total = - oi.discount_amount
+        new_item_price += discount_price
+        new_item_total += discount_total
+        if oi.refunded
           discount_price = 0
           discount_total = 0
         end
@@ -791,14 +790,13 @@ class Order < ActiveRecord::Base
       end
 
       # Price calculation for rebates, a separate line will be added below so no modification of item_total
+      # MF: Diversion between models and this calculation: buyback items with rebates (which does't make sense and nobody will ever use 
       if oi.rebate and oi.rebate > 0
-        rebate_total = 0
-        if not oi.refunded
-          rebate_price = - ( oi.price * oi.rebate / 100.0)
-          rebate_total = rebate_price * oi.quantity
-          new_item_price += rebate_price
-          new_item_total += rebate_total
-        else
+        rebate_price = - ( oi.price * oi.rebate / 100.0)
+        rebate_total = rebate_price * oi.quantity
+        new_item_price += rebate_price
+        new_item_total += rebate_total
+        if oi.refunded
           rebate_price = 0
           rebate_total = 0
         end
@@ -806,11 +804,16 @@ class Order < ActiveRecord::Base
       end
 
       # Price calculation for refunds
-      if oi.refunded then
-        if self.rebate > 0 and self.rebate_type == 'percent'
-          refund_subtotal -= item_total * (1 - self.rebate / 100.0)
-        elsif
-          refund_subtotal -= item_total
+      if oi.refunded or ( oi.order_item and oi.order_item.refunded) then
+        if not oi.item_type_id == 3
+          # this is somewhat of a hack, which would be fixed if coupons would be refunded together with it's OrderItem
+          refund_subtotal -= ( item_total - oi.discount_amount - oi.coupon_amount - oi.rebate_amount )
+        end
+        if self.rebate > 0
+          if self.rebate_type == 'percent'
+            # only percent order rebates will be equally distributed on all OrderItems
+            refund_subtotal += new_item_total * ( 1 - ( 1 - self.rebate / 100.0 ))
+          end
         end
         item_price = 0
         item_total = 0
@@ -821,13 +824,14 @@ class Order < ActiveRecord::Base
       # Price calculation for taxes
       if not oi.refunded
         sum_taxes[oi.tax_profile.id] += new_item_total # start with unmodified price
-
         if self.rebate > 0
           if self.rebate_type == 'percent'
+            # distribute % order rebate euqally on all order items
             sum_taxes[oi.tax_profile.id] -= new_item_total * ( 1 - ( 1 - self.rebate / 100.0 ))
           end
           if self.rebate_type == 'fixed'
-            sum_taxes[oi.tax_profile.id] -= self.rebate / self.nonrefunded_item_count # dividing works because it's inside of not oi.refunded
+            # distribute fixed order rebate euqally on all order items
+            sum_taxes[oi.tax_profile.id] -= self.rebate / self.nonrefunded_item_count # dividing is safe because it's inside of not oi.refunded
           end
         end
       end
