@@ -513,14 +513,12 @@ class OrderItem < ActiveRecord::Base
     # puts "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
     amnt = 0
     return 0 if ttl <= 0
-    
+    if self.quantity > oi.quantity then
+      self.update_attribute(:quantity,oi.quantity)
+      self.quantity = oi.quantity
+    end
+
     if self.item.coupon_type == 1 then #percent off self type
-      puts "!!! coupon is percent"
-      if self.quantity > oi.quantity then
-        puts "!!! updating quantity"
-        self.update_attribute :quantity,oi.quantity
-        self.quantity = oi.quantity
-      end
       q = self.quantity
       amnt = (oi.price * quantity) * (self.price / 100)
     elsif self.item.coupon_type == 2 then #fixed amount off
