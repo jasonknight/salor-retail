@@ -811,9 +811,14 @@ class Order < ActiveRecord::Base
         end
         if self.rebate > 0
           if self.rebate_type == 'percent'
-            # only percent order rebates will be equally distributed on all OrderItems
             refund_subtotal += new_item_total * ( 1 - ( 1 - self.rebate / 100.0 ))
           end
+          if self.rebate_type == 'fixed'
+            refund_subtotal += self.rebate / self.order_items.visible.count
+          end
+        end
+        if self.lc_discount_amount > 0
+          refund_subtotal += self.lc_discount_amount /  self.order_items.visible.count
         end
         item_price = 0
         item_total = 0
@@ -831,12 +836,12 @@ class Order < ActiveRecord::Base
           end
           if self.rebate_type == 'fixed'
             # distribute fixed order rebate euqally on all order items
-            sum_taxes[oi.tax_profile.id] -= self.rebate / self.nonrefunded_item_count # dividing is safe because it's inside of not oi.refunded
+            sum_taxes[oi.tax_profile.id] -= self.rebate / self.order_items.visible.count
           end
         end
         if self.lc_points?
           lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
-          sum_taxes[oi.tax_profile.id] += lc_points_discount / self.nonrefunded_item_count
+          sum_taxes[oi.tax_profile.id] += lc_points_discount / self.order_items.visible.count
         end
       end
 
@@ -899,8 +904,9 @@ class Order < ActiveRecord::Base
     end # order_items.each do
 
 
-    if self.lc_points? and not self.refunded
-      lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
+    if self.lc_discount_amount > 0
+      lc_points_discount = - self.lc_discount_amount * (self.nonrefunded_item_count.to_f / self.order_items.visible.count.to_f )
+      lc_points_count = self.lc_points * (self.nonrefunded_item_count.to_f / self.order_items.visible.count.to_f )
       subtotal1 += lc_points_discount
     end
 
@@ -930,7 +936,7 @@ class Order < ActiveRecord::Base
       percent_rebate = self.rebate
       order_rebate = percent_rebate_amount
     elsif self.rebate_type == 'fixed' and not self.rebate.zero?
-      fixed_rebate_amount = - self.rebate
+      fixed_rebate_amount = - self.rebate * (self.nonrefunded_item_count.to_f / self.order_items.visible.count.to_f )
       order_rebate = fixed_rebate_amount
     end
     subsubtotal = subtotal4 + order_rebate
@@ -970,7 +976,7 @@ class Order < ActiveRecord::Base
     report[:coupon_subtotal] = coupon_subtotal
     report[:list_of_items] = list_of_items
     report[:lc_points_discount] = lc_points_discount
-    report[:lc_points] = lc_points
+    report[:lc_points] = lc_points_count
     report[:subtotal1] = subtotal1
     report[:display_subtotal1] = display_subtotal1
     report[:subtotal2] = subtotal2

@@ -579,7 +579,7 @@ module UserEmployeeMethods
         item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
         item_total = item_total * ( 1 - o.rebate / 100.0 ) if o.rebate_type == 'percent' # spread order percent rebate equally
         item_total -= o.rebate / o.order_items.visible.count if o.rebate_type == 'fixed' # spread order fixed rebate equally
-        item_total -= o.lc_discount_amount / o.order_items.visible.count  # spread order lc discount amount equally
+        item_total -= o.lc_discount_amount / o.order_items.visible.count  # spread order lc discount amount 
         item_total -= oi.discount_amount if oi.discount_applied
         gro = item_total
         net = item_total / ( 1 + oi.tax_profile_amount / 100 )
