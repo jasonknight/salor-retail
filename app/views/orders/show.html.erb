@@ -16,12 +16,6 @@
           </td>
         <%= salor_render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items.visible} %>
       </table>
-
-      <p align=center><%= t("views.total") %>: <%= salor_number_to_currency(@order.total) %></p>
-      <p align=center><%= t("views.retour") %>: <%= salor_number_to_currency(@order.change_given) %></p>
-      <p align=center><%= t("activerecord.attributes.refund") %>: <%= salor_number_to_currency(@order.refund_total) %></p>
-
-
 <%
   if @order.refunded then
     reverse = "/images/icons/#{icon(:refund,32)}"
@@ -36,20 +30,6 @@
     </td>
   </tr>
 </table>
-
-
-
-    <h3 align=center>Zahlungsmethoden</h3>
-    <table align=center width='20%' class="ui-corner-all ui-widget ui-content stripe-me">
-      <% @order.payment_methods.each do |pm|  %>
-      <tr>
-        <td><%= t pm.internal_type %></td>
-        <td><%= number_to_currency pm.amount %></td>
-      </tr>
-      <% end %>
-    </table>
-
-
 
 <script>
 var payment_internal_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
