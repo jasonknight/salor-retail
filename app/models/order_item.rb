@@ -531,7 +531,7 @@ class OrderItem < ActiveRecord::Base
         amnt = self.item.base_price * self.quantity
         # puts "Setting to self.total " + self.item.base_price.to_s
       end
-      self.update_attribute(:price,amnt)
+      self.update_attribute(:total,amnt)
       # puts "Fixed amnt = " + amnt.to_s
     elsif self.item.coupon_type == 3 then #buy 1 get 1 free
       if oi.quantity > 1 then
@@ -549,7 +549,7 @@ class OrderItem < ActiveRecord::Base
       else
         add_salor_error("system.errors.coupon_not_enough_items")
       end
-      self.update_attribute(:price,amnt)
+      self.update_attribute(:total,amnt)
     else
       # puts "couldn't figure out coupon type"
     end
