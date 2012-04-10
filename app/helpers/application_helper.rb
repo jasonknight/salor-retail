@@ -48,7 +48,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 module ApplicationHelper
-  # {START} noconst
+  # {START} noconst ignore-adminbox ignore-adminclass ignore-options ignore-crumbs
   def salor_render(h)
     #t = "<!-- begin-partial #{h[:partial]}-->\n"
     t = raw(render(h))
