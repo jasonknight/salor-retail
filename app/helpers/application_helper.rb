@@ -48,6 +48,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 module ApplicationHelper
+  # {START} noconst
   def salor_render(h)
     #t = "<!-- begin-partial #{h[:partial]}-->\n"
     t = raw(render(h))
@@ -346,4 +347,5 @@ module ApplicationHelper
     ["True",true]
     ]
   end
+  # {END}
 end
