@@ -146,6 +146,7 @@ class Order < ActiveRecord::Base
     end
   end
   def total=(p)
+    return if self.paid == 1
     p = self.string_to_float(p)
     p = p * -1 if self.buy_order == true and p > 0
     write_attribute(:total,p) 
@@ -157,18 +158,23 @@ class Order < ActiveRecord::Base
     write_attribute(:front_end_change,self.string_to_float(p)) 
   end
   def rebate=(p)
+    return if self.paid == 1
     write_attribute(:rebate,self.string_to_float(p)) 
   end
   def subtotal=(p)
+    return if self.paid == 1
     write_attribute(:subtotal,self.string_to_float(p)) 
   end
   def tax=(p)
+    return if self.paid == 1
     write_attribute(:tax,self.string_to_float(p)) 
   end
   def toggle_buy_order=(x)
+    return if self.paid == 1
     toggle_buy_order(x)
   end
   def toggle_buy_order(x)
+    return if self.paid == 1
     if self.buy_order then
       self.update_attribute(:buy_order, false)
     else
@@ -216,6 +222,7 @@ class Order < ActiveRecord::Base
 
   #
 	def add_item(item)
+    return if self.paid == 1
 	  if not item then
 	    GlobalErrors.append("system.errors.item_not_found",self)
 	    return false
@@ -476,6 +483,7 @@ class Order < ActiveRecord::Base
     self.update_attribute :paid, 1
     self.update_attribute :created_at, Time.now
     self.update_attribute :drawer_id, $User.get_drawer.id
+    self.reload
     begin # so if all this doesn't work, then the order won't complete...
       log_action "Updating quantities"
       order_items.visible.each do |oi|

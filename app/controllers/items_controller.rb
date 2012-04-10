@@ -110,6 +110,12 @@ class ItemsController < ApplicationController
     # We must insure that tax_profile is set first, otherwise, the
     # gross magic won't work
     # TODO Test this as it's no longer necessary
+    @item = Item.all_seeing.find_by_sku(params[:item][:sku])
+    if @item then
+      @item.attributes = params[:item]
+      flash[:notice] = I18n.t('system.errors.sku_must_be_unique',:sku => @item.sku)
+      render :action => "new" and return
+    end
     @item = Item.new
     @item.tax_profile_id = params[:item][:tax_profile_id]
     @item.attributes = params[:item]

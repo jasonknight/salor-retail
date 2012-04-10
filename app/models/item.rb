@@ -372,12 +372,13 @@ class Item < ActiveRecord::Base
     end
   end
   def validify
-    make_valid
     @item = Item.all_seeing.find_by_sku(self.sku)
     if not @item.nil? and not self.id == @item.id then
       errors.add(:sku, I18n.t('system.errors.sku_must_be_unique',:sku => self.sku))
       GlobalErrors.append_fatal('system.errors.sku_must_be_unique',self,{:sku => self.sku});
+      return
     end
+    make_valid
     if self.item_type.behavior == 'coupon' then
       unless Item.find_by_sku(self.coupon_applies) then
         errors.add(:coupon_applies,I18n.t('views.item_must_exist'))
