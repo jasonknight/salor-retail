@@ -103,7 +103,7 @@ module ApplicationHelper
     end
   end
   def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :breadcrumb => true, :classes => []}, hideowner = false)
-    classes = ['box-title','shadow']
+    clses = ['box-title','shadow']
     bbt = '<div class="left-blank"></div>'
     rbtn = '<div class="right-blank"></div>'
     crumbs = ''
@@ -113,7 +113,7 @@ module ApplicationHelper
     if salor_signed_in? and salor_user.class == User and not hideowner then
       adminclass = '-admin'
       adminbox = '
-        <div class="title-box-admin #{classes.join(" ")}">
+        <div class="title-box-admin #{clses.join(" ")}">
           &#8226; ' + t("system.owner_mode") + ' &#8226;
           <div class="button-row-admin">
             <div class="button-admin" onclick="javascript:window.location.href=\'/home/edit_owner\';">' + t(:"menu.configuration") + '</div>
@@ -133,7 +133,7 @@ module ApplicationHelper
     %Q[
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
       <div class="title-container">
-          #{bbt} <div class="title-box #{classes.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
+          #{bbt} <div class="title-box #{clases.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
           <div class="breadcrumb-container">
             #{crumbs}
           </div>
