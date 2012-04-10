@@ -48,6 +48,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 module ApplicationHelper
+  # {START} noconst ignore-adminbox ignore-adminclass ignore-options ignore-crumbs
   def salor_render(h)
     #t = "<!-- begin-partial #{h[:partial]}-->\n"
     t = raw(render(h))
@@ -102,8 +103,8 @@ module ApplicationHelper
     end
   end
   def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :breadcrumb => true, :classes => []}, hideowner = false)
-    classes = ['box-title','shadow']
-    bbutton = '<div class="left-blank"></div>'
+    clses = ['box-title','shadow']
+    bbt = '<div class="left-blank"></div>'
     rbtn = '<div class="right-blank"></div>'
     crumbs = ''
     options[:classes] ||= []
@@ -112,7 +113,7 @@ module ApplicationHelper
     if salor_signed_in? and salor_user.class == User and not hideowner then
       adminclass = '-admin'
       adminbox = '
-        <div class="title-box-admin #{classes.join(" ")}">
+        <div class="title-box-admin #{clses.join(" ")}">
           &#8226; ' + t("system.owner_mode") + ' &#8226;
           <div class="button-row-admin">
             <div class="button-admin" onclick="javascript:window.location.href=\'/home/edit_owner\';">' + t(:"menu.configuration") + '</div>
@@ -123,7 +124,7 @@ module ApplicationHelper
       classes = ['small-title','shadow']
     else
       unless options[:menu] == false
-        bbutton = '<div onclick="history.go(-1);" class="back-button' + adminclass + '"> &lt; </div>'
+        bbt = '<div onclick="history.go(-1);" class="back-button' + adminclass + '"> &lt; </div>'
         rbtn = '<div onclick="window.location.reload();" class="reload-button' + adminclass + '"> &#x267A; </div>'
         crumbs = breadcrumbs
       end
@@ -132,7 +133,7 @@ module ApplicationHelper
     %Q[
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
       <div class="title-container">
-          #{bbutton} <div class="title-box #{classes.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
+          #{bbt} <div class="title-box #{clses.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
           <div class="breadcrumb-container">
             #{crumbs}
           </div>
@@ -324,8 +325,8 @@ module ApplicationHelper
     tm = l(Time.now, :format => :salor)
     tarr = tm.split(' ')
     ret = ''
-    register = CashRegister.find_by_id($User.meta.cash_register_id)
-    ret << "<span>#{tarr[3]}</span><br />#{tarr[0]} #{tarr[1]} #{tarr[2]}<br />#{$User.username}<br />#{ register.name if register  }"
+    reg = CashRegister.find_by_id($User.meta.cash_register_id)
+    ret << "<span>#{tarr[3]}</span><br />#{tarr[0]} #{tarr[1]} #{tarr[2]}<br />#{$User.username}<br />#{ reg.name if reg }"
     return ret.html_safe
   end
   def num2name(num)
@@ -346,4 +347,5 @@ module ApplicationHelper
     ["True",true]
     ]
   end
+  # {END}
 end
