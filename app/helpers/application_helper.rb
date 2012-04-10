@@ -133,7 +133,7 @@ module ApplicationHelper
     %Q[
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
       <div class="title-container">
-          #{bbt} <div class="title-box #{clases.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
+          #{bbt} <div class="title-box #{clses.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
           <div class="breadcrumb-container">
             #{crumbs}
           </div>
