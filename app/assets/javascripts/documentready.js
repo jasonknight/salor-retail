@@ -21,6 +21,10 @@ $(function () {
     Salor.poleDancer(Register.pole_display, '     S A L O R      Next Generation POS' );
   }
 
+  if (typeof(Salor) != 'undefined' && Register.pole_display == '') {
+    Salor.mimoImage('/opt/salor_pos/salor-customerscreen-advertising.bmp');
+  }
+
   jQuery.expr[':'].focus = function( elem ) {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
