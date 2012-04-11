@@ -337,7 +337,7 @@ module UserEmployeeMethods
     # This method allows for more than one user to have money
     # put into the same drawer, i.e. for CigarMan
     if self.class == Employee and self.uses_drawer_id then
-      d = Drawer.find_by_id self.uses_drawer_id
+      d = Drawer.find_by_id(self.uses_drawer_id)
       return d if d
     end
     if self.drawer.nil? then

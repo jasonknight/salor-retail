@@ -143,11 +143,11 @@ class CustomersController < ApplicationController
 
   def labels
     if params[:user_type] == 'User'
-      @user = User.find_by_id params[:user_id]
+      @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id params[:user_id]
+      @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id params[:cash_register_id]
+    @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
