@@ -96,9 +96,9 @@ module ApplicationHelper
   def salor_user
     if session[:user_id] then
       if session[:user_type] == "User" then
-        return User.find_by_id session[:user_id]
+        return User.find_by_id(session[:user_id])
       else
-        return Employee.find_by_id session[:user_id]
+        return Employee.find_by_id(session[:user_id])
       end
     end
   end
