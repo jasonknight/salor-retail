@@ -716,7 +716,15 @@ class Order < ActiveRecord::Base
   def paylife_blurb
     
   end
-  
+  def to_list_of_items_raw(array)
+    ret = {}
+    i = 0
+    [:letter,:name,:price,:quantity,:total,:type].each do |k|
+      ret[k] = array[i]
+      i += 1
+    end
+    return ret
+  end
   def get_report
     sum_taxes = Hash.new
     TaxProfile.scopied.each { |t| sum_taxes[t.id] = 0 }
@@ -726,6 +734,14 @@ class Order < ActiveRecord::Base
     refund_subtotal = 0
     coupon_subtotal = 0
     list_of_items = ''
+    list_of_items_raw = []
+    list_of_taxes_raw = []
+
+    integer_format = "%s %19.19s %6.2f  %3u   %6.2f\n"
+    float_format = "%s %19.19s %6.2f  %5.3f %6.2f\n"
+    percent_format = "%s %19.19s %6.1f%% %3u   %6.2f\n"
+    tax_format = "       %s: %2i%% %7.2f %7.2f %8.2f\n"
+
     self.order_items.visible.each do |oi|
 
       item_total = 0 if item_total.nil?
@@ -811,9 +827,14 @@ class Order < ActiveRecord::Base
         end
         if self.rebate > 0
           if self.rebate_type == 'percent'
-            # only percent order rebates will be equally distributed on all OrderItems
             refund_subtotal += new_item_total * ( 1 - ( 1 - self.rebate / 100.0 ))
           end
+          if self.rebate_type == 'fixed'
+            refund_subtotal += self.rebate / self.order_items.visible.count
+          end
+        end
+        if self.lc_discount_amount > 0
+          refund_subtotal += self.lc_discount_amount /  self.order_items.visible.count
         end
         item_price = 0
         item_total = 0
@@ -831,8 +852,12 @@ class Order < ActiveRecord::Base
           end
           if self.rebate_type == 'fixed'
             # distribute fixed order rebate euqally on all order items
-            sum_taxes[oi.tax_profile.id] -= self.rebate / self.nonrefunded_item_count # dividing is safe because it's inside of not oi.refunded
+            sum_taxes[oi.tax_profile.id] -= self.rebate / self.order_items.visible.count
           end
+        end
+        if self.lc_points?
+          lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
+          sum_taxes[oi.tax_profile.id] += lc_points_discount / self.order_items.visible.count
         end
       end
 
@@ -844,40 +869,49 @@ class Order < ActiveRecord::Base
       if oi.behavior == 'normal'
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
         else
           # float quantity (e.g. weighed OrderItem)
-          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items += float_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'float'])
         end
       end
 
       # GIFT CARDS
       if oi.behavior == 'gift_card'
-        list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+        list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+        list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
       end
 
       # COUPONS
       if oi.behavior == 'coupon'
         if oi.item.coupon_type == 1
           # percent coupon
-          list_of_items += "%s %19.19s %6.1f%% %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items += percent_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'percent'])
         elsif oi.item.coupon_type == 2
           # fixed amount coupon
-          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
         elsif oi.item.coupon_type == 3
           # b1g1 coupon
-          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
         end
       end
 
       # DISCOUNTS
       if oi.discount_applied and not self.buy_order
+        discount_name = I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name, discount_price, oi.quantity, discount_total]
+          list_of_items += integer_format % [oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total, 'integer'])
         else
           # float quantity
-          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name, discount_price, oi.quantity, discount_total]
+          list_of_items += float_format % [oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total, 'float'])
         end
       end
 
@@ -885,18 +919,21 @@ class Order < ActiveRecord::Base
       if oi.rebate and oi.rebate > 0
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += "%s %19.19s %6.2f  %3u   %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
+          list_of_items += integer_format % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
         else
           # float quantity
-          list_of_items += "%s %19.19s %6.2f  %5.3f %6.2f\n" % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
+          list_of_items += float_format % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'float'])
         end
       end
 
     end # order_items.each do
 
 
-    if self.lc_points? and not self.refunded
-      lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
+    if self.lc_discount_amount > 0
+      lc_points_discount = - self.lc_discount_amount * (self.nonrefunded_item_count.to_f / self.order_items.visible.count.to_f )
+      lc_points_count = self.lc_points * (self.nonrefunded_item_count.to_f / self.order_items.visible.count.to_f )
       subtotal1 += lc_points_discount
     end
 
@@ -926,7 +963,7 @@ class Order < ActiveRecord::Base
       percent_rebate = self.rebate
       order_rebate = percent_rebate_amount
     elsif self.rebate_type == 'fixed' and not self.rebate.zero?
-      fixed_rebate_amount = - self.rebate
+      fixed_rebate_amount = - self.rebate * (self.nonrefunded_item_count.to_f / self.order_items.visible.count.to_f )
       order_rebate = fixed_rebate_amount
     end
     subsubtotal = subtotal4 + order_rebate
@@ -944,7 +981,8 @@ class Order < ActiveRecord::Base
       net = sum_taxes[tax.id] / (1.00 + fact)
       gro = sum_taxes[tax.id]
       vat = gro - net
-      list_of_taxes += "       %s: %2i%% %7.2f %7.2f %8.2f\n" % [tax.letter,tax.value,net,vat,gro]
+      list_of_taxes += tax_format % [tax.letter,tax.value,net,vat,gro]
+      list_of_taxes_raw << {:letter => tax.letter, :value => tax.value, :net => net, :tax => vat, :gross => gro}
     end
 
     if self.customer
@@ -965,8 +1003,9 @@ class Order < ActiveRecord::Base
     report[:refund_subtotal] = refund_subtotal
     report[:coupon_subtotal] = coupon_subtotal
     report[:list_of_items] = list_of_items
+    report[:list_of_items_raw] = list_of_items_raw
     report[:lc_points_discount] = lc_points_discount
-    report[:lc_points] = lc_points
+    report[:lc_points] = lc_points_count
     report[:subtotal1] = subtotal1
     report[:display_subtotal1] = display_subtotal1
     report[:subtotal2] = subtotal2
@@ -982,6 +1021,7 @@ class Order < ActiveRecord::Base
     report[:paymentmethods] = paymentmethods
     report[:change_given] = self.change_given
     report[:list_of_taxes] = list_of_taxes
+    report[:list_of_taxes_raw] = list_of_taxes_raw
     report[:customer] = customer
     report[:unit] = I18n.t('number.currency.format.friendly_unit')
 

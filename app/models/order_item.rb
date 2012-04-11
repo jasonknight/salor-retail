@@ -126,18 +126,23 @@ class OrderItem < ActiveRecord::Base
     # -1 = Not Enough in Drawer
     # false is general failure
     # true is everything went according to plan  
-    if not $User.get_drawer.amount >= self.total and refund_payment_method == 'InCash' then
+    t = (self.calculate_total)
+    if self.order and self.order.rebate > 0
+      if self.order.rebate_type == "percent" then
+        t -= t * ( self.order.rebate / 100.0 )
+      end
+      if self.order.rebate_type == "fixed" then
+        t -= self.order.rebate / self.order.order_items.visible.count
+      end
+    end
+    if self.order and self.order.lc_discount_amount > 0
+      t -= self.order.lc_discount_amount / self.order.order_items.visible.count
+    end
+    if (($User.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash') then
       GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
       return -1
     end
 
-    t = (self.calculate_total)
-    if self.order and not self.order.rebate == 0
-      if self.order.rebate_type == "percent" then
-        t -= t * (self.order.rebate / 100)
-      end
-    end
-    return -1 if ($User.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash'
     q = self.quantity
     if self.refunded then
       return false

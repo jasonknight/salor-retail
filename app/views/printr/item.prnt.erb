@@ -16,7 +16,7 @@
 <%= @report[:list_of_items] %>
 
 <% unless @report[:lc_points_discount].zero? %>
-<%= "  %19.19s       %4u  %8.2f\n" % [t('printr.order_receipt.lc_points_substracted'), @report[:lc_points], @report[:lc_points_discount]] %>
+<%= "  %19.19s        %4u %8.2f\n" % [t('printr.order_receipt.lc_points_substracted'), @report[:lc_points], @report[:lc_points_discount]] %>
 <% end %>
 <%= "------------------------------------------" %>
 
@@ -75,7 +75,7 @@
 
 <%= @report[:customer][:postalcode] %> <%= @report[:customer][:city] %>
 
-<%= t('printr.order_receipt.current_loyalty_points') %>: **<%= @report[:customer][:current_loyalty_points] %>**
+<%= t('printr.order_receipt.current_loyalty_points') %>: -= <%= @report[:customer][:current_loyalty_points] %> =-
 <% end %>
 
 <%= @order.vendor.salor_configuration.receipt_blurb_footer.to_s if @order.vendor %>

@@ -1,5 +1,7 @@
 = raw content_box_top(t("views.orders"))
 
+- report = @order.get_report
+
 %div.tools
   %div.print_report_button{ :onmousedown => 'Salor.printPage();' }
     = salor_icon(:print, {}, 32)
@@ -17,22 +19,54 @@
     %div.company_data= raw Kramdown::Document.new(@vendor.salor_configuration.receipt_blurb).to_html
 
     %div.customer_data
-    - if @order.customer
-      = @order.customer.company_name
-      %br
-      == #{ @order.customer.first_name } #{ @order.customer.last_name }
-      %br
-      = @order.customer.street1
-      %br
-      == #{ @order.customer.postalcode } #{ @order.customer.city }
-      %br
-      == Punktestand: #{ @order.loyalty_card.points - @order.lc_points.to_i }
+      - if report[:customer]
+        = report[:customer][:company_name]
+        %br
+        == #{ report[:customer][:first_name] } #{ report[:customer][:last_name] }
+        %br
+        = report[:customer][:street1]
+        %br
+        = report[:customer][:street2]
+        %br
+        == #{ report[:customer][:postalcode]} #{ report[:customer][:city] }
+        %br
+        == #{ t('printr.order_receipt.current_loyalty_points') }: #{ report[:customer][:current_loyalty_points] }
 
     .clear
 
-    - @subtotal, @sum_taxes, @discount_subtotal, @rebate_subtotal, @refund_subtotal, @coupon_subtotal, @list_of_items = calculate_order_sums(@order)
-    = render :partial => 'detailed_list'
+    - format_item = lambda do |item|
+      - if item[:type] == 'integer'
+        - item[:price] = number_to_currency item[:price]
+        - item[:total] = number_to_currency item[:total]
+        - item[:quantity] = Integer(item[:quantity])
+      - elsif item[:type] == 'float'
+        - item[:price] = number_to_currency item[:price]
+        - item[:total] = number_to_currency item[:total]
+        - item[:quantity] = number_with_precision item[:quantity], :precision => 3
+      - elsif item[:type] == 'percent'
+        - item[:total] = number_to_currency item[:total]
+        - item[:price] = number_to_percentage item[:price]
+        - item[:quantity] = Integer(item[:quantity])
+      - return item
 
+    - format_tax = lambda do |tax|
+      - tax[:value] = number_to_percentage tax[:value]
+      - tax[:net] = number_to_currency tax[:net]
+      - tax[:tax] = number_to_currency tax[:tax]
+      - tax[:gross] = number_to_currency tax[:gross]
+      - return tax
+
+    %table.striped-table2
+      %tr
+        - report[:list_of_items_raw].first.keys.each do |k|
+          - next if k == :type
+          %th= t("activerecord.attributes.#{ k }")
+      - report[:list_of_items_raw].each do |item|
+        - item = format_item.call(item)
+        %tr
+          - item.each do |k,v|
+            - next if k == :type
+            %td== #{v}
 
 
     %h3 Zahlungsmethoden
@@ -40,18 +74,12 @@
       %tr
         %th.left Methode
         %th.right Betrag
-      - @order.payment_methods.each do |pm|
+      - report[:paymentmethods].to_a.each do |pm|
         %tr
-          %td= t pm.internal_type
-          %td= number_to_currency pm.amount
-
-    - if @refund_subtotal.zero?
-      %p= "Retour: EUR %8.2f" % [ @order.change_given ]
-
-    %p= "Stornierung in Bar: EUR %8.2f" % [ @order.refund_total ]
-
-
+          %td= pm[0]
+          %td= number_to_currency pm[1]
     
+
 
     %h3 Steuerklassen
     %table.taxes.striped-table2
@@ -61,15 +89,10 @@
         %th netto
         %th USt.
         %th brutto
-      - list_of_taxes = ''
-      - TaxProfile.all.each do |tax|
-        - next if @sum_taxes[tax.id] == 0
-        - fact = tax.value/100.00
-        - net = @sum_taxes[tax.id] / (1.00+fact)
-        - gro = @sum_taxes[tax.id]
-        - vat = gro-net
-        - list_of_taxes += "<tr><td>#{tax.name}:</td><td>#{ number_to_percentage tax.value }</td><td>#{ number_to_currency net }</td><td>#{ number_to_currency vat }</td><td>#{ number_to_currency gro }</td></tr>"
-      = raw list_of_taxes
+      - report[:list_of_taxes_raw].each do |tax|
+        - tax = format_tax.call(tax)
+        %tr
+          - tax.each do |k,v|
+            %td= v
 
-
-= raw content_box_bottom
+    = @order.vendor.salor_configuration.receipt_blurb_footer.to_s if @order.vendor
