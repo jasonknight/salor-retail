@@ -290,7 +290,7 @@ class OrderItem < ActiveRecord::Base
     if self.order and self.order.paid == 1 then
       return false
     end
-	  item.make_valid # MF: this should be done only when saving an item, I guess it's a slowdown on each barcode scan
+	  #item.make_valid # MF: this should be done only when saving an item, I guess it's a slowdown on each barcode scan
 
     # GIFT CARD
 		if item.item_type.behavior == 'gift_card' then

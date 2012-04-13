@@ -506,7 +506,6 @@ fr:
       from: XXXFrom
       to: XXXTo
 
-      
 
   printr:
     formats:
@@ -554,6 +553,28 @@ fr:
       calculated_drawer_amount: XXXCalculated drawer amount
       system_drawer_amount: XXXSystem drawer amount
       warning_drawer_amount_not_zero: XXXWarning! Your drawer amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
+    order_receipt:
+      lc_points_substracted: XXX Substracted Loyalty Points
+      subsubtotal: XXX TOTAL
+      change: XXX Change money
+      refund: XXX Total refunds
+      given: XXX Given money
+      net: XXX net
+      tax: XXX Tax
+      gross: XXX gross
+      current_loyalty_points: XXX Your loyalty points
+      subtotal1: XXX Subtotal
+      subtotal2: XXX Subtotal
+      subtotal3: XXX Subtotal
+      subtotal4: XXX Subtotal
+      rebate_subtotal: XXX Rebate Subtotal
+      rebate: XXX Single rebate
+      coupon_subtotal: XXX Coupon Subtotal
+      discount_subtotal: XXX Discount Subtotal
+      discount: XXX Discount
+      rebate_percent: XXX Percent rebate
+      rebate_fixed: XXX Fixed rebate
+      refunded: XXX REFUNDED
 
     word:
       cancelled: annulé
@@ -815,6 +836,14 @@ fr:
     index:
       only_for_tobacco_stores: Cette fonction s'applique uniquement aux bureaux de tabac. Des articles Tabac seront créés et téléchargés et mis à jour. ceci peut prendre jusau'à 20 minutes. Êtes-vous sûr de vouloir continuer ?
       database_distiller_warning: XXX Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
+    database_distiller:
+      used_item_ids: XXX Used Items
+      relevant_item_ids: XXX Items relevant for deletion
+      unused_item_ids: XXX Unused Items
+      hidden: XXX Already Deleted Items
+      hidden_by_distiller: XXX Items deleted by Database Distiller
+      delete_unused_items: XXX Delete unused Items!
+      are_you_sure: XXX All unused Items will be deleted. This cannot be undone. Are you sure you want to proceed?
     upload:
       upload: mettre en ligne
     inventory_report:

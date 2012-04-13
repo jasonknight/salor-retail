@@ -553,6 +553,28 @@ es:
       calculated_drawer_amount: Calculated drawer amount
       system_drawer_amount: System drawer amount
       warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
+    order_receipt:
+      lc_points_substracted: Substracted Loyalty Points
+      subsubtotal: TOTAL
+      change: Change money
+      refund: Total refunds
+      given: Given money
+      net: net
+      tax: Tax
+      gross: gross
+      current_loyalty_points: Your loyalty points
+      subtotal1: Subtotal
+      subtotal2: Subtotal
+      subtotal3: Subtotal
+      subtotal4: Subtotal
+      rebate_subtotal: Rebate Subtotal
+      rebate: Single rebate
+      coupon_subtotal: Coupon Subtotal
+      discount_subtotal: Discount Subtotal
+      discount: Discount
+      rebate_percent: Percent rebate
+      rebate_fixed: Fixed rebate
+      refunded: REFUNDED
 
     word:
       cancelled: cancelled
@@ -814,6 +836,14 @@ es:
     index:
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
       database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
+    database_distiller:
+      used_item_ids: Used Items
+      relevant_item_ids: Items relevant for deletion
+      unused_item_ids: Unused Items
+      hidden: Already deleted Items
+      hidden_by_distiller: Items deleted by Database Distiller
+      delete_unused_items: Delete unused Items!
+      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you sure you want to proceed?
     upload:
       upload: upload
     inventory_report:

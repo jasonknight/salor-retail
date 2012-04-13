@@ -1,4 +1,4 @@
-tr:
+en-US:
   activerecord:
     models:
       button:
@@ -73,7 +73,6 @@ tr:
         other: Payment Methods
 
     attributes:
-      calculate_tax: XXX Calculate Tax
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       employee:
@@ -182,8 +181,8 @@ tr:
       cash_register:
         sticker_printer: Sticker printer
       item:
-        purchase_price: XXXPurchase Price
-        quantity: XXXQuantity
+        purchase_price: Purchase Price
+        quantity: Quantity
       sku: SKU
       start_amount: start amount
       start_date: start date
@@ -226,7 +225,7 @@ tr:
         
    
   headings:
-    database_distiller: XXX Database distiller
+    database_distiller: Database distiller
     order_validation: "Order Validation"
     paylife: "Paylife(Artema Hybrid)"
     bank_machine_types: supported bank machines
@@ -287,7 +286,7 @@ tr:
     usb_device: Usb Stick
     salortrainer: Salor Trainer
     salorlive: Salor Live!
-    database_distiller: XXX Database Distiller
+    database_distiller: Database Distiller
     clear_order: Clear
     inventory_report: Inventory report
     ok: OK
@@ -418,7 +417,7 @@ tr:
       start_date: start date
       sum_total: sum total
     report_range:
-      title: journal
+      title: Sums
       display: display
       end_date: end date
       gross: gross
@@ -673,7 +672,7 @@ tr:
       shipment_item_already_in_stock: Item %{sku} is already in stock
       shipment_item_move_failed: "Item %{sku} failed to move with error: %{error}"
       shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: must be unique
+      sku_must_be_unique: "%{sku} must be unique"
       uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
       value_not_set: NotSet
       order_failed: Order could not be finished.
@@ -702,8 +701,8 @@ tr:
       purchase_price_sum: Purchase price sum
 
   views:
-    eticket: Ticket
-    sticky_ticket: Sticker
+    eticket: Shelf label
+    sticky_ticket: Sticky label
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
     advanced_field: advanced field
     by_card: by card
@@ -882,5 +881,5 @@ tr:
   label: label
   sticker: sticker
   support: XXX
-  edit: XXXEdit
-  delete: XXXDelete
+  edit: Edit
+  delete: Delete
