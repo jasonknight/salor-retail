@@ -58,6 +58,10 @@
                       <%= conf.label t("activerecord.attributes.dollar_per_lp") %><br />
                       <%= conf.text_field :dollar_per_lp, :class => "keyboardable"%>
                     </div>
+                    <div class="field">
+                      <%= conf.label t("activerecord.attributes.calculate_tax") %><br />
+                      <%= conf.check_box :calculate_tax %>
+                    </div>
                     <% if AppConfig.standalone == true  %>
                       <div class="field">  
                         <h2><%=t :"vendors.clear_cache_header" %></h2>

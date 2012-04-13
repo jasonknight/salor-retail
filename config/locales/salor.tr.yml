@@ -73,6 +73,7 @@ tr:
         other: Payment Methods
 
     attributes:
+      calculate_tax: XXX Calculate Tax
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       employee:

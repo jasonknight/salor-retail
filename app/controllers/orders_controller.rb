@@ -299,7 +299,7 @@ class OrdersController < ApplicationController
       @order.reload
     end
   end
-
+  # {END}
   def print_receipt
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
@@ -327,7 +327,7 @@ class OrdersController < ApplicationController
       render :nothing => true
     end
   end
-
+  # {START}
   def show_payment_ajax
     # Recalculate everything and then show Payment Popup
     @order = initialize_order

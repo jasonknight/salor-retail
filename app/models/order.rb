@@ -333,7 +333,7 @@ class Order < ActiveRecord::Base
 	    return
 	  end
 	  unless speedy == true then
-	    # puts "Speedy is not true"
+	    # #puts "Speedy is not true"
       # EVERYTHING is recalculated in normal mode only
       self.total = 0 unless self.total_is_locked and not self.total.nil?
       self.subtotal = 0 unless self.subtotal_is_locked and not self.subtotal.nil?
@@ -352,7 +352,7 @@ class Order < ActiveRecord::Base
         # Coupons are not handled here, they are handled at the end of the order.
         if oi.item_type.behavior == 'normal' or oi.item_type.behavior == 'gift_card' then
           price = oi.calculate_total self.subtotal
-          puts "price from #{oi.item.sku} is #{price}"
+          #puts "price from #{oi.item.sku} is #{price}"
           if oi.is_buyback and not self.buy_order then
             if price > 0 then
               oi.update_attribute(:price, price * -1)
@@ -367,7 +367,7 @@ class Order < ActiveRecord::Base
               b = self.subtotal
               self.subtotal = self.subtotal + price
               a = self.subtotal
-              puts "Check:  #{b} + #{price} = #{a}"
+              #puts "Check:  #{b} + #{price} = #{a}"
             end
           end
           # regular items are never activated, 
@@ -375,13 +375,13 @@ class Order < ActiveRecord::Base
           # counts as a normal item, if it is
           # activated, then it is not a taxable item, 
           # as it is not being sold.
-            if not oi.item.activated then
+            if not oi.activated then
               self.tax ||= 0
-              self.tax += oi.calculate_tax unless self.tax_is_locked or oi.is_buyback == true
+              self.tax += oi.calculate_tax unless oi.is_buyback == true
             end
         end
       end
-      # puts "Here I am in order, #{self.subtotal}"
+      # #puts "Here I am in order, #{self.subtotal}"
       # Now let's consider Store Wide Discounts, for item/location/percent specific discounts,
       # see Item.price    
       if not self.subtotal_is_locked then
@@ -397,8 +397,8 @@ class Order < ActiveRecord::Base
           self.discount_ids = dids
         end
         begin
-          if GlobalData.conf and self.lc_points then
-            disc = GlobalData.conf.dollar_per_lp * self.lc_points
+          if $Conf and self.lc_points then
+            disc = $Conf.dollar_per_lp * self.lc_points
             self.subtotal -= disc
             self.update_attribute(:lc_discount_amount, disc)
           end
@@ -412,31 +412,36 @@ class Order < ActiveRecord::Base
       #if self.subtotal < 0 then
         #self.subtotal = 0
       #end
-      puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
-      self.total = self.subtotal unless self.total_is_locked
+      #puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
+      if $Conf.calculate_tax then
+        self.total = self.subtotal + self.tax
+      else
+        self.total = self.subtotal
+      end
     else
       # Here we do speedy version calculations for show_payment_ajax processing
-      self.total = 0 if self.total.nil?
-      self.subtotal = self.total
-      self.calculate_tax
-      Order.connection.execute("update orders set total = #{self.total}, subtotal = #{self.subtotal}, tax = #{self.tax} where id = #{self.id}")
+      # self.total = 0 if self.total.nil?
+      # self.subtotal = self.total
+      # self.calculate_tax
+      # Order.connection.execute("update orders set total = #{self.total}, subtotal = #{self.subtotal}, tax = #{self.tax} where id = #{self.id}")
     end
     # Coupon stuff is done in both speedy and normal modes
-	  coupons.each do |oi|
+    # coupons.each do |oi|
       # If the coupn applies to an entire order, like $10 off any order etc
       # Users should be able to specify this in their own language.
-      if oi.item.coupon_applies == I18n.t('views.single_words.order') then
-        if oi.item.coupon_type == 1 then #percent off coupon type
-          self.total -= (oi.price / 100) * self.total
-        elsif oi.item.coupon_type == 2 then #fixed amount off
-          self.total -= oi.price
-        elsif oi.item.coupon_type == 3 then
-          GlobalErrors.append("system.errors.coupon_cannot_be_buy_one_get_one", self,{:sku => oi.item.sku, :applies => oi.item.coupon_applies})
-        end
-      end
-    end if coupons and not self.total_is_locked
+#     WE AREN'T USING ORDER LEVEL COUPONS
+#     if oi.item.coupon_applies == I18n.t('views.single_words.order') then
+#        if oi.item.coupon_type == 1 then #percent off coupon type
+#          self.total -= (oi.price / 100) * self.total
+#        elsif oi.item.coupon_type == 2 then #fixed amount off
+#          self.total -= oi.price
+#        elsif oi.item.coupon_type == 3 then
+#          GlobalErrors.append("system.errors.coupon_cannot_be_buy_one_get_one", self,{:sku => oi.item.sku, :applies => oi.item.coupon_applies})
+#        end
+#      end
+#    end if coupons and not self.total_is_locked
     self.update_attribute(:total, self.total)
-    # puts "End of calculate_totals, total is: #{self.total}"
+    # #puts "End of calculate_totals, total is: #{self.total}"
 	end
 
 	#
@@ -450,7 +455,7 @@ class Order < ActiveRecord::Base
   end
   #
   def gross
-    if self.vendor.calculate_tax then
+    if $Conf.calculate_tax then
       taxttl = OrderItem.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false").sum(:tax)
       return self.subtotal + taxttl
     else
@@ -522,11 +527,11 @@ class Order < ActiveRecord::Base
         lc.update_attribute(:points,lc.points + np)
       end
     rescue
-      # puts $!.to_s
+      # #puts $!.to_s
       self.update_attribute :paid, 0
       GlobalErrors.append_fatal("system.errors.order_failed",self)
       log_action $!.to_s
-      puts $!.to_s
+      #puts $!.to_s
     end
     log_action "Ending complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
   end
@@ -548,7 +553,7 @@ class Order < ActiveRecord::Base
       next if pm.internal_type == 'InCash'
       ottl -= pm.amount
     end
-    puts "get_drawer_add returning #{ottl}"
+    #puts "get_drawer_add returning #{ottl}"
     return ottl
   end
   def get_in_cash_amount
@@ -726,8 +731,10 @@ class Order < ActiveRecord::Base
     return ret
   end
   def get_report
+    # sum_taxes is the taxable sum of money charged by the system
     sum_taxes = Hash.new
-    TaxProfile.scopied.each { |t| sum_taxes[t.id] = 0 }
+    # we turn sum_taxes into a hash of hashes 
+    TaxProfile.scopied.each { |t| sum_taxes[t.id] = {:total => 0, :letter => t.letter, :value => 0} }
     subtotal1 = 0
     discount_subtotal = 0
     rebate_subtotal = 0
@@ -736,6 +743,7 @@ class Order < ActiveRecord::Base
     list_of_items = ''
     list_of_items_raw = []
     list_of_taxes_raw = []
+    list_of_order_items = []
 
     integer_format = "%s %19.19s %6.2f  %3u   %6.2f\n"
     float_format = "%s %19.19s %6.2f  %5.3f %6.2f\n"
@@ -743,7 +751,7 @@ class Order < ActiveRecord::Base
     tax_format = "       %s: %2i%% %7.2f %7.2f %8.2f\n"
 
     self.order_items.visible.each do |oi|
-
+      list_of_order_items << oi
       item_total = 0 if item_total.nil?
       oi.price = 0 if oi.price.nil?
       oi.quantity = 0 if oi.quantity.nil?
@@ -844,20 +852,22 @@ class Order < ActiveRecord::Base
 
       # Price calculation for taxes
       if not oi.refunded
-        sum_taxes[oi.tax_profile.id] += new_item_total # start with unmodified price
+        sum_taxes[oi.tax_profile_id][:total] += new_item_total # start with unmodified price
+        # we can get away with this because it is highly unlikely that the value attribute on a TP changed mid order.
+        sum_taxes[oi.tax_profile_id][:value] = oi.tax_profile_amount 
         if self.rebate > 0
           if self.rebate_type == 'percent'
             # distribute % order rebate euqally on all order items
-            sum_taxes[oi.tax_profile.id] -= new_item_total * ( 1 - ( 1 - self.rebate / 100.0 ))
+            sum_taxes[oi.tax_profile_id][:total] -= new_item_total * ( 1 - ( 1 - self.rebate / 100.0 ))
           end
           if self.rebate_type == 'fixed'
             # distribute fixed order rebate euqally on all order items
-            sum_taxes[oi.tax_profile.id] -= self.rebate / self.order_items.visible.count
+            sum_taxes[oi.tax_profile_id][:total] -= self.rebate / self.order_items.visible.count
           end
         end
         if self.lc_points?
           lc_points_discount = - self.vendor.salor_configuration.dollar_per_lp * self.lc_points
-          sum_taxes[oi.tax_profile.id] += lc_points_discount / self.order_items.visible.count
+          sum_taxes[oi.tax_profile_id][:total] += lc_points_discount / self.order_items.visible.count
         end
       end
 
@@ -975,14 +985,32 @@ class Order < ActiveRecord::Base
     end
 
     list_of_taxes = ''
-    TaxProfile.scopied.each do |tax|
-      next if sum_taxes[tax.id] == 0
-      fact = tax.value / 100.00
-      net = sum_taxes[tax.id] / (1.00 + fact)
-      gro = sum_taxes[tax.id]
+    # TaxProfiles are not immutable, counting on them to not be hidden/deleted or changed
+    # may lead to some small errors. 
+    # additionally, TaxProfiles not being immutable means we cannot use their value
+    # attribute because it can change overtime.
+    # When it comes to a report it is perhaps better to think in terms of
+    # what the system charged them for taxes instead of what it should or should not be. 
+    # because we don't allow for the deletion of TaxProfiles anymore, we just hid them
+    # we can get away with using all for the time being 
+    # TaxProfile.scopied.each do |tax|
+    TaxProfile.all.each do |tax|
+      next if sum_taxes[tax.id] == nil or sum_taxes[tax.id][:total] == 0
+      # I.E. what is the percentage decimal of the tax value
+      fact = sum_taxes[tax.id][:value] / 100.00
+      # How much of the sum goes to the store after taxes
+      if not $Conf.calculate_tax then
+        net = sum_taxes[tax.id][:total] / (1.00 + fact)
+        gro = sum_taxes[tax.id][:total]
+      else
+        # I.E. The net total is the item total because the tax is outside that price.
+        net = sum_taxes[tax.id][:total]
+        gro = net + (net * fact)
+      end
+      # The amount of taxes paid is the gross minus the net total
       vat = gro - net
-      list_of_taxes += tax_format % [tax.letter,tax.value,net,vat,gro]
-      list_of_taxes_raw << {:letter => tax.letter, :value => tax.value, :net => net, :tax => vat, :gross => gro}
+      list_of_taxes += tax_format % [tax.letter,sum_taxes[tax.id][:value],net,vat,gro]
+      list_of_taxes_raw << {:letter => tax.letter, :value => sum_taxes[tax.id][:value], :net => net, :tax => vat, :gross => gro}
     end
 
     if self.customer
@@ -998,6 +1026,7 @@ class Order < ActiveRecord::Base
     end
 
     report = Hash.new
+    report[:order_items] = list_of_order_items
     report[:discount_subtotal] = discount_subtotal
     report[:rebate_subtotal] = rebate_subtotal
     report[:refund_subtotal] = refund_subtotal
@@ -1032,7 +1061,7 @@ class Order < ActiveRecord::Base
   
   def self.generate
     if GlobalData.salor_user.get_meta.order_id then
-      # puts "OrderId found"
+      # #puts "OrderId found"
       o = Order.find(GlobalData.salor_user.get_meta.order_id)
       if o and (not o.paid and not o.order_items.any?) then
         # We already have an empty order.
@@ -1042,9 +1071,9 @@ class Order < ActiveRecord::Base
     o = Order.new(:tax => 0.0, :subtotal => 0.0, :total => 0.0)
     o.set_model_owner
     if o.save then
-      # puts "Updating :order_id"
+      # #puts "Updating :order_id"
     else
-      # puts o.errors.inspect
+      # #puts o.errors.inspect
     end
     GlobalData.salor_user.get_meta.update_attribute :order_id, o.id
     return o

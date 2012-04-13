@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120408100304) do
+ActiveRecord::Schema.define(:version => 20120413132223) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -508,7 +508,7 @@ ActiveRecord::Schema.define(:version => 20120408100304) do
     t.integer  "refunded_by"
     t.string   "refunded_by_type"
     t.float    "discount_amount",       :default => 0.0
-    t.float    "rebate"
+    t.float    "rebate",                :default => 0.0
     t.integer  "coupon_id",             :default => 0
     t.boolean  "is_buyback",            :default => false
     t.string   "sku"
@@ -651,6 +651,7 @@ ActiveRecord::Schema.define(:version => 20120408100304) do
     t.string   "url",                   :default => "http://salor"
     t.boolean  "salor_printer",         :default => false
     t.string   "receipt_blurb_footer"
+    t.boolean  "calculate_tax",         :default => false
   end
 
   add_index "salor_configurations", ["vendor_id"], :name => "index_configurations_on_vendor_id"
@@ -841,7 +842,6 @@ ActiveRecord::Schema.define(:version => 20120408100304) do
     t.binary   "logo_image"
     t.binary   "logo_invoice_image"
     t.binary   "logo_invoice_image_content_type"
-    t.boolean  "calculate_tax"
     t.boolean  "multi_currency",                  :default => false
     t.string   "sku"
   end
