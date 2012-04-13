@@ -223,13 +223,10 @@ class OrdersController < ApplicationController
     end
     unless @order_item.nil? then
       unless @order_item.activated or @order_item.is_buyback then
-        @order_item.total += @order_item.price
-        @order_item.is_valid = true
         @order_item.quantity += 1
-        @order.total += @order_item.price
-        newtax = @order_item.calculate_tax(true)
-        @order_item.connection.execute("update order_items set quantity = quantity + 1, total = total + #{@order_item.price}, tax = #{newtax} where id = '#{@order_item.id}'")
-        @order.connection.execute("update orders set total = total + #{@order_item.price} where id = #{@order.id}")
+        @order_item.save
+        @order_item.order.update_self_and_save
+        @order = @order_item.order
         render and return
       end
     end
@@ -262,14 +259,19 @@ class OrdersController < ApplicationController
       @order.update_self_and_save
     else
       unless @order_item.activated or @order_item.item.is_gs1 then
+        if $Conf.calculate_tax then
+          total = @order_item.total + @order_item.tax
+        else
+          total = @order_item.total
+        end
         if @order.total.nil? or @order.total == 0.0 then
           @order.total = 0
           # puts  "Updating total direcly"
-          @order.connection.execute("update orders set total = #{@order_item.total} where id = #{@order.id}")
-          @order.total += @order_item.total
+          @order.connection.execute("update orders set total = #{total} where id = #{@order.id}")
+          @order.total += total
         else
-          @order.connection.execute("update orders set total = total + #{@order_item.price} where id = #{@order.id}")
-          @order.total += @order_item.price
+          @order.connection.execute("update orders set total = total + #{total} where id = #{@order.id}")
+          @order.total += total
         end
       end
     end
