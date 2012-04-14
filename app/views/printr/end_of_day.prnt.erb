@@ -17,7 +17,7 @@ categories_sum = @report['categories_sum'] %>
 <%= @vendor.salor_configuration.receipt_blurb %><%= "\n\e!\x01" + "\ea\x00" %>
 
 
-<%= @report[:date] %>
+<%= @report[:date_from] %> - <%= @report[:date_to] %>
 
 <%= "\e!\x00" %>
 
@@ -30,6 +30,20 @@ categories_sum = @report['categories_sum'] %>
 <% [[:pos,'.sales'], [:neg,'.payments']].each do |i| %>
 
 <%= "\e!\x18"%><%= t "printr.eod_report#{i[1]}" %><%= "\e!\x00" %>
+
+
+<%= "%-25s %7s %7s\n" % [t('orders.report_day.sums_by_category'), t('orders.report_day.net'), t('orders.report_day.gross'), ] %>
+<% categories[i[0]].to_a.each do |c| %>
+<%= "%24.24s  %7.2f %7.2f\n" % [c[0].empty? ? t('printr.eod_report.no_category') : c[0], c[1][:net], c[1][:gro]] %>
+<% end %>
+
+<%= t 'orders.report_day.sums_by_tax_profile' %>
+
+<% taxes[i[0]].to_a.each do |t| %>
+<%= "%24.24s  %7.2f %7.2f\n" % [t[0], t[1][:net], t[1][:gro]] %>
+<% end %>
+
+<%= t 'orders.report_day.sums_by_payment_methods' %>
 
 <% paymentmethods[i[0]].to_a.each do |p| %>
 <%= "%29.29s %s %7.2f" % [t(p[0]), @report[:unit], p[1]] %>

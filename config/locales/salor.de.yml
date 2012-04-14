@@ -531,6 +531,7 @@ de:
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
     eod_report:
+      no_category: Unbenannt
       orders_total: Verkäufe gesamt
       refunded_total: Stornierungen gesamt
       buyback_item_total: Pfand- bzw. Auszahlungsartikel

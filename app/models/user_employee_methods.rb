@@ -666,7 +666,8 @@ module UserEmployeeMethods
     report['calculated_drawer_amount'] = calculated_drawer_amount
     report['orders_count'] = orders.count
     report['categories_sum'] = categories_sum
-    report[:date] = I18n.l(DateTime.now, :format => :long)
+    report[:date_from] = I18n.l(from, :format => :just_day)
+    report[:date_to] = I18n.l(to, :format => :just_day)
     report[:unit] = I18n.t('number.currency.format.friendly_unit')
     if employee
       report[:drawer_amount] = employee.get_drawer.amount
