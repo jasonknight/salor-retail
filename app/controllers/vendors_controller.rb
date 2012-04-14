@@ -329,8 +329,11 @@ class VendorsController < ApplicationController
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
-    @report = @user.get_end_of_day_report(DateTime.now)
+    @from, @to = assign_from_to(params)
+    @from = @from.beginning_of_day
+    @to = @to.end_of_day
 
+    @report = UserEmployeeMethods.get_end_of_day_report(@from.beginning_of_day,@to.end_of_day,@user)
 
     text = Printr.new.sane_template('end_of_day',binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
@@ -343,6 +346,7 @@ class VendorsController < ApplicationController
       render :nothing => true
     end
   end
+
   #
   def end_day
     begin

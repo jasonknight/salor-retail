@@ -386,7 +386,7 @@ de:
     download: Herunterladen
     reorder: Nachbestellung
     report: Verkaufsbericht
-    report_range: Detailbericht
+    report_range: Gesamtbericht
     report_day: Tagesbericht
     report_accounting: Transaktionen
     report_day_range: Monatsbericht
@@ -418,7 +418,7 @@ de:
       start_date: Von
       sum_total: Gesamtsumme
     report_range:
-      title: Detailbericht
+      title: Gesamtbericht
       display: Anzeigen
       end_date: Bis
       gross: brutto
@@ -473,7 +473,7 @@ de:
       from: von
       to: bis
     report_range:
-      title: Tagesbericht
+      title: Gesamtbericht
       sums_by_category: nach Kategorie
       sums_by_tax_profile: nach Steuern
       sums_by_payment_methods: nach Zahlungsmethoden

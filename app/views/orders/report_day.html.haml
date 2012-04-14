@@ -33,7 +33,7 @@
   %div.clear
 
   %div
-    %h2== #{ t '.title' } #{ l @from, :format => :just_day }<br />#{ @vendor.name }<br />#{ @employee.name_with_username }
+    %h2== #{ t '.title' } #{ l @from, :format => :just_day }<br />#{ @vendor.name }<br />#{ @employee.name_with_username if @employee }
 
     %p== #{ t '.count_orders' }: #{ orders_count }
 
@@ -145,7 +145,7 @@
 
     %h3= t '.cash_drawer'
 
-    - if @from.beginning_of_day == Time.now.beginning_of_day
+    - if @from.beginning_of_day == Time.now.beginning_of_day and @employee
       %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency @employee.get_drawer.amount }
 
     %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
