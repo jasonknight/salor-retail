@@ -71,7 +71,7 @@ categories_sum = @report['categories_sum'] %>
 <%= "%29.29s %s %7.2f" % [t('printr.eod_report.revenue_total'), @report[:unit], revenue[:gro]] %>
 
 
-<% if @from != @to.beginning_of_day %>
+<% if @from == @to.beginning_of_day %>
 <%= "\e!\x18"%><%= t 'activerecord.models.drawer_transaction.other' %><%= "\e!\x00" %>
 
 ---------------
