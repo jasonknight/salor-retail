@@ -22,7 +22,7 @@ end
 gem 'sass-rails'
 gem 'jquery-rails'
 gem 'kaminari'
-gem 'rmagick'
+#gem 'rmagick'
 gem 'printr', '0.6.2'
 gem 'serialport'
 gem 'haml'
