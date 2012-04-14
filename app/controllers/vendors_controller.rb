@@ -286,38 +286,7 @@ class VendorsController < ApplicationController
     end
   end
 
-  def list_drawer_transactions
-    render :nothing => true and return if not GlobalData.salor_user.is_technician?
-    @from, @to = assign_from_to(params)
-    from2 = @from.beginning_of_day
-    to2 = @to.beginning_of_day + 1.day
-    @transactions = DrawerTransaction.scopied.where(:created_at => from2..to2)
-  end
-  #
-  def edit_drawer_transaction
-    render :nothing => true and return if not GlobalData.salor_user.is_technician?
-    @drawer_transaction = DrawerTransaction.find_by_id(params[:id])
-    if @drawer_transaction then
-      @drawer_transaction.update_attributes(params[:drawer_transaction])
-      atomize(ISDIR, 'cash_drop')
-    end
-    respond_to do |format|
-      format.html { redirect_to(request.referer) }
-      format.xml  { head :ok }
-    end
-  end
-  #
-  def destroy_drawer_transaction
-    render :nothing => true and return if not GlobalData.salor_user.is_technician?
-      @drawer_transaction = DrawerTransaction.find_by_id(params[:id])
-      @drawer_transaction.destroy if @drawer_transaction
-      atomize(ISDIR, 'cash_drop')
-    respond_to do |format|
-      format.html { redirect_to(request.referer) }
-      format.xml  { head :ok }
-    end
-  end
-  #
+
   def render_end_of_day_receipt
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
@@ -330,8 +299,8 @@ class VendorsController < ApplicationController
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @from, @to = assign_from_to(params)
-    @from = @from.beginning_of_day
-    @to = @to.end_of_day
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
 
     @report = UserEmployeeMethods.get_end_of_day_report(@from.beginning_of_day,@to.end_of_day,@user)
 

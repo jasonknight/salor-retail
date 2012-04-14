@@ -512,7 +512,7 @@ class OrdersController < ApplicationController
 
   def report_day
     @from, @to = assign_from_to(params)
-    @from = @from ? @from.beginning_of_day : DateTime.now
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
     @vendor = GlobalData.vendor
     @employees = @vendor.employees.where(:hidden => 0)

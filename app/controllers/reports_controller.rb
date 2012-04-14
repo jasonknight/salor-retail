@@ -54,8 +54,10 @@ class ReportsController < ApplicationController
    before_filter :crumble, :only => :selector
 
   def selector
+    @from, @to = assign_from_to(params)
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
     if not params[:usb_device].empty? and File.exists? params[:usb_device] then
-      @from, @to = assign_from_to(params)
       @report = Report.new
       @report.dump_all(@from,@to,params[:usb_device])
       flash[:notice] = "Complete"
@@ -64,18 +66,18 @@ class ReportsController < ApplicationController
 
   def cash_account
     @from, @to = assign_from_to(params)
-    from2 = @from.beginning_of_day
-    to2 = @to.end_of_day
-    @orders = Order.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
+    @orders = Order.find(:all, :conditions => { :created_at => @from..@to, :paid => true })
     @orders.reverse!
     @taxes = TaxProfile.where( :hidden => 0)
   end
 
   def daily
     @from, @to = assign_from_to(params)
-    from2 = @from.beginning_of_day
-    to2 = @to.beginning_of_day + 1.day
-    @orders = Order.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
+    @orders = Order.find(:all, :conditions => { :created_at => @from..@to, :paid => true })
     @orders.reverse!
     @taxes = TaxProfile.where( :hidden => 0)
   end
@@ -85,23 +87,6 @@ class ReportsController < ApplicationController
     @vendor = salor_user.get_vendor(salor_user.meta.vendor_id) if @vendor.nil?
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.report"),'reports_path(:vendor_id => params[:vendor_id])'
-  end
-  
-  def assign_from_to(p)
-    begin
-      f = Date.civil( p[:from][:year ].to_i,
-                      p[:from][:month].to_i,
-                      p[:from][:day  ].to_i) if p[:from]
-      t = Date.civil( p[:to  ][:year ].to_i,
-                      p[:to  ][:month].to_i,
-                      p[:to  ][:day  ].to_i) if p[:to]
-    rescue
-      f = t = nil
-    end
-
-    f ||= 0.day.ago
-    t ||= 0.day.ago
-    return f.beginning_of_day, t.end_of_day
   end
 
 end
