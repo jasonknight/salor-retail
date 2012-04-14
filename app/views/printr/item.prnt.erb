@@ -20,24 +20,23 @@
 <% end %>
 <%= "------------------------------------------" %>
 
-<% if @report[:display_subtotal1] %>
+<% if not @report[:discount_subtotal].zero? %>
 <%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal1'), @report[:unit], @report[:subtotal1]] %>
-<% end %>
-<% if @report[:display_subtotal2] %>
 <%= "%29s %s %8.2f\n" % [t('printr.order_receipt.discount_subtotal'), @report[:unit], @report[:discount_subtotal]] %>
+<% end %>
+<% if not @report[:rebate_subtotal].zero? %>
 <%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal2'), @report[:unit], @report[:subtotal2]] %>
-<% end %>
-<% if @report[:display_subtotal3] %>
 <%= "%29s %s %8.2f\n" % [t('printr.order_receipt.rebate_subtotal'), @report[:unit], @report[:rebate_subtotal]] %>
-<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal3'), @report[:unit], @report[:subtotal3]] %>
 <% end %>
-<% if @report[:display_subtotal4] %>
+<% if not @report[:coupon_subtotal].zero? %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal3'), @report[:unit], @report[:subtotal3]] %>
 <%= "%29s %s %8.2f\n" % [t('printr.order_receipt.coupon_subtotal'), @report[:unit], @report[:coupon_subtotal]] %>
-<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal4'), @report[:unit], @report[:subtotal4]] %>
 <% end %>
 <% if @report[:percent_rebate_amount] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal4'), @report[:unit], @report[:subtotal4]] %>
 <%= "%25.25s %2i%% %s %8.2f\n" % [t('printr.order_receipt.rebate_percent'), @report[:percent_rebate], @report[:unit], @report[:percent_rebate_amount] ] %>
 <% elsif @report[:fixed_rebate_amount] %>
+<%= "%29s %s %8.2f\n" % [t('printr.order_receipt.subtotal4'), @report[:unit], @report[:subtotal4]] %>
 <%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.rebate_fixed'), @report[:unit], @report[:fixed_rebate_amount]] %>
 <% end %>
 

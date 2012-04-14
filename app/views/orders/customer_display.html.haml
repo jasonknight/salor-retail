@@ -1,0 +1,52 @@
+.customer-display
+  .logo
+    - if @vendor.logo_image
+      %img{ :src => "/vendors/#{ @vendor.id }/logo" }
+
+  - @report[:list_of_items_raw].reverse[0..4].each do |item|
+    %div{ :class => "#{ item[:price] < 0 ? 'highlighted' : '' }" }
+      - item = format_item(item)
+      - item.each do |k,v|
+        - next if k == :type or k == :letter
+        %span{ :class => k }= v
+  - if not @report[:lc_points_discount].zero?
+    %div.highlighted
+      %span.name= t('printr.order_receipt.lc_points_substracted')
+      %span.price
+      %span.quantity= Integer(@report[:lc_points])
+      %span.total= number_to_currency @report[:lc_points_discount]
+
+  - if @report[:percent_rebate_amount]
+    %div.highlighted
+      %span.name= t('printr.order_receipt.rebate_percent')
+      %span.price
+      %span.quantity= number_to_percentage @report[:percent_rebate], :precision => 1
+      %span.total= number_to_currency @report[:percent_rebate_amount]
+  - elsif @report[:fixed_rebate_amount]
+    %div.highlighted
+      %span.name= t('printr.order_receipt.rebate_fixed')
+      %span.price
+      %span.quantity
+      %span.total= number_to_currency @report[:fixed_rebate_amount]
+
+
+  %div#subsubtotal= number_to_currency @report[:subsubtotal]
+
+  - if params[:display_change] == '1'
+    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @report[:change_given] }
+
+  - if @report[:customer]
+    .customerdetails
+      %img{ :src => "/images/icons/#{ icon(:customer,32)  }"}
+      - if not @report[:customer][:company_name].empty?
+        %span= @report[:customer][:company_name]
+      - else
+        %span== #{ @report[:customer][:first_name] } #{ @report[:customer][:last_name] }
+      %br
+      %span== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
+
+  .paymentmethods
+    %b== #{ t('printr.order_receipt.given') }:
+    - @report[:paymentmethods].to_a.each do |pm|
+      %span== #{ number_to_currency pm[1] } (#{ pm[0] })
+

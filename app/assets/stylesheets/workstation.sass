@@ -298,11 +298,23 @@ table.striped-table2
   border-bottom: 2px solid black
   background-color: #D0D0D0
 
+.striped-table2 tr.total
+  border-top: 2px solid black
+  background-color: #D0D0D0
+  font-weight: bold
 
 .has-total tr:last-child 
   background-color: #D0D0D0
   border-top: 3px solid black
   font-weight: bold
+
+.striped-table2 td.total,
+.striped-table2 td.right,
+.striped-table2 td.price
+  text-align: right
+
+.striped-table2 td.quantity
+  text-align: center
 
 
 
@@ -2581,7 +2593,7 @@ div.clear
   clear: both
 
 table.taxes
-  width: 40%
+  width: 50%
 
 
 div.backup 

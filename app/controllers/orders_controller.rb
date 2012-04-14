@@ -475,6 +475,7 @@ class OrdersController < ApplicationController
     GlobalData.salor_user = @order.get_user
     @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
     @order_items = @order.order_items.visible.order('id ASC')
+    @report = @order.get_report
     if @order_items
       render :layout => 'customer_display', :nothing => :true
     else
@@ -533,13 +534,17 @@ class OrdersController < ApplicationController
     @taxes = TaxProfile.scopied.where( :hidden => 0)
   end
 
+  #
   def print
     #FIXME Needs to be setup to work with SaaS version
-      @order = Order.find_by_id(params[:id])
-      GlobalData.salor_user = @order.user if @order.user
-      GlobalData.salor_user = @order.employee if @order.employee
-      @vendor = @order.vendor
+    @order = Order.find_by_id(params[:id])
+    GlobalData.salor_user = @order.user if @order.user
+    GlobalData.salor_user = @order.employee if @order.employee
+    @vendor = @order.vendor
+    @report = @order.get_report
   end
+
+  #
   def remove_payment_method
     if GlobalData.salor_user.is_technician? then
       @order = Order.find(params[:id])

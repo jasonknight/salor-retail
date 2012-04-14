@@ -84,7 +84,7 @@ de:
       thermal_printer: Thermodrucker
       paylife: Paylife
       url: URL
-      letter: Brief
+      letter: Steuerklasse
       default: Standard
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
@@ -556,7 +556,7 @@ de:
     order_receipt:
       lc_points_substracted: Treuepunkte Abzug
       subsubtotal: GESAMTSUMME
-      change: Wechselgeld
+      change: Retour
       refund: Rabatte auf gesamten Einkauf
       given: Gegeben
       net: netto
@@ -569,7 +569,7 @@ de:
       subtotal4: Zwischensumme
       rebate_subtotal: Summe Rabatte
       rebate: Einzelrabatt
-      coupon_subtotal: Summe Geschenkkarte
+      coupon_subtotal: Summe Coupons
       discount_subtotal: Summe Aktionen
       discount: Aktion
       rebate_percent: Prozent-Rabatt

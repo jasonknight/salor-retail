@@ -794,6 +794,8 @@ class Order < ActiveRecord::Base
           item_price = - (oi.order_item.price)
           item_total = Integer(oi.order_item.quantity / 2) * item_price
         end
+        coupon_subtotal += item_total
+        subtotal1 -= item_total # subtotal1 is without any subtractions, so add it again
       end
 
       # these will accumulate discounts and rebates further down and are needed for tax and refund total calculation
@@ -850,6 +852,8 @@ class Order < ActiveRecord::Base
         new_item_total = 0
       end
 
+      subtotal1 += item_total
+
       # Price calculation for taxes
       if not oi.refunded
         sum_taxes[oi.tax_profile_id][:total] += new_item_total # start with unmodified price
@@ -870,8 +874,6 @@ class Order < ActiveRecord::Base
           sum_taxes[oi.tax_profile_id][:total] += lc_points_discount / self.order_items.visible.count
         end
       end
-
-      subtotal1 += item_total
 
       # THE FOLLOWING IS THE LINE GENERATION
 
@@ -947,25 +949,17 @@ class Order < ActiveRecord::Base
       subtotal1 += lc_points_discount
     end
 
-    display_subtotal1 = not(self.rebate.zero? and discount_subtotal.zero? and rebate_subtotal.zero?)
+    display_subtotal1 = not(self.rebate.zero? and discount_subtotal.zero? and rebate_subtotal.zero? and coupon_subtotal.zero?)
 
     subtotal2 = subtotal1
-    if not discount_subtotal.zero?
-      display_subtotal2 = true
-      subtotal2 += discount_subtotal
-    end
+    subtotal2 += discount_subtotal if not discount_subtotal.zero?
 
     subtotal3 = subtotal2
-    if not rebate_subtotal.zero?
-      display_subtotal3 = true
-      subtotal3 += rebate_subtotal
-    end
+    subtotal3 += rebate_subtotal if not rebate_subtotal.zero?
 
     subtotal4 = subtotal3
-    if not coupon_subtotal.zero?
-      display_subtotal4 = true
-      subtotal4 += coupon_subtotal
-    end
+    subtotal4 += coupon_subtotal if not coupon_subtotal.zero?
+
 
     order_rebate = 0
     if self.rebate_type == 'percent' and not self.rebate.zero?
@@ -1036,13 +1030,9 @@ class Order < ActiveRecord::Base
     report[:lc_points_discount] = lc_points_discount
     report[:lc_points] = lc_points_count
     report[:subtotal1] = subtotal1
-    report[:display_subtotal1] = display_subtotal1
     report[:subtotal2] = subtotal2
-    report[:display_subtotal2] = display_subtotal2
     report[:subtotal3] = subtotal3
-    report[:display_subtotal3] = display_subtotal3
     report[:subtotal4] = subtotal4
-    report[:display_subtotal4] = display_subtotal4
     report[:percent_rebate_amount] = percent_rebate_amount
     report[:percent_rebate] = percent_rebate
     report[:fixed_rebate_amount] = fixed_rebate_amount
