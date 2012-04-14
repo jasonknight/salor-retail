@@ -46,7 +46,7 @@
 # covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
-#require 'RMagick'
+require 'RMagick'
 class Barcode
   def create(code,type='39')
     return get_barcode(code) if File.exists?(eps_path(code)) and File.exists?(png_path(code))
@@ -55,8 +55,8 @@ class Barcode
   def make_barcode(string,type)
     begin
       system("barcode -c -b #{string} -o #{eps_path(string)} -e #{type} -E")
-      #bc = Magick::ImageList.new(eps_path(string))
-      #bc.write(png_path(string))
+      bc = Magick::ImageList.new(eps_path(string))
+      bc.write(png_path(string))
       return get_barcode(string)
     rescue
       return ''
