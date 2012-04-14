@@ -54,8 +54,8 @@ ActiveRecord::Schema.define(:version => 20120413132223) do
     t.string   "sku"
     t.string   "old_category_name"
     t.integer  "weight"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.integer  "vendor_id"
     t.boolean  "is_buyback",        :default => false
     t.integer  "category_id"
@@ -274,8 +274,8 @@ ActiveRecord::Schema.define(:version => 20120413132223) do
     t.string   "applies_to_type"
     t.integer  "applies_to_id"
     t.boolean  "seen",            :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.string   "url"
     t.string   "referer"
   end
@@ -593,8 +593,8 @@ ActiveRecord::Schema.define(:version => 20120413132223) do
     t.text     "struct"
     t.text     "json"
     t.boolean  "tes",              :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.string   "sa"
     t.string   "ind"
   end
@@ -777,16 +777,16 @@ ActiveRecord::Schema.define(:version => 20120413132223) do
     t.string   "name"
     t.string   "internal_type"
     t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
     t.integer  "hidden",        :default => 0
   end
 
   create_table "transaction_tags", :force => true do |t|
     t.string   "name"
     t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
     t.binary   "logo_image"
     t.string   "logo_image_content_type"
   end
