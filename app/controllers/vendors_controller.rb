@@ -54,48 +54,7 @@ class VendorsController < ApplicationController
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
     before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
-  def technician_control_panel
-    if not $User.is_technician? then
-      redirect_to :action => :index
-    end
-  end
-  def move_transactions
-    @from, @to = time_from_to(params)
-    parts = params[:from_emp][:set_owner_to].split(":")
-    from_user = Kernel.const_get(parts[0]).find_by_id parts[1]
-    parts = params[:to_emp][:set_owner_to].split(":")
-    to_user = Kernel.const_get(parts[0]).find_by_id parts[1]
-    # Stats variables
-    orders_moved = 0
-    dts_moved = 0
-    orders = from_user.orders.where(:created_at => @from..@to)
-    dts = from_user.drawer_transactions.where(:created_at => @from..@to)
-    from_user.transaction do
-        orders.each do |o|
-          o.user_id = nil
-          o.employee_id = nil
-          o.set_model_owner(to_user)
-          o.drawer_id = to_user.get_drawer.id
-          o.save
-          orders_moved += 1
-        end
-        dts.each do |dt|
-          dt.owner_id = nil
-          dt.owner_type = nil
-          dt.set_model_owner to_user
-          if dt.drop then
-            from_user.get_drawer.add(dt.amount * -1)
-            to_user.get_drawer.add(dt.amount)
-          elsif dt.payout then
-            from_user.get_drawer.add(dt.amount)
-            to_user.get_drawer.add(dt.amount * -1)
-          end
-          dt.save
-          dts_moved += 1
-        end
-      end #from_user.transaction
-    redirect_to :controller => :home, :action => :index, :notice => "Orders Found: #{orders.length} Orders moved: #{orders_moved} DTs Found: #{dts.length} DTs moved: #{dts_moved}"
-  end
+
   # GET /vendors
   # GET /vendors.xml
   def index

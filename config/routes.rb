@@ -75,21 +75,16 @@ Salor::Application.routes.draw do
   match "cash_registers/end_of_day" => "cash_registers#end_of_day"
 
   match "items/create_ajax" => "items#create_ajax"
-  match "vendors/edit_drawer_transaction" => "vendors#edit_drawer_transaction"
   match "vendors/edit_field_on_child" => "vendors#edit_field_on_child"
   match "vendors/toggle" => "vendors#toggle"
-  match "vendors/technician_control_panel" => "vendors#technician_control_panel"
   match "vendors/destroy/:id" => "vendors#destroy"
   match "vendors/end_day" => "vendors#end_day"
   match "vendors/end_day" => "vendors#end_day"
   match "vendors/open_cash_drawer" => "vendors#open_cash_drawer"
   match "vendors/export" => "vendors#export"
   match "vendors/clearcache" => "vendors#clearcache"
-  match "vendors/list_drawer_transactions" => "vendors#list_drawer_transactions"
   match "vendors/export" => "vendors#export"
   match "vendors/new_drawer_transaction" => "vendors#new_drawer_transaction"
-  match "vendors/edit_drawer_transaction" => "vendors#edit_drawer_transaction"
-  delete  "vendors/destroy_drawer_transaction"
   match "vendors/labels"
   match "vendors/spy" => "vendors#spy"
   match "api/order" => "api#order"
@@ -97,7 +92,6 @@ Salor::Application.routes.draw do
   match "shipments/move_all_to_items" => "shipments#move_all_to_items"
   match "shipments/move_shipment_item" => "shipments#move_shipment_item"
   match "home/load_clock" => "home#load_clock"
-  match "vendors/move_transactions" => "vendors#move_transactions"
   match "home/backup_database" => "home#backup_database"
   match "home/errors_display" => "home#errors_display"
   match "home/backup_logfile" => "home#backup_logfile"
@@ -116,8 +110,6 @@ Salor::Application.routes.draw do
     get "api/#{u}"
   end
 
-  match "vendors/edit_drawer_transaction/:id" => 'vendors#edit_drawer_transaction'
-  match "vendors/destroy_drawer_transaction/:id" => 'vendors#destroy_drawer_transaction'
   match "vendors/render_end_of_day_receipt" => 'vendors#render_end_of_day_receipt'
   match "vendors/render_open_cashdrawer" => 'vendors#render_open_cashdrawer'
   match "vendors/render_drawer_transaction_receipt" => 'vendors#render_drawer_transaction_receipt'
