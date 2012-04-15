@@ -455,11 +455,12 @@ class Order < ActiveRecord::Base
   end
   #
   def gross
+    refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total)
     if $Conf.calculate_tax then
-      taxttl = OrderItem.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false").sum(:tax)
-      return self.subtotal + taxttl
+      taxttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax)
+      return self.subtotal + taxttl - refunded_ttl
     else
-      return self.subtotal
+      return self.subtotal - refunded_ttl
     end
   end
   #
@@ -1005,7 +1006,7 @@ class Order < ActiveRecord::Base
       else
         # I.E. The net total is the item total because the tax is outside that price.
         net = sum_taxes[tax.id][:total]
-        gro = net + (net * fact)
+        gro = net * (1 + sum_taxes[tax.id][:value].to_f/100.00)
       end
       # The amount of taxes paid is the gross minus the net total
       vat = gro - net
