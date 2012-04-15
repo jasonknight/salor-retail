@@ -681,7 +681,7 @@ div.header > ul > li > div
 div.header > ul > li > div.active 
   padding-top: 5px
   width: 65px
-  height: 45px
+  height: 46px
   cursor: pointer
   background-color: $background
   @include rounded_corners_top  
@@ -690,7 +690,7 @@ div.header > ul > li > div.active
 div.header > ul > li > div.first 
   background-color: $background
   @include rounded_corners_top
-  height: 45px
+  height: 46px
   @include no_select
 
 div.header > ul > li > div.first > a > img 
@@ -707,7 +707,7 @@ div.close-window
   @include rounded_corners_left
   position: fixed
   right: 0px
-  bottom: 15px
+  bottom: 8px
   padding: 18px
   font-weight: bold
   text-transform: uppercase
@@ -719,7 +719,7 @@ a.reload-window
   @include rounded_corners_right
   position: fixed
   left: 0px
-  bottom: 15px
+  bottom: 8px
   padding: 18px
   text-decoration: none
   font-weight: bold
@@ -736,6 +736,7 @@ div.header #clockbox
   font-size: $text_size_tiny
   text-shadow: 1px 1px 1px #666666
   font-family: $font_family
+  position: absolute
 
 div.header #clockbox span 
   font-weight: bold
@@ -767,12 +768,15 @@ span.version
   left: 0px
   bottom: 0px
   font-size: 70%
+  width: 50%
 
 span.salorbinversion
   position: fixed
   right: 0px
   bottom: 0px
   font-size: 70%
+  width: 50%
+  text-align: right
 
 
 /* Main and Main Content Divs */
@@ -1217,7 +1221,7 @@ div#eod-calculator-total, div#eod-calculator-difference
   font-weight: bold
   font-size: 200%
   padding: 5px
-  width: 50%
+  width: 40%
   margin: 5px
   background-color: $light_background
   @include rounded_corners_right
@@ -1296,6 +1300,9 @@ div.pos-menu div.pos-configuration
   overflow: hidden
   @include pointer
   background-color: $light_background
+
+.pos-item-total
+  width: 11%
 
 .pos-item-sku 
   width: 18%
@@ -2378,10 +2385,12 @@ section.report
 
 
 .eod-drawer-button, .pos-drawer-button, .uniscalebutton 
-  padding: 5px 60px
+  padding: 5px 0px
+  width: 15%
   margin: 5px
   min-height: 30px
   @include pointer
+  text-align: center
 
 
 .pos-drawer-button 
