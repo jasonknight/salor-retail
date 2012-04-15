@@ -511,7 +511,6 @@ class Order < ActiveRecord::Base
         ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
-
         $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
@@ -549,7 +548,7 @@ class Order < ActiveRecord::Base
     end
   end
   def get_drawer_add
-    ottl = self.subtotal
+    ottl = self.total
     self.payment_methods.each do |pm|
       next if pm.internal_type == 'InCash'
       ottl -= pm.amount

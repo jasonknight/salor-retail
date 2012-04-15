@@ -382,17 +382,17 @@ function complete_order_send(print) {
       setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
     }
   }
-  if (typeof(Salor) != 'undefined') {
-    if (Register.pole_display == "") {
-      Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
-    }
-  }
 
   print_order_id = $('.order-id').html();
 
   get('/orders/complete_order_ajax?order_id='+$('.order-id').html()+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
     if (print == 'true') { print_order(print_order_id); }
     sendingOrder = false;
+    if (typeof(Salor) != 'undefined') {
+      if (Register.pole_display == "") {
+        Salor.mimoRefresh(Conf.url + "/orders/" + $('.order-id').html() + "/customer_display?display_change=1",800,480);
+      }
+    }
   }, 'get', function() {
     sendingOrder = false;
     allow_complete_order();
