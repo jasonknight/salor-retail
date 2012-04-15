@@ -475,6 +475,7 @@ class OrdersController < ApplicationController
     GlobalData.salor_user = @order.get_user
     @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
     @order_items = @order.order_items.visible.order('id ASC')
+    @report = @order.get_report
     if @order_items
       render :layout => 'customer_display', :nothing => :true
     else
@@ -506,22 +507,17 @@ class OrdersController < ApplicationController
     @from = @from.beginning_of_day
     @to = @to.end_of_day
     @vendor = GlobalData.vendor
-    @employees = @vendor.employees.where(:hidden => 0)
-    @employee ||= @employees.first
-    @report = @employee.get_end_of_day_report(@from,@to)
+    @report = UserEmployeeMethods.get_end_of_day_report(@from,@to,nil)
   end
 
   def report_day
-    f, t = assign_from_to(params)
-    @from = f
-    @to = t
-    @from = @from.beginning_of_day
-    @to = @to.end_of_day
+    @from, @to = assign_from_to(params)
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
     @vendor = GlobalData.vendor
     @employees = @vendor.employees.where(:hidden => 0)
     @employee = Employee.scopied.find_by_id(params[:employee_id])
-    @employee ||= @employees.first
-    @report = @employee.get_end_of_day_report(@from,@to)
+    @report = UserEmployeeMethods.get_end_of_day_report(@from,@to,@employee)
   end
 
   def report_day_range
@@ -533,13 +529,17 @@ class OrdersController < ApplicationController
     @taxes = TaxProfile.scopied.where( :hidden => 0)
   end
 
+  #
   def print
     #FIXME Needs to be setup to work with SaaS version
-      @order = Order.find_by_id(params[:id])
-      GlobalData.salor_user = @order.user if @order.user
-      GlobalData.salor_user = @order.employee if @order.employee
-      @vendor = @order.vendor
+    @order = Order.find_by_id(params[:id])
+    GlobalData.salor_user = @order.user if @order.user
+    GlobalData.salor_user = @order.employee if @order.employee
+    @vendor = @order.vendor
+    @report = @order.get_report
   end
+
+  #
   def remove_payment_method
     if GlobalData.salor_user.is_technician? then
       @order = Order.find(params[:id])

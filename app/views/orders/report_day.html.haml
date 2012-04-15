@@ -17,11 +17,18 @@
     = label 'from', t('.from')
     = select_date(@from, :prefix => 'from')
     %br
+    = label 'to', t('.to')
+    = select_date(@to, :prefix => 'to')
+    %br
     %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'name_with_username', params[:employee_id])
+    %br
     %br
     = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()'
     %br
-    %div.print_report_button{ :onmousedown => 'Salor.printPage();' }= salor_icon(:print, {}, 32)
+    %br
+    %br
+    = salor_icon(:print, {:onclick => 'Salor.printPage();'}, 32, t('.a4'))
+    = salor_icon(:print, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt',$('#date_range').serialize());" }, 32, t('.thermal'))
     %br
     %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 
@@ -33,7 +40,7 @@
   %div.clear
 
   %div
-    %h2== #{ t '.title' } #{ l @from, :format => :just_day }<br />#{ @vendor.name }<br />#{ @employee.name_with_username }
+    %h2== #{ t '.title' } #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @vendor.name }<br />#{ @employee.name_with_username if @employee }
 
     %p== #{ t '.count_orders' }: #{ orders_count }
 
@@ -122,35 +129,36 @@
     %p== #{ t '.net' }: #{ number_to_currency revenue[:net] }
 
 
-    %h3= t '.transactions'
+    - if @from == @to.beginning_of_day
+      %h3= t '.transactions'
 
-    %table.striped-table2
-      %tr
-        %th.left= t '.transaction_tag'
-        %th.left
-        %th.left= t '.time'
-        %th.right= t '.drop'
-        %th.right= t '.payout'
-      - transactions.to_a.each do |d|
-        - next if d[1][:is_refund]
+      %table.striped-table2
         %tr
-          %td.left= t ('.' + d[1][:tag])
-          %td.left= d[1][:notes]
-          %td.left= l d[1][:time], :format => :just_time
-          %td.right= number_to_currency d[1][:amount] if d[1][:drop]
-          %td.right= number_to_currency d[1][:amount] unless d[1][:drop]
+          %th.left= t '.transaction_tag'
+          %th.left
+          %th.left= t '.time'
+          %th.right= t '.drop'
+          %th.right= t '.payout'
+        - transactions.to_a.each do |d|
+          - next if d[1][:is_refund]
+          %tr
+            %td.left= t ('.' + d[1][:tag])
+            %td.left= d[1][:notes]
+            %td.left= l d[1][:time], :format => :just_time
+            %td.right= number_to_currency d[1][:amount] if d[1][:drop]
+            %td.right= number_to_currency d[1][:amount] unless d[1][:drop]
 
-    %p== #{ t '.sum_transactions' }: #{ number_to_currency transactions_sum[:total] }
+      %p== #{ t '.sum_transactions' }: #{ number_to_currency transactions_sum[:total] }
 
 
-    %h3= t '.cash_drawer'
+      %h3= t '.cash_drawer'
 
-    - if @from.beginning_of_day == Time.now.beginning_of_day
-      %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency @employee.get_drawer.amount }
+      - if @from.beginning_of_day == Time.now.beginning_of_day and @employee
+        %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency @employee.get_drawer.amount }
 
-    %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
+      %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
 
-    - if calculated_drawer_amount.round(2) != 0
-      %p
-        %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
+      - if calculated_drawer_amount.round(2) != 0
+        %p
+          %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
 

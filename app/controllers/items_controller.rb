@@ -308,8 +308,10 @@ class ItemsController < ApplicationController
 
   def export_broken_items
     @from, @to = assign_from_to(params)
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
     if params[:from] then
-      @items = BrokenItem.scopied.where(["created_at between ? and ?", @from.beginning_of_day, @to.end_of_day])
+      @items = BrokenItem.scopied.where(["created_at between ? and ?", @from, @to])
       text = []
       if @items.any? then
         text << @items.first.csv_header

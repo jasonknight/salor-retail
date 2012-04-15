@@ -58,7 +58,7 @@ class Customer < ActiveRecord::Base
   before_create :set_model_owner
 
   def set_sku
-    self.sku = "#{self.company_name}#{self.first_name}#{self.lastname}".gsub(/[^a-zA-Z0-9]+/,'')
+    self.sku = "#{self.company_name}#{self.first_name}#{self.last_name}".gsub(/[^a-zA-Z0-9]+/,'')
   end
   def full_name
     self.first_name = 'NotSet' if self.first_name.blank?

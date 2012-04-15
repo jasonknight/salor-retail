@@ -293,9 +293,8 @@ class ApplicationController < ActionController::Base
     rescue
       f = t = nil
     end
-
-    f ||= 0.day.ago
-    t ||= 0.day.ago
+    #f ||= DateTime.now
+    #t ||= DateTime.now
     return f, t
   end
   def time_from_to(p)

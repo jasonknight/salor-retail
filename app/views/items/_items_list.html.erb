@@ -7,7 +7,14 @@
           <%= item.name %>
         </td>
         <td>
-          <%= item.behavior != 'coupon' ? salor_number_to_currency(item.base_price) : number_to_percentage(item.base_price) %>
+          <%= if item.behavior == 'coupon' and item.coupon_type == 1
+                number_to_percentage(item.base_price)
+              elsif item.behavior == 'coupon' and item.coupon_type == 3
+                # nothing
+              else
+                salor_number_to_currency(item.base_price)
+              end
+          %>
         </td>
         <td>
           <%= item.sku %>

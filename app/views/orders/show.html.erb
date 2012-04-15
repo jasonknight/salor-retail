@@ -14,7 +14,7 @@
             <%= options_for_select PaymentMethod.types_list %>
             </select>
           </td>
-        <%= salor_render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items.visible} %>
+        <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
       </table>
 <%
   if @order.refunded then
@@ -37,21 +37,3 @@ var payment_external_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[0]}'
 </script>
 
 
-
-
-<% if $User.is_technician? %>
-    <table class="payment-methods-table" width="100%">
-      <% @order.payment_methods.each do |pm|  %>
-      <tr>
-        <td><%= edit_me(:name,pm,pm.name) %></td>
-        <td><%= edit_me(:internal_type,pm,pm.internal_type) %></td>
-        <td><%= edit_me(:amount,pm,pm.amount) %></td>
-        <td>
-          <div class="generic-button" onmousedown="$.get('/orders/remove_payment_method?id=<%= @order.id %>&pid=<%= pm.id %>')">
-            Delete
-          </div>
-        </td>
-      </tr>
-      <% end %>
-    </table>
-<% end %>
