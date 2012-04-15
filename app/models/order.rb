@@ -450,16 +450,17 @@ class Order < ActiveRecord::Base
     self.tax = 0 if self.tax.nil?
     return self.tax if self.tax_is_locked
     #res = OrderItem.connection.execute("select sum(tax) as taxtotal from order_items where order_id = #{self.id} and behavior = 'normal' and is_buyback is false")
-    taxttl = OrderItem.where("order_id = #{self.id} and behavior = 'normal' and is_buyback is false").sum(:tax)
+    taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior = 'normal' and is_buyback is false").sum(:tax)
     taxttl.nil? ? self.tax = 0 : self.tax = taxttl.to_f.round(2)
   end
   #
   def gross
+    refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total)
     if $Conf.calculate_tax then
-      taxttl = OrderItem.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false").sum(:tax)
-      return self.subtotal + taxttl
+      taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax)
+      return self.subtotal + taxttl - refunded_ttl
     else
-      return self.subtotal
+      return self.subtotal - refunded_ttl
     end
   end
   #
@@ -999,7 +1000,7 @@ class Order < ActiveRecord::Base
       else
         # I.E. The net total is the item total because the tax is outside that price.
         net = sum_taxes[tax.id][:total]
-        gro = net + (net * fact)
+        gro = net * (1 + sum_taxes[tax.id][:value].to_f/100.00)
       end
       # The amount of taxes paid is the gross minus the net total
       vat = gro - net

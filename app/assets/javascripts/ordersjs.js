@@ -66,3 +66,86 @@ function update_pos_display() {
 //  }
 //);
 //}
+
+/* FROM views/orders/new.html.erb */
+function makeItemMenu(item) {
+  try {
+
+    var base_id = getOrderItemId(item);
+    var e = $('.' + base_id + '-name');
+    //This is because if the SKU gets too big, it messes up the screen
+    //e.html(e.html().substr(0,7));
+    e.html(e.html());
+
+    e.unbind();
+    e.mousedown(function (event) {
+        $('.item-menu-div').remove();
+        var menu = $("<div class='item-menu-div'></div>");
+        $('body').append(menu);
+        menu.css({position: 'absolute', left: event.pageX, top: event.pageY});
+        var dicon = $('<div class="oi-menu-icon"><img src="/images/icons/delete_32.png" /></div>');
+        dicon.mousedown(function () {
+            $('.' + base_id).remove();
+            get('/orders/delete_order_item?id=' + item.id, filename);
+            menu.remove();
+            //setScrollerState();
+            focusInput($('#keyboard_input'));
+        });
+        menu.append(dicon);
+        
+        var buyback = $('<div class="oi-menu-icon"><img src="/images/icons/money_32.png" /></div>');
+        buyback.addClass('pointer');
+        buyback.mousedown(function () {
+            var string = '/vendors/toggle?model_id=' +
+                          item.id +'&klass=OrderItem' +
+                          '&field=toggle_buyback'+
+                          '&value=undefined';
+                          get(string, filename);
+                          menu.remove();
+                          focusInput($('#keyboard_input'));
+        }).mouseup(function () {
+          focusInput($('#keyboard_input'));
+        });
+        menu.append(buyback);
+        if (!Register.scale == '') {
+          var wicon = $('<div class="oi-menu-icon"><img src="/images/icons/weight_32.png" /></div>');
+          wicon.mousedown(function () {
+              var string = '/vendors/edit_field_on_child?id=' +
+                            item.id +'&klass=OrderItem' +
+                            '&field=quantity'+
+                            '&value=' + Register.scale;
+                            get(string, filename);
+              menu.remove();
+              focusInput($('#keyboard_input'));
+          }).mouseup(function () {
+            focusInput($('#keyboard_input'));
+          });
+
+          menu.append(wicon);
+        } // end  if (!Register.scale == '') {
+
+        var btn = $('<div class="oi-menu-icon"><img src="/images/icons/tick_32.png" /></div>');
+        btn.mousedown(function () {
+            menu.remove();
+            focusInput($('#keyboard_input'));
+        }).mouseup(function () {
+          focusInput($('#keyboard_input'));
+        });
+    menu.append(btn);
+    });
+
+  } catch (err) {
+    //console.log(err);
+  }
+}
+
+function updateCustomerView(item,order_id) {
+  if (typeof(Salor) != 'undefined') {
+    if(Register.pole_display == "") {
+      Salor.mimoRefresh(Conf.url+"/orders/"+order_id+"/customer_display",800,480);
+    } else {
+      output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
+      Salor.poleDancer(Register.pole_display, output );
+    }
+  }
+}

@@ -54,7 +54,10 @@ class NodeObserver < ActiveRecord::Observer
   observe :item,:tax_profile,:button, :customer, :category, :loyalty_card
   def send_json(record)
     snode = Node.scopied.where(:is_self => true).limit(1).first
-    return if not snode
+    if not snode then
+      log_action "No Self Node Found"
+      return
+    end
     if record.class == Customer or record.class == LoyaltyCard then
       child_nodes = Node.scopied.where(:is_self => false,:is_busy => false)
     else
@@ -67,9 +70,6 @@ class NodeObserver < ActiveRecord::Observer
       log_action "Sending to child: " + c.inspect
       begin
         response = snode.send_to_node(record,c)
-        log_action "### Response \n
-            #{response.code} #{response.message}:\n
-            #{response.body}" if response
       rescue
         log_action $!.inspect
       end
