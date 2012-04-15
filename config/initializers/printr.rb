@@ -8,5 +8,5 @@ Printr.setup do |config|
   config.debug = false
   #config.sanitize = true
   config.encoding = 'ISO-8859-15'
-  config.logger = File.open("/tmp/printr.txt",'a')
+  #config.logger = File.open("/tmp/printr.txt",'a')
 end
