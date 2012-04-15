@@ -47,7 +47,7 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 module SalorBase
-  VERSION = 'Babylon5'
+  VERSION = '{{VERSION}}'
   def self.symbolize_keys arg
     case arg
     when Array

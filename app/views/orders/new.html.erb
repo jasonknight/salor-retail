@@ -71,104 +71,7 @@ function getOrderItemId(item) {
   return id;
 }
 
-function makeItemMenu(item) {
-  try {
 
-    var base_id = getOrderItemId(item);
-    var e = $('.' + base_id + '-sku');
-    //This is because if the SKU gets too big, it messes up the screen
-    //e.html(e.html().substr(0,7));
-    e.html(e.html());
-
-    e.unbind();
-    e.mousedown(function (event) {
-        $('.item-menu-div').remove();
-        var menu = $("<div class='item-menu-div'></div>");
-        $('body').append(menu);
-        menu.css({position: 'absolute', left: event.pageX, top: event.pageY});
-        var dicon = $('<div class="oi-menu-icon"><%= raw salor_icon(:delete,{},32) %></div>');
-        dicon.mousedown(function () {
-            $('.' + base_id).remove();
-            get('/orders/delete_order_item?id=' + item.id, filename);
-            menu.remove();
-            //setScrollerState();
-            focusInput($('#keyboard_input'));
-        });
-        menu.append(dicon);
-        if (item.behavior == 'gift_card') {
-          var gc = $('<div class="oi-menu-icon"><%= raw salor_icon(:activate,{},32) %></div>');
-          gc.addClass('pointer');
-          gc.mousedown(function () {
-              get("/orders/activate_gift_card?id="+item.id+"&amount=" + item.amount_remaining, filename);
-              menu.remove();
-              focusInput($('#keyboard_input'));
-          }).mouseup(function () {
-            focusInput($('#keyboard_input'));
-          });
-          menu.append(gc);
-        }
-        /* if (item.locked) {
-          var lock = $('<img src="/images/icons/unlock_32.png" />');
-        } else {
-          var lock = $('<img src="/images/icons/unlock_32.png" />');
-        }
-        lock.addClass('pointer');
-        lock.mousedown(function () {
-            var string = '/vendors/edit_field_on_child?id=' +
-                          item.id +'&klass=OrderItem' +
-                          '&field=toggle_lock'+
-                          '&value=total';
-                          get(string, filename);
-                          menu.remove();
-        });
-        menu.append(lock);
-        */
-
-        var buyback = $('<div class="oi-menu-icon"><%= raw salor_icon(:order,{},32) %></div>');
-        buyback.addClass('pointer');
-        buyback.mousedown(function () {
-            var string = '/vendors/toggle?model_id=' +
-                          item.id +'&klass=OrderItem' +
-                          '&field=toggle_buyback'+
-                          '&value=undefined';
-                          get(string, filename);
-                          menu.remove();
-                          focusInput($('#keyboard_input'));
-        }).mouseup(function () {
-          focusInput($('#keyboard_input'));
-        });
-        menu.append(buyback);
-        <% if not @cash_register.scale.blank? %>
-        var wicon = $('<div class="oi-menu-icon"><%= raw salor_icon(:weight,{},32) %></div>');
-        wicon.mousedown(function () {
-            var string = '/vendors/edit_field_on_child?id=' +
-                          item.id +'&klass=OrderItem' +
-                          '&field=quantity'+
-                          '&value=' + Salor.<%= @cash_register.scale %>;
-                          get(string, filename);
-            menu.remove();
-            focusInput($('#keyboard_input'));
-        }).mouseup(function () {
-          focusInput($('#keyboard_input'));
-        });
-
-        menu.append(wicon);
-        <% end %>
-
-        var btn = $('<div class="oi-menu-icon"><%= t("menu.done") %></div>');
-        btn.mousedown(function () {
-            menu.remove();
-            focusInput($('#keyboard_input'));
-        }).mouseup(function () {
-          focusInput($('#keyboard_input'));
-        });
-    menu.append(btn);
-    });
-
-  } catch (err) {
-    //console.log(err);
-  }
-}
 
 function format_pole(name,price,quantity,weight_metric,total) {
   if (weight_metric == null) { weight_metric = '' };
@@ -179,25 +82,14 @@ function format_pole(name,price,quantity,weight_metric,total) {
   return pole_name + pole_price + pole_quantity + pole_total;
 }
 
-function updateCustomerView(item,order_id) {
-  if (typeof(Salor) != 'undefined') {
-    if(Register.pole_display == "") {
-      Salor.mimoRefresh(Conf.url+"/orders/"+order_id+"/customer_display",800,480);
-    } else {
-      output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
-      Salor.poleDancer(Register.pole_display, output );
-    }
-  }
-}
-
 function updatePosItem(item) {
   var base_id = getOrderItemId(item);
   //item['price'] = item['price'] - item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   <% if GlobalData.cash_register.hide_discounts == true then  %>
-    var attrs = ['name','sku','quantity','price','total'];
+    var attrs = ['name','quantity','price','total'];
   <% else  %>
-    var attrs = ['name','sku','quantity','price','coupon_amount','rebate','total'];
+    var attrs = ['name','quantity','price','coupon_amount','rebate','total'];
   <% end %>
   for (var i = 0; i < attrs.length; i++) {
     var key = attrs[i];
@@ -244,9 +136,9 @@ function addPosItem(item) {
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   $('.pos-table-left-column-items').prepend(row);
   <% if GlobalData.cash_register.hide_discounts == true then  %>
-    var attrs = ['name','sku','quantity','price','total'];
+    var attrs = ['name','quantity','price','total'];
   <% else  %>
-    var attrs = ['name','sku','quantity','price','coupon_amount','rebate','total','tax_profile_amount'];
+    var attrs = ['name','quantity','price','coupon_amount','rebate','total','tax_profile_amount'];
   <% end %>
   for (var i = 0; i < attrs.length; i++) {
     var attr = attrs[i];

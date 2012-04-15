@@ -266,7 +266,7 @@ class Node < ActiveRecord::Base
     @hash ||= {}
     record = {:class => item.class.to_s}
     item.changes.each do |k,v|
-      record[k.to_sym] = v[1] unless iggy(k,item)
+      record[k.to_sym] = v[1] unless iggy?(k,item)
     end
     if item.respond_to? :sku and item.sku.nil? then
       item.set_sku if item.respond_to? :set_sku
@@ -333,7 +333,7 @@ class Node < ActiveRecord::Base
   def send_to_node(item,target)
     prepare(item,target)
     if not verify? then
-      # puts "Could not verify on send..."
+      log_action puts "Could not verify on send..."
       return nil
     end
     send!   
@@ -366,12 +366,27 @@ class Node < ActiveRecord::Base
     end
     n = Cue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :to_send => true, :payload => self.payload)
     n.save
+    log_action "Cue created with attributes: #{n.attributes.to_json}"
     # req.body = self.payload
     #log_action "Sending: " + req.body.inspect
 #   @request ||= Net::HTTP.new(url.host, url.port)
 #    response = @request.start {|http| http.request(req) }
     # puts response.body
 #   response
+  end
+  def flush
+    Cue.where(:to_send => true).each do |cue|
+      req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+      url = URI.parse(cue.url)
+      req.body = cue.payload
+      @request ||= Net::HTTP.new(url.host,url.port)
+      response = @request.start { |http| 
+        http.request(req) 
+      }
+      if response.is_a? HTTPSuccess then
+        cue.update_attribute :to_send,false
+      end
+    end
   end
   def broadcast_add_me
     return if self.is_self == true

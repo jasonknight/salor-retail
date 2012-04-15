@@ -29,7 +29,7 @@
     </td>
     <td> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :short) %></td>
-    <td><%= salor_number_to_currency order.total %></td>
+    <td><%= salor_number_to_currency order.gross %></td>
     <td>
       <%= order.payment_display[0] + ': ' + salor_number_to_currency(order.payment_display[1]) %>
     </td>
