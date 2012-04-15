@@ -7,5 +7,5 @@ $(function(){
 function connect_service() {
   $('img#progress').show();
   password = $('#service_connect_password').val();
-  $.get('/home/connect_service', {pw: password} );
+  $.get('/home/connect_remote_service', {pw: password} );
 }

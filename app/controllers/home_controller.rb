@@ -135,7 +135,7 @@ class HomeController < ApplicationController
         exec "expect #{ File.join(Rails.root, 'salor_ssh_reverse_connect.expect').to_s } #{ params[:pw] }"
       end
     end
+    Process.detach(connection_thread)
     render :nothing => true
-    #Process.detach(job1)
   end
 end
