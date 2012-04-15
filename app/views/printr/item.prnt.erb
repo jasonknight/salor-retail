@@ -1,5 +1,6 @@
 <%= "\e@" %>
 <%= "\ea\x01" %>
+<%= "\x1D\x61\x01" %>
 <%= "\e!\x38" %><%= @order.vendor.name if @order.vendor and @order.vendor.receipt_logo_header.nil? %>
 <%= "\e!\x01" %>
 <%= @order.vendor.receipt_logo_header if @order.vendor %>
