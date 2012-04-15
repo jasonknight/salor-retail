@@ -13,7 +13,7 @@
 %>
 <%= (i.weight.nil? or i.weight.zero?) ? '' : " #{ i.weight } #{ i.weight_metric }" %>
 
-<%= "\x1B\x61\x02" %><%= "\x1D\x21\x00" %><%= "(EUR #{ "%.2f" % [i.base_price * factor / i.weight] }/#{ base_metric })" %>
+<%= "\x1B\x61\x02" %><%= "\x1D\x21\x00" %><% unless i.weight.zero? %><%= "(EUR #{ "%.2f" % [i.base_price * factor / i.weight] }/#{ base_metric })" %><% end %>
 
 <%= "\x1D\x56\x00" %>
 <%= "\x1B\x61\x02" %><%= "\x1D\x21\x00" %><%= "per " if i.sales_metric %><%= i.sales_metric %> <%= "\x1D\x21\x22" %>EUR  <%= "%.2f" % [i.base_price] %>
