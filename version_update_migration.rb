@@ -1,4 +1,4 @@
-# do something like:   rails g migration update_from_old_version_to_version
+# do something like:    rails g migration update_from_old_version_to_version
 class UpdateFromStargazerToBabylonFive < ActiveRecord::Migration
 # COPY CODE BETWEEN HERE AND END COMMENT INTO BODY OF MIGRATION
   def up
