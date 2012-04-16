@@ -142,7 +142,7 @@ class Node < ActiveRecord::Base
       @hash = {}
       @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
       @hash.merge!({:node => {:token => self.token, :sku => self.sku}, :message => "Sync"})
-      [Category,TaxProfilerb,Item,Button,Customer].each do |klass|
+      [Category,TaxProfile,Item,Button,Customer].each do |klass|
         x = 0 # we want to send them in small blocks
         models = []
         klass.scopied.all.each do |model|
