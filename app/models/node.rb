@@ -59,6 +59,7 @@ class Node < ActiveRecord::Base
   end
   def handle(params)
     log_action "Node receiving object"
+    begin
     if params.class == String then
       params = JSON.parse(params)
     end
@@ -99,6 +100,11 @@ class Node < ActiveRecord::Base
     else
       # puts "Failed to verify"
       log_action "node failed to verify"
+    end
+    rescue
+      log_action "An error occurred: " + $!.inspect
+      log_action $!.backtrace.join("\n")
+      log_action Kernel.caller.join("\n")
     end
   end
   def attributes_of_item(models,model)
