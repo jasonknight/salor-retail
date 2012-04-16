@@ -59,6 +59,7 @@ class Node < ActiveRecord::Base
   end
   def handle(params)
     log_action "Node receiving object"
+    begin
     if params.class == String then
       params = JSON.parse(params)
     end
@@ -100,6 +101,11 @@ class Node < ActiveRecord::Base
       # puts "Failed to verify"
       log_action "node failed to verify"
     end
+    rescue
+      log_action "An error occurred: " + $!.inspect
+      log_action $!.backtrace.join("\n")
+      log_action Kernel.caller.join("\n")
+    end
   end
   def attributes_of_item(models,model)
     attrs = all_attributes_of(model)
@@ -136,7 +142,7 @@ class Node < ActiveRecord::Base
       @hash = {}
       @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
       @hash.merge!({:node => {:token => self.token, :sku => self.sku}, :message => "Sync"})
-      [Category,TaxProfilerb,Item,Button,Customer].each do |klass|
+      [Category,TaxProfile,Item,Button,Customer].each do |klass|
         x = 0 # we want to send them in small blocks
         models = []
         klass.scopied.all.each do |model|
