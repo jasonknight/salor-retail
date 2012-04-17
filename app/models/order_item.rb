@@ -322,9 +322,9 @@ class OrderItem < ActiveRecord::Base
 		self.amount_remaining = item.amount_remaining
 		self.sku = item.sku
 		self.activated = item.activated
-		if self.quantity > item.quantity or self.quantity == 0 then
-		  GlobalErrors.append('system.errors.insufficient_quantity_on_item',self,{:sku => item.sku})
-		end
+		#if self.quantity > item.quantity or self.quantity == 0 then
+		#  GlobalErrors.append('system.errors.insufficient_quantity_on_item',self,{:sku => item.sku})
+		#end
 
     # GS1
 		if item.is_gs1 then

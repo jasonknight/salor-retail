@@ -1,5 +1,5 @@
 <div class="last-completed-orders">
-    <% Order.scopied.where("paid = 1").order("created_at DESC").limit(5).each do |order|  %>
+    <% Order.scopied.where("paid = 1").order("created_at DESC").limit(4).each do |order|  %>
       <div class="completed-entry">
         <table>  
          <tr>

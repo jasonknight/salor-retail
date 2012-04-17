@@ -276,7 +276,7 @@ class OrdersController < ApplicationController
       end
     end
     if @item.base_price.zero? and not @item.is_gs1
-      #GlobalErrors.append("system.errors.item_price_is_zero")
+      GlobalErrors.append("system.errors.item_price_is_zero")
       SalorBase.beep(1500, 100, 3, 10)
     end
   end
