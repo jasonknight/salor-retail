@@ -182,7 +182,7 @@ class Node < ActiveRecord::Base
     end
     if @inst then 
       # puts "Updating record"
-      if @inst.send("accepts_#{@inst.class.table_name}") then
+      if @target.send("accepts_#{@inst.class.table_name}") then
         @inst.update_attributes(new_record)
         log_action "UPDATING ATTRS OF #{@inst.class} with id of #{@inst.id}"
       else
@@ -191,10 +191,15 @@ class Node < ActiveRecord::Base
     else
       # puts "Creating new record"
       @inst = @klass.new(new_record)
-      if @inst.send("accepts_#{@inst.class.table_name}") then
+      if @target.send("accepts_#{@inst.class.table_name}") then
         log_action "CREATING A NEW RECORD"
         if @inst.save then
           log_action "Saved item to database " + @inst.inspect
+        else
+          log_action "There were errors..."
+          @inst.errors.full_messages.each do |msg|
+            log_action msg
+          end
         end
       else
         log_action "REJECTING #{@inst.class}"

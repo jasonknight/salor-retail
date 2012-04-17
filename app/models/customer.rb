@@ -79,7 +79,10 @@ class Customer < ActiveRecord::Base
   end
   def loyalty_card_sku=(sku)
     if not self.loyalty_card then
-      lc = LoyaltyCard.new(:sku => sku)
+      lc = LoyaltyCard.find_by_sku sku
+      if not lc then
+        lc = LoyaltyCard.new(:sku => sku)
+      end
       self.loyalty_card = lc
     else
       self.loyalty_card.update_attribute(:sku, sku)
