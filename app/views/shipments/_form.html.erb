@@ -7,7 +7,11 @@
           $('.form-container').hide();
           $($(this).attr('href')).show();
       });
+      $(':input',document.new_shipment).bind("change", function() {  alert('setting'); window.onbeforeunload = onNavigateAway;});
   });
+  function onNavigateAway() {
+    return "<%= I18n.t("views.notice.save_before") %>";
+  }
 </script>
 <div align="center">
 <%= form_for(@shipment) do |f| %>
@@ -64,6 +68,10 @@
             <%= f.hidden_field(:employee_id, :value => salor_user.id) if salor_user.is_employee? %>
     </div> <!-- end id="general" -->
     <div id="items" class="hidden form-container shipment-items-form-container">
+    <div class="actions">
+      <br />
+      <%= f.submit t 'helpers.submit.save' %>
+    </div>
        <%= salor_render :partial => "shared/shipment_item_form", :locals => {:f => f,:model => 'shipment', :items => @shipment.shipment_items} %>
     </div>
     <div id="notes" class="hidden form-container shipment-notes-form-container">

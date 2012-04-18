@@ -784,6 +784,7 @@ de:
           returned: Retourniert
           shipped: im Transit
     notice:
+      save_before: XXX Save before leaving?
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       wholesaler_upload_report: "Aktualisiert: %{updated_items}, Erzeugt: %{created_items}, Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}"
       cache_was_cleared: Cache wurde gelöscht
