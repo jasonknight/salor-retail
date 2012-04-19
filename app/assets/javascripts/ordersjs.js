@@ -144,8 +144,12 @@ function updateCustomerView(item,order_id) {
     if(Register.pole_display == "") {
       Salor.mimoRefresh(Conf.url+"/orders/"+order_id+"/customer_display",800,480);
     } else {
-      output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
-      Salor.poleDancer(Register.pole_display, output );
+      if (item == false) {
+        showOrderTotalOnPoleDisplay(); 
+      } else {
+        output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
+        Salor.poleDancer(Register.pole_display, output );
+      }
     }
   }
 }

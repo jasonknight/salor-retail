@@ -62,7 +62,13 @@ class ItemsController < ApplicationController
     if not check_license() then
       redirect_to :controller => "home", :action => "index" and return
     end
-    @items = salor_user.get_items
+    if params[:order_by] then
+      key = params[:order_by]
+      session[key] = (session[key] == 'DESC') ? 'ASC' : 'DESC'
+      @items = Item.scopied.page(params[:page]).per(25).order("#{key} #{session[key]}")
+    else
+      @items = Item.scopied.page(params[:page]).per(25)
+    end
 
     respond_to do |format|
       format.html # index.html.erb

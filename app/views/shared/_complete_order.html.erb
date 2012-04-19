@@ -121,7 +121,17 @@ function validatePaymentMethod(element) {
     $(pay_input).val(cardTotal);
   }
 }
-
+function showOrderTotalOnPoleDisplay() {
+  <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
+    if (typeof(Salor) != 'undefined') {
+      blurb = ('<%= t('activerecord.attributes.total') %>' + '               ').substring(0,10);
+      currency = '<%= t('number.currency.format.friendly_unit') %>';
+      total = parseFloat(($('#pos_order_total').html()).replace(',','.').substring(1));
+      total = sprintf("%s %6.2f", currency, total);
+      Salor.poleDancer('<%= GlobalData.cash_register.pole_display %>', blurb + total );
+    }
+  <% end %>
+}
 function complete_order_show() {
   sendingOrder = false;
   $(".payment-amount").remove();
@@ -133,7 +143,7 @@ function complete_order_show() {
   //allow_complete_order(isBuyOrder); // need to get the total money tended > complete_total before active unless this isBuyOrder
   $('#complete_order').show();
 
-  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
+  <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
     if (typeof(Salor) != 'undefined') {
       blurb = ('<%= t('activerecord.attributes.total') %>' + '               ').substring(0,10);
       currency = '<%= t('number.currency.format.friendly_unit') %>';
