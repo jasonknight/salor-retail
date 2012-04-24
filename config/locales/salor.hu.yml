@@ -73,6 +73,7 @@ en-US:
         other: Payment Methods
 
     attributes:
+      calculate_tax: XXX Calculate Tax
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       employee:
@@ -782,6 +783,7 @@ en-US:
           returned: returned
           shipped: shipped
     notice:
+      save_before: XXX Save before leaving?
       move_real_quantities_success: Item quantities were successfully updated
       wholesaler_upload_report: "Updated items: %{updated_items}, Created items: %{created_items}, Created categories: %{created_categories}, Created Tax Profiles %{created_tax_profiles}"
       cache_was_cleared: Cache files deleted.

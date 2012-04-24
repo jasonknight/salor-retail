@@ -26,6 +26,13 @@
 
   <div class="sign-in-forms">
     <div class="tab-container">
+    <div class="freefield">
+      <select id="locale_select" onchange="window.location = '?locale=' + $('#locale_select').val();">
+        <% supported_languages.each do |l| %>
+          <option value="<%= l[:locale] %>" <%= I18n.locale.to_s == l[:locale] ? 'selected="selected"' : ''%>><%= l[:name] %></option>
+        <% end %>
+      </select>
+  </div>
   <img src='/images/salor-logo-reports.png'>
 
 

@@ -525,11 +525,16 @@ module UserEmployeeMethods
   end
 
   #
-  def get_end_of_day_report(from,to)
-    orders = Order.scopied.where({ :vendor_id => self.get_meta.vendor_id, :drawer_id => self.get_drawer.id,:created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
+  def self.get_end_of_day_report(from,to,employee)
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
-    drawertransactions = DrawerTransaction.where({:drawer_id => self.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
+    if employee
+      orders = Order.scopied.where({ :vendor_id => employee.get_meta.vendor_id, :drawer_id => employee.get_drawer.id,:created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
+      drawertransactions = DrawerTransaction.where({:drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
+    else
+      orders = Order.scopied.where({ :vendor_id => $Vendor.id,:created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
+      drawertransactions = DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
+    end
     regular_payment_methods = PaymentMethod.types_list.collect{|pm| pm[1].to_s }
 
     categories = {:pos => {}, :neg => {}}
@@ -661,10 +666,16 @@ module UserEmployeeMethods
     report['calculated_drawer_amount'] = calculated_drawer_amount
     report['orders_count'] = orders.count
     report['categories_sum'] = categories_sum
-    report[:date] = I18n.l(DateTime.now, :format => :long)
-    report[:drawer_amount] = self.get_drawer.amount
+    report[:date_from] = I18n.l(from, :format => :just_day)
+    report[:date_to] = I18n.l(to, :format => :just_day)
     report[:unit] = I18n.t('number.currency.format.friendly_unit')
-    report[:username] = "#{ self.first_name } #{ self.last_name } (#{ self.username })"
+    if employee
+      report[:drawer_amount] = employee.get_drawer.amount
+      report[:username] = "#{ employee.first_name } #{ employee.last_name } (#{ employee.username })"
+    else
+      report[:drawer_amount] = 0
+      report[:username] = ''
+    end
     return report
   end
 

@@ -58,7 +58,7 @@ class Customer < ActiveRecord::Base
   before_create :set_model_owner
 
   def set_sku
-    self.sku = "#{self.company_name}#{self.first_name}#{self.lastname}".gsub(/[^a-zA-Z0-9]+/,'')
+    self.sku = "#{self.company_name}#{self.first_name}#{self.last_name}".gsub(/[^a-zA-Z0-9]+/,'')
   end
   def full_name
     self.first_name = 'NotSet' if self.first_name.blank?
@@ -79,7 +79,10 @@ class Customer < ActiveRecord::Base
   end
   def loyalty_card_sku=(sku)
     if not self.loyalty_card then
-      lc = LoyaltyCard.new(:sku => sku)
+      lc = LoyaltyCard.find_by_sku sku
+      if not lc then
+        lc = LoyaltyCard.new(:sku => sku)
+      end
       self.loyalty_card = lc
     else
       self.loyalty_card.update_attribute(:sku, sku)

@@ -54,48 +54,7 @@ class VendorsController < ApplicationController
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
     before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
-  def technician_control_panel
-    if not $User.is_technician? then
-      redirect_to :action => :index
-    end
-  end
-  def move_transactions
-    @from, @to = time_from_to(params)
-    parts = params[:from_emp][:set_owner_to].split(":")
-    from_user = Kernel.const_get(parts[0]).find_by_id parts[1]
-    parts = params[:to_emp][:set_owner_to].split(":")
-    to_user = Kernel.const_get(parts[0]).find_by_id parts[1]
-    # Stats variables
-    orders_moved = 0
-    dts_moved = 0
-    orders = from_user.orders.where(:created_at => @from..@to)
-    dts = from_user.drawer_transactions.where(:created_at => @from..@to)
-    from_user.transaction do
-        orders.each do |o|
-          o.user_id = nil
-          o.employee_id = nil
-          o.set_model_owner(to_user)
-          o.drawer_id = to_user.get_drawer.id
-          o.save
-          orders_moved += 1
-        end
-        dts.each do |dt|
-          dt.owner_id = nil
-          dt.owner_type = nil
-          dt.set_model_owner to_user
-          if dt.drop then
-            from_user.get_drawer.add(dt.amount * -1)
-            to_user.get_drawer.add(dt.amount)
-          elsif dt.payout then
-            from_user.get_drawer.add(dt.amount)
-            to_user.get_drawer.add(dt.amount * -1)
-          end
-          dt.save
-          dts_moved += 1
-        end
-      end #from_user.transaction
-    redirect_to :controller => :home, :action => :index, :notice => "Orders Found: #{orders.length} Orders moved: #{orders_moved} DTs Found: #{dts.length} DTs moved: #{dts_moved}"
-  end
+
   # GET /vendors
   # GET /vendors.xml
   def index
@@ -286,38 +245,7 @@ class VendorsController < ApplicationController
     end
   end
 
-  def list_drawer_transactions
-    render :nothing => true and return if not GlobalData.salor_user.is_technician?
-    @from, @to = assign_from_to(params)
-    from2 = @from.beginning_of_day
-    to2 = @to.beginning_of_day + 1.day
-    @transactions = DrawerTransaction.scopied.where(:created_at => from2..to2)
-  end
-  #
-  def edit_drawer_transaction
-    render :nothing => true and return if not GlobalData.salor_user.is_technician?
-    @drawer_transaction = DrawerTransaction.find_by_id(params[:id])
-    if @drawer_transaction then
-      @drawer_transaction.update_attributes(params[:drawer_transaction])
-      atomize(ISDIR, 'cash_drop')
-    end
-    respond_to do |format|
-      format.html { redirect_to(request.referer) }
-      format.xml  { head :ok }
-    end
-  end
-  #
-  def destroy_drawer_transaction
-    render :nothing => true and return if not GlobalData.salor_user.is_technician?
-      @drawer_transaction = DrawerTransaction.find_by_id(params[:id])
-      @drawer_transaction.destroy if @drawer_transaction
-      atomize(ISDIR, 'cash_drop')
-    respond_to do |format|
-      format.html { redirect_to(request.referer) }
-      format.xml  { head :ok }
-    end
-  end
-  #
+
   def render_end_of_day_receipt
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
@@ -329,8 +257,11 @@ class VendorsController < ApplicationController
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
-    @report = @user.get_end_of_day_report(DateTime.now)
+    @from, @to = assign_from_to(params)
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
 
+    @report = UserEmployeeMethods.get_end_of_day_report(@from.beginning_of_day,@to.end_of_day,@user)
 
     text = Printr.new.sane_template('end_of_day',binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
@@ -343,6 +274,7 @@ class VendorsController < ApplicationController
       render :nothing => true
     end
   end
+
   #
   def end_day
     begin

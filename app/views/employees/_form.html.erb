@@ -29,7 +29,7 @@
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
               <div class="freefield"><%= f.label Employee.human_attribute_name :uses_drawer_id %><br />
-              <%= f.select :uses_drawer_id, Employee.scopied.collect {|e| e.username == @employee.username ? ["N/A",""] : [e.username,e.get_drawer.id]} %>
+              <%= f.select :uses_drawer_id, Employee.scopied.where("username != '#{@employee.username}'").collect {|e| [e.username,e.get_drawer.id] }.unshift(["N/A",""]) %>
               
               </div>
             </td>
@@ -50,6 +50,10 @@
             </td>
         </tr>
       </table>
+      <div class="actions">
+          <%= f.submit %>
+        </div>
+
       <table valign="top" width="98%">
         <tr>
           <td colspan="2">
@@ -59,7 +63,7 @@
         </tr>
         <tr>
           <td valign="top" colspan="2">
-            <h2> <%= t("views.forms.roles") %> <%= raw get_help('roles') %> </h2>
+            <h2> <%= t("views.forms.roles") %></h2>
             <div id="role_search">
               <input id="role_search_input" type="text" class="keyboardable" />
               <script type="text/javascript">

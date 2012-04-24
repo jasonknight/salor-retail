@@ -124,18 +124,30 @@ class HomeController < ApplicationController
 
   #
   def get_connection_status
-    @status = `netstat -pna | grep :26`
+    @status_ssh = `netstat -pna | grep :26`
+    @status_vpn = `netstat -pna | grep :28`
   end
 
   #
   def connect_remote_service
-    @status = `netstat -pna | grep :26`
-    if @status.empty? # don't create more process than one, otherwise the remote disconnection won't stop the additional processes
-      connection_thread = fork do
-        exec "expect #{ File.join(Rails.root, 'salor_ssh_reverse_connect.expect').to_s } #{ params[:pw] }"
+    if params[:type] == 'ssh'
+      @status_ssh = `netstat -pna | grep :26`
+      if @status_ssh.empty? # don't create more process than one
+        connection_thread_ssh = fork do
+          exec "expect #{ File.join('/', 'usr', 'share', 'red-e_ssh_reverse_connect.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
+        end
+        Process.detach(connection_thread_ssh)
+      end
+    end
+    if params[:type] == 'vpn'
+      @status_vpn = `netstat -pna | grep :28`
+      if @status_ssh.empty? # don't create more process than one
+        connection_thread_vpn = fork do
+          exec "expect #{ File.join('/', 'usr', 'share', 'red-e_vpn_reverse_connect.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
+        end
+        #Process.detach(connection_thread_vpn)
       end
     end
     render :nothing => true
-    #Process.detach(job1)
   end
 end

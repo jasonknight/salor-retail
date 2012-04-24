@@ -298,11 +298,23 @@ table.striped-table2
   border-bottom: 2px solid black
   background-color: #D0D0D0
 
+.striped-table2 tr.total
+  border-top: 2px solid black
+  background-color: #D0D0D0
+  font-weight: bold
 
 .has-total tr:last-child 
   background-color: #D0D0D0
   border-top: 3px solid black
   font-weight: bold
+
+.striped-table2 td.total,
+.striped-table2 td.right,
+.striped-table2 td.price
+  text-align: right
+
+.striped-table2 td.quantity
+  text-align: center
 
 
 
@@ -669,7 +681,7 @@ div.header > ul > li > div
 div.header > ul > li > div.active 
   padding-top: 5px
   width: 65px
-  height: 45px
+  height: 46px
   cursor: pointer
   background-color: $background
   @include rounded_corners_top  
@@ -678,7 +690,7 @@ div.header > ul > li > div.active
 div.header > ul > li > div.first 
   background-color: $background
   @include rounded_corners_top
-  height: 45px
+  height: 46px
   @include no_select
 
 div.header > ul > li > div.first > a > img 
@@ -695,7 +707,7 @@ div.close-window
   @include rounded_corners_left
   position: fixed
   right: 0px
-  bottom: 15px
+  bottom: 8px
   padding: 18px
   font-weight: bold
   text-transform: uppercase
@@ -707,7 +719,7 @@ a.reload-window
   @include rounded_corners_right
   position: fixed
   left: 0px
-  bottom: 15px
+  bottom: 8px
   padding: 18px
   text-decoration: none
   font-weight: bold
@@ -724,6 +736,7 @@ div.header #clockbox
   font-size: $text_size_tiny
   text-shadow: 1px 1px 1px #666666
   font-family: $font_family
+  position: absolute
 
 div.header #clockbox span 
   font-weight: bold
@@ -755,12 +768,15 @@ span.version
   left: 0px
   bottom: 0px
   font-size: 70%
+  width: 50%
 
 span.salorbinversion
   position: fixed
   right: 0px
   bottom: 0px
   font-size: 70%
+  width: 50%
+  text-align: right
 
 
 /* Main and Main Content Divs */
@@ -933,6 +949,7 @@ div.list > div.master-wide
   @include no_select
   font-size: $text_size_massive
   text-transform: uppercase
+  overflow: hidden
 
 div.list img 
   border: none
@@ -1204,7 +1221,7 @@ div#eod-calculator-total, div#eod-calculator-difference
   font-weight: bold
   font-size: 200%
   padding: 5px
-  width: 50%
+  width: 40%
   margin: 5px
   background-color: $light_background
   @include rounded_corners_right
@@ -1278,11 +1295,14 @@ div.pos-menu div.pos-configuration
   text-transform: uppercase
   text-align: center
   white-space: wrap
-  width: 8%
+  width: 9%
   text-overflow: ellipsis
   overflow: hidden
   @include pointer
   background-color: $light_background
+
+.pos-item-total
+  width: 11%
 
 .pos-item-sku 
   width: 18%
@@ -1298,7 +1318,7 @@ div.pos-menu div.pos-configuration
 
 .pos-item-name 
   text-align: left
-  width: 18%
+  width: 30%
   overflow: hidden
   white-space: nowrap
   float: none
@@ -1324,7 +1344,7 @@ div.pos-menu div.pos-configuration
   @include left_right_pad_wide
 
 .pos-item-price
-  width: 9%
+  width: 10%
   text-transform: uppercase
   background-color: $light_background
 
@@ -2365,10 +2385,12 @@ section.report
 
 
 .eod-drawer-button, .pos-drawer-button, .uniscalebutton 
-  padding: 5px 60px
+  padding: 5px 0px
+  width: 15%
   margin: 5px
   min-height: 30px
   @include pointer
+  text-align: center
 
 
 .pos-drawer-button 
@@ -2581,7 +2603,7 @@ div.clear
   clear: both
 
 table.taxes
-  width: 40%
+  width: 50%
 
 
 div.backup 
@@ -2810,11 +2832,16 @@ div.shipment_item_attr_header_stock_location_id
   :width 100px
 
 div.request_service
-  :padding-top 100px
+  :padding-top 10px
+  label
+    :text-align right
+    :display inline-block
+    :width 150px
   text-align: center
-  input#service_connect_password
+  input
     font-size: 200%
-    width: 200px
+    font-weight: bold
+    width: 300px
   div.generic-button
     display: inline-block
   div#connection_status

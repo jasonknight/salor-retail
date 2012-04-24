@@ -1,0 +1,187 @@
+# Salor Software License
+
+Licensor (“(Red) E”):
+
+(Red) E Tools Ltd.
+
+160 Greentree Drive, Suite 101
+
+Dover, Delaware 19904
+
+U.S.A.
+
+
+# DEFINITIONS
+
+"Acceptance" means when Licensee **confirms by clicking the button marked "OK"** to (Red) E that the Software meets Licensee’s acceptance criteria in full-time, commercial operation. If within (i) fifteen (15) days following receipt and setup of the Software configured for full-time commercial operation on the Hardware, Licensee has not given written notice that the Software fails to meet the Licensee’s acceptance criteria, acceptance shall be automatic without further action by either party. If Licensee provides (Red) E with a written notice stating errors occurring during Acceptance testing, then (Red) E shall use all reasonable efforts to promptly and diligently correct such errors and re-deliver and re-install the Software for re-testing with respect to such errors, in each case at the sole expense of (Red) E and within thirty (30) days of receipt of notice from Licensee. Licensee shall have the right to re-test the Software and (Red) E shall be obligated to correct, re-deliver, and re-install the Software in accordance with the foregoing procedure for up to fifteen (15) days. If after these attempts to re-deliver and re-install the Software, (Red) E has not corrected such errors, the Licensee may terminate this Agreement for cause and receive a full refund of any fees or costs paid to date.
+
+“Applicable Laws” means applicable local, state, and federal laws, including executive orders, rules, regulations, ordinances, codes, and decrees of all applicable governments or governmental agencies.
+
+“Documentation”, means the standard and current documentation, both in written and electronic form that (Red) E delivers with the Software.
+
+“Hardware” means the complete hardware configuration including monitor, server, and all hardware peripherals, upon which the Software was installed upon by a Salor representative. 
+
+“Software”, means the complete executable object code of the products/modules listed in Attachment A, and except where the context requires otherwise, the term includes all upgrades and enhancements thereto.
+
+“Supported Databases”, means most ODBC compliant databases.
+
+“Supported Operating Systems”, means those desktop, mobile, and server operating systems identified in Attachment A.
+
+# ENTERPRISE AND CONCURRENT LICENSE GRANT.
+
+(Red) E hereby grants to Licensee, the limited, perpetual, nonexclusive, and nontransferable licenses and rights set forth in this Agreement to use the Software in exchange for payment of the license fee and compliance with the terms of this Agreement. In addition, (Red) E shall provide Support and Maintenance Services and initial training for Licensee’s use of the Software as more fully set forth in this Agreement. This License does not extend to any third party, including without limitation any parent entity, subsidiary, affiliate, or independent contractor.
+
+a. Licensee may:
+
+i. Use and run the Software, in object code form only, and in conjunction with any Access Keys and Hardware provided, on one CPU at a time for Licensee’s own use for as long as this License remains in effect. ((Red) E reserves the right to employ other devices and codes that detect and prevent the unauthorized copying and use of the Software). For each Enterprise License Licensee acquires, Licensee may install and use the Software on a single site. For the Concurrent License acquired by Licensee under this Agreement, Licensee shall only use a single copy of the Software on a single computer.
+
+ii. Make no more than one (1) archival or backup copy of the Software and use it only in the event that and for so long as the original media is damaged, destroyed, or inoperable. All archival and backup copies of the Software are subject to the terms of this Agreement.
+b. Licensee may not:
+
+i. Copy, run, or use the Software or Hardware in any manner not expressly authorized by this License.
+
+ii. Use the Software with any gateways, bridges, modems, and/or network extenders or electronically transfer the Software from one computer to another over a network and/or zone that allows the Software to be used on multiple CPUs unless one authorized copy of the Software has been licensed for each CPU executing the Software.
+
+iii. Distribute, sublicense, lease, lend, rent, sell, transfer, assign, or convey the Software or Hardware to any third party.
+
+iv. Allow the Software or Hardware to be subject to any lien, security interest, judgment, or other encumbrance.
+
+v. Modify, adapt, translate, or make derivations of the Software.
+
+vi. Decode, decompile, disassemble, cross-assemble, replicate, or otherwise reverse-engineer the Software.
+
+vii. Remove, obstruct, alter, or obscure any trade name, trademark, trademark notice, copyright notice, confidentiality warning, and designation of origin or other legend appearing in any form in connection with the Software or Hardware.
+
+viii. Add any trademark notice, copyright notice, or other designation of any type to any copy of the licensed Software or Hardware without express prior written approval.
+
+ix. Export the Software in violation of any export laws or regulations of the United States.
+
+# SUPPORT AND MAINTENANCE SERVICES.
+
+During the term set forth in Section 4.2 of this Agreement, the parties agree as follows:
+(Red) E will provide the following support and maintenance for the Software:
+
+a. Corrections of material defects in the Software so that the Software will operate as described in the Documentation.
+
+b. Periodic updates and Documentation of the Software that incorporate (a) corrections of any material defects, (b) fixes of minor bugs, and (c) at (Red) E’s sole discretion, enhancements to the Software. (Red) E will provide ample lead time (15 days) to allow Licensee to review changes contained within upgrades and prepare for such update (i.e. Licensee may need to coordinate modifications to in-house software which may be integrated with (Red) E's Software).
+c. Telephone and electronic mail support to permit the Licensee to report problems and seek assistance in using the Software.
+
+d. Internet accessible files containing patches and other released defect corrections to the Software.
+
+e. Internet accessible files containing new versions of the Software made generally available during the support term.
+
+f. Includes telephone support for business days between the hours of 8:00 AM and 5:00 PM [Time Zone] time with extended support hours until 8 PM with an on call technician. Users with current maintenance receive Software updates for Software modules that they own.
+
+g. (Red) E will provide Documentation for all material specifications and Software functionality descriptions that is sufficient, clear, and concise in detail of information to facilitate tasks specified within the Documentation content in the operational context of the Software itself.
+The following services are not included as part of the Support and Maintenance Services:
+
+a. Charged-for enhancements that are offered at (Red) E’s sole discretion to Licensees upon payment of license fee.
+
+b. On-Site Support; and
+
+c. Training.
+
+**Licensee will:**
+
+a. Notify (Red) E of Licensee’s designated Technical Contact. Licensee shall designate a contact with sufficient technical background to report the Software problems and receive support under the terms herein.
+
+b. Upon detection of any error in the Software, Licensee, as requested by (Red) E, shall provide data that (Red) E may reasonably request in order to reproduce operating conditions similar to those present when the error occurred. Licensee agrees to identify and document for (Red) E currently installed releases of and all changes to operating and language support software that the Software requires for its successful operation, as determined by (Red) E.
+
+
+# TERM AND TERMINATION
+
+## LICENSE GRANT.
+
+a. Unless sooner terminated for cause as provided in Section 4.4 herein, this License grant shall run in perpetuity. Licensee may terminate this License grant without cause at any time by destroying the Software and accompanying materials and returning the Hardware to (Red) E or returning the Software and Hardware to (Red) E. (Red) E may terminate this Agreement for cause upon Licensee’s default or breach of any term of this Agreement as provided in Section 4.4.
+
+b. Upon termination or expiration of this Agreement, Licensee shall cease all use of the Software, collect all copies and embodiments of the Software and Hardware, and return or destroy all copies of the Software or return the Software and Hardware to (Red) E. (Red) E may require Licensee to certify the destruction and non-use of the Software.
+
+c. Licensee’s obligations not to infringe or impair (Red) E’s copyright and other proprietary interests as well as Licensee’s obligations not to use or disclose proprietary information survive the termination of this Agreement.
+
+## SUPPORT AND MAINTENANCE SERVICES TERM/CONFIDENTIALITY.
+
+The initial term of the period of support for the Software shall be from the date of Acceptance of the Software by Licensee and shall continue for one (1) year from that date. The parties acknowledge that the cost of the first year Support and Maintenance Services is included in the license fee. (Red) E agrees to provide annual Support and Maintenance Services for the Software to Licensee thereafter so long as Licensee pays (Red) E an annual Services payment equal to 18% of all Software license fees paid by Licensee to (Red) E for the Software under this Agreement. Termination of the License in accordance with Section 4.1 also terminates the Support and Maintenance Services. (Red) E reserves the right to terminate support and maintenance, via non-renewal at the end of any term, for non-current versions of the Software; however, in no instance will changes to the Software that are made as part of the Support and Maintenance services set forth in Section 3 of this Agreement render the Software “non-current” for the purposes of this section.
+
+This Agreement supersedes all previous communications, agreements, promises, representations, understandings, and negotiations, whether written or oral, between the parties with respect to confidentiality, including any applicable non-disclosure agreement. Each party acknowledges and agrees that pursuant to this Agreement each party may have access to confidential or proprietary information of the other party, including without limitation information and material concerning or pertaining to the other party’s business, methods, plans, customer lists, software programs, network systems, data, programs, inventory, and/or projects or other materials, and that such information is confidential and proprietary to the party disclosing such information to the other ("Confidential Information"). Each party agrees to exercise the same level of care that it exercises to protect its own confidential information of like importance, but no less than a reasonable standard of care consistent with then current industry standards, to protect the secrecy and avoid disclosure, use, or loss of Confidential Information in order to prevent such information from falling into the public domain or the possession of unauthorized persons, or otherwise being lost, unless such use, copying, or disclosure is necessary to accomplish the purposes of this Agreement and has been authorized in advance in writing by the other party. The provisions of this Section shall not apply to any information which either party can show (a) has been published in writing and has become, before the time of use, copying or disclosure by the disclosing party, a part of the public domain other than by reason of any of the disclosing party’s acts or omissions; (b) has been put in the disclosing party’s possession or knowledge, before the time of its use or disclosure by the disclosing party, by any third party as a matter of right and without restriction on use or disclosure; (c) was specifically authorized in writing by the non-disclosing party to become publicly known; (d) was independently developed by the disclosing party without reference to, knowledge of, use of, or access to the Confidential Information; or (e) was the minimum amount required to be disclosed to any governmental agency or court of competent jurisdiction by written order, provided however, that the non-disclosing party is provided with the opportunity to obtain an appropriate protective order or otherwise challenge such disclosure. 
+
+## LICENSEE RIGHT TO TERMINATE.
+
+a. If (Red) E fails to cure any material breach of this Agreement, including failure to provide or maintain the Support and Maintenance Services, in whole or in part, pursuant to the terms of this Agreement, Licensee may terminate this Agreement for cause, in which event termination shall be without any further liability to Licensee, if Licensee provides (Red) E with written notice of the breach and a reasonable opportunity to cure within 10 days from receipt of notice, specifying the breach and demanding such cure, provided that if such breach is curable but not reasonably curable within such 10-day period, (Red) E shall not be deemed to be in breach if within such 10-day period it commences to cure the breach and thereafter diligently prosecutes the full cure of the breach to conclusion within such period of time as is reasonably necessary to accomplish such cure but in all events within thirty (30) days of receipt of notice. If (Red) E commits three (3) or more performance breaches under this Agreement within a two (2) month period (notwithstanding the timely and full cure of those performance breaches), Licensee shall nevertheless have the right to terminate this Agreement for cause upon thirty (30) days of receipt of notice of the occurrence of (Red) E’s third breach within the two (2) month time period of time. If (Red) E fails to cure, then Licensee may terminate this Agreement for cause and (Red) E shall reimburse Licensee for a prorated amount of Licensee’s then-current annual Software Support payments effective 30 days after (Red) E’s receipt of Licensee’s written notice to terminate. 
+
+b. Should (Red) E violate or allow a violation of any Applicable Laws, and does not cure such violation within thirty (30) days from the date of receipt of written notice from the Licensee specifying the breach and demanding such cure, provided that if such breach is curable but not curable within such 30-day period, (Red) E shall not be deemed to be in breach if within such 30-day period it commences to cure the breach and thereafter diligently prosecutes the full cure of the breach to conclusion within such period of time as is reasonably necessary to accomplish such cure.
+
+c. Should (Red) E make an assignment for the benefit of creditors, admit in writing its inability to pay its debts as they become due, file a voluntary petition in bankruptcy, be adjudged bankrupt or insolvent, file a petition or answer seeking for itself any reorganization, arrangement, composition, readjustment, liquidation, dissolution, or similar relief under any present or future statute, law, or regulation, file any answer admitting or not contesting the material allegations of a petition filed against such party in any such proceeding, or seek, consent to, or acquiesce in, the appointment of any trustee, receiver, custodian, or liquidator of such party or of all or any substantial part of such party's properties, or (Red) E, or its directors, shareholders, or constituent entities take an action to dissolve or liquidate the party.
+
+## (RED) E RIGHT TO TERMINATE. (Red) E may immediately terminate the Agreement for cause if:
+
+a. (a)	Licensee fails to cure its default of the payment terms for the Software or the Support and Maintenance Services after the expiration of all applicable notice, grace, and cure periods;
+
+b. Licensee fails to cure any other material breach of the Agreement within 30 days after receiving (Red) E’s written notice specifying the nature and extent of breach and demanding such cure, provided that if such breach is curable but not reasonably curable within such 30-day period, Licensee shall not be deemed to be in breach if within such 30-day period Licensee commences to cure the breach and thereafter diligently prosecutes the full cure of the breach to conclusion within such period of time as is reasonably necessary to accomplish such cure.
+
+c. Licensee violates any Applicable Laws, and does not cure such violation within thirty (30) days from the date of receipt of written notice from the (Red) E specifying the breach and demanding such cure, provided that if such breach is curable but not reasonably curable within such 30-day period, Licensee shall not be deemed to be in breach if within such 30-day period it commences to cure the breach and thereafter diligently prosecutes the full cure of the breach to conclusion within such period of time as is reasonably necessary to accomplish such cure.
+
+d. Licensee makes an assignment for the benefit of creditors, admits in writing its inability to pay its debts as they become due, files a voluntary petition in bankruptcy, is adjudged a bankrupt or insolvent, file a petition or answer seeking for itself any reorganization, arrangement, composition, readjustment, liquidation, dissolution, or similar relief under any present or future statute, law, or regulation, files any answer admitting or not contesting the material allegations of a petition filed against such party in any such proceeding, or seeks, consents to, or acquiesces in, the appointment of any trustee, receiver, custodian, or liquidator of such party or of all or any substantial part of such party’s properties, or Licensee, or its directors, shareholders, or constituent entities take an action to dissolve or liquidate the party.
+
+If (Red) E terminates the Agreement under this Section 4.4, Licensee will be liable for payment of all License Fees and Support and Maintenance Services Fees provided up to the date of termination, whether or not invoiced by the termination date.
+
+## TEMPORARY SUSPENSION OF SERVICES.
+
+In the event Licensee is in default of any payments due under this Agreement or is in any other material breach of the Agreement after the expiration of all applicable notice, grace, and cure provisions, in addition to (Red) E’s rights to terminate the Agreement as set forth in section 4.4(a) and (b) above, (Red) E may also, at its option, suspend the Services, until such deficiency is cured within the notice period set forth in section 4.4(a) and (b) above provided (Red) E provides written Notice of threatened suspension of Services to Licensee in accordance with the notice provisions of this Agreement.
+
+# OWNERSHIP.
+
+(Red) E holds exclusive right, title and interest in the Software and Hardware including all corrections, bug fixes, enhancements, updates, or other modifications to the Software, along with all Documentation, including all copyright, and trade secret interests therein. Licensee agrees to not infringe, misappropriate or otherwise impair (Red) E’s ownership of the Software, Hardware, and Documentation, and agrees to protect them both against unauthorized use and copying and to maintain in confidence the trade secret information therein.
+
+# WARRANTY: LIMITATIONS OF LIABILITY AND REMEDY.
+
+a. LIMITED EXPRESS WARRANTY. For a period of sixty (60) days from Licensee’s Acceptance of the Software and thereafter for so long as Licensee is a current subscriber to the Support and Maintenance Services, (Red) E warrants that: (1) the Hardware on which the Software is provided and the associated Access Key(s) shall be free of material defects in material and workmanship; and (2) the Software, when used in accordance with this License, will perform substantially in accordance with the material specifications and descriptions set forth in the Documentation. (Red) E shall, at its sole option, either repair or replace the non-performing Hardware, Access Key, or Software, as the case may be, or refund all the license fee and all amounts paid by Licensee under the terms of this Agreement. (RED) E MAKES NO OTHER EXPRESS WARRANTY AND DISCLAIMS ALL IMPLIED WARRANTIES AND SPECIFICALLY DISCLAIMS ALL EXPRESS OR IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS OR A PARTICULAR PURPOSE.
+
+### b. LIMITATION OF LIABILITY. IN NO EVENT SHALL (RED) E BE HELD LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES (INCLUDING, WITHOUT LIMITATION, LOSS OF BUSINESS, LOSS OF PROFITS, BUSINESS INTERRUPTION, LOSS OF DATA, OR OTHER LOSS) WHETHER BASED ON CONTRACT, TORT, OR OTHER LEGAL THEORY, IN CONNECTION WITH THE USE OF THE SOFTWARE. Some jurisdictions do not allow the exclusion or limitation of implied warranties or liabilities for incidental or consequential damages, so the above limitations may not apply.
+
+c. No oral or written information or advice given by (Red) E, its dealers, distributors, agents, affiliates, developers, directors, officers, or employees shall create a warranty or in any way increase the scope of the limited warranty.
+
+**(Red) E further represents and warrants that:**
+
+1.	(Red) E represents and warrants to Licensee that (Red) E has full corporate power and authority to enter into this Agreement, and the execution by (Red) E of this Agreement and the consummation by (Red) E of the transactions contemplated by this Agreement have been duly authorized by all necessary corporate actions on behalf of (Red) E; and
+
+2.	The execution and delivery of this Agreement by (Red) E, and the consummation of the transactions contemplated by this Agreement, do not conflict with or violate: (i) the charter documents or by-laws of (Red) E; (ii) any contract or agreement to which (Red) E is bound, or to which any of (Red) E's assets are subject; or (iii) any Applicable Law or the order of any court or governmental authority; (iv) (Red) E owns or otherwise possesses sufficient rights in the Hardware, licensed Software and Support and Maintenance Services as required to perform its obligations under this Agreement and to be displayed, accessed, and/or utilized in the manner contemplated by this Agreement; and (v) as of the date of this Agreement, (Red) E has not received any notification from any third party that the (Red) E licensed Software or any of its Support or Maintenance Services violates or infringes any copyright, trade secret, trademark, patent, or any other intellectual property right of any third party.
+
+# LICENSE INFRINGEMENT REMEDY.
+
+(Red) E shall defend, indemnify, and hold Licensee harmless from any and all third party claims, demands, causes of action, judgments, awards, and all damages, losses, and liabilities, whether absolute or accrued, contingent or otherwise, and expenses (including attorney fees, expert and consultant fees, investigative costs, and costs of appeal and enforcement of this provision) of every kind and nature based on an allegation, assertion, or claim that the Software or the Support and Maintenance Services infringes any copyright, trade secret, patent, or other intellectual property rights. In addition, (Red) E shall, at its option, either: (i) modify the Software to make the Software non-infringing but still functionally equivalent to the original Software, or (ii) obtain a license to such rights on a commercially reasonable basis, which license also covers use by Licensee, as may be required to make the Software non-infringing while still complying with the terms of this Agreement. If neither of the foregoing two alternatives is commercially reasonably available to (Red) E, then the alleged infringing activity will be discontinued by Licensee and (Red) E shall reduce the Software pricing accordingly as mutually determined by the parties, and (Red) E shall refund to Licensee all amounts paid in advance to (Red) E for the Software which have been discontinued. 
+
+# GENERAL TERMS.
+
+a. This Agreement (including Attachment A to this Agreement, the terms of which are incorporated in full into this Agreement by this reference) comprises the entire agreement between Licensee and (Red) E relating to the Software and the Support and Maintenance Services. This Agreement supersedes all prior agreements or understandings, whether written, oral or implied. This Agreement can only be modified in writing by the written consent of both Licensee and (Red) E. Future modifications to this Agreement will be noted as Addendums to this original document. Neither this Agreement nor any obligations hereunder may be assigned or transferred by either party (whether by operation of law, merger, acquisition, or otherwise) to any party whatsoever and any purported assignment or transfer without the other party's consent shall be void. If any part or provision of this Agreement is determined to be invalid or unenforceable, the remainder of this Agreement shall be enforceable and shall in no way be invalidated. All waivers hereunder and all modifications, amendments, or alterations hereto must be made in writing and signed by both parties. No forbearance, failure, or delay in exercising any right, power, or privilege is a waiver thereof, nor does any single or partial exercise thereof preclude any other or future exercise thereof, or the exercise of any other right, power, or privilege. This Agreement shall continue in full force and effect notwithstanding the lack of a continuing relationship between the parties and shall be binding on, and inure to the benefit of, the parties and their successors and assigns. This Agreement is governed by and shall be construed, performed, and enforced in accordance with the domestic laws of the State of California, United States, excluding any conflicts-of-laws rule or principle that might refer the governance or the construction of this Agreement to the law of another jurisdiction.
+
+b. Should any term of this Agreement be finally determined by a court or tribunal of competent jurisdiction to be void, unenforceable or contrary to law or equity, the parties agree that such term shall be deleted or limited and that the remainder of the Agreement shall remain in full force and effect.
+
+c. The non-enforcement or delay in enforcement of any term hereunder shall not constitute a waiver of that term or any cause of action relating to any violations of that term.
+
+d. If either party commences an action or proceeding against the other party arising out of or in connection with this Agreement, including an administrative action with a federal, state, or local agency, or institutes any proceeding in a bankruptcy or similar court which has jurisdiction over the other party, or any or all of its property or assets, the prevailing party in such action or proceeding and in any appeal in connection therewith shall be entitled to have and recover from the unsuccessful party actual attorney fees paid or incurred in good faith, court costs, expenses (including without limitation experts' fees) and other costs of investigation and preparation incurred by such prevailing party in such action or proceeding, and in any appeal in connection therewith). If such prevailing party recovers a judgment in any such action, proceeding, or appeal, such actual attorneys fees paid or incurred in good faith, court costs, and expenses (including without limitation experts' fees) shall be included in and as a part of such judgment. "Prevailing Party" within the meaning of this provision includes, without limitation, the party who recovered a greater relief in the action or proceeding on the Agreement as well as a party who agrees to dismiss an action or proceeding on the other party's payment of the sums allegedly due or performance of the covenants allegedly defaulted, or who obtains substantially the relief sought by it.
+
+# DISPUTE RESOLUTION.
+
+With the exception of disputes involving breach of confidentiality, infringement of a party’s intellectual property, or other types of irreparable harm for which injunctive relief through the courts is sought by either party, the following procedure will be adhered to in all disputes arising under this Agreement which the parties cannot resolve informally. The parties shall attempt in good faith to resolve any dispute promptly by discussion between (Red) E and Licensee. Either party shall give the other party written notice of any dispute. Within ten (10) business days after delivery of such notice, the parties shall meet at a mutually acceptable time and place (subject to the provisions of Section 9.2) and thereafter as often as they reasonably deem necessary, to exchange information about the nature of the deficiency and the corrective action to be taken by the respective parties in an attempt to resolve the dispute. The Licensee Account Manager and (Red) E Project Manager shall produce a report about the nature of the dispute to their respective management. If the dispute has not been resolved within fifteen (15) business days of the first meeting or if the parties cannot agree upon corrective action, the matter shall be referred by the Licensee Account Manager and (Red) E Project Manager for resolution jointly to a Manager of, or their designated representative within, each company having the authority to resolve the dispute without further consent of any other person (“Management”) who shall meet or otherwise act to facilitate resolution within fifteen (15) business days of the date of written notification. If Management cannot resolve the dispute or agree upon a written plan of corrective action to do so within seven (7) business days after their initial meeting or other action, or if the agreed-upon completion dates in the written plan of corrective action are exceeded, then either party may initiate a mediation of the controversy and the costs of mediation shall be apportioned in equal amounts to (Red) E and Licensee. Except as otherwise provided, neither party shall initiate an arbitration or litigation of the controversy unless and until this dispute resolution procedure or one substantially equivalent has been employed or waived. Failure of a party to fulfill its obligations in this Section, including failure to meet timely upon the other party’s notice, shall be deemed such a waiver. Each party is required to continue to perform its obligations under this Agreement pending final resolution of any dispute arising out of or relating to this Agreement. All negotiations and mediation conducted pursuant to this clause are confidential and shall be treated as compromise and settlement negotiations under Virginia law.
+
+## Venue
+
+If either party initiates dispute resolution against the other on a cause of action arising out of, or relating to, this Agreement, the party may do so solely in San Francisco, California.
+
+This Section shall survive any termination or expiration of this Agreement and shall continue to be enforceable in the event of the bankruptcy of a party. The use of any dispute resolution procedure under this Agreement shall not be construed under the doctrine of laches, waiver, or estoppel to affect adversely the rights of either party. Nothing in this Section will prevent either party from resorting to judicial proceedings if interim relief from a court is necessary to prevent serious and irreparable injury to a party or to others.
+
+#NOTICES; EFFECTIVENESS; ELECTRONIC COMMUNICATIONS.
+
+Notices Generally. Except in the case of notices and other communications expressly permitted to be given by telephone (and except as provided in Section 10.2 below), all notices and other communications provided for herein shall be in writing and shall be delivered by hand or overnight courier service, mailed by certified or registered mail, or sent by telecopier as follows, and all notices and other communications expressly permitted hereunder to be given by telephone shall be made to the applicable telephone number, as follows:
+
+(i)	if to (Red) E:
+(Red) E Tools Ltd.
+160 Greentree Drive, Suite 101
+Dover, Delaware 19904
+U.S.A.
+
+Notices sent by hand or overnight courier service, or mailed by certified or registered mail, shall be deemed to have been given when received; notices sent by telecopier shall be deemed to have been given when sent (except that, if not given during normal business hours for the recipient, shall be deemed to have been given at the opening of business on the next business day for the recipient). Notices delivered through electronic communications to the extent provided in subsection (b) below, shall be effective as provided in such Section 10.2.
+
+## Electronic Communications. 
+
+Notices and other communications to the party hereunder may be delivered or furnished by electronic communication (including e-mail and Internet or intranet websites). Notices and other communications sent to an e-mail address shall be deemed received upon the sender’s receipt of an acknowledgement from the intended recipient (such as by the “return receipt requested” function, as available, return e-mail, or other written acknowledgement), provided that if such notice or other communication is not sent during the normal business hours of the recipient, such notice or communication shall be deemed to have been sent at the opening of business on the next business day for the recipient, and (ii) notices or communications posted to an Internet or intranet website shall be deemed received upon the deemed receipt by the intended recipient at its e-mail address as described in the foregoing clause (i) of notification that such notice or communication is available and identifying the website address therefor.

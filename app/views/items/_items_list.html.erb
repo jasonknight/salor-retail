@@ -1,16 +1,39 @@
 <div class="list">
-  <% if GlobalData.conf.items_view_list then %>
+  <% if $Conf.items_view_list then %>
     <table width="100%" class="stripe-me">
+    <tr>
+      <% [:name,:base_price,:sku,:quantity,:quantity_sold, '',''].each do |key| %>
+        <% if not key == '' %>
+          <th class="pointer" onclick="window.location = '?order_by=<%= key %>&page=<%= params[:page]%>';"><%= I18n.t("activerecord.attributes.#{key}") %></th>
+        <% else %>
+          <th> &nbsp;</th>
+        <% end %>
+      <% end %>
+    </tr>
     <% @items.each do |item| %>
       <tr>
         <td>
           <%= item.name %>
         </td>
         <td>
-          <%= item.behavior != 'coupon' ? salor_number_to_currency(item.base_price) : number_to_percentage(item.base_price) %>
+          <%= if item.behavior == 'coupon' and item.coupon_type == 1
+                number_to_percentage(item.base_price)
+              elsif item.behavior == 'coupon' and item.coupon_type == 3
+                # nothing
+              else
+                salor_number_to_currency(item.base_price)
+              end
+          %>
         </td>
         <td>
           <%= item.sku %>
+        </td>
+        <td>
+          <%= item.quantity %>
+        </td>
+
+        <td>
+          <%= item.quantity_sold%>
         </td>
         <td>
         <div onmousedown="window.location ='<%= edit_item_path(item)%>';" style="padding: 5px;">

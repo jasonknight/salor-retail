@@ -7,4 +7,5 @@ updateOrder(<%= raw @order.to_json %>);
   end
 %>
 updateOrderItems([<%= raw items.join(',') %>]);
+updateCustomerView(false, <%= @order.id %>);
 focusInput($('#keyboard_input'));

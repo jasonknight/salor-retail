@@ -59,6 +59,7 @@ class Node < ActiveRecord::Base
   end
   def handle(params)
     log_action "Node receiving object"
+    begin
     if params.class == String then
       params = JSON.parse(params)
     end
@@ -100,6 +101,11 @@ class Node < ActiveRecord::Base
       # puts "Failed to verify"
       log_action "node failed to verify"
     end
+    rescue
+      log_action "An error occurred: " + $!.inspect
+      log_action $!.backtrace.join("\n")
+      log_action Kernel.caller.join("\n")
+    end
   end
   def attributes_of_item(models,model)
     attrs = all_attributes_of(model)
@@ -136,7 +142,7 @@ class Node < ActiveRecord::Base
       @hash = {}
       @hash.merge!({:target => {:token => @target.token, :sku => @target.sku}})
       @hash.merge!({:node => {:token => self.token, :sku => self.sku}, :message => "Sync"})
-      [Category,TaxProfilerb,Item,Button,Customer].each do |klass|
+      [Category,TaxProfile,Item,Button,Customer].each do |klass|
         x = 0 # we want to send them in small blocks
         models = []
         klass.scopied.all.each do |model|
@@ -176,7 +182,7 @@ class Node < ActiveRecord::Base
     end
     if @inst then 
       # puts "Updating record"
-      if @inst.send("accepts_#{@inst.class.table_name}") then
+      if @target.send("accepts_#{@inst.class.table_name}") then
         @inst.update_attributes(new_record)
         log_action "UPDATING ATTRS OF #{@inst.class} with id of #{@inst.id}"
       else
@@ -185,10 +191,15 @@ class Node < ActiveRecord::Base
     else
       # puts "Creating new record"
       @inst = @klass.new(new_record)
-      if @inst.send("accepts_#{@inst.class.table_name}") then
+      if @target.send("accepts_#{@inst.class.table_name}") then
         log_action "CREATING A NEW RECORD"
         if @inst.save then
           log_action "Saved item to database " + @inst.inspect
+        else
+          log_action "There were errors..."
+          @inst.errors.full_messages.each do |msg|
+            log_action msg
+          end
         end
       else
         log_action "REJECTING #{@inst.class}"
@@ -266,7 +277,7 @@ class Node < ActiveRecord::Base
     @hash ||= {}
     record = {:class => item.class.to_s}
     item.changes.each do |k,v|
-      record[k.to_sym] = v[1] unless iggy(k,item)
+      record[k.to_sym] = v[1] unless iggy?(k,item)
     end
     if item.respond_to? :sku and item.sku.nil? then
       item.set_sku if item.respond_to? :set_sku
@@ -333,7 +344,7 @@ class Node < ActiveRecord::Base
   def send_to_node(item,target)
     prepare(item,target)
     if not verify? then
-      # puts "Could not verify on send..."
+      log_action puts "Could not verify on send..."
       return nil
     end
     send!   
@@ -366,12 +377,27 @@ class Node < ActiveRecord::Base
     end
     n = Cue.new(:source_sku => self.sku, :destination_sku => @target.sku, :url => @target.url, :to_send => true, :payload => self.payload)
     n.save
+    log_action "Cue created with attributes: #{n.attributes.to_json}"
     # req.body = self.payload
     #log_action "Sending: " + req.body.inspect
 #   @request ||= Net::HTTP.new(url.host, url.port)
 #    response = @request.start {|http| http.request(req) }
     # puts response.body
 #   response
+  end
+  def flush
+    Cue.where(:to_send => true).each do |cue|
+      req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+      url = URI.parse(cue.url)
+      req.body = cue.payload
+      @request ||= Net::HTTP.new(url.host,url.port)
+      response = @request.start { |http| 
+        http.request(req) 
+      }
+      if response.is_a? HTTPSuccess then
+        cue.update_attribute :to_send,false
+      end
+    end
   end
   def broadcast_add_me
     return if self.is_self == true

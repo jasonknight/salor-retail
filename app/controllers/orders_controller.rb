@@ -223,13 +223,10 @@ class OrdersController < ApplicationController
     end
     unless @order_item.nil? then
       unless @order_item.activated or @order_item.is_buyback then
-        @order_item.total += @order_item.price
-        @order_item.is_valid = true
         @order_item.quantity += 1
-        @order.total += @order_item.price
-        newtax = @order_item.calculate_tax(true)
-        @order_item.connection.execute("update order_items set quantity = quantity + 1, total = total + #{@order_item.price}, tax = #{newtax} where id = '#{@order_item.id}'")
-        @order.connection.execute("update orders set total = total + #{@order_item.price} where id = #{@order.id}")
+        @order_item.save
+        @order_item.order.update_self_and_save
+        @order = @order_item.order
         render and return
       end
     end
@@ -262,19 +259,24 @@ class OrdersController < ApplicationController
       @order.update_self_and_save
     else
       unless @order_item.activated or @order_item.item.is_gs1 then
+        if $Conf.calculate_tax then
+          total = @order_item.total + @order_item.tax
+        else
+          total = @order_item.total
+        end
         if @order.total.nil? or @order.total == 0.0 then
           @order.total = 0
           # puts  "Updating total direcly"
-          @order.connection.execute("update orders set total = #{@order_item.total} where id = #{@order.id}")
-          @order.total += @order_item.total
+          @order.connection.execute("update orders set total = #{total} where id = #{@order.id}")
+          @order.total += total
         else
-          @order.connection.execute("update orders set total = total + #{@order_item.price} where id = #{@order.id}")
-          @order.total += @order_item.price
+          @order.connection.execute("update orders set total = total + #{total} where id = #{@order.id}")
+          @order.total += total
         end
       end
     end
     if @item.base_price.zero? and not @item.is_gs1
-      #GlobalErrors.append("system.errors.item_price_is_zero")
+      GlobalErrors.append("system.errors.item_price_is_zero")
       SalorBase.beep(1500, 100, 3, 10)
     end
   end
@@ -299,7 +301,7 @@ class OrdersController < ApplicationController
       @order.reload
     end
   end
-
+  # {END}
   def print_receipt
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
@@ -327,7 +329,7 @@ class OrdersController < ApplicationController
       render :nothing => true
     end
   end
-
+  # {START}
   def show_payment_ajax
     # Recalculate everything and then show Payment Popup
     @order = initialize_order
@@ -473,6 +475,7 @@ class OrdersController < ApplicationController
     GlobalData.salor_user = @order.get_user
     @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
     @order_items = @order.order_items.visible.order('id ASC')
+    @report = @order.get_report
     if @order_items
       render :layout => 'customer_display', :nothing => :true
     else
@@ -504,22 +507,17 @@ class OrdersController < ApplicationController
     @from = @from.beginning_of_day
     @to = @to.end_of_day
     @vendor = GlobalData.vendor
-    @employees = @vendor.employees.where(:hidden => 0)
-    @employee ||= @employees.first
-    @report = @employee.get_end_of_day_report(@from,@to)
+    @report = UserEmployeeMethods.get_end_of_day_report(@from,@to,nil)
   end
 
   def report_day
-    f, t = assign_from_to(params)
-    @from = f
-    @to = t
-    @from = @from.beginning_of_day
-    @to = @to.end_of_day
+    @from, @to = assign_from_to(params)
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
     @vendor = GlobalData.vendor
     @employees = @vendor.employees.where(:hidden => 0)
     @employee = Employee.scopied.find_by_id(params[:employee_id])
-    @employee ||= @employees.first
-    @report = @employee.get_end_of_day_report(@from,@to)
+    @report = UserEmployeeMethods.get_end_of_day_report(@from,@to,@employee)
   end
 
   def report_day_range
@@ -531,13 +529,17 @@ class OrdersController < ApplicationController
     @taxes = TaxProfile.scopied.where( :hidden => 0)
   end
 
+  #
   def print
     #FIXME Needs to be setup to work with SaaS version
-      @order = Order.find_by_id(params[:id])
-      GlobalData.salor_user = @order.user if @order.user
-      GlobalData.salor_user = @order.employee if @order.employee
-      @vendor = @order.vendor
+    @order = Order.find_by_id(params[:id])
+    GlobalData.salor_user = @order.user if @order.user
+    GlobalData.salor_user = @order.employee if @order.employee
+    @vendor = @order.vendor
+    @report = @order.get_report
   end
+
+  #
   def remove_payment_method
     if GlobalData.salor_user.is_technician? then
       @order = Order.find(params[:id])

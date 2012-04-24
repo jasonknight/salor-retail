@@ -21,7 +21,7 @@
                 reverse = "/images/icons/#{icon(:refunded,32)}"
               end
             %>
-            <td class='order_table_item_name'><%= salor_icon(:delete,{:class => 'pointer', :onclick => "get('/orders/delete_order_item?id=#{oi.id}', '_order_line_items.html.erb')"},16) if not oi.order.paid %>&nbsp;&nbsp;&nbsp;<span class="editme item-name" <%= opts %>><%= oi.item.name %></span></td>
+            <td class='order_table_item_name'><span class="editme item-name" <%= opts %>><%= oi.item.name %></span></td>
             <td>
               <%= oi.item.sku %>
               <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>

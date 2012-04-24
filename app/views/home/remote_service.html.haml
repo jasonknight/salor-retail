@@ -3,9 +3,14 @@
 = raw content_box_top(t(".title"))
 
 .request_service
-  = text_field_tag 'service_connect_password', t('.enter_password')
+  = text_field_tag 'service_connect_host', 'red-e.eu'
   %br
-  .generic-button{ :onclick => 'connect_service();' }= t('.connect')
+  = text_field_tag 'service_connect_user', 'service'
+  %br
+  = text_field_tag 'service_connect_password', t('.password')
+  %br
+  .generic-button{ :onclick => 'connect_service("ssh");' }= t('.connect_ssh')
+  .generic-button{ :onclick => 'connect_service("vpn");' }= t('.connect_vpn')
   #connection_status= t('.requesting_connection_status')
   %br
   %img{ :id => 'progress', :src => '/images/upload.gif' }

@@ -119,7 +119,15 @@ function show_coin_calculator() {
   <% end %>
       <p style="background:#683870;padding:5px;">
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
-        <input type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="" size=3 />
+        <%
+          # prefil amount if cash_drawer is empty
+          if $User and $User.drawer and DrawerTransaction.last and $User.get_drawer.amount == 0 then
+            amount = DrawerTransaction.last.amount
+          else
+            amount = 0
+          end
+        %>
+        <input type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="<%= amount %>" size=3 />
       </p>
       <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>

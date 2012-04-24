@@ -5,9 +5,6 @@
     <td align="center">
       <div class='tools'>
         <div class="tool-icon">
-          <a href='orders/report_range'><img src='/images/icons/book_64.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.report_range") %></span>
-        </div>
-        <div class="tool-icon">
           <a href='orders/report_day'><img src='/images/icons/book_sun_64.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.report_day") %></span>
         </div>
       </div>
@@ -32,7 +29,7 @@
     </td>
     <td> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :short) %></td>
-    <td><%= salor_number_to_currency order.total %></td>
+    <td><%= salor_number_to_currency order.gross %></td>
     <td>
       <%= order.payment_display[0] + ': ' + salor_number_to_currency(order.payment_display[1]) %>
     </td>

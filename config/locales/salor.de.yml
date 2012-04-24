@@ -73,6 +73,7 @@ de:
         other: Zahlungsmethoden
 
     attributes:
+      calculate_tax: XXX Calculate Tax
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       employee:
@@ -83,7 +84,7 @@ de:
       thermal_printer: Thermodrucker
       paylife: Paylife
       url: URL
-      letter: Brief
+      letter: Steuerklasse
       default: Standard
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
@@ -385,7 +386,7 @@ de:
     download: Herunterladen
     reorder: Nachbestellung
     report: Verkaufsbericht
-    report_range: Detailbericht
+    report_range: Gesamtbericht
     report_day: Tagesbericht
     report_accounting: Transaktionen
     report_day_range: Monatsbericht
@@ -417,7 +418,7 @@ de:
       start_date: Von
       sum_total: Gesamtsumme
     report_range:
-      title: Detailbericht
+      title: Gesamtbericht
       display: Anzeigen
       end_date: Bis
       gross: brutto
@@ -472,7 +473,7 @@ de:
       from: von
       to: bis
     report_range:
-      title: Tagesbericht
+      title: Gesamtbericht
       sums_by_category: nach Kategorie
       sums_by_tax_profile: nach Steuern
       sums_by_payment_methods: nach Zahlungsmethoden
@@ -530,6 +531,7 @@ de:
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
     eod_report:
+      no_category: Unbenannt
       orders_total: Verkäufe gesamt
       refunded_total: Stornierungen gesamt
       buyback_item_total: Pfand- bzw. Auszahlungsartikel
@@ -555,7 +557,7 @@ de:
     order_receipt:
       lc_points_substracted: Treuepunkte Abzug
       subsubtotal: GESAMTSUMME
-      change: Wechselgeld
+      change: Retour
       refund: Rabatte auf gesamten Einkauf
       given: Gegeben
       net: netto
@@ -568,7 +570,7 @@ de:
       subtotal4: Zwischensumme
       rebate_subtotal: Summe Rabatte
       rebate: Einzelrabatt
-      coupon_subtotal: Summe Geschenkkarte
+      coupon_subtotal: Summe Coupons
       discount_subtotal: Summe Aktionen
       discount: Aktion
       rebate_percent: Prozent-Rabatt
@@ -782,6 +784,7 @@ de:
           returned: Retourniert
           shipped: im Transit
     notice:
+      save_before: XXX Save before leaving?
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       wholesaler_upload_report: "Aktualisiert: %{updated_items}, Erzeugt: %{created_items}, Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}"
       cache_was_cleared: Cache wurde gelöscht
@@ -863,8 +866,11 @@ de:
       backup_logfile: Logdatei herunterladen
     remote_service:
       title: Fernwartung
-      enter_password: Passwort
-      connect: Verbinden!
+      password: Passwort
+      user: Benutzername
+      host: Server
+      connect_ssh: Fernwartung
+      connect_vpn: Bildschirm teilen
       requesting_connection_status: Verbindungsstatus wird angefragt...
     get_connection_status:
       connected: verbunden

@@ -174,6 +174,10 @@ class ApplicationController < ActionController::Base
 	  Job.run # Cron jobs for the application
 	  GlobalData.base_locale = AppConfig.base_locale
     I18n.locale = AppConfig.locale
+    I18n.locale = params[:locale] if params[:locale]
+    if params[:license_accepted].to_s == "true" then
+      Vendor.first.salor_configuration.update_attribute :license_accepted, true
+    end
 	  if salor_signed_in? and salor_user then
       I18n.locale = salor_user.language
 		  @owner = salor_user.get_owner
@@ -293,9 +297,8 @@ class ApplicationController < ActionController::Base
     rescue
       f = t = nil
     end
-
-    f ||= 0.day.ago
-    t ||= 0.day.ago
+    #f ||= DateTime.now
+    #t ||= DateTime.now
     return f, t
   end
   def time_from_to(p)
