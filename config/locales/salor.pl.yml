@@ -2,7 +2,7 @@ en-US:
   activerecord:
     models:
       button:
-        one: Button
+        one: XXX Button
         other: Buttons
       tender_method:
         one: Tender Method
