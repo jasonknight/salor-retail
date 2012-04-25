@@ -121,7 +121,10 @@ function updatePosItem(item) {
     if (price == 0) {
       $(id).trigger('click');
       setTimeout( function () {
-      $(".ui-keyboard-preview").select();
+          if (IS_APPLE_DEVICE) {
+                $('.ui-keyboard-preview').val("");
+          }
+          $(".ui-keyboard-preview").select();
       },100);
 
     }
@@ -237,7 +240,10 @@ function addPosItem(item) {
     if (price == 0) {
       $(id).trigger('click');
       setTimeout( function () {
-      $(".ui-keyboard-preview").select();
+          if (IS_APPLE_DEVICE) {
+                $('.ui-keyboard-preview').val("");
+          }
+        $(".ui-keyboard-preview").select();
       },100);
     }
   }

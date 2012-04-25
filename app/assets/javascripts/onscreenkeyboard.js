@@ -74,7 +74,16 @@ function make_keyboardable_with_options(elem,opts) {
   for (opt in opts) {
     options[opt] = opts[opt];
   }
-  options["visible"]=function(){ $('.ui-keyboard-preview').select(); };
+  // we have to check cause sometimes we pass in a visible func that is special
+  // as is the case with payment methods
+  if (!options["visible"]) {
+    options["visible"]= function(){ 
+      if (IS_APPLE_DEVICE) {
+        $(".ui-keyboard-preview").val("");
+      }
+      $('.ui-keyboard-preview').select(); 
+    };
+  }
   if (elem.hasClass('keyboardable-int')) {
     options['layout'] = 'num';    
   }
