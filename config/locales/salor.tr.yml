@@ -864,9 +864,12 @@ tr:
       backup_database: Backup Database
       backup_logfile: Backup Logfile
     remote_service:
-      title: Remote Service
-      enter_password: Password
-      connect: Connect!
+      title: Remove Service
+      password: Password
+      user: User
+      host: Server
+      connect_ssh: Remote service
+      connect_vpn: Share screen
       requesting_connection_status: Requesting connection status ...
     get_connection_status:
       connected: connected

@@ -864,10 +864,13 @@ fr:
       backup_database: Créer une copie de sauvergarde de la BDD
       backup_logfile: Créer une copie de sauvergarde du journal
     remote_service:
-      title: Remote XXX Service
-      enter_password: XXX Password
-      connect: XXX Connect!
-      requesting_connection_status: XXX Requesting connection status ...
+      title: XXX Remove Service
+      password: XXXPassword
+      user: XXXUser
+      host: XXXServer
+      connect_ssh: XXXRemote service
+      connect_vpn: XXXShare screen
+      requesting_connection_status: XXXRequesting connection status ...
     get_connection_status:
       connected: XXX connected
       disconnected: XXX disconnected
