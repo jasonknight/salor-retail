@@ -45,7 +45,7 @@ function clickBuyOrderButton(id) {
         </div>
         <div id="print_receipt_button" onmousedown="get('/orders/show_payment_ajax?order_id=' + $('.order-id').html());" class="input pos-button print-receipt">
           <b><span class="order-id"><%= @order.id %></span></b>
-          <%= t("system.complete_sale")%>
+          <%= t("system.complete_sale")[0...5] %>
         </div>
 
 </div>
