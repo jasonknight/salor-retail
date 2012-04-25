@@ -54,6 +54,9 @@ function add_payment_method() {
     visible: function () {
       var cls = $(sel).val() + '-amount';
       $(".ui-keyboard-preview").removeClass('payment-amount');
+      if (IS_APPLE_DEVICE) {
+        $(".ui-keyboard-preview").val("");
+      }
       $("." + cls).select();
     },
     accepted: function () {

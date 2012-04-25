@@ -168,7 +168,12 @@ function in_place_edit(id,x,y) {
             stayOpen : true,
             layout       : field.hasClass('keyboardable-int') ? 'num' : i18nlocale,
             customLayout : null,
-            visible : function(){ $('.ui-keyboard-preview').select();},
+            visible : function(){ 
+              if (IS_APPLE_DEVICE) {
+                $('.ui-keyboard-preview').val("");
+              } 
+              $('.ui-keyboard-preview').select();
+            },
             accepted: function(){ in_place_edit_go(id); }
           });
           field.getkeyboard().reveal();

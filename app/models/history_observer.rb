@@ -55,12 +55,14 @@ class HistoryObserver < ActiveRecord::Observer
       object.changes.keys.each do |k|
         if [:hidden, :total, :paid].include? k.to_sym then
           History.record('order_edit_' + k,object,2)
+          return
         end
       end
     elsif object.class == OrderItem then
       object.changes.keys.each do |k|
         if [:price, :hidden, :total].include? k.to_sym then
           History.record('order_item_edit_' + k,object,3)
+          return
         end
       end
     elsif object.class == LoyaltyCard then
@@ -68,11 +70,13 @@ class HistoryObserver < ActiveRecord::Observer
       # FIXME this should be relative to the stores setting in some way
       if object.changes['points'] and (object.changes['points'][1].to_i - object.changes['points'][0].to_i) > 200 then
         History.record("loyalty_card_points",object,4)
+        return
       end
     else
       object.changes.keys.each do |k|
         if [:base_price, :price, :hidden, :value, :sku, :name, :amount].include? k.to_sym then
           History.record("#{object.class.to_s.downcase}_edit_#{k}",object,5)
+          return
         end
       end
     end 
