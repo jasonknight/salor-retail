@@ -2854,9 +2854,12 @@ div.request_service
     @include rounded_corners_all
 
 div.error_page
+  font-size: 13px
   text-align: center
   div.exception_message
     font-size: 150%
-  div.backtrace
-    text-align: left
-    width: 800px
+  div.errordescription
+    background-color: #7A607E
+    padding: 5px
+    margin: 15px
+    @include rounded_corners_all

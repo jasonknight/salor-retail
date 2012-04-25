@@ -4,19 +4,20 @@
   %h1= I18n.t('exception_page.oops_an_error_occurred')
 
   %b= t('exception_page.assistance_text')
-.list
-  .widget.master
-    %a{ :href => '/' }
-      = salor_icon :vendor
-      %br
-      = t "menu.home"
-  .widget.master
-    %a{ :href => '/home/remote_service' }
-      = salor_icon :nurse
-      %br
-      = t "menu.remote_service"
+  .list
+    .widget.master
+      %a{ :href => '/' }
+        = salor_icon :vendor
+        %br
+        = t "menu.home"
+    .widget.master
+      %a{ :href => '/home/remote_service' }
+        = salor_icon :nurse
+        %br
+        = t "menu.remote_service"
 
-%h2= t('exception_page.exception_description')
-.exception_message= @exception.message
-%h2= t('exception_page.exception_in_files')
-.backtrace= raw @exception.backtrace[0..3].join('<br /><br />')
+  .errordescription
+    %h2= t('exception_page.exception_description')
+    .exception_message= @exception.message
+    %h2= t('exception_page.exception_in_files')
+    .backtrace= raw @exception.backtrace[0..3].join('<br /><br />')
