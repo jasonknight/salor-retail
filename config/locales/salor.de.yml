@@ -866,8 +866,11 @@ de:
       backup_logfile: Logdatei herunterladen
     remote_service:
       title: Fernwartung
-      enter_password: Passwort
-      connect: Verbinden!
+      password: Passwort
+      user: Benutzername
+      host: Server
+      connect_ssh: Fernwartung
+      connect_vpn: Bildschirm teilen
       requesting_connection_status: Verbindungsstatus wird angefragt...
     get_connection_status:
       connected: verbunden
