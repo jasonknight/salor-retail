@@ -102,7 +102,6 @@ class OrdersController < ApplicationController
   end
 
   def new
-lkj.lkj
     if not salor_user or not salor_user.meta.vendor_id then
       redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
     end
