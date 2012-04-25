@@ -54,6 +54,9 @@ class OrdersController < ApplicationController
    before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt]
    before_filter :crumble, :except => [:customer_display,:print, :print_receipt]
+   def offline
+   
+   end
    def new_pos
       if not salor_user.meta.vendor_id then
         redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return

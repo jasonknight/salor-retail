@@ -23,6 +23,8 @@ Salor::Application.routes.draw do
   match "orders/clear" => "orders#clear"
   match "orders/remove_payment_method" => "orders#remove_payment_method"
   match "orders/bancomat" => "orders#bancomat"
+  match "orders/offline" => "orders#offline"
+  match "order_items/index" => "order_items#index"
   match "reports/index" => "reports#selector"
   match "reports" => "reports#selector"
   match "items/search" => "items#search"

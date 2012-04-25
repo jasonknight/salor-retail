@@ -48,15 +48,20 @@
 # sentative to clarify any rights that you infer from this license or believe you will need for the proper 
 # functioning of your business.
 class OrderItemsController < ApplicationController
-    before_filter :authify
+   before_filter :authify
    before_filter :initialize_instance_variables
   # GET /order_items
   # GET /order_items.xml
   def index
-    @order_items = OrderItem.all
-
+    @items = Item.scopied
+    @order_items = {}
+    @items.each do |item|
+      oi = OrderItem.new.set_item(item)
+      @order_items[item.sku] = oi if oi
+    end
     respond_to do |format|
       format.html # index.html.erb
+      format.json { render :json => @order_items.to_json }
       format.xml  { render :xml => @order_items }
     end
   end
