@@ -869,7 +869,7 @@ es:
       user: User
       host: Server
       connect_ssh: Remote service
-      connect_vpn: Share screen
+      connect_vnc: Share screen
       requesting_connection_status: Requesting connection status ...
       connected: connected
       disconnected: disconnected

@@ -869,7 +869,7 @@ fr:
       user: XXXUser
       host: XXXServer
       connect_ssh: XXXRemote service
-      connect_vpn: XXXShare screen
+      connect_vnc: XXXShare screen
       requesting_connection_status: XXXRequesting connection status ...
       connected: XXX connected
       disconnected: XXX disconnected

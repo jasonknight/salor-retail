@@ -60,7 +60,7 @@ function connect_service(type) {
       Salor.remoteService(host,user,password,'ssh');
     }
     if (type == 'vnc' && Salor.remoteServiceConnectionOpen('vnc') == false) {
-      Salor.remoteService(host,user,password,'ssh');
+      Salor.remoteService(host,user,password,'vnc');
     }
   }
 }

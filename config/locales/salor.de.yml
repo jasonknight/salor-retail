@@ -870,7 +870,7 @@ de:
       user: Benutzername
       host: Server
       connect_ssh: Fernwartung
-      connect_vpn: Bildschirm teilen
+      connect_vnc: Bildschirm teilen
       requesting_connection_status: Verbindungsstatus wird angefragt...
       connected: verbunden
       disconnected: getrennt
