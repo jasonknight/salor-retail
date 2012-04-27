@@ -122,13 +122,13 @@ class HomeController < ApplicationController
     send_file 'log/production.log', :filename => "salor-logfile-#{ l Time.now, :format => :datetime_iso2 }.log"
   end
 
-  #
+  # this is never called currently. Has been replaced with Salor::JSApi.
   def get_connection_status
     @status_ssh = `netstat -pna | grep :26`
     @status_vpn = `netstat -pna | grep :28`
   end
 
-  #
+  # this is never called currently. Has been replaced with Salor::JSApi.
   def connect_remote_service
     if params[:type] == 'ssh'
       @status_ssh = `netstat -pna | grep :26`
@@ -137,15 +137,6 @@ class HomeController < ApplicationController
           exec "expect #{ File.join('/', 'usr', 'share', 'red-e_ssh_reverse_connect.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
         end
         Process.detach(connection_thread_ssh)
-      end
-    end
-    if params[:type] == 'vpn'
-      @status_vpn = `netstat -pna | grep :28`
-      if @status_ssh.empty? # don't create more process than one
-        connection_thread_vpn = fork do
-          exec "expect #{ File.join('/', 'usr', 'share', 'red-e_vpn_reverse_connect.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
-        end
-        #Process.detach(connection_thread_vpn)
       end
     end
     render :nothing => true

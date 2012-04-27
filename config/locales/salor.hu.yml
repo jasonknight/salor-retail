@@ -871,9 +871,9 @@ en-US:
       connect_ssh: Remote service
       connect_vpn: Share screen
       requesting_connection_status: Requesting connection status ...
-    get_connection_status:
       connected: connected
       disconnected: disconnected
+      not_supported_by_browser: Remote service is not supported by this browser.
       
   InCash: In Cash
   ByCard: By Card

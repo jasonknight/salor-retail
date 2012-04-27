@@ -872,9 +872,9 @@ de:
       connect_ssh: Fernwartung
       connect_vpn: Bildschirm teilen
       requesting_connection_status: Verbindungsstatus wird angefragt...
-    get_connection_status:
       connected: verbunden
       disconnected: getrennt
+      not_supported_by_browser: Fernwartung wird von diesem Browser nicht unterstützt
       
   InCash: In Bar
   ByCard: Karte
