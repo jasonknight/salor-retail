@@ -1,3 +1,9 @@
+# coding: UTF-8
+
+# Salor -- The innovative Point Of Sales Software for your Retail Store
+# Copyright (C) 2012-2013  Red (E) Tools LTD
+# 
+# See license.txt for the license applying to all files within this software.
 # {VOCABULARY} actions_done roles_completed owner_info on_import_new on_import_old
 # {VOCABULARY} added multiplied subtracted deferred code_completed action_report
 class Action < ActiveRecord::Base

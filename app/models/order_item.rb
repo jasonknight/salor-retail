@@ -1,51 +1,10 @@
-# ------------------- Salor Point of Sale ----------------------- 
-# An innovative multi-user, multi-store application for managing
-# small to medium sized retail stores.
-# Copyright (C) 2011-2012  Jason Martin <jason@jolierouge.net>
-# Visit us on the web at http://salorpos.com
+# coding: UTF-8
+
+# Salor -- The innovative Point Of Sales Software for your Retail Store
+# Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
-# This program is commercial software (All provided plugins, source code, 
-# compiled bytecode and configuration files, hereby referred to as the software). 
-# You may not in any way modify the software, nor use any part of it in a 
-# derivative work.
-# 
-# You are hereby granted the permission to use this software only on the system 
-# (the particular hardware configuration including monitor, server, and all hardware 
-# peripherals, hereby referred to as the system) which it was installed upon by a duly 
-# appointed representative of Salor, or on the system whose ownership was lawfully 
-# transferred to you by a legal owner (a person, company, or legal entity who is licensed 
-# to own this system and software as per this license). 
-#
-# You are hereby granted the permission to interface with this software and
-# interact with the user data (Contents of the Database) contained in this software.
-#
-# You are hereby granted permission to export the user data contained in this software,
-# and use that data any way that you see fit.
-#
-# You are hereby granted the right to resell this software only when all of these conditions are met:
-#   1. You have not modified the source code, or compiled code in any way, nor induced, encouraged, 
-#      or compensated a third party to modify the source code, or compiled code.
-#   2. You have purchased this system from a legal owner.
-#   3. You are selling the hardware system and peripherals along with the software. They may not be sold
-#      separately under any circumstances.
-#   4. You have not copied the software, and maintain no sourcecode backups or copies.
-#   5. You did not install, or induce, encourage, or compensate a third party not permitted to install 
-#      this software on the device being sold.
-#   6. You have obtained written permission from Salor to transfer ownership of the software and system.
-#
-# YOU MAY NOT, UNDER ANY CIRCUMSTANCES
-#   1. Transmit any part of the software via any telecommunications medium to another system.
-#   2. Transmit any part of the software via a hardware peripheral, such as, but not limited to,
-#      USB Pendrive, or external storage medium, Bluetooth, or SSD device.
-#   3. Provide the software, in whole, or in part, to any thrid party unless you are exercising your
-#      rights to resell a lawfully purchased system as detailed above.
-#
-# All other rights are reserved, and may be granted only with direct written permission from Salor. By using
-# this software, you agree to adhere to the rights, terms, and stipulations as detailed above in this license, 
-# and you further agree to seek to clarify any right not directly spelled out herein. Any right, not directly 
-# covered by this license is assumed to be reserved by Salor, and you agree to contact an official Salor repre-
-# sentative to clarify any rights that you infer from this license or believe you will need for the proper 
-# functioning of your business.
+# See license.txt for the license applying to all files within this software.
+
 class OrderItem < ActiveRecord::Base
   # {START}
   include SalorScope
@@ -71,7 +30,7 @@ class OrderItem < ActiveRecord::Base
     Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type").where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
   end
   def toggle_buyback(x)
-    puts "Order.buy_order #{self.order.buy_order}"
+    #puts "Order.buy_order #{self.order.buy_order}"
     if self.is_buyback then
       self.update_attribute(:is_buyback,false)
       self.price = discover_price(self.item)
@@ -382,9 +341,9 @@ class OrderItem < ActiveRecord::Base
     # GIFT CARDS
     if self.behavior == 'gift_card' then
       if self.item.activated then
-        puts "Item is an activated gift_card"
+        #puts "Item is an activated gift_card"
         if self.amount_remaining <= 0 then
-          puts "Amount remaining is 0"
+          #puts "Amount remaining is 0"
           return 0
         end
         if self.price == 0 then
@@ -397,7 +356,7 @@ class OrderItem < ActiveRecord::Base
         if self.price > self.amount_remaining then
           self.price = self.amount_remaining
         end
-        puts "Price: #{self.price} Subtotal: #{order_subtotal}"
+        #puts "Price: #{self.price} Subtotal: #{order_subtotal}"
         if self.price > order_subtotal then
           self.price = order_subtotal
         end
@@ -424,9 +383,9 @@ class OrderItem < ActiveRecord::Base
       begin
         ttl = self.price * self.quantity
       rescue
-        puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
+        #puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
       end
-      puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
+      #puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
     end
     
     # REFUNDS
@@ -434,7 +393,7 @@ class OrderItem < ActiveRecord::Base
       ttl = ttl * -1
     end
 
-    puts "ttl at this point is: #{ttl}"
+    #puts "ttl at this point is: #{ttl}"
 
     # i.e. sometimes the order hasn't been saved yet..
 
@@ -444,15 +403,15 @@ class OrderItem < ActiveRecord::Base
       self.order.coupon_for(self.item.sku).each do |c|
         cttl += c.coupon_total(ttl,self)
       end
-      puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
+      #puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
       ttl -= cttl
     end
     if self.rebate then
       ttl -= (ttl * (self.rebate / 100.0))
-      puts "self.rebate: #{ttl}"
+      #puts "self.rebate: #{ttl}"
     end
 
-    puts "ttl at this point is: #{ttl}"
+    #puts "ttl at this point is: #{ttl}"
 
     # DISCOUNTS
     if self.discount_amount > 0 then
@@ -461,10 +420,10 @@ class OrderItem < ActiveRecord::Base
 
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
-      puts "In update, ttl is #{ttl} and self.total is #{self.total}"
+      #puts "In update, ttl is #{ttl} and self.total is #{self.total}"
       self.update_attribute(:total,ttl) # MF MOD
     end
-    puts "Returning total of: #{self.total}"
+    #puts "Returning total of: #{self.total}"
     return self.total
   end
   
@@ -530,7 +489,7 @@ class OrderItem < ActiveRecord::Base
   end
   #
   def coupon_total(ttl,oi)
-    # puts "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
+    # #puts "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
     amnt = 0
     return 0 if ttl <= 0
     if self.quantity > oi.quantity then
@@ -542,17 +501,17 @@ class OrderItem < ActiveRecord::Base
       q = self.quantity
       amnt = (oi.price * quantity) * (self.price / 100)
     elsif self.item.coupon_type == 2 then #fixed amount off
-      # puts "Coupon is fixed"
+      # #puts "Coupon is fixed"
       if self.price > ttl then
         #add_salor_error("system.errors.self_fixed_amount_greater_than_total",:sku => self.item.sku, :item => self.item.coupon_applies)
         amnt = ttl * self.quantity
-        # puts "Setting to ttl " + ttl.to_s
+        # #puts "Setting to ttl " + ttl.to_s
       else
         amnt = self.item.base_price * self.quantity
-        # puts "Setting to self.total " + self.item.base_price.to_s
+        # #puts "Setting to self.total " + self.item.base_price.to_s
       end
       self.update_attribute(:total,amnt)
-      # puts "Fixed amnt = " + amnt.to_s
+      # #puts "Fixed amnt = " + amnt.to_s
     elsif self.item.coupon_type == 3 then #buy 1 get 1 free
       if oi.quantity > 1 then
         if self.quantity > 1 then
@@ -569,11 +528,11 @@ class OrderItem < ActiveRecord::Base
       end
       self.update_attribute(:total,amnt)
     else
-      # puts "couldn't figure out coupon type"
+      # #puts "couldn't figure out coupon type"
     end
     oi.update_attribute(:coupon_amount,amnt)
     oi.update_attribute(:coupon_applied, true)
-    # puts "## Updating Attribute to #{amnt}"
+    # #puts "## Updating Attribute to #{amnt}"
     if amnt > 0 then
       oi.coupons << self
       oi.save
@@ -616,8 +575,8 @@ class OrderItem < ActiveRecord::Base
             not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
             not (discount.category_id == item.category_id and discount.applies_to == 'Category') and
             not (discount.applies_to == 'Vendor' and discount.amount_type == 'percent') then
-            # puts "this discount doesn't match"
-            # puts "category_id is #{discount.category_id} and category_id is #{item.category_id}"
+            # #puts "this discount doesn't match"
+            # #puts "category_id is #{discount.category_id} and category_id is #{item.category_id}"
           next
         end
         if discount.amount_type == 'percent' then
@@ -630,13 +589,13 @@ class OrderItem < ActiveRecord::Base
         end
       end # Discount.scopied.where(conds)
     else
-      # puts "Not Applying Discounts at all..."
+      # #puts "Not Applying Discounts at all..."
     end
     #p -= damount
     self.update_attribute(:discount_applied,true) if self.discounts.any?
     self.update_attribute(:discount_amount,damount) if self.discounts.any?
     p = p.round(2)
-    # puts "Is BuyBack: #{self.is_buyback}"
+    # #puts "Is BuyBack: #{self.is_buyback}"
     return p
   end
 
@@ -679,7 +638,7 @@ class OrderItem < ActiveRecord::Base
   
   def set_sold
     the_item = self.item
-    # puts "My quantity is: #{self.quantity} and my #{self.behavior}"
+    # #puts "My quantity is: #{self.quantity} and my #{self.behavior}"
     #
     # begin update the quantities of the item
     if the_item.ignore_qty == false and self.behavior == 'normal' then
