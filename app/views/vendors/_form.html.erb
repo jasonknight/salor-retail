@@ -10,7 +10,7 @@
   });
 </script>
 <div align="center">
-<%= form_for @vendor do |f| %>
+<%= form_for @vendor, :html => { :enctype => "multipart/form-data" } do |f| %>
   <% if @vendor.errors.any? %>
     <div id="error_explanation">
       <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @vendor.errors.count,:model => t("activerecord.models.vendor.one"))%></h2>
@@ -92,6 +92,26 @@
                   </td>
                   <td>
                     <div class="field">
+                      <label for="vendor_receipt_logo_header"><%= Vendor.human_attribute_name(:receipt_logo_header) %></label>
+                      <br />
+                      <input id="vendor_receipt_logo_header" name="vendor[receipt_logo_header]" type="file">
+                    </div>
+                    <div class="field">
+                      <label for="vendor_receipt_logo_header"><%= Vendor.human_attribute_name(:receipt_logo_footer) %></label>
+                      <br />
+                      <input id="vendor_receipt_logo_footer" name="vendor[receipt_logo_footer]" type="file">
+                    </div>
+                    <div class="field">
+                      <label for="vendor_logo"><%= Vendor.human_attribute_name(:logo) %></label>
+                      <br />
+                      <input id="vendor_logo" name="vendor[logo]" type="file">
+                    </div>
+                    <div class="field">
+                      <label for="vendor_logo_invoice"><%= Vendor.human_attribute_name(:logo_invoice) %></label>
+                      <br />
+                      <input id="vendor_logo_invoice" name="vendor[logo_invoice]" type="file">
+                    </div>
+                    <div class="field">
                       <%= conf.label t("activerecord.attributes.pagination") %><br />
                       <%= conf.text_field :pagination, :class => "keyboardable-int" %>
                     </div>
@@ -118,11 +138,6 @@
                         <%= conf.check_box :open_cash_drawer %>
                       </div>                    
                     <% end %>
-                    <br />
-                    <div class="field">
-                      <%= conf.label t("activerecord.attributes.auto_drop") %><br />
-                      <%= conf.check_box :auto_drop %>
-                    </div>
                   </td>
                 </tr>
               </table>
@@ -225,37 +240,5 @@
 </div>
 <% end %>
 </div>
-
-<br>
-<br>
-<% if $User.class == User then %>
-<form accept-charset="UTF-8" action="/vendors/1" class="edit_vendor" enctype="multipart/form-data" id="edit_vendor_1" method="post">
-<div style="margin:0;padding:0;display:inline">
-  <input name="utf8" type="hidden" value="&#x2713;" />
-  <input name="_method" type="hidden" value="put" />
-  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>" /></div>
-  <label for="vendor_receipt_logo_header">Rechnungslogo Kopf</label>
-  <input id="vendor_receipt_logo_header" name="vendor[receipt_logo_header]" type="file">
-  <br>
-
-  <label for="vendor_receipt_logo_header">Rechnungslogo Fuß</label>
-  <input id="vendor_receipt_logo_footer" name="vendor[receipt_logo_footer]" type="file">
-  <br>
-
-  <label for="vendor_logo">Logo</label>
-  <input id="vendor_logo" name="vendor[logo]" type="file">
-  <br>
-
-  <label for="vendor_logo_invoice">Logo Rechnung</label>
-  <input id="vendor_logo_invoice" name="vendor[logo_invoice]" type="file">
-  <input id="vendor_submit" name="commit" type="submit" value="Filiale aktualisieren" />
-</form>
-<% end -%>
-
-
-
-
-
-
 
 
