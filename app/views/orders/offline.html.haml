@@ -1,1 +1,48 @@
 = javascript_include_tag "offline"
+%div{:id => 'offline_canvas'}
+  %div{:id => 'order_items'}
+    %div.order_item_row
+      %div.name
+        Item Name
+      %div.quantity
+        1
+      %div.price
+        32,50
+    %br
+    %div.order_item_row
+      %div.name
+        Item Name
+      %div.quantity
+        1
+      %div.price
+        32,50
+    %br
+    %div.order_item_row
+      %div.name
+        Item Name
+      %div.quantity
+        1
+      %div.price
+        32,50
+  %div{:id => 'control_panel'}
+    %div{:id => 'order_total'}
+      100,26
+    %br
+    %div.fat-button{:id => 'complete_in_cash'}
+      Cash
+    %br
+    %div.fat-button{:id => 'complete_in_credit'}
+      Credit
+    %br
+    - x = 1
+    - y = 0
+    - I18n.t("number.currency.format.pieces").split(',').find_all { |piece| piece.to_f > 2.0}.each do |p|
+      - if y < 4
+        %div.denomination{:value => p}= p
+      - y += 1
+      - if x == 2
+        - x = 1
+        %br
+      - else
+        - x += 1
+

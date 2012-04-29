@@ -69,7 +69,7 @@ class ItemsController < ApplicationController
     else
       @items = Item.scopied.page(params[:page]).per(25)
     end
-
+    Node.flush
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @items }

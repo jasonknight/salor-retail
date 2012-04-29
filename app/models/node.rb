@@ -385,20 +385,28 @@ class Node < ActiveRecord::Base
     # puts response.body
 #   response
   end
-  def flush
-    Cue.where(:to_send => true).each do |cue|
-      req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
-      url = URI.parse(cue.url)
-      req.body = cue.payload
-      @request ||= Net::HTTP.new(url.host,url.port)
-      response = @request.start { |http| 
-        http.request(req) 
-      }
-      if response.is_a? HTTPSuccess then
-        cue.update_attribute :to_send,false
+  def self.flush
+    req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
+   Cue.where(:to_send => true).each do |node|
+      url = uri.parse(node.url)
+      req.body = node.payload
+      log_action "sending single msg #{node.id}"
+      req2 = net::http.new(url.host, url.port)
+      response = req2.start {|http| http.request(req) }
+      response_parse = json.parse(response.body)
+      log_action("received from node: " + response.body)
+      node.update_attribute :is_handled, true
+   end # end cue.where to_send
+
+   Cue.where(:to_receive => true).each do |msg|
+      p = SalorBase.symbolize_keys(JSON.parse(msg.payload))
+      node = Node.where(:sku => p[:node][:sku]).first
+      if node then
+        node.handle(p)
       end
-    end
+   end # end cue.where to_receive
   end
+#
   def broadcast_add_me
     return if self.is_self == true
     node = Node.scopied.where(:is_self => true).first

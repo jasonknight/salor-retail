@@ -11,13 +11,13 @@ class NodesController < ApplicationController
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     node = Cue.find_by_id(params[:id])
     if node then
-      url = URI.parse(node.url)
+      url = uri.parse(node.url)
       req.body = node.payload
-      log_action "Sending Single MSG #{node.id}"
-      req2 = Net::HTTP.new(url.host, url.port)
+      log_action "sending single msg #{node.id}"
+      req2 = net::http.new(url.host, url.port)
       response = req2.start {|http| http.request(req) }
-      response_parse = JSON.parse(response.body)
-      log_action("Received From Node: " + response.body)
+      response_parse = json.parse(response.body)
+      log_action("received from node: " + response.body)
       node.update_attribute :is_handled, true
     end
     redirect_to request.referer

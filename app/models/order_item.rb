@@ -71,7 +71,7 @@ class OrderItem < ActiveRecord::Base
     Discount.scopied.select("amount,item_sku,id,location_id,category_id,applies_to,amount_type").where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
   end
   def toggle_buyback(x)
-    puts "Order.buy_order #{self.order.buy_order}"
+    #puts "Order.buy_order #{self.order.buy_order}"
     if self.is_buyback then
       self.update_attribute(:is_buyback,false)
       self.price = discover_price(self.item)
@@ -382,9 +382,9 @@ class OrderItem < ActiveRecord::Base
     # GIFT CARDS
     if self.behavior == 'gift_card' then
       if self.item.activated then
-        puts "Item is an activated gift_card"
+        #puts "Item is an activated gift_card"
         if self.amount_remaining <= 0 then
-          puts "Amount remaining is 0"
+          #puts "Amount remaining is 0"
           return 0
         end
         if self.price == 0 then
@@ -397,7 +397,7 @@ class OrderItem < ActiveRecord::Base
         if self.price > self.amount_remaining then
           self.price = self.amount_remaining
         end
-        puts "Price: #{self.price} Subtotal: #{order_subtotal}"
+        #puts "Price: #{self.price} Subtotal: #{order_subtotal}"
         if self.price > order_subtotal then
           self.price = order_subtotal
         end
@@ -424,9 +424,9 @@ class OrderItem < ActiveRecord::Base
       begin
         ttl = self.price * self.quantity
       rescue
-        puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
+        #puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
       end
-      puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
+      #puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
     end
     
     # REFUNDS
@@ -434,7 +434,7 @@ class OrderItem < ActiveRecord::Base
       ttl = ttl * -1
     end
 
-    puts "ttl at this point is: #{ttl}"
+    #puts "ttl at this point is: #{ttl}"
 
     # i.e. sometimes the order hasn't been saved yet..
 
@@ -444,15 +444,15 @@ class OrderItem < ActiveRecord::Base
       self.order.coupon_for(self.item.sku).each do |c|
         cttl += c.coupon_total(ttl,self)
       end
-      puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
+      #puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
       ttl -= cttl
     end
     if self.rebate then
       ttl -= (ttl * (self.rebate / 100.0))
-      puts "self.rebate: #{ttl}"
+      #puts "self.rebate: #{ttl}"
     end
 
-    puts "ttl at this point is: #{ttl}"
+    #puts "ttl at this point is: #{ttl}"
 
     # DISCOUNTS
     if self.discount_amount > 0 then
@@ -461,10 +461,10 @@ class OrderItem < ActiveRecord::Base
 
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
-      puts "In update, ttl is #{ttl} and self.total is #{self.total}"
+      #puts "In update, ttl is #{ttl} and self.total is #{self.total}"
       self.update_attribute(:total,ttl) # MF MOD
     end
-    puts "Returning total of: #{self.total}"
+    #puts "Returning total of: #{self.total}"
     return self.total
   end
   
@@ -530,7 +530,7 @@ class OrderItem < ActiveRecord::Base
   end
   #
   def coupon_total(ttl,oi)
-    # puts "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
+    # #puts "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
     amnt = 0
     return 0 if ttl <= 0
     if self.quantity > oi.quantity then
@@ -542,17 +542,17 @@ class OrderItem < ActiveRecord::Base
       q = self.quantity
       amnt = (oi.price * quantity) * (self.price / 100)
     elsif self.item.coupon_type == 2 then #fixed amount off
-      # puts "Coupon is fixed"
+      # #puts "Coupon is fixed"
       if self.price > ttl then
         #add_salor_error("system.errors.self_fixed_amount_greater_than_total",:sku => self.item.sku, :item => self.item.coupon_applies)
         amnt = ttl * self.quantity
-        # puts "Setting to ttl " + ttl.to_s
+        # #puts "Setting to ttl " + ttl.to_s
       else
         amnt = self.item.base_price * self.quantity
-        # puts "Setting to self.total " + self.item.base_price.to_s
+        # #puts "Setting to self.total " + self.item.base_price.to_s
       end
       self.update_attribute(:total,amnt)
-      # puts "Fixed amnt = " + amnt.to_s
+      # #puts "Fixed amnt = " + amnt.to_s
     elsif self.item.coupon_type == 3 then #buy 1 get 1 free
       if oi.quantity > 1 then
         if self.quantity > 1 then
@@ -569,11 +569,11 @@ class OrderItem < ActiveRecord::Base
       end
       self.update_attribute(:total,amnt)
     else
-      # puts "couldn't figure out coupon type"
+      # #puts "couldn't figure out coupon type"
     end
     oi.update_attribute(:coupon_amount,amnt)
     oi.update_attribute(:coupon_applied, true)
-    # puts "## Updating Attribute to #{amnt}"
+    # #puts "## Updating Attribute to #{amnt}"
     if amnt > 0 then
       oi.coupons << self
       oi.save
@@ -616,8 +616,8 @@ class OrderItem < ActiveRecord::Base
             not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
             not (discount.category_id == item.category_id and discount.applies_to == 'Category') and
             not (discount.applies_to == 'Vendor' and discount.amount_type == 'percent') then
-            # puts "this discount doesn't match"
-            # puts "category_id is #{discount.category_id} and category_id is #{item.category_id}"
+            # #puts "this discount doesn't match"
+            # #puts "category_id is #{discount.category_id} and category_id is #{item.category_id}"
           next
         end
         if discount.amount_type == 'percent' then
@@ -630,13 +630,13 @@ class OrderItem < ActiveRecord::Base
         end
       end # Discount.scopied.where(conds)
     else
-      # puts "Not Applying Discounts at all..."
+      # #puts "Not Applying Discounts at all..."
     end
     #p -= damount
     self.update_attribute(:discount_applied,true) if self.discounts.any?
     self.update_attribute(:discount_amount,damount) if self.discounts.any?
     p = p.round(2)
-    # puts "Is BuyBack: #{self.is_buyback}"
+    # #puts "Is BuyBack: #{self.is_buyback}"
     return p
   end
 
@@ -679,7 +679,7 @@ class OrderItem < ActiveRecord::Base
   
   def set_sold
     the_item = self.item
-    # puts "My quantity is: #{self.quantity} and my #{self.behavior}"
+    # #puts "My quantity is: #{self.quantity} and my #{self.behavior}"
     #
     # begin update the quantities of the item
     if the_item.ignore_qty == false and self.behavior == 'normal' then

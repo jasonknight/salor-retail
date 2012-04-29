@@ -61,7 +61,7 @@ class OrderItemsController < ApplicationController
     end
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @order_items.to_json }
+      format.json { render :json => { :count => @items.length, :items => @order_items }.to_json  }
       format.xml  { render :xml => @order_items }
     end
   end
