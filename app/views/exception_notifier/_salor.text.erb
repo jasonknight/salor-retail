@@ -1,0 +1,3 @@
+Salor Version: <%= SalorBase::VERSION %>
+
+eth0 Mac addr: <%= /HWaddr (..):(..):(..):(..):(..):(..)/.match(`ifconfig eth0`)[1..6].join %>

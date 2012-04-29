@@ -1,3 +1,6 @@
+ActionMailer::Base.sendmail_settings = { :arguments => '-i' }
+ExceptionNotifier::Notifier.append_view_path "#{Rails.root}/app/views"
+
 Salor::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -71,8 +74,5 @@ config.action_dispatch.rack_cache = {:metastore => "rails:/", :entitystore => "r
 
   config.action_mailer.delivery_method = :sendmail
 
-# config.middleware.use ExceptionNotifier,
-#   :email_prefix => "[Salor] ",
-#   :sender_address => %{"notifier" <notifier@salorpos.com>},
-#   :exception_recipients => %w{jason@jason-knight-martin.com}
+  config.middleware.use ExceptionNotifier, :email_prefix => "[SalorException] ", :sender_address => %{"Salor" <michael@billgastro.com>}, :exception_recipients => %w{office@billgastro.com}, :sections => %w(salor request session environment backtrace)
 end

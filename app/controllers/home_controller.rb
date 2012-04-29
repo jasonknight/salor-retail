@@ -53,6 +53,9 @@ class HomeController < ApplicationController
   def errors_display
     @exception = $!
   end
+  def exception_test
+    nil.whine
+  end
   def index
     if AppConfig.standalone and User.count == 0 then
       redirect_to new_user_registration_path and return

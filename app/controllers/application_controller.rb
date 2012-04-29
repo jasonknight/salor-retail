@@ -203,7 +203,12 @@ class ApplicationController < ActionController::Base
   def render_error(exception)
     #log_error(exception)
     @exception = exception
-    render :template => '/errors/error.html.haml', :layout => 'customer_display'
+    if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier }
+      env['exception_notifier.options'] = notifier.args.first || {}                   
+      ExceptionNotifier::Notifier.exception_notification(env, exception).deliver
+      env['exception_notifier.delivered'] = true
+    end
+    render :template => '/errors/error', :layout => 'customer_display'
   end
 
   def authify
