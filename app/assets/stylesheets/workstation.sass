@@ -2831,7 +2831,7 @@ div.shipment_item_attr_header_quantity
 div.shipment_item_attr_header_stock_location_id
   :width 100px
 
-div.request_service
+div#request_service
   :padding-top 10px
   label
     :text-align right
@@ -2852,11 +2852,21 @@ div.request_service
     margin: auto
     background-color: #7A607E
     @include rounded_corners_all
+  div.connect_service_button_container
+    display: inline-block
+    width: 200px
+    height: 70px
+  div#connect_service_ssh,
+  div#connect_service_vnc
+    display: none
 
 div.error_page
+  font-size: 13px
   text-align: center
   div.exception_message
     font-size: 150%
-  div.backtrace
-    text-align: left
-    width: 800px
+  div.errordescription
+    background-color: #7A607E
+    padding: 5px
+    margin: 15px
+    @include rounded_corners_all

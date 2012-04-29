@@ -52,11 +52,15 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :workstation?, :mobile?
   protect_from_forgery
-  before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login]
-  before_filter :pre_load
-  before_filter :setup_global_data, :except => [:login]
+  before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login, :render_error]
+  before_filter :pre_load, :except => [:render_error]
+  before_filter :setup_global_data, :except => [:login, :render_error]
   layout :layout_by_response
   helper_method [:user_cache_name]
+
+  unless Salor::Application.config.consider_all_requests_local
+    rescue_from Exception, :with => :render_error
+  end 
 
   def pre_load
   end
@@ -195,6 +199,13 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def render_error(exception)
+    #log_error(exception)
+    @exception = exception
+    render :template => '/errors/error.html.haml', :layout => 'customer_display'
+  end
+
   def authify
     if not salor_signed_in? then
       # puts  "Not Signed in..";
