@@ -13,7 +13,7 @@
     <% @items.each do |item| %>
       <tr>
         <td>
-          <%= item.name %>
+          <%= link_to item.name, item_path(item) %>
         </td>
         <td>
           <%= if item.behavior == 'coupon' and item.coupon_type == 1

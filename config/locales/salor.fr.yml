@@ -834,6 +834,11 @@ fr:
 
 
   items:
+    show:
+      from: XXXfrom
+      to: XXXto
+      query: XXXQuery!
+      quantity_sold: XXXSold quantity
     index:
       only_for_tobacco_stores: Cette fonction s'applique uniquement aux bureaux de tabac. Des articles Tabac seront créés et téléchargés et mis à jour. ceci peut prendre jusau'à 20 minutes. Êtes-vous sûr de vouloir continuer ?
       database_distiller_warning: XXX Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?

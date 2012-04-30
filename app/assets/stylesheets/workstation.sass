@@ -937,8 +937,12 @@ div.list > div.master
   border-color: $foreground
   background-color: $middleground
   margin-top: 15px
+  font-size: 90%
   padding: 0px 10px
   @include no_select
+
+div.list > div.master a
+  text-decoration: none
 
 div.list > div.master-wide 
   @include rounded_corners_all
@@ -947,7 +951,6 @@ div.list > div.master-wide
   margin-top: 15px
   padding: 0px 10px
   @include no_select
-  font-size: $text_size_massive
   text-transform: uppercase
   overflow: hidden
 
@@ -955,8 +958,6 @@ div.list img
   border: none
 
 div.list a, div.list a:visited, div.list a:hover 
-  text-decoration: none
-  font-size: $text_size_normal
 
 
 /* Login Page */
@@ -2870,3 +2871,6 @@ div.error_page
     padding: 5px
     margin: 15px
     @include rounded_corners_all
+
+div.item_sold_times
+  :font-size 300%

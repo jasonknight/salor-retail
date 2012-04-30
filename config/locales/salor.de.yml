@@ -835,6 +835,11 @@ de:
 
 
   items:
+    show:
+      from: von
+      to: bis
+      query: Abfragen
+      quantity_sold: Verkaufte Menge
     index:
       only_for_tobacco_stores: Diese Funktion ist nur für Trafiken. Tabak-Artikel werden nun angelegt bzw. aktualisiert. Diese Aktion dauert etwa 20 Minuten. Sind Sie wirklich sicher, dass Sie fortfahren möchten?
       database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
