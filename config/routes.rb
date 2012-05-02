@@ -17,6 +17,7 @@ Salor::Application.routes.draw do
   match "orders/set_weight" => "orders#set_weight"
   match "orders/recently_tagged" => "orders#recently_tagged"
   match "orders/print_order_receipt" => "orders#print_order_receipt"
+  match "orders/print_confirmed" => "orders#print_confirmed"
   match "orders/render_order_receipt" => "orders#render_order_receipt"
   match "orders/refund_item" => "orders#refund_item"
   match "orders/refund_order" => "orders#refund_order"

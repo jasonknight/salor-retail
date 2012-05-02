@@ -7,10 +7,10 @@
 # {VOCABULARY} orders_item item_price oi_price customer_payments payments_type payments_method paying_agent agent_has_paid agent_will_pay_later gift_card_applies coupon_percentage coupon_updated gift_cards_used item_price_update item_discount_percentage cash_register_used cash_register_inc include_register_codes employee_vendor
 class OrdersController < ApplicationController
 # {START}
-   before_filter :authify, :except => [:customer_display,:print, :print_receipt]
-   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt]
-   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt]
-   before_filter :crumble, :except => [:customer_display,:print, :print_receipt]
+   before_filter :authify, :except => [:customer_display,:print, :print_receipt, :print_confirmed]
+   before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt, :print_confirmed]
+   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt, :print_confirmed]
+   before_filter :crumble, :except => [:customer_display,:print, :print_receipt, :print_confirmed]
    def offline
    
    end
@@ -285,10 +285,18 @@ class OrdersController < ApplicationController
     if @register.salor_printer
       render :text => text
     else
-      puts File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      print_confirmed if written_bytes > 0
       render :nothing => true
     end
   end
+
+  # just rendering the template is not enough for putting "copy/duplicate" on the receipt. so, let salor-bin and rails confirm if bytes were actually sent to a file.
+  def print_confirmed
+    o = Order.find_by_id params[:order_id]
+    o.update_attribute :was_printed, true if o
+  end
+
   # {START}
   def show_payment_ajax
     # Recalculate everything and then show Payment Popup

@@ -82,9 +82,7 @@
 <%= "\e!\x08" %>
 <% if @order.was_printed == true  %>
 ---- * DUPLICATE/COPY/REPRINT * ----
-<% else
-  @order.update_attribute :was_printed,true
-end %>
+<% end %>
 
 <%= @order.vendor.receipt_logo_footer if @order.vendor and @order.vendor.receipt_logo_footer %>
 

@@ -1,12 +1,13 @@
 function print_order(id) {
-   print_url(Register.thermal_printer,'/orders/print_receipt', '&order_id=' + id);
+   print_url(Register.thermal_printer,'/orders/print_receipt', '&order_id=' + id,'/orders/print_confirmed?order_id=' + id);
 }
 
-function print_url(printer_path,url,params) {
+function print_url(printer_path,url,params,confirmation_url) {
+  confirmation_url = typeof(confirmation_url) !== 'undefined' ? confirmation_url : '';
   param_string = '?user_id=' + User.id + '&user_type=' + User.type + '&cash_register_id=' + Register.id + params;
   if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
     Salor.stopDrawerObserver(Register.cash_drawer_path);
-    SalorPrinter.printURL(printer_path, Conf.url + url + param_string);
+    SalorPrinter.printURL(printer_path, Conf.url + url + param_string, Conf.url + confirmation_url);
   } else {
     $.get(url + param_string);
   }
