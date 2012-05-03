@@ -73,6 +73,7 @@ en-US:
         other: Payment Methods
 
     attributes:
+      hide_buttons: Hide Buttons
       calculate_tax: XXX Calculate Tax
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of

@@ -32,13 +32,17 @@
                   <%= f.check_box :hide_discounts %>
                 </div>
                 <div class="field">
+                  <%= f.label t("activerecord.attributes.hide_buttons") %><br />
+                  <%= f.check_box :hide_buttons %>
+                </div>
+                <div class="field">
                   <%= f.label t("activerecord.attributes.no_print") %><br />
                   <%= f.check_box :no_print %>
-                  </div>
-                  <div class="field">
-                    <%= f.label t("activerecord.attributes.salor_printer") %><br />
-                    <%= f.check_box :salor_printer %>
-                  </div>
+                </div>
+                <div class="field">
+                  <%= f.label t("activerecord.attributes.salor_printer") %><br />
+                  <%= f.check_box :salor_printer %>
+                </div>
                 <div class="field">
                   <%= f.label t("activerecord.attributes.cash_drawer") %><br />
                   <%= f.text_field :cash_drawer_path, :class => "keyboardable"%>
