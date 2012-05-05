@@ -28,7 +28,7 @@ class EmployeesController < ApplicationController
 
         
     if user then
-      if check == 41 then
+      if check == 41 and not request.url.include? "salortrainer" then
         t = Time.now - 61.days
         if user.created_at <= t then
           redirect_to :controller => :home, :action => "you_have_to_pay" and return
