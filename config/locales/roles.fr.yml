@@ -1,55 +1,55 @@
 fr:
-  any_reports: XXX Any Reports
-  index_reports: XXX Index Reports
-  edit_reports: XXX Edit Reports
-  show_reports: XXX Show Reports
-  create_reports: XXX Create Reports
-  destroy_reports: XXX Destroy Reports
-  update_reports: XXX Update Reports
-  :employee: Employee
-  :manager: Manager
-  :head_cashier: Head Cashier
-  :cashier: Cashier
-  :stockboy: Stockboy
-  :edit_others_orders: Edit Others Orders
-  :index_orders: Index Orders
-  :edit_orders: Edit Orders
-  :destroy_orders: Destroy Orders
-  :create_orders: Create Orders
-  :update_orders: Update Orders
-  :show_orders: Show Orders
-  :any_orders: Any Orders
-  :index_items: Index Items
-  :edit_items: Edit Items
-  :destroy_items: Destroy Items
-  :create_items: Create Items
-  :update_items: Update Items
-  :show_items: Show Items
-  :any_items: Any Items
-  :index_categories: Index Categories
-  :edit_categories: Edit Categories
-  :destroy_categories: Destroy Categories
-  :create_categories: Create Categories
-  :update_categories: Update Categories
-  :show_categories: Show Categories
-  :any_categories: Any Categories
-  :index_locations: Index Locations
-  :edit_locations: Edit Locations
-  :destroy_locations: Destroy Locations
-  :create_locations: Create Locations
-  :update_locations: Update Locations
-  :show_locations: Show Locations
-  :any_locations: Any Locations
-  :index_shippers: Index Shippers
-  :edit_shippers: Edit Shippers
-  :destroy_shippers: Destroy Shippers
-  :create_shippers: Create Shippers
-  :update_shippers: Update Shippers
-  :show_shippers: Show Shippers
-  :any_shippers: Any Shippers
-  :index_shipments: Index Shipments
-  :edit_shipments: Edit Shipments
-  :destroy_shipments: Destroy Shipments
+  any_reports: Tous les rapports
+  index_reports: Indexer les rapports
+  edit_reports: Editer les rapports
+  show_reports: Montrer les rapports
+  create_reports: Créer des rapports
+  destroy_reports: Détruire des rapports
+  update_reports: Mettre à jour des rapports
+  :employee: Employé
+  :manager: Gérant
+  :head_cashier: Chef de caissières
+  :cashier: Caissière
+  :stockboy: Magasinier
+  :edit_others_orders: Editer les commandes des autres
+  :index_orders: Indexer les commandes
+  :edit_orders: Editer les commandes
+  :destroy_orders: Détruire des commandes
+  :create_orders: Créer des les commandes
+  :update_orders: Mettre à jour des commandes
+  :show_orders: Montrer les commandes
+  :any_orders: Toutes les commandes
+  :index_items: Indexer les articles
+  :edit_items: Editer les articles
+  :destroy_items: Détruire des articles
+  :create_items: Créer des articles
+  :update_items: Mettre à jour les articles
+  :show_items: Montrer les articles
+  :any_items: Tous les articles
+  :index_categories: Indexer les catégories
+  :edit_categories: Editer les catégories
+  :destroy_categories: Détruire les catégories
+  :create_categories: Créer des catégories
+  :update_categories: Mettre à jour les catégories
+  :show_categories: Montrer les catégories
+  :any_categories: Toutes les catégories
+  :index_locations: Indexer les emplacements
+  :edit_locations: Editer les emplacements
+  :destroy_locations: Détruire des emplacements
+  :create_locations: Créer des emplacements
+  :update_locations: Mettre à jour les emplacements
+  :show_locations: Montrer les emplacements
+  :any_locations: Tous les emplacements
+  :index_shippers: Indexer les livreurs
+  :edit_shippers: Editer les livreurs
+  :destroy_shippers: Détruire des livreurs
+  :create_shippers: Créer des livreurs
+  :update_shippers: Mettre à jour les livreurs
+  :show_shippers: Montrer les livreurs
+  :any_shippers: Tous les livreurs
+  :index_shipments: Indexer les livraisons
+  :edit_shipments: Editer les livraisons
+  :destroy_shipments: Effacer es livraisons
   :create_shipments: Create Shipments
   :update_shipments: Update Shipments
   :show_shipments: Show Shipments
