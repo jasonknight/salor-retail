@@ -4,8 +4,8 @@ fr:
   edit_reports: Editer les rapports
   show_reports: Montrer les rapports
   create_reports: Créer des rapports
-  destroy_reports: Détruire des rapports
-  update_reports: Mettre à jour des rapports
+  destroy_reports: Effacer des rapports
+  update_reports: Mettre à jour les rapports
   :employee: Employé
   :manager: Gérant
   :head_cashier: Chef de caissières
@@ -14,35 +14,35 @@ fr:
   :edit_others_orders: Editer les commandes des autres
   :index_orders: Indexer les commandes
   :edit_orders: Editer les commandes
-  :destroy_orders: Détruire des commandes
+  :destroy_orders: Effacer des commandes
   :create_orders: Créer des les commandes
-  :update_orders: Mettre à jour des commandes
+  :update_orders: Mettre à jour les commandes
   :show_orders: Montrer les commandes
   :any_orders: Toutes les commandes
   :index_items: Indexer les articles
   :edit_items: Editer les articles
-  :destroy_items: Détruire des articles
+  :destroy_items: Effacer des articles
   :create_items: Créer des articles
   :update_items: Mettre à jour les articles
   :show_items: Montrer les articles
   :any_items: Tous les articles
   :index_categories: Indexer les catégories
   :edit_categories: Editer les catégories
-  :destroy_categories: Détruire les catégories
+  :destroy_categories: Effacer des catégories
   :create_categories: Créer des catégories
   :update_categories: Mettre à jour les catégories
   :show_categories: Montrer les catégories
   :any_categories: Toutes les catégories
   :index_locations: Indexer les emplacements
   :edit_locations: Editer les emplacements
-  :destroy_locations: Détruire des emplacements
+  :destroy_locations: Effacer des emplacements
   :create_locations: Créer des emplacements
   :update_locations: Mettre à jour les emplacements
   :show_locations: Montrer les emplacements
   :any_locations: Tous les emplacements
   :index_shippers: Indexer les livreurs
   :edit_shippers: Editer les livreurs
-  :destroy_shippers: Détruire des livreurs
+  :destroy_shippers: Effacer des livreurs
   :create_shippers: Créer des livreurs
   :update_shippers: Mettre à jour les livreurs
   :show_shippers: Montrer les livreurs
@@ -56,7 +56,7 @@ fr:
   :any_shipments: Toutes les livraisons
   :index_vendors: Indexer les vendeurs
   :edit_vendors: Editer les vendeurs
-  :destroy_vendors: Effacer les vendeurs
+  :destroy_vendors: Effacer des vendeurs
   :create_vendors: Créer des vendeurs
   :update_vendors: Mettre à jour les vendeurs
   :show_vendors: Montrer les vendeurs
@@ -70,68 +70,68 @@ fr:
   :any_employees: Tous les employés
   :index_discounts: Indexer les remises
   :edit_discounts: Editer les remises
-  :destroy_discounts: Effacer les remises
-  :create_discounts: Créer les remises
-  :update_discounts: Update les remises
+  :destroy_discounts: Effacer des remises
+  :create_discounts: Créer des remises
+  :update_discounts: Mettre à jour les remises
   :show_discounts: Montrer les remises
-  :any_discounts: Any les remises
+  :any_discounts: Toutes les remises
   :index_tax_profiles: Indexer les types de taxe
-  :edit_tax_profiles: Editerles types de taxe
-  :destroy_tax_profiles: Destroy les types de taxe
+  :edit_tax_profiles: Editer les types de taxe
+  :destroy_tax_profiles: Effacer des types de taxe
   :create_tax_profiles: Créer des types de taxe
-  :update_tax_profiles: Update les types de taxe
+  :update_tax_profiles: Mettre à jour les types de taxe
   :show_tax_profiles: Montrer les types de taxe
-  :any_tax_profiles: Any les types de taxe
+  :any_tax_profiles: Tous les types de taxe
   :index_customers: Indexer les clients
   :edit_customers: Editer les clients
-  :destroy_customers: Destroy les clients
+  :destroy_customers: Effacer des clients
   :create_customers: Créer des clients
-  :update_customers: Update les clients
+  :update_customers: Mettre à jour les clients
   :show_customers: Montrer les clients
-  :any_customers: Any les clients
+  :any_customers: Tous les clients
   :index_transaction_tags: Indexer les étiquettes de transaction
   :edit_transaction_tags: Editer les étiquettes de transaction
-  :destroy_transaction_tags: Destroy les étiquettes de transaction
-  :create_transaction_tags: Create les étiquettes de transaction
-  :update_transaction_tags: Update les étiquettes de transaction
+  :destroy_transaction_tags: Effacer des étiquettes de transaction
+  :create_transaction_tags: Créer des étiquettes de transaction
+  :update_transaction_tags: Mettre à jour les étiquettes de transaction
   :show_transaction_tags: Montrer les étiquettes de transaction
-  :any_transaction_tags: Any les étiquettes de transaction
+  :any_transaction_tags: Toutes les étiquettes de transaction
   :index_buttons: Indexer les boutons
   :edit_buttons: Editer les boutons
-  :destroy_buttons: Destroy les boutons
-  :create_buttons: Create les boutons
-  :update_buttons: Update les boutons
+  :destroy_buttons: Effacer des boutons
+  :create_buttons: Créer des boutons
+  :update_buttons: Mettre à jour les boutons
   :show_buttons: Montrer les boutons
-  :any_buttons: Any les boutons
+  :any_buttons: Tous les boutons
   :index_stock_locations: Indexer les emplacements de stock
   :edit_stock_locations: Editer les emplacements de stock
-  :destroy_stock_locations: Destroy les emplacements de stock
-  :create_stock_locations: Create les emplacements de stock
-  :update_stock_locations: Update les emplacements de stock
+  :destroy_stock_locations: Effacer des emplacements de stock
+  :create_stock_locations: Créer des emplacements de stock
+  :update_stock_locations: Mettre à jour les emplacements de stock
   :show_stock_locations: Montrer les emplacements de stock
-  :any_stock_locations: Any les emplacements de stock
-  :clear_orders: Clear les commandes
-  :see_header: See Header
-  :destroy_order_items: Destroy Order Items
-  :change_prices: Change Prices
-  :index_histories: Indexer Histories
-  :edit_histories: Editer Histories
-  :destroy_histories: Destroy Histories
-  :create_histories: Create Histories
-  :update_histories: Update Histories
-  :show_histories: Montrer Histories
-  :any_histories: Any Histories
-  :index_actions: Indexer Actions
-  :edit_actions: Editer Actions
-  :destroy_actions: Destroy Actions
-  :create_actions: Create Actions
-  :update_actions: Update Actions
-  :show_actions: Montrer Actions
-  :any_actions: Any Actions
+  :any_stock_locations: Tous les emplacements de stock
+  :clear_orders: Effacer le contenu des commandes
+  :see_header: Voir en-tête
+  :destroy_order_items: Effacer les articles d'une commande
+  :change_prices: Modifier les prix
+  :index_histories: Indexer les historiques
+  :edit_histories: Editer les historiques
+  :destroy_histories: Effacer des historiques
+  :create_histories: Créer des historiques
+  :update_histories: Mettre à jour les historiques
+  :show_histories: Montrer les historiques
+  :any_histories: Tous les historiques
+  :index_actions: Indexer les actions
+  :edit_actions: Editer les actions
+  :destroy_actions: Effacer les actions
+  :create_actions: Créer des actions
+  :update_actions: Mettre à jour les actions
+  :show_actions: Montrer les actions
+  :any_actions: Toutes les actions
   :index_shipment_items: Indexer Shipment Items
   :edit_shipment_items: Editer Shipment Items
-  :destroy_shipment_items: Destroy Shipment Items
-  :create_shipment_items: Create Shipment Items
+  :destroy_shipment_items: Effacer Shipment Items
+  :create_shipment_items: Créer des Shipment Items
   :update_shipment_items: Update Shipment Items
   :show_shipment_items: Montrer Shipment Items
-  :any_shipment_items: Any Shipment Items
+  :any_shipment_items: Tous les articles de livraison
