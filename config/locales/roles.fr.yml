@@ -128,10 +128,10 @@ fr:
   :update_actions: Mettre à jour les actions
   :show_actions: Montrer les actions
   :any_actions: Toutes les actions
-  :index_shipment_items: Indexer Shipment Items
-  :edit_shipment_items: Editer Shipment Items
-  :destroy_shipment_items: Effacer Shipment Items
-  :create_shipment_items: Créer des Shipment Items
-  :update_shipment_items: Update Shipment Items
-  :show_shipment_items: Montrer Shipment Items
+  :index_shipment_items: Indexer les articles de livraison
+  :edit_shipment_items: Editer les articles de livraison
+  :destroy_shipment_items: Effacer des articles de livraison
+  :create_shipment_items: Créer des articles de livraison
+  :update_shipment_items: Update les articles de livraison
+  :show_shipment_items: Montrer les articles de livraison
   :any_shipment_items: Tous les articles de livraison
