@@ -1,19 +1,19 @@
 namespace :salor do
   task :test => [:environment] do
-    require "#{RAILS_ROOT}/db/seeds_testing.rb"
+    require "#{Rails.root.to_s}/db/seeds_testing.rb"
   end
   task :test_discounts => [:environment] do 
-    require "#{RAILS_ROOT}/test/setup.rb"
-    if File.exists? "#{RAILS_ROOT}/test/unit/discount_setup.rb" then
-      require "#{RAILS_ROOT}/test/unit/discount_setup.rb"
+    require "#{Rails.root.to_s}/test/setup.rb"
+    if File.exists? "#{Rails.root.to_s}/test/unit/discount_setup.rb" then
+      require "#{Rails.root.to_s}/test/unit/discount_setup.rb"
     end
-    require "#{RAILS_ROOT}/test/unit/discount_test.rb"
+    require "#{Rails.root.to_s}/test/unit/discount_test.rb"
   end
   task :test_gift_cards => [:environment] do 
-    require "#{RAILS_ROOT}/test/setup.rb"
-    if File.exists? "#{RAILS_ROOT}/test/unit/gift_card_setup.rb" then
-      require "#{RAILS_ROOT}/test/unit/gift_card_setup.rb"
+    require "#{Rails.root.to_s}/test/setup.rb"
+    if File.exists? "#{Rails.root.to_s}/test/unit/gift_card_setup.rb" then
+      require "#{Rails.root.to_s}/test/unit/gift_card_setup.rb"
     end
-    require "#{RAILS_ROOT}/test/unit/gift_card_test.rb"
+    require "#{Rails.root.to_s}/test/unit/gift_card_test.rb"
   end
 end

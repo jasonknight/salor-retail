@@ -7,24 +7,29 @@
 
 class Kcsv
 	def initialize(file, options)
-		@file = file
+    @file = file.rewind.read.split("\n") if file.class == File
+    @file = file.split("\n") if file.class == String
+    options[:separator] ||= ";"
 		@options = options
     @separator = options[:separator]
-		options[:header] == true ? @headers = parse_header_line : @headers = false
+		options[:header] == true ? @headers = parse_header_line(0) : @headers = false
 		@children = []
-		
 		@accepted_headers = options[:accepted_headers]
 		parse
 	end
 	
 	def parse
 		i = 0
-		@file.rewind
-		
-		@file.each_line do |line|
+		@file.each do |line|
 			#looping through each line of the file
 			if i > 0 then # we are past the first line
 				x = 0 #we set the index for our position in the headers.
+        if line.include? "#HEADERS" then
+          @headers = parse_header_line(i)
+          i += 1
+          next
+        end
+        i += 1
 				row = {} #the row
 				if not line.include?(@separator) then #Here we check to see if it is a single column
 					row[@headers[x][0]] = clean(line) if not @headers[x].nil?
@@ -57,23 +62,21 @@ class Kcsv
 		string = string.gsub('"','').strip
     return string
 	end
-	def parse_header_line
+	def parse_header_line(index)
 		headers = []
 		accepted_headers = @accepted_headers
-		@file.rewind
-		@file.each_line do |line|
-			x = 0
-      # puts @separator
-			if not line.include?(@separator) then
-				headers << [clean(line),x]
-				#headers << [x,x] if not accepted_headers.include? clean(line)
-			else
-				line.split(@separator).each do |col|
-					headers << [clean(col).strip,x]
-					x = x + 1
-				end
+    line = @file[index]
+		x = 0
+    # puts @separator
+		if not line.include?(@separator) then
+			headers << [clean(line),x]
+			#headers << [x,x] if not accepted_headers.include? clean(line)
+		else
+			line.split(@separator).each do |col|
+        next if col == "#HEADERS"
+				headers << [clean(col).strip.to_sym,x]
+				x = x + 1
 			end
-			break
 		end
 		return headers
 	end

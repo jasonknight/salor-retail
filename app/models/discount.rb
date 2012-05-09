@@ -29,6 +29,20 @@ class Discount < ActiveRecord::Base
   after_save :refresh_discounts
   after_update :refresh_discounts
   after_destroy :refresh_discounts
+  def category_sku
+    return self.category.sku if self.category
+  end
+  def category_sku=(str)
+    c = Category.scopied.find_by_sku(str)
+    self.category = c if c
+  end
+  def location_sku
+    return self.location.sku if self.location
+  end
+  def location_sku=(str)
+    d = Location.scopied.find_by_sku(str)
+    self.location = d if d
+  end
   def set_sku
     self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
   end

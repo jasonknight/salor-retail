@@ -17,7 +17,7 @@ class LoyaltyCard < ActiveRecord::Base
   def validify
     clean_model
     lc = LoyaltyCard.scopied.find_by_sku(self.sku)
-    if lc.id != self.id then
+    if lc and lc.id != self.id then
       errors.add(:sku, I18n.t('system.errors.sku_must_be_unique'))
       GlobalErrors.append_fatal('system.errors.sku_must_be_unique');
     end

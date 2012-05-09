@@ -13,5 +13,15 @@ class Location < ActiveRecord::Base
 	has_many :items, :conditions => "items.behavior = 'normal'"
 	has_many :shipment_items
 	has_many :discounts
+  before_create :set_sku
 	scope :applies, lambda {|t| where(:applies_to => t)}
+  def set_sku
+    # This might cause issues down the line with a SAAS version so we need to make sure
+    # that the request for a category by sku is scopied.
+    # the reason we do it like this is for reproducibility across systems.
+    # Note that this algorithm should not support special chars, so if you have a
+    # category named stüff then the sku would come out: stff
+    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
+  end
+
 end

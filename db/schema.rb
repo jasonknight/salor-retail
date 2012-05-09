@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120503091601) do
+ActiveRecord::Schema.define(:version => 20120508193120) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -81,8 +81,8 @@ ActiveRecord::Schema.define(:version => 20120503091601) do
 
   create_table "cash_registers", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
     t.integer  "vendor_id"
     t.string   "scale"
     t.boolean  "hidden",                :default => false
@@ -92,12 +92,12 @@ ActiveRecord::Schema.define(:version => 20120503091601) do
     t.boolean  "big_buttons",           :default => false
     t.boolean  "hide_discounts",        :default => false
     t.boolean  "no_print",              :default => false
-    t.string   "thermal_printer"
-    t.string   "sticker_printer"
+    t.string   "thermal_printer",       :default => "/dev/usb/lp0"
+    t.string   "sticker_printer",       :default => "/dev/usb/lp1"
     t.string   "a4_printer"
     t.string   "pole_display"
     t.string   "customer_screen_blurb"
-    t.boolean  "salor_printer",         :default => false
+    t.boolean  "salor_printer",         :default => true
     t.string   "color"
     t.string   "ip"
     t.boolean  "hide_buttons",          :default => true
@@ -168,11 +168,11 @@ ActiveRecord::Schema.define(:version => 20120503091601) do
     t.integer  "location_id"
     t.string   "item_sku"
     t.string   "applies_to"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.float    "amount"
     t.string   "amount_type"
-    t.boolean  "hidden"
+    t.boolean  "hidden",      :default => false
     t.string   "sku"
   end
 
@@ -383,6 +383,7 @@ ActiveRecord::Schema.define(:version => 20120503091601) do
     t.float    "quantity_sold", :default => 0.0
     t.float    "cash_made",     :default => 0.0
     t.integer  "hidden",        :default => 0
+    t.string   "sku",           :default => ""
   end
 
   add_index "locations", ["vendor_id"], :name => "index_locations_on_vendor_id"
@@ -654,6 +655,11 @@ ActiveRecord::Schema.define(:version => 20120503091601) do
     t.string   "receipt_blurb_footer"
     t.boolean  "calculate_tax",         :default => false
     t.boolean  "license_accepted",      :default => false
+    t.boolean  "csv_categories"
+    t.boolean  "csv_buttons"
+    t.boolean  "csv_discounts"
+    t.boolean  "csv_customers"
+    t.boolean  "csv_loyalty_cards"
   end
 
   add_index "salor_configurations", ["vendor_id"], :name => "index_configurations_on_vendor_id"
@@ -846,6 +852,7 @@ ActiveRecord::Schema.define(:version => 20120503091601) do
     t.binary   "logo_invoice_image_content_type"
     t.boolean  "multi_currency",                  :default => false
     t.string   "sku"
+    t.string   "token"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

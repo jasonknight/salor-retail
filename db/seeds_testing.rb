@@ -197,8 +197,7 @@ discount_cats.each do |dc|
   )
   #d.save
 end
-
-
+exit
 # Order Testing
 puts "Creating 5 orders"
 Order.delete_all

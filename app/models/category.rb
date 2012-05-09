@@ -18,6 +18,7 @@ class Category < ActiveRecord::Base
   belongs_to :vendor
   has_many :order_items
   before_create :set_model_owner
+  before_create :set_sku
   acts_as_list
   def set_sku
     # This might cause issues down the line with a SAAS version so we need to make sure
@@ -25,7 +26,7 @@ class Category < ActiveRecord::Base
     # the reason we do it like this is for reproducibility across systems.
     # Note that this algorithm should not support special chars, so if you have a
     # category named stüff then the sku would come out: stff
-    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
+    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'') if self.sku.blank?
   end
   def get_tag
     if not self.tag or self.tag == '' then

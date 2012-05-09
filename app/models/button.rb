@@ -16,6 +16,9 @@ class Button < ActiveRecord::Base
   def category_sku=(sku)
     self.category = Category.where(:sku => sku).first
   end
+  def category_sku
+    return self.category.sku if self.category
+  end
   def set_flags
     i = Item.find_by_sku self.sku
     self.is_buyback = true if i and i.default_buyback
