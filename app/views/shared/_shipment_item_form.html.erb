@@ -383,7 +383,7 @@ function showCreateItem(values) {
       $.post('/items/create_ajax',$('.shipment-create-item-form').serialize(),function (data) {
           $('.shipment-create-item').remove();
           $('.attribute-sku').each(function () {
-              if ($(this).val() == data['item']['sku']) {
+              if ($(this).val() == data.sku) {
                 $(this).trigger('blur');
               }
           });

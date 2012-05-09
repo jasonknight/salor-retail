@@ -29,7 +29,7 @@ function cancel_confirm(cancel_func,confirm_func) {
   var row = $('<div class="button-row" align="right"></div>');
   var can = $('<div class="button-cancel">' + i18n_menu_cancel + '</div>');
   can.mousedown(cancel_func);
-  var comp = $('<div class="button-confirm">' + i18n_menu_done + '</div>');
+  var comp = $('<div class="button-confirm">' + i18n_menu_ok + '</div>');
   comp.mousedown(confirm_func);
   var sp = $('<div class="spacer-rmargin">&nbsp;</div>');
   var spw = $('<div class="spacer-rmargin">&nbsp;&nbsp;&nbsp;</div>');
