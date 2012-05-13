@@ -2,14 +2,14 @@ cn:
   activerecord:
     models:
       button:
-        one: Button
-        other: Buttons
+        one: 按鈕
+        other: 按鈕
       tender_method:
-        one: Tender Method
-        other: Tender Methods
+        one: 貨幣方法
+        other: 貨幣方法
       action: 
-        one: Action
-        other: Actions
+        one: 行動
+        other: 行動
       broken_item:
         one: Broken item
         other: Broken items
