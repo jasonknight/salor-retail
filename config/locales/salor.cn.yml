@@ -41,24 +41,24 @@ cn:
         one: 位置
         other: 位置
       order:
-        one: 秩序
-        other: 秩序
+        one: 訂購
+        other: 訂購
       order_item:
-        one: Order Item
-        other: Order Items
+        one: 訂購項目
+        other: 訂購項目
       shipment:
-        one: Shipment
-        other: Shipments
+        one: 裝船
+        other: 裝船
       shipment_type:
-        one: Shipment Type
-        other: Shipment Types
-        default_name: Auto Nachbestellung
+        one: 裝船類型
+        other: 裝船類型
+        default_name: 默認名稱
       shipper:
-        one: Shipper
-        other: Shippers
+        one: 發貨人
+        other: 發貨人
       stock_location:
-        one: Stock Location
-        other: Stock Locations
+        one: 貨物位置
+        other: 貨物位置
       tax_profile:
         one: Tax Profile
         other: Tax Profiles
