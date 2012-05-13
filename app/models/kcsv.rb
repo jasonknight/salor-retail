@@ -21,6 +21,10 @@ class Kcsv
 	def parse
 		i = 0
 		@file.each do |line|
+		  if line == "" then
+		    i += 1
+		    next
+		  end
 			#looping through each line of the file
 			if i > 0 then # we are past the first line
 				x = 0 #we set the index for our position in the headers.
@@ -60,6 +64,16 @@ class Kcsv
 	protected
 	def clean(string)
 		string = string.gsub('"','').strip
+		tmp = string.downcase
+		if tmp == 'true' then
+		  return true
+		elsif tmp == 'false' then
+		  return false
+		elsif tmp == 'nil' then
+		  return nil
+		elsif tmp == 'null' then
+		  return nil
+		end
     return string
 	end
 	def parse_header_line(index)

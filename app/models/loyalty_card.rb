@@ -25,4 +25,13 @@ class LoyaltyCard < ActiveRecord::Base
   def clean_model
     self.sku = self.sku.gsub(' ','')
   end
+  def customer_sku
+    csku = self.customer.sku if self.customer
+    if csku.blank? then
+      self.customer.set_sku
+      csku = self.customer.sku
+      self.customer.save
+    end
+    return csku
+  end
 end

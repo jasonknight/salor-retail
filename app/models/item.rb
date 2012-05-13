@@ -54,6 +54,9 @@ class Item < ActiveRecord::Base
       self.category = c
     end
   end
+  def location_name
+    return self.location.name if self.location
+  end
   def self.repair_items
     Item.where('child_id IS NOT NULL and child_id != 0').each do |item|
       if item.parent or item.child then

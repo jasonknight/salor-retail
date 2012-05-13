@@ -74,7 +74,7 @@ en-US:
 
     attributes:
       hide_buttons: Hide Buttons
-      calculate_tax: XXX Calculate Tax
+      calculate_tax: Calculate Tax
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       employee:

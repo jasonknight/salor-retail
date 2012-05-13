@@ -59,6 +59,10 @@
                       <%= conf.text_field :dollar_per_lp, :class => "keyboardable"%>
                     </div>
                     <div class="field">
+                      <%= f.label 'Token' %><br />
+                      <%= f.text_field :token, :class => "keyboardable"%>
+                    </div>
+                    <div class="field">
                       <%= conf.label t("activerecord.attributes.calculate_tax") %><br />
                       <%= conf.check_box :calculate_tax %>
                     </div>

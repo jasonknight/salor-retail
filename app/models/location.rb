@@ -21,7 +21,7 @@ class Location < ActiveRecord::Base
     # the reason we do it like this is for reproducibility across systems.
     # Note that this algorithm should not support special chars, so if you have a
     # category named stüff then the sku would come out: stff
-    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
+    self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'') if self.sku.blank?
   end
 
 end

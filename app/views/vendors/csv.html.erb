@@ -9,12 +9,28 @@
 %>
 <%= line.join(";") %><% end %><% end %>
 <% if @items then %><%
-  header = [ :class,:sku,:name,
-             :base_price,:category_name,
+  header = [ :class,:sku,
+             :name,
+             :base_price,:category_name, :behavior,
+             :location_name,
+             :item_type_id,
              :tax_profile_amount,
+             :active,
+             :hidden,
+             :image,
              :sales_metric,:weight_metric,
              :weight,:purchase_price,
-             :parent_sku,:child_sku]
+             :height,:height_metric,
+             :length, :length_metric,
+             :width,:width_metric,
+             :parent_sku,:child_sku,
+             :is_gs1, :is_part, :price_by_qty, 
+             :part_id, :calculate_part_price,
+             :part_quantity, :buyback_price,
+             :quantity_buyback, :default_buyback, :weigh_compulsory,
+             :min_quantity, :shipper_sku, :packaging_unit,
+             :must_change_price, :track_expiry, :expires_on, :activated,
+             :amount_remaining, :coupon_type, :coupon_applies]
 %>#HEADERS;<%= header.join(";") %><% 
 @items.each do |item| 
   line = []
@@ -55,8 +71,9 @@
   end
 %>
 <%= line.join(";") %><% end %><% end %>
-<% if @loyalty_cards then %><%
+<% if @vendor.salor_configuration.csv_loyalty_cards then %><%
   header = [ :class, :sku, :points, :customer_sku]
+  @loyalty_cards = @customers.each.inject([]) {|cards,customer| cards << customer.loyalty_card }
 %>#HEADERS;<%= header.join(";") %><% 
 @loyalty_cards.each do |item| 
   line = []

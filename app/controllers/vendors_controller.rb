@@ -15,14 +15,13 @@ class VendorsController < ApplicationController
   # GET /vendors
   # GET /vendors.xml
   def csv
-    v = Vendor.find_by_token(params[:token])
-    if v then
-      @items = Item.where(["vendor_id =? and hidden != 1",v.id])
-      @categories = Category.where(["vendor_id =? and hidden != 1",v.id])
-      @buttons = Button.where(["vendor_id =? and hidden != 1",v.id]) if v.salor_configuration.csv_buttons
-      @discounts = Discount.where(["vendor_id =? and hidden IS FALSE OR hidden IS NULL",v.id]) if v.salor_configuration.csv_discounts
-      @customers = Customer.where(["vendor_id =? and hidden != 1",v.id]) if v.salor_configuration.csv_customers
-      @loyalty_cards = LoyaltyCard.where(["vendor_id =? and hidden != 1",v.id]) if v.salor_configuration.csv_loyalty_cards
+    @vendor = Vendor.find_by_token(params[:token])
+    if @vendor then
+      @items = Item.where(["vendor_id =? and hidden != 1",@vendor.id])
+      @categories = Category.where(["vendor_id =? and hidden != 1",@vendor.id])
+      @buttons = Button.where(["vendor_id =? and hidden != 1",@vendor.id]) if @vendor.salor_configuration.csv_buttons
+      @discounts = Discount.where(["vendor_id =? and hidden IS FALSE OR hidden IS NULL",@vendor.id]) if @vendor.salor_configuration.csv_discounts
+      @customers = Customer.where(["vendor_id =? and hidden != 1",@vendor.id]) if @vendor.salor_configuration.csv_customers
     end
     render :layout => false
   end
