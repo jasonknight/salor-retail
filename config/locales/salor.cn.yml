@@ -75,10 +75,10 @@ cn:
     attributes:
       hide_buttons: 隱藏按鈕
       calculate_tax: 計稅
-      track_expiry: Track Expiry
-      uses_drawer_id: Uses Drawer of
+      track_expiry: 跟踪屆滿
+      uses_drawer_id: 使用的託收人
       employee:
-        uses_drawer_id: Uses drawer of
+        uses_drawer_id: 使用的託收人
       reorder_type: Reorder Type
       big_buttons: Big Buttons
       hide_discounts: Hide Discounts
