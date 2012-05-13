@@ -128,8 +128,8 @@ cn:
       coupon_applies: 優惠券適用
       coupon_total: 優惠券總計
       coupon_type: 優惠券類型
-      decimal_points: decimal points
-      default_buyback: default buyback
+      decimal_points: 小數點
+      default_buyback: 默認的下回購
       dollar_per_lp: dollar per loyalty point
       drop: drop
       email: email
