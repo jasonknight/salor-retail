@@ -109,17 +109,17 @@ cn:
       amount_remaining: 剩餘量
       amount_type: 數量類型
       applies_to: 適用於
-      base_price: base price
-      behavior: behavior
-      body: body
-      buyback_price: buyback price
-      calculate_part_price: calculate part price
-      cash_made: cash made
-      category_id: Category
-      cellphone: cell phone
-      city: city
-      company_name: company name
-      contact_address: contact address
+      base_price: 基價
+      behavior: 行為
+      body: 身體
+      buyback_price: buyback price 回購價格
+      calculate_part_price: 計算部分價格
+      cash_made: 賺的錢
+      category_id: 類別
+      cellphone: 手機
+      city: 城市
+      company_name: 公司名稱
+      contact_address: 聯繫地址
       contact_email: contact email
       contact_fax: contact fax
       contact_person: contact person
