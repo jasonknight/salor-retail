@@ -91,12 +91,12 @@ cn:
       csv_imports_url: CSV 進口的 URL
       customer_screen_blurb: 標準文本顧客屏幕
       pole_display: 桿顯示
-      auto_drop: "Automatically Begin Day"
-      must_change_price: Must Change Price
-      created_at: Created
-      is_refund: Is Refund?
-      owner_id: Owner
-      owner_type: Owner Type
+      auto_drop: "自動開始日"
+      must_change_price: 必須更改價格
+      created_at: 創建了
+      is_refund: 有退款嗎?
+      owner_id: 業主
+      owner_type: 業主類型
       parent_sku: Parent SKU
       child_sku: Child SKU
       ignore_qty: Ignore Qty
