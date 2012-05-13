@@ -132,9 +132,9 @@ cn:
       default_buyback: 默認的下回購
       dollar_per_lp: 美元每忠誠點
       drop: 下降
-      email: email
-      end_amount: end amount
-      end_date: end date
+      email: 電子郵件
+      end_amount: 最後量
+      end_date: 結束日期
       expires_on: expires on
       first_name: first name
       height: height
