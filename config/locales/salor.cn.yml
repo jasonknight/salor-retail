@@ -11,17 +11,17 @@ cn:
         one: 行動
         other: 行動
       broken_item:
-        one: Broken item
-        other: Broken items
+        one: 破碎項目
+        other: 破碎項目
       category:
-        one: Category
-        other: Categories
+        one: 類別
+        other: 類別
       customer:
-        one: Customer
-        other: Customers
+        one: 顧客
+        other: 顧客
       discount:
-        one: Discount
-        other: Discounts
+        one: 折扣
+        other: 折扣
       drawer:
         one: Drawer
         other: Drawers
@@ -29,11 +29,11 @@ cn:
         one: Drawer Transaction
         other: Drawer Transactions
       employee:
-        one: Employee
-        other: Employees
+        one: 僱員
+        other: 僱員
       item:
-        one: Item
-        other: Items
+        one: 項目
+        other: 項目
       item_type:
         one: Item Type
         other: Item Types
