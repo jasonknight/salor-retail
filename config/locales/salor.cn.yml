@@ -120,14 +120,14 @@ cn:
       city: 城市
       company_name: 公司名稱
       contact_address: 聯繫地址
-      contact_email: contact email
-      contact_fax: contact fax
-      contact_person: contact person
-      contact_phone: contact phone
-      country: country
-      coupon_applies: coupon applies
-      coupon_total: coupon total
-      coupon_type: coupon type
+      contact_email: 聯絡電郵
+      contact_fax: 聯絡傳真
+      contact_person: 聯絡人
+      contact_phone: 聯絡電話
+      country: 國家
+      coupon_applies: 優惠券適用
+      coupon_total: 優惠券總計
+      coupon_type: 優惠券類型
       decimal_points: decimal points
       default_buyback: default buyback
       dollar_per_lp: dollar per loyalty point
