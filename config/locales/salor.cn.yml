@@ -97,8 +97,8 @@ cn:
       is_refund: 有退款嗎?
       owner_id: 業主
       owner_type: 業主類型
-      parent_sku: Parent SKU
-      child_sku: Child SKU
+      parent_sku: 父母的 SKU
+      child_sku: 孩子的 SKU
       ignore_qty: Ignore Qty
       bank_machine_path: ATM
       artema_hybrid: Artema Hybrid
