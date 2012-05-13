@@ -23,11 +23,11 @@ cn:
         one: 折扣
         other: 折扣
       drawer:
-        one: Drawer
-        other: Drawers
+        one: 託收人
+        other: 託收人
       drawer_transaction:
-        one: Drawer Transaction
-        other: Drawer Transactions
+        one: Drawer 託收交易
+        other: Drawer 託收交易
       employee:
         one: 僱員
         other: 僱員
@@ -35,14 +35,14 @@ cn:
         one: 項目
         other: 項目
       item_type:
-        one: Item Type
-        other: Item Types
+        one: 項目類型
+        other: 項目類型
       location:
-        one: Location
-        other: Locations
+        one: 位置
+        other: 位置
       order:
-        one: Order
-        other: Orders
+        one: 秩序
+        other: 秩序
       order_item:
         one: Order Item
         other: Order Items
