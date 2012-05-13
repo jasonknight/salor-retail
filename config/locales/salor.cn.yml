@@ -130,8 +130,8 @@ cn:
       coupon_type: 優惠券類型
       decimal_points: 小數點
       default_buyback: 默認的下回購
-      dollar_per_lp: dollar per loyalty point
-      drop: drop
+      dollar_per_lp: 美元每忠誠點
+      drop: 下降
       email: email
       end_amount: end amount
       end_date: end date
