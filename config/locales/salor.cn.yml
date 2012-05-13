@@ -11,8 +11,8 @@ cn:
         one: 行動
         other: 行動
       broken_item:
-        one: 破碎項目
-        other: 破碎項目
+        one: 破碎的項目
+        other: 破碎的項目
       category:
         one: 類別
         other: 類別
@@ -23,11 +23,11 @@ cn:
         one: 折扣
         other: 折扣
       drawer:
-        one: 託收人
-        other: 託收人
+        one: 抽屜
+        other: 抽屜
       drawer_transaction:
-        one: Drawer 託收交易
-        other: Drawer 託收交易
+        one: 抽屜交易
+        other: 抽屜交易
       employee:
         one: 僱員
         other: 僱員
@@ -76,9 +76,9 @@ cn:
       hide_buttons: 隱藏按鈕
       calculate_tax: 計稅
       track_expiry: 跟踪屆滿
-      uses_drawer_id: 使用的託收人
+      uses_drawer_id: 使用的抽屜
       employee:
-        uses_drawer_id: 使用的託收人
+        uses_drawer_id: 使用的抽屜
       reorder_type: 重新訂購類型
       big_buttons: Big Buttons
       hide_discounts: Hide Discounts
