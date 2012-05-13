@@ -60,21 +60,21 @@ cn:
         one: 貨物位置
         other: 貨物位置
       tax_profile:
-        one: Tax Profile
-        other: Tax Profiles
+        one: 稅務個人資料
+        other: 稅務個人資料
       vendor:
-        one: Store
-        other: Stores
+        one: 商店
+        other: 商店
       transaction_tag:
-        one: Tag
-        other: Tags
+        one: 標籤
+        other: 標籤
       payment_method:
-        one: Payment Method
-        other: Payment Methods
+        one: 付款方式
+        other: 付款方式
 
     attributes:
-      hide_buttons: Hide Buttons
-      calculate_tax: Calculate Tax
+      hide_buttons: 隱藏按鈕
+      calculate_tax: 計稅
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       employee:
