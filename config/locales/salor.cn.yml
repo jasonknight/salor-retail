@@ -80,8 +80,8 @@ cn:
       employee:
         uses_drawer_id: 使用的抽屜
       reorder_type: 重新訂購類型
-      big_buttons: Big Buttons
-      hide_discounts: Hide Discounts
+      big_buttons: 大按鈕
+      hide_discounts: 隱藏折扣
       thermal_printer: Thermal Printer
       paylife: Paylife
       url: URL
