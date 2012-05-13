@@ -99,16 +99,16 @@ cn:
       owner_type: 業主類型
       parent_sku: 父母的 SKU
       child_sku: 孩子的 SKU
-      ignore_qty: Ignore Qty
-      bank_machine_path: ATM
+      ignore_qty: 忽略數量
+      bank_machine_path: 自動櫃員機
       artema_hybrid: Artema Hybrid
-      type: type
-      active: active
-      address: address
-      amount: amount
-      amount_remaining: amount remaining
-      amount_type: amount type
-      applies_to: applies to
+      type: 類型
+      active: 活躍
+      address: 地址
+      amount: 數量
+      amount_remaining: 剩餘量
+      amount_type: 數量類型
+      applies_to: 適用於
       base_price: base price
       behavior: behavior
       body: body
