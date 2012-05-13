@@ -82,15 +82,15 @@ cn:
       reorder_type: 重新訂購類型
       big_buttons: 大按鈕
       hide_discounts: 隱藏折扣
-      thermal_printer: Thermal Printer
+      thermal_printer: 熱敏打印機
       paylife: Paylife
       url: URL
-      letter: Letter
-      default: Default
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standard text customer screen
-      pole_display: Pole display
+      letter: 信
+      default: 默認
+      csv_imports: CSV 進口
+      csv_imports_url: CSV 進口的 URL
+      customer_screen_blurb: 標準文本顧客屏幕
+      pole_display: 桿顯示
       auto_drop: "Automatically Begin Day"
       must_change_price: Must Change Price
       created_at: Created
