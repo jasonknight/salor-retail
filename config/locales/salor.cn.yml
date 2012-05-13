@@ -141,11 +141,11 @@ cn:
       is_shipment_item: 裝運產品
       item_sku: 產品的sku
       itemsviewlist: "為產品的列表視圖"
-      last_name: last name
-      lc_points: loyalty card points
-      length: length
-      location_id: location id
-      lp_per_dollar: loyalty points per dollar
+      last_name: 姓
+      lc_points: 忠誠卡點
+      length: 長度
+      location_id: 位置 ID
+      lp_per_dollar: 每美元的忠誠點
       min_quantity: min quantity
       name: name
       not_paid: not paid
