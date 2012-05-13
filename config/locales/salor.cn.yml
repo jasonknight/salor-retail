@@ -79,7 +79,7 @@ cn:
       uses_drawer_id: 使用的託收人
       employee:
         uses_drawer_id: 使用的託收人
-      reorder_type: Reorder Type
+      reorder_type: 重新訂購類型
       big_buttons: Big Buttons
       hide_discounts: Hide Discounts
       thermal_printer: Thermal Printer
