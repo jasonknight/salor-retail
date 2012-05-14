@@ -220,19 +220,19 @@ cn:
       order_id: 訂購
       scale: 規模
       no_print: 不要在輸入打印
-      salor_printer: Print Client Side
+      salor_printer: 打印客戶端
       
   api:
-    user_does_not_exist: user does not exist
+    user_does_not_exist: 用戶不存在
         
    
   headings:
-    database_distiller: Database distiller
-    order_validation: "Order Validation"
+    database_distiller: 數據庫蒸餾器
+    order_validation: "訂購驗證"
     paylife: "Paylife(Artema Hybrid)"
-    bank_machine_types: supported bank machines
-    almost_out: almost out
-    best_sellers: bestsellers
+    bank_machine_types: 支持的銀行機
+    almost_out: 幾乎沒有
+    best_sellers: 暢銷
     best_selling_category: best selling category
     best_selling_location: best selling location
     crd: Time,Amount,Type,Notes
