@@ -194,21 +194,21 @@ cn:
       street1: 地址1
       street2: 地址2
       subtotal: 小計
-      tag: tag
-      tax: tax
-      tax_profile_id: tax
-      telephone: telephone
-      the_receiver: the receiver
-      the_shipper: the shipper
-      title: title
-      total: total
-      username: username
-      value: value
-      vendor_id: Vendor
-      vendor_printers: printers
-      weigh_compulsory: compulsory weighing
-      weight: weight
-      width: width
+      tag: 標籤
+      tax: 稅
+      tax_profile_id: 稅
+      telephone: 電話
+      the_receiver: 收到人
+      the_shipper: 發貨人
+      title: 稱號
+      total: 共計
+      username: 用戶名
+      value: 價值
+      vendor_id: 供應商
+      vendor_printers: 打印機
+      weigh_compulsory: 強制稱重
+      weight: 重量
+      width: 寬度
       open_cash_drawer: open cash drawer
       cash_drawer: cash drawer
       stylesheets: stylesheets
