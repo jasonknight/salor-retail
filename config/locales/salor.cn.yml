@@ -172,28 +172,28 @@ cn:
       sales_metric: 銷售公制
       shipment:
         from: 從
-        paid: paid
-        price: price
+        paid: 支付
+        price: price 價格
         to: 至
       shipment_item:
-        name: name
-        quantity: quantity
+        name: 名稱
+        quantity: quantity 數量
         sku: SKU
-        stock_location_id: Stock location
+        stock_location_id: 庫存位置
       cash_register:
-        sticker_printer: Sticker printer
+        sticker_printer: 標籤打印機
       item:
-        purchase_price: Purchase Price
+        purchase_price: 購買價格
         quantity: Quantity
       sku: SKU
-      start_amount: start amount
-      start_date: start date
-      state: state
-      status: status
-      stock_location_ids: Stock location
-      street1: Address 1
-      street2: Address 2
-      subtotal: subtotal
+      start_amount: 開始數量
+      start_date: 開始日期
+      state: 州
+      status: 狀態
+      stock_location_ids: 庫存位置
+      street1: 地址1
+      street2: 地址2
+      subtotal: 小計
       tag: tag
       tax: tax
       tax_profile_id: tax
