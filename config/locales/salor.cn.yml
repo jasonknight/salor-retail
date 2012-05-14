@@ -209,17 +209,17 @@ cn:
       weigh_compulsory: 強制稱重
       weight: 重量
       width: 寬度
-      open_cash_drawer: open cash drawer
-      cash_drawer: cash drawer
-      stylesheets: stylesheets
-      eod_show: show at end of day
-      shipper_sku: Shipper SKU
-      code: code 
-      when: when
-      afield: field
-      order_id: order
-      scale: scale
-      no_print: Don't Print on Enter
+      open_cash_drawer: 打開錢抽屜
+      cash_drawer: 錢抽屜
+      stylesheets: 樣式表
+      eod_show: 顯示在天結束
+      shipper_sku: 發貨人 SKU
+      code: 碼 
+      when: 何時
+      afield: 領域
+      order_id: 訂購
+      scale: 規模
+      no_print: 不要在輸入打印
       salor_printer: Print Client Side
       
   api:
