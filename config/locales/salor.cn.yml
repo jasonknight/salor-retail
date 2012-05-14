@@ -159,22 +159,22 @@ cn:
       payout: 派息
       points: 點
       postalcode: 郵政編碼
-      price: price
-      price_by_qty: price by quantity
-      purchase_price: purchase price
-      quantity: quantity
-      real_quantity: real quantity
-      quantity_sold: quantity sold
-      rebate: rebate
-      rebate_type: rebate type
-      receipt_blurb: Receipt header
-      receipt_blurb_footer: Receipt footer
-      sales_metric: sales metric
+      price: 價格
+      price_by_qty: 價格由數量
+      purchase_price: 購買價格
+      quantity: quantity 數量
+      real_quantity: 實際數量
+      quantity_sold: 銷售數量
+      rebate: 回扣
+      rebate_type: 回扣類型
+      receipt_blurb: 收據頭
+      receipt_blurb_footer: 收據腳
+      sales_metric: 銷售公制
       shipment:
-        from: from
+        from: 從
         paid: paid
         price: price
-        to: to
+        to: 至
       shipment_item:
         name: name
         quantity: quantity
