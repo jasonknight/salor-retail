@@ -146,19 +146,19 @@ cn:
       length: 長度
       location_id: 位置 ID
       lp_per_dollar: 每美元的忠誠點
-      min_quantity: min quantity
-      name: name
-      not_paid: not paid
-      notes: notes
-      packaging_unit: packaging unit
-      pagination: pagination
-      paid: paid
-      part_quantity: part quantity
-      parts: parts
-      password: password
-      payout: payout
-      points: points
-      postalcode: postal code
+      min_quantity: 最低數量
+      name: 名稱
+      not_paid: 沒支付
+      notes: 筆記
+      packaging_unit: 包裝單位
+      pagination: 分頁
+      paid: 支付
+      part_quantity: 部分數量
+      parts: 部分
+      password: 密碼
+      payout: 派息
+      points: 點
+      postalcode: 郵政編碼
       price: price
       price_by_qty: price by quantity
       purchase_price: purchase price
