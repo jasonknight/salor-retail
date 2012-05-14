@@ -232,12 +232,12 @@ cn:
     paylife: "Paylife(Artema Hybrid)"
     bank_machine_types: 支持的銀行機
     almost_out: 幾乎沒有
-    best_sellers: 暢銷
-    best_selling_category: best selling category
-    best_selling_location: best selling location
-    crd: Time,Amount,Type,Notes
-    discount_for: rebate for %{store}
-    discounts_for: rebates for %{store}
+    best_sellers: 暢銷的
+    best_selling_category: 最好的銷售類別
+    best_selling_location: 最好的銷售位置
+    crd: 時間,數量,類型,註釋
+    discount_for: %{store} 的回贈
+    discounts_for: %{store} 的回贈
     edit_shipper: edit shipper %{name}
     employees: employees
     expiring_soon: expiring soon
