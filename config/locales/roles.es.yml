@@ -12,126 +12,126 @@ es:
   :cashier: Cajera
   :stockboy: Almacenero
   :edit_others_orders: Editar otros pedidos
-  :index_orders: Index pedidos
+  :index_orders: Indexar pedidos
   :edit_orders: Editar pedidos
-  :destroy_orders: Destroy pedidos
-  :create_orders: Create pedidos
-  :update_orders: Update pedidos
-  :show_orders: Show pedidos
+  :destroy_orders: Destruir pedidos
+  :create_orders: Crear pedidos
+  :update_orders: Actualizar pedidos
+  :show_orders: Mostrar pedidos
   :any_orders: Cualquier pedidos
-  :index_items: Index artículos
+  :index_items: Indexar artículos
   :edit_items: Editar artículos
-  :destroy_items: Destroy artículos
-  :create_items: Create artículos
-  :update_items: Update artículos
-  :show_items: Show artículos
+  :destroy_items: Destruir artículos
+  :create_items: Crear artículos
+  :update_items: Actualizar artículos
+  :show_items: Mostrar artículos
   :any_items: Cualquier artículo
-  :index_categories: Index categorías
+  :index_categories: Indexar categorías
   :edit_categories: Editar categorías
-  :destroy_categories: Destroy categorías
-  :create_categories: Create categorías
+  :destroy_categories: Destruir categorías
+  :create_categories: Crear categorías
   :update_categories: Update categorías
-  :show_categories: Show categorías
+  :show_categories: Mostrar categorías
   :any_categories: Cualquier categoría
-  :index_locations: Index ubicaciones
+  :index_locations: Indexar ubicaciones
   :edit_locations: Editar ubicaciones
-  :destroy_locations: Destroy ubicaciones
-  :create_locations: Create ubicaciones
+  :destroy_locations: Destruir ubicaciones
+  :create_locations: Crear ubicaciones
   :update_locations: Update ubicaciones
-  :show_locations: Show ubicaciones
+  :show_locations: Mostrar ubicaciones
   :any_locations: Cualquier ubicación
-  :index_shippers: Index Shippers
-  :edit_shippers: Editar Shippers
-  :destroy_shippers: Destroy Shippers
-  :create_shippers: Create Shippers
-  :update_shippers: Update Shippers
-  :show_shippers: Show Shippers
-  :any_shippers: Cualquier Shippers
-  :index_shipments: Index Shipments
-  :edit_shipments: Editar Shipments
-  :destroy_shipments: Destroy Shipments
-  :create_shipments: Create Shipments
-  :update_shipments: Update Shipments
-  :show_shipments: Show Shipments
-  :any_shipments: Cualquier Shipments
-  :index_vendors: Index Vendors
-  :edit_vendors: Editar Vendors
-  :destroy_vendors: Destroy Vendors
-  :create_vendors: Create Vendors
-  :update_vendors: Update Vendors
-  :show_vendors: Show Vendors
-  :any_vendors: Cualquier Vendors
-  :index_employees: Index Employees
-  :edit_employees: Editar Employees
-  :destroy_employees: Destroy Employees
-  :create_employees: Create Employees
-  :update_employees: Update Employees
-  :show_employees: Show Employees
-  :any_employees: Cualquier Employees
-  :index_discounts: Index Discounts
-  :edit_discounts: Editar Discounts
-  :destroy_discounts: Destroy Discounts
-  :create_discounts: Create Discounts
-  :update_discounts: Update Discounts
-  :show_discounts: Show Discounts
-  :any_discounts: Cualquier Discounts
-  :index_tax_profiles: Index Tax Profiles
-  :edit_tax_profiles: Editar Tax Profiles
-  :destroy_tax_profiles: Destroy Tax Profiles
-  :create_tax_profiles: Create Tax Profiles
-  :update_tax_profiles: Update Tax Profiles
-  :show_tax_profiles: Show Tax Profiles
-  :any_tax_profiles: Cualquier Tax Profiles
-  :index_customers: Index Customers
-  :edit_customers: Editar Customers
-  :destroy_customers: Destroy Customers
-  :create_customers: Create Customers
-  :update_customers: Update Customers
-  :show_customers: Show Customers
-  :any_customers: Cualquier Customers
-  :index_transaction_tags: Index Transaction Tags
-  :edit_transaction_tags: Editar Transaction Tags
-  :destroy_transaction_tags: Destroy Transaction Tags
-  :create_transaction_tags: Create Transaction Tags
-  :update_transaction_tags: Update Transaction Tags
-  :show_transaction_tags: Show Transaction Tags
-  :any_transaction_tags: Cualquier Transaction Tags
-  :index_buttons: Index Buttons
-  :edit_buttons: Editar Buttons
-  :destroy_buttons: Destroy Buttons
-  :create_buttons: Create Buttons
-  :update_buttons: Update Buttons
-  :show_buttons: Show Buttons
-  :any_buttons: Cualquier Buttons
-  :index_stock_locations: Index Stock Locations
-  :edit_stock_locations: Editar Stock Locations
-  :destroy_stock_locations: Destroy Stock Locations
-  :create_stock_locations: Create Stock Locations
-  :update_stock_locations: Update Stock Locations
-  :show_stock_locations: Show Stock Locations
-  :any_stock_locations: Cualquier Stock Locations
+  :index_shippers: Indexar despachantes
+  :edit_shippers: Editar despachantes
+  :destroy_shippers: Destruir despachantes
+  :create_shippers: Crear despachantes
+  :update_shippers: Update despachantes
+  :show_shippers: Mostrar despachantes
+  :any_shippers: Cualquier despachante
+  :index_shipments: Indexar envíos
+  :edit_shipments: Editar envíos
+  :destroy_shipments: Destruir envíos
+  :create_shipments: Crear envíos
+  :update_shipments: Update envíos
+  :show_shipments: Mostrar envíos
+  :any_shipments: Cualquier envío
+  :index_vendors: Indexar tiendas
+  :edit_vendors: Editar tiendas
+  :destroy_vendors: Destruir tiendas
+  :create_vendors: Crear tiendas
+  :update_vendors: Update tiendas
+  :show_vendors: Mostrar tiendas
+  :any_vendors: Cualquier tienda
+  :index_employees: Indexar empleados
+  :edit_employees: Editar empleados
+  :destroy_employees: Destruir empleados
+  :create_employees: Crear empleados
+  :update_employees: Update empleados
+  :show_employees: Mostrar empleados
+  :any_employees: Cualquier empleado
+  :index_discounts: Indexar descuentos
+  :edit_discounts: Editar descuentos
+  :destroy_discounts: Destruir descuentos
+  :create_discounts: Crear descuentos
+  :update_discounts: Update descuentos
+  :show_discounts: Mostrar descuentos
+  :any_discounts: Cualquier descuento
+  :index_tax_profiles: Indexar tipos de IVA
+  :edit_tax_profiles: Editar tipos de IVA
+  :destroy_tax_profiles: Destruir tipos de IVA
+  :create_tax_profiles: Crear tipos de IVA
+  :update_tax_profiles: Update tipos de IVA
+  :show_tax_profiles: Mostrar tipos de IVA
+  :any_tax_profiles: Cualquier tipo de IVA
+  :index_customers: Indexar clientes
+  :edit_customers: Editar clientes
+  :destroy_customers: Destruir clientes
+  :create_customers: Crear clientes
+  :update_customers: Update clientes
+  :show_customers: Mostrar clientes
+  :any_customers: Cualquier cliente
+  :index_transaction_tags: Indexar etiquetas de transacción
+  :edit_transaction_tags: Editar etiquetas de transacción
+  :destroy_transaction_tags: Destruir etiquetas de transacción
+  :create_transaction_tags: Crear etiquetas de transacción
+  :update_transaction_tags: Update etiquetas de transacción
+  :show_transaction_tags: Mostrar etiquetas de transacción
+  :any_transaction_tags: Cualquier etiqueta de transacción
+  :index_buttons: Indexar botones
+  :edit_buttons: Editar botones
+  :destroy_buttons: Destruir botones
+  :create_buttons: Crear botones
+  :update_buttons: Update botones
+  :show_buttons: Mostrar botones
+  :any_buttons: Cualquier botón
+  :index_stock_locations: Indexar depósitos de stock
+  :edit_stock_locations: Editar depósitos de stock
+  :destroy_stock_locations: Destruir depósitos de stock
+  :create_stock_locations: Crear depósitos de stock
+  :update_stock_locations: Update depósitos de stock
+  :show_stock_locations: Mostrar depósitos de stock
+  :any_stock_locations: Cualquier depósito de stock
   :clear_orders: Clear Orders
   :see_header: See Header
   :destroy_order_items: Destroy Order Items
   :change_prices: Change Prices
-  :index_histories: Index Histories
-  :edit_histories: Editar Histories
-  :destroy_histories: Destroy Histories
-  :create_histories: Create Histories
-  :update_histories: Update Histories
-  :show_histories: Show Histories
-  :any_histories: Cualquier Histories
-  :index_actions: Index Actions
-  :edit_actions: Editar Actions
-  :destroy_actions: Destroy Actions
-  :create_actions: Create Actions
-  :update_actions: Update Actions
-  :show_actions: Show Actions
-  :any_actions: Cualquier Actions
-  :index_shipment_items: Index Shipment Items
-  :edit_shipment_items: Editar Shipment Items
-  :destroy_shipment_items: Destroy Shipment Items
-  :create_shipment_items: Create Shipment Items
+  :index_histories: Indexar historias
+  :edit_histories: Editar historias
+  :destroy_histories: Destruir historias
+  :create_histories: Crear historias
+  :update_histories: Update historias
+  :show_histories: Mostrar historias
+  :any_histories: Cualquier historia
+  :index_actions: Indexar acciones
+  :edit_actions: Editar acciones
+  :destroy_actions: Destruir acciones
+  :create_actions: Crear acciones
+  :update_actions: Update acciones
+  :show_actions: Mostrar acciones
+  :any_actions: Cualquier acciones
+  :index_shipment_items: Indexar artículos de un envío
+  :edit_shipment_items: Editar artículos de un envío
+  :destroy_shipment_items: Destruir artículos de un envío
+  :create_shipment_items: Crear artículos de un envío
   :update_shipment_items: Update Shipment Items
-  :show_shipment_items: Show Shipment Items
-  :any_shipment_items: Cualquier Shipment Items
+  :show_shipment_items: Mostrar artículos de un envío
+  :any_shipment_items: Cualquier artículos de un envío
