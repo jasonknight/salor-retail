@@ -41,18 +41,18 @@ es:
         one: Ubicación
         other: Ubicaciones
       order:
-        one: Order
-        other: Orders
+        one: Pedido
+        other: Pedidos
       order_item:
-        one: Order Item
-        other: Order Artículo
+        one: Artículo de pedido
+        other: Otro artículo de pedido
       shipment:
-        one: Shipment
-        other: Shipments
+        one: Envío
+        other: Envíos
       shipment_type:
-        one: Tipo de Shipment
-        other: Tipos de Shipment
-        default_name: Auto Nachbestellung
+        one: Tipo de Envío
+        other: Tipos de Envío
+        default_name: Renovación atumo
       shipper:
         one: Shipper
         other: Shippers
@@ -79,7 +79,7 @@ es:
       uses_drawer_id: Uses caja of
       employee:
         uses_drawer_id: Uses caja of
-      reorder_type: Reorder Tipo de 
+      reorder_type: Tipo de nuevo pedido
       big_buttons: Big Botones
       hide_discounts: Hide descuentos
       thermal_printer: Thermal Printer
@@ -138,7 +138,7 @@ es:
       expires_on: expires on
       first_name: first name
       height: height
-      is_shipment_item: is shipment item
+      is_shipment_item: is Envío item
       item_sku: item sku
       itemsviewlist: "List View for Artículos"
       last_name: last name
@@ -217,7 +217,7 @@ es:
       code: code 
       when: when
       afield: field
-      order_id: order
+      order_id: Pedido
       scale: scale
       no_print: Don't Print on Enter
       salor_printer: Print Client Side
@@ -228,7 +228,7 @@ es:
    
   headings:
     database_distiller: XXX Database distiller
-    order_validation: "Order Validation"
+    order_validation: "Pedido Validation"
     paylife: "Paylife(Artema Hybrid)"
     bank_machine_types: supported bank machines
     almost_out: almost out
@@ -245,11 +245,11 @@ es:
     item_selection: item selection
     new_discount_for: new discount for %{store}
     notes: notes
-    shipment_items: shipment Artículos
+    shipment_items: Artículos de un envío
     shipment_items_header: Name,SKU,price,Categoría,Ubicación
-    shipment_types: shipment Tipos de 
+    shipment_types: Tipos de envío
     shipment_types_header: state,added by, , 
-    shipments: shipments
+    shipments: Envíos
     shipments_header: name,from,to,price,paid?,added by,status, , , 
     update_location: update Ubicación 
     update_real_quantity: update real quantity
@@ -274,7 +274,7 @@ es:
     on_save: on save
     on_import: on import
     on_export: on export
-    add_to_order: on add to order
+    add_to_order: on add to pedido
     
   behavior_list:
     add: add
@@ -300,7 +300,7 @@ es:
     actions: Acciones
     new_broken_item: new broken item
     activate_gift_card: activate gift card
-    add_to_current_order: add to current order
+    add_to_current_order: add to current pedido
     additional: additional
     back: back
     broken_items: broken Artículos
@@ -312,7 +312,7 @@ es:
     categories: categories
     configuration: Config.
     contact: contact
-    current_order: "current order: #%{id}"
+    current_order: "current pedido: #%{id}"
     customer: Cliente
     customers: Clientes
     delete: delete
@@ -328,8 +328,8 @@ es:
     edit_employee: edit empleado
     edit_item: edit item
     edit_location: edit Ubicación 
-    edit_shipment: edit shipment
-    edit_shipment_type: edit shipment tipo de 
+    edit_shipment: edit Envío
+    edit_shipment_type: edit tipo de envío
     edit_shipper: edit shipper %{name}
     edit_tax_profile: edit tax profile
     edit_vendor: edit vendor
@@ -341,8 +341,8 @@ es:
     items: Artículos
     locations: Ubicaciones 
     loyalty_cards: loyalty cards
-    move_all_shipment_items: move all shipment artículos
-    move_shipment_item: move shipment item
+    move_all_shipment_items: move all artículos del envío
+    move_shipment_item: move artículo de envío
     new_action: new action
     new_cash_register: new cash register
     new_category: new categoría
@@ -350,29 +350,29 @@ es:
     new_discount: new discount
     new_employee: new empleado
     new_item: new item
-    new_location: new location
+    new_location: new Ubicación
     new_order: New
-    new_shipment: new shipment
-    new_shipment_type: new shipment tipo de 
+    new_shipment: new Envío
+    new_shipment_type: new tipo de Envío
     new_shipper: new shipper
-    new_stock_location: new stock location
+    new_stock_location: new stock Ubicación 
     new_tax_profile: new tax profile
     new_vendor: new vendor
     new_button: new button
-    order: order
+    order: Pedido
     points: points
     pos: POS
-    orders: orders
+    orders: Pedidos
     overview: overview
     pretext: pretext
     reports: reports
     search: search
-    shipment_types: shipment Tipos de 
-    shipments: shipments
+    shipment_types: Tipos de Envío
+    shipments: Envíos
     shippers: shippers
     show: show
     split: split
-    stock_locations: stock locations
+    stock_locations: stock Ubicaciones
     support: support
     tax_profiles: tax profiles
     update_gift_card: update gift card
@@ -380,12 +380,12 @@ es:
     void: void
     end_of_day_drop: end of day payout
     transaction_tags: transacción tags
-    update_location: update location
+    update_location: update Ubicación
     update_real_quantity: update real quantity
     print: print
     upload: upload
     download: download
-    reorder: reorder
+    reorder: Pasar nuevo pedido
     report: report
     report_range: report detail
     report_day: report day
@@ -396,7 +396,7 @@ es:
     
     
   notifications:
-    shipments_item_could_not_be_saved: shipments item could not be saved
+    shipments_item_could_not_be_saved: artículo de envío could not be saved
     shipments_move_all_items: all artículos were successfully moved
     shipments_move_item: item was successfully moved
 
@@ -457,9 +457,9 @@ es:
       transaction_journal: transacción journal
       time: time
       OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
+      OrderRefund: Pedido Refund
       None: Not specified
-      count_orders: Count of orders
+      count_orders: Count of Pedidos
       sales: Sales
       payments: Payments
       cash_drawer: Caja
@@ -489,10 +489,10 @@ es:
       transaction_total: transacción total
       transaction_journal: transacción journal
       time: time
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
+      OrderItemRefund: artículo Refund
+      OrderRefund: Pedido Refund
       None: Not specified
-      count_orders: Count of orders
+      count_orders: Count of Pedidos
       sales: Sales
       payments: Payments
       cash_drawer: Caja
@@ -532,18 +532,18 @@ es:
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
     eod_report:
-      orders_total: Orders total
+      orders_total: Pedidos total
       refunded_total: Refunded total
       buyback_item_total: Buyback item total
-      buyback_order_total: Buyback order total
+      buyback_order_total: Buyback Pedido total
       drop_total: TOTAL
       payout_total: TOTAL
       payment_method_total: TOTAL
       transaction_total: TOTAL
       cash_refunds_total: TOTAL
       revenue_total: TOTAL
-      OrderItemRefund: Order Item Refund
-      OrderRefund: Order Refund
+      OrderItemRefund: Pedido Item Refund
+      OrderRefund: Pedido Refund
       sales: Sales
       payments: Payments
       refund: Refund
@@ -585,7 +585,7 @@ es:
 
   receipts:
     invoice: Rechnung
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
+    invoice_numer_X_at_time: Pedido Nr. %{number} at %{datetime}
     report_at_time: Report %{datetime}
     x_sum: |+
         %{type} SUM:   EUR %.2f
@@ -628,12 +628,12 @@ es:
     sign_up: sign up
     errors:
       auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
-      order_totals_validation_failed: "Order total validation failed, refreshing the order may repair the issue. Press OK to refresh."
+      order_totals_validation_failed: "Pedido total validation failed, refreshing the order may repair the issue. Press OK to refresh."
       parent_sku_must_exist: "Parent Item Must Exist!"
       child_sku_must_exist: "Child Item Must Exist!"
-      cannot_edit_completed_order: "That order is completed and cannot be modified."
+      cannot_edit_completed_order: "That Pedido is completed and cannot be modified."
       limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
-      sanity_check: Requested action is insane, verify order total and notify customer of correction.
+      sanity_check: Requested action is insane, verify Pedido total and notify customer of correction.
       cannot_reorder: No Artículos  must be reordered.
       action_code_error: "Code could not be executed because %{error}"
       action_error: "Action could not complute because %{error}"
@@ -647,9 +647,9 @@ es:
       csv_item_failed: "%{id} %{i} failed."
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
       gift_card_amount_remaining: The amount specified was greater than the amount remaining on this gift card, the new amount is %{amt}
-      gift_card_amount_to_high: The gift card amount exceeds the order subtotal, the amount has been adjusted, only activate gift cards at the end of a transaction!
+      gift_card_amount_to_high: The gift card amount exceeds the Pedido subtotal, the amount has been adjusted, only activate gift cards at the end of a transaction!
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.
-      gift_card_not_found: Could not find that gift card attached to this order...
+      gift_card_not_found: Could not find that gift card attached to this Pedido...
       gs1_item_not_found: "Item marked as gs1, but %{sku} is not in the correct format."
       insufficient_quantity_on_item: "Warning, Item %{sku} quantity is insufficient, time to update your stock levels!"
       inventory_update_error: inventory update error
@@ -664,11 +664,11 @@ es:
       no_class: "There is no class for %{model} at line %{i}"
       no_role: You do not have the necessary role to access this resource.
       no_such_item: There is no item with this SKU
-      not_on_buy_orders: You cannot add this item to a Buy Order
-      order_must_have_user: You cannot save an order without a User or Employee assigned to it.
-      order_not_found: Order not found
-      order_register_required: You must specify a register for this order
-      order_vendor_required: You must supply a vendor for this order
+      not_on_buy_orders: You cannot add this item to a Buy Pedido
+      order_must_have_user: You cannot save an Pedido without a User or Employee assigned to it.
+      order_not_found: Pedido not found
+      order_register_required: You must specify a register for this Pedido
+      order_vendor_required: You must supply a vendor for this Pedido
       payment_required: "Error 402: Full Payment is Required"
       payment_required_explanation: We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
       shipment_item_already_in_stock: Item %{sku} is already in stock
@@ -677,8 +677,8 @@ es:
       sku_must_be_unique: "%{sku} must be unique"
       uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
       value_not_set: NotSet
-      order_failed: Order could not be finished.
-      order_print_failure: Failure during printing of order.
+      order_failed: Pedido could not be finished.
+      order_print_failure: Failure during printing of Pedido .
     
   vendors:
     clear_cache_button: clear cache
@@ -727,15 +727,15 @@ es:
     language: language
     listing: listing
     listing_items: listing Artículos
-    locations: locations
+    locations: Ubicaciones 
     loyalty_card: loyalty card
     name: name
     new_item_heading: "New item for %{store}"
     new_sale_for: "New sale for %{store}"
-    new_stock_location: New stock location
-    order_heading: "Order #%{id} for %{store}"
-    order_number: "Order #%{id}"
-    order_summary: Orders of the last 7 days
+    new_stock_location: New stock Ubicación
+    order_heading: "Pedido #%{id} for %{store}"
+    order_number: "Pedido #%{id}"
+    order_summary: Pedidos of the last 7 days
     owner_language: Owner language
     password: password
     password_confirm: confirm password
@@ -745,7 +745,7 @@ es:
     rebate: rebate
     remember_me: remember me
     report: report
-    stock_locations: stock_locations
+    stock_locations: stock_ubicaciones 
     subtotal: subtotal
     tax_profile: tax profile
     three_easy_ways: three easy ways
@@ -765,11 +765,11 @@ es:
       fixed_amount_off: fixed amount off
       item_editor: item editor
       items: Artículo
-      location_editor: location editor
+      location_editor: Ubicación editor
       manager: Manager
       no_change: no change
       notes: notes
-      order_editor: order editor
+      order_editor: Pedido editor
       parts: parts
       percent_off: "% off"
       roles: roles
@@ -791,7 +791,7 @@ es:
       csv_edit_starting: csv edit starting
       model_create: "%{model} was created successfully"
       model_edit: "%{model} was edited successfully"
-      new_order: new order created
+      new_order: new Pedido created
       order_refund_dt: "#%{id}"
       please_wait: "Please wait..."
       transaction_succeeded: "Paid!"
@@ -823,7 +823,7 @@ es:
       edit: edit
       from: from
       loading: loading
-      order: order
+      order: pedido
       processing: processing...
       saving: saving...
       searching: searching...
