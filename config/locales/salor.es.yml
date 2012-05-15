@@ -342,7 +342,7 @@ es:
     loyalty_cards: Tarjetas de fidelización
     move_all_shipment_items: Desplazar todos los artículos del envío
     move_shipment_item: Desplazar artículo de envío
-    new_action: Nueva action
+    new_action: Nueva acción
     new_cash_register: Nueva caja
     new_category: Nueva categoría
     new_customer: Nuevo cliente
@@ -360,85 +360,85 @@ es:
     new_button: Nuevo botón
     order: Pedido
     points: Puntos
-    pos: POS
+    pos: PDV
     orders: Pedidos
-    overview: overview
-    pretext: pretext
-    reports: reports
-    search: search
-    shipment_types: Tipos de Envío
+    overview: Vista general
+    pretext: Pre-texto
+    reports: Informes
+    search: Buscar
+    shipment_types: Tipos de envío
     shipments: Envíos
     shippers: Transportadores
-    show: show
-    split: split
+    show: Mostrar
+    split: Separar
     stock_locations: Ubicaciones del stock
-    support: support
+    support: Soporte
     tax_profiles: Tipos de IVA
-    update_gift_card: Actualizar gift card
+    update_gift_card: Actualizar la tarjeta de regalo
     vendors: Tiendas
-    void: void
-    end_of_day_drop: end of día Reembolso
+    void: Anular
+    end_of_day_drop: Reembolso de fin del día
     transaction_tags: Etiquetas de transacción
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
-    print: print
-    upload: upload
-    download: download
+    print: Imprimir
+    upload: Subir a la red
+    download: Bajar de la red
     reorder: Pasar nuevo pedido
-    report: report
-    report_range: report detail
-    report_day: report día
-    report_accounting: report accounting
-    report_day_range: monthly report
-    wholesaler_update: wholesaler Actualización
-    law_reports: Report Download
+    report: Informe
+    report_range: Informe detallado
+    report_day: Informe del día
+    report_accounting: Informe contabilidad
+    report_day_range: Informe mensual
+    wholesaler_update: Actualización del disteibuidor
+    law_reports: Descargar el informe
     
     
   notifications:
-    shipments_item_could_not_be_saved: artículo de envío could not be saved
-    shipments_move_all_items: all artículos were successfully moved
-    shipments_move_item: artículo was successfully moved
+    shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
+    shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
+    shipments_move_item: El artículo ha sido desplazado con éxito.
 
   exception_page:
-    oops_an_error_occurred: "Oops! An Error occurred"
-    exception_description: "Error description:"
-    exception_in_files: "The Error occurred en the following files:"
-    assistance_text: 'Please click on the Botón "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the Botón "Remote Service". We will help you immediately.'
+    oops_an_error_occurred: "¡Ay! Se ha producido un error."
+    exception_description: "Descripción del error:"
+    exception_in_files: "El error occurrió en los siguientes archivos:"
+    assistance_text: 'Rogamos pulse el botón "Inicio" y vuelva a intentarlo. Si el error persiste, por favor llame al servicio al cliente, y conecte su ordenador al servicio a distancia con el botón "Servicio a distancia". Hemos de ayudarlo inmediatamente.'
 
   orders:
     report:
-      title: Sums
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
-      sum: sum
+      title: Totales
+      display: Mostrar
+      end_date: Fecha final
+      gross: Bruto
+      net: Neto
+      sum: Suma
       rebate: Rebaja
       points: Puntos
-      start_date: start date
-      sum_total: sum total
+      start_date: Fecha inicial
+      sum_total: Suma total
     report_range:
-      title: journal
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
-      sum: sum
+      title: Diario
+      display: Mostrar
+      end_date: Fecha final
+      gross: Bruto
+      net: Neto
+      sum: Suma
       rebate: Rebaja
       points: Puntos
-      start_date: start date
-      sum_total: sum total
+      start_date: Fecha inicial
+      sum_total: Suma total
     report_day_range:
-      title: monthly report
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
-      sum: sum
+      title: Informe mensual
+      display: Mostrar
+      end_date: Fecha final
+      gross: Bruto
+      net: Neto
+      sum: Suma
       rebate: Rebaja
       points: Puntos
-      start_date: start date
-      sum_total: sum total
+      start_date: Fecha inicial
+      sum_total: Suma total
     report_day:
       title: día report
       sums_by_category: sums by Categoría
