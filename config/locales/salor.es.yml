@@ -244,7 +244,7 @@ es:
     export: export
     item_selection: item selection
     new_discount_for: Nuevo descuento for %{store}
-    notes: notes
+    notes: Notas
     shipment_items: Artículos de un envío
     shipment_items_header: nombre,SKU,precio,Categoría,Ubicación
     shipment_types: Tipos de envío
@@ -599,8 +599,8 @@ es:
     total: total
 
   roles:
-    cashier: cashier
-    header_cashier: header cashier
+    cashier: Cajera
+    header_cashier: Jefe de cajeras
     manager: manager
     stockboy: almacenero
     
@@ -614,8 +614,8 @@ es:
     logout: Desconectarse
     not_you: not you?
     owner_login: Nombre de usuario del dueño
-    owner_mode: OWNER MODE
-    owner_success: Owner properties were successfully updated
+    owner_mode: MODALIDAD DUEÑO
+    owner_success: dueño properties were successfully updated
     payment_external_types: cash,card,gift card,other
     payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
     rebate_types:
@@ -735,7 +735,7 @@ es:
     order_heading: "Pedido #%{id} for %{store}"
     order_number: "Pedido #%{id}"
     order_summary: Pedidos of the last 7 días
-    owner_language: Owner language
+    owner_language: Dueño language
     password: password
     password_confirm: confirm password
     please_test_before_upload: "WARNING: You are about to overwrite data in the database."
@@ -767,13 +767,13 @@ es:
       location_editor: Ubicación editor
       manager: Manager
       no_change: no change
-      notes: notes
+      notes: Notas
       order_editor: Pedido editor
       parts: parts
       percent_off: "% off"
-      roles: roles
+      roles: Roles
       search: search
-      stocker: almacenero
+      stocker: Almacenero
       shipment:
         types:
           canceled: canceled
