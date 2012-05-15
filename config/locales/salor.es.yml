@@ -54,34 +54,34 @@ es:
         other: Tipos de Envío
         default_name: Renovación automática del pedido
       shipper:
-        one: Shipper
-        other: Shippers
+        one: Transportador
+        other: Transportadores
       stock_location:
-        one: Stock Ubicación
-        other: Stock Ubicaciones
+        one: Ubicación del stock
+        other: Ubicaciones del stock
       tax_profile:
-        one: Tax Profile
-        other: Tax Profiles
+        one: Tipo de IVA
+        other: Tipos de IVA
       vendor:
-        one: Store
-        other: Stores
+        one: Tienda
+        other: Tiendas
       transaction_tag: etiqueta de transacción
-        one: Tag
-        other: Tags
+        one: Etiqueta
+        other: Etiquetas
       payment_method:
-        one: Payment Method
-        other: Payment Methods
+        one: Método de pago
+        other: Métodos de pago
 
     attributes:
-      hide_buttons: XXX Hide Botones
-      calculate_tax: XXX Calculate Tax
+      hide_buttons: Ocultar Botones
+      calculate_tax: Calcular el IVA
       track_expiry: Track Expiry
       uses_drawer_id: Uses caja of
       employee:
         uses_drawer_id: Uses caja of
       reorder_type: Tipo de nuevo pedido
       big_buttons: Big Botones
-      hide_discounts: Hide descuentos
+      hide_discounts: Ocultar descuentos
       thermal_printer: Thermal Printer
       paylife: Paylife
       url: URL
@@ -179,7 +179,7 @@ es:
         name: name
         quantity: quantity
         sku: SKU
-        stock_location_id: Stock Ubicación 
+        stock_location_id: Ubicación del stock
       cash_register:
         sticker_printer: Sticker printer
       item:
@@ -190,16 +190,16 @@ es:
       start_date: start date
       state: state
       status: status
-      stock_location_ids: Stock Ubicación 
+      stock_location_ids: Ubicación del stock
       street1: Address 1
       street2: Address 2
       subtotal: subtotal
-      tag: tag
-      tax: tax
-      tax_profile_id: tax
+      tag: Etiqueta
+      tax: IVA
+      tax_profile_id: IVA
       telephone: telephone
       the_receiver: the receiver
-      the_shipper: the shipper
+      the_shipper: the Transportador
       title: title
       total: total
       username: username
@@ -213,7 +213,7 @@ es:
       cash_drawer: caja
       stylesheets: stylesheets
       eod_show: show at end of day
-      shipper_sku: Shipper SKU
+      shipper_sku: Transportador SKU
       code: code 
       when: when
       afield: field
@@ -238,7 +238,7 @@ es:
     crd: Time,Amount,tipo,Notes
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
-    edit_shipper: edit shipper %{name}
+    edit_shipper: edit Transportador %{name}
     employees: Empleados
     expiring_soon: expiring soon
     export: export
@@ -330,8 +330,8 @@ es:
     edit_location: edit Ubicación 
     edit_shipment: edit Envío
     edit_shipment_type: edit tipo de envío
-    edit_shipper: edit shipper %{name}
-    edit_tax_profile: edit tax profile
+    edit_shipper: edit Transportador %{name}
+    edit_tax_profile: edit Tipo de IVA
     edit_vendor: edit vendor
     employees: Empleados
     end_day: end day
@@ -354,9 +354,9 @@ es:
     new_order: New
     new_shipment: new Envío
     new_shipment_type: new tipo de Envío
-    new_shipper: new shipper
-    new_stock_location: new stock Ubicación 
-    new_tax_profile: new tax profile
+    new_shipper: new Transportador
+    new_stock_location: Nueva ubicación de stock 
+    new_tax_profile: new Tipo de IVA
     new_vendor: new vendor
     new_button: new button
     order: Pedido
@@ -369,17 +369,17 @@ es:
     search: search
     shipment_types: Tipos de Envío
     shipments: Envíos
-    shippers: shippers
+    shippers: Transportadores
     show: show
     split: split
-    stock_locations: stock Ubicaciones
+    stock_locations: Ubicaciones del stock
     support: support
-    tax_profiles: tax profiles
+    tax_profiles: Tipos de IVA
     update_gift_card: update gift card
     vendors: vendors
     void: void
     end_of_day_drop: end of day payout
-    transaction_tags: transacción tags
+    transaction_tags: Etiquetas de transacción
     update_location: update Ubicación
     update_real_quantity: update real quantity
     print: print
@@ -443,12 +443,12 @@ es:
     report_day:
       title: day report
       sums_by_category: sums by Categoría
-      sums_by_tax_profile: sums by tax profile
-      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by Tipo de IVA
+      sums_by_payment_methods: sums by Métodos de pago
       sum: sum
       sums_by_transaction_types: sums by tipos de transacción
       transactions: Transacciones
-      transaction_tag: transacción tag
+      transaction_tag: Etiqueta de transacción
       drops: drops
       drop: drop
       payouts: payouts
@@ -476,12 +476,12 @@ es:
     report_range:
       title: day report
       sums_by_category: sums by Categoría
-      sums_by_tax_profile: sums by tax profile
-      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by Tipo de IVA
+      sums_by_payment_methods: sums by Métodos de pago
       sum: sum
       sums_by_transaction_types: sums by tipos de transacciones
       transactions: transacción 
-      transaction_tag: transacción tag
+      transaction_tag: Etiqueta de transacción
       drops: drops
       drop: drop
       payouts: payouts
@@ -494,7 +494,7 @@ es:
       None: Not specified
       count_orders: Count of Pedidos
       sales: Sales
-      payments: Payments
+      payments: Pagos
       cash_drawer: Caja
       revenue: Revenue
       sum_gross: Sum gross
@@ -545,7 +545,7 @@ es:
       OrderItemRefund: Pedido Item Refund
       OrderRefund: Pedido Refund
       sales: Sales
-      payments: Payments
+      payments: Pagos
       refund: Refund
       None: Not named
       noncash-refunds: Noncash-Refunds
@@ -561,7 +561,7 @@ es:
       refund: Total refunds
       given: Given money
       net: net
-      tax: Tax
+      tax: IVA
       gross: gross
       current_loyalty_points: Your loyalty points
       subtotal1: Subtotal
@@ -593,7 +593,7 @@ es:
     
   reports:
     item_zero: Sold out Artículo
-    tax_class: tax class
+    tax_class: Clase de IVA
     description: description
     unit_price: unit price
     amount: amount
@@ -603,10 +603,10 @@ es:
     cashier: cashier
     header_cashier: header cashier
     manager: manager
-    stockboy: stockboy
+    stockboy: almacenero
     
   system:
-    add_payment_method: add payment method
+    add_payment_method: add Método de pago
     complete_sale: Complete
     employee_login: empleado login
     inventory_updated: inventory updated
@@ -655,11 +655,11 @@ es:
       inventory_update_error: inventory update error
       item_not_found: The item you are looking for could not be found, try searching?
       item_price_is_zero: "Warning: Item price is 0"
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your store configuration?
+      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your Tienda configuration?
       must_cash_drop: Your caja does not have any money, please add a cash drop!
       must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Store
+      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Tienda!
+      must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Tienda
       must_specify_drop_or_payout: You must specify either drop or payout!
       no_class: "There is no class for %{model} at line %{i}"
       no_role: You do not have the necessary role to access this resource.
@@ -732,7 +732,7 @@ es:
     name: name
     new_item_heading: "New item for %{store}"
     new_sale_for: "New sale for %{store}"
-    new_stock_location: New stock Ubicación
+    new_stock_location: Nueva ubicación de stock
     order_heading: "Pedido #%{id} for %{store}"
     order_number: "Pedido #%{id}"
     order_summary: Pedidos of the last 7 days
@@ -745,9 +745,9 @@ es:
     rebate: rebate
     remember_me: remember me
     report: report
-    stock_locations: stock_ubicaciones 
+    stock_locations: ubicaciones_de_stock 
     subtotal: subtotal
-    tax_profile: tax profile
+    tax_profile: Tipo de IVA
     three_easy_ways: three easy ways
     total: total
     username: username
@@ -774,19 +774,19 @@ es:
       percent_off: "% off"
       roles: roles
       search: search
-      stocker: stocker
+      stocker: almacenero
       shipment:
         types:
           canceled: canceled
           complete: complete
-          in_stock: in stock
+          in_stock: en stock
           new: new
           returned: returned
           shipped: shipped
     notice:
       save_before: XXX Save before leaving?
       move_real_quantities_success: Item quantities were successfully updated
-      wholesaler_upload_report: "Updated Artículos: %{updated_items}, Created Artículos: %{created_items}, Created categories: %{created_categories}, Created Tax Profiles %{created_tax_profiles}"
+      wholesaler_upload_report: "Updated Artículos: %{updated_items}, Created Artículos: %{created_items}, Created categories: %{created_categories}, Created Tipos de IVA %{created_tax_profiles}"
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
       model_create: "%{model} was created successfully"
