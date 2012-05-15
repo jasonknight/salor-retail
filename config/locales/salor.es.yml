@@ -621,10 +621,10 @@ es:
     rebate_types:
       fixed: $
       percent: "%"
-    register_today: register today
+    register_today: Inscribirme hoy
     report_external_types: XXX
     report_internal_types: XXX
-    sign_up: sign up
+    sign_up: Conectarse
     errors:
       auto_drop_failed: "The system failed to auto Reembolso, please manually create a beginning of día cash Reembolso"
       order_totals_validation_failed: "Pedido total validation failed, refreshing the order may repair the issue. Press OK to refresh."
