@@ -2,32 +2,32 @@ es:
   activerecord:
     models:
       button:
-        one: Button
-        other: Buttons
+        one: Botón
+        other: Botones
       tender_method:
-        one: Tender Method
-        other: Tender Methods
+        one: Forma de pago
+        other: Formas de pago
       action: 
-        one: Action
-        other: Actions
+        one: Acción
+        other: Acciones
       broken_item:
-        one: Broken item
-        other: Broken items
+        one: Artículo dañado
+        other: Artículos dañado
       category:
-        one: Category
-        other: Categories
+        one: Categoría
+        other: Categorías
       customer:
-        one: Customer
-        other: Customers
+        one: Cliente
+        other: Cliente
       discount:
-        one: Discount
-        other: Discounts
+        one: Descuento
+        other: Descuentos
       drawer:
-        one: Drawer
-        other: Drawers
+        one: Caja
+        other: Cajas
       drawer_transaction:
-        one: Drawer Transaction
-        other: Drawer Transactions
+        one: Transacción de caja
+        other: Transacciones de caja
       employee:
         one: Employee
         other: Employees
@@ -65,7 +65,7 @@ es:
       vendor:
         one: Store
         other: Stores
-      transaction_tag:
+      transaction_tag: etiqueta de transacción
         one: Tag
         other: Tags
       payment_method:
@@ -73,15 +73,15 @@ es:
         other: Payment Methods
 
     attributes:
-      hide_buttons: XXX Hide Buttons
+      hide_buttons: XXX Hide Botones
       calculate_tax: XXX Calculate Tax
       track_expiry: Track Expiry
-      uses_drawer_id: Uses Drawer of
+      uses_drawer_id: Uses caja of
       employee:
-        uses_drawer_id: Uses drawer of
+        uses_drawer_id: Uses caja of
       reorder_type: Reorder Type
-      big_buttons: Big Buttons
-      hide_discounts: Hide Discounts
+      big_buttons: Big Botones
+      hide_discounts: Hide descuentos
       thermal_printer: Thermal Printer
       paylife: Paylife
       url: URL
@@ -89,7 +89,7 @@ es:
       default: Default
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standard text customer screen
+      customer_screen_blurb: Standard text cliente screen
       pole_display: Pole display
       auto_drop: "Automatically Begin Day"
       must_change_price: Must Change Price
@@ -115,7 +115,7 @@ es:
       buyback_price: buyback price
       calculate_part_price: calculate part price
       cash_made: cash made
-      category_id: Category
+      category_id: Categoría
       cellphone: cell phone
       city: city
       company_name: company name
@@ -209,8 +209,8 @@ es:
       weigh_compulsory: compulsory weighing
       weight: weight
       width: width
-      open_cash_drawer: open cash drawer
-      cash_drawer: cash drawer
+      open_cash_drawer: open caja
+      cash_drawer: caja
       stylesheets: stylesheets
       eod_show: show at end of day
       shipper_sku: Shipper SKU
@@ -297,7 +297,7 @@ es:
     tender_methods: tender methods
     new_tender_method: new tender method
     edit_tender_method: edit tender method
-    actions: actions
+    actions: Acciones
     new_broken_item: new broken item
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
@@ -313,18 +313,18 @@ es:
     configuration: Config.
     contact: contact
     current_order: "current order: #%{id}"
-    customer: customer
-    customers: customers
+    customer: Cliente
+    customers: Clientes
     delete: delete
     delete_confirm: Are you sure?
     destroy: destroy
-    discounts: discounts
+    discounts: Descuentos
     done: done
     edit: edit
     edit_cash_register: edit cash register
-    edit_category: edit category
-    edit_customer: edit customer
-    edit_discount: edit discount
+    edit_category: edit categoría
+    edit_customer: edit cliente
+    edit_discount: edit descuento
     edit_employee: edit employee
     edit_item: edit item
     edit_location: edit location
@@ -346,7 +346,7 @@ es:
     new_action: new action
     new_cash_register: new cash register
     new_category: new category
-    new_customer: new customer
+    new_customer: new cliente
     new_discount: new discount
     new_employee: new employee
     new_item: new item
@@ -379,7 +379,7 @@ es:
     vendors: vendors
     void: void
     end_of_day_drop: end of day payout
-    transaction_tags: transaction tags
+    transaction_tags: transacción tags
     update_location: update location
     update_real_quantity: update real quantity
     print: print
@@ -446,7 +446,7 @@ es:
       sums_by_tax_profile: sums by tax profile
       sums_by_payment_methods: sums by payment methods
       sum: sum
-      sums_by_transaction_types: sums by transaction types
+      sums_by_transaction_types: sums by transacción types
       transactions: transactions
       transaction_tag: transaction tag
       drops: drops
@@ -462,7 +462,7 @@ es:
       count_orders: Count of orders
       sales: Sales
       payments: Payments
-      cash_drawer: Cash drawer
+      cash_drawer: Caja
       revenue: Revenue
       sum_gross: Sum gross
       sum_net: Sum net
@@ -495,7 +495,7 @@ es:
       count_orders: Count of orders
       sales: Sales
       payments: Payments
-      cash_drawer: Cash drawer
+      cash_drawer: Caja
       revenue: Revenue
       sum_gross: Sum gross
       sum_net: Sum net
@@ -551,9 +551,9 @@ es:
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
       revenue: Revenue
-      calculated_drawer_amount: Calculated drawer amount
-      system_drawer_amount: System drawer amount
-      warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
+      calculated_drawer_amount: Calculated caja amount
+      system_drawer_amount: System caja amount
+      warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
     order_receipt:
       lc_points_substracted: Substracted Loyalty Points
       subsubtotal: TOTAL
@@ -637,7 +637,7 @@ es:
       cannot_reorder: No items must be reordered.
       action_code_error: "Code could not be executed because %{error}"
       action_error: "Action could not complute because %{error}"
-      not_enough_in_drawer: not enough in drawer
+      not_enough_in_drawer: not enough in caja
       cash_drop_amount_must_be_positive: cash drop amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
       coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
@@ -656,7 +656,7 @@ es:
       item_not_found: The item you are looking for could not be found, try searching?
       item_price_is_zero: "Warning: Item price is 0"
       lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your store configuration?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
+      must_cash_drop: Your caja does not have any money, please add a cash drop!
       must_choose_register: You must login to a cash register!
       must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
       must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Store
@@ -692,7 +692,7 @@ es:
     end_of_day:
       end_of_day_thermal_report: Print Report
       paper_report: Detail Report
-      cash_drawer: Cash Drawer
+      cash_drawer: Caja
       counted: Counted
       difference: Difference
 
@@ -713,7 +713,7 @@ es:
     category_heading: category %{name} for %{store}
     given: given
     change: change
-    customers: customers
+    customers: Clientes
     download_may_last_long: This download may last long. Continue?
     dummy_item: dummy item
     dummy_part: dummy part
