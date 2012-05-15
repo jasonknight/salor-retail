@@ -137,7 +137,7 @@ es:
       end_date: Fecha final
       expires_on: Fecha de vencimiento
       first_name: Nombre
-      height: altura
+      height: Altura
       is_shipment_item: es un artículo de envío
       item_sku: SKU del artículo
       itemsviewlist: "Ver lista de artículos"
@@ -236,7 +236,7 @@ es:
     best_selling_category: best selling Categoría
     best_selling_location: best selling Ubicación 
     crd: Time,Amount,tipo,Notes
-    discount_for: rebate for %{store}
+    discount_for: Rebaja for %{store}
     discounts_for: rebates for %{store}
     edit_shipper: edit Transportador %{name}
     employees: Empleados
@@ -246,11 +246,11 @@ es:
     new_discount_for: new discount for %{store}
     notes: notes
     shipment_items: Artículos de un envío
-    shipment_items_header: Name,SKU,price,Categoría,Ubicación
+    shipment_items_header: nombre,SKU,precio,Categoría,Ubicación
     shipment_types: Tipos de envío
     shipment_types_header: state,added by, , 
     shipments: Envíos
-    shipments_header: name,from,to,price,paid?,added by,status, , , 
+    shipments_header: name,from,to,precio,paid?,added by,status, , , 
     update_location: update Ubicación 
     update_real_quantity: update real cantidad
 
@@ -292,12 +292,11 @@ es:
     clear_order: Clear
     inventory_report: inventario report
     ok: OK
-    buttons: buttons
+    buttons: Botones
     cameras: cameras
-    tender_methods: tender methods
-    new_tender_method: new tender method
-    edit_tender_method: edit tender method
-    actions: Acciones
+    tender_methods: métodos de pago
+    new_tender_method: Nuevo método de pago
+    edit_tender_method: Editar método de pago
     new_broken_item: new broken item
     activate_gift_card: activate gift card
     add_to_current_order: add to current pedido
@@ -306,12 +305,12 @@ es:
     broken_items: broken Artículos
     buy_order: Buy
     cancel: cancel
-    cash_drop: cash drop
-    cash_register: cash register
-    cash_registers: cash registers
-    categories: categories
+    cash_drop: depósito de efectivo
+    cash_register: Caja
+    cash_registers: Cajas
+    categories: categorías
     configuration: Config.
-    contact: contact
+    contact: Contacto
     current_order: "current pedido: #%{id}"
     customer: Cliente
     customers: Clientes
@@ -320,13 +319,13 @@ es:
     destroy: destroy
     discounts: Descuentos
     done: done
-    edit: edit
-    edit_cash_register: edit cash register
-    edit_category: edit categoría
-    edit_customer: edit cliente
-    edit_discount: edit descuento
-    edit_employee: edit empleado
-    edit_item: edit item
+    edit: Editar
+    edit_cash_register: Editar caja
+    edit_category: Editar categoría
+    edit_customer: Editar cliente
+    edit_discount: Editar descuento
+    edit_employee: Editar empleado
+    edit_item: Editar item
     edit_location: edit Ubicación 
     edit_shipment: edit Envío
     edit_shipment_type: edit tipo de envío
@@ -340,7 +339,7 @@ es:
     item_types: Tipos de artículo
     items: Artículos
     locations: Ubicaciones 
-    loyalty_cards: loyalty cards
+    loyalty_cards: Tarjetas de fidelización
     move_all_shipment_items: move all artículos del envío
     move_shipment_item: move artículo de envío
     new_action: new action
@@ -358,7 +357,7 @@ es:
     new_stock_location: Nueva ubicación de stock 
     new_tax_profile: new Tipo de IVA
     new_vendor: new vendor
-    new_button: new button
+    new_button: new Botón
     order: Pedido
     points: points
     pos: POS
@@ -404,7 +403,7 @@ es:
     oops_an_error_occurred: "Oops! An Error occurred"
     exception_description: "Error description:"
     exception_in_files: "The Error occurred in the following files:"
-    assistance_text: 'Please click on the button "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the button "Remote Service". We will help you immediately.'
+    assistance_text: 'Please click on the Botón "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the Botón "Remote Service". We will help you immediately.'
 
   orders:
     report:
@@ -414,7 +413,7 @@ es:
       gross: gross
       net: net
       sum: sum
-      rebate: rebate
+      rebate: Rebaja
       points: points
       start_date: start date
       sum_total: sum total
@@ -425,7 +424,7 @@ es:
       gross: gross
       net: net
       sum: sum
-      rebate: rebate
+      rebate: Rebaja
       points: points
       start_date: start date
       sum_total: sum total
@@ -436,7 +435,7 @@ es:
       gross: gross
       net: net
       sum: sum
-      rebate: rebate
+      rebate: Rebaja
       points: points
       start_date: start date
       sum_total: sum total
@@ -444,7 +443,7 @@ es:
       title: day report
       sums_by_category: sums by Categoría
       sums_by_tax_profile: sums by Tipo de IVA
-      sums_by_payment_methods: sums by Métodos de pago
+      sums_by_payment_methods: sums by métodos de pago
       sum: sum
       sums_by_transaction_types: sums by tipos de transacción
       transactions: Transacciones
@@ -477,7 +476,7 @@ es:
       title: day report
       sums_by_category: sums by Categoría
       sums_by_tax_profile: sums by Tipo de IVA
-      sums_by_payment_methods: sums by Métodos de pago
+      sums_by_payment_methods: sums by métodos de pago
       sum: sum
       sums_by_transaction_types: sums by tipos de transacciones
       transactions: transacción 
@@ -522,12 +521,12 @@ es:
       discount_subtotal: Discount                       EUR %8.2f
       discounted_item: "%c %20.20s %7.2f %3u %7.2f"
       end_of_day: "%20.20s EUR %5.2f"
-      fixed_rebate: Rebate                         EUR %8.2f
+      fixed_rebate: Rebaja                         EUR %8.2f
       item: "%c %20.20s %7.2f %3u %7.2f"
       percent_coupon: "%c %20.20s %7.1f%% %3u %7.2f"
-      rebate_amount: Rebate %4.2f%%                 EUR %8.2f
+      rebate_amount: Rebaja %4.2f%%                 EUR %8.2f
       rebate_item: "%c %20.20s %7.2f %3u %7.2f"
-      rebate_subtotal: Rebate Total                  EUR %8.2f
+      rebate_subtotal: Rebaja Total                  EUR %8.2f
       subtotal: Subtotal                      EUR %8.2f
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
@@ -555,7 +554,7 @@ es:
       system_drawer_amount: System caja amount
       warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
     order_receipt:
-      lc_points_substracted: Substracted Loyalty Points
+      lc_points_substracted: Substracted puntos de fidelización
       subsubtotal: TOTAL
       change: Change money
       refund: Total refunds
@@ -563,18 +562,18 @@ es:
       net: net
       tax: IVA
       gross: gross
-      current_loyalty_points: Your loyalty points
+      current_loyalty_points: Your puntos de fidelización
       subtotal1: Subtotal
       subtotal2: Subtotal
       subtotal3: Subtotal
       subtotal4: Subtotal
-      rebate_subtotal: Rebate Subtotal
-      rebate: Single rebate
+      rebate_subtotal: Rebaja Subtotal
+      rebate: Single Rebaja
       coupon_subtotal: Coupon Subtotal
       discount_subtotal: Discount Subtotal
       discount: Discount
-      rebate_percent: Percent rebate
-      rebate_fixed: Fixed rebate
+      rebate_percent: Percent Rebaja
+      rebate_fixed: Fixed Rebaja
       refunded: REFUNDED
 
     word:
@@ -595,7 +594,7 @@ es:
     item_zero: Sold out Artículo
     tax_class: Clase de IVA
     description: description
-    unit_price: unit price
+    unit_price: unit precio
     amount: amount
     total: total
 
@@ -606,7 +605,7 @@ es:
     stockboy: almacenero
     
   system:
-    add_payment_method: add Método de pago
+    add_payment_method: add método de pago
     complete_sale: Complete
     employee_login: empleado login
     inventory_updated: inventario updated
@@ -640,7 +639,7 @@ es:
       not_enough_in_drawer: not enough in caja
       cash_drop_amount_must_be_positive: cash drop amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
-      coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
+      coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the precioof Item %{item}"
       coupon_not_enough_items: You have not purchased enough artículos for this to apply
       coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
       csv_item_exists: "Item %{sku} exists!"
@@ -654,8 +653,8 @@ es:
       insufficient_quantity_on_item: "Warning, Item %{sku} Cantidad is insufficient, time to update your stock levels!"
       inventory_update_error: inventario update error
       item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: "Warning: Item price is 0"
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your Tienda configuration?
+      item_price_is_zero: "Warning: Item precio is 0"
+      lp_calculation_failed: Failed to apply puntos de fidelización, are you sure you setup this up in your Tienda configuration?
       must_cash_drop: Your caja does not have any money, please add a cash drop!
       must_choose_register: You must login to a cash register!
       must_choose_vendor: You minsufficient_cantidad_on_itemust choose a Tienda!
@@ -700,7 +699,7 @@ es:
     index:
       report: Report
     show:
-      purchase_price_sum: Purchase price sum
+      purchase_price_sum: Purchase precio sum
 
   views:
     eticket: Ticket
@@ -728,8 +727,8 @@ es:
     listing: listing
     listing_items: listing Artículos
     locations: Ubicaciones 
-    loyalty_card: loyalty card
-    name: name
+    loyalty_card: Tarjeta de fidelización
+    name: Nombre
     new_item_heading: "New item for %{store}"
     new_sale_for: "New sale for %{store}"
     new_stock_location: Nueva ubicación de stock
@@ -740,9 +739,9 @@ es:
     password: password
     password_confirm: confirm password
     please_test_before_upload: "WARNING: You are about to overwrite data in the database."
-    price: price
+    price: Precio
     quantity: Cantidad
-    rebate: rebate
+    rebate: Rebaja
     remember_me: remember me
     report: report
     stock_locations: ubicaciones_de_stock 
@@ -750,7 +749,7 @@ es:
     tax_profile: Tipo de IVA
     three_easy_ways: three easy ways
     total: total
-    username: username
+    username: Nombre de usuario
     vendor: vendor
     shape: shape
     errors:
@@ -855,11 +854,11 @@ es:
       upload: upload
     inventory_report:
       title: inventario Report
-      price: Selling price
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
+      price: Selling precio
+      total_buying_price: Sum Purchase precio
+      total_selling_price: Sum Selling precio
+      subtotal_purchase_price: Subtotal Purchase precio
+      subtotal_selling_price: Subtotal Selling precio
     update_real_quantity:
       inventory_report: inventario Report
       update_quantity: Update inventario cantidades
