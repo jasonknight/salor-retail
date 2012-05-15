@@ -52,7 +52,7 @@ es:
       shipment_type:
         one: Tipo de Envío
         other: Tipos de Envío
-        default_name: Renovación atumo
+        default_name: Renovación automática del pedido
       shipper:
         one: Shipper
         other: Shippers
