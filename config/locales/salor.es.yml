@@ -131,7 +131,7 @@ es:
       decimal_points: Puntos decimales
       default_buyback: Recompra por defecto
       dollar_per_lp: dólar por punto de fidelización
-      drop: depósito
+      drop: Reembolso
       email: E-mail
       end_amount: Monto final
       end_date: Fecha final
@@ -305,7 +305,7 @@ es:
     broken_items: broken Artículos
     buy_order: Buy
     cancel: cancel
-    cash_drop: depósito de efectivo
+    cash_drop: Reembolso de efectivo
     cash_register: Caja
     cash_registers: Cajas
     categories: categorías
@@ -359,7 +359,7 @@ es:
     new_vendor: Nueva tienda
     new_button: Nuevo botón
     order: Pedido
-    points: points
+    points: Puntos
     pos: POS
     orders: Pedidos
     overview: overview
@@ -377,7 +377,7 @@ es:
     update_gift_card: update gift card
     vendors: Tiendas
     void: void
-    end_of_day_drop: end of día payout
+    end_of_day_drop: end of día Reembolso
     transaction_tags: Etiquetas de transacción
     update_location: update Ubicación
     update_real_quantity: update real Cantidad
@@ -402,7 +402,7 @@ es:
   exception_page:
     oops_an_error_occurred: "Oops! An Error occurred"
     exception_description: "Error description:"
-    exception_in_files: "The Error occurred in the following files:"
+    exception_in_files: "The Error occurred en the following files:"
     assistance_text: 'Please click on the Botón "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the Botón "Remote Service". We will help you immediately.'
 
   orders:
@@ -414,7 +414,7 @@ es:
       net: net
       sum: sum
       rebate: Rebaja
-      points: points
+      points: Puntos
       start_date: start date
       sum_total: sum total
     report_range:
@@ -425,7 +425,7 @@ es:
       net: net
       sum: sum
       rebate: Rebaja
-      points: points
+      points: Puntos
       start_date: start date
       sum_total: sum total
     report_day_range:
@@ -436,7 +436,7 @@ es:
       net: net
       sum: sum
       rebate: Rebaja
-      points: points
+      points: Puntos
       start_date: start date
       sum_total: sum total
     report_day:
@@ -448,10 +448,10 @@ es:
       sums_by_transaction_types: sums by tipos de transacción
       transactions: Transacciones
       transaction_tag: Etiqueta de transacción
-      drops: drops
-      drop: drop
-      payouts: payouts
-      payout: payout
+      drops: Reembolsos
+      drop: Reembolso
+      payouts: Desembolsos
+      payout: Desembolso
       transaction_total: transacción total
       transaction_journal: transacción journal
       time: time
@@ -468,8 +468,8 @@ es:
       gross: gross
       net: net
       sum_transactions: Sum transacciones
-      noncash-refunds: Noncash-Refunds
-      cash-refunds: Cash-Refunds
+      noncash-refunds: Reintegro no en efectivo
+      cash-refunds: Reintegro en efectivo
       from: From
       to: To
     report_range:
@@ -481,10 +481,10 @@ es:
       sums_by_transaction_types: sums by tipos de transacciones
       transactions: transacción 
       transaction_tag: Etiqueta de transacción
-      drops: drops
-      drop: drop
-      payouts: payouts
-      payout: payout
+      drops: Reembolsos
+      drop: Reembolso
+      payouts: Desembolsos
+      payout: Desembolso
       transaction_total: transacción total
       transaction_journal: transacción journal
       time: time
@@ -552,7 +552,7 @@ es:
       revenue: Revenue
       calculated_drawer_amount: Calculated caja amount
       system_drawer_amount: System caja amount
-      warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each día with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
+      warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each día with a drawer amount of zero to ease accounting work. Make a cash Desembolso accordingly and print this report again.
     order_receipt:
       lc_points_substracted: Substracted puntos de fidelización
       subsubtotal: TOTAL
@@ -572,15 +572,15 @@ es:
       coupon_subtotal: Coupon Subtotal
       discount_subtotal: descuento Subtotal
       discount: descuento 
-      rebate_percent: Percent Rebaja
+      rebate_percent: Rebaja en porcentaje
       rebate_fixed: Fixed Rebaja
       refunded: REFUNDED
 
     word:
       cancelled: cancelled
-      drop: drop
-      payout: payout
-      sold: sold
+      drop: Reembolso
+      payout: Desembolso
+      sold: Vendido
 
   receipts:
     invoice: Rechnung
@@ -607,13 +607,13 @@ es:
   system:
     add_payment_method: add método de pago
     complete_sale: Complete
-    employee_login: empleado login
+    employee_login: Nombre de usuario del empleado
     inventory_updated: inventario updated
     logged_in_as: logged in as
-    login: login
-    logout: logout
+    login: Nombre de usuario
+    logout: Desconectarse
     not_you: not you?
-    owner_login: owner login
+    owner_login: Nombre de usuario del dueño
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
     payment_external_types: cash,card,gift card,other
@@ -626,7 +626,7 @@ es:
     report_internal_types: XXX
     sign_up: sign up
     errors:
-      auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
+      auto_drop_failed: "The system failed to auto Reembolso, please manually create a beginning of día cash Reembolso"
       order_totals_validation_failed: "Pedido total validation failed, refreshing the order may repair the issue. Press OK to refresh."
       parent_sku_must_exist: "Parent Item Must Exist!"
       child_sku_must_exist: "Child Item Must Exist!"
@@ -637,7 +637,7 @@ es:
       action_code_error: "Code could not be executed because %{error}"
       action_error: "Action could not complute because %{error}"
       not_enough_in_drawer: not enough in caja
-      cash_drop_amount_must_be_positive: cash drop amount must be positive
+      cash_drop_amount_must_be_positive: cash Reembolso amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
       coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the precioof artículo %{item}"
       coupon_not_enough_items: You have not purchased enough artículos for this to apply
@@ -655,11 +655,11 @@ es:
       item_not_found: The artículo you are looking for could not be found, try searching?
       item_price_is_zero: "Warning: artículo precio is 0"
       lp_calculation_failed: Failed to apply puntos de fidelización, are you sure you setup this up in your Tienda configuration?
-      must_cash_drop: Your caja does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
+      must_cash_drop: Your caja does not have any money, please add a cash Reembolso!
+      must_choose_register: You must login to a caja!
       must_choose_vendor: You minsufficient_cantidad_on_artículo must choose a Tienda!
       must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Tienda
-      must_specify_drop_or_payout: You must specify either drop or payout!
+      must_specify_drop_or_payout: You must specify either Reembolso or desembolso!
       no_class: "There is no class for %{model} at line %{i}"
       no_role: You do not have the necessary role to access this resource.
       no_such_item: There is no artículo with this SKU
@@ -708,7 +708,7 @@ es:
     advanced_field: advanced field
     by_card: by card
     cash_register_heading: "%{name} for %{store}"
-    cash_registers: cash registers
+    cash_registers: Cajas
     category_heading: Categoría %{name} for %{store}
     given: given
     change: change
@@ -721,7 +721,7 @@ es:
     forgot_password: forgot password?
     gift_card: gift card
     gift_card_amount: gift card amount
-    in_cash: in cash
+    in_cash: en efectivo
     item: artículo 
     language: language
     listing: listing
@@ -734,7 +734,7 @@ es:
     new_stock_location: Nueva ubicación de stock
     order_heading: "Pedido #%{id} for %{store}"
     order_number: "Pedido #%{id}"
-    order_summary: Pedidos of the last 7 days
+    order_summary: Pedidos of the last 7 días
     owner_language: Owner language
     password: password
     password_confirm: confirm password
@@ -759,7 +759,7 @@ es:
     forms:
       applies_to_item: applies to artículo with SKU
       buy_one_get_one: buy one get one
-      cashier: cashier
+      cashier: Cajera
       category_editor: Categoría editor
       fixed_amount_off: fixed amount off
       item_editor: artículo editor
@@ -795,8 +795,8 @@ es:
       please_wait: "Please wait..."
       transaction_succeeded: "Paid!"
       artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
-      paylife_ending_day: Ending day
-      paylife_endday_complete: Ending day complete
+      paylife_ending_day: Ending día
+      paylife_endday_complete: Ending día complete
     pagination:
       last: last
       next: next &gt;
@@ -887,7 +887,7 @@ es:
   ByCardRefund: By Card Refund
   ByGiftCardRefund: By Gift Card Refund
   OtherCreditRefund: Other Credit Refund
-  end_of_day: End of Day
+  end_of_day: End of día
   label: label
   sticker: sticker
   support: XXX
