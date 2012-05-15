@@ -75,43 +75,43 @@ es:
     attributes:
       hide_buttons: Ocultar Botones
       calculate_tax: Calcular el IVA
-      track_expiry: Track Expiry
-      uses_drawer_id: Uses caja of
+      track_expiry: Monitorear fecha de vencimiento
+      uses_drawer_id: Utiliza la caja de
       employee:
-        uses_drawer_id: Uses caja of
-      reorder_type: Tipo de nuevo pedido
-      big_buttons: Big Botones
+        uses_drawer_id: Utiliza la caja de
+      reorder_type: Tipo de pedido nuevo 
+      big_buttons: Botones grandes
       hide_discounts: Ocultar descuentos
-      thermal_printer: Thermal Printer
+      thermal_printer: Impresora térmica
       paylife: Paylife
       url: URL
-      letter: Letter
-      default: Default
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standard text cliente screen
-      pole_display: Pole display
-      auto_drop: "Automatically Begin Day"
-      must_change_price: Must Change Price
-      created_at: Created
-      is_refund: Is Refund?
-      owner_id: Owner
-      owner_type: Owner Tipo de 
-      parent_sku: Parent SKU
-      child_sku: Child SKU
-      ignore_qty: Ignore Qty
-      bank_machine_path: ATM
-      artema_hybrid: Artema Hybrid
+      letter: Carta
+      default: Por defecto
+      csv_imports: Importaciones CSV
+      csv_imports_url: URL de importaciones CSV
+      customer_screen_blurb: Texto estánda pantalla cliente
+      pole_display: Afiche polos
+      auto_drop: "Comenzar el día automáticamente"
+      must_change_price: Cambiar el precio sí o sí
+      created_at: Creado
+      is_refund: ¿Es un descuento?
+      owner_id: Dueño
+      owner_type: Tipo de dueño
+      parent_sku: SKU padre
+      child_sku: SKU hijo
+      ignore_qty: Ignorar cantidad
+      bank_machine_path: Cajero automático
+      artema_hybrid: Artema híbrida
       type: Tipo
-      active: active
-      address: address
-      amount: amount
-      amount_remaining: amount remaining
-      amount_type: amount Tipo de 
-      applies_to: applies to
-      base_price: base price
-      behavior: behavior
-      body: body
+      active: Activo
+      address: Dirección
+      amount: Monto
+      amount_remaining: Monto restante
+      amount_type: Tipo de monto
+      applies_to: Se aplica a
+      base_price: Precio de lista
+      behavior: Conducta
+      body: Cuerpo
       buyback_price: buyback price
       calculate_part_price: calculate part price
       cash_made: cash made
