@@ -158,72 +158,72 @@ es:
       password: Clave
       payout: Desembolso
       points: Puntos
-      postalcode: postal code
-      price: price
-      price_by_qty: price by quantity
-      purchase_price: purchase price
-      quantity: quantity
-      real_quantity: real quantity
-      quantity_sold: quantity sold
-      rebate: rebate
-      rebate_type: rebate Tipo de 
-      receipt_blurb: Receipt header
-      receipt_blurb_footer: Receipt footer
-      sales_metric: sales metric
+      postalcode: Código postal
+      price: Precio
+      price_by_qty: Precio por cantidad
+      purchase_price: Precio de compra
+      quantity: Cantidad
+      real_quantity: Cantidad real
+      quantity_sold: Cantidad vendida
+      rebate: Rebaja
+      rebate_type: Tipo de rebaja
+      receipt_blurb: Encabezamiento del recibo
+      receipt_blurb_footer: Texto al pie del recibo
+      sales_metric: Sistema métrico de ventas
       shipment:
-        from: from
-        paid: paid
-        price: price
-        to: to
+        from: De
+        paid: Pagado
+        price: Precio
+        to: a
       shipment_item:
-        name: name
-        quantity: quantity
+        name: Nombre
+        quantity: Cantidad
         sku: SKU
         stock_location_id: Ubicación del stock
       cash_register:
-        sticker_printer: Sticker printer
+        sticker_printer: Impresora de etiquetas adhesivas
       item:
-        purchase_price: XXXPurchase Price
-        quantity: XXXQuantity
+        purchase_price: Precio de compra
+        quantity: Cantidad
       sku: SKU
-      start_amount: start amount
-      start_date: start date
-      state: state
-      status: status
+      start_amount: Monto inicial
+      start_date: Fecha inicial
+      state: Estado
+      status: Estatus
       stock_location_ids: Ubicación del stock
-      street1: Address 1
-      street2: Address 2
-      subtotal: subtotal
+      street1: Dirección 1
+      street2: Dirección 2
+      subtotal: Subtotal
       tag: Etiqueta
       tax: IVA
       tax_profile_id: IVA
-      telephone: telephone
-      the_receiver: the receiver
-      the_shipper: the Transportador
-      title: title
-      total: total
-      username: username
-      value: value
-      vendor_id: Vendor
-      vendor_printers: printers
-      weigh_compulsory: compulsory weighing
-      weight: weight
-      width: width
-      open_cash_drawer: open caja
-      cash_drawer: caja
-      stylesheets: stylesheets
-      eod_show: show at end of day
-      shipper_sku: Transportador SKU
-      code: code 
-      when: when
-      afield: field
+      telephone: teléfono
+      the_receiver: El receptor
+      the_shipper: El transportador
+      title: Título
+      total: Total
+      username: Nombre de usuario
+      value: Valor
+      vendor_id: Tienda
+      vendor_printers: Impresora
+      weigh_compulsory: Peso obligatorio
+      weight: Peso
+      width: Ancho
+      open_cash_drawer: Abrir caja
+      cash_drawer: Caja
+      stylesheets: Hojas de estilo
+      eod_show: Mostrar al final del día
+      shipper_sku: SKU del transportador
+      code: Código
+      when: Cuándo
+      afield: Campo
       order_id: Pedido
-      scale: scale
-      no_print: Don't Print on Enter
-      salor_printer: Print Client Side
+      scale: Balanza
+      no_print: No imprimir con la techa Entrar
+      salor_printer: Imprimir del lado del cliente
       
   api:
-    user_does_not_exist: user does not exist
+    user_does_not_exist: Este usuario no existe
         
    
   headings:
