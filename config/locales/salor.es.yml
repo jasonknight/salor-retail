@@ -197,7 +197,7 @@ es:
       tag: Etiqueta
       tax: IVA
       tax_profile_id: IVA
-      telephone: teléfono
+      telephone: Teléfono
       the_receiver: El receptor
       the_shipper: El transportador
       title: Título
@@ -219,7 +219,7 @@ es:
       afield: Campo
       order_id: Pedido
       scale: Balanza
-      no_print: No imprimir con la techa Entrar
+      no_print: No imprimir con la techa "Entrar"
       salor_printer: Imprimir del lado del cliente
       
   api:
@@ -227,17 +227,17 @@ es:
         
    
   headings:
-    database_distiller: XXX Database distiller
-    order_validation: "Pedido Validation"
-    paylife: "Paylife(Artema Hybrid)"
-    bank_machine_types: supported bank machines
-    almost_out: almost out
-    best_sellers: bestsellers
-    best_selling_category: best selling Categoría
-    best_selling_location: best selling Ubicación 
-    crd: Time,Amount,tipo,Notes
-    discount_for: Rebaja for %{store}
-    discounts_for: rebates for %{store}
+    database_distiller: Filtro de la base de datos
+    order_validation: "Validación del pedido"
+    paylife: "Paylife(Artema Híbrida)"
+    bank_machine_types: Procesadores de tarjeta autorizados
+    almost_out: Casi agotado
+    best_sellers: Más vendidos
+    best_selling_category: Categoría de más vendidos
+    best_selling_location: Ubicación de más vendidos
+    crd: hora,monto,tipo,notas
+    discount_for: Rebaja de %{store}
+    discounts_for: Rebajas de %{store}
     edit_shipper: Editar transportador %{name}
     employees: Empleados
     expiring_soon: expiring soon
