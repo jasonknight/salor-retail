@@ -295,6 +295,7 @@ class OrdersController < ApplicationController
   def print_confirmed
     o = Order.find_by_id params[:order_id]
     o.update_attribute :was_printed, true if o
+    render :nothing => true
   end
 
   # {START}

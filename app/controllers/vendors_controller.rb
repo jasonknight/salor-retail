@@ -6,14 +6,25 @@
 # See license.txt for the license applying to all files within this software.
 class VendorsController < ApplicationController
     # {START}
-    before_filter :authify, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
-    before_filter :initialize_instance_variables, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
+    before_filter :authify, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
+    before_filter :initialize_instance_variables, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
-    before_filter :crumble, :except => [:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
+    before_filter :crumble, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
 
   # GET /vendors
   # GET /vendors.xml
+  def csv
+    @vendor = Vendor.find_by_token(params[:token])
+    if @vendor then
+      @items = Item.where(["vendor_id =? and hidden != 1",@vendor.id])
+      @categories = Category.where(["vendor_id =? and hidden != 1",@vendor.id])
+      @buttons = Button.where(["vendor_id =? and hidden != 1",@vendor.id]) if @vendor.salor_configuration.csv_buttons
+      @discounts = Discount.where(["vendor_id =? and hidden IS FALSE OR hidden IS NULL",@vendor.id]) if @vendor.salor_configuration.csv_discounts
+      @customers = Customer.where(["vendor_id =? and hidden != 1",@vendor.id]) if @vendor.salor_configuration.csv_customers
+    end
+    render :layout => false
+  end
   def index
     @vendors = $User.get_vendors(params[:page])
     respond_to do |format|

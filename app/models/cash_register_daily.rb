@@ -24,4 +24,4 @@ class CashRegisterDaily < ActiveRecord::Base
       write_attribute(:end_amount,p)
     end
   end
-end
+  end

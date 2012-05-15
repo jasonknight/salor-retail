@@ -1,0 +1,84 @@
+<% if @categories then %><%
+  header = [ :class,:sku,:name,:tag,:button_category,:position,:color]
+%>#HEADERS;<%= header.join(";") %><% 
+@categories.each do |item| 
+  line = []
+  header.each do |h|
+    line << item.send(h)
+  end
+%>
+<%= line.join(";") %><% end %><% end %>
+<% if @items then %><%
+  header = [ :class,:sku,
+             :name,
+             :base_price,:category_name, :behavior,
+             :location_name,
+             :item_type_id,
+             :tax_profile_amount,
+             :active,
+             :hidden,
+             :image,
+             :sales_metric,:weight_metric,
+             :weight,:purchase_price,
+             :height,:height_metric,
+             :length, :length_metric,
+             :width,:width_metric,
+             :parent_sku,:child_sku,
+             :is_gs1, :is_part, :price_by_qty, 
+             :part_id, :calculate_part_price,
+             :part_quantity, :buyback_price,
+             :quantity_buyback, :default_buyback, :weigh_compulsory,
+             :min_quantity, :shipper_sku, :packaging_unit,
+             :must_change_price, :track_expiry, :expires_on, :activated,
+             :amount_remaining, :coupon_type, :coupon_applies]
+%>#HEADERS;<%= header.join(";") %><% 
+@items.each do |item| 
+  line = []
+  header.each do |h|
+    line << item.send(h)
+  end
+%>
+<%= line.join(";") %><% end %><% end %>
+<% if @buttons then %><%
+  header = [ :class,:sku,:name,:weight,:is_buyback,:category_sku,:position]
+%>#HEADERS;<%= header.join(";") %><% 
+@buttons.each do |item| 
+  line = []
+  header.each do |h|
+    line << item.send(h)
+  end
+%>
+<%= line.join(";") %><% end %><% end %>
+
+<% if @discounts then %><%
+  header = [ :class,:sku,:name, :start_date,:end_date,:category_sku,:location_sku,:item_sku,:amount,:amount_type]
+%>#HEADERS;<%= header.join(";") %><% 
+@discounts.each do |item| 
+  line = []
+  header.each do |h|
+    line << item.send(h)
+  end
+%>
+<%= line.join(";") %><% end %><% end %>
+<% if @customers then %><%
+  header = [ :class,:sku,:first_name,:last_name,:street1,:street2,:postalcode,:state,:country,:telephone,
+             :cellphone,:email,:company_name]
+%>#HEADERS;<%= header.join(";") %><% 
+@customers.each do |item| 
+  line = []
+  header.each do |h|
+    line << item.send(h)
+  end
+%>
+<%= line.join(";") %><% end %><% end %>
+<% if @vendor.salor_configuration.csv_loyalty_cards then %><%
+  header = [ :class, :sku, :points, :customer_sku]
+  @loyalty_cards = @customers.each.inject([]) {|cards,customer| cards << customer.loyalty_card }
+%>#HEADERS;<%= header.join(";") %><% 
+@loyalty_cards.each do |item| 
+  line = []
+  header.each do |h|
+    line << item.send(h)
+  end
+%>
+<%= line.join(";") %><% end %><% end %>

@@ -45,6 +45,18 @@ class Item < ActiveRecord::Base
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
+  def category_name
+    return self.category.name if self.category
+  end
+  def category_name=(str)
+    c = Category.scopied.find_by_name(str)
+    if c then
+      self.category = c
+    end
+  end
+  def location_name
+    return self.location.name if self.location
+  end
   def self.repair_items
     Item.where('child_id IS NOT NULL and child_id != 0').each do |item|
       if item.parent or item.child then

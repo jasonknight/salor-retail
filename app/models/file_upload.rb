@@ -411,5 +411,69 @@ class FileUpload
     end
     GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
   end
+  def dist(file,trusted)
+    i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
+    csv = Kcsv.new(file,{:header => true})
+    csv.to_a.each do |rec|
+      begin
+        kls = Kernel.const_get(rec[:class])
+        rec.delete(:class)
+        if kls == Item then
+          tp = TaxProfile.find_or_create_by_value(rec[:tax_profile_amount])
+          created_tax_profiles += 1 if tp.new_record?
+          cat = Category.find_by_name(rec[:category_name])
+          rec.delete(:category_name)
+          if rec[:location_name] then
+            loc = Location.find_or_create_by_name(rec[:location_name]) if trusted
+            if not loc.save then
+              loc.errors.full_messages.each do |m|
+                GlobalErrors << ['',m]
+              end
+            end
+          end
+          rec.delete(:location_name)
+          item = Item.find_or_create_by_sku(rec[:sku])
+          item.tax_profile = tp
+          item.category = cat
+          item.location = loc
+          item.attributes = rec
+          created_items += 1 if item.new_record?
+          updated_items += 1 if not item.new_record?
+        elsif kls == Button then
+          item = Button.find_or_create_by_sku(rec)
+          item.attributes = rec
+        elsif kls == Category then
+          item = Category.find_or_create_by_sku(rec[:sku])
+          item.attributes = rec
+          created_categories += 1 if item.new_record?
+        elsif kls == LoyaltyCard and trusted then
+          item = LoyaltyCard.find_or_create_by_sku(rec[:sku])
+          item.attributes = rec
+        elsif kls == Customer and trusted then
+          item = Customer.find_or_create_by_sku(rec[:sku])
+          item.attributes = rec
+        elsif kls == Discount and trusted then
+          item = Discount.find_or_create_by_sku(rec[:sku])
+          item.attributes = rec
+        end
+        if not item.save then
+          SalorBase.log_action "DistUpload","failed to save #{item.attributes.inspect}"
+          item.errors.full_messages.each do |msg|
+            SalorBase.log_action "DistUpload","#{msg}"
+          end 
+        end
+      rescue 
+         GlobalErrors << [$!.inspect,rec.inspect]
+      end
+    end # end csv.to_a.each
+    GlobalErrors.append('views.notice.wholesaler_upload_report', 
+                         nil, 
+                         { 
+                            :updated_items => updated_items, 
+                            :created_items => created_items, 
+                            :created_categories => created_categories, 
+                            :created_tax_profiles => created_tax_profiles 
+                         })
+  end # def dist(file)
   # {END}
 end

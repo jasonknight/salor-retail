@@ -17,12 +17,21 @@ class LoyaltyCard < ActiveRecord::Base
   def validify
     clean_model
     lc = LoyaltyCard.scopied.find_by_sku(self.sku)
-    if lc.id != self.id then
+    if not lc.id.nil? and lc.id != self.id then
       errors.add(:sku, I18n.t('system.errors.sku_must_be_unique'))
       GlobalErrors.append_fatal('system.errors.sku_must_be_unique');
     end
   end
   def clean_model
     self.sku = self.sku.gsub(' ','')
+  end
+  def customer_sku
+    csku = self.customer.sku if self.customer
+    if csku.blank? then
+      self.customer.set_sku
+      csku = self.customer.sku
+      self.customer.save
+    end
+    return csku
   end
 end

@@ -340,7 +340,13 @@ class ItemsController < ApplicationController
       else
         file = a.get(GlobalData.conf.csv_imports_url + "/" + parts[0])
       end
-      uploader.send(parts[1].to_sym, file.body.split("\n")) # i.e. we dynamically call the function to process
+      if parts[1].include? "dist*" then
+        uploader.send('dist'.to_sym, file.body,true) # i.e. dist* means an internal source
+      elsif parts[1] == 'dist' then
+        uploader.send(parts[1].to_sym, file.body,false) # just dist means that it is the new salor format, but not trusted
+      else
+        uploader.send(parts[1].to_sym, file.body.split("\n")) # i.e. we dynamically call the function to process
+      end
       # this .csv file, this is set in the vendor.salor_configuration as filename.csv,type1|type2 ...
       rescue
         GlobalErrors << ["WholeSaleImportError",$!.to_s + " For " + parts[0].to_s,nil]

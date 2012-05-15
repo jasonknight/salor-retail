@@ -2,6 +2,7 @@ Salor::Application.routes.draw do
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
+  match "vendors/csv" => "vendors#csv"
   match "nodes/send_msg" => "nodes#send_msg"
   match "nodes/receive_msg" => "nodes#receive_msg"
   match "home/index" => "home#index"
