@@ -440,45 +440,45 @@ es:
       start_date: Fecha inicial
       sum_total: Suma total
     report_day:
-      title: día report
-      sums_by_category: sums by Categoría
-      sums_by_tax_profile: sums by Tipo de IVA
-      sums_by_payment_methods: sums by métodos de pago
-      sum: sum
-      sums_by_transaction_types: sums by tipos de transacción
+      title: Informe del día
+      sums_by_category: Sumas por categoría
+      sums_by_tax_profile: Sumas por tipo de IVA
+      sums_by_payment_methods: Sumas por métodos de pago
+      sum: Suma
+      sums_by_transaction_types: Sumas por tipos de transacción
       transactions: Transacciones
       transaction_tag: Etiqueta de transacción
       drops: Reembolsos
       drop: Reembolso
       payouts: Desembolsos
       payout: Desembolso
-      transaction_total: transacción total
-      transaction_journal: transacción journal
-      time: time
-      OrderItemRefund: Item Refund
-      OrderRefund: Pedido Refund
-      None: Not specified
-      count_orders: Count of Pedidos
-      sales: Sales
-      payments: Payments
+      transaction_total: Total de la transacción total
+      transaction_journal: Diario de transacciones
+      time: Hora
+      OrderItemRefund: Reintegro de artículo
+      OrderRefund: Reintegro de pedido
+      None: No especificado
+      count_orders: Cuenta de pedidos
+      sales: Ventas
+      payments: Pagos
       cash_drawer: Caja
-      revenue: Revenue
-      sum_gross: Sum gross
-      sum_net: Sum net
-      gross: gross
-      net: net
-      sum_transactions: Sum transacciones
+      revenue: Ganancias
+      sum_gross: Suma bruta
+      sum_net: Suma neta
+      gross: Bruto
+      net: Neto
+      sum_transactions: Suma de transacciones
       noncash-refunds: Reintegro no en efectivo
       cash-refunds: Reintegro en efectivo
-      from: From
-      to: To
+      from: De
+      to: A
     report_range:
-      title: día report
-      sums_by_category: sums by Categoría
-      sums_by_tax_profile: sums by Tipo de IVA
-      sums_by_payment_methods: sums by métodos de pago
-      sum: sum
-      sums_by_transaction_types: sums by tipos de transacciones
+      title: Informe del día
+      sums_by_category: Sumas por categoría
+      sums_by_tax_profile: Sumas por tipo de IVA
+      sums_by_payment_methods: Sumas por métodos de pago
+      sum: Suma
+      sums_by_transaction_types: Sumas por tipos de transacciones
       transactions: transacción 
       transaction_tag: Etiqueta de transacción
       drops: Reembolsos
@@ -487,37 +487,37 @@ es:
       payout: Desembolso
       transaction_total: transacción total
       transaction_journal: transacción journal
-      time: time
-      OrderItemRefund: artículo Refund
-      OrderRefund: Pedido Refund
-      None: Not specified
-      count_orders: Count of Pedidos
-      sales: Sales
+      time: Hora
+      OrderItemRefund: Reintegro de artículo
+      OrderRefund: Reintegro de pedido
+      None: No especificado
+      count_orders: Cuenta de pedidos
+      sales: Ventas
       payments: Pagos
       cash_drawer: Caja
-      revenue: Revenue
-      sum_gross: Sum gross
-      sum_net: Sum net
-      gross: gross
-      net: net
-      sum_transactions: Sum transacciones 
-      noncash-refunds: Noncash-Refunds
-      cash-refunds: Cash-Refunds
-      from: From
-      to: To
+      revenue: Ganancias
+      sum_gross: Suma bruta
+      sum_net: Suma neta
+      gross: Bruto
+      net: Neto
+      sum_transactions: suma de transacciones 
+      noncash-refunds: Reintegros no en efectivo
+      cash-refunds: Reintegros en efectivo
+      from: De
+      to: A
       
 
   printr:
     formats:
       advert: |-
-          The Innovative Point of Sale
+          El punto de venta innovador
           www.salorpos.com
       b1g1_coupon: "%c %20.20s"
-      by_card: "By Card:                  EUR %8.2f"
-      by_cash: "In Cash:                  EUR %8.2f"
-      cancel: Cancel                  EUR %8.2f
-      change: "Change:                       EUR %8.2f"
-      coupon_subtotal: Coupon                   EUR %8.2f
+      by_card: "Con tarjeta:                  EUR %8.2f"
+      by_cash: "En efectivo:                  EUR %8.2f"
+      cancel: Cancelar                  EUR %8.2f
+      change: "Cambiar:                       EUR %8.2f"
+      coupon_subtotal: Cupón                   EUR %8.2f
       discount_subtotal: Descuento                        EUR %8.2f
       discounted_item: "%c %20.20s %7.2f %3u %7.2f"
       end_of_day: "%20.20s EUR %5.2f"
@@ -526,32 +526,32 @@ es:
       percent_coupon: "%c %20.20s %7.1f%% %3u %7.2f"
       rebate_amount: Rebaja %4.2f%%                 EUR %8.2f
       rebate_item: "%c %20.20s %7.2f %3u %7.2f"
-      rebate_subtotal: Rebaja Total                  EUR %8.2f
+      rebate_subtotal: Rebaja total                  EUR %8.2f
       subtotal: Subtotal                      EUR %8.2f
-      thanks: Thank you for shopping with us!
+      thanks: ¡Gracias por su compra!
       total: TOTAL                         EUR %8.2f
     eod_report:
-      orders_total: Pedidos total
-      refunded_total: Refunded total
-      buyback_item_total: recompra artículo total
-      buyback_order_total: recompra Pedido total
+      orders_total: Total de pedidos
+      refunded_total: Total de reintegros
+      buyback_item_total: Total de artículos de recompra 
+      buyback_order_total: Total de pedido de recompra 
       drop_total: TOTAL
       payout_total: TOTAL
       payment_method_total: TOTAL
       transaction_total: TOTAL
       cash_refunds_total: TOTAL
       revenue_total: TOTAL
-      OrderItemRefund: Pedido Item Refund
-      OrderRefund: Pedido Refund
-      sales: Sales
+      OrderItemRefund: Reintegro de artículo del pedido
+      OrderRefund: Reintegro del pedido
+      sales: Centas
       payments: Pagos
-      refund: Refund
-      None: Not named
-      noncash-refunds: Noncash-Refunds
-      cash-refunds: Cash-Refunds
-      revenue: Revenue
-      calculated_drawer_amount: Calculated caja amount
-      system_drawer_amount: System caja amount
+      refund: Reintegro
+      None: Sin nombre
+      noncash-refunds: Reintegros no en efectivo
+      cash-refunds: Reintegros en efectivo
+      revenue: Ganancias
+      calculated_drawer_amount: Total calculado en caja
+      system_drawer_amount: Total en la caja del sistema
       warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each día with a drawer amount of zero to ease accounting work. Make a cash Desembolso accordingly and print this report again.
     order_receipt:
       lc_points_substracted: Substracted puntos de fidelización
