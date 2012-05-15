@@ -552,72 +552,72 @@ es:
       revenue: Ganancias
       calculated_drawer_amount: Total calculado en caja
       system_drawer_amount: Total en la caja del sistema
-      warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each día with a drawer amount of zero to ease accounting work. Make a cash Desembolso accordingly and print this report again.
+      warning_drawer_amount_not_zero: ¡Atención! El total en su caja no es cero. Le aconsejamos terminar y empazar cada día con la caja vacía a fin de facilitar su contabilidad. Realice el desembolso de efectivo correspondiente e imprima nuevamente este informe.
     order_receipt:
-      lc_points_substracted: Substracted puntos de fidelización
+      lc_points_substracted: Puntos de fidelización sustraidos
       subsubtotal: TOTAL
-      change: Change money
-      refund: Total refunds
-      given: Given money
-      net: net
+      change: Cambiar dinero
+      refund: Total de reintegros
+      given: Dinero otorgado
+      net: Neto
       tax: IVA
-      gross: gross
-      current_loyalty_points: Your puntos de fidelización
+      gross: Bruto
+      current_loyalty_points: Sus puntos de fidelización
       subtotal1: Subtotal
       subtotal2: Subtotal
       subtotal3: Subtotal
       subtotal4: Subtotal
-      rebate_subtotal: Rebaja Subtotal
-      rebate: Single Rebaja
-      coupon_subtotal: Coupon Subtotal
-      discount_subtotal: descuento Subtotal
-      discount: descuento 
+      rebate_subtotal: subtotal de la rebaja
+      rebate: Rebaja única
+      coupon_subtotal: Subtotal del cupón
+      discount_subtotal: Subtotal del descuento
+      discount: Descuento 
       rebate_percent: Rebaja en porcentaje
-      rebate_fixed: Fixed Rebaja
-      refunded: REFUNDED
+      rebate_fixed: Rebaja fija
+      refunded: REINTEGRADO
 
     word:
-      cancelled: cancelled
+      cancelled: Cancelado
       drop: Reembolso
       payout: Desembolso
       sold: Vendido
 
   receipts:
-    invoice: Rechnung
-    invoice_numer_X_at_time: Pedido Nr. %{number} at %{datetime}
-    report_at_time: Report %{datetime}
+    invoice: Factura
+    invoice_numer_X_at_time: Pedido Nro. %{number} at %{datetime}
+    report_at_time: Informe %{datetime}
     x_sum: |+
-        %{type} SUM:   EUR %.2f
-    you_were_served_by: "You were served by %{name}"
+        %{type} TOTAL:   EUR %.2f
+    you_were_served_by: "Ud. fue atendido por %{name}"
     
   reports:
-    item_zero: Sold out Artículo
+    item_zero: Artículo agotado
     tax_class: Clase de IVA
-    description: description
-    unit_price: unit precio
-    amount: amount
-    total: total
+    description: Descripción
+    unit_price: Precio unitario
+    amount: Monto
+    total: Total
 
   roles:
     cashier: Cajera
     header_cashier: Jefe de cajeras
-    manager: manager
-    stockboy: almacenero
+    manager: Gerente
+    stockboy: Almacenero
     
   system:
-    add_payment_method: add método de pago
-    complete_sale: Complete
+    add_payment_method: Añadir método de pago
+    complete_sale: Terminar
     employee_login: Nombre de usuario del empleado
     inventory_updated: Inventario actualizado 
-    logged_in_as: logged in as
+    logged_in_as: Conectado como
     login: Nombre de usuario
     logout: Desconectarse
-    not_you: not you?
+    not_you: ¿No es usted?
     owner_login: Nombre de usuario del dueño
     owner_mode: MODALIDAD DUEÑO
-    owner_success: dueño properties were successfully actualizado
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    owner_success: Las propiedades del dueño han sido actualizadas con éxito.
+    payment_external_types: efectivo,tarjeta de crédito,tarjeta de regalo,otro
+    payment_internal_types: EnEfectivo,ConTarjetaDeCrédito,ConTarjetaDeRegalo,OtroCiente
     rebate_types:
       fixed: $
       percent: "%"
