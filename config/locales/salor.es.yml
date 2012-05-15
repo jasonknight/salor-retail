@@ -240,85 +240,85 @@ es:
     discounts_for: Rebajas de %{store}
     edit_shipper: Editar transportador %{name}
     employees: Empleados
-    expiring_soon: expiring soon
-    export: export
-    item_selection: item selection
-    new_discount_for: Nuevo descuento for %{store}
+    expiring_soon: Se vence pronto
+    export: Exportar
+    item_selection: Selección de artículos
+    new_discount_for: Nuevo descuento de %{store}
     notes: Notas
     shipment_items: Artículos de un envío
-    shipment_items_header: nombre,SKU,precio,Categoría,Ubicación
+    shipment_items_header: nombre,SKU,precio,categoría,ubicación
     shipment_types: Tipos de envío
-    shipment_types_header: state,added by, , 
+    shipment_types_header: estado,añadido por, , 
     shipments: Envíos
-    shipments_header: name,from,to,precio,paid?,added by,status, , , 
-    update_location: update Ubicación 
-    update_real_quantity: update real cantidad
+    shipments_header: nombre,de,a,precio,¿pagado?,añadido por,estatus, , , 
+    update_location: Actualizar ubicación 
+    update_real_quantity: Actualizar cantidad real 
 
   helpers:
     select:
-      prompt: please select
+      prompt: Por favor seleccione
     submit:
-      cancel: cancel
-      clear: clear
-      create: create
-      get_item: get item
-      print: print
-      complete_sale: complete sale
-      submit: submit
-      save: Save
-      update: update
+      cancel: Cancelar
+      clear: Borrar
+      create: Crear
+      get_item: Obtener artículo
+      print: Imprimir
+      complete_sale: Finalizar la venta
+      submit: Someter
+      save: Guardar
+      update: Actualizar
       ok: OK
 
   when_list:
-    always: always
-    on_save: on save
-    on_import: on import
-    on_export: on export
-    add_to_order: on add to pedido
+    always: siempre
+    on_save: al guardar
+    on_import: al importar
+    on_export: al exportar
+    add_to_order: al añadir al pedido
     
   behavior_list:
-    add: add
-    subtract: subtract
-    multiply: multiply
-    divide: divide
-    assign: assign
+    add: Sumar
+    subtract: Restar
+    multiply: Multiplicar
+    divide: Dividir
+    assign: Asignar
 
   menu:
-    remote_service: Remote Service
-    usb_device: Usb Stick
-    salortrainer: Salor Trainer
-    salorlive: Salor Live!
-    database_distiller: XXX Database Distiller
-    clear_order: Clear
-    inventory_report: inventario report
+    remote_service: Servicio a distancia
+    usb_device: Llave USB
+    salortrainer: Entrenador de Salor
+    salorlive: ¡Salor en vivo!
+    database_distiller: Filtro de la base de datos
+    clear_order: Borrar
+    inventory_report: Resúmen de inventario
     ok: OK
     buttons: Botones
-    cameras: cameras
-    tender_methods: métodos de pago
+    cameras: Cámaras
+    tender_methods: Métodos de pago
     new_tender_method: Nuevo método de pago
     edit_tender_method: Editar método de pago
-    new_broken_item: Nuevo broken artículo
-    activate_gift_card: Activar gift card
-    add_to_current_order: add to current pedido
-    additional: additional
-    back: back
-    broken_items: broken Artículos
-    buy_order: Buy
-    cancel: cancel
+    new_broken_item: Nuevo artículo dañado
+    activate_gift_card: Activar tarjeta de regalo
+    add_to_current_order: Añadir al pedido actual
+    additional: Adicional
+    back: Volver
+    broken_items: Artículos dañados
+    buy_order: Comprar
+    cancel: Cancelar
     cash_drop: Reembolso de efectivo
     cash_register: Caja
     cash_registers: Cajas
-    categories: categorías
+    categories: Categorías
     configuration: Config.
     contact: Contacto
-    current_order: "current pedido: #%{id}"
+    current_order: "pedido actual: #%{id}"
     customer: Cliente
     customers: Clientes
-    delete: delete
-    delete_confirm: Are you sure?
-    destroy: destroy
+    delete: Borrar
+    delete_confirm: ¿Está ud. seguro?
+    destroy: Destruir
     discounts: Descuentos
-    done: done
+    done: Listo
     edit: Editar
     edit_cash_register: Editar caja
     edit_category: Editar categoría
@@ -333,15 +333,15 @@ es:
     edit_tax_profile: Editar tipo de IVA
     edit_vendor: Editar tienda
     employees: Empleados
-    end_day: end día
-    general_configuration: general configuration
-    home: home
+    end_day: Finalizar el día
+    general_configuration: Configuración general
+    home: Inicio
     item_types: Tipos de artículo
     items: Artículos
     locations: Ubicaciones 
     loyalty_cards: Tarjetas de fidelización
-    move_all_shipment_items: move all artículos del envío
-    move_shipment_item: move artículo de envío
+    move_all_shipment_items: Desplazar todos los artículos del envío
+    move_shipment_item: Desplazar artículo de envío
     new_action: Nueva action
     new_cash_register: Nueva caja
     new_category: Nueva categoría
@@ -374,13 +374,13 @@ es:
     stock_locations: Ubicaciones del stock
     support: support
     tax_profiles: Tipos de IVA
-    update_gift_card: update gift card
+    update_gift_card: Actualizar gift card
     vendors: Tiendas
     void: void
     end_of_day_drop: end of día Reembolso
     transaction_tags: Etiquetas de transacción
-    update_location: update Ubicación
-    update_real_quantity: update real Cantidad
+    update_location: Actualizar ubicación
+    update_real_quantity: Actualizar cantidad real
     print: print
     upload: upload
     download: download
@@ -390,7 +390,7 @@ es:
     report_day: report día
     report_accounting: report accounting
     report_day_range: monthly report
-    wholesaler_update: wholesaler update
+    wholesaler_update: wholesaler Actualización
     law_reports: Report Download
     
     
@@ -608,14 +608,14 @@ es:
     add_payment_method: add método de pago
     complete_sale: Complete
     employee_login: Nombre de usuario del empleado
-    inventory_updated: inventario updated
+    inventory_updated: Inventario actualizado 
     logged_in_as: logged in as
     login: Nombre de usuario
     logout: Desconectarse
     not_you: not you?
     owner_login: Nombre de usuario del dueño
     owner_mode: MODALIDAD DUEÑO
-    owner_success: dueño properties were successfully updated
+    owner_success: dueño properties were successfully actualizado
     payment_external_types: cash,card,gift card,other
     payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
     rebate_types:
@@ -650,8 +650,8 @@ es:
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.
       gift_card_not_found: Could not find that gift card attached to this Pedido...
       gs1_item_not_found: "artículo marked as gs1, but %{sku} is not in the correct format."
-      insufficient_quantity_on_item: "Warning, artículo %{sku} Cantidad is insufficient, time to update your stock levels!"
-      inventory_update_error: inventario update error
+      insufficient_quantity_on_item: "Warning, artículo %{sku} Cantidad is insufficient, time to Actualizar your stock levels!"
+      inventory_update_error: inventario Actualizar error
       item_not_found: The artículo you are looking for could not be found, try searching?
       item_price_is_zero: "Warning: artículo precio is 0"
       lp_calculation_failed: Failed to apply puntos de fidelización, are you sure you setup this up in your Tienda configuration?
@@ -704,7 +704,7 @@ es:
   views:
     eticket: Ticket
     sticky_ticket: Sticker
-    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
+    wholesaler_refresh: Fetching wholesaler Actualizaciones. This can take several minutes.
     advanced_field: advanced field
     by_card: by card
     cash_register_heading: "%{name} for %{store}"
@@ -784,8 +784,8 @@ es:
           shipped: shipped
     notice:
       save_before: XXX Save before leaving?
-      move_real_quantities_success: Item quantities were successfully updated
-      wholesaler_upload_report: "Updated Artículos: %{updated_items}, Created Artículos: %{created_items}, Created categories: %{created_categories}, Created Tipos de IVA %{created_tax_profiles}"
+      move_real_quantities_success: Item quantities were successfully Actualizado
+      wholesaler_upload_report: "Artículos actualizados: %{updated_items}, Created Artículos: %{created_items}, Created categories: %{created_categories}, Created Tipos de IVA %{created_tax_profiles}"
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
       model_create: "%{model} was created successfully"
@@ -840,7 +840,7 @@ es:
       query: Query!
       quantity_sold: Cantidad vendida
     index:
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
+      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and Actualizado. This action will take about 20 minutes. Are you really sure that you want to proceed?
       database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
     database_distiller:
       used_item_ids: Used Artículos
@@ -861,7 +861,7 @@ es:
       subtotal_selling_price: Subtotal Selling precio
     update_real_quantity:
       inventory_report: inventario Report
-      update_quantity: Update inventario cantidades
+      update_quantity: Actualizar inventario cantidades
       are_you_sure: This will copy the inventario cantidades into the database and reset the inventario report. Continue?
 
   home:
