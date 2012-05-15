@@ -146,14 +146,14 @@ es:
       length: largo
       location_id: Nombre de la ubicación
       lp_per_dollar: Puntos de fidelización por dólar
-      min_quantity: cantidad mínima
+      min_quantity: Cantidad mínima
       name: Nombre
       not_paid: Pago pendiente
       notes: Notas
       packaging_unit: Unidad de embalaje
       pagination: Paginación
       paid: Pagado
-      part_quantity: Quantidad de partes
+      part_quantity: Cantidad de partes
       parts: Partes
       password: Clave
       payout: Desembolso
@@ -252,7 +252,7 @@ es:
     shipments: Envíos
     shipments_header: name,from,to,price,paid?,added by,status, , , 
     update_location: update Ubicación 
-    update_real_quantity: update real quantity
+    update_real_quantity: update real cantidad
 
   helpers:
     select:
@@ -290,7 +290,7 @@ es:
     salorlive: Salor Live!
     database_distiller: XXX Database Distiller
     clear_order: Clear
-    inventory_report: Inventory report
+    inventory_report: inventario report
     ok: OK
     buttons: buttons
     cameras: cameras
@@ -381,7 +381,7 @@ es:
     end_of_day_drop: end of day payout
     transaction_tags: Etiquetas de transacción
     update_location: update Ubicación
-    update_real_quantity: update real quantity
+    update_real_quantity: update real Cantidad
     print: print
     upload: upload
     download: download
@@ -609,7 +609,7 @@ es:
     add_payment_method: add Método de pago
     complete_sale: Complete
     employee_login: empleado login
-    inventory_updated: inventory updated
+    inventory_updated: inventario updated
     logged_in_as: logged in as
     login: login
     logout: logout
@@ -651,14 +651,14 @@ es:
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.
       gift_card_not_found: Could not find that gift card attached to this Pedido...
       gs1_item_not_found: "Item marked as gs1, but %{sku} is not in the correct format."
-      insufficient_quantity_on_item: "Warning, Item %{sku} quantity is insufficient, time to update your stock levels!"
-      inventory_update_error: inventory update error
+      insufficient_quantity_on_item: "Warning, Item %{sku} Cantidad is insufficient, time to update your stock levels!"
+      inventory_update_error: inventario update error
       item_not_found: The item you are looking for could not be found, try searching?
       item_price_is_zero: "Warning: Item price is 0"
       lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your Tienda configuration?
       must_cash_drop: Your caja does not have any money, please add a cash drop!
       must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Tienda!
+      must_choose_vendor: You minsufficient_cantidad_on_itemust choose a Tienda!
       must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Tienda
       must_specify_drop_or_payout: You must specify either drop or payout!
       no_class: "There is no class for %{model} at line %{i}"
@@ -741,7 +741,7 @@ es:
     password_confirm: confirm password
     please_test_before_upload: "WARNING: You are about to overwrite data in the database."
     price: price
-    quantity: quantity
+    quantity: Cantidad
     rebate: rebate
     remember_me: remember me
     report: report
@@ -839,7 +839,7 @@ es:
       from: from
       to: to
       query: Query!
-      quantity_sold: Sold quantity
+      quantity_sold: Cantidad vendida
     index:
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
       database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
@@ -854,16 +854,16 @@ es:
     upload:
       upload: upload
     inventory_report:
-      title: Inventory Report
+      title: inventario Report
       price: Selling price
       total_buying_price: Sum Purchase Price
       total_selling_price: Sum Selling Price
       subtotal_purchase_price: Subtotal Purchase Price
       subtotal_selling_price: Subtotal Selling Price
     update_real_quantity:
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
-      are_you_sure: This will copy the inventory quantities into the database and reset the inventory report. Continue?
+      inventory_report: inventario Report
+      update_quantity: Update inventario cantidades
+      are_you_sure: This will copy the inventario cantidades into the database and reset the inventario report. Continue?
 
   home:
     user_employee_index:
