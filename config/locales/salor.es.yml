@@ -29,36 +29,36 @@ es:
         one: Transacción de caja
         other: Transacciones de caja
       employee:
-        one: Employee
-        other: Employees
+        one: Empleado
+        other: Empleados
       item:
-        one: Item
-        other: Items
+        one: Artículo
+        other: Artículos
       item_type:
-        one: Item Type
-        other: Item Types
+        one: Tipo de artículo 
+        other: Tipo de artículo 
       location:
-        one: Location
-        other: Locations
+        one: Ubicación
+        other: Ubicaciones
       order:
         one: Order
         other: Orders
       order_item:
         one: Order Item
-        other: Order Items
+        other: Order Artículo
       shipment:
         one: Shipment
         other: Shipments
       shipment_type:
-        one: Shipment Type
-        other: Shipment Types
+        one: Tipo de Shipment
+        other: Tipos de Shipment
         default_name: Auto Nachbestellung
       shipper:
         one: Shipper
         other: Shippers
       stock_location:
-        one: Stock Location
-        other: Stock Locations
+        one: Stock Ubicación
+        other: Stock Ubicaciones
       tax_profile:
         one: Tax Profile
         other: Tax Profiles
@@ -79,7 +79,7 @@ es:
       uses_drawer_id: Uses caja of
       employee:
         uses_drawer_id: Uses caja of
-      reorder_type: Reorder Type
+      reorder_type: Reorder Tipo de 
       big_buttons: Big Botones
       hide_discounts: Hide descuentos
       thermal_printer: Thermal Printer
@@ -96,18 +96,18 @@ es:
       created_at: Created
       is_refund: Is Refund?
       owner_id: Owner
-      owner_type: Owner Type
+      owner_type: Owner Tipo de 
       parent_sku: Parent SKU
       child_sku: Child SKU
       ignore_qty: Ignore Qty
       bank_machine_path: ATM
       artema_hybrid: Artema Hybrid
-      type: type
+      type: Tipo
       active: active
       address: address
       amount: amount
       amount_remaining: amount remaining
-      amount_type: amount type
+      amount_type: amount Tipo de 
       applies_to: applies to
       base_price: base price
       behavior: behavior
@@ -127,7 +127,7 @@ es:
       country: country
       coupon_applies: coupon applies
       coupon_total: coupon total
-      coupon_type: coupon type
+      coupon_type: coupon Tipo de 
       decimal_points: decimal points
       default_buyback: default buyback
       dollar_per_lp: dollar per loyalty point
@@ -140,11 +140,11 @@ es:
       height: height
       is_shipment_item: is shipment item
       item_sku: item sku
-      itemsviewlist: "List View for Items"
+      itemsviewlist: "List View for Artículos"
       last_name: last name
       lc_points: loyalty card points
       length: length
-      location_id: location id
+      location_id: Ubicación id
       lp_per_dollar: loyalty points per dollar
       min_quantity: min quantity
       name: name
@@ -166,7 +166,7 @@ es:
       real_quantity: real quantity
       quantity_sold: quantity sold
       rebate: rebate
-      rebate_type: rebate type
+      rebate_type: rebate Tipo de 
       receipt_blurb: Receipt header
       receipt_blurb_footer: Receipt footer
       sales_metric: sales metric
@@ -179,7 +179,7 @@ es:
         name: name
         quantity: quantity
         sku: SKU
-        stock_location_id: Stock location
+        stock_location_id: Stock Ubicación 
       cash_register:
         sticker_printer: Sticker printer
       item:
@@ -190,7 +190,7 @@ es:
       start_date: start date
       state: state
       status: status
-      stock_location_ids: Stock location
+      stock_location_ids: Stock Ubicación 
       street1: Address 1
       street2: Address 2
       subtotal: subtotal
@@ -233,25 +233,25 @@ es:
     bank_machine_types: supported bank machines
     almost_out: almost out
     best_sellers: bestsellers
-    best_selling_category: best selling category
-    best_selling_location: best selling location
-    crd: Time,Amount,Type,Notes
+    best_selling_category: best selling Categoría
+    best_selling_location: best selling Ubicación 
+    crd: Time,Amount,tipo,Notes
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
     edit_shipper: edit shipper %{name}
-    employees: employees
+    employees: Empleados
     expiring_soon: expiring soon
     export: export
     item_selection: item selection
     new_discount_for: new discount for %{store}
     notes: notes
-    shipment_items: shipment items
-    shipment_items_header: Name,SKU,price,category,location
-    shipment_types: shipment types
+    shipment_items: shipment Artículos
+    shipment_items_header: Name,SKU,price,Categoría,Ubicación
+    shipment_types: shipment Tipos de 
     shipment_types_header: state,added by, , 
     shipments: shipments
     shipments_header: name,from,to,price,paid?,added by,status, , , 
-    update_location: update location
+    update_location: update Ubicación 
     update_real_quantity: update real quantity
 
   helpers:
@@ -303,7 +303,7 @@ es:
     add_to_current_order: add to current order
     additional: additional
     back: back
-    broken_items: broken items
+    broken_items: broken Artículos
     buy_order: Buy
     cancel: cancel
     cash_drop: cash drop
@@ -325,35 +325,35 @@ es:
     edit_category: edit categoría
     edit_customer: edit cliente
     edit_discount: edit descuento
-    edit_employee: edit employee
+    edit_employee: edit empleado
     edit_item: edit item
-    edit_location: edit location
+    edit_location: edit Ubicación 
     edit_shipment: edit shipment
-    edit_shipment_type: edit shipment type
+    edit_shipment_type: edit shipment tipo de 
     edit_shipper: edit shipper %{name}
     edit_tax_profile: edit tax profile
     edit_vendor: edit vendor
-    employees: employees
+    employees: Empleados
     end_day: end day
     general_configuration: general configuration
     home: home
-    item_types: item types
-    items: items
-    locations: locations
+    item_types: Tipos de artículo
+    items: Artículos
+    locations: Ubicaciones 
     loyalty_cards: loyalty cards
-    move_all_shipment_items: move all shipment items
+    move_all_shipment_items: move all shipment artículos
     move_shipment_item: move shipment item
     new_action: new action
     new_cash_register: new cash register
-    new_category: new category
+    new_category: new categoría
     new_customer: new cliente
     new_discount: new discount
-    new_employee: new employee
+    new_employee: new empleado
     new_item: new item
     new_location: new location
     new_order: New
     new_shipment: new shipment
-    new_shipment_type: new shipment type
+    new_shipment_type: new shipment tipo de 
     new_shipper: new shipper
     new_stock_location: new stock location
     new_tax_profile: new tax profile
@@ -367,7 +367,7 @@ es:
     pretext: pretext
     reports: reports
     search: search
-    shipment_types: shipment types
+    shipment_types: shipment Tipos de 
     shipments: shipments
     shippers: shippers
     show: show
@@ -397,7 +397,7 @@ es:
     
   notifications:
     shipments_item_could_not_be_saved: shipments item could not be saved
-    shipments_move_all_items: all items were successfully moved
+    shipments_move_all_items: all artículos were successfully moved
     shipments_move_item: item was successfully moved
 
   exception_page:
@@ -442,19 +442,19 @@ es:
       sum_total: sum total
     report_day:
       title: day report
-      sums_by_category: sums by category
+      sums_by_category: sums by Categoría
       sums_by_tax_profile: sums by tax profile
       sums_by_payment_methods: sums by payment methods
       sum: sum
-      sums_by_transaction_types: sums by transacción types
-      transactions: transactions
-      transaction_tag: transaction tag
+      sums_by_transaction_types: sums by tipos de transacción
+      transactions: Transacciones
+      transaction_tag: transacción tag
       drops: drops
       drop: drop
       payouts: payouts
       payout: payout
-      transaction_total: transaction total
-      transaction_journal: transaction journal
+      transaction_total: transacción total
+      transaction_journal: transacción journal
       time: time
       OrderItemRefund: Item Refund
       OrderRefund: Order Refund
@@ -468,26 +468,26 @@ es:
       sum_net: Sum net
       gross: gross
       net: net
-      sum_transactions: Sum transactions
+      sum_transactions: Sum transacciones
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
       from: From
       to: To
     report_range:
       title: day report
-      sums_by_category: sums by category
+      sums_by_category: sums by Categoría
       sums_by_tax_profile: sums by tax profile
       sums_by_payment_methods: sums by payment methods
       sum: sum
-      sums_by_transaction_types: sums by transaction types
-      transactions: transactions
-      transaction_tag: transaction tag
+      sums_by_transaction_types: sums by tipos de transacciones
+      transactions: transacción 
+      transaction_tag: transacción tag
       drops: drops
       drop: drop
       payouts: payouts
       payout: payout
-      transaction_total: transaction total
-      transaction_journal: transaction journal
+      transaction_total: transacción total
+      transaction_journal: transacción journal
       time: time
       OrderItemRefund: Item Refund
       OrderRefund: Order Refund
@@ -501,7 +501,7 @@ es:
       sum_net: Sum net
       gross: gross
       net: net
-      sum_transactions: Sum transactions
+      sum_transactions: Sum transacciones 
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
       from: From
@@ -592,7 +592,7 @@ es:
     you_were_served_by: "You were served by %{name}"
     
   reports:
-    item_zero: Sold out items
+    item_zero: Sold out Artículo
     tax_class: tax class
     description: description
     unit_price: unit price
@@ -608,7 +608,7 @@ es:
   system:
     add_payment_method: add payment method
     complete_sale: Complete
-    employee_login: employee login
+    employee_login: empleado login
     inventory_updated: inventory updated
     logged_in_as: logged in as
     login: login
@@ -634,14 +634,14 @@ es:
       cannot_edit_completed_order: "That order is completed and cannot be modified."
       limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
       sanity_check: Requested action is insane, verify order total and notify customer of correction.
-      cannot_reorder: No items must be reordered.
+      cannot_reorder: No Artículos  must be reordered.
       action_code_error: "Code could not be executed because %{error}"
       action_error: "Action could not complute because %{error}"
       not_enough_in_drawer: not enough in caja
       cash_drop_amount_must_be_positive: cash drop amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
       coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
-      coupon_not_enough_items: You have not purchased enough items for this to apply
+      coupon_not_enough_items: You have not purchased enough artículos for this to apply
       coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
       csv_item_exists: "Item %{sku} exists!"
       csv_item_failed: "%{id} %{i} failed."
@@ -710,7 +710,7 @@ es:
     by_card: by card
     cash_register_heading: "%{name} for %{store}"
     cash_registers: cash registers
-    category_heading: category %{name} for %{store}
+    category_heading: Categoría %{name} for %{store}
     given: given
     change: change
     customers: Clientes
@@ -726,7 +726,7 @@ es:
     item: item
     language: language
     listing: listing
-    listing_items: listing items
+    listing_items: listing Artículos
     locations: locations
     loyalty_card: loyalty card
     name: name
@@ -761,10 +761,10 @@ es:
       applies_to_item: applies to item with SKU
       buy_one_get_one: buy one get one
       cashier: cashier
-      category_editor: category editor
+      category_editor: Categoría editor
       fixed_amount_off: fixed amount off
       item_editor: item editor
-      items: items
+      items: Artículo
       location_editor: location editor
       manager: Manager
       no_change: no change
@@ -786,7 +786,7 @@ es:
     notice:
       save_before: XXX Save before leaving?
       move_real_quantities_success: Item quantities were successfully updated
-      wholesaler_upload_report: "Updated items: %{updated_items}, Created items: %{created_items}, Created categories: %{created_categories}, Created Tax Profiles %{created_tax_profiles}"
+      wholesaler_upload_report: "Updated Artículos: %{updated_items}, Created Artículos: %{created_items}, Created categories: %{created_categories}, Created Tax Profiles %{created_tax_profiles}"
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
       model_create: "%{model} was created successfully"
@@ -844,13 +844,13 @@ es:
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
       database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
     database_distiller:
-      used_item_ids: Used Items
-      relevant_item_ids: Items relevant for deletion
-      unused_item_ids: Unused Items
-      hidden: Already deleted Items
-      hidden_by_distiller: Items deleted by Database Distiller
-      delete_unused_items: Delete unused Items!
-      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you sure you want to proceed?
+      used_item_ids: Used Artículoa
+      relevant_item_ids: Artículos relevant for deletion
+      unused_item_ids: Unused Artículos
+      hidden: Already deleted Artículos
+      hidden_by_distiller: Artículos deleted by Database Distiller
+      delete_unused_items: Delete unused Artículos!
+      are_you_sure: All unused Artículos will be deleted. This cannot be undone. Are you sure you want to proceed?
     upload:
       upload: upload
     inventory_report:
