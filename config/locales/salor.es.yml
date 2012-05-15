@@ -238,12 +238,12 @@ es:
     crd: Time,Amount,tipo,Notes
     discount_for: Rebaja for %{store}
     discounts_for: rebates for %{store}
-    edit_shipper: edit Transportador %{name}
+    edit_shipper: Editar transportador %{name}
     employees: Empleados
     expiring_soon: expiring soon
     export: export
     item_selection: item selection
-    new_discount_for: new discount for %{store}
+    new_discount_for: Nuevo descuento for %{store}
     notes: notes
     shipment_items: Artículos de un envío
     shipment_items_header: nombre,SKU,precio,Categoría,Ubicación
@@ -297,8 +297,8 @@ es:
     tender_methods: métodos de pago
     new_tender_method: Nuevo método de pago
     edit_tender_method: Editar método de pago
-    new_broken_item: new broken item
-    activate_gift_card: activate gift card
+    new_broken_item: Nuevo broken artículo
+    activate_gift_card: Activar gift card
     add_to_current_order: add to current pedido
     additional: additional
     back: back
@@ -325,15 +325,15 @@ es:
     edit_customer: Editar cliente
     edit_discount: Editar descuento
     edit_employee: Editar empleado
-    edit_item: Editar item
-    edit_location: edit Ubicación 
-    edit_shipment: edit Envío
-    edit_shipment_type: edit tipo de envío
-    edit_shipper: edit Transportador %{name}
-    edit_tax_profile: edit Tipo de IVA
-    edit_vendor: edit vendor
+    edit_item: Editar artículo
+    edit_location: Editar ubicación 
+    edit_shipment: Editar envío
+    edit_shipment_type: Editar tipo de envío
+    edit_shipper: Editar transportador %{name}
+    edit_tax_profile: Editar tipo de IVA
+    edit_vendor: Editar tienda
     employees: Empleados
-    end_day: end day
+    end_day: end día
     general_configuration: general configuration
     home: home
     item_types: Tipos de artículo
@@ -342,22 +342,22 @@ es:
     loyalty_cards: Tarjetas de fidelización
     move_all_shipment_items: move all artículos del envío
     move_shipment_item: move artículo de envío
-    new_action: new action
-    new_cash_register: new cash register
-    new_category: new categoría
-    new_customer: new cliente
-    new_discount: new discount
-    new_employee: new empleado
-    new_item: new item
-    new_location: new Ubicación
-    new_order: New
-    new_shipment: new Envío
-    new_shipment_type: new tipo de Envío
-    new_shipper: new Transportador
+    new_action: Nueva action
+    new_cash_register: Nueva caja
+    new_category: Nueva categoría
+    new_customer: Nuevo cliente
+    new_discount: Nuevo descuento
+    new_employee: Nuevo empleado
+    new_item: Nuevo artículo
+    new_location: Nueva ubicación
+    new_order: Nuevo 
+    new_shipment: Nuevo envío
+    new_shipment_type: Nuevo tipo de envío
+    new_shipper: Nuevo transportador
     new_stock_location: Nueva ubicación de stock 
-    new_tax_profile: new Tipo de IVA
-    new_vendor: new vendor
-    new_button: new Botón
+    new_tax_profile: Nuevo tipo de IVA
+    new_vendor: Nueva tienda
+    new_button: Nuevo botón
     order: Pedido
     points: points
     pos: POS
@@ -375,9 +375,9 @@ es:
     support: support
     tax_profiles: Tipos de IVA
     update_gift_card: update gift card
-    vendors: vendors
+    vendors: Tiendas
     void: void
-    end_of_day_drop: end of day payout
+    end_of_day_drop: end of día payout
     transaction_tags: Etiquetas de transacción
     update_location: update Ubicación
     update_real_quantity: update real Cantidad
@@ -387,7 +387,7 @@ es:
     reorder: Pasar nuevo pedido
     report: report
     report_range: report detail
-    report_day: report day
+    report_day: report día
     report_accounting: report accounting
     report_day_range: monthly report
     wholesaler_update: wholesaler update
@@ -397,7 +397,7 @@ es:
   notifications:
     shipments_item_could_not_be_saved: artículo de envío could not be saved
     shipments_move_all_items: all artículos were successfully moved
-    shipments_move_item: item was successfully moved
+    shipments_move_item: artículo was successfully moved
 
   exception_page:
     oops_an_error_occurred: "Oops! An Error occurred"
@@ -440,7 +440,7 @@ es:
       start_date: start date
       sum_total: sum total
     report_day:
-      title: day report
+      title: día report
       sums_by_category: sums by Categoría
       sums_by_tax_profile: sums by Tipo de IVA
       sums_by_payment_methods: sums by métodos de pago
@@ -473,7 +473,7 @@ es:
       from: From
       to: To
     report_range:
-      title: day report
+      title: día report
       sums_by_category: sums by Categoría
       sums_by_tax_profile: sums by Tipo de IVA
       sums_by_payment_methods: sums by métodos de pago
@@ -518,7 +518,7 @@ es:
       cancel: Cancel                  EUR %8.2f
       change: "Change:                       EUR %8.2f"
       coupon_subtotal: Coupon                   EUR %8.2f
-      discount_subtotal: Discount                       EUR %8.2f
+      discount_subtotal: Descuento                        EUR %8.2f
       discounted_item: "%c %20.20s %7.2f %3u %7.2f"
       end_of_day: "%20.20s EUR %5.2f"
       fixed_rebate: Rebaja                         EUR %8.2f
@@ -533,8 +533,8 @@ es:
     eod_report:
       orders_total: Pedidos total
       refunded_total: Refunded total
-      buyback_item_total: Buyback item total
-      buyback_order_total: Buyback Pedido total
+      buyback_item_total: recompra artículo total
+      buyback_order_total: recompra Pedido total
       drop_total: TOTAL
       payout_total: TOTAL
       payment_method_total: TOTAL
@@ -552,7 +552,7 @@ es:
       revenue: Revenue
       calculated_drawer_amount: Calculated caja amount
       system_drawer_amount: System caja amount
-      warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
+      warning_drawer_amount_not_zero: Warning! Your caja amount is not zero. You are advised to finish and start each día with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
     order_receipt:
       lc_points_substracted: Substracted puntos de fidelización
       subsubtotal: TOTAL
@@ -570,8 +570,8 @@ es:
       rebate_subtotal: Rebaja Subtotal
       rebate: Single Rebaja
       coupon_subtotal: Coupon Subtotal
-      discount_subtotal: Discount Subtotal
-      discount: Discount
+      discount_subtotal: descuento Subtotal
+      discount: descuento 
       rebate_percent: Percent Rebaja
       rebate_fixed: Fixed Rebaja
       refunded: REFUNDED
@@ -639,40 +639,40 @@ es:
       not_enough_in_drawer: not enough in caja
       cash_drop_amount_must_be_positive: cash drop amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
-      coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the precioof Item %{item}"
+      coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the precioof artículo %{item}"
       coupon_not_enough_items: You have not purchased enough artículos for this to apply
       coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
-      csv_item_exists: "Item %{sku} exists!"
+      csv_item_exists: "artículo %{sku} exists!"
       csv_item_failed: "%{id} %{i} failed."
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
-      gift_card_amount_remaining: The amount specified was greater than the amount remaining on this gift card, the new amount is %{amt}
-      gift_card_amount_to_high: The gift card amount exceeds the Pedido subtotal, the amount has been adjusted, only activate gift cards at the end of a transaction!
+      gift_card_amount_remaining: The amount specified was greater than the amount remaining on this gift card, the Nuevo amount is %{amt}
+      gift_card_amount_to_high: The gift card amount exceeds the Pedido subtotal, the amount has been adjusted, only activar gift cards at the end of a transaction!
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.
       gift_card_not_found: Could not find that gift card attached to this Pedido...
-      gs1_item_not_found: "Item marked as gs1, but %{sku} is not in the correct format."
-      insufficient_quantity_on_item: "Warning, Item %{sku} Cantidad is insufficient, time to update your stock levels!"
+      gs1_item_not_found: "artículo marked as gs1, but %{sku} is not in the correct format."
+      insufficient_quantity_on_item: "Warning, artículo %{sku} Cantidad is insufficient, time to update your stock levels!"
       inventory_update_error: inventario update error
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: "Warning: Item precio is 0"
+      item_not_found: The artículo you are looking for could not be found, try searching?
+      item_price_is_zero: "Warning: artículo precio is 0"
       lp_calculation_failed: Failed to apply puntos de fidelización, are you sure you setup this up in your Tienda configuration?
       must_cash_drop: Your caja does not have any money, please add a cash drop!
       must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_cantidad_on_itemust choose a Tienda!
+      must_choose_vendor: You minsufficient_cantidad_on_artículo must choose a Tienda!
       must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Tienda
       must_specify_drop_or_payout: You must specify either drop or payout!
       no_class: "There is no class for %{model} at line %{i}"
       no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no item with this SKU
-      not_on_buy_orders: You cannot add this item to a Buy Pedido
+      no_such_item: There is no artículo with this SKU
+      not_on_buy_orders: You cannot add this artículo to a Buy Pedido
       order_must_have_user: You cannot save an Pedido without a User or Employee assigned to it.
       order_not_found: Pedido not found
       order_register_required: You must specify a register for this Pedido
-      order_vendor_required: You must supply a vendor for this Pedido
+      order_vendor_required: You must supply a tienda for this Pedido
       payment_required: "Error 402: Full Payment is Required"
       payment_required_explanation: We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: "Item %{sku} failed to move with error: %{error}"
-      shipment_item_nil: Item returned from_shipment_item was nil?
+      shipment_item_already_in_stock: artículo %{sku} is already in stock
+      shipment_item_move_failed: "artículo %{sku} failed to move with error: %{error}"
+      shipment_item_nil: artículo returned from_shipment_artículo was nil?
       sku_must_be_unique: "%{sku} must be unique"
       uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
       value_not_set: NotSet
@@ -714,23 +714,23 @@ es:
     change: change
     customers: Clientes
     download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy item
+    dummy_item: dummy artículo
     dummy_part: dummy part
-    edit_item_heading: edit item heading
+    edit_item_heading: Editar artículo heading
     email: email
     forgot_password: forgot password?
     gift_card: gift card
     gift_card_amount: gift card amount
     in_cash: in cash
-    item: item
+    item: artículo 
     language: language
     listing: listing
     listing_items: listing Artículos
     locations: Ubicaciones 
     loyalty_card: Tarjeta de fidelización
     name: Nombre
-    new_item_heading: "New item for %{store}"
-    new_sale_for: "New sale for %{store}"
+    new_item_heading: "Nuevo artículo for %{store}"
+    new_sale_for: "Nueva sale for %{store}"
     new_stock_location: Nueva ubicación de stock
     order_heading: "Pedido #%{id} for %{store}"
     order_number: "Pedido #%{id}"
@@ -750,19 +750,19 @@ es:
     three_easy_ways: three easy ways
     total: total
     username: Nombre de usuario
-    vendor: vendor
+    vendor: Tienda
     shape: shape
     errors:
       no_access_right: You do not have the right to access this resource. This error has been logged.
       nothing_found: Nothing found
       unknown_vendor: Unknown
     forms:
-      applies_to_item: applies to item with SKU
+      applies_to_item: applies to artículo with SKU
       buy_one_get_one: buy one get one
       cashier: cashier
       category_editor: Categoría editor
       fixed_amount_off: fixed amount off
-      item_editor: item editor
+      item_editor: artículo editor
       items: Artículo
       location_editor: Ubicación editor
       manager: Manager
@@ -779,7 +779,7 @@ es:
           canceled: canceled
           complete: complete
           in_stock: en stock
-          new: new
+          new: Nuevo
           returned: returned
           shipped: shipped
     notice:
@@ -790,7 +790,7 @@ es:
       csv_edit_starting: csv edit starting
       model_create: "%{model} was created successfully"
       model_edit: "%{model} was edited successfully"
-      new_order: new Pedido created
+      new_order: Nuevo Pedido created
       order_refund_dt: "#%{id}"
       please_wait: "Please wait..."
       transaction_succeeded: "Paid!"
@@ -808,7 +808,7 @@ es:
     shipments:
       state: State
     single_words:
-      new: New
+      new: Nuevo
       all: All
       camera: camera
       ordering: ordering
@@ -819,7 +819,7 @@ es:
       delete: delete
       destroy: destroy
       download: download
-      edit: edit
+      edit: Editar
       from: from
       loading: loading
       order: pedido
@@ -843,7 +843,7 @@ es:
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
       database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
     database_distiller:
-      used_item_ids: Used Artículoa
+      used_item_ids: Used Artículos
       relevant_item_ids: Artículos relevant for deletion
       unused_item_ids: Unused Artículos
       hidden: Already deleted Artículos
@@ -891,5 +891,5 @@ es:
   label: label
   sticker: sticker
   support: XXX
-  edit: XXXEdit
+  edit: Editar
   delete: XXXDelete
