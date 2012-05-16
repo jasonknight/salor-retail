@@ -353,8 +353,8 @@ cn:
     new_location: 新位置
     new_order: 新
     new_shipment: 新裝船
-    new_shipment_type: new shipment type
-    new_shipper: new shipper
+    new_shipment_type: 新裝船類型
+    new_shipper: 新發貨人
     new_stock_location: new stock location
     new_tax_profile: new tax profile
     new_vendor: new vendor
