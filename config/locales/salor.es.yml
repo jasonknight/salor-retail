@@ -657,34 +657,34 @@ es:
       lp_calculation_failed: No se han podido aplicar los puntos de fidelización. ¿Está seguro de haber configurado esta opción conrrectamente en la configuración de sur tienda?
       must_cash_drop: Su caja no contiene dinero. ¡Realice un reembolso en efectivo!
       must_choose_register: ¡Ud. debe estar conectado a una caja!
-      must_choose_vendor: Cantidad mínuima insuficiente de un artículo. ¡Debe seleccionar una tienda!
+      must_choose_vendor: Cantidad mínima insuficiente de un artículo. ¡Debe seleccionar una tienda!
       must_set_receiver_to_vendor: Debe atribuir este receptor de envíos a una tienda válida.
       must_specify_drop_or_payout: ¡Debe especificar ya sea un reembolso o un desembolso!
-      no_class: "There is no class for %{model} at line %{i}"
-      no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no artículo with this SKU
-      not_on_buy_orders: You cannot add this artículo to a Buy Pedido
-      order_must_have_user: You cannot save an Pedido without a User or Employee assigned to it.
-      order_not_found: Pedido not found
-      order_register_required: You must specify a register for this Pedido
-      order_vendor_required: You must supply a tienda for this Pedido
-      payment_required: "Error 402: Full Payment is Required"
-      payment_required_explanation: We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
-      shipment_item_already_in_stock: artículo %{sku} is already in stock
-      shipment_item_move_failed: "artículo %{sku} failed to move with error: %{error}"
-      shipment_item_nil: artículo returned from_shipment_artículo was nil?
-      sku_must_be_unique: "%{sku} must be unique"
-      uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
-      value_not_set: NotSet
-      order_failed: Pedido could not be finished.
-      order_print_failure: Failure during printing of Pedido .
+      no_class: "No existe una clase para %{model}en la línea %{i}."
+      no_role: Ud. no tiene el rol necesario para acceder a esta fuente.
+      no_such_item: No existe ningún artículo con este SKU.
+      not_on_buy_orders: No es posible añadir este artículo a una orden de compra.
+      order_must_have_user: No es posible guardar un pedido sin asignarlo a un usuario o empleado.
+      order_not_found: No se ha hallado ese pedido.
+      order_register_required: Debe especificar una caja para este pedido.
+      order_vendor_required: Debe atribuir una tienda a este pedido.
+      payment_required: "Error 402: Se requiere el pago total."
+      payment_required_explanation: Lamentamos informarle que el sistema se ha desconectado automáticamente porque su licencia prepaga se ha vencido. Debe completar el pago de Salor a fin de seguir beneficiando de éste. Rogamos contacte a su representante del servicio técnico de Salor.
+      shipment_item_already_in_stock: El artículo %{sku} ya está en stock
+      shipment_item_move_failed: "El artículo %{sku} no ha podido ser desplazado. Error: %{error}"
+      shipment_item_nil: El artículo volvió del envío. ¿Es una artículo vacío?
+      sku_must_be_unique: "%{sku} debe ser único."
+      uspecified_error: Algo malo a ocurrido. ¡Por favor contacte al servicio técnico! Intente refrescar la página.
+      value_not_set: NoDeterminado
+      order_failed: El pedido no ha podido finalizarse.
+      order_print_failure: Error durante la impresión del pedido.
     
   vendors:
-    clear_cache_button: clear cache
+    clear_cache_button: borrar cache
     clear_cache_header: cache
     form:
-      receipt_logo_header: receipt logo header
-      receipt_logo_footer: receipt logo footer
+      receipt_logo_header: Encabezamiento del recibo con logo
+      receipt_logo_footer: Pie del recibo con logo
       logo: logo
 
   cash_registers:
