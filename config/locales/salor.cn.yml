@@ -260,21 +260,21 @@ cn:
     submit:
       cancel: 取消
       clear: 清洗
-      create: create
-      get_item: get item
-      print: print
-      complete_sale: complete sale
-      submit: submit
-      save: Save
-      update: update
+      create: 創建
+      get_item: 獲得產品
+      print: 打印
+      complete_sale: 完成銷售
+      submit: 提交
+      save: 儲存
+      update: 更新
       ok: OK
 
   when_list:
-    always: always
-    on_save: on save
-    on_import: on import
-    on_export: on export
-    add_to_order: on add to order
+    always: 總是
+    on_save: 在儲存
+    on_import: 在進口
+    on_export: 在出口
+    add_to_order: 在加入訂單
     
   behavior_list:
     add: add
