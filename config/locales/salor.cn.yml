@@ -315,14 +315,14 @@ cn:
     current_order: "當前的訂單: #%{id}"
     customer: 顧客
     customers: 顧客
-    delete: delete
-    delete_confirm: Are you sure?
-    destroy: destroy
-    discounts: discounts
-    done: done
-    edit: edit
-    edit_cash_register: edit cash register
-    edit_category: edit category
+    delete: 刪除
+    delete_confirm: 確定嗎?
+    destroy: 摧毀
+    discounts: discounts 折扣
+    done: 完成
+    edit: 編輯
+    edit_cash_register: 編輯收款台
+    edit_category: 編輯類別
     edit_customer: edit customer
     edit_discount: edit discount
     edit_employee: edit employee
