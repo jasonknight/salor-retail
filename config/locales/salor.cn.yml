@@ -323,11 +323,11 @@ cn:
     edit: 編輯
     edit_cash_register: 編輯收款台
     edit_category: 編輯類別
-    edit_customer: edit customer
-    edit_discount: edit discount
-    edit_employee: edit employee
-    edit_item: edit item
-    edit_location: edit location
+    edit_customer: 編輯顧客
+    edit_discount: 編輯折扣
+    edit_employee: 編輯僱員
+    edit_item: 編輯產品
+    edit_location: 編輯位置
     edit_shipment: edit shipment
     edit_shipment_type: edit shipment type
     edit_shipper: edit shipper %{name}
