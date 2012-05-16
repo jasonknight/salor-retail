@@ -617,7 +617,7 @@ es:
     owner_mode: MODALIDAD DUEÑO
     owner_success: Las propiedades del dueño han sido actualizadas con éxito.
     payment_external_types: efectivo,tarjeta de crédito,tarjeta de regalo,otro
-    payment_internal_types: EnEfectivo,ConTarjetaDeCrédito,ConTarjetaDeRegalo,OtroCiente
+    payment_internal_types: EnEfectivo,ConTarjetaDeCrédito,ConTarjetaDeRegalo,OtroCliente
     rebate_types:
       fixed: $
       percent: "%"
@@ -626,22 +626,22 @@ es:
     report_internal_types: XXX
     sign_up: Conectarse
     errors:
-      auto_drop_failed: "The system failed to auto Reembolso, please manually create a beginning of día cash Reembolso"
-      order_totals_validation_failed: "Pedido total validation failed, refreshing the order may repair the issue. Press OK to refresh."
-      parent_sku_must_exist: "Parent Item Must Exist!"
-      child_sku_must_exist: "Child Item Must Exist!"
-      cannot_edit_completed_order: "That Pedido is completed and cannot be modified."
-      limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
-      sanity_check: Requested action is insane, verify Pedido total and notify customer of correction.
-      cannot_reorder: No Artículos  must be reordered.
-      action_code_error: "Code could not be executed because %{error}"
-      action_error: "Action could not complute because %{error}"
-      not_enough_in_drawer: not enough in caja
-      cash_drop_amount_must_be_positive: cash Reembolso amount must be positive
-      coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
-      coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the precioof artículo %{item}"
-      coupon_not_enough_items: You have not purchased enough artículos for this to apply
-      coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
+      auto_drop_failed: "El sistema no ha logrado efectuar un reembolso automético. Rogamos cree manualmente un reembolso en efectivo de comienzo del día."
+      order_totals_validation_failed: "La validación del total del pedido ha fracasado. Refrescar la página podría solucionar el problema. Haga un clic en OK para refrescar la página."
+      parent_sku_must_exist: "¡Debe existir un artículo padre!"
+      child_sku_must_exist: "¡Debe existir un artículo hijo!"
+      cannot_edit_completed_order: "Ese pedido ha finalizado y no puede ser modificado."
+      limited_alphabet: "Sólo está permitido usar las letras a-z. No es posible utilizar espacios ni tildes."
+      sanity_check: La acción solicitada es descabellada. Verifique el total del pedido y notifique la corrección al cliente.
+      cannot_reorder: No ne necesita volver a encargar ningún artículo.
+      action_code_error: "El código no ha podido ser ejecutado porque %{error}"
+      action_error: "La acción no ha sido efectuada porque %{error}"
+      not_enough_in_drawer: Dinero insuficiente en caja
+      cash_drop_amount_must_be_positive: El monto de un reembolso en efectivo debe ser una cifra positiva.
+      coupon_cannot_be_buy_one_get_one: "El cupón %{sku} no puede ser compre_uno_reciba_uno_de regalo cuando se lo aplica a %{applies}"
+      coupon_fixed_amount_greater_than_total: "El monto del cupón %{sku} es superior al precio del artículo %{item}"
+      coupon_not_enough_items: Ud. no ha comprado los suficientes artículos para que esto se aplique.
+      coupon_total_returned_nil: "El total del cupón %{sku} returned nil, ignoring"
       csv_item_exists: "artículo %{sku} exists!"
       csv_item_failed: "%{id} %{i} failed."
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
