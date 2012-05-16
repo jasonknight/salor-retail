@@ -755,92 +755,92 @@ es:
     errors:
       no_access_right: Ud. no tiene autorización para acceder a esta fuente. El error ha sido registrado.
       nothing_found: No se ha hallado nada.
-      unknown_vendor: desconocido.
+      unknown_vendor: Desconocido.
     forms:
       applies_to_item: Se aplica al artículo con SKU
       buy_one_get_one: Compre uno llévese uno
       cashier: Cajera
       category_editor: Editor de categoría
-      fixed_amount_off: fixed amount off
-      item_editor: artículo editor
+      fixed_amount_off: Descuento fijo
+      item_editor: Editor de artículos
       items: Artículo
-      location_editor: Ubicación editor
-      manager: Manager
-      no_change: no change
+      location_editor: Editor de ubicaciones
+      manager: Gerente
+      no_change: Sin cambios
       notes: Notas
-      order_editor: Pedido editor
-      parts: parts
-      percent_off: "% off"
+      order_editor: Editor de pedidos
+      parts: Partes
+      percent_off: "% de descuento"
       roles: Roles
-      search: search
+      search: Buscar
       stocker: Almacenero
       shipment:
         types:
-          canceled: canceled
-          complete: complete
-          in_stock: en stock
+          canceled: Cancelado
+          complete: Completar
+          in_stock: En stock
           new: Nuevo
-          returned: returned
-          shipped: shipped
+          returned: Devuelto
+          shipped: Enviado
     notice:
-      save_before: XXX Save before leaving?
-      move_real_quantities_success: Item quantities were successfully Actualizado
-      wholesaler_upload_report: "Artículos actualizados: %{updated_items}, Created Artículos: %{created_items}, Created categories: %{created_categories}, Created Tipos de IVA %{created_tax_profiles}"
-      cache_was_cleared: Cache files deleted.
-      csv_edit_starting: csv edit starting
-      model_create: "%{model} was created successfully"
-      model_edit: "%{model} was edited successfully"
-      new_order: Nuevo Pedido created
+      save_before: ¿Guardar antes de salir?
+      move_real_quantities_success: Las cantidades de artículos han sido actualizadas con éxito
+      wholesaler_upload_report: "Artículos actualizados: %{updated_items}, Artículos creados: %{created_items}, Categorías creadas: %{created_categories}, Tipos de IVA creados %{created_tax_profiles}"
+      cache_was_cleared: Archvos cache borrados.
+      csv_edit_starting: Comienzo de la edición de csv
+      model_create: "%{model} ha sido creado con éxito."
+      model_edit: "%{model} ha sido editado con éxito."
+      new_order: Nuevo pedido creado
       order_refund_dt: "#%{id}"
-      please_wait: "Please wait..."
-      transaction_succeeded: "Paid!"
-      artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
-      paylife_ending_day: Ending día
-      paylife_endday_complete: Ending día complete
+      please_wait: "Por favor espere..."
+      transaction_succeeded: "¡Pagado!"
+      artema_hybrid_lost: se ha perdido la conexión a Artema Híbrida. Desconectar y volver a conectar la máquina.
+      paylife_ending_day: Finalizando el día
+      paylife_endday_complete: Se ha finalizado el día.
     pagination:
-      last: last
-      next: next &gt;
-      previous: "&lt; previous"
+      last: último
+      next: siguiente &gt;
+      previous: "&lt; previo"
       truncate: ...
     reports:
       cash_account: XXX
       daily: XXX
     shipments:
-      state: State
+      state: Estado
     single_words:
       new: Nuevo
-      all: All
-      camera: camera
-      ordering: ordering
-      body: body
-      bottom: bottom
-      continue: continue
-      coupons: Coupons
-      delete: delete
-      destroy: destroy
-      download: download
+      all: Todos
+      camera: Cámara
+      ordering: Orden
+      body: Cuerpo
+      bottom: Debajo
+      continue: Continuar
+      coupons: Cupones
+      delete: Borrar
+      destroy: Destruir
+      download: Descargar
       edit: Editar
-      from: from
-      loading: loading
-      order: pedido
-      processing: processing...
-      saving: saving...
-      searching: searching...
+      from: De
+      loading: Cargando
+      order: Pedido
+      processing: Procesando...
+      saving: Guardando...
+      searching: Buscando...
       sku: SKU
-      title: title
-      to: to
-      top: top
-      waiting: waiting...
+      title: Título
+      to: A
+      top: Arriba
+      waiting: Esperando...
 
 
   items:
     show:
-      from: from
-      to: to
-      query: Query!
+      from: De
+      to: A
+      query: ¡Pregunta!
       quantity_sold: Cantidad vendida
     index:
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and Actualizado. This action will take about 20 minutes. Are you really sure that you want to proceed?
+      only_for_tobacco_stores: Esta función sólo existe para expendidoras de tabaco. Artículos de tabaco serán creados y actualizados. Esta acción llevará unos 20 minutes. Are you really sure that you want to proceed?
       database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
     database_distiller:
       used_item_ids: Used Artículos
