@@ -305,16 +305,16 @@ cn:
     back: 回
     broken_items: 破碎的產品
     buy_order: 買
-    cancel: cancel
-    cash_drop: cash drop
-    cash_register: cash register
-    cash_registers: cash registers
-    categories: categories
-    configuration: Config.
-    contact: contact
-    current_order: "current order: #%{id}"
-    customer: customer
-    customers: customers
+    cancel: 取消
+    cash_drop: 現金下降
+    cash_register: 收款台
+    cash_registers: 收款台
+    categories: 類別
+    configuration: 組態
+    contact: contact 聯絡
+    current_order: "當前的訂單: #%{id}"
+    customer: 顧客
+    customers: 顧客
     delete: delete
     delete_confirm: Are you sure?
     destroy: destroy
