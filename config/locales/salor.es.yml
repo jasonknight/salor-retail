@@ -65,7 +65,7 @@ es:
       vendor:
         one: Tienda
         other: Tiendas
-      transaction_tag: etiqueta de transacción
+      transaction_tag: 
         one: Etiqueta
         other: Etiquetas
       payment_method:

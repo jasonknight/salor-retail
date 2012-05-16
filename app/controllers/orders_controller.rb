@@ -187,6 +187,7 @@ class OrdersController < ApplicationController
         @order_item.save
         @order_item.order.update_self_and_save
         @order = @order_item.order
+        @order_item = @order.order_items.find(@order_item.id)
         render and return
       end
     end
