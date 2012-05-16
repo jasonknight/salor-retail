@@ -328,13 +328,13 @@ cn:
     edit_employee: 編輯僱員
     edit_item: 編輯產品
     edit_location: 編輯位置
-    edit_shipment: edit shipment
-    edit_shipment_type: edit shipment type
-    edit_shipper: edit shipper %{name}
-    edit_tax_profile: edit tax profile
-    edit_vendor: edit vendor
-    employees: employees
-    end_day: end day
+    edit_shipment: 編輯裝船
+    edit_shipment_type: 編輯裝船類型
+    edit_shipper: 編輯發貨人 %{name}
+    edit_tax_profile: 編輯稅務個人資料
+    edit_vendor: 編輯供應商
+    employees: 僱員
+    end_day: end day 結束日
     general_configuration: general configuration
     home: home
     item_types: item types
