@@ -248,7 +248,7 @@ cn:
     shipment_items: 裝運產品
     shipment_items_header: 名稱, SKU, 價格, 類別, 位置
     shipment_types: 裝船類型
-    shipment_types_header: state,added by, , 
+    shipment_types_header: 州,added by, , 
     shipments: 裝船
     shipments_header: name,from,to,price,paid?,added by,status, , , 
     update_location: update location
