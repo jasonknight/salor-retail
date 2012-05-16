@@ -277,22 +277,22 @@ cn:
     add_to_order: 在加入訂單
     
   behavior_list:
-    add: add
-    subtract: subtract
-    multiply: multiply
-    divide: divide
-    assign: assign
+    add: 加
+    subtract: 減
+    multiply: 乘
+    divide: 分
+    assign: 分配
 
   menu:
-    remote_service: Remote Service
-    usb_device: Usb Stick
-    salortrainer: Salor Trainer
-    salorlive: Salor Live!
-    database_distiller: Database Distiller
-    clear_order: Clear
-    inventory_report: Inventory report
+    remote_service: 遠程服務
+    usb_device: USB記憶棒
+    salortrainer: Salor訓練者
+    salorlive: Salor 活著!
+    database_distiller: 數據庫蒸餾器
+    clear_order: 清洗
+    inventory_report: 庫存報告
     ok: OK
-    buttons: buttons
+    buttons: 按鈕
     cameras: cameras
     tender_methods: tender methods
     new_tender_method: new tender method
