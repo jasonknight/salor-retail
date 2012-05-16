@@ -248,18 +248,18 @@ cn:
     shipment_items: 裝運產品
     shipment_items_header: 名稱, SKU, 價格, 類別, 位置
     shipment_types: 裝船類型
-    shipment_types_header: 州,added by, , 
+    shipment_types_header: 州, 由添加, , 
     shipments: 裝船
-    shipments_header: name,from,to,price,paid?,added by,status, , , 
-    update_location: update location
-    update_real_quantity: update real quantity
+    shipments_header: 名稱, 從, 至, 價格, 價格, 支付?, 由添加, 狀態, , , 
+    update_location: 更新位置
+    update_real_quantity: 更新實際數量
 
   helpers:
     select:
-      prompt: please select
+      prompt: 請選擇
     submit:
-      cancel: cancel
-      clear: clear
+      cancel: 取消
+      clear: 清洗
       create: create
       get_item: get item
       print: print
