@@ -335,24 +335,24 @@ cn:
     edit_vendor: 編輯供應商
     employees: 僱員
     end_day: end day 結束日
-    general_configuration: general configuration
-    home: home
-    item_types: item types
-    items: items
-    locations: locations
-    loyalty_cards: loyalty cards
-    move_all_shipment_items: move all shipment items
-    move_shipment_item: move shipment item
-    new_action: new action
-    new_cash_register: new cash register
-    new_category: new category
-    new_customer: new customer
-    new_discount: new discount
-    new_employee: new employee
-    new_item: new item
-    new_location: new location
-    new_order: New
-    new_shipment: new shipment
+    general_configuration: 一般組態
+    home: 家
+    item_types: 產品類型
+    items: 產品
+    locations: 位置
+    loyalty_cards: 忠誠卡
+    move_all_shipment_items: 移動所有裝船產品
+    move_shipment_item: 移動裝船產品
+    new_action: 新行動
+    new_cash_register: 新收款台
+    new_category: 新類別
+    new_customer: 新顧客
+    new_discount: 新折扣
+    new_employee: 新僱員
+    new_item: 新產品
+    new_location: 新位置
+    new_order: 新
+    new_shipment: 新裝船
     new_shipment_type: new shipment type
     new_shipper: new shipper
     new_stock_location: new stock location
