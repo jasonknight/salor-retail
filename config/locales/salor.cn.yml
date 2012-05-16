@@ -293,12 +293,12 @@ cn:
     inventory_report: 庫存報告
     ok: OK
     buttons: 按鈕
-    cameras: cameras
-    tender_methods: tender methods
-    new_tender_method: new tender method
-    edit_tender_method: edit tender method
-    actions: actions
-    new_broken_item: new broken item
+    cameras: 相機
+    tender_methods: 貨幣方法
+    new_tender_method: new 新貨幣方法
+    edit_tender_method: edit 編輯貨幣方法
+    actions: actions 行動
+    new_broken_item: 新破碎的產品
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
     additional: additional
