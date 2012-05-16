@@ -641,16 +641,16 @@ es:
       coupon_cannot_be_buy_one_get_one: "El cupón %{sku} no puede ser compre_uno_reciba_uno_de regalo cuando se lo aplica a %{applies}"
       coupon_fixed_amount_greater_than_total: "El monto del cupón %{sku} es superior al precio del artículo %{item}"
       coupon_not_enough_items: Ud. no ha comprado los suficientes artículos para que esto se aplique.
-      coupon_total_returned_nil: "El total del cupón %{sku} returned nil, ignoring"
-      csv_item_exists: "artículo %{sku} exists!"
-      csv_item_failed: "%{id} %{i} failed."
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
-      gift_card_amount_remaining: The amount specified was greater than the amount remaining on this gift card, the Nuevo amount is %{amt}
-      gift_card_amount_to_high: The gift card amount exceeds the Pedido subtotal, the amount has been adjusted, only activar gift cards at the end of a transaction!
-      gift_card_empty: Gift Card is Empty, notify client, and destroy card.
-      gift_card_not_found: Could not find that gift card attached to this Pedido...
-      gs1_item_not_found: "artículo marked as gs1, but %{sku} is not in the correct format."
-      insufficient_quantity_on_item: "Warning, artículo %{sku} Cantidad is insufficient, time to Actualizar your stock levels!"
+      coupon_total_returned_nil: "El total del cupón %{sku} no ha dado ningún resultado. Ignorar..."
+      csv_item_exists: "¡El artículo %{sku} ya existe!"
+      csv_item_failed: "%{id} %{i} ha fracasado."
+      failed_to_save_parts: No se ha podido grabar las partes. Asegúrese de que existan artículos con partes.
+      gift_card_amount_remaining: El monto especificado supera el crédito restante en la tarjeta de regalo. El nuevo monto es de %{amt}
+      gift_card_amount_to_high: El crédito de la tarjeta de regalo supera el subtotal del pedido. El total ha sido corregido. ¡Activar las tarjetas de regalo únicamente al final de una transacción!
+      gift_card_empty: La tarjeta de regalo no contiene más crédito. Informar al cliente y destrir la tarjeta.
+      gift_card_not_found: No se ha podido hallar la tarjeta de regalo asociada a este pedido...
+      gs1_item_not_found: "Artículo marcado como gs1, pero %{sku} no es el formato correcto."
+      insufficient_quantity_on_item: "¡Atención! La cantidad del artículo %{sku} no es suficiente. ¡Actualice sus niveles de stock!"
       inventory_update_error: inventario Actualizar error
       item_not_found: The artículo you are looking for could not be found, try searching?
       item_price_is_zero: "Warning: artículo precio is 0"
