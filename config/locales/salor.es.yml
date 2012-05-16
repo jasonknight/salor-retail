@@ -736,31 +736,31 @@ es:
     order_number: "Pedido #%{id}"
     order_summary: Pedidos de los últimos 7 días
     owner_language: Idioma del dueño
-    password: contraseña
-    password_confirm: confirm password
-    please_test_before_upload: "WARNING: You are about to overwrite data in the database."
+    password: Contraseña
+    password_confirm: Confirmar contraseña
+    please_test_before_upload: "ATENCIÓN: Ud. está a punto de sobrescribir datos en la base de datos."
     price: Precio
     quantity: Cantidad
     rebate: Rebaja
-    remember_me: remember me
-    report: report
-    stock_locations: ubicaciones_de_stock 
-    subtotal: subtotal
+    remember_me: Recordarme
+    report: Informe
+    stock_locations: Ubicaciones_de_stock 
+    subtotal: Subtotal
     tax_profile: Tipo de IVA
-    three_easy_ways: three easy ways
-    total: total
+    three_easy_ways: Tres modos fáciles
+    total: Total
     username: Nombre de usuario
     vendor: Tienda
-    shape: shape
+    shape: Forma
     errors:
-      no_access_right: You do not have the right to access this resource. This error has been logged.
-      nothing_found: Nothing found
-      unknown_vendor: Unknown
+      no_access_right: Ud. no tiene autorización para acceder a esta fuente. El error ha sido registrado.
+      nothing_found: No se ha hallado nada.
+      unknown_vendor: desconocido.
     forms:
-      applies_to_item: applies to artículo with SKU
-      buy_one_get_one: buy one get one
+      applies_to_item: Se aplica al artículo con SKU
+      buy_one_get_one: Compre uno llévese uno
       cashier: Cajera
-      category_editor: Categoría editor
+      category_editor: Editor de categoría
       fixed_amount_off: fixed amount off
       item_editor: artículo editor
       items: Artículo
