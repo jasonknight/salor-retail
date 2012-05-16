@@ -651,12 +651,12 @@ es:
       gift_card_not_found: No se ha podido hallar la tarjeta de regalo asociada a este pedido...
       gs1_item_not_found: "Artículo marcado como gs1, pero %{sku} no es el formato correcto."
       insufficient_quantity_on_item: "¡Atención! La cantidad del artículo %{sku} no es suficiente. ¡Actualice sus niveles de stock!"
-      inventory_update_error: inventario Actualizar error
-      item_not_found: The artículo you are looking for could not be found, try searching?
-      item_price_is_zero: "Warning: artículo precio is 0"
-      lp_calculation_failed: Failed to apply puntos de fidelización, are you sure you setup this up in your Tienda configuration?
-      must_cash_drop: Your caja does not have any money, please add a cash Reembolso!
-      must_choose_register: You must login to a caja!
+      inventory_update_error: Error al actualizar el inventario.
+      item_not_found: Ela artículo que busca no ha sido hallado. Intente hacer una búsqueda manual.
+      item_price_is_zero: "¡Atención!: El precio de este artículo es 0."
+      lp_calculation_failed: No se han podido aplicar los puntos de fidelización. ¿Está seguro de haber configurado esta opción conrrectamente en la configuración de sur tienda?
+      must_cash_drop: Su caja no contiene dinero. ¡Realice un reembolso en efectivo!
+      must_choose_register: ¡Ud. debe estar conectado a una caja!
       must_choose_vendor: You minsufficient_cantidad_on_artículo must choose a Tienda!
       must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Tienda
       must_specify_drop_or_payout: You must specify either Reembolso or desembolso!
