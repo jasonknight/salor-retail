@@ -689,54 +689,54 @@ es:
 
   cash_registers:
     end_of_day:
-      end_of_day_thermal_report: Print Report
-      paper_report: Detail Report
+      end_of_day_thermal_report: Imprimir informe
+      paper_report: Informe detallado
       cash_drawer: Caja
-      counted: Counted
-      difference: Difference
+      counted: Calculado
+      difference: Diferencia
 
   shipments:
     index:
-      report: Report
+      report: Informe
     show:
-      purchase_price_sum: Purchase precio sum
+      purchase_price_sum: Suma precio de venta
 
   views:
     eticket: Ticket
-    sticky_ticket: Sticker
-    wholesaler_refresh: Fetching wholesaler Actualizaciones. This can take several minutes.
-    advanced_field: advanced field
-    by_card: by card
-    cash_register_heading: "%{name} for %{store}"
+    sticky_ticket: Etiqueta adhesiva
+    wholesaler_refresh: Actualización del distribuidor en curso. Esto puede llevar algunos minutos.
+    advanced_field: Campo avanzado
+    by_card: con tarjeta
+    cash_register_heading: "%{name} para %{store}"
     cash_registers: Cajas
-    category_heading: Categoría %{name} for %{store}
-    given: given
-    change: change
+    category_heading: Categoría %{name} para %{store}
+    given: Rebibido
+    change: Vuelto
     customers: Clientes
-    download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy artículo
-    dummy_part: dummy part
-    edit_item_heading: Editar artículo heading
-    email: email
-    forgot_password: forgot password?
-    gift_card: gift card
-    gift_card_amount: gift card amount
-    in_cash: en efectivo
-    item: artículo 
-    language: language
-    listing: listing
-    listing_items: listing Artículos
+    download_may_last_long: Esta dercarga puede llevar tiempo. ¿Continuar?
+    dummy_item: Artículo general
+    dummy_part: Parte general
+    edit_item_heading: Editar el encabezamiento del artículo
+    email: e-mail
+    forgot_password: ¿Ha olvidado su contraseña?
+    gift_card: Tarjeta de regalo
+    gift_card_amount: Monto de la tarjeta de regalo
+    in_cash: En efectivo
+    item: Artículo 
+    language: Idioma
+    listing: Listado
+    listing_items: Artículos de lista
     locations: Ubicaciones 
     loyalty_card: Tarjeta de fidelización
     name: Nombre
-    new_item_heading: "Nuevo artículo for %{store}"
-    new_sale_for: "Nueva sale for %{store}"
+    new_item_heading: "Nuevo artículo para %{store}"
+    new_sale_for: "Nueva venta para %{store}"
     new_stock_location: Nueva ubicación de stock
-    order_heading: "Pedido #%{id} for %{store}"
+    order_heading: "Pedido #%{id} para %{store}"
     order_number: "Pedido #%{id}"
-    order_summary: Pedidos of the last 7 días
-    owner_language: Dueño language
-    password: password
+    order_summary: Pedidos de los últimos 7 días
+    owner_language: Idioma del dueño
+    password: contraseña
     password_confirm: confirm password
     please_test_before_upload: "WARNING: You are about to overwrite data in the database."
     price: Precio
