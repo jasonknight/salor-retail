@@ -299,9 +299,9 @@ cn:
     edit_tender_method: edit 編輯貨幣方法
     actions: actions 行動
     new_broken_item: 新破碎的產品
-    activate_gift_card: activate gift card
-    add_to_current_order: add to current order
-    additional: additional
+    activate_gift_card: 激活禮品卡
+    add_to_current_order: 添加到當前的訂單
+    additional: 額外
     back: back
     broken_items: broken items
     buy_order: Buy
