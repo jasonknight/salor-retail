@@ -840,52 +840,52 @@ es:
       query: ¡Pregunta!
       quantity_sold: Cantidad vendida
     index:
-      only_for_tobacco_stores: Esta función sólo existe para expendidoras de tabaco. Artículos de tabaco serán creados y actualizados. Esta acción llevará unos 20 minutes. Are you really sure that you want to proceed?
-      database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
+      only_for_tobacco_stores: Esta función sólo existe para expendidoras de tabaco. Artículos de tabaco serán creados y actualizados. Esta acción llevará unos 20 minutos. ¿Está seguro de continuar?
+      database_distiller_warning: Dado que se generarán estadísticas, esta función llevará unos 30 segundos. ¿Continuar igual?
     database_distiller:
-      used_item_ids: Used Artículos
-      relevant_item_ids: Artículos relevant for deletion
-      unused_item_ids: Unused Artículos
-      hidden: Already deleted Artículos
-      hidden_by_distiller: Artículos deleted by Database Distiller
-      delete_unused_items: Delete unused Artículos!
-      are_you_sure: All unused Artículos will be deleted. This cannot be undone. Are you sure you want to proceed?
+      used_item_ids: Artículos usados
+      relevant_item_ids: Artículos relevantes para borrar
+      unused_item_ids: Artículos no usados
+      hidden: Artículos ya borrados
+      hidden_by_distiller: Artículos borrados por el filtro de la base de datos
+      delete_unused_items: ¡Borrar artículos no usados!
+      are_you_sure: Todos los artículos no utilizados serán borrados. Esto es irreversible. ¿Está seguro de continuar?
     upload:
-      upload: upload
+      upload: Cargar
     inventory_report:
-      title: inventario Report
-      price: Selling precio
-      total_buying_price: Sum Purchase precio
-      total_selling_price: Sum Selling precio
-      subtotal_purchase_price: Subtotal Purchase precio
-      subtotal_selling_price: Subtotal Selling precio
+      title: Informe de inventario
+      price: Precio de venta
+      total_buying_price: Total del precio de compra
+      total_selling_price: Total del precio de venta
+      subtotal_purchase_price: Subtotal del precio de compra
+      subtotal_selling_price:  Subtotal del precio de venta
     update_real_quantity:
-      inventory_report: inventario Report
-      update_quantity: Actualizar inventario cantidades
-      are_you_sure: This will copy the inventario cantidades into the database and reset the inventario report. Continue?
+      inventory_report: Informe de inventario
+      update_quantity: Actualizar cantidades en inventario
+      are_you_sure: Esto copiará las cantidades del inventario en la base de datos y generará un nuevo informe de inventario. ¿Continuar?
 
   home:
     user_employee_index:
-      backup_database: Backup Database
-      backup_logfile: Backup Logfile
+      backup_database: Copia de seguridad de la base de datos
+      backup_logfile: Copia de seguridad del archivo de registro
     remote_service:
-      title: Remove Service
-      password: Password
-      user: User
-      host: Server
-      connect_ssh: Remote service
-      connect_vnc: Share screen
-      requesting_connection_status: Requesting connection status ...
-      connected: connected
-      disconnected: disconnected
-      not_supported_by_browser: Remote service is not supported by this browser.
+      title: Quitar el servicio
+      password: Contraseña
+      user: Usuario
+      host: Servidor
+      connect_ssh: Servicio a distancia
+      connect_vnc: Compartir pantalla
+      requesting_connection_status: Solicitando el estado de la conexión...
+      connected: Conectado
+      disconnected: Desconectado
+      not_supported_by_browser: Este motor de búsqueda no permite el servicio a distancia.
       
-  InCash: In Cash
-  ByCard: By Card
-  ByGiftCard: By Gift Card
-  OtherCredit: Other Credit
-  ByCardRefund: By Card Refund
-  ByGiftCardRefund: By Gift Card Refund
+  InCash: En efectivo
+  ByCard: Con tarjeta de crédito
+  ByGiftCard: Con tarjeta de regalo
+  OtherCredit: Otro
+  ByCardRefund: Reembolso con tarjeta
+  ByGiftCardRefund: Reembolso con tarjeta de regalo
   OtherCreditRefund: Other Credit Refund
   end_of_day: End of día
   label: label
