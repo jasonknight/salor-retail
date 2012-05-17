@@ -363,10 +363,10 @@ cn:
     points: 點
     pos: POS
     orders: 訂購
-    overview: overview
-    pretext: pretext
-    reports: reports
-    search: search
+    overview: 概貌
+    pretext: 藉口
+    reports: 報告
+    search: 尋找
     shipment_types: shipment types
     shipments: shipments
     shippers: shippers
