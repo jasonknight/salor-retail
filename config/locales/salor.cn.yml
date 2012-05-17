@@ -236,14 +236,14 @@ cn:
     best_selling_category: 最好的銷售類別
     best_selling_location: 最好的銷售位置
     crd: 時間,數量,類型,註釋
-    discount_for: %{store} 的回贈
-    discounts_for: %{store} 的回贈
+    discount_for: "%{store} 的回贈"
+    discounts_for: "%{store} 的回贈"
     edit_shipper: 編輯托運人 %{name}
     employees: 僱員
     expiring_soon: 即將到期
     export: 出口
     item_selection: 產品選擇
-    new_discount_for: %{store} 的新折扣
+    new_discount_for: "%{store} 的新折扣"
     notes: 註釋
     shipment_items: 裝運產品
     shipment_items_header: 名稱, SKU, 價格, 類別, 位置
