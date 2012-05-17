@@ -303,7 +303,9 @@ class OrdersController < ApplicationController
   def show_payment_ajax
     # Recalculate everything and then show Payment Popup
     @order = initialize_order
-    @order.calculate_totals(true) # true = Speedy version!
+    # MF: speedy version of calculate_totals is completely commented out in order.rb, so that would explain why in case of a racing condition (e.g. where 2 items are scanned and the first ajax request is handled AFTER the second ajax request due to passenger instance queue) the order total was not recalculated and was therefore missing one item.
+    # I changed below to "false", which means, every time the "complete" button is pressed, it will update the order total according to the items. In dev mode, it is still speedy, so I think it's save for the live systems. This makes screen masking unnecessary.
+    @order.calculate_totals(false)
     @order.save!
   end
   def last_five_orders
