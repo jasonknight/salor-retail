@@ -355,14 +355,14 @@ cn:
     new_shipment: 新裝船
     new_shipment_type: 新裝船類型
     new_shipper: 新發貨人
-    new_stock_location: new stock location
-    new_tax_profile: new tax profile
-    new_vendor: new vendor
-    new_button: new button
-    order: order
-    points: points
+    new_stock_location: 新貨物位置
+    new_tax_profile: 新稅務個人資料
+    new_vendor: 新供應商
+    new_button: 新按鈕
+    order: 訂購
+    points: 點
     pos: POS
-    orders: orders
+    orders: 訂購
     overview: overview
     pretext: pretext
     reports: reports
