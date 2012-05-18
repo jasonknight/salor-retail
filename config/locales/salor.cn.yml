@@ -501,11 +501,11 @@ cn:
       sum_net: 總和淨
       gross: 合計
       net: 淨
-      sum_transactions: Sum transactions
-      noncash-refunds: Noncash-Refunds
-      cash-refunds: Cash-Refunds
-      from: From
-      to: To
+      sum_transactions: 總和交易
+      noncash-refunds: 非現金的退款
+      cash-refunds: 現金的退款
+      from: 從
+      to: 至
       
 
   printr:
