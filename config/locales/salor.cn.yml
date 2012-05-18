@@ -459,18 +459,18 @@ cn:
       OrderItemRefund: 產品退款
       OrderRefund: 訂購退款
       None: 未指定
-      count_orders: 所有訂單列表
-      sales: Sales
-      payments: Payments
-      cash_drawer: Cash drawer
-      revenue: Revenue
-      sum_gross: Sum gross
-      sum_net: Sum net
-      gross: gross
-      net: net
-      sum_transactions: Sum transactions
-      noncash-refunds: Noncash-Refunds
-      cash-refunds: Cash-Refunds
+      count_orders: 所有訂購列表
+      sales: 銷售
+      payments: 付款
+      cash_drawer: 錢抽屜
+      revenue: 收入
+      sum_gross: 總和合計
+      sum_net: 總和淨
+      gross: 合計
+      net: 淨
+      sum_transactions: 總和交易
+      noncash-refunds: 非現金的退款
+      cash-refunds: 現金退款
       from: From
       to: To
     report_range:
