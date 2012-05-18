@@ -386,22 +386,22 @@ cn:
     upload: 上載
     download: 下載
     reorder: 重新排序
-    report: report
-    report_range: report detail
-    report_day: report day
-    report_accounting: report accounting
-    report_day_range: monthly report
-    wholesaler_update: wholesaler update
-    law_reports: Report Download
+    report: 報告
+    report_range: 報告詳細
+    report_day: 報告日
+    report_accounting: 報告會計
+    report_day_range: 月度報告
+    wholesaler_update: 批發商更新
+    law_reports: 報告下載
     
     
   notifications:
-    shipments_item_could_not_be_saved: shipments item could not be saved
-    shipments_move_all_items: all items were successfully moved
-    shipments_move_item: item was successfully moved
+    shipments_item_could_not_be_saved: 出貨項目不能保存
+    shipments_move_all_items: 所有項目均順利搬遷
+    shipments_move_item: 項目均順利搬遷
 
   exception_page:
-    oops_an_error_occurred: "Oops! An Error occurred"
+    oops_an_error_occurred: "哎呀！發生錯誤"
     exception_description: "Error description:"
     exception_in_files: "The Error occurred in the following files:"
     assistance_text: 'Please click on the button "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the button "Remote Service". We will help you immediately.'
