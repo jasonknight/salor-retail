@@ -409,13 +409,13 @@ cn:
   orders:
     report:
       title: 總和
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
+      display: 顯示
+      end_date: 結束日期
+      gross: 合計
+      net: 淨
       sum: 總和
-      rebate: rebate
-      points: points
+      rebate: 回扣
+      points: 點
       start_date: start date
       sum_total: sum total
     report_range:
