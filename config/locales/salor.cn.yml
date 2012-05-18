@@ -446,9 +446,9 @@ cn:
       sums_by_tax_profile: 總和由稅務個人資料
       sums_by_payment_methods: 總和由付款方式
       sum: 總和
-      sums_by_transaction_types: sums by transaction types
-      transactions: transactions
-      transaction_tag: transaction tag
+      sums_by_transaction_types: 總和由交易類型
+      transactions: 交易
+      transaction_tag: 交易標籤
       drops: drops
       drop: drop
       payouts: payouts
