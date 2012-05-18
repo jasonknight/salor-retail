@@ -455,11 +455,11 @@ cn:
       payout: 派息
       transaction_total: 交易總計
       transaction_journal: 交易日記
-      time: time
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      None: Not specified
-      count_orders: Count of orders
+      time: 時候
+      OrderItemRefund: 產品退款
+      OrderRefund: 訂購退款
+      None: 未指定
+      count_orders: 所有訂單列表
       sales: Sales
       payments: Payments
       cash_drawer: Cash drawer
