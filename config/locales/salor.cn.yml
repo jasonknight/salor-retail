@@ -374,11 +374,11 @@ cn:
     split: 分裂
     stock_locations: 貨物位置
     support: 支持
-    tax_profiles: tax profiles
+    tax_profiles: 稅務個人資料
     update_gift_card: 更新禮品卡
-    vendors: vendors
-    void: void
-    end_of_day_drop: end of day payout
+    vendors: 供應商
+    void: 廢止
+    end_of_day_drop: 天結束派息
     transaction_tags: transaction tags
     update_location: update location
     update_real_quantity: update real quantity
