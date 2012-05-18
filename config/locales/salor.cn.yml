@@ -336,7 +336,7 @@ cn:
     employees: 僱員
     end_day: end day 結束日
     general_configuration: 一般組態
-    home: 家
+    home: 主頁
     item_types: 產品類型
     items: 產品
     locations: 位置
@@ -402,9 +402,9 @@ cn:
 
   exception_page:
     oops_an_error_occurred: "哎呀！發生錯誤"
-    exception_description: "Error description:"
-    exception_in_files: "The Error occurred in the following files:"
-    assistance_text: 'Please click on the button "Home" and try again. If the error happens again, please call the customer support, and connect your computer to the Remote Service with the button "Remote Service". We will help you immediately.'
+    exception_description: "錯誤描述:"
+    exception_in_files: "錯誤發生在下面的文件:"
+    assistance_text: '請點擊”主頁“按鈕，並再次嘗試。如果錯誤再次發生，請致電客戶支持，將計算機連接到遠程服務“遠程服務”按鈕。我們會立即幫你.'
 
   orders:
     report:
