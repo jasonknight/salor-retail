@@ -449,12 +449,12 @@ cn:
       sums_by_transaction_types: 總和由交易類型
       transactions: 交易
       transaction_tag: 交易標籤
-      drops: drops
-      drop: drop
-      payouts: payouts
-      payout: payout
-      transaction_total: transaction total
-      transaction_journal: transaction journal
+      drops: 下降
+      drop: 下降
+      payouts: 派息
+      payout: 派息
+      transaction_total: 交易總計
+      transaction_journal: 交易日記
       time: time
       OrderItemRefund: Item Refund
       OrderRefund: Order Refund
