@@ -408,23 +408,23 @@ cn:
 
   orders:
     report:
-      title: Sums
+      title: 總和
       display: display
       end_date: end date
       gross: gross
       net: net
-      sum: sum
+      sum: 總和
       rebate: rebate
       points: points
       start_date: start date
       sum_total: sum total
     report_range:
-      title: Sums
+      title: 總和
       display: display
       end_date: end date
       gross: gross
       net: net
-      sum: sum
+      sum: 總和
       rebate: rebate
       points: points
       start_date: start date
@@ -435,7 +435,7 @@ cn:
       end_date: end date
       gross: gross
       net: net
-      sum: sum
+      sum: 總和
       rebate: rebate
       points: points
       start_date: start date
