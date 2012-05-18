@@ -416,36 +416,36 @@ cn:
       sum: 總和
       rebate: 回扣
       points: 點
-      start_date: start date
-      sum_total: sum total
+      start_date: 開始日期
+      sum_total: 總和總計
     report_range:
       title: 總和
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
+      display: 顯示
+      end_date: 結束日期
+      gross: 合計
+      net: 淨
       sum: 總和
-      rebate: rebate
-      points: points
-      start_date: start date
-      sum_total: sum total
+      rebate: 回扣
+      points: 點
+      start_date: 開始日期
+      sum_total: 總和總計
     report_day_range:
-      title: monthly report
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
+      title: 月度報告
+      display: 顯示
+      end_date: 結束日期
+      gross: 合計
+      net: 淨
       sum: 總和
-      rebate: rebate
-      points: points
-      start_date: start date
-      sum_total: sum total
+      rebate: 回扣
+      points: 點
+      start_date: 開始日期
+      sum_total: 總和總計
     report_day:
-      title: day report
-      sums_by_category: sums by category
-      sums_by_tax_profile: sums by tax profile
-      sums_by_payment_methods: sums by payment methods
-      sum: sum
+      title: 天報告
+      sums_by_category: 總和由類別
+      sums_by_tax_profile: 總和由稅務個人資料
+      sums_by_payment_methods: 總和由付款方式
+      sum: 總和
       sums_by_transaction_types: sums by transaction types
       transactions: transactions
       transaction_tag: transaction tag
