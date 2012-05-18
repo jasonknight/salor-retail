@@ -379,13 +379,13 @@ cn:
     vendors: 供應商
     void: 廢止
     end_of_day_drop: 天結束派息
-    transaction_tags: transaction tags
-    update_location: update location
-    update_real_quantity: update real quantity
-    print: print
-    upload: upload
-    download: download
-    reorder: reorder
+    transaction_tags: 交易標籤
+    update_location: 更新位置
+    update_real_quantity: 更新實際數量
+    print: 打印
+    upload: 上載
+    download: 下載
+    reorder: 重新排序
     report: report
     report_range: report detail
     report_day: report day
