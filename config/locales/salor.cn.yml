@@ -367,15 +367,15 @@ cn:
     pretext: 藉口
     reports: 報告
     search: 尋找
-    shipment_types: shipment types
-    shipments: shipments
-    shippers: shippers
-    show: show
-    split: split
-    stock_locations: stock locations
-    support: support
+    shipment_types: 裝船類型
+    shipments: 裝船
+    shippers: 發貨人
+    show: 顯示
+    split: 分裂
+    stock_locations: 貨物位置
+    support: 支持
     tax_profiles: tax profiles
-    update_gift_card: update gift card
+    update_gift_card: 更新禮品卡
     vendors: vendors
     void: void
     end_of_day_drop: end of day payout
