@@ -471,36 +471,36 @@ cn:
       sum_transactions: 總和交易
       noncash-refunds: 非現金的退款
       cash-refunds: 現金退款
-      from: From
-      to: To
+      from: 從
+      to: 至
     report_range:
-      title: day report
-      sums_by_category: sums by category
-      sums_by_tax_profile: sums by tax profile
-      sums_by_payment_methods: sums by payment methods
-      sum: sum
-      sums_by_transaction_types: sums by transaction types
-      transactions: transactions
-      transaction_tag: transaction tag
-      drops: drops
-      drop: drop
-      payouts: payouts
-      payout: payout
-      transaction_total: transaction total
-      transaction_journal: transaction journal
-      time: time
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      None: Not specified
-      count_orders: Count of orders
-      sales: Sales
-      payments: Payments
-      cash_drawer: Cash drawer
-      revenue: Revenue
-      sum_gross: Sum gross
-      sum_net: Sum net
-      gross: gross
-      net: net
+      title: 天報告
+      sums_by_category: 總和由類別
+      sums_by_tax_profile: 總和由稅務個人資料
+      sums_by_payment_methods: 總和由付款方式
+      sum: 總和
+      sums_by_transaction_types: 總和由交易類型
+      transactions: 交易
+      transaction_tag: 交易標籤
+      drops: 下降
+      drop: 下降
+      payouts: 派息
+      payout: 派息
+      transaction_total: 交易總計
+      transaction_journal: 交易日記
+      time: 時候
+      OrderItemRefund: 產品退款
+      OrderRefund: 訂購退款
+      None: 未指定
+      count_orders: 所有訂購列表
+      sales: 銷售
+      payments: 付款
+      cash_drawer: 錢抽屜
+      revenue: 收入
+      sum_gross: 總和合計
+      sum_net: 總和淨
+      gross: 合計
+      net: 淨
       sum_transactions: Sum transactions
       noncash-refunds: Noncash-Refunds
       cash-refunds: Cash-Refunds
