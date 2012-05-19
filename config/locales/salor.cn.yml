@@ -571,25 +571,25 @@ cn:
       rebate_subtotal: 回扣小計
       rebate: 單回扣
       coupon_subtotal: 優惠券小計
-      discount_subtotal: Discount Subtotal
-      discount: Discount
-      rebate_percent: Percent rebate
-      rebate_fixed: Fixed rebate
-      refunded: REFUNDED
+      discount_subtotal: 折扣小計
+      discount: 折扣
+      rebate_percent: ％的回扣
+      rebate_fixed: 固定回扣
+      refunded: 退款了
 
     word:
-      cancelled: cancelled
-      drop: drop
-      payout: payout
-      sold: sold
+      cancelled: 取消了
+      drop: 下降
+      payout: 派息
+      sold: 出售了
 
   receipts:
-    invoice: Rechnung
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
-    report_at_time: Report %{datetime}
+    invoice: 發票
+    invoice_numer_X_at_time: 訂單號 %{number} 在 %{datetime}
+    report_at_time: 報告 %{datetime}
     x_sum: |+
         %{type} SUM:   EUR %.2f
-    you_were_served_by: "You were served by %{name}"
+    you_were_served_by: "你服務由 %{name}"
     
   reports:
     item_zero: Sold out items
