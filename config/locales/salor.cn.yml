@@ -632,11 +632,11 @@ cn:
       parent_sku_must_exist: "父項必須存在!"
       child_sku_must_exist: "子項必須存在!"
       cannot_edit_completed_order: "該訂單完成後, 不能修改."
-      limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
-      sanity_check: Requested action is insane, verify order total and notify customer of correction.
-      cannot_reorder: No items must be reordered.
-      action_code_error: "Code could not be executed because %{error}"
-      action_error: "Action could not complete because %{error}"
+      limited_alphabet: "只有a-z許可. 允許沒有空格或重音字符."
+      sanity_check: 要求的行動是瘋狂的，確認訂單總額，並通知客戶改正.
+      cannot_reorder: 沒有任何產品必須重新排序.
+      action_code_error: "代碼不能執行, 因為 %{error}"
+      action_error: "操作無法完成, 因為 %{error}"
       not_enough_in_drawer: not enough in drawer
       cash_drop_amount_must_be_positive: cash drop amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
