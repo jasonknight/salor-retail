@@ -511,10 +511,10 @@ cn:
   printr:
     formats:
       advert: |-
-          The Innovative Point of Sale
+          銷售創新點
           www.salorpos.com
       b1g1_coupon: "%c %20.20s"
-      by_card: "By Card:                  EUR %8.2f"
+      by_card: "由卡:                  EUR %8.2f"
       by_cash: "In Cash:                  EUR %8.2f"
       cancel: Cancel                  EUR %8.2f
       change: "Change:                       EUR %8.2f"
