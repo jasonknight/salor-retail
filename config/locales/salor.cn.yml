@@ -592,17 +592,17 @@ cn:
     you_were_served_by: "你服務由 %{name}"
     
   reports:
-    item_zero: Sold out items
-    tax_class: tax class
-    description: description
-    unit_price: unit price
-    amount: amount
-    total: total
+    item_zero: 售罄的產品
+    tax_class: 稅務類
+    description: 描述
+    unit_price: 單價
+    amount: 數量
+    total: 總計
 
   roles:
-    cashier: cashier
-    header_cashier: header cashier
-    manager: manager
+    cashier: 出納員
+    header_cashier: 頭收銀員
+    manager: 經理
     stockboy: stockboy
     
   system:
