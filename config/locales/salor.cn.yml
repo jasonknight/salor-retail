@@ -606,14 +606,14 @@ cn:
     stockboy: stockboy
     
   system:
-    add_payment_method: add payment method
-    complete_sale: Complete
-    employee_login: employee login
-    inventory_updated: inventory updated
-    logged_in_as: logged in as
-    login: login
-    logout: logout
-    not_you: not you?
+    add_payment_method: 添加付款方式
+    complete_sale: 完成
+    employee_login: 僱員登錄
+    inventory_updated: 庫存更新了
+    logged_in_as: 登錄為
+    login: 登錄
+    logout: 註銷
+    not_you: 不是你嗎？
     owner_login: owner login
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
