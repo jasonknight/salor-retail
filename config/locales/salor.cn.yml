@@ -637,7 +637,7 @@ cn:
       cannot_reorder: 沒有任何產品必須重新排序.
       action_code_error: "代碼不能執行, 因為 %{error}"
       action_error: "操作無法完成, 因為 %{error}"
-      not_enough_in_drawer: not enough in drawer
+      not_enough_in_drawer: 沒有足夠的抽屜
       cash_drop_amount_must_be_positive: cash drop amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
       coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
