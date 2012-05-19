@@ -515,41 +515,41 @@ cn:
           www.salorpos.com
       b1g1_coupon: "%c %20.20s"
       by_card: "由卡:                  EUR %8.2f"
-      by_cash: "In Cash:                  EUR %8.2f"
-      cancel: Cancel                  EUR %8.2f
-      change: "Change:                       EUR %8.2f"
-      coupon_subtotal: Coupon                   EUR %8.2f
-      discount_subtotal: Discount                       EUR %8.2f
+      by_cash: "現金:                  EUR %8.2f"
+      cancel: 取消                  EUR %8.2f
+      change: "零錢:                       EUR %8.2f"
+      coupon_subtotal: 優惠券                   EUR %8.2f
+      discount_subtotal: 折扣                       EUR %8.2f
       discounted_item: "%c %20.20s %7.2f %3u %7.2f"
       end_of_day: "%20.20s EUR %5.2f"
-      fixed_rebate: Rebate                         EUR %8.2f
+      fixed_rebate: 回扣                         EUR %8.2f
       item: "%c %20.20s %7.2f %3u %7.2f"
       percent_coupon: "%c %20.20s %7.1f%% %3u %7.2f"
-      rebate_amount: Rebate %4.2f%%                 EUR %8.2f
+      rebate_amount: 回扣 %4.2f%%                 EUR %8.2f
       rebate_item: "%c %20.20s %7.2f %3u %7.2f"
-      rebate_subtotal: Rebate Total                  EUR %8.2f
-      subtotal: Subtotal                      EUR %8.2f
-      thanks: Thank you for shopping with us!
-      total: TOTAL                         EUR %8.2f
+      rebate_subtotal: 回扣總計                  EUR %8.2f
+      subtotal: 小計                      EUR %8.2f
+      thanks: 感謝您與我們購物！
+      total: 總計                         EUR %8.2f
     eod_report:
-      orders_total: Orders total
-      refunded_total: Refunded total
-      buyback_item_total: Buyback item total
-      buyback_order_total: Buyback order total
-      drop_total: TOTAL
-      payout_total: TOTAL
-      payment_method_total: TOTAL
-      transaction_total: TOTAL
-      cash_refunds_total: TOTAL
-      revenue_total: TOTAL
-      OrderItemRefund: Order Item Refund
-      OrderRefund: Order Refund
-      sales: Sales
-      payments: Payments
-      refund: Refund
-      None: Not named
-      noncash-refunds: Noncash-Refunds
-      cash-refunds: Cash-Refunds
+      orders_total: 訂購總計
+      refunded_total: 退款總計
+      buyback_item_total: 回購產品總計
+      buyback_order_total: 回購訂購總計
+      drop_total: 總計
+      payout_total: 總計
+      payment_method_total: 總計
+      transaction_total: 總計
+      cash_refunds_total: 總計
+      revenue_total: 總計
+      OrderItemRefund: 訂購產品退款
+      OrderRefund: 訂購退款
+      sales: 銷售
+      payments: 付款
+      refund: 退款
+      None: 未命名
+      noncash-refunds: 非現金的退款
+      cash-refunds: 現金的退款
       revenue: Revenue
       calculated_drawer_amount: Calculated drawer amount
       system_drawer_amount: System drawer amount
