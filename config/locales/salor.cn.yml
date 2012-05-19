@@ -95,8 +95,8 @@ cn:
       must_change_price: 必須更改價格
       created_at: 創建了
       is_refund: 有退款嗎?
-      owner_id: 業主
-      owner_type: 業主類型
+      owner_id: 雇主
+      owner_type: 雇主類型
       parent_sku: 父母的 SKU
       child_sku: 孩子的 SKU
       ignore_qty: 忽略數量
@@ -614,15 +614,15 @@ cn:
     login: 登錄
     logout: 註銷
     not_you: 不是你嗎？
-    owner_login: owner login
-    owner_mode: OWNER MODE
-    owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    owner_login: 雇主登錄
+    owner_mode: 雇主模式
+    owner_success: 雇主屬性已順利更新
+    payment_external_types: 現金, 卡, 禮品卡, 其它
+    payment_internal_types: 現金, 卡, 禮品卡, 其它信用卡
     rebate_types:
       fixed: $
       percent: "%"
-    register_today: register today
+    register_today: 今日註冊
     report_external_types: XXX
     report_internal_types: XXX
     sign_up: sign up
