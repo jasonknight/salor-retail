@@ -625,18 +625,18 @@ cn:
     register_today: 今日註冊
     report_external_types: XXX
     report_internal_types: XXX
-    sign_up: sign up
+    sign_up: 報名
     errors:
-      auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
-      order_totals_validation_failed: "Order total validation failed, refreshing the order may repair the issue. Press OK to refresh."
-      parent_sku_must_exist: "Parent Item Must Exist!"
-      child_sku_must_exist: "Child Item Must Exist!"
-      cannot_edit_completed_order: "That order is completed and cannot be modified."
+      auto_drop_failed: "系統沒自動下降，請手動創建一個開始一天的現金下降"
+      order_totals_validation_failed: "訂單總額驗證失敗，令人耳目一新的順序可能會修復此問題. 按OK刷新."
+      parent_sku_must_exist: "父項必須存在!"
+      child_sku_must_exist: "子項必須存在!"
+      cannot_edit_completed_order: "該訂單完成後, 不能修改."
       limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
       sanity_check: Requested action is insane, verify order total and notify customer of correction.
       cannot_reorder: No items must be reordered.
       action_code_error: "Code could not be executed because %{error}"
-      action_error: "Action could not complute because %{error}"
+      action_error: "Action could not complete because %{error}"
       not_enough_in_drawer: not enough in drawer
       cash_drop_amount_must_be_positive: cash drop amount must be positive
       coupon_cannot_be_buy_one_get_one: "coupon %{sku} cannot be_buy_one_get_one when applied to %{applies}"
