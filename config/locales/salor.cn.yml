@@ -550,27 +550,27 @@ cn:
       None: 未命名
       noncash-refunds: 非現金的退款
       cash-refunds: 現金的退款
-      revenue: Revenue
-      calculated_drawer_amount: Calculated drawer amount
-      system_drawer_amount: System drawer amount
-      warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You are advised to finish and start each day with a drawer amount of zero to ease accounting work. Make a cash payout accordingly and print this report again.
+      revenue: 收入
+      calculated_drawer_amount: 計算抽屜金額
+      system_drawer_amount: 系統抽屜金額
+      warning_drawer_amount_not_zero: 警告！你的抽屜金額不為零。建議你來完成，並開始與零的抽屜數量，以紓緩會     計工作的每一天。相應地作出現金支付，並再次打印此報告。
     order_receipt:
-      lc_points_substracted: Substracted Loyalty Points
-      subsubtotal: TOTAL
-      change: Change money
-      refund: Total refunds
-      given: Given money
-      net: net
-      tax: Tax
-      gross: gross
-      current_loyalty_points: Your loyalty points
-      subtotal1: Subtotal
-      subtotal2: Subtotal
-      subtotal3: Subtotal
-      subtotal4: Subtotal
-      rebate_subtotal: Rebate Subtotal
-      rebate: Single rebate
-      coupon_subtotal: Coupon Subtotal
+      lc_points_substracted: 加減忠誠點
+      subsubtotal: 總計
+      change: 換錢
+      refund: 總計退款
+      given: 鑑於錢
+      net: 淨
+      tax: 稅
+      gross: 合計
+      current_loyalty_points: 你的忠誠點
+      subtotal1: 小計
+      subtotal2: 小計
+      subtotal3: 小計
+      subtotal4: 小計
+      rebate_subtotal: 回扣小計
+      rebate: 單回扣
+      coupon_subtotal: 優惠券小計
       discount_subtotal: Discount Subtotal
       discount: Discount
       rebate_percent: Percent rebate
