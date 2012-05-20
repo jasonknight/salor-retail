@@ -833,6 +833,14 @@ de:
       waiting: Waiting...
 
 
+  customers:
+    show:
+      order_total: Summe
+      sold_count: Verkaufsmenge
+      order_id: Verkausnummer
+      bought_items: Verkaufte Anzahl
+      last_orders: Letzte Verkäufe
+
   items:
     show:
       from: von

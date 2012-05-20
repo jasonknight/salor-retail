@@ -283,6 +283,14 @@ en-US:
     divide: divide
     assign: assign
 
+  customers:
+    show:
+      order_total: Order total
+      sold_count: sold count
+      order_id: Order Number
+      bought_items: Bought items
+      last_orders: Last orders
+
   menu:
     remote_service: Remote Service
     usb_device: Usb Stick

@@ -57,13 +57,19 @@ class Customer < ActiveRecord::Base
   end
 
   #
-  def get_sales_statistics
+  def get_item_statistics
     item = Hash.new
     orders = self.orders
     orders.each do |o|
       o.order_items.each do |oi|
+        if item.has_key? oi.id
+          item[oi.id][:count] += 1
+        else
+          item[oi.id] = {:name => oi.item.name, :count => 1, :sku => oi.sku}
+        end
       end
     end 
+    return item
   end
   # {END}
 end
