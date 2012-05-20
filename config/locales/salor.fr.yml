@@ -78,7 +78,7 @@ fr:
       track_expiry: Date limite de suivi
       uses_drawer_id: Utilise la caisse de
       employee: employé
-        uses_drawer_id: Utilise la caisse de
+      uses_drawer_id: Utilise la caisse de
       reorder_type: Type de nouvelle commande
       big_buttons: Grands boutons
       hide_discounts: Cacher remises
@@ -404,7 +404,7 @@ fr:
     oops_an_error_occurred: "Oh là là ! Une erreur s'est produite."
     exception_description: "Description de l'erreur :"
     exception_in_files: "L'erreur s'est produite dans les fichiers suivants :"
-    assistance_text: 'Veuillez cliquer sur le bouton "Accueil" et réessayer. Si l'erreur persiste, veuillez contacter le service client, et connecter votre ordinateur au service à distance en appuyant sur le bouton "Service à distance". Nous vous aiderons immédiatement.'
+    assistance_text: "Veuillez cliquer sur le bouton \"Accueil\" et réessayer. Si l'erreur persiste, veuillez contacter le service client, et connecter votre ordinateur au service à distance en appuyant sur le bouton \"Service à distance\". Nous vous aiderons immédiatement."
 
   orders:
     report:

@@ -65,7 +65,7 @@ es:
       vendor:
         one: Tienda
         other: Tiendas
-      transaction_tag: etiqueta de transacción
+      transaction_tag: 
         one: Etiqueta
         other: Etiquetas
       payment_method:
@@ -78,7 +78,7 @@ es:
       track_expiry: Monitorear fecha de vencimiento
       uses_drawer_id: Utiliza la caja de
       employee:
-        uses_drawer_id: Utiliza la caja de
+        uses_drawer_id: "Utiliza la caja de"
       reorder_type: Tipo de pedido nuevo 
       big_buttons: Botones grandes
       hide_discounts: Ocultar descuentos

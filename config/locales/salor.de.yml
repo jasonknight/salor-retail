@@ -73,8 +73,8 @@ de:
         other: Zahlungsmethoden
 
     attributes:
-      hide_buttons: XXX Hide Buttons
-      calculate_tax: XXX Calculate Tax
+      hide_buttons: Tasten ausblenden
+      calculate_tax: Steuer berechnen
       track_expiry: Track Expiry
       uses_drawer_id: Uses Drawer of
       employee:
@@ -624,8 +624,6 @@ de:
       fixed: EUR
       percent: "%"
     register_today: Heute gratis anmelden!
-    report_external_types: XXX
-    report_internal_types: XXX
     sign_up: Konto erstellen
     errors:
       auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
@@ -785,7 +783,7 @@ de:
           returned: Retourniert
           shipped: im Transit
     notice:
-      save_before: XXX Save before leaving?
+      save_before: Vor dem Verlassen speichern?
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       wholesaler_upload_report: "Aktualisiert: %{updated_items}, Erzeugt: %{created_items}, Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}"
       cache_was_cleared: Cache wurde gelöscht
