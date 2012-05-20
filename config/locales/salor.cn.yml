@@ -105,9 +105,9 @@ cn:
       type: 類型
       active: 活躍
       address: 地址
-      amount: 數量
-      amount_remaining: 剩餘量
-      amount_type: 數量類型
+      amount: 金額
+      amount_remaining: 剩餘金額
+      amount_type: 金額類型
       applies_to: 適用於
       base_price: 基價
       behavior: 行為
@@ -133,7 +133,7 @@ cn:
       dollar_per_lp: 美元每忠誠點
       drop: 下降
       email: 電子郵件
-      end_amount: 最後量
+      end_amount: 最後金額
       end_date: 結束日期
       expires_on: 到期
       first_name: 名字
@@ -186,7 +186,7 @@ cn:
         purchase_price: 購買價格
         quantity: Quantity
       sku: SKU
-      start_amount: 開始數量
+      start_amount: 開始金額
       start_date: 開始日期
       state: 州
       status: 狀態
@@ -596,7 +596,7 @@ cn:
     tax_class: 稅務類
     description: 描述
     unit_price: 單價
-    amount: 數量
+    amount: 金額
     total: 總計
 
   roles:
@@ -640,8 +640,8 @@ cn:
       not_enough_in_drawer: 沒有足夠的抽屜
       cash_drop_amount_must_be_positive: 現金下降金額必須是積極的
       coupon_cannot_be_buy_one_get_one: "優惠券 %{sku} 不能買一送一當應用到 %{applies}"
-      coupon_fixed_amount_greater_than_total: "優惠券 %{sku} 金額大於 the price of Item %{item}"
-      coupon_not_enough_items: You have not purchased enough items for this to apply
+      coupon_fixed_amount_greater_than_total: "優惠券 %{sku} 金額大於產品的價格 %{item}"
+      coupon_not_enough_items: 你還沒有購買足夠的產品申請
       coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
       csv_item_exists: "Item %{sku} exists!"
       csv_item_failed: "%{id} %{i} failed."
