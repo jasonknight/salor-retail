@@ -231,13 +231,13 @@ cn:
     subtract: 減
   cash_registers:
     end_of_day:
-      cash_drawer: Cash Drawer
-      counted: Counted
-      difference: Difference
-      end_of_day_thermal_report: Print Report
-      paper_report: Detail Report
-  delete: Delete
-  edit: Edit
+      cash_drawer: 錢抽屜
+      counted: 計數了
+      difference: 區別
+      end_of_day_thermal_report: 打印報告
+      paper_report: 詳細報告
+  delete: 刪除
+  edit: 編輯
   end_of_day: 天結束
   exception_page:
     assistance_text: 請點擊”主頁“按鈕，並再次嘗試。如果錯誤再次發生，請致電客戶支持，將計算機連接到遠程服務“遠程服務”按鈕。我們會立即幫你.
