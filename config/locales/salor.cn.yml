@@ -284,8 +284,8 @@ cn:
       update: 更新
   home:
     remote_service:
-      connect_ssh: Remote service
-      connect_vnc: Share screen
+      connect_ssh: 遠程服務
+      connect_vnc: 共享屏幕
       connected: connected
       disconnected: disconnected
       host: Server
