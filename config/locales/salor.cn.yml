@@ -286,17 +286,17 @@ cn:
     remote_service:
       connect_ssh: 遠程服務
       connect_vnc: 共享屏幕
-      connected: connected
-      disconnected: disconnected
-      host: Server
-      not_supported_by_browser: Remote service is not supported by this browser.
-      password: Password
-      requesting_connection_status: Requesting connection status ...
-      title: Remote Service
-      user: User
+      connected: 連接了
+      disconnected: 斷開了
+      host: 服務器
+      not_supported_by_browser: 此瀏覽器不支持遠程服務.
+      password: 密碼
+      requesting_connection_status: 請求的連接狀態 ...
+      title: 遠程服務
+      user: 用戶
     user_employee_index:
-      backup_database: Backup Database
-      backup_logfile: Backup Logfile
+      backup_database: 備份數據庫
+      backup_logfile: 備份日誌文件
   items:
     database_distiller:
       are_you_sure: All unused Items will be deleted. This cannot be undone. Are you
