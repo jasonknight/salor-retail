@@ -651,7 +651,7 @@ cn:
       gift_card_empty: 禮品卡是空的, 通知客戶, 並摧毀卡.
       gift_card_not_found: 找不到連接到這個訂購的禮品卡...
       gs1_item_not_found: "禮品標記為gs1, 但 %{sku} 是不正確的格式."
-      insufficient_quantity_on_item: "Warning, Item %{sku} quantity is insufficient, time to update your stock levels!"
+      insufficient_quantity_on_item: "警告, 禮品 %{sku} 數量是不夠的, 請更新您的庫存水平!"
       inventory_update_error: inventory update error
       item_not_found: The item you are looking for could not be found, try searching?
       item_price_is_zero: "Warning: Item price is 0"
