@@ -1,18 +1,165 @@
+---
 cn:
+  ByCard: By Card
+  ByGiftCard: By Gift Card
+  InCash: In Cash
   activerecord:
+    attributes:
+      active: 活躍
+      address: 地址
+      afield: 領域
+      amount: 金額
+      amount_remaining: 剩餘金額
+      amount_type: 金額類型
+      applies_to: 適用於
+      auto_drop: 自動開始日
+      bank_machine_path: 自動櫃員機
+      base_price: 基價
+      behavior: 行為
+      body: 身體
+      buyback_price: buyback price 回購價格
+      calculate_part_price: 計算部分價格
+      calculate_tax: 計稅
+      cash_drawer: 錢抽屜
+      cash_made: 賺的錢
+      cash_register:
+        sticker_printer: 標籤打印機
+      category_id: 類別
+      cellphone: 手機
+      child_sku: 孩子的 SKU
+      city: 城市
+      code: 碼
+      company_name: 公司名稱
+      contact_address: 聯繫地址
+      contact_email: 聯絡電郵
+      contact_fax: 聯絡傳真
+      contact_person: 聯絡人
+      contact_phone: 聯絡電話
+      country: 國家
+      coupon_applies: 優惠券適用
+      coupon_total: 優惠券總計
+      coupon_type: 優惠券類型
+      created_at: 創建了
+      csv_imports: CSV 進口
+      csv_imports_url: CSV 進口的 URL
+      customer_screen_blurb: 標準文本顧客屏幕
+      decimal_points: 小數點
+      default: 默認
+      default_buyback: 默認的下回購
+      dollar_per_lp: 美元每忠誠點
+      drop: 下降
+      email: 電子郵件
+      employee:
+        uses_drawer_id: 使用的抽屜
+      end_amount: 最後金額
+      end_date: 結束日期
+      eod_show: 顯示在天結束
+      expires_on: 到期
+      first_name: 名字
+      height: 高度
+      hide_buttons: 隱藏按鈕
+      hide_discounts: 隱藏折扣
+      ignore_qty: 忽略數量
+      is_refund: 有退款嗎?
+      is_shipment_item: 裝運產品
+      item:
+        purchase_price: 購買價格
+        quantity: Quantity
+      item_sku: 產品的sku
+      itemsviewlist: 為產品的列表視圖
+      last_name: 姓
+      lc_points: 忠誠卡點
+      length: 長度
+      letter: 信
+      location_id: 位置 ID
+      lp_per_dollar: 每美元的忠誠點
+      min_quantity: 最低數量
+      must_change_price: 必須更改價格
+      name: 名稱
+      no_print: 不要在輸入打印
+      notes: 筆記
+      open_cash_drawer: 打開錢抽屜
+      order_id: 訂購
+      owner_id: 雇主
+      owner_type: 雇主類型
+      packaging_unit: 包裝單位
+      pagination: 分頁
+      paid: 支付
+      parent_sku: 父母的 SKU
+      part_quantity: 部分數量
+      parts: 部分
+      password: 密碼
+      paylife: Paylife
+      payout: 派息
+      points: 點
+      pole_display: 桿顯示
+      postalcode: 郵政編碼
+      price: 價格
+      price_by_qty: 價格由數量
+      purchase_price: 購買價格
+      quantity: quantity 數量
+      quantity_sold: 銷售數量
+      real_quantity: 實際數量
+      rebate: 回扣
+      rebate_type: 回扣類型
+      receipt_blurb: 收據頭
+      receipt_blurb_footer: 收據腳
+      reorder_type: 重新訂購類型
+      sales_metric: 銷售公制
+      salor_printer: 打印客戶端
+      scale: 規模
+      shipment:
+        from: 從
+        paid: 支付
+        price: price 價格
+        to: 至
+      shipment_item:
+        name: 名稱
+        quantity: quantity 數量
+        sku: SKU
+        stock_location_id: 庫存位置
+      shipper_sku: 發貨人 SKU
+      sku: SKU
+      start_amount: 開始金額
+      start_date: 開始日期
+      state: 州
+      status: 狀態
+      stock_location_ids: 庫存位置
+      street1: 地址1
+      street2: 地址2
+      stylesheets: 樣式表
+      subtotal: 小計
+      tag: 標籤
+      tax: 稅
+      tax_profile_id: 稅
+      telephone: 電話
+      the_receiver: 收到人
+      the_shipper: 發貨人
+      thermal_printer: 熱敏打印機
+      title: 稱號
+      total: 共計
+      track_expiry: 跟踪屆滿
+      type: 類型
+      url: URL
+      username: 用戶名
+      uses_drawer_id: 使用的抽屜
+      value: 價值
+      vendor_id: 供應商
+      vendor_printers: 打印機
+      weigh_compulsory: 強制稱重
+      weight: 重量
+      when: 何時
+      width: 寬度
     models:
-      button:
-        one: 按鈕
-        other: 按鈕
-      tender_method:
-        one: 貨幣方法
-        other: 貨幣方法
-      action: 
+      action:
         one: 行動
         other: 行動
       broken_item:
         one: 破碎的產品
         other: 破碎的產品
+      button:
+        one: 按鈕
+        other: 按鈕
       category:
         one: 類別
         other: 類別
@@ -46,13 +193,16 @@ cn:
       order_item:
         one: 訂購產品
         other: 訂購產品
+      payment_method:
+        one: 付款方式
+        other: 付款方式
       shipment:
         one: 裝船
         other: 裝船
       shipment_type:
+        default_name: 默認名稱
         one: 裝船類型
         other: 裝船類型
-        default_name: 默認名稱
       shipper:
         one: 發貨人
         other: 發貨人
@@ -62,264 +212,155 @@ cn:
       tax_profile:
         one: 稅務個人資料
         other: 稅務個人資料
-      vendor:
-        one: 商店
-        other: 商店
+      tender_method:
+        one: 貨幣方法
+        other: 貨幣方法
       transaction_tag:
         one: 標籤
         other: 標籤
-      payment_method:
-        one: 付款方式
-        other: 付款方式
-
-    attributes:
-      hide_buttons: 隱藏按鈕
-      calculate_tax: 計稅
-      track_expiry: 跟踪屆滿
-      uses_drawer_id: 使用的抽屜
-      employee:
-        uses_drawer_id: 使用的抽屜
-      reorder_type: 重新訂購類型
-      big_buttons: 大按鈕
-      hide_discounts: 隱藏折扣
-      thermal_printer: 熱敏打印機
-      paylife: Paylife
-      url: URL
-      letter: 信
-      default: 默認
-      csv_imports: CSV 進口
-      csv_imports_url: CSV 進口的 URL
-      customer_screen_blurb: 標準文本顧客屏幕
-      pole_display: 桿顯示
-      auto_drop: "自動開始日"
-      must_change_price: 必須更改價格
-      created_at: 創建了
-      is_refund: 有退款嗎?
-      owner_id: 雇主
-      owner_type: 雇主類型
-      parent_sku: 父母的 SKU
-      child_sku: 孩子的 SKU
-      ignore_qty: 忽略數量
-      bank_machine_path: 自動櫃員機
-      artema_hybrid: Artema Hybrid
-      type: 類型
-      active: 活躍
-      address: 地址
-      amount: 金額
-      amount_remaining: 剩餘金額
-      amount_type: 金額類型
-      applies_to: 適用於
-      base_price: 基價
-      behavior: 行為
-      body: 身體
-      buyback_price: buyback price 回購價格
-      calculate_part_price: 計算部分價格
-      cash_made: 賺的錢
-      category_id: 類別
-      cellphone: 手機
-      city: 城市
-      company_name: 公司名稱
-      contact_address: 聯繫地址
-      contact_email: 聯絡電郵
-      contact_fax: 聯絡傳真
-      contact_person: 聯絡人
-      contact_phone: 聯絡電話
-      country: 國家
-      coupon_applies: 優惠券適用
-      coupon_total: 優惠券總計
-      coupon_type: 優惠券類型
-      decimal_points: 小數點
-      default_buyback: 默認的下回購
-      dollar_per_lp: 美元每忠誠點
-      drop: 下降
-      email: 電子郵件
-      end_amount: 最後金額
-      end_date: 結束日期
-      expires_on: 到期
-      first_name: 名字
-      height: 高度
-      is_shipment_item: 裝運產品
-      item_sku: 產品的sku
-      itemsviewlist: "為產品的列表視圖"
-      last_name: 姓
-      lc_points: 忠誠卡點
-      length: 長度
-      location_id: 位置 ID
-      lp_per_dollar: 每美元的忠誠點
-      min_quantity: 最低數量
-      name: 名稱
-      not_paid: 沒支付
-      notes: 筆記
-      packaging_unit: 包裝單位
-      pagination: 分頁
-      paid: 支付
-      part_quantity: 部分數量
-      parts: 部分
-      password: 密碼
-      payout: 派息
-      points: 點
-      postalcode: 郵政編碼
-      price: 價格
-      price_by_qty: 價格由數量
-      purchase_price: 購買價格
-      quantity: quantity 數量
-      real_quantity: 實際數量
-      quantity_sold: 銷售數量
-      rebate: 回扣
-      rebate_type: 回扣類型
-      receipt_blurb: 收據頭
-      receipt_blurb_footer: 收據腳
-      sales_metric: 銷售公制
-      shipment:
-        from: 從
-        paid: 支付
-        price: price 價格
-        to: 至
-      shipment_item:
-        name: 名稱
-        quantity: quantity 數量
-        sku: SKU
-        stock_location_id: 庫存位置
-      cash_register:
-        sticker_printer: 標籤打印機
-      item:
-        purchase_price: 購買價格
-        quantity: Quantity
-      sku: SKU
-      start_amount: 開始金額
-      start_date: 開始日期
-      state: 州
-      status: 狀態
-      stock_location_ids: 庫存位置
-      street1: 地址1
-      street2: 地址2
-      subtotal: 小計
-      tag: 標籤
-      tax: 稅
-      tax_profile_id: 稅
-      telephone: 電話
-      the_receiver: 收到人
-      the_shipper: 發貨人
-      title: 稱號
-      total: 共計
-      username: 用戶名
-      value: 價值
-      vendor_id: 供應商
-      vendor_printers: 打印機
-      weigh_compulsory: 強制稱重
-      weight: 重量
-      width: 寬度
-      open_cash_drawer: 打開錢抽屜
-      cash_drawer: 錢抽屜
-      stylesheets: 樣式表
-      eod_show: 顯示在天結束
-      shipper_sku: 發貨人 SKU
-      code: 碼 
-      when: 何時
-      afield: 領域
-      order_id: 訂購
-      scale: 規模
-      no_print: 不要在輸入打印
-      salor_printer: 打印客戶端
-      
+      vendor:
+        one: 商店
+        other: 商店
   api:
     user_does_not_exist: 用戶不存在
-        
-   
+  behavior_list:
+    add: 加
+    assign: 分配
+    divide: 分
+    multiply: 乘
+    subtract: 減
+  cash_registers:
+    end_of_day:
+      cash_drawer: Cash Drawer
+      counted: Counted
+      difference: Difference
+      end_of_day_thermal_report: Print Report
+      paper_report: Detail Report
+  delete: Delete
+  edit: Edit
+  end_of_day: End of Day
+  exception_page:
+    assistance_text: 請點擊”主頁“按鈕，並再次嘗試。如果錯誤再次發生，請致電客戶支持，將計算機連接到遠程服務“遠程服務”按鈕。我們會立即幫你.
+    exception_description: ! '錯誤描述:'
+    exception_in_files: ! '錯誤發生在下面的文件:'
+    oops_an_error_occurred: 哎呀！發生錯誤
   headings:
-    database_distiller: 數據庫蒸餾器
-    order_validation: "訂購驗證"
-    paylife: "Paylife(Artema Hybrid)"
-    bank_machine_types: 支持的銀行機
     almost_out: 幾乎沒有
+    bank_machine_types: 支持的銀行機
     best_sellers: 暢銷的
     best_selling_category: 最好的銷售類別
     best_selling_location: 最好的銷售位置
     crd: 時間,數量,類型,註釋
-    discount_for: "%{store} 的回贈"
-    discounts_for: "%{store} 的回贈"
+    database_distiller: 數據庫蒸餾器
+    discount_for: ! '%{store} 的回贈'
+    discounts_for: ! '%{store} 的回贈'
     edit_shipper: 編輯托運人 %{name}
     employees: 僱員
     expiring_soon: 即將到期
     export: 出口
     item_selection: 產品選擇
-    new_discount_for: "%{store} 的新折扣"
+    new_discount_for: ! '%{store} 的新折扣'
     notes: 註釋
+    order_validation: 訂購驗證
+    paylife: Paylife(Artema Hybrid)
     shipment_items: 裝運產品
-    shipment_items_header: 名稱, SKU, 價格, 類別, 位置
     shipment_types: 裝船類型
-    shipment_types_header: 州, 由添加, , 
     shipments: 裝船
-    shipments_header: 名稱, 從, 至, 價格, 價格, 支付?, 由添加, 狀態, , , 
     update_location: 更新位置
     update_real_quantity: 更新實際數量
-
   helpers:
     select:
       prompt: 請選擇
     submit:
       cancel: 取消
       clear: 清洗
+      complete_sale: 完成銷售
       create: 創建
       get_item: 獲得產品
-      print: 打印
-      complete_sale: 完成銷售
-      submit: 提交
-      save: 儲存
-      update: 更新
       ok: OK
-
-  when_list:
-    always: 總是
-    on_save: 在儲存
-    on_import: 在進口
-    on_export: 在出口
-    add_to_order: 在加入訂單
-    
-  behavior_list:
-    add: 加
-    subtract: 減
-    multiply: 乘
-    divide: 分
-    assign: 分配
-
+      print: 打印
+      save: 儲存
+      submit: 提交
+      update: 更新
+  home:
+    remote_service:
+      connect_ssh: Remote service
+      connect_vnc: Share screen
+      connected: connected
+      disconnected: disconnected
+      host: Server
+      not_supported_by_browser: Remote service is not supported by this browser.
+      password: Password
+      requesting_connection_status: Requesting connection status ...
+      title: Remote Service
+      user: User
+    user_employee_index:
+      backup_database: Backup Database
+      backup_logfile: Backup Logfile
+  items:
+    database_distiller:
+      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you
+        sure you want to proceed?
+      delete_unused_items: Delete unused Items!
+      hidden: Already deleted Items
+      hidden_by_distiller: Items deleted by Database Distiller
+      relevant_item_ids: Items relevant for deletion
+      unused_item_ids: Unused Items
+      used_item_ids: Used Items
+    index:
+      database_distiller_warning: Due to the generation of statistics, calling this
+        function will last for about 30 seconds. Proceed anyway?
+      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items
+        will now be created and updated. This action will take about 20 minutes. Are
+        you really sure that you want to proceed?
+    inventory_report:
+      price: Selling price
+      subtotal_purchase_price: Subtotal Purchase Price
+      subtotal_selling_price: Subtotal Selling Price
+      title: Inventory Report
+      total_buying_price: Sum Purchase Price
+      total_selling_price: Sum Selling Price
+    show:
+      from: from
+      quantity_sold: Sold quantity
+      query: Query!
+      to: to
+    update_real_quantity:
+      are_you_sure: This will copy the inventory quantities into the database and
+        reset the inventory report. Continue?
+      inventory_report: Inventory Report
+      update_quantity: Update inventory quantities
+    upload:
+      upload: upload
+  label: label
   menu:
-    remote_service: 遠程服務
-    usb_device: USB記憶棒
-    salortrainer: Salor訓練者
-    salorlive: Salor 活著!
-    database_distiller: 數據庫蒸餾器
-    clear_order: 清洗
-    inventory_report: 庫存報告
-    ok: OK
-    buttons: 按鈕
-    cameras: 相機
-    tender_methods: 貨幣方法
-    new_tender_method: new 新貨幣方法
-    edit_tender_method: edit 編輯貨幣方法
     actions: actions 行動
-    new_broken_item: 新破碎的產品
     activate_gift_card: 激活禮品卡
     add_to_current_order: 添加到當前的訂單
     additional: 額外
     back: 回
     broken_items: 破碎的產品
+    buttons: 按鈕
     buy_order: 買
+    cameras: 相機
     cancel: 取消
     cash_drop: 現金下降
     cash_register: 收款台
     cash_registers: 收款台
     categories: 類別
+    clear_order: 清洗
     configuration: 組態
     contact: contact 聯絡
-    current_order: "當前的訂單: #%{id}"
+    current_order: ! '當前的訂單: #%{id}'
     customer: 顧客
     customers: 顧客
+    database_distiller: 數據庫蒸餾器
     delete: 刪除
     delete_confirm: 確定嗎?
     destroy: 摧毀
     discounts: discounts 折扣
     done: 完成
+    download: 下載
     edit: 編輯
     edit_cash_register: 編輯收款台
     edit_category: 編輯類別
@@ -332,18 +373,22 @@ cn:
     edit_shipment_type: 編輯裝船類型
     edit_shipper: 編輯發貨人 %{name}
     edit_tax_profile: 編輯稅務個人資料
+    edit_tender_method: edit 編輯貨幣方法
     edit_vendor: 編輯供應商
     employees: 僱員
     end_day: end day 結束日
     general_configuration: 一般組態
     home: 主頁
+    inventory_report: 庫存報告
     item_types: 產品類型
     items: 產品
+    law_reports: 報告下載
     locations: 位置
     loyalty_cards: 忠誠卡
-    move_all_shipment_items: 移動所有裝船產品
     move_shipment_item: 移動裝船產品
     new_action: 新行動
+    new_broken_item: 新破碎的產品
+    new_button: 新按鈕
     new_cash_register: 新收款台
     new_category: 新類別
     new_customer: 新顧客
@@ -357,15 +402,24 @@ cn:
     new_shipper: 新發貨人
     new_stock_location: 新貨物位置
     new_tax_profile: 新稅務個人資料
+    new_tender_method: new 新貨幣方法
     new_vendor: 新供應商
-    new_button: 新按鈕
+    ok: OK
     order: 訂購
-    points: 點
-    pos: POS
     orders: 訂購
     overview: 概貌
-    pretext: 藉口
+    points: 點
+    pos: POS
+    print: 打印
+    remote_service: 遠程服務
+    reorder: 重新排序
+    report: 報告
+    report_day: 報告日
+    report_day_range: 月度報告
+    report_range: 報告詳細
     reports: 報告
+    salorlive: Salor 活著!
+    salortrainer: Salor訓練者
     search: 尋找
     shipment_types: 裝船類型
     shipments: 裝船
@@ -375,406 +429,287 @@ cn:
     stock_locations: 貨物位置
     support: 支持
     tax_profiles: 稅務個人資料
-    update_gift_card: 更新禮品卡
-    vendors: 供應商
-    void: 廢止
-    end_of_day_drop: 天結束派息
+    tender_methods: 貨幣方法
     transaction_tags: 交易標籤
+    update_gift_card: 更新禮品卡
     update_location: 更新位置
     update_real_quantity: 更新實際數量
-    print: 打印
     upload: 上載
-    download: 下載
-    reorder: 重新排序
-    report: 報告
-    report_range: 報告詳細
-    report_day: 報告日
-    report_accounting: 報告會計
-    report_day_range: 月度報告
+    usb_device: USB記憶棒
+    vendors: 供應商
+    void: 廢止
     wholesaler_update: 批發商更新
-    law_reports: 報告下載
-    
-    
   notifications:
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
     shipments_move_item: 項目均順利搬遷
-
-  exception_page:
-    oops_an_error_occurred: "哎呀！發生錯誤"
-    exception_description: "錯誤描述:"
-    exception_in_files: "錯誤發生在下面的文件:"
-    assistance_text: '請點擊”主頁“按鈕，並再次嘗試。如果錯誤再次發生，請致電客戶支持，將計算機連接到遠程服務“遠程服務”按鈕。我們會立即幫你.'
-
   orders:
     report:
+      display: 顯示
+      end_date: 結束日期
+      gross: 合計
+      net: 淨
+      points: 點
+      rebate: 回扣
+      start_date: 開始日期
+      sum: 總和
+      sum_total: 總和總計
       title: 總和
-      display: 顯示
-      end_date: 結束日期
-      gross: 合計
-      net: 淨
-      sum: 總和
-      rebate: 回扣
-      points: 點
-      start_date: 開始日期
-      sum_total: 總和總計
-    report_range:
-      title: 總和
-      display: 顯示
-      end_date: 結束日期
-      gross: 合計
-      net: 淨
-      sum: 總和
-      rebate: 回扣
-      points: 點
-      start_date: 開始日期
-      sum_total: 總和總計
-    report_day_range:
-      title: 月度報告
-      display: 顯示
-      end_date: 結束日期
-      gross: 合計
-      net: 淨
-      sum: 總和
-      rebate: 回扣
-      points: 點
-      start_date: 開始日期
-      sum_total: 總和總計
     report_day:
-      title: 天報告
-      sums_by_category: 總和由類別
-      sums_by_tax_profile: 總和由稅務個人資料
-      sums_by_payment_methods: 總和由付款方式
-      sum: 總和
-      sums_by_transaction_types: 總和由交易類型
-      transactions: 交易
-      transaction_tag: 交易標籤
-      drops: 下降
-      drop: 下降
-      payouts: 派息
-      payout: 派息
-      transaction_total: 交易總計
-      transaction_journal: 交易日記
-      time: 時候
+      None: 未指定
       OrderItemRefund: 產品退款
       OrderRefund: 訂購退款
-      None: 未指定
-      count_orders: 所有訂購列表
-      sales: 銷售
-      payments: 付款
-      cash_drawer: 錢抽屜
-      revenue: 收入
-      sum_gross: 總和合計
-      sum_net: 總和淨
-      gross: 合計
-      net: 淨
-      sum_transactions: 總和交易
-      noncash-refunds: 非現金的退款
       cash-refunds: 現金退款
-      from: 從
-      to: 至
-    report_range:
-      title: 天報告
-      sums_by_category: 總和由類別
-      sums_by_tax_profile: 總和由稅務個人資料
-      sums_by_payment_methods: 總和由付款方式
-      sum: 總和
-      sums_by_transaction_types: 總和由交易類型
-      transactions: 交易
-      transaction_tag: 交易標籤
-      drops: 下降
-      drop: 下降
-      payouts: 派息
-      payout: 派息
-      transaction_total: 交易總計
-      transaction_journal: 交易日記
-      time: 時候
-      OrderItemRefund: 產品退款
-      OrderRefund: 訂購退款
-      None: 未指定
-      count_orders: 所有訂購列表
-      sales: 銷售
-      payments: 付款
       cash_drawer: 錢抽屜
-      revenue: 收入
-      sum_gross: 總和合計
-      sum_net: 總和淨
+      count_orders: 所有訂購列表
+      drop: 下降
+      from: 從
       gross: 合計
       net: 淨
-      sum_transactions: 總和交易
       noncash-refunds: 非現金的退款
-      cash-refunds: 現金的退款
-      from: 從
+      payments: 付款
+      payout: 派息
+      payouts: 派息
+      revenue: 收入
+      sales: 銷售
+      sum: 總和
+      sum_gross: 總和合計
+      sum_net: 總和淨
+      sum_transactions: 總和交易
+      sums_by_category: 總和由類別
+      sums_by_payment_methods: 總和由付款方式
+      sums_by_tax_profile: 總和由稅務個人資料
+      time: 時候
+      title: 天報告
       to: 至
-      
-
+      transaction_tag: 交易標籤
+      transaction_total: 交易總計
+      transactions: 交易
+    report_day_range:
+      display: 顯示
+      end_date: 結束日期
+      gross: 合計
+      net: 淨
+      points: 點
+      rebate: 回扣
+      start_date: 開始日期
+      sum: 總和
+      sum_total: 總和總計
+      title: 月度報告
+    report_range:
+      None: 未指定
+      OrderItemRefund: 產品退款
+      OrderRefund: 訂購退款
+      cash-refunds: 現金的退款
+      cash_drawer: 錢抽屜
+      count_orders: 所有訂購列表
+      drop: 下降
+      from: 從
+      gross: 合計
+      net: 淨
+      noncash-refunds: 非現金的退款
+      payments: 付款
+      payout: 派息
+      payouts: 派息
+      revenue: 收入
+      sales: 銷售
+      sum: 總和
+      sum_gross: 總和合計
+      sum_net: 總和淨
+      sum_transactions: 總和交易
+      sums_by_category: 總和由類別
+      sums_by_payment_methods: 總和由付款方式
+      sums_by_tax_profile: 總和由稅務個人資料
+      time: 時候
+      title: 天報告
+      to: 至
+      transaction_tag: 交易標籤
+      transaction_total: 交易總計
+      transactions: 交易
   printr:
+    eod_report:
+      None: 未命名
+      OrderItemRefund: 訂購產品退款
+      OrderRefund: 訂購退款
+      calculated_drawer_amount: 計算抽屜金額
+      cash-refunds: 現金的退款
+      cash_refunds_total: 總計
+      noncash-refunds: 非現金的退款
+      orders_total: 訂購總計
+      payment_method_total: 總計
+      payments: 付款
+      refund: 退款
+      revenue: 收入
+      revenue_total: 總計
+      sales: 銷售
+      system_drawer_amount: 系統抽屜金額
+      transaction_total: 總計
+      warning_drawer_amount_not_zero: 警告！你的抽屜金額不為零。建議你來完成，並開始與零的抽屜數量，以紓緩會     計工作的每一天。相應地作出現金支付，並再次打印此報告。
     formats:
-      advert: |-
-          銷售創新點
-          www.salorpos.com
-      b1g1_coupon: "%c %20.20s"
-      by_card: "由卡:                  EUR %8.2f"
-      by_cash: "現金:                  EUR %8.2f"
+      advert: ! '銷售創新點
+
+        www.salorpos.com'
       cancel: 取消                  EUR %8.2f
-      change: "零錢:                       EUR %8.2f"
+      change: ! '零錢:                       EUR %8.2f'
       coupon_subtotal: 優惠券                   EUR %8.2f
       discount_subtotal: 折扣                       EUR %8.2f
-      discounted_item: "%c %20.20s %7.2f %3u %7.2f"
-      end_of_day: "%20.20s EUR %5.2f"
+      end_of_day: ! '%20.20s EUR %5.2f'
       fixed_rebate: 回扣                         EUR %8.2f
-      item: "%c %20.20s %7.2f %3u %7.2f"
-      percent_coupon: "%c %20.20s %7.1f%% %3u %7.2f"
+      item: ! '%c %20.20s %7.2f %3u %7.2f'
       rebate_amount: 回扣 %4.2f%%                 EUR %8.2f
-      rebate_item: "%c %20.20s %7.2f %3u %7.2f"
       rebate_subtotal: 回扣總計                  EUR %8.2f
       subtotal: 小計                      EUR %8.2f
       thanks: 感謝您與我們購物！
       total: 總計                         EUR %8.2f
-    eod_report:
-      orders_total: 訂購總計
-      refunded_total: 退款總計
-      buyback_item_total: 回購產品總計
-      buyback_order_total: 回購訂購總計
-      drop_total: 總計
-      payout_total: 總計
-      payment_method_total: 總計
-      transaction_total: 總計
-      cash_refunds_total: 總計
-      revenue_total: 總計
-      OrderItemRefund: 訂購產品退款
-      OrderRefund: 訂購退款
-      sales: 銷售
-      payments: 付款
-      refund: 退款
-      None: 未命名
-      noncash-refunds: 非現金的退款
-      cash-refunds: 現金的退款
-      revenue: 收入
-      calculated_drawer_amount: 計算抽屜金額
-      system_drawer_amount: 系統抽屜金額
-      warning_drawer_amount_not_zero: 警告！你的抽屜金額不為零。建議你來完成，並開始與零的抽屜數量，以紓緩會     計工作的每一天。相應地作出現金支付，並再次打印此報告。
     order_receipt:
-      lc_points_substracted: 加減忠誠點
-      subsubtotal: 總計
       change: 換錢
-      refund: 總計退款
-      given: 鑑於錢
-      net: 淨
-      tax: 稅
-      gross: 合計
+      coupon_subtotal: 優惠券小計
       current_loyalty_points: 你的忠誠點
+      discount: 折扣
+      discount_subtotal: 折扣小計
+      given: 鑑於錢
+      gross: 合計
+      lc_points_substracted: 加減忠誠點
+      net: 淨
+      rebate: 單回扣
+      rebate_fixed: 固定回扣
+      rebate_percent: ％的回扣
+      rebate_subtotal: 回扣小計
+      refund: 總計退款
+      refunded: 退款了
+      subsubtotal: 總計
       subtotal1: 小計
       subtotal2: 小計
       subtotal3: 小計
       subtotal4: 小計
-      rebate_subtotal: 回扣小計
-      rebate: 單回扣
-      coupon_subtotal: 優惠券小計
-      discount_subtotal: 折扣小計
-      discount: 折扣
-      rebate_percent: ％的回扣
-      rebate_fixed: 固定回扣
-      refunded: 退款了
-
+      tax: 稅
     word:
-      cancelled: 取消了
       drop: 下降
       payout: 派息
       sold: 出售了
-
   receipts:
     invoice: 發票
     invoice_numer_X_at_time: 訂單號 %{number} 在 %{datetime}
-    report_at_time: 報告 %{datetime}
-    x_sum: |+
-        %{type} SUM:   EUR %.2f
-    you_were_served_by: "你服務由 %{name}"
-    
   reports:
+    amount: 金額
+    description: 描述
     item_zero: 售罄的產品
     tax_class: 稅務類
-    description: 描述
-    unit_price: 單價
-    amount: 金額
     total: 總計
-
+    unit_price: 單價
   roles:
     cashier: 出納員
-    header_cashier: 頭收銀員
     manager: 經理
     stockboy: stockboy
-    
+  shipments:
+    index:
+      report: Report
+    show:
+      purchase_price_sum: Purchase price sum
+  sticker: sticker
+  support: XXX
   system:
     add_payment_method: 添加付款方式
     complete_sale: 完成
-    employee_login: 僱員登錄
+    errors:
+      action_code_error: 代碼不能執行, 因為 %{error}
+      action_error: 操作無法完成, 因為 %{error}
+      auto_drop_failed: 系統沒自動下降，請手動創建一個開始一天的現金下降
+      cannot_edit_completed_order: 該訂單完成後, 不能修改.
+      cannot_reorder: 沒有任何產品必須重新排序.
+      child_sku_must_exist: 子項必須存在!
+      coupon_cannot_be_buy_one_get_one: 優惠券 %{sku} 不能買一送一當應用到 %{applies}
+      coupon_not_enough_items: 你還沒有購買足夠的產品申請
+      csv_item_exists: 產品 %{sku} 存在!
+      csv_item_failed: ! '%{id} %{i} 失敗.'
+      failed_to_save_parts: 無法儲存的部分. 請檢查這些部分是否存在.
+      gift_card_empty: 禮品卡是空的, 通知客戶, 並摧毀卡.
+      gs1_item_not_found: 禮品標記為gs1, 但 %{sku} 是不正確的格式.
+      insufficient_quantity_on_item: 警告, 禮品 %{sku} 數量是不夠的, 請更新您的庫存水平!
+      inventory_update_error: inventory update error
+      item_not_found: The item you are looking for could not be found, try searching?
+      item_price_is_zero: ! 'Warning: Item price is 0'
+      limited_alphabet: 只有a-z許可. 允許沒有空格或重音字符.
+      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup
+        this up in your store configuration?
+      must_cash_drop: Your drawer does not have any money, please add a cash drop!
+      must_choose_register: You must login to a cash register!
+      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
+      must_set_receiver_to_vendor: You must set this shipment's receiver field to
+        a valid Store
+      must_specify_drop_or_payout: You must specify either drop or payout!
+      no_class: There is no class for %{model} at line %{i}
+      no_role: You do not have the necessary role to access this resource.
+      no_such_item: There is no item with this SKU
+      not_enough_in_drawer: 沒有足夠的抽屜
+      order_failed: Order could not be finished.
+      order_must_have_user: You cannot save an order without a User or Employee assigned
+        to it.
+      order_register_required: You must specify a register for this order
+      order_totals_validation_failed: 訂單總額驗證失敗，令人耳目一新的順序可能會修復此問題. 按OK刷新.
+      order_vendor_required: You must supply a vendor for this order
+      parent_sku_must_exist: 父項必須存在!
+      payment_required: ! 'Error 402: Full Payment is Required'
+      payment_required_explanation: We regret to inform you that your system has automatically
+        shutdown as your pre-payment license has run out. You must complete the full
+        payment of Salor to continue benefitting from it. Please contact your Salor
+        technical support representative.
+      sanity_check: 要求的行動是瘋狂的，確認訂單總額，並通知客戶改正.
+      shipment_item_already_in_stock: Item %{sku} is already in stock
+      shipment_item_move_failed: ! 'Item %{sku} failed to move with error: %{error}'
+      shipment_item_nil: Item returned from_shipment_item was nil?
+      sku_must_be_unique: ! '%{sku} must be unique'
+      value_not_set: NotSet
     inventory_updated: 庫存更新了
     logged_in_as: 登錄為
     login: 登錄
     logout: 註銷
     not_you: 不是你嗎？
-    owner_login: 雇主登錄
     owner_mode: 雇主模式
     owner_success: 雇主屬性已順利更新
     payment_external_types: 現金, 卡, 禮品卡, 其它
     payment_internal_types: 現金, 卡, 禮品卡, 其它信用卡
     rebate_types:
       fixed: $
-      percent: "%"
-    register_today: 今日註冊
-    report_external_types: XXX
-    report_internal_types: XXX
+      percent: ! '%'
     sign_up: 報名
-    errors:
-      auto_drop_failed: "系統沒自動下降，請手動創建一個開始一天的現金下降"
-      order_totals_validation_failed: "訂單總額驗證失敗，令人耳目一新的順序可能會修復此問題. 按OK刷新."
-      parent_sku_must_exist: "父項必須存在!"
-      child_sku_must_exist: "子項必須存在!"
-      cannot_edit_completed_order: "該訂單完成後, 不能修改."
-      limited_alphabet: "只有a-z許可. 允許沒有空格或重音字符."
-      sanity_check: 要求的行動是瘋狂的，確認訂單總額，並通知客戶改正.
-      cannot_reorder: 沒有任何產品必須重新排序.
-      action_code_error: "代碼不能執行, 因為 %{error}"
-      action_error: "操作無法完成, 因為 %{error}"
-      not_enough_in_drawer: 沒有足夠的抽屜
-      cash_drop_amount_must_be_positive: 現金下降金額必須是積極的
-      coupon_cannot_be_buy_one_get_one: "優惠券 %{sku} 不能買一送一當應用到 %{applies}"
-      coupon_fixed_amount_greater_than_total: "優惠券 %{sku} 金額大於產品的價格 %{item}"
-      coupon_not_enough_items: 你還沒有購買足夠的產品申請
-      coupon_total_returned_nil: "優惠券 %{sku} 總返回零, 無視"
-      csv_item_exists: "產品 %{sku} 存在!"
-      csv_item_failed: "%{id} %{i} 失敗."
-      failed_to_save_parts: 無法儲存的部分. 請檢查這些部分是否存在.
-      gift_card_amount_remaining: 指定的金額是大於這個禮物卡上的剩餘金額, 新的金額是 %{amt}
-      gift_card_amount_to_high: 禮品卡金額超過訂單小計, 金額已調整, 只有在交易結束時激活禮品卡!
-      gift_card_empty: 禮品卡是空的, 通知客戶, 並摧毀卡.
-      gift_card_not_found: 找不到連接到這個訂購的禮品卡...
-      gs1_item_not_found: "禮品標記為gs1, 但 %{sku} 是不正確的格式."
-      insufficient_quantity_on_item: "警告, 禮品 %{sku} 數量是不夠的, 請更新您的庫存水平!"
-      inventory_update_error: inventory update error
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: "Warning: Item price is 0"
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup this up in your store configuration?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to a valid Store
-      must_specify_drop_or_payout: You must specify either drop or payout!
-      no_class: "There is no class for %{model} at line %{i}"
-      no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no item with this SKU
-      not_on_buy_orders: You cannot add this item to a Buy Order
-      order_must_have_user: You cannot save an order without a User or Employee assigned to it.
-      order_not_found: Order not found
-      order_register_required: You must specify a register for this order
-      order_vendor_required: You must supply a vendor for this order
-      payment_required: "Error 402: Full Payment is Required"
-      payment_required_explanation: We regret to inform you that your system has automatically shutdown as your pre-payment license has run out. You must complete the full payment of Salor to continue benefitting from it. Please contact your Salor technical support representative.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: "Item %{sku} failed to move with error: %{error}"
-      shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: "%{sku} must be unique"
-      uspecified_error: Something bad happened, please contact tech support! Try refreshing this page.
-      value_not_set: NotSet
-      order_failed: Order could not be finished.
-      order_print_failure: Failure during printing of order.
-    
   vendors:
     clear_cache_button: clear cache
     clear_cache_header: cache
     form:
-      receipt_logo_header: receipt logo header
-      receipt_logo_footer: receipt logo footer
       logo: logo
-
-  cash_registers:
-    end_of_day:
-      end_of_day_thermal_report: Print Report
-      paper_report: Detail Report
-      cash_drawer: Cash Drawer
-      counted: Counted
-      difference: Difference
-
-  shipments:
-    index:
-      report: Report
-    show:
-      purchase_price_sum: Purchase price sum
-
+      receipt_logo_footer: receipt logo footer
+      receipt_logo_header: receipt logo header
   views:
-    eticket: Shelf label
-    sticky_ticket: Sticky label
-    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
     advanced_field: advanced field
-    by_card: by card
-    cash_register_heading: "%{name} for %{store}"
+    cash_register_heading: ! '%{name} for %{store}'
     cash_registers: cash registers
     category_heading: category %{name} for %{store}
-    given: given
     change: change
     customers: customers
     download_may_last_long: This download may last long. Continue?
     dummy_item: dummy item
-    dummy_part: dummy part
     edit_item_heading: edit item heading
     email: email
-    forgot_password: forgot password?
-    gift_card: gift card
-    gift_card_amount: gift card amount
-    in_cash: in cash
-    item: item
-    language: language
-    listing: listing
-    listing_items: listing items
-    locations: locations
-    loyalty_card: loyalty card
-    name: name
-    new_item_heading: "New item for %{store}"
-    new_sale_for: "New sale for %{store}"
-    new_stock_location: New stock location
-    order_heading: "Order #%{id} for %{store}"
-    order_number: "Order #%{id}"
-    order_summary: Orders of the last 7 days
-    owner_language: Owner language
-    password: password
-    password_confirm: confirm password
-    please_test_before_upload: "WARNING: You are about to overwrite data in the database."
-    price: price
-    quantity: quantity
-    rebate: rebate
-    remember_me: remember me
-    report: report
-    stock_locations: stock_locations
-    subtotal: subtotal
-    tax_profile: tax profile
-    three_easy_ways: three easy ways
-    total: total
-    username: username
-    vendor: vendor
-    shape: shape
     errors:
-      no_access_right: You do not have the right to access this resource. This error has been logged.
+      no_access_right: You do not have the right to access this resource. This error
+        has been logged.
       nothing_found: Nothing found
       unknown_vendor: Unknown
+    eticket: Shelf label
     forms:
       applies_to_item: applies to item with SKU
       buy_one_get_one: buy one get one
       cashier: cashier
-      category_editor: category editor
       fixed_amount_off: fixed amount off
-      item_editor: item editor
       items: items
-      location_editor: location editor
       manager: Manager
       no_change: no change
       notes: notes
-      order_editor: order editor
       parts: parts
-      percent_off: "% off"
+      percent_off: ! '% off'
       roles: roles
       search: search
-      stocker: stocker
       shipment:
         types:
           canceled: canceled
@@ -783,38 +718,57 @@ cn:
           new: new
           returned: returned
           shipped: shipped
+    gift_card: gift card
+    gift_card_amount: gift card amount
+    given: given
+    in_cash: in cash
+    item: item
+    language: language
+    listing: listing
+    listing_items: listing items
+    locations: locations
+    loyalty_card: loyalty card
+    name: name
+    new_item_heading: New item for %{store}
+    new_stock_location: New stock location
     notice:
-      save_before: XXX Save before leaving?
-      move_real_quantities_success: Item quantities were successfully updated
-      wholesaler_upload_report: "Updated items: %{updated_items}, Created items: %{created_items}, Created categories: %{created_categories}, Created Tax Profiles %{created_tax_profiles}"
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
-      model_create: "%{model} was created successfully"
-      model_edit: "%{model} was edited successfully"
+      model_create: ! '%{model} was created successfully'
+      model_edit: ! '%{model} was edited successfully'
+      move_real_quantities_success: Item quantities were successfully updated
       new_order: new order created
-      order_refund_dt: "#%{id}"
-      please_wait: "Please wait..."
-      transaction_succeeded: "Paid!"
-      artema_hybrid_lost: Artema Hybrid connection lost, disconnect then reconnect device.
-      paylife_ending_day: Ending day
-      paylife_endday_complete: Ending day complete
+      order_refund_dt: ! '#%{id}'
+      save_before: XXX Save before leaving?
+      wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
+        %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
+        %{created_tax_profiles}'
+    order_heading: ! 'Order #%{id} for %{store}'
+    order_number: ! 'Order #%{id}'
     pagination:
       last: last
       next: next &gt;
-      previous: "&lt; previous"
-      truncate: ...
+      previous: ! '&lt; previous'
+      truncate: ! '...'
+    password: password
+    password_confirm: confirm password
+    please_test_before_upload: ! 'WARNING: You are about to overwrite data in the
+      database.'
+    price: price
+    quantity: quantity
+    rebate: rebate
+    remember_me: remember me
+    report: report
     reports:
       cash_account: XXX
       daily: XXX
     shipments:
       state: State
     single_words:
-      new: New
       all: All
-      camera: camera
-      ordering: ordering
       body: body
       bottom: bottom
+      camera: camera
       continue: continue
       coupons: Coupons
       delete: delete
@@ -823,74 +777,28 @@ cn:
       edit: edit
       from: from
       loading: loading
+      new: New
       order: order
+      ordering: ordering
       processing: processing...
       saving: saving...
-      searching: searching...
       sku: SKU
       title: title
       to: to
       top: top
       waiting: waiting...
-
-
-  items:
-    show:
-      from: from
-      to: to
-      query: Query!
-      quantity_sold: Sold quantity
-    index:
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items will now be created and updated. This action will take about 20 minutes. Are you really sure that you want to proceed?
-      database_distiller_warning: Due to the generation of statistics, calling this function will last for about 30 seconds. Proceed anyway?
-    database_distiller:
-      used_item_ids: Used Items
-      relevant_item_ids: Items relevant for deletion
-      unused_item_ids: Unused Items
-      hidden: Already deleted Items
-      hidden_by_distiller: Items deleted by Database Distiller
-      delete_unused_items: Delete unused Items!
-      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you sure you want to proceed?
-    upload:
-      upload: upload
-    inventory_report:
-      title: Inventory Report
-      price: Selling price
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
-    update_real_quantity:
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
-      are_you_sure: This will copy the inventory quantities into the database and reset the inventory report. Continue?
-
-  home:
-    user_employee_index:
-      backup_database: Backup Database
-      backup_logfile: Backup Logfile
-    remote_service:
-      title: Remote Service
-      password: Password
-      user: User
-      host: Server
-      connect_ssh: Remote service
-      connect_vnc: Share screen
-      requesting_connection_status: Requesting connection status ...
-      connected: connected
-      disconnected: disconnected
-      not_supported_by_browser: Remote service is not supported by this browser.
-      
-  InCash: In Cash
-  ByCard: By Card
-  ByGiftCard: By Gift Card
-  OtherCredit: Other Credit
-  ByCardRefund: By Card Refund
-  ByGiftCardRefund: By Gift Card Refund
-  OtherCreditRefund: Other Credit Refund
-  end_of_day: End of Day
-  label: label
-  sticker: sticker
-  support: XXX
-  edit: Edit
-  delete: Delete
+    sticky_ticket: Sticky label
+    stock_locations: stock_locations
+    subtotal: subtotal
+    tax_profile: tax profile
+    three_easy_ways: three easy ways
+    total: total
+    username: username
+    vendor: vendor
+    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
+  when_list:
+    add_to_order: 在加入訂單
+    always: 總是
+    on_export: 在出口
+    on_import: 在進口
+    on_save: 在儲存
