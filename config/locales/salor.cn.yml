@@ -639,7 +639,7 @@ cn:
       action_error: "操作無法完成, 因為 %{error}"
       not_enough_in_drawer: 沒有足夠的抽屜
       cash_drop_amount_must_be_positive: 現金下降金額必須是積極的
-      coupon_cannot_be_buy_one_get_one: "優惠券 %{sku} 不能買一送一 when applied to %{applies}"
+      coupon_cannot_be_buy_one_get_one: "優惠券 %{sku} 不能買一送一當應用到 %{applies}"
       coupon_fixed_amount_greater_than_total: "Coupon %{sku} amount is greater than the price of Item %{item}"
       coupon_not_enough_items: You have not purchased enough items for this to apply
       coupon_total_returned_nil: "Coupon %{sku} total returned nil, ignoring"
