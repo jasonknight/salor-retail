@@ -64,14 +64,14 @@ cn:
       is_shipment_item: 裝運產品
       item:
         purchase_price: 購買價格
-        quantity: Quantity
-      item_sku: 產品的sku
+        quantity: 數量
+      item_sku: 產品的SKU
       itemsviewlist: 為產品的列表視圖
       last_name: 姓
       lc_points: 忠誠卡點
       length: 長度
       letter: 信
-      location_id: 位置 ID
+      location_id: 位置ID
       lp_per_dollar: 每美元的忠誠點
       min_quantity: 最低數量
       must_change_price: 必須更改價格
@@ -85,7 +85,7 @@ cn:
       packaging_unit: 包裝單位
       pagination: 分頁
       paid: 支付
-      parent_sku: 父母的 SKU
+      parent_sku: 父母的SKU
       part_quantity: 部分數量
       parts: 部分
       password: 密碼
@@ -118,7 +118,7 @@ cn:
         quantity: quantity 數量
         sku: SKU
         stock_location_id: 庫存位置
-      shipper_sku: 發貨人 SKU
+      shipper_sku: 發貨人SKU
       sku: SKU
       start_amount: 開始金額
       start_date: 開始日期
@@ -238,7 +238,7 @@ cn:
       paper_report: Detail Report
   delete: Delete
   edit: Edit
-  end_of_day: End of Day
+  end_of_day: 天結束
   exception_page:
     assistance_text: 請點擊”主頁“按鈕，並再次嘗試。如果錯誤再次發生，請致電客戶支持，將計算機連接到遠程服務“遠程服務”按鈕。我們會立即幫你.
     exception_description: ! '錯誤描述:'
@@ -797,7 +797,7 @@ cn:
     vendor: vendor
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
   when_list:
-    add_to_order: 在加入訂單
+    add_to_order: 加入訂單
     always: 總是
     on_export: 在出口
     on_import: 在進口
