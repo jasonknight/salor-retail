@@ -13,125 +13,125 @@ en-US:
   :stockboy: 補充庫存的人
   :edit_others_orders: 編輯其他人的訂單
   :index_orders: 指數訂單
-  :edit_orders: Edit 訂單
-  :destroy_orders: Destroy 訂單
-  :create_orders: Create 訂單
-  :update_orders: Update 訂單
-  :show_orders: Show 訂單
+  :edit_orders: 編輯訂單
+  :destroy_orders: 銷毀訂單
+  :create_orders: 創建訂單
+  :update_orders: 更新訂單
+  :show_orders: 顯示訂單
   :any_orders: Any 訂單
-  :index_items: Index 項目
-  :edit_items: Edit 項目
-  :destroy_items: Destroy 項目
-  :create_items: Create 項目
-  :update_items: Update 項目
-  :show_items: Show 項目
+  :index_items: 指數項目
+  :edit_items: 編輯項目
+  :destroy_items: 銷毀項目
+  :create_items: 創建項目
+  :update_items: 更新項目
+  :show_items: 顯示項目
   :any_items: Any 項目
-  :index_categories: Index 類別
-  :edit_categories: Edit 類別
-  :destroy_categories: Destroy 類別
-  :create_categories: Create 類別
-  :update_categories: Update 類別
-  :show_categories: Show 類別
+  :index_categories: 指數類別
+  :edit_categories: 編輯類別
+  :destroy_categories: 銷毀類別
+  :create_categories: 創建類別
+  :update_categories: 更新類別
+  :show_categories: 顯示類別
   :any_categories: Any 類別
-  :index_locations: Index 位置
-  :edit_locations: Edit 位置
-  :destroy_locations: Destroy 位置
-  :create_locations: Create 位置
-  :update_locations: Update 位置
-  :show_locations: Show 位置
+  :index_locations: 指數位置
+  :edit_locations: 編輯位置
+  :destroy_locations: 銷毀位置
+  :create_locations: 創建位置
+  :update_locations: 更新位置
+  :show_locations: 顯示位置
   :any_locations: Any 位置
-  :index_shippers: Index 貨主
-  :edit_shippers: Edit 貨主
-  :destroy_shippers: Destroy 貨主
-  :create_shippers: Create 貨主
-  :update_shippers: Update 貨主
-  :show_shippers: Show 貨主
+  :index_shippers: 指數貨主
+  :edit_shippers: 編輯貨主
+  :destroy_shippers: 銷毀貨主
+  :create_shippers: 創建貨主
+  :update_shippers: 更新貨主
+  :show_shippers: 顯示貨主
   :any_shippers: Any 貨主
-  :index_shipments: Index 出貨
-  :edit_shipments: Edit 出貨
-  :destroy_shipments: Destroy 出貨
-  :create_shipments: Create 出貨
-  :update_shipments: Update 出貨
-  :show_shipments: Show 出貨
+  :index_shipments: 指數出貨
+  :edit_shipments: 編輯出貨
+  :destroy_shipments: 銷毀出貨
+  :create_shipments: 創建出貨
+  :update_shipments: 更新出貨
+  :show_shipments: 顯示出貨
   :any_shipments: Any 出貨
-  :index_vendors: Index 供應商
-  :edit_vendors: Edit 供應商
-  :destroy_vendors: Destroy 供應商
-  :create_vendors: Create 供應商
-  :update_vendors: Update 供應商
-  :show_vendors: Show 供應商
+  :index_vendors: 指數供應商
+  :edit_vendors: 編輯供應商
+  :destroy_vendors: 銷毀供應商
+  :create_vendors: 創建供應商
+  :update_vendors: 更新供應商
+  :show_vendors: 顯示供應商
   :any_vendors: Any 供應商
-  :index_employees: Index 員工
-  :edit_employees: Edit 員工
-  :destroy_employees: Destroy 員工
-  :create_employees: Create 員工
-  :update_employees: Update 員工
+  :index_employees: 指數員工
+  :edit_employees: 編輯員工
+  :destroy_employees: 銷毀員工
+  :create_employees: 創建員工
+  :update_employees: 更新員工
   :show_employees: Show 員工
   :any_employees: Any 員工
-  :index_discounts: Index 折扣
-  :edit_discounts: Edit 折扣
-  :destroy_discounts: Destroy 折扣
-  :create_discounts: Create 折扣
-  :update_discounts: Update 折扣
+  :index_discounts: 指數折扣
+  :edit_discounts: 編輯折扣
+  :destroy_discounts: 銷毀折扣
+  :create_discounts: 創建折扣
+  :update_discounts: 更新折扣
   :show_discounts: Show 折扣
   :any_discounts: Any 折扣
-  :index_tax_profiles: Index 稅務個人資料
-  :edit_tax_profiles: Edit 稅務個人資料
-  :destroy_tax_profiles: Destroy 稅務個人資料
-  :create_tax_profiles: Create 稅務個人資料
-  :update_tax_profiles: Update 稅務個人資料
+  :index_tax_profiles: 指數稅務個人資料
+  :edit_tax_profiles: 編輯稅務個人資料
+  :destroy_tax_profiles: 銷毀稅務個人資料
+  :create_tax_profiles: 創建稅務個人資料
+  :update_tax_profiles: 更新稅務個人資料
   :show_tax_profiles: Show 稅務個人資料
   :any_tax_profiles: Any 稅務個人資料
-  :index_customers: Index 客戶
-  :edit_customers: Edit 客戶
-  :destroy_customers: Destroy 客戶
-  :create_customers: Create 客戶
-  :update_customers: Update 客戶
+  :index_customers: 指數客戶
+  :edit_customers: 編輯客戶
+  :destroy_customers: 銷毀客戶
+  :create_customers: 創建客戶
+  :update_customers: 更新客戶
   :show_customers: Show 客戶
   :any_customers: Any 客戶
-  :index_transaction_tags: Index 交易標籤
-  :edit_transaction_tags: Edit 交易標籤
-  :destroy_transaction_tags: Destroy 交易標籤
-  :create_transaction_tags: Create 交易標籤
-  :update_transaction_tags: Update 交易標籤
+  :index_transaction_tags: 指數交易標籤
+  :edit_transaction_tags: 編輯交易標籤
+  :destroy_transaction_tags: 銷毀交易標籤
+  :create_transaction_tags: 創建交易標籤
+  :update_transaction_tags: 更新交易標籤
   :show_transaction_tags: Show 交易標籤
   :any_transaction_tags: Any 交易標籤
-  :index_buttons: Index 按鈕
-  :edit_buttons: Edit 按鈕
-  :destroy_buttons: Destroy 按鈕
-  :create_buttons: Create 按鈕
-  :update_buttons: Update 按鈕
+  :index_buttons: 指數按鈕
+  :edit_buttons: 編輯按鈕
+  :destroy_buttons: 銷毀按鈕
+  :create_buttons: 創建按鈕
+  :update_buttons: 更新按鈕
   :show_buttons: Show 按鈕
   :any_buttons: Any 按鈕
-  :index_stock_locations: Index 貨物位置
-  :edit_stock_locations: Edit 貨物位置
-  :destroy_stock_locations: Destroy 貨物位置
-  :create_stock_locations: Create 貨物位置
-  :update_stock_locations: Update 貨物位置
+  :index_stock_locations: 指數貨物位置
+  :edit_stock_locations: 編輯貨物位置
+  :destroy_stock_locations: 銷毀貨物位置
+  :create_stock_locations: 創建貨物位置
+  :update_stock_locations: 更新貨物位置
   :show_stock_locations: Show 貨物位置
   :any_stock_locations: Any 貨物位置
   :clear_orders: 清除訂單
   :see_header: 看頭
   :destroy_order_items: 銷毀訂購產品
   :change_prices: 改變價格
-  :index_histories: Index 歷史
-  :edit_histories: Edit 歷史
-  :destroy_histories: Destroy 歷史
-  :create_histories: Create 歷史
-  :update_histories: Update 歷史
+  :index_histories: 指數歷史
+  :edit_histories: 編輯歷史
+  :destroy_histories: 銷毀歷史
+  :create_histories: 創建歷史
+  :update_histories: 更新歷史
   :show_histories: Show 歷史
   :any_histories: Any 歷史
-  :index_actions: Index 行動
-  :edit_actions: Edit 行動
-  :destroy_actions: Destroy 行動
-  :create_actions: Create 行動
-  :update_actions: Update 行動
+  :index_actions: 指數行動
+  :edit_actions: 編輯行動
+  :destroy_actions: 銷毀行動
+  :create_actions: 創建行動
+  :update_actions: 更新行動
   :show_actions: Show 行動
   :any_actions: Any 行動
-  :index_shipment_items: Index 運費產品
-  :edit_shipment_items: Edit 運費產品
-  :destroy_shipment_items: Destroy 運費產品
-  :create_shipment_items: Create 運費產品
-  :update_shipment_items: Update 運費產品
+  :index_shipment_items: 指數運費產品
+  :edit_shipment_items: 編輯運費產品
+  :destroy_shipment_items: 銷毀運費產品
+  :create_shipment_items: 創建運費產品
+  :update_shipment_items: 更新運費產品
   :show_shipment_items: Show 運費產品
   :any_shipment_items: Any 運費產品
