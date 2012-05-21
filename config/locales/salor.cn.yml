@@ -675,20 +675,19 @@ cn:
     cash_registers: 收款台
     category_heading: 類別 %{name} 為 %{store}
     change: 零錢
-    customers: customers
-    download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy item
-    edit_item_heading: edit item heading
-    email: email
+    customers: 客戶
+    download_may_last_long: 此下載可能會持續很長時間. 繼續嗎?
+    dummy_item: 虛擬產品
+    edit_item_heading: 編輯項目標題
+    email: 電子郵件
     errors:
-      no_access_right: You do not have the right to access this resource. This error
-        has been logged.
-      nothing_found: Nothing found
-      unknown_vendor: Unknown
-    eticket: Shelf label
+      no_access_right: 您沒有訪問此資源的權利. 此錯誤已被記錄.
+      nothing_found: 沒有找到
+      unknown_vendor: 未知
+    eticket: 貨架標籤
     forms:
-      applies_to_item: applies to item with SKU
-      buy_one_get_one: buy one get one
+      applies_to_item: 適用於與SKU的項目
+      buy_one_get_one: 買一贈一
       cashier: cashier
       fixed_amount_off: fixed amount off
       items: items
