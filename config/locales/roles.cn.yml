@@ -40,35 +40,35 @@ en-US:
   :update_locations: Update Locations
   :show_locations: Show Locations
   :any_locations: Any Locations
-  :index_shippers: Index Shippers
+  :index_shippers: Index 貨主
   :edit_shippers: Edit Shippers
   :destroy_shippers: Destroy Shippers
   :create_shippers: Create Shippers
   :update_shippers: Update Shippers
   :show_shippers: Show Shippers
   :any_shippers: Any Shippers
-  :index_shipments: Index Shipments
+  :index_shipments: Index 出貨
   :edit_shipments: Edit Shipments
   :destroy_shipments: Destroy Shipments
   :create_shipments: Create Shipments
   :update_shipments: Update Shipments
   :show_shipments: Show Shipments
   :any_shipments: Any Shipments
-  :index_vendors: Index Vendors
+  :index_vendors: Index 供應商
   :edit_vendors: Edit Vendors
   :destroy_vendors: Destroy Vendors
   :create_vendors: Create Vendors
   :update_vendors: Update Vendors
   :show_vendors: Show Vendors
   :any_vendors: Any Vendors
-  :index_employees: Index Employees
+  :index_employees: Index 員工
   :edit_employees: Edit Employees
   :destroy_employees: Destroy Employees
   :create_employees: Create Employees
   :update_employees: Update Employees
   :show_employees: Show Employees
   :any_employees: Any Employees
-  :index_discounts: Index Discounts
+  :index_discounts: Index 折扣
   :edit_discounts: Edit Discounts
   :destroy_discounts: Destroy Discounts
   :create_discounts: Create Discounts
@@ -82,21 +82,21 @@ en-US:
   :update_tax_profiles: Update Tax Profiles
   :show_tax_profiles: Show Tax Profiles
   :any_tax_profiles: Any Tax Profiles
-  :index_customers: Index Customers
+  :index_customers: Index 客戶
   :edit_customers: Edit Customers
   :destroy_customers: Destroy Customers
   :create_customers: Create Customers
   :update_customers: Update Customers
   :show_customers: Show Customers
   :any_customers: Any Customers
-  :index_transaction_tags: Index Transaction Tags
+  :index_transaction_tags: Index 交易標籤
   :edit_transaction_tags: Edit Transaction Tags
   :destroy_transaction_tags: Destroy Transaction Tags
   :create_transaction_tags: Create Transaction Tags
   :update_transaction_tags: Update Transaction Tags
   :show_transaction_tags: Show Transaction Tags
   :any_transaction_tags: Any Transaction Tags
-  :index_buttons: Index Buttons
+  :index_buttons: Index 按鈕
   :edit_buttons: Edit Buttons
   :destroy_buttons: Destroy Buttons
   :create_buttons: Create Buttons
@@ -110,8 +110,8 @@ en-US:
   :update_stock_locations: Update Stock Locations
   :show_stock_locations: Show Stock Locations
   :any_stock_locations: Any Stock Locations
-  :clear_orders: Clear Orders
-  :see_header: See Header
+  :clear_orders: 清除訂單
+  :see_header: 看頭
   :destroy_order_items: Destroy Order Items
   :change_prices: Change Prices
   :index_histories: Index Histories
