@@ -648,12 +648,12 @@ cn:
       shipment_item_move_failed: ! '產品 %{sku} 未能提出錯誤: %{error}'
       shipment_item_nil: 產品 returned from_shipment_item 是零?
       sku_must_be_unique: ! '%{sku} 必須是唯一的'
-      value_not_set: NotSet
+      value_not_set: 未設置
     inventory_updated: 庫存更新了
     logged_in_as: 登錄為
     login: 登錄
     logout: 註銷
-    not_you: 不是你嗎？
+    not_you: 不是你嗎?
     owner_mode: 雇主模式
     owner_success: 雇主屬性已順利更新
     payment_external_types: 現金, 卡, 禮品卡, 其它
@@ -663,18 +663,18 @@ cn:
       percent: ! '%'
     sign_up: 報名
   vendors:
-    clear_cache_button: clear cache
-    clear_cache_header: cache
+    clear_cache_button: 清除緩存
+    clear_cache_header: 緩存
     form:
-      logo: logo
-      receipt_logo_footer: receipt logo footer
-      receipt_logo_header: receipt logo header
+      logo: 標誌
+      receipt_logo_footer: 收據標誌頁腳
+      receipt_logo_header: 收據標誌頭
   views:
-    advanced_field: advanced field
-    cash_register_heading: ! '%{name} for %{store}'
-    cash_registers: cash registers
-    category_heading: category %{name} for %{store}
-    change: change
+    advanced_field: 先進的現場
+    cash_register_heading: ! '%{name} 為 %{store}'
+    cash_registers: 收款台
+    category_heading: 類別 %{name} 為 %{store}
+    change: 零錢
     customers: customers
     download_may_last_long: This download may last long. Continue?
     dummy_item: dummy item
