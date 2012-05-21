@@ -1,14 +1,14 @@
 en-US:
-  any_reports: Any Reports
-  index_reports: Index Reports
-  edit_reports: Edit Reports
-  show_reports: Show Reports
-  create_reports: Create Reports
-  destroy_reports: Destroy Reports
-  update_reports: Update Reports
-  :employee: Employee
-  :manager: Manager
-  :head_cashier: Head Cashier
+  any_reports: 任何報告
+  index_reports: 指數報告
+  edit_reports: 編輯報告  
+  show_reports: 顯示報告
+  create_reports: 創建報告
+  destroy_reports: 銷毀報告
+  update_reports: 更新報告
+  :employee: 僱員
+  :manager: 經理
+  :head_cashier: 頭出納
   :cashier: Cashier
   :stockboy: Stockboy
   :edit_others_orders: Edit Others Orders
