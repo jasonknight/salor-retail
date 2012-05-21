@@ -47,7 +47,7 @@ cn:
       default: 默認
       default_buyback: 默認的下回購
       dollar_per_lp: 美元每忠誠點
-      drop: 下降
+      drop: 下拉
       email: 電子郵件
       employee:
         uses_drawer_id: 使用的抽屜
@@ -339,7 +339,7 @@ cn:
     buy_order: 買
     cameras: 相機
     cancel: 取消
-    cash_drop: 現金下降
+    cash_drop: 現金下拉
     cash_register: 收款台
     cash_registers: 收款台
     categories: 類別
@@ -457,7 +457,7 @@ cn:
       cash-refunds: 現金退款
       cash_drawer: 錢抽屜
       count_orders: 所有訂購列表
-      drop: 下降
+      drop: 下拉
       from: 從
       gross: 合計
       net: 淨
@@ -498,7 +498,7 @@ cn:
       cash-refunds: 現金的退款
       cash_drawer: 錢抽屜
       count_orders: 所有訂購列表
-      drop: 下降
+      drop: 下拉
       from: 從
       gross: 合計
       net: 淨
@@ -579,7 +579,7 @@ cn:
       subtotal4: 小計
       tax: 稅
     word:
-      drop: 下降
+      drop: 下拉
       payout: 派息
       sold: 出售了
   receipts:
@@ -609,7 +609,7 @@ cn:
     errors:
       action_code_error: 代碼不能執行, 因為 %{error}
       action_error: 操作無法完成, 因為 %{error}
-      auto_drop_failed: 系統沒自動下降，請手動創建一個開始一天的現金下降
+      auto_drop_failed: 系統沒自動下拉，請手動創建一個開始一天的現金下降
       cannot_edit_completed_order: 該訂單完成後, 不能修改.
       cannot_reorder: 沒有任何產品必須重新排序.
       child_sku_must_exist: 子項必須存在!
@@ -622,13 +622,12 @@ cn:
       gs1_item_not_found: 禮品標記為gs1, 但 %{sku} 是不正確的格式.
       insufficient_quantity_on_item: 警告, 禮品 %{sku} 數量是不夠的, 請更新您的庫存水平!
       inventory_update_error: 庫存更新錯誤
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: ! 'Warning: Item price is 0'
+      item_not_found: 無法找到您正在尋找的項目, 試圖尋找?
+      item_price_is_zero: '警告: 產品價格為0!'
       limited_alphabet: 只有a-z許可. 允許沒有空格或重音字符.
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup
-        this up in your store configuration?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
+      lp_calculation_failed: 無法適用忠誠點. 你肯定設置在您的商店配置?
+      must_cash_drop: 你的抽屜裡沒有任何錢，請增加現金下拉!
+      must_choose_register: 你必須登錄到收銀!
       must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
       must_set_receiver_to_vendor: You must set this shipment's receiver field to
         a valid Store
