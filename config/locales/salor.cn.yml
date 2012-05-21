@@ -299,20 +299,16 @@ cn:
       backup_logfile: 備份日誌文件
   items:
     database_distiller:
-      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you
-        sure you want to proceed?
-      delete_unused_items: Delete unused Items!
-      hidden: Already deleted Items
-      hidden_by_distiller: Items deleted by Database Distiller
-      relevant_item_ids: Items relevant for deletion
-      unused_item_ids: Unused Items
-      used_item_ids: Used Items
+      are_you_sure: 所有未使用的項目將被刪除. 這不能撤消. 你確定你要繼續嗎?
+      delete_unused_items: 刪除未使用的項目!
+      hidden: 已刪除的項目
+      hidden_by_distiller: 由數據庫釀酒刪除的項目
+      relevant_item_ids: 刪除有關的項目
+      unused_item_ids: 未使用的項目
+      used_item_ids: 使用的項目
     index:
-      database_distiller_warning: Due to the generation of statistics, calling this
-        function will last for about 30 seconds. Proceed anyway?
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items
-        will now be created and updated. This action will take about 20 minutes. Are
-        you really sure that you want to proceed?
+      database_distiller_warning: 由於統計生成, 調用此函數將持續約30秒. 繼續嗎?
+      only_for_tobacco_stores: 此功能只有在煙草店. 煙草項目現在將被創建和更新. 這一行動將需要大約20分鐘。你真的確定要繼續嗎?
     inventory_report:
       price: Selling price
       subtotal_purchase_price: Subtotal Purchase Price
