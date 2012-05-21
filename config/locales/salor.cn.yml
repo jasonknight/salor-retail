@@ -695,16 +695,16 @@ cn:
       notes: 筆記
       parts: 部分
       percent_off: ! '% 折扣'
-      roles: roles
-      search: search
+      roles: 角色
+      search: 尋找
       shipment:
         types:
-          canceled: canceled
-          complete: complete
-          in_stock: in stock
-          new: new
-          returned: returned
-          shipped: shipped
+          canceled: 取消了
+          complete: 完成
+          in_stock: 存在
+          new: 新
+          returned: 返回了
+          shipped: 運了
     gift_card: gift card
     gift_card_amount: gift card amount
     given: given
