@@ -628,11 +628,10 @@ cn:
       lp_calculation_failed: 無法適用忠誠點. 你肯定設置在您的商店配置?
       must_cash_drop: 你的抽屜裡沒有任何錢，請增加現金下拉!
       must_choose_register: 你必須登錄到收銀!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to
-        a valid Store
-      must_specify_drop_or_payout: You must specify either drop or payout!
-      no_class: There is no class for %{model} at line %{i}
+      must_choose_vendor: 你必須選擇一家商店!
+      must_set_receiver_to_vendor: 這批貨物的接收字段，你必須設置一個有效的商店
+      must_specify_drop_or_payout: 你必須指定的下拉或支出!
+      no_class: %{模型}沒有類在行%{i}
       no_role: You do not have the necessary role to access this resource.
       no_such_item: There is no item with this SKU
       not_enough_in_drawer: 沒有足夠的抽屜
