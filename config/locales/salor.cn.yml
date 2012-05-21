@@ -631,7 +631,7 @@ cn:
       must_choose_vendor: 你必須選擇一家商店!
       must_set_receiver_to_vendor: 這批貨物的接收字段，你必須設置一個有效的商店
       must_specify_drop_or_payout: 你必須指定的下拉或支出!
-      no_class: %{模型}沒有類在行%{i}
+      no_class: %{model}沒有類在行%{i}
       no_role: 您沒有訪問此資源的必要作用.
       no_such_item: 沒有與此SKU的項目
       not_enough_in_drawer: 沒有足夠的抽屜
@@ -642,15 +642,12 @@ cn:
       order_vendor_required: 你必須提供此訂單的供應商.
       parent_sku_must_exist: 父項必須存在!
       payment_required: ! '錯誤402; 須繳付所有款項'
-      payment_required_explanation: We regret to inform you that your system has automatically
-        shutdown as your pre-payment license has run out. You must complete the full
-        payment of Salor to continue benefitting from it. Please contact your Salor
-        technical support representative.
+      payment_required_explanation: 我們遺憾地通知您, 您的系統已經為您預先支付牌照已經用完自動關機. 你必須完成的Salor足額發放, 要繼續從受益. 請聯繫您的Salor技術支援代表.
       sanity_check: 要求的行動是瘋狂的，確認訂單總額，並通知客戶改正.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: ! 'Item %{sku} failed to move with error: %{error}'
-      shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: ! '%{sku} must be unique'
+      shipment_item_already_in_stock: 產品 %{sku} 已經在股票
+      shipment_item_move_failed: ! '產品 %{sku} 未能提出錯誤: %{error}'
+      shipment_item_nil: 產品 returned from_shipment_item 是零?
+      sku_must_be_unique: ! '%{sku} 必須是唯一的'
       value_not_set: NotSet
     inventory_updated: 庫存更新了
     logged_in_as: 登錄為
