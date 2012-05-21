@@ -728,24 +728,23 @@ cn:
       order_refund_dt: ! '#%{id}'
       save_before: 儲存在離開之前?
       wholesaler_upload_report: ! '更新的項目: %{updated_items}, 創建的項目:
-        %{created_items}, 創建的類: %{created_categories}, 建立稅務信息
+        %{created_items}, 創建的類: %{created_categories}, 創建的稅務信息
         %{created_tax_profiles}'
-    order_heading: ! 'Order #%{id} for %{store}'
-    order_number: ! 'Order #%{id}'
+    order_heading: ! '訂單 #%{id} 為了 %{store}'
+    order_number: ! '訂單 #%{id}'
     pagination:
-      last: last
-      next: next &gt;
-      previous: ! '&lt; previous'
+      last: 最後
+      next: 下 &gt;
+      previous: ! '&lt; 前'
       truncate: ! '...'
-    password: password
-    password_confirm: confirm password
-    please_test_before_upload: ! 'WARNING: You are about to overwrite data in the
-      database.'
-    price: price
-    quantity: quantity
-    rebate: rebate
+    password: 密碼
+    password_confirm: 確認密碼
+    please_test_before_upload: ! '警告: 你是要覆蓋數據庫中的數據.'
+    price: 價格
+    quantity: 數量
+    rebate: 回扣
     remember_me: remember me
-    report: report
+    report: 報告
     reports:
       cash_account: XXX
       daily: XXX
