@@ -719,16 +719,16 @@ cn:
     new_item_heading: 新產品為 %{store}
     new_stock_location: 新貨物位置
     notice:
-      cache_was_cleared: Cache files deleted.
-      csv_edit_starting: csv edit starting
-      model_create: ! '%{model} was created successfully'
-      model_edit: ! '%{model} was edited successfully'
-      move_real_quantities_success: Item quantities were successfully updated
-      new_order: new order created
+      cache_was_cleared: 刪除緩存文件刪除了.
+      csv_edit_starting: CSV編輯起動了
+      model_create: ! '%{model} 成功創建了'
+      model_edit: ! '%{model} 編輯成功了'
+      move_real_quantities_success: 產品數量已成功更新了
+      new_order: 新訂單創建了
       order_refund_dt: ! '#%{id}'
-      save_before: XXX Save before leaving?
-      wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
-        %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
+      save_before: 儲存在離開之前?
+      wholesaler_upload_report: ! '更新的項目: %{updated_items}, 創建的項目:
+        %{created_items}, 創建的類: %{created_categories}, 建立稅務信息
         %{created_tax_profiles}'
     order_heading: ! 'Order #%{id} for %{store}'
     order_number: ! 'Order #%{id}'
