@@ -701,23 +701,23 @@ cn:
         types:
           canceled: 取消了
           complete: 完成
-          in_stock: 存在
+          in_stock: 貨物存在
           new: 新
           returned: 返回了
           shipped: 運了
-    gift_card: gift card
-    gift_card_amount: gift card amount
-    given: given
-    in_cash: in cash
-    item: item
-    language: language
-    listing: listing
-    listing_items: listing items
-    locations: locations
-    loyalty_card: loyalty card
-    name: name
-    new_item_heading: New item for %{store}
-    new_stock_location: New stock location
+    gift_card: 禮品卡
+    gift_card_amount: 禮品卡金額
+    given: 送了
+    in_cash: 現金
+    item: 產品
+    language: 語言
+    listing: 單
+    listing_items: 單項目
+    locations: 位置
+    loyalty_card: 忠誠卡
+    name: 名稱
+    new_item_heading: 新產品為 %{store}
+    new_stock_location: 新貨物位置
     notice:
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
