@@ -308,27 +308,26 @@ cn:
       used_item_ids: 使用的項目
     index:
       database_distiller_warning: 由於統計生成, 調用此函數將持續約30秒. 繼續嗎?
-      only_for_tobacco_stores: 此功能只有在煙草店. 煙草項目現在將被創建和更新. 這一行動將需要大約20分鐘。你真的確定要繼續嗎?
+      only_for_tobacco_stores: 此功能只有在煙草店. 煙草項目現在將被創建和更新. 這一行動將需要大約20分鐘. 你真的確定要繼續嗎?
     inventory_report:
-      price: Selling price
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
-      title: Inventory Report
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
+      price: 售價
+      subtotal_purchase_price: 小計購買價格
+      subtotal_selling_price: 小計銷售價格
+      title: 庫存報告
+      total_buying_price: 總和購買價格
+      total_selling_price: 總和銷售價格
     show:
-      from: from
-      quantity_sold: Sold quantity
-      query: Query!
-      to: to
+      from: 從
+      quantity_sold: 銷售數量
+      query: 查詢!
+      to: 至
     update_real_quantity:
-      are_you_sure: This will copy the inventory quantities into the database and
-        reset the inventory report. Continue?
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
+      are_you_sure: 這將複製到數據庫中的庫存數量和重置庫存報告. 繼續嗎?
+      inventory_report: 庫存報告
+      update_quantity: 更新庫存數量
     upload:
-      upload: upload
-  label: label
+      upload: 上載
+  label: 標籤
   menu:
     actions: actions 行動
     activate_gift_card: 激活禮品卡
