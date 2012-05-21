@@ -19,14 +19,14 @@ en-US:
   :update_orders: Update Orders
   :show_orders: Show Orders
   :any_orders: Any Orders
-  :index_items: Index Items
+  :index_items: Index 項目
   :edit_items: Edit Items
   :destroy_items: Destroy Items
   :create_items: Create Items
   :update_items: Update Items
   :show_items: Show Items
   :any_items: Any Items
-  :index_categories: Index Categories
+  :index_categories: Index 類別
   :edit_categories: Edit Categories
   :destroy_categories: Destroy Categories
   :create_categories: Create Categories
