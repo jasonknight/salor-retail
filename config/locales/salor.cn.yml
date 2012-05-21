@@ -743,29 +743,29 @@ cn:
     price: 價格
     quantity: 數量
     rebate: 回扣
-    remember_me: remember me
+    remember_me: 記得我
     report: 報告
     reports:
       cash_account: XXX
       daily: XXX
     shipments:
-      state: State
+      state: 州
     single_words:
-      all: All
-      body: body
-      bottom: bottom
-      camera: camera
-      continue: continue
-      coupons: Coupons
-      delete: delete
-      destroy: destroy
-      download: download
-      edit: edit
-      from: from
-      loading: loading
-      new: New
-      order: order
-      ordering: ordering
+      all: 所有
+      body: 身體
+      bottom: 底部
+      camera: 相機
+      continue: 繼續
+      coupons: 優惠券
+      delete: 刪除
+      destroy: 摧毀
+      download: 下載
+      edit: 編輯
+      from: 從
+      loading: 加載
+      new: 新
+      order: 訂單
+      ordering: 訂購
       processing: processing...
       saving: saving...
       sku: SKU
