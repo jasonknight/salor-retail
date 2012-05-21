@@ -8,10 +8,10 @@ en-US:
   update_reports: 更新報告
   :employee: 僱員
   :manager: 經理
-  :head_cashier: 頭出納
-  :cashier: Cashier
-  :stockboy: Stockboy
-  :edit_others_orders: Edit Others Orders
+  :head_cashier: 頭出納員
+  :cashier: 出納員
+  :stockboy: 補充庫存的人
+  :edit_others_orders: 編輯其他人的訂單
   :index_orders: Index Orders
   :edit_orders: Edit Orders
   :destroy_orders: Destroy Orders
