@@ -766,22 +766,22 @@ cn:
       new: 新
       order: 訂單
       ordering: 訂購
-      processing: processing...
-      saving: saving...
+      processing: 處理... 
+      saving: 保存...
       sku: SKU
-      title: title
-      to: to
-      top: top
-      waiting: waiting...
-    sticky_ticket: Sticky label
-    stock_locations: stock_locations
-    subtotal: subtotal
-    tax_profile: tax profile
-    three_easy_ways: three easy ways
-    total: total
-    username: username
-    vendor: vendor
-    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
+      title: 稱號
+      to: 至
+      top: 頂部
+      waiting: 等候...
+    sticky_ticket: 黏標籤
+    stock_locations: 貨物位置
+    subtotal: 小計
+    tax_profile: 稅務個人資料
+    three_easy_ways: 三個簡單的方法
+    total: 總計
+    username: 用戶名
+    vendor: 供應商
+    wholesaler_refresh: 取批發商更新. 這可能需要幾分鐘.
   when_list:
     add_to_order: 加入訂單
     always: 總是
