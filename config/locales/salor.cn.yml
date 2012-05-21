@@ -688,14 +688,13 @@ cn:
     forms:
       applies_to_item: 適用於與SKU的項目
       buy_one_get_one: 買一贈一
-      cashier: cashier
-      fixed_amount_off: fixed amount off
-      items: items
-      manager: Manager
-      no_change: no change
-      notes: notes
-      parts: parts
-      percent_off: ! '% off'
+      cashier: 出納員
+      fixed_amount_off: 固定數量折扣
+      manager: 經理
+      no_change: 沒有變化
+      notes: 筆記
+      parts: 部分
+      percent_off: ! '% 折扣'
       roles: roles
       search: search
       shipment:
