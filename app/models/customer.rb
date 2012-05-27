@@ -62,14 +62,14 @@ class Customer < ActiveRecord::Base
     orders = self.orders
     orders.each do |o|
       o.order_items.each do |oi|
-        if item.has_key? oi.id
-          item[oi.id][:count] += 1
+        if item.has_key? oi.sku
+          item[oi.sku][:count] += oi.quantity 
         else
-          item[oi.id] = {:name => oi.item.name, :count => 1, :sku => oi.sku}
+          item[oi.sku] = {:name => oi.item.name, :count => oi.quantity, :sku => oi.sku}
         end
       end
     end 
-    return item
+    return item.sort { |x,y| y[1][:count] <=> x[1][:count] }
   end
   # {END}
 end

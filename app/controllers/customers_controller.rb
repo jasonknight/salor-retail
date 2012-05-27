@@ -37,7 +37,7 @@ class CustomersController < ApplicationController
   def show
     @customer = Customer.scopied.find_by_id(params[:id])
     @item_statistics = @customer.get_item_statistics
-    @last_orders = @customer.orders.limit(5)
+    @last_orders = @customer.orders.limit(5).reverse
   end
 
   # GET /customers/1/edit
