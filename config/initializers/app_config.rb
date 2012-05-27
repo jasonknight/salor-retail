@@ -1,3 +1,5 @@
+require 'yaml'
+YAML::ENGINE.yamler = 'syck'
 NilClass.class_eval do
   METHOD_CLASS_MAP = Hash.new
 

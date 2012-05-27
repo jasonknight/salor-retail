@@ -36,7 +36,8 @@ module ApplicationHelper
       {:name => "Polski", :locale => 'pl'},
       {:name => "Français", :locale => 'fr'},
       {:name => "Espagnole", :locale => 'es'},
-      {:name => "Türkçe", :locale => 'tr'}
+      {:name => "Türkçe", :locale => 'tr'},
+      {:name => "中文", :locale => 'cn'}
     ]
   end
   def salor_number_to_currency(amnt)
