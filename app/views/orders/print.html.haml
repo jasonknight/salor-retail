@@ -31,6 +31,8 @@
         == #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
     .clear
+    %br
+    %br
 
 
     %table.striped-table2.has-total
@@ -95,7 +97,9 @@
       %tr
         %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal')
         %td.total= number_to_currency @report[:subsubtotal]
-
+ 
+    %br
+    %br
 
     - if @report[:refund_subtotal].zero?
       %table.taxes.striped-table2
@@ -110,6 +114,8 @@
     - else
       %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
 
+    %br
+    %br
 
     %table.taxes.striped-table2
       %tr
