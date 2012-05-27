@@ -164,6 +164,7 @@ module ApplicationHelper
       :button => 'button',
       :card => 'credit_card',
       :print => 'print',
+      :a4print => 'a4print',
       :document => 'document',
       :trash => 'trash',
       :user6 => 'user6',

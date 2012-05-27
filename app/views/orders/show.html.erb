@@ -26,7 +26,10 @@
 <table align="center">
   <tr>
     <td>
-      &nbsp; &nbsp;<%= salor_icon(:printer,{:style => "cursor:pointer;", :onclick => "print_order('#{@order.id }');"},32) %>
+      <%= salor_icon(:printer,{:style => "cursor:pointer;", :onclick => "print_order('#{@order.id }');"},32) %>
+    </td>
+    <td>
+      <%= link_to salor_icon(:a4print,{},32), "/orders/#{@order.id}/print" %>
     </td>
   </tr>
 </table>
