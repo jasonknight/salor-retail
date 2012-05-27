@@ -284,11 +284,11 @@ class OrdersController < ApplicationController
     text = Printr.new.sane_template('item',binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @cash_register.id, :content => text)
     if @register.salor_printer
-      render :text => text
+      render :text => text and return
     else
       written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       print_confirmed if written_bytes > 0
-      render :nothing => true
+      render :nothing => true and return
     end
   end
 
