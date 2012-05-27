@@ -236,7 +236,7 @@ class OrdersController < ApplicationController
         end
       end
     end
-    if @item.base_price.zero? and not @item.is_gs1
+    if @item.base_price.zero? and not @item.is_gs1 and not @item.must_change_price and not @item.default_buyback
       GlobalErrors.append("system.errors.item_price_is_zero")
       SalorBase.beep(1500, 100, 3, 10)
     end
