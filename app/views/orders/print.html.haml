@@ -124,4 +124,4 @@
           - tax.each do |k,v|
             %td.total= v
 
-    = @order.vendor.salor_configuration.receipt_blurb_footer.to_s if @order.vendor
+    %div.footer= raw Kramdown::Document.new(@vendor.salor_configuration.receipt_blurb_footer).to_html
