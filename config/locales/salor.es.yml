@@ -5,6 +5,8 @@ es:
   InCash: En efectivo
   activerecord:
     attributes:
+      invoice_blurb: Invoice text
+      invoice_blurb_footer: Invoice text footer
       active: Activo
       address: Dirección
       afield: Campo

@@ -5,6 +5,8 @@ cn:
   InCash: In Cash
   activerecord:
     attributes:
+      invoice_blurb: Invoice text
+      invoice_blurb_footer: Invoice text footer
       active: 活躍
       address: 地址
       afield: 領域
