@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120508193120) do
+ActiveRecord::Schema.define(:version => 20120529090807) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -652,7 +652,7 @@ ActiveRecord::Schema.define(:version => 20120508193120) do
     t.boolean  "items_view_list",       :default => true
     t.string   "url",                   :default => "http://salor"
     t.boolean  "salor_printer",         :default => false
-    t.string   "receipt_blurb_footer"
+    t.text     "receipt_blurb_footer"
     t.boolean  "calculate_tax",         :default => false
     t.boolean  "license_accepted",      :default => false
     t.boolean  "csv_categories"
