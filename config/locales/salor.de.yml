@@ -5,6 +5,8 @@ de:
   InCash: In Bar
   activerecord:
     attributes:
+      invoice_blurb: Rechnungstext Kopf
+      invoice_blurb_footer: Rechnungstext Fuß
       active: aktiv
       address: Adresse
       afield: Feld
@@ -102,8 +104,8 @@ de:
       real_quantity: Inventur
       rebate: Rabatt
       rebate_type: Rabatt-Typ
-      receipt_blurb: Rechnung Kopf
-      receipt_blurb_footer: Rechnung Fuß
+      receipt_blurb: Belegtest Kopf
+      receipt_blurb_footer: Belegtext Fuß
       reorder_type: Reorder Type
       sales_metric: Verkaufseinheit
       salor_printer: Client-seitiges Drucken

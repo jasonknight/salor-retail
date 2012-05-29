@@ -11,6 +11,9 @@
 </script>
 <div align="center">
 <%= form_for @vendor, :html => { :enctype => "multipart/form-data" } do |f| %>
+  <div class="actions">
+      <%= f.submit I18n.t('helpers.submit.save') %>
+  </div>
   <% if @vendor.errors.any? %>
     <div id="error_explanation">
       <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @vendor.errors.count,:model => t("activerecord.models.vendor.one"))%></h2>
@@ -75,73 +78,73 @@
                       </div>
                     <% end %>
                   </td>
-                  <td valign="top">
-                 <h2> <%= t("menu.general_configuration") %> </h2>
-                    <div class="field">
-                      <%= conf.label t("activerecord.attributes.telephone") %><br />
-                      <%= conf.text_field :telephone, :class => "keyboardable"%>
-                    </div>
-                    <div class="field">
-                      <%= conf.label t("activerecord.attributes.address") %><br />
-                      <%= conf.text_area :address, :rows => 3, :class => "keyboardable" %>
-                    </div>
-                    <div class="field">
-                      <%= conf.label t("activerecord.attributes.receipt_blurb") %><br />
-                      <%= conf.text_area :receipt_blurb, :rows => 7, :class => "keyboardable" %>
-                    </div>
-                    <div class="field">
-                      <%= conf.label t("activerecord.attributes.receipt_blurb_footer") %><br />
-                      <%= conf.text_area :receipt_blurb_footer, :rows => 3, :class => "keyboardable" %>
-                    </div>
-                  </td>
                   <td>
-                    <div class="field">
+                    <div>
                       <label for="vendor_receipt_logo_header"><%= Vendor.human_attribute_name(:receipt_logo_header) %></label>
                       <br />
                       <input id="vendor_receipt_logo_header" name="vendor[receipt_logo_header]" type="file">
                     </div>
-                    <div class="field">
+                    <div>
                       <label for="vendor_receipt_logo_header"><%= Vendor.human_attribute_name(:receipt_logo_footer) %></label>
                       <br />
                       <input id="vendor_receipt_logo_footer" name="vendor[receipt_logo_footer]" type="file">
                     </div>
-                    <div class="field">
+                    <div>
                       <label for="vendor_logo"><%= Vendor.human_attribute_name(:logo) %></label>
                       <br />
                       <input id="vendor_logo" name="vendor[logo]" type="file">
                     </div>
-                    <div class="field">
+                    <div>
                       <label for="vendor_logo_invoice"><%= Vendor.human_attribute_name(:logo_invoice) %></label>
                       <br />
                       <input id="vendor_logo_invoice" name="vendor[logo_invoice]" type="file">
                     </div>
-                    <div class="field">
+                    <div>
                       <%= conf.label t("activerecord.attributes.pagination") %><br />
                       <%= conf.text_field :pagination, :class => "keyboardable-int" %>
                     </div>
-                    <div class="field">
+                    <div>
                       <%= conf.label t("activerecord.attributes.itemsviewlist") %><br />
                       <%= conf.check_box :items_view_list %>
                     </div>
-                    <div class="field">
+                    <div>
                       <%= conf.label t("activerecord.attributes.stylesheets") %><br />
                       <%= conf.select :stylesheets, ['','default','darker','retro','goldenrod','sky','hippy'] %>
                     </div>
                     <% if AppConfig.standalone == true  %>
-                      <div class="field">
+                      <div>
                         <%= conf.label t("activerecord.attributes.cash_drawer") %><br />
                         <%= conf.text_field :cash_drawer, :class => "keyboardable" %>
                       </div>
-                      <div class="field">
+                      <div>
                         <%= conf.label t("activerecord.attributes.url") %><br />
                         <%= conf.text_field :url, :class => "keyboardable" %>
                       </div>
 
-                      <div class="field">
+                      <div>
                         <%= conf.label t("activerecord.attributes.open_cash_drawer") %><br />
                         <%= conf.check_box :open_cash_drawer %>
-                      </div>                    
+                      </div>
                     <% end %>
+                  </td>
+                  <td valign="top">
+                    <h2> <%= t("menu.general_configuration") %> </h2>
+                    <div>
+                      <%= conf.label t("activerecord.attributes.receipt_blurb") %><br />
+                      <%= conf.text_area :receipt_blurb, :rows => 5, :class => "keyboardable" %>
+                    </div>
+                    <div>
+                      <%= conf.label t("activerecord.attributes.receipt_blurb_footer") %><br />
+                      <%= conf.text_area :receipt_blurb_footer, :rows => 5, :class => "keyboardable" %>
+                    </div>
+                    <div>
+                      <%= conf.label t("activerecord.attributes.invoice_blurb") %><br />
+                      <%= conf.text_area :invoice_blurb, :rows => 5, :class => "keyboardable" %>
+                    </div>
+                    <div>
+                      <%= conf.label t("activerecord.attributes.invoice_blurb_footer") %><br />
+                      <%= conf.text_area :invoice_blurb_footer, :rows => 5, :class => "keyboardable" %>
+                    </div>
                   </td>
                 </tr>
               </table>
@@ -239,9 +242,6 @@
         </div>
       </div>
   </div>
-<div class="actions">
-    <%= f.submit I18n.t('helpers.submit.save') %>
-</div>
 <% end %>
 </div>
 

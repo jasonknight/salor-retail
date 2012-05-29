@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120529090807) do
+ActiveRecord::Schema.define(:version => 20120529102810) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -660,6 +660,8 @@ ActiveRecord::Schema.define(:version => 20120529090807) do
     t.boolean  "csv_discounts"
     t.boolean  "csv_customers"
     t.boolean  "csv_loyalty_cards"
+    t.text     "invoice_blurb"
+    t.text     "invoice_blurb_footer"
   end
 
   add_index "salor_configurations", ["vendor_id"], :name => "index_configurations_on_vendor_id"
