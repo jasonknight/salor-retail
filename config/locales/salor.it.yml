@@ -2,42 +2,42 @@
 en-US:
   ByCard: By Card
   ByGiftCard: By Gift Card
-  InCash: In Cash
+  InCash: Cassa
   activerecord:
     attributes:
       invoice_blurb: Invoice text
       invoice_blurb_footer: Invoice text footer
-      active: active
-      address: address
-      afield: field
-      amount: amount
-      amount_remaining: amount remaining
-      amount_type: amount type
-      applies_to: applies to
+      active: attivo
+      address: indirizzo
+      afield: campo
+      amount: importo
+      amount_remaining: importo rimanente
+      amount_type: importo tipo
+      applies_to: applica a
       auto_drop: Automatically Begin Day
       bank_machine_path: ATM
-      base_price: base price
-      behavior: behavior
-      body: body
+      base_price: prezzo base
+      behavior: comportamento
+      body: corpo
       buyback_price: buyback price
       calculate_part_price: calculate part price
-      calculate_tax: Calculate Tax
+      calculate_tax: Calcola Iva
       cash_drawer: cash drawer
       cash_made: cash made
       cash_register:
         sticker_printer: Sticker printer
       category_id: Category
-      cellphone: cell phone
+      cellphone: cellulare
       child_sku: Child SKU
-      city: city
-      code: code
-      company_name: company name
-      contact_address: contact address
-      contact_email: contact email
-      contact_fax: contact fax
-      contact_person: contact person
-      contact_phone: contact phone
-      country: country
+      city: città
+      code: cap
+      company_name: nome azienda
+      contact_address: indirizzo contatto
+      contact_email: email contatto
+      contact_fax: fax contatto
+      contact_person: persona di riferimento
+      contact_phone: telefono
+      country: paese
       coupon_applies: coupon applies
       coupon_total: coupon total
       coupon_type: coupon type
