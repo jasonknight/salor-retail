@@ -1,10 +1,12 @@
 ---
-en-US:
+ru:
   ByCard: By Card
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
+      invoice_blurb: Invoice text
+      invoice_blurb_footer: Invoice text footer
       active: active
       address: address
       afield: field
