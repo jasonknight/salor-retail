@@ -758,6 +758,7 @@ en-US:
       move_real_quantities_success: Item quantities were successfully updated
       new_order: new order created
       order_refund_dt: ! '#%{id}'
+      please_backup: "Please backup your system regularly!"
       save_before: XXX Save before leaving?
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles

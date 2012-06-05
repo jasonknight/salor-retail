@@ -765,6 +765,7 @@ fr:
         avec succès.
       new_order: Nouvelle commande créée
       order_refund_dt: ! '#%{id}'
+      please_backup: "Veuillez sauvegarder votre système régulièrement!"
       save_before: Sauvegarder avant de quitter cette page ?
       wholesaler_upload_report: ! 'Articles mis à jour: %{updated_items}, Articles
         créés: %{created_items}, Catégories créées: %{created_categories}, Types de

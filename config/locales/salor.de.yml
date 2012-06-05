@@ -767,6 +767,7 @@ de:
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       new_order: Neuer Verkauf angelegt
       order_refund_dt: ! '#%{id}'
+      please_backup: "XXX Please backup your system regularly!"
       save_before: Vor dem Verlassen speichern?
       wholesaler_upload_report: ! 'Aktualisiert: %{updated_items}, Erzeugt: %{created_items},
         Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}'

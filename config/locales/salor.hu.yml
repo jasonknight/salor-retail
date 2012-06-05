@@ -1,5 +1,5 @@
 ---
-en-US:
+hu:
   ByCard: By Card
   ByCardRefund: By Card Refund
   ByGiftCard: By Gift Card
@@ -819,6 +819,7 @@ en-US:
       move_real_quantities_success: Item quantities were successfully updated
       new_order: new order created
       order_refund_dt: ! '#%{id}'
+      please_backup: "XXX Please backup your system regularly!"
       paylife_endday_complete: Ending day complete
       paylife_ending_day: Ending day
       please_wait: Please wait...
