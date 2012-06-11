@@ -1,5 +1,5 @@
 en-US:
-  any_reports: Любой отчет
+  any_reports: Любые отчеты
   index_reports: Индексирует отчеты
   edit_reports: Редактирует отчеты
   show_reports: Показывает отчеты
@@ -12,20 +12,20 @@ en-US:
   :cashier: Кассир
   :stockboy: Кладовщик
   :edit_others_orders: Редактирует другие заказы
-  :index_orders: Index Orders
-  :edit_orders: Edit Orders
-  :destroy_orders: Destroy Orders
-  :create_orders: Create Orders
-  :update_orders: Update Orders
-  :show_orders: Show Orders
-  :any_orders: Any Orders
-  :index_items: Index Items
-  :edit_items: Edit Items
-  :destroy_items: Destroy Items
-  :create_items: Create Items
-  :update_items: Update Items
-  :show_items: Show Items
-  :any_items: Any Items
+  :index_orders: Индексирует заказы
+  :edit_orders: Редактирует заказы
+  :destroy_orders: Удаляет заказы
+  :create_orders: Создает заказы
+  :update_orders: Обновляет заказы
+  :show_orders: Показывает заказы
+  :any_orders: Любые заказы
+  :index_items: Индексирует товары
+  :edit_items: Редактирует товары
+  :destroy_items: Удаляет товары
+  :create_items: Создает товары
+  :update_items: Обновляет товары
+  :show_items: Показывает товары
+  :any_items: Любые товары
   :index_categories: Index Categories
   :edit_categories: Edit Categories
   :destroy_categories: Destroy Categories
