@@ -1,8 +1,8 @@
-en-US:
-  any_reports: Любые отчеты
+ru-RU:
+  any_reports: Любое действие с отчетами
   index_reports: Индексирует отчеты
   edit_reports: Редактирует отчеты
-  show_reports: Показывает отчеты
+  show_reports: Видит отчеты
   create_reports: Создает отчеты
   destroy_reports: Удаляет отчеты
   update_reports: Обновляет отчеты
@@ -17,24 +17,24 @@ en-US:
   :destroy_orders: Удаляет заказы
   :create_orders: Создает заказы
   :update_orders: Обновляет заказы
-  :show_orders: Показывает заказы
-  :any_orders: Любые заказы
+  :show_orders: Видит заказы
+  :any_orders: Любое действие с заказами
   :index_items: Индексирует товары
   :edit_items: Редактирует товары
   :destroy_items: Удаляет товары
   :create_items: Создает товары
   :update_items: Обновляет товары
-  :show_items: Показывает товары
-  :any_items: Любые товары
+  :show_items: Видит товары
+  :any_items: Любое действие с товарами
   :index_categories: Индексирует категории
   :edit_categories: Редактирует категории
   :destroy_categories: Удаляет категории
   :create_categories: Создает категории
   :update_categories: Обновляет категории
-  :show_categories: Show Categories
-  :any_categories: Any Categories
-  :index_locations: Index Locations
-  :edit_locations: Edit Locations
+  :show_categories: Видит категории
+  :any_categories: Любое действие с категориями
+  :index_locations: Индексирует местоположения
+  :edit_locations: Редактирует местоположения
   :destroy_locations: Destroy Locations
   :create_locations: Create Locations
   :update_locations: Update Locations
