@@ -26,11 +26,11 @@ en-US:
   :update_items: Обновляет товары
   :show_items: Показывает товары
   :any_items: Любые товары
-  :index_categories: Index Categories
-  :edit_categories: Edit Categories
-  :destroy_categories: Destroy Categories
-  :create_categories: Create Categories
-  :update_categories: Update Categories
+  :index_categories: Индексирует категории
+  :edit_categories: Редактирует категории
+  :destroy_categories: Удаляет категории
+  :create_categories: Создает категории
+  :update_categories: Обновляет категории
   :show_categories: Show Categories
   :any_categories: Any Categories
   :index_locations: Index Locations
