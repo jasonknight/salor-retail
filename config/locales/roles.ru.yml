@@ -6,12 +6,12 @@ en-US:
   create_reports: Создает отчеты
   destroy_reports: Удаляет отчеты
   update_reports: Обновляет отчеты
-  :employee: Employee
-  :manager: Manager
-  :head_cashier: Head Cashier
-  :cashier: Cashier
-  :stockboy: Stockboy
-  :edit_others_orders: Edit Others Orders
+  :employee: Работник
+  :manager: Менеджер
+  :head_cashier: Главный кассир
+  :cashier: Кассир
+  :stockboy: Кладовщик
+  :edit_others_orders: Редактирует другие заказы
   :index_orders: Index Orders
   :edit_orders: Edit Orders
   :destroy_orders: Destroy Orders
