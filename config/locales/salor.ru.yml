@@ -9,7 +9,7 @@ ru:
       invoice_blurb_footer: Invoice text footer
       active: active
       address: адрес
-      afield: field
+      afield: поле
       amount: amount
       amount_remaining: amount remaining
       amount_type: amount type
