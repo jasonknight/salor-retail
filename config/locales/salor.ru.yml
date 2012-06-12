@@ -616,17 +616,17 @@ ru:
     stockboy: stockboy
   shipments:
     index:
-      report: Report
+      report: Отчет
     show:
       purchase_price_sum: Purchase price sum
-  sticker: sticker
+  sticker: наклейка
   support: XXX
   system:
-    add_payment_method: add payment method
-    complete_sale: Complete
+    add_payment_method: добавить метод оплаты
+    complete_sale: Готово
     errors:
-      action_code_error: Code could not be executed because %{error}
-      action_error: Action could not complute because %{error}
+      action_code_error: Код не может быть выполнен потому что %{error}
+      action_error: Действие не может быть выполнено потому что %{error}
       auto_drop_failed: The system failed to auto drop, please manually create a beginning
         of day cash drop
       cannot_edit_completed_order: That order is completed and cannot be modified.
@@ -680,14 +680,14 @@ ru:
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
     inventory_updated: inventory updated
-    logged_in_as: logged in as
-    login: login
-    logout: logout
-    not_you: not you?
-    owner_mode: OWNER MODE
-    owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: Наличными,БанковскойКартой,ByGiftCard,OtherCredit
+    logged_in_as: вошли как
+    login: войти
+    logout: выйти
+    not_you: не вы?
+    owner_mode: РЕЖИМ ВЛАДЕЛЬЦЫ
+    owner_success: Свойства владельца были успешно обновлены
+    payment_external_types: наличные,карта,подарочная карта,другое
+    payment_internal_types: Наличными,Банковской Картой,Подарочной картой,Другой кредит
     rebate_types:
       fixed: $
       percent: ! '%'
