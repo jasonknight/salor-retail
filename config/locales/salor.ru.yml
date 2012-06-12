@@ -763,7 +763,7 @@ ru:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
         %{created_tax_profiles}'
     order_heading: ! 'Order #%{id} for %{store}'
-    order_number: ! 'Order #%{id}'
+    order_number: ! 'Заказ #%{id}'
     pagination:
       last: последняя
       next: следуящая &gt;
