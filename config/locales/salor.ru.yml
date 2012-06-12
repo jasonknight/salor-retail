@@ -687,7 +687,7 @@ ru:
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
     payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    payment_internal_types: Наличными,БанковскойКартой,ByGiftCard,OtherCredit
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -696,34 +696,33 @@ ru:
     clear_cache_button: clear cache
     clear_cache_header: cache
     form:
-      logo: logo
+      logo: логотип
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
   views:
     advanced_field: advanced field
-    cash_register_heading: ! '%{name} for %{store}'
-    cash_registers: cash registers
-    category_heading: category %{name} for %{store}
-    change: change
-    customers: customers
-    download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy item
-    edit_item_heading: edit item heading
+    cash_register_heading: ! '%{name} для %{store}'
+    cash_registers: кассовые аппараты
+    category_heading: category %{name} для %{store}
+    change: сдача
+    customers: покупатели
+    download_may_last_long: Скачивание может длится долго. Продолжить?
+    dummy_item: фиктивный товар
+    edit_item_heading: редактировать название товара
     email: email
     errors:
-      no_access_right: You do not have the right to access this resource. This error
-        has been logged.
-      nothing_found: Nothing found
-      unknown_vendor: Unknown
+      no_access_right: У вас не прав доступа к этому ресурсу. Эта ошибка была записана.
+      nothing_found: Ничего не найдено
+      unknown_vendor: Неизвестно
     eticket: Shelf label
     forms:
-      applies_to_item: applies to item with SKU
-      buy_one_get_one: buy one get one
-      cashier: cashier
-      fixed_amount_off: fixed amount off
-      items: items
-      manager: Manager
-      no_change: б
+      applies_to_item: применяется к товару с SKU
+      buy_one_get_one: купи один - получи один
+      cashier: кассир
+      fixed_amount_off: минус фиксированное количество
+      items: товары
+      manager: Менеджер
+      no_change: без изменений
       notes: заметки
       parts: части
       percent_off: ! '% off'
