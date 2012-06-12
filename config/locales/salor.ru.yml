@@ -38,8 +38,8 @@ ru:
       contact_person: контактное лицо
       contact_phone: контактный телефон
       country: страна
-      coupon_applies: coupon applies
-      coupon_total: coupon total
+      coupon_applies: применим купон
+      coupon_total: всего по купонам
       coupon_type: тип купона
       created_at: Создан
       csv_imports: Импорт CSV
@@ -53,25 +53,25 @@ ru:
       email: email
       employee:
         uses_drawer_id: Пользуется кассой как
-      end_amount: end amount
-      end_date: end date
-      eod_show: show at end of day
+      end_amount: конечное количество
+      end_date: конечная дата
+      eod_show: показывать в конце дня
       expires_on: истекает
       first_name: имя
       height: высота
       hide_buttons: Скрыть кнопки
       hide_discounts: Скрыть скидки
       ignore_qty: Игнорировать кол-во
-      is_refund: Is Refund?
-      is_shipment_item: is shipment item
+      is_refund: Это возврат ?
+      is_shipment_item: товар из поставки
       item:
-        purchase_price: Purchase Price
-        quantity: Quantity
-      item_sku: item sku
-      itemsviewlist: List View for Items
-      last_name: last name
+        purchase_price: Цена закупки
+        quantity: Количество
+      item_sku: SKU товара
+      itemsviewlist: Товары в виде списка
+      last_name: фамилия
       lc_points: loyalty card points
-      length: length
+      length: длинна
       letter: Letter
       location_id: location id
       lp_per_dollar: loyalty points per dollar
