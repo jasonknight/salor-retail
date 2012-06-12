@@ -723,9 +723,9 @@ ru:
       fixed_amount_off: fixed amount off
       items: items
       manager: Manager
-      no_change: no change
-      notes: notes
-      parts: parts
+      no_change: б
+      notes: заметки
+      parts: части
       percent_off: ! '% off'
       roles: roles
       search: search
@@ -748,8 +748,8 @@ ru:
     locations: адреса
     loyalty_card: loyalty card
     name: name
-    new_item_heading: New item for %{store}
-    new_stock_location: New stock location
+    new_item_heading: Новый товар для %{store}
+    new_stock_location: Новый адрес склада
     notice:
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
