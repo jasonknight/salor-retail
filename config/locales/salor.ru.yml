@@ -48,7 +48,7 @@ ru:
       decimal_points: количество разрядов
       default: По умолчанию
       default_buyback: выкуп по умолчанию
-      dollar_per_lp: рублей за единицу верности
+      dollar_per_lp: рублей за единицу лояльности
       drop: выбросить
       email: email
       employee:
@@ -70,27 +70,27 @@ ru:
       item_sku: SKU товара
       itemsviewlist: Товары в виде списка
       last_name: фамилия
-      lc_points: loyalty card points
-      length: длинна
+      lc_points: очки карты лояльности
+      length: длина
       letter: Letter
-      location_id: location id
-      lp_per_dollar: loyalty points per dollar
+      location_id: Идентификатор адреса
+      lp_per_dollar: очков лояльности за рубль
       min_quantity: мин. количество
-      must_change_price: Must Change Price
-      name: name
+      must_change_price: Нужно изменить цену
+      name: имя
       no_print: Не печатать при вводе
       notes: заметки
       open_cash_drawer: открыть кассу
       order_id: заказ
       owner_id: Владелец
-      owner_type: Owner Type
-      packaging_unit: packaging unit
-      pagination: pagination
-      paid: заплачено
+      owner_type: Тип владельца
+      packaging_unit: упаковочная единица
+      pagination: нумерация страниц
+      paid: оплачено
       parent_sku: SKU родителя
-      part_quantity: part quantity
-      parts: parts
-      password: password
+      part_quantity: количество частей
+      parts: части
+      password: пароль
       paylife: Paylife
       payout: payout
       points: points
