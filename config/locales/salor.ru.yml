@@ -1,6 +1,6 @@
 ---
 ru:
-  ByCard: Картой
+  ByCard: Картойtest
   ByGiftCard: Подарочной картой
   InCash: Наличными
   activerecord:
