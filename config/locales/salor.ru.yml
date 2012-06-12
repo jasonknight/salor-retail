@@ -126,10 +126,10 @@ ru:
       start_date: start date
       state: state
       status: статус
-      stock_location_ids: Местоположение склада
+      stock_location_ids: Адрес склада
       street1: Адрес 1
       street2: Адрес 2
-      stylesheets: stylesheets
+      stylesheets: таблицы стилей
       subtotal: подытог
       tag: метка
       tax: налог
@@ -148,7 +148,7 @@ ru:
       value: объем
       vendor_id: Магазин
       vendor_printers: принтеры
-      weigh_compulsory: compulsory weighing
+      weigh_compulsory: обязательное взвешивание
       weight: вес
       when: когда
       width: ширина
@@ -202,7 +202,7 @@ ru:
         one: Поставка
         other: Поставки
       shipment_type:
-        default_name: Auto Nachbestellung
+        default_name: Поставка по умолчанию
         one: Тип поставки
         other: Типы поставки
       shipper:
