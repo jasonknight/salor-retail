@@ -762,7 +762,7 @@ ru:
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
         %{created_tax_profiles}'
-    order_heading: ! 'Order #%{id} for %{store}'
+    order_heading: ! 'Заказ #%{id} для %{store}'
     order_number: ! 'Заказ #%{id}'
     pagination:
       last: последняя
