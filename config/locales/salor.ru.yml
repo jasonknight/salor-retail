@@ -73,7 +73,7 @@ ru:
       lc_points: очки карты лояльности
       length: длина
       letter: Letter
-      location_id: Идентификатор адреса
+      location_id: Отдел
       lp_per_dollar: очков лояльности за рубль
       min_quantity: мин. количество
       must_change_price: Нужно изменить цену
@@ -119,14 +119,14 @@ ru:
         name: наименование
         quantity: количество
         sku: SKU
-        stock_location_id: Местоположение склада
+        stock_location_id: Расположение склада
       shipper_sku: SKU отправителя
       sku: SKU
       start_amount: начальное количество
       start_date: начальная дата
       state: state
       status: статус
-      stock_location_ids: Адрес склада
+      stock_location_ids: Расположения складов
       street1: Адрес 1
       street2: Адрес 2
       stylesheets: таблицы стилей
@@ -187,8 +187,8 @@ ru:
         one: Тип товара
         other: Типы товара
       location:
-        one: Адрес
-        other: Адреса
+        one: Отдел
+        other: Отделы
       order:
         one: Заказ
         other: Заказы
@@ -209,8 +209,8 @@ ru:
         one: Поставщик
         other: Поставщики
       stock_location:
-        one: Адрес склада
-        other: Адреса складов
+        one: Расположение склада
+        other: Расположения складов
       tax_profile:
         one: Налоговый профиль
         other: Налоговые профили
