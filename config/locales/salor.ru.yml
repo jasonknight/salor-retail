@@ -631,7 +631,7 @@ ru:
       csv_item_failed: ! '%{id} %{i} failed.'
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
-      gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту Gift Card is Empty, notify client, and destroy card.
+      gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту.
       gs1_item_not_found: Товар помечен как gs1, но %{sku} не соответствует формату.
       insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
       inventory_update_error: ошибка обновления инвентарной ведомости
