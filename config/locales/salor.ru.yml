@@ -501,11 +501,11 @@ ru:
       sum_total: итого
       title: месячный отчет
     report_range:
-      None: Not specified
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      cash-refunds: Cash-Refunds
-      cash_drawer: Cash drawer
+      None: Не указано
+      OrderItemRefund: Вернуть товар
+      OrderRefund: Вернуть заказ
+      cash-refunds: Возвраты наличными
+      cash_drawer: Касса
       count_orders: Количество заказов
       drop: изъять
       from: От
