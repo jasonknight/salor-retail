@@ -249,7 +249,7 @@ ru:
   edit: Редактировать
   end_of_day: Конец дня
   exception_page:
-    assistance_text: Please click on the button "Home" and try again. If the error
+    assistance_text: Пожалуйста, нажмите кнопку "Домой" и попробуйте снова. Если ошибка повторится, свяжитесь со службой поддержки и активируйте удаленное обслуживание с помощью кнопки "Удаленное обслуживание". Мы  Please click on the button "Home" and try again. If the error
       happens again, please call the customer support, and connect your computer to
       the Remote Service with the button "Remote Service". We will help you immediately.
     exception_description: ! 'Error description:'
@@ -590,12 +590,12 @@ ru:
       rebate_subtotal: Rebate Subtotal
       refund: Total refunds
       refunded: REFUNDED
-      subsubtotal: TOTAL
-      subtotal1: Subtotal
-      subtotal2: Subtotal
-      subtotal3: Subtotal
-      subtotal4: Subtotal
-      tax: Tax
+      subsubtotal: ВСЕГО
+      subtotal1: Подытог
+      subtotal2: Подытог
+      subtotal3: Подытог
+      subtotal4: Подытог
+      tax: Налог
     word:
       drop: drop
       payout: payout
@@ -604,16 +604,16 @@ ru:
     invoice: Rechnung
     invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
   reports:
-    amount: amount
-    description: description
-    item_zero: Sold out items
+    amount: количество
+    description: описание
+    item_zero: Распроданные товары
     tax_class: tax class
-    total: total
+    total: всего
     unit_price: unit price
   roles:
-    cashier: cashier
-    manager: manager
-    stockboy: stockboy
+    cashier: кассир
+    manager: менеджер
+    stockboy: кладовщик
   shipments:
     index:
       report: Отчет
