@@ -320,36 +320,35 @@ ru:
       only_for_tobacco_stores: Это функция только для табачных магазинов. Табачные товары будут созданы и обновлены. Это может занять до 20 минут. Вы действительно хотите продолжить?
     inventory_report:
       price: Цена продажи
-      subtotal_purchase_price: Цена покупки для подытога
-      subtotal_selling_price: Цена продажи для подытога
-      title: Inventory Report
-      total_buying_price: Суммарная цена покупSum Purchase Price
-      total_selling_price: Sum Selling Price
+      subtotal_purchase_price: Подытог цены покупки
+      subtotal_selling_price: Подытог цены продажи
+      title: Инвентарный отчёт
+      total_buying_price: Суммарная цена покупки
+      total_selling_price: Суммарная цена продажи
     show:
       from: от
-      quantity_sold: Sold quantity
+      quantity_sold: Проданое количество
       query: Запрос!
       to: кому
     update_real_quantity:
-      are_you_sure: This will copy the inventory quantities into the database and
-        reset the inventory report. Continue?
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
+      are_you_sure: Инвентарные данные будут скопированы в базу данных, и будет пересоздан инвентарный отчёт. Продолжить?
+      inventory_report: Инвентарный отчёт
+      update_quantity: Обновить инвентарные данные
     upload:
-      upload: upload
-  label: label
+      upload: загрузить
+  label: ярлык
   menu:
-    actions: actions
-    activate_gift_card: activate gift card
-    add_to_current_order: add to current order
-    additional: additional
+    actions: действия
+    activate_gift_card: активировать подарочную карту
+    add_to_current_order: добавить к текущему заказу
+    additional: дополнительный
     back: назад
-    broken_items: broken items
+    broken_items: некондиционные товары
     buttons: кнопки
     buy_order: Купить
     cameras: камеры
-    cancel: cancel
-    cash_drop: cash drop
+    cancel: отмена
+    cash_drop: изъятие наличности
     cash_register: кассовый аппарат
     cash_registers: кассовые аппараты
     categories: категории
@@ -378,8 +377,8 @@ ru:
     edit_shipment_type: редактировать тип поставки
     edit_shipper: редактировать поставщика %{name}
     edit_tax_profile: редактировать налоговый профиль
-    edit_tender_method: edit tender method
-    edit_vendor: edit vendor
+    edit_tender_method: редактировать метод тендера
+    edit_vendor: редактировать магазин
     employees: работники
     end_day: конец дня
     general_configuration: основные настройки
@@ -387,9 +386,9 @@ ru:
     inventory_report: Отчет по товарам
     item_types: типы товаров
     items: товары
-    law_reports: Report Download
-    locations: locations
-    loyalty_cards: loyalty cards
+    law_reports: Скачать отчет
+    locations: адреса
+    loyalty_cards: карты лояльности cards
     move_shipment_item: move shipment item
     new_action: new action
     new_broken_item: new broken item
