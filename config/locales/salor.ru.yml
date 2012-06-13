@@ -258,7 +258,7 @@ ru:
     bank_machine_types: поддерживаемые банкоматы
     best_sellers: бестселлеры
     best_selling_category: категория-бестселлер
-    best_selling_location: адрес-бестселлер
+    best_selling_location: отдел-бестселлер
     crd: Время,Количество,Тип,Заметки
     database_distiller: Отчистка базы данных
     discount_for: скидка для %{store}
@@ -275,7 +275,7 @@ ru:
     shipment_items: товары в поставке
     shipment_types: виды поставок
     shipments: поставки
-    update_location: обновить адрес
+    update_location: обновить отдел
     update_real_quantity: обновить реальное количество
   helpers:
     select:
@@ -372,7 +372,7 @@ ru:
     edit_discount: редактировать скидку
     edit_employee: редактировать работника
     edit_item: редактировать товар
-    edit_location: редактировать местоположение
+    edit_location: редактировать отдел
     edit_shipment: редактировать поставку
     edit_shipment_type: редактировать тип поставки
     edit_shipper: редактировать поставщика %{name}
@@ -387,7 +387,7 @@ ru:
     item_types: типы товаров
     items: товары
     law_reports: Скачать отчет
-    locations: адреса
+    locations: отделы
     loyalty_cards: клубные карты
     move_shipment_item: новый поставляемый товар
     new_action: новое действие
@@ -399,12 +399,12 @@ ru:
     new_discount: новая скидка
     new_employee: новый работник
     new_item: новый товар
-    new_location: новый адрес
+    new_location: новый отдел
     new_order: новый заказ
     new_shipment: новая поставка
     new_shipment_type: новый тип поставки
     new_shipper: новый поставщик
-    new_stock_location: новый адрес склада
+    new_stock_location: новое расположение склада
     new_tax_profile: новый налоговый профиль
     new_tender_method: новый метод тендеров
     new_vendor: новый магазин
@@ -430,13 +430,13 @@ ru:
     shippers: поставщики
     show: показать
     split: разбить
-    stock_locations: адреса складов
+    stock_locations: расположения складов
     support: поддержка
     tax_profiles: налоговые профили
     tender_methods: методы тендеров
     transaction_tags: метки транзакций
     update_gift_card: обновить подарочную карту
-    update_location: обновить адрес
+    update_location: обновить отдел
     update_real_quantity: обновить действительное количество
     upload: загрузить
     usb_device: устройство USB
@@ -727,11 +727,11 @@ ru:
     language: язык
     listing: список
     listing_items: товары в списке
-    locations: адреса
+    locations: отделы
     loyalty_card: клубная карта
     name: название
     new_item_heading: Новый товар для %{store}
-    new_stock_location: Новый адрес склада
+    new_stock_location: Новое расположение склада
     notice:
       cache_was_cleared: Кэш-файлы удалены.
       csv_edit_starting: начало редактирования CSV
@@ -788,7 +788,7 @@ ru:
       top: верх
       waiting: ожидание...
     sticky_ticket: Наклейка
-    stock_locations: адреса складов
+    stock_locations: расположения складов
     subtotal: подытог
     tax_profile: налоговый профиль
     three_easy_ways: три простых способа
