@@ -244,7 +244,7 @@ ru:
       last_orders: Последние заказы
       order_id: Номер заказа
       order_total: Всего заказов
-      sold_count: sold count
+      sold_count: счёт продаж
   delete: Удалить
   edit: Редактировать
   end_of_day: Конец дня
@@ -261,8 +261,8 @@ ru:
     best_selling_location: адрес-бестселлер
     crd: Время,Количество,Тип,Заметки
     database_distiller: Отчистка базы данных
-    discount_for: rebate for %{store}
-    discounts_for: rebates for %{store}
+    discount_for: скидка для %{store}
+    discounts_for: скидки для %{store}
     edit_shipper: редактировать поставщика %{name}
     employees: работники
     expiring_soon: скоро заканчивается срок годности
@@ -311,7 +311,7 @@ ru:
       are_you_sure: Все неиспользуемые товары будут удалены. Это действие нельзя будет отменить. Вы уверены, что хотите продолжить?
       delete_unused_items: Удалить неиспользуемые товары !
       hidden: Уже удаленные товары
-      hidden_by_distiller: Items deleted by Database Distiller
+      hidden_by_distiller: Товары удаленные чистильщиком базы данных
       relevant_item_ids: Товары подлежащие удалению
       unused_item_ids: Неиспользуемые товары
       used_item_ids: Используемые товары
