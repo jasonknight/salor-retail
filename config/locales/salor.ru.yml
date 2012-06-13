@@ -532,7 +532,7 @@ ru:
       transactions: transactions
   printr:
     eod_report:
-      None: Not named
+      None: Без имени
       OrderItemRefund: Order Item Refund
       OrderRefund: Order Refund
       calculated_drawer_amount: Calculated drawer amount
@@ -563,10 +563,10 @@ ru:
       fixed_rebate: Rebate                         EUR %8.2f
       item: ! '%c %20.20s %7.2f %3u %7.2f'
       rebate_amount: Rebate %4.2f%%                 EUR %8.2f
-      rebate_subtotal: Rebate Total                  EUR %8.2f
-      subtotal: Subtotal                      EUR %8.2f
-      thanks: Thank you for shopping with us!
-      total: TOTAL                         EUR %8.2f
+      rebate_subtotal: Rebate Total                  РУБ %8.2f
+      subtotal: Subtotal                      РУБ %8.2f
+      thanks: Спасибо за покупку!
+      total: ВСЕГО                         РУБ %8.2f
     order_receipt:
       change: Change money
       coupon_subtotal: Coupon Subtotal
@@ -576,7 +576,7 @@ ru:
       given: Given money
       gross: gross
       lc_points_substracted: Вычтеные очки с клубной карты
-      net: net
+      net: сеть
       rebate: Single rebate
       rebate_fixed: Fixed rebate
       rebate_percent: Percent rebate
@@ -670,9 +670,9 @@ ru:
       shipment_item_already_in_stock: Item %{sku} is already in stock
       shipment_item_move_failed: ! 'Item %{sku} failed to move with error: %{error}'
       shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: ! '%{sku} must be unique'
-      value_not_set: NotSet
-    inventory_updated: inventory updated
+      sku_must_be_unique: ! '%{sku} должен быть уникальным'
+      value_not_set: НеУказано
+    inventory_updated: проведен переучет товара
     logged_in_as: вошли как
     login: войти
     logout: выйти
