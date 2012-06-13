@@ -439,7 +439,7 @@ ru:
     update_location: update location
     update_real_quantity: update real quantity
     upload: upload
-    usb_device: Usb Stick
+    usb_device: устройство USB
     vendors: vendors
     void: void
     wholesaler_update: wholesaler update
@@ -642,20 +642,18 @@ ru:
       limited_alphabet: Only a-z permitted. No spaces or accented characters allowed.
       lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup
         this up in your store configuration?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to
-        a valid Store
-      must_specify_drop_or_payout: You must specify either drop or payout!
-      no_class: There is no class for %{model} at line %{i}
-      no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no item with this SKU
-      not_enough_in_drawer: not enough in drawer
-      order_failed: Order could not be finished.
-      order_must_have_user: You cannot save an order without a User or Employee assigned
-        to it.
-      order_register_required: You must specify a register for this order
+      must_cash_drop: В вашей кассе нет денег. Пожалуйста, добавьте изъятие наличных!
+      must_choose_register: Вы должны авторизоваться в кассовом аппарате!
+      must_choose_vendor: Вам нужно выбрать магазин!
+      must_set_receiver_to_vendor: В поле получателя для этой доставки нужно указать существующий магазин.
+      must_specify_drop_or_payout: Вы должны выбрать изъятие или выплату!
+      no_class: Нет класса для %{model} на строке %{i}
+      no_role: У вас недостаточно прав для доступа к этому ресурсу.
+      no_such_item: Товар с таким SKU не найден.
+      not_enough_in_drawer: не достаточно в кассе
+      order_failed: Заказ не может быть завершен.
+      order_must_have_user: Вы не можете сохранить заказ, не указав пользователя или работника для него.
+      order_register_required: Вы должны указать запись для этого заказа
       order_totals_validation_failed: Общая проверка заказа не прошла. Обновление заказа возможно решит эту проблему. Нажмите OK для обновления.
       order_vendor_required: Вам нужно указать магазин для этого заказа
       parent_sku_must_exist: Родительский товар должен существовать!
