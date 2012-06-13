@@ -1,12 +1,12 @@
 ---
 en-US:
-  ByCard: By Card
-  ByGiftCard: By Gift Card
+  ByCard: Da Carta
+  ByGiftCard: Da Carta Omaggio
   InCash: Cassa
   activerecord:
     attributes:
-      invoice_blurb: Invoice text
-      invoice_blurb_footer: Invoice text footer
+      invoice_blurb: Testo fattura
+      invoice_blurb_footer: Testo fattura piè di pagina
       active: attivo
       address: indirizzo
       afield: campo
@@ -14,21 +14,21 @@ en-US:
       amount_remaining: importo rimanente
       amount_type: importo tipo
       applies_to: applica a
-      auto_drop: Automatically Begin Day
+      auto_drop: Inizia Giorno Automaticamente
       bank_machine_path: ATM
       base_price: prezzo base
       behavior: comportamento
       body: corpo
-      buyback_price: buyback price
-      calculate_part_price: calculate part price
+      buyback_price: prezzo riacquisto
+      calculate_part_price: calcola prezzo parziale
       calculate_tax: Calcola Iva
-      cash_drawer: cash drawer
-      cash_made: cash made
+      cash_drawer: contante in cassa
+      cash_made: contante effettuato
       cash_register:
-        sticker_printer: Sticker printer
-      category_id: Category
+        sticker_printer: Stampante etichette
+      category_id: Categoria
       cellphone: cellulare
-      child_sku: Child SKU
+      child_sku: Figlio SKU
       city: città
       code: cap
       company_name: nome azienda
@@ -38,151 +38,151 @@ en-US:
       contact_person: persona di riferimento
       contact_phone: telefono
       country: paese
-      coupon_applies: coupon applies
-      coupon_total: coupon total
-      coupon_type: coupon type
-      created_at: Created
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standard text customer screen
-      decimal_points: decimal points
-      default: Default
-      default_buyback: default buyback
-      dollar_per_lp: dollar per loyalty point
-      drop: drop
+      coupon_applies: applica scontrino
+      coupon_total: totale scontrini
+      coupon_type: tipo scontrino
+      created_at: Creato
+      csv_imports: Importa CSV
+      csv_imports_url: Importa URL CSV
+      customer_screen_blurb: Schermo cliente standard
+      decimal_points: decimali
+      default: Predefinito
+      default_buyback: riacquisto predefinito
+      dollar_per_lp: euro per punti fedeltà
+      drop: lascia
       email: email
       employee:
-        uses_drawer_id: Uses drawer of
-      end_amount: end amount
-      end_date: end date
-      eod_show: show at end of day
-      expires_on: expires on
-      first_name: first name
-      height: height
-      hide_buttons: Hide Buttons
-      hide_discounts: Hide Discounts
-      ignore_qty: Ignore Qty
-      is_refund: Is Refund?
-      is_shipment_item: is shipment item
+        uses_drawer_id: usa cassa id
+      end_amount: ammontare finale
+      end_date: fine data
+      eod_show: mostra a fine giornata
+      expires_on: scade il
+      first_name: nome
+      height: altezza
+      hide_buttons: Nascondi Bottoni
+      hide_discounts: Nascondi Sconti
+      ignore_qty: Ignora Qta
+      is_refund: Rimborsato?
+      is_shipment_item: articolo spedito
       item:
-        purchase_price: Purchase Price
-        quantity: Quantity
-      item_sku: item sku
-      itemsviewlist: List View for Items
-      last_name: last name
-      lc_points: loyalty card points
-      length: length
-      letter: Letter
-      location_id: location id
-      lp_per_dollar: loyalty points per dollar
-      min_quantity: min quantity
-      must_change_price: Must Change Price
-      name: name
-      no_print: Don't Print on Enter
-      notes: notes
-      open_cash_drawer: open cash drawer
-      order_id: order
-      owner_id: Owner
-      owner_type: Owner Type
-      packaging_unit: packaging unit
-      pagination: pagination
-      paid: paid
-      parent_sku: Parent SKU
-      part_quantity: part quantity
-      parts: parts
+        purchase_price: Prezzo di Acquisto
+        quantity: Quantità
+      item_sku: articolo sku
+      itemsviewlist: Vedi Lista per Articolo
+      last_name: cognome
+      lc_points: punti carta fedeltà
+      length: lunghezza
+      letter: Letter (Note: if it's about the paper format then it would be the "A4" here in Italy)
+      location_id: id posizione
+      lp_per_dollar: punti fedeltà per euro
+      min_quantity: min quantità
+      must_change_price: Prezzo da Cambiare
+      name: nome
+      no_print: Non Stampare dopo Invio
+      notes: note
+      open_cash_drawer: apri cassa
+      order_id: ordine
+      owner_id: Proprietario
+      owner_type: Tipo Proprietario
+      packaging_unit: unità pacco
+      pagination: impaginazione
+      paid: pagato
+      parent_sku: SKU Genitore
+      part_quantity: dividi quantità
+      parts: quantità (o porzione..?)
       password: password
       paylife: Paylife
-      payout: payout
-      points: points
+      payout: indennizzo o sovvenzione?
+      points: punti
       pole_display: Pole display
-      postalcode: postal code
-      price: price
-      price_by_qty: price by quantity
-      purchase_price: purchase price
-      quantity: quantity
-      quantity_sold: quantity sold
-      real_quantity: real quantity
-      rebate: rebate
-      rebate_type: rebate type
-      receipt_blurb: Receipt header
-      receipt_blurb_footer: Receipt footer
-      reorder_type: Reorder Type
-      sales_metric: sales metric
-      salor_printer: Print Client Side
-      scale: scale
+      postalcode: codice postale
+      price: prezzo
+      price_by_qty: prezzo per quantità
+      purchase_price: prezzo di acquisto
+      quantity: quantità
+      quantity_sold: quantità venduta
+      real_quantity: quantità reale
+      rebate: rimborso
+      rebate_type: tipo rimborso
+      receipt_blurb: Intestazione ricevuta
+      receipt_blurb_footer: Piè di pagina ricevuta
+      reorder_type: Tipo Riordine
+      sales_metric: metrica vendite
+      salor_printer: Stampa Lato Cliente
+      scale: scala
       shipment:
-        from: from
-        paid: paid
-        price: price
-        to: to
+        from: da
+        paid: pagato
+        price: prezzo
+        to: a
       shipment_item:
-        name: name
-        quantity: quantity
+        name: nome
+        quantity: quantità
         sku: SKU
-        stock_location_id: Stock location
-      shipper_sku: Shipper SKU
+        stock_location_id: Posizione Stock
+      shipper_sku: Spedizioniere SKU
       sku: SKU
-      start_amount: start amount
-      start_date: start date
-      state: state
-      status: status
-      stock_location_ids: Stock location
-      street1: Address 1
-      street2: Address 2
-      stylesheets: stylesheets
-      subtotal: subtotal
-      tag: tag
-      tax: tax
-      tax_profile_id: tax
-      telephone: telephone
-      the_receiver: the receiver
-      the_shipper: the shipper
-      thermal_printer: Thermal Printer
-      title: title
-      total: total
-      track_expiry: Track Expiry
-      type: type
+      start_amount: ammontare di partenza
+      start_date: data di inizio
+      state: stato
+      status: stato
+      stock_location_ids: Stock posizione
+      street1: Indirizzo 1
+      street2: Indirizzo 2
+      stylesheets: foglio di stile
+      subtotal: subtotale
+      tag: etichetta
+      tax: iva
+      tax_profile_id: iva
+      telephone: telefono
+      the_receiver: il ricevente
+      the_shipper: lo spedizioniere
+      thermal_printer: Stampante Termica
+      title: titolo
+      total: totale
+      track_expiry: Track Expiry – Scadenza Traccia ?
+      type: tipo
       url: URL
-      username: username
-      uses_drawer_id: Uses Drawer of
-      value: value
-      vendor_id: Vendor
-      vendor_printers: printers
+      username: nome utente
+      uses_drawer_id: Usa Cassa di
+      value: valore
+      vendor_id: Venditore
+      vendor_printers: stampanti
       weigh_compulsory: compulsory weighing
-      weight: weight
-      when: when
-      width: width
+      weight: peso
+      when: quando
+      width: larghezza
     models:
       action:
-        one: Action
-        other: Actions
+        one: Azione
+        other: Azioni
       broken_item:
-        one: Broken item
-        other: Broken items
+        one: Articolo danneggiato
+        other: Articoli danneggiati
       button:
-        one: Button
-        other: Buttons
+        one: Bottone
+        other: Bottoni
       category:
-        one: Category
-        other: Categories
+        one: Categoria
+        other: Categorie
       customer:
-        one: Customer
-        other: Customers
+        one: Cliente
+        other: Clienti
       discount:
-        one: Discount
-        other: Discounts
+        one: Sconto
+        other: Sconti
       drawer:
-        one: Drawer
-        other: Drawers
+        one: Cassa
+        other: Casse
       drawer_transaction:
-        one: Drawer Transaction
-        other: Drawer Transactions
+        one: Transazione Cassa
+        other: Transazioni Cassa
       employee:
-        one: Employee
-        other: Employees
+        one: Impiegato
+        other: Impiegati
       item:
-        one: Item
-        other: Items
+        one: Articolo
+        other: Articoli
       item_type:
         one: Item Type
         other: Item Types
