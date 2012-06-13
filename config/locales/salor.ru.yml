@@ -389,49 +389,49 @@ ru:
     law_reports: Скачать отчет
     locations: адреса
     loyalty_cards: клубные карты
-    move_shipment_item: move shipment item
-    new_action: new action
-    new_broken_item: new broken item
-    new_button: new button
-    new_cash_register: new cash register
-    new_category: new category
-    new_customer: new customer
-    new_discount: new discount
-    new_employee: new employee
-    new_item: new item
-    new_location: new location
-    new_order: New
-    new_shipment: new shipment
-    new_shipment_type: new shipment type
-    new_shipper: new shipper
-    new_stock_location: new stock location
-    new_tax_profile: new tax profile
-    new_tender_method: new tender method
+    move_shipment_item: новый поставляемый товар
+    new_action: новое действие
+    new_broken_item: новый некондиционный товар
+    new_button: новая кнопка
+    new_cash_register: новый кассовый аппарат
+    new_category: новая категория
+    new_customer: новый покупатель
+    new_discount: новая скидка
+    new_employee: новый работник
+    new_item: новый товар
+    new_location: новый адрес
+    new_order: новый заказ
+    new_shipment: новая поставка
+    new_shipment_type: новый тип поставки
+    new_shipper: новый поставщик
+    new_stock_location: новый адрес склада
+    new_tax_profile: новый налоговый профиль
+    new_tender_method: новый метод тендеров
     new_vendor: новый магазин
     ok: OK
     order: заказ
-    orders: orders
-    overview: overview
+    orders: заказы
+    overview: обзор
     points: очки
-    pos: POS
+    pos: Терминал
     print: печатать
     remote_service: Remote Service
     reorder: reorder
-    report: report
-    report_day: report day
-    report_day_range: monthly report
-    report_range: report detail
-    reports: reports
+    report: отчет
+    report_day: отчет за день
+    report_day_range: отчет за месяц
+    report_range: детальный отчет
+    reports: отчеты
     salorlive: Salor Live!
     salortrainer: Salor Trainer
-    search: search
+    search: поиск
     shipment_types: shipment types
     shipments: shipments
     shippers: shippers
-    show: show
-    split: split
-    stock_locations: stock locations
-    support: support
+    show: показать
+    split: разбить
+    stock_locations: адреса складов
+    support: поддержка
     tax_profiles: tax profiles
     tender_methods: tender methods
     transaction_tags: transaction tags
@@ -632,8 +632,8 @@ ru:
       csv_item_failed: ! '%{id} %{i} failed.'
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
-      gift_card_empty: Gift Card is Empty, notify client, and destroy card.
-      gs1_item_not_found: Item marked as gs1, but %{sku} is not in the correct format.
+      gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту Gift Card is Empty, notify client, and destroy card.
+      gs1_item_not_found: Товар помечен как gs1, но %{sku} не соответствует формату.
       insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
       inventory_update_error: ошибка обновления инвентарной ведомости
       item_not_found: Товар, который вы ищете не найден, поискать?
