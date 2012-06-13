@@ -620,9 +620,8 @@ ru:
     errors:
       action_code_error: Код не может быть выполнен потому что %{error}
       action_error: Действие не может быть выполнено потому что %{error}
-      auto_drop_failed: The system failed to auto drop, please manually create a beginning
-        of day cash drop
-      cannot_edit_completed_order: That order is completed and cannot be modified.
+      auto_drop_failed: Система не смогла выполнить автоматическое изъятие наличных. Пожалуйста, создайте начало дня изъятия наличных вручную.
+      cannot_edit_completed_order: Этот заказ выполнен и не может быть изменён.
       cannot_reorder: No items must be reordered.
       child_sku_must_exist: Child Item Must Exist!
       coupon_cannot_be_buy_one_get_one: coupon %{sku} cannot be_buy_one_get_one when
