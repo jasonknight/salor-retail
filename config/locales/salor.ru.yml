@@ -441,7 +441,7 @@ ru:
     upload: upload
     usb_device: устройство USB
     vendors: vendors
-    void: void
+    void: пусто
     wholesaler_update: wholesaler update
   notifications:
     shipments_item_could_not_be_saved: shipments item could not be saved
@@ -634,14 +634,12 @@ ru:
         dass Set-Items existieren.
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.
       gs1_item_not_found: Item marked as gs1, but %{sku} is not in the correct format.
-      insufficient_quantity_on_item: Warning, Item %{sku} quantity is insufficient,
-        time to update your stock levels!
-      inventory_update_error: inventory update error
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: ! 'Warning: Item price is 0'
-      limited_alphabet: Only a-z permitted. No spaces or accented characters allowed.
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup
-        this up in your store configuration?
+      insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
+      inventory_update_error: ошибка обновления инвентарной ведомости
+      item_not_found: Товар, который вы ищете не найден, поискать?
+      item_price_is_zero: ! 'Внимание: Нулевая цена товара!'
+      limited_alphabet: Разрешены только буквы a-z. Никаких пробелов или букв в верхнем регистре.
+      lp_calculation_failed: Ошибка при применении очков клубной карты. Вы уверены, что добавили их в настройке магазина?
       must_cash_drop: В вашей кассе нет денег. Пожалуйста, добавьте изъятие наличных!
       must_choose_register: Вы должны авторизоваться в кассовом аппарате!
       must_choose_vendor: Вам нужно выбрать магазин!
