@@ -667,8 +667,8 @@ ru:
         technical support representative.
       sanity_check: Requested action is insane, verify order total and notify customer
         of correction.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: ! 'Item %{sku} failed to move with error: %{error}'
+      shipment_item_already_in_stock: Товар %{sku} уже есть на складе
+      shipment_item_move_failed: ! 'Товар %{sku} не был перемещен, ошибка: %{error}'
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} должен быть уникальным'
       value_not_set: НеУказано
@@ -684,19 +684,19 @@ ru:
     rebate_types:
       fixed: $
       percent: ! '%'
-    sign_up: sign up
+    sign_up: войти
   vendors:
-    clear_cache_button: clear cache
-    clear_cache_header: cache
+    clear_cache_button: отчистить кэш
+    clear_cache_header: кэш
     form:
       logo: логотип
-      receipt_logo_footer: receipt logo footer
-      receipt_logo_header: receipt logo header
+      receipt_logo_footer: низ логотипа квитанции
+      receipt_logo_header: верх логотипа квитанции
   views:
-    advanced_field: advanced field
+    advanced_field: дополнительное поле
     cash_register_heading: ! '%{name} для %{store}'
     cash_registers: кассовые аппараты
-    category_heading: category %{name} для %{store}
+    category_heading: категория %{name} для %{store}
     change: сдача
     customers: покупатели
     download_may_last_long: Скачивание может длится долго. Продолжить?
@@ -707,7 +707,7 @@ ru:
       no_access_right: У вас не прав доступа к этому ресурсу. Эта ошибка была записана.
       nothing_found: Ничего не найдено
       unknown_vendor: Неизвестно
-    eticket: Shelf label
+    eticket: Этикетка
     forms:
       applies_to_item: применяется к товару с SKU
       buy_one_get_one: купи один - получи один
@@ -718,9 +718,9 @@ ru:
       no_change: без изменений
       notes: заметки
       parts: части
-      percent_off: ! '% off'
-      roles: roles
-      search: search
+      percent_off: ! '% минус'
+      roles: роли
+      search: поиск
       shipment:
         types:
           canceled: отменена 
@@ -735,24 +735,24 @@ ru:
     in_cash: наличными
     item: товар
     language: язык
-    listing: listing
-    listing_items: listing items
+    listing: список
+    listing_items: товары в списке
     locations: адреса
     loyalty_card: клубная карта
-    name: name
+    name: название
     new_item_heading: Новый товар для %{store}
     new_stock_location: Новый адрес склада
     notice:
-      cache_was_cleared: Cache files deleted.
-      csv_edit_starting: csv edit starting
-      model_create: ! '%{model} was created successfully'
-      model_edit: ! '%{model} was edited successfully'
-      move_real_quantities_success: Item quantities were successfully updated
-      new_order: new order created
+      cache_was_cleared: Кэш-файлы удалены.
+      csv_edit_starting: начало редактирования CSV
+      model_create: ! '%{model} была успешно создана'
+      model_edit: ! '%{model} была успешно отредактирована'
+      move_real_quantities_success: Количество товара было успешно обновлено
+      new_order: новый заказ создан
       order_refund_dt: ! '#%{id}'
-      save_before: XXX Save before leaving?
-      wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
-        %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
+      save_before: Сохранить перед выходом?
+      wholesaler_upload_report: ! 'Обновленные товары: %{updated_items}, Созданные товары:
+        %{created_items}, Созданные категории: %{created_categories}, Созданные налоговые профили
         %{created_tax_profiles}'
     order_heading: ! 'Заказ #%{id} для %{store}'
     order_number: ! 'Заказ #%{id}'
@@ -770,8 +770,8 @@ ru:
     remember_me: запомнить меня
     report: отчет
     reports:
-      cash_account: XXX
-      daily: XXX
+      cash_account: Количество наличных
+      daily: Ежедневно
     shipments:
       state: Область
     single_words:
@@ -789,7 +789,7 @@ ru:
       loading: загрузка
       new: Новый
       order: заказ
-      ordering: ordering
+      ordering: заказ
       processing: обработка...
       saving: сохранение...
       sku: SKU
