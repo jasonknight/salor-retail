@@ -656,17 +656,12 @@ ru:
       order_must_have_user: You cannot save an order without a User or Employee assigned
         to it.
       order_register_required: You must specify a register for this order
-      order_totals_validation_failed: Order total validation failed, refreshing the
-        order may repair the issue. Press OK to refresh.
-      order_vendor_required: You must supply a vendor for this order
-      parent_sku_must_exist: Parent Item Must Exist!
-      payment_required: ! 'Error 402: Full Payment is Required'
-      payment_required_explanation: We regret to inform you that your system has automatically
-        shutdown as your pre-payment license has run out. You must complete the full
-        payment of Salor to continue benefitting from it. Please contact your Salor
-        technical support representative.
-      sanity_check: Requested action is insane, verify order total and notify customer
-        of correction.
+      order_totals_validation_failed: Общая проверка заказа не прошла. Обновление заказа возможно решит эту проблему. Нажмите OK для обновления.
+      order_vendor_required: Вам нужно указать магазин для этого заказа
+      parent_sku_must_exist: Родительский товар должен существовать!
+      payment_required: ! 'Ошибка 402: Требуется полная оплата'
+      payment_required_explanation: Нам жаль, но ваша система была автоматически выключена, так как ваша ознакомительная лицензия закончилась. Чтобы продолжить пользоваться системой, вам нужно приобрести полную лицензию Salor. Пожалуйста, свяжитесь с вашим представителем технической поддержки.
+      sanity_check: Запрашиваемое действие не имеет смысла. Проверьте заказ и уведомите покупателя об исправлении.
       shipment_item_already_in_stock: Товар %{sku} уже есть на складе
       shipment_item_move_failed: ! 'Товар %{sku} не был перемещен, ошибка: %{error}'
       shipment_item_nil: Item returned from_shipment_item was nil?
