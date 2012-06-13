@@ -388,7 +388,7 @@ ru:
     items: товары
     law_reports: Скачать отчет
     locations: адреса
-    loyalty_cards: карты лояльности cards
+    loyalty_cards: клубные карты
     move_shipment_item: move shipment item
     new_action: new action
     new_broken_item: new broken item
@@ -570,12 +570,12 @@ ru:
     order_receipt:
       change: Change money
       coupon_subtotal: Coupon Subtotal
-      current_loyalty_points: Your loyalty points
+      current_loyalty_points: Ваши очки на клубной карте
       discount: Discount
       discount_subtotal: Discount Subtotal
       given: Given money
       gross: gross
-      lc_points_substracted: Substracted Loyalty Points
+      lc_points_substracted: Вычтеные очки с клубной карты
       net: net
       rebate: Single rebate
       rebate_fixed: Fixed rebate
@@ -677,7 +677,7 @@ ru:
     login: войти
     logout: выйти
     not_you: не вы?
-    owner_mode: РЕЖИМ ВЛАДЕЛЬЦЫ
+    owner_mode: РЕЖИМ ВЛАДЕЛЬЦА
     owner_success: Свойства владельца были успешно обновлены
     payment_external_types: наличные,карта,подарочная карта,другое
     payment_internal_types: Наличными,Банковской Картой,Подарочной картой,Другой кредит
@@ -738,7 +738,7 @@ ru:
     listing: listing
     listing_items: listing items
     locations: адреса
-    loyalty_card: loyalty card
+    loyalty_card: клубная карта
     name: name
     new_item_heading: Новый товар для %{store}
     new_stock_location: Новый адрес склада
