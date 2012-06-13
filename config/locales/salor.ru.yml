@@ -215,8 +215,8 @@ ru:
         one: Налоговый профиль
         other: Налоговые профили
       tender_method:
-        one: МетTender Method
-        other: Tender Methods
+        one: Метод тендера
+        other: Методы тендера
       transaction_tag:
         one: Метка
         other: Метки
@@ -234,7 +234,7 @@ ru:
   cash_registers:
     end_of_day:
       cash_drawer: Кассовый аппарат
-      counted: Counted
+      counted: Посчитано
       difference: Разница
       end_of_day_thermal_report: Печатать отчет
       paper_report: Детальный отчет
@@ -254,7 +254,7 @@ ru:
     exception_in_files: ! 'Ошибка произошла в следующих файлах:'
     oops_an_error_occurred: Ой! Произошла ошибка
   headings:
-    almost_out: almost out
+    almost_out: почти закончился
     bank_machine_types: поддерживаемые банкоматы
     best_sellers: бестселлеры
     best_selling_category: категория-бестселлер
@@ -270,7 +270,7 @@ ru:
     item_selection: выбор товара
     new_discount_for: новая скидка для %{store}
     notes: заметки
-    order_validation: Order Validation
+    order_validation: Подтверждение заказа
     paylife: Paylife(Artema Hybrid)
     shipment_items: товары в поставке
     shipment_types: виды поставок
@@ -283,9 +283,9 @@ ru:
     submit:
       cancel: отменить
       clear: отчистить
-      complete_sale: complete sale
+      complete_sale: завершить продажу
       create: создать
-      get_item: get item
+      get_item: получить товар
       ok: OK
       print: печатать
       save: Сохранить
@@ -293,23 +293,22 @@ ru:
       update: обновить
   home:
     remote_service:
-      connect_ssh: Remote service
+      connect_ssh: Удаленное обслуживание
       connect_vnc: Share screen
       connected: соединен
       disconnected: нет соединения
       host: Сервер
-      not_supported_by_browser: Remote service is not supported by this browser.
+      not_supported_by_browser: Удаленное обслуживание не поддерживается этим браузером.
       password: Пароль
       requesting_connection_status: Запрос статуса соединения ...
-      title: Remote Service
+      title: Удаленное обслуживание
       user: Пользователь
     user_employee_index:
       backup_database: Резервировать базу данных
       backup_logfile: Резервировать лог-файл
   items:
     database_distiller:
-      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you
-        sure you want to proceed?
+      are_you_sure: Все неиспользуемые товары будут удалены. Это действие нельзя будет отменить. Вы уверены, что хотите продолжить?
       delete_unused_items: Удалить неиспользуемые товары !
       hidden: Уже удаленные товары
       hidden_by_distiller: Items deleted by Database Distiller
@@ -317,17 +316,14 @@ ru:
       unused_item_ids: Неиспользуемые товары
       used_item_ids: Используемые товары
     index:
-      database_distiller_warning: Due to the generation of statistics, calling this
-        function will last for about 30 seconds. Proceed anyway?
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items
-        will now be created and updated. This action will take about 20 minutes. Are
-        you really sure that you want to proceed?
+      database_distiller_warning: Из-за рассчета статистики данная функция требует около 30 секунд на выполнение. Продолжить?
+      only_for_tobacco_stores: Это функция только для табачных магазинов. Табачные товары будут созданы и обновлены. Это может занять до 20 минут. Вы действительно хотите продолжить?
     inventory_report:
       price: Цена продажи
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
+      subtotal_purchase_price: Цена покупки для подытога
+      subtotal_selling_price: Цена продажи для подытога
       title: Inventory Report
-      total_buying_price: Sum Purchase Price
+      total_buying_price: Суммарная цена покупSum Purchase Price
       total_selling_price: Sum Selling Price
     show:
       from: от
