@@ -506,26 +506,26 @@ ru:
       OrderRefund: Order Refund
       cash-refunds: Cash-Refunds
       cash_drawer: Cash drawer
-      count_orders: Count of orders
-      drop: drop
-      from: From
-      gross: gross
-      net: net
-      noncash-refunds: Noncash-Refunds
-      payments: Payments
-      payout: payout
-      payouts: payouts
-      revenue: Revenue
-      sales: Sales
-      sum: sum
-      sum_gross: Sum gross
-      sum_net: Sum net
-      sum_transactions: Sum transactions
-      sums_by_category: sums by category
-      sums_by_payment_methods: sums by payment methods
-      sums_by_tax_profile: sums by tax profile
-      time: time
-      title: дневн
+      count_orders: Количество заказов
+      drop: изъять
+      from: От
+      gross: гросс
+      net: чистыми
+      noncash-refunds: Безналичные возвраты
+      payments: Платежи
+      payout: выплата
+      payouts: выплаты
+      revenue: Выручка
+      sales: Продажи
+      sum: сумма
+      sum_gross: Сумма гросс
+      sum_net: Сумма чистыми
+      sum_transactions: Сумма транзакций
+      sums_by_category: суммы по категориям
+      sums_by_payment_methods: суммы по методу оплаты
+      sums_by_tax_profile: суммы по налоговому профилю
+      time: время
+      title: дневной отчет
       to: Кому
       transaction_tag: метка транзакции
       transaction_total: всего за транзакцию
