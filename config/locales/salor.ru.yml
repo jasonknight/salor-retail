@@ -1,67 +1,67 @@
 ---
 ru:
-  ByCard: By Card
-  ByGiftCard: By Gift Card
-  InCash: In Cash
+  ByCard: Картой
+  ByGiftCard: Подарочной картой
+  InCash: Наличными
   activerecord:
     attributes:
-      invoice_blurb: Invoice text
-      invoice_blurb_footer: Invoice text footer
-      active: active
-      address: address
-      afield: field
-      amount: amount
-      amount_remaining: amount remaining
-      amount_type: amount type
-      applies_to: applies to
-      auto_drop: Automatically Begin Day
-      bank_machine_path: ATM
-      base_price: base price
-      behavior: behavior
-      body: body
-      buyback_price: buyback price
-      calculate_part_price: calculate part price
-      calculate_tax: Calculate Tax
-      cash_drawer: cash drawer
-      cash_made: cash made
+      invoice_blurb: Текст счета
+      invoice_blurb_footer: Нижний колонтитул счета
+      active: активный
+      address: адрес
+      afield: поле
+      amount: количество
+      amount_remaining: осталось
+      amount_type: единица измерения
+      applies_to: применяется к
+      auto_drop: Автоматически начать день
+      bank_machine_path: Банкомат
+      base_price: базовая цена
+      behavior: поведение
+      body: тело
+      buyback_price: цена выкупа
+      calculate_part_price: рассчитать частичную цену
+      calculate_tax: Рассчитать налог
+      cash_drawer: касса
+      cash_made: выручено наличными
       cash_register:
-        sticker_printer: Sticker printer
-      category_id: Category
-      cellphone: cell phone
-      child_sku: Child SKU
-      city: city
-      code: code
-      company_name: company name
-      contact_address: contact address
-      contact_email: contact email
-      contact_fax: contact fax
-      contact_person: contact person
-      contact_phone: contact phone
-      country: country
+        sticker_printer: Принтер наклеек
+      category_id: Категория
+      cellphone: мобильный телефон
+      child_sku: SKU наследника
+      city: город
+      code: код
+      company_name: название компании
+      contact_address: контактный адрес
+      contact_email: контактный email
+      contact_fax: контактный факс
+      contact_person: контактное лицо
+      contact_phone: контактный телефон
+      country: страна
       coupon_applies: coupon applies
       coupon_total: coupon total
-      coupon_type: coupon type
-      created_at: Created
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standard text customer screen
-      decimal_points: decimal points
-      default: Default
-      default_buyback: default buyback
-      dollar_per_lp: dollar per loyalty point
-      drop: drop
+      coupon_type: тип купона
+      created_at: Создан
+      csv_imports: Импорт CSV
+      csv_imports_url: URL для импорта CSV
+      customer_screen_blurb: Стандартный текст для экрана покупателя
+      decimal_points: количество разрядов
+      default: По умолчанию
+      default_buyback: выкуп по умолчанию
+      dollar_per_lp: рублей за единицу верности
+      drop: выбросить
       email: email
       employee:
-        uses_drawer_id: Uses drawer of
+        uses_drawer_id: Пользуется кассой как
       end_amount: end amount
       end_date: end date
       eod_show: show at end of day
-      expires_on: expires on
-      first_name: first name
-      height: height
-      hide_buttons: Hide Buttons
-      hide_discounts: Hide Discounts
-      ignore_qty: Ignore Qty
+      expires_on: истекает
+      first_name: имя
+      height: высота
+      hide_buttons: Скрыть кнопки
+      hide_discounts: Скрыть скидки
+      ignore_qty: Игнорировать кол-во
       is_refund: Is Refund?
       is_shipment_item: is shipment item
       item:
@@ -75,19 +75,19 @@ ru:
       letter: Letter
       location_id: location id
       lp_per_dollar: loyalty points per dollar
-      min_quantity: min quantity
+      min_quantity: мин. количество
       must_change_price: Must Change Price
       name: name
-      no_print: Don't Print on Enter
-      notes: notes
-      open_cash_drawer: open cash drawer
-      order_id: order
-      owner_id: Owner
+      no_print: Не печатать при вводе
+      notes: заметки
+      open_cash_drawer: открыть кассу
+      order_id: заказ
+      owner_id: Владелец
       owner_type: Owner Type
       packaging_unit: packaging unit
       pagination: pagination
-      paid: paid
-      parent_sku: Parent SKU
+      paid: заплачено
+      parent_sku: SKU родителя
       part_quantity: part quantity
       parts: parts
       password: password
@@ -95,13 +95,13 @@ ru:
       payout: payout
       points: points
       pole_display: Pole display
-      postalcode: postal code
-      price: price
-      price_by_qty: price by quantity
-      purchase_price: purchase price
-      quantity: quantity
-      quantity_sold: quantity sold
-      real_quantity: real quantity
+      postalcode: почтовый код
+      price: цена
+      price_by_qty: цена за количество
+      purchase_price: цена покупки
+      quantity: количество
+      quantity_sold: всего продано
+      real_quantity: реальное количество
       rebate: rebate
       rebate_type: rebate type
       receipt_blurb: Receipt header
@@ -111,143 +111,143 @@ ru:
       salor_printer: Print Client Side
       scale: scale
       shipment:
-        from: from
+        from: от
         paid: paid
         price: price
         to: to
       shipment_item:
-        name: name
-        quantity: quantity
+        name: наименование
+        quantity: количество
         sku: SKU
-        stock_location_id: Stock location
-      shipper_sku: Shipper SKU
+        stock_location_id: Местоположение склада
+      shipper_sku: SKU отправителя
       sku: SKU
       start_amount: start amount
       start_date: start date
       state: state
-      status: status
-      stock_location_ids: Stock location
-      street1: Address 1
-      street2: Address 2
+      status: статус
+      stock_location_ids: Местоположение склада
+      street1: Адрес 1
+      street2: Адрес 2
       stylesheets: stylesheets
-      subtotal: subtotal
-      tag: tag
-      tax: tax
-      tax_profile_id: tax
-      telephone: telephone
-      the_receiver: the receiver
-      the_shipper: the shipper
-      thermal_printer: Thermal Printer
-      title: title
-      total: total
+      subtotal: подытог
+      tag: метка
+      tax: налог
+      tax_profile_id: налог
+      telephone: телефон
+      the_receiver: получатель
+      the_shipper: отправитель
+      thermal_printer: Термопринтер
+      title: заголовок
+      total: всего
       track_expiry: Track Expiry
-      type: type
+      type: тип
       url: URL
-      username: username
-      uses_drawer_id: Uses Drawer of
-      value: value
-      vendor_id: Vendor
-      vendor_printers: printers
+      username: имя пользователя
+      uses_drawer_id: Использует кассу как
+      value: объем
+      vendor_id: Магазин
+      vendor_printers: принтеры
       weigh_compulsory: compulsory weighing
-      weight: weight
-      when: when
-      width: width
+      weight: вес
+      when: когда
+      width: ширина
     models:
       action:
-        one: Action
-        other: Actions
+        one: Действие
+        other: Действия
       broken_item:
-        one: Broken item
-        other: Broken items
+        one: Некондиционный товар
+        other: Некондиционные товары
       button:
-        one: Button
-        other: Buttons
+        one: Кнопка
+        other: Кнопки
       category:
-        one: Category
-        other: Categories
+        one: Категория
+        other: Категории
       customer:
-        one: Customer
-        other: Customers
+        one: Покупатель
+        other: Покупатели
       discount:
-        one: Discount
-        other: Discounts
+        one: Скидка
+        other: Скидки
       drawer:
-        one: Drawer
-        other: Drawers
+        one: Касса
+        other: Кассы
       drawer_transaction:
-        one: Drawer Transaction
-        other: Drawer Transactions
+        one: Кассовая транзакция
+        other: Кассовые транзакции
       employee:
-        one: Employee
-        other: Employees
+        one: Работник
+        other: Работники
       item:
-        one: Item
-        other: Items
+        one: Товар
+        other: Товары
       item_type:
-        one: Item Type
-        other: Item Types
+        one: Тип товара
+        other: Типы товара
       location:
-        one: Location
-        other: Locations
+        one: Адрес
+        other: Адреса
       order:
-        one: Order
-        other: Orders
+        one: Заказ
+        other: Заказы
       order_item:
         one: Order Item
         other: Order Items
       payment_method:
-        one: Payment Method
-        other: Payment Methods
+        one: Способ оплаты
+        other: Способы оплаты
       shipment:
-        one: Shipment
-        other: Shipments
+        one: Поставка
+        other: Поставки
       shipment_type:
         default_name: Auto Nachbestellung
-        one: Shipment Type
-        other: Shipment Types
+        one: Тип поставки
+        other: Типы поставки
       shipper:
-        one: Shipper
-        other: Shippers
+        one: Поставщик
+        other: Поставщики
       stock_location:
-        one: Stock Location
-        other: Stock Locations
+        one: Адрес склада
+        other: Адреса складов
       tax_profile:
-        one: Tax Profile
-        other: Tax Profiles
+        one: Налоговый профиль
+        other: Налоговые профили
       tender_method:
         one: Tender Method
         other: Tender Methods
       transaction_tag:
-        one: Tag
-        other: Tags
+        one: Метка
+        other: Метки
       vendor:
-        one: Store
-        other: Stores
+        one: Магазин
+        other: Магазины
   api:
-    user_does_not_exist: user does not exist
+    user_does_not_exist: пользователь не существует
   behavior_list:
-    add: add
-    assign: assign
-    divide: divide
-    multiply: multiply
-    subtract: subtract
+    add: добавить
+    assign: назначить
+    divide: разделить
+    multiply: умножить
+    subtract: отнять
   cash_registers:
     end_of_day:
-      cash_drawer: Cash Drawer
+      cash_drawer: Кассовый аппарат
       counted: Counted
-      difference: Difference
-      end_of_day_thermal_report: Print Report
-      paper_report: Detail Report
+      difference: Разница
+      end_of_day_thermal_report: Печатать отчет
+      paper_report: Детальный отчет
   customers:
     show:
-      bought_items: Bought items
-      last_orders: Last orders
-      order_id: Order Number
-      order_total: Order total
+      bought_items: Купленные товары
+      last_orders: Последние заказы
+      order_id: Номер заказа
+      order_total: Всего заказов
       sold_count: sold count
-  delete: Delete
-  edit: Edit
-  end_of_day: End of Day
+  delete: Удалить
+  edit: Редактировать
+  end_of_day: Конец дня
   exception_page:
     assistance_text: Please click on the button "Home" and try again. If the error
       happens again, please call the customer support, and connect your computer to
@@ -258,66 +258,66 @@ ru:
   headings:
     almost_out: almost out
     bank_machine_types: supported bank machines
-    best_sellers: bestsellers
+    best_sellers: бестселлеры
     best_selling_category: best selling category
     best_selling_location: best selling location
-    crd: Time,Amount,Type,Notes
+    crd: Время,Количество,Тип,Заметки
     database_distiller: Database distiller
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
     edit_shipper: edit shipper %{name}
-    employees: employees
-    expiring_soon: expiring soon
-    export: export
+    employees: работники
+    expiring_soon: скоро заканчивается срок годности
+    export: экспорт
     item_selection: item selection
     new_discount_for: new discount for %{store}
-    notes: notes
+    notes: заметки
     order_validation: Order Validation
     paylife: Paylife(Artema Hybrid)
     shipment_items: shipment items
     shipment_types: shipment types
-    shipments: shipments
+    shipments: поставки
     update_location: update location
     update_real_quantity: update real quantity
   helpers:
     select:
       prompt: please select
     submit:
-      cancel: cancel
-      clear: clear
+      cancel: отменить
+      clear: отчистить
       complete_sale: complete sale
-      create: create
+      create: создать
       get_item: get item
       ok: OK
-      print: print
-      save: Save
-      submit: submit
-      update: update
+      print: печатать
+      save: Сохранить
+      submit: отправить
+      update: обновить
   home:
     remote_service:
       connect_ssh: Remote service
       connect_vnc: Share screen
-      connected: connected
-      disconnected: disconnected
-      host: Server
+      connected: соединен
+      disconnected: нет соединения
+      host: Сервер
       not_supported_by_browser: Remote service is not supported by this browser.
-      password: Password
-      requesting_connection_status: Requesting connection status ...
+      password: Пароль
+      requesting_connection_status: Запрос статуса соединения ...
       title: Remote Service
-      user: User
+      user: Пользователь
     user_employee_index:
-      backup_database: Backup Database
-      backup_logfile: Backup Logfile
+      backup_database: Резервировать базу данных
+      backup_logfile: Резервировать лог-файл
   items:
     database_distiller:
       are_you_sure: All unused Items will be deleted. This cannot be undone. Are you
         sure you want to proceed?
-      delete_unused_items: Delete unused Items!
-      hidden: Already deleted Items
+      delete_unused_items: Удалить неиспользуемые товары !
+      hidden: Уже удаленные товары
       hidden_by_distiller: Items deleted by Database Distiller
-      relevant_item_ids: Items relevant for deletion
-      unused_item_ids: Unused Items
-      used_item_ids: Used Items
+      relevant_item_ids: Товары подлежащие удалению
+      unused_item_ids: Неиспользуемые товары
+      used_item_ids: Используемые товары
     index:
       database_distiller_warning: Due to the generation of statistics, calling this
         function will last for about 30 seconds. Proceed anyway?
@@ -325,17 +325,17 @@ ru:
         will now be created and updated. This action will take about 20 minutes. Are
         you really sure that you want to proceed?
     inventory_report:
-      price: Selling price
+      price: Цена продажи
       subtotal_purchase_price: Subtotal Purchase Price
       subtotal_selling_price: Subtotal Selling Price
       title: Inventory Report
       total_buying_price: Sum Purchase Price
       total_selling_price: Sum Selling Price
     show:
-      from: from
+      from: от
       quantity_sold: Sold quantity
-      query: Query!
-      to: to
+      query: Запрос!
+      to: кому
     update_real_quantity:
       are_you_sure: This will copy the inventory quantities into the database and
         reset the inventory report. Continue?
@@ -349,50 +349,50 @@ ru:
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
     additional: additional
-    back: back
+    back: назад
     broken_items: broken items
-    buttons: buttons
-    buy_order: Buy
-    cameras: cameras
+    buttons: кнопки
+    buy_order: Купить
+    cameras: камеры
     cancel: cancel
     cash_drop: cash drop
-    cash_register: cash register
-    cash_registers: cash registers
-    categories: categories
-    clear_order: Clear
-    configuration: Config.
-    contact: contact
-    current_order: ! 'current order: #%{id}'
-    customer: customer
-    customers: customers
-    database_distiller: Database Distiller
-    delete: delete
-    delete_confirm: Are you sure?
-    destroy: destroy
-    discounts: discounts
-    done: done
-    download: download
-    edit: edit
-    edit_cash_register: edit cash register
-    edit_category: edit category
-    edit_customer: edit customer
-    edit_discount: edit discount
-    edit_employee: edit employee
-    edit_item: edit item
-    edit_location: edit location
-    edit_shipment: edit shipment
-    edit_shipment_type: edit shipment type
-    edit_shipper: edit shipper %{name}
-    edit_tax_profile: edit tax profile
+    cash_register: кассовый аппарат
+    cash_registers: кассовые аппараты
+    categories: категории
+    clear_order: Отчистить
+    configuration: Конфиг.
+    contact: контакт
+    current_order: ! 'текущий заказ: #%{id}'
+    customer: покупатель
+    customers: покупатели
+    database_distiller: Отчистка базы данных
+    delete: удалить
+    delete_confirm: Вы уверены?
+    destroy: уничтожить
+    discounts: скидки
+    done: готово
+    download: скачать
+    edit: редактировать
+    edit_cash_register: редактировать кассовый аппарат
+    edit_category: редактировать категорию
+    edit_customer: редактировать покупателя
+    edit_discount: редактировать скидку
+    edit_employee: редактировать работника
+    edit_item: редактировать товар
+    edit_location: редактировать местоположение
+    edit_shipment: редактировать поставку
+    edit_shipment_type: редактировать тип поставки
+    edit_shipper: редактировать поставщика %{name}
+    edit_tax_profile: редактировать налоговый профиль
     edit_tender_method: edit tender method
     edit_vendor: edit vendor
-    employees: employees
-    end_day: end day
-    general_configuration: general configuration
-    home: home
-    inventory_report: Inventory report
-    item_types: item types
-    items: items
+    employees: работники
+    end_day: конец дня
+    general_configuration: основные настройки
+    home: домой
+    inventory_report: Отчет по товарам
+    item_types: типы товаров
+    items: товары
     law_reports: Report Download
     locations: locations
     loyalty_cards: loyalty cards
@@ -414,14 +414,14 @@ ru:
     new_stock_location: new stock location
     new_tax_profile: new tax profile
     new_tender_method: new tender method
-    new_vendor: new vendor
+    new_vendor: новый магазин
     ok: OK
-    order: order
+    order: заказ
     orders: orders
     overview: overview
-    points: points
+    points: очки
     pos: POS
-    print: print
+    print: печатать
     remote_service: Remote Service
     reorder: reorder
     report: report
@@ -731,21 +731,21 @@ ru:
       search: search
       shipment:
         types:
-          canceled: canceled
-          complete: complete
-          in_stock: in stock
-          new: new
-          returned: returned
-          shipped: shipped
-    gift_card: gift card
+          canceled: отменена 
+          complete: завершена
+          in_stock: на складе
+          new: новая
+          returned: возращена
+          shipped: доставлена
+    gift_card: подарочная карта
     gift_card_amount: gift card amount
     given: given
-    in_cash: in cash
-    item: item
-    language: language
+    in_cash: наличными
+    item: товар
+    language: язык
     listing: listing
     listing_items: listing items
-    locations: locations
+    locations: адреса
     loyalty_card: loyalty card
     name: name
     new_item_heading: New item for %{store}
@@ -765,59 +765,58 @@ ru:
     order_heading: ! 'Order #%{id} for %{store}'
     order_number: ! 'Order #%{id}'
     pagination:
-      last: last
-      next: next &gt;
-      previous: ! '&lt; previous'
+      last: последняя
+      next: следуящая &gt;
+      previous: ! '&lt; предыдущая'
       truncate: ! '...'
-    password: password
-    password_confirm: confirm password
-    please_test_before_upload: ! 'WARNING: You are about to overwrite data in the
-      database.'
-    price: price
-    quantity: quantity
-    rebate: rebate
-    remember_me: remember me
-    report: report
+    password: пароль
+    password_confirm: подтвердите пароль
+    please_test_before_upload: ! 'ВНИМАНИЕ: Вы собираетесь перезаписать информацию в базе данных.'
+    price: цена
+    quantity: количество
+    rebate: вычет
+    remember_me: запомнить меня
+    report: отчет
     reports:
       cash_account: XXX
       daily: XXX
     shipments:
-      state: State
+      state: Область
     single_words:
-      all: All
-      body: body
-      bottom: bottom
-      camera: camera
-      continue: continue
-      coupons: Coupons
-      delete: delete
-      destroy: destroy
-      download: download
-      edit: edit
-      from: from
-      loading: loading
-      new: New
-      order: order
+      all: Все
+      body: тело
+      bottom: низ
+      camera: камера
+      continue: продолжить
+      coupons: Купоны
+      delete: удалить
+      destroy: уничтожить
+      download: скачать
+      edit: редактировать
+      from: от
+      loading: загрузка
+      new: Новый
+      order: заказ
       ordering: ordering
-      processing: processing...
-      saving: saving...
+      processing: обработка...
+      saving: сохранение...
       sku: SKU
-      title: title
-      to: to
-      top: top
-      waiting: waiting...
-    sticky_ticket: Sticky label
-    stock_locations: stock_locations
-    subtotal: subtotal
-    tax_profile: tax profile
-    three_easy_ways: three easy ways
-    total: total
-    username: username
-    vendor: vendor
-    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
+      title: заголовок
+      to: кому
+      top: верх
+      waiting: ожидание...
+    sticky_ticket: Наклейка
+    stock_locations: адреса складов
+    subtotal: подытог
+    tax_profile: налоговый профиль
+    three_easy_ways: три простых способа
+    total: всего
+    username: имя пользователя
+    vendor: магазин
+    wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять несколько минут.
   when_list:
     add_to_order: on add to order
-    always: always
-    on_export: on export
-    on_import: on import
-    on_save: on save
+    always: всегда
+    on_export: при экспорте
+    on_import: при импорте
+    on_save: при сохранении

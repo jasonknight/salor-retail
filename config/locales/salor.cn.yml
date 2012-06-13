@@ -546,18 +546,18 @@ cn:
       advert: ! '銷售創新點
 
         www.salorpos.com'
-      cancel: 取消                  EUR %8.2f
-      change: ! '零錢:                       EUR %8.2f'
-      coupon_subtotal: 優惠券                   EUR %8.2f
-      discount_subtotal: 折扣                       EUR %8.2f
-      end_of_day: ! '%20.20s EUR %5.2f'
-      fixed_rebate: 回扣                         EUR %8.2f
+      cancel: 取消                  CNY %8.2f
+      change: ! '零錢:                       CNY %8.2f'
+      coupon_subtotal: 優惠券                   CNY %8.2f
+      discount_subtotal: 折扣                       CNY %8.2f
+      end_of_day: ! '%20.20s CNY %5.2f'
+      fixed_rebate: 回扣                         CNY %8.2f
       item: ! '%c %20.20s %7.2f %3u %7.2f'
-      rebate_amount: 回扣 %4.2f%%                 EUR %8.2f
-      rebate_subtotal: 回扣總計                  EUR %8.2f
-      subtotal: 小計                      EUR %8.2f
+      rebate_amount: 回扣 %4.2f%%                 CNY %8.2f
+      rebate_subtotal: 回扣總計                  CNY %8.2f
+      subtotal: 小計                      CNY %8.2f
       thanks: 感謝您與我們購物！
-      total: 總計                         EUR %8.2f
+      total: 總計                         CNY %8.2f
     order_receipt:
       change: 換錢
       coupon_subtotal: 優惠券小計
@@ -728,6 +728,7 @@ cn:
       move_real_quantities_success: 產品數量已成功更新了
       new_order: 新訂單創建了
       order_refund_dt: ! '#%{id}'
+      please_backup: "Please, backup your system regularly!"
       save_before: 儲存在離開之前?
       wholesaler_upload_report: ! '更新的項目: %{updated_items}, 創建的項目:
         %{created_items}, 創建的類: %{created_categories}, 創建的稅務信息

@@ -537,7 +537,15 @@ class VendorsController < ApplicationController
     @vendor = Vendor.find(params[:id])
     render :layout => 'customer_display'
   end
-
+  def backup
+    dbconfig = YAML::load(File.open('config/database.yml'))
+    mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+    username = dbconfig[mode]['username']
+    password = dbconfig[mode]['password']
+    database = dbconfig[mode]['database']
+    `mysqldump -u #{username} -p#{password} #{database} > #{params[:path]}/salor-#{Time.now.strftime("%Y-%m-%d")}.sql`
+    `cp -f #{Rails.root.to_s}/log/production.log #{params[:path]}/production-#{Time.now.strftime("%Y-%m-%d")}.log`
+  end
 
   # Employee Editing Functions
   private
