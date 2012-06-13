@@ -92,8 +92,8 @@ ru:
       parts: части
       password: пароль
       paylife: Paylife
-      payout: payout
-      points: points
+      payout: выплата
+      points: очки
       pole_display: Pole display
       postalcode: почтовый код
       price: цена
@@ -104,17 +104,17 @@ ru:
       real_quantity: реальное количество
       rebate: rebate
       rebate_type: rebate type
-      receipt_blurb: Receipt header
-      receipt_blurb_footer: Receipt footer
+      receipt_blurb: Заголовок квитанции
+      receipt_blurb_footer: Нижний колонтитул квитанции
       reorder_type: Reorder Type
-      sales_metric: sales metric
-      salor_printer: Print Client Side
+      sales_metric: метрика продаж
+      salor_printer: Печатать у клиента
       scale: scale
       shipment:
         from: от
-        paid: paid
-        price: price
-        to: to
+        paid: оплачено
+        price: цена
+        to: кому
       shipment_item:
         name: наименование
         quantity: количество
@@ -122,8 +122,8 @@ ru:
         stock_location_id: Местоположение склада
       shipper_sku: SKU отправителя
       sku: SKU
-      start_amount: start amount
-      start_date: start date
+      start_amount: начальное количество
+      start_date: начальная дата
       state: state
       status: статус
       stock_location_ids: Адрес склада
@@ -193,8 +193,8 @@ ru:
         one: Заказ
         other: Заказы
       order_item:
-        one: Order Item
-        other: Order Items
+        one: Товар в заказе
+        other: Товары в заказе
       payment_method:
         one: Способ оплаты
         other: Способы оплаты
@@ -215,7 +215,7 @@ ru:
         one: Налоговый профиль
         other: Налоговые профили
       tender_method:
-        one: Tender Method
+        one: МетTender Method
         other: Tender Methods
       transaction_tag:
         one: Метка
@@ -249,39 +249,37 @@ ru:
   edit: Редактировать
   end_of_day: Конец дня
   exception_page:
-    assistance_text: Пожалуйста, нажмите кнопку "Домой" и попробуйте снова. Если ошибка повторится, свяжитесь со службой поддержки и активируйте удаленное обслуживание с помощью кнопки "Удаленное обслуживание". Мы  Please click on the button "Home" and try again. If the error
-      happens again, please call the customer support, and connect your computer to
-      the Remote Service with the button "Remote Service". We will help you immediately.
-    exception_description: ! 'Error description:'
-    exception_in_files: ! 'The Error occurred in the following files:'
-    oops_an_error_occurred: Oops! An Error occurred
+    assistance_text: Пожалуйста, нажмите кнопку "Домой" и попробуйте снова. Если ошибка повторится, свяжитесь со службой поддержки и активируйте удаленное обслуживание с помощью кнопки "Удаленное обслуживание". Мы незамедлительно вам поможем.
+    exception_description: ! 'Описание ошибки:'
+    exception_in_files: ! 'Ошибка произошла в следующих файлах:'
+    oops_an_error_occurred: Ой! Произошла ошибка
   headings:
     almost_out: almost out
-    bank_machine_types: supported bank machines
+    bank_machine_types: поддерживаемые банкоматы
     best_sellers: бестселлеры
-    best_selling_category: best selling category
-    best_selling_location: best selling location
+    best_selling_category: категория-бестселлер
+    best_selling_location: адрес-бестселлер
     crd: Время,Количество,Тип,Заметки
-    database_distiller: Database distiller
+    database_distiller: Отчистка базы данных
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
-    edit_shipper: edit shipper %{name}
+    edit_shipper: редактировать поставщика %{name}
     employees: работники
     expiring_soon: скоро заканчивается срок годности
     export: экспорт
-    item_selection: item selection
-    new_discount_for: new discount for %{store}
+    item_selection: выбор товара
+    new_discount_for: новая скидка для %{store}
     notes: заметки
     order_validation: Order Validation
     paylife: Paylife(Artema Hybrid)
-    shipment_items: shipment items
-    shipment_types: shipment types
+    shipment_items: товары в поставке
+    shipment_types: виды поставок
     shipments: поставки
-    update_location: update location
-    update_real_quantity: update real quantity
+    update_location: обновить адрес
+    update_real_quantity: обновить реальное количество
   helpers:
     select:
-      prompt: please select
+      prompt: выберете пожалуйста
     submit:
       cancel: отменить
       clear: отчистить
