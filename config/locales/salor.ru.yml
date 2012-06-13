@@ -415,8 +415,8 @@ ru:
     points: очки
     pos: Терминал
     print: печатать
-    remote_service: Remote Service
-    reorder: reorder
+    remote_service: Удаленное обслуживание
+    reorder: повторить заказ
     report: отчет
     report_day: отчет за день
     report_day_range: отчет за месяц
@@ -425,32 +425,32 @@ ru:
     salorlive: Salor Live!
     salortrainer: Salor Trainer
     search: поиск
-    shipment_types: shipment types
-    shipments: shipments
-    shippers: shippers
+    shipment_types: типы поставок
+    shipments: поставки
+    shippers: поставщики
     show: показать
     split: разбить
     stock_locations: адреса складов
     support: поддержка
-    tax_profiles: tax profiles
-    tender_methods: tender methods
-    transaction_tags: transaction tags
-    update_gift_card: update gift card
-    update_location: update location
-    update_real_quantity: update real quantity
-    upload: upload
+    tax_profiles: налоговые профили
+    tender_methods: методы тендеров
+    transaction_tags: метки транзакций
+    update_gift_card: обновить подарочную карту
+    update_location: обновить адрес
+    update_real_quantity: обновить действительное количество
+    upload: загрузить
     usb_device: устройство USB
-    vendors: vendors
+    vendors: магазины
     void: пусто
-    wholesaler_update: wholesaler update
+    wholesaler_update: обновление оптового поставщика
   notifications:
-    shipments_item_could_not_be_saved: shipments item could not be saved
-    shipments_move_all_items: all items were successfully moved
-    shipments_move_item: item was successfully moved
+    shipments_item_could_not_be_saved: товар поставки не может быть сохранен
+    shipments_move_all_items: все товары были успешно перемещёны
+    shipments_move_item: товар был успешно перемещён
   orders:
     report:
-      display: display
-      end_date: end date
+      display: показать
+      end_date: конечная дата
       gross: gross
       net: net
       points: points
