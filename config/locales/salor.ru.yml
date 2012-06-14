@@ -595,14 +595,14 @@ ru:
       sold: sold
   receipts:
     invoice: Rechnung
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
+    invoice_numer_X_at_time: Заказ № %{number} от %{datetime}
   reports:
     amount: количество
     description: описание
     item_zero: Распроданные товары
-    tax_class: tax class
+    tax_class: класс налога
     total: всего
-    unit_price: unit price
+    unit_price: цена за единицу
   roles:
     cashier: кассир
     manager: менеджер
@@ -611,7 +611,7 @@ ru:
     index:
       report: Отчет
     show:
-      purchase_price_sum: Purchase price sum
+      purchase_price_sum: Сумма покупки
   sticker: наклейка
   support: XXX
   system:
@@ -623,14 +623,12 @@ ru:
       auto_drop_failed: Система не смогла выполнить автоматическое изъятие наличных. Пожалуйста, создайте начало дня изъятия наличных вручную.
       cannot_edit_completed_order: Этот заказ выполнен и не может быть изменён.
       cannot_reorder: No items must be reordered.
-      child_sku_must_exist: Child Item Must Exist!
-      coupon_cannot_be_buy_one_get_one: coupon %{sku} cannot be_buy_one_get_one when
-        applied to %{applies}
-      coupon_not_enough_items: You have not purchased enough items for this to apply
+      child_sku_must_exist: Товар-наследник должен существовать!
+      coupon_cannot_be_buy_one_get_one: купон %{sku} не может be_buy_one_get_one когда применяется к %{applies}
+      coupon_not_enough_items: Вы приобрели недостаточно товаров, чтобы применить это
       csv_item_exists: Товар %{sku} существует!
       csv_item_failed: ! '%{id} %{i} failed.'
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
-        dass Set-Items existieren.
+      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
       gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту.
       gs1_item_not_found: Товар помечен как gs1, но %{sku} не соответствует формату.
       insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
