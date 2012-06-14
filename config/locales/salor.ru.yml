@@ -39,7 +39,7 @@ ru:
       contact_phone: контактный телефон
       country: страна
       coupon_applies: применим купон
-      coupon_total: всего по купонам
+      coupon_total: итого по купонам
       coupon_type: тип купона
       created_at: Создан
       csv_imports: Импорт CSV
@@ -49,7 +49,7 @@ ru:
       default: По умолчанию
       default_buyback: выкуп по умолчанию
       dollar_per_lp: рублей за единицу бонуса
-      drop: внести
+      drop: внесение
       email: email
       employee:
         uses_drawer_id: Пользуется кассой как
@@ -139,7 +139,7 @@ ru:
       the_shipper: отправитель
       thermal_printer: Термопринтер
       title: заголовок
-      total: всего
+      total: итого
       track_expiry: Следить за сроком годности
       type: тип
       url: URL
@@ -457,7 +457,7 @@ ru:
       rebate: скидка
       start_date: начальная дата
       sum: сумма
-      sum_total: всего
+      sum_total: итого
       title: Суммы
     report_day:
       None: Не указан
@@ -466,7 +466,7 @@ ru:
       cash-refunds: Возвраты наличными
       cash_drawer: Касса
       count_orders: Количество заказов
-      drop: внести
+      drop: внесение
       from: От
       gross: гросс
       net: чистыми
@@ -487,7 +487,7 @@ ru:
       title: отчет за день
       to: Кому
       transaction_tag: метка транзакции
-      transaction_total: всего за транзакцию
+      transaction_total: итого за транзакцию
       transactions: транзакции
     report_day_range:
       display: показать
@@ -528,7 +528,7 @@ ru:
       title: дневной отчет
       to: Кому
       transaction_tag: метка транзакции
-      transaction_total: всего за транзакцию
+      transaction_total: итого за транзакцию
       transactions: транзакции
   printr:
     eod_report:
@@ -537,17 +537,17 @@ ru:
       OrderRefund: Возврат заказа
       calculated_drawer_amount: Рассчитанный кассовый баланс
       cash-refunds: Возвраты наличными
-      cash_refunds_total: ВСЕГО
+      cash_refunds_total: ИТОГО
       noncash-refunds: Безналичные возвраты
       orders_total: Всего заказов
-      payment_method_total: ВСЕГО
+      payment_method_total: ИТОГО
       payments: Платежи
       refund: Возврат
       revenue: Выручка
-      revenue_total: ВСЕГО
+      revenue_total: ИТОГО
       sales: Продажи
       system_drawer_amount: Баланс системной кассы
-      transaction_total: ВСЕГО
+      transaction_total: ИТОГО
       warning_drawer_amount_not_zero: Внимание! Ваш кассовый баланс отличен от нуля. Рекомендуется заканчивать и начинать каждый день с нулевым балансом для упрощения бухгалтерских расчетов. Сделайте выплату наличных в соответствии с балансом и напечатайте отчет снова.
     formats:
       advert: ! 'Инновационная точка продаж www.salorpos.com'
@@ -559,10 +559,10 @@ ru:
       fixed_rebate: Скидка                         РУБ %8.2f
       item: ! '%c %20.20s %7.2f %3u %7.2f'
       rebate_amount: Скидка %4.2f%%                 РУБ %8.2f
-      rebate_subtotal: Скидка всего                  РУБ %8.2f
+      rebate_subtotal: Итого скидка                  РУБ %8.2f
       subtotal: Подытог                      РУБ %8.2f
       thanks: Спасибо за покупку!
-      total: ВСЕГО                         РУБ %8.2f
+      total: ИТОГО                         РУБ %8.2f
     order_receipt:
       change: Сдача
       coupon_subtotal: Подытог по купонам
@@ -577,9 +577,9 @@ ru:
       rebate_fixed: Фиксированная скидка
       rebate_percent: Процент скидкок
       rebate_subtotal: Подытог по скидкам
-      refund: Всего возвращено
+      refund: Итого возвращено
       refunded: ВОЗВРАЩЕНО
-      subsubtotal: ВСЕГО
+      subsubtotal: ИТОГО
       subtotal1: Подытог
       subtotal2: Подытог
       subtotal3: Подытог
@@ -597,7 +597,7 @@ ru:
     description: описание
     item_zero: Распроданные товары
     tax_class: класс налога
-    total: всего
+    total: итого
     unit_price: цена за единицу
   roles:
     cashier: кассир
@@ -637,7 +637,7 @@ ru:
       must_choose_register: Вы должны авторизоваться в кассовом аппарате!
       must_choose_vendor: Вам нужно выбрать магазин!
       must_set_receiver_to_vendor: В поле получателя для этой доставки нужно указать существующий магазин.
-      must_specify_drop_or_payout: Вы должны выбрать изъятие или выплату!
+      must_specify_drop_or_payout: Вы должны выбрать внесение или выплату!
       no_class: Нет класса для %{model} на строке %{i}
       no_role: У вас недостаточно прав для доступа к этому ресурсу.
       no_such_item: Товар с таким SKU не найден.
@@ -786,7 +786,7 @@ ru:
     subtotal: подытог
     tax_profile: налоговый профиль
     three_easy_ways: три простых способа
-    total: всего
+    total: итого
     username: имя пользователя
     vendor: магазин
     wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять несколько минут.
