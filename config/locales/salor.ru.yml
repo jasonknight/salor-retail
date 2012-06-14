@@ -202,7 +202,7 @@ ru:
         one: Поставка
         other: Поставки
       shipment_type:
-        default_name: Поставка по умолчанию
+        default_name: Автоповтор заказа
         one: Тип поставки
         other: Типы поставки
       shipper:
@@ -215,8 +215,8 @@ ru:
         one: Налоговый профиль
         other: Налоговые профили
       tender_method:
-        one: Способ оплаты
-        other: Способы оплаты
+        one: Метод тендера
+        other: Методы тендера
       transaction_tag:
         one: Метка
         other: Метки
@@ -377,7 +377,7 @@ ru:
     edit_shipment_type: редактировать тип поставки
     edit_shipper: редактировать поставщика %{name}
     edit_tax_profile: редактировать налоговый профиль
-    edit_tender_method: редактировать способ оплаты
+    edit_tender_method: редактировать метод тендера
     edit_vendor: редактировать магазин
     employees: работники
     end_day: конец дня
@@ -406,7 +406,7 @@ ru:
     new_shipper: новый поставщик
     new_stock_location: новое расположение склада
     new_tax_profile: новый налоговый профиль
-    new_tender_method: новый способ оплаты
+    new_tender_method: новый метод тендеров
     new_vendor: новый магазин
     ok: OK
     order: заказ
@@ -433,7 +433,7 @@ ru:
     stock_locations: расположения складов
     support: поддержка
     tax_profiles: налоговые профили
-    tender_methods: способы оплаты
+    tender_methods: методы тендеров
     transaction_tags: метки транзакций
     update_gift_card: обновить подарочную карту
     update_location: обновить отдел
@@ -628,7 +628,7 @@ ru:
       coupon_not_enough_items: Вы приобрели недостаточно товаров, чтобы применить это
       csv_item_exists: Товар %{sku} существует!
       csv_item_failed: ! '%{id} %{i} failed.'
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
+      failed_to_save_parts: Невозможно сохранить комплект. Убедитесь, что выбранные товары существуют.
       gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту.
       gs1_item_not_found: Товар помечен как gs1, но %{sku} не соответствует формату.
       insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
