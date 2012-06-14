@@ -202,7 +202,7 @@ ru:
         one: Поставка
         other: Поставки
       shipment_type:
-        default_name: Поставка по умолчанию
+        default_name: Автоповтор заказа
         one: Тип поставки
         other: Типы поставки
       shipper:
@@ -628,7 +628,7 @@ ru:
       coupon_not_enough_items: Вы приобрели недостаточно товаров, чтобы применить это
       csv_item_exists: Товар %{sku} существует!
       csv_item_failed: ! '%{id} %{i} failed.'
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
+      failed_to_save_parts: Невозможно сохранить комплект. Убедитесь, что выбранные товары существуют.
       gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту.
       gs1_item_not_found: Товар помечен как gs1, но %{sku} не соответствует формату.
       insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
