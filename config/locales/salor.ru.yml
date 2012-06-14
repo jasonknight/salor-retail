@@ -294,7 +294,7 @@ ru:
   home:
     remote_service:
       connect_ssh: Удаленное обслуживание
-      connect_vnc: Share screen
+      connect_vnc: Разрешить удаленное управление
       connected: соединен
       disconnected: нет соединения
       host: Сервер
