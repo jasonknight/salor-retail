@@ -48,7 +48,7 @@ ru:
       decimal_points: количество разрядов
       default: По умолчанию
       default_buyback: выкуп по умолчанию
-      dollar_per_lp: рублей за единицу лояльности
+      dollar_per_lp: рублей за единицу бонуса
       drop: внести
       email: email
       employee:
@@ -70,7 +70,7 @@ ru:
       item_sku: SKU товара
       itemsviewlist: Товары в виде списка
       last_name: фамилия
-      lc_points: очки карты лояльности
+      lc_points: очки бонусной карты
       length: длина
       letter: Письмо
       location_id: Отдел
@@ -388,7 +388,7 @@ ru:
     items: товары
     law_reports: Скачать отчет
     locations: отделы
-    loyalty_cards: клубные карты
+    loyalty_cards: бонусные карты
     move_shipment_item: новый поставляемый товар
     new_action: новое действие
     new_broken_item: новый некондиционный товар
@@ -466,7 +466,7 @@ ru:
       cash-refunds: Возвраты наличными
       cash_drawer: Касса
       count_orders: Количество заказов
-      drop: изъять
+      drop: внести
       from: От
       gross: гросс
       net: чистыми
@@ -507,7 +507,7 @@ ru:
       cash-refunds: Возвраты наличными
       cash_drawer: Касса
       count_orders: Количество заказов
-      drop: изъять
+      drop: внесение
       from: От
       gross: гросс
       net: чистыми
@@ -566,12 +566,12 @@ ru:
     order_receipt:
       change: Сдача
       coupon_subtotal: Подытог по купонам
-      current_loyalty_points: Ваши очки на клубной карте
+      current_loyalty_points: Ваши очки на бонусной карте
       discount: Скидка
       discount_subtotal: Подытог по скидкам
       given: Отдано
       gross: гросс
-      lc_points_substracted: Вычтеные очки с клубной карты
+      lc_points_substracted: Вычтеные очки с бонусной карты
       net: сеть
       rebate: Единичная скидка
       rebate_fixed: Фиксированная скидка
@@ -632,7 +632,7 @@ ru:
       item_not_found: Товар, который вы ищете не найден, поискать?
       item_price_is_zero: ! 'Внимание: Нулевая цена товара!'
       limited_alphabet: Разрешены только буквы a-z. Никаких пробелов или букв в верхнем регистре.
-      lp_calculation_failed: Ошибка при применении очков клубной карты. Вы уверены, что добавили их в настройке магазина?
+      lp_calculation_failed: Ошибка при применении очков бонусной карты. Вы уверены, что добавили их в настройке магазина?
       must_cash_drop: В вашей кассе нет денег. Пожалуйста, внесите наличные!
       must_choose_register: Вы должны авторизоваться в кассовом аппарате!
       must_choose_vendor: Вам нужно выбрать магазин!
@@ -722,7 +722,7 @@ ru:
     listing: список
     listing_items: товары в списке
     locations: отделы
-    loyalty_card: клубная карта
+    loyalty_card: бонусная карта
     name: название
     new_item_heading: Новый товар для %{store}
     new_stock_location: Новое расположение склада
