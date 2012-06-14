@@ -20,7 +20,7 @@ ru:
       behavior: поведение
       body: тело
       buyback_price: цена выкупа
-      calculate_part_price: рассчитать цену части
+      calculate_part_price: рассчитать цену комплекта
       calculate_tax: Рассчитать налог
       cash_drawer: касса
       cash_made: выручено наличными
@@ -89,12 +89,12 @@ ru:
       paid: оплачено
       parent_sku: SKU родителя
       part_quantity: количество частей
-      parts: части
+      parts: комплект
       password: пароль
       paylife: Paylife
       payout: выплата
       points: очки
-      pole_display: Pole display
+      pole_display: Кассовый дисплей
       postalcode: почтовый код
       price: цена
       price_by_qty: цена за количество
@@ -705,7 +705,7 @@ ru:
       manager: Менеджер
       no_change: без изменений
       notes: заметки
-      parts: части
+      parts: комплект
       percent_off: ! '% минус'
       roles: роли
       search: поиск
