@@ -20,7 +20,7 @@ ru:
       behavior: поведение
       body: тело
       buyback_price: цена выкупа
-      calculate_part_price: рассчитать частичную цену
+      calculate_part_price: рассчитать цену комплекта
       calculate_tax: Рассчитать налог
       cash_drawer: касса
       cash_made: выручено наличными
@@ -38,8 +38,8 @@ ru:
       contact_person: контактное лицо
       contact_phone: контактный телефон
       country: страна
-      coupon_applies: coupon applies
-      coupon_total: coupon total
+      coupon_applies: применим купон
+      coupon_total: итого по купонам
       coupon_type: тип купона
       created_at: Создан
       csv_imports: Импорт CSV
@@ -48,53 +48,53 @@ ru:
       decimal_points: количество разрядов
       default: По умолчанию
       default_buyback: выкуп по умолчанию
-      dollar_per_lp: рублей за единицу верности
-      drop: выбросить
+      dollar_per_lp: рублей за единицу бонуса
+      drop: внесение
       email: email
       employee:
         uses_drawer_id: Пользуется кассой как
-      end_amount: end amount
-      end_date: end date
-      eod_show: show at end of day
+      end_amount: конечное количество
+      end_date: конечная дата
+      eod_show: показывать в конце дня
       expires_on: истекает
       first_name: имя
       height: высота
       hide_buttons: Скрыть кнопки
       hide_discounts: Скрыть скидки
       ignore_qty: Игнорировать кол-во
-      is_refund: Is Refund?
-      is_shipment_item: is shipment item
+      is_refund: Это возврат ?
+      is_shipment_item: товар из поставки
       item:
-        purchase_price: Purchase Price
-        quantity: Quantity
-      item_sku: item sku
-      itemsviewlist: List View for Items
-      last_name: last name
-      lc_points: loyalty card points
-      length: length
-      letter: Letter
-      location_id: location id
-      lp_per_dollar: loyalty points per dollar
+        purchase_price: Цена закупки
+        quantity: Количество
+      item_sku: SKU товара
+      itemsviewlist: Товары в виде списка
+      last_name: фамилия
+      lc_points: очки бонусной карты
+      length: длина
+      letter: Письмо
+      location_id: Отдел
+      lp_per_dollar: бонусных очков за рубль
       min_quantity: мин. количество
-      must_change_price: Must Change Price
-      name: name
+      must_change_price: Нужно изменить цену
+      name: имя
       no_print: Не печатать при вводе
       notes: заметки
       open_cash_drawer: открыть кассу
       order_id: заказ
       owner_id: Владелец
-      owner_type: Owner Type
-      packaging_unit: packaging unit
-      pagination: pagination
-      paid: заплачено
+      owner_type: Тип владельца
+      packaging_unit: упаковочная единица
+      pagination: нумерация страниц
+      paid: оплачено
       parent_sku: SKU родителя
-      part_quantity: part quantity
-      parts: parts
-      password: password
+      part_quantity: количество частей
+      parts: комплект
+      password: пароль
       paylife: Paylife
-      payout: payout
-      points: points
-      pole_display: Pole display
+      payout: выплата
+      points: очки
+      pole_display: Кассовый дисплей
       postalcode: почтовый код
       price: цена
       price_by_qty: цена за количество
@@ -102,34 +102,34 @@ ru:
       quantity: количество
       quantity_sold: всего продано
       real_quantity: реальное количество
-      rebate: rebate
-      rebate_type: rebate type
-      receipt_blurb: Receipt header
-      receipt_blurb_footer: Receipt footer
-      reorder_type: Reorder Type
-      sales_metric: sales metric
-      salor_printer: Print Client Side
-      scale: scale
+      rebate: скидка
+      rebate_type: тип скидки
+      receipt_blurb: Заголовок квитанции
+      receipt_blurb_footer: Нижний колонтитул квитанции
+      reorder_type: Тип повторного заказа
+      sales_metric: метрика продаж
+      salor_printer: Печатать у клиента
+      scale: размер
       shipment:
         from: от
-        paid: paid
-        price: price
-        to: to
+        paid: оплачено
+        price: цена
+        to: кому
       shipment_item:
         name: наименование
         quantity: количество
         sku: SKU
-        stock_location_id: Местоположение склада
+        stock_location_id: Расположение склада
       shipper_sku: SKU отправителя
       sku: SKU
-      start_amount: start amount
-      start_date: start date
-      state: state
+      start_amount: начальное количество
+      start_date: начальная дата
+      state: сострояние
       status: статус
-      stock_location_ids: Местоположение склада
+      stock_location_ids: Расположения складов
       street1: Адрес 1
       street2: Адрес 2
-      stylesheets: stylesheets
+      stylesheets: таблицы стилей
       subtotal: подытог
       tag: метка
       tax: налог
@@ -139,8 +139,8 @@ ru:
       the_shipper: отправитель
       thermal_printer: Термопринтер
       title: заголовок
-      total: всего
-      track_expiry: Track Expiry
+      total: итого
+      track_expiry: Следить за сроком годности
       type: тип
       url: URL
       username: имя пользователя
@@ -148,7 +148,7 @@ ru:
       value: объем
       vendor_id: Магазин
       vendor_printers: принтеры
-      weigh_compulsory: compulsory weighing
+      weigh_compulsory: обязательное взвешивание
       weight: вес
       when: когда
       width: ширина
@@ -187,14 +187,14 @@ ru:
         one: Тип товара
         other: Типы товара
       location:
-        one: Адрес
-        other: Адреса
+        one: Отдел
+        other: Отделы
       order:
         one: Заказ
         other: Заказы
       order_item:
-        one: Order Item
-        other: Order Items
+        one: Товар в заказе
+        other: Товары в заказе
       payment_method:
         one: Способ оплаты
         other: Способы оплаты
@@ -202,21 +202,21 @@ ru:
         one: Поставка
         other: Поставки
       shipment_type:
-        default_name: Auto Nachbestellung
+        default_name: Автоповтор заказа
         one: Тип поставки
         other: Типы поставки
       shipper:
         one: Поставщик
         other: Поставщики
       stock_location:
-        one: Адрес склада
-        other: Адреса складов
+        one: Расположение склада
+        other: Расположения складов
       tax_profile:
         one: Налоговый профиль
         other: Налоговые профили
       tender_method:
-        one: Tender Method
-        other: Tender Methods
+        one: Метод оплаты
+        other: Методы оплаты
       transaction_tag:
         one: Метка
         other: Метки
@@ -234,7 +234,7 @@ ru:
   cash_registers:
     end_of_day:
       cash_drawer: Кассовый аппарат
-      counted: Counted
+      counted: Посчитано
       difference: Разница
       end_of_day_thermal_report: Печатать отчет
       paper_report: Детальный отчет
@@ -244,50 +244,48 @@ ru:
       last_orders: Последние заказы
       order_id: Номер заказа
       order_total: Всего заказов
-      sold_count: sold count
+      sold_count: счёт продаж
   delete: Удалить
   edit: Редактировать
   end_of_day: Конец дня
   exception_page:
-    assistance_text: Please click on the button "Home" and try again. If the error
-      happens again, please call the customer support, and connect your computer to
-      the Remote Service with the button "Remote Service". We will help you immediately.
-    exception_description: ! 'Error description:'
-    exception_in_files: ! 'The Error occurred in the following files:'
-    oops_an_error_occurred: Oops! An Error occurred
+    assistance_text: Пожалуйста, нажмите кнопку "Домой" и попробуйте снова. Если ошибка повторится, свяжитесь со службой поддержки и активируйте удаленное обслуживание с помощью кнопки "Удаленное обслуживание". Мы незамедлительно вам поможем.
+    exception_description: ! 'Описание ошибки:'
+    exception_in_files: ! 'Ошибка произошла в следующих файлах:'
+    oops_an_error_occurred: Ой! Произошла ошибка
   headings:
-    almost_out: almost out
-    bank_machine_types: supported bank machines
+    almost_out: почти закончился
+    bank_machine_types: поддерживаемые банкоматы
     best_sellers: бестселлеры
-    best_selling_category: best selling category
-    best_selling_location: best selling location
+    best_selling_category: категория-бестселлер
+    best_selling_location: отдел-бестселлер
     crd: Время,Количество,Тип,Заметки
-    database_distiller: Database distiller
-    discount_for: rebate for %{store}
-    discounts_for: rebates for %{store}
-    edit_shipper: edit shipper %{name}
+    database_distiller: Отчистка базы данных
+    discount_for: скидка для %{store}
+    discounts_for: скидки для %{store}
+    edit_shipper: редактировать поставщика %{name}
     employees: работники
     expiring_soon: скоро заканчивается срок годности
     export: экспорт
-    item_selection: item selection
-    new_discount_for: new discount for %{store}
+    item_selection: выбор товара
+    new_discount_for: новая скидка для %{store}
     notes: заметки
-    order_validation: Order Validation
+    order_validation: Подтверждение заказа
     paylife: Paylife(Artema Hybrid)
-    shipment_items: shipment items
-    shipment_types: shipment types
+    shipment_items: товары в поставке
+    shipment_types: виды поставок
     shipments: поставки
-    update_location: update location
-    update_real_quantity: update real quantity
+    update_location: обновить отдел
+    update_real_quantity: обновить реальное количество
   helpers:
     select:
-      prompt: please select
+      prompt: выберете пожалуйста
     submit:
       cancel: отменить
       clear: отчистить
-      complete_sale: complete sale
+      complete_sale: завершить продажу
       create: создать
-      get_item: get item
+      get_item: получить товар
       ok: OK
       print: печатать
       save: Сохранить
@@ -295,67 +293,62 @@ ru:
       update: обновить
   home:
     remote_service:
-      connect_ssh: Remote service
-      connect_vnc: Share screen
+      connect_ssh: Удаленное обслуживание
+      connect_vnc: Разрешить удаленное управление
       connected: соединен
       disconnected: нет соединения
       host: Сервер
-      not_supported_by_browser: Remote service is not supported by this browser.
+      not_supported_by_browser: Удаленное обслуживание не поддерживается этим браузером.
       password: Пароль
       requesting_connection_status: Запрос статуса соединения ...
-      title: Remote Service
+      title: Удаленное обслуживание
       user: Пользователь
     user_employee_index:
       backup_database: Резервировать базу данных
       backup_logfile: Резервировать лог-файл
   items:
     database_distiller:
-      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you
-        sure you want to proceed?
+      are_you_sure: Все неиспользуемые товары будут удалены. Это действие нельзя будет отменить. Вы уверены, что хотите продолжить?
       delete_unused_items: Удалить неиспользуемые товары !
       hidden: Уже удаленные товары
-      hidden_by_distiller: Items deleted by Database Distiller
+      hidden_by_distiller: Товары удаленные чистильщиком базы данных
       relevant_item_ids: Товары подлежащие удалению
       unused_item_ids: Неиспользуемые товары
       used_item_ids: Используемые товары
     index:
-      database_distiller_warning: Due to the generation of statistics, calling this
-        function will last for about 30 seconds. Proceed anyway?
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items
-        will now be created and updated. This action will take about 20 minutes. Are
-        you really sure that you want to proceed?
+      database_distiller_warning: Из-за рассчета статистики данная функция требует около 30 секунд на выполнение. Продолжить?
+      only_for_tobacco_stores: Это функция только для табачных магазинов. Табачные товары будут созданы и обновлены. Это может занять до 20 минут. Вы действительно хотите продолжить?
     inventory_report:
       price: Цена продажи
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
-      title: Inventory Report
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
+      subtotal_purchase_price: Подытог цены покупки
+      subtotal_selling_price: Подытог цены продажи
+      title: Инвентарный отчёт
+      total_buying_price: Суммарная цена покупки
+      total_selling_price: Суммарная цена продажи
     show:
       from: от
-      quantity_sold: Sold quantity
+      quantity_sold: Проданое количество
       query: Запрос!
       to: кому
     update_real_quantity:
-      are_you_sure: This will copy the inventory quantities into the database and
-        reset the inventory report. Continue?
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
+      are_you_sure: Инвентарные данные будут скопированы в базу данных, и будет пересоздан инвентарный отчёт. Продолжить?
+      inventory_report: Инвентарный отчёт
+      update_quantity: Обновить инвентарные данные
     upload:
-      upload: upload
-  label: label
+      upload: загрузить
+  label: ярлык
   menu:
-    actions: actions
-    activate_gift_card: activate gift card
-    add_to_current_order: add to current order
-    additional: additional
+    actions: действия
+    activate_gift_card: активировать подарочную карту
+    add_to_current_order: добавить к текущему заказу
+    additional: дополнительный
     back: назад
-    broken_items: broken items
+    broken_items: некондиционные товары
     buttons: кнопки
     buy_order: Купить
     cameras: камеры
-    cancel: cancel
-    cash_drop: cash drop
+    cancel: отмена
+    cash_drop: внесение наличных
     cash_register: кассовый аппарат
     cash_registers: кассовые аппараты
     categories: категории
@@ -379,13 +372,13 @@ ru:
     edit_discount: редактировать скидку
     edit_employee: редактировать работника
     edit_item: редактировать товар
-    edit_location: редактировать местоположение
+    edit_location: редактировать отдел
     edit_shipment: редактировать поставку
     edit_shipment_type: редактировать тип поставки
     edit_shipper: редактировать поставщика %{name}
     edit_tax_profile: редактировать налоговый профиль
-    edit_tender_method: edit tender method
-    edit_vendor: edit vendor
+    edit_tender_method: редактировать метод оплаты
+    edit_vendor: редактировать магазин
     employees: работники
     end_day: конец дня
     general_configuration: основные настройки
@@ -393,342 +386,325 @@ ru:
     inventory_report: Отчет по товарам
     item_types: типы товаров
     items: товары
-    law_reports: Report Download
-    locations: locations
-    loyalty_cards: loyalty cards
-    move_shipment_item: move shipment item
-    new_action: new action
-    new_broken_item: new broken item
-    new_button: new button
-    new_cash_register: new cash register
-    new_category: new category
-    new_customer: new customer
-    new_discount: new discount
-    new_employee: new employee
-    new_item: new item
-    new_location: new location
-    new_order: New
-    new_shipment: new shipment
-    new_shipment_type: new shipment type
-    new_shipper: new shipper
-    new_stock_location: new stock location
-    new_tax_profile: new tax profile
-    new_tender_method: new tender method
+    law_reports: Скачать отчет
+    locations: отделы
+    loyalty_cards: бонусные карты
+    move_shipment_item: новый поставляемый товар
+    new_action: новое действие
+    new_broken_item: новый некондиционный товар
+    new_button: новая кнопка
+    new_cash_register: новый кассовый аппарат
+    new_category: новая категория
+    new_customer: новый покупатель
+    new_discount: новая скидка
+    new_employee: новый работник
+    new_item: новый товар
+    new_location: новый отдел
+    new_order: новый заказ
+    new_shipment: новая поставка
+    new_shipment_type: новый тип поставки
+    new_shipper: новый поставщик
+    new_stock_location: новое расположение склада
+    new_tax_profile: новый налоговый профиль
+    new_tender_method: новый метод оплаты
     new_vendor: новый магазин
     ok: OK
     order: заказ
-    orders: orders
-    overview: overview
+    orders: заказы
+    overview: обзор
     points: очки
-    pos: POS
+    pos: POS-терминал
     print: печатать
-    remote_service: Remote Service
-    reorder: reorder
-    report: report
-    report_day: report day
-    report_day_range: monthly report
-    report_range: report detail
-    reports: reports
+    remote_service: Удаленное обслуживание
+    reorder: повторить заказ
+    report: отчет
+    report_day: отчет за день
+    report_day_range: отчет за месяц
+    report_range: детальный отчет
+    reports: отчеты
     salorlive: Salor Live!
     salortrainer: Salor Trainer
-    search: search
-    shipment_types: shipment types
-    shipments: shipments
-    shippers: shippers
-    show: show
-    split: split
-    stock_locations: stock locations
-    support: support
-    tax_profiles: tax profiles
-    tender_methods: tender methods
-    transaction_tags: transaction tags
-    update_gift_card: update gift card
-    update_location: update location
-    update_real_quantity: update real quantity
-    upload: upload
-    usb_device: Usb Stick
-    vendors: vendors
-    void: void
-    wholesaler_update: wholesaler update
+    search: поиск
+    shipment_types: типы поставок
+    shipments: поставки
+    shippers: поставщики
+    show: показать
+    split: разбить
+    stock_locations: расположения складов
+    support: поддержка
+    tax_profiles: налоговые профили
+    tender_methods: методы оплаты
+    transaction_tags: метки транзакций
+    update_gift_card: обновить подарочную карту
+    update_location: обновить отдел
+    update_real_quantity: обновить действительное количество
+    upload: загрузить
+    usb_device: устройство USB
+    vendors: магазины
+    void: пусто
+    wholesaler_update: обновление оптового поставщика
   notifications:
-    shipments_item_could_not_be_saved: shipments item could not be saved
-    shipments_move_all_items: all items were successfully moved
-    shipments_move_item: item was successfully moved
+    shipments_item_could_not_be_saved: товар поставки не может быть сохранен
+    shipments_move_all_items: все товары были успешно перемещёны
+    shipments_move_item: товар был успешно перемещён
   orders:
     report:
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
-      points: points
-      rebate: rebate
-      start_date: start date
-      sum: sum
-      sum_total: sum total
-      title: Sums
+      display: показать
+      end_date: конечная дата
+      gross: гросс
+      net: чистыми
+      points: очки
+      rebate: скидка
+      start_date: начальная дата
+      sum: сумма
+      sum_total: итого
+      title: Суммы
     report_day:
-      None: Not specified
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      cash-refunds: Cash-Refunds
-      cash_drawer: Cash drawer
-      count_orders: Count of orders
-      drop: drop
-      from: From
-      gross: gross
-      net: net
-      noncash-refunds: Noncash-Refunds
-      payments: Payments
-      payout: payout
-      payouts: payouts
-      revenue: Revenue
-      sales: Sales
-      sum: sum
-      sum_gross: Sum gross
-      sum_net: Sum net
-      sum_transactions: Sum transactions
-      sums_by_category: sums by category
-      sums_by_payment_methods: sums by payment methods
-      sums_by_tax_profile: sums by tax profile
-      time: time
-      title: day report
-      to: To
-      transaction_tag: transaction tag
-      transaction_total: transaction total
-      transactions: transactions
+      None: Не указан
+      OrderItemRefund: Возврат товара
+      OrderRefund: Возврат заказа
+      cash-refunds: Возвраты наличными
+      cash_drawer: Касса
+      count_orders: Количество заказов
+      drop: внесение
+      from: От
+      gross: гросс
+      net: чистыми
+      noncash-refunds: Безналичные возвраты
+      payments: Платежи
+      payout: выплата
+      payouts: выплаты
+      revenue: Выручка
+      sales: Продажи
+      sum: сумма
+      sum_gross: Сумма гросс
+      sum_net: Сумма чистыми
+      sum_transactions: Сумма транзакций
+      sums_by_category: суммы по категориям
+      sums_by_payment_methods: суммы по способам оплаты
+      sums_by_tax_profile: суммы по налоговым профилям
+      time: время
+      title: отчет за день
+      to: Кому
+      transaction_tag: метка транзакции
+      transaction_total: итого за транзакцию
+      transactions: транзакции
     report_day_range:
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
-      points: points
-      rebate: rebate
-      start_date: start date
-      sum: sum
-      sum_total: sum total
-      title: monthly report
+      display: показать
+      end_date: конечная дата
+      gross: гросс
+      net: чистыми
+      points: очки
+      rebate: скидка
+      start_date: начальная дата
+      sum: сумма
+      sum_total: итого
+      title: месячный отчет
     report_range:
-      None: Not specified
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      cash-refunds: Cash-Refunds
-      cash_drawer: Cash drawer
-      count_orders: Count of orders
-      drop: drop
-      from: From
-      gross: gross
-      net: net
-      noncash-refunds: Noncash-Refunds
-      payments: Payments
-      payout: payout
-      payouts: payouts
-      revenue: Revenue
-      sales: Sales
-      sum: sum
-      sum_gross: Sum gross
-      sum_net: Sum net
-      sum_transactions: Sum transactions
-      sums_by_category: sums by category
-      sums_by_payment_methods: sums by payment methods
-      sums_by_tax_profile: sums by tax profile
-      time: time
-      title: day report
-      to: To
-      transaction_tag: transaction tag
-      transaction_total: transaction total
-      transactions: transactions
+      None: Не указано
+      OrderItemRefund: Вернуть товар
+      OrderRefund: Вернуть заказ
+      cash-refunds: Возвраты наличными
+      cash_drawer: Касса
+      count_orders: Количество заказов
+      drop: внесение
+      from: От
+      gross: гросс
+      net: чистыми
+      noncash-refunds: Безналичные возвраты
+      payments: Платежи
+      payout: выплата
+      payouts: выплаты
+      revenue: Выручка
+      sales: Продажи
+      sum: сумма
+      sum_gross: Сумма гросс
+      sum_net: Сумма чистыми
+      sum_transactions: Сумма транзакций
+      sums_by_category: суммы по категориям
+      sums_by_payment_methods: суммы по методу оплаты
+      sums_by_tax_profile: суммы по налоговому профилю
+      time: время
+      title: дневной отчет
+      to: Кому
+      transaction_tag: метка транзакции
+      transaction_total: итого за транзакцию
+      transactions: транзакции
   printr:
     eod_report:
-      None: Not named
-      OrderItemRefund: Order Item Refund
-      OrderRefund: Order Refund
-      calculated_drawer_amount: Calculated drawer amount
-      cash-refunds: Cash-Refunds
-      cash_refunds_total: TOTAL
-      noncash-refunds: Noncash-Refunds
-      orders_total: Orders total
-      payment_method_total: TOTAL
-      payments: Payments
-      refund: Refund
-      revenue: Revenue
-      revenue_total: TOTAL
-      sales: Sales
-      system_drawer_amount: System drawer amount
-      transaction_total: TOTAL
-      warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You
-        are advised to finish and start each day with a drawer amount of zero to ease
-        accounting work. Make a cash payout accordingly and print this report again.
+      None: Без имени
+      OrderItemRefund: Возврат товара из заказа
+      OrderRefund: Возврат заказа
+      calculated_drawer_amount: Рассчитанный кассовый баланс
+      cash-refunds: Возвраты наличными
+      cash_refunds_total: ИТОГО
+      noncash-refunds: Безналичные возвраты
+      orders_total: Всего заказов
+      payment_method_total: ИТОГО
+      payments: Платежи
+      refund: Возврат
+      revenue: Выручка
+      revenue_total: ИТОГО
+      sales: Продажи
+      system_drawer_amount: Баланс системной кассы
+      transaction_total: ИТОГО
+      warning_drawer_amount_not_zero: Внимание! Ваш кассовый баланс отличен от нуля. Рекомендуется заканчивать и начинать каждый день с нулевым балансом для упрощения бухгалтерских расчетов. Сделайте выплату наличных в соответствии с балансом и напечатайте отчет снова.
     formats:
-      advert: ! 'The Innovative Point of Sale
-
-        www.salorpos.com'
-      cancel: Cancel                  EUR %8.2f
-      change: ! 'Change:                       EUR %8.2f'
-      coupon_subtotal: Coupon                   EUR %8.2f
-      discount_subtotal: Discount                       EUR %8.2f
-      end_of_day: ! '%20.20s EUR %5.2f'
-      fixed_rebate: Rebate                         EUR %8.2f
+      advert: ! 'Инновационная точка продаж www.salorpos.com'
+      cancel: Отмена                  РУБ %8.2f
+      change: ! 'Сдача:                       РУБ %8.2f'
+      coupon_subtotal: Купон                   РУБ %8.2f
+      discount_subtotal: Скидка                       РУБ %8.2f
+      end_of_day: ! '%20.20s РУБ %5.2f'
+      fixed_rebate: Скидка                         РУБ %8.2f
       item: ! '%c %20.20s %7.2f %3u %7.2f'
-      rebate_amount: Rebate %4.2f%%                 EUR %8.2f
-      rebate_subtotal: Rebate Total                  EUR %8.2f
-      subtotal: Subtotal                      EUR %8.2f
-      thanks: Thank you for shopping with us!
-      total: TOTAL                         EUR %8.2f
+      rebate_amount: Скидка %4.2f%%                 РУБ %8.2f
+      rebate_subtotal: Итого скидка                  РУБ %8.2f
+      subtotal: Подытог                      РУБ %8.2f
+      thanks: Спасибо за покупку!
+      total: ИТОГО                         РУБ %8.2f
     order_receipt:
-      change: Change money
-      coupon_subtotal: Coupon Subtotal
-      current_loyalty_points: Your loyalty points
-      discount: Discount
-      discount_subtotal: Discount Subtotal
-      given: Given money
-      gross: gross
-      lc_points_substracted: Substracted Loyalty Points
-      net: net
-      rebate: Single rebate
-      rebate_fixed: Fixed rebate
-      rebate_percent: Percent rebate
-      rebate_subtotal: Rebate Subtotal
-      refund: Total refunds
-      refunded: REFUNDED
-      subsubtotal: TOTAL
-      subtotal1: Subtotal
-      subtotal2: Subtotal
-      subtotal3: Subtotal
-      subtotal4: Subtotal
-      tax: Tax
+      change: Сдача
+      coupon_subtotal: Подытог по купонам
+      current_loyalty_points: Ваши очки на бонусной карте
+      discount: Скидка
+      discount_subtotal: Подытог по скидкам
+      given: Отдано
+      gross: гросс
+      lc_points_substracted: Вычтеные очки с бонусной карты
+      net: сеть
+      rebate: Единичная скидка
+      rebate_fixed: Фиксированная скидка
+      rebate_percent: Процент скидкок
+      rebate_subtotal: Подытог по скидкам
+      refund: Итого возвращено
+      refunded: ВОЗВРАЩЕНО
+      subsubtotal: ИТОГО
+      subtotal1: Подытог
+      subtotal2: Подытог
+      subtotal3: Подытог
+      subtotal4: Подытог
+      tax: Налог
     word:
-      drop: drop
-      payout: payout
-      sold: sold
+      drop: внесение
+      payout: выплата
+      sold: продан
   receipts:
     invoice: Rechnung
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
+    invoice_numer_X_at_time: Заказ № %{number} от %{datetime}
   reports:
-    amount: amount
-    description: description
-    item_zero: Sold out items
-    tax_class: tax class
-    total: total
-    unit_price: unit price
+    amount: количество
+    description: описание
+    item_zero: Распроданные товары
+    tax_class: класс налога
+    total: итого
+    unit_price: цена за единицу
   roles:
-    cashier: cashier
-    manager: manager
-    stockboy: stockboy
+    cashier: кассир
+    manager: менеджер
+    stockboy: кладовщик
   shipments:
     index:
-      report: Report
+      report: Отчет
     show:
-      purchase_price_sum: Purchase price sum
-  sticker: sticker
+      purchase_price_sum: Сумма покупки
+  sticker: наклейка
   support: XXX
   system:
-    add_payment_method: add payment method
-    complete_sale: Complete
+    add_payment_method: добавить метод оплаты
+    complete_sale: Готово
     errors:
-      action_code_error: Code could not be executed because %{error}
-      action_error: Action could not complute because %{error}
-      auto_drop_failed: The system failed to auto drop, please manually create a beginning
-        of day cash drop
-      cannot_edit_completed_order: That order is completed and cannot be modified.
-      cannot_reorder: No items must be reordered.
-      child_sku_must_exist: Child Item Must Exist!
-      coupon_cannot_be_buy_one_get_one: coupon %{sku} cannot be_buy_one_get_one when
-        applied to %{applies}
-      coupon_not_enough_items: You have not purchased enough items for this to apply
-      csv_item_exists: Item %{sku} exists!
-      csv_item_failed: ! '%{id} %{i} failed.'
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
-        dass Set-Items existieren.
-      gift_card_empty: Gift Card is Empty, notify client, and destroy card.
-      gs1_item_not_found: Item marked as gs1, but %{sku} is not in the correct format.
-      insufficient_quantity_on_item: Warning, Item %{sku} quantity is insufficient,
-        time to update your stock levels!
-      inventory_update_error: inventory update error
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: ! 'Warning: Item price is 0'
-      limited_alphabet: Only a-z permitted. No spaces or accented characters allowed.
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup
-        this up in your store configuration?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to
-        a valid Store
-      must_specify_drop_or_payout: You must specify either drop or payout!
-      no_class: There is no class for %{model} at line %{i}
-      no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no item with this SKU
-      not_enough_in_drawer: not enough in drawer
-      order_failed: Order could not be finished.
-      order_must_have_user: You cannot save an order without a User or Employee assigned
-        to it.
-      order_register_required: You must specify a register for this order
-      order_totals_validation_failed: Order total validation failed, refreshing the
-        order may repair the issue. Press OK to refresh.
-      order_vendor_required: You must supply a vendor for this order
-      parent_sku_must_exist: Parent Item Must Exist!
-      payment_required: ! 'Error 402: Full Payment is Required'
-      payment_required_explanation: We regret to inform you that your system has automatically
-        shutdown as your pre-payment license has run out. You must complete the full
-        payment of Salor to continue benefitting from it. Please contact your Salor
-        technical support representative.
-      sanity_check: Requested action is insane, verify order total and notify customer
-        of correction.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: ! 'Item %{sku} failed to move with error: %{error}'
-      shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: ! '%{sku} must be unique'
-      value_not_set: NotSet
-    inventory_updated: inventory updated
-    logged_in_as: logged in as
-    login: login
-    logout: logout
-    not_you: not you?
-    owner_mode: OWNER MODE
-    owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+      action_code_error: Код не может быть выполнен потому что %{error}
+      action_error: Действие не может быть выполнено потому что %{error}
+      auto_drop_failed: Система не смогла выполнить автоматическое внесение наличных. Пожалуйста, создайте начало дня внесения наличных вручную.
+      cannot_edit_completed_order: Этот заказ выполнен и не может быть изменён.
+      cannot_reorder: Невозможно повторить заказ.
+      child_sku_must_exist: Товар-наследник должен существовать!
+      coupon_cannot_be_buy_one_get_one: купон %{sku} не может be_buy_one_get_one когда применяется к %{applies}
+      coupon_not_enough_items: Вы приобрели недостаточно товаров, чтобы применить это
+      csv_item_exists: Товар %{sku} существует!
+      csv_item_failed: ! 'Ошибка чтения %{id} %{i}'
+      failed_to_save_parts: Невозможно сохранить комплект. Убедитесь, что выбранные товары существуют.
+      gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту.
+      gs1_item_not_found: Товар помечен как gs1, но %{sku} не соответствует формату.
+      insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
+      inventory_update_error: ошибка обновления инвентарной ведомости
+      item_not_found: Товар, который вы ищете не найден, поискать?
+      item_price_is_zero: ! 'Внимание: Нулевая цена товара!'
+      limited_alphabet: Разрешены только буквы a-z. Никаких пробелов или букв в верхнем регистре.
+      lp_calculation_failed: Ошибка при применении очков бонусной карты. Вы уверены, что добавили их в настройке магазина?
+      must_cash_drop: В вашей кассе нет денег. Пожалуйста, внесите наличные!
+      must_choose_register: Вы должны авторизоваться в кассовом аппарате!
+      must_choose_vendor: Вам нужно выбрать магазин!
+      must_set_receiver_to_vendor: В поле получателя для этой доставки нужно указать существующий магазин.
+      must_specify_drop_or_payout: Вы должны выбрать внесение или выплату!
+      no_class: Нет класса для %{model} на строке %{i}
+      no_role: У вас недостаточно прав для доступа к этому ресурсу.
+      no_such_item: Товар с таким SKU не найден.
+      not_enough_in_drawer: не достаточно в кассе
+      order_failed: Заказ не может быть завершен.
+      order_must_have_user: Вы не можете сохранить заказ, не указав пользователя или работника для него.
+      order_register_required: Вы должны указать запись для этого заказа
+      order_totals_validation_failed: Общая проверка заказа не прошла. Обновление заказа возможно решит эту проблему. Нажмите OK для обновления.
+      order_vendor_required: Вам нужно указать магазин для этого заказа
+      parent_sku_must_exist: Родительский товар должен существовать!
+      payment_required: ! 'Ошибка 402: Требуется полная оплата'
+      payment_required_explanation: Нам жаль, но ваша система была автоматически выключена, так как ваша ознакомительная лицензия закончилась. Чтобы продолжить пользоваться системой, вам нужно приобрести полную лицензию Salor. Пожалуйста, свяжитесь с вашим представителем технической поддержки.
+      sanity_check: Запрашиваемое действие не имеет смысла. Проверьте заказ и уведомите покупателя об исправлении.
+      shipment_item_already_in_stock: Товар %{sku} уже есть на складе
+      shipment_item_move_failed: ! 'Товар %{sku} не был перемещен, ошибка: %{error}'
+      shipment_item_nil: Товар, вернувшийся из поставки, пустой?
+      sku_must_be_unique: ! '%{sku} должен быть уникальным'
+      value_not_set: НеУказано
+    inventory_updated: проведен переучет товара
+    logged_in_as: вошли как
+    login: войти
+    logout: выйти
+    not_you: не вы?
+    owner_mode: РЕЖИМ ВЛАДЕЛЬЦА
+    owner_success: Свойства владельца были успешно обновлены
+    payment_external_types: наличные,карта,подарочная карта,другое
+    payment_internal_types: Наличными,Банковской Картой,Подарочной картой,Другой кредит
     rebate_types:
       fixed: $
       percent: ! '%'
-    sign_up: sign up
+    sign_up: войти
   vendors:
-    clear_cache_button: clear cache
-    clear_cache_header: cache
+    clear_cache_button: отчистить кэш
+    clear_cache_header: кэш
     form:
-      logo: logo
-      receipt_logo_footer: receipt logo footer
-      receipt_logo_header: receipt logo header
+      logo: логотип
+      receipt_logo_footer: низ логотипа квитанции
+      receipt_logo_header: верх логотипа квитанции
   views:
-    advanced_field: advanced field
-    cash_register_heading: ! '%{name} for %{store}'
-    cash_registers: cash registers
-    category_heading: category %{name} for %{store}
-    change: change
-    customers: customers
-    download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy item
-    edit_item_heading: edit item heading
+    advanced_field: дополнительное поле
+    cash_register_heading: ! '%{name} для %{store}'
+    cash_registers: кассовые аппараты
+    category_heading: категория %{name} для %{store}
+    change: сдача
+    customers: покупатели
+    download_may_last_long: Скачивание может длится долго. Продолжить?
+    dummy_item: фиктивный товар
+    edit_item_heading: редактировать название товара
     email: email
     errors:
-      no_access_right: You do not have the right to access this resource. This error
-        has been logged.
-      nothing_found: Nothing found
-      unknown_vendor: Unknown
-    eticket: Shelf label
+      no_access_right: У вас не прав доступа к этому ресурсу. Эта ошибка была записана.
+      nothing_found: Ничего не найдено
+      unknown_vendor: Неизвестно
+    eticket: Этикетка
     forms:
-      applies_to_item: applies to item with SKU
-      buy_one_get_one: buy one get one
-      cashier: cashier
-      fixed_amount_off: fixed amount off
-      items: items
-      manager: Manager
-      no_change: no change
-      notes: notes
-      parts: parts
-      percent_off: ! '% off'
-      roles: roles
-      search: search
+      applies_to_item: применяется к товару с SKU
+      buy_one_get_one: купи один - получи один
+      cashier: кассир
+      fixed_amount_off: минус фиксированное количество
+      items: товары
+      manager: Менеджер
+      no_change: без изменений
+      notes: заметки
+      parts: комплект
+      percent_off: ! '% минус'
+      roles: роли
+      search: поиск
       shipment:
         types:
           canceled: отменена 
@@ -738,32 +714,32 @@ ru:
           returned: возращена
           shipped: доставлена
     gift_card: подарочная карта
-    gift_card_amount: gift card amount
-    given: given
+    gift_card_amount: номинал подарочной карты
+    given: заданный
     in_cash: наличными
     item: товар
     language: язык
-    listing: listing
-    listing_items: listing items
-    locations: адреса
-    loyalty_card: loyalty card
-    name: name
-    new_item_heading: New item for %{store}
-    new_stock_location: New stock location
+    listing: список
+    listing_items: товары в списке
+    locations: отделы
+    loyalty_card: бонусная карта
+    name: название
+    new_item_heading: Новый товар для %{store}
+    new_stock_location: Новое расположение склада
     notice:
-      cache_was_cleared: Cache files deleted.
-      csv_edit_starting: csv edit starting
-      model_create: ! '%{model} was created successfully'
-      model_edit: ! '%{model} was edited successfully'
-      move_real_quantities_success: Item quantities were successfully updated
-      new_order: new order created
+      cache_was_cleared: Кэш-файлы удалены.
+      csv_edit_starting: начало редактирования CSV
+      model_create: ! '%{model} была успешно создана'
+      model_edit: ! '%{model} была успешно отредактирована'
+      move_real_quantities_success: Количество товара было успешно обновлено
+      new_order: новый заказ создан
       order_refund_dt: ! '#%{id}'
-      save_before: XXX Save before leaving?
-      wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
-        %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
+      save_before: Сохранить перед выходом?
+      wholesaler_upload_report: ! 'Обновленные товары: %{updated_items}, Созданные товары:
+        %{created_items}, Созданные категории: %{created_categories}, Созданные налоговые профили
         %{created_tax_profiles}'
-    order_heading: ! 'Order #%{id} for %{store}'
-    order_number: ! 'Order #%{id}'
+    order_heading: ! 'Заказ #%{id} для %{store}'
+    order_number: ! 'Заказ #%{id}'
     pagination:
       last: последняя
       next: следуящая &gt;
@@ -778,8 +754,8 @@ ru:
     remember_me: запомнить меня
     report: отчет
     reports:
-      cash_account: XXX
-      daily: XXX
+      cash_account: Количество наличных
+      daily: Ежедневно
     shipments:
       state: Область
     single_words:
@@ -797,7 +773,7 @@ ru:
       loading: загрузка
       new: Новый
       order: заказ
-      ordering: ordering
+      ordering: заказ
       processing: обработка...
       saving: сохранение...
       sku: SKU
@@ -806,16 +782,16 @@ ru:
       top: верх
       waiting: ожидание...
     sticky_ticket: Наклейка
-    stock_locations: адреса складов
+    stock_locations: расположения складов
     subtotal: подытог
     tax_profile: налоговый профиль
     three_easy_ways: три простых способа
-    total: всего
+    total: итого
     username: имя пользователя
     vendor: магазин
     wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять несколько минут.
   when_list:
-    add_to_order: on add to order
+    add_to_order: при добавлении к заказу
     always: всегда
     on_export: при экспорте
     on_import: при импорте

@@ -33,13 +33,13 @@ ru-RU:
   :update_categories: Обновляет категории
   :show_categories: Видит категории
   :any_categories: Любое действие с категориями
-  :index_locations: Индексирует адреса
-  :edit_locations: Редактирует адреса
-  :destroy_locations: Удаляет адреса
-  :create_locations: Создает адреса
-  :update_locations: Обновляет адреса
-  :show_locations: Видит адреса
-  :any_locations: Любое действие с адресами
+  :index_locations: Индексирует отделы
+  :edit_locations: Редактирует отделы
+  :destroy_locations: Удаляет отделы
+  :create_locations: Создает отделы
+  :update_locations: Обновляет отделы
+  :show_locations: Видит отделы
+  :any_locations: Любое действие с отделами
   :index_shippers: Индексирует поставщиков
   :edit_shippers: Редактирует поставщиков
   :destroy_shippers: Удаляет поставщиков
@@ -103,13 +103,13 @@ ru-RU:
   :update_buttons: Обновляет кнопки
   :show_buttons: Видит кнопки
   :any_buttons: Любое действие с кнопками
-  :index_stock_locations: Индексирует адреса складов
-  :edit_stock_locations: Редактирует адреса складов
-  :destroy_stock_locations: Удаляет адреса складов
-  :create_stock_locations: Создает адреса складов
-  :update_stock_locations: Обновляет адреса складов
-  :show_stock_locations: Видит адреса складов
-  :any_stock_locations: Любое действие с адресами складов
+  :index_stock_locations: Индексирует расположения складов
+  :edit_stock_locations: Редактирует расположения складов
+  :destroy_stock_locations: Удаляет расположения складов
+  :create_stock_locations: Создает расположения складов
+  :update_stock_locations: Обновляет расположения складов
+  :show_stock_locations: Видит расположения складов
+  :any_stock_locations: Любое действие с расположениями складов
   :clear_orders: Отчищает заказы
   :see_header: Видит заголовок
   :destroy_order_items: Удаляет товары в заказах
