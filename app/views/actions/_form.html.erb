@@ -76,18 +76,6 @@
     <input type="text" name="item[value]" value="<%= @action.value %>" />
   </div>
 
-
-  <% if AppConfig.standalone == true  %>
-    <div class="warning">
-      <br />
-      <%= I18n.t("views.advanced_field") %>
-    </div>
-    <div class="field">
-     <label> Code </label><br />
-     <textarea name="item[code]" rows="5" cols="80"><%= @action.code %></textarea>
-    </div>
-    <br />
-  <% end %>
     <div class="actions">
       <input type="submit" name="submit" value="<%=  I18n.t("helpers.submit.submit") %>" />
     </div>
