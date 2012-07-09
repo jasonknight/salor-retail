@@ -35,6 +35,7 @@ gem 'mechanize'
 gem 'coffee-filter'
 gem 'acts_as_list'
 gem 'i18n-js'
+gem 'debugger'
 
 #group :test, :development do
 #  gem 'turn', '< 0.8.3'
