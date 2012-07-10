@@ -176,16 +176,6 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_nodes) %>
-        <div class="widget master onmousedown="window.location = '/nodes?vendor_id=<%= @vendor.id %>';"">
-          <div align="center">
-            <a href="/nodes?vendor_id=<%= @vendor.id %>">
-              <img src="/images/icons/network_64.png" /><br />
-              <%= t("menu.nodes") %>
-            </a>
-          </div>
-        </div>
-        <% end %>
         <% if salor_user.can(:show_reports) %>
         <div class="widget master onmousedown="window.location = '/reports?vendor_id=<%= @vendor.id %>';"">
           <div align="center">
