@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now
-    @sold_times = OrderItem.scopied.find(:all, :conditions => {:sku => @item.sku, :hidden => 0, :is_buyback => false, :refunded => false, :created_at => @from..@to}).size
+    @sold_times = OrderItem.scopied.find(:all, :conditions => {:sku => @item.sku, :hidden => 0, :is_buyback => false, :refunded => false, :created_at => @from..@to}).collect{ |i| i.quantity }.sum
   end
 
   # GET /items/new
@@ -367,7 +367,6 @@ class ItemsController < ApplicationController
     add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
     add_breadcrumb I18n.t("menu.inventory_report"), items_inventory_report_path
     @items = Item.scopied.where('real_quantity > 0')
-    @items.inspect
     @categories = Category.scopied
   end
 
