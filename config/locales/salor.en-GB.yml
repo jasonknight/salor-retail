@@ -144,7 +144,7 @@ en-US:
       username: username
       uses_drawer_id: Uses Drawer of
       value: value
-      vendor_id: Vendor
+      vendor_id: Store
       vendor_printers: printers
       weigh_compulsory: compulsory weighing
       weight: weight
@@ -383,7 +383,7 @@ en-US:
     edit_shipper: edit shipper %{name}
     edit_tax_profile: edit tax profile
     edit_tender_method: edit tender method
-    edit_vendor: edit vendor
+    edit_vendor: edit Store
     employees: employees
     end_day: end day
     general_configuration: general configuration
@@ -412,7 +412,7 @@ en-US:
     new_stock_location: new stock location
     new_tax_profile: new tax profile
     new_tender_method: new tender method
-    new_vendor: new vendor
+    new_vendor: new Store
     ok: OK
     order: order
     orders: orders
@@ -445,7 +445,7 @@ en-US:
     update_real_quantity: update real quantity
     upload: upload
     usb_device: Usb Stick
-    vendors: vendors
+    vendors: Stores
     void: void
     wholesaler_update: wholesaler update
   notifications:
@@ -663,7 +663,7 @@ en-US:
       order_register_required: You must specify a register for this order
       order_totals_validation_failed: Order total validation failed, refreshing the
         order may repair the issue. Press OK to refresh.
-      order_vendor_required: You must supply a vendor for this order
+      order_vendor_required: You must supply a Store for this order
       parent_sku_must_exist: Parent Item Must Exist!
       payment_required: ! 'Error 402: Full Payment is Required'
       payment_required_explanation: We regret to inform you that your system has automatically
@@ -811,7 +811,7 @@ en-US:
     three_easy_ways: three easy ways
     total: total
     username: username
-    vendor: vendor
+    vendor: Store
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
   when_list:
     add_to_order: on add to order
