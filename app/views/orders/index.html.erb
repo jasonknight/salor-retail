@@ -36,7 +36,7 @@
     <td><%= link_to image_tag('/images/icons/' + icon(:printer,32)), "orders/#{ order.id }/print" %></td>
     <td><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
     <td><%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>
-    <td><%= link_to(image_tag('/images/icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete) if not order.paid %></td>
+    <!--<td><%= link_to(image_tag('/images/icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete) if not order.paid %></td>-->
   </tr>
 <% end %>
 </table>

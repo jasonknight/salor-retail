@@ -1,4 +1,5 @@
 <%= raw content_box_top(t("views.order_heading", :store => @order.vendor.name, :id => @order.id)) %>
+     
       <table id="order_items_table" width="50%" align=center class="ui-corner-all ui-widget ui-content stripe-me">
         <tr>
           <th><%= t("activerecord.attributes.name") %></th>
@@ -8,13 +9,14 @@
           <th><%= t("activerecord.attributes.coupon_total") %></th>
           <th><%= t("activerecord.attributes.total") %></th>
         </tr>
-        <tr>
-          <td align=center colspan=6>
-            <select id='refund_payment_method'>
-            <%= options_for_select PaymentMethod.types_list %>
-            </select>
-          </td>
         <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
+        <tr>
+            <td align=center colspan=6>
+              <select id='refund_payment_method'>
+              <%= options_for_select PaymentMethod.types_list %>
+              </select>
+            </td>
+        </tr>
       </table>
 <%
   if @order.refunded then

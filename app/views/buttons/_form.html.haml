@@ -4,7 +4,7 @@
     .form_errors
       - @button.errors.full_messages.each do |msg|
         %p= msg
-  %table
+  %table{:width => '90%', :align => 'center'}
     %tr
       %td
         .field
@@ -22,7 +22,7 @@
       %td
         .field
           = f.label :color
-          = f.text_field :color, :class => 'keyboardable'
+          = f.text_field :color
     %tr
       %td
         .field

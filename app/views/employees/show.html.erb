@@ -15,11 +15,11 @@
       <%= @employee.email %>
     </td>
   </tr>
-  <tr>
+ <!-- <tr>
     <td colspan="4">
       API: <%= @employee.make_token %>
     </td>
-  </tr>
+  </tr>-->
   <tr>
     <td valign="top" colspan="3" align="right">
       <%= I18n.t("activerecord.models.drawer.one") %>
@@ -38,13 +38,10 @@
           </div>
         <% end %>
       </div>
-      <% transactions = @employee.drawer.drawer_transactions.scopied.page(params[:page]).per(GlobalData.conf.pagination) %>
+      <% transactions = @employee.drawer.drawer_transactions.scopied.where("tag != 'CompleteOrder'").page(params[:page]).per(GlobalData.conf.pagination) %>
         <% transactions.each do |crd|  %>
           <div class="table-row">
             <div class="table-cell">
-            <% if $User.is_technician? then  %>
-              <%= link_to image_tag('/images/icons/' + icon(:delete,16)), "/vendors/destroy_drawer_transaction?id=#{crd.id}", :confirm => 'Are you sure?', :method => :delete %>
-            <% end %>
               <%= l crd.created_at, :format => :salor %>
             </div>
             <div class="table-cell">
@@ -79,7 +76,7 @@
       <br />
       
       <table width="100%" class="stripe-me">
-      <% orders = @employee.orders.scopied.order("id DESC").page(params[:page]).per(GlobalData.conf.pagination)  %>
+      <% orders = @employee.orders.scopied.order("id DESC").page(params[:page]).per($Conf.pagination)  %>
         <% orders.each do |order| %>
           <tr>
             <td valign="top">
@@ -98,7 +95,7 @@
             <td><%= salor_number_to_currency order.total %></td>
             <td><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
             <td><%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>
-            <td><%= link_to(image_tag('/images/icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete) if not order.paid %></td>
+            
           </tr>
         <% end %>
         
