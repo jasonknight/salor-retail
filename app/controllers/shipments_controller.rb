@@ -20,6 +20,14 @@ class ShipmentsController < ApplicationController
       format.xml  { render :xml => @shipments }
     end
   end
+  def new_shipments
+    @shipments = Shipment.scopied.order('created_at desc').page(params[:page]).per(9)
+    @locale = I18n.locale
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @shipments }
+    end
+  end
 
   # GET /shipments/1
   # GET /shipments/1.xml

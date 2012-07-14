@@ -148,7 +148,7 @@ function addPosItem(item) {
     var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
     // those need number formatting
     if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax_profile_amount') {
-      if (item["action_applied"] == true) {
+      if (item["action_applied"] == true && attr != 'total' && attr != 'tax_profile_amount') {
         col.addClass("pos-action-applied");
       }
 

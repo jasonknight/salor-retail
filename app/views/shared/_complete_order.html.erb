@@ -159,7 +159,7 @@ function complete_order_show() {
   var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print_48.png' /></div>");
   var left = $('#complete_order').position().left;
   var width = $('#complete_order').width();
-  var cpos = {x: width + left + 25, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
+  var cpos = {x: width + left + 21, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
   a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
   relevant_order_id = $('.order-id').html();
   a4print.mousedown(function () {

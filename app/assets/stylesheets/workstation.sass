@@ -1,17 +1,27 @@
 $base_width: 1024px
 $base_height: 768px
 $border_color: #788285
+$light_border_color: #444444
 $border_style: solid
 $border_width: 1px
-$foreground: #f2f2f2
+$foreground: white
 $foreground2: #d6d6d6
-$middleground: #7a607e
-$middleground2: #a572ae //#513356
-$middleground3: #3e2242
+$middleground: #5b7682
+$middleground2: #243239 //#513356
+$middleground3: #7E868A
 $middleground4: #1c0f1e
-$background: #291627 //#170c16
-$light_background: #7d5285 //#663172
+$background: #0E1D25//#170c16
+$light_background: #3A474D//#663172
+$extra_light_background: #556067
 $inactive_background: #808080
+
+$warning: #74101b
+$violet: #80477d
+$orange: #ed8b00
+$pink: #cd0052
+$green: #75b10d
+$blue: #136880
+$blank: #27343b
 
 $text_color: #dddddd
 $text_color_dark: #333333
@@ -48,7 +58,7 @@ $text_size_massive: 150%
 
 $base_zoom: 1
 
-$header_height: 50px
+$header_height: 70px
 $header_width: $base_width
 $header_li_pad: 2px
 
@@ -157,10 +167,9 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 
 @mixin dialog 
-  border: 5px solid $middleground3
-  background-color: $middleground4
+  border: 1px solid $border_color
+  background-color: $middleground2
   color: $foreground
-  opacity: .95
   padding: 10px
   padding-top: 1em
 
@@ -189,44 +198,70 @@ body
   font-family: $font_family
   letter-spacing: 1.5px
 
+@mixin awesome_button
+  background: #222 url(/images/alert-overlay.png) repeat-x
+  display: inline-block 
+  padding: 12px 10px 12px
+  color: #fff
+  text-decoration: none
+  -moz-border-radius: 5px 
+  -webkit-border-radius: 5px
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
+  border-bottom: 1px solid rgba(0,0,0,0.25)
+  position: relative
+  cursor: pointer
+
+@mixin raised_element
+  background: #222 url(/images/alert-overlay.png) repeat-x
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
+  border-bottom: 1px solid rgba(0,0,0,0.25)
+  cursor: pointer
+  
 @mixin bright_button 
-  background-color: $text_color_bright
+  @include awesome_button
+  background-color: $orange
   color: $background
   @include no_select
 
-
 @mixin highlight_button 
+  @include awesome_button
   background-color: $text_color_highlight
   color: $background
   @include no_select
 
 
 @mixin cool_button 
+  @include awesome_button
   background-color: $text_color_cool
   color: $background
   @include no_select
 
 @mixin attention_button 
+  @include awesome_button
   background-color: $text_color_attention
   color: $background
   @include no_select
 
 @mixin stylish_input 
-  border: 2px solid $middleground2
+  border: 1px solid $border_color
   font-size: $text_size_big
   color: $foreground
   background-color: $background
 
 @mixin stylish_input_no_bg 
   @include left_right_pad
-  border: 2px solid $middleground2
+  border: 1px solid $border_color
   font-size: $text_size_big
   color: $foreground
   background-color: $background
 
 
 @mixin widget 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   border-color: $foreground
   background-color: $middleground
   @include no_select
@@ -363,13 +398,11 @@ div.table > div.table-row > div.table-cell
 .table-cell 
   display: inline-block
   text-align: left
-  margin: 6px 1px
-  height: 30px
+  margin: 2px 2px
+  height: 35px
   text-align: center
   padding-top: 10px
   vertical-align: top
-  -moz-border-radius: 3px
-  -webkit-border-radius: 3px
 
 td.table-cell 
   display: table-cell
@@ -459,7 +492,7 @@ div.table-cell.btn
   display: inline-block
   @include cool_button
   @include no_select
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include left_right_pad_wide
   @include pointer
   padding: 7px
@@ -479,28 +512,28 @@ div.main_sku
   @include left_right_pad_wide
   @include pointer
   padding: 3px
-  @include rounded_corners_left
+  @include rounded_corners_all
   width: 20px
   text-align: center
 
 .even 
-  background-color: $middleground4
+  background-color: $light_background
   color: $foreground
 
 .even 
-  @include rounded_corners_left
+  @include rounded_corners_all
 
 /* Form Styling */
 .stylish-text 
   @include stylish-input-no-bg
 
 .keyboardable, .keyboardable-disabled 
-  //@include rounded_corners_mismatch
+  //@include rounded_corners_all
   @include stylish_input_no_bg
   width: 200px
 
 .keyboardable-int 
-  //@include rounded_corners_mismatch
+  //@include rounded_corners_all
   @include stylish_input_no_bg
   width: 120px
 
@@ -528,7 +561,6 @@ div.general-form
 div.general-form > div.tab-container 
   clear: both
   background-color: $middleground
-  @include rounded_corners_all
 
 div.general-form > div.form-menu > div.link 
   float: left
@@ -544,10 +576,9 @@ div.general-form > div.form-menu > div.link
 div.general-form > div.form-menu > div 
   float: left
   width: 150px
-  background-color: $middleground2
-  color: $background
+  background-color: $middleground3
+  color: $foreground
   margin-right: 5px
-  @include rounded_corners_top
 
 div.general-form > div.form-menu > div.active 
   background-color: $middleground
@@ -565,7 +596,7 @@ div.form-container,div.form-container * input
 div.form-container * input[type=text],
 div.form-container * input[type=password],
 div.form-container * input.attribute-input 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   @include left_right_pad_wide
   @include stylish_input_no_bg
   @include dark_input
@@ -652,8 +683,9 @@ span.link, a
 /* The Header */
 
 div.header 
-  background: $middleground
-  @include rounded_corners_all
+  @include raised_element
+  background-color: $light_background
+  @include rounded_corners_bottom
   height: $header_height
   padding: 5px 0px -3px 0px
   margin-bottom: 17px
@@ -671,11 +703,11 @@ div.header > ul > li
 div.header > ul > li > div 
   padding-top: 5px
   width: 65px
-  height: $header_height - 5
+  height: $header_height - 2
   cursor: pointer
   :active 
     background-color: $middleground2
-    //@include rounded_corners_top
+    //@include rounded_corners_all
     //@include no_select
 
 
@@ -683,16 +715,16 @@ div.header > ul > li > div
 div.header > ul > li > div.active 
   padding-top: 5px
   width: 65px
-  height: 46px
+  height: $header_height - 2
   cursor: pointer
   background-color: $background
-  @include rounded_corners_top  
+  @include rounded_corners_top
   @include no_select
 
 div.header > ul > li > div.first 
   background-color: $background
   @include rounded_corners_top
-  height: 46px
+  height: $header_height - 2
   @include no_select
 
 div.header > ul > li > div.first > a > img 
@@ -706,7 +738,7 @@ div.header > ul > li > div > a > img
 
 div.close-window 
   @include attention_button
-  @include rounded_corners_left
+  @include rounded_corners_all
   position: fixed
   right: 0px
   bottom: 8px
@@ -718,7 +750,7 @@ div.close-window
 
 a.reload-window
   @include attention_button
-  @include rounded_corners_right
+  @include rounded_corners_all
   position: fixed
   left: 0px
   bottom: 8px
@@ -801,12 +833,13 @@ div.content-box > div.title-container
 
 
 
-div.content-box > div.title-container > div.title-box 
+div.content-box > div.title-container > div.title-box
+  @include raised_element
   height: 29px
-  padding-top: 3px
+  padding: 7px
   float: left
-  width: 84%
-  background-color: $middleground
+  width: 82%
+  background-color: $light_background
   text-transform: uppercase
 
 div.content-box > div.title-container > div.title-box-admin 
@@ -830,14 +863,14 @@ div.button-row-admin
 
 div.button-row-admin > div.spacer 
   background-color: #CC5757
-  @include rounded_corners_bottom_right
+  @include rounded_corners_all
   float: left
   height: 21px
   margin-top: -3px
 
 div.button-row-admin > div.button-admin 
   background-color: #FF8484
-  @include rounded_corners_bottom_left
+  @include rounded_corners_all
   color: #280D2E
   cursor: pointer
   float: left
@@ -860,7 +893,7 @@ div.content-box > div.title-container > div.left-blank
   font-size: $text_size_big
   color: $background
   background-color: $middleground
-  @include rounded_corners_left
+  @include rounded_corners_all
   @include bright_button
   @include pointer
 
@@ -877,10 +910,12 @@ div.content-box > div.title-container > div.right-blank
   font-size: $text_size_massive
   color: $background
   background-color: $middleground
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include cool_button
   @include pointer
-
+div.content-box > div.title-container > div.back-button,
+div.content-box > div.title-container > div.reload-button
+  padding: 5px
 div.content-box > div.title-container  > div.back-button-admin 
   height: 64px
 
@@ -937,7 +972,7 @@ div.list > div
 div.list > div.master 
   @include rounded_corners_all
   border-color: $foreground
-  background-color: $middleground
+  background-color: $light_background
   margin-top: 15px
   font-size: 70%
   padding: 0px 10px
@@ -948,8 +983,8 @@ div.list > div.widget a
 
 div.list > div.master-wide 
   @include rounded_corners_all
-  border-color: $foreground
-  background-color: $middleground
+  border-color: $border_color
+  background-color: $light_background
   margin-top: 15px
   padding: 0px 10px
   @include no_select
@@ -982,7 +1017,7 @@ div.sign-in-forms > div.sign-in-form-menu > div.link
   width: 150px
   margin-right: 5px
   padding-top: 5px
-  @include rounded_corners_top
+  @include rounded_corners_all
   @include pointer
   @include left_right_pad
   height: 40px
@@ -993,7 +1028,7 @@ div.sign-in-forms > div.sign-in-form-menu > div
   background-color: $middleground2
   color: $background
   margin-right: 5px
-  @include rounded_corners_top
+  @include rounded_corners_all
 
 div.sign-in-forms > div.sign-in-form-menu > div.active 
   background-color: $middleground
@@ -1002,16 +1037,16 @@ div.sign-in-forms > div.sign-in-form-menu > div.active
 
 div.sign-in-form-container * input[type=text],
 div.sign-in-form-container * input[type=password] 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   @include left_right_pad_wide
   @include stylish_input
   width: 82%
 
 div.sign-in-form-container * div.button-row > div.button-confirm 
-  @include rounded_corners_right
+  @include rounded_corners_all
 
 div.sign-in-form-container * div.button-row  
-  @include rounded_corners_right
+  @include rounded_corners_all
   position: relative
   right: -250px
   bottom: -60px
@@ -1040,7 +1075,7 @@ nav.pagination span.disabled
   padding: 8px
   display: inline-block
   min-width: 35px
-  background-color: $middleground
+  background-color: $light_background
   font-size: $text_size_big
   margin-bottom: 10px
 
@@ -1050,12 +1085,12 @@ nav.pagination span.page
   margin-right: 4px
 
 nav.pagination span.first 
-  @include rounded_corners_left
+  @include rounded_corners_all
   @include bright_button
   margin-right: 5px
 
 nav.pagination span.last 
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include bright_button
   margin-left: 5px
 
@@ -1073,11 +1108,10 @@ nav.pagination span.disabled
 $key_width: 2em
 $key_width_wide: 4em
 input.keyboard-input 
-  @include rounded_corners_left
-  //@include rounded_corners_right
+  @include rounded_corners_all
+  //@include rounded_corners_all
   text-align: center
-  border: 2px solid $middleground2
-  font-size: $text_size_big
+  border: 1px solid $border_color
   width: 30%
   background-size: 100%
   height: 1.5em
@@ -1085,6 +1119,7 @@ input.keyboard-input
   background-color: $foreground
   color: $background
   font-weight: bold
+  font-size: 200%
   margin: 0px 0px 0px 0px
 
 div.keys div.key,
@@ -1097,7 +1132,7 @@ input.ui-keyboard-button
   float: left
   text-align: center
   vertical-align: middle
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   @include pointer
   @include no_select
   color: $background
@@ -1129,21 +1164,21 @@ div.keys div.wide-key
 
 div.keys div.key-clear 
   width: 5.6em
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include attention_button
 
 div.keys div.key-Enter 
   width: 5.6em
-  @include rounded_corners_left
+  @include rounded_corners_all
   @include bright_button
 
 div.keys div.key-Bksp 
   width: 5.6em
-  @include rounded_corners_left
+  @include rounded_corners_all
 
 div.keys div.key-Suche 
   width: 5.5em
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include cool_button
 
 td.pos-left-column 
@@ -1217,6 +1252,7 @@ div#eod-calculator-total, div#eod-calculator-difference
   color: white
 
 .pos-order-total 
+  @include raised_element
   cursor: pointer
   display: inline-block
   text-transform: uppercase
@@ -1226,9 +1262,9 @@ div#eod-calculator-total, div#eod-calculator-difference
   padding: 5px
   width: 40%
   margin: 5px
-  background-color: $light_background
-  @include rounded_corners_right
-  @include rounded_corners_left
+  background-color: $green
+  @include rounded_corners_all
+  @include rounded_corners_all
 
 .pos-order-total-highlight 
   cursor: pointer
@@ -1240,12 +1276,12 @@ div#eod-calculator-total, div#eod-calculator-difference
   width: 50%
   margin: 5px
   background-color: $text_color_highlight
-  @include rounded_corners_right
-  @include rounded_corners_left
+  @include rounded_corners_all
+  @include rounded_corners_all
 
 
 div.pos-button 
-  padding: 20px 0px
+  @include awesome_button
   @include pointer
   background-color: $foreground
   color: $background
@@ -1262,11 +1298,15 @@ div.square-button
 
 div.pos-menu div.new-order 
   @include rounded_corners_left
+  background-color: $blue
+  color: white
   width: 10%
 
 div.pos-menu div.print-receipt 
   @include rounded_corners_right
   @include bright_button
+  color: white
+  padding-right: 5px
   width: 15%
   text-align: right
 
@@ -1302,8 +1342,22 @@ div.pos-menu div.pos-configuration
   text-overflow: ellipsis
   overflow: hidden
   @include pointer
-  background-color: $light_background
 
+div.pos-item-attr
+  @include raised_element
+  background-color: $light_background
+  
+div.pos-item-total
+  background-color: $green
+  font-weight: bolder
+  font-size: 150%
+.quantity-button
+  border: 1px solid $border_color
+  
+div.pos-item-name
+  padding-right: 20px
+  overflow-x: hidden
+  text-align: right
 .pos-item-total
   width: 11%
 
@@ -1321,7 +1375,7 @@ div.pos-menu div.pos-configuration
 
 .pos-item-name 
   text-align: left
-  width: 30%
+  width: 27%
   overflow: hidden
   white-space: nowrap
   float: none
@@ -1387,7 +1441,7 @@ div.pos-menu div.pos-configuration
 .item-menu-div 
   padding: 5px
   @include dialog
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
 
 .item-menu-div img 
   margin-right: 25px
@@ -1400,7 +1454,7 @@ div.cash-drop, div#coincalculator
   z-index: 10
 
 .error-input 
-  border: 2px solid red
+  border: 1px solid red
 
 .cash-drop, .shipment-create-item, div#coincalculator 
   width: 450px
@@ -1408,7 +1462,7 @@ div.cash-drop, div#coincalculator
   position: absolute
   top: 5%
   left: 20%
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   @include dialog
 
 div#coincalculator 
@@ -1472,18 +1526,17 @@ span.complete_order_highlight
   color: $text_color_highlight
 
 .complete-order,.reorder-types 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   width: 450px
   font-size: 1.5em
   position: absolute
   top: 20px
   left: 20%
-  opacity: .95
   @include dialog
   padding: 10px 10px 50px 10px
 
 .reorder-types 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   width: 350px
   position: absolute
   top: 200px
@@ -1491,7 +1544,7 @@ span.complete_order_highlight
 
 
 .complete-order input[type=text] 
-  @include rounded_corners_mismatch
+  @include rounded_corners_all
   @include left_right_pad_wide
   @include stylish_input
   color: white
@@ -1579,13 +1632,13 @@ span.order-lc_points,.order-points,.loyalty-points
   @include dialog
 
 .rounded-corners-left
-  @include rounded_corners_left
+  @include rounded_corners_all
 
 .rounded-corners-right
-  @include rounded_corners_right
+  @include rounded_corners_all
 
 .button-cancel 
-  @include rounded_corners_left
+  @include rounded_corners_all
   @include cool_button
   padding: 10px
   @include left_right_pad_wide
@@ -1593,7 +1646,7 @@ span.order-lc_points,.order-points,.loyalty-points
   @include pointer
 
 .button-confirm 
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include bright_button
   padding: 10px
   @include left_right_pad_wide
@@ -1606,21 +1659,21 @@ span.order-lc_points,.order-points,.loyalty-points
   @include pointer
 
 .button-confirm-left 
-  @include rounded_corners_top_left
+  @include rounded_corners_all
   @include bright_button
   padding: 10px
   @include left_right_pad_wide
   @include pointer
 
 .button-confirm-bottom-left 
-  @include rounded_corners_bottom_left
+  @include rounded_corners_all
   @include bright_button
   padding: 3px
   @include left_right_pad_wide
   @include pointer
 
 .button-confirm-bottom-right 
-  @include rounded_corners_bottom_right
+  @include rounded_corners_all
   @include bright_button
   padding: 3px
   @include left_right_pad_wide
@@ -1736,7 +1789,7 @@ div.scrollable-button-row
   @include cool_button
 
 .button-down 
-  @include rounded_corners_left
+  @include rounded_corners_all
   @include cool_button
   padding: 3px
   @include left_right_pad_wide
@@ -1747,7 +1800,7 @@ div.scrollable-button-row
 
 
 .button-up 
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include bright_button
   padding: 3px
   @include left_right_pad_wide
@@ -1971,7 +2024,7 @@ html>body tbody.scrollContent td + td + td
 select 
   -webkit-appearance: none
   @include stylish_input_no_bg
-  @include rounded_corners_top_right
+  @include rounded_corners_all
   padding-right: 5px
 
 option
@@ -1986,22 +2039,18 @@ select:focus
   background-color: $background
 
 ::-webkit-scrollbar-thumb:vertical 
-  background-color: $middleground3
+  background-color: $light_background
   min-height: 20px
   max-height: 100px
-  @include rounded_corners_top
-  @include rounded_corners_bottom
+  @include rounded_corners_all
 
 ::-webkit-scrollbar-track:vertical 
-  background-color: $middleground4
-  @include rounded_corners_top
-  @include rounded_corners_bottom
+  background-color: $background
+  @include rounded_corners_all
 
 ::-webkit-scrollbar-button:vertical 
   height: 35px
-
-  @include cool_button
-
+  background-color: $light_background
 ::-webkit-scrollbar-button:vertical:decrement 
   @include rounded_corners_bottom
 
@@ -2026,7 +2075,7 @@ select:focus
   position: absolute
   top: 0
   left: 0
-  border: 1px solid $light_background
+  border: 1px solid $light_border_color
   background: $middleground2
   padding: 2px
 
@@ -2034,7 +2083,7 @@ select:focus
   padding: 5px 10px 5px 25px
   background: #fbfbfb url('/images/loading.gif') no-repeat 5px 5px
   line-height: 16px
-  border: 1px solid #333
+  border: 1px solid $border_color
   color: #222
   font: normal 11px tahoma, arial, helvetica, sans-serif
   cursor: wait
@@ -2243,7 +2292,7 @@ div.discount_applied
 
 /*E-Help classes*/
 .EHmarker
-  border: 2px solid #FF0000 
+  border: 1px solid #FF0000 
 
 #EHhelpBox
   position: relative
@@ -2298,7 +2347,7 @@ div.discount_applied
 
 .EHtooltipc span 
   background-color: #FF0000
-  border: 2px solid white
+  border: 1px solid white
   color: white
   float: left
   margin: 0
@@ -2329,7 +2378,7 @@ div.discount_applied
 
 .EHtooltmp a.EHclose
   background-color: #FF0000
-  border: 2px solid white
+  border: 1px solid white
   color: white
   float: left
   margin: 0
@@ -2354,7 +2403,7 @@ div.discount_applied
 
 .EHtoolgost span 
   background-color: #eee
-  border: 2px solid white
+  border: 1px solid white
   color: #666
   float: left
   margin: 0
@@ -2398,12 +2447,12 @@ section.report
 
 .pos-drawer-button 
   float: right
-  background-color: #663172
+  background-color: $light_background
 
 
 .uniscalebutton 
   float : left
-  background-color: #663172
+  background-color: $light_background
 
 
 div.wholesaler-refresh 
@@ -2452,7 +2501,7 @@ div.pieces-button
 
 div.bycard-button 
   @include dialog
-  @include rounded_corners_right
+  @include rounded_corners_all
   @include no_select
   cursor: pointer
   width: 100px
@@ -2552,7 +2601,7 @@ div.last-completed-orders
     display: inline-block
     padding: 5px
     margin-right: 5px
-    border: 1px solid $middleground3
+    border: 1px solid $border_color
   
   
 
@@ -2649,13 +2698,13 @@ input
 
 .cool-button-left 
   @include cool_button
-  @include rounded_corners_left
+  @include rounded_corners_all
   padding: 10px
   cursor: pointer
 
 .cool-button-right 
   @include cool_button
-  @include rounded_corners_right
+  @include rounded_corners_all
   padding: 10px
   cursor: pointer
 
@@ -2748,7 +2797,7 @@ div.edit-delete-row div.spacer
 
 div.edit-delete-row div.edit 
   @include cool_button
-  @include rounded_corners_left
+  @include rounded_corners_all
   text-align: right
   padding-left: 11px
   padding-right: 2px
@@ -2756,7 +2805,7 @@ div.edit-delete-row div.edit
 
 div.edit-delete-row div.delete 
   @include attention_button
-  @include rounded_corners_bottom_right
+  @include rounded_corners_all
   text-align: right
   padding-right: 11px
   padding-left: 5px
@@ -2814,6 +2863,7 @@ div.role-check
 
 div#header_drawer_amount
   :position absolute
+  :top -3px
   :padding 32px 0px 0px 0px
   :font-weight bold
   :font-size 90%
@@ -2876,3 +2926,117 @@ div.error_page
 
 div.item_sold_times
   :font-size 300%
+div.popup-hide-button
+  :float right
+  :width 50px
+div.pos-action-applied
+  :background-color #c080de
+  :color black
+@button
+  display: inline-block
+#offline_canvas
+  border: 2px solid red
+#offline_canvas #control_panel
+  border: 2px solid green
+  display: inline-block
+#offline_canvas #order_items
+  border: 2px solid blue
+  display: inline-block
+  width: 70%
+  top: 0
+#offline_canvas #order_items .order_item_row
+  border: 1px solid pink
+  display: inline-block
+#order_total
+  display: inline-block
+  font-size: 3em
+  text-align: right
+  background-color: red
+  width: 95%
+  margin: 5px
+#offline_canvas div.fat-button
+  display: inline-block
+  font-size: 2.5em
+  font-weight: bolder
+  margin: 5px
+  background-color: yellow
+  color: black
+  text-align: center
+  width: 220px
+.order_item_row div
+  display: inline-block
+.denomination
+  width: 100px
+  display: inline-block
+  font-size: 2.5em
+  font-weight: bolder
+  margin: 5px
+  background-color: yellow
+  color: black
+  text-align: center
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+div.popup-hide-button
+  :float right
+  :width 50px
+div.pos-action-applied
+  :background-color $orange
+  :color black
+@button
+  display: inline-block
+#offline_canvas
+  border: 2px solid red
+#offline_canvas #control_panel
+  border: 2px solid green
+  display: inline-block
+#offline_canvas #order_items
+  border: 2px solid blue
+  display: inline-block
+  width: 70%
+  top: 0
+#offline_canvas #order_items .order_item_row
+  border: 1px solid pink
+  display: inline-block
+#order_total
+  display: inline-block
+  font-size: 3em
+  text-align: right
+  background-color: red
+  width: 95%
+  margin: 5px
+#offline_canvas div.fat-button
+  display: inline-block
+  font-size: 2.5em
+  font-weight: bolder
+  margin: 5px
+  background-color: yellow
+  color: black
+  text-align: center
+  width: 220px
+.order_item_row div
+  display: inline-block
+.denomination
+  width: 100px
+  display: inline-block
+  font-size: 2.5em
+  font-weight: bolder
+  margin: 5px
+  background-color: yellow
+  color: black
+  text-align: center
+
+input:focus
+  outline: none

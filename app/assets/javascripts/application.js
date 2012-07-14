@@ -29,3 +29,4 @@
 //= require onscreenkeyboard
 //= require salor_bin
 //= require style
+//= require shared
