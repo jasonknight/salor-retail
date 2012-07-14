@@ -289,8 +289,9 @@ module ApplicationHelper
     tm = l(Time.now, :format => :salor)
     tarr = tm.split(' ')
     ret = ''
-    reg = CashRegister.find_by_id($User.meta.cash_register_id)
-    ret << "<span>#{tarr[3]}</span><br />#{tarr[0]} #{tarr[1]} #{tarr[2]}<br />#{$User.username}<br />#{ reg.name if reg }"
+    reg = ''
+    reg = CashRegister.find_by_id($User.meta.cash_register_id) if $User
+    ret << "<span>#{tarr[3]}</span><br />#{tarr[0]} #{tarr[1]} #{tarr[2]}<br />#{$User.username if $User}<br />#{ reg.name if reg }"
     return ret.html_safe
   end
   def num2name(num)
