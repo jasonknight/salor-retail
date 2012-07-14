@@ -471,7 +471,7 @@ class OrderItem < ActiveRecord::Base
     return self.tax if self.tax_is_locked
     return 0 if not self.tax_profile_amount
     p = self.total
-    if not $Conf.calculate_tax then
+    if $Conf and not $Conf.calculate_tax then
       net_price = (p *(100 / (100 + (100 * (self.tax_profile_amount/100))))).round(2);
       t = (p - net_price).round(2)
     else
