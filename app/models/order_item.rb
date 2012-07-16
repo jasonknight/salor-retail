@@ -220,7 +220,7 @@ class OrderItem < ActiveRecord::Base
   end
   def quantity=(q)
     if self.order and self.order.paid == 1 then
-      #  return # Mikey: return interferes with splitting of an order item, so I disabled this
+      return
     end
     if q.nil? or q.blank? then
       q = 0

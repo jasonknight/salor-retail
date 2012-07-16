@@ -46,6 +46,9 @@ class FileUpload
       base_price_carton = base_price_piece * packaging_unit_carton
       purchase_price_carton = purchase_price_piece * packaging_unit_carton
 
+      # packaging_unit_modification
+      packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
+
       if columns[36]
         tax_profile = TaxProfile.scopied.find_by_value(columns[36].to_f / 100)
       elsif columns[15] == columns[16]
@@ -176,6 +179,9 @@ class FileUpload
       # carton price calculation
       base_price_carton = base_price_piece * packaging_unit_carton
       purchase_price_carton = purchase_price_piece * packaging_unit_carton
+
+      # packaging_unit_modification
+      packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
 
       if columns[36]
         tax_profile = TaxProfile.scopied.find_by_value(columns[36].to_f / 100)
