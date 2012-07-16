@@ -7,6 +7,9 @@ function make_keyboardable(elem) {
   kbd.mousedown(function () {
     elem.getkeyboard().reveal();
   });
+  var new_offset = elem.offset();
+  new_offset.top += 2;
+  kbd.css({position: 'absolute', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
   if (!elem.hasClass('keyboardable-int')) {
     if (elem.hasClass("keyboard-input")) {
         elem.keyboard({
@@ -40,14 +43,23 @@ function make_keyboardable(elem) {
   elem.addClass("keyboardable-done");
   if (elem.hasClass('left-kbd')) {
     kbd.addClass('kbd-show-left pointer');
-    kbd.insertBefore(elem);
+    $('body').append(kbd);
+    new_offset.left = new_offset.left - (kbd.outerWidth() + 10);
+    kbd.offset(new_offset);
+  } else if (elem.hasClass('wide-left-kbd')) {
+    kbd.addClass('kbd-show-left pointer');
+    $('body').append(kbd);
+    new_offset.left = new_offset.left - (kbd.outerWidth() + 36);
+    kbd.offset(new_offset);
   } else {
     kbd.addClass('kbd-show pointer');
     kbd.insertAfter(elem);
     if (elem.hasClass("keyboard-input")) {
       kbd.insertAfter(elem);
-      kbd.css({display: 'inline-block'});
+      
     }
+    new_offset.left += elem.outerWidth();
+    kbd.offset(new_offset);
   }
 
   return elem;
@@ -65,6 +77,9 @@ function make_keyboardable_with_options(elem,opts) {
     $(target).getkeyboard().reveal();
   });
   kbd.addClass('kbd-show pointer');
+  var new_offset = elem.offset();
+  new_offset.top += 2;
+  kbd.css({position: 'absolute', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
   var options = {
         openOn   : '',
         stayOpen : true,
@@ -88,7 +103,9 @@ function make_keyboardable_with_options(elem,opts) {
     options['layout'] = 'num';    
   }
   elem.keyboard(options);
- kbd.insertAfter(elem);
+  kbd.insertAfter(elem);
+  new_offset.left += elem.outerWidth() + 10;
+  kbd.offset(new_offset);
   return elem;
 }
 

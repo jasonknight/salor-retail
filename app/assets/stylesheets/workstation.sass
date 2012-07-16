@@ -71,8 +71,8 @@ $search_width: 250px
 $search_input_width: 200px
 $search_button_width: 50px
 
-$small_border_radius: 8px
-$large_border_radius: 10px
+$small_border_radius: 3px
+$large_border_radius: 8px
 
 /* Pos Keyboard Sizing */
 
@@ -111,6 +111,10 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 @mixin rounded_corners_all 
   -moz-border-radius: $large_border_radius
   -webkit-border-radius: $large_border_radius
+  
+@mixin rounded_corners_all_small 
+  -moz-border-radius: $small_border_radius
+  -webkit-border-radius: $small_border_radius
 
 @mixin rounded_corners_top 
   -webkit-border-top-left-radius: $large_border_radius
@@ -204,8 +208,8 @@ body
   padding: 12px 10px 12px
   color: #fff
   text-decoration: none
-  -moz-border-radius: 5px 
-  -webkit-border-radius: 5px
+  -moz-border-radius: $large_border_radius 
+  -webkit-border-radius: $large_border_radius
   -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
@@ -492,12 +496,10 @@ div.table-cell.btn
   display: inline-block
   @include cool_button
   @include no_select
-  @include rounded_corners_all
-  @include left_right_pad_wide
+  @include rounded_corners_all_small
   @include pointer
-  padding: 7px
-  width: 20px
   text-align: center
+  padding: 3px
 
 div.main_sku
   text-align: center
@@ -506,13 +508,12 @@ div.main_sku
 
 .kbd-show-left 
   float: left
-  margin-right: 5px
   @include cool_button
   @include no_select
   @include left_right_pad_wide
   @include pointer
   padding: 3px
-  @include rounded_corners_all
+  @include rounded_corners_all_small
   width: 20px
   text-align: center
 
@@ -548,6 +549,7 @@ div.actions
 
 div.actions input[type=submit],
 div.content-container-shipments-show button 
+  border: none
   @include rounded_corners_all
   @include bright_button
   padding: 3px
@@ -838,7 +840,7 @@ div.content-box > div.title-container > div.title-box
   height: 29px
   padding: 7px
   float: left
-  width: 82%
+  width: 80%
   background-color: $light_background
   text-transform: uppercase
 
@@ -900,7 +902,7 @@ div.content-box > div.title-container > div.left-blank
 div.content-box > div.title-container > div.reload-button,
 div.content-box > div.title-container > div.reload-button-admin,
 div.content-box > div.title-container > div.right-blank 
-  width: 7%
+  width: 6%
   height: 32px
   float: left
   margin-left: 5px
@@ -1120,7 +1122,7 @@ input.keyboard-input
   color: $background
   font-weight: bold
   font-size: 200%
-  margin: 0px 0px 0px 0px
+  margin: 0px 0px 6px 0px
 
 div.keys div.key,
 input.ui-keyboard-button 
@@ -1356,6 +1358,7 @@ div.pos-item-total
   
 div.pos-item-name
   padding-right: 20px
+  padding-left: 10px
   overflow-x: hidden
   text-align: right
 .pos-item-total
@@ -1374,8 +1377,7 @@ div.pos-item-name
   padding: 4px 0px 6px 0px
 
 .pos-item-name 
-  text-align: left
-  width: 27%
+  width: 20%
   overflow: hidden
   white-space: nowrap
   float: none
