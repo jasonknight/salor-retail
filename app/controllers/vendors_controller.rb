@@ -261,6 +261,7 @@ class VendorsController < ApplicationController
       cookies[:user_id] = nil
       cookies[:user_type] = nil
       redirect_to :controller => :home, :action => :index
+      $User = nil
     end
   end
   # {END}

@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   helper_method [:user_cache_name]
 
   unless Salor::Application.config.consider_all_requests_local
-    rescue_from Exception, :with => :render_error
+    #rescue_from Exception, :with => :render_error
   end 
 
   def pre_load
@@ -76,7 +76,9 @@ class ApplicationController < ActionController::Base
       else
         user= Employee.find_by_id(session[:user_id])
       end
+      return user
     end
+    return nil
   end
 
   def user_cache_name
@@ -149,6 +151,7 @@ class ApplicationController < ActionController::Base
         salor_user.meta.save
       end
     else 
+      $User = nil # $User is being set somewhere before this is even called, which is weird.
       @owner = User.new
     end
     

@@ -118,6 +118,11 @@ $(function () {
     <td valign="top"> <%= f.text_field :quantity, :class => "keyboardable-int delimit-number", :size => 7 %> </td>
   </tr>
   
+  <tr>
+    <td valign="top"> <%= f.label I18n.t("activerecord.models.vendor.one") %> </td>
+    <td valign="top"> <%= f.collection_select :vendor_id,GlobalData.vendors,:id,:name %> </td>
+  </tr>
+  
   <% if not @item.sku.blank?  %>
   <tr>
     <td>&nbsp;</td>

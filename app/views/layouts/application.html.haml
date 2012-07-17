@@ -36,7 +36,7 @@
 
   %body#body
     .background
-      = salor_render :partial => "shared/header_menu" if salor_signed_in? and $User.can(:see_header) 
+      = salor_render :partial => "shared/header_menu" if $User and $User.can(:see_header) 
       = salor_render :partial => "shared/notice"
       .errors.hidden
       .help.hidden

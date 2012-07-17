@@ -354,24 +354,29 @@ $(function () {
 </div>
 
 <div class='clear'></div>
-<% if not @cash_register.scale.blank? then  %>
   <script type="text/javascript">
     function weigh_last_item() {
     try {
       var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
-      var weight = Salor.<%= @cash_register.scale %>;
+      <% if not @cash_register.scale.blank? then  %>
+        var weight = Salor.<%= @cash_register.scale %>;
+      <% else %>
+        var weight = 0;
+      <% end %>
       var string = '/vendors/edit_field_on_child?id=' +
               itemid +'&klass=OrderItem' +
               '&field=quantity'+
               '&value=' + weight;
               get(string, filename);
-if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
+      if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
 
      } catch (err) {
-     	//don't complain
+      //don't complain
      }
     }
   </script>
+<% if not @cash_register.scale.blank? then  %>
+  
   <div class="uniscalebutton" align="center" onmousedown="weigh_last_item();">
     <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32) %>
   </div>

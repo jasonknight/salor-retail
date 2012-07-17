@@ -72,24 +72,26 @@ class ItemsController < ApplicationController
     # We must insure that tax_profile is set first, otherwise, the
     # gross magic won't work
     # TODO Test this as it's no longer necessary
+    
     @item = Item.all_seeing.find_by_sku(params[:item][:sku])
     if @item then
       @item.attributes = params[:item]
       flash[:notice] = I18n.t('system.errors.sku_must_be_unique',:sku => @item.sku)
       render :action => "new" and return
     end
+
     @item = Item.new
     @item.tax_profile_id = params[:item][:tax_profile_id]
     @item.attributes = params[:item]
     @item.sku.upcase!
 
     respond_to do |format|
-      if salor_user.owns_vendor?(@item.vendor_id) and @item.save
+      if $User.owns_vendor?(@item.vendor_id) and @item.save
         @item.set_model_owner(salor_user)
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Item.model_name.human)) }
         format.xml  { render :xml => @item, :status => :created, :location => @item }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => "new", :notice => "Failed" }
         format.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
       end
     end
