@@ -310,7 +310,7 @@ en-US:
       backup_logfile: Backup file di Log
   items:
     database_distiller:
-      are_you_sure: Tutti gli articoli non utilizzati verranno cancellati. Non si potrà recuperare gli articoli. Sei sicuro di provedere?
+      are_you_sure: Tutti gli articoli non utilizzati verranno cancellati. Non si potrà recuperare gli articoli. Sei sicuro di continuare?
       delete_unused_items: Articoli non utilizzati cancellati!
       hidden: Articoli già cancellati
       hidden_by_distiller: Articoli cancellati dal Filtro Database
@@ -349,7 +349,7 @@ en-US:
     buy_order: Compra
     cameras: videocamera
     cancel: cancella
-    cash_drop: uscita cassa
+    cash_drop: prelievo cassa
     cash_register: registratore di cassa
     cash_registers: registratori di cassa
     categories: categorie
@@ -539,7 +539,7 @@ en-US:
       calculated_drawer_amount: Importo di cassa calcolato
       cash-refunds: Rimborso-Cassa
       cash_refunds_total: TOTALE
-      noncash-refunds: Noncash-Refunds
+      noncash-refunds: Rimborso non contante
       orders_total: Ordini totale
       payment_method_total: TOTALE
       payments: Pagamenti
@@ -549,14 +549,14 @@ en-US:
       sales: Vendite
       system_drawer_amount: Importo sistema cassa
       transaction_total: TOTALE
-      warning_drawer_amount_not_zero: Attenzione! L'importo di cassa è diverso da zero. Si avvisa di chiudere e partire ogni giorno con un importo di cassa uguale a zero per semplificare la contabilità. Esegui una liquidazione cassa e stampa di nuovo questo rapporto.
+      warning_drawer_amount_not_zero: Attenzione! L'importo di cassa è diverso da zero. Si avvisa di chiudere e di ripartire ogni giorno con un importo di cassa uguale a zero per semplificare la contabilità. Esegui una liquidazione cassa e stampa di nuovo questo rapporto.
     formats:
       advert: ! 'Il Punto di Vendita Innovativo
 
         www.salorpos.com'
       cancel: Cancella                  EUR %8.2f
       change: ! 'Cambia:                       EUR %8.2f'
-      coupon_subtotal: Scontrino Subtotale                   EUR %8.2f
+      coupon_subtotal: Buono-sconto Subtotale              EUR %8.2f
       discount_subtotal: Sconto                       EUR %8.2f
       end_of_day: ! '%20.20s EUR %5.2f'
       fixed_rebate: Riduzione                         EUR %8.2f
@@ -568,7 +568,7 @@ en-US:
       total: TOTALE                         EUR %8.2f
     order_receipt: ricevuta_ordine
       change: Cambia moneta
-      coupon_subtotal: Scontrino Subtotale
+      coupon_subtotal: Buono-Sconto Subtotale
       current_loyalty_points: Tuoi punti fedeltà
       discount: Sconto
       discount_subtotal: Sconto Subtotale
@@ -623,9 +623,9 @@ en-US:
         liquidazione cassa del giorno
       cannot_edit_completed_order: Questo ordine è comleto e non può essere modificato.
       cannot_reorder: Nessun articolo da riordinare.
-      child_sku_must_exist: Child Item Must Exist!
-      coupon_cannot_be_buy_one_get_one: coupon %{sku} cannot be_buy_one_get_one when
-        applied to %{applies}
+      child_sku_must_exist: Articolo Figlio deve esistere!
+      coupon_cannot_be_buy_one_get_one: buono-sconto %{sku} non può essere un compra uno prendi uno quando
+        applicato a %{applies}
       coupon_not_enough_items: Non hai comprato abbastanza articoli per procedere
       csv_item_exists: Articolo %{sku} esistente!
       csv_item_failed: ! '%{id} %{i} fallito.'
@@ -643,10 +643,10 @@ en-US:
         nella configurazione del negozio?
       must_cash_drop: In cassa non ci sono soldi, aggiungi contante  prelevato per piacere!
       must_choose_register: Devi registrarti ad un registratore di cassa!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
+      must_choose_vendor: Devi minsufficient_quantity_on_itemust scegliere un Negozio!
       must_set_receiver_to_vendor: Devi configurare questo campo di ricevimento spedizione 
         con un Negozio valido
-      must_specify_drop_or_payout: You must specify either drop or payout!
+      must_specify_drop_or_payout: Devi selezionare prelievo o liquidazione!
       no_class: Non esiste una classe per %{model} alla linea %{i}
       no_role: Non hai il ruolo necessario per accedere a questa risorsa.
       no_such_item: Non esiste articolo con questo SKU
@@ -717,7 +717,7 @@ en-US:
       manager: Manager
       no_change: nessun cambiamento
       notes: note
-      parts: parti o ricambi????
+      parts: parti
       percent_off: ! '% off'
       roles: ruoli
       search: cerca
