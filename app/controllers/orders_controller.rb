@@ -413,13 +413,12 @@ class OrdersController < ApplicationController
     @oi = OrderItem.find_by_id(params[:id])
     if @oi then
       noi = OrderItem.new(@oi.attributes)
-      @oi.quantity -= 1
-      @oi.total = @oi.price * @oi.quantity
+      new_quantity = @oi.quantity - 1
+      new_total = @oi.price * new_quantity
       noi.order_id = @oi.order_id
-      noi.quantity = 1
-      noi.total = noi.quantity * noi.price
-      OrderItem.connection.execute("update order_items set quantity = '#{@oi.quantity}', total = '#{@oi.total}' where id = #{@oi.id}")
       noi.save
+      OrderItem.connection.execute("update order_items set quantity = '#{new_quantity}', total = '#{new_total}' where id = #{@oi.id}") 
+      OrderItem.connection.execute("update order_items set quantity = '#{1}', total = '#{@oi.price}', price = '#{@oi.price}' where id = #{noi.id}")
     end
     redirect_to "/orders/#{@oi.order.id}"
   end

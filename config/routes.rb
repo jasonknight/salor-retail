@@ -3,6 +3,7 @@ Salor::Application.routes.draw do
   # first created -> highest priority.
 
   match "vendors/csv" => "vendors#csv"
+  match "vendors/backup" => "vendors#backup"
   match "nodes/send_msg" => "nodes#send_msg"
   match "nodes/receive_msg" => "nodes#receive_msg"
   match "home/index" => "home#index"

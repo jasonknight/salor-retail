@@ -172,8 +172,10 @@ module UserEmployeeMethods
     end
     if i.first then
        i = i.first
-      end
-    return i if i and owns_vendor?(i.vendor_id)
+    else
+       i = nil
+    end
+    return i if i and i.respond_to? :vendor_id and owns_vendor?(i.vendor_id)
     return nil
   end
 

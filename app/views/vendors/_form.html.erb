@@ -112,7 +112,7 @@
                       <%= conf.select :stylesheets, ['','default','darker','retro','goldenrod','sky','hippy'] %>
                     </div>
                     <% if AppConfig.standalone == true  %>
-                      <div>
+                      <div style="display: none;">
                         <%= conf.label t("activerecord.attributes.cash_drawer") %><br />
                         <%= conf.text_field :cash_drawer, :class => "keyboardable" %>
                       </div>

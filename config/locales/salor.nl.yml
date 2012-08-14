@@ -5,6 +5,8 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      invoice_blurb: Invoice text
+      invoice_blurb_footer: Invoice text footer
       active: active
       address: address
       afield: field
@@ -144,7 +146,7 @@ en-US:
       username: username
       uses_drawer_id: Uses Drawer of
       value: value
-      vendor_id: Store
+      vendor_id: Vendor
       vendor_printers: printers
       weigh_compulsory: compulsory weighing
       weight: weight
@@ -383,7 +385,7 @@ en-US:
     edit_shipper: edit shipper %{name}
     edit_tax_profile: edit tax profile
     edit_tender_method: edit tender method
-    edit_vendor: edit Store
+    edit_vendor: edit vendor
     employees: employees
     end_day: end day
     general_configuration: general configuration
@@ -412,7 +414,7 @@ en-US:
     new_stock_location: new stock location
     new_tax_profile: new tax profile
     new_tender_method: new tender method
-    new_vendor: new Store
+    new_vendor: new vendor
     ok: OK
     order: order
     orders: orders
@@ -445,7 +447,7 @@ en-US:
     update_real_quantity: update real quantity
     upload: upload
     usb_device: Usb Stick
-    vendors: Stores
+    vendors: vendors
     void: void
     wholesaler_update: wholesaler update
   notifications:
@@ -663,7 +665,7 @@ en-US:
       order_register_required: You must specify a register for this order
       order_totals_validation_failed: Order total validation failed, refreshing the
         order may repair the issue. Press OK to refresh.
-      order_vendor_required: You must supply a Store for this order
+      order_vendor_required: You must supply a vendor for this order
       parent_sku_must_exist: Parent Item Must Exist!
       payment_required: ! 'Error 402: Full Payment is Required'
       payment_required_explanation: We regret to inform you that your system has automatically
@@ -756,6 +758,7 @@ en-US:
       move_real_quantities_success: Item quantities were successfully updated
       new_order: new order created
       order_refund_dt: ! '#%{id}'
+      please_backup: "Please backup your system regularly!"
       save_before: XXX Save before leaving?
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
@@ -811,7 +814,7 @@ en-US:
     three_easy_ways: three easy ways
     total: total
     username: username
-    vendor: Store
+    vendor: vendor
     wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
   when_list:
     add_to_order: on add to order

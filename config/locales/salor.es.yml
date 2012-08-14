@@ -763,6 +763,7 @@ es:
         con éxito
       new_order: Nuevo pedido creado
       order_refund_dt: ! '#%{id}'
+      please_backup: "Por favor, respaldo el sistema regularmente!"
       save_before: ¿Guardar antes de salir?
       wholesaler_upload_report: ! 'Artículos actualizados: %{updated_items}, Artículos
         creados: %{created_items}, Categorías creadas: %{created_categories}, Tipos

@@ -33,6 +33,7 @@ module ApplicationHelper
       {:name => "US English", :locale => 'en-US'},
       {:name => "GB English", :locale => 'en-GB'},
       {:name => "CA English", :locale => 'en-CA'},
+      {:name => "Pусский", :locale => 'ru'},
       {:name => "Polski", :locale => 'pl'},
       {:name => "Français", :locale => 'fr'},
       {:name => "Espagnole", :locale => 'es'},

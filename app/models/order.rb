@@ -891,11 +891,11 @@ class Order < ActiveRecord::Base
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
           list_of_items += integer_format % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'integer'])
         else
           # float quantity
           list_of_items += float_format % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'float'])
+          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'float'])
         end
       end
 

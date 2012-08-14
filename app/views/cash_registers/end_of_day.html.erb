@@ -44,56 +44,20 @@
 <div class="button-row" align="center">
       <div id="eod-calculator-total"><%= t '.counted' %>: <span class='eod-calculator-total'><%= SalorBase.number_to_currency(0) %></span></div>
       <div id="eod-calculator-difference"><%= t '.difference' %>: <span class='eod-calculator-difference'><%= SalorBase.number_to_currency(0) %></span></div>
-
-
 </div>
-
-<br/>
-<br/>
-<br/>
-
-
-<% if $Register.paylife then %>
-<h2> Cute Credit</h2>
-<table width="100%">
-  <% cute_total = 0 %>
-  <% cute_eod_total = 0 %>
-  <% $User.cute_credit_messages.each(:symbolize_keys => true) do |msg|  %>
-    <% next if msg[:sa] != "P" %>
-    <% cute_eod_total = 0 if msg[:ind].to_i == 2%>
-    <tr>
-      <td>
-        Nr. <%= msg[:ref_id] %>
-      </td>
-      <td>
-          <%= msg[:x_text] %>
-          <% tmp = msg[:x_text] %>
-          <% cute_total += SalorBase.string_to_float(tmp) %>
-          <% cute_eod_total += SalorBase.string_to_float(tmp) %>
-          <% ref_id = msg[:ref_id] %>
-      </td>
-    </tr>
-  <% end -%>
-  <tr>
-    <td colspan="2" align="right" id="cute_credit_total">
-       <%= I18n.t("paylife.total") %> <%= SalorBase.number_to_currency(cute_total) %>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" align="right" id="cute_credit_eod_total" eod_total="<%= cute_eod_total%>" ref_id="<%= ref_id %>">
-       <%= I18n.t("paylife.eod_total") %> <%= SalorBase.number_to_currency(cute_eod_total) %>
-    </td>
-  </tr>
-  </table>
-  <script type="text/css">
-  <% if cute_eod_total > 0 then %>
-    $(function () {
-      $('body').trigger({type: "CuteCreditEODNeeded"});
-    });
-  <% end -%>
-  </script>
-<% end %>
-    </td>
-  </tr>
-</table>
+<br />
+<br />
+<br />
+<div class="button-row" align="center">
+<%= I18n.t("views.notice.please_backup") %>
+      <select name="usb_device" id="usb_device">
+      <option value="<%= Dir['/home/*'].first %>/Documents">Documents</option>
+        <% Dir.entries("/media").each do |d| %>
+        
+          <% next  if d == '.' or d == '..'%>
+          <option value="/media/<%= d %>"><%= d %></option>
+        <% end %>
+      </select>
+      <div class="button-confirm rounded-corners-all" onmousedown="$.get('/vendors/backup?path='+$('#usb_device').val())"><%= t 'menu.backup' %></div>
+</div>
 
