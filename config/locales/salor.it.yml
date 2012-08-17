@@ -380,7 +380,8 @@ it:
       only_for_tobacco_stores: Questa funzione è esclusiva delle tabaccherie. Gli articoli di tabaccheria verranno ora creati e aggiornati. Il tempo di attesa è di 20 minuti. Sei veramente sicuro di procedere?
     inventory_report:
       price: Prezzo di vendita
-      subtotal_purchase_price: Subtotale Prezzo di Acquisto  	subtotal_selling_price: Subtotale Prezzo di Vendita
+      subtotal_purchase_price: Subtotale Prezzo di Acquisto
+      subtotal_selling_price: Subtotale Prezzo di Vendita
       title: Rapporto Inventario
       total_buying_price: Somma Prezzo di Acquisto
       total_selling_price: Somma Prezzo di Vendita
