@@ -130,7 +130,7 @@ it:
       last_name: cognome
       lc_points: punti carta fedeltà
       length: lunghezza
-      letter: Letter (Note: if it's about the paper format then it would be the "A4" here in Italy)
+      letter: Letter
       location_id: id posizione
       lp_per_dollar: punti fedeltà per euro
       min_quantity: min quantità
@@ -380,7 +380,8 @@ it:
       only_for_tobacco_stores: Questa funzione è esclusiva delle tabaccherie. Gli articoli di tabaccheria verranno ora creati e aggiornati. Il tempo di attesa è di 20 minuti. Sei veramente sicuro di procedere?
     inventory_report:
       price: Prezzo di vendita
-      subtotal_purchase_price: Subtotale Prezzo di Acquisto  	subtotal_selling_price: Subtotale Prezzo di Vendita
+      subtotal_purchase_price: Subtotale Prezzo di Acquisto
+      subtotal_selling_price: Subtotale Prezzo di Vendita
       title: Rapporto Inventario
       total_buying_price: Somma Prezzo di Acquisto
       total_selling_price: Somma Prezzo di Vendita
@@ -611,9 +612,7 @@ it:
       transaction_total: TOTALE
       warning_drawer_amount_not_zero: Attenzione! L'importo di cassa è diverso da zero. Si avvisa di chiudere e di ripartire ogni giorno con un importo di cassa uguale a zero per semplificare la contabilità. Esegui una liquidazione cassa e stampa di nuovo questo rapporto.
     formats:
-      advert: ! 'Il Punto di Vendita Innovativo
-
-        www.salorpos.com'
+      advert: ! 'Il Punto di Vendita Innovativo www.salorpos.com'
       cancel: Cancella                  EUR %8.2f
       change: ! 'Cambia:                       EUR %8.2f'
       coupon_subtotal: Buono-sconto Subtotale              EUR %8.2f
@@ -626,7 +625,7 @@ it:
       subtotal: Subtotale                      EUR %8.2f
       thanks: Grazie per aver aquistato con noi!
       total: TOTALE                         EUR %8.2f
-    order_receipt: ricevuta_ordine
+    order_receipt:
       change: Cambia moneta
       coupon_subtotal: Buono-Sconto Subtotale
       current_loyalty_points: Tuoi punti fedeltà
@@ -740,7 +739,7 @@ it:
     owner_success: Diritti proprietario aggiornati con successo
     payment_external_types: contante,carta,carta regalo,altro
     payment_internal_types: InCassa,PerCarta,PerCartaRegalo,AltroCredito
-    rebate_types: tipi riduzione
+    rebate_types:
       fixed: $
       percent: ! '%'
     sign_up: accedi
@@ -812,9 +811,7 @@ it:
       new_order: creato nuovo ordine
       order_refund_dt: ! '#%{id}'
       save_before: Salva prima di uscire?
-      wholesaler_upload_report: ! 'Articoli aggiornati: %{updated_items}, Articoli creati:
-        %{created_items}, Categorie create: %{created_categories}, Profili Iva creati
-        %{created_tax_profiles}'
+      wholesaler_upload_report: ! 'Articoli aggiornati: %{updated_items}, Articoli creati: %{created_items}, Categorie create: %{created_categories}, Profili Iva creati %{created_tax_profiles}'
     order_heading: ! 'Ordine #%{id} per %{store}'
     order_number: ! 'Ordine #%{id}'
     pagination:
@@ -824,8 +821,7 @@ it:
       truncate: ! '...'
     password: password
     password_confirm: conferma password
-    please_test_before_upload: ! 'ATTENZIONE: Stai per riscrivere i dati
-      nel database.'
+    please_test_before_upload: ! 'ATTENZIONE: Stai per riscrivere i datinel database.'
     price: prezzo
     quantity: quantità
     rebate: riduzione
