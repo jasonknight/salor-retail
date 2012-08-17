@@ -253,7 +253,6 @@ ActiveRecord::Schema.define(:version => 20120730171806) do
     t.integer  "uses_drawer_id"
     t.integer  "auth_code"
     t.string   "last_path",                             :default => "/cash_registers"
-    t.string   "role_cache"
   end
 
   add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
@@ -824,7 +823,6 @@ ActiveRecord::Schema.define(:version => 20120730171806) do
     t.boolean  "is_technician"
     t.integer  "auth_code"
     t.string   "last_path",                             :default => "/vendors"
-    t.string   "role_cache"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
