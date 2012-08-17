@@ -130,7 +130,7 @@ it:
       last_name: cognome
       lc_points: punti carta fedeltà
       length: lunghezza
-      letter: Letter (Note: if it's about the paper format then it would be the "A4" here in Italy)
+      letter: Letter
       location_id: id posizione
       lp_per_dollar: punti fedeltà per euro
       min_quantity: min quantità
