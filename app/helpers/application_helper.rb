@@ -44,7 +44,7 @@ module ApplicationHelper
   end
   def salor_number_to_currency(amnt)
 
-    return number_to_currency(amnt)
+    return number_to_currency(amnt, :unit => I18n.t("number.currency.format.unit"))
   end
   def salor_number_with_delimiter(num)
     return number_with_delimiter(num)

@@ -1,13 +1,21 @@
 <%
-  attrs_list = [:id,:sku, :name, :quantity,:stock_location_ids]
+  attrs_list = [:id,:sku, :name, :quantity,:stock_location_ids,:purchase_price]
   js_attrs_list = attrs_list.collect {|a| "'#{a}'"}
-  alist = [:name,:base_price, :sku,:location_id,:vendor_id,:category_id,:tax_profile_id]
+  alist = [:name,:base_price,:purchase_price, :sku,:location_id,:vendor_id,:category_id,:tax_profile_id]
   create_attrs = {}
   alist.each do |a|
     create_attrs[a] = I18n.t("activerecord.attributes.#{a}")
   end
+  attribute_names= {}
+  attrs_list.each do |a|
+    if a == :id then
+      attribute_names[a] = "&nbsp;"
+      next
+    end
+    attribute_names[a] = I18n.t("activerecord.attributes.#{a}")
+  end
   js_attrs_list_names = attrs_list.collect {|a| "'#{I18n.t("activerecord.attributes.#{a}")}'"}
-  js_ints_list = [:base_price,:quantity].collect {|a| "'#{a}'"}
+  js_ints_list = [:base_price,:quantity, :purchase_price]
 %>
 <script type="text/javascript">
 var id = 0;
@@ -15,8 +23,9 @@ var attrs_list = [ <%= js_attrs_list.join(',') %> ];
 var attrs_list_names = [ <%= js_attrs_list_names.join(',') %> ];
 
 var create_attrs = <%= raw create_attrs.to_json %>
+var attribute_names_obj = <%= raw attribute_names.to_json %>;
 
-var ints_list = [ <% js_ints_list.join(',')  %> ];
+var ints_list = <%= raw js_ints_list.to_json  %> ;
 
 var shipment_items_callbacks = {
   _delete: function (value) {
@@ -147,7 +156,7 @@ var shipment_items_callbacks = {
   quantity: function (value, sku) {
     var e = shipment_item_input('quantity',{});
     e.val(value);
-    $(e).addClass('sku-' + sku + '-quantity');
+    $(e).addClass('sku-' + sku + '-quantity keyboardable-int');
     e.blur(function () {
         addItem({});
     });
@@ -164,7 +173,6 @@ var shipment_items_callbacks = {
     $(elem).append($(hidden));
     return elem;*/
     var elem = shipment_item_input('name');
-    elem.addClass('keyboardable');
     elem.val(value);
     elem.addClass("attribute-name-" + id);
     elem.addClass("attribute-name");
@@ -187,6 +195,7 @@ var shipment_items_callbacks = {
         if ($(this).hasClass('create-sku-input')) {
           return;
         }
+        $('#shipment_items * div.kbd-show').remove();
         var mid = elem.attr('mid');
         if ($(this).val() != '') {
           var sku = $(this).val();
@@ -198,8 +207,9 @@ var shipment_items_callbacks = {
                 var qty = Number(tRow.val()) + 1;
                 tRow.val(qty);
                 // SCOTTIE: move this row to the top
-                var sRow = tRow.parents(':eq(1)').detach();
-                $(sRow).insertAfter('#shipment_items > div.item:first');
+                var sRow = tRow.parent().parent().parent().detach();
+                console.log(sRow);
+                sRow.insertAfter("#shipment_items * tr:first");
                 // END
                 var f = $('.attribute-sku').first();
                 f.val('');
@@ -217,7 +227,7 @@ var shipment_items_callbacks = {
                   var node = $(selector);
                   $(node).each(function(){
                     if (this.nodeName.toLowerCase() == 'input') $(this).val(data[key]);
-                    if (this.nodeName.toLowerCase() == 'div') {
+                    if (this.nodeName.toLowerCase() == 'td') {
                       var hidden = makeHiddenInput(key, mid, data[key]);
                       $(this).html(data[key]);
                       $(this).append($(hidden));
@@ -305,12 +315,16 @@ function addItem(values) {
       }
       if (ints_list.indexOf(name) != -1) {
         inp.addClass('keyboardable-int');
-      } else {
+      } else if (name == "sku") {
         inp.addClass('keyboardable');
       }
     }
     inp.addClass('shipment-items-input');
-    var col = td(inp,{});
+    var lbl = $("<label>" + attribute_names_obj[name] + "</label>");
+    lbl.append("<br />");
+    lbl.append(inp);
+    var col = $("<td class='shipment-item-attribute-column'></td>");
+    col.append(lbl)
     tds.push(col);
   }
   var del = $('<%= salor_icon(:delete,{},32) %>');
@@ -322,15 +336,20 @@ function addItem(values) {
       $(selector).val(1);
       $('.item-' + id).remove();
   });
-  var col = td(del);
+  var col = $("<td></td>");
+  col.append(del);
   tds.push(col);
-  var row = tr(tds,{classes: ['item item-' + id]});
+  var row = $("<tr></tr>");
+  row.addClass('item item-' + id);
+  for (i in tds) {
+    row.append(tds[i]);
+  }
   $('#shipment_items').prepend(row);
   $('.keyboardable').each(function () {
-      make_keyboardable($(this));
+      //make_keyboardable($(this));
   });
   $('.keyboardable-int').each(function () {
-      make_keyboardable($(this));
+      //make_keyboardable($(this));
   });
   focusInput($('.attribute-sku-' + id));
   id = id + 1;
@@ -372,7 +391,7 @@ function showCreateItem(values) {
     rows.push(row);
   }
   var form = $('.shipment-create-item-form');
-  form.append($('<h3>Neuen Artikel anlegen</h3>'));
+  form.append($('<h3><%= I18n.t("views.create_new_item") %></h3>'));
   for (var i = 0; i < rows.length; i++) {
     form.append(rows[i]);
   }
@@ -410,20 +429,18 @@ $(function () {
 </script>
 
 
-<table align="center" width="90%">
+<table align="center" width="20%" align="right">
   <tr>
-    <td valign="top" align="left">
-      <h2> <%= I18n.t("views.forms.items") %> </h2>
-    </td>
     <td valign="middle" class="shipment-item-add">
-      <%= salor_icon(:add, {:class => 'pointer', :onclick => "addItem({});"},32) %>
+      <%= salor_icon(:add, {:id => "new_shipment_item",:class => 'pointer', :onclick => "addItem({});"},32) %>
     </td>
   </tr>
 </table>
 <div>
-<div class='shipment_item_attr_header shipment_item_attr_header_sku'><%= ShipmentItem.human_attribute_name :sku %></div>
+<!--<div class='shipment_item_attr_header shipment_item_attr_header_sku'><%= ShipmentItem.human_attribute_name :sku %></div>
 <div class='shipment_item_attr_header shipment_item_attr_header_name'><%= ShipmentItem.human_attribute_name :name %></div>
 <div class='shipment_item_attr_header shipment_item_attr_header_quantity'><%= ShipmentItem.human_attribute_name :quantity %></div>
 <div class='shipment_item_attr_header shipment_item_attr_header_stock_location_id'><%= ShipmentItem.human_attribute_name :stock_location_id %></div>
+<div class='shipment_item_attr_header shipment_item_attr_header_stock_location_id'><%= ShipmentItem.human_attribute_name :purchase_price %></div>-->
 </div>
-<div id="shipment_items" class="shipment-items"></div>
+<table id="shipment_items" class="shipment-items"></table>

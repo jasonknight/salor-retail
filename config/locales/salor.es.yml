@@ -1,5 +1,64 @@
 ---
 es:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: ", and "
+
+    select:
+      prompt: "Please select"
+
+  number:
+    format:
+      separator: "."
+      delimiter: ","
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+      
+
+    currency:
+      format:
+        format: "%u%n"
+        friendly_unit: "EUR"
+        unit: "€"
+        separator: ","
+        delimiter: " "
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
   ByCard: Con tarjeta de crédito
   ByGiftCard: Con tarjeta de regalo
   InCash: En efectivo
@@ -416,6 +475,7 @@ es:
     points: Puntos
     pos: PDV
     print: Imprimir
+    receipts: XXX Receipts
     remote_service: Servicio a distancia
     reorder: Pasar nuevo pedido
     report: Informe
@@ -704,6 +764,7 @@ es:
       receipt_logo_footer: Pie del recibo con logo
       receipt_logo_header: Encabezamiento del recibo con logo
   views:
+    create_new_item: xxx Create New Article
     advanced_field: Campo avanzado
     cash_register_heading: ! '%{name} para %{store}'
     cash_registers: Cajas
@@ -801,6 +862,7 @@ es:
       download: Descargar
       edit: Editar
       from: De
+      gift_cards: XXX Gift Cards
       loading: Cargando
       new: Nuevo
       order: Pedido

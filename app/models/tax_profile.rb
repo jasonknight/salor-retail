@@ -12,6 +12,7 @@ class TaxProfile < ActiveRecord::Base
   has_many :items
   has_many :order_items
   belongs_to :user
+  belongs_to :vendor
   before_create :set_model_owner
   validates_presence_of :name,:value
   def set_sku

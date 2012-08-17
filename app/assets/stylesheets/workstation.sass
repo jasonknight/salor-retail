@@ -232,7 +232,7 @@ body
   @include no_select
 
 @mixin highlight_button 
-  @include awesome_button
+  @include raised_element
   background-color: $text_color_highlight
   color: $background
   @include no_select
@@ -528,11 +528,14 @@ div.main_sku
 .stylish-text 
   @include stylish-input-no-bg
 
-.keyboardable, .keyboardable-disabled 
+input, .keyboardable, .keyboardable-disabled 
   //@include rounded_corners_all
   @include stylish_input_no_bg
   width: 200px
 
+input[type="submit"]
+  @include awesome_button
+  background-color: $orange
 .keyboardable-int 
   //@include rounded_corners_all
   @include stylish_input_no_bg
@@ -3042,3 +3045,6 @@ div.pos-action-applied
 
 input:focus
   outline: none
+  
+td.shipment-item-attribute-column
+  padding-right: 30px

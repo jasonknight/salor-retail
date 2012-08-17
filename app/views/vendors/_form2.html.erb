@@ -7,7 +7,7 @@
   <tr>
     <td valign="top" colspan="2" align="right">
       <div class="actions">
-          <%= f.submit I18n.t('helpers.submit.save') %>
+          <%= f.submit I18n.t('helpers.submit.save'), :id => 'save_button' %>
       </div>
       
         <% if @vendor.errors.any? %>

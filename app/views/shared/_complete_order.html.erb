@@ -215,7 +215,7 @@ function show_denominations() {
 		var doc = 99; // radius
 		var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
 		for (var i in pieces) {
-		  p = $('<div id="complete_piece_"'+pieces[1]+'>'+toCurrency(pieces[i])+'</div>');
+		  p = $('<div id="complete_piece_'+ pieces[i] + '">'+toCurrency(pieces[i])+'</div>');
 		  p.css({height: '35px',width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
 		  p.addClass("pieces-button shadow");
 			cpos = {x: cpos.x, y: cpos.y + 54};
@@ -372,7 +372,10 @@ function display_change() {
   } else {
     recommend(change);
     $('#complete_order_change').html(toCurrency(change));
+    setTimeout(function () {
     get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html());
+    //$('.last-completed-orders').prepend('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html() + " <br/>");
+    },120);
     allow_complete_order();
   }
   if(change > 0) { displayChangeToCustomer(); }

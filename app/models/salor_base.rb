@@ -27,6 +27,7 @@ module SalorBase
     return str[5..8] + str[0..rand(str.length/2).to_i]
   end
   def self.check_code(str)
+    return true
     odds = str.to_s.scan(/(\d{2})\d(\d{2})\d\d(\d)\d\d(\d)/)
     good = true
     x = 0
@@ -119,36 +120,35 @@ module SalorBase
     SalorBase.log_action(self.class.to_s,txt)
   end
   def self.log_action(from="unk",txt)
-    puts txt
-    File.open("#{::Rails.root.to_s}/log/#{Rails.env}}-history.log","a") do |f|
+    File.open("#{::Rails.root.to_s}/log/#{Rails.env}-history.log","a") do |f|
       f.write "[#{Time.now}] [FROM: #{from}] " + txt + "\n"
     end
   end
   def self.string_to_float(str)
     return str if str.class == Float or str.class == Fixnum
       string = "#{str}"
-      puts string
+      #puts string
       string.gsub!(/[^-\d.,]/,'')
-      puts string
+      #puts string
       if string =~ /^.*[\.,]\d{1}$/
         string = string + "0"
       end
-      puts string
+     # puts string
       unless string =~ /^.*[\.,]\d{2,3}$/
         string = string + "00"
       end
-      puts string
+      #puts string
       return string if string.class == Float or string.class == Fixnum or string == 0
       if string =~ /^.*[\.,]\d{3}$/ then
          string.gsub!(/[\.,]/,'')
          string = string.to_f / 1000
-         puts string
+         #puts string
       else
         string.gsub!(/[\.,]/,'')
         string = string.to_f / 100
-        puts string
+        #puts string
       end
-      puts string
+      #puts string
       return string
    end
    def string_to_float(string)
@@ -213,9 +213,10 @@ module SalorBase
    # @inst.new attribs
    def set_model_owner(user=nil)
       if user.nil? then
-       user = GlobalData.salor_user
+       user = $User
       end
       return if user.nil?
+
       if self.respond_to? :owner_id and self.owner_id.nil? then
         self.owner_id = user.id
         self.owner_type = user.class.to_s
@@ -228,11 +229,7 @@ module SalorBase
         self.cash_register_id = user.get_meta.cash_register_id
       end
       if self.respond_to? :user_id and self.user_id.nil? then
-       if user.is_employee? then
-         self.user_id = user.user.id
-       else
-         self.user_id = user.id
-       end
+       self.user_id = user.get_owner.id
       end
       if self.respond_to? :employee_id and self.employee_id.nil? then
          if user.is_employee? then

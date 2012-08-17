@@ -38,7 +38,8 @@ NilClass.class_eval do
       if klass = METHOD_CLASS_MAP[method]
         raise_nil_warning_for klass, method, caller
       else
-        puts "### Raising errors because of : " + method.to_s
+        puts "### Raising errors because of" + method.to_s
+        puts Kernel.caller[0][/`.*'/][1..-2]
         super
       end
     end

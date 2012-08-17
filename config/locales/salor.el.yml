@@ -1,4 +1,62 @@
 el:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: ", and "
+
+    select:
+      prompt: "Please select"
+
+  number:
+    format:
+      separator: "."
+      delimiter: ","
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u%n"
+        friendly_unit: "EUR"
+        unit: "€"
+        separator: ","
+        delimiter: " "
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
   ByCard: Μέσω Κάρτας
   ByGiftCard: Μέσω Δωροκάρτας
   InCash: Μέσω Μετρητών
@@ -260,14 +318,14 @@ el:
     best_selling_location: τοποθεσία καλύτερων πωλήσεων 
     crd: Χρόνο,Ποσό,Τύπος,Σημειώσεις
     database_distiller: Φιλτράρισμα βάσης δεδομένων
-    discount_for: έκπτωση για %{κατάστημα}
-    discounts_for: εκπτώσεις για %{κατάστημα}
-    edit_shipper: επεξεργασία αποστολέα %{όνομα}
+    discount_for: "έκπτωση για %{store}"
+    discounts_for: "εκπτώσεις για %{store}"
+    edit_shipper: "επεξεργασία αποστολέα %{name}"
     employees: υπάλληλοι 
     expiring_soon: λήγει σύντομα
     export: εξαγωγή
     item_selection: επιλογή αντικειμένου 
-    new_discount_for: νέα έκπτωση για %{κατάστημα}
+    new_discount_for: "νέα έκπτωση για %{store}"
     notes: σημειώσεις 
     order_validation: Επιβεβαίωση Παραγγελίας 
     paylife: Paylife(Artema Hybrid)
@@ -354,7 +412,7 @@ el:
     clear_order: Διαγράψτε
     configuration: Ρυθμίσεις
     contact: άτομο επικοινωνίας 
-    current_order: ! 'τρέχουσα παραγγελία: #%{κωδικός}'
+    current_order: ! 'τρέχουσα παραγγελία: #%{id}'
     customer: πελάτης 
     customers: πελάτες
     database_distiller: Φιλτράρισμα Βάσης Δεδομένων 
@@ -374,7 +432,7 @@ el:
     edit_location: επεξεργασία τοποθεσίας 
     edit_shipment: επεξεργασία αποστολής
     edit_shipment_type: επεξεργασία τύπου αποστολής 
-    edit_shipper: επεξεργασία αποστολέα %{όνομα}
+    edit_shipper: επεξεργασία αποστολέα %{name}
     edit_tax_profile: επεξεργασία φορολογικού προφίλ 
     edit_tender_method: επεξεργασία μεθόδου πληρωμής
     edit_vendor: επεξεργασία προμηθευτή
@@ -415,6 +473,7 @@ el:
     pos: Σημείο Πώλησης (POS)
     print: εκτύπωση 
     remote_service: Εξ’ Αποστάσεως Τεχνική Υποστήριξη 
+    receipts: XXX Receipts
     reorder: αναπαραγγελία
     report: αναφορά
     report_day: μέρα αναφοράς
@@ -592,7 +651,7 @@ el:
       sold: πωλημένο
   receipts:
     invoice: Λογαριασμός
-    invoice_numer_X_at_time: Αριθμός Παραγγελίας %{αριθμός} στις %{ημερομηνίαώρα}
+    invoice_numer_X_at_time: Αριθμός Παραγγελίας %{number} στις %{datetime}
   reports:
     amount: ποσό
     description: περιγραφή
@@ -615,13 +674,13 @@ el:
     add_payment_method: προσθέστε τη μέθοδο πληρωμής
     complete_sale: Ολοκληρωμένο
     errors:
-      action_code_error: Ο κώδικας δεν μπορεί να εκτελεστεί λόγο προβλήματος %{πρόβλημα}
-      action_error: Η πράξη δεν μπόρεσε να εκτελεστεί λόγο προβλήματος %{πρόβλημα}
+      action_code_error: "Ο κώδικας δεν μπορεί να εκτελεστεί λόγο προβλήματος %{error}"
+      action_error: "Η πράξη δεν μπόρεσε να εκτελεστεί λόγο προβλήματος %{error}"
       auto_drop_failed: Το σύστημα απέτυχε την αυτόματη προσθήκη μετρητών στο συρτάρι, σας παρακαλούμε όπως δημιουργήσετε από μόνοι σας προσθήκη μετρητών αρχής μέρας. 
       cannot_edit_completed_order: Αυτή η παραγγελία ολοκληρώθηκε και δεν μπορεί να διαμορφωθεί. 
       cannot_reorder: Κανένα προϊόν δεν πρέπει να αναπαραγγελθεί.        
       child_sku_must_exist: Πρέπει να υπάρχει SKU!
-      coupon_cannot_be_buy_one_get_one: κουπόνι %{sku} δεν μπορεί να είναι αγοράστε_ένα_πάρτε_ένα όταν ισχύει %{ισχύει}
+      coupon_cannot_be_buy_one_get_one: κουπόνι %{sku} δεν μπορεί να είναι αγοράστε_ένα_πάρτε_ένα όταν ισχύει %{applies}
       coupon_not_enough_items: Δεν έχετε αγοράσει αρκετά αντικείμενα για να ισχύσει αυτό
       csv_item_exists: Αντικείμενο %{sku} υπάρχει!
       csv_item_failed: ! '%{id} %{i} απέτυχε.'
@@ -639,7 +698,7 @@ el:
       must_choose_vendor: Πρέπει να επιλέξετε κατάστημα!
       must_set_receiver_to_vendor: Πρέπει να θέσετε τον παραλήπτη αυτής της αποστολής σε έγκυρο κατάστημα. 
       must_specify_drop_or_payout: Πρέπει να καθορίσετε αν είναι προσθήκη μετρητών ή αποπληρωμή!
-      no_class: Δεν υπάρχει τάξη για %{μοντέλο} στη σειρά %{i}
+      no_class: Δεν υπάρχει τάξη για %{model} στη σειρά %{i}
       no_role: Δεν έχετε τον απαραίτητο ρόλο για πρόσβαση σε αυτό τον πόρο. 
       no_such_item: Δεν υπάρχει αντικείμενο με αυτό το SKU
       not_enough_in_drawer: δεν υπάρχουν αρκετά στο συρτάρι
@@ -653,7 +712,7 @@ el:
       payment_required_explanation: Με λύπη σας πληροφορούμε ότι το σύστημα σας απενεργοποιήθηκε αυτόματα καθώς η προπληρωμένη άδεια σας έχει εξαντληθεί. Πρέπει να ολοκληρώσετε πλήρη πληρωμή στο Salor για να εξακολουθήσετε να επωφελείστε απ’ αυτό. Παρακαλούμε όπως επικοινωνήσετε με τον αντιπρόσωπο τεχνικής υποστήριξης του Salor.
       sanity_check: Η αιτούμενη πράξη είναι παράλογη, επιβεβαιώστε το ολικό της παραγγελίας και ενημερώστε τον πελάτη για την διόρθωση. 
       shipment_item_already_in_stock: Το αντικείμενο %{sku} βρίσκεται ήδη σε απόθεμα
-      shipment_item_move_failed: ! 'Το αντικείμενο %{sku} απέτυχε να μετακινηθεί με πρόβλημα: %{πρόβλημα}'
+      shipment_item_move_failed: ! 'Το αντικείμενο %{sku} απέτυχε να μετακινηθεί με πρόβλημα: %{error}'
       shipment_item_nil: Το αντικείμενο που επιστράφηκε από from_shipment_item ήταν άκυρο;
       sku_must_be_unique: ! '%{sku} πρέπει να είναι μοναδικό'
       value_not_set: ΜηΚαθορισμένο
@@ -678,10 +737,11 @@ el:
       receipt_logo_footer: λογότυπο απόδειξης υποσέλιδο
       receipt_logo_header: λογότυπο απόδειξης κεφαλίδα
   views:
+    create_new_item: xxx Create New Article
     advanced_field: προηγμένο πεδίο
-    cash_register_heading: ! '%{όνομα} για %{κατάστημα}'
+    cash_register_heading: ! '%{name} για %{store}'
     cash_registers: ταμειακές μηχανές
-    category_heading: κατηγορία %{όνομα} για %{κατάστημα}
+    category_heading: κατηγορία %{name} για %{store}
     change: αλλαγή
     customers: πελάτες
     download_may_last_long: Αυτή η μεταφόρτωση μπορεί να διαρκέσει πολύ. Θα συνεχίσετε;
@@ -725,21 +785,21 @@ el:
     locations: τοποθεσίες
     loyalty_card: κάρτα επιβράβευσης
     name: όνομα
-    new_item_heading: Νέο αντικείμενο για %{κατάστημα}
+    new_item_heading: Νέο αντικείμενο για %{store}
     new_stock_location: Τοποθεσία νέου αποθέματος
     notice:
       cache_was_cleared: Τα αρχεία της κρυφής μνήμης διαγράφηκαν.
       csv_edit_starting: αρχίζει η επεξεργασία csv
-      model_create: ! '%{μοντέλο} δημιουργήθηκε επιτυχώς'
+      model_create: ! '%{model} δημιουργήθηκε επιτυχώς'
       model_edit: ! '%{model} επεξεργάστηκε επιτυχώς'
       move_real_quantities_success: Οι ποσότητες των προϊόντων ενημερώθηκαν επιτυχώς
       new_order: δημιουργήθηκε νέα παραγγελία
       order_refund_dt: ! '#%{id}'
-      save_before: XXX Θέλετε να αποθηκεύσετε πριν αποχωρήσετε;
+      save_before: Θέλετε να αποθηκεύσετε πριν αποχωρήσετε;
       wholesaler_upload_report: ! 'Ενημερωμένα αντικείμενα: %{ενημερωμένα_αντικείμενα }, Δημιουργημένα αντικείμενα:
         %{δημιουργημένα_αντικείμενα}, Δημιουργημένες κατηγορίες: %{δημιουργημένες_κατηγορίες}, Δημιουργημένα φορολογικά προφίλ
         %{δημιουργημένα_φορολογικά_προφίλ}'
-    order_heading: ! 'Παραγγελία #%{id} για %{κατάστημα}'
+    order_heading: ! 'Παραγγελία #%{id} για %{store}'
     order_number: ! 'Παραγγελία #%{id}'
     pagination:
       last: τελευταίο
@@ -755,8 +815,8 @@ el:
     remember_me: θυμήσου με 
     report: αναφορά
     reports:
-      cash_account: XXX
-      daily: XXX
+      cash_account: XXX Cash Account
+      daily: XXX Daily
     shipments:
       state: Κατάσταση
     single_words:
@@ -771,6 +831,7 @@ el:
       download: μεταφορτώστε
       edit: επεξεργαστείτε
       from: από
+      gift_cards: XXX Gift Cards
       loading: φόρτωση
       new: Νέο
       order: παραγγελία

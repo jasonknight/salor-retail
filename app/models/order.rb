@@ -373,9 +373,9 @@ class Order < ActiveRecord::Base
       #end
       #puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
       if $Conf.calculate_tax then
-        self.total = self.subtotal + self.tax
+        self.total = self.subtotal.round(2) + self.tax.round(2)
       else
-        self.total = self.subtotal
+        self.total = self.subtotal.round(2)
       end
     else
       # Here we do speedy version calculations for show_payment_ajax processing
@@ -414,12 +414,14 @@ class Order < ActiveRecord::Base
   end
   #
   def gross
-    refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total)
+    refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total).round(2)
     if $Conf.calculate_tax then
-      taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax)
-      return self.subtotal + taxttl - refunded_ttl
+      taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax).round(2)
+      nval = self.subtotal + taxttl - refunded_ttl
+      return nval.round(2)
     else
-      return self.subtotal - refunded_ttl
+      nval = self.subtotal - refunded_ttl
+      return nval.round(2)
     end
   end
   #
@@ -1032,6 +1034,19 @@ class Order < ActiveRecord::Base
       return false
     end
     return true
+  end
+  def inspectify
+    txt = "Order[#{self.id}]"
+    [:total,:subtotal,:tax,:gross].each do |f|
+       txt += " #{f}=#{self.send(f)}"
+    end
+    self.order_items.each do |oi|
+      txt += "\n\tOrderItem[#{oi.id}]"
+      [:quantity,:price,:total,:amount_remaining,:activated].each do |f|
+        txt += " #{f}=#{oi.send(f)}"
+      end
+    end
+    return txt
   end
   # {END}
 end

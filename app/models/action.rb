@@ -46,7 +46,7 @@ class Action < ActiveRecord::Base
   end
   def sku
     owner = self.owner
-    if owner then
+    if owner and owner.respond_to? :sku then
       return owner.sku
     else
       return ''

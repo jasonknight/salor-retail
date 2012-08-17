@@ -83,6 +83,9 @@ FactoryGirl.define do
   factory :salor_configuration do
     association :vendor
     address "None"
+    calculate_tax false
+    license_accepted true
+    pagination 10
   end
   factory :order do
     association :vendor
@@ -105,7 +108,7 @@ FactoryGirl.define do
   factory :vendor do
     name "TestVendor"
     association :user, :factory => :user
-    calculate_tax false
+    
     multi_currency false
     after_create do |v|
       v.salor_configuration = Factory(:salor_configuration, :vendor => v)
@@ -115,6 +118,9 @@ FactoryGirl.define do
   factory :cash_register do
     name "Cash Register"
     association :vendor
+    thermal_printer "/tmp/thermal_printer"
+    sticker_printer "/tmp/sticker_printer"
+    salor_printer false
   end
   factory :tax_profile do
     name "Test Tax Profile"

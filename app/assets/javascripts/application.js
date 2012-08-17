@@ -14,8 +14,6 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require sprintf
-//= require i18n
-//= require i18n/translations
 //= require generic
 //= require math
 //= require camera

@@ -52,7 +52,7 @@
 <div>
 <h3><%= I18n.t("headings.shipment_items") %></h3>
 
-<div style="display:inline;"><a href="/shipments/move_all_to_items?id=<%= @shipment.id %>"><img id='button-move-all-shipment-items' src='/images/icons/left_32.png'></img></a></div>
+<div style="display:inline;"><a href="/shipments/move_all_to_items?vendor_id=<%= $Vendor.id %>&id=<%= @shipment.id %>"><img id='button-move-all-shipment-items' src='/images/icons/left_32.png'></img></a></div>
 
 <table class='shipments-edit'>
   <tr>

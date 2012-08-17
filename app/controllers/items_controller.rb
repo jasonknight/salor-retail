@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
       session[key] = (session[key] == 'DESC') ? 'ASC' : 'DESC'
       @items = Item.scopied.page(params[:page]).per(25).order("#{key} #{session[key]}")
     else
-      @items = Item.scopied.page(params[:page]).per(25)
+      @items = Item.scopied.page(params[:page]).per(25).order("id desc")
     end
     Node.flush
     respond_to do |format|
@@ -213,7 +213,7 @@ class ItemsController < ApplicationController
     end
   end
   def item_json
-    @item = Item.all_seeing.find_by_sku(params[:sku], :select => "name,sku,id")
+    @item = Item.all_seeing.find_by_sku(params[:sku], :select => "name,sku,id,purchase_price")
   end
   def edit_location
     respond_to do |format|
@@ -231,7 +231,7 @@ class ItemsController < ApplicationController
     @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
-    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
+    render :text => "No User#{@user}, or Register#{@register}, or Vendor#{@vendor}" and return if @register.nil? or @vendor.nil? or @user.nil?
 
     if params[:id]
       @items = Item.find_all_by_id(params[:id])

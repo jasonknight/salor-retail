@@ -55,13 +55,19 @@ function toDelimited(number) {
 }
 
 function toCurrency(number) {
+  
   var match, property, integerPart, fractionalPart;
   var settings = {         precision: 2,
     unit: i18nunit,
     separator: i18nseparator,
     delimiter : i18ndelimiter
   };
-
+  if (!typeof number == 'number') {
+    number = toFloat(number);
+  }
+  if (typeof number == 'undefined') {
+    number = 0;
+  }
   match = number.toString().match(/([\+\-]?[0-9]*)(.[0-9]+)?/);
 
   if (!match) return;

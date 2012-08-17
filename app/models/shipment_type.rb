@@ -10,4 +10,5 @@ class ShipmentType < ActiveRecord::Base
   include SalorScope
   include SalorModel
   has_many :shipments
+  belongs_to :vendor
 end

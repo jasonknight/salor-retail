@@ -246,6 +246,7 @@ class OrderItem < ActiveRecord::Base
   end
   
 	def set_item(item,qty=1)
+    item.make_valid
     if self.order and self.order.paid == 1 then
       return false
     end
@@ -415,6 +416,7 @@ class OrderItem < ActiveRecord::Base
 
     # DISCOUNTS
     if self.discount_amount > 0 then
+#       puts "Subtracting discount amount"
       ttl -= self.discount_amount # MF MOD
     end
 
@@ -571,31 +573,36 @@ class OrderItem < ActiveRecord::Base
     pstart = p
     if not self.is_buyback and not OrderItem.get_discounts.nil? then
       OrderItem.get_discounts.each do |discount|
+#         puts "Evaling discount: " + discount.inspect
         if not (discount.item_sku == item.sku and discount.applies_to == 'Item') and
             not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
             not (discount.category_id == item.category_id and discount.applies_to == 'Category') and
             not (discount.applies_to == 'Vendor' and discount.amount_type == 'percent') then
-            # #puts "this discount doesn't match"
-            # #puts "category_id is #{discount.category_id} and category_id is #{item.category_id}"
+#             puts "this discount doesn't match"
+#             puts "category_id is #{discount.category_id} and category_id is #{item.category_id}"
           next
         end
+#         puts "Applying discount"
         if discount.amount_type == 'percent' then
           d = discount.amount / 100
           damount += (pstart * d)
           self.discounts << discount
+#           puts "discount is percent"
         elsif discount.amount_type == 'fixed' then
           damount += discount.amount
           self.discounts << discount
+        else
+#           puts "no amount_type"
         end
       end # Discount.scopied.where(conds)
     else
-      # #puts "Not Applying Discounts at all..."
+#       puts "Not Applying Discounts at all..."
     end
     #p -= damount
     self.update_attribute(:discount_applied,true) if self.discounts.any?
     self.update_attribute(:discount_amount,damount) if self.discounts.any?
     p = p.round(2)
-    # #puts "Is BuyBack: #{self.is_buyback}"
+    
     return p
   end
 

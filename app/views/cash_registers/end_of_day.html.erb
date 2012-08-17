@@ -2,10 +2,10 @@
 <br />
 </div>
 <div class="button-row" align='right'>
-          <div class='button-print rounded-corners-left' onmousedown="print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt','');"><%= t('.end_of_day_thermal_report')%></div>
-          <div class='button-print' onmousedown="window.location.href='/orders/report_day';"><%= t('.paper_report')%></div>
+          <div id="confirm_print_end_of_day_report" class='button-print rounded-corners-left' onmousedown="print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt','');"><%= t('.end_of_day_thermal_report')%></div>
+          <div id="go_to_report_day" class='button-print' onmousedown="window.location.href='/orders/report_day';"><%= t('.paper_report')%></div>
           <div class="spacer">&nbsp;</div>
-          <div class="button-confirm rounded-corners-right" onmousedown="logout();"><%= I18n.t("system.logout") %></div>
+          <div id="confirm_end_of_day" class="button-confirm rounded-corners-right" onmousedown="logout();"><%= I18n.t("system.logout") %></div>
 </div>
 
 <br/>
@@ -23,10 +23,9 @@
 <div align="center">
       <% I18n.t("number.currency.format.pieces").split(',').each do |piece| %>
         <div class="eod-piece">
-      
               <label class="eod-calculator-input-label"><%= raw leftpad(piece.to_s.gsub('0.','.'),3,'&nbsp;') %></label>
        
-              <input id="eod_piece_<%= num2name(piece) %>"
+              <input id="eod_piece_<%= (piece.to_f * 100).to_i %>"
                  type="text"
                  name="eod_piece_<%= num2name(piece) %>"
                  class="text-input eod-calculator-input"

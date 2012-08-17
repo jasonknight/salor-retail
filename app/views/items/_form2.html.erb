@@ -187,7 +187,7 @@ $(function () {
   
   <tr>
     <td valign="top"> <%= f.label I18n.t("activerecord.attributes.expires_on") %> </td>
-    <td valign="top"> <%= f.date_select :expires_on%> </td>
+    <td valign="top"> <%= f.date_select :expires_on, :order => [:day,:month,:year] %> </td>
   </tr>
   
   <tr>

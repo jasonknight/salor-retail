@@ -37,24 +37,24 @@ gem 'acts_as_list'
 gem 'i18n-js'
 gem 'debugger'
 
-#group :test, :development do
-#  gem 'turn', '< 0.8.3'
-#  gem "rspec-rails"
-#  gem 'rspec'
-#  gem 'rspec-mocks'
+group :test, :development do
+  gem 'turn', '< 0.8.3'
+  gem "rspec-rails"
+  gem 'rspec'
+  gem 'rspec-mocks'
 #  gem 'rb-fsevent'
 #  gem 'rb-inotify'
 #  gem 'guard-rspec', '0.5.2'
-#  gem 'capybara'
-#  gem 'capybara-webkit'
-#  gem 'factory_girl_rails'
-#  gem 'spork', '0.9.0.rc9'
+  gem 'capybara'
+  gem 'capybara-webkit'
+  gem 'factory_girl_rails'
+  gem 'spork', '0.9.0.rc9'
 #  gem 'guard-spork'
 #  gem 'guard','0.8.8'
-#  gem 'database_cleaner'
-#  #gem 'rails-erd'
-#  gem 'launchy'
-#  gem 'faker'
+  gem 'database_cleaner'
+  #gem 'rails-erd'
+  gem 'launchy'
+  gem 'faker'
 #  gem 'ruby_core_source', '0.1.5'
 #  gem 'ruby-debug19', '0.11.6'
 #  gem 'ruby-debug-base19', '0.11.26' #manual install, native extensions
@@ -62,7 +62,7 @@ gem 'debugger'
 #  # export RVM_SRC=~/.rvm/src/ruby-1.9.3-p194/
 #  # gem install ~/Downloads/debug19/ruby-debug-base19-0.11.26.gem -- --with-ruby-include=/$RVM_SRC
 #  gem 'linecache19', '0.5.13' # manual install
-#end
+end
 
 
 # To use ActiveModel has_secure_password

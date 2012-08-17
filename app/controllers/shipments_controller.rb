@@ -103,11 +103,14 @@ class ShipmentsController < ApplicationController
   end
   def move_all_to_items
     @shipment = Shipment.find(params[:id])
-    if salor_user.owns_this?(@shipment) then
+    if $User.owns_this?(@shipment) then
       @shipment.move_all_to_items
       @shipment.save
+      redirect_to shipment_path(params[:id], :notice => "Items moved.") and return
+    else
+      redirect_to shipment_path(params[:id], :notice => "Items not moved.")
     end
-    redirect_to shipment_path(params[:id])
+    
   end
   def move_shipment_item
     @shipment = Shipment.find(params[:id])
@@ -119,11 +122,11 @@ class ShipmentsController < ApplicationController
     @item = Item.scopied.find_by_sku(@shipment_item.sku)
   end
   private
-  def crumble
-    
-    add_breadcrumb I18n.t("menu.vendors"),'vendors_path'
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)' if @vendor
-    add_breadcrumb I18n.t("menu.shipments"),'shipments_path'
-  end
+    def crumble
+      
+      add_breadcrumb I18n.t("menu.vendors"),'vendors_path'
+      add_breadcrumb @vendor.name,'vendor_path(@vendor)' if @vendor
+      add_breadcrumb I18n.t("menu.shipments"),'shipments_path'
+    end
   # {END}
 end

@@ -1,7 +1,7 @@
 <%= raw(content_box_top(@vendor.name, {:width => '90%'})) %>
       <div class="list">
       <% if salor_user.can(:edit_vendors) %>
-        <div class="widget master" onmousedown="window.location = '<%= edit_vendor_path(@vendor) %>';">
+        <div id="edit_vendor" class="widget master" onmousedown="window.location = '<%= edit_vendor_path(@vendor) %>';">
           <div align="center">
             <a href="<%= edit_vendor_path(@vendor) %>">
               <img src="/images/icons/<%= icon(:settings) %>" /><br />
@@ -9,6 +9,16 @@
             </a>
           </div>
         </div>
+        <% end %>
+        <% if salor_user.can(:show_tax_profiles) %>
+        <div class="widget master" onmousedown="window.location = '<%= tax_profiles_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= tax_profiles_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:tax_profile,64) %>" /><br />
+              <%= t("menu.tax_profiles") %>
+            </a>
+          </div>
+          </div>
         <% end %>
         <% if salor_user.can(:index_categories) %>
         <div class="widget master" onmousedown="window.location = '<%= categories_path(:vendor_id => @vendor.id) %>';">
@@ -100,7 +110,7 @@
          <div class="widget master" onmousedown="window.location = '<%= shippers_path %>';">
           <div align="center">
             <a href="<%= shippers_path %>">
-              <img src="/images/icons/<%= icon(:shipper) %>" /><br />
+              <img id="edit_shippers" src="/images/icons/<%= icon(:shipper) %>" /><br />
               <%= t("menu.shippers") %>
             </a>
           </div>

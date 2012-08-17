@@ -188,6 +188,7 @@ class Item < ActiveRecord::Base
     return lcard if lcard
     #oops, still haven't found it, let's creat a dummy item
     i = Item.scopied.find_or_create_by_sku(code)
+    i.vendor_id = $Vendor.id
     i.make_valid
     return i
   end
@@ -302,7 +303,7 @@ class Item < ActiveRecord::Base
     self.sku = self.sku.upcase
     invld = false
     if self.vendor_id.nil? then
-      self.vendor_id = GlobalData.salor_user.meta.vendor_id
+      self.vendor_id = $Vendor.id
       invld = true
     end
     if self.name.blank? then
@@ -372,7 +373,8 @@ class Item < ActiveRecord::Base
       #if si.shipment.shipper == i.vendor # this is advanced stuff and needs more thinking
       #  i.quantity = i.quantity - si.quantity
       #else
-        i.quantity += si.quantity if si.quantity
+        si.quantity ||= 1
+        i.quantity += si.quantity
       #end
       return i
     else

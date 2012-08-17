@@ -42,6 +42,9 @@ class Role < ActiveRecord::Base
       :report_day_orders
     ],
     :head_cashier => [
+      :index_transaction_tags,
+      :show_reports,
+      :show_tender_methods,
       :any_shippers,
       :any_shipments,
       :any_categories,
@@ -54,6 +57,7 @@ class Role < ActiveRecord::Base
       :create_transaction_tags,
       :create_tender_methods,
       :edit_tender_methods,
+      :edit_cash_registers,
       :destroy_items,
       :any_tax_profiles,
       :new_items,
@@ -62,6 +66,7 @@ class Role < ActiveRecord::Base
       :create_vendors,
       :update_vendors,
       :destroy_vendors,
+      :destroy_cash_registers,
       :edit_stock_locations,
       :edit_transaction_tags,
       :stockboy,

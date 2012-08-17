@@ -1,10 +1,70 @@
 ---
-en-US:
+en-GB:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: ", and "
+
+    select:
+      prompt: "Please select"
+
+  number:
+    format:
+      separator: "."
+      delimiter: ","
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u%n"
+        friendly_unit: "GBP"
+        unit: "£"
+        separator: "."
+        delimiter: ","
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,5,10,20,50,100
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
   ByCard: By Card
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
+      invoice_blurb: Invoice text
+      invoice_blurb_footer: Invoice text footer
       active: active
       address: address
       afield: field
@@ -420,6 +480,7 @@ en-US:
     points: points
     pos: POS
     print: print
+    receipts: Receipts
     remote_service: Remote Service
     reorder: reorder
     report: report
@@ -698,6 +759,7 @@ en-US:
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
   views:
+    create_new_item: Create New Article
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: cash registers
@@ -756,6 +818,7 @@ en-US:
       move_real_quantities_success: Item quantities were successfully updated
       new_order: new order created
       order_refund_dt: ! '#%{id}'
+      please_backup: "Please backup your system regularly!"
       save_before: XXX Save before leaving?
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
@@ -793,6 +856,7 @@ en-US:
       download: download
       edit: edit
       from: from
+      gift_cards: Gift Cards
       loading: loading
       new: New
       order: order

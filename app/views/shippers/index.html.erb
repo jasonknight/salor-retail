@@ -4,17 +4,17 @@
         <table width="375px" align="center">
           <tr valign="top">
             <td align="center" width="125px">
-              <%= link_to image_tag('/images/icons/' + icon(:add, 32)), new_shipper_path(:vendor_id => params[:vendor_id]) %>
+              <%= link_to image_tag('/images/icons/' + icon(:add, 32)), new_shipper_path(:vendor_id => $Vendor.id), :id => "new_shipper" %>
             </td>
             <td align="center" width="125px">
-              <a class='shippers_index' href="<%= shipments_path %>">
-                <img src="/images/icons/<%= icon(:shipment,32) %>" /><br />
+              <a class='shippers_index' href="<%= shipments_path(:vendor_id => $Vendor.id) %>">
+                <img id="#edit_shipments" src="/images/icons/<%= icon(:shipment,32) %>" /><br />
                 <%= t "menu.shipments" %>
               </a>
             </td>
             <td align="center" width="125px">
-              <a class='shippers_index' href="<%= shipment_types_path %>">
-                <img src="/images/icons/<%= icon(:shipment_type,32) %>" /><br />
+              <a class='shippers_index' href="<%= shipment_types_path(:vendor_id => $Vendor.id) %>">
+                <img id="edit_shipment_types" src="/images/icons/<%= icon(:shipment_type,32) %>" /><br />
                 <%= t "menu.shipment_types" %>
               </a>
             </td>

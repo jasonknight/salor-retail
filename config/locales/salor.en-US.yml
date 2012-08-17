@@ -1,5 +1,63 @@
 ---
 en-US:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: ", and "
+
+    select:
+      prompt: "Please select"
+
+  number:
+    format:
+      separator: "."
+      delimiter: ","
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u%n"
+        friendly_unit: "USD"
+        unit: "$"
+        separator: "."
+        delimiter: ","
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+        pieces: 0.01,0.05,0.10,0.25,0.50,1,5,10,20,50,100
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
   ByCard: By Card
   ByGiftCard: By Gift Card
   InCash: In Cash
@@ -423,6 +481,7 @@ en-US:
     pos: POS
     print: print
     remote_service: Remote Service
+    receipts: Receipts
     reorder: reorder
     report: report
     report_day: report day
@@ -537,6 +596,7 @@ en-US:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+  OtherCredit: "Other"
   printr:
     eod_report:
       None: Not named
@@ -555,6 +615,7 @@ en-US:
       sales: Sales
       system_drawer_amount: System drawer amount
       transaction_total: TOTAL
+      no_category: No Category
       warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You
         are advised to finish and start each day with a drawer amount of zero to ease
         accounting work. Make a cash payout accordingly and print this report again.
@@ -620,7 +681,7 @@ en-US:
     show:
       purchase_price_sum: Purchase price sum
   sticker: sticker
-  support: XXX
+  support: Support
   system:
     add_payment_method: add payment method
     complete_sale: Complete
@@ -700,6 +761,7 @@ en-US:
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
   views:
+    create_new_item: Create New Article
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: cash registers
@@ -759,7 +821,7 @@ en-US:
       new_order: new order created
       order_refund_dt: ! '#%{id}'
       please_backup: "Please backup your system regularly!"
-      save_before: XXX Save before leaving?
+      save_before: Save before leaving?
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
         %{created_tax_profiles}'
@@ -780,8 +842,8 @@ en-US:
     remember_me: remember me
     report: report
     reports:
-      cash_account: XXX
-      daily: XXX
+      cash_account: Cash Account
+      daily: Daily
     shipments:
       state: State
     single_words:
@@ -796,6 +858,7 @@ en-US:
       download: download
       edit: edit
       from: from
+      gift_cards: Gift Cards
       loading: loading
       new: New
       order: order

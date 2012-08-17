@@ -32,6 +32,7 @@
         </div>
         <br />
           <%= f.hidden_field :user_id, :value => salor_user.is_employee? ? salor_user.user.id : salor_user.id %>
+          <%= f.hidden_field :vendor_id, :value => $Vendor.id %>
         <div class="actions">
           <%= f.submit %>
         </div>

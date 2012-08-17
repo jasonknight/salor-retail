@@ -29,6 +29,12 @@ class User < ActiveRecord::Base
   has_many :drawer_transactions, :as => :owner
   has_many :shippers
   has_many :shipments
+  def vendor
+    return vendors.first
+  end
+  def vendor_id
+    self.vendors.first.id
+  end
   def usage
     report = {}
     report[:vendors] = Vendor.scopied.count

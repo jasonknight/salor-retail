@@ -29,7 +29,8 @@ class Vendor < ActiveRecord::Base
 	has_many :discounts
 	has_many :stock_locations
 	has_many :shipment_items, :through => :shipments
-  has_many :tax_profiles, :through => :user
+  has_many :tax_profiles
+  has_many :shipment_types
 	
   
 	def salor_configuration_attributes=(hash)

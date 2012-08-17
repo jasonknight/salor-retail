@@ -16,7 +16,7 @@ class HomeController < ApplicationController
   end
   def index
     if AppConfig.standalone and User.count == 0 then
-      redirect_to new_user_registration_path and return
+      raise "NoUser" and return
     end
     @from = Time.now
     @to = Time.now

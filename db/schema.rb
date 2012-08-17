@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120529102810) do
+ActiveRecord::Schema.define(:version => 20120730171806) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(:version => 20120529102810) do
     t.integer  "uses_drawer_id"
     t.integer  "auth_code"
     t.string   "last_path",                             :default => "/cash_registers"
+    t.string   "role_cache"
   end
 
   add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
@@ -709,6 +710,7 @@ ActiveRecord::Schema.define(:version => 20120529102810) do
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
     t.integer  "hidden",     :default => 0
+    t.integer  "vendor_id"
   end
 
   add_index "shipment_types", ["name"], :name => "index_shipment_types_on_name"
@@ -753,6 +755,7 @@ ActiveRecord::Schema.define(:version => 20120529102810) do
     t.integer  "hidden",          :default => 0
     t.string   "reorder_type"
     t.string   "sku"
+    t.integer  "vendor_id"
   end
 
   add_index "shippers", ["employee_id"], :name => "index_shippers_on_employee_id"
@@ -821,6 +824,7 @@ ActiveRecord::Schema.define(:version => 20120529102810) do
     t.boolean  "is_technician"
     t.integer  "auth_code"
     t.string   "last_path",                             :default => "/vendors"
+    t.string   "role_cache"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

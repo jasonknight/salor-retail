@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'spork'
+
 #uncomment the following line to use spork with the debugger
 #require 'spork/ext/ruby-debug'
 
@@ -11,7 +12,7 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
-  
+ 
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
@@ -25,6 +26,7 @@ Spork.prefork do
       # config.mock_with :flexmock
       # config.mock_with :rr
       config.mock_with :rspec
+      ActiveSupport::Deprecation.silenced = true
   
       # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
       # config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -113,6 +115,7 @@ def login_user(user)
 end
 def login_employee(code)
   GlobalData.salor_user = Employee.login(code)
+  $User = GlobalData.salor_user
   visit '/employees/login?code=' + code.to_s
 end
 
@@ -128,8 +131,8 @@ def single_store_setup
     @vendor = Factory :vendor, :user => @user
     @manager = Factory :manager, :user => @user, :vendor => @vendor
     @cashier = Factory :cashier, :user => @user, :vendor => @vendor
-    @cash_register = Factory :cash_register, :vendor => @vendor
-    @tax_profile = Factory :tax_profile, :user => @user
+    @cash_register = Factory :cash_register, :vendor => @vendor, :salor_printer => false
+    @tax_profile = Factory :tax_profile, :user => @user, :vendor => @vendor
     @category = Factory :category, :vendor => @vendor
     @order = Factory :order, :user => @user, :vendor => @vendor, :cash_register => @cash_register
     @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
@@ -148,6 +151,7 @@ def multi_store_setup
   @user = Factory :user
   $User = @user
   @vendor = Factory :vendor, :name => "Vendor One",:user => @user
+  $Conf = @vendor.salor_configuration
   @vendor2 = Factory :vendor, :name => "Vendor Two", :user => @user
   @cash_register = Factory :cash_register, :vendor => @vendor
   @tax_profile = Factory :tax_profile, :user => @user
@@ -155,4 +159,10 @@ def multi_store_setup
   GlobalData.salor_user = @user
   GlobalData.vendor = @vendor
   GlobalData.vendor_id = @vendor.id
+end
+def last_thermal_receipt
+  Receipt.last.content
+end
+def last_sticker
+  return File.open(@cash_register.sticker_printer,'r') {|f| f.read }
 end

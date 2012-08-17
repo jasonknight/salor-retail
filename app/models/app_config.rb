@@ -17,7 +17,11 @@ class AppConfig
     else
       # this is mainly for the standalone install, keeps salor.yml
       # from being overwritten on update.
-      @@config = YAML::load_file("/etc/salor.yml")
+      if File.exists?("/etc/salor.yml") then
+        @@config = YAML::load_file("/etc/salor.yml")
+      else
+        @@config = YAML::load_file("#{Rails.root.to_s}/config/config.yml")
+      end
     end
   end
   def self.method_missing(sym, *args, &block)

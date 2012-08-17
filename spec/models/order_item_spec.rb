@@ -44,10 +44,10 @@ describe OrderItem do
        @order_item = OrderItem.new
        OrderItem.get_discounts.length.should == 1
       end 
-      it "should should consider discounts that apply to the categor of an item" do
+      it "should should consider discounts that apply to the category of an item" do
         single_store_setup
         @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
-        @discount = Factory :discount, :vendor => @vendor, :category => @category
+        @discount = Factory :discount, :vendor => @vendor, :category => @category, :start_date => Time.now - 1.day, :end_date => Time.now + 1.day,:amount_type => 'percent'
         @discount.save
         Discount.count.should_not == 0
         puts Discount.first.inspect
@@ -56,8 +56,10 @@ describe OrderItem do
         OrderItem.reload_discounts
         @order_item = OrderItem.new
         @order_item.set_item(@item)
-        @order_item.price.should_not == @item.base_price
-        @order_item.price.should be_within(0.05).of(@item.base_price / 2)
+        @order_item.discounts.count.should == 1
+        @order_item.calculate_total(0)
+        @order_item.total.should_not == @item.base_price
+        @order_item.total.should be_within(0.05).of(@item.base_price / 2)
       end
   end # when being created
 end

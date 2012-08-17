@@ -49,6 +49,7 @@
     <td width="270px" style="padding-bottom:10px;">
       &nbsp;
       <%= f.hidden_field :user_id, :value => salor_user.get_owner.id if salor_user.is_employee? %>
+      <%= f.hidden_field :vendor_id, :value => $Vendor.id %>
       <%= f.hidden_field salor_user.is_employee? ? :employee_id : :user_id, :value => salor_user.id%>
     </td>
   </tr>
@@ -67,6 +68,6 @@
 </table>
 <br />
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit :id => "submit" %>
   </div>
 <% end %>

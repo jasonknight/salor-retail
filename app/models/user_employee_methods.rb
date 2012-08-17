@@ -38,7 +38,7 @@ module UserEmployeeMethods
           return
         end
         string = string.strip.to_i.to_s
-        if not string.empty? and not string.length < 11 then
+        if not string.empty? then
           if SalorBase.check_code(string) == false then
             self.errors[:password] << "incorrect format"
             return
@@ -134,8 +134,8 @@ module UserEmployeeMethods
   # them an Interface
   
   def get_discounts
-    if GlobalData.params.page then
-      return Discount.scopied.order("id DESC").page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    if $Params[:page] then
+      return Discount.scopied.order("id DESC").page($Params[:page]).per($Conf.pagination)
     else
       return Discount.scopied.order("id DESC")
     end
@@ -150,7 +150,7 @@ module UserEmployeeMethods
   end
   
   def get_shippers(page)
-    return Shipper.scopied.order("id DESC").page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    return Shipper.scopied.order("id DESC").page($Params[:page]).per($Conf.pagination)
   end
 
   def get_default_vendor
@@ -163,7 +163,7 @@ module UserEmployeeMethods
   
   # Items related functions
   def get_items
-    return Item.where("sku NOT LIKE 'DMY%'").order(AppConfig.items.order).scopied.page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    return Item.where("sku NOT LIKE 'DMY%'").order(AppConfig.items.order).scopied.page($Params[:page]).per($Conf.pagination)
   end
   def get_item(id)
     i = Item.scopied.where(["id = ?",id]) 
@@ -179,21 +179,21 @@ module UserEmployeeMethods
 
   # ShipmentTypes
   def get_shipment_types
-    return ShipmentType.scopied.order("name ASC").page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    return ShipmentType.scopied.order("name ASC").page($Params[:page]).per($Conf.pagination)
   end
   def get_shipment_type(id)
     c = ShipmentType.scopied.find_by_id(id)
     return c
   end
   def get_all_shipment_types
-    stypes = ShipmentType.order("id DESC").where(:user_id => GlobalData.salor_user.get_owner.id)
+    stypes = ShipmentType.order("id DESC").where(:vendor_id => $Vendor.id)
     
     stypes.unshift ShipmentType.new(:name => ' ')
     return stypes
   end
   #Category related functions
   def get_categories(page=nil)
-    return Category.scopied.order("id DESC").page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    return Category.scopied.order("id DESC").page($Params[:page]).per($Conf.pagination)
   end
   def get_all_categories
     cats = Category.by_vendor.order("id DESC")
@@ -205,13 +205,13 @@ module UserEmployeeMethods
     return c
   end
   def get_customers(page=nil)
-    return Customer.scopied.order('id DESC').page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    return Customer.scopied.order('id DESC').page($Params[:page]).per($Conf.pagination)
   end
   
   # Locations related functions
   def get_locations(page=nil)
     id = GlobalData.salor_user.meta.vendor_id
-    return Location.scopied.order('id DESC').page(GlobalData.params.page)
+    return Location.scopied.order('id DESC').page($Params[:page])
   end
   def get_location(id)
     l = Location.scopied.find(id)
@@ -224,15 +224,14 @@ module UserEmployeeMethods
     return TaxProfile.scopied 
   end
   def get_tax_profile(id)
-    tp = TaxProfile.scopied.find(id)
-    return tp if tp.user_id == self.id and self.class == User
-    return tp if tp.user_id == self.user.id and self.class == Employee
-    return TaxProfile.new
+    tp = TaxProfile.scopied.find_by_id(id)
+    tp = TaxProfile.new if not tp
+    return tp
   end
   
   # Orders related functions
   def get_orders
-    return Order.order("id DESC").scopied.page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    return Order.order("id DESC").scopied.page($Params[:page]).per($Conf.pagination)
   end
   def get_order(id)
     order = Order.includes(:order_items,:coupons,:gift_cards).find_by_id(id)
@@ -277,7 +276,7 @@ module UserEmployeeMethods
   
   # Employees related functions
   def get_employees(id,page)
-    return Employee.scopied.page(page).per(GlobalData.conf.pagination)
+    return Employee.scopied.page(page).per($Conf.pagination)
   end
   def get_employee(id)
     employee = Employee.find(id)
@@ -307,36 +306,34 @@ module UserEmployeeMethods
   end
   
   def can(action)
-    puts "Called for: #{action}"
     if self.class == User or AppConfig.roleless == true then
       return true
     else
       action = action.to_s
-      admin = Role.find_by_name('manager')
-      r = Role.find_by_name action
+      admin = 'manager'
       any = nil
       if action.match(/new|index|edit|destroy|create|update|show/) then
-        a = action.gsub(/new|index|edit|destroy|create|update|show/,'any')
-        any = Role.find_by_name(a)
-        any = Role.new(:name => a) if any.nil?
+        any = action.gsub(/new|index|edit|destroy|create|update|show/,'any')
       else
         # puts "No Match for #{action}"
       end
-      any = Role.new(:name => 'xxxxxxxxxxxxxxxxx') if any.nil?
-      if self.roles.include?(r) or self.roles.include?(admin) or self.roles.include?(any)
-        # puts "Role #{action} allowed."
+      any = 'xxxxxxxxxxxxxxxxx' if any.nil?
+      if self.role_cache.include?(action) or self.role_cache.include?(admin) or self.role_cache.include?(any)
+#          puts "Role #{action} allowed."
         return true
       else
         # the role isn't on the model, so let's see if
         # they are prevented from this action
-        self.roles.each do |role|
-          cnts = Role::CANNOTDO[role.name.to_sym]          
+        self.role_cache.split(',').each do |role|
+          cnts = Role::CANNOTDO[role.to_sym]          
           if cnts then
-            if cnts.include? action.to_sym or cnts.include? any.name.to_sym or cnts.include? :anything then
+            if cnts.include? action.to_sym or cnts.include? any.to_sym or cnts.include? :anything then
+#               puts "Returning false from cannot do... #{action}"
               return false
             end
           end            
         end
+#         puts "Cants didn't trip, returning true"
         return true
       end
     end
@@ -443,9 +440,9 @@ module UserEmployeeMethods
   
   def almost_out
     if self.class == User then
-      return self.items.where("quantity < min_quantity AND ignore_qty = 0 AND (active IS TRUE or active = 1)").order('quantity ASC').page(GlobalData.params.page).per(10)
+      return self.items.where("quantity < min_quantity AND ignore_qty = 0 AND (active IS TRUE or active = 1)").order('quantity ASC').page($Params[:page]).per(10)
     else
-      return self.user.items.where("quantity < min_quantity AND ignore_qty = 0 AND (active IS TRUE or active = 1)").order('quantity ASC').page(GlobalData.params.page).per(10)
+      return self.user.items.where("quantity < min_quantity AND ignore_qty = 0 AND (active IS TRUE or active = 1)").order('quantity ASC').page($Params[:page]).per(10)
     end
   end
   
@@ -692,6 +689,13 @@ module UserEmployeeMethods
     else
       # puts "Autodrop not set"
     end
+  end
+  def set_role_cache
+    rs = []
+    self.roles.each do |r|
+      rs << r.name
+    end
+    self.role_cache = rs.join(',')
   end
   # {END}
 end

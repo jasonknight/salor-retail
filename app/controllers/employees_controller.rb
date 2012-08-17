@@ -121,22 +121,11 @@ class EmployeesController < ApplicationController
   # PUT /employees/1
   # PUT /employees/1.xml
   def update
-    @employee = salor_user.get_employee(params[:id])
-    @employee.make_valid
-    if not params[:employee][:password].empty? then
-      @employee.password = params[:employee][:password]; 
-      if not @employee.errors.any? and @employee.save then
-        saved = true
-        params[:employee] = ''
-        redirect_to(:action => 'edit', :id => @employee.id, :notice => 'Employee was successfully updated.') and return
-      else
-        saved = false
-      end
-    else 
-      saved = true
-    end
+    @employee = $User.get_employee(params[:id])
     respond_to do |format|
-      if saved and @employee.update_attributes(params[:employee])
+      if @employee.update_attributes(params[:employee])
+        @employee.set_role_cache
+        @employee.save
         format.html { redirect_to :action => 'edit', :id => @employee.id, :notice => 'Employee was successfully updated.' }
         format.xml  { head :ok }
       else

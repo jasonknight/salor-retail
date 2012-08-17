@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'pp'
 describe Order do
   before(:each) do
     single_store_setup
@@ -7,7 +8,9 @@ describe Order do
     
   end
   def create_taxable_order
-    @vendor = Factory :vendor, :user => @user, :calculate_tax => true
+    @vendor = Factory :vendor, :user => @user
+    @vendor.salor_configuration.calculate_tax = true
+    $Conf = @vendor.salor_configuration
     @order = Factory :order, :user => @user, :vendor => @vendor, :cash_register => @cash_register
   end
   def create_pc_items
@@ -120,7 +123,7 @@ describe Order do
       @order.remove_order_item(@order.order_items.first)
       @order.order_items.reload.first.should be
     end # should not allow you to remove and item once paid
-    it "should allow you to refund a single item", :focus => true do
+    it "should allow you to refund a single item" do
       @item = Factory :item, :vendor => @vendor, :tax_profile => @tax_profile, :category => @category
       @order.add_item(@item)
       @order.update_self_and_save
@@ -128,7 +131,7 @@ describe Order do
       DrawerTransaction.last.amount.should == @order.get_drawer_add
       DrawerTransaction.last.tag.should == 'CompleteOrder'
       @order.order_items.first.toggle_refund(true,'InCash')
-      @order.gross.should == @order.subtotal
+      @order.gross.should == 0.0
       DrawerTransaction.last.amount.should == @order.order_items.first.total
       DrawerTransaction.last.order_id.should == @order.id
       DrawerTransaction.last.order_item_id.should == @order.order_items.first.id
@@ -219,16 +222,18 @@ describe Order do
       @order.paid.should == 1
       @order2 = Factory :order, :user => @user, :vendor => @vendor, :cash_register => @cash_register
       @gift_card.reload
-      @order2.add_item(@gift_card)
-      @order2.update_self_and_save
-      @order2.gross.should == 0
-      @order2.order_items.first.update_attribute(:price,5)
-      @order2.order_items.reload
-      @order2.update_self_and_save
+      @gift_card.activated.should == true
       @order2.gross.should == 0
       @order2.add_item(@item)
       @order2.update_self_and_save
-      @order2.gross.should be_within(0.005).of(0.95)
+      
+      @order2.add_item(@gift_card)
+      @order2.update_self_and_save
+      
+      @order2.gross.should == 0
+      @order2.order_items.last.update_attribute(:price,5)
+      @order2.update_self_and_save
+      @order2.gross.should == 0.95
     end # should discount orders when using an activated giftcard
   end # when using gift cards
   context "when vendor.calculate_tax is set to true" do
@@ -237,7 +242,7 @@ describe Order do
       @order.add_item(@item)
       @order.update_self_and_save
       @order.subtotal.should be_within(0.005).of(@item.base_price)
-      @order.gross.should be_within(0.005).of(@order.order_items.first.tax + @order.total)
+      @order.gross.should be_within(0.005).of(@order.order_items.first.tax + @order.subtotal)
       @order.subtotal.should_not == @order.gross
     end # should return the total + tax
   end # when vendor.calculate_tax is set to true
