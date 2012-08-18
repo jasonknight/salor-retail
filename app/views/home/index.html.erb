@@ -2,7 +2,7 @@
   if AppConfig.standalone then
 %>
   <%= salor_render :partial => "shared/login" %>
-  <% if not Vendor.first.salor_configuration.license_accepted then %>
+  <!--<% if not Vendor.first.salor_configuration.license_accepted then %>
    <div id="salor_license">
       <div id="license_header" onclick="window.location = '?license_accepted=true';">
         <div class="generic-button">
@@ -17,7 +17,7 @@
         </div>
       </div>
    </div>
-  <% end %>
+  <% end %>-->
 <% else %>
   <%= salor_render :partial => "shared/front_page" %>
 <% end %>
