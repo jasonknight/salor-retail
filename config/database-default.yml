@@ -9,7 +9,7 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: salor_development
+  database: salor_retail_development
   pool: 5
   username: root
   password: 
@@ -22,7 +22,7 @@ test:
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: salor_test
+  database: salor_retail_test
   pool: 5
   username: root
   password: 
@@ -32,7 +32,7 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: salor_production
+  database: salor_retail_production
   pool: 5
   username: root
   password: 
