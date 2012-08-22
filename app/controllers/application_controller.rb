@@ -139,6 +139,7 @@ class ApplicationController < ActionController::Base
     return "application"
   end
   def loadup
+    $Notice = ""
     SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
     GlobalData.refresh # Because classes are cached across requests
 	  Job.run # Cron jobs for the application

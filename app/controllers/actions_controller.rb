@@ -12,7 +12,7 @@ class ActionsController < ApplicationController
   # GET /actions
   # GET /actions.xml
   def index
-    @actions = Action.scopied.all
+    @actions = Action.scopied.order("id desc").page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

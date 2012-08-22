@@ -1083,6 +1083,7 @@ nav.pagination span.disabled
   background-color: $light_background
   font-size: $text_size_big
   margin-bottom: 10px
+  @include awesome_button
 
 nav.pagination span.page 
   padding-left: 2px
@@ -3048,3 +3049,6 @@ input:focus
   
 td.shipment-item-attribute-column
   padding-right: 30px
+table.padded-table * td,
+table.padded-table * th
+  padding: 10px
