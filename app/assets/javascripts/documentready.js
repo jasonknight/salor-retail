@@ -22,7 +22,7 @@ $(function () {
   }
 
   if (typeof(Salor) != 'undefined' && Register.pole_display == '') {
-    Salor.mimoImage('/opt/salor_pos/salor-customerscreen-advertising.bmp');
+    Salor.mimoImage('/opt/salor/support/salor-retail-customerscreen-advertising.bmp');
   }
 
   jQuery.expr[':'].focus = function( elem ) {
