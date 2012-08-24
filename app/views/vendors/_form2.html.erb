@@ -34,6 +34,15 @@
   </tr>
   
   <tr>
+    <td valign="top" class="attr">
+      <%= f.label "Token" %>
+    </td>
+    <td valign="top" class="value">
+      <%= f.text_field :token, :class => "keyboardable"%>
+    </td>
+  </tr>
+  
+  <tr>
     <td valign="top" colspan="2">
       <hr />
       <h2> <%= t("menu.loyalty_cards") %> </h2>
@@ -82,6 +91,8 @@
       <%= conf.check_box :items_view_list %><br /> <br />
     </td>
   </tr>
+  
+  
   
   <tr>
     <td valign="top" class="attr">
@@ -202,6 +213,32 @@
     </td>
     <td valign="top" class="value">
       <%= conf.text_area :csv_imports, :rows => 10, :style => 'width: 80%;',:class => "keyboardable" %> 
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" class="attr">
+      <%= conf.label t("menu.buttons") %>
+    </td>
+    <td valign="top" class="value">
+      <%= conf.check_box :csv_buttons %><br /> <br />
+    </td>
+  </tr>
+  
+  <tr>
+    <td valign="top" class="attr">
+      <%= conf.label t("menu.customers") %>
+    </td>
+    <td valign="top" class="value">
+      <%= conf.check_box :csv_customers %><br /> <br />
+    </td>
+  </tr>
+  
+  <tr>
+    <td valign="top" class="attr">
+      <%= conf.label t("menu.discounts") %>
+    </td>
+    <td valign="top" class="value">
+      <%= conf.check_box :csv_discounts %><br /> <br />
     </td>
   </tr>
   

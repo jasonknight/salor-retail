@@ -117,7 +117,7 @@ module SalorBase
     GlobalData.salor_user.meta.cash_register_id = CashRegister.first.id
   end
   def log_action(txt)
-    SalorBase.log_action(self.class.to_s,txt)
+    #SalorBase.log_action(self.class.to_s,txt)
   end
   def self.log_action(from="unk",txt)
     #File.open("#{::Rails.root.to_s}/log/#{Rails.env}-history.log","a") do |f|

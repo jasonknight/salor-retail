@@ -1,18 +1,24 @@
 <%= raw content_box_top(t("menu.actions")) %>
 
-<%= link_to salor_icon(:add,{},32),new_action_path %>
-
-<table width="99%" cellspacing="0" align="center">
+<table align="center">
+  <tr> 
+    <td><%= link_to salor_icon(:add,{},32),new_action_path %></td>
+  </tr>
+</table>
+<table width="80%" cellspacing="0" align="center" class="padded-table">
   <tr>
-    <th align="left"><%= I18n.t("activerecord.attributes.name") %></th>
+    <th align="left" width="33%"><%= I18n.t("activerecord.attributes.name") %></th>
     <th align="left"><%= I18n.t("activerecord.attributes.when") %></th>
     <th align="left"><%= I18n.t("activerecord.attributes.sku") %></th>
     <th></th>
     <th></th>
   </tr>
+</table>
+<table width="80%" cellspacing="0" align="center" class="stripe-me padded-table">
+
 <% @actions.each do |action| %>
-  <tr class="<%= cycle('even','odd') %>">
-    <td><%= action.name %></td>
+  <tr >
+    <td width="33%"><%= action.name %></td>
     <td><%=I18n.t("when_list.#{action.whento}") if action.whento %></td>
     <td><%= link_to action.sku, "/items/#{action.sku}/edit" %></td>
     <td width="40px"><%= link_to salor_icon(:edit,{},16), edit_action_path(action) %></td>
@@ -20,4 +26,7 @@
   </tr>
 <% end %>
 </table>
+<div class="pagination" align="center">
+  <%= paginate @actions if @actions %>
+</div>
 <%= raw content_box_bottom %>

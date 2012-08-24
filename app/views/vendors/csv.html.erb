@@ -13,7 +13,7 @@
              :name,
              :base_price,:category_name, :behavior,
              :location_name,
-             :item_type_id,
+             :item_type_name,
              :tax_profile_amount,
              :active,
              :hidden,
@@ -35,7 +35,11 @@
 @items.each do |item| 
   line = []
   header.each do |h|
-    line << item.send(h)
+    if h == :item_type_name
+      line << item.item_type.behavior
+    else
+      line << item.send(h)
+    end
   end
 %>
 <%= line.join(";") %><% end %><% end %>
