@@ -381,6 +381,9 @@ class Item < ActiveRecord::Base
       #else
         si.quantity ||= 1
         i.quantity += si.quantity
+        if si.purchase_price then
+          i.purchase_price = si.purchase_price
+        end
       #end
       return i
     else

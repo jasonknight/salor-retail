@@ -126,7 +126,18 @@ def login_remote_user(user,server = 'salor.com')
   visit server + '/employees/login?code=' + user.username + "1234"
   Capybara.default_host = ohost
 end
+def clear_db
+  User.delete_all
+  Employee.delete_all
+  Item.delete_all
+  Order.delete_all
+  Vendor.delete_all
+  CashRegister.delete_all
+  TaxProfile.delete_all
+  Discount.delete_all
+end
 def single_store_setup
+    clear_db
     @user = Factory :user
     @vendor = Factory :vendor, :user => @user
     @manager = Factory :manager, :user => @user, :vendor => @vendor
@@ -144,10 +155,11 @@ def single_store_setup
     GlobalData.conf = @vendor.salor_configuration
     $Conf = @vendor.salor_configuration
     $User = @user 
-
+    $Vendor = @vendor
     @enter_event = 'e = jQuery.Event("keypress");e.which = 13;e.keyCode = 13;$("INPUT").trigger(e);';
 end
 def multi_store_setup
+  clear_db
   @user = Factory :user
   $User = @user
   @vendor = Factory :vendor, :name => "Vendor One",:user => @user
