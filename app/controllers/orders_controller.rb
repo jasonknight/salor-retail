@@ -284,9 +284,20 @@ class OrdersController < ApplicationController
     text = Printr.new.sane_template('item',binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @cash_register.id, :content => text)
     if @register.salor_printer
-      render :text => text and return
+      if params[:download] then
+        send_data(text,{:filename => 'salor.bill'})
+      else
+        render :text => text and return
+      end
     else
-      written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      if is_mac? then
+        written_bytes = File.open("/tmp/" + @register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+        `lp -d #{@register.thermal_printer} /tmp/#{@register.thermal_printer}`
+        print_confirmed if written_bytes > 0
+        render :nothing => true and return
+      else
+        written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      end
       print_confirmed if written_bytes > 0
       render :nothing => true and return
     end

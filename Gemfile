@@ -46,7 +46,7 @@ group :test, :development do
 #  gem 'rb-inotify'
 #  gem 'guard-rspec', '0.5.2'
   gem 'capybara'
-  gem 'capybara-webkit'
+  #gem 'capybara-webkit'
   gem 'factory_girl_rails'
   gem 'spork', '0.9.0.rc9'
 #  gem 'guard-spork'
