@@ -20,7 +20,17 @@ class ApplicationController < ActionController::Base
   unless Salor::Application.config.consider_all_requests_local
     #rescue_from Exception, :with => :render_error
   end 
+  def is_mac?
+     RUBY_PLATFORM.downcase.include?("darwin")
+  end
 
+  def is_windows?
+     RUBY_PLATFORM.downcase.include?("mswin")
+  end
+
+  def is_linux?
+     RUBY_PLATFORM.downcase.include?("linux")
+  end   
   def pre_load
   end
   def render_csv(filename = nil,text = nil)
