@@ -6,23 +6,34 @@
       - @category.errors.full_messages.each do |msg|
         %p msg
 
-  = f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id
-  .field
-    = f.label :name
-    = f.text_field :name, :class => 'keyboardable'
-  .field
-    = f.label :eod_show
-    = f.check_box :eod_show
-  .field
-    = f.label :tag
-    = f.collection_select :tag, @tags, :name, :name
-  .field
-    = f.label :color
-    = f.text_field :color
-  .field
-    = f.label :button_category
-    = f.check_box :button_category
-  .field
-    = f.label :position
-    = f.text_field :position
-  .actions= f.submit
+  %table{:width => '90%', :align=> 'center'}
+    %tr
+      %td
+        = f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id
+        .field
+          = f.label :name
+          = f.text_field :name, :class => 'keyboardable'
+        /
+          .field
+            = f.label :eod_show
+            = f.check_box :eod_show
+        /
+          .field
+            = f.label :tag
+            = f.collection_select :tag, @tags, :name, :name
+      %td
+        .field
+          = f.label :color
+          = f.text_field :color
+    %tr
+      %td
+        .field
+          = f.label :button_category
+          = f.check_box :button_category
+      %td
+        .field
+          = f.label :position
+          = f.text_field :position, :class => 'keyboardable', :size => 4, :style => 'width: 40px;'
+    %tr
+      %td{ :colspan => 2, :align => 'right'}
+        .actions= f.submit

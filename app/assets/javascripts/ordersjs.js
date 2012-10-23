@@ -83,7 +83,7 @@ function makeItemMenu(item) {
         var menu = $("<div class='item-menu-div'></div>");
         $('body').append(menu);
         menu.css({position: 'absolute', left: event.pageX, top: event.pageY});
-        var dicon = $('<div class="oi-menu-icon"><img src="/images/icons/delete_32.png" /></div>');
+        var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete_32.png" /></div>');
         dicon.mousedown(function () {
             $('.' + base_id).remove();
             get('/orders/delete_order_item?id=' + item.id, filename);
@@ -93,7 +93,7 @@ function makeItemMenu(item) {
         });
         menu.append(dicon);
         
-        var buyback = $('<div class="oi-menu-icon"><img src="/images/icons/money_32.png" /></div>');
+        var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/money_32.png" /></div>');
         buyback.addClass('pointer');
         buyback.mousedown(function () {
             var string = '/vendors/toggle?model_id=' +
@@ -108,7 +108,7 @@ function makeItemMenu(item) {
         });
         menu.append(buyback);
         if (!Register.scale == '') {
-          var wicon = $('<div class="oi-menu-icon"><img src="/images/icons/weight_32.png" /></div>');
+          var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/weight_32.png" /></div>');
           wicon.mousedown(function () {
               var string = '/vendors/edit_field_on_child?id=' +
                             item.id +'&klass=OrderItem' +
@@ -124,7 +124,7 @@ function makeItemMenu(item) {
           menu.append(wicon);
         } // end  if (!Register.scale == '') {
 
-        var btn = $('<div class="oi-menu-icon"><img src="/images/icons/tick_32.png" /></div>');
+        var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/tick_32.png" /></div>');
         btn.mousedown(function () {
             menu.remove();
             focusInput($('#keyboard_input'));

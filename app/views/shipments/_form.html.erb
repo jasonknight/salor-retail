@@ -7,7 +7,7 @@
           $('.form-container').hide();
           $($(this).attr('href')).show();
       });
-      $(':input',document.new_shipment).bind("change", function() {  alert('setting'); window.onbeforeunload = onNavigateAway;});
+      $(':input',document.new_shipment).bind("change", function() {  window.onbeforeunload = onNavigateAway;});
   });
   function onNavigateAway() {
     return "<%= I18n.t("views.notice.save_before") %>";
@@ -28,13 +28,13 @@
   <% end %>
 <div class="general-form">
   <div class="form-menu">
-      <div class="link active" href="#general">
+      <div id="general_tab" class="link active" href="#general">
       <%= t("menu.general_configuration") %>
     </div>
-    <div class="link" href="#items">
+    <div id="items_tab" class="link" href="#items">
       <%= t("headings.shipment_items") %>
     </div>
-    <div class="link" href="#notes">
+    <div id="notes_tab" class="link" href="#notes">
       <%= t("menu.additional") %>
     </div>
   </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="field left">
               <%= f.label t("activerecord.attributes.status") %><br />
-              <%= f.select :shipment_type_id, GlobalData.salor_user.get_all_shipment_types.collect {|t| [t[:name],t[:id]]} %>
+              <%= f.select :shipment_type_id, $User.get_all_shipment_types.collect {|t| [t[:name],t[:id]]} %>
             </div>
             <div class="field left">
               <%= f.label t("activerecord.attributes.the_receiver") %><br />
@@ -80,7 +80,7 @@
   </div>
   <div class="actions">
     <br />
-    <%= f.submit t 'helpers.submit.save' %>
+    <%= f.submit t('helpers.submit.save'), :id => "submit" %>
   </div>
 <% end %>
 </div>

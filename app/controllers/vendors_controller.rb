@@ -261,6 +261,7 @@ class VendorsController < ApplicationController
       cookies[:user_id] = nil
       cookies[:user_type] = nil
       redirect_to :controller => :home, :action => :index
+      $User = nil
     end
   end
   # {END}
@@ -275,53 +276,53 @@ class VendorsController < ApplicationController
       render :nothing => true and return
     end
     if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
-       puts  "### Class is allowed"
+#        puts  "### Class is allowed"
       kls = Kernel.const_get(params[:klass])
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
       if kls.exists? params[:id] then
-         puts  "### Class Exists"
+#          puts  "### Class Exists"
         @inst = kls.find(params[:id])
         if @inst.class == OrderItem and @inst.order.paid == 1 then
-          puts "## Order is Paid"
+#           puts "## Order is Paid"
           render :layout => false and return
         end
         if @inst.class == Order and @inst.paid == 1 then
           @order = $User.get_new_order
-          puts "## Order is paid 2"
+#           puts "## Order is paid 2"
           render :layout => false and return
         end
         if @inst.respond_to? params[:field]
-           puts  "### Inst responds_to field #{params[:field]}"
+#            puts  "### Inst responds_to field #{params[:field]}"
           if not salor_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
              puts  "### User doesn't own resource"
             raise I18n.t("views.errors.no_access_right")
           end
-          puts "## Locked stuff"
+#           puts "## Locked stuff"
           if @inst.class == Order or @inst.class == OrderItem then
-             puts  "### Checking for locked ..."
+#              puts  "### Checking for locked ..."
             meth = "#{params[:field]}_is_locked"
             if @inst.respond_to? meth.to_sym then
-               puts  "### inst responds_to #{meth}"
+#                puts  "### inst responds_to #{meth}"
               @inst.update_attribute(meth.to_sym,true)
               render :layout => false and return
             end
           end
           # Replace , with . for for float calcs to work properly
-           puts  " --- " + params[:value].to_s
+#            puts  " --- " + params[:value].to_s
           params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
-           puts  " --- " + params[:value].to_s
+#            puts  " --- " + params[:value].to_s
           if kls == OrderItem then
-             puts  "### klass is OrderItem"
+#              puts  "### klass is OrderItem"
             if params[:field] == 'quantity' and 
                @inst.behavior == 'normal' and 
                @inst.coupon_applied == false and 
                @inst.is_buyback == false and 
                @inst.order.buy_order == false and (not @inst.weigh_compulsory == true) then
-               puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
+#                puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
               unless @inst.activated and true == false then
-                 puts  "### inst is not activated."
+#                  puts  "### inst is not activated."
                 # Takes into account ITEM rebate and ORDER rebate.
                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
                 newval = params[:value]
@@ -342,7 +343,7 @@ class VendorsController < ApplicationController
                 render :layout => false and return
               end
             elsif params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
-               puts  "### field is price"
+#                puts  "### field is price"
               unless @inst.activated then
                 # Takes into account ITEM rebate and ORDER rebate.
                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
@@ -366,7 +367,7 @@ class VendorsController < ApplicationController
                 render :layout => false and return
               end
             elsif params[:field] == 'rebate'and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
-               puts  "### field is rebate"
+#                puts  "### field is rebate"
               # Takes into account ITEM rebate and ORDER rebate.
               # ORDER and ITEM totals are updated in DB and in instance vars for JS
               rebate = params[:value].gsub(',','.').to_f
@@ -385,7 +386,7 @@ class VendorsController < ApplicationController
               @inst.rebate = rebate
               render :layout => false and return
             else
-               puts  "### Other OrderItem updates executing"
+#                puts  "### Other OrderItem updates executing"
               # For all other OrderItem updates
               # puts  "### update(#{params[:field].to_sym},#{params[:value]})"
               @inst.update_attribute(params[:field].to_sym,params[:value])
@@ -404,7 +405,7 @@ class VendorsController < ApplicationController
             # Tax for order is calculated before payment
             if params[:field] == 'rebate' and false == true then
 
-              puts "Updating scotty on order"
+#               puts "Updating scotty on order"
               # ORDER rebate updating
               old_rebate = @inst.rebate
               newvalue = params[:value].gsub(',','.').to_f
@@ -537,7 +538,15 @@ class VendorsController < ApplicationController
     @vendor = Vendor.find(params[:id])
     render :layout => 'customer_display'
   end
-
+  def backup
+    dbconfig = YAML::load(File.open('config/database.yml'))
+    mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+    username = dbconfig[mode]['username']
+    password = dbconfig[mode]['password']
+    database = dbconfig[mode]['database']
+    `mysqldump -u #{username} -p#{password} #{database} > #{params[:path]}/salor-#{Time.now.strftime("%Y-%m-%d")}.sql`
+    `cp -f #{Rails.root.to_s}/log/production.log #{params[:path]}/production-#{Time.now.strftime("%Y-%m-%d")}.log`
+  end
 
   # Employee Editing Functions
   private

@@ -11,8 +11,9 @@ module SalorScope
       # {START}
       inst = klass.new
       klass.scope(:by_vendor, lambda { |*args|
-         if inst.respond_to? :vendor_id and not inst.class == TaxProfile
-           return {:conditions => ["vendor_id = ? ", GlobalData.salor_user.get_meta.vendor_id]} if GlobalData.salor_user
+         if inst.respond_to? :vendor_id
+           
+           return {:conditions => ["vendor_id = ? ", $User.vendor_id]} if $User and Vendor.exists?($User.vendor_id)
          end
       })
       klass.scope(:visible, lambda { |*args|
@@ -31,10 +32,10 @@ module SalorScope
              GlobalData.salor_user.is_employee? and
              not GlobalData.salor_user.can(:head_cashier) and
              not GlobalData.salor_user.can(:edit_orders) then
-             return {:conditions => 'employee_id = ' + GlobalData.salor_user.id.to_s}
+             return {:conditions => 'employee_id = ' + $User.id.to_s}
           end
-          if inst.respond_to? :user_id
-            return {:conditions => 'user_id = ' + GlobalData.salor_user.get_owner.id.to_s}
+          if inst.respond_to? :user_id and [TaxProfile,Shipper,ShipmentType].include?(inst.class) == false
+            return {:conditions => 'user_id = ' + $User.get_owner.id.to_s}
          end
       })
       klass.scope( :by_keywords , lambda {|*args|

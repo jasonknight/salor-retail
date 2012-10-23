@@ -4,7 +4,7 @@
         <table width="375px" align="center">
           <tr valign="top">
             <td align="center" width="125px">
-              <%= link_to(image_tag("/images/icons/" + icon(:add,32)), new_shipment_type_path) %>              
+              <%= link_to(image_tag("/images/icons/" + icon(:add,32),:id => "new_shipment_type"), new_shipment_type_path(:vendor_id => $Vendor.id)) %>              
             </td>
             <td align="center" width="125px">
               <a class='shippers_index' href="<%= shippers_path %>">

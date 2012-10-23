@@ -1,18 +1,225 @@
+---
 de:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: ", and "
+
+    select:
+      prompt: "Please select"
+
+  number:
+    format:
+      separator: "."
+      delimiter: ","
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u%n"
+        friendly_unit: "EUR"
+        unit: "€"
+        separator: ","
+        delimiter: " "
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
+  ByCard: Karte
+  ByGiftCard: Gutschein
+  InCash: In Bar
   activerecord:
+    attributes:
+      invoice_blurb: Rechnungstext Kopf
+      invoice_blurb_footer: Rechnungstext Fuß
+      active: aktiv
+      address: Adresse
+      afield: Feld
+      amount: Betrag
+      amount_remaining: Restmenge
+      amount_type: Art
+      applies_to: bezieht sich auf
+      auto_drop: Auto-Buchung Tagesbeginn
+      bank_machine_path: Bankomat
+      base_price: Preis/Betrag/Prozent
+      behavior: Verhalten
+      body: Körper
+      buyback_price: Pfandbetrag
+      calculate_part_price: Setpreis berechnen
+      calculate_tax: Steuer berechnen
+      cash_drawer: Kassenlade
+      cash_made: eingenommener Betrag
+      cash_register:
+        sticker_printer: Etikettendrucker
+      category_id: Kategorie
+      cellphone: Mobil
+      child_sku: Kind-SKU
+      city: Stadt
+      code: Code
+      company_name: Firmenname
+      contact_address: Kontaktadresse
+      contact_email: Kontakt E-Mail
+      contact_fax: Kontakt Fax
+      contact_person: Kontaktperson
+      contact_phone: Telefon
+      country: Bundesland
+      coupon_applies: Gutschein anwendbar
+      coupon_total: Coupon
+      coupon_type: Gutschein-Art
+      created_at: Created
+      csv_imports: CSV Imports
+      csv_imports_url: CSV Imports URL
+      customer_screen_blurb: Standardtext Verkaufsanzeige
+      decimal_points: Dezimalstellen
+      default: Standard
+      default_buyback: Pfand
+      dollar_per_lp: Euro pro Punkt
+      drop: Einzahlen
+      email: E-Mail
+      employee:
+        uses_drawer_id: Kassenlade von
+      end_amount: Schlussbetrag
+      end_date: Ende
+      eod_show: Zeige bei Tagesabschluss
+      expires_on: läuft ab am
+      first_name: Vorname
+      height: Höhe
+      hide_buttons: Tasten ausblenden
+      hide_discounts: Preisnachlässe ausblenden
+      ignore_qty: Menge Ignorieren
+      is_refund: Is Refund?
+      is_shipment_item: ist Lieferartikel
+      item:
+        purchase_price: Einkaufspreis
+        quantity: Lagermenge
+      item_sku: Artikel SKU
+      itemsviewlist: Listenansicht für Artikel
+      last_name: Familienname
+      lc_points: Punkteabzug
+      length: Länge
+      letter: Steuerklasse
+      location_id: Ort
+      lp_per_dollar: Punkte pro Euro
+      min_quantity: Mindestmenge
+      must_change_price: Must Change Price
+      name: Name
+      no_print: Nicht drucken bei Enter
+      notes: Notiz
+      open_cash_drawer: Öffne Kassenlade
+      order_id: Verkaufs-Id
+      owner_id: Owner
+      owner_type: Owner Type
+      packaging_unit: Verpackungseinheit
+      pagination: Artikel pro Seite
+      paid: Bezahlt
+      parent_sku: Eltern-SKU
+      part_quantity: Menge
+      parts: Set
+      password: Passwort
+      paylife: Paylife
+      payout: Ausbezahlen
+      points: Treuepunkte
+      pole_display: Verkaufsanzeige
+      postalcode: PLZ
+      price: Preis
+      price_by_qty: Preisberechnung nach Menge
+      purchase_price: Kaufpreis
+      quantity: Menge
+      quantity_sold: Menge verkauft
+      real_quantity: Inventur
+      rebate: Rabatt
+      rebate_type: Rabatt-Typ
+      receipt_blurb: Belegtest Kopf
+      receipt_blurb_footer: Belegtext Fuß
+      reorder_type: Reorder Type
+      sales_metric: Verkaufseinheit
+      salor_printer: Client-seitiges Drucken
+      scale: Waage
+      shipment:
+        from: von
+        paid: bezahlt
+        price: Preis
+        to: an
+      shipment_item:
+        name: Name
+        quantity: Liefermenge
+        sku: SKU
+        stock_location_id: Lagerort
+      shipper_sku: Bestellnummer
+      sku: SKU
+      start_amount: Startbetrag
+      start_date: Beginn
+      state: Land
+      status: Status
+      stock_location_ids: Lagerort
+      street1: Adresse 1
+      street2: Adresse 2
+      stylesheets: Stylesheets
+      subtotal: Zwischensumme
+      tag: Tag
+      tax: Steuer
+      tax_profile_id: Steuerklasse
+      telephone: Telefon
+      the_receiver: Geliefert an
+      the_shipper: Geliefert durch
+      thermal_printer: Thermodrucker
+      title: Titel
+      total: Gesamt
+      track_expiry: Track Expiry
+      type: Typ
+      url: URL
+      username: Benutzername
+      uses_drawer_id: Uses Drawer of
+      value: Betrag
+      vendor_id: Filiale
+      vendor_printers: Drucker
+      weigh_compulsory: Wiegepflicht
+      weight: Gewicht
+      when: Wenn
+      width: Breite
     models:
-      button:
-        one: Taste
-        other: Tasten
-      tender_method:
-        one: Zahlungsmethode
-        other: Zahlungsmethoden
-      action: 
+      action:
         one: Aktion
         other: Aktionen
       broken_item:
         one: Defekter Artikel
         other: Defekte Artikel
+      button:
+        one: Taste
+        other: Tasten
       category:
         one: Kategorie
         other: Kategorien
@@ -46,11 +253,15 @@ de:
       order_item:
         one: Verkaufter Artikel
         other: Verkaufte Artikel
+      payment_method:
+        one: Zahlungsmethode
+        other: Zahlungsmethoden
       shipment:
+        default_name: Auto Nachbestellung
         one: Auto-Vorschlag
         other: Auto-Vorschlag
-        default_name: Auto Nachbestellung
       shipment_type:
+        default_name: XXX Auto Nachbestellung
         one: Lieferart
         other: Lieferarten
       shipper:
@@ -62,180 +273,55 @@ de:
       tax_profile:
         one: Steuerklasse
         other: Steuerklassen
-      vendor:
-        one: Filiale
-        other: Filialen
+      tender_method:
+        one: Zahlungsmethode
+        other: Zahlungsmethoden
       transaction_tag:
         one: Tag
         other: Tags
-      payment_method:
-        one: Zahlungsmethode
-        other: Zahlungsmethoden
-
-    attributes:
-      hide_buttons: XXX Hide Buttons
-      calculate_tax: XXX Calculate Tax
-      track_expiry: Track Expiry
-      uses_drawer_id: Uses Drawer of
-      employee:
-        uses_drawer_id: Kassenlade von
-      reorder_type: Reorder Type
-      big_buttons: Große Tasten
-      hide_discounts: Preisnachlässe ausblenden
-      thermal_printer: Thermodrucker
-      paylife: Paylife
-      url: URL
-      letter: Steuerklasse
-      default: Standard
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      customer_screen_blurb: Standardtext Verkaufsanzeige
-      pole_display: Verkaufsanzeige
-      auto_drop: Auto-Buchung Tagesbeginn
-      must_change_price: Must Change Price
-      created_at: Created
-      is_refund: Is Refund?
-      owner_id: Owner
-      owner_type: Owner Type
-      parent_sku: Eltern-SKU
-      child_sku: Kind-SKU
-      ignore_qty: Menge Ignorieren
-      bank_machine_path: Bankomat
-      artema_hybrid: Artema Hybrid
-      type: Typ
-      active: aktiv
-      address: Adresse
-      amount: Betrag
-      amount_remaining: Restmenge
-      amount_type: Art
-      applies_to: bezieht sich auf
-      base_price: Preis/Betrag/Prozent
-      behavior: Verhalten
-      body: Körper
-      buyback_price: Pfandbetrag
-      calculate_part_price: Setpreis berechnen
-      cash_made: eingenommener Betrag
-      category_id: Kategorie
-      cellphone: Mobil
-      city: Stadt
-      company_name: Firmenname
-      contact_address: Kontaktadresse
-      contact_email: Kontakt E-Mail
-      contact_fax: Kontakt Fax
-      contact_person: Kontaktperson
-      contact_phone: Telefon
-      country: Bundesland
-      coupon_applies: Gutschein anwendbar
-      coupon_total: Coupon
-      coupon_type: Gutschein-Art
-      decimal_points: Dezimalstellen
-      default_buyback: Pfand
-      dollar_per_lp: Euro pro Punkt
-      drop: Einzahlen
-      email: E-Mail
-      end_amount: Schlussbetrag
-      end_date: Ende
-      expires_on: läuft ab am
-      first_name: Vorname
-      height: Höhe
-      is_shipment_item: ist Lieferartikel
-      item_sku: Artikel SKU
-      itemsviewlist: "Listenansicht für Artikel"
-      last_name: Familienname
-      lc_points: Punkteabzug
-      length: Länge
-      location_id: Ort
-      lp_per_dollar: Punkte pro Euro
-      min_quantity: Mindestmenge
-      name: Name
-      not_paid: Unbezahlt
-      notes: Notiz
-      packaging_unit: Verpackungseinheit
-      pagination: Artikel pro Seite
-      paid: Bezahlt
-      part_quantity: Menge
-      parts: Set
-      password: Passwort
-      payout: Ausbezahlen
-      points: Treuepunkte
-      postalcode: PLZ
-      price: Preis
-      price_by_qty: Preisberechnung nach Menge
-      purchase_price: Kaufpreis
-      quantity: Menge
-      real_quantity: Inventur
-      quantity_sold: Menge verkauft
-      rebate: Rabatt
-      rebate_type: Rabatt-Typ
-      receipt_blurb: Rechnung Kopf
-      receipt_blurb_footer: Rechnung Fuß
-      sales_metric: Verkaufseinheit
-      shipment:
-        from: von
-        paid: bezahlt
-        price: Preis
-        to: an
-      shipment_item:
-        name: Name
-        quantity: Liefermenge
-        sku: SKU
-        stock_location_id: Lagerort
-      cash_register:
-        sticker_printer: Etikettendrucker
-      item:
-        purchase_price: Einkaufspreis
-        quantity: Lagermenge
-      sku: SKU
-      start_amount: Startbetrag
-      start_date: Beginn
-      state: Land
-      status: Status
-      stock_location_ids: Lagerort
-      street1: Adresse 1
-      street2: Adresse 2
-      subtotal: Zwischensumme
-      tag: Tag
-      tax: Steuer
-      tax_profile_id: Steuerklasse
-      telephone: Telefon
-      the_receiver: Geliefert an
-      the_shipper: Geliefert durch
-      title: Titel
-      total: Gesamt
-      username: Benutzername
-      value: Betrag
-      vendor_id: Filiale
-      vendor_printers: Drucker
-      weigh_compulsory: Wiegepflicht
-      weight: Gewicht
-      width: Breite
-      open_cash_drawer: Öffne Kassenlade
-      cash_drawer: Kassenlade
-      stylesheets: Stylesheets
-      eod_show: Zeige bei Tagesabschluss
-      shipper_sku: Bestellnummer
-      code: Code 
-      when: Wenn
-      afield: Feld
-      order_id: Verkaufs-Id
-      scale: Waage
-      no_print: Nicht drucken bei Enter
-      salor_printer: Client-seitiges Drucken
-      
+      vendor:
+        one: Filiale
+        other: Filialen
   api:
     user_does_not_exist: Dieser Benutzer existiert nicht oder darf die API nicht benutzen.
-        
-   
+  behavior_list:
+    add: addieren
+    assign: setze zu
+    divide: dividieren
+    multiply: multiplizieren
+    subtract: subtrahieren
+  cash_registers:
+    end_of_day:
+      cash_drawer: Kassenlade
+      counted: Gezählt
+      difference: Differenz
+      end_of_day_thermal_report: Bericht drucken
+      paper_report: Detailbericht
+  customers:
+    show:
+      bought_items: Verkaufte Anzahl
+      last_orders: Letzte Verkäufe
+      order_id: Verkausnummer
+      order_total: Summe
+      sold_count: Verkaufsmenge
+  delete: Löschen
+  edit: Bearbeiten
+  end_of_day: Kassensaldo
+  exception_page:
+    assistance_text: Bitte klicken Sie auf den Button "Filialen" und versuchen Sie
+      es nochmals. Falls der Fehler erneut auftritt, rufen Sie den Kundensupport und
+      verbinden Sie sich mit dem Button "Fernwartung". Wir sind umgehend um Sie bemüht.
+    exception_description: ! 'Fehlerbeschreibung:'
+    exception_in_files: ! 'Der Fehler trat in diesen Dateien auf:'
+    oops_an_error_occurred: Oops! Es ist leider ein Fehler aufgetreten
   headings:
-    database_distiller: Datenbank-Reiniger
-    order_validation: "Order Validation"
-    paylife: "Paylife(Artema Hybrid)"
-    bank_machine_types: Typ unterstützen
     almost_out: Artikel, die nachbestellt werden müssen
+    bank_machine_types: Typ unterstützen
     best_sellers: Bestseller
     best_selling_category: Bestseller nach Kategorie
     best_selling_location: Bestseller nach Ort
     crd: Anmeldezeit, Startbetrag, Art, Notizen
+    database_distiller: Datenbank-Reiniger
     discount_for: Rabatt für %{store}
     discounts_for: Rabatte für %{store}
     edit_shipper: Lieferant %{name} bearbeiten
@@ -245,81 +331,107 @@ de:
     item_selection: Etiketten-Druckauswahl
     new_discount_for: Neuer Rabatt for %{store}
     notes: Notizen
+    order_validation: Order Validation
+    paylife: Paylife(Artema Hybrid)
     shipment_items: Lieferartikel
-    shipment_items_header: Name,SKU,Preis,Kategorie,Ort
     shipment_types: Lieferstatus
-    shipment_types_header: Status,Hinzugefügt durch, , 
     shipments: Lieferungen
-    shipments_header: Name,Von,An,Preis,Bezahlt?,Hinzugefügt von,Status, , , 
     update_location: Lagerort aktualisieren
     update_real_quantity: Tatsächliche Menge aktualisieren
-
   helpers:
     select:
       prompt: Bitte auswählen
     submit:
       cancel: Zurück
       clear: Löschen
+      complete_sale: abschließen
       create: Erzeugen
       get_item: Artikel anfordern
-      print: Drucken
-      complete_sale: abschließen
-      submit: Speichern
-      save: Speichern
-      update: Aktualisieren
       ok: OK
-
-  when_list:
-    always: immer
-    on_save: beim Speichern
-    on_import: beim Import
-    on_export: beim Export
-    add_to_order: beim Verkauf
-    
-  behavior_list:
-    add: addieren
-    subtract: subtrahieren
-    multiply: multiplizieren
-    divide: dividieren
-    assign: setze zu
-
+      print: Drucken
+      save: Speichern
+      submit: Speichern
+      update: Aktualisieren
+  home:
+    remote_service:
+      connect_ssh: Fernwartung
+      connect_vnc: Bildschirm teilen
+      connected: verbunden
+      disconnected: getrennt
+      host: Server
+      not_supported_by_browser: Fernwartung wird von diesem Browser nicht unterstützt
+      password: Passwort
+      requesting_connection_status: Verbindungsstatus wird angefragt...
+      title: Fernwartung
+      user: Benutzername
+    user_employee_index:
+      backup_database: Datenbank herunterladen
+      backup_logfile: Logdatei herunterladen
+  items:
+    database_distiller:
+      are_you_sure: Durch diese Aktion werden alle nicht verwendeten Artikel gelöscht.
+        Dies kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren
+        möchten?
+      delete_unused_items: Nicht verwendete Artikel löschen!
+      hidden: Bereits Gelöschte Artikel
+      hidden_by_distiller: Durch den Datenbank-Reiniger gelöschte Artikel
+      relevant_item_ids: Artikel, die zur Löschung in Frage kommen
+      unused_item_ids: Nicht verwendete Artikel
+      used_item_ids: Bisher verwendete Artikel
+    index:
+      database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung
+        von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
+      only_for_tobacco_stores: Diese Funktion ist nur für Trafiken. Tabak-Artikel
+        werden nun angelegt bzw. aktualisiert. Diese Aktion dauert etwa 20 Minuten.
+        Sind Sie wirklich sicher, dass Sie fortfahren möchten?
+    inventory_report:
+      price: Verkaufspreis
+      subtotal_purchase_price: Gesamtsumme Einkaufspreis
+      subtotal_selling_price: Gesamtsumme Verkaufspreis
+      title: Bericht Inventur
+      total_buying_price: Summe Kaufpreis
+      total_selling_price: Summe Verkaufspreis
+    show:
+      from: von
+      quantity_sold: Verkaufte Menge
+      query: Abfragen
+      to: bis
+    update_real_quantity:
+      are_you_sure: Dies übernimmt die Inventurmengen in die Datenbank und der Inventurbericht
+        wird gelöscht. Fortsetzen?
+      inventory_report: Bericht Inventur
+      update_quantity: Inventurmengen übernehmen
+    upload:
+      upload: Importieren
+  label: Regaletikett
   menu:
-    remote_service: Fernwartung
-    usb_device: Usb Stick
-    salortrainer: Salor Trainer
-    salorlive: Salor Live!
-    database_distiller: Datenbank-Reiniger
-    clear_order: Löschen
-    inventory_report: Bericht Inventur
-    ok: OK
-    buttons: Tasten
-    cameras: Kamera
-    tender_methods: Zahlungsmethode
-    new_tender_method: neue Zahlungsmethode
-    edit_tender_method: Zahlungsmethode bearbeiten
     actions: Aktionen
-    new_broken_item: Beschädigungen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf
     additional: Details
     back: Zurück
     broken_items: Zerbrochene Artikel
+    buttons: Tasten
     buy_order: Pfand
+    cameras: Kamera
     cancel: Abbrechen
     cash_drop: Buchungen
     cash_register: Kasse
     cash_registers: Kassen
     categories: Kategorien
+    clear_order: Löschen
     configuration: Details
     contact: Kontakt
-    current_order: Aktueller Verkauf #%{id}
+    current_order: Aktueller Verkauf
     customer: Kunde
     customers: Kunden
+    database_distiller: Datenbank-Reiniger
     delete: Löschen
     delete_confirm: Sind Sie sicher?
     destroy: Löschen
     discounts: Preisnachlässe
     done: Fertig
+    download: Herunterladen
     edit: Bearbeiten
     edit_cash_register: Kasse bearbeiten
     edit_category: Kategorie bearbeiten
@@ -332,18 +444,22 @@ de:
     edit_shipment_type: Lieferstatus bearbeiten
     edit_shipper: Lieferant %{name} bearbeiten
     edit_tax_profile: Steuerklasse bearbeiten
+    edit_tender_method: Zahlungsmethode bearbeiten
     edit_vendor: Filiale bearbeiten
     employees: Angestellte
     end_day: Tag beenden
     general_configuration: Allgemein
     home: Filialen
+    inventory_report: Bericht Inventur
     item_types: Artikeltypen
     items: Artikel
+    law_reports: §131 Abs. 2, 3 BAO<br>Bericht-Download
     locations: Verkaufsflächen
     loyalty_cards: Kundenkarten
-    move_all_shipment_items: Alle in den Verkaufsbereich verschieben
     move_shipment_item: In den Verkaufsbereich verschieben
     new_action: Aktion
+    new_broken_item: Beschädigungen
+    new_button: Neue Taste
     new_cash_register: Neue Kasse
     new_category: Neue Kategorie
     new_customer: Neuer Kunde
@@ -357,15 +473,25 @@ de:
     new_shipper: Neuer Lieferant
     new_stock_location: Neues Lager
     new_tax_profile: Neue Steuerklasse
+    new_tender_method: neue Zahlungsmethode
     new_vendor: Neue Filiale
-    new_button: Neue Taste
+    ok: OK
     order: Verkauf
-    points: Treuepunkte
-    pos: POS
     orders: Verkäufe
     overview: Überblick
-    pretext: Start
+    points: Treuepunkte
+    pos: POS
+    print: Etiketten
+    receipts: XXXX Receipts
+    remote_service: Fernwartung
+    reorder: Nachbestellung
+    report: Verkaufsbericht
+    report_day: Tagesbericht
+    report_day_range: Monatsbericht
+    report_range: Gesamtbericht
     reports: Berichte
+    salorlive: Salor Live!
+    salortrainer: Salor Trainer
     search: Suche
     shipment_types: Status
     shipments: Lieferungen
@@ -375,407 +501,303 @@ de:
     stock_locations: Lager
     support: Unterstützung
     tax_profiles: Steuerklassen
-    update_gift_card: Gutschein aktualisieren
-    vendors: Filialen
-    void: Storno
-    end_of_day_drop: Gesamtsumme entnehmen
+    tender_methods: Zahlungsmethode
     transaction_tags: Buchungen
+    update_gift_card: Gutschein aktualisieren
     update_location: Orte
     update_real_quantity: Inventur
-    print: Etiketten
     upload: Hinaufladen
-    download: Herunterladen
-    reorder: Nachbestellung
-    report: Verkaufsbericht
-    report_range: Gesamtbericht
-    report_day: Tagesbericht
-    report_accounting: Transaktionen
-    report_day_range: Monatsbericht
+    usb_device: Usb Stick
+    vendors: Filialen
+    void: Storno
     wholesaler_update: Artikelupdate Großhändler
-    law_reports: "§131 Abs. 2, 3 BAO<br>Bericht-Download"
-    
-    
   notifications:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
     shipments_move_item: Artikel erfolgreich verschoben ...
-
-  exception_page:
-    oops_an_error_occurred: "Oops! Es ist leider ein Fehler aufgetreten"
-    exception_description: "Fehlerbeschreibung:"
-    exception_in_files: "Der Fehler trat in diesen Dateien auf:"
-    assistance_text: 'Bitte klicken Sie auf den Button "Filialen" und versuchen Sie es nochmals. Falls der Fehler erneut auftritt, rufen Sie den Kundensupport und verbinden Sie sich mit dem Button "Fernwartung". Wir sind umgehend um Sie bemüht.'
-
   orders:
     report:
+      display: Anzeigen
+      end_date: Bis
+      gross: brutto
+      net: netto
+      points: Treuepunkte
+      rebate: Rabatte
+      start_date: Von
+      sum: Summe
+      sum_total: Gesamtsumme
       title: Verkaufsbericht
-      display: Anzeigen
-      end_date: Bis
-      gross: brutto
-      net: netto
-      sum: Summe
-      rebate: Rabatte
-      points: Treuepunkte
-      start_date: Von
-      sum_total: Gesamtsumme
-    report_range:
-      title: Gesamtbericht
-      display: Anzeigen
-      end_date: Bis
-      gross: brutto
-      net: netto
-      sum: Summe
-      rebate: Rabatte
-      points: Treuepunkte
-      start_date: Von
-      sum_total: Gesamtsumme
-    report_day_range:
-      title: Monatsbericht
-      display: Anzeigen
-      end_date: Bis
-      gross: brutto
-      net: netto
-      sum: Summe
-      rebate: Rabatte
-      points: Treuepunkte
-      start_date: Von
-      sum_total: Gesamtsumme
     report_day:
+      None: Unbenannt
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      cash-refunds: Bargeld-Stornierungen
+      cash_drawer: Kassenlade
+      count_orders: Anzahl Verkäufe
+      drop: Einzahlung
+      from: von
+      gross: brutto
+      net: netto
+      noncash-refunds: Nichtbargeld-Stornierungen
+      payments: Zahlungen
+      payout: Auszahlung
+      payouts: Auszahlungen
+      revenue: Umsatz
+      sales: Verkäufe
+      sum: Summe
+      sum_gross: Summe brutto
+      sum_net: Summe netto
+      sum_transactions: Summe Buchungen
+      sums_by_category: nach Kategorie
+      sums_by_payment_methods: nach Zahlungsmethoden
+      sums_by_tax_profile: nach Steuern
+      time: Zeit
       title: Tagesbericht
-      sums_by_category: nach Kategorie
-      sums_by_tax_profile: nach Steuern
-      sums_by_payment_methods: nach Zahlungsmethoden
-      sum: Summe
-      sums_by_transaction_types: pro Buchungsart
-      transactions: Buchungen
+      to: bis
       transaction_tag: Journal
-      drops: Einzahlungen
-      drop: Einzahlung
-      payouts: Auszahlungen
-      payout: Auszahlung
       transaction_total: Gesamtbewegung
-      transaction_journal: Buchungsjournal
-      time: Zeit
-      OrderItemRefund: Einzelstornierung
-      OrderRefund: Gesamtstornierung
-      None: Unbenannt
-      count_orders: Anzahl Verkäufe
-      sales: Verkäufe
-      payments: Zahlungen
-      cash_drawer: Kassenlade
-      revenue: Umsatz
-      sum_gross: Summe brutto
-      sum_net: Summe netto
+      transactions: Buchungen
+    report_day_range:
+      display: Anzeigen
+      end_date: Bis
       gross: brutto
       net: netto
-      sum_transactions: Summe Buchungen
-      noncash-refunds: Nichtbargeld-Stornierungen
-      cash-refunds: Bargeld-Stornierungen
-      from: von
-      to: bis
+      points: Treuepunkte
+      rebate: Rabatte
+      start_date: Von
+      sum: Summe
+      sum_total: Gesamtsumme
+      title: Monatsbericht
     report_range:
-      title: Gesamtbericht
-      sums_by_category: nach Kategorie
-      sums_by_tax_profile: nach Steuern
-      sums_by_payment_methods: nach Zahlungsmethoden
-      sum: Summe
-      sums_by_transaction_types: pro Buchungsart
-      transactions: Buchungen
-      transaction_tag: Journal
-      drops: Einzahlungen
-      drop: Einzahlung
-      payouts: Auszahlungen
-      payout: Auszahlung
-      transaction_total: Gesamtbewegung
-      transaction_journal: Buchungsjournal
-      time: Zeit
+      None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
-      None: Unbenannt
-      count_orders: Anzahl Verkäufe
-      sales: Verkäufe
-      payments: Zahlungen
+      cash-refunds: Bargeld-Stornierungen
       cash_drawer: Kassenlade
-      revenue: Umsatz
-      sum_gross: Summe brutto
-      sum_net: Summe netto
+      count_orders: Anzahl Verkäufe
+      drop: Einzahlung
+      from: von
       gross: brutto
       net: netto
-      sum_transactions: Summe Buchungen
       noncash-refunds: Nichtbargeld-Stornierungen
-      cash-refunds: Bargeld-Stornierungen
-      from: von
+      payments: Zahlungen
+      payout: Auszahlung
+      payouts: Auszahlungen
+      revenue: Umsatz
+      sales: Verkäufe
+      sum: Summe
+      sum_gross: Summe brutto
+      sum_net: Summe netto
+      sum_transactions: Summe Buchungen
+      sums_by_category: nach Kategorie
+      sums_by_payment_methods: nach Zahlungsmethoden
+      sums_by_tax_profile: nach Steuern
+      time: Zeit
+      title: Gesamtbericht
       to: bis
-      
-
+      transaction_tag: Journal
+      transaction_total: Gesamtbewegung
+      transactions: Buchungen
   printr:
+    eod_report:
+      None: Unbenannt
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      calculated_drawer_amount: Kassenlade
+      cash-refunds: Bargeld-Stornierungen
+      cash_refunds_total: GESAMT
+      no_category: Unbenannt
+      noncash-refunds: Nichtbargeld-Stornierungen
+      orders_total: Verkäufe gesamt
+      payment_method_total: GESAMT
+      payments: Auszahlungen
+      refund: Stornierung
+      revenue: Umsatz
+      revenue_total: GESAMT
+      sales: Verkäufe
+      system_drawer_amount: Kassenlade derzeitiger Stand
+      transaction_total: GESAMT
+      warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist
+        nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe
+        auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine
+        entsprechende Buchung vor und laden Sie diese Seite neu.
     formats:
-      advert: |-
-          The Innovative Point of Sale
-          www.salorpos.com
-      b1g1_coupon: "%c %20.20s"
-      by_card: "By Card:                  EUR %8.2f"
-      by_cash: "In Cash:                  EUR %8.2f"
+      advert: ! 'The Innovative Point of Sale
+
+        www.salorpos.com'
       cancel: Cancel                  EUR %8.2f
-      change: "Change:                       EUR %8.2f"
+      change: ! 'Change:                       EUR %8.2f'
       coupon_subtotal: Coupon                   EUR %8.2f
       discount_subtotal: Discount                       EUR %8.2f
-      discounted_item: "%c %20.20s %7.2f %3u %7.2f"
-      end_of_day: "%20.20s EUR %5.2f"
+      end_of_day: ! '%20.20s EUR %5.2f'
       fixed_rebate: Rebate                         EUR %8.2f
-      item: "%c %20.20s %7.2f %3u %7.2f"
-      percent_coupon: "%c %20.20s %7.1f%% %3u %7.2f"
+      item: ! '%c %20.20s %7.2f %3u %7.2f'
       rebate_amount: Rebate %4.2f%%                 EUR %8.2f
-      rebate_item: "%c %20.20s %7.2f %3u %7.2f"
       rebate_subtotal: Rebate Total                  EUR %8.2f
       subtotal: Subtotal                      EUR %8.2f
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
-    eod_report:
-      no_category: Unbenannt
-      orders_total: Verkäufe gesamt
-      refunded_total: Stornierungen gesamt
-      buyback_item_total: Pfand- bzw. Auszahlungsartikel
-      buyback_order_total: Pfand- bzw. Auszahlungsverkäufe
-      drop_total: GESAMT
-      payout_total: GESAMT
-      payment_method_total: GESAMT
-      transaction_total: GESAMT
-      cash_refunds_total: GESAMT
-      revenue_total: GESAMT
-      OrderItemRefund: Einzelstornierung
-      OrderRefund: Gesamtstornierung
-      sales: Verkäufe
-      payments: Auszahlungen
-      refund: Stornierung
-      None: Unbenannt
-      noncash-refunds: Nichtbargeld-Stornierungen
-      cash-refunds: Bargeld-Stornierungen
-      revenue: Umsatz
-      calculated_drawer_amount: Kassenlade
-      system_drawer_amount: Kassenlade derzeitiger Stand
-      warning_drawer_amount_not_zero: ACHTUNG! Der Betrag in Ihrer Kassenlade ist nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine entsprechende Buchung vor und laden Sie diese Seite neu.
     order_receipt:
-      lc_points_substracted: Treuepunkte Abzug
-      subsubtotal: GESAMTSUMME
       change: Retour
-      refund: Rabatte auf gesamten Einkauf
-      given: Gegeben
-      net: netto
-      tax: USt.
-      gross: brutto
+      coupon_subtotal: Summe Coupons
       current_loyalty_points: Aktueller Punktestand
+      discount: Aktion
+      discount_subtotal: Summe Aktionen
+      given: Gegeben
+      gross: brutto
+      lc_points_substracted: Treuepunkte Abzug
+      net: netto
+      rebate: Einzelrabatt
+      rebate_fixed: Fix-Rabatt
+      rebate_percent: Prozent-Rabatt
+      rebate_subtotal: Summe Rabatte
+      refund: Rabatte auf gesamten Einkauf
+      refunded: STORNIERUNG
+      subsubtotal: GESAMTSUMME
       subtotal1: Zwischensumme
       subtotal2: Zwischensumme
       subtotal3: Zwischensumme
       subtotal4: Zwischensumme
-      rebate_subtotal: Summe Rabatte
-      rebate: Einzelrabatt
-      coupon_subtotal: Summe Coupons
-      discount_subtotal: Summe Aktionen
-      discount: Aktion
-      rebate_percent: Prozent-Rabatt
-      rebate_fixed: Fix-Rabatt
-      refunded: STORNIERUNG
-
+      tax: USt.
     word:
-      cancelled: storniert
       drop: einbezahlt
       payout: ausbezahlt
       sold: verkauft
-
   receipts:
     invoice: Rechnung
     invoice_numer_X_at_time: Rechnung Nr. %{number} am %{datetime}
-    report_at_time: Kassenbericht %{datetime}
-    x_sum: |+
-        %{type} SUMME:   EUR %.2f
-    you_were_served_by: "Sie wurden bedient von: %{name}"
-    
   reports:
-    item_zero: "Ausverkaufte Artikel:"
-    tax_class: Steuerklasse
-    description: Bezeichnung
-    unit_price: Einzelpreis
     amount: Anzahl
+    description: Bezeichnung
+    item_zero: ! 'Ausverkaufte Artikel:'
+    tax_class: Steuerklasse
     total: Gesamt
-
+    unit_price: Einzelpreis
   roles:
     cashier: Kassier
-    header_cashier: Hauptkassier
     manager: Manager
     stockboy: Lagerarbeiter
-    
+  shipments:
+    index:
+      report: Bericht
+    show:
+      purchase_price_sum: Einkaufspreis gesamt
+  sticker: Aufkleber
+  support: Support
   system:
     add_payment_method: Zahlungsmethode hinzufügen
     complete_sale: abschließen
-    employee_login: Login Angestellte
+    errors:
+      action_code_error: Code could not be executed because %{error}
+      action_error: Action could not complute because %{error}
+      auto_drop_failed: The system failed to auto drop, please manually create a beginning
+        of day cash drop
+      cannot_edit_completed_order: That order is completed and cannot be modified.
+      cannot_reorder: Es müssen keine Artikel nachbestellt werden.
+      child_sku_must_exist: Kind-Arikel existiert nicht.
+      coupon_cannot_be_buy_one_get_one: ! 'Coupon %{sku} kann nicht sein: Kaufe eines,
+        bekomme eines geschenkt wenn auf Artikel %{applies} angewendet.'
+      coupon_not_enough_items: Sie haben nicht genug Artikel gekauft, damit dies angewendet
+        werden kann.
+      csv_item_exists: Item %{sku} existiert!
+      csv_item_failed: ! '%{id} %{i} schlug fehl.'
+      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
+        dass Set-Items existieren.
+      gift_card_empty: Der Gutschein ist leer. Benachrichten Sie den Kunden und vernichten
+        Sie die Karte.
+      gs1_item_not_found: Item ist als GS1 markiert, aber %{sku} hat nicht das richtige
+        Format
+      insufficient_quantity_on_item: Warnung, die Lagermenge von Artikel %{sku} ist
+        zu gering, Zeit das Lager aufzustocken!
+      inventory_update_error: Das Inventar konnte nicht aktualisiert werden
+      item_not_found: Der Artikel, nach dem Sie suchen, konnte nicht gefunden werden.
+        Verwenden Sie die Suchfunktion.
+      item_price_is_zero: ! 'Achtung: Der Preis des Artikels ist 0'
+      limited_alphabet: Only a-z permitted. No spaces or accented characters allowed.
+      lp_calculation_failed: Konnte Treuepunkte nicht anwenden. Bitte diese in der
+        Konfiguration einstellen.
+      must_cash_drop: Ihre Kassenlade ist noch leer, bitte zahlen Sie Geld ein!
+      must_choose_register: Sie müssen sich an einer Kasse anmelden!
+      must_choose_vendor: Sie müssen eine Filiale auswählen!
+      must_set_receiver_to_vendor: Sie müssen eine gültige Filiale als Empfänger dieser
+        Lieferung auswählen
+      must_specify_drop_or_payout: Sie müssen entweder 'Einzahlen' oder 'Ausbezahlen'
+        wählen!
+      no_class: There is no class for %{model} at line %{i}
+      no_role: Sie haben nicht die notwendige Rolle, um auf diese Ressource zuzugeifen.
+      no_such_item: Es gibt keinen Artikel mit dieser SKU
+      not_enough_in_drawer: Nicht genügend in Kassenlade.
+      order_failed: Verkauf konnte nicht abgeschlossen werden.
+      order_must_have_user: Sie können eine Verkauf nicht speichern, ohne einen Benutzer
+        oder Angestellen zuzuweisen.
+      order_register_required: Sie müssen eine Kasse für diese Verkauf angeben
+      order_totals_validation_failed: Order total validation failed, refreshing the
+        order may repair the issue. Press OK to refresh.
+      order_vendor_required: Sie müssen einen Händler für diese Verkauf angeben
+      parent_sku_must_exist: Eltern-Artikel existiert nicht.
+      payment_required: ! 'Fehler 402: Volle Bezahlung ist erfordert'
+      payment_required_explanation: Es tut uns leid, Sie darüber informieren zu müssen,
+        dass das System autmatisch heruntergefahren ist, da ihre Anzahlungs-Lizenz
+        ausgelaufen ist. Sie müssen die Restzahlung leisten, um weiterhin von Salor
+        profitieren zu können. Bitte kontaktieren Sie das Salor-Supportpersonal.\n
+      sanity_check: Requested action is insane, verify order has been updated and
+        notify customer of error.
+      shipment_item_already_in_stock: Artikel %{sku} liegt bereits auf Lager.
+      shipment_item_move_failed: ! 'Artikel %{sku} weist folgenden Fehler auf: %{error}'
+      shipment_item_nil: Artikel aus from_shipment_item war nil?
+      sku_must_be_unique: ! '%{sku} muss einzigartig sein.'
+      value_not_set: Nicht gesetzt
     inventory_updated: Inventar wurde aktualisiert
     logged_in_as: Eingeloggt als
     login: Einloggen
     logout: Ausloggen
     not_you: Nicht Sie?
-    owner_login: Login Eigentümer
     owner_mode: ADMIN MODUS
     owner_success: Administrator wurde erfolgreich aktualisiert.
     payment_external_types: Bargeld,Mit Karte,Gutschein,Andere
     payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
     rebate_types:
       fixed: EUR
-      percent: "%"
-    register_today: Heute gratis anmelden!
-    report_external_types: XXX
-    report_internal_types: XXX
+      percent: ! '%'
     sign_up: Konto erstellen
-    errors:
-      auto_drop_failed: "The system failed to auto drop, please manually create a beginning of day cash drop"
-      order_totals_validation_failed: "Order total validation failed, refreshing the order may repair the issue. Press OK to refresh."
-      parent_sku_must_exist: Eltern-Artikel existiert nicht.
-      child_sku_must_exist: Kind-Arikel existiert nicht.
-      cannot_edit_completed_order: "That order is completed and cannot be modified."
-      limited_alphabet: "Only a-z permitted. No spaces or accented characters allowed."
-      sanity_check: Requested action is insane, verify order has been updated and notify customer of error.
-      cannot_reorder: Es müssen keine Artikel nachbestellt werden.
-      action_code_error: "Code could not be executed because %{error}"
-      action_error: "Action could not complute because %{error}"
-      not_enough_in_drawer: Nicht genügend in Kassenlade.
-      cash_drop_amount_must_be_positive: Die einbezahlte Summe muss ein positiver Dezimalwert sein!
-      coupon_cannot_be_buy_one_get_one: "Coupon %{sku} kann nicht sein: Kaufe eines, bekomme eines geschenkt wenn auf Artikel %{applies} angewendet."
-      coupon_fixed_amount_greater_than_total: "Coupon %{sku} Menge ist größer als der Preis von Artikel %{item}"
-      coupon_not_enough_items: Sie haben nicht genug Artikel gekauft, damit dies angewendet werden kann.
-      coupon_total_returned_nil: "Coupon %{sku} lieferte Null, ingoriere."
-      csv_item_exists: "Item %{sku} existiert!"
-      csv_item_failed: "%{id} %{i} schlug fehl."
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher, dass Set-Items existieren.
-      gift_card_amount_remaining: Die angegebene Menge ist größer als die Restmenge auf dem Gutschein. Die neue Menge ist %{amt}
-      gift_card_amount_to_high: Der Gutscheinbetrag übersteigt die Bestellsumme. Der Betrag wurde angepasst. Aktivieren Sie Gutscheine nur am Ende einer Transaktion!
-      gift_card_empty: Der Gutschein ist leer. Benachrichten Sie den Kunden und vernichten Sie die Karte.
-      gift_card_not_found: Konnte den dieser Bestellung zugeordneten Gutschein nicht finden...
-      gs1_item_not_found: "Item ist als GS1 markiert, aber %{sku} hat nicht das richtige Format"
-      insufficient_quantity_on_item: "Warnung, die Lagermenge von Artikel %{sku} ist zu gering, Zeit das Lager aufzustocken!"
-      inventory_update_error: Das Inventar konnte nicht aktualisiert werden
-      item_not_found: Der Artikel, nach dem Sie suchen, konnte nicht gefunden werden. Verwenden Sie die Suchfunktion.
-      item_price_is_zero: "Achtung: Der Preis des Artikels ist 0"
-      lp_calculation_failed: Konnte Treuepunkte nicht anwenden. Bitte diese in der Konfiguration einstellen.
-      must_cash_drop: Ihre Kassenlade ist noch leer, bitte zahlen Sie Geld ein!
-      must_choose_register: Sie müssen sich an einer Kasse anmelden!
-      must_choose_vendor: Sie müssen eine Filiale auswählen!
-      must_set_receiver_to_vendor: Sie müssen eine gültige Filiale als Empfänger dieser Lieferung auswählen
-      must_specify_drop_or_payout: Sie müssen entweder 'Einzahlen' oder 'Ausbezahlen' wählen!
-      no_class: "There is no class for %{model} at line %{i}"
-      no_role: Sie haben nicht die notwendige Rolle, um auf diese Ressource zuzugeifen.
-      no_such_item: Es gibt keinen Artikel mit dieser SKU
-      not_on_buy_orders: Sie können dieses Item nicht zu einer Auszahlungs-Bestellung hinzufügen
-      order_must_have_user: Sie können eine Verkauf nicht speichern, ohne einen Benutzer oder Angestellen zuzuweisen.
-      order_not_found: Verkauf nicht gefunden
-      order_register_required: Sie müssen eine Kasse für diese Verkauf angeben
-      order_vendor_required: Sie müssen einen Händler für diese Verkauf angeben
-      payment_required: "Fehler 402: Volle Bezahlung ist erfordert"
-      payment_required_explanation: Es tut uns leid, Sie darüber informieren zu müssen, dass das System autmatisch heruntergefahren ist, da ihre Anzahlungs-Lizenz ausgelaufen ist. Sie müssen die Restzahlung leisten, um weiterhin von Salor profitieren zu können. Bitte kontaktieren Sie das Salor-Supportpersonal.\n
-      shipment_item_already_in_stock: "Artikel %{sku} liegt bereits auf Lager."
-      shipment_item_move_failed: "Artikel %{sku} weist folgenden Fehler auf: %{error}"
-      shipment_item_nil: Artikel aus from_shipment_item war nil?
-      sku_must_be_unique: "%{sku} muss einzigartig sein."
-      uspecified_error: Etwas Schlimmes ist passiert. Bitte kontaktieren Sie den technischen Support! Versuchen Sie, diese Seite neu zu laden.
-      value_not_set: Nicht gesetzt
-      order_failed: Verkauf konnte nicht abgeschlossen werden.
-      order_print_failure: Kann nicht drucken
-    
   vendors:
     clear_cache_button: Löschen Sie alle Cache-Dateien
     clear_cache_header: Cache
     form:
-      receipt_logo_header: Rechnungslogo Kopf
-      receipt_logo_footer: Rechnungslogo Fuß
       logo: Logo
-
-  cash_registers:
-    end_of_day:
-      end_of_day_thermal_report: Bericht drucken
-      paper_report: Detailbericht
-      cash_drawer: Kassenlade
-      counted: Gezählt
-      difference: Differenz
-
-  shipments:
-    index:
-      report: Bericht
-    show:
-      purchase_price_sum: Einkaufspreis gesamt
-
+      receipt_logo_footer: Rechnungslogo Fuß
+      receipt_logo_header: Rechnungslogo Kopf
   views:
-    eticket: Regaletikett
-    sticky_ticket: Klebeetikett
-    wholesaler_refresh: Großhändlerdaten werden aktualisiert. Dies kann einige Minuten dauern.
+    create_new_item: NEUEN ARTIKEL ANLEGEN
     advanced_field: Achtung, nur für fortgeschrittene Benutzer!
-    by_card: Mit Karte
-    cash_register_heading: "%{name} für %{store}"
+    cash_register_heading: ! '%{name} für %{store}'
     cash_registers: Kassen
     category_heading: Kategorie %{name} für %{store}
-    given: Gegeben
     change: Retour
     customers: Kunden
     download_may_last_long: Der Download kann eine längere Zeit dauern. Fortfahren?
     dummy_item: Divers
-    dummy_part: Divers
     edit_item_heading: Artikel bearbeiten
     email: E-Mail
-    forgot_password: Passwort vergessen?
-    gift_card: Gutschein
-    gift_card_amount: Gutscheinbetrag
-    in_cash: In Bar
-    item: Artikel
-    language: Sprache
-    listing: Auflistung
-    listing_items: Artikel auflisten
-    locations: Orte
-    loyalty_card: Kundenkarte
-    name: Name
-    new_item_heading: "Neuer Artikel für %{store}"
-    new_sale_for: "Neuer Einkauf für %{store}"
-    new_stock_location: Neues Lager
-    order_heading: "Verkauf Nr. %{id} für %{store}"
-    order_number: "Verkauf Nr. %{id}"
-    order_summary: Verkäufe der letzten 7 Tage
-    owner_language: Sprache des Eigentümers
-    password: Passwort
-    password_confirm: Passwortbestätigung
-    please_test_before_upload: "WARNUNG: Sie sind im Begriff, die Artikeldatenbank mit neuen Daten zu überschreiben. Bitte testen Sie vorher in Salor Trainer!"
-    price: Preis
-    quantity: Menge
-    rebate: Rabatt
-    remember_me: An mich erinnern?
-    report: Bericht
-    stock_locations: Lager
-    subtotal: Gesamt
-    tax_profile: Steuerklasse
-    three_easy_ways: 3 einfache Wege!
-    total: Summe
-    username: Benutzername
-    vendor: Filiale
-    shape: Form
     errors:
-      no_access_right: Ihnen fehlt die Berechtigung, um auf diese Ressource zuzugreifen. Dieser Fehler wurde aufgezeichnet.
+      no_access_right: Ihnen fehlt die Berechtigung, um auf diese Ressource zuzugreifen.
+        Dieser Fehler wurde aufgezeichnet.
       nothing_found: Nichts gefunden
       unknown_vendor: Unbekannt
+    eticket: Regaletikett
     forms:
       applies_to_item: Bezieht sich auf Artikel mit SKU
       buy_one_get_one: Kaufe 1 bekomme 1 geschenkt
       cashier: Kassierer
-      category_editor: Kategorie-Editor
       fixed_amount_off: Fixbetrag
-      item_editor: Artikel-Editor
       items: Artikel
-      location_editor: Ort-Editor
       manager: Manager
       no_change: Kein Retourgeld
       notes: Notizen
-      order_editor: Verkauf-Editor
       parts: Teile
-      percent_off: "% Nachlass"
+      percent_off: ! '% Nachlass'
       roles: Rollen
       search: Suche
-      stocker: Lagerarbeiter
       shipment:
         types:
           canceled: Abgebrochen
@@ -784,38 +806,57 @@ de:
           new: Neu
           returned: Retourniert
           shipped: im Transit
+    gift_card: Gutschein
+    gift_card_amount: Gutscheinbetrag
+    given: Gegeben
+    in_cash: In Bar
+    item: Artikel
+    language: Sprache
+    listing: Auflistung
+    listing_items: Artikel auflisten
+    locations: Orte
+    loyalty_card: Kundenkarte
+    name: Name
+    new_item_heading: Neuer Artikel für %{store}
+    new_stock_location: Neues Lager
     notice:
-      save_before: XXX Save before leaving?
-      move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
-      wholesaler_upload_report: "Aktualisiert: %{updated_items}, Erzeugt: %{created_items}, Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}"
       cache_was_cleared: Cache wurde gelöscht
       csv_edit_starting: Bearbeitung startet
-      model_create: "%{model} wurde erfolgreich angelegt."
-      model_edit: "%{model} wurde erfolgreich bearbeitet."
+      model_create: ! '%{model} wurde erfolgreich angelegt.'
+      model_edit: ! '%{model} wurde erfolgreich bearbeitet.'
+      move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       new_order: Neuer Verkauf angelegt
-      order_refund_dt: "#%{id}"
-      please_wait: "Bitte warten..."
-      transaction_succeeded: "Bezahlt!"
-      artema_hybrid_lost: "Artema Hybrid Anschluss prufen! Terminal abstecken und wieder anstecken."
-      paylife_ending_day: "Tagesende Aktiv"
-      paylife_endday_complete: "Tagesende OK"
+      order_refund_dt: ! '#%{id}'
+      please_backup: "XXX Please backup your system regularly!"
+      save_before: Vor dem Verlassen speichern?
+      wholesaler_upload_report: ! 'Aktualisiert: %{updated_items}, Erzeugt: %{created_items},
+        Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}'
+    order_heading: Verkauf Nr. %{id} für %{store}
+    order_number: Verkauf Nr. %{id}
     pagination:
       last: Ende
       next: vor &gt;
-      previous: "&lt; zurück"
-      truncate: ...
+      previous: ! '&lt; zurück'
+      truncate: ! '...'
+    password: Passwort
+    password_confirm: Passwortbestätigung
+    please_test_before_upload: ! 'WARNUNG: Sie sind im Begriff, die Artikeldatenbank
+      mit neuen Daten zu überschreiben. Bitte testen Sie vorher in Salor Trainer!'
+    price: Preis
+    quantity: Menge
+    rebate: Rabatt
+    remember_me: An mich erinnern?
+    report: Bericht
     reports:
-      cash_account: 
-      daily: 
+      cash_account: XXX XXX
+      daily: XXX XXX
     shipments:
       state: State
     single_words:
-      new: Neu
       all: Alle
-      camera: Kamera
-      ordering: Reihenfolge
       body: Körper
       bottom: Hinunter
+      camera: Kamera
       continue: Continue
       coupons: Coupons
       delete: Löschen
@@ -823,75 +864,31 @@ de:
       download: Download
       edit: Bearbeiten
       from: Von
+      gift_cards: XXX Gift Cards
       loading: Loading
+      new: Neu
       order: Verkauf
+      ordering: Reihenfolge
       processing: Processing...
       saving: Saving...
-      searching: Suche...
       sku: SKU
       title: Titel
       to: An
       top: Hinauf
       waiting: Waiting...
-
-
-  items:
-    show:
-      from: von
-      to: bis
-      query: Abfragen
-      quantity_sold: Verkaufte Menge
-    index:
-      only_for_tobacco_stores: Diese Funktion ist nur für Trafiken. Tabak-Artikel werden nun angelegt bzw. aktualisiert. Diese Aktion dauert etwa 20 Minuten. Sind Sie wirklich sicher, dass Sie fortfahren möchten?
-      database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
-    database_distiller:
-      used_item_ids: Bisher verwendete Artikel
-      relevant_item_ids: Artikel, die zur Löschung in Frage kommen
-      unused_item_ids: Nicht verwendete Artikel
-      hidden: Bereits Gelöschte Artikel
-      hidden_by_distiller: Durch den Datenbank-Reiniger gelöschte Artikel
-      delete_unused_items: Nicht verwendete Artikel löschen!
-      are_you_sure: Durch diese Aktion werden alle nicht verwendeten Artikel gelöscht. Dies kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren möchten?
-    upload:
-      upload: Importieren
-    inventory_report:
-      title: Bericht Inventur
-      price: Verkaufspreis
-      total_buying_price: Summe Kaufpreis
-      total_selling_price: Summe Verkaufspreis
-      subtotal_purchase_price: Gesamtsumme Einkaufspreis
-      subtotal_selling_price: Gesamtsumme Verkaufspreis
-    update_real_quantity:
-      inventory_report: Bericht Inventur
-      update_quantity: Inventurmengen übernehmen
-      are_you_sure: Dies übernimmt die Inventurmengen in die Datenbank und der Inventurbericht wird gelöscht. Fortsetzen?
-
-  home:
-    user_employee_index:
-      backup_database: Datenbank herunterladen
-      backup_logfile: Logdatei herunterladen
-    remote_service:
-      title: Fernwartung
-      password: Passwort
-      user: Benutzername
-      host: Server
-      connect_ssh: Fernwartung
-      connect_vnc: Bildschirm teilen
-      requesting_connection_status: Verbindungsstatus wird angefragt...
-      connected: verbunden
-      disconnected: getrennt
-      not_supported_by_browser: Fernwartung wird von diesem Browser nicht unterstützt
-      
-  InCash: In Bar
-  ByCard: Karte
-  ByGiftCard: Gutschein
-  OtherCredit: Andere Bezahlmethode
-  ByCardRefund: Karte Stornierung
-  ByGiftCardRefund: Gutschein Stornierung
-  OtherCreditRefund: Andere Bezahlmethode Stornierung
-  end_of_day: Kassensaldo
-  label: Regaletikett
-  sticker: Aufkleber
-  support: Support
-  edit: Bearbeiten
-  delete: Löschen
+    sticky_ticket: Klebeetikett
+    stock_locations: Lager
+    subtotal: Gesamt
+    tax_profile: Steuerklasse
+    three_easy_ways: 3 einfache Wege!
+    total: Summe
+    username: Benutzername
+    vendor: Filiale
+    wholesaler_refresh: Großhändlerdaten werden aktualisiert. Dies kann einige Minuten
+      dauern.
+  when_list:
+    add_to_order: beim Verkauf
+    always: immer
+    on_export: beim Export
+    on_import: beim Import
+    on_save: beim Speichern

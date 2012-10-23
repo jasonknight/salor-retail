@@ -1,36 +1,29 @@
 <%= raw content_box_top(t("menu.vendors")) %>
 <div class="list">
-      <% if salor_user.can(:show_tax_profiles) %>
-        <div class="widget master" onmousedown="window.location = '<%= tax_profiles_path(:vendor_id => @vendor.id) %>';">
-          <div align="center">
-            <a href="<%= tax_profiles_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/<%= icon(:tax_profile,64) %>" /><br />
-              <%= t("menu.tax_profiles") %>
-            </a>
-          </div>
-          </div>
-          <% end %>
-
     <% GlobalData.vendors.each do |store| %>
-      <div class="widget master-wide" >
+      <div class="widget master-wide"  >
         <div align="center">
         <a href="/vendors/<%= store.id %>">
-          <img src="/images/icons/<%= icon(:vendor) %>" onmousedown="window.location = '/vendors/<%= store.id %>';"/><br />
+          <img id="vendor_<%= store.id %>" src="/images/icons/<%= icon(:vendor) %>" onmousedown="window.location = '/vendors/<%= store.id %>';"/><br />
           <%= store.name %>
       	</a>
       </div>
     </div>
   <% end %>
-  <% if $User.can(:create_vendors) %>
-  <div class="widget master">
+  <% 
+  #if $User.can(:create_vendors) 
+  %>
+<!--  <div class="widget master">
       <div align="center">
         <a href="<%= new_vendor_path %>">
           <img src="/images/icons/<%= icon(:add) %>" /><br />
           <%= t "menu.new_vendor" %>
       	</a>
       </div>
-    </div>
-  <% end %>
+    </div>-->
+  <% 
+  #end 
+  %>
   <br />
   <div class="widget master">
       <div align="center">
@@ -41,7 +34,7 @@
             <%= t "menu.salorlive" %>
         	</a>
         <% else %>
-          <a href="http://salortrainer/vendors">
+          <a href="http://salor-retail-trainer/vendors">
             <%= salor_icon :user6 %>
             <br />
             <%= t "menu.salortrainer" %>

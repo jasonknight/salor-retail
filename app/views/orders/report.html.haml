@@ -3,10 +3,10 @@
 = form_tag 'report', :class => 'no-print', :method => :get do
   %div.from
     = label('from', t('.start_date'))
-    = select_date(@from, :prefix => 'from')
+    = select_date(@from, :prefix => 'from' :order => [:day,:month,:year])
   %div.to
     = label('to', t('.end_date'))
-    = select_date(@to, :prefix => 'to')
+    = select_date(@to, :prefix => 'to' :order => [:day,:month,:year])
   %div.actions
     %p{:align => 'center', :style => 'margin-left:-50px;'}
       = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()'

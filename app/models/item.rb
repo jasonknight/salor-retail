@@ -45,6 +45,12 @@ class Item < ActiveRecord::Base
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
+  def item_type_name=(name)
+    it = ItemType.find_by_behavior(name)
+    if it then
+      self.item_type_id = it.id
+    end
+  end
   def category_name
     return self.category.name if self.category
   end
@@ -159,7 +165,7 @@ class Item < ActiveRecord::Base
     # Let's see if they entered a price
     pm = code.match(/(\d{1,5}[\.\,]\d{1,2})/)
     if pm and pm[1] then
-      i = Item.scopied.where("sku LIKE 'DMY%' and base_price LIKE '#{code}%'") 
+      i = Item.scopied.where("sku LIKE 'DMY%' and base_price = #{code}") 
       if i.empty? then
         i = Item.scopied.find_or_create_by_sku("DMY" + GlobalData.salor_user.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
         i.base_price = code
@@ -188,6 +194,7 @@ class Item < ActiveRecord::Base
     return lcard if lcard
     #oops, still haven't found it, let's creat a dummy item
     i = Item.scopied.find_or_create_by_sku(code)
+    i.vendor_id = $Vendor.id
     i.make_valid
     return i
   end
@@ -302,7 +309,7 @@ class Item < ActiveRecord::Base
     self.sku = self.sku.upcase
     invld = false
     if self.vendor_id.nil? then
-      self.vendor_id = GlobalData.salor_user.meta.vendor_id
+      self.vendor_id = $Vendor.id
       invld = true
     end
     if self.name.blank? then
@@ -372,7 +379,11 @@ class Item < ActiveRecord::Base
       #if si.shipment.shipper == i.vendor # this is advanced stuff and needs more thinking
       #  i.quantity = i.quantity - si.quantity
       #else
-        i.quantity += si.quantity if si.quantity
+        si.quantity ||= 1
+        i.quantity += si.quantity
+        if si.purchase_price then
+          i.purchase_price = si.purchase_price
+        end
       #end
       return i
     else

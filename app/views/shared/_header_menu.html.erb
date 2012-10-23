@@ -14,13 +14,13 @@
       </a>
     </div>
   </li>
-  <% if salor_user.can(:index_items) %>
+  <% if $User and $User.can(:index_items) %>
   <li>
     <div align="center" id="btn-items-index" class="">
-      <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => salor_user.meta.vendor_id) %>
+      <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => $User.meta.vendor_id) %>
     </div>
   </li>
-  <% if salor_user.can(:cashier) %>
+  <% if $User and $User.can(:cashier) %>
     <li>
       <div align="center" class="no-touchy cash-drop-header" onmousedown="show_cash_drop();">
         <div id='header_drawer_amount'></div>
@@ -28,22 +28,22 @@
       </div>
     </li>
   <% end %>
-  <% if salor_user.can(:index_orders) %>
+  <% if $User and $User.can(:index_orders) %>
   <li>
     <div align="center" id="btn-orders-new" class="">
       <%= link_to salor_icon(:order,{},32), "/orders/new" %><br /><span class='icon-caption'><%= I18n.t("menu.pos") %></span>
     </div>
   </li>
   <% end %>
-  <% if salor_user.can(:index_customers) %>
+  <% if $User and $User.can(:index_customers) %>
   <li>
     <div align="center" id="btn-customers-new" class="">
-      <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => salor_user.meta.vendor_id) %><br />
+      <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => $User.meta.vendor_id) %><br />
     </div>
   </li>
   <% end %>
   <li>
-    <div align="center">
+    <div align="center" id="end_of_day_button">
       <a href="/cash_registers/end_of_day">
         <img src="/images/icons/<%= icon(:logout,32) %>" /><br /><span class='icon-caption'><%= I18n.t("system.logout") %></span>
       </a>
@@ -56,7 +56,7 @@
     </div>
   </li>
   </ul>
-  <% if salor_user and not curl("orders#new") then  %>
+  <% if $User and not curl("orders#new") then  %>
     <%= salor_render :partial => "shared/generic_search" %>
   <% end %>
 </div>

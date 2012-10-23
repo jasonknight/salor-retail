@@ -46,6 +46,9 @@ class FileUpload
       base_price_carton = base_price_piece * packaging_unit_carton
       purchase_price_carton = purchase_price_piece * packaging_unit_carton
 
+      # packaging_unit_modification
+      packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
+
       if columns[36]
         tax_profile = TaxProfile.scopied.find_by_value(columns[36].to_f / 100)
       elsif columns[15] == columns[16]
@@ -176,6 +179,9 @@ class FileUpload
       # carton price calculation
       base_price_carton = base_price_piece * packaging_unit_carton
       purchase_price_carton = purchase_price_piece * packaging_unit_carton
+
+      # packaging_unit_modification
+      packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
 
       if columns[36]
         tax_profile = TaxProfile.scopied.find_by_value(columns[36].to_f / 100)
@@ -416,9 +422,12 @@ class FileUpload
     csv = Kcsv.new(file,{:header => true})
     csv.to_a.each do |rec|
       begin
+#         puts "Beginning: #{rec.inspect}"
         kls = Kernel.const_get(rec[:class])
         rec.delete(:class)
         if kls == Item then
+#           puts "KLS is Item\n"
+          begin
           tp = TaxProfile.find_or_create_by_value(rec[:tax_profile_amount])
           created_tax_profiles += 1 if tp.new_record?
           cat = Category.find_by_name(rec[:category_name])
@@ -427,7 +436,7 @@ class FileUpload
             loc = Location.find_or_create_by_name(rec[:location_name]) if trusted
             if not loc.save then
               loc.errors.full_messages.each do |m|
-                GlobalErrors << ['',m]
+#                 puts "Errors #{m}"
               end
             end
           end
@@ -437,8 +446,13 @@ class FileUpload
           item.category = cat
           item.location = loc
           item.attributes = rec
+          item.base_price = rec[:base_price]
+#           puts "\n\nITEM IS: #{item.inspect}"
           created_items += 1 if item.new_record?
           updated_items += 1 if not item.new_record?
+          rescue
+#             puts "## ERROR #{$!.inspect}"
+          end
         elsif kls == Button then
           item = Button.find_or_create_by_sku(rec)
           item.attributes = rec
@@ -456,24 +470,21 @@ class FileUpload
           item = Discount.find_or_create_by_sku(rec[:sku])
           item.attributes = rec
         end
+#         puts "Saving Item #{item.inspect}"
         if not item.save then
           SalorBase.log_action "DistUpload","failed to save #{item.attributes.inspect}"
           item.errors.full_messages.each do |msg|
             SalorBase.log_action "DistUpload","#{msg}"
+#             puts "UnSaved #{item.sku} #{item.base_price} #{msg}"
           end 
+        else
+#           puts "Saved #{item.sku} #{item.base_price}"
         end
       rescue 
-         GlobalErrors << [$!.inspect,rec.inspect]
+         GlobalErrors << ["Error"]
       end
+      $Notice = I18n.t("wholesaler_upload_report",{ :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
     end # end csv.to_a.each
-    GlobalErrors.append('views.notice.wholesaler_upload_report', 
-                         nil, 
-                         { 
-                            :updated_items => updated_items, 
-                            :created_items => created_items, 
-                            :created_categories => created_categories, 
-                            :created_tax_profiles => created_tax_profiles 
-                         })
   end # def dist(file)
   # {END}
 end

@@ -11,10 +11,10 @@
       %img.left{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
   %div.clear
   %div
-    %h2== #{ I18n.t("receipts.invoice") }
+    %h2== #{ I18n.t("receipts.invoice") } #{ @order.id }
     %h3= I18n.l(@order.created_at, :format => :long)
 
-    %div.company_data= raw Kramdown::Document.new(@vendor.salor_configuration.receipt_blurb).to_html
+    %div.company_data= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb).to_html
 
     %div.customer_data
       - if @report[:customer]
@@ -31,6 +31,8 @@
         == #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
     .clear
+    %br
+    %br
 
 
     %table.striped-table2.has-total
@@ -95,7 +97,9 @@
       %tr
         %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal')
         %td.total= number_to_currency @report[:subsubtotal]
-
+ 
+    %br
+    %br
 
     - if @report[:refund_subtotal].zero?
       %table.taxes.striped-table2
@@ -110,6 +114,8 @@
     - else
       %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
 
+    %br
+    %br
 
     %table.taxes.striped-table2
       %tr
@@ -124,4 +130,4 @@
           - tax.each do |k,v|
             %td.total= v
 
-    = @order.vendor.salor_configuration.receipt_blurb_footer.to_s if @order.vendor
+    %div.invoice_blurb_footer= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb_footer).to_html

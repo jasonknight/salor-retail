@@ -33,15 +33,18 @@ module ApplicationHelper
       {:name => "US English", :locale => 'en-US'},
       {:name => "GB English", :locale => 'en-GB'},
       {:name => "CA English", :locale => 'en-CA'},
+      {:name => "ελληνική", :locale => 'el'},
+      {:name => "Pусский", :locale => 'ru'},
       {:name => "Polski", :locale => 'pl'},
       {:name => "Français", :locale => 'fr'},
       {:name => "Espagnole", :locale => 'es'},
-      {:name => "Türkçe", :locale => 'tr'}
+      {:name => "Türkçe", :locale => 'tr'},
+      {:name => "中文", :locale => 'cn'}
     ]
   end
   def salor_number_to_currency(amnt)
 
-    return number_to_currency(amnt)
+    return number_to_currency(amnt, :unit => I18n.t("number.currency.format.unit"))
   end
   def salor_number_with_delimiter(num)
     return number_with_delimiter(num)
@@ -163,6 +166,7 @@ module ApplicationHelper
       :button => 'button',
       :card => 'credit_card',
       :print => 'print',
+      :a4print => 'a4print',
       :document => 'document',
       :trash => 'trash',
       :user6 => 'user6',
@@ -285,8 +289,9 @@ module ApplicationHelper
     tm = l(Time.now, :format => :salor)
     tarr = tm.split(' ')
     ret = ''
-    reg = CashRegister.find_by_id($User.meta.cash_register_id)
-    ret << "<span>#{tarr[3]}</span><br />#{tarr[0]} #{tarr[1]} #{tarr[2]}<br />#{$User.username}<br />#{ reg.name if reg }"
+    reg = ''
+    reg = CashRegister.find_by_id($User.meta.cash_register_id) if $User
+    ret << "<span>#{tarr[3]}</span><br />#{tarr[0]} #{tarr[1]} #{tarr[2]}<br />#{$User.username if $User}<br />#{ reg.name if reg }"
     return ret.html_safe
   end
   def num2name(num)

@@ -57,13 +57,19 @@ class Customer < ActiveRecord::Base
   end
 
   #
-  def get_sales_statistics
+  def get_item_statistics
     item = Hash.new
     orders = self.orders
     orders.each do |o|
       o.order_items.each do |oi|
+        if item.has_key? oi.sku
+          item[oi.sku][:count] += oi.quantity 
+        else
+          item[oi.sku] = {:name => oi.item.name, :count => oi.quantity, :sku => oi.sku}
+        end
       end
     end 
+    return item.sort { |x,y| y[1][:count] <=> x[1][:count] }
   end
   # {END}
 end

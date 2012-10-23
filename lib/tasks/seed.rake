@@ -17,4 +17,7 @@ namespace :salor do
   task :barcode => [:environment] do
     require "#{Rails.root}/db/barcode_sheet.rb"
   end
+  task :bigtest => [:environment] do
+    require "#{Rails.root}/db/seeds_bigtest.rb"
+  end
 end

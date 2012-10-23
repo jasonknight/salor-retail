@@ -1,15 +1,4 @@
-<% header = "id;child_id;sku;name;price;tax;sales_metric;weight;weight_metric;purchase_price;category;quantity;quantity_sold;buyback_price;min_quantity;shipper_sku" -%>
-<%= header %>
-<% @items.each do |i| -%>
-<%
-categoryname = i.category ? i.category.name : '-'
-tax = i.tax_profile ? i.tax_profile.value/100.0 : 0.0
-pp = i.purchase_price ? i.purchase_price : 0.0
-%>
-<% begin %>
-<% line = sprintf('%u;%u;%s;%s;%.2f;%.2f;%s;%.2f;%s;%.2f;%s;%.3f;%.3f;%.3f;%.2f;%s', i.id, i.child_id ? i.child_id : 0, i.sku, i.name, i.base_price, tax, i.sales_metric ? i.sales_metric : '', i.weight, i.weight_metric ? i.weight_metric : '', pp, categoryname, i.quantity, i.quantity_sold, i.buyback_price, i.min_quantity, i.shipper_sku ? i.shipper_sku : '') %>
-<% rescue %>
-<% debugger %>
-<% end %>
-<%= line %>
+<%= "id;first_name;last_name;company_name;address;city;state;country;postalcode;m_number;m_points;email;telephone;cellphone" -%>
+<% @customers.each do |i| -%>
+<%= sprintf('%u;%s;%s;%s;%s;%s;%s;%s;%s;%s;%u;%s;%s;%s;', i.id, i.first_name, i.last_name, i.company_name, i.address, i.city, i.state, i.country, i.postalcode, i.m_number, i.m_points, i.email, i.telephone, i.cellphone) %>
 <% end -%>

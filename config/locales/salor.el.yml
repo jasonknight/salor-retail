@@ -1,0 +1,860 @@
+el:
+  time:
+    formats:
+      salor: "%a, %b %d %H:%M"
+      iso: "%Y-%m-%d %H:%M:%S"
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
+      datetime_short: "%y-%m-%d %H:%M"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+  date:
+    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    order:
+      - :year
+      - :month
+      - :day
+    formats:
+      iso_day: "%Y-%m-%d"
+      just_day: "%d. %B %Y"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: ", and "
+
+    select:
+      prompt: "Please select"
+
+  number:
+    format:
+      separator: "."
+      delimiter: ","
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u%n"
+        friendly_unit: "EUR"
+        unit: "€"
+        separator: ","
+        delimiter: " "
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
+  ByCard: Μέσω Κάρτας
+  ByGiftCard: Μέσω Δωροκάρτας
+  InCash: Μέσω Μετρητών
+  activerecord:
+    attributes:
+      invoice_blurb: Κείμενο Τιμολογίου 
+      invoice_blurb_footer: Υποσέλιδο Κείμενο Τιμολογίου 
+      active: ενεργό 
+      address: διεύθυνση 
+      afield: πεδίο
+      amount: ποσό
+      amount_remaining: υπόλοιπο ποσό
+      amount_type: τύπος ποσού
+      applies_to: ισχύει για
+      auto_drop: Αρχίστε τη Μέρα Αυτόματα	  
+      bank_machine_path: ATM
+      base_price: Βασική Τιμή
+      behavior: συμπεριφορά 
+      body: κύριο τμήμα
+      buyback_price: Τιμή Αγοράς Ιδίων
+      calculate_part_price: Υπολογισμός Τιμής Μέρους
+      calculate_tax: Υπολογισμός Φόρου
+      cash_drawer: Συρτάρι Μετρητών 
+      cash_made: Μετρητά
+      cash_register:
+        sticker_printer: Εκτυπωτής Αυτοκόλλητων Ετικετών
+      category_id: Κατηγορία
+      cellphone: κινητό τηλέφωνο
+      child_sku: Child SKU
+      city: πόλη
+      code: κώδικας
+      company_name: όνομα εταιρίας
+      contact_address: διεύθυνση επικοινωνίας 
+      contact_email: ηλεκτρονική διεύθυνση 
+      contact_fax: Φαξ
+      contact_person: άτομο επικοινωνίας 
+      contact_phone: τηλέφωνο 
+      country: χώρα
+      coupon_applies: εφαρμογή κουπονιού 
+      coupon_total: ολικό ποσό κουπονιού 
+      coupon_type: τύπος κουπονιού 
+      created_at: Δημιουργήθηκε στις
+      csv_imports: CSV Εισαγόμενων Προϊόντων 
+      csv_imports_url: CSV Εισαγόμενων Προϊόντων URL
+      customer_screen_blurb: Οθόνη πελάτη βασικού κειμένου
+      decimal_points: δεκαδικά ψηφία 
+      default: Προεπιλογή 
+      default_buyback: προεπιλογή αγοράς ιδίων 
+      dollar_per_lp: ευρώ ανά πόντους επιβράβευσης 
+      drop: προσθήκη μετρητών 
+      email: ηλεκτρονική διεύθυνση 
+      employee:
+        uses_drawer_id: Χρήση συρταριού του/της
+      end_amount: τελικό ποσό 
+      end_date: ημερομηνία λήξης 
+      eod_show: προβολή τέλους μέρας 
+      expires_on: λήγει στις
+      first_name: όνομα 
+      height: ύψος
+      hide_buttons: Απόκρυψη Κουμπιών 
+      hide_discounts: Απόκρυψη Εκπτώσεων 
+      ignore_qty: Αγνοήστε την ποσότητα
+      is_refund: Είναι επιστροφή; 
+      is_shipment_item: είναι προϊόν αποστολής  
+      item:
+        purchase_price: Τιμή Αγοράς 
+        quantity: Ποσότητα 
+      item_sku: αντικείμενο SKU
+      itemsviewlist: Προβολή Λίστας Προϊόντων 
+      last_name: Επώνυμο 
+      lc_points: κάρτα πόντων επιβράβευσης 
+      length: μήκος
+      letter: Γράμμα
+      location_id: κωδικός τοποθεσίας 
+      lp_per_dollar: πόντοι επιβράβευσης ανά ευρώ
+      min_quantity: ελάχιστη ποσότητα
+      must_change_price: Πρέπει να Γίνει Αλλαγή Τιμής 
+      name: όνομα
+      no_print: Όχι Εκτύπωση στο Enter
+      notes: σημειώσεις 
+      open_cash_drawer: ανοίξτε συρτάρι μετρητών 
+      order_id: παραγγελία 
+      owner_id: Ιδιοκτήτης 
+      owner_type: Τύπος Ιδιοκτήτη 
+      packaging_unit: μονάδα συσκευασίας 
+      pagination: σελιδοποίηση 
+      paid: πληρωμένο 
+      parent_sku: Parent SKU
+      part_quantity: ποσότητα μερών 
+      parts: μέρη 
+      password: κωδικός πρόσβασης 
+      paylife: Paylife
+      payout: αποπληρωμή 
+      points: πόντοι 
+      pole_display: Οθόνη πελάτη
+      postalcode: ταχυδρομικός κώδικας 
+      price: τιμή 
+      price_by_qty: τιμή ανά ποσότητα 
+      purchase_price: τιμή αγοράς 
+      quantity: ποσότητα 
+      quantity_sold: πωληθείσα ποσότητα 
+      real_quantity: πραγματική ποσότητα 
+      rebate: επιστροφή
+      rebate_type: τύπος επιστροφής 
+      receipt_blurb: Κεφαλίδα Απόδειξης 
+      receipt_blurb_footer: Υποσέλιδο Απόδειξης 
+      reorder_type: Είδος Αναπαραγγελίας 
+      sales_metric: μετρικό πωλήσεων 
+      salor_printer: Εκτυπώστε την Πλευρά του Πελάτη 
+      scale: ζυγαριά 
+      shipment:
+        from: από 
+        paid: πληρωμένο 
+        price: τιμή
+        to: προς 
+      shipment_item:
+        name: όνομα 
+        quantity: ποσότητα 
+        sku: SKU
+        stock_location_id: Τοποθεσία αποθέματος 
+      shipper_sku: SKU Αποστολέα 
+      sku: SKU
+      start_amount: αρχικό ποσό
+      start_date: αρχική ημερομηνία
+      state: κατάσταση (state)
+      status: κατάσταση (status)
+      stock_location_ids: Τοποθεσία αποθέματος
+      street1: Διεύθυνση 1
+      street2: Διεύθυνση 2
+      stylesheets: φύλλα στυλ
+      subtotal: υποσύνολο
+      tag: ετικέτα
+      tax: φόρος
+      tax_profile_id: φόρος
+      telephone: τηλέφωνο
+      the_receiver: ο παραλήπτης 
+      the_shipper: ο αποστολέας
+      thermal_printer: Θερμικός Εκτυπωτής 
+      title: τίτλος 
+      total: ολικό
+      track_expiry: Παρακολούθηση Λήξης
+      type: τύπος
+      url: URL
+      username: όνομα χρήστη
+      uses_drawer_id: Χρήση συρταριού του/της
+      value: αξία
+      vendor_id: Προμηθευτής
+      vendor_printers: εκτυπωτές
+      weigh_compulsory: υποχρεωτικό ζύγισμα
+      weight: βάρος
+      when: πότε
+      width: πλάτος
+    models:
+      action:
+        one: Πράξη
+        other: Πράξεις
+      broken_item:
+        one: Σπασμένο αντικείμενο
+        other: Σπασμένα αντικείμενα 
+      button:
+        one: Κουμπί
+        other: Κουμπιά 
+      category:
+        one: Κατηγορία
+        other: Κατηγορίες
+      customer:
+        one: Πελάτης
+        other: Πελάτες 
+      discount:
+        one: Έκπτωση 
+        other: Εκπτώσεις
+      drawer:
+        one: Συρτάρι
+        other: Συρτάρια
+      drawer_transaction:
+        one: Συναλλαγή Συρταριού 
+        other: Συναλλαγές Συρταριού
+      employee:
+        one: Υπάλληλος
+        other: Υπάλληλοι 
+      item:
+        one: Αντικείμενο 
+        other: Αντικείμενα 
+      item_type:
+        one: Τύπος Αντικείμενου 
+        other: Τύποι Αντικείμενου
+      location:
+        one: Τοποθεσία 
+        other: Τοποθεσίες
+      order:
+        one: Παραγγελία 
+        other: Παραγγελίες
+      order_item:
+        one: Αντικείμενο Παραγγελίας
+        other: Αντικείμενα Παραγγελίας 
+      payment_method:
+        one: Μέθοδος Πληρωμής 
+        other: Μέθοδοι Πληρωμής 
+      shipment:
+        one: Αποστολή
+        other: Αποστολές 
+      shipment_type:
+        default_name: Αυτόματη αναπαραγγελία
+        one: Τύπος Αποστολής 
+        other: Τύποι Αποστολής 
+      shipper:
+        one: Αποστολέας 
+        other: Αποστολείς 
+      stock_location:
+        one: Τοποθεσία Αποθέματος 
+        other: Τοποθεσίες Αποθέματος 
+      tax_profile:
+        one: Φορολογικό Προφίλ
+        other: Φορολογικά Προφίλ
+      tender_method:
+        one: Μέθοδος Πληρωμής
+        other: Μέθοδοι Πληρωμής
+      transaction_tag:
+        one: Ετικέτα 
+        other: Ετικέτες 
+      vendor:
+        one: Κατάστημα 
+        other: Καταστήματα 
+  api:
+    user_does_not_exist: ο χρήστης δεν υπάρχει
+  behavior_list:
+    add: προσθέστε 
+    assign: απονείμετε 
+    divide: διαιρέστε 
+    multiply: πολλαπλασιάστε 
+    subtract: αφαιρέστε 
+  cash_registers:
+    end_of_day:
+      cash_drawer: Συρτάρι Μετρητών 
+      counted: Μετρημένα 
+      difference: Διαφορά 
+      end_of_day_thermal_report: Εκτύπωση Αναφοράς 
+      paper_report: Λεπτομερής Αναφορά
+  customers:
+    show:
+      bought_items: Αγορασμένα Είδη 
+      last_orders: Τελευταίες Παραγγελίες 
+      order_id: Αριθμός Παραγγελίας 
+      order_total: Ολικό Παραγγελίας 
+      sold_count: καταμέτρηση πωληθέντων 
+  delete: Διαγραφή 
+  edit: Επεξεργασία 
+  end_of_day: Τέλος Μέρας
+  exception_page:
+    assistance_text: Κάντε κλικ στο κύριο μενού και δοκιμάστε ξανά. Εάν το πρόβλημα ξανασυμβεί, παρακαλούμε όπως καλέσετε την υποστήριξη πελατών και συνδέστε τον υπολογιστή σας στην Εξ’ Αποστάσεως Τεχνική Υποστήριξη με το κουμπί  «Εξ’ Αποστάσεως Τεχνική Υποστήριξη». Θα σας βοηθήσουμε αμέσως. 
+    exception_description: ! 'Περιγραφή προβλήματος:'
+    exception_in_files: ! 'Το πρόβλημα προέκυψε στα ακόλουθα αρχεία:'
+    oops_an_error_occurred: Ωχ! Προέκυψε πρόβλημα
+  headings:
+    almost_out: Σχεδόν μας τελείωσε
+    bank_machine_types: εγκριμένες τραπεζικές μηχανές
+    best_sellers: μπεστ σέλλερς
+    best_selling_category: κατηγορία καλύτερων πωλήσεων 
+    best_selling_location: τοποθεσία καλύτερων πωλήσεων 
+    crd: Χρόνο,Ποσό,Τύπος,Σημειώσεις
+    database_distiller: Φιλτράρισμα βάσης δεδομένων
+    discount_for: "έκπτωση για %{store}"
+    discounts_for: "εκπτώσεις για %{store}"
+    edit_shipper: "επεξεργασία αποστολέα %{name}"
+    employees: υπάλληλοι 
+    expiring_soon: λήγει σύντομα
+    export: εξαγωγή
+    item_selection: επιλογή αντικειμένου 
+    new_discount_for: "νέα έκπτωση για %{store}"
+    notes: σημειώσεις 
+    order_validation: Επιβεβαίωση Παραγγελίας 
+    paylife: Paylife(Artema Hybrid)
+    shipment_items: αντικείμενα αποστολής 
+    shipment_types: τύποι αποστολής 
+    shipments: αποστολές
+    update_location: ενημέρωση τοποθεσίας
+    update_real_quantity: ενημέρωση πραγματικής ποσότητας
+  helpers:
+    select:
+      prompt: παρακαλώ επιλέξτε
+    submit:
+      cancel: Άκυρο 
+      clear: Διαγραφή
+      complete_sale: Ολοκλήρωση πώλησης
+      create: Δημιουργία
+      get_item: Αναζήτηση αντικείμενου
+      ok: OK
+      print: Εκτύπωση
+      save: Αποθήκευση
+      submit: Υποβολή
+      update: Ενημέρωση
+  home:
+    remote_service:
+      connect_ssh: Εξ’ αποστάσεως τεχνική υποστήριξη
+      connect_vnc: Μοιραστείτε οθόνη
+      connected: συνδεδεμένοι 
+      disconnected: αποσυνδεδεμένοι
+      host: Όνομα υπολογιστή/Server 
+      not_supported_by_browser: Η εξ’ αποστάσεως τεχνική υποστήριξη δεν υποστηρίζεται από το συγκεκριμένο πρόγραμμα περιήγησης.
+      password: Κωδικός Πρόσβασης
+      requesting_connection_status: Αίτημα Κατάστασης Σύνδεσης...
+      title: Εξ’ Αποστάσεως Τεχνική Υποστήριξη 
+      user: Χρήστης
+    user_employee_index:
+      backup_database: Αντίγραφο Βάσης Δεδομένων
+      backup_logfile: Αντίγραφο Αρχείου Καταγραφής
+  items:
+    database_distiller:
+      are_you_sure: Όλα τα αχρησιμοποίητα αντικείμενα θα διαγραφούν. Αυτό δεν είναι αναστρέψιμο. Είστε σίγουροι πως θέλετε να προχωρήσετε;
+      delete_unused_items: Διαγραφή αχρησιμοποίητων αντικείμενων!
+      hidden: Αντικείμενα που έχουν ήδη διαγραφεί
+      hidden_by_distiller: Αντικείμενα Διαγραμμένα από Φίλτρο Βάσης Δεδομένων
+      relevant_item_ids: Στοιχεία σχετικά για διαγραφή
+      unused_item_ids: Αχρησιμοποίητα Αντικείμενα
+      used_item_ids: Αντικείμενα Εν Χρήση
+    index:
+      database_distiller_warning: Λόγω της παραγωγής στατιστικών, αν καλέσετε αυτή τη λειτουργία θα διαρκέσει για περίπου 30 δευτερόλεπτα. Θα θέλατε να προχωρήσετε έτσι κι αλλιώς; 
+      only_for_tobacco_stores: Αυτή η λειτουργία είναι μόνο για καταστήματα καπνού. Τώρα θα δημιουργηθούν και θα ενημερωθούν αντικείμενα καπνού. Αυτή η εκτέλεση θα διαρκέσει περίπου 20 λεπτά. Είστε απόλυτα σίγουροι πως θέλετε να προχωρήσετε;  
+    inventory_report:
+      price: Τιμή πώλησης
+      subtotal_purchase_price: Υποσύνολο Τιμής Αγοράς
+      subtotal_selling_price: Υποσύνολο Τιμής Πώλησης
+      title: Έκθεση Απογραφής
+      total_buying_price: Άθροισμα Τιμής Αγοράς
+      total_selling_price: Άθροισμα Τιμής Πώλησης
+    show:
+      from: από
+      quantity_sold: Πωληθέντα Ποσότητα
+      query: Αναζήτηση!
+      to: προς
+    update_real_quantity:
+      are_you_sure: Αυτό θα αντιγράψει τις ποσότητες αποθεμάτων στη βάση δεδομένων και θα μηδενίσει την αναφορά αποθέματος. Θέλετε να προχωρήσετε; 
+      inventory_report: Αναφορά Αποθέματος
+      update_quantity: Ενημερώστε τις ποσότητες αποθέματος
+    upload:
+      upload: φορτώστε
+  label: κατατάξτε
+  menu:
+    actions: πράξεις
+    activate_gift_card: ενεργοποιήστε τη δωροκάρτα 
+    add_to_current_order: προσθέστε στην τρέχων παραγγελία
+    additional: επιπλέον
+    back: πίσω
+    broken_items: σπασμένα αντικείμενα
+    buttons: κουμπιά 
+    buy_order: Αγοράστε
+    cameras: κάμερες
+    cancel: ακυρώστε
+    cash_drop:  προσθήκη μετρητών
+    cash_register: ταμειακή μηχανή
+    cash_registers: ταμειακές μηχανές 
+    categories: κατηγορίες
+    clear_order: Διαγράψτε
+    configuration: Ρυθμίσεις
+    contact: άτομο επικοινωνίας 
+    current_order: ! 'τρέχουσα παραγγελία: #%{id}'
+    customer: πελάτης 
+    customers: πελάτες
+    database_distiller: Φιλτράρισμα Βάσης Δεδομένων 
+    delete: διαγράψτε 
+    delete_confirm: Είστε σίγουροι; 
+    destroy: καταστρέψτε
+    discounts: εκπτώσεις
+    done: ολοκληρωμένο
+    download: μεταφορτώστε
+    edit: Επεξεργασία 
+    edit_cash_register: επεξεργασία ταμειακής μηχανής
+    edit_category: επεξεργασία κατηγορίας
+    edit_customer: επεξεργασία πελάτη 
+    edit_discount: επεξεργασία έκπτωσης 
+    edit_employee: επεξεργασία υπαλλήλου
+    edit_item: επεξεργασία αντικειμένου 
+    edit_location: επεξεργασία τοποθεσίας 
+    edit_shipment: επεξεργασία αποστολής
+    edit_shipment_type: επεξεργασία τύπου αποστολής 
+    edit_shipper: επεξεργασία αποστολέα %{name}
+    edit_tax_profile: επεξεργασία φορολογικού προφίλ 
+    edit_tender_method: επεξεργασία μεθόδου πληρωμής
+    edit_vendor: επεξεργασία προμηθευτή
+    employees: υπάλληλοι 
+    end_day: τέλος μέρας
+    general_configuration: γενικές ρυθμίσεις 
+    home: κύριο μενού
+    inventory_report: Αναφορά απογραφής 
+    item_types: τύποι αντικειμένου
+    items: αντικείμενα
+    law_reports: Αναφορά Μεταφόρτωσης 
+    locations: τοποθεσίες 
+    loyalty_cards: κάρτες επιβράβευσης
+    move_shipment_item: μετακινήστε αντικείμενο αποστολής
+    new_action: νέα πράξη 
+    new_broken_item: νέο σπασμένο αντικείμενο
+    new_button: νέο κουμπί
+    new_cash_register: νέα ταμειακή μηχανή
+    new_category: νέα κατηγορία 
+    new_customer: νέος πελάτης 
+    new_discount: νέα έκπτωση 
+    new_employee: νέος υπάλληλος
+    new_item: νέο αντικείμενο
+    new_location: νέα τοποθεσία 
+    new_order: νέα παραγγελία
+    new_shipment: νέα αποστολή
+    new_shipment_type: νέο είδος αποστολής 
+    new_shipper: νέος αποστολέας 
+    new_stock_location: νέα τοποθεσία αποθέματος
+    new_tax_profile: νέο φορολογικό προφίλ 
+    new_tender_method: νέα μέθοδος πληρωμής
+    new_vendor: νέος προμηθευτής 
+    ok: OK
+    order: παραγγελία 
+    orders: παραγγελίες
+    overview: επισκόπηση 
+    points: πόντοι
+    pos: Σημείο Πώλησης (POS)
+    print: εκτύπωση 
+    remote_service: Εξ’ Αποστάσεως Τεχνική Υποστήριξη 
+    receipts: XXX Receipts
+    reorder: αναπαραγγελία
+    report: αναφορά
+    report_day: μέρα αναφοράς
+    report_day_range: μηνιαία αναφορά
+    report_range: λεπτομέρεια αναφοράς
+    reports: αναφορές 
+    salorlive: Το Salor στον Αέρα!
+    salortrainer: Εκπαιδευτής Salor 
+    search: αναζήτηση 
+    shipment_types: τύποι αποστολής 
+    shipments: αποστολές
+    shippers: αποστολείς 
+    show: προβολή
+    split: διαχωρισμός
+    stock_locations: τοποθεσίες αποθέματος
+    support: υποστήριξη
+    tax_profiles: φορολογικά προφίλ
+    tender_methods: μέθοδοι πληρωμής
+    transaction_tags: ετικέτες συναλλαγής
+    update_gift_card: ενημέρωση δωροκάρτας
+    update_location: ενημέρωση τοποθεσίας
+    update_real_quantity: ενημέρωση πραγματικής ποσότητας
+    upload: μεταφορά δεδομένων 
+    usb_device: Μνήμη USB
+    vendors: προμηθευτές
+    void: άκυρο
+    wholesaler_update: ενημέρωση χονδρέμπορου 
+  notifications:
+    shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
+    shipments_move_all_items: όλα τα αντικείμενα μεταφέρθηκαν επιτυχώς 
+    shipments_move_item: το αντικείμενο μεταφέρθηκε επιτυχώς 
+  orders:
+    report:
+      display: ανάρτηση
+      end_date: ημερομηνία λήξης
+      gross: χονδρικό
+      net: καθαρό
+      points: πόντοι
+      rebate: επιστροφή
+      start_date: ημερομηνία έναρξης
+      sum: σύνολο
+      sum_total: συνολικό ποσό
+      title: Σύνολα 
+    report_day:
+      None: Ακαθόριστο
+      OrderItemRefund: Επιστροφή Αντικειμένου
+      OrderRefund: Επιστροφή Παραγγελίας
+      cash-refunds: Επιστροφή Μετρητών
+      cash_drawer: Συρτάρι Μετρητών
+      count_orders: Μέτρηση Παραγγελιών 
+      drop: προσθήκη μετρητών
+      from: Από
+      gross: χονδρικό
+      net: καθαρό
+      noncash-refunds: Επιστροφή μη-μετρητών
+      payments: Πληρωμές
+      payout: αποπληρωμή
+      payouts: αποπληρωμές
+      revenue: Έσοδα
+      sales: Πωλήσεις
+      sum: σύνολο
+      sum_gross: Χονδρικό Σύνολο
+      sum_net: Καθαρό Σύνολο
+      sum_transactions: Σύνολο Συναλλαγών
+      sums_by_category: σύνολα ανά κατηγορία
+      sums_by_payment_methods: σύνολα ανά μεθόδους πληρωμής
+      sums_by_tax_profile: σύνολα ανά φορολογικό προφίλ
+      time: ώρα
+      title: αναφορά μέρας
+      to: Προς
+      transaction_tag: ετικέτα συναλλαγών
+      transaction_total: ολικό συναλλαγών
+      transactions: συναλλαγές 
+    report_day_range:
+      display: ανάρτηση 
+      end_date: ημερομηνία λήξης 
+      gross: χονδρικό
+      net: καθαρό
+      points: πόντοι
+      rebate: επιστροφή
+      start_date: ημερομηνία έναρξης
+      sum: σύνολο
+      sum_total: ολικό σύνολο
+      title: μηνιαία αναφορά
+    report_range:
+      None: Ακαθόριστο
+      OrderItemRefund: Επιστροφή Αντικειμένου
+      OrderRefund: Επιστροφή Παραγγελίας
+      cash-refunds: Επιστροφή Μετρητών
+      cash_drawer: Συρτάρι Μετρητών
+      count_orders: Μέτρηση Παραγγελιών
+      drop: προσθήκη μετρητών
+      from: Από
+      gross: χονδρικό
+      net: καθαρό
+      noncash-refunds: Επιστροφή μη-μετρητών
+      payments: πληρωμές
+      payout: αποπληρωμή
+      payouts: αποπληρωμές
+      revenue: Έσοδα
+      sales: Πωλήσεις
+      sum: σύνολο
+      sum_gross: Χονδρικό σύνολο
+      sum_net: Καθαρό σύνολο
+      sum_transactions: Σύνολο συναλλαγών
+      sums_by_category: σύνολο ανά κατηγορία
+      sums_by_payment_methods: σύνολο ανά μεθόδους πληρωμής
+      sums_by_tax_profile: σύνολο ανά φορολογικό προφίλ
+      time: ώρα
+      title: αναφορά μέρας
+      to: Προς
+      transaction_tag: ετικέτα συναλλαγής
+      transaction_total: ολικό συναλλαγής
+      transactions: συναλλαγές
+  printr:
+    eod_report:
+      None: Μη ονομαζόμενα
+      OrderItemRefund: Επιστροφή αντικειμένου παραγγελίας
+      OrderRefund: Επιστροφή παραγγελίας
+      calculated_drawer_amount: Υπολογισμένο ποσό συρταριού
+      cash-refunds: Επιστροφή μετρητών
+      cash_refunds_total: ΟΛΙΚΟ
+      noncash-refunds: Επιστροφή μη-μετρητών
+      orders_total: Ολικό παραγγελιών
+      payment_method_total: ΟΛΙΚΟ
+      payments: Πληρωμές
+      refund: Επιστροφή
+      revenue: Έσοδα
+      revenue_total: ΟΛΙΚΟ
+      sales: Πωλήσεις
+      system_drawer_amount: Ποσό συρταριού του συστήματος
+      transaction_total: ΟΛΙΚΟ
+      warning_drawer_amount_not_zero: Προειδοποίηση! Το ποσό του συρταριού σας δεν είναι μηδέν. Σας συνιστούμε να τελειώνετε και να ξεκινάτε τη μέρα σας με ποσό συρταριού μηδέν για να διευκολύνετε τα λογιστικά. Κάντε αποπληρωμή μετρητών αναλόγως και εκτυπώστε ξανά αυτή την αναφορά.   
+    formats:
+      advert: ! 'Το καινοτόμο Σημείο Πώλησης
+
+        www.salorpos.com'
+      cancel: Ακύρωση                  EUR %8.2f
+      change: ! 'Αλλαγή:                       EUR %8.2f'
+      coupon_subtotal: Κουπόνι                   EUR %8.2f
+      discount_subtotal: Έκπτωση                       EUR %8.2f
+      end_of_day: ! '%20.20s EUR %5.2f'
+      fixed_rebate: Επιστροφή                         EUR %8.2f
+      item: ! '%c %20.20s %7.2f %3u %7.2f'
+      rebate_amount: Επιστροφή %4.2f%%                 EUR %8.2f
+      rebate_subtotal: Ολικό Επιστροφής                  EUR %8.2f
+      subtotal: Υποσύνολο                      EUR %8.2f
+      thanks: Σας ευχαριστούμε που ψωνίσατε μαζί μας!
+      total: ΟΛΙΚΟ                         EUR %8.2f
+    order_receipt:
+      change: Αλλαγή χρημάτων
+      coupon_subtotal: Υποσύνολο κουπονιού
+      current_loyalty_points: Οι πόντοι επιβράβευσης σας! 
+      discount: Έκπτωση
+      discount_subtotal: Υποσύνολο Έκπτωσης
+      given: Δοσμένα χρήματα
+      gross: χονδρικό
+      lc_points_substracted: Αφαιρεμένοι πόντοι επιβράβευσης
+      net: καθαρό
+      rebate: Μονή επιστροφή
+      rebate_fixed: Αμετάβλητη επιστροφή
+      rebate_percent: Επιστροφή τοις εκατό
+      rebate_subtotal: Υποσύνολο επιστροφής 
+      refund: Ολικό επιστροφών
+      refunded: ΕΠΙΣΤΡΕΦΟΜΕΝΟ 
+      subsubtotal: ΟΛΙΚΟ
+      subtotal1: Υποσύνολο
+      subtotal2: Υποσύνολο
+      subtotal3: Υποσύνολο
+      subtotal4: Υποσύνολο
+      tax: Φόρος
+    word:
+      drop: προσθήκη μετρητών
+      payout: αποπληρωμή
+      sold: πωλημένο
+  receipts:
+    invoice: Λογαριασμός
+    invoice_numer_X_at_time: Αριθμός Παραγγελίας %{number} στις %{datetime}
+  reports:
+    amount: ποσό
+    description: περιγραφή
+    item_zero: Ξεπουλημένα αντικείμενα
+    tax_class: φορολογική τάξη
+    total: ολικό
+    unit_price: τιμή μονάδας
+  roles:
+    cashier: ταμίας
+    manager: διευθυντής
+    stockboy: αναπληρωτής αποθεμάτων
+  shipments:
+    index:
+      report: Αναφορά
+    show:
+      purchase_price_sum: Σύνολο τιμής αγοράς
+  sticker: αυτοκόλλητο
+  support: XXX
+  system:
+    add_payment_method: προσθέστε τη μέθοδο πληρωμής
+    complete_sale: Ολοκληρωμένο
+    errors:
+      action_code_error: "Ο κώδικας δεν μπορεί να εκτελεστεί λόγο προβλήματος %{error}"
+      action_error: "Η πράξη δεν μπόρεσε να εκτελεστεί λόγο προβλήματος %{error}"
+      auto_drop_failed: Το σύστημα απέτυχε την αυτόματη προσθήκη μετρητών στο συρτάρι, σας παρακαλούμε όπως δημιουργήσετε από μόνοι σας προσθήκη μετρητών αρχής μέρας. 
+      cannot_edit_completed_order: Αυτή η παραγγελία ολοκληρώθηκε και δεν μπορεί να διαμορφωθεί. 
+      cannot_reorder: Κανένα προϊόν δεν πρέπει να αναπαραγγελθεί.        
+      child_sku_must_exist: Πρέπει να υπάρχει SKU!
+      coupon_cannot_be_buy_one_get_one: κουπόνι %{sku} δεν μπορεί να είναι αγοράστε_ένα_πάρτε_ένα όταν ισχύει %{applies}
+      coupon_not_enough_items: Δεν έχετε αγοράσει αρκετά αντικείμενα για να ισχύσει αυτό
+      csv_item_exists: Αντικείμενο %{sku} υπάρχει!
+      csv_item_failed: ! '%{id} %{i} απέτυχε.'
+      failed_to_save_parts: Η αποθήκευση του σετ δεν ήταν δυνατή. Παρακαλούμε όπως βεβαιωθείτε πως αντικείμενα αυτού του σετ υπάρχουν.
+      gift_card_empty: Η δωροκάρτα είναι άδεια, ειδοποιήστε τον πελάτη και καταστρέψτε την κάρτα. 
+      gs1_item_not_found: Το αντικείμενο είναι σημειωμένο ως gs1, αλλά το %{sku} δεν βρίσκεται στην σωστή μορφή.
+      insufficient_quantity_on_item: Προειδοποίηση, Αντικείμενο %{sku} ποσότητα είναι ανεπαρκής, καιρός να ενημερώσετε τα ποσοστά αποθεμάτων σας!
+      inventory_update_error: πρόβλημα στην ενημέρωση απογραφής
+      item_not_found: Το αντικείμενο που ψάχνετε δεν βρέθηκε, θέλετε να δοκιμάσετε αναζήτηση; 
+      item_price_is_zero: ! 'Προειδοποίηση: Η τιμή του αντικειμένου είναι 0'
+      limited_alphabet: Μόνο α-ω επιτρέπεται. Τα διαστήματα και οι τονισμένοι χαρακτήρες δεν επιτρέπονται. 
+      lp_calculation_failed: Αποτύχατε να εφαρμόσετε τους πόντους επιβράβευσης, είστε σίγουροι ότι είναι στημένο στις ρυθμίσεις του καταστήματος σας; 
+      must_cash_drop: Το συρτάρι σας δεν περιέχει καθόλου χρήματα, παρακαλούμε όπως πράξατε προσθήκη μετρητών!
+      must_choose_register: Πρέπει να συνδεθείτε με μια ταμειακή μηχανή!
+      must_choose_vendor: Πρέπει να επιλέξετε κατάστημα!
+      must_set_receiver_to_vendor: Πρέπει να θέσετε τον παραλήπτη αυτής της αποστολής σε έγκυρο κατάστημα. 
+      must_specify_drop_or_payout: Πρέπει να καθορίσετε αν είναι προσθήκη μετρητών ή αποπληρωμή!
+      no_class: Δεν υπάρχει τάξη για %{model} στη σειρά %{i}
+      no_role: Δεν έχετε τον απαραίτητο ρόλο για πρόσβαση σε αυτό τον πόρο. 
+      no_such_item: Δεν υπάρχει αντικείμενο με αυτό το SKU
+      not_enough_in_drawer: δεν υπάρχουν αρκετά στο συρτάρι
+      order_failed: Η παραγγελία δεν μπόρεσε να ολοκληρωθεί.
+      order_must_have_user: Δεν μπορείτε να αποθηκεύσετε μια παραγγελία χωρίς να αναθέσετε χρήστη ή υπάλληλο σ’ αυτήν. 
+      order_register_required: Πρέπει να καθορίσετε ένα ταμείο γι’ αυτή την παραγγελία
+      order_totals_validation_failed: Η επιβεβαίωση του ολικού της παραγγελίας απέτυχε, η ανανέωση της παραγγελίας μπορεί να επιδιορθώσει το πρόβλημα. Πατήστε ΟΚ για ανανέωση. 
+      order_vendor_required: Πρέπει να παρέχετε ένα προμηθευτή γι’ αυτή την παραγγελία 
+      parent_sku_must_exist: Πρέπει να υπάρχει parent SKU!
+      payment_required: ! 'Πρόβλημα 402: Απαιτείται πλήρης πληρωμή'
+      payment_required_explanation: Με λύπη σας πληροφορούμε ότι το σύστημα σας απενεργοποιήθηκε αυτόματα καθώς η προπληρωμένη άδεια σας έχει εξαντληθεί. Πρέπει να ολοκληρώσετε πλήρη πληρωμή στο Salor για να εξακολουθήσετε να επωφελείστε απ’ αυτό. Παρακαλούμε όπως επικοινωνήσετε με τον αντιπρόσωπο τεχνικής υποστήριξης του Salor.
+      sanity_check: Η αιτούμενη πράξη είναι παράλογη, επιβεβαιώστε το ολικό της παραγγελίας και ενημερώστε τον πελάτη για την διόρθωση. 
+      shipment_item_already_in_stock: Το αντικείμενο %{sku} βρίσκεται ήδη σε απόθεμα
+      shipment_item_move_failed: ! 'Το αντικείμενο %{sku} απέτυχε να μετακινηθεί με πρόβλημα: %{error}'
+      shipment_item_nil: Το αντικείμενο που επιστράφηκε από from_shipment_item ήταν άκυρο;
+      sku_must_be_unique: ! '%{sku} πρέπει να είναι μοναδικό'
+      value_not_set: ΜηΚαθορισμένο
+    inventory_updated: η απογραφή ενημερώθηκε
+    logged_in_as: συνδεδεμένοι ως 
+    login: συνδεθείτε
+    logout: αποσυνδεθείτε 
+    not_you: δεν είστε εσείς;
+    owner_mode: ΛΕΙΤΟΥΡΓΙΑ ΙΔΙΟΚΤΗΤΗ
+    owner_success: Οι ιδιότητες του ιδιοκτήτη ενημερώθηκαν επιτυχώς
+    payment_external_types: μετρητά,κάρτα,δωροκάρτα,άλλο
+    payment_internal_types: ΜεΜετρητά,ΜεΚάρτα,ΜεΔωροκάρτα,ΆλλεςΠιστώσεις
+    rebate_types:
+      fixed: $
+      percent: ! '%'
+    sign_up: εγγραφείτε
+  vendors:
+    clear_cache_button: καθαρίστε την κρυφή μνήμη
+    clear_cache_header: κρυφή μνήμη
+    form:
+      logo: λογότυπο
+      receipt_logo_footer: λογότυπο απόδειξης υποσέλιδο
+      receipt_logo_header: λογότυπο απόδειξης κεφαλίδα
+  views:
+    create_new_item: xxx Create New Article
+    advanced_field: προηγμένο πεδίο
+    cash_register_heading: ! '%{name} για %{store}'
+    cash_registers: ταμειακές μηχανές
+    category_heading: κατηγορία %{name} για %{store}
+    change: αλλαγή
+    customers: πελάτες
+    download_may_last_long: Αυτή η μεταφόρτωση μπορεί να διαρκέσει πολύ. Θα συνεχίσετε;
+    dummy_item: εικονικό αντικείμενο
+    edit_item_heading: επεξεργασία τίτλου αντικειμένου
+    email: ηλεκτρονικό ταχυδρομείο
+    errors:
+      no_access_right: Δεν έχετε δικαίωμα πρόσβασης σε αυτό τον πόρο. Αυτό το πρόβλημα έχει καταγραφεί. 
+      nothing_found: Τίποτα δεν βρέθηκε
+      unknown_vendor: Άγνωστο
+    eticket: Ετικέτα ραφιού
+    forms:
+      applies_to_item: ισχύει για αντικείμενα με SKU
+      buy_one_get_one: αγοράστε ένα πάρτε ένα
+      cashier: ταμίας
+      fixed_amount_off: σταθερό ποσό απενεργοποιημένο
+      items: αντικείμενα
+      manager: Διευθυντής
+      no_change: καμιά αλλαγή
+      notes: σημειώσεις 
+      parts: μέρη
+      percent_off: ! '% απενεργοποιημένο'
+      roles: ρόλοι
+      search: αναζήτηση
+      shipment:
+        types:
+          canceled: ακυρωμένο
+          complete: ολοκληρωμένο
+          in_stock: σε απόθεμα
+          new: νέο
+          returned: επιστραμμένο
+          shipped: αποσταλμένο
+    gift_card: δωροκάρτα
+    gift_card_amount: ποσό δωροκάρτας
+    given: δοσμένο
+    in_cash: σε μετρητά
+    item: αντικείμενο
+    language: γλώσσα
+    listing: καταγραφή
+    listing_items: καταγραφή αντικειμένων
+    locations: τοποθεσίες
+    loyalty_card: κάρτα επιβράβευσης
+    name: όνομα
+    new_item_heading: Νέο αντικείμενο για %{store}
+    new_stock_location: Τοποθεσία νέου αποθέματος
+    notice:
+      cache_was_cleared: Τα αρχεία της κρυφής μνήμης διαγράφηκαν.
+      csv_edit_starting: αρχίζει η επεξεργασία csv
+      model_create: ! '%{model} δημιουργήθηκε επιτυχώς'
+      model_edit: ! '%{model} επεξεργάστηκε επιτυχώς'
+      move_real_quantities_success: Οι ποσότητες των προϊόντων ενημερώθηκαν επιτυχώς
+      new_order: δημιουργήθηκε νέα παραγγελία
+      order_refund_dt: ! '#%{id}'
+      save_before: Θέλετε να αποθηκεύσετε πριν αποχωρήσετε;
+      wholesaler_upload_report: ! 'Ενημερωμένα αντικείμενα: %{ενημερωμένα_αντικείμενα }, Δημιουργημένα αντικείμενα:
+        %{δημιουργημένα_αντικείμενα}, Δημιουργημένες κατηγορίες: %{δημιουργημένες_κατηγορίες}, Δημιουργημένα φορολογικά προφίλ
+        %{δημιουργημένα_φορολογικά_προφίλ}'
+    order_heading: ! 'Παραγγελία #%{id} για %{store}'
+    order_number: ! 'Παραγγελία #%{id}'
+    pagination:
+      last: τελευταίο
+      next: επόμενο &gt;
+      previous: ! '&lt; προηγούμενο'
+      truncate: ! '...'
+    password: κωδικός πρόσβασης
+    password_confirm: επιβεβαίωση κωδικού πρόσβασης
+    please_test_before_upload: ! 'ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Πρόκειται να αντικαταστήσετε τα δεδομένα στη βάση δεδομένων.'
+    price: τιμή
+    quantity: ποσότητα
+    rebate: επιστροφή
+    remember_me: θυμήσου με 
+    report: αναφορά
+    reports:
+      cash_account: XXX Cash Account
+      daily: XXX Daily
+    shipments:
+      state: Κατάσταση
+    single_words:
+      all: Όλα
+      body: κύριο τμήμα
+      bottom: κάτω μέρος
+      camera: κάμερα
+      continue: συνεχίστε
+      coupons: Κουπόνια
+      delete: διαγράψτε
+      destroy: καταστρέψτε
+      download: μεταφορτώστε
+      edit: επεξεργαστείτε
+      from: από
+      gift_cards: XXX Gift Cards
+      loading: φόρτωση
+      new: Νέο
+      order: παραγγελία
+      ordering: παραγγείλετε 
+      processing: επεξεργασία...
+      saving: αποθήκευση...
+      sku: SKU
+      title: τίτλος
+      to: προς
+      top: πάνω μέρος
+      waiting: αναμονή...
+    sticky_ticket: Αυτοκόλλητη ετικέτα 
+    stock_locations: τοποθεσίες_αποθέματος
+    subtotal: υποσύνολο
+    tax_profile: φορολογικό προφίλ
+    three_easy_ways: τρεις εύκολοι τρόποι
+    total: ολικό
+    username: όνομα χρήστη
+    vendor: προμηθευτής
+    wholesaler_refresh: Ψάχνουμε για ενημερώσεις χονδρεμπόρου. Αυτό μπορεί να διαρκέσει λίγα λεπτά. 
+  when_list:
+    add_to_order: προσθέστε για παραγγελία
+    always: πάντα
+    on_export: κατά την εξαγωγή
+    on_import: κατά την εισαγωγή
+    on_save: κατά την αποθήκευση

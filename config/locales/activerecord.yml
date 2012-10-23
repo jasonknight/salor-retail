@@ -1,0 +1,108 @@
+"en-US":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"en-GB":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"de":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"fr":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"es":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"el":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"cn":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"pl":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"ru":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"hu":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"tr":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"
+"ar":
+  activerecord:
+    errors:
+      messages:
+        taken: "has already been taken"
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          one: "Cannot delete record because a dependent %{record} exists"
+          many: "Cannot delete record because dependent %{record} exist"

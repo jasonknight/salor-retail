@@ -1,19 +1,26 @@
 require 'spec_helper'
 
-describe "Employes" do
+describe "Vendors" do
   before(:each) do
-    @user = Factory :user, :password => "31202023287"
-    @vendor = Factory :vendor, :user => @user
-    @cash_register = Factory :cash_register, :vendor => @vendor
-    @tax_profile = Factory :tax_profile, :user => @user
-    @category = Factory :category, :vendor => @vendor
-    GlobalData.salor_user = @user
-    GlobalData.vendor = @vendor
-    GlobalData.vendor_id = @vendor.id
-    GlobalData.cash_register = @cash_register
+    single_store_setup
+    sleep(4)
+    login_employee("31202053295")
+  end
+  def click_on(id)
+    find(id).click
+    sleep(1)
   end
  describe "editing a vendor" do
-  it "should allow you to set salor_printer on the vendor config" do
+   it "should allow you to edit the vendor", :js => true, :driver => :selenium  do
+    visit "/vendors"
+    page.should have_content @vendor.name
+    find("#vendor_#{@vendor.id}").click
+    sleep(1)
+    find("#edit_vendor").click
+    fill_in("vendor[name]",:with => "I have edited the name")
+    find("#save_button").click
+    sleep(2)
+    @vendor.reload.name.should == "I have edited the name"
   end
  end
 end

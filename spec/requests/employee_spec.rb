@@ -12,9 +12,9 @@ describe "Employes" do
     GlobalData.vendor_id = @vendor.id
   end
  describe "GET /employess/login" do
-  it "should log you in when visiting with a valid code" do
+  it "should log you in when visiting with a valid code", :js => true, :driver => :selenium do
     visit "/employees/login?code=31202023287" 
-    page.should have_content("vendors")
+    page.should have_content("Stores")
   end
  end
 end

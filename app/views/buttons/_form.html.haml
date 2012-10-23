@@ -4,21 +4,30 @@
     .form_errors
       - @button.errors.full_messages.each do |msg|
         %p= msg
-
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :sku
-    = f.text_field :sku
-  .field
-    = f.label :category_id
-    = collection_select :button, :category_id, @button_categories, :id, :name, :prompt => true
-  .field
-    = f.label :color
-    = f.text_field :color
-  .field
-    = f.label :position
-    = f.text_field :position
-  .field
-    = f.submit
+  %table{:width => '90%', :align => 'center'}
+    %tr
+      %td
+        .field
+          = f.label :name
+          = f.text_field :name, :class => 'keyboardable'
+      %td
+        .field
+          = f.label :sku
+          = f.text_field :sku, :class => 'keyboardable'
+    %tr
+      %td
+        .field
+          = f.label :category_id
+          = collection_select :button, :category_id, @button_categories, :id, :name, :prompt => true
+      %td
+        .field
+          = f.label :color
+          = f.text_field :color
+    %tr
+      %td
+        .field
+          = f.label :position
+          = f.text_field :position, :class => 'keyboardable'
+      %td
+        .actions
+          = f.submit

@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
       session[key] = (session[key] == 'DESC') ? 'ASC' : 'DESC'
       @items = Item.scopied.page(params[:page]).per(25).order("#{key} #{session[key]}")
     else
-      @items = Item.scopied.page(params[:page]).per(25)
+      @items = Item.scopied.page(params[:page]).per(25).order("id desc")
     end
     Node.flush
     respond_to do |format|
@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now
-    @sold_times = OrderItem.scopied.find(:all, :conditions => {:sku => @item.sku, :hidden => 0, :is_buyback => false, :refunded => false, :created_at => @from..@to}).size
+    @sold_times = OrderItem.scopied.find(:all, :conditions => {:sku => @item.sku, :hidden => 0, :is_buyback => false, :refunded => false, :created_at => @from..@to}).collect{ |i| i.quantity }.sum
   end
 
   # GET /items/new
@@ -72,24 +72,26 @@ class ItemsController < ApplicationController
     # We must insure that tax_profile is set first, otherwise, the
     # gross magic won't work
     # TODO Test this as it's no longer necessary
+    
     @item = Item.all_seeing.find_by_sku(params[:item][:sku])
     if @item then
       @item.attributes = params[:item]
       flash[:notice] = I18n.t('system.errors.sku_must_be_unique',:sku => @item.sku)
       render :action => "new" and return
     end
+
     @item = Item.new
     @item.tax_profile_id = params[:item][:tax_profile_id]
     @item.attributes = params[:item]
     @item.sku.upcase!
 
     respond_to do |format|
-      if salor_user.owns_vendor?(@item.vendor_id) and @item.save
+      if $User.owns_vendor?(@item.vendor_id) and @item.save
         @item.set_model_owner(salor_user)
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Item.model_name.human)) }
         format.xml  { render :xml => @item, :status => :created, :location => @item }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => "new", :notice => "Failed" }
         format.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
       end
     end
@@ -211,7 +213,7 @@ class ItemsController < ApplicationController
     end
   end
   def item_json
-    @item = Item.all_seeing.find_by_sku(params[:sku], :select => "name,sku,id")
+    @item = Item.all_seeing.find_by_sku(params[:sku], :select => "name,sku,id,purchase_price")
   end
   def edit_location
     respond_to do |format|
@@ -229,7 +231,7 @@ class ItemsController < ApplicationController
     @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
     #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
-    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
+    render :text => "No User#{@user}, or Register#{@register}, or Vendor#{@vendor}" and return if @register.nil? or @vendor.nil? or @user.nil?
 
     if params[:id]
       @items = Item.find_all_by_id(params[:id])
@@ -367,7 +369,6 @@ class ItemsController < ApplicationController
     add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
     add_breadcrumb I18n.t("menu.inventory_report"), items_inventory_report_path
     @items = Item.scopied.where('real_quantity > 0')
-    @items.inspect
     @categories = Category.scopied
   end
 

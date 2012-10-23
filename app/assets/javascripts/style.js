@@ -20,7 +20,7 @@ var _currentSelectTarget = '';
 var _currentSelectButton;
 function make_select_widget(name,elem) {
   elem.hide();
-  var button = div();
+  var button = $('<div id="select_widget_button_for_' + elem.attr("id") + '"></div>');
   button.html($(elem).find("option:selected").text());
   if (button.html() == "")
     button.html($(elem).find("option:first").text());
@@ -38,7 +38,7 @@ function make_select_widget(name,elem) {
     mdiv.addClass("select-widget-display select-widget-display-" + _currentSelectTarget.replace("#",""));
     var x = 0;
     $(_currentSelectTarget).children("option").each(function () {
-      var d = div();
+      var d = $('<div id="active_select_'+$(this).attr('value').replace(':','-')+'"></div>');
       d.html($(this).text());
       d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
       d.attr("value", $(this).attr('value'))

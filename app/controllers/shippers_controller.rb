@@ -14,7 +14,7 @@ class ShippersController < ApplicationController
   cache_sweeper :shipper_sweeper, :only => [:create, :update, :destroy]
 
   def index
-    @shippers = salor_user.get_shippers(params[:page])
+    @shippers = $User.get_shippers(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

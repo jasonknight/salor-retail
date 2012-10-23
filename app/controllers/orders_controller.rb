@@ -236,7 +236,7 @@ class OrdersController < ApplicationController
         end
       end
     end
-    if @item.base_price.zero? and not @item.is_gs1
+    if @item.base_price.zero? and not @item.is_gs1 and not @item.must_change_price and not @item.default_buyback
       GlobalErrors.append("system.errors.item_price_is_zero")
       SalorBase.beep(1500, 100, 3, 10)
     end
@@ -284,11 +284,22 @@ class OrdersController < ApplicationController
     text = Printr.new.sane_template('item',binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @cash_register.id, :content => text)
     if @register.salor_printer
-      render :text => text
+      if params[:download] then
+        send_data(text,{:filename => 'salor.bill'})
+      else
+        render :text => text and return
+      end
     else
-      written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      if is_mac? then
+        written_bytes = File.open("/tmp/" + @register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+        `lp -d #{@register.thermal_printer} /tmp/#{@register.thermal_printer}`
+        print_confirmed if written_bytes > 0
+        render :nothing => true and return
+      else
+        written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      end
       print_confirmed if written_bytes > 0
-      render :nothing => true
+      render :nothing => true and return
     end
   end
 
@@ -303,7 +314,9 @@ class OrdersController < ApplicationController
   def show_payment_ajax
     # Recalculate everything and then show Payment Popup
     @order = initialize_order
-    @order.calculate_totals(true) # true = Speedy version!
+    # MF: speedy version of calculate_totals is completely commented out in order.rb, so that would explain why in case of a racing condition (e.g. where 2 items are scanned and the first ajax request is handled AFTER the second ajax request due to passenger instance queue) the order total was not recalculated and was therefore missing one item.
+    # I changed below to "false", which means, every time the "complete" button is pressed, it will update the order total according to the items. In dev mode, it is still speedy, so I think it's save for the live systems. This makes screen masking unnecessary and passenger instances can now be more than 1 again.
+    @order.calculate_totals(false)
     @order.save!
   end
   def last_five_orders
@@ -411,13 +424,12 @@ class OrdersController < ApplicationController
     @oi = OrderItem.find_by_id(params[:id])
     if @oi then
       noi = OrderItem.new(@oi.attributes)
-      @oi.quantity -= 1
-      @oi.total = @oi.price * @oi.quantity
+      new_quantity = @oi.quantity - 1
+      new_total = @oi.price * new_quantity
       noi.order_id = @oi.order_id
-      noi.quantity = 1
-      noi.total = noi.quantity * noi.price
-      OrderItem.connection.execute("update order_items set quantity = '#{@oi.quantity}', total = '#{@oi.total}' where id = #{@oi.id}")
       noi.save
+      OrderItem.connection.execute("update order_items set quantity = '#{new_quantity}', total = '#{new_total}' where id = #{@oi.id}") 
+      OrderItem.connection.execute("update order_items set quantity = '#{1}', total = '#{@oi.price}', price = '#{@oi.price}' where id = #{noi.id}")
     end
     redirect_to "/orders/#{@oi.order.id}"
   end

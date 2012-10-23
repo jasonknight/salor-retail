@@ -8,12 +8,11 @@
 development:
   adapter: mysql2
   encoding: utf8
-  reconnect: false
-  database: salor_development
+  reconnect: true
+  database: salor_retail_development
   pool: 5
   username: root
   password: 
-  reconnect: true
   socket: /var/run/mysqld/mysqld.sock
 
 # Warning: The database defined as "test" will be erased and
@@ -22,21 +21,19 @@ development:
 test:
   adapter: mysql2
   encoding: utf8
-  reconnect: false
-  database: salor_test
+  reconnect: true
+  database: salor_retail_test
   pool: 5
   username: root
   password: 
-  reconnect: true
   socket: /var/run/mysqld/mysqld.sock
 
 production:
   adapter: mysql2
   encoding: utf8
-  reconnect: false
-  database: salor_production
+  reconnect: true
+  database: salor_retail_production
   pool: 5
   username: root
   password: 
-  reconnect: true
   socket: /var/run/mysqld/mysqld.sock

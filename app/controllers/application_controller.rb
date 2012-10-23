@@ -18,9 +18,19 @@ class ApplicationController < ActionController::Base
   helper_method [:user_cache_name]
 
   unless Salor::Application.config.consider_all_requests_local
-    rescue_from Exception, :with => :render_error
+    #rescue_from Exception, :with => :render_error
   end 
+  def is_mac?
+     RUBY_PLATFORM.downcase.include?("darwin")
+  end
 
+  def is_windows?
+     RUBY_PLATFORM.downcase.include?("mswin")
+  end
+
+  def is_linux?
+     RUBY_PLATFORM.downcase.include?("linux")
+  end   
   def pre_load
   end
   def render_csv(filename = nil,text = nil)
@@ -53,7 +63,7 @@ class ApplicationController < ActionController::Base
   end
 
   def salor_signed_in?
-    if session[:user_id] and session[:user_type] and Employee.exists? session[:user_id] then
+    if session[:user_id] and session[:user_type] and (Employee.exists? session[:user_id] or User.exists? session[:user_id]) then
       return true
     else
       return false
@@ -75,8 +85,12 @@ class ApplicationController < ActionController::Base
         user= User.find_by_id(session[:user_id].to_i)
       else
         user= Employee.find_by_id(session[:user_id])
+        $Vendor = user.vendor if user #Because Global State is maintained across requests.
+        $User = user
       end
+      return user
     end
+    return nil
   end
 
   def user_cache_name
@@ -124,6 +138,9 @@ class ApplicationController < ActionController::Base
     if @vendor then 
       $Conf = @vendor.salor_configuration
     end
+    if !$Conf then
+      $Conf = Vendor.first.salor_configuration
+    end
   end
   def layout_by_response
     if params[:ajax] then
@@ -132,6 +149,7 @@ class ApplicationController < ActionController::Base
     return "application"
   end
   def loadup
+    $Notice = ""
     SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
     GlobalData.refresh # Because classes are cached across requests
 	  Job.run # Cron jobs for the application
@@ -149,6 +167,7 @@ class ApplicationController < ActionController::Base
         salor_user.meta.save
       end
     else 
+      $User = nil # $User is being set somewhere before this is even called, which is weird.
       @owner = User.new
     end
     
@@ -235,6 +254,7 @@ class ApplicationController < ActionController::Base
       GlobalData.cash_register = @cash_register
       GlobalData.user_id = salor_user.get_owner.id
       $User = salor_user
+      $Vendor = $User.vendor
       $Meta = salor_user.get_meta
       tps = salor_user.get_tax_profiles
       if tps.any? then
