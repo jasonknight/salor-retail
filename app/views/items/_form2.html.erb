@@ -209,7 +209,7 @@ $(function () {
   
   <tr>
     <td valign="top"> <%= f.label I18n.t("activerecord.models.category.one") %> </td>
-    <td valign="top"> <%= f.collection_select :category_id, GlobalData.categories,:id,:name %> </td>
+    <td valign="top"> <%= f.collection_select :category_id, Category.scopied.all,:id,:name %> </td>
   </tr>
   
   <tr>
