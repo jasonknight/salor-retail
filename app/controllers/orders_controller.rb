@@ -170,6 +170,7 @@ class OrdersController < ApplicationController
     @order = initialize_order
     if @order.paid == 1 and not $User.is_technician? then
       @order = $User.get_new_order 
+      @item = Item.get_by_code(params[:sku])
       @order_item = @order.add_item(@item)
       @order.update_self_and_save
       @order_item.reload
@@ -200,13 +201,14 @@ class OrdersController < ApplicationController
       flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
       render :action => :update_pos_display and return
     end
-    if @item.class == LoyaltyCard and @item.customer then
+    if @item.class == LoyaltyCard then
       @loyalty_card = @item
       @order.customer = @loyalty_card.customer
       if @order.save then
         render :action => "connect_loyalty_card" and return
       else
-        raise "ERROR customer is nil?"
+        flash[:notice] = "Customer NIL?"
+        render :action => :update_pos_display and return
       end
     end
     @order_item = @order.add_item(@item)
@@ -278,7 +280,7 @@ class OrdersController < ApplicationController
 
     @order = Order.find_by_id(params[:order_id])
     if not @order then
-      render :nothing => true and return
+      render :text => "No Order Found" and return
     end
     @report = @order.get_report
     text = Printr.new.sane_template('item',binding)
@@ -293,12 +295,12 @@ class OrdersController < ApplicationController
       if is_mac? then
         written_bytes = File.open("/tmp/" + @register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
         `lp -d #{@register.thermal_printer} /tmp/#{@register.thermal_printer}`
-        print_confirmed if written_bytes > 0
+        print_confirmed = true if written_bytes > 0
         render :nothing => true and return
       else
         written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       end
-      print_confirmed if written_bytes > 0
+      print_confirmed = true if written_bytes > 0
       render :nothing => true and return
     end
   end

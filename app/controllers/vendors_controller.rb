@@ -544,8 +544,11 @@ class VendorsController < ApplicationController
     username = dbconfig[mode]['username']
     password = dbconfig[mode]['password']
     database = dbconfig[mode]['database']
-    `mysqldump -u #{username} -p#{password} #{database} > #{params[:path]}/salor-#{Time.now.strftime("%Y-%m-%d")}.sql`
-    `cp -f #{Rails.root.to_s}/log/production.log #{params[:path]}/production-#{Time.now.strftime("%Y-%m-%d")}.log`
+    `mysqldump -u #{username} -p#{password} #{database} orders order_items drawer_transactions -w "vendor_id='#{$Vendor.id}'" | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
+
+    send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
+   #redirect_to "/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2"
+    #`cp -f #{Rails.root.to_s}/log/production.log #{params[:path]}/production-#{Time.now.strftime("%Y-%m-%d")}.log`
   end
 
   # Employee Editing Functions

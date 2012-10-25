@@ -9,6 +9,7 @@ ru:
       just_time: "%H:%M"
       datetime_short: "%y-%m-%d %H:%M"
       datetime_iso2: "%Y%m%dT%H%M%S"
+      long: "%Y%m%dT%H%M%S"
   date:
     day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
     abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]

@@ -23,6 +23,7 @@ class DrawerTransaction < ActiveRecord::Base
   end
   
   def validify
+    self.vendor_id = $Vendor.id
     if self.amount.to_f <= 0 then
       self.amount *= -1.0
     end

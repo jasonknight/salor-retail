@@ -192,6 +192,7 @@ class Order < ActiveRecord::Base
       oi.set_item(item)
       oi.is_valid = true
       oi.order_id = self.id
+      oi.vendor_id = self.vendor_id
       self.order_items << oi
       update_self_and_save
       return oi
@@ -210,6 +211,7 @@ class Order < ActiveRecord::Base
 	    oi = OrderItem.new # MF: doesn't make sense?
 	  end
 	  oi.order_id = self.id
+    oi.vendor_id = self.vendor_id
 	  oi.no_inc = true if GlobalData.params and GlobalData.params.no_inc
 	  ret = oi.set_item(item)
 	  return oi if not ret

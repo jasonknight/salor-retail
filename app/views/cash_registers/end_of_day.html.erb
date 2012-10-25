@@ -49,14 +49,7 @@
 <br />
 <div class="button-row" align="center">
 <%= I18n.t("views.notice.please_backup") %>
-      <select name="usb_device" id="usb_device">
-      <option value="<%= Dir['/home/*'].first %>/Documents">Documents</option>
-        <% Dir.entries("/media").each do |d| %>
-        
-          <% next  if d == '.' or d == '..'%>
-          <option value="/media/<%= d %>"><%= d %></option>
-        <% end %>
-      </select>
-      <div class="button-confirm rounded-corners-all" onmousedown="$.get('/vendors/backup?path='+$('#usb_device').val())"><%= t 'menu.backup' %></div>
+      
+      <div class="button-confirm rounded-corners-all" onmousedown="window.location='/vendors/backup?path='+$('#usb_device').val()"><%= t 'menu.backup' %></div>
 </div>
 
