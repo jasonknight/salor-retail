@@ -166,15 +166,13 @@ for lInstance in $gInstances; do
         rake1.9.1 db:migrate RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
         echo "  postinst: running db:seed ..."
         rake1.9.1 db:seed SEED_MODE=minimal RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
-        echo "  postinst: updating vendors cache ..."
-        rake1.9.1 update_vendor_cache RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
       else
         echo "  postinst: $rails_etc/database.yml does not exist. Instance \"${lInstance}\" database must be configured manually."
       fi
       
       for protocol in http https; do
         echo "  postinst: creating apache2 site configuration file $protocol..."
-        apache_site_maintainer_config=/etc/apache2/sites-available/sh-${lInstance}-$protocol
+        apache_site_maintainer_config=/etc/apache2/sites-available/sr-${lInstance}-$protocol
         cp $app_root/config/apache-site-$protocol.template $apache_site_maintainer_config.maintainer
         sed -i "s/INSTANCE_ID/${lInstance}/g" $apache_site_maintainer_config.maintainer
         ucf --debconf-ok $apache_site_maintainer_config.maintainer $apache_site_maintainer_config
