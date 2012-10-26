@@ -135,14 +135,14 @@ $(function () {
                   path = b.create(@item.sku)
                 %>
                 <div style="background-color: white;">
-                  <%= link_to "/images/" + b.get_barcode(@item.sku) do %>
-                    <%= image_tag File.join('/images/',path) %>
+                  <%= link_to b.get_barcode(@item.sku) do %>
+                    <%= image_tag path %>
                   <% end %>
                 </div>
           </td>
           <td valign="middle" align="center"> 
                 <div class="new-item-field">
-                <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), "/images/" + b.get_barcode(@item.sku).gsub('.png','.eps') %> 
+                <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@item.sku).gsub('.png','.eps') %> 
                 &nbsp;&nbsp;&nbsp;
                 <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker')" %> 
       &nbsp;&nbsp;&nbsp;

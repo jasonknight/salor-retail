@@ -22,7 +22,11 @@ class Barcode
     end
   end
   def get_barcode(string)
-    "barcodes/#{string}.png"
+    if SalorRetail::Application::SR_DEBIAN_SITEID == 'none'
+      return File.join('/', 'barcodes', "#{string}.png")
+    else
+      File.join('/', 'barcodes',SalorRetail::Application::SR_DEBIAN_SITEID, "#{string}.png")
+    end
   end
   def eps_path(string)
     if SalorRetail::Application::SR_DEBIAN_SITEID == 'none'

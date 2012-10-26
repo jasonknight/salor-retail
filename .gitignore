@@ -33,6 +33,6 @@ debian/salor-retail
 debian/files
 *.debhelper
 *.substvars
-salor-hospitality/config/database.yml
-public/images/barcodes/*.png
-public/images/barcodes/*.eps
+salor-retail/config/database.yml
+salor-retail/public/barcodes/*.png
+salor-retail/public/barcodes/*.eps
