@@ -25,10 +25,18 @@ class Barcode
     "barcodes/#{string}.png"
   end
   def eps_path(string)
-      "#{::Rails.root.to_s}/public/images/barcodes/#{string}.eps"
+    if SalorRetail::Application::SR_DEBIAN_SITEID == 'none'
+      return File.join(Rails.root, 'public', 'barcodes', "#{string}.eps")
+    else
+      File.join(Rails.root, 'public','barcodes',SalorRetail::Application::SR_DEBIAN_SITEID, "#{string}.eps")
+    end
   end
   def png_path(string)
-    "#{::Rails.root.to_s}/public/images/barcodes/#{string}.png"
+    if SalorRetail::Application::SR_DEBIAN_SITEID == 'none'
+      return File.join(Rails.root, 'public', 'barcodes', "#{string}.png")
+    else
+      File.join(Rails.root, 'public','barcodes',SalorRetail::Application::SR_DEBIAN_SITEID, "#{string}.eps")
+    end
   end
   def page(&block)
     @_page ||= BarcodePage.new

@@ -34,4 +34,5 @@ debian/files
 *.debhelper
 *.substvars
 salor-hospitality/config/database.yml
-public/images/barcodes/*
+public/images/barcodes/*.png
+public/images/barcodes/*.eps
