@@ -7,7 +7,7 @@
 
 <VirtualHost *:80>
   ServerName INSTANCE_ID.sr.red-e.eu
-  SetEnv SH_DEBIAN_SITEID INSTANCE_ID
+  SetEnv SR_DEBIAN_SITEID INSTANCE_ID
   DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
   PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
   

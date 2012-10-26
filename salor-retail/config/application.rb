@@ -24,7 +24,7 @@ module SalorRetail
   class Application < Rails::Application
     
     if ENV['SR_DEBIAN_SITEID']
-      SH_DEBIAN_SITEID = ENV['SR_DEBIAN_SITEID']
+      SR_DEBIAN_SITEID = ENV['SR_DEBIAN_SITEID']
     else
       SR_DEBIAN_SITEID = 'none'
     end

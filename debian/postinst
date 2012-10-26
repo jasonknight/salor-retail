@@ -47,8 +47,8 @@ for lInstance in $gOldInstances; do
   fi
   
   rm -rf /etc/salor-retail/$lInstance
-  rm -rf /etc/apache2/sites-available/sh-$lInstance-http
-  rm -rf /etc/apache2/sites-enabled/sh-$lInstance-http
+  rm -rf /etc/apache2/sites-available/sr-$lInstance-http
+  rm -rf /etc/apache2/sites-enabled/sr-$lInstance-http
   rm -rf /usr/share/salor-retail/$lInstance
   rm -rf /var/log/salor-retail/$lInstance
   rm -rf /var/cache/salor-retail/$lInstance
@@ -181,14 +181,14 @@ for lInstance in $gInstances; do
         rm -rf $apache_site_maintainer_config.maintainer
         cd /etc/apache2/sites-enabled
         if [ $protocol = "http" ]; then
-          ln -sf ../sites-available/sh-${lInstance}-$protocol sh-${lInstance}-$protocol
+          ln -sf ../sites-available/sr-${lInstance}-$protocol sr-${lInstance}-$protocol
         fi
       done
      
       echo "  postinst: Adding salor-retail to /etc/hosts if not yet there..."
-      result=`cat /etc/hosts | grep "${lInstance}.sh.red-e.eu" | wc -l`
+      result=`cat /etc/hosts | grep "${lInstance}.sr.red-e.eu" | wc -l`
       if [ "$result" = "0" ]; then
-        echo "127.0.0.1 ${lInstance}.sh.red-e.eu" >> /etc/hosts;
+        echo "127.0.0.1 ${lInstance}.sr.red-e.eu" >> /etc/hosts;
       fi
       ;;
 
