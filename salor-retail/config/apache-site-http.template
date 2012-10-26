@@ -10,36 +10,13 @@
   SetEnv SR_DEBIAN_SITEID INSTANCE_ID
   DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
   #PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
-  
-  <Directory /usr/share/salor-retail>
-    Options FollowSymLinks
-    AllowOverride none
-  </Directory>
-
-  <Directory /usr/share/salor-retail/INSTANCE_ID/public/uploads>
-    Order deny,allow
-    Deny from all
-  </Directory>
-  
-  <Directory /usr/share/salor-retail/INSTANCE_ID/public/barcodes>
-    Order deny,allow
-    Deny from all
-  </Directory>
-
-  <Directory /usr/share/salor-retail/INSTANCE_ID/public/uploads/INSTANCE_ID>
-    Order deny,allow
-    Allow from all
-  </Directory>
-  
-  <Directory /usr/share/salor-retail/INSTANCE_ID/public/barcodes/INSTANCE_ID>
-    Order deny,allow
-    Allow from all
-  </Directory>
 
   <Location />
     Order deny,allow
     Deny from all
     Allow from 127.0.0.1 192.168 10.0
+    #Allow from all
+    
     #AUTH: AuthType Digest
     #AUTH: AuthName "SALOR"
     #AUTH: AuthDigestDomain /
@@ -48,6 +25,22 @@
     #AUTH: AuthGroupFile /etc/apache2/salor-auth-groups
     #AUTH: Require group INSTANCE_ID
     Satisfy any
+  </Location>
+  
+  <Location /uploads>
+    Deny from all
+  </Location>
+
+  <Location /barcodes>
+    Deny from all
+  </Location>
+  
+  <Location /uploads/INSTANCE_ID>
+    Allow from all
+  </Location>
+  
+  <Location /barcodes/INSTANCE_ID>
+    Allow from all
   </Location>
   
   # Passenger configuration for this VirtualHost
