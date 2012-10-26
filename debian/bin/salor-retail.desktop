@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Salor Retail Point Of Sale
+GenericName=Salor Retail Point Of Sale
+Icon=salor-retail-icon
+Exec=salor-retail
+Terminal=false
+Categories=GNOME;Office;
+Encoding=UTF-8
+Name[de]=Salor Retail

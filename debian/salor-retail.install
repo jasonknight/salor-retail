@@ -1,0 +1,21 @@
+salor-retail/app             /usr/share/salor-retail/source
+salor-retail/config          /usr/share/salor-retail/source
+salor-retail/lib             /usr/share/salor-retail/source
+salor-retail/script          /usr/share/salor-retail/source
+
+salor-retail/public/*.*      /usr/share/salor-retail/source/public
+salor-retail/public/fonts    /usr/share/salor-retail/source/public
+salor-retail/public/images   /usr/share/salor-retail/source/public
+
+salor-retail/vendor/assets   /usr/share/salor-retail/source/vendor
+
+salor-retail/Gemfile         /usr/share/salor-retail/source
+salor-retail/Rakefile        /usr/share/salor-retail/source
+salor-retail/config.ru       /usr/share/salor-retail/source
+
+salor-retail/db/migrate        /usr/share/salor-retail/source/db
+salor-retail/db/seeds.rb       /usr/share/salor-retail/source/db
+
+debian/bin/salor-retail.desktop  /usr/share/applications
+debian/bin/salor-retail          /usr/bin
+salor-retail/app/assets/images/salor-retail-icon.svg          /usr/share/icons/hicolor/scalable/apps

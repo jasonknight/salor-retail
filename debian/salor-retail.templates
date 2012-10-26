@@ -1,0 +1,23 @@
+Template: salor-retail/old-instances
+Type: string
+Description: Salor Hospitality instances to be deconfigured:
+ Configuration files for these instances will be removed.
+ .
+ Database (de)configuration will be asked accordingly.
+
+Template: salor-retail/current-instances
+Type: string
+Default: default
+Description: Salor Hospitality instances to be configured or upgraded:
+ Space-separated list of instances identifiers.
+ . 
+ Each instance has its configuration files in /etc/salor-retail/<instance-identifier>/
+ .
+ To deconfigure an instance, remove its identifier from this list.
+
+Template: salor-retail/user
+Type: select
+Choices: ${availableUsers}
+Default: www-data
+Description: User to run the Salor Retail Rails application with.
+ Salor Hospitality can write files to your Desktop and supports to share your Desktop screen in combination with the remotesupport package. For this to work, the application must run as the user you are working with normally. If you are not going to use Salor Hospitality as a desktop application, but provide it as a Software as a Service, it is recommended to leave the default, www-data.

@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Loading Chromium and default application in Kiosk mode. Please wait..."
+chromium-browser --kiosk --incognito -start-maximized http://default.sr.red-e.eu

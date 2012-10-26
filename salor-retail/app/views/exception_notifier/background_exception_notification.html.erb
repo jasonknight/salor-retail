@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Exception</title>
+  </head>
+  <body>
+    <pre style="font-size: 12px">
+<%= @exception.class.to_s =~ /^[aeiou]/i ? 'An' : 'A' %> <%= @exception.class %> occurred in background at <%= raw Time.current %> :
+
+<%= @exception.message %>
+<%= @backtrace.first %>
+<% 
+    sections = @sections.map do |section|
+      summary = render(section).strip
+      unless summary.blank?
+        title = render("title", :title => section).strip
+        "#{title}\n\n#{summary.gsub(/^/, "  ")}\n\n"
+      end
+    end.join
+    sections = sections.force_encoding('UTF-8').encode('UTF-16', :invalid => :replace).encode('UTF-8') if sections.respond_to?(:force_encoding)
+%>
+<%= raw sections %>
+    </pre>
+  </body>
+</html>

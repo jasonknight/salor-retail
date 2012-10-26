@@ -1,0 +1,51 @@
+# ---
+# Global Passenger configuration. Uncomment this only once in all of your sites.
+
+#PassengerMaxPoolSize 2
+#PassengerPoolIdleTime 15000
+# --- 
+
+<VirtualHost *:80>
+  ServerName INSTANCE_ID.sr.red-e.eu
+  SetEnv SH_DEBIAN_SITEID INSTANCE_ID
+  DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
+  PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
+  
+  <Directory /usr/share/salor-retail>
+    Options FollowSymLinks
+    AllowOverride none
+  </Directory>
+
+  <Directory /usr/share/salor-retail/INSTANCE_ID/public/uploads>
+    Order deny,allow
+    Deny from all
+  </Directory>
+
+  <Directory /usr/share/salor-retail/INSTANCE_ID/public/uploads/INSTANCE_ID>
+    Order deny,allow
+    Allow from all
+  </Directory>
+
+  <Location />
+    Order deny,allow
+    Deny from all
+    Allow from 127.0.0.1 192.168 10.0
+    #AUTH: AuthType Digest
+    #AUTH: AuthName "SALOR"
+    #AUTH: AuthDigestDomain /
+    #AUTH: AuthDigestProvider file
+    #AUTH: AuthUserFile /etc/apache2/salor-auth-users
+    #AUTH: AuthGroupFile /etc/apache2/salor-auth-groups
+    #AUTH: Require group INSTANCE_ID
+    Satisfy any
+  </Location>
+  
+  # Passenger configuration for this VirtualHost
+  PassengerMaxRequests 2000
+  RailsAutoDetect off
+  PassengerStatThrottleRate 30
+  PassengerSpawnMethod smart
+  RailsAppSpawnerIdleTime 36000
+  PassengerHighPerformance on
+  PassengerMinInstances 1
+</VirtualHost>

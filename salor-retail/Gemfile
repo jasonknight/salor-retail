@@ -1,0 +1,20 @@
+source 'http://rubygems.org'
+
+gem 'rails', '3.2.6'
+gem 'mysql2'
+gem 'serialport'
+gem 'kramdown'
+gem 'jquery-rails'
+gem 'haml'
+gem 'sass'
+gem 'sass-rails'
+gem 'coffee-rails'
+gem 'rmagick'
+gem 'uglifier'
+
+# The following have to be eliminated:
+gem 'acts_as_list'
+gem 'kaminari'
+gem 'unicode_utils'
+gem 'nokogiri'
+gem 'mechanize'

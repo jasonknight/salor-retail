@@ -1,3 +1,0 @@
-Salor Version: <%= SalorBase::VERSION %>
-
-eth0 Mac addr: <%= /(..):(..):(..):(..):(..):(..)/.match(`/sbin/ifconfig eth0`.split("\n")[0])[1..6].join %>
