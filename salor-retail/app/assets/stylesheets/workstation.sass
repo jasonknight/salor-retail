@@ -270,6 +270,9 @@ body
   background-color: $middleground
   @include no_select
 
+.salor-dialog 
+  @include dialog
+
 /* Non Specific */
 input, textarea, select
   font-family: sans-serif
@@ -2816,6 +2819,15 @@ div.edit-delete-row div.delete
   padding-right: 11px
   padding-left: 5px
   margin-left: -1px
+
+div.delete 
+  @include attention_button
+  @include rounded_corners_all
+  text-align: center
+  color: white
+  font-weight: bolder
+  padding-right: 15px
+  padding-left: 15px
 
 .jquery-checkbox
   :display inline

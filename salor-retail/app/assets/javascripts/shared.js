@@ -315,7 +315,7 @@ function deletable(elem,type,callback) {
   if (!type)
     type = 'right';
   if ($('#' + elem.attr('id') + '_delete').length == 0) {
-    var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'',elem);
+    var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
     if (!callback) {
       del_button.on('click',function () {
         $('#' + $(this).attr('target')).slideUp();

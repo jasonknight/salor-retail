@@ -31,7 +31,7 @@ function clickBuyOrderButton(id) {
         <div id="buy_order_button" class="input pos-button pos-configuration" onclick="clickBuyOrderButton($('.order-id').html())">
         <%= t("menu.buy_order")%>
         </div>
-        <div id="configuration_button" onmousedown="showHideCustomerOrRebate();" class="input pos-button pos-configuration">
+        <div id="configuration_button" onmousedown="showOrderOptions();" class="input pos-button pos-configuration">
           <%= t("menu.configuration")%>
         </div> 
         <div id="show_customers" onmousedown="$('.last-five-orders').show();" class="input pos-button">
