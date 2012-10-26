@@ -29,7 +29,7 @@ salor-retail/.bundle
 sha1-signatures.txt
 *.tar.bz2
 Gemfile.lock
-debian/salor-hospitality
+debian/salor-retail
 debian/files
 *.debhelper
 *.substvars
