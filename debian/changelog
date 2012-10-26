@@ -1,9 +1,3 @@
-salor-retail (4.0.0.0ubuntu1) precise; urgency=low
-
-  * added libxslt dependency for mechanize gem of salor retail
-
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Oct 2012 15:10:46 +0200
-
 salor-retail (4.0.0.0) unstable; urgency=low
 
   * initial
