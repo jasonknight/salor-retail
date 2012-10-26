@@ -103,6 +103,7 @@ for lInstance in $gInstances; do
       mkdir -p $rails_log
       mkdir -p $rails_cache
       mkdir -p $rails_var/public/uploads
+      mkdir -p $rails_var/public/barcodes
       
       use_dbconfig=false
       
