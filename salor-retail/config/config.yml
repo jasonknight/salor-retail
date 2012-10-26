@@ -1,3 +1,7 @@
+---
+:exception_notification: false
+:exception_notification_sender: Sender Name <user@example.com>
+:exception_notification_receipients: receipient1@example.com receipient2@example.com
 app_name: "Salor"
 technician_code: U9479880090210
 stylesheets: 'darker'
@@ -62,9 +66,6 @@ mail:
   port: 110
   user_name: None
   password: None
-tobacco_land:
-  user: "511196"
-  pass: "10400017"
   
   
   

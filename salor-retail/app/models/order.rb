@@ -638,11 +638,12 @@ class Order < ActiveRecord::Base
       :total => self.total.round(2),
       :rebate_type => self.rebate_type_display,
       :rebate => self.rebate.round(2),
-      :customer => false,
+      :customer => self.customer ? self.customer : false,
       :lc_points => self.lc_points,
       :id => self.id,
       :buy_order => self.buy_order,
-      :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag
+      :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag,
+      :tax_free => self.tax_free
     }
     if self.customer then
       attrs[:customer] = self.customer

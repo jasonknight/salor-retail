@@ -47,8 +47,8 @@ for lInstance in $gOldInstances; do
   fi
   
   rm -rf /etc/salor-retail/$lInstance
-  rm -rf /etc/apache2/sites-available/sh-$lInstance-http
-  rm -rf /etc/apache2/sites-enabled/sh-$lInstance-http
+  rm -rf /etc/apache2/sites-available/sr-$lInstance-http
+  rm -rf /etc/apache2/sites-enabled/sr-$lInstance-http
   rm -rf /usr/share/salor-retail/$lInstance
   rm -rf /var/log/salor-retail/$lInstance
   rm -rf /var/cache/salor-retail/$lInstance
@@ -69,7 +69,7 @@ case "$1" in
       echo "  postinst: All required gems are available as Debian packages. Nothing to be done."
     else
       echo "  postinst: Some of the required gems are not available as Debian packages. We have to run bundle install to download gems from rubygems.org."
-      salor-installgems h
+      salor-installgems r
     fi
   ;;
 
@@ -166,29 +166,27 @@ for lInstance in $gInstances; do
         rake1.9.1 db:migrate RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
         echo "  postinst: running db:seed ..."
         rake1.9.1 db:seed SEED_MODE=minimal RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
-        echo "  postinst: updating vendors cache ..."
-        rake1.9.1 update_vendor_cache RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
       else
         echo "  postinst: $rails_etc/database.yml does not exist. Instance \"${lInstance}\" database must be configured manually."
       fi
       
       for protocol in http https; do
         echo "  postinst: creating apache2 site configuration file $protocol..."
-        apache_site_maintainer_config=/etc/apache2/sites-available/sh-${lInstance}-$protocol
+        apache_site_maintainer_config=/etc/apache2/sites-available/sr-${lInstance}-$protocol
         cp $app_root/config/apache-site-$protocol.template $apache_site_maintainer_config.maintainer
         sed -i "s/INSTANCE_ID/${lInstance}/g" $apache_site_maintainer_config.maintainer
         ucf --debconf-ok $apache_site_maintainer_config.maintainer $apache_site_maintainer_config
         rm -rf $apache_site_maintainer_config.maintainer
         cd /etc/apache2/sites-enabled
         if [ $protocol = "http" ]; then
-          ln -sf ../sites-available/sh-${lInstance}-$protocol sh-${lInstance}-$protocol
+          ln -sf ../sites-available/sr-${lInstance}-$protocol sr-${lInstance}-$protocol
         fi
       done
      
       echo "  postinst: Adding salor-retail to /etc/hosts if not yet there..."
-      result=`cat /etc/hosts | grep "${lInstance}.sh.red-e.eu" | wc -l`
+      result=`cat /etc/hosts | grep "${lInstance}.sr.red-e.eu" | wc -l`
       if [ "$result" = "0" ]; then
-        echo "127.0.0.1 ${lInstance}.sh.red-e.eu" >> /etc/hosts;
+        echo "127.0.0.1 ${lInstance}.sr.red-e.eu" >> /etc/hosts;
       fi
       ;;
 

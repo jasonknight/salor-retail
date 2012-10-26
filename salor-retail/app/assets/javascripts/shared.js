@@ -644,15 +644,14 @@ window.shared = {
       input.blur(callbacks.blur);
       return div;
     },
-    check_option: function (name,append_to,callback,initval) {
-      if (!initval)
-        initval = false;
-      var div = shared.element('div',{id: 'option_' + name.replace(/\s/,''),class:'options-row'}, '', append_to);
-      div.append('<div class="option-name">' + name + '</div>');
+    check_option: function (options,callbacks) {
+      var div = shared.element('div',{id: 'option_' + options.name.replace(/\s/,''),class:'options-row'}, '', options.append_to);
+      div.append('<div class="option-name">' + options.title + '</div>');
       var div2 = shared.element('div',{class:'option-input'}, '', div);
-      var input = shared.element('input',{id: 'option_' + name.replace(/\s/,'') + '_input', type:'checkbox',class:'option-actual-input'},'',div2);
-      input.attr('checked',initval);
-      input.change(callback);
+      var input = shared.element('input',{id: 'option_' + options.name.replace(/\s/,'') + '_input', type:'checkbox',class:'option-actual-input'},'',div2);
+      console.log("Options",options);
+      input.attr('checked',options.value);
+      input.change(callbacks.change);
       input.checkbox();
       return div;
     },

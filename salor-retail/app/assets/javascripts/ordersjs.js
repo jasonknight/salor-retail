@@ -175,5 +175,17 @@ window.showOrderOptions = function () {
     append_to: dialog
   };
   var rebate = shared.draw.option(options,callbacks);
+  
+  callbacks = {change: function () {
+    
+    }
+  };
+  options = {
+    name: 'tax_free',
+    title: 'Tax',
+    value: Order.tax_free,
+    append_to: dialog
+  };
+  var tax_free_check = shared.draw.check_option(options,callbacks);
   dialog.show();
 }
