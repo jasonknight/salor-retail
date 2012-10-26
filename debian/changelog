@@ -1,3 +1,12 @@
+salor-retail (4.0.0.1) unstable; urgency=low
+
+  * added libxslt dependency for mechanize gem of salor retail
+  * build
+  * fragment cache re-enabled
+  * barcodes for multi instances
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Oct 2012 17:06:50 +0200
+
 salor-retail (4.0.0.0) unstable; urgency=low
 
   * initial
