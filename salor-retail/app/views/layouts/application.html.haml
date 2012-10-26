@@ -24,6 +24,7 @@
       = stylesheet_link_tag 'salortrainer'
 
     = javascript_include_tag 'application'
+    = javascript_include_tag "locales/salor.#{I18n.locale}.js"
     = salor_render :partial => "shared/application_js"
     - if mobile?
       = javascript_include_tag 'mobile'

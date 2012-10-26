@@ -689,10 +689,8 @@ ar:
     invoice: Rechnung
     invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
     report_at_time: Report %{datetime}
-    x_sum: ! '%{type} SUM:   EUR %.2f
-
-'
-    you_were_served_by: You were served by %{name}
+    x_sum: "%{type} SUM:   EUR %.2f"
+    you_were_served_by: "You were served by %{name}"
   reports:
     amount: amount
     description: description

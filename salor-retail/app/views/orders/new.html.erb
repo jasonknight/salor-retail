@@ -1,4 +1,5 @@
 <script type="text/javascript">
+Order = <%= raw @order.to_json %>;
 var filename = "new.html.erb";
 var isBuyOrder = false;
 var highlightAttrs = ['sku','price','total'];
@@ -37,7 +38,8 @@ setInterval(function () {
       !$('#inplaceedit-div').is(":visible") && 
       !$('#search').is(":visible") &&
       !$('.void-order').is(":visible") &&
-      !$('.ui-keyboard').is(":visible")) {
+      !$('.ui-keyboard').is(":visible") && 
+      !$('.salor-dialog').is(":visible")) {
     focusInput($("#keyboard_input"));
   } 
 },2000);

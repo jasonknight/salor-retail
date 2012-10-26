@@ -600,7 +600,6 @@ window.shared = {
     dialog: function (title,id,clear) {
       var dialog = shared.element('div',{id: id,class: 'salor-dialog'},'',$('body'));
       dialog.css({width: retail.container.width() * 0.50, height: retail.container.height() * 0.30,'z-index':11});
-      
       if (_get('existed',dialog)) {
         dialog.html('');
         _set('existed',false,dialog);
@@ -629,27 +628,30 @@ window.shared = {
       _set('retail.loader_shown',false);
       _set('retail.show_loading',false);
     },
-    option: function (name,append_to,callback,initval,type) {
-      if (!initval)
-        initval = '';
-      var div = shared.element('div',{id: 'option_' + name,class:'options-row'}, '', append_to);
-      div.append('<div class="option-name">' + name + '</div>');
+    option: function (options,callbacks) {
+      if (!options.value)
+        options.value = '';
+        
+      var div = shared.element('div',{id: 'option_' + options.name,class:'options-row'}, '', options.append_to);
+      div.append('<div class="option-name">' + options.title + '</div>');
       var div2 = shared.element('div',{class:'option-input'}, '', div);
-      var input = shared.element('input',{id: 'option_' + name + '_input', type:'text',class:'option-actual-input'},'',div2);
-      input.val(initval);
-      input.on('keyup',callback);
-      input.focus(shared.callbacks.on_focus);
+      var input = shared.element('input',{id: 'option_' + options.name + '_input', type:'text',class:'option-actual-input'},'',div2);
+      var div3 = shared.element('div',{class:'option-button'}, 'OK', div);
+      div3.on("click",callbacks.click);
+      input.val(options.value);
+      input.on('keyup',callbacks.keyup);
+      input.focus(callbacks.focus);
+      input.blur(callbacks.blur);
       return div;
     },
-    check_option: function (name,append_to,callback,initval) {
-      if (!initval)
-        initval = false;
-      var div = shared.element('div',{id: 'option_' + name.replace(/\s/,''),class:'options-row'}, '', append_to);
-      div.append('<div class="option-name">' + name + '</div>');
+    check_option: function (options,callbacks) {
+      var div = shared.element('div',{id: 'option_' + options.name.replace(/\s/,''),class:'options-row'}, '', options.append_to);
+      div.append('<div class="option-name">' + options.title + '</div>');
       var div2 = shared.element('div',{class:'option-input'}, '', div);
-      var input = shared.element('input',{id: 'option_' + name.replace(/\s/,'') + '_input', type:'checkbox',class:'option-actual-input'},'',div2);
-      input.attr('checked',initval);
-      input.change(callback);
+      var input = shared.element('input',{id: 'option_' + options.name.replace(/\s/,'') + '_input', type:'checkbox',class:'option-actual-input'},'',div2);
+      console.log("Options",options);
+      input.attr('checked',options.value);
+      input.change(callbacks.change);
       input.checkbox();
       return div;
     },
