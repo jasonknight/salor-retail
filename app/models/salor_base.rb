@@ -120,7 +120,7 @@ module SalorBase
     #SalorBase.log_action(self.class.to_s,txt)
   end
   def self.log_action(from="unk",txt)
-    #File.open("#{::Rails.root.to_s}/log/#{Rails.env}-history.log","a") do |f|
+    #File.open("#{::Rails.root.to_s}/log/#{Rails.env}}-history.log","a") do |f|
     #  f.write "[#{Time.now}] [FROM: #{from}] " + txt + "\n"
     #end
   end
