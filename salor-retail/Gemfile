@@ -11,7 +11,7 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'rmagick'
 gem 'uglifier'
-
+gem 'therubyracer'
 # The following have to be eliminated:
 gem 'acts_as_list'
 gem 'kaminari'

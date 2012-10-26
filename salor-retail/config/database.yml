@@ -2,9 +2,9 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: sr_development
+  database: salor_development
   username: root
-  password: root
+  password: us3rabc123
   pool: 5
   host: localhost
 
@@ -12,9 +12,9 @@ test:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: sr_test
+  database: salor_test
   username: root
-  password: root
+  password: us3rabc123
   pool: 5
   host: localhost
 
@@ -22,8 +22,8 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: sr_production
+  database: salor_production
   username: root
-  password: root
+  password: us3rabc123
   pool: 5
   host: localhost

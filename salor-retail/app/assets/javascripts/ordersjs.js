@@ -155,6 +155,25 @@ function updateCustomerView(item,order_id) {
 }
 window.retail = {container: $(window)};
 window.showOrderOptions = function () {
-  var dialog = shared.draw.dialog("Order Options","order_options");
+  var dialog = shared.draw.dialog(i18n.menu.configuration,"order_options");
+  var callbacks = {
+    click: function () {
+      var id = '#option_order_rebate_input';
+      console.log("Input is:",id,$(id));
+      var value = $(id).val();
+      var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=rebate&value=' + value;
+      get(string, 'showOrderOptions', function () {
+        update_order_items();
+        update_pos_display();
+      });
+    }
+  };
+  var options = {
+    name: 'order_rebate',
+    title: i18n.activerecord.attributes.rebate,
+    value: Order.rebate,
+    append_to: dialog
+  };
+  var rebate = shared.draw.option(options,callbacks);
   dialog.show();
 }
