@@ -39,7 +39,7 @@ class Barcode
     if SalorRetail::Application::SR_DEBIAN_SITEID == 'none'
       return File.join(Rails.root, 'public', 'barcodes', "#{string}.png")
     else
-      File.join(Rails.root, 'public','barcodes',SalorRetail::Application::SR_DEBIAN_SITEID, "#{string}.eps")
+      File.join(Rails.root, 'public','barcodes',SalorRetail::Application::SR_DEBIAN_SITEID, "#{string}.png")
     end
   end
   def page(&block)

@@ -9,7 +9,7 @@
   ServerName INSTANCE_ID.sr.red-e.eu
   SetEnv SR_DEBIAN_SITEID INSTANCE_ID
   DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
-  PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
+  #PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
   
   <Directory /usr/share/salor-retail>
     Options FollowSymLinks
@@ -20,8 +20,18 @@
     Order deny,allow
     Deny from all
   </Directory>
+  
+  <Directory /usr/share/salor-retail/INSTANCE_ID/public/barcodes>
+    Order deny,allow
+    Deny from all
+  </Directory>
 
   <Directory /usr/share/salor-retail/INSTANCE_ID/public/uploads/INSTANCE_ID>
+    Order deny,allow
+    Allow from all
+  </Directory>
+  
+  <Directory /usr/share/salor-retail/INSTANCE_ID/public/barcodes/INSTANCE_ID>
     Order deny,allow
     Allow from all
   </Directory>
@@ -47,5 +57,5 @@
   PassengerSpawnMethod smart
   RailsAppSpawnerIdleTime 36000
   PassengerHighPerformance on
-  PassengerMinInstances 1
+  #PassengerMinInstances 1
 </VirtualHost>
