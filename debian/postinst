@@ -1,0 +1,228 @@
+#!/bin/bash
+# postinst script for salor-retail
+#
+# see: dh_installdeb(1)
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+. /usr/share/debconf/confmodule
+
+app_root=/usr/share/salor-retail/source
+
+echo ""
+echo "POSTINST called with $@"
+echo "===================================="
+
+echo "  Remove and purge old-instances"
+# the following code to clear old instances must be here in postinst because of the following reasons:
+#   1) dpkg-reconfigure DOES call prerm but does NOT call postrm, therefore the code cannot go into postrm.
+#   2) prerm is called BEFORE the config script. Since old-instances is set up only in the config script, the code cannot be in prerm.
+#   3) Therefore, the only place is here in postrm.
+
+db_get salor-retail/old-instances || true
+gOldInstances="${RET}"
+for lInstance in $gOldInstances; do
+  echo "    Instance $lInstance"
+  db_get salor-retail/instances/$lInstance/dbconfig-install || true
+  if [ "$RET" = "true" ]; then
+    ( . /usr/share/dbconfig-common/dpkg/prerm ; dbc_go salor-retail/instances/$lInstance remove )
+    ( . /usr/share/dbconfig-common/dpkg/postrm ; dbc_go salor-retail/instances/$lInstance purge )
+  fi
+  
+  if which ucf >/dev/null 2>&1; then
+    ucf --purge /etc/salor-retail/$lInstance/database.yml
+    ucf --purge /etc/salor-retail/$lInstance/config.yml
+  fi
+  
+  rm -rf /etc/salor-retail/$lInstance
+  rm -rf /etc/apache2/sites-available/sh-$lInstance-http
+  rm -rf /etc/apache2/sites-enabled/sh-$lInstance-http
+  rm -rf /usr/share/salor-retail/$lInstance
+  rm -rf /var/log/salor-retail/$lInstance
+  rm -rf /var/cache/salor-retail/$lInstance
+  rm -rf /var/lib/salor-retail/$lInstance
+done
+db_set salor-retail/old-instances ""
+
+case "$1" in
+  configure)
+    echo "  postinst: Adding pcspkr to /etc/modules if not yet there..."
+    result=`cat /etc/modules | grep 'pcspkr' | wc -l`
+    if [ "$result" = "0" ]; then
+      echo "pcspkr" >> /etc/modules;
+    fi
+    
+    hasPack=$(dpkg -l | grep salor-virtual | wc -l)
+    if [ "$hasPack" = "0" ]; then
+      echo "  postinst: All required gems are available as Debian packages. Nothing to be done."
+    else
+      echo "  postinst: Some of the required gems are not available as Debian packages. We have to run bundle install to download gems from rubygems.org."
+      salor-installgems h
+    fi
+  ;;
+
+  abort-upgrade|abort-remove|abort-deconfigure)
+  ;;
+
+  *)
+      echo "postinst called with unknown argument \`$1'" >&2
+      exit 1
+  ;;
+esac
+
+
+db_get salor-retail/current-instances || true
+gInstances="${RET}"
+for lInstance in $gInstances; do
+  case "$1" in
+    configure)
+    
+      echo ""
+      echo "               $lInstance"
+      echo "  -----------------------------------"
+      
+      rails_etc=/etc/salor-retail/$lInstance
+      rails_log=/var/log/salor-retail/$lInstance
+      rails_cache=/var/cache/salor-retail/$lInstance
+      rails_var=/var/lib/salor-retail/$lInstance
+      
+      echo "  postinst: creating directories"
+      mkdir -p $rails_etc
+      mkdir -p $rails_log
+      mkdir -p $rails_cache
+      mkdir -p $rails_var/public/uploads
+      
+      use_dbconfig=false
+      
+      db_get salor-retail/instances/$lInstance/dbconfig-install || true
+      if [ "$RET" = "true" ]; then
+        echo "  postinst: dbconfig-install is $RET. Setting use_dbconfig to TRUE"
+        use_dbconfig=true
+        db_get salor-retail/instances/$lInstance/dbconfig-reinstall || true
+        if [ "$RET" = "false" ]; then
+          echo "  postinst: dbconfig-reinstall is $RET"
+          db_fget salor-retail/instances/$lInstance/dbconfig-reinstall seen || true
+          if [ "$RET" = "true" ]; then
+            echo "  postinst: dbconfig-reinstall seen is $RET. Setting use_dbconfig to FALSE."
+            use_dbconfig=false
+          fi
+        fi
+      fi
+      
+      if [ ! -f /etc/salor-retail/$lInstance/database.yml.lock ]; then
+        database_config_yml_template="$app_root/config/database.yml.template"
+        database_config_yml=$rails_etc/database.yml.new
+        if [ $use_dbconfig = true ]; then
+          echo "  postinst: generating database.yml configuration file"
+          dbc_generate_include=template:$database_config_yml
+          dbc_generate_include_args="-o template_infile=$database_config_yml_template"
+          ucf --purge $database_config_yml
+          ( . /usr/share/dbconfig-common/dpkg/postinst ; dbc_go salor-retail/instances/$lInstance $@ ) # dbc_go is automatically registering database.yml.new as config file. however, since this is only our temporary file, we have to purge it. The real, permanent file is called database.yml
+          ucf --purge $database_config_yml
+          ucf --debconf-ok $database_config_yml /etc/salor-retail/$lInstance/database.yml
+          chmod 660 /etc/salor-retail/$lInstance/database.yml
+          rm -rf $database_config_yml
+        fi
+      fi
+
+      echo "  postinst: creating symlinks"
+      ln -sfn $app_root /usr/share/salor-retail/${lInstance}
+      ln -sfn $rails_var/public/uploads $app_root/public/uploads/${lInstance}
+ 
+      if [ $use_dbconfig = true ]; then
+        # this file prevents dbconfig-common to ask for reconfiguration of the instance during dpkg-reconfigure. see config script.
+        touch $rails_etc/database.yml.lock
+      fi
+      
+      echo "  postinst: Deleting the asset cache"
+      rm -rf $app_root/tmp/cache/assets
+      
+      if [ -e $app_root/db/schema.rb ]; then
+        echo "  postinst: Copying schema.rb to instance directory."
+        cp $app_root/db/schema.rb $rails_var
+      fi
+      if [ -e $app_root/config/config.yml ]; then
+        echo "  postinst: Copying config.yml to etc directory and registering as config file."
+        ucf --debconf-ok $app_root/config/config.yml $rails_etc/config.yml
+        chmod 660 $rails_etc/config.yml
+      fi
+      
+      if [ -e $rails_etc/database.yml ]; then
+        echo "  postinst: this instance has a configured database."
+        cd $app_root        
+        echo "  postinst: migrating the database. this may take a while."
+        rake1.9.1 db:migrate RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
+        echo "  postinst: running db:seed ..."
+        rake1.9.1 db:seed SEED_MODE=minimal RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
+        echo "  postinst: updating vendors cache ..."
+        rake1.9.1 update_vendor_cache RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
+      else
+        echo "  postinst: $rails_etc/database.yml does not exist. Instance \"${lInstance}\" database must be configured manually."
+      fi
+      
+      for protocol in http https; do
+        echo "  postinst: creating apache2 site configuration file $protocol..."
+        apache_site_maintainer_config=/etc/apache2/sites-available/sh-${lInstance}-$protocol
+        cp $app_root/config/apache-site-$protocol.template $apache_site_maintainer_config.maintainer
+        sed -i "s/INSTANCE_ID/${lInstance}/g" $apache_site_maintainer_config.maintainer
+        ucf --debconf-ok $apache_site_maintainer_config.maintainer $apache_site_maintainer_config
+        rm -rf $apache_site_maintainer_config.maintainer
+        cd /etc/apache2/sites-enabled
+        if [ $protocol = "http" ]; then
+          ln -sf ../sites-available/sh-${lInstance}-$protocol sh-${lInstance}-$protocol
+        fi
+      done
+     
+      echo "  postinst: Adding salor-retail to /etc/hosts if not yet there..."
+      result=`cat /etc/hosts | grep "${lInstance}.sh.red-e.eu" | wc -l`
+      if [ "$result" = "0" ]; then
+        echo "127.0.0.1 ${lInstance}.sh.red-e.eu" >> /etc/hosts;
+      fi
+      ;;
+
+      abort-upgrade|abort-remove|abort-deconfigure)
+      ;;
+
+      *)
+          echo "postinst called with unknown argument \`$1'" >&2
+          exit 1
+      ;;
+  esac
+done    
+    
+    
+db_get salor-retail/user || true
+app_user=$RET
+echo "  postinst: changing ownership for user $app_user"
+chown -R $app_user:$app_user $app_root
+chown -R $app_user:$app_user /etc/salor-retail
+chown -R $app_user:$app_user /var/log/salor-retail
+chown -R $app_user:$app_user /var/cache/salor-retail
+chown -R $app_user:$app_user /var/lib/salor-retail
+
+echo "  postinst: changing permissions for user $app_user"
+chmod 770 /etc/salor-retail
+  
+echo "  postinst: restarting Apache ..."
+service apache2 restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
+echo "  postinst: restarting udev ..."
+service udev restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
+      
+# dh_installdeb will replace this special comment with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

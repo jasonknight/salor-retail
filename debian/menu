@@ -1,0 +1,2 @@
+?package(salor-hospitality):needs="X11" section="Applications/Office"\
+  title="SalorRetail" command="/usr/bin/salor-retail"

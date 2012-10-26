@@ -1,0 +1,17 @@
+Source: salor-retail
+Section: ruby
+Priority: extra
+Maintainer: Michael Franzl <office@michaelfranzl.com>
+Build-Depends: debhelper (>= 8.0.0), po-debconf
+Standards-Version: 3.9.3
+Homepage: http://red-e.eu/app/salor-retail/
+#Vcs-Git: git@github.com:jasonknight/salor-retail.git
+#Vcs-Browser: https://github.com/jasonknight/salor-retail
+
+Package: salor-retail
+Architecture: all
+Pre-Depends: dbconfig-common
+Depends: ${misc:Depends}, debconf, apache2, libapache2-mod-passenger, mysql-server, beep, barcode, chromium-browser, udev, ruby | ruby-interpreter, libruby1.9.1, ruby1.9.1-dev, rails3, ruby-haml, ruby-kramdown, ruby-json, ruby-serialport, ruby-rmagick, ruby-mysql2
+Suggests: vim, apt-show-versions, remotesupport, salor-bin, exim4, isc-dhcp-server, expect, ssh, x11vnc, bind9
+Description: Innovative Point of Sale Solution serving the Retail Industry
+ More description here.
