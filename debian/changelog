@@ -1,3 +1,9 @@
+salor-retail (4.0.0.4) unstable; urgency=low
+
+  * restricted barcodes from other instances
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Oct 2012 20:29:19 +0200
+
 salor-retail (4.0.0.3) unstable; urgency=low
 
   * barcode permissions
