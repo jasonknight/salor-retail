@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121025152622) do
+ActiveRecord::Schema.define(:version => 20121026110919) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -523,6 +523,7 @@ ActiveRecord::Schema.define(:version => 20121025152622) do
     t.integer  "hidden",                :default => 0
     t.float    "rebate_amount",         :default => 0.0
     t.integer  "vendor_id"
+    t.boolean  "tax_free",              :default => false
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -579,6 +580,7 @@ ActiveRecord::Schema.define(:version => 20121025152622) do
     t.float    "front_end_change",       :default => 0.0
     t.string   "sku"
     t.integer  "drawer_id"
+    t.boolean  "tax_free",               :default => false
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"

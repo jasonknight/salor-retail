@@ -153,3 +153,8 @@ function updateCustomerView(item,order_id) {
     }
   }
 }
+window.retail = {container: $(window)};
+window.showOrderOptions = function () {
+  var dialog = shared.draw.dialog("Order Options","order_options");
+  dialog.show();
+}
