@@ -23,7 +23,7 @@
     #AUTH: AuthDigestProvider file
     #AUTH: AuthUserFile /etc/apache2/salor-auth-users
     #AUTH: AuthGroupFile /etc/apache2/salor-auth-groups
-    #AUTH: Require group INSTANCE_ID
+    #AUTH: Require group srINSTANCE_ID
     Satisfy any
   </Location>
   
