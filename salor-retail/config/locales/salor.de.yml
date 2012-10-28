@@ -1,5 +1,6 @@
 ---
 de:
+  are_you_sure: Sind Sie sicher?
   time:
     formats:
       salor: "%a, %b %d %H:%M"

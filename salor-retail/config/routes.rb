@@ -158,6 +158,9 @@ SalorRetail::Application.routes.draw do
   resources :categories
   resources :vendors
   resources :nodes
+  resources :countries
+  resources :invoice_notes
+  resources :sale_types
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.

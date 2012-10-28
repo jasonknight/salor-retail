@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121026110919) do
+ActiveRecord::Schema.define(:version => 20121027182911) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -122,6 +122,15 @@ ActiveRecord::Schema.define(:version => 20121026110919) do
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
+
+  create_table "countries", :force => true do |t|
+    t.string   "name"
+    t.integer  "vendor_id"
+    t.integer  "user_id"
+    t.boolean  "hidden"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "cues", :force => true do |t|
     t.boolean  "is_handled",      :default => false
@@ -296,6 +305,20 @@ ActiveRecord::Schema.define(:version => 20121026110919) do
     t.text     "params"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "invoice_notes", :force => true do |t|
+    t.string   "name"
+    t.text     "note_header"
+    t.text     "note_footer"
+    t.integer  "origin_country_id"
+    t.integer  "destination_country_id"
+    t.integer  "vendor_id"
+    t.integer  "user_id"
+    t.boolean  "hidden"
+    t.integer  "sale_type_id"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   create_table "item_types", :force => true do |t|
@@ -628,6 +651,15 @@ ActiveRecord::Schema.define(:version => 20121026110919) do
 
   create_table "roles", :force => true do |t|
     t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "sale_types", :force => true do |t|
+    t.string   "name"
+    t.integer  "vendor_id"
+    t.integer  "user_id"
+    t.boolean  "hidden"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

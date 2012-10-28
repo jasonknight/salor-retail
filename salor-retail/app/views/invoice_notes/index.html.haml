@@ -1,0 +1,9 @@
+%h2= t('activerecord.models.invoice_note.other')
+
+= link_to (t :new), new_invoice_note_path, :class => 'links'
+
+%table
+  - @invoice_notes.each do |i|
+    %tr
+      %td= link_to i.name, edit_invoice_note_path(i)
+      %td= link_to image_tag('button_small_delete.png', :title => InvoiceNote.human_attribute_name(:hidden), :alt => InvoiceNote.human_attribute_name(:hidden)), invoice_note_path(i), :method => :delete, :confirm => t(:are_you_sure)

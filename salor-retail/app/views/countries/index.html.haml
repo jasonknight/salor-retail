@@ -1,0 +1,9 @@
+%h2= t('activerecord.models.country.other')
+
+= link_to (t :new), new_country_path, :class => 'links'
+
+%table
+  - @countries.each do |c|
+    %tr
+      %td= link_to c.name, edit_country_path(c)
+      %td= link_to image_tag('button_small_delete.png', :title => Country.human_attribute_name(:hidden), :alt => Country.human_attribute_name(:hidden)), country_path(c), :method => :delete, :confirm => t(:are_you_sure)

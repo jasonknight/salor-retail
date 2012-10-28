@@ -176,6 +176,36 @@
           </div>
         </div>
         <% end %>
+        <% if salor_user.can(:show_countries) %>
+        <div class="widget master" onmousedown="window.location = '<%= countries_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= countries_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:payment,64) %>" /><br />
+              <%= t("menu.countries") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:show_sale_types) %>
+        <div class="widget master" onmousedown="window.location = '<%= sale_types_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= sale_types_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:payment,64) %>" /><br />
+              <%= t("menu.sale_types") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
+        <% if salor_user.can(:show_invoice_notes) %>
+        <div class="widget master" onmousedown="window.location = '<%= invoice_notes_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= invoice_notes_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:payment,64) %>" /><br />
+              <%= t("menu.invoice_notes") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
         <% if salor_user.can(:show_buttons) %>
         <div class="widget master" onmousedown="window.location = '<%= buttons_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
