@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121027182911) do
+ActiveRecord::Schema.define(:version => 20121028185721) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -604,6 +604,9 @@ ActiveRecord::Schema.define(:version => 20121027182911) do
     t.string   "sku"
     t.integer  "drawer_id"
     t.boolean  "tax_free",               :default => false
+    t.integer  "origin_country_id"
+    t.integer  "destination_country_id"
+    t.integer  "sale_type_id"
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"
