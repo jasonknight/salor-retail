@@ -156,6 +156,38 @@ function updateCustomerView(item,order_id) {
 window.retail = {container: $(window)};
 window.showOrderOptions = function () {
   var dialog = shared.draw.dialog(i18n.menu.configuration,"order_options");
+  
+  // Customer code
+  var e = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
+  obj = Order.customer;
+  lc = Order.loyalty_card;
+  var name = $('<div><span class="customer_name"></span></div>');
+  name.html(obj.first_name + ' ' + obj.last_name);
+  var row = $('<div></div>');
+  row.append(name);
+  row.append('<span class="">'+i18n.activerecord.attributes.points+'</span>');
+  if (!lc.points > 0) {
+    lc.points = 0;
+  }
+  var col = $('<span id="pos-loyalty-card-points" class="loyalty-points">'+lc.points+'</span>');
+  col.attr('model_id',lc.id);
+  col.attr('klass','LoyaltyCard');
+  col.attr('field','points');
+  col.addClass('editme');
+  make_in_place_edit(col);
+  row.append(col);
+  row.append('<span class="">'+i18n.activerecord.attributes.lc_points+'</span>');
+  var col = $('<span id="pos-order-points" class="order-points">' + Order.lc_points + '</span>');
+  col.attr('model_id',$('.order-id').html());
+  col.attr('klass','Order');
+  col.attr('field','lc_points');
+  col.addClass('editme');
+  make_in_place_edit(col);
+  row.append(col);
+  e.append(row);
+  // End customer code
+  
+  
   var callbacks = {
     click: function () {
       var id = '#option_order_rebate_input';
@@ -177,7 +209,7 @@ window.showOrderOptions = function () {
   var rebate = shared.draw.option(options,callbacks);
   
   callbacks = {change: function () {
-    
+      get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
     }
   };
   options = {
@@ -187,5 +219,8 @@ window.showOrderOptions = function () {
     append_to: dialog
   };
   var tax_free_check = shared.draw.check_option(options,callbacks);
+  
+  
+  shared.helpers.expand(dialog,0.50,'vertical');
   dialog.show();
 }

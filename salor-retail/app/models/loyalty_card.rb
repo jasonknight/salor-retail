@@ -34,4 +34,13 @@ class LoyaltyCard < ActiveRecord::Base
     end
     return csku
   end
+  def json_attrs
+    return {
+      :sku => self.sku,
+      :points => self.points,
+      :customer_id => self.customer_id,
+      :num_swipes => self.num_swipes,
+      :id => self.id
+    }
+  end
 end

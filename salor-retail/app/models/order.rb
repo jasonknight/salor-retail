@@ -154,6 +154,10 @@ class Order < ActiveRecord::Base
     end
   end
   #
+  def toggle_tax_free(x)
+    self.update_attribute(:tax_free, !self.tax_free)
+  end
+  #
   def get_owner
     return self.employee if self.employee
     return self.user if self.user  
@@ -638,7 +642,6 @@ class Order < ActiveRecord::Base
       :total => self.total.round(2),
       :rebate_type => self.rebate_type_display,
       :rebate => self.rebate.round(2),
-      :customer => self.customer ? self.customer : false,
       :lc_points => self.lc_points,
       :id => self.id,
       :buy_order => self.buy_order,
@@ -646,8 +649,8 @@ class Order < ActiveRecord::Base
       :tax_free => self.tax_free
     }
     if self.customer then
-      attrs[:customer] = self.customer
-      attrs[:loyalty_card] = self.customer.loyalty_card
+      attrs[:customer] = self.customer.json_attrs
+      attrs[:loyalty_card] = self.customer.loyalty_card.json_attrs
     end
     attrs.to_json
   end

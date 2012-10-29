@@ -605,7 +605,7 @@ window.shared = {
         _set('existed',false,dialog);
       }
       var pad_div = create_dom_element('h2',{class: 'header'},title,dialog);
-      dialog.append('<br /><hr />');
+      dialog.append('<hr />');
       deletable(dialog,function () { $(this).parent().remove()});
       shared.helpers.center(dialog, $(window));
       return dialog;

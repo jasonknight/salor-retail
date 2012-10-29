@@ -31,10 +31,23 @@ class Customer < ActiveRecord::Base
   end
   def to_json
     a = {
-      :name => self.full_name,
+      :first_name => self.first_name,
+      :last_name => self.last_name,
+      :company_name => self.company_name,
       :sku => self.loyalty_card.sku,
       :points => self.loyalty_card.points
     }.to_json
+  end
+  def json_attrs
+    a = {
+      :name => self.full_name,
+      :first_name => self.first_name,
+      :last_name => self.last_name,
+      :company_name => self.company_name,
+      :sku => self.loyalty_card.sku,
+      :points => self.loyalty_card.points,
+      :id => self.id
+    }
   end
   def loyalty_card_sku=(sku)
     if not self.loyalty_card then
