@@ -11,34 +11,35 @@ class OrdersController < ApplicationController
    before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt, :print_confirmed]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt, :print_confirmed]
    before_filter :crumble, :except => [:customer_display,:print, :print_receipt, :print_confirmed]
-   def offline
    
+   # TODO: Remove method offline since empty.
+   def offline
    end
-   def new_pos
-      if not salor_user.meta.vendor_id then
-        redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
-      end
-      if not salor_user.meta.cash_register_id then
-        redirect_to :controller => 'cash_registers', :notice => I18n.t("system.errors.must_choose_register") and return
-      end
-      #if salor_user.get_drawer.amount <= 0 then
-      #  GlobalErrors.append("system.errors.must_cash_drop")
-      #end
-      @order = initialize_order
 
-      add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
-      add_breadcrumb t("menu.order") + "#" + @order.id.to_s,'new_order_path(:vendor_id => salor_user.meta.vendor_id)'
-      respond_to do |format|
-        format.html {render :layout => "application"}
-        format.xml  { render :xml => @order }
-      end
-   end
-  # GET /orders
-  # GET /orders.xml
+  # TODO: Remove method new_pos since apparanlty no longer used.
+#    def new_pos
+#       if not salor_user.meta.vendor_id then
+#         redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
+#       end
+#       if not salor_user.meta.cash_register_id then
+#         redirect_to :controller => 'cash_registers', :notice => I18n.t("system.errors.must_choose_register") and return
+#       end
+#       #if salor_user.get_drawer.amount <= 0 then
+#       #  GlobalErrors.append("system.errors.must_cash_drop")
+#       #end
+#       @order = initialize_order
+# 
+#       add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
+#       add_breadcrumb t("menu.order") + "#" + @order.id.to_s,'new_order_path(:vendor_id => salor_user.meta.vendor_id)'
+#       respond_to do |format|
+#         format.html {render :layout => "application"}
+#         format.xml  { render :xml => @order }
+#       end
+#    end
+
+   
+   
   def index
-    if not check_license() then
-      redirect_to :controller => "home", :action => "index" and return
-    end
     @orders = salor_user.get_orders
 
     respond_to do |format|
@@ -513,14 +514,15 @@ class OrdersController < ApplicationController
     @taxes = TaxProfile.scopied.where( :hidden => 0)
   end
 
-  #
   def print
-    #FIXME Needs to be setup to work with SaaS version
-    @order = Order.find_by_id(params[:id])
+    @order = Order.scopied.find_by_id(params[:id])
     GlobalData.salor_user = @order.user if @order.user
     GlobalData.salor_user = @order.employee if @order.employee
     @vendor = @order.vendor
     @report = @order.get_report
+    view = SalorRetail::Application::CONFIGURATION[:invoice_style]
+    view ||= 'print'
+    render view
   end
 
   #
