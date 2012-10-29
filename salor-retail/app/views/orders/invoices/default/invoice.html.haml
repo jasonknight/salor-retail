@@ -1,0 +1,69 @@
+= stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'invoice_default_print', :media => 'print'
+
+= raw content_box_top(t("views.orders"))
+
+.tools
+  .print_report_button{ :onmousedown => 'Salor.printPage();' }= salor_icon(:print, {}, 32)
+
+.paper-invoice.invoice_print
+  = render 'orders/invoices/default/invoice_header_page_one'
+  
+  - item_count = @report[:list_of_items_raw].size
+  
+  - item_pagination_count_one = 5
+  - item_pagination_count_one = item_count if item_count < item_pagination_count_one
+  = render :partial => 'orders/invoices/default/order_item_list', :locals => { :item_start => 0, :item_end => item_pagination_count_one }
+  
+  
+  - item_pagination_count_other = 10
+  - item_count -= item_pagination_count_one
+  - ((item_count / item_pagination_count_other)+1).times do |i|
+    - item_start = i * item_pagination_count_other
+    - item_end = item_start + item_pagination_count_other
+    - item_end = item_count if item_end > item_count
+    
+    = render('orders/invoices/default/invoice_header_page_other')
+    = render :partial => 'orders/invoices/default/order_item_list', :locals => { :item_start => item_start, :item_end => item_end }
+
+  %table.striped-table2.has-total
+    %tr
+      %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal')
+      %td.total= number_to_currency @report[:subsubtotal]
+
+  %br
+  %br
+
+  - if @report[:refund_subtotal].zero?
+    %table.striped-table2.small
+      - @report[:paymentmethods].to_a.each do |pm|
+        %tr
+          %td= pm[0]
+          %td.total= number_to_currency pm[1]
+      %tr
+        %td= t('printr.order_receipt.change')
+        %td.total= number_to_currency @report[:change_given]
+
+  - else
+    %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
+
+  %br
+  %br
+
+  %table.striped-table2.small
+    %tr
+      %th
+      %th
+      %th.right= t('printr.order_receipt.net')
+      %th.right= t('printr.order_receipt.tax')
+      %th.right= t('printr.order_receipt.gross')
+    - @report[:list_of_taxes_raw].each do |tax|
+      - tax = format_tax(tax)
+      %tr
+        - tax.each do |k,v|
+          %td.total= v
+
+  %div.invoice_blurb_footer= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb_footer).to_html
+  
+  .center
+    %img.salorlogo{ :src => '/images/salor-logo-reports.png'}

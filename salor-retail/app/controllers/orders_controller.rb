@@ -521,8 +521,8 @@ class OrdersController < ApplicationController
     @vendor = @order.vendor
     @report = @order.get_report
     view = SalorRetail::Application::CONFIGURATION[:invoice_style]
-    view ||= 'print'
-    render view
+    view ||= 'default'
+    render "orders/invoices/#{view}/invoice"
   end
 
   #
