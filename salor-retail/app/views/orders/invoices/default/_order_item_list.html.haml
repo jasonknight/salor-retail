@@ -1,0 +1,57 @@
+%table.striped-table2
+  %tr
+    - @report[:list_of_items_raw].first.keys.each do |k|
+      - next if k == :type
+      %th= t("activerecord.attributes.#{ k }")
+  - @report[:list_of_items_raw][item_start..item_end].each do |item|
+    - item = format_item(item)
+    %tr
+      - item.each do |k,v|
+        - next if k == :type
+        %td{ :class => k }= v
+    - unless @report[:lc_points_discount].zero?
+      %tr
+        %td{ :colspan => 3 }= t('printr.order_receipt.lc_points_substracted')
+        %td.quantity= Integer(@report[:lc_points])
+        %td.total= number_to_currency @report[:lc_points_discount]
+
+    - if not @report[:discount_subtotal].zero?
+      %tr.total
+        %td{ :colspan => 4 }= t('printr.order_receipt.subtotal1')
+        %td.total= number_to_currency @report[:subtotal1]
+      %tr
+        %td{ :colspan => 4 }= t('printr.order_receipt.discount_subtotal')
+        %td.total= number_to_currency @report[:discount_subtotal]
+
+    - if not @report[:rebate_subtotal].zero?
+      %tr.total
+        %td{ :colspan => 4 }= t('printr.order_receipt.subtotal2')
+        %td.total= number_to_currency @report[:subtotal2]
+      %tr
+        %td{ :colspan => 4 }= t('printr.order_receipt.rebate_subtotal')
+        %td.total= number_to_currency @report[:rebate_subtotal]
+
+    - if not @report[:coupon_subtotal].zero?
+      %tr.total
+        %td{ :colspan => 4 }= t('printr.order_receipt.subtotal3')
+        %td.total= number_to_currency @report[:subtotal3]
+      %tr
+        %td{ :colspan => 4 }= t('printr.order_receipt.coupon_subtotal')
+        %td.total= number_to_currency @report[:coupon_subtotal]
+
+    - if @report[:percent_rebate_amount]
+      %tr.total
+        %td{ :colspan => 4 }= t('printr.order_receipt.subtotal4')
+        %td.total= number_to_currency @report[:subtotal4]
+      %tr
+        %td{ :colspan => 3 }= t('printr.order_receipt.rebate_percent')
+        %td.right= number_to_percentage @report[:percent_rebate]
+        %td.total= number_to_currency @report[:percent_rebate_amount]
+
+    - elsif @report[:fixed_rebate_amount]
+      %tr.total
+        %td{ :colspan => 4 }= t('printr.order_receipt.subtotal4')
+        %td.total= number_to_currency @report[:subtotal4]
+      %tr
+        %td{ :colspan => 4 }= t('printr.order_receipt.rebate_fixed')
+        %td.total= number_to_currency @report[:fixed_rebate_amount]

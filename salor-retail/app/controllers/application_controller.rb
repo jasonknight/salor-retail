@@ -69,6 +69,7 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
+
   def admin_signed_in?
     if session[:user_id] and session[:user_type] == "User" then
       return true
@@ -76,9 +77,11 @@ class ApplicationController < ActionController::Base
       return false
     end
   end
+
   def current_user
     return User.find session[:user_id] if session[:user_type] == "User"
   end
+
   def salor_user
     if session[:user_id] then
       if session[:user_type] == "User" then
@@ -142,12 +145,14 @@ class ApplicationController < ActionController::Base
       $Conf = Vendor.first.salor_configuration
     end
   end
+
   def layout_by_response
     if params[:ajax] then
        return false
     end
     return "application"
   end
+  
   def loadup
     $Notice = ""
     SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
@@ -278,9 +283,11 @@ class ApplicationController < ActionController::Base
     return salor_user.can(p[:action] + '_' + p[:controller])
   end
   
+  # TODO: Remove method check_license since no longer used
   def check_license()
     return true
   end
+  
   def assign_from_to(p)
     begin
       f = Date.civil( p[:from][:year ].to_i,

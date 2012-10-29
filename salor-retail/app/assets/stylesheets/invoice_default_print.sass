@@ -1,0 +1,47 @@
+div.paper-invoice
+  width: 100%
+  img.vendorlogo
+    width: 10em
+  img.salorlogo
+    width: 5em
+    
+  div.header-page-one
+
+  div.header-page-other
+    page-break-before: always
+
+  table.striped-table2 
+    width: 100%
+    border-collapse: collapse
+    a
+      text-decoration: none
+    td
+      border: 1px solid black
+    td.total,
+    td.price
+      text-align: right
+    td.quantity
+      text-align: center
+    th
+      color: black
+      border: 1px solid black
+    tr 
+      background-color: white
+      border-bottom: 1px solid black
+    tr:first-child 
+      background-color: #D0D0D0
+    tr:nth-child(even) 
+      backgrond-color: #F0F0F0
+    tr.total
+      border-top: 2px solid black
+      background-color: #D0D0D0
+      font-weight: bold
+
+  table.striped-table2.has-total
+    tr:last-child 
+      background-color: #D0D0D0
+      border-top: 3px solid black
+      font-weight: bold
+      
+  table.striped-table2.small
+    width: 50%

@@ -20,6 +20,11 @@ class Order < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :cash_register
   belongs_to :cash_register_daily
+
+  belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
+  belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
+  belongs_to :sale_type
+  
   has_and_belongs_to_many :discounts
   scope :last_seven_days, lambda { where(:created_at => 7.days.ago.utc...Time.now.utc) }
   # These two associations are here for eager loading to speed things up

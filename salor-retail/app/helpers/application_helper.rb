@@ -5,21 +5,25 @@
 # 
 # See license.txt for the license applying to all files within this software.
 module ApplicationHelper
-  # {START} noconst ignore-adminbox ignore-adminclass ignore-options ignore-crumbs
+ 
+  # TODO: salor_render should be depreciated in favor of plain Rails render, since it does nothing
   def salor_render(h)
     #t = "<!-- begin-partial #{h[:partial]}-->\n"
     t = raw(render(h))
     #t += "\n<!-- end-partial  #{h[:partial]}-->\n"
     return raw(t)
   end
+  
   def add_param(p)
-    @_params ||= {}
-    @_params.merge!(p)
+   @_params ||= {}
+   @_params.merge!(p)
   end
+  
   def get_params
     @_params ||= {}
     return @_params
   end
+  
   def flatten_params
     s = []
     get_params.each do |k,v|
@@ -27,6 +31,7 @@ module ApplicationHelper
     end
     return s.join("&")
   end
+  
   def supported_languages
     [
       {:name => "Deutsch", :locale => 'de'},
@@ -42,13 +47,14 @@ module ApplicationHelper
       {:name => "中文", :locale => 'cn'}
     ]
   end
+  
   def salor_number_to_currency(amnt)
-
     return number_to_currency(amnt, :unit => I18n.t("number.currency.format.unit"))
   end
   def salor_number_with_delimiter(num)
     return number_with_delimiter(num)
   end
+  
   def salor_signed_in?
     if session[:user_id] and session[:user_type] then
       return true
@@ -56,6 +62,7 @@ module ApplicationHelper
       return false
     end
   end
+  
   def salor_user
     if session[:user_id] then
       if session[:user_type] == "User" then
@@ -65,6 +72,7 @@ module ApplicationHelper
       end
     end
   end
+  
   def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :breadcrumb => true, :classes => []}, hideowner = false)
     clses = ['box-title','shadow']
     bbt = '<div class="left-blank"></div>'
@@ -78,7 +86,7 @@ module ApplicationHelper
       adminbox = '
         <div class="title-box-admin #{clses.join(" ")}">
           &#8226; ' + t("system.owner_mode") + ' &#8226;
-          <div class="button-row-admin">
+#           <div class="button-row-admin">
             <div class="button-admin" onclick="javascript:window.location.href=\'/home/edit_owner\';">' + t(:"menu.configuration") + '</div>
           </div>
         </div>'

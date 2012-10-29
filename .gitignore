@@ -20,6 +20,7 @@ salor-retail/public/uploads/*
 salor-retail/vendor/bundle
 salor-retail/vendor/plugins
 salor-retail/.bundle
+salor-retail/tmp
 *.log
 *.bill
 .sass-cache

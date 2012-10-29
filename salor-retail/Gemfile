@@ -18,4 +18,4 @@ gem 'kaminari'
 gem 'unicode_utils'
 gem 'nokogiri'
 gem 'mechanize'
-
+gem 'debugger'

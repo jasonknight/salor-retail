@@ -313,58 +313,8 @@ input, textarea, select
 .striped-table td:first-child 
   padding-left: 10px
   padding-right: 10px
+  
 
-
-table.striped-table2 
-  border: 1px solid black
-  background-color: white
-  border-collapse: collapse
-  margin-bottom: 10px
-  width: 98%
-
-
-.striped-table2 a 
-  text-decoration: none
-  color: black
-
-
-.striped-table2 td, .striped-table2 th 
-  color: black
-  border: 1px solid black
-
-
-.striped-table2 tr 
-  background-color: white
-  border-bottom: 1px solid black
-
-
-.striped-table2 tr:first-child 
-  border-bottom: 2px solid black
-  background-color: #D0D0D0
-
-.striped-table2 tr.total
-  border-top: 2px solid black
-  background-color: #D0D0D0
-  font-weight: bold
-
-.has-total tr:last-child 
-  background-color: #D0D0D0
-  border-top: 3px solid black
-  font-weight: bold
-
-.striped-table2 td.total,
-.striped-table2 td.right,
-.striped-table2 td.price
-  text-align: right
-
-.striped-table2 td.quantity
-  text-align: center
-
-
-
-
-.striped-table2 tr:nth-child(even) 
-  backgrond-color: #F0F0F0
 
 
 .table-center 
@@ -2152,14 +2102,6 @@ div.report-container
     display: none
 
 
-.customer_data 
-  float: left
-
-
-.company_data 
-  float: right
-
-
 .report-container h2,
 .report-container h3
   color: black
@@ -2176,21 +2118,6 @@ table.report_day th.left,
 table.report_day td.left 
   text-align: left
   padding: 0px 10px
-
-
-.striped-table2 th.left,
-.striped-table2 td.left 
-  text-align: left
-
-
-.striped-table2 th.center,
-.striped-table2 td.center 
-  text-align: center
-
-
-.striped-table2 th.right,
-.striped-table2 td.right 
-  text-align: right
 
 
 table.report_day th.right,
@@ -3111,3 +3038,29 @@ div.options-row .option-button
   @include rounded_corners_all
   margin-bottom: 5px
   padding: 10px
+
+// =========================================
+  
+// ----- common ---------
+
+.floatleft
+  float: left
+  
+.marginauto
+  margin: auto
+
+.floatright
+  float: right
+
+.left
+  text-align: left
+
+.center
+  text-align: center
+
+.right
+  text-align: right
+  
+.clear
+  clear: both
+  
