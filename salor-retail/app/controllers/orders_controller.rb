@@ -520,9 +520,10 @@ class OrdersController < ApplicationController
     GlobalData.salor_user = @order.employee if @order.employee
     @vendor = @order.vendor
     @report = @order.get_report
+    @invoice_note = InvoiceNote.scopied.where(:origin_country_id => @order.origin_country_id, :destination_country_id => @order.destination_country_id, :sale_type_id => @order.sale_type_id).first
     view = SalorRetail::Application::CONFIGURATION[:invoice_style]
     view ||= 'default'
-    render "orders/invoices/#{view}/invoice"
+    render "orders/invoices/#{view}/page"
   end
 
   #

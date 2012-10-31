@@ -180,7 +180,9 @@ module ApplicationHelper
       :user6 => 'user6',
       :user7 => 'user7',
       :nurse => 'user2',
-      :save => 'save'
+      :save => 'save',
+      :gearpage => 'gearpage',
+      :label => 'label'
     }
     return icons[name] + '_' + size.to_s + '.png'
   end

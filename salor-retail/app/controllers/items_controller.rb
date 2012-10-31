@@ -222,6 +222,7 @@ class ItemsController < ApplicationController
     end
   end
 
+  # due to salor-bin this can't rely on session
   def labels
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
@@ -238,7 +239,7 @@ class ItemsController < ApplicationController
     elsif params[:skus]
       @items = Item.where(:sku => params[:skus].split(","))
     end
-    text = Printr.new.sane_template(params[:type],binding)
+    text = Printr.new.sane_template("#{params[:type]}_#{params[:style]}",binding)
     if @register.salor_printer
       render :text => text
       #`beep -f 2000 -l 10 -r 3`
@@ -370,6 +371,15 @@ class ItemsController < ApplicationController
     add_breadcrumb I18n.t("menu.inventory_report"), items_inventory_report_path
     @items = Item.scopied.where('real_quantity > 0')
     @categories = Category.scopied
+  end
+  
+  def selection
+    if params[:order_id]
+      order = Order.scopied.find_by_id(params[:order_id])
+      @skus = order.order_items.visible.collect{ |oi| oi.sku }.join("\n")
+    else
+      @skus = nil
+    end
   end
 
   private 

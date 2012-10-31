@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121028185721) do
+ActiveRecord::Schema.define(:version => 20121031153619) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -384,6 +384,9 @@ ActiveRecord::Schema.define(:version => 20121028185721) do
     t.boolean  "must_change_price",    :default => false
     t.boolean  "hidden_by_distiller",  :default => false
     t.boolean  "track_expiry",         :default => false
+    t.string   "customs_code"
+    t.float    "manufacturer_price"
+    t.string   "origin_country"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"

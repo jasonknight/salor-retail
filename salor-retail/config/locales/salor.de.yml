@@ -65,6 +65,8 @@ de:
   InCash: In Bar
   activerecord:
     attributes:
+      order_item:
+        quantity: Menge
       invoice_blurb: Rechnungstext Kopf
       invoice_blurb_footer: Rechnungstext Fuß
       active: aktiv
@@ -127,6 +129,9 @@ de:
       item:
         purchase_price: Einkaufspreis
         quantity: Lagermenge
+        origin_country: Herstellerland
+        customs_code: Export-Code
+        manufacturer_price: Herstellerpreis
       item_sku: Artikel SKU
       itemsviewlist: Listenansicht für Artikel
       last_name: Familienname
@@ -200,7 +205,7 @@ de:
       thermal_printer: Thermodrucker
       title: Titel
       total: Gesamt
-      track_expiry: Track Expiry
+      track_expiry: Ablaufdatum beobachten
       type: Typ
       url: URL
       username: Benutzername
@@ -370,6 +375,8 @@ de:
       backup_database: Datenbank herunterladen
       backup_logfile: Logdatei herunterladen
   items:
+    selection:
+      print: Drucken
     database_distiller:
       are_you_sure: Durch diese Aktion werden alle nicht verwendeten Artikel gelöscht.
         Dies kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie fortfahren
@@ -484,6 +491,7 @@ de:
     points: Treuepunkte
     pos: POS
     print: Etiketten
+    labels: Etiketten
     receipts: XXXX Receipts
     remote_service: Fernwartung
     reorder: Nachbestellung
@@ -518,6 +526,11 @@ de:
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
     shipments_move_item: Artikel erfolgreich verschoben ...
   orders:
+    print:
+      print: Druck-Dialog
+      delivery_note: Lieferschein
+      invoice: Rechnung
+      labels: Etiketten
     report:
       display: Anzeigen
       end_date: Bis
@@ -667,6 +680,7 @@ de:
       sold: verkauft
   receipts:
     invoice: Rechnung
+    delivery_note: Lieferschein
     invoice_numer_X_at_time: Rechnung Nr. %{number} am %{datetime}
   reports:
     amount: Anzahl
@@ -771,7 +785,7 @@ de:
       receipt_logo_header: Rechnungslogo Kopf
   views:
     create_new_item: NEUEN ARTIKEL ANLEGEN
-    advanced_field: Achtung, nur für fortgeschrittene Benutzer!
+    advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'
     cash_registers: Kassen
     category_heading: Kategorie %{name} für %{store}
@@ -866,7 +880,7 @@ de:
       download: Download
       edit: Bearbeiten
       from: Von
-      gift_cards: XXX Gift Cards
+      gift_cards: Gutscheine
       loading: Loading
       new: Neu
       order: Verkauf

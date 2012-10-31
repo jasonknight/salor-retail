@@ -1,0 +1,38 @@
+= raw content_box_top(I18n.t("headings.item_selection"))
+
+.center
+  %p= text_area_tag 'skus', @skus, :class => 'labels-snag-me keyboardable', :style => 'width:245px;height:245px;'
+
+  %table.selection
+    %tr
+      %td
+        = I18n.t("views.eticket")
+        %br
+        %input{ :id => 'label', :type => "radio", :name => "type", :value => "label", :checked => true}
+        %br
+        = select_tag 'label_style', options_for_select(['default'])
+      %td
+        = I18n.t("views.sticky_ticket")
+        %br
+        %input{ :id => 'sticker', :type => "radio", :name => "type", :value => "sticker"}
+        %br
+        = select_tag 'sticker_style', options_for_select(['default', 'type1'])
+
+  %button{ :onclick => "print();" }= t '.print'
+
+:javascript
+  window.setTimeout("set_focus()", 1000);
+  
+  function set_focus() {
+    $('#skus')[0].focus();
+  }
+  
+  function print() {
+    var skus = $('#skus').val().split("\n");
+    if($("#label:checked").val() == 'label') {
+      print_url(Register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val());
+    }
+    if($("#sticker:checked").val() == 'sticker') {
+      print_url(Register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val());
+    }
+  }

@@ -21,6 +21,3 @@
       == #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
       
   .clear
-      
-  %h2== #{ I18n.t("receipts.invoice") } #{ @order.id }
-  %h3= I18n.l(@order.created_at, :format => :just_day)
