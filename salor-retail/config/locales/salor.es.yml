@@ -65,6 +65,13 @@ es:
   InCash: En efectivo
   activerecord:
     attributes:
+      origin_country_id: XXX Origin Country
+      destination_country_id: XXX Destination Country
+      sale_type_id: XXX Sale Type
+      note_header: XXX Note Header
+      note_footer: XXX Note Footer
+      order_item:
+        quantity: XXX Qty.
       invoice_blurb: Invoice text
       invoice_blurb_footer: Invoice text footer
       active: Activo
@@ -427,6 +434,9 @@ es:
     done: Listo
     download: Bajar de la red
     edit: Editar
+    edit: XXX Edit Country
+    edit_sale_type: XXX Edit Sale Type
+    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: Editar caja
     edit_category: Editar categoría
     edit_customer: Editar cliente
@@ -451,6 +461,9 @@ es:
     locations: Ubicaciones
     loyalty_cards: Tarjetas de fidelización
     move_shipment_item: Desplazar artículo de envío
+    new_country: XXX new country
+    new_sale_type: XXX new sale type
+    new_invoice_note: XXX New Invoice Note
     new_action: Nueva acción
     new_broken_item: Nuevo artículo dañado
     new_button: Nuevo botón

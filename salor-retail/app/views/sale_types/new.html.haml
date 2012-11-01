@@ -1,4 +1,4 @@
-%h2= @sale_type.new_record? ? (t '.new_sale_type') : (t '.edit_sale_type')
+%h2= @sale_type.new_record? ? (t 'menu.new_sale_type') : (t 'menu.edit_sale_type')
 
 - if @sale_type.errors.any?
   .errors
@@ -9,8 +9,10 @@
 
 .form_fields
   = form_for @sale_type do |sale_type_form|
-    %p= submit_tag( controller.action_name == 'new' ? (t :create) : (t :edit) )
     %table
       %tr
-        %td= sale_type_form.label 'name'
+        %td= sale_type_form.label t('activerecord.attributes.name')
         %td= sale_type_form.text_field :name, :size => '10'
+      %tr
+        %td{:colspan=> 2,:align=>'right'}
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('helpers.submit.edit')) )

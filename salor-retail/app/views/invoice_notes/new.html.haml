@@ -1,5 +1,3 @@
-%h2= @invoice_note.new_record? ? (t '.new_invoice_note') : (t '.edit_invoice_note')
-
 - if @invoice_note.errors.any?
   .errors
     %h3= t 'activerecord.errors.template.header', :count => @invoice_note.errors.size, :model => InvoiceNote.model_name.human
@@ -9,21 +7,27 @@
 
 .form_fields
   = form_for @invoice_note do |invoice_note_form|
-    %p= submit_tag( controller.action_name == 'new' ? (t :create) : (t :edit) )
-    %table
+    %table{:width=>'90%',:align=>'center'}
       %tr
-        %td= invoice_note_form.label :origin_country_id
+        %td{:colspan=>2}
+          %h2= @invoice_note.new_record? ? (t 'menu.new_invoice_note') : (t 'menu.edit_invoice_note')
+          %hr
+      %tr
+        %td{:valign=>'top'}= invoice_note_form.label I18n.t('activerecord.attributes.origin_country_id')
         %td= invoice_note_form.collection_select :origin_country_id, @countries, :id, :name, { :include_blank => true }
       %tr
-        %td= invoice_note_form.label :destination_country_id
+        %td{:valign=>'top'}= invoice_note_form.label I18n.t('activerecord.attributes.destination_country_id')
         %td= invoice_note_form.collection_select :destination_country_id, @countries, :id, :name, { :include_blank => true }
       %tr
-        %td= invoice_note_form.label :sale_type_id
+        %td{:valign=>'top'}= invoice_note_form.label I18n.t('activerecord.attributes.sale_type_id')
         %td= invoice_note_form.collection_select :sale_type_id, @sale_types, :id, :name, { :include_blank => true }
       %tr
-        %td= invoice_note_form.label :note_header
-        %td= invoice_note_form.text_area :note_header, :rows => 3
+        %td{:valign=>'top'}= invoice_note_form.label I18n.t('activerecord.attributes.note_header')
+        %td= invoice_note_form.text_area :note_header, :rows => 10, :style => 'width: 80%;',:class => "keyboardable"
       %tr
-        %td= invoice_note_form.label :note_footer
-        %td= invoice_note_form.text_area :note_footer, :rows => 3
+        %td{:valign=>'top'}= invoice_note_form.label I18n.t('activerecord.attributes.note_footer')
+        %td= invoice_note_form.text_area :note_footer, :rows => 10, :style => 'width: 80%;',:class => "keyboardable"
+      %tr
+        %td{:colspan=> 2,:align=>'right'}
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('helpers.submit.edit')) )
         

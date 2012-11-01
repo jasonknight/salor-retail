@@ -64,6 +64,13 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      origin_country_id: Origin Country
+      destination_country_id: Destination Country
+      sale_type_id: Sale Type
+      note_header: Note Header
+      note_footer: Note Footer
+      order_item:
+        quantity: Qty.
       invoice_blurb: Invoice text
       invoice_blurb_footer: Invoice text footer
       active: active
@@ -432,6 +439,9 @@ en-US:
     done: done
     download: download
     edit: edit
+    edit_country: Edit Country
+    edit_sale_type: Edit Sale type
+    edit_invoice_note: Edit Inovice Note
     edit_cash_register: edit cash register
     edit_category: edit category
     edit_customer: edit customer
@@ -456,9 +466,12 @@ en-US:
     locations: locations
     loyalty_cards: loyalty cards
     move_shipment_item: move shipment item
-    new_action: new action
-    new_broken_item: new broken item
-    new_button: new button
+    new_country: New Country
+    new_sale_type: New Sale Type
+    new_invoice_note: New Invoice Note
+    new_action: new New Action
+    new_broken_item: New Broken Item
+    new_button: New Button
     new_cash_register: new cash register
     new_category: new category
     new_customer: new customer

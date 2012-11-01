@@ -64,6 +64,13 @@ cn:
   InCash: In Cash
   activerecord:
     attributes:
+      origin_country_id: XXX Origin Country
+      destination_country_id: XXX Destination Country
+      sale_type_id: XXX Sale Type
+      note_header: XXX Note Header
+      note_footer: XXX Note Footer
+      order_item:
+        quantity: XXX Qty.
       invoice_blurb: Invoice text
       invoice_blurb_footer: Invoice text footer
       active: 活躍
@@ -418,6 +425,9 @@ cn:
     done: 完成
     download: 下載
     edit: 編輯
+    edit: XXX Edit Country
+    edit_sale_type: XXX Edit Sale Type
+    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: 編輯收款台
     edit_category: 編輯類別
     edit_customer: 編輯顧客
@@ -442,6 +452,9 @@ cn:
     locations: 位置
     loyalty_cards: 忠誠卡
     move_shipment_item: 移動裝船產品
+    new_country: XXX new country
+    new_sale_type: XXX new sale type
+    new_invoice_note: XXX New Invoice Note
     new_action: 新行動
     new_broken_item: 新破碎的產品
     new_button: 新按鈕

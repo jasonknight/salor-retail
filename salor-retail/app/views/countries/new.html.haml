@@ -1,4 +1,4 @@
-%h2= @country.new_record? ? (t '.new_country') : (t '.edit_country')
+%h2= @country.new_record? ? (t 'menu.new_country') : (t 'menu.edit_country')
 
 - if @country.errors.any?
   .errors
@@ -9,8 +9,11 @@
 
 .form_fields
   = form_for @country do |sale_type_form|
-    %p= submit_tag( controller.action_name == 'new' ? (t :create) : (t :edit) )
+    
     %table
       %tr
-        %td= sale_type_form.label 'name'
+        %td= sale_type_form.label t('activerecord.attributes.name')
         %td= sale_type_form.text_field :name, :size => '10'
+      %tr
+        %td{:colspan=> 2,:align=>'right'}
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('helpers.submit.edit')) )

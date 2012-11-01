@@ -64,6 +64,13 @@ it:
   InCash: Cassa
   activerecord:
     attributes:
+      origin_country_id: XXX Origin Country
+      destination_country_id: XXX Destination Country
+      sale_type_id: XXX Sale Type
+      note_header: XXX Note Header
+      note_footer: XXX Note Footer
+      order_item:
+        quantity: XXX Qty.
       invoice_blurb: Testo fattura
       invoice_blurb_footer: Testo fattura piè di pagina
       active: attivo
@@ -427,6 +434,9 @@ it:
     done: fatto
     download: scarica
     edit: edita
+    edit: XXX Edit Country
+    edit_sale_type: XXX Edit Sale Type
+    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: edita registratore di cassa
     edit_category: edita categoria
     edit_customer: edita cliente
@@ -451,6 +461,9 @@ it:
     locations: locazioni
     loyalty_cards: carte fedeltà
     move_shipment_item: sposta articolo spedizione
+    new_country: XXX new country
+    new_sale_type: XXX new sale type
+    new_invoice_note: XXX New Invoice Note
     new_action: nuova azione
     new_broken_item: nuovo articolo danneggiato
     new_button: nuovo pulsante

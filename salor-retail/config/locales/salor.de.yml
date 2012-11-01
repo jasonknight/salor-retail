@@ -65,6 +65,11 @@ de:
   InCash: In Bar
   activerecord:
     attributes:
+      origin_country_id: XXX Origin Country
+      destination_country_id: XXX Destination Country
+      sale_type_id: XXX Sale Type
+      note_header: XXX Note Header
+      note_footer: XXX Note Footer
       order_item:
         quantity: Menge
       invoice_blurb: Rechnungstext Kopf
@@ -442,6 +447,9 @@ de:
     done: Fertig
     download: Herunterladen
     edit: Bearbeiten
+    edit: XXX Edit Country
+    edit_sale_type: XXX Edit Sale Type
+    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: Kasse bearbeiten
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten
@@ -466,7 +474,10 @@ de:
     locations: Verkaufsflächen
     loyalty_cards: Kundenkarten
     move_shipment_item: In den Verkaufsbereich verschieben
-    new_action: Aktion
+    new_country: XXX new country
+    new_sale_type: XXX new sale type
+    new_invoice_note: XXX New Invoice Note
+    new_action: Neu Aktion
     new_broken_item: Beschädigungen
     new_button: Neue Taste
     new_cash_register: Neue Kasse

@@ -63,6 +63,13 @@ el:
   InCash: Μέσω Μετρητών
   activerecord:
     attributes:
+      origin_country_id: XXX Origin Country
+      destination_country_id: XXX Destination Country
+      sale_type_id: XXX Sale Type
+      note_header: XXX Note Header
+      note_footer: XXX Note Footer
+      order_item:
+        quantity: XXX Qty.
       invoice_blurb: Κείμενο Τιμολογίου 
       invoice_blurb_footer: Υποσέλιδο Κείμενο Τιμολογίου 
       active: ενεργό 
@@ -424,6 +431,9 @@ el:
     done: ολοκληρωμένο
     download: μεταφορτώστε
     edit: Επεξεργασία 
+    edit: XXX Edit Country
+    edit_sale_type: XXX Edit Sale Type
+    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: επεξεργασία ταμειακής μηχανής
     edit_category: επεξεργασία κατηγορίας
     edit_customer: επεξεργασία πελάτη 
@@ -448,6 +458,9 @@ el:
     locations: τοποθεσίες 
     loyalty_cards: κάρτες επιβράβευσης
     move_shipment_item: μετακινήστε αντικείμενο αποστολής
+    new_country: XXX new country
+    new_sale_type: XXX new sale type
+    new_invoice_note: XXX New Invoice Note
     new_action: νέα πράξη 
     new_broken_item: νέο σπασμένο αντικείμενο
     new_button: νέο κουμπί
