@@ -978,7 +978,7 @@ class Order < ActiveRecord::Base
       next if sum_taxes[tax.id] == nil or sum_taxes[tax.id][:total] == 0
       # I.E. what is the percentage decimal of the tax value
       fact = sum_taxes[tax.id][:value] / 100.00
-      if self.tax_free
+      if self.tax_free == true
         net =  sum_taxes[tax.id][:total]
         gro =  sum_taxes[tax.id][:total]
       else

@@ -1,6 +1,8 @@
 = raw content_box_top(t("activerecord.models.invoice_note.other"))
 %table{:width=>"90%",:align=>"center"}
   %tr
+    %td{:colspan=>2,:align=>'right'}= link_to (t 'menu.new_invoice_note'), new_invoice_note_path, :class => 'links new-model-button'
+  %tr
     %td{:colspan=>2}
       %h2= t('activerecord.models.invoice_note.other')
       %hr
@@ -8,8 +10,3 @@
     %tr
       %td= link_to i.name, edit_invoice_note_path(i)
       %td= link_to image_tag('button_small_delete.png', :title => InvoiceNote.human_attribute_name(:hidden), :alt => InvoiceNote.human_attribute_name(:hidden)), invoice_note_path(i), :method => :delete, :confirm => t(:are_you_sure)
-  %tr
-    %td{:colspan=>2,:align=>'right'}
-      %br
-      = link_to (t 'menu.new_invoice_note'), new_invoice_note_path, :class => 'links new-model-button'
-= raw content_box_bottom

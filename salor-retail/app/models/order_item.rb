@@ -460,7 +460,7 @@ class OrderItem < ActiveRecord::Base
   end
   #
   def calculate_tax(no_update = false)
-    return 0 if self.tax_free or (self.order and self.order.tax_free)
+    return 0 if self.tax_free == true or (self.order and self.order.tax_free == true)
     return 0 if self.refunded
     if self.activated and self.behavior == 'gift_card' then
       self.update_attribute(:tax,0) if self.tax != 0

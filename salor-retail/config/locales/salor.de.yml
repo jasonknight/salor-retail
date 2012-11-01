@@ -65,14 +65,15 @@ de:
   InCash: In Bar
   activerecord:
     attributes:
-      tax_free: XXX Tax Free
-      origin_country_id: XXX Origin Country
-      destination_country_id: XXX Destination Country
-      sale_type_id: XXX Sale Type
-      note_header: XXX Note Header
-      note_footer: XXX Note Footer
+      invoice_note:
+        origin_country_id: Ursprungsland
+        destination_country_id: Zielland
+        note_header: Text Kopf
+        note_footer: Text Fuß
+        sale_type_id: Verkaufs-Art
       order_item:
         quantity: Menge
+        tax_free: Steuerfrei
       invoice_blurb: Rechnungstext Kopf
       invoice_blurb_footer: Rechnungstext Fuß
       active: aktiv
@@ -89,7 +90,7 @@ de:
       body: Körper
       buyback_price: Pfandbetrag
       calculate_part_price: Setpreis berechnen
-      calculate_tax: Steuer berechnen
+      calculate_tax: Nettopreise
       cash_drawer: Kassenlade
       cash_made: eingenommener Betrag
       cash_register:
@@ -225,14 +226,14 @@ de:
       width: Breite
     models:
       sale_type:
-        one: xxx Sale Type
-        other: xxx Sale Types
+        one: Verkaufs-Art
+        other: Verkaufs-Arten
       country: 
-        one: xxx Country
-        other: xxx Countries
+        one: Land
+        other: Länder
       invoice_note:
-        one: xxx Invoice Note
-        other: xxx Invoice Notes
+        one: Rechnungstext
+        other: Rechnungstexte
       action:
         one: Aktion
         other: Aktionen
@@ -283,7 +284,7 @@ de:
         one: Auto-Vorschlag
         other: Auto-Vorschlag
       shipment_type:
-        default_name: XXX Auto Nachbestellung
+        default_name: Auto Nachbestellung
         one: Lieferart
         other: Lieferarten
       shipper:
@@ -458,9 +459,8 @@ de:
     done: Fertig
     download: Herunterladen
     edit: Bearbeiten
-    edit: XXX Edit Country
-    edit_sale_type: XXX Edit Sale Type
-    edit_invoice_note: XXX Edit Invoice Note
+    edit_sale_type: Verkaufs-Art bearbeiten
+    edit_invoice_note: Lieferschein bearbeiten
     edit_cash_register: Kasse bearbeiten
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten
@@ -485,9 +485,9 @@ de:
     locations: Verkaufsflächen
     loyalty_cards: Kundenkarten
     move_shipment_item: In den Verkaufsbereich verschieben
-    new_country: XXX new country
-    new_sale_type: XXX new sale type
-    new_invoice_note: XXX New Invoice Note
+    new_country: Neues Land
+    new_sale_type: Neue Verkaufs-Art
+    new_invoice_note: Neuer Rechnungstext
     new_action: Neu Aktion
     new_broken_item: Beschädigungen
     new_button: Neue Taste
@@ -514,7 +514,7 @@ de:
     pos: POS
     print: Etiketten
     labels: Etiketten
-    receipts: XXXX Receipts
+    receipts: Belege
     remote_service: Fernwartung
     reorder: Nachbestellung
     report: Verkaufsbericht
@@ -865,7 +865,7 @@ de:
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       new_order: Neuer Verkauf angelegt
       order_refund_dt: ! '#%{id}'
-      please_backup: "XXX Please backup your system regularly!"
+      please_backup: "Machen Sie regelmäßig Backups!"
       save_before: Vor dem Verlassen speichern?
       wholesaler_upload_report: ! 'Aktualisiert: %{updated_items}, Erzeugt: %{created_items},
         Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}'

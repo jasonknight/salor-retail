@@ -1,5 +1,3 @@
-%h2= @country.new_record? ? (t 'menu.new_country') : (t 'menu.edit_country')
-
 - if @country.errors.any?
   .errors
     %h3= t 'activerecord.errors.template.header', :count => @country.errors.size, :model => Country.model_name.human
@@ -9,7 +7,11 @@
 
 .form_fields
   = form_for @country do |country_form|
-    %table
+    %table{:width=>'90%',:align=>'center'}
+      %tr
+        %td{:colspan=>2}
+          %h2= @country.new_record? ? (t 'menu.new_country') : (t 'menu.edit_coutry')
+          %hr
       %tr
         %td= country_form.label t('activerecord.attributes.name')
         %td= country_form.text_field :name, :size => '10'

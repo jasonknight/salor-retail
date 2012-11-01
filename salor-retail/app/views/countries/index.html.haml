@@ -1,6 +1,9 @@
 = raw content_box_top(t("activerecord.models.country.other"))
 %table{:width=>"90%",:align=>"center"}
   %tr
+    %td{:colspan=>2,:align=>'right'}
+      = link_to (t 'menu.new_country'), new_country_path, :class => 'links new-model-button'
+  %tr
     %td{:colspan=>2}
       %h2= t('activerecord.models.country.other')
       %hr
@@ -8,8 +11,3 @@
     %tr
       %td= link_to c.name, edit_country_path(c)
       %td{:align=>'right'}= link_to image_tag('button_small_delete.png', :title => Country.human_attribute_name(:hidden), :alt => Country.human_attribute_name(:hidden)), country_path(c), :method => :delete, :confirm => t(:are_you_sure)
-  %tr
-    %td{:colspan=>2,:align=>'right'}
-      %br
-      = link_to (t 'menu.new_country'), new_country_path, :class => 'links new-model-button'
-= raw content_box_bottom

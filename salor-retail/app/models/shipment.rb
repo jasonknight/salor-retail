@@ -164,6 +164,7 @@ class Shipment < ActiveRecord::Base
       end
     end
   end
+  
   def move_shipment_item_to_item(id)
     if self.receiver.nil? or not self.receiver_type == 'Vendor' then
       add_salor_error("system.errors.must_set_receiver_to_vendor")

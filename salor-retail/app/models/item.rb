@@ -373,6 +373,7 @@ class Item < ActiveRecord::Base
   def set_amount_remaining
     self.update_attribute(:amount_remaining,self.base_price)
   end
+  
   def from_shipment_item(si)
     i = Item.find_by_sku(si.sku)
     if i then
