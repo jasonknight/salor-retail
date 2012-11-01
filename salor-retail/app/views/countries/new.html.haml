@@ -8,12 +8,11 @@
         %li= msg
 
 .form_fields
-  = form_for @country do |sale_type_form|
-    
+  = form_for @country do |country_form|
     %table
       %tr
-        %td= sale_type_form.label t('activerecord.attributes.name')
-        %td= sale_type_form.text_field :name, :size => '10'
+        %td= country_form.label t('activerecord.attributes.name')
+        %td= country_form.text_field :name, :size => '10'
       %tr
         %td{:colspan=> 2,:align=>'right'}
-          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('helpers.submit.edit')) )
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('menu.edit')) )

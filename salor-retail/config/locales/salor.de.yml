@@ -65,6 +65,7 @@ de:
   InCash: In Bar
   activerecord:
     attributes:
+      tax_free: XXX Tax Free
       origin_country_id: XXX Origin Country
       destination_country_id: XXX Destination Country
       sale_type_id: XXX Sale Type
@@ -223,6 +224,15 @@ de:
       when: Wenn
       width: Breite
     models:
+      sale_type:
+        one: xxx Sale Type
+        other: xxx Sale Types
+      country: 
+        one: xxx Country
+        other: xxx Countries
+      invoice_note:
+        one: xxx Invoice Note
+        other: xxx Invoice Notes
       action:
         one: Aktion
         other: Aktionen
@@ -362,6 +372,7 @@ de:
       ok: OK
       print: Drucken
       save: Speichern
+      edit: Edit
       submit: Speichern
       update: Aktualisieren
   home:

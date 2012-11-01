@@ -1,5 +1,8 @@
 class CountriesController < ApplicationController
   
+  def testing
+    puts "i am a test"
+  end
   def index
     @countries = Country.scopied
   end
@@ -38,5 +41,12 @@ class CountriesController < ApplicationController
     redirect_to countries_path and return unless @country
     @country.update_attribute :hidden, true
     redirect_to countries_path
+  end
+  before_filter :initialize_instance_variables,:authify,:crumble
+  private
+  def crumble
+    @vendor = $User.get_vendor($User.meta.vendor_id)
+    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
+    add_breadcrumb I18n.t("activerecord.models.country.other"),'countries_path(:vendor_id => params[:vendor_id])'
   end
 end

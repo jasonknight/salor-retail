@@ -29,5 +29,5 @@
         %td= invoice_note_form.text_area :note_footer, :rows => 10, :style => 'width: 80%;',:class => "keyboardable"
       %tr
         %td{:colspan=> 2,:align=>'right'}
-          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('helpers.submit.edit')) )
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('menu.edit')) )
         

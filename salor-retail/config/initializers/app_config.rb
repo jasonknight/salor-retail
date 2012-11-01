@@ -39,7 +39,9 @@ NilClass.class_eval do
         raise_nil_warning_for klass, method, caller
       else
         puts "### Raising errors because of" + method.to_s
-        puts Kernel.caller[0][/`.*'/][1..-2]
+        Kernel.caller(0).each do |caller|
+          puts caller
+        end
         super
       end
     end
