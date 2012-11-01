@@ -65,6 +65,7 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      tax_free: Tax Free
       origin_country_id: Origin Country
       destination_country_id: Destination Country
       sale_type_id: Sale Type
@@ -220,6 +221,15 @@ en-US:
       when: when
       width: width
     models:
+      sale_type:
+        one: Sale Type
+        other: Sale Types
+      country: 
+        one: Country
+        other: Countries
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
       action:
         one: Action
         other: Actions

@@ -193,7 +193,6 @@ window.showOrderOptions = function () {
   var callbacks = {
     click: function () {
       var id = '#option_order_rebate_input';
-      console.log("Input is:",id,$(id));
       var value = $(id).val();
       var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=rebate&value=' + value;
       get(string, 'showOrderOptions', function () {
@@ -216,13 +215,86 @@ window.showOrderOptions = function () {
   };
   options = {
     name: 'tax_free',
-    title: 'Tax',
+    title: i18n.activerecord.attributes.tax_free,
     value: Order.tax_free,
     append_to: dialog
   };
   var tax_free_check = shared.draw.check_option(options,callbacks);
   
-  
-  shared.helpers.expand(dialog,0.50,'vertical');
+  // salestype and countries
+  options = {
+    name: 'sales_type_and_countries',
+    title: i18n.menu.additional,
+    append_to: dialog,
+    selections: [
+      // begin sale_types
+      {
+        name: 'sale_type',
+        title: i18n.activerecord.models.sale_type.one,
+        options: (function () {
+          var stys = {};
+          for (var t in SaleTypes) {
+            var sale_type = SaleTypes[t];
+            stys[sale_type.id] = sale_type.name;
+          }
+          return stys;
+        })(),
+        change: function () {
+          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=sale_type_id&value=' + $(this).val();
+          get(string, 'showOrderOptions->sale_type', function () {
+            //
+          });
+        },
+        attribute: {name: i18n.activerecord.models.sale_type.one},
+        value: Order.sale_type_id,
+      }, 
+      // end sale_types
+      {
+        name: 'origin_country',
+        title: i18n.activerecord.models.country.one,
+        options: (function () {
+          var ctys = {};
+          for (var t in Countries) {
+            var country = Countries[t];
+            ctys[country.id] = country.name;
+          }
+          return ctys;
+        })(),
+        change: function () {
+          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=origin_country_id&value=' + $(this).val();
+          get(string, 'showOrderOptions->origin_country', function () {
+            //
+          });
+        },
+        attributes: {name: i18n.activerecord.models.country.one},
+        value: Order.origin_country_id,
+      }, 
+      // end origin country
+      {
+        name: 'destination_country',
+        title: i18n.activerecord.models.country.one,
+        options: (function () {
+          var ctys = {};
+          for (var t in Countries) {
+            var country = Countries[t];
+            ctys[country.id] = country.name;
+          }
+          return ctys;
+        })(),
+        change: function () {
+          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=destination_country_id&value=' + $(this).val();
+          get(string, 'showOrderOptions->destination_country', function () {
+            //
+          });
+        },
+        attributes: {name: i18n.activerecord.models.country.one},
+        value: Order.destination_country_id,
+      }, 
+    ]
+  };
+  var additional = shared.draw.select_option(options);
+  additional.find('select').each(function () {make_select_widget($(this).attr('name'),$(this));});
+  shared.helpers.expand(dialog,0.60,'vertical');
+  shared.helpers.center(dialog);
   dialog.show();
 }

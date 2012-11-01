@@ -18,6 +18,7 @@ function get_position(x,y) {
 
 var _currentSelectTarget = '';
 var _currentSelectButton;
+
 function make_select_widget(name,elem) {
   elem.hide();
   var button = $('<div id="select_widget_button_for_' + elem.attr("id") + '"></div>');
@@ -57,8 +58,9 @@ function make_select_widget(name,elem) {
       }
 
     });
-    mdiv.css({position: 'absolute', left: MX - 50, top: MY - 50});
+    mdiv.css({position: 'absolute'});
     $('body').append(mdiv);
+    mdiv.offset({left: button.offset().left - 1, top: button.offset().top - 1});
     mdiv.show();
   });
 }

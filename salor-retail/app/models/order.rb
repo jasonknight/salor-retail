@@ -651,7 +651,13 @@ class Order < ActiveRecord::Base
       :id => self.id,
       :buy_order => self.buy_order,
       :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag,
-      :tax_free => self.tax_free
+      :tax_free => self.tax_free,
+      :sale_type_id => self.sale_type_id,
+      :destination_country_id => self.destination_country_id,
+      :origin_country_id => self.origin_country_id,
+      :sale_type  => self.sale_type,
+      :origin => self.origin_country,
+      :destination => self.destination_country
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs

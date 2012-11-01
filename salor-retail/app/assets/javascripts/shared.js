@@ -631,7 +631,6 @@ window.shared = {
     option: function (options,callbacks) {
       if (!options.value)
         options.value = '';
-        
       var div = shared.element('div',{id: 'option_' + options.name,class:'options-row'}, '', options.append_to);
       div.append('<div class="option-name">' + options.title + '</div>');
       var div2 = shared.element('div',{class:'option-input'}, '', div);
@@ -649,19 +648,30 @@ window.shared = {
       div.append('<div class="option-name">' + options.title + '</div>');
       var div2 = shared.element('div',{class:'option-input'}, '', div);
       var input = shared.element('input',{id: 'option_' + options.name.replace(/\s/,'') + '_input', type:'checkbox',class:'option-actual-input'},'',div2);
-      console.log("Options",options);
       input.attr('checked',options.value);
       input.change(callbacks.change);
       input.checkbox();
       return div;
     },
-    select_option: function (name,append_to,callback,initval) {
-      if (!initval)
-        initval = false;
-      var div = shared.element('div',{id: 'option_' + name.replace(/\s/,''),class:'options-row'}, '', append_to);
-      div.append('<div class="option-name">' + name + '</div>');
-      var div2 = shared.element('div',{class:'option-input'}, '', div);
-
+    select_option: function (options) {
+      var div = shared.element('div',{id: 'option_' + options.name.replace(/\s/,''),class:'options-row'}, '', options.append_to);
+      div.append('<div class="option-name">' + options.title + '</div>');
+      var div2 = shared.element('div',{class:'option-input option-select-input'}, '', div);
+      for (var i = 0; i < options.selections.length; i++) {
+        var selection = options.selections[i];
+        var select = shared.element('select',{id: 'option_' + selection.name.replace(/\s/,'') + '_' + i, class: 'option-actual-input'},'',div2);
+        for (var attr in selection.attributes) {
+          select.attr(attr,selection.attributes[attr]);
+        }
+        for (var key in selection.options) {
+          var opt = shared.element('option',{value: key},selection.options[key],select);
+          if (selection.value == key) {
+            opt.attr('selected',true);
+          }
+        }
+        select.on('change',selection.change);
+      }
+      return div;
     },
   },
   helpers: {
