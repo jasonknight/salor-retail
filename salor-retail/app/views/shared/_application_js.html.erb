@@ -109,6 +109,8 @@ var inplace_locations = "<%= escape_javascript raw inplace_locations %>";
 var inplace_itemtypes = "<%= escape_javascript raw inplace_itemtypes %>";
 var inplace_shipmentstatuses = "<%= escape_javascript raw inplace_shipmentstatuses %>";
 var inplace_rebatetypes = "<%= escape_javascript raw inplace_rebatetypes %>";
+var SaleTypes = <%= raw SaleType.scopied.to_json %>;
+var Countries = <%= raw Country.scopied.to_json %>;
 
 
 window.params = {

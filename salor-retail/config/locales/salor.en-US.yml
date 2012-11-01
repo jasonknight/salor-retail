@@ -1,5 +1,6 @@
 ---
 en-US:
+  are_you_sure: Are you sure you want to do this?
   time:
     formats:
       salor: "%a, %b %d %H:%M"
