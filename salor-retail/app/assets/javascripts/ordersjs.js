@@ -158,33 +158,35 @@ window.showOrderOptions = function () {
   var dialog = shared.draw.dialog(i18n.menu.configuration,"order_options");
   
   // Customer code
-  var e = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
-  obj = Order.customer;
-  lc = Order.loyalty_card;
-  var name = $('<div><span class="customer_name"></span></div>');
-  name.html(obj.first_name + ' ' + obj.last_name);
-  var row = $('<div></div>');
-  row.append(name);
-  row.append('<span class="">'+i18n.activerecord.attributes.points+'</span>');
-  if (!lc.points > 0) {
-    lc.points = 0;
+  if (Order.customer) {
+    var e = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
+    obj = Order.customer;
+    lc = Order.loyalty_card;
+    var name = $('<div><span class="customer_name"></span></div>');
+    name.html(obj.first_name + ' ' + obj.last_name);
+    var row = $('<div></div>');
+    row.append(name);
+    row.append('<span class="">'+i18n.activerecord.attributes.points+'</span>');
+    if (!lc.points > 0) {
+      lc.points = 0;
+    }
+    var col = $('<span id="pos-loyalty-card-points" class="loyalty-points">'+lc.points+'</span>');
+    col.attr('model_id',lc.id);
+    col.attr('klass','LoyaltyCard');
+    col.attr('field','points');
+    col.addClass('editme');
+    make_in_place_edit(col);
+    row.append(col);
+    row.append('<span class="">'+i18n.activerecord.attributes.lc_points+'</span>');
+    var col = $('<span id="pos-order-points" class="order-points">' + Order.lc_points + '</span>');
+    col.attr('model_id',$('.order-id').html());
+    col.attr('klass','Order');
+    col.attr('field','lc_points');
+    col.addClass('editme');
+    make_in_place_edit(col);
+    row.append(col);
+    e.append(row);
   }
-  var col = $('<span id="pos-loyalty-card-points" class="loyalty-points">'+lc.points+'</span>');
-  col.attr('model_id',lc.id);
-  col.attr('klass','LoyaltyCard');
-  col.attr('field','points');
-  col.addClass('editme');
-  make_in_place_edit(col);
-  row.append(col);
-  row.append('<span class="">'+i18n.activerecord.attributes.lc_points+'</span>');
-  var col = $('<span id="pos-order-points" class="order-points">' + Order.lc_points + '</span>');
-  col.attr('model_id',$('.order-id').html());
-  col.attr('klass','Order');
-  col.attr('field','lc_points');
-  col.addClass('editme');
-  make_in_place_edit(col);
-  row.append(col);
-  e.append(row);
   // End customer code
   
   

@@ -1,12 +1,14 @@
 %table.striped-table2
   %tr
-    - @report[:list_of_items_raw].first.keys.each do |k|
-      - next if k == :type
-      %th= t("activerecord.attributes.#{ k }")
+    %th{ :style => 'width: 5%'}= t("activerecord.attributes.letter")
+    %th= t("activerecord.attributes.name")
+    %th{ :style => 'width: 20%'}= t("activerecord.attributes.price")
+    %th{ :style => 'width: 10%'}= t("activerecord.attributes.quantity")
+    %th{ :style => 'width: 20%'}= t("activerecord.attributes.total")
   - @report[:list_of_items_raw][item_start..item_end].each do |item|
-    - item = format_item(item)
+    - formatted_item = format_item(item)
     %tr
-      - item.each do |k,v|
+      - formatted_item.each do |k,v|
         - next if k == :type
         %td{ :class => k }= v
     - unless @report[:lc_points_discount].zero?

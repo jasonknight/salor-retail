@@ -35,8 +35,8 @@
   - item_pagination_count_other = 10
   - item_count -= item_pagination_count_one
   - (item_count / item_pagination_count_other).times do |i|
-    - item_start = i * item_pagination_count_other
-    - item_end = item_start + item_pagination_count_other
+    - item_start = 1 + item_pagination_count_one + i * item_pagination_count_other
+    - item_end = item_start + item_pagination_count_other - 1
     - item_end = item_count if item_end > item_count
     = render('orders/invoices/default/header_page_other')
     - if params[:delivery_note]

@@ -736,7 +736,7 @@ class Order < ActiveRecord::Base
       oi.price = 0 if oi.price.nil?
       oi.quantity = 0 if oi.quantity.nil?
       item_price = 0 if item_price.nil?
-      name = oi.item.name
+      name = oi.item.name + oi.item.sku
 
       # Price calculation for normal items
       if oi.behavior == 'normal'
@@ -972,14 +972,19 @@ class Order < ActiveRecord::Base
       next if sum_taxes[tax.id] == nil or sum_taxes[tax.id][:total] == 0
       # I.E. what is the percentage decimal of the tax value
       fact = sum_taxes[tax.id][:value] / 100.00
-      # How much of the sum goes to the store after taxes
-      if not $Conf.calculate_tax then
-        net = sum_taxes[tax.id][:total] / (1.00 + fact)
-        gro = sum_taxes[tax.id][:total]
+      if self.tax_free
+        net =  sum_taxes[tax.id][:total]
+        gro =  sum_taxes[tax.id][:total]
       else
-        # I.E. The net total is the item total because the tax is outside that price.
-        net = sum_taxes[tax.id][:total]
-        gro = net * (1 + sum_taxes[tax.id][:value].to_f/100.00)
+        # How much of the sum goes to the store after taxes
+        if not $Conf.calculate_tax then
+          net = sum_taxes[tax.id][:total] / (1.00 + fact)
+          gro = sum_taxes[tax.id][:total]
+        else
+          # I.E. The net total is the item total because the tax is outside that price.
+          net = sum_taxes[tax.id][:total]
+          gro = net * (1 + sum_taxes[tax.id][:value].to_f/100.00)
+        end
       end
       # The amount of taxes paid is the gross minus the net total
       vat = gro - net
