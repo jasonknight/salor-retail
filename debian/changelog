@@ -1,4 +1,4 @@
-salor-retail (4.0.0.5) precise; urgency=low
+salor-retail (4.0.0.5) unstable; urgency=low
 
   [ Michael Franzl ]
   * closes #1340
