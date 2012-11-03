@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121031153619) do
+ActiveRecord::Schema.define(:version => 20121102105947) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -901,6 +901,7 @@ ActiveRecord::Schema.define(:version => 20121031153619) do
     t.boolean  "multi_currency",                  :default => false
     t.string   "sku"
     t.string   "token"
+    t.string   "email"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

@@ -7,7 +7,9 @@
 
 <VirtualHost *:80>
   ServerName INSTANCE_ID.sr.red-e.eu
+  #ServerAlias *.sh.red-e.eu
   SetEnv SR_DEBIAN_SITEID INSTANCE_ID
+  SetEnv BUNDLE_GEMFILE /etc/salor-retail/INSTANCE_ID/Gemfile
   DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
   #PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
 
@@ -23,7 +25,7 @@
     #AUTH: AuthDigestProvider file
     #AUTH: AuthUserFile /etc/apache2/salor-auth-users
     #AUTH: AuthGroupFile /etc/apache2/salor-auth-groups
-    #AUTH: Require group srINSTANCE_ID
+    #AUTH: Require group INSTANCE_ID.sr
     Satisfy any
   </Location>
   
