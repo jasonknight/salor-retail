@@ -9,7 +9,7 @@ salor-retail/public/images   /usr/share/salor-retail/source/public
 
 salor-retail/vendor/assets   /usr/share/salor-retail/source/vendor
 
-salor-retail/Gemfile         /usr/share/salor-retail/source
+salor-retail/Gemfile.production         /usr/share/salor-retail/source
 salor-retail/Rakefile        /usr/share/salor-retail/source
 salor-retail/config.ru       /usr/share/salor-retail/source
 
