@@ -144,9 +144,9 @@ $(function () {
                 <div class="new-item-field">
                 <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@item.sku).gsub('.png','.eps') %> 
                 &nbsp;&nbsp;&nbsp;
-                <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker')" %> 
+                <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')" %> 
       &nbsp;&nbsp;&nbsp;
-                <%= image_tag "/images/icons/print_48.png", :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label')" %> 
+                <%= image_tag "/images/icons/print_48.png", :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')" %> 
                 </div>
               <div class="clear">
                 &nbsp;
