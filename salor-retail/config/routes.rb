@@ -103,7 +103,7 @@ SalorRetail::Application.routes.draw do
   match "home/errors_display" => "home#errors_display"
   match "home/backup_logfile" => "home#backup_logfile"
   match "home/remote_service" => 'home#remote_service'
-  match "home/get_connection_status" => "home#get_connection_status"
+  match "home/update_connection_status" => "home#update_connection_status"
   match "home/connect_remote_service" => "home#connect_remote_service"
   match "reports/selector" => "reports#selector"
   match "reports/daily" => "reports#daily"
