@@ -6,18 +6,22 @@
 # --- 
 
 <VirtualHost *:80>
-  ServerName INSTANCE_ID.sr.red-e.eu
-  #ServerAlias *.sh.red-e.eu
+  ServerName INSTANCE_ID.sr.local
+  #ServerAlias *.sr.local
   SetEnv SR_DEBIAN_SITEID INSTANCE_ID
   SetEnv BUNDLE_GEMFILE /etc/salor-retail/INSTANCE_ID/Gemfile
   DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
-  #PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
+  #PassengerPreStart http://INSTANCE_ID.sr.local/
+  
+  SetEnvIf Host ^.*-b\.sr\.red-e\.eu USE_AUTH
+  SetEnvIf Host ^.*-d\.sr\.red-e\.eu USE_AUTH
 
   <Location />
-    Order deny,allow
-    Deny from all
+    Order allow,deny
     Allow from 127.0.0.1 192.168 10.0
     #Allow from all
+    
+    Allow from env=!USE_AUTH
     
     #AUTH: AuthType Digest
     #AUTH: AuthName "SALOR"
@@ -26,6 +30,7 @@
     #AUTH: AuthUserFile /etc/apache2/salor-auth-users
     #AUTH: AuthGroupFile /etc/apache2/salor-auth-groups
     #AUTH: Require group INSTANCE_ID.sr
+    
     Satisfy any
   </Location>
   
@@ -52,5 +57,5 @@
   PassengerSpawnMethod smart
   RailsAppSpawnerIdleTime 36000
   PassengerHighPerformance on
-  #PassengerMinInstances 1
+  #PassengerMinInstances 2
 </VirtualHost>

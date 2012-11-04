@@ -34,10 +34,10 @@ module UserEmployeeMethods
       end
       def password=(string)
         if string == '000' then
-          write_attribute :encripted_password, generate_password(rand(900000))
+          write_attribute :encrypted_password, generate_password(rand(900000))
           return
         end
-        string = string.strip.to_i.to_s
+        string = string.strip
         if not string.empty? then
           if SalorBase.check_code(string) == false then
             self.errors[:password] << "incorrect format"
