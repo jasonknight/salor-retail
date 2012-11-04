@@ -742,7 +742,7 @@ class Order < ActiveRecord::Base
       oi.price = 0 if oi.price.nil?
       oi.quantity = 0 if oi.quantity.nil?
       item_price = 0 if item_price.nil?
-      name = oi.item.name + oi.item.sku
+      name = oi.item.name
 
       # Price calculation for normal items
       if oi.behavior == 'normal'
@@ -989,7 +989,7 @@ class Order < ActiveRecord::Base
         else
           # I.E. The net total is the item total because the tax is outside that price.
           net = sum_taxes[tax.id][:total]
-          gro = net * (1 + sum_taxes[tax.id][:value].to_f/100.00)
+          gro = sum_taxes[tax.id][:total] * (1 + fact)
         end
       end
       # The amount of taxes paid is the gross minus the net total
