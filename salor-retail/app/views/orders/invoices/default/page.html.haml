@@ -21,7 +21,7 @@
   - else
     %h2== #{ I18n.t("receipts.invoice") } #{ @order.id }
     %h3= I18n.l(@order.created_at, :format => :just_day)
-    %p= raw Kramdown::Document.new(@invoice_note.note_header) if @invoice_note
+    %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
   
   - item_count = @report[:list_of_items_raw].size
   
@@ -80,7 +80,7 @@
           - tax.each do |k,v|
             %td.total= v
             
-    %p= raw Kramdown::Document.new(@invoice_note.note_footer) if @invoice_note
+    %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
 
   %div.invoice_blurb_footer= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb_footer).to_html
   

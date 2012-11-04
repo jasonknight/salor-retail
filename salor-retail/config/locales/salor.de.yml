@@ -65,6 +65,7 @@ de:
   InCash: In Bar
   activerecord:
     attributes:
+      tax_free: Steuerfrei
       invoice_note:
         origin_country_id: Ursprungsland
         destination_country_id: Zielland
@@ -891,6 +892,7 @@ de:
     shipments:
       state: State
     single_words:
+      choose: Wählen
       all: Alle
       body: Körper
       bottom: Hinunter

@@ -26,7 +26,7 @@ function make_select_widget(name,elem) {
   if (button.html() == "")
     button.html($(elem).find("option:first").text());
   if (button.html() == "")
-    button.html("Choose");
+    button.html(name);
   button.insertAfter(elem);
   button.attr('select_target',"#" + elem.attr("id"));
   button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
