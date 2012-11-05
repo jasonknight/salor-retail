@@ -318,7 +318,7 @@ class OrdersController < ApplicationController
     # Recalculate everything and then show Payment Popup
     @order = initialize_order
     # MF: speedy version of calculate_totals is completely commented out in order.rb, so that would explain why in case of a racing condition (e.g. where 2 items are scanned and the first ajax request is handled AFTER the second ajax request due to passenger instance queue) the order total was not recalculated and was therefore missing one item.
-    # I changed below to "false", which means, every time the "complete" button is pressed, it will update the order total according to the items. In dev mode, it is still speedy, so I think it's save for the live systems. This makes screen masking unnecessary and passenger instances can now be more than 1 again.
+    # I changed below to "false", which means, every time the "complete" button is pressed, it will update the order total according to the items. In dev mode, it is still speedy, so I think it's safe for the live systems. This makes screen masking unnecessary and passenger instances can now be more than 1 again.
     @order.calculate_totals(false)
     @order.save!
   end
@@ -458,10 +458,13 @@ class OrdersController < ApplicationController
   def customer_display
     @order = Order.find_by_id(params[:id])
     GlobalData.salor_user = @order.get_user
-    @vendor = Vendor.find(GlobalData.salor_user.meta.vendor_id)
+    $User = @order.get_user
+    @vendor = Vendor.find(@order.vendor_id)
+    $Conf = @vendor.salor_configuration
     @order_items = @order.order_items.visible.order('id ASC')
     @report = @order.get_report
     if @order_items
+    puts "### Order items are present."
       render :layout => 'customer_display', :nothing => :true
     else
       render :layout => 'customer_display'

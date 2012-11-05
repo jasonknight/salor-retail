@@ -1,0 +1,3 @@
+var dialog = shared.draw.dialog("<%= @type %>","error_dialog",true);
+var content = shared.element('div',{class: 'error-explanation'},"<%= @error %>", dialog);
+dialog.show();
