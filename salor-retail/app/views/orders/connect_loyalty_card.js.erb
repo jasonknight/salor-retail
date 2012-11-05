@@ -3,3 +3,4 @@ updateOrder(<%= raw @order.to_json %>);
 updateCustomerView({},<%= @order.id %>);
 <% end %>
 Order = <%= raw @order.to_json %>;
+showOrderOptions();
