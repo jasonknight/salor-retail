@@ -102,7 +102,7 @@ class Item < ActiveRecord::Base
     ""
   end
   def parent
-    Item.find_by_child_id(self.id)
+    Item.find_by_child_id(self.id) unless self.new_record?
   end
   def child
     Item.find_by_id(self.child_id)
