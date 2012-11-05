@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121102105947) do
+ActiveRecord::Schema.define(:version => 20121105100411) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -610,6 +610,8 @@ ActiveRecord::Schema.define(:version => 20121102105947) do
     t.integer  "origin_country_id"
     t.integer  "destination_country_id"
     t.integer  "sale_type_id"
+    t.text     "invoice_comment"
+    t.text     "delivery_note_comment"
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"
