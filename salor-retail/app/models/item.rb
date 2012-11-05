@@ -455,10 +455,12 @@ class Item < ActiveRecord::Base
       i = self.quantity - 1
       if i == -1
         if self.parent.class == Item
-          # puts "Updating parent qty";
+          #puts "Updating parent #{self.parent.name} qty";
           before = self.parent.quantity
-          self.parent.update_attribute :quantity, self.parent.quantity - 1
+          #puts "Before #{before}"
+          self.parent.update_attribute :quantity, before - 1 # recursion
           after = self.parent.quantity
+          #puts "After #{after}"
           parent_reducable = before != after
           write_attribute(:quantity, self.parent.packaging_unit - 1) if parent_reducable
         else
