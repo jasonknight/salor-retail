@@ -983,7 +983,7 @@ class Order < ActiveRecord::Base
         gro =  sum_taxes[tax.id][:total]
       else
         # How much of the sum goes to the store after taxes
-        if not $Conf.calculate_tax then
+        if $Conf and not $Conf.calculate_tax then
           net = sum_taxes[tax.id][:total] / (1.00 + fact)
           gro = sum_taxes[tax.id][:total]
         else

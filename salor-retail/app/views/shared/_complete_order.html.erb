@@ -20,9 +20,9 @@ var allow_payment_amount = true;
   puts payment_external_types[index] etc.
 */
 // i.e. what needs to be sent in the payment_methods[][internal_type] field
-var payment_internal_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
+var payment_internal_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
 // what can be set as the payment_methods[][name] field
-var payment_external_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
+var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
 
 function payment_method_options() {
   var txt = '';

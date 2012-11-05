@@ -37,7 +37,7 @@
       = salor_render :partial => "shared/cash_drop"
       
       = yield
-      .close-window{ :onclick => "Salor.shutdown();" } X
+      .close-window{ :onclick => "if (typeof Salor != 'undefined') { Salor.shutdown();} else { self.close();}" } X
       
       %span.version= "Salor Version: #{ SalorRetail::Application::VERSION }"
       %span.salorbinversion
