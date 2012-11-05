@@ -180,7 +180,7 @@
         <div class="widget master" onmousedown="window.location = '<%= countries_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= countries_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/<%= icon(:payment,64) %>" /><br />
+              <img src="/images/icons/<%= icon(:globe,64) %>" /><br />
               <%= t('activerecord.models.country.other') %>
             </a>
           </div>
@@ -190,7 +190,7 @@
         <div class="widget master" onmousedown="window.location = '<%= sale_types_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= sale_types_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/<%= icon(:payment,64) %>" /><br />
+              <img src="/images/icons/<%= icon(:buy,64) %>" /><br />
               <%= t('activerecord.models.sale_type.other') %>
             </a>
           </div>
@@ -200,7 +200,7 @@
         <div class="widget master" onmousedown="window.location = '<%= invoice_notes_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= invoice_notes_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/<%= icon(:payment,64) %>" /><br />
+              <img src="/images/icons/<%= icon(:bubble,64) %>" /><br />
               <%= t('activerecord.models.invoice_note.other') %>
             </a>
           </div>

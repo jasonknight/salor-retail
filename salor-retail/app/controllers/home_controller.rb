@@ -83,21 +83,30 @@ class HomeController < ApplicationController
     send_file 'log/production.log', :filename => "salor-logfile-#{ l Time.now, :format => :datetime_iso2 }.log"
   end
 
-  # this is never called currently. Has been replaced with Salor::JSApi.
-  def get_connection_status
-    @status_ssh = `netstat -pna | grep :26`
-    @status_vpn = `netstat -pna | grep :28`
+
+  def update_connection_status
+    @status_ssh = not(`netstat -pna | grep :26`.empty?)
+    @status_vnc = not(`netstat -pna | grep :28`.empty?)
+    #@status_ssh = false
+    #@status_vnc = false
+    render :js => "connection_status = {ssh:#{@status_ssh}, vnc:#{@status_vnc}};"
   end
 
-  # this is never called currently. Has been replaced with Salor::JSApi.
+
   def connect_remote_service
     if params[:type] == 'ssh'
       @status_ssh = `netstat -pna | grep :26`
       if @status_ssh.empty? # don't create more process than one
         connection_thread_ssh = fork do
-          exec "expect #{ File.join('/', 'usr', 'share', 'red-e_ssh_reverse_connect.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
+          exec "expect #{ File.join('/', 'usr', 'share', 'remotesupport', 'remotesupportssh.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
         end
         Process.detach(connection_thread_ssh)
+      end
+    end
+    if params[:type] == 'vnc'
+      @status_vnc = `netstat -pna | grep :28`
+      if @status_vnc.empty? # don't create more process than one
+        spawn "expect /usr/share/remotesupport/remotesupportvnc.expect #{ params[:host] } #{ params[:user] } #{ params[:pw] }", :out => "/tmp/salor-retail-x11vnc-stdout.log", :err => "/tmp/salor-retail-x11vnc-stderr.log"
       end
     end
     render :nothing => true

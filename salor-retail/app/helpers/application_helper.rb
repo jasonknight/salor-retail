@@ -182,7 +182,10 @@ module ApplicationHelper
       :nurse => 'user2',
       :save => 'save',
       :gearpage => 'gearpage',
-      :label => 'label'
+      :label => 'label',
+      :bubble => 'bubble',
+      :buy => 'buy',
+      :globe => 'globe'
     }
     return icons[name] + '_' + size.to_s + '.png'
   end

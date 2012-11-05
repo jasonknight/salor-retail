@@ -144,9 +144,9 @@ $(function () {
                 <div class="new-item-field">
                 <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@item.sku).gsub('.png','.eps') %> 
                 &nbsp;&nbsp;&nbsp;
-                <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker')" %> 
+                <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')" %> 
       &nbsp;&nbsp;&nbsp;
-                <%= image_tag "/images/icons/print_48.png", :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label')" %> 
+                <%= image_tag "/images/icons/print_48.png", :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')" %> 
                 </div>
               <div class="clear">
                 &nbsp;
@@ -300,8 +300,49 @@ $(function () {
   </tr>
   
   <tr>
-    <td>  </td>
-    <td>  </td>
+    <td></td>
+    <td>
+      <% current = @item 
+        cap = 10
+        i = 0
+      %>
+      <% ancestorcount = 0 %>
+      <% begin %>
+        <% parent = current.parent %>
+        <% if parent.class == Item and not parent.child_id.nil? %>
+          <% ancestorcount += 1 %>
+          <p><b>Parent <%= ancestorcount %>: <%= link_to parent.name, edit_item_path(parent) %></b></p>
+          <p><%= t 'activerecord.attributes.quantity' %>: <%= parent.quantity %><br/>
+              <%= t 'activerecord.attributes.sku' %>: <%= parent.sku %><br/>
+              <%= t 'activerecord.attributes.packaging_unit' %>: <%= parent.packaging_unit %><br/>
+              <%= t 'activerecord.attributes.price' %>: <%= number_to_currency parent.base_price %></p>
+        <% end %>
+        <% 
+          current = parent 
+          i = i + 1
+        %>
+      <% end while parent.class == Item and i < cap %>
+      <% current = @item %>
+      <% 
+        ancestorcount = 0 
+        i = 0
+      %>
+      <% begin %>
+        <% child = current.child %>
+        <% if child %>
+          <% ancestorcount += 1 %>
+          <p><b>Child <%= ancestorcount %>: <%= link_to child.name, edit_item_path(child) %></b></p>
+          <p><%= t 'activerecord.attributes.quantity' %>: <%= child.quantity %><br/>
+              <%= t 'activerecord.attributes.sku' %>: <%= child.sku %><br/>
+              <%= t 'activerecord.attributes.packaging_unit' %>: <%= child.packaging_unit %><br/>
+              <%= t 'activerecord.attributes.price' %>: <%= number_to_currency child.base_price %></p>
+        <% end %>
+        <% 
+          current = child 
+          i = i + 1
+        %>
+      <% end while child.class == Item and i < cap%>
+    </td>
   </tr>
   
   <tr>

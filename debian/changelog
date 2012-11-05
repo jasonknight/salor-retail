@@ -1,3 +1,34 @@
+salor-retail (4.0.0.5) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * closes #1340
+  * closes #1342
+  * added order relationship with destination country, origin country and sale_type
+  * closes #1354
+  * work for #1343, invoice styles
+  * closes #1344, multi-page invoice headers
+
+  [ Jason Knight ]
+  * New POS Config dialog work
+
+  [ Michael Franzl ]
+  * deleted wrongly checked in files
+  * issues #1347, #1368
+  * closes #1368, #1367, #1356
+
+  [ Jason Knight ]
+  * Added internationalization
+  * More intl. fixing forms, and setting up JS variables for config popup
+  * Order Options Dialog
+  * Intl and form edits
+
+  [ Michael Franzl ]
+  * styling, translations
+  * debian stuff, preparation for email notifications
+  * debian fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 03 Nov 2012 15:07:58 +0100
+
 salor-retail (4.0.0.4) unstable; urgency=low
 
   * restricted barcodes from other instances

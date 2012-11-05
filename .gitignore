@@ -29,6 +29,7 @@ salor-retail/tmp
 *.kate-swp
 sha1-signatures.txt
 *.tar.bz2
+Gemfile
 Gemfile.lock
 debian/salor-retail
 debian/files

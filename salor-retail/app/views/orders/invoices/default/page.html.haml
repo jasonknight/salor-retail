@@ -18,10 +18,12 @@
   
   - if params[:delivery_note]
     %h2== #{ I18n.t("receipts.delivery_note") } #{ @order.id }
+    %p= text_field_tag 'delivery_note_comment', @order.delivery_note_comment
   - else
     %h2== #{ I18n.t("receipts.invoice") } #{ @order.id }
     %h3= I18n.l(@order.created_at, :format => :just_day)
-    %p= raw Kramdown::Document.new(@invoice_note.note_header) if @invoice_note
+    %p= text_field_tag 'invoice_comment', @order.invoice_comment
+    %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
   
   - item_count = @report[:list_of_items_raw].size
   
@@ -80,9 +82,24 @@
           - tax.each do |k,v|
             %td.total= v
             
-    %p= raw Kramdown::Document.new(@invoice_note.note_footer) if @invoice_note
+    %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
 
   %div.invoice_blurb_footer= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb_footer).to_html
   
   .center
     %img.salorlogo{ :src => '/images/salor-logo-reports.png'}
+    
+:javascript
+  $('#invoice_comment').on('change', function() {
+    $.ajax({
+      url: '/vendors/edit_field_on_child',
+      data: {id:#{@order.id},klass:'Order',field:'invoice_comment',value:$(this).val()}    
+    })
+  })
+  
+  $('#delivery_note_comment').on('change', function() {
+    $.ajax({
+      url: '/vendors/edit_field_on_child',
+      data: {id:#{@order.id},klass:'Order',field:'delivery_note_comment',value:$(this).val()}    
+    })
+  })

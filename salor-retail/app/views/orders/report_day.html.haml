@@ -1,3 +1,6 @@
+= stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'invoice_default_print', :media => 'print'
+
 - categories = @report['categories']
 - taxes = @report['taxes']
 - paymentmethods = @report['paymentmethods']
@@ -32,11 +35,11 @@
     %br
     %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 
-%div.report-container
-  %div
-    %img.right{ :src => '/images/salor-logo-reports.png'}
+.paper-invoice.invoice_print
+  .header-page-one
     - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image
-      %img.left{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
+      %img.vendorlogo.floatright{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
+    
   %div.clear
 
   %div

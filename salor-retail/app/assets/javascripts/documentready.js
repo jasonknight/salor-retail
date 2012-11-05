@@ -146,7 +146,7 @@ $(function () {
     if (workstation) {
       $('select').each(function () {
        if ($(this).val() == '') {
-        make_select_widget('Choose',$(this));
+        make_select_widget(i18n.views.single_words.choose,$(this));
        } else if ($(this).find("option:selected").html()) {
         make_select_widget($(this).find("option:selected").html(),$(this));
        } else {

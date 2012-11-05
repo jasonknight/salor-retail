@@ -63,14 +63,6 @@ case "$1" in
     if [ "$result" = "0" ]; then
       echo "pcspkr" >> /etc/modules;
     fi
-    
-    hasPack=$(dpkg -l | grep salor-virtual | wc -l)
-    if [ "$hasPack" = "0" ]; then
-      echo "  postinst: All required gems are available as Debian packages. Nothing to be done."
-    else
-      echo "  postinst: Some of the required gems are not available as Debian packages. We have to run bundle install to download gems from rubygems.org."
-      salor-installgems r
-    fi
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)
@@ -156,18 +148,31 @@ for lInstance in $gInstances; do
         cp $app_root/db/schema.rb $rails_var
       fi
       if [ -e $app_root/config/config.yml ]; then
-        echo "  postinst: Copying config.yml to etc directory and registering as config file."
+        echo "  postinst: Installing config.yml as config file ..."
         ucf --debconf-ok $app_root/config/config.yml $rails_etc/config.yml
         chmod 660 $rails_etc/config.yml
+      fi
+      
+      echo "  postinst: Installing Gemfile as configuration file ..."
+      gemfile_source=$app_root/Gemfile.production
+      gemfile_target=$rails_etc/Gemfile
+      ucf --debconf-ok $gemfile_source $gemfile_target
+      
+      hasPack=$(dpkg -l | grep salor-virtual | wc -l)
+      if [ "$hasPack" = "0" ]; then
+        echo "  postinst: All required gems are available as Debian packages. Nothing to be done."
+      else
+        echo "  postinst: Some of the required gems are not available as Debian packages. We have to run bundle install to download gems from rubygems.org."
+        salor-installgems r ${lInstance}
       fi
       
       if [ -e $rails_etc/database.yml ]; then
         echo "  postinst: this instance has a configured database."
         cd $app_root        
         echo "  postinst: migrating the database. this may take a while."
-        rake1.9.1 db:migrate RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
+        rake1.9.1 db:migrate RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" BUNDLE_GEMFILE="${gemfile_target}" #> /dev/null
         echo "  postinst: running db:seed ..."
-        rake1.9.1 db:seed SEED_MODE=minimal RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" #> /dev/null
+        rake1.9.1 db:seed SEED_MODE=minimal RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" BUNDLE_GEMFILE="${gemfile_target}" #> /dev/null
       else
         echo "  postinst: $rails_etc/database.yml does not exist. Instance \"${lInstance}\" database must be configured manually."
       fi

@@ -34,10 +34,10 @@ module UserEmployeeMethods
       end
       def password=(string)
         if string == '000' then
-          write_attribute :encripted_password, generate_password(rand(900000))
+          write_attribute :encrypted_password, generate_password(rand(900000))
           return
         end
-        string = string.strip.to_i.to_s
+        string = string.strip
         if not string.empty? then
           if SalorBase.check_code(string) == false then
             self.errors[:password] << "incorrect format"
@@ -544,8 +544,22 @@ module UserEmployeeMethods
         item_total -= o.rebate / o.order_items.visible.count if o.rebate_type == 'fixed' # spread order fixed rebate equally
         item_total -= o.lc_discount_amount / o.order_items.visible.count  # spread order lc discount amount 
         item_total -= oi.discount_amount if oi.discount_applied
-        gro = item_total
-        net = item_total / ( 1 + oi.tax_profile_amount / 100 )
+        
+        if o.tax_free == true
+          gro = item_total
+          net = item_total
+        else
+          fact = oi.tax_profile_amount / 100
+          # How much of the sum goes to the store after taxes
+          if not $Conf.calculate_tax then
+            net = item_total / (1.00 + fact)
+            gro = item_total
+          else
+            # I.E. The net total is the item total because the tax is outside that price.
+            net = item_total
+            gro = item_total * (1 + fact)
+          end
+        end
         if item_total > 0.0
           if not categories[:pos].has_key?(catname)
             categories[:pos].merge! catname => { :gro => gro, :net => net }
