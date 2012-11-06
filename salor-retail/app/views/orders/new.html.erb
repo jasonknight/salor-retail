@@ -199,34 +199,38 @@ function addPosItem(item) {
     }
     if (attr == 'quantity') {
       //MF: Why is this special in editing? Why not use just class editme for editing?
-      var up = td().removeClass('jtable-cell').addClass('table-cell');
-      
-      up.mousedown(function () {
-          var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
-          var string = '/vendors/edit_field_on_child?id=' +
-                        item.id +'&klass=OrderItem' +
-                        '&field=quantity'+
-                        '&value=' + v;
-                        get(string, filename);
-                        focusInput($('#keyboard_input'));
-      });
-      up.html("<div><img src=\"/images/icons/up_32.png\" />");
-      up.addClass('pointer quantity-button');
-      row.append(up);
+      if (Register.show_plus_minus == true) {
+        var up = td().removeClass('jtable-cell').addClass('table-cell');
+        
+        up.mousedown(function () {
+            var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
+            var string = '/vendors/edit_field_on_child?id=' +
+                          item.id +'&klass=OrderItem' +
+                          '&field=quantity'+
+                          '&value=' + v;
+                          get(string, filename);
+                          focusInput($('#keyboard_input'));
+        });
+        up.html("<div><img src=\"/images/icons/up_32.png\" />");
+        up.addClass('pointer quantity-button');
+        row.append(up);
+      }
       row.append(col);
-      var d = td().removeClass('jtable-cell').addClass('table-cell');
-      d.mousedown(function () {
-          var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
-          var string = '/vendors/edit_field_on_child?id=' +
-                        item.id +'&klass=OrderItem' +
-                        '&field=quantity'+
-                        '&value=' + v;
-                        get(string, filename);
-                        focusInput($('#keyboard_input'));
-      });
-      d.html("<div><img src=\"/images/icons/down_32.png\" />");
-      d.addClass('pointer quantity-button');
-      row.append(d);
+      if (Register.show_plus_minus == true) {
+        var d = td().removeClass('jtable-cell').addClass('table-cell');
+        d.mousedown(function () {
+            var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
+            var string = '/vendors/edit_field_on_child?id=' +
+                          item.id +'&klass=OrderItem' +
+                          '&field=quantity'+
+                          '&value=' + v;
+                          get(string, filename);
+                          focusInput($('#keyboard_input'));
+        });
+        d.html("<div><img src=\"/images/icons/down_32.png\" />");
+        d.addClass('pointer quantity-button');
+        row.append(d);
+      }
     } else {
       row.append(col);
     }

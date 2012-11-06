@@ -48,10 +48,10 @@ class Shipment < ActiveRecord::Base
   ]
   def self.receiver_shipper_list()
     ret = []
-    GlobalData.salor_user.get_shippers(nil).each do |shipper|
+    Shipper.scopied.each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
     end
-    GlobalData.salor_user.get_vendors(nil).each do |vendor|
+    $User.get_vendors(nil).each do |vendor|
       ret << {:name => vendor.name, :value => 'Vendor:' + vendor.id.to_s}
     end
     return ret
