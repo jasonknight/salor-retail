@@ -1,3 +1,25 @@
+salor-retail (4.0.0.6) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * build
+  * closes #1374
+  * closes #1371
+  * translations and icons, kramdown fix
+  * closes #1375
+  * all rails printing works
+  * Closes #1377
+  * Closes #1378
+  * tested parent/child item relationship, working
+
+  [ Jason Knight ]
+  * Added exit that works for chromium in kiosk mode
+  * fixed complete order popup error
+
+  [ Michael Franzl ]
+  * added comments to upload
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 05 Nov 2012 19:49:40 +0100
+
 salor-retail (4.0.0.5) unstable; urgency=low
 
   [ Michael Franzl ]
