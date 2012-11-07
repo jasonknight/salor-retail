@@ -1,3 +1,8 @@
+if User.any?
+  puts "Database is already seeded. Not running seed script again."
+  Process.exit 0
+end
+
 # Consider this file also a tutorial on how the system works
 I18n.locale = 'en-US'
 ItemType.delete_all
