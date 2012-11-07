@@ -22,7 +22,7 @@
   - else
     %h2== #{ I18n.t("receipts.invoice") } #{ @order.id }
     %h3= I18n.l(@order.created_at, :format => :just_day)
-    %p= text_field_tag 'invoice_comment', @order.invoice_comment
+    %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
   
   - item_count = @report[:list_of_items_raw].size
