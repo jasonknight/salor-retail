@@ -1,7 +1,7 @@
 ---
 :exception_notification: false
-:exception_notification_sender: Sender Name <user@example.com>
-:exception_notification_receipients: receipient1@example.com receipient2@example.com
+:exception_notification_sender: Sender Name <nobody@localhost>
+:exception_notification_receipients: nobody@localhost
 :invoice_style: default
 app_name: "Salor"
 technician_code: U9479880090210
