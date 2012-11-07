@@ -1,3 +1,9 @@
+salor-retail (4.0.0.8) unstable; urgency=low
+
+  * run seed script only on an empty db, added all tables to db dump
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Nov 2012 16:53:58 +0100
+
 salor-retail (4.0.0.7) unstable; urgency=low
 
   [ Jason Knight ]
