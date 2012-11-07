@@ -1,3 +1,9 @@
+salor-retail (4.0.0.10) unstable; urgency=low
+
+  * added missing plusminus migration
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Nov 2012 17:39:47 +0100
+
 salor-retail (4.0.0.9) unstable; urgency=low
 
   * seeds fix
