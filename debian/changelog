@@ -1,3 +1,14 @@
+salor-retail (4.0.0.7) unstable; urgency=low
+
+  [ Jason Knight ]
+  * show options dialog when adding a customer
+  * Feature #1382
+
+  [ Michael Franzl ]
+  * added udev rules, italian translations, better invoice note
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Nov 2012 16:35:26 +0100
+
 salor-retail (4.0.0.6) unstable; urgency=low
 
   [ Michael Franzl ]
