@@ -539,12 +539,14 @@ class VendorsController < ApplicationController
     render :layout => 'customer_display'
   end
   def backup
-    dbconfig = YAML::load(File.open('config/database.yml'))
+    configpath = SalorRetail::Application::SR_DEBIAN_SITEID == 'none' ? 'config/database.yml' : "/etc/salor-retail/#{SalorRetail::Application::SR_DEBIAN_SITEID}/database.yml"
+    dbconfig = YAML::load(File.open(configpath))
     mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
     username = dbconfig[mode]['username']
     password = dbconfig[mode]['password']
     database = dbconfig[mode]['database']
-    `mysqldump -u #{username} -p#{password} #{database} -w "vendor_id='#{$Vendor.id}'" | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
+    `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
+    #`mysqldump -u #{username} -p#{password} #{database} -w "vendor_id='#{$Vendor.id}'" | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2` # TODO: limiting by vendor was not working, so I disabled it.
 
     send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
    #redirect_to "/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2"
