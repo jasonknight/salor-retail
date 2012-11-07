@@ -47,14 +47,16 @@
     <td> <%= f.check_box :paid %> </td>
   </tr>
   <tr>
-    <td> <%= f.label t("activerecord.attributes.status") %> </td>
-    <td> <%= f.select :shipment_type_id, $User.get_all_shipment_types.collect {|t| [t[:name],t[:id]]} %> </td>
-    
-    <td> <%= f.label t("activerecord.attributes.the_receiver") %> </td>
-    <td> <%= f.select :the_receiver, Shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]} %> </td>
-    
-    <td> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
-    <td> <%= f.select :the_shipper, Shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]} %> </td>
+    <td colspan="3"> <%= f.label t("activerecord.attributes.status") %> </td>
+    <td colspan="3"> <%= f.select :shipment_type_id, $User.get_all_shipment_types.collect {|t| [t[:name],t[:id]]} %> </td>
+  </tr>
+  <tr>
+    <td colspan="3"> <%= f.label t("activerecord.attributes.the_receiver") %> </td>
+    <td colspan="3"> <%= f.select :the_receiver, Shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]} %> </td>
+  </tr>
+  <tr>
+    <td colspan="3"> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
+    <td colspan="3"> <%= f.select :the_shipper, Shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]} %> </td>
   </tr>
   <tr>
     <td colspan="6">

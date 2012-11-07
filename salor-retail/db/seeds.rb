@@ -149,7 +149,7 @@ Vendor.delete_all
   current_user = 0
   Drawer.create :amount => 0, :owner_id => @stockboy.id, :owner_type => 'Employee'
   @tp = TaxProfile.create(:name => "Default #{lang}",:sku => "DEFAUTLTaxProfile", :value => 7, :vendor => @vendor)
-  5.times do |i|
+  25.times do |i|
     # Create 5 categories
     Category.create({
       :name => "Category #{lang} ##{i+1}",
@@ -165,6 +165,12 @@ Vendor.delete_all
     })
     ShipmentType.create({
       :name => "ShipmentType #{lang} ##{i+1}",
+      :vendor => @vendor
+    })
+  end
+  25.times do |i|
+    Shipper.create({
+      :name => "Shipper #{lang} ##{i+1}",
       :vendor => @vendor
     })
   end

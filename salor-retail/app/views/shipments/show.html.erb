@@ -58,7 +58,9 @@
   <tr>
     <th><%= ShipmentItem.human_attribute_name(:name) %></th>
     <th><%= ShipmentItem.human_attribute_name(:sku) %></th>
+    <!--
     <th><%= Item.human_attribute_name(:quantity) %></th>
+    -->
     <th><%= ShipmentItem.human_attribute_name(:quantity) %></th>
     <th><%= Item.human_attribute_name(:purchase_price) %></th>
     <th><%= t('.purchase_price_sum') %></th>
@@ -76,9 +78,11 @@
       <td valign="middle">
         <%= raw edit_me(:sku,sitem,'','','shipment_item_' + sitem.id.to_s + 'sku') %>
       </td>
+      <!--       
       <td valign="middle">
         <%= raw edit_me(:quantity, item, '', '', 'item_' + item.id.to_s + 'quantity') if item %>
       </td>
+      -->
       <td valign="middle">
         <%= raw edit_me(:quantity,sitem,'','','shipment_item_' + sitem.id.to_s + 'quantity') %>
       </td>
@@ -110,7 +114,7 @@
   <tr>
     <td></td>
     <td></td>
-    <td></td>
+    <!-- <td></td> -->
     <td></td>
     <td></td>
     <td><b><%= number_to_currency purchase_price_total %></b></td>

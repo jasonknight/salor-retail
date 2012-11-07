@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121105100411) do
+ActiveRecord::Schema.define(:version => 20121106171547) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20121105100411) do
     t.string   "color"
     t.string   "ip"
     t.boolean  "hide_buttons",          :default => true
+    t.boolean  "show_plus_minus",       :default => true
   end
 
   add_index "cash_registers", ["vendor_id"], :name => "index_cash_registers_on_vendor_id"
