@@ -1,3 +1,10 @@
+salor-retail (4.0.0.11) unstable; urgency=low
+
+  * backup fix for multi-instances, no limit by vendor
+  * sticky labels type1
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 08 Nov 2012 16:50:11 +0100
+
 salor-retail (4.0.0.10) unstable; urgency=low
 
   * added missing plusminus migration
