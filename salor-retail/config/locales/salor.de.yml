@@ -140,6 +140,7 @@ de:
         origin_country: Herstellerland
         customs_code: Export-Code
         manufacturer_price: Herstellerpreis
+        description: Beschreibung
       item_sku: Artikel SKU
       itemsviewlist: Listenansicht für Artikel
       last_name: Familienname

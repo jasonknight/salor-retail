@@ -109,6 +109,11 @@ $(function () {
   </tr>
   
   <tr>
+    <td> <%= f.label Item.human_attribute_name :description %> </td>
+    <td> <%= f.text_field :description, :class => "keyboardable", :style => "width: 80%;" %> </td>
+  </tr>
+  
+  <tr>
     <td> <%= f.label I18n.t("activerecord.attributes.base_price") %> </td>
     <td> <%= f.text_field salor_number_with_delimiter(:base_price), :class => "keyboardable-int delimit-number" %> </td>
   </tr>

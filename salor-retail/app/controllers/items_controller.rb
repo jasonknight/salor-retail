@@ -237,7 +237,13 @@ class ItemsController < ApplicationController
     if params[:id]
       @items = Item.find_all_by_id(params[:id])
     elsif params[:skus]
-      @items = Item.where(:sku => params[:skus].split(","))
+      match = /(ORDER)(.*)/.match(params[:skus].split(",").first)
+      if match[1] == 'ORDER'
+        order_id = match[2].to_i
+        @order_items = Order.find_by_id(order_id).order_items.visible
+      else
+        @items = Item.where(:sku => params[:skus].split(","))
+      end
     end
     text = Printr.new.sane_template("#{params[:type]}_#{params[:style]}",binding)
     if @register.salor_printer
@@ -376,7 +382,8 @@ class ItemsController < ApplicationController
   def selection
     if params[:order_id]
       order = Order.scopied.find_by_id(params[:order_id])
-      @skus = order.order_items.visible.collect{ |oi| oi.sku }.join("\n")
+      @skus = "ORDER#{order.id}"
+      #order.order_items.visible.collect{ |oi| "{OI#{oi.id}}" }.join("\n")
     else
       @skus = nil
     end
