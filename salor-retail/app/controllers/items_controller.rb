@@ -245,14 +245,19 @@ class ItemsController < ApplicationController
         @items = Item.where(:sku => params[:skus].split(","))
       end
     end
+
     text = Printr.new.sane_template("#{params[:type]}_#{params[:style]}",binding)
-    if @register.salor_printer
-      render :text => text
+
+    if params[:download] == 'true'
+      send_data text, :filename => '1.salor' and return
+      #render :nothing => true and return
+    elsif @register.salor_printer
+      render :text => text and return
       #`beep -f 2000 -l 10 -r 3`
     else
       printer_path = params[:type] == 'sticker' ? @register.sticker_printer : @register.thermal_printer
       File.open(printer_path,'w:ISO-8859-15') { |f| f.write text }
-      render :nothing => true
+      render :nothing => true and return
     end
   end
 

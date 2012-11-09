@@ -18,7 +18,8 @@
         %br
         = select_tag 'sticker_style', options_for_select(['default', 'type1'])
 
-  %button{ :onclick => "print();" }= t '.print'
+  %button{ :onclick => "print(false);" }= t '.print'
+  %button{ :onclick => "print(true);" }= t '.download'
 
 :javascript
   window.setTimeout("set_focus()", 1000);
@@ -27,12 +28,12 @@
     $('#skus')[0].focus();
   }
   
-  function print() {
+  function print(download) {
     var skus = $('#skus').val().split("\n");
     if($("#label:checked").val() == 'label') {
-      print_url(Register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val());
+      print_url(Register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val() + '&download=' + download);
     }
     if($("#sticker:checked").val() == 'sticker') {
-      print_url(Register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val());
+      print_url(Register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val() + '&download=' + download);
     }
   }
