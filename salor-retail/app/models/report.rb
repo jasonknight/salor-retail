@@ -95,6 +95,7 @@ class Report
     cols = [:id,:class,:hidden,:created_at,:updated_at,:employee_id,:rebate,:rebate_type,:discount_amount,:buy_order,:drawer_id,:subtotal,:tax,:total,:front_end_change,:vendor_id,:cash_register_id, :customer_id, :lc_points, :lc_discount_amount,:tag]
     oi_cols = [:id,:class,:order_id,:hidden,:created_at,:updated_at,:item_id,:sku,:behavior,:quantity,:price,:tax,:total,:coupon_applied,:coupon_amount,:discount_applied, :discount_amount,:rebate,:is_buyback,:tax_profile_amount,:amount_remaining,:refunded,:refund_payment_method,:action_applied] 
     pm_cols = PaymentMethod.content_columns
+    puts pm_cols
     pm_cols.map! {|c| c.name}
     pm_cols.unshift(:order_id)
     pm_cols.unshift(:class)

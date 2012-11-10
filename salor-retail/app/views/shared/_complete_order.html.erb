@@ -138,7 +138,7 @@ function showOrderTotalOnPoleDisplay() {
 function complete_order_show() {
   sendingOrder = false;
   $(".payment-amount").remove();
-  complete_total = toFloat($('#pos_order_total').text());
+  complete_total = Order.total;
   if (isBuyOrder) complete_total *= -1;
   $(".complete-order-total").html($('#pos_order_total').html());
   $("#complete_order_change").html('');
