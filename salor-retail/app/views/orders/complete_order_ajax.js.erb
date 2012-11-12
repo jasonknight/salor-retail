@@ -8,3 +8,4 @@ $('#header_drawer_amount').html('<%= salor_number_to_currency($User.get_drawer.a
 $('.pos-rebates').show();
 $('.last-completed-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_completed_orders" %>');
 $('#last_five_orders').replaceWith('<%= escape_javascript render :partial => "last_five_orders" %>');
+Order = <%= raw @order.to_json %>;

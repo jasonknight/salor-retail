@@ -7,12 +7,13 @@ function RoundFixed(Number, DecimalPlaces) {
 }
 
 function toFloat(str, returnString) {
-  if (str == '') {return 0.0;}
+  /* if (str == '') {return 0.0;}
   if (returnString == null) returnString = false;
   if (typeof str == 'number') {
     return str;
   }
   if (str.match(/\d+\.\d+\,\d+/)) {
+   console.log('matched');
     str = str.replace('.','');
   }
   var ac = [0,1,2,3,4,5,6,7,8,9,'.',',','-'];
@@ -27,7 +28,17 @@ function toFloat(str, returnString) {
       }
     }
   }
-  return (returnString) ? nstr : parseFloat(nstr);
+  return (returnString) ? nstr : parseFloat(nstr); */
+  var r = /([\d,\.]+)[,\.](\d{2,})/g;
+  var matches = r.exec(str);
+  var lpart = matches[1].replace(/[\.,]+/g,'');
+  var rpart = matches[2].replace(/[\.,]+/g,'');
+  var num = lpart + '.' + rpart;
+  if (returnString) {
+    return num;
+  } else {
+    return parseFloat(num);
+  }
 }
 
 function roundNumber(num, dec) {
