@@ -7,23 +7,27 @@
 class AppConfig
   def self.config
     return @@config
-  end 
-  if ::Rails.env == 'development' then
-    @@config = YAML::load_file("#{::Rails.root.to_s}/config/config.yml")
-  else
-    # This lets us have multiple salors on the same machine.
-    if File.exists?("#{::Rails.root.to_s}/config/salor.yml") then
-      @@config = YAML::load_file("#{::Rails.root.to_s}/config/salor.yml")
-    else
-      # this is mainly for the standalone install, keeps salor.yml
-      # from being overwritten on update.
-      if File.exists?("/etc/salor.yml") then
-        @@config = YAML::load_file("/etc/salor.yml")
-      else
-        @@config = YAML::load_file("#{Rails.root.to_s}/config/config.yml")
-      end
-    end
   end
+  
+  # Configuration loading now takes place in application.rb. This works for developmet and multi-instance installs.
+  @@config = SalorRetail::Application::CONFIGURATION
+  
+#   if ::Rails.env == 'development' then
+#      #YAML::load_file("#{::Rails.root.to_s}/config/config.yml")
+#   else
+#     # This lets us have multiple salors on the same machine.
+#     if File.exists?("#{::Rails.root.to_s}/config/salor.yml") then
+#       @@config = SalorRetail::Application::CONFIGURATION #YAML::load_file("#{::Rails.root.to_s}/config/salor.yml")
+#     else
+#       # this is mainly for the standalone install, keeps salor.yml
+#       # from being overwritten on update.
+#       if File.exists?("/etc/salor.yml") then
+#         @@config = SalorRetail::Application::CONFIGURATION #YAML::load_file("/etc/salor.yml")
+#       else
+#         @@config = SalorRetail::Application::CONFIGURATION #YAML::load_file("#{Rails.root.to_s}/config/config.yml")
+#       end
+#     end
+#   end
   def self.method_missing(sym, *args, &block)
    
     if @@config[sym.to_s] then

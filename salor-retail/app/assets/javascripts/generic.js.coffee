@@ -3,7 +3,6 @@
 $ ->
   if typeof(Salor) != 'undefined'
     Salor.stopDrawerObserver()
-    $('#salorbinversion').html(Salor.version());
 
 window.showButtonCategoryContainer = (id) ->
   $('.button-category-container').hide()

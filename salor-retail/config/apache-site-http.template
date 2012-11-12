@@ -6,12 +6,12 @@
 # --- 
 
 <VirtualHost *:80>
-  ServerName INSTANCE_ID.sr.local
-  #ServerAlias *.sr.local
+  ServerName INSTANCE_ID.sr.red-e.eu
+  #ServerAlias *.sr.red-e.eu
   SetEnv SR_DEBIAN_SITEID INSTANCE_ID
   SetEnv BUNDLE_GEMFILE /etc/salor-retail/INSTANCE_ID/Gemfile
   DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
-  #PassengerPreStart http://INSTANCE_ID.sr.local/
+  #PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
   
   SetEnvIf Host ^.*-b\.sr\.red-e\.eu USE_AUTH
   SetEnvIf Host ^.*-d\.sr\.red-e\.eu USE_AUTH
