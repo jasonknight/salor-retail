@@ -706,7 +706,7 @@ cn:
       must_choose_vendor: 你必須選擇一家商店!
       must_set_receiver_to_vendor: 這批貨物的接收字段，你必須設置一個有效的商店
       must_specify_drop_or_payout: 你必須指定的下拉或支出!
-      no_class: %{model}沒有類在行%{i}
+      no_class: "%{model}沒有類在行%{i}"
       no_role: 您沒有訪問此資源的必要作用.
       no_such_item: 沒有與此SKU的項目
       not_enough_in_drawer: 沒有足夠的抽屜
