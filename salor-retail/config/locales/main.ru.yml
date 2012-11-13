@@ -2,76 +2,99 @@
 ru:
   time:
     formats:
-      salor: "%a, %b %d %H:%M"
-      iso: "%Y-%m-%d %H:%M:%S"
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-      just_time: "%H:%M"
-      datetime_short: "%y-%m-%d %H:%M"
-      datetime_iso2: "%Y%m%dT%H%M%S"
-      long: "%Y%m%dT%H%M%S"
+      salor: ! '%a, %b %d %H:%M'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      datetime_short: ! '%y-%m-%d %H:%M'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      long: ! '%Y%m%dT%H%M%S'
   date:
-    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
-    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
-    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
     order:
-      - :year
-      - :month
-      - :day
+    - :year
+    - :month
+    - :day
     formats:
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-
-  support:
-    array:
-      words_connector: ", "
-      two_words_connector: " and "
-      last_word_connector: ", and "
-
-    select:
-      prompt: "Please select"
-
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+  support: XXX
   number:
     format:
-      separator: "."
-      delimiter: ","
+      separator: .
+      delimiter: ! ','
       precision: 3
       significant: false
       strip_insignificant_zeros: false
-      
-
     currency:
       format:
-        format: "%u%n"
-        friendly_unit: "EUR"
-        unit: "€"
-        separator: ","
-        delimiter: " "
+        format: ! '%u%n'
+        friendly_unit: EUR
+        unit: €
+        separator: ! ','
+        delimiter: ! ' '
         precision: 2
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
         significant: false
         strip_insignificant_zeros: false
-        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
-
     percentage:
       format:
-        delimiter: ""
-
+        delimiter: ''
     precision:
       format:
-        delimiter: ""
+        delimiter: ''
   ByCard: Картой
   ByGiftCard: Подарочной картой
   InCash: Наличными
   activerecord:
     attributes:
-      origin_country_id: XXX Origin Country
-      destination_country_id: XXX Destination Country
-      sale_type_id: XXX Sale Type
-      note_header: XXX Note Header
-      note_footer: XXX Note Footer
       order_item:
         quantity: XXX Qty.
+        tax_free: Tax Free
       invoice_blurb: Текст счета
       invoice_blurb_footer: Нижний колонтитул счета
       active: активный
@@ -134,6 +157,10 @@ ru:
       item:
         purchase_price: Цена закупки
         quantity: Количество
+        origin_country: Origin Country
+        customs_code: Customs Code
+        manufacturer_price: Manufacturer Price
+        description: Description
       item_sku: SKU товара
       itemsviewlist: Товары в виде списка
       last_name: фамилия
@@ -219,6 +246,13 @@ ru:
       weight: вес
       when: когда
       width: ширина
+      tax_free: Tax Free
+      invoice_note:
+        origin_country_id: Origin Country
+        destination_country_id: Destination Country
+        note_header: Note header
+        note_footer: Note footer
+        sale_type_id: Sale Type
     models:
       action:
         one: Действие
@@ -268,6 +302,7 @@ ru:
       shipment:
         one: Поставка
         other: Поставки
+        default_name: Default Name
       shipment_type:
         default_name: Автоповтор заказа
         one: Тип поставки
@@ -290,6 +325,15 @@ ru:
       vendor:
         one: Магазин
         other: Магазины
+      sale_type:
+        one: Sale Type
+        other: Sale Types
+      country:
+        one: Country
+        other: Countries
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
   api:
     user_does_not_exist: пользователь не существует
   behavior_list:
@@ -316,7 +360,9 @@ ru:
   edit: Редактировать
   end_of_day: Конец дня
   exception_page:
-    assistance_text: Пожалуйста, нажмите кнопку "Домой" и попробуйте снова. Если ошибка повторится, свяжитесь со службой поддержки и активируйте удаленное обслуживание с помощью кнопки "Удаленное обслуживание". Мы незамедлительно вам поможем.
+    assistance_text: Пожалуйста, нажмите кнопку "Домой" и попробуйте снова. Если ошибка
+      повторится, свяжитесь со службой поддержки и активируйте удаленное обслуживание
+      с помощью кнопки "Удаленное обслуживание". Мы незамедлительно вам поможем.
     exception_description: ! 'Описание ошибки:'
     exception_in_files: ! 'Ошибка произошла в следующих файлах:'
     oops_an_error_occurred: Ой! Произошла ошибка
@@ -358,6 +404,7 @@ ru:
       save: Сохранить
       submit: отправить
       update: обновить
+      edit: Edit
   home:
     remote_service:
       connect_ssh: Удаленное обслуживание
@@ -375,7 +422,8 @@ ru:
       backup_logfile: Резервировать лог-файл
   items:
     database_distiller:
-      are_you_sure: Все неиспользуемые товары будут удалены. Это действие нельзя будет отменить. Вы уверены, что хотите продолжить?
+      are_you_sure: Все неиспользуемые товары будут удалены. Это действие нельзя будет
+        отменить. Вы уверены, что хотите продолжить?
       delete_unused_items: Удалить неиспользуемые товары !
       hidden: Уже удаленные товары
       hidden_by_distiller: Товары удаленные чистильщиком базы данных
@@ -383,8 +431,11 @@ ru:
       unused_item_ids: Неиспользуемые товары
       used_item_ids: Используемые товары
     index:
-      database_distiller_warning: Из-за рассчета статистики данная функция требует около 30 секунд на выполнение. Продолжить?
-      only_for_tobacco_stores: Это функция только для табачных магазинов. Табачные товары будут созданы и обновлены. Это может занять до 20 минут. Вы действительно хотите продолжить?
+      database_distiller_warning: Из-за рассчета статистики данная функция требует
+        около 30 секунд на выполнение. Продолжить?
+      only_for_tobacco_stores: Это функция только для табачных магазинов. Табачные
+        товары будут созданы и обновлены. Это может занять до 20 минут. Вы действительно
+        хотите продолжить?
     inventory_report:
       price: Цена продажи
       subtotal_purchase_price: Подытог цены покупки
@@ -398,11 +449,14 @@ ru:
       query: Запрос!
       to: кому
     update_real_quantity:
-      are_you_sure: Инвентарные данные будут скопированы в базу данных, и будет пересоздан инвентарный отчёт. Продолжить?
+      are_you_sure: Инвентарные данные будут скопированы в базу данных, и будет пересоздан
+        инвентарный отчёт. Продолжить?
       inventory_report: Инвентарный отчёт
       update_quantity: Обновить инвентарные данные
     upload:
       upload: загрузить
+    selection:
+      print: Print
   label: ярлык
   menu:
     actions: действия
@@ -432,7 +486,6 @@ ru:
     discounts: скидки
     done: готово
     download: скачать
-    edit: редактировать
     edit: XXX Edit Country
     edit_sale_type: XXX Edit Sale Type
     edit_invoice_note: XXX Edit Invoice Note
@@ -517,6 +570,7 @@ ru:
     vendors: магазины
     void: пусто
     wholesaler_update: обновление оптового поставщика
+    labels: Labels
   notifications:
     shipments_item_could_not_be_saved: товар поставки не может быть сохранен
     shipments_move_all_items: все товары были успешно перемещёны
@@ -604,6 +658,11 @@ ru:
       transaction_tag: метка транзакции
       transaction_total: итого за транзакцию
       transactions: транзакции
+    print:
+      print: Print-Dialog
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
   printr:
     eod_report:
       None: Без имени
@@ -622,9 +681,13 @@ ru:
       sales: Продажи
       system_drawer_amount: Баланс системной кассы
       transaction_total: ИТОГО
-      warning_drawer_amount_not_zero: Внимание! Ваш кассовый баланс отличен от нуля. Рекомендуется заканчивать и начинать каждый день с нулевым балансом для упрощения бухгалтерских расчетов. Сделайте выплату наличных в соответствии с балансом и напечатайте отчет снова.
+      warning_drawer_amount_not_zero: Внимание! Ваш кассовый баланс отличен от нуля.
+        Рекомендуется заканчивать и начинать каждый день с нулевым балансом для упрощения
+        бухгалтерских расчетов. Сделайте выплату наличных в соответствии с балансом
+        и напечатайте отчет снова.
+      no_category: No Category
     formats:
-      advert: ! 'Инновационная точка продаж www.salorpos.com'
+      advert: Инновационная точка продаж www.salorpos.com
       cancel: Отмена                  РУБ %8.2f
       change: ! 'Сдача:                       РУБ %8.2f'
       coupon_subtotal: Купон                   РУБ %8.2f
@@ -666,6 +729,7 @@ ru:
   receipts:
     invoice: Rechnung
     invoice_numer_X_at_time: Заказ № %{number} от %{datetime}
+    delivery_note: Lieferschein
   reports:
     amount: количество
     description: описание
@@ -683,48 +747,62 @@ ru:
     show:
       purchase_price_sum: Сумма покупки
   sticker: наклейка
-  support: XXX
   system:
     add_payment_method: добавить метод оплаты
     complete_sale: Готово
     errors:
       action_code_error: Код не может быть выполнен потому что %{error}
       action_error: Действие не может быть выполнено потому что %{error}
-      auto_drop_failed: Система не смогла выполнить автоматическое внесение наличных. Пожалуйста, создайте начало дня внесения наличных вручную.
+      auto_drop_failed: Система не смогла выполнить автоматическое внесение наличных.
+        Пожалуйста, создайте начало дня внесения наличных вручную.
       cannot_edit_completed_order: Этот заказ выполнен и не может быть изменён.
       cannot_reorder: Невозможно повторить заказ.
       child_sku_must_exist: Товар-наследник должен существовать!
-      coupon_cannot_be_buy_one_get_one: купон %{sku} не может be_buy_one_get_one когда применяется к %{applies}
-      coupon_not_enough_items: Вы приобрели недостаточно товаров, чтобы применить это
+      coupon_cannot_be_buy_one_get_one: купон %{sku} не может be_buy_one_get_one когда
+        применяется к %{applies}
+      coupon_not_enough_items: Вы приобрели недостаточно товаров, чтобы применить
+        это
       csv_item_exists: Товар %{sku} существует!
-      csv_item_failed: ! 'Ошибка чтения %{id} %{i}'
-      failed_to_save_parts: Невозможно сохранить комплект. Убедитесь, что выбранные товары существуют.
-      gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте карту.
+      csv_item_failed: Ошибка чтения %{id} %{i}
+      failed_to_save_parts: Невозможно сохранить комплект. Убедитесь, что выбранные
+        товары существуют.
+      gift_card_empty: На подарочной карте ничего нет, уведомите клиента и уничтожьте
+        карту.
       gs1_item_not_found: Товар помечен как gs1, но %{sku} не соответствует формату.
-      insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно, пора обновить данные склада!
+      insufficient_quantity_on_item: Внимание, количество товара %{sku} недостаточно,
+        пора обновить данные склада!
       inventory_update_error: ошибка обновления инвентарной ведомости
       item_not_found: Товар, который вы ищете не найден, поискать?
       item_price_is_zero: ! 'Внимание: Нулевая цена товара!'
-      limited_alphabet: Разрешены только буквы a-z. Никаких пробелов или букв в верхнем регистре.
-      lp_calculation_failed: Ошибка при применении очков бонусной карты. Вы уверены, что добавили их в настройке магазина?
+      limited_alphabet: Разрешены только буквы a-z. Никаких пробелов или букв в верхнем
+        регистре.
+      lp_calculation_failed: Ошибка при применении очков бонусной карты. Вы уверены,
+        что добавили их в настройке магазина?
       must_cash_drop: В вашей кассе нет денег. Пожалуйста, внесите наличные!
       must_choose_register: Вы должны авторизоваться в кассовом аппарате!
       must_choose_vendor: Вам нужно выбрать магазин!
-      must_set_receiver_to_vendor: В поле получателя для этой доставки нужно указать существующий магазин.
+      must_set_receiver_to_vendor: В поле получателя для этой доставки нужно указать
+        существующий магазин.
       must_specify_drop_or_payout: Вы должны выбрать внесение или выплату!
       no_class: Нет класса для %{model} на строке %{i}
       no_role: У вас недостаточно прав для доступа к этому ресурсу.
       no_such_item: Товар с таким SKU не найден.
       not_enough_in_drawer: не достаточно в кассе
       order_failed: Заказ не может быть завершен.
-      order_must_have_user: Вы не можете сохранить заказ, не указав пользователя или работника для него.
+      order_must_have_user: Вы не можете сохранить заказ, не указав пользователя или
+        работника для него.
       order_register_required: Вы должны указать запись для этого заказа
-      order_totals_validation_failed: Общая проверка заказа не прошла. Обновление заказа возможно решит эту проблему. Нажмите OK для обновления.
+      order_totals_validation_failed: Общая проверка заказа не прошла. Обновление
+        заказа возможно решит эту проблему. Нажмите OK для обновления.
       order_vendor_required: Вам нужно указать магазин для этого заказа
       parent_sku_must_exist: Родительский товар должен существовать!
       payment_required: ! 'Ошибка 402: Требуется полная оплата'
-      payment_required_explanation: Нам жаль, но ваша система была автоматически выключена, так как ваша ознакомительная лицензия закончилась. Чтобы продолжить пользоваться системой, вам нужно приобрести полную лицензию Salor. Пожалуйста, свяжитесь с вашим представителем технической поддержки.
-      sanity_check: Запрашиваемое действие не имеет смысла. Проверьте заказ и уведомите покупателя об исправлении.
+      payment_required_explanation: Нам жаль, но ваша система была автоматически выключена,
+        так как ваша ознакомительная лицензия закончилась. Чтобы продолжить пользоваться
+        системой, вам нужно приобрести полную лицензию Salor. Пожалуйста, свяжитесь
+        с вашим представителем технической поддержки.
+      sanity_check: Запрашиваемое действие не имеет смысла. Проверьте заказ и уведомите
+        покупателя об исправлении.
       shipment_item_already_in_stock: Товар %{sku} уже есть на складе
       shipment_item_move_failed: ! 'Товар %{sku} не был перемещен, ошибка: %{error}'
       shipment_item_nil: Товар, вернувшийся из поставки, пустой?
@@ -782,7 +860,7 @@ ru:
       search: поиск
       shipment:
         types:
-          canceled: отменена 
+          canceled: отменена
           complete: завершена
           in_stock: на складе
           new: новая
@@ -810,9 +888,10 @@ ru:
       new_order: новый заказ создан
       order_refund_dt: ! '#%{id}'
       save_before: Сохранить перед выходом?
-      wholesaler_upload_report: ! 'Обновленные товары: %{updated_items}, Созданные товары:
-        %{created_items}, Созданные категории: %{created_categories}, Созданные налоговые профили
-        %{created_tax_profiles}'
+      wholesaler_upload_report: ! 'Обновленные товары: %{updated_items}, Созданные
+        товары: %{created_items}, Созданные категории: %{created_categories}, Созданные
+        налоговые профили %{created_tax_profiles}'
+      please_backup: Please backup your system regularly!
     order_heading: ! 'Заказ #%{id} для %{store}'
     order_number: ! 'Заказ #%{id}'
     pagination:
@@ -822,7 +901,8 @@ ru:
       truncate: ! '...'
     password: пароль
     password_confirm: подтвердите пароль
-    please_test_before_upload: ! 'ВНИМАНИЕ: Вы собираетесь перезаписать информацию в базе данных.'
+    please_test_before_upload: ! 'ВНИМАНИЕ: Вы собираетесь перезаписать информацию
+      в базе данных.'
     price: цена
     quantity: количество
     rebate: вычет
@@ -857,6 +937,7 @@ ru:
       to: кому
       top: верх
       waiting: ожидание...
+      choose: choose
     sticky_ticket: Наклейка
     stock_locations: расположения складов
     subtotal: подытог
@@ -865,10 +946,12 @@ ru:
     total: итого
     username: имя пользователя
     vendor: магазин
-    wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять несколько минут.
+    wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять
+      несколько минут.
   when_list:
     add_to_order: при добавлении к заказу
     always: всегда
     on_export: при экспорте
     on_import: при импорте
     on_save: при сохранении
+  are_you_sure: Are you sure you want to do this?

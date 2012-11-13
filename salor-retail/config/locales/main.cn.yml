@@ -2,75 +2,99 @@
 cn:
   time:
     formats:
-      salor: "%a, %b %d %H:%M"
-      iso: "%Y-%m-%d %H:%M:%S"
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-      just_time: "%H:%M"
-      datetime_short: "%y-%m-%d %H:%M"
-      datetime_iso2: "%Y%m%dT%H%M%S"
-      long: "%Y%m%dT%H%M%S"
+      salor: ! '%a, %b %d %H:%M'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      datetime_short: ! '%y-%m-%d %H:%M'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      long: ! '%Y%m%dT%H%M%S'
   date:
-    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
-    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
-    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
     order:
-      - :year
-      - :month
-      - :day
+    - :year
+    - :month
+    - :day
     formats:
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-
-  support:
-    array:
-      words_connector: ", "
-      two_words_connector: " and "
-      last_word_connector: ", and "
-
-    select:
-      prompt: "Please select"
-
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+  support: 支持
   number:
     format:
-      separator: "."
-      delimiter: ","
+      separator: .
+      delimiter: ! ','
       precision: 3
       significant: false
       strip_insignificant_zeros: false
-
     currency:
       format:
-        format: "%u%n"
-        friendly_unit: "EUR"
-        unit: "€"
-        separator: ","
-        delimiter: " "
+        format: ! '%u%n'
+        friendly_unit: EUR
+        unit: €
+        separator: ! ','
+        delimiter: ! ' '
         precision: 2
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
         significant: false
         strip_insignificant_zeros: false
-        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
-
     percentage:
       format:
-        delimiter: ""
-
+        delimiter: ''
     precision:
       format:
-        delimiter: ""
+        delimiter: ''
   ByCard: By Card
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
-      origin_country_id: XXX Origin Country
-      destination_country_id: XXX Destination Country
-      sale_type_id: XXX Sale Type
-      note_header: XXX Note Header
-      note_footer: XXX Note Footer
       order_item:
         quantity: XXX Qty.
+        tax_free: Tax Free
       invoice_blurb: Invoice text
       invoice_blurb_footer: Invoice text footer
       active: 活躍
@@ -133,6 +157,10 @@ cn:
       item:
         purchase_price: 購買價格
         quantity: 數量
+        origin_country: Origin Country
+        customs_code: Customs Code
+        manufacturer_price: Manufacturer Price
+        description: Description
       item_sku: 產品的SKU
       itemsviewlist: 為產品的列表視圖
       last_name: 姓
@@ -218,6 +246,13 @@ cn:
       weight: 重量
       when: 何時
       width: 寬度
+      tax_free: Tax Free
+      invoice_note:
+        origin_country_id: Origin Country
+        destination_country_id: Destination Country
+        note_header: Note header
+        note_footer: Note footer
+        sale_type_id: Sale Type
     models:
       action:
         one: 行動
@@ -267,6 +302,7 @@ cn:
       shipment:
         one: 裝船
         other: 裝船
+        default_name: Default Name
       shipment_type:
         default_name: 默認名稱
         one: 裝船類型
@@ -289,6 +325,15 @@ cn:
       vendor:
         one: 商店
         other: 商店
+      sale_type:
+        one: Sale Type
+        other: Sale Types
+      country:
+        one: Country
+        other: Countries
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
   api:
     user_does_not_exist: 用戶不存在
   behavior_list:
@@ -350,6 +395,7 @@ cn:
       save: 儲存
       submit: 提交
       update: 更新
+      edit: Edit
   home:
     remote_service:
       connect_ssh: 遠程服務
@@ -395,6 +441,8 @@ cn:
       update_quantity: 更新庫存數量
     upload:
       upload: 上載
+    selection:
+      print: Print
   label: 標籤
   menu:
     actions: actions 行動
@@ -414,7 +462,7 @@ cn:
     clear_order: 清洗
     configuration: 組態
     contact: contact 聯絡
-    current_order: '當前的訂單: #%{id}'
+    current_order: ! '當前的訂單: #%{id}'
     customer: 顧客
     customers: 顧客
     database_distiller: 數據庫蒸餾器
@@ -424,7 +472,6 @@ cn:
     discounts: discounts 折扣
     done: 完成
     download: 下載
-    edit: 編輯
     edit: XXX Edit Country
     edit_sale_type: XXX Edit Sale Type
     edit_invoice_note: XXX Edit Invoice Note
@@ -509,6 +556,7 @@ cn:
     vendors: 供應商
     void: 廢止
     wholesaler_update: 批發商更新
+    labels: Labels
   notifications:
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
@@ -596,6 +644,11 @@ cn:
       transaction_tag: 交易標籤
       transaction_total: 交易總計
       transactions: 交易
+    print:
+      print: Print-Dialog
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
   printr:
     eod_report:
       None: 未命名
@@ -615,6 +668,7 @@ cn:
       system_drawer_amount: 系統抽屜金額
       transaction_total: 總計
       warning_drawer_amount_not_zero: 警告！你的抽屜金額不為零。建議你來完成，並開始與零的抽屜數量，以紓緩會     計工作的每一天。相應地作出現金支付，並再次打印此報告。
+      no_category: No Category
     formats:
       advert: ! '銷售創新點
 
@@ -660,6 +714,7 @@ cn:
   receipts:
     invoice: 發票
     invoice_numer_X_at_time: 訂單號 %{number} 在 %{datetime}
+    delivery_note: Lieferschein
   reports:
     amount: 金額
     description: 描述
@@ -677,7 +732,6 @@ cn:
     show:
       purchase_price_sum: 購買價格的總和
   sticker: 貼紙
-  support: 支持
   system:
     add_payment_method: 添加付款方式
     complete_sale: 完成
@@ -698,7 +752,7 @@ cn:
       insufficient_quantity_on_item: 警告, 禮品 %{sku} 數量是不夠的, 請更新您的庫存水平!
       inventory_update_error: 庫存更新錯誤
       item_not_found: 無法找到您正在尋找的項目, 試圖尋找?
-      item_price_is_zero: '警告: 產品價格為0!'
+      item_price_is_zero: ! '警告: 產品價格為0!'
       limited_alphabet: 只有a-z許可. 允許沒有空格或重音字符.
       lp_calculation_failed: 無法適用忠誠點. 你肯定設置在您的商店配置?
       must_cash_drop: 你的抽屜裡沒有任何錢，請增加現金下拉!
@@ -706,7 +760,7 @@ cn:
       must_choose_vendor: 你必須選擇一家商店!
       must_set_receiver_to_vendor: 這批貨物的接收字段，你必須設置一個有效的商店
       must_specify_drop_or_payout: 你必須指定的下拉或支出!
-      no_class: "%{model}沒有類在行%{i}"
+      no_class: ! '%{model}沒有類在行%{i}'
       no_role: 您沒有訪問此資源的必要作用.
       no_such_item: 沒有與此SKU的項目
       not_enough_in_drawer: 沒有足夠的抽屜
@@ -716,8 +770,9 @@ cn:
       order_totals_validation_failed: 訂單總額驗證失敗, 令人耳目一新的順序可能會修復此問題. 按OK刷新.
       order_vendor_required: 你必須提供此訂單的供應商.
       parent_sku_must_exist: 父項必須存在!
-      payment_required: ! '錯誤402; 須繳付所有款項'
-      payment_required_explanation: 我們遺憾地通知您, 您的系統已經為您預先支付牌照已經用完自動關機. 你必須完成的Salor足額發放, 要繼續從受益. 請聯繫您的Salor技術支援代表.
+      payment_required: 錯誤402; 須繳付所有款項
+      payment_required_explanation: 我們遺憾地通知您, 您的系統已經為您預先支付牌照已經用完自動關機. 你必須完成的Salor足額發放,
+        要繼續從受益. 請聯繫您的Salor技術支援代表.
       sanity_check: 要求的行動是瘋狂的，確認訂單總額，並通知客戶改正.
       shipment_item_already_in_stock: 產品 %{sku} 已經在股票
       shipment_item_move_failed: ! '產品 %{sku} 未能提出錯誤: %{error}'
@@ -781,6 +836,7 @@ cn:
           new: 新
           returned: 返回了
           shipped: 運了
+      items: items
     gift_card: 禮品卡
     gift_card_amount: 禮品卡金額
     given: 送了
@@ -802,11 +858,10 @@ cn:
       move_real_quantities_success: 產品數量已成功更新了
       new_order: 新訂單創建了
       order_refund_dt: ! '#%{id}'
-      please_backup: "Please, backup your system regularly!"
+      please_backup: Please, backup your system regularly!
       save_before: 儲存在離開之前?
-      wholesaler_upload_report: ! '更新的項目: %{updated_items}, 創建的項目:
-        %{created_items}, 創建的類: %{created_categories}, 創建的稅務信息
-        %{created_tax_profiles}'
+      wholesaler_upload_report: ! '更新的項目: %{updated_items}, 創建的項目: %{created_items},
+        創建的類: %{created_categories}, 創建的稅務信息 %{created_tax_profiles}'
     order_heading: ! '訂單 #%{id} 為了 %{store}'
     order_number: ! '訂單 #%{id}'
     pagination:
@@ -844,13 +899,14 @@ cn:
       new: 新
       order: 訂單
       ordering: 訂購
-      processing: 處理... 
+      processing: 處理...
       saving: 保存...
       sku: SKU
       title: 稱號
       to: 至
       top: 頂部
       waiting: 等候...
+      choose: choose
     sticky_ticket: 黏標籤
     stock_locations: 貨物位置
     subtotal: 小計
@@ -866,3 +922,11 @@ cn:
     on_export: 在出口
     on_import: 在進口
     on_save: 在儲存
+  are_you_sure: Are you sure you want to do this?
+  customers:
+    show:
+      bought_items: Bought items
+      last_orders: Last orders
+      order_id: Order Number
+      order_total: Order total
+      sold_count: sold count

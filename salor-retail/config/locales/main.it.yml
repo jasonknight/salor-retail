@@ -67,6 +67,10 @@ it:
       item:
         purchase_price: Prezzo di Acquisto
         quantity: Quantità
+        origin_country: Origin Country
+        customs_code: Customs Code
+        manufacturer_price: Manufacturer Price
+        description: Description
       item_sku: articolo sku
       itemsviewlist: Vedi Lista per Articolo
       last_name: cognome
@@ -152,6 +156,16 @@ it:
       weight: peso
       when: quando
       width: larghezza
+      tax_free: Tax Free
+      order_item:
+        quantity: Qty.
+        tax_free: Tax Free
+      invoice_note:
+        origin_country_id: Origin Country
+        destination_country_id: Destination Country
+        note_header: Note header
+        note_footer: Note footer
+        sale_type_id: Sale Type
     models:
       action:
         one: Azione
@@ -201,6 +215,7 @@ it:
       shipment:
         one: Spedizione
         other: Spedizioni
+        default_name: Default Name
       shipment_type:
         default_name: Riordine Automatico
         one: Tipo Spedizione
@@ -223,6 +238,15 @@ it:
       vendor:
         one: Negozio
         other: NEgozi
+      sale_type:
+        one: Sale Type
+        other: Sale Types
+      country:
+        one: Country
+        other: Countries
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
   api:
     user_does_not_exist: utente non esistente
   behavior_list:
@@ -249,9 +273,9 @@ it:
   edit: Edita
   end_of_day: Fine Giornata
   exception_page:
-    assistance_text: Premi "Home" e prova ancora. Se l'errore
-      si ripete, chiamare l'assistenza, e connetti il computer con
-      con il Servizio Remoto con il pulsante "Servizio Remoto". Vi aiuteremo immediatamente.
+    assistance_text: Premi "Home" e prova ancora. Se l'errore si ripete, chiamare
+      l'assistenza, e connetti il computer con con il Servizio Remoto con il pulsante
+      "Servizio Remoto". Vi aiuteremo immediatamente.
     exception_description: ! 'Descrizione errore:'
     exception_in_files: ! 'Errore nei seguenti files:'
     oops_an_error_occurred: Oops! Si è verificato un errore
@@ -293,6 +317,7 @@ it:
       save: Salva
       submit: invia
       update: aggiorna
+      edit: Edit
   home:
     remote_service:
       connect_ssh: Servizio Remoto
@@ -310,7 +335,8 @@ it:
       backup_logfile: Backup file di Log
   items:
     database_distiller:
-      are_you_sure: Tutti gli articoli non utilizzati verranno cancellati. Non si potrà recuperare gli articoli. Sei sicuro di continuare?
+      are_you_sure: Tutti gli articoli non utilizzati verranno cancellati. Non si
+        potrà recuperare gli articoli. Sei sicuro di continuare?
       delete_unused_items: Articoli non utilizzati cancellati!
       hidden: Articoli già cancellati
       hidden_by_distiller: Articoli cancellati dal Filtro Database
@@ -318,8 +344,11 @@ it:
       unused_item_ids: Articoli non utilizzati
       used_item_ids: Articoli utilizzati
     index:
-      database_distiller_warning: A causa della generazione di statistiche, la chiamata di questa funzione durerà 30 secondi. Procedere comunque?
-      only_for_tobacco_stores: Questa funzione è esclusiva delle tabaccherie. Gli articoli di tabaccheria verranno ora creati e aggiornati. Il tempo di attesa è di 20 minuti. Sei veramente sicuro di procedere?
+      database_distiller_warning: A causa della generazione di statistiche, la chiamata
+        di questa funzione durerà 30 secondi. Procedere comunque?
+      only_for_tobacco_stores: Questa funzione è esclusiva delle tabaccherie. Gli
+        articoli di tabaccheria verranno ora creati e aggiornati. Il tempo di attesa
+        è di 20 minuti. Sei veramente sicuro di procedere?
     inventory_report:
       price: Prezzo di vendita
       subtotal_purchase_price: Subtotale Prezzo di Acquisto
@@ -333,11 +362,14 @@ it:
       query: Interrogazione!
       to: a
     update_real_quantity:
-      are_you_sure: Si procederà con la copia delle quantità in inventario nel database cancellando il rapporto di inventario. Continuo?
+      are_you_sure: Si procederà con la copia delle quantità in inventario nel database
+        cancellando il rapporto di inventario. Continuo?
       inventory_report: Raporto Inventario
       update_quantity: Aggiorna quantità inventario
     upload:
       upload: carica
+    selection:
+      print: Print
   label: etichetta
   menu:
     actions: azioni
@@ -445,6 +477,13 @@ it:
     vendors: venditori
     void: vuoto
     wholesaler_update: aggiorna grossista
+    edit_sale_type: Edit Sale type
+    edit_invoice_note: Edit Inovice Note
+    new_country: New Country
+    new_sale_type: New Sale Type
+    new_invoice_note: New Invoice Note
+    receipts: Receipts
+    labels: Labels
   notifications:
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
     shipments_move_all_items: tutti gli articoli sono stati spostati con successo
@@ -532,6 +571,11 @@ it:
       transaction_tag: etichetta transazione
       transaction_total: totale transazione
       transactions: transazioni
+    print:
+      print: Print-Dialog
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
   printr:
     eod_report:
       None: Senza nome
@@ -550,9 +594,13 @@ it:
       sales: Vendite
       system_drawer_amount: Importo sistema cassa
       transaction_total: TOTALE
-      warning_drawer_amount_not_zero: Attenzione! L'importo di cassa è diverso da zero. Si avvisa di chiudere e di ripartire ogni giorno con un importo di cassa uguale a zero per semplificare la contabilità. Esegui una liquidazione cassa e stampa di nuovo questo rapporto.
+      warning_drawer_amount_not_zero: Attenzione! L'importo di cassa è diverso da
+        zero. Si avvisa di chiudere e di ripartire ogni giorno con un importo di cassa
+        uguale a zero per semplificare la contabilità. Esegui una liquidazione cassa
+        e stampa di nuovo questo rapporto.
+      no_category: No Category
     formats:
-      advert: ! 'Il Punto di Vendita Innovativo www.salorpos.com'
+      advert: Il Punto di Vendita Innovativo www.salorpos.com
       cancel: Cancella                  EUR %8.2f
       change: ! 'Cambia:                       EUR %8.2f'
       coupon_subtotal: Buono-sconto Subtotale              EUR %8.2f
@@ -590,10 +638,11 @@ it:
     word:
       drop: versamento
       payout: prelievo
-      sold: venduto     
+      sold: venduto
   receipts:
     invoice: Fattura
     invoice_numer_X_at_time: Ordine Nr. %{number} del %{datetime}
+    delivery_note: Lieferschein
   reports:
     amount: importo
     description: descrizione
@@ -618,32 +667,34 @@ it:
     errors:
       action_code_error: Il codice non può essere eseguito per %{error}
       action_error: Azione non calcolata per %{error}
-      auto_drop_failed: Il sistema ha fallito il versamento automatico, si prega di creare manualmente un inizio
-        liquidazione cassa del giorno
+      auto_drop_failed: Il sistema ha fallito il versamento automatico, si prega di
+        creare manualmente un inizio liquidazione cassa del giorno
       cannot_edit_completed_order: Questo ordine è comleto e non può essere modificato.
       cannot_reorder: Nessun articolo da riordinare.
       child_sku_must_exist: Articolo Figlio deve esistere!
-      coupon_cannot_be_buy_one_get_one: buono-sconto %{sku} non può essere un compra uno prendi uno quando
-        applicato a %{applies}
+      coupon_cannot_be_buy_one_get_one: buono-sconto %{sku} non può essere un compra
+        uno prendi uno quando applicato a %{applies}
       coupon_not_enough_items: Non hai comprato abbastanza articoli per procedere
       csv_item_exists: Articolo %{sku} esistente!
       csv_item_failed: ! '%{id} %{i} fallito.'
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
-      gift_card_empty: Carta Regalo è Vuota, contattare il cliente e distruggere la carta.
+      gift_card_empty: Carta Regalo è Vuota, contattare il cliente e distruggere la
+        carta.
       gs1_item_not_found: Articolo segnato come gs1, ma %{sku} non è nel formato corretto.
-      insufficient_quantity_on_item: Attenzione, Articolo %{sku} insufficiente,
-        è ora di aggiornare lo stock!
+      insufficient_quantity_on_item: Attenzione, Articolo %{sku} insufficiente, è
+        ora di aggiornare lo stock!
       inventory_update_error: errore aggiornamento inventario
       item_not_found: L'articolo che stai cercando non è stato trovato, provo la ricerca?
       item_price_is_zero: ! 'Attenzione: Prezzo articolo è 0'
       limited_alphabet: Lettere a-z permesse. Spazi o accenti non consentiti.
-      lp_calculation_failed: Fallita applicazione Punti Fedeltà, se sicuro di averlo configurato
-        nella configurazione del negozio?
-      must_cash_drop: In cassa non ci sono soldi, aggiungi contante  prelevato per piacere!
+      lp_calculation_failed: Fallita applicazione Punti Fedeltà, se sicuro di averlo
+        configurato nella configurazione del negozio?
+      must_cash_drop: In cassa non ci sono soldi, aggiungi contante  prelevato per
+        piacere!
       must_choose_register: Devi registrarti ad un registratore di cassa!
       must_choose_vendor: Devi minsufficient_quantity_on_itemust scegliere un Negozio!
-      must_set_receiver_to_vendor: Devi configurare questo campo di ricevimento spedizione 
+      must_set_receiver_to_vendor: Devi configurare questo campo di ricevimento spedizione
         con un Negozio valido
       must_specify_drop_or_payout: Devi selezionare versamento o prelievo!
       no_class: Non esiste una classe per %{model} alla linea %{i}
@@ -651,22 +702,23 @@ it:
       no_such_item: Non esiste articolo con questo SKU
       not_enough_in_drawer: non abbastanza in cassa
       order_failed: L'ordine non può essere completato.
-      order_must_have_user: Non puoi salvare un ordine senza un Utente o un Impiegato assengati
-        allo stesso.
+      order_must_have_user: Non puoi salvare un ordine senza un Utente o un Impiegato
+        assengati allo stesso.
       order_register_required: Devi specificare un registro per questo ordine
-      order_totals_validation_failed: Validazione totale ordine fallita, aggiornando l'ordine
-        può risolvere il problema. Premi OK per aggiornare.
+      order_totals_validation_failed: Validazione totale ordine fallita, aggiornando
+        l'ordine può risolvere il problema. Premi OK per aggiornare.
       order_vendor_required: Devi inserire un venditore per questo ordine
       parent_sku_must_exist: Articolo Genitore Deve Esistere!
       payment_required: ! 'Errore 402: Pagamento Completo Richiesto'
-      payment_required_explanation: Ci dispiace informarla che il suo sistema si è chiuso automaticamente
-        perché la licenza pre-pagata è stata esaurita. Devi completare l'intero pagamento
-        di Salor per continuare ad usarlo. Prego contattare il suo rappresentante personale
-        per supporto tecnico di Salor.
-      sanity_check: L'azione richiesta è folle, verifica totale ordine e notifica al cliente
-        della correzione eseguita.
+      payment_required_explanation: Ci dispiace informarla che il suo sistema si è
+        chiuso automaticamente perché la licenza pre-pagata è stata esaurita. Devi
+        completare l'intero pagamento di Salor per continuare ad usarlo. Prego contattare
+        il suo rappresentante personale per supporto tecnico di Salor.
+      sanity_check: L'azione richiesta è folle, verifica totale ordine e notifica
+        al cliente della correzione eseguita.
       shipment_item_already_in_stock: Articolo %{sku} è già in stock
-      shipment_item_move_failed: ! 'Articolo %{sku} spostamento fallito con errore: %{error}'
+      shipment_item_move_failed: ! 'Articolo %{sku} spostamento fallito con errore:
+        %{error}'
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
@@ -750,9 +802,10 @@ it:
       new_order: creato nuovo ordine
       order_refund_dt: ! '#%{id}'
       save_before: XXX Salva prima di uscire?
-      wholesaler_upload_report: ! 'Articoli aggiornati: %{updated_items}, Articoli creati:
-        %{created_items}, Categorie create: %{created_categories}, Profili Iva creati
-        %{created_tax_profiles}'
+      wholesaler_upload_report: ! 'Articoli aggiornati: %{updated_items}, Articoli
+        creati: %{created_items}, Categorie create: %{created_categories}, Profili
+        Iva creati %{created_tax_profiles}'
+      please_backup: Please backup your system regularly!
     order_heading: ! 'Ordine #%{id} per %{store}'
     order_number: ! 'Ordine #%{id}'
     pagination:
@@ -762,8 +815,7 @@ it:
       truncate: ! '...'
     password: password
     password_confirm: conferma password
-    please_test_before_upload: ! 'ATTENZIONE: Stai per riscrivere i dati
-      nel database.'
+    please_test_before_upload: ! 'ATTENZIONE: Stai per riscrivere i dati nel database.'
     price: prezzo
     quantity: quantità
     rebate: riduzione
@@ -797,6 +849,8 @@ it:
       to: a
       top: alto
       waiting: in attesa...
+      gift_cards: Gift Cards
+      choose: choose
     sticky_ticket: Etichetta adesiva
     stock_locations: stock_posizioni
     subtotal: subtotale
@@ -806,9 +860,97 @@ it:
     username: nome utente
     vendor: venditore
     wholesaler_refresh: Recupero aggiornamenti fornitori. Può richiedere diversi minuti.
+    create_new_item: Create New Article
   when_list:
     add_to_order: aggiungo ad ordine
     always: sempre
     on_export: esportazione
     on_import: importazione
     on_save: salvataggio
+  are_you_sure: Are you sure you want to do this?
+  time:
+    formats:
+      salor: ! '%a, %b %d %H:%M'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      datetime_short: ! '%y-%m-%d %H:%M'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      long: ! '%Y%m%dT%H%M%S'
+  date:
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    order:
+    - :year
+    - :month
+    - :day
+    formats:
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+  number:
+    format:
+      separator: .
+      delimiter: ! ','
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+    currency:
+      format:
+        format: ! '%u%n'
+        friendly_unit: USD
+        unit: $
+        separator: .
+        delimiter: ! ','
+        precision: 2
+        pieces: 0.01,0.05,0.10,0.25,0.50,1,5,10,20,50,100
+        significant: false
+        strip_insignificant_zeros: false
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''

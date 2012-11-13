@@ -2,76 +2,99 @@
 es:
   time:
     formats:
-      salor: "%a, %b %d %H:%M"
-      iso: "%Y-%m-%d %H:%M:%S"
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-      just_time: "%H:%M"
-      datetime_short: "%y-%m-%d %H:%M"
-      datetime_iso2: "%Y%m%dT%H%M%S"
-      long: "%Y%m%dT%H%M%S"
+      salor: ! '%a, %b %d %H:%M'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      datetime_short: ! '%y-%m-%d %H:%M'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      long: ! '%Y%m%dT%H%M%S'
   date:
-    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
-    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
-    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
     order:
-      - :year
-      - :month
-      - :day
+    - :year
+    - :month
+    - :day
     formats:
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-
-  support:
-    array:
-      words_connector: ", "
-      two_words_connector: " and "
-      last_word_connector: ", and "
-
-    select:
-      prompt: "Please select"
-
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+  support: XXX
   number:
     format:
-      separator: "."
-      delimiter: ","
+      separator: .
+      delimiter: ! ','
       precision: 3
       significant: false
       strip_insignificant_zeros: false
-      
-
     currency:
       format:
-        format: "%u%n"
-        friendly_unit: "EUR"
-        unit: "€"
-        separator: ","
-        delimiter: " "
+        format: ! '%u%n'
+        friendly_unit: EUR
+        unit: €
+        separator: ! ','
+        delimiter: ! ' '
         precision: 2
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
         significant: false
         strip_insignificant_zeros: false
-        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
-
     percentage:
       format:
-        delimiter: ""
-
+        delimiter: ''
     precision:
       format:
-        delimiter: ""
+        delimiter: ''
   ByCard: Con tarjeta de crédito
   ByGiftCard: Con tarjeta de regalo
   InCash: En efectivo
   activerecord:
     attributes:
-      origin_country_id: XXX Origin Country
-      destination_country_id: XXX Destination Country
-      sale_type_id: XXX Sale Type
-      note_header: XXX Note Header
-      note_footer: XXX Note Footer
       order_item:
         quantity: XXX Qty.
+        tax_free: Tax Free
       invoice_blurb: Invoice text
       invoice_blurb_footer: Invoice text footer
       active: Activo
@@ -134,6 +157,10 @@ es:
       item:
         purchase_price: Precio de compra
         quantity: Cantidad
+        origin_country: Origin Country
+        customs_code: Customs Code
+        manufacturer_price: Manufacturer Price
+        description: Description
       item_sku: SKU del artículo
       itemsviewlist: Ver lista de artículos
       last_name: Apellido
@@ -219,6 +246,13 @@ es:
       weight: Peso
       when: Cuándo
       width: Ancho
+      tax_free: Tax Free
+      invoice_note:
+        origin_country_id: Origin Country
+        destination_country_id: Destination Country
+        note_header: Note header
+        note_footer: Note footer
+        sale_type_id: Sale Type
     models:
       action:
         one: Acción
@@ -268,6 +302,7 @@ es:
       shipment:
         one: Envío
         other: Envíos
+        default_name: Default Name
       shipment_type:
         default_name: Renovación automática del pedido
         one: Tipo de Envío
@@ -290,6 +325,15 @@ es:
       vendor:
         one: Tienda
         other: Tiendas
+      sale_type:
+        one: Sale Type
+        other: Sale Types
+      country:
+        one: Country
+        other: Countries
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
   api:
     user_does_not_exist: Este usuario no existe
   behavior_list:
@@ -354,6 +398,7 @@ es:
       save: Guardar
       submit: Someter
       update: Actualizar
+      edit: Edit
   home:
     remote_service:
       connect_ssh: Servicio a distancia
@@ -404,6 +449,8 @@ es:
       update_quantity: Actualizar cantidades en inventario
     upload:
       upload: Cargar
+    selection:
+      print: Print
   label: Etiqueta
   menu:
     actions: XXX actions
@@ -433,7 +480,6 @@ es:
     discounts: Descuentos
     done: Listo
     download: Bajar de la red
-    edit: Editar
     edit: XXX Edit Country
     edit_sale_type: XXX Edit Sale Type
     edit_invoice_note: XXX Edit Invoice Note
@@ -518,6 +564,7 @@ es:
     vendors: Tiendas
     void: Anular
     wholesaler_update: Actualización del disteibuidor
+    labels: Labels
   notifications:
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
@@ -605,6 +652,11 @@ es:
       transaction_tag: Etiqueta de transacción
       transaction_total: transacción total
       transactions: transacción
+    print:
+      print: Print-Dialog
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
   printr:
     eod_report:
       None: Sin nombre
@@ -627,6 +679,7 @@ es:
         aconsejamos terminar y empazar cada día con la caja vacía a fin de facilitar
         su contabilidad. Realice la extracción de efectivo correspondiente e imprima
         nuevamente este informe.
+      no_category: No Category
     formats:
       advert: ! 'El punto de venta innovador
 
@@ -672,6 +725,7 @@ es:
   receipts:
     invoice: Factura
     invoice_numer_X_at_time: Pedido Nro. %{number} at %{datetime}
+    delivery_note: Lieferschein
   reports:
     amount: Monto
     description: Descripción
@@ -689,7 +743,6 @@ es:
     show:
       purchase_price_sum: Suma precio de venta
   sticker: Etiqueta adhesiva
-  support: XXX
   system:
     add_payment_method: Añadir método de pago
     complete_sale: Terminar
@@ -838,7 +891,7 @@ es:
         con éxito
       new_order: Nuevo pedido creado
       order_refund_dt: ! '#%{id}'
-      please_backup: "Por favor, respaldo el sistema regularmente!"
+      please_backup: Por favor, respaldo el sistema regularmente!
       save_before: ¿Guardar antes de salir?
       wholesaler_upload_report: ! 'Artículos actualizados: %{updated_items}, Artículos
         creados: %{created_items}, Categorías creadas: %{created_categories}, Tipos
@@ -888,6 +941,7 @@ es:
       to: A
       top: Arriba
       waiting: Esperando...
+      choose: choose
     sticky_ticket: Etiqueta adhesiva
     stock_locations: Ubicaciones_de_stock
     subtotal: Subtotal
@@ -904,3 +958,11 @@ es:
     on_export: al exportar
     on_import: al importar
     on_save: al guardar
+  are_you_sure: Are you sure you want to do this?
+  customers:
+    show:
+      bought_items: Bought items
+      last_orders: Last orders
+      order_id: Order Number
+      order_total: Order total
+      sold_count: sold count

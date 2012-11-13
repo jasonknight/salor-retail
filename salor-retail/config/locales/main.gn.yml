@@ -3,63 +3,91 @@ gn:
   are_you_sure: Sind Sie sicher?
   time:
     formats:
-      salor: "%a, %b %d %H:%M"
-      iso: "%Y-%m-%d %H:%M:%S"
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-      just_time: "%H:%M"
-      datetime_short: "%y-%m-%d %H:%M"
-      datetime_iso2: "%Y%m%dT%H%M%S"
-      long: "%Y%m%dT%H%M%S"
+      salor: ! '%a, %b %d %H:%M'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      datetime_short: ! '%y-%m-%d %H:%M'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      long: ! '%Y%m%dT%H%M%S'
   date:
-    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
-    month_names: [~, Januar, Februar, März, April, Mai, Juni, Juli, August, September, Oktober, November, Dezember]
-    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    month_names:
+    - 
+    - Januar
+    - Februar
+    - März
+    - April
+    - Mai
+    - Juni
+    - Juli
+    - August
+    - September
+    - Oktober
+    - November
+    - Dezember
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
     order:
-      - :year
-      - :month
-      - :day
+    - :year
+    - :month
+    - :day
     formats:
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-
-  support:
-    array:
-      words_connector: ", "
-      two_words_connector: " and "
-      last_word_connector: ", and "
-
-    select:
-      prompt: "Please select"
-
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+  support: Support
   number:
     format:
-      separator: "."
-      delimiter: ","
+      separator: .
+      delimiter: ! ','
       precision: 3
       significant: false
       strip_insignificant_zeros: false
-
     currency:
       format:
-        format: "%u%n"
-        friendly_unit: "EUR"
-        unit: "€"
-        separator: ","
-        delimiter: " "
+        format: ! '%u%n'
+        friendly_unit: EUR
+        unit: €
+        separator: ! ','
+        delimiter: ! ' '
         precision: 2
+        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
         significant: false
         strip_insignificant_zeros: false
-        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
-
     percentage:
       format:
-        delimiter: ""
-
+        delimiter: ''
     precision:
       format:
-        delimiter: ""
+        delimiter: ''
   ByCard: Karte
   ByGiftCard: Gutschein
   InCash: In Bar
@@ -230,7 +258,7 @@ gn:
       sale_type:
         one: Verkaufs-Art
         other: Verkaufs-Arten
-      country: 
+      country:
         one: Land
         other: Länder
       invoice_note:
@@ -723,7 +751,6 @@ gn:
     show:
       purchase_price_sum: Einkaufspreis gesamt
   sticker: Aufkleber
-  support: Support
   system:
     add_payment_method: Zahlungsmethode hinzufügen
     complete_sale: abschließen
@@ -867,7 +894,7 @@ gn:
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       new_order: Neuer Verkauf angelegt
       order_refund_dt: ! '#%{id}'
-      please_backup: "Machen Sie regelmäßig Backups!"
+      please_backup: Machen Sie regelmäßig Backups!
       save_before: Vor dem Verlassen speichern?
       wholesaler_upload_report: ! 'Aktualisiert: %{updated_items}, Erzeugt: %{created_items},
         Neue Kategorien: %{created_categories}, Neue Steuerklassen %{created_tax_profiles}'
