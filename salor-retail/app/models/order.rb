@@ -462,13 +462,16 @@ class Order < ActiveRecord::Base
 	end
 	#
   def complete
-    log_action "Starting complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
-    log_action "User Is: #{GlobalData.salor_user.username}"
-    log_action "DrawerId Is: #{GlobalData.salor_user.get_drawer.id}"
-    log_action "OrderId Is: #{self.id}"
-    self.update_attribute :paid, 1
-    self.update_attribute :created_at, Time.now
-    self.update_attribute :drawer_id, $User.get_drawer.id
+#     log_action "Starting complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
+#     log_action "User Is: #{GlobalData.salor_user.username}"
+#     log_action "DrawerId Is: #{GlobalData.salor_user.get_drawer.id}"
+#     log_action "OrderId Is: #{self.id}"
+    self.paid = 1
+    self.created_at = Time.now
+    self.drawer_id = $User.get_drawer.id
+    self.nr = self.vendor.get_unique_model_number('order')
+    self.save
+    self.update
     self.reload
     begin # so if all this doesn't work, then the order won't complete...
       log_action "Updating quantities"
@@ -513,7 +516,7 @@ class Order < ActiveRecord::Base
       log_action $!.to_s
       #puts $!.to_s
     end
-    log_action "Ending complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
+    #log_action "Ending complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
   end
   def activate_gift_cards
     self.gift_cards.each do |gc|

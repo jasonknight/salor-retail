@@ -7,42 +7,35 @@
 
 module SalorScope
   def self.included(klass)
-    klass.scope(:by_vendor, lambda { |model|
-      if model.respond_to?(:vendor_id) and not model.vendor_id.nil?
-        klass.where(:vendor_id => $User.vendor_id) if $User
-      end
-    })
+    
+    if klass.column_names.include? 'vendor_id'
+      klass.scope(:by_vendor, lambda { klass.where(:vendor_id => $User.vendor_id) if $User })
+    end
 
     if klass.column_names.include? 'hidden'
       klass.scope(:visible, lambda { klass.where('hidden = FALSE OR hidden IS NULL') })
       klass.scope(:invisible, lambda { klass.where('hidden = TRUE OR hidden = 1') })
     end
   
-    klass.scope( :by_user , lambda { |model|
-      if model.class == Order and $User and $User.is_employee? and not $User.can(:head_cashier) and not $User.can(:edit_orders)
-        klass.where(:employee_id => $User.id.to_s)
-      elsif model.respond_to? :user_id and [TaxProfile,Shipper,ShipmentType].include?(model.class) == false
-        klass.where(:user_id => $User.get_owner.id.to_s)
-      end
-    })
+    if klass.class == Order
+      klass.scope(:by_user , lambda { klass.where(:employee_id => $User.id.to_s) if $User and $User.is_employee? and not $User.can(:head_cashier) and not $User.can(:edit_orders) })
+    elsif klass.column_names.include?('user_id') and [TaxProfile,Shipper,ShipmentType,TransactionTag].include?(klass.class) == false
+      klass.scope(:by_user , lambda { klass.where(:user_id => $User.get_owner.id.to_s) if $User })
+    else
+      klass.scope(:by_user, lambda {})
+    end
     
-    klass.scope(:scopied, lambda { |model|
-      klass.by_keywords.visible.by_vendor.by_user
-    })
+    klass.scope(:scopied, lambda { klass.by_keywords.visible.by_vendor.by_user })
     
-    klass.scope(:all_seeing, lambda { |model|
-      klass.by_keywords.by_vendor.by_user
-    })
+    klass.scope(:all_seeing, lambda { klass.by_keywords.by_vendor.by_user })
     
-    
-    
-    klass.scope(:by_keywords , lambda {|model|
+    klass.scope(:by_keywords , lambda {
       conds = []
       vals = []
       words = GlobalData.params.keywords if GlobalData.params
       return if words.nil? or words.blank?
       conds << "id = '#{words}'"
-      if model.respond_to? :name then
+      if klass.respond_to? :name then
         if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and model.respond_to? :base_price then
           parts = words.match(/([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/)
           price = SalorBase.string_to_float(parts[2]) 
@@ -56,7 +49,7 @@ module SalorScope
           conds << "name LIKE '%#{words}%'"
         end
       end
-      if model.respond_to? :first_name then
+      if klass.respond_to? :first_name then
         if words.include? " " then
           parts = words.split(" ")
           conds << "first_name LIKE '%#{parts[0]}%'"
@@ -64,7 +57,7 @@ module SalorScope
           conds << "first_name LIKE '%#{words}%'"
         end
       end
-      if model.respond_to? :last_name then
+      if klass.respond_to? :last_name then
         if words.include? " " then
           parts = words.split(" ")
           conds << "last_name LIKE '%#{parts[1]}%'"
@@ -72,19 +65,19 @@ module SalorScope
           conds << "last_name LIKE '%#{words}%'"
         end
       end
-      if model.respond_to? :sku then
+      if klass.respond_to? :sku then
         conds << "sku LIKE '#{words}%'"
       end
-      if model.respond_to? :username then
+      if klass.respond_to? :username then
         conds << "username LIKE '#{words}%'"
       end
-      if model.respond_to? :email then
+      if klass.respond_to? :email then
         conds << "email LIKE '#{words}%'"
       end
-      if model.respond_to? :tag then
+      if klass.respond_to? :tag then
         conds << "tag LIKE '%#{words}%'"
       end
-      return {:conditions => conds.join(" OR ")}
+      klass.where(conds.join(" OR "))
     })
   end
 end

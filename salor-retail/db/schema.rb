@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121113174910) do
+ActiveRecord::Schema.define(:version => 20121113192954) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -848,6 +848,7 @@ ActiveRecord::Schema.define(:version => 20121113174910) do
     t.datetime "updated_at",              :null => false
     t.binary   "logo_image"
     t.string   "logo_image_content_type"
+    t.boolean  "hidden"
   end
 
   create_table "users", :force => true do |t|

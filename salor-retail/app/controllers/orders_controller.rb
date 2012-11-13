@@ -138,7 +138,7 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.xml
   def destroy
-    @order = Order.by_vendor(salor_user.meta.vendor_id).find(params[:id])
+    @order = Order.by_vendor.find(params[:id])
     @order.kill
     respond_to do |format|
       format.html { redirect_to(orders_url) }
