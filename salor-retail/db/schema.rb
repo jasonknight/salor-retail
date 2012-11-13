@@ -615,6 +615,7 @@ ActiveRecord::Schema.define(:version => 20121113182444) do
     t.integer  "sale_type_id"
     t.text     "invoice_comment"
     t.text     "delivery_note_comment"
+    t.integer  "nr"
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"
@@ -849,6 +850,7 @@ ActiveRecord::Schema.define(:version => 20121113182444) do
     t.datetime "updated_at",              :null => false
     t.binary   "logo_image"
     t.string   "logo_image_content_type"
+    t.boolean  "hidden"
   end
 
   create_table "users", :force => true do |t|
@@ -894,8 +896,8 @@ ActiveRecord::Schema.define(:version => 20121113182444) do
     t.string   "name"
     t.integer  "user_id"
     t.text     "description"
-    t.datetime "created_at",                                         :null => false
-    t.datetime "updated_at",                                         :null => false
+    t.datetime "created_at",                                              :null => false
+    t.datetime "updated_at",                                              :null => false
     t.integer  "hidden",                          :default => 0
     t.text     "receipt_logo_header"
     t.text     "receipt_logo_footer"
@@ -907,6 +909,9 @@ ActiveRecord::Schema.define(:version => 20121113182444) do
     t.string   "sku"
     t.string   "token"
     t.string   "email"
+    t.boolean  "use_order_numbers",               :default => true
+    t.string   "unused_order_numbers",            :default => "--- []\n"
+    t.integer  "largest_order_number",            :default => 0
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

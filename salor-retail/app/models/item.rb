@@ -190,7 +190,7 @@ class Item < ActiveRecord::Base
       end
       return item
     end
-    lcard = LoyaltyCard.scopied.find_by_sku(code)
+    lcard = LoyaltyCard.find_by_sku(code)
     return lcard if lcard
     #oops, still haven't found it, let's creat a dummy item
     i = Item.scopied.find_or_create_by_sku(code)

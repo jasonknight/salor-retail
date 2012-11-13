@@ -31,6 +31,7 @@ class Vendor < ActiveRecord::Base
 	has_many :shipment_items, :through => :shipments
   has_many :tax_profiles
   has_many :shipment_types
+  serialize :unused_order_numbers
 	
   
 	def salor_configuration_attributes=(hash)
@@ -93,6 +94,27 @@ class Vendor < ActiveRecord::Base
       features[:order_level_rebates_count] = Order.scopied.where('rebate IS NOT NULL AND rebate != 0.0').count
     end
     @features = features
+  end
+  
+  def get_unique_model_number(model_name_singular)
+    model_name_plural = model_name_singular + 's'
+    return 0 if not self.send("use_#{model_name_singular}_numbers")
+    if not self.send("unused_#{model_name_singular}_numbers").empty?
+      # reuse order numbers if present'
+      nr = self.send("unused_#{model_name_singular}_numbers").first
+      self.send("unused_#{model_name_singular}_numbers").delete(nr)
+      self.save
+    elsif not self.send("largest_#{model_name_singular}_number").zero?
+      # increment largest model number'
+      nr = self.send("largest_#{model_name_singular}_number") + 1
+      self.update_attribute "largest_#{model_name_singular}_number", nr
+    else
+      # find Order with largest nr attribute from database. this should happen only once, when having a new database
+      last_model = self.send(model_name_plural).visible.where('nr is not NULL OR nr <> 0').last
+      nr = last_model ? last_model.nr + 1 : 1
+      self.update_attribute "largest_#{model_name_singular}_number", nr
+    end
+    return nr
   end
   # {END}
 end

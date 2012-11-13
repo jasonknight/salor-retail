@@ -68,7 +68,7 @@ var i18n_transaction_tag_one = '<%= I18n.t("activerecord.models.transaction_tag.
     stores = stores.join(' ')
     inplace_stores = "<select id='inplaceedit'>#{stores}</select>"
 
-    locations = Location.by_vendor(salor_user.meta.vendor_id)
+    locations = Location.by_vendor
     locs = []
     locations.each do |loc|
       locs << "<option value='#{loc.id}'>#{loc.name}</option>"

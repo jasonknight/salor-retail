@@ -7,98 +7,77 @@
 
 module SalorScope
   def self.included(klass)
-    begin
-      # {START}
-      inst = klass.new
-      klass.scope(:by_vendor, lambda { |*args|
-         if inst.respond_to? :vendor_id
-           
-           return {:conditions => ["vendor_id = ? ", $User.vendor_id]} if $User and Vendor.exists?($User.vendor_id)
-         end
-      })
-      klass.scope(:visible, lambda { |*args|
-         if inst.respond_to? :hidden
-           return { :conditions => "`#{ inst.class.table_name}`.`hidden` = 0 or `#{ inst.class.table_name}`.`hidden` is null"}
-         end
-               })
-      klass.scope(:invisible, lambda { |*args|
-         if inst.respond_to? :hidden
-           return {:conditions => "`#{ inst.class.table_name }`.`hidden` = 1"}
-         end
-      })
-      klass.scope( :by_user , lambda { |*args|
-          if inst.class == Order and 
-             GlobalData.salor_user and 
-             GlobalData.salor_user.is_employee? and
-             not GlobalData.salor_user.can(:head_cashier) and
-             not GlobalData.salor_user.can(:edit_orders) then
-             return {:conditions => 'employee_id = ' + $User.id.to_s}
-          end
-          if inst.respond_to? :user_id and [TaxProfile,Shipper,ShipmentType].include?(inst.class) == false
-            return {:conditions => 'user_id = ' + $User.get_owner.id.to_s}
-         end
-      })
-      klass.scope( :by_keywords , lambda {|*args|
-         conds = []
-         vals = []
-         words = GlobalData.params.keywords if GlobalData.params
-         return if words.nil? or words.blank?
-         conds << "id = '#{words}'"
-         if inst.respond_to? :name then
-           if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and inst.respond_to? :base_price then
-             parts = words.match(/([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/)
-             price = SalorBase.string_to_float(parts[2]) 
-             if parts[1] == '*' then
-               conds << "base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}"
-             else
-               conds << "name LIKE '%#{parts[1].split(" ").join("%")}%' and base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}"
-             end
-           else
-             words = words.split(" ").join("%")
-             conds << "name LIKE '%#{words}%'"
-           end
-         end
-         if inst.respond_to? :first_name then
-           if words.include? " " then
-             parts = words.split(" ")
-             conds << "first_name LIKE '%#{parts[0]}%'"
-           else
-             conds << "first_name LIKE '%#{words}%'"
-           end
-         end
-         if inst.respond_to? :last_name then
-           if words.include? " " then
-             parts = words.split(" ")
-             conds << "last_name LIKE '%#{parts[1]}%'"
-           else
-             conds << "last_name LIKE '%#{words}%'"
-           end
-         end
-         if inst.respond_to? :sku then
-           conds << "sku LIKE '#{words}%'"
-         end
-         if inst.respond_to? :username then
-           conds << "username LIKE '#{words}%'"
-         end
-         if inst.respond_to? :email then
-           conds << "email LIKE '#{words}%'"
-         end
-        if inst.respond_to? :tag then
-           conds << "tag LIKE '%#{words}%'"
-         end
+    
+    if klass.column_names.include? 'vendor_id'
+      klass.scope(:by_vendor, lambda { klass.where(:vendor_id => $User.vendor_id) if $User })
+    end
 
-         return {:conditions => conds.join(" OR ")}
-      })
-      klass.scope(:scopied, lambda { |*args|
-          klass.send(:by_keywords).visible.by_vendor.by_user
-      } )
-      klass.scope(:all_seeing, lambda { |*args|
-          klass.send(:by_keywords).by_vendor.by_user
-      } )
-      
-      rescue Exception => e
-        # puts "Something bad happend..."
+    if klass.column_names.include? 'hidden'
+      klass.scope(:visible, lambda { klass.where('hidden = FALSE OR hidden IS NULL') })
+      klass.scope(:invisible, lambda { klass.where('hidden = TRUE OR hidden = 1') })
+    end
+  
+    if klass.class == Order
+      klass.scope(:by_user , lambda { klass.where(:employee_id => $User.id.to_s) if $User and $User.is_employee? and not $User.can(:head_cashier) and not $User.can(:edit_orders) })
+    elsif klass.column_names.include?('user_id') and [TaxProfile,Shipper,ShipmentType,TransactionTag].include?(klass.class) == false
+      klass.scope(:by_user , lambda { klass.where(:user_id => $User.get_owner.id.to_s) if $User })
+    else
+      klass.scope(:by_user, lambda {})
+    end
+    
+    klass.scope(:scopied, lambda { klass.by_keywords.visible.by_vendor.by_user })
+    
+    klass.scope(:all_seeing, lambda { klass.by_keywords.by_vendor.by_user })
+    
+    klass.scope(:by_keywords , lambda {
+      conds = []
+      vals = []
+      words = GlobalData.params.keywords if GlobalData.params
+      return if words.nil? or words.blank?
+      conds << "id = '#{words}'"
+      if klass.respond_to? :name then
+        if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and model.respond_to? :base_price then
+          parts = words.match(/([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/)
+          price = SalorBase.string_to_float(parts[2]) 
+          if parts[1] == '*' then
+            conds << "base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}"
+          else
+            conds << "name LIKE '%#{parts[1].split(" ").join("%")}%' and base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}"
+          end
+        else
+          words = words.split(" ").join("%")
+          conds << "name LIKE '%#{words}%'"
+        end
       end
-      # {END}
+      if klass.respond_to? :first_name then
+        if words.include? " " then
+          parts = words.split(" ")
+          conds << "first_name LIKE '%#{parts[0]}%'"
+        else
+          conds << "first_name LIKE '%#{words}%'"
+        end
+      end
+      if klass.respond_to? :last_name then
+        if words.include? " " then
+          parts = words.split(" ")
+          conds << "last_name LIKE '%#{parts[1]}%'"
+        else
+          conds << "last_name LIKE '%#{words}%'"
+        end
+      end
+      if klass.respond_to? :sku then
+        conds << "sku LIKE '#{words}%'"
+      end
+      if klass.respond_to? :username then
+        conds << "username LIKE '#{words}%'"
+      end
+      if klass.respond_to? :email then
+        conds << "email LIKE '#{words}%'"
+      end
+      if klass.respond_to? :tag then
+        conds << "tag LIKE '%#{words}%'"
+      end
+      klass.where(conds.join(" OR "))
+    })
   end
 end

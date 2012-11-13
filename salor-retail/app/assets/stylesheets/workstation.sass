@@ -190,17 +190,8 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 @mixin yes_select 
 
-@font-face 
-  font-family: LCARS
-  src: url("/LCARS2.ttf")
-
 .no-select 
   @include no_select
-
-body 
-  @include no_select
-  font-family: $font_family
-  letter-spacing: 1.5px
 
 @mixin awesome_button
   background: #222 url(/images/alert-overlay.png) repeat-x
@@ -274,8 +265,6 @@ body
   @include dialog
 
 /* Non Specific */
-input, textarea, select
-  font-family: sans-serif
 .align-left 
   text-align: left
 
@@ -593,17 +582,18 @@ div.part,div.batch
   float: left
 
 body 
-  font-family: $font_family
   font-size: $text_size_normal
   color: $foreground
   background-color: $background
   padding: 0px
   margin: 0px
+  @include no_select
+  font-family: Ubuntu-R
+  letter-spacing: 1.5px
 
 .icon-caption 
   font-size: $text_size_tiny
   text-transform: uppercase
-  font-family: $font_family
 
 .header .icon-caption 
   position: relative
@@ -727,7 +717,6 @@ div.header #clockbox
   text-align: center
   font-size: $text_size_tiny
   text-shadow: 1px 1px 1px #666666
-  font-family: $font_family
   position: absolute
 
 div.header #clockbox span 

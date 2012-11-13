@@ -20,7 +20,7 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    @category = Category.by_vendor(GlobalData.session.vendor_id).visible.find_by_id(params[:id])
+    @category = Category.by_vendor.visible.find_by_id(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
