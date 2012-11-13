@@ -343,6 +343,7 @@ en-US:
     divide: divide
     multiply: multiply
     subtract: subtract
+    discount_after_threshold: discount after threshold
   cash_registers:
     end_of_day:
       cash_drawer: Cash Drawer

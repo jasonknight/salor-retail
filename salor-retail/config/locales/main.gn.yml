@@ -343,6 +343,7 @@ gn:
     divide: dividieren
     multiply: multiplizieren
     subtract: subtrahieren
+    discount_after_threshold: Discount After Threshold
   cash_registers:
     end_of_day:
       cash_drawer: Kassenlade

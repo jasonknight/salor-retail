@@ -28,10 +28,10 @@ class Action < ActiveRecord::Base
     write_attribute(:code,text)
   end
   def self.behavior_list
-    [:add,:subtract,:multiply, :divide, :assign]
+    [:add,:subtract,:multiply, :divide, :assign,:discount_after_threshold]
   end
   def self.afield_list
-    [:base_price, :quantity,:tax_profile_id]
+    [:base_price, :quantity,:tax_profile_id, :quantity]
   end
   def sku=(s)
     if not s.blank? then
@@ -64,11 +64,26 @@ class Action < ActiveRecord::Base
           # puts "Running action: #{action.behavior} #{action.whento}"
           if action.value > 0 then
             begin
-              eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add 
-              eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract
-              eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply 
-              eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide
-              eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign
+              eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add and not item.action_applied
+              eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract and not item.action_applied
+              eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply  and not item.action_applied
+              eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide and not item.action_applied
+              eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign and not item.action_applied
+              if action.behavior.to_sym == :discount_after_threshold and act == :add_to_order and item.class == OrderItem then
+#                 debugger
+                if (item.quantity / action.value2).floor >= 1 then
+                  num_of_discountables = (item.quantity / action.value2).floor
+                  total_2_discount = num_of_discountables * item.price
+                  item.rebate = 0
+                  percentage = total_2_discount / item.calculate_total
+                  item.rebate = percentage * 100
+                else
+                  item.rebate = 0
+                end
+                #puts "### item.#{action.afield} -= (item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor.to_i"
+               # eval("item.#{action.afield} =  ((item.item.base_price * item.quantity) - ((item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor))")
+                item.save
+              end
               if item.class == OrderItem then
                item.update_attribute :action_applied, true
               end
@@ -82,7 +97,7 @@ class Action < ActiveRecord::Base
           if not action.code.blank? then
             begin
               # puts "evaluating code"
-              eval(action.code)
+              #eval(action.code)
             rescue
               # puts "There was an error #{$!}"
               GlobalErrors.append("system.errors.action_code_error",action,{:error => $!})

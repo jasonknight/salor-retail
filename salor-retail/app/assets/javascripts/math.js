@@ -31,9 +31,14 @@ function toFloat(str, returnString) {
   return (returnString) ? nstr : parseFloat(nstr); */
   var r = /([\d,\.]+)[,\.](\d{2,})/g;
   var matches = r.exec(str);
-  var lpart = matches[1].replace(/[\.,]+/g,'');
-  var rpart = matches[2].replace(/[\.,]+/g,'');
-  var num = lpart + '.' + rpart;
+  if (matches) {
+    var lpart = matches[1].replace(/[\.,]+/g,'');
+    var rpart = matches[2].replace(/[\.,]+/g,'');
+    var num = lpart + '.' + rpart;
+  } else {
+    num = parseFloat(str);
+  }
+  
   if (returnString) {
     return num;
   } else {

@@ -1,2 +1,7 @@
 = link_to salor_icon(:add,{},32),new_button_path
 = render :partial => 'popup'
+:javascript
+  $(function () {
+    $('#buttons').show();
+    $('#buttons').offset({top: 150});
+  });

@@ -150,9 +150,8 @@ class Shipment < ActiveRecord::Base
       end
       i = Item.new.from_shipment_item(item)
       i.make_valid
-      if self.vendor == self.shipper then
-        i.quantity -= item.quantity * 2
-      end
+#       debugger
+      
       if i.save then
         item.update_attribute(:in_stock,true)
       else

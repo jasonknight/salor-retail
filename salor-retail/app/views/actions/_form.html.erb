@@ -65,6 +65,15 @@
       <% end %>
     </select>
   </div>
+
+      <div class="field">
+        <label>  <%= I18n.t("activerecord.attributes.afield")%> </label><br />
+          <select id="action_field2" name="item[field2]">
+            <% Action.afield_list.each do |w|  %>
+            <option value="<%= w %>" <%= @action.field2.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("activerecord.attributes.#{w}") %> </option>
+            <% end %>
+          </select>
+        </div>
       </td>
     </tr>
     <tr>
@@ -74,6 +83,11 @@
   <div class="field">
     <label> <%= I18n.t("activerecord.attributes.value") %> </label><br />
     <input type="text" name="item[value]" value="<%= @action.value %>" />
+  </div>
+  
+  <div class="field">
+    <label> <%= I18n.t("activerecord.attributes.value") %> </label><br />
+    <input type="text" name="item[value2]" value="<%= @action.value2 %>" />
   </div>
 
     <div class="actions">

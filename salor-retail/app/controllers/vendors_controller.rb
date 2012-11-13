@@ -315,34 +315,35 @@ class VendorsController < ApplicationController
 #            puts  " --- " + params[:value].to_s
           if kls == OrderItem then
 #              puts  "### klass is OrderItem"
-            if params[:field] == 'quantity' and 
-               @inst.behavior == 'normal' and 
-               @inst.coupon_applied == false and 
-               @inst.is_buyback == false and 
-               @inst.order.buy_order == false and (not @inst.weigh_compulsory == true) then
+#             if params[:field] == 'quantity' and 
+#                @inst.behavior == 'normal' and 
+#                @inst.coupon_applied == false and 
+#                @inst.is_buyback == false and 
+#                @inst.order.buy_order == false and (not @inst.weigh_compulsory == true) then
 #                puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
-              unless @inst.activated and true == false then
-#                  puts  "### inst is not activated."
-                # Takes into account ITEM rebate and ORDER rebate.
-                # ORDER and ITEM totals are updated in DB and in instance vars for JS
-                newval = params[:value]
-                origttl = @inst.total
-                @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
-                @inst.quantity = newval
-                @inst.calculate_total_with_rebate
-                @inst.calculate_rebate_amount
-                # Calculate OI tax, but update DB below instead
-                @inst.calculate_tax(true)
-                # Only include ORDER rebate in calculation if type = 'percent'
-                @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
-                # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
-                @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-                @inst.connection.execute("update `order_items` set total = #{@inst.total},`quantity` = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
-                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
-                @inst.is_valid = true
-                render :layout => false and return
-              end
-            elsif params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
+#               unless @inst.activated and true == false then
+# #                  puts  "### inst is not activated."
+#                 # Takes into account ITEM rebate and ORDER rebate.
+#                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
+#                 newval = params[:value]
+#                 origttl = @inst.total
+#                 @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
+#                 @inst.quantity = newval
+#                 @inst.calculate_total_with_rebate
+#                 @inst.calculate_rebate_amount
+#                 # Calculate OI tax, but update DB below instead
+#                 @inst.calculate_tax(true)
+#                 # Only include ORDER rebate in calculation if type = 'percent'
+#                 @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
+#                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
+#                 @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
+#                 @inst.connection.execute("update `order_items` set total = #{@inst.total},`quantity` = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
+#                 @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
+#                 @inst.is_valid = true
+#                 render :layout => false and return
+#               end
+            #els
+            if params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
 #                puts  "### field is price"
               unless @inst.activated then
                 # Takes into account ITEM rebate and ORDER rebate.
@@ -389,13 +390,19 @@ class VendorsController < ApplicationController
 #                puts  "### Other OrderItem updates executing"
               # For all other OrderItem updates
               # puts  "### update(#{params[:field].to_sym},#{params[:value]})"
-              @inst.update_attribute(params[:field].to_sym,params[:value])
+              if params[:field] == 'quantity' and params[:value] > @inst.quantity then
+                @inst.update_attribute(params[:field].to_sym,params[:value])
+                puts "### field being updated is quantity"
+                Action.run(@inst,:add_to_order)
+              else
+                @inst.update_attribute(params[:field].to_sym,params[:value])
+              end
+              
+              
               @inst.calculate_total
               @inst.order.update_self_and_save
               @inst.reload
-              if @inst.behavior == 'coupon' then
-                
-              end
+              
               render :layout => false and return
             end
           end

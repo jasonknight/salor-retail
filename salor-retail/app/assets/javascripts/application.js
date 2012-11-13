@@ -28,3 +28,4 @@
 //= require salor_bin
 //= require style
 //= require shared
+//= require jquery.modcoder.excolor

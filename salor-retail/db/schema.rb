@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121107163908) do
+ActiveRecord::Schema.define(:version => 20121113182444) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(:version => 20121107163908) do
     t.string   "afield"
     t.float    "value",      :default => 0.0
     t.integer  "hidden",     :default => 0
+    t.string   "field2"
+    t.float    "value2"
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"

@@ -377,15 +377,14 @@ class Item < ActiveRecord::Base
   def from_shipment_item(si)
     i = Item.find_by_sku(si.sku)
     if i then
-      #if si.shipment.shipper == i.vendor # this is advanced stuff and needs more thinking
-      #  i.quantity = i.quantity - si.quantity
-      #else
-        si.quantity ||= 1
+      if i.vendor == si.shipment.shipper then
+        i.quantity -= si.quantity
+      else
         i.quantity += si.quantity
-        if si.purchase_price then
-          i.purchase_price = si.purchase_price
-        end
-      #end
+      end
+      if si.purchase_price then
+        i.purchase_price = si.purchase_price
+      end
       return i
     else
       # puts "No item found..."
