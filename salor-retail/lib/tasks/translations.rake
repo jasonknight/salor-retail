@@ -72,7 +72,7 @@ def clean(source,target)
     elsif value.is_a? Hash and source[key]
       output[key] = clean(source[key],value)
     else
-      puts "  Not copying #{key} to output"
+      puts "  Cleaning #{key} from target"
     end
   end
   return output
@@ -269,6 +269,7 @@ namespace :translations do
         t = base_name.gsub('XXX',lang)
         s = base_name.gsub('XXX',langs[0])
         source, sourcelang, sourcefile, translation, translationlang, transfile = open_translation(s,t)
+        next if sourcelang == translationlang
         puts "Equalizing #{sourcelang} => #{translationlang}"
         translation = equalize(source,translation)
         write_translation(translation, translationlang, transfile)
