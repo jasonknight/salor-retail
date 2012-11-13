@@ -1,5 +1,5 @@
 = javascript_include_tag 'shipments.js'
-= javascript_include_tag "locales/salor.#{@locale}.js"
+= javascript_include_tag "locales/main.#{@locale}.js"
 :javascript
   var database = { shipments: #{raw @shipments.to_json}};
   $(function () { shipments.draw.shipments(database.shipments)});

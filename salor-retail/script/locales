@@ -12,7 +12,7 @@ puts JS_ROOT
 # locale javascript namespace
 JS_NAMESPACE = 'i18n = '
 
-Dir[File.join(YAML_ROOT, 'salor.*.yml')].sort.each { |locale| 
+Dir[File.join(YAML_ROOT, 'main.*.yml')].sort.each { |locale| 
   locale_yml = YAML::load(IO.read(locale))
   puts 'Filename: ' + locale
   File.open(

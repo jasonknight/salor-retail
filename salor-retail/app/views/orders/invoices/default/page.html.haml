@@ -17,10 +17,13 @@
   = render 'orders/invoices/default/header_page_one'
   
   - if params[:delivery_note]
-    %h2== #{ I18n.t("receipts.delivery_note") } #{ @order.id }
+    %h2== #{ I18n.t("receipts.delivery_note") } #{ @order.nr }
     %p= text_field_tag 'delivery_note_comment', @order.delivery_note_comment
   - else
-    %h2== #{ I18n.t("receipts.invoice") } #{ @order.id }
+    - if @order.nr
+      %h2== #{ I18n.t("receipts.invoice") } #{ @order.nr }
+    - else
+      %h2== #{ I18n.t("receipts.offer") }
     %h3= I18n.l(@order.created_at, :format => :just_day)
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note

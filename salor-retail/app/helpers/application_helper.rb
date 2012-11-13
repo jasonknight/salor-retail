@@ -34,16 +34,12 @@ module ApplicationHelper
   
   def supported_languages
     [
-      {:name => "Deutsch", :locale => 'de'},
+      {:name => "Deutsch", :locale => 'gn'},
       {:name => "US English", :locale => 'en-US'},
       {:name => "GB English", :locale => 'en-GB'},
-      {:name => "CA English", :locale => 'en-CA'},
       {:name => "ελληνική", :locale => 'el'},
-      {:name => "Pусский", :locale => 'ru'},
-      {:name => "Polski", :locale => 'pl'},
       {:name => "Français", :locale => 'fr'},
       {:name => "Espagnole", :locale => 'es'},
-      {:name => "Türkçe", :locale => 'tr'},
       {:name => "中文", :locale => 'cn'}
     ]
   end

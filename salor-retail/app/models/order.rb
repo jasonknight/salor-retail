@@ -471,7 +471,6 @@ class Order < ActiveRecord::Base
     self.drawer_id = $User.get_drawer.id
     self.nr = self.vendor.get_unique_model_number('order')
     self.save
-    self.update
     self.reload
     begin # so if all this doesn't work, then the order won't complete...
       log_action "Updating quantities"
