@@ -258,7 +258,7 @@ namespace :translations do
   task :update do
     base_path = File.join(Rails.root,'config','locales')
     base_name = "main.XXX.yml" # i.e. the pattern name of the files
-    langs = ['en-US','en-GB','gn', 'cn','el','es','fr','it','ru']
+    langs = ['gn','en-US','en-GB','cn','el','es','fr','it','ru']
     default_file = File.join(base_path,base_name.gsub('XXX',langs[0])) #i.e. the first file is the default file
     langs.each do |lang|
       current_file = File.join(base_path,base_name.gsub('XXX',lang))
@@ -270,7 +270,7 @@ namespace :translations do
         s = base_name.gsub('XXX',langs[0])
         source, sourcelang, sourcefile, translation, translationlang, transfile = open_translation(s,t)
         next if sourcelang == translationlang
-        puts "Equalizing #{sourcelang} => #{translationlang}"
+        puts "\n\nEqualizing #{sourcelang} => #{translationlang}"
         translation = equalize(source,translation)
         write_translation(translation, translationlang, transfile)
       end
