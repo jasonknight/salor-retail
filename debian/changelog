@@ -1,3 +1,25 @@
+salor-retail (4.0.0.13) unstable; urgency=low
+
+  [ Jason Knight ]
+  * fixing complete order bug preventing completing orders over 1,000
+
+  [ Michael Franzl ]
+  * Closes #1361, salor-bin working properly
+  * removed unused translation files, updated translation rake task
+  * translations
+  * translations
+  * translations
+  * translations
+  * translations
+  * translations
+  * translations
+  * updated all translations with english defaults
+  * fixed SalorScope breaking serialization, added unique and reused order numbers
+  * fixed SalorScope, Ubuntu font
+  * Closes #1400, #1401
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 13 Nov 2012 22:12:25 +0100
+
 salor-retail (4.0.0.12) unstable; urgency=low
 
   * added download for item label printcode
