@@ -3,76 +3,100 @@ en-US:
   are_you_sure: Are you sure you want to do this?
   time:
     formats:
-      salor: "%a, %b %d %H:%M"
-      iso: "%Y-%m-%d %H:%M:%S"
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-      just_time: "%H:%M"
-      datetime_short: "%y-%m-%d %H:%M"
-      datetime_iso2: "%Y%m%dT%H%M%S"
-      long: "%Y%m%dT%H%M%S"
+      salor: ! '%a, %b %d %H:%M'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      datetime_short: ! '%y-%m-%d %H:%M'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      long: ! '%Y%m%dT%H%M%S'
   date:
-    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
-    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
-    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
     order:
-      - :year
-      - :month
-      - :day
+    - :year
+    - :month
+    - :day
     formats:
-      iso_day: "%Y-%m-%d"
-      just_day: "%d. %B %Y"
-
-  support:
-    array:
-      words_connector: ", "
-      two_words_connector: " and "
-      last_word_connector: ", and "
-
-    select:
-      prompt: "Please select"
-
+      iso_day: ! '%Y-%m-%d'
+      just_day: ! '%d. %B %Y'
+  support: Support
   number:
     format:
-      separator: "."
-      delimiter: ","
+      separator: .
+      delimiter: ! ','
       precision: 3
       significant: false
       strip_insignificant_zeros: false
-
     currency:
       format:
-        format: "%u%n"
-        friendly_unit: "USD"
-        unit: "$"
-        separator: "."
-        delimiter: ","
+        format: ! '%u%n'
+        friendly_unit: USD
+        unit: $
+        separator: .
+        delimiter: ! ','
         precision: 2
+        pieces: 0.01,0.05,0.10,0.25,0.50,1,5,10,20,50,100
         significant: false
         strip_insignificant_zeros: false
-        pieces: 0.01,0.05,0.10,0.25,0.50,1,5,10,20,50,100
-
     percentage:
       format:
-        delimiter: ""
-
+        delimiter: ''
     precision:
       format:
-        delimiter: ""
+        delimiter: ''
   ByCard: By Card
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
       tax_free: Tax Free
-      origin_country_id: Origin Country
-      destination_country_id: Destination Country
-      sale_type_id: Sale Type
-      note_header: Note Header
-      note_footer: Note Footer
       order_item:
         quantity: Qty.
+        tax_free: Tax Free
       invoice_blurb: Invoice text
       invoice_blurb_footer: Invoice text footer
       active: active
@@ -135,6 +159,10 @@ en-US:
       item:
         purchase_price: Purchase Price
         quantity: Quantity
+        origin_country: Origin Country
+        customs_code: Customs Code
+        manufacturer_price: Manufacturer Price
+        description: Description
       item_sku: item sku
       itemsviewlist: List View for Items
       last_name: last name
@@ -220,11 +248,17 @@ en-US:
       weight: weight
       when: when
       width: width
+      invoice_note:
+        origin_country_id: Origin Country
+        destination_country_id: Destination Country
+        note_header: Note header
+        note_footer: Note footer
+        sale_type_id: Sale Type
     models:
       sale_type:
         one: Sale Type
         other: Sale Types
-      country: 
+      country:
         one: Country
         other: Countries
       invoice_note:
@@ -278,8 +312,9 @@ en-US:
       shipment:
         one: Shipment
         other: Shipments
+        default_name: Default Name
       shipment_type:
-        default_name: Auto Nachbestellung
+        default_name: Default Name
         one: Shipment Type
         other: Shipment Types
       shipper:
@@ -421,6 +456,8 @@ en-US:
       update_quantity: Update inventory quantities
     upload:
       upload: upload
+    selection:
+      print: Print
   label: label
   menu:
     actions: actions
@@ -451,7 +488,6 @@ en-US:
     done: done
     download: download
     edit: edit
-    edit_country: Edit Country
     edit_sale_type: Edit Sale type
     edit_invoice_note: Edit Inovice Note
     edit_cash_register: edit cash register
@@ -535,6 +571,7 @@ en-US:
     vendors: Stores
     void: void
     wholesaler_update: wholesaler update
+    labels: Labels
   notifications:
     shipments_item_could_not_be_saved: shipments item could not be saved
     shipments_move_all_items: all items were successfully moved
@@ -622,7 +659,11 @@ en-US:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
-  OtherCredit: "Other"
+    print:
+      print: Print-Dialog
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
   printr:
     eod_report:
       None: Not named
@@ -690,6 +731,7 @@ en-US:
   receipts:
     invoice: Rechnung
     invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
+    delivery_note: Lieferschein
   reports:
     amount: amount
     description: description
@@ -707,7 +749,6 @@ en-US:
     show:
       purchase_price_sum: Purchase price sum
   sticker: sticker
-  support: Support
   system:
     add_payment_method: add payment method
     complete_sale: Complete
@@ -846,7 +887,7 @@ en-US:
       move_real_quantities_success: Item quantities were successfully updated
       new_order: new order created
       order_refund_dt: ! '#%{id}'
-      please_backup: "Please backup your system regularly!"
+      please_backup: Please backup your system regularly!
       save_before: Save before leaving?
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
@@ -896,6 +937,7 @@ en-US:
       to: to
       top: top
       waiting: waiting...
+      choose: choose
     sticky_ticket: Sticky label
     stock_locations: stock_locations
     subtotal: subtotal
