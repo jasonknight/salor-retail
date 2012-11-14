@@ -13,7 +13,7 @@ function showHideCustomerOrRebate() {
   }
 }
 function clearOrder() {
-  $.get('/orders/clear?order_id=' + $('.order-id').html());
+  $.get('/orders/clear?order_id=' + Order.id);
 }
 
 function clickBuyOrderButton(id) {
@@ -28,7 +28,7 @@ function clickBuyOrderButton(id) {
         <div id="clear_button" onmousedown="clearOrder();" class="input pos-button pos-configuration" style="width: 3%;background-color: red;">
         C
         </div>
-        <div id="buy_order_button" class="input pos-button pos-configuration" onclick="clickBuyOrderButton($('.order-id').html())">
+        <div id="buy_order_button" class="input pos-button pos-configuration" onclick="clickBuyOrderButton(Order.id);">
         <%= t("menu.buy_order")%>
         </div>
         <div id="configuration_button" onmousedown="showOrderOptions();" class="input pos-button pos-configuration">
@@ -43,7 +43,7 @@ function clickBuyOrderButton(id) {
         <div id="show_search" onmousedown="showSearch();" class="input pos-button">
           <%= t("menu.search")%>
         </div>
-        <div id="print_receipt_button" onmousedown="get('/orders/show_payment_ajax?order_id=' + $('.order-id').html());" class="input pos-button print-receipt">
+        <div id="print_receipt_button" onmousedown="get('/orders/show_payment_ajax?order_id=' + Order.id);" class="input pos-button print-receipt">
           <%= t("system.complete_sale")[0...5] %>
         </div>
 

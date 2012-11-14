@@ -346,9 +346,11 @@ class OrdersController < ApplicationController
     # in javascript if an order is completable or not.
     
     if not @order.order_items.visible.any? then
-      render :js => " complete_order_hide(); " and return
+      
+      render :js => " alert('NoVisibleItems');complete_order_hide(); " and return
     end
     
+       
     #if GlobalData.salor_user.get_drawer.amount <= 0 then
     #  GlobalErrors.append_fatal("system.errors.must_cash_drop")
     #end
@@ -381,13 +383,16 @@ class OrdersController < ApplicationController
       # what we think the order.total should be
       @order.reload
       
-      if payment_methods_total.round(2) < @order.total.round(2) then
+      if payment_methods_total.round(2) < @order.total.round(2) and @order.is_proforma == false then
         GlobalErrors.append_fatal("system.errors.sanity_check")
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return
       else
         payment_methods_array.each {|pm| pm.save} # otherwise, we save them
+      end
+      if @order.is_proforma == true then
+        render :js => " window.location = '/orders/#{@order.id}/print'; " and return
       end
       params[:print].nil? ? print = 'true' : print = params[:print].to_s
       # Receipt printing moved into Order.rb, line 497

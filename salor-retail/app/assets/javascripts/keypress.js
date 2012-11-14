@@ -41,7 +41,7 @@ var onF2Key = function (event) {
 
 var onEndKey = function(event) {
   if (params.controller == 'orders' && params.action == 'new') {
-    get('/orders/show_payment_ajax?order_id=' + $('.order-id').html());
+    get('/orders/show_payment_ajax?order_id=' + Order.id);
   }
 }
 

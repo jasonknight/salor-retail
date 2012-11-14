@@ -3,6 +3,7 @@
 <title>Salor</title>
 <%= stylesheet_link_tag 'workstation' %>
 <%= stylesheet_link_tag 'customer_screen' %>
+<%= javascript_include_tag "locales/main.#{I18n.locale}.js" %>
 </head>
 <body>
 <%= yield %>

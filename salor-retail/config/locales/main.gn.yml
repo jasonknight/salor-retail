@@ -93,6 +93,7 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      is_proforma: xxx Proforma
       tax_free: Steuerfrei
       invoice_note:
         origin_country_id: Ursprungsland

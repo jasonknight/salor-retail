@@ -12,14 +12,14 @@ function getByCardAmount() {
 
 function add_item(sku, additional_params) {
   if (sku.match(/^31\d{8}.{1,2}$/)) {
-    var oid = $('.order-id').html();
+    var oid = Order.id;
     var cid = Meta['cash_register_id'];
     var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
     window.location = "/employees/login?" + p.join("&");
     return;
   }
   var user_line = "&user_id=" + User.id + "&user_type=" + User.type;
-  get('/orders/add_item_ajax?order_id='+$('.order-id').html()+'&sku=' + sku + user_line + additional_params, filename);
+  get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + user_line + additional_params, filename);
   $('#keyboard_input').val('');
 }
 
@@ -155,7 +155,7 @@ function updateCustomerView(item,order_id) {
 }
 window.retail = {container: $(window)};
 window.showOrderOptions = function () {
-  var dialog = shared.draw.dialog(i18n.menu.configuration,"order_options");
+  var dialog = shared.draw.dialog(i18n.menu.configuration + ' Nr.' + Order.id,"order_options");
   
   // Customer code
   if (Order.customer) {
@@ -179,7 +179,7 @@ window.showOrderOptions = function () {
     row.append(col);
     row.append('<span class="">'+i18n.activerecord.attributes.lc_points+'</span>');
     var col = $('<span id="pos-order-points" class="order-points">' + Order.lc_points + '</span>');
-    col.attr('model_id',$('.order-id').html());
+    col.attr('model_id',Order.id);
     col.attr('klass','Order');
     col.attr('field','lc_points');
     col.addClass('editme');
@@ -219,6 +219,18 @@ window.showOrderOptions = function () {
     value: Order.tax_free,
     append_to: dialog
   };
+  callbacks = {change: function () {
+    get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
+  }
+  };
+  var tax_free_check = shared.draw.check_option(options,callbacks);
+  
+  options = {
+    name: 'is_proforma',
+    title: i18n.activerecord.attributes.is_proforma,
+    value: Order.is_proforma,
+    append_to: dialog
+  };
   var tax_free_check = shared.draw.check_option(options,callbacks);
   
   // salestype and countries
@@ -245,7 +257,7 @@ window.showOrderOptions = function () {
             //
           });
         },
-        attribute: {name: i18n.activerecord.models.sale_type.one},
+        attributes: {name: i18n.activerecord.models.sale_type.one},
         value: Order.sale_type_id,
       }, 
       // end sale_types

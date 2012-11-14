@@ -13,7 +13,7 @@ module SalorScope
     end
 
     if klass.column_names.include? 'hidden'
-      klass.scope(:visible, lambda { klass.where('hidden = FALSE OR hidden IS NULL') })
+      klass.scope(:visible, lambda { klass.where('hidden = FALSE OR hidden IS NULL OR hidden = 0') })
       klass.scope(:invisible, lambda { klass.where('hidden = TRUE OR hidden = 1') })
     end
   

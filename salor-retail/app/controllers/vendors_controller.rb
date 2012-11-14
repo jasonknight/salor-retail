@@ -272,7 +272,7 @@ class VendorsController < ApplicationController
     # and takes up to 2s for lots of items!!
     if params[:field] == "front_end_change" then
       o = Order.scopied.find_by_id(params[:order_id])
-      o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value])
+      o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value]) if o
       render :nothing => true and return
     end
     if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?

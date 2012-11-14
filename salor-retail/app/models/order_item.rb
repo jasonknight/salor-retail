@@ -649,7 +649,7 @@ class OrderItem < ActiveRecord::Base
     # #puts "My quantity is: #{self.quantity} and my #{self.behavior}"
     #
     # begin update the quantities of the item
-    if the_item.ignore_qty == false and self.behavior == 'normal' then
+    if the_item.ignore_qty == false and self.behavior == 'normal' and self.order.is_proforma == false then
       if self.order and self.order.buy_order then
         the_item.update_attribute(:quantity, the_item.quantity + self.quantity)
         the_item.update_attribute(:quantity_buyback, the_item.quantity_buyback + self.quantity)
@@ -661,21 +661,32 @@ class OrderItem < ActiveRecord::Base
     # end update the quantities of the item
     #
     # begin Check Parts and update quantities
-      log_action "Checking Parts"
     	  if the_item.parts.any? then
         the_item.parts.each do |part|
           next if part.ignore_qty == true # i.e. we just ignore the qty
           part.quantity ||= 0
+          next if self.order.is_proforma == true
           if self.order and self.order.buy_order then
             part.update_attribute(:quantity, part.quantity + part.part_quantity)
           else
             part.update_attribute(:quantity, part.quantity - part.part_quantity)
+            
+            # update statistics based on parts
+            the_item = part
+            if the_item.category then
+              the_item.category.update_attribute(:quantity_sold, the_item.category.quantity_sold + the_item.part_quantity)
+            end
+            if the_item.location then
+              the_item.location.update_attribute(:quantity_sold,the_item.location.quantity_sold + the_item.part_quantity)
+            end
+            
           end
         end
       end
     # end Check Parts and update quantities
   end
   def update_quantity_sold
+    return if self.order.is_proforma == true
     the_item = self.item
     if the_item.category then
       the_item.category.update_attribute(:quantity_sold, the_item.category.quantity_sold + self.quantity)
@@ -685,6 +696,7 @@ class OrderItem < ActiveRecord::Base
     end
   end
   def update_cash_made
+    return if self.order.is_proforma == true
     the_item = self.item
     if the_item.category then
       the_item.category.update_attribute(:cash_made, the_item.category.cash_made + self.total)

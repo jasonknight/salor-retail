@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121113192954) do
+ActiveRecord::Schema.define(:version => 20121114110755) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -616,6 +616,7 @@ ActiveRecord::Schema.define(:version => 20121113192954) do
     t.text     "invoice_comment"
     t.text     "delivery_note_comment"
     t.integer  "nr"
+    t.boolean  "is_proforma",            :default => false
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"

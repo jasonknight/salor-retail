@@ -163,6 +163,10 @@ class Order < ActiveRecord::Base
     self.update_attribute(:tax_free, !self.tax_free)
   end
   #
+  def toggle_is_proforma(x)
+    self.update_attribute(:is_proforma, !self.is_proforma)
+  end
+  #
   def get_owner
     return self.employee if self.employee
     return self.user if self.user  
@@ -659,7 +663,8 @@ class Order < ActiveRecord::Base
       :origin_country_id => self.origin_country_id,
       :sale_type  => self.sale_type,
       :origin => self.origin_country,
-      :destination => self.destination_country
+      :destination => self.destination_country,
+      :is_proforma => self.is_proforma
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs

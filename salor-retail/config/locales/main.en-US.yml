@@ -93,6 +93,7 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      is_proforma: Proforma?
       tax_free: Tax Free
       order_item:
         quantity: Qty.
