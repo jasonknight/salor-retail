@@ -45,6 +45,18 @@ class Item < ActiveRecord::Base
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
+  
+  def name_translations=(hash)
+    write_attribute(:name_translations,hash.to_json)
+  end
+  def name_translations
+    text = read_attribute(:name_translations)
+    if text.empty? or text.nil? then
+      return {}
+    else
+      return ActiveSupport::JSON.decode(text)
+    end
+  end
   def item_type_name=(name)
     it = ItemType.find_by_behavior(name)
     if it then

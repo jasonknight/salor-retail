@@ -104,6 +104,29 @@ $(function () {
   </tr>
   
   <tr>
+    <td> 
+      <select id="locale_select" onchange="itemsAddNameTranslation($(this).val());">
+        <% supported_languages.each do |l| %>
+          <option value="<%= l[:locale] %>" <%= I18n.locale.to_s == l[:locale] ? 'selected="selected"' : ''%>><%= l[:name] %></option>
+        <% end %>
+      </select>
+    </td>
+    <td> 
+    <script type="text/javascript">
+    $(function () {
+      <% @item.name_translations.each do |k,v|%>
+        inp = itemsAddNameTranslation('<%= k %>');
+        inp.val("<%= escape_javascript v %>");
+      <% end %>
+      });
+    </script>
+      <div id="name_translations">
+      
+      </div>
+    </td>
+  </tr>
+  
+  <tr>
     <td> <%= f.label I18n.t("activerecord.attributes.sku") %> </td>
     <td> <%= f.text_field :sku, :class => "keyboardable", :style => "width: 80%;" %> </td>
   </tr>
