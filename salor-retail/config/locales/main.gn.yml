@@ -737,6 +737,7 @@ gn:
     offer: Angebot
     delivery_note: Lieferschein
     invoice_numer_X_at_time: Rechnung Nr. %{number} am %{datetime}
+    a_conto: a conto
   reports:
     amount: Anzahl
     description: Bezeichnung

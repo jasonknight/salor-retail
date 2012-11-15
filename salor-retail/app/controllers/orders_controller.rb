@@ -38,7 +38,25 @@ class OrdersController < ApplicationController
 #    end
 
    
-   
+  def new_from_proforma
+    @proforma = initialize_order
+    @order = Order.new
+    @order.attributes = @proforma.attributes
+    @order.save
+    @proforma.order_items.each do |oi|
+       noi = oi.dup
+       noi.order_id = @order.id
+       noi.save
+    end
+    item = Item.get_by_code("DMYACONTO")
+    item.update_attribute :name, I18n.t("receipts.a_conto")
+    item.make_valid
+    noi = @order.add_item(item)
+    noi.price = @proforma.amount_paid * -1
+    noi.save
+    @order.update_self_and_save
+    redirect_to "/orders/new?order_id=#{@order.id}"
+  end
   def index
     @orders = salor_user.get_orders
 

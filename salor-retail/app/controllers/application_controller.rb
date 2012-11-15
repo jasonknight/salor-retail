@@ -160,7 +160,7 @@ class ApplicationController < ActionController::Base
 	  Job.run # Cron jobs for the application
 	  GlobalData.base_locale = AppConfig.base_locale
     I18n.locale = AppConfig.locale
-    I18n.locale = params[:locale] if params[:locale]
+    
     if params[:license_accepted].to_s == "true" then
       Vendor.first.salor_configuration.update_attribute :license_accepted, true
     end
@@ -175,7 +175,7 @@ class ApplicationController < ActionController::Base
       $User = nil # $User is being set somewhere before this is even called, which is weird.
       @owner = User.new
     end
-    
+    I18n.locale = params[:locale] if params[:locale]
     add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
     @page_title = "Salor"
     @page_title_options = {}

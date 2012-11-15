@@ -278,7 +278,7 @@ class OrderItem < ActiveRecord::Base
 		self.category_id = item.category_id
 		self.location_id = item.location_id
 		self.behavior = item.item_type.behavior
-		self.tax_profile_amount = item.tax_profile.value
+		self.tax_profile_amount = item.tax_profile.value if item.tax_profile
 		self.amount_remaining = item.amount_remaining
 		self.sku = item.sku
 		self.activated = item.activated

@@ -37,7 +37,13 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.percent_off'),'percent'],
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
-
+  def amount_paid
+    amnt = 0
+    self.payment_methods.each do |pm|
+      amnt += pm.amount
+    end
+    return amnt
+  end
   def nonrefunded_item_count
     self.order_items.visible.where(:refunded => false).count
   end

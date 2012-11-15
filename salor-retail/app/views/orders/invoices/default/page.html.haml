@@ -10,6 +10,8 @@
   - else
     = link_to salor_icon(:gearpage, {}, 32, t('orders.print.delivery_note')), "/orders/#{ @order.id }/print?delivery_note=1"
   = link_to salor_icon(:label, {}, 32, t('orders.print.labels')), "/items/selection?order_id=#{ @order.id }"
+  - if @order.is_proforma
+    = link_to salor_icon(:order,{},32,I18n.t("menu.new_order")),"/orders/new_from_proforma?order_id=#{@order.id}"
     
 .clear
 
@@ -63,9 +65,10 @@
           %tr
             %td= pm[0]
             %td.total= number_to_currency pm[1]
-        %tr
-          %td= t('printr.order_receipt.change')
-          %td.total= number_to_currency @report[:change_given]
+        - if not @order.is_proforma
+          %tr
+            %td= t('printr.order_receipt.change')
+            %td.total= number_to_currency @report[:change_given]
 
     - else
       %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }

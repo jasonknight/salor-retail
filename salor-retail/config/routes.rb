@@ -15,6 +15,7 @@ SalorRetail::Application.routes.draw do
   match "categories/categories_json" => "categories#categories_json"
   match "categories/items_json" => "categories#items_json"
   match "orders/add_item_ajax" => "orders#add_item_ajax"
+  match "orders/new_from_proforma" => "orders#new_from_proforma"
   match "orders/update_order_item" => "orders#update_order_item"
   match "orders/set_weight" => "orders#set_weight"
   match "orders/recently_tagged" => "orders#recently_tagged"
