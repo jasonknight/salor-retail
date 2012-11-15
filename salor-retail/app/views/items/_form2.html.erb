@@ -119,6 +119,11 @@ $(function () {
   </tr>
   
   <tr>
+    <td> <%= f.label I18n.t("activerecord.attributes.purchase_price") %> </td>
+    <td> <%= f.text_field :purchase_price, :class=> "keyboardable-int delimit-number" %> </td>
+  </tr>
+  
+  <tr>
     <td> <%= f.label I18n.t("activerecord.attributes.quantity") %> </td>
     <td> <%= f.text_field :quantity, :class => "keyboardable-int delimit-number", :size => 7 %> </td>
   </tr>
@@ -126,6 +131,16 @@ $(function () {
   <tr>
     <td> <%= f.label I18n.t("activerecord.models.vendor.one") %> </td>
     <td> <%= f.collection_select :vendor_id,GlobalData.vendors,:id,:name %> </td>
+  </tr>
+  
+  <tr>
+    <td> <%= f.label I18n.t("activerecord.models.category.one") %> </td>
+    <td> <%= f.collection_select :category_id, Category.scopied.all,:id,:name %> </td>
+  </tr>
+  
+  <tr>
+    <td> <%= f.label I18n.t("activerecord.models.location.one") %> </td>
+    <td> <%= f.collection_select :location_id, Location.scopied.all,:id,:name %> </td>
   </tr>
   
   <% if not @item.sku.blank?  %>
@@ -171,18 +186,13 @@ $(function () {
   </tr>
   
   <tr>
-    <td> <%= f.label I18n.t("activerecord.attributes.default_buyback") %> </td>
-    <td> <%= f.check_box :default_buyback%> </td>
-  </tr>
-  
-  <tr>
     <td> <%= f.label I18n.t("activerecord.attributes.buyback_price") %> </td>
     <td> <%= f.text_field :buyback_price, :class => 'keyboardable-int delimit-number'%> </td>
   </tr>
   
   <tr>
-    <td> <%= f.label I18n.t("activerecord.attributes.purchase_price") %> </td>
-    <td> <%= f.text_field :purchase_price, :class=> "keyboardable-int delimit-number" %> </td>
+    <td> <%= f.label I18n.t("activerecord.attributes.default_buyback") %> </td>
+    <td> <%= f.check_box :default_buyback%> </td>
   </tr>
   
   <tr>
@@ -212,10 +222,7 @@ $(function () {
     <td> <%= f.text_field :min_quantity, :class => "keyboardable-int delimit-number" %> </td>
   </tr>
   
-  <tr>
-    <td> <%= f.label I18n.t("activerecord.models.category.one") %> </td>
-    <td> <%= f.collection_select :category_id, Category.scopied.all,:id,:name %> </td>
-  </tr>
+  
   
   <tr>
     <td> <%= f.label I18n.t("activerecord.models.item_type.one") %> </td>

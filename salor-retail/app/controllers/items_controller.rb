@@ -16,15 +16,12 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.xml
   def index
-    if not check_license() then
-      redirect_to :controller => "home", :action => "index" and return
-    end
     if params[:order_by] then
       key = params[:order_by]
       session[key] = (session[key] == 'DESC') ? 'ASC' : 'DESC'
-      @items = Item.scopied.page(params[:page]).per(25).order("#{key} #{session[key]}")
+      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(25).order("#{key} #{session[key]}")
     else
-      @items = Item.scopied.page(params[:page]).per(25).order("id desc")
+      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(25).order("id desc")
     end
     Node.flush
     respond_to do |format|
