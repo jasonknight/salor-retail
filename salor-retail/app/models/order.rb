@@ -755,7 +755,7 @@ class Order < ActiveRecord::Base
       oi.price = 0 if oi.price.nil?
       oi.quantity = 0 if oi.quantity.nil?
       item_price = 0 if item_price.nil?
-      name = oi.item.name
+      name = oi.item.get_translated_name(I18n.locale)
 
       # Price calculation for normal items
       if oi.behavior == 'normal'
@@ -880,35 +880,35 @@ class Order < ActiveRecord::Base
       if oi.behavior == 'normal'
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
+          list_of_items += integer_format % [oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total, 'integer'])
         else
           # float quantity (e.g. weighed OrderItem)
-          list_of_items += float_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'float'])
+          list_of_items += float_format % [oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total, 'float'])
         end
       end
 
       # GIFT CARDS
       if oi.behavior == 'gift_card'
-        list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-        list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
+        list_of_items += integer_format % [oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total]
+        list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total, 'integer'])
       end
 
       # COUPONS
       if oi.behavior == 'coupon'
         if oi.item.coupon_type == 1
           # percent coupon
-          list_of_items += percent_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'percent'])
+          list_of_items += percent_format % [oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total, 'percent'])
         elsif oi.item.coupon_type == 2
           # fixed amount coupon
-          list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
+          list_of_items += integer_format % [oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total, 'integer'])
         elsif oi.item.coupon_type == 3
           # b1g1 coupon
-          list_of_items += integer_format % [oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, name, item_price, oi.quantity, item_total, 'integer'])
+          list_of_items += integer_format % [oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, name, item_price, oi.quantity, item_total, 'integer'])
         end
       end
 
@@ -917,12 +917,12 @@ class Order < ActiveRecord::Base
         discount_name = I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += integer_format % [oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total, 'integer'])
+          list_of_items += integer_format % [oi.get_tax_profile_letter, discount_name, discount_price, oi.quantity, discount_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, discount_name, discount_price, oi.quantity, discount_total, 'integer'])
         else
           # float quantity
-          list_of_items += float_format % [oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, discount_name, discount_price, oi.quantity, discount_total, 'float'])
+          list_of_items += float_format % [oi.get_tax_profile_letter, discount_name, discount_price, oi.quantity, discount_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, discount_name, discount_price, oi.quantity, discount_total, 'float'])
         end
       end
 
@@ -930,12 +930,12 @@ class Order < ActiveRecord::Base
       if oi.rebate and oi.rebate > 0
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += integer_format % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'integer'])
+          list_of_items += integer_format % [oi.get_tax_profile_letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'integer'])
         else
           # float quantity
-          list_of_items += float_format % [oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
-          list_of_items_raw << to_list_of_items_raw([oi.item.tax_profile.letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'float'])
+          list_of_items += float_format % [oi.get_tax_profile_letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
+          list_of_items_raw << to_list_of_items_raw([oi.get_tax_profile_letter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'float'])
         end
       end
 

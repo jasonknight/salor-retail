@@ -23,6 +23,13 @@ class OrderItem < ActiveRecord::Base
 
   scope :sorted_by_modified, order('updated_at ASC')
   
+  def get_tax_profile_letter
+    if self.item.tax_profile then
+      return self.item.tax_profile.letter
+    else
+      return ''
+    end
+  end
   # To speed things up, we cache the discounts
   def self.reload_discounts
   end

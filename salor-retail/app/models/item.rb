@@ -46,6 +46,20 @@ class Item < ActiveRecord::Base
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
   
+  def get_translated_name(locale)
+    locale = locale.to_s
+    trans = read_attribute(:name_translations)
+    if trans.empty? or trans.nil?
+      return read_attribute(:name)
+    else
+      hash = ActiveSupport::JSON.decode(trans)
+      if hash[locale] then
+        return hash[locale]
+      else
+        return read_attribute :name
+      end
+    end
+  end
   def name_translations=(hash)
     write_attribute(:name_translations,hash.to_json)
   end
