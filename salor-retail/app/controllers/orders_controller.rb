@@ -54,6 +54,7 @@ class OrdersController < ApplicationController
     noi = @order.add_item(item)
     noi.price = @proforma.amount_paid * -1
     noi.save
+    @order.is_proforma = false
     @order.update_self_and_save
     redirect_to "/orders/new?order_id=#{@order.id}"
   end
