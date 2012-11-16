@@ -38,3 +38,4 @@ debian/files
 salor-retail/config/database.yml
 salor-retail/public/barcodes/*.png
 salor-retail/public/barcodes/*.eps
+salor-retail/log/
