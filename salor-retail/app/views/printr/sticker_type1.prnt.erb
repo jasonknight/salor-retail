@@ -5,7 +5,7 @@ SM20,20
 CUTn
 <% if @items %>
 <% @items.each do |i| %>
-T0,0,3,1,1,0,0,N,N,F,'<%= i.name[0..22] %>'
+T0,0,3,1,1,0,0,N,N,F,'<%= i.get_translated_name(I18n.locale)[0..22] %>'
 T0,30,3,1,1,0,0,N,N,F,'<%= i.description[0..22] %>'
 T0,60,3,1,1,0,0,N,N,F,'<%= i.customs_code %>'
 T0,90,3,1,1,0,0,N,N,F,'<%= i.origin_country %>'
@@ -16,7 +16,7 @@ P
 <% end %>
 <% if @order_items %>
 <% @order_items.each do |oi| %>
-T0,0,3,1,1,0,0,N,N,F,'<%= oi.item.name[0..22] %>'
+T0,0,3,1,1,0,0,N,N,F,'<%= oi.item.get_translated_name[0..22] %>'
 T0,30,3,1,1,0,0,N,N,F,'<%= oi.item.description[0..22] %>'
 T0,60,3,1,1,0,0,N,N,F,'<%= oi.item.customs_code %>'
 T0,90,3,1,1,0,0,N,N,F,'<%= oi.item.origin_country %>'
