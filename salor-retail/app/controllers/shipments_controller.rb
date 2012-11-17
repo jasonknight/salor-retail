@@ -13,7 +13,7 @@ class ShipmentsController < ApplicationController
   # GET /shipments
   # GET /shipments.xml
   def index
-  @shipments = Shipment.scopied.page(params[:page]).per(10).order('created_at desc')
+  @shipments = Shipment.scopied.page(params[:page]).per(30).order('created_at desc')
 
     respond_to do |format|
       format.html # index.html.erb

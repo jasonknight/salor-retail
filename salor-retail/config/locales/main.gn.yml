@@ -312,8 +312,8 @@ gn:
         other: Zahlungsmethoden
       shipment:
         default_name: Auto Nachbestellung
-        one: Auto-Vorschlag
-        other: Auto-Vorschlag
+        one: Lieferung
+        other: Lieferungen
       shipment_type:
         default_name: Auto Nachbestellung
         one: Lieferart

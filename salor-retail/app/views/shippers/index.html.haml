@@ -1,0 +1,16 @@
+= raw content_box_top(I18n.t("menu.shippers"))
+
+%div.pagination= paginate @shippers if @shippers
+
+%table{:width=>"90%",:align=>"center"}
+  %tr
+    %td{:colspan=>2,:align=>'right'}
+      = link_to (t 'menu.new_shipper'), new_shipper_path, :class => 'links new-model-button'
+  %tr
+    %td{:colspan=>2}
+      %h2= t('activerecord.models.shipper.other')
+      %hr
+  - @shippers.each do |s|
+    %tr
+      %td{:align=>'right'}= link_to image_tag('button_small_delete.png', :title => Shipper.human_attribute_name(:hidden), :alt => Shipper.human_attribute_name(:hidden)), shipper_path(s), :method => :delete, :confirm => t(:are_you_sure)
+      %td= link_to s.name, edit_shipper_path(s)
