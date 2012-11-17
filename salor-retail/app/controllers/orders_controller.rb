@@ -554,11 +554,15 @@ class OrdersController < ApplicationController
   end
   #
   def order_reports
-    @items = Item.scopied.where("sku NOT LIKE 'DMY%'").limit(25).order('quantity_sold desc')
-    @categories_by_cash_made = Category.scopied.limit(10).order("cash_made desc")
-    @categories_by_quantity_sold = Category.scopied.limit(10).order('quantity_sold desc')
-    @locations_by_cash_made = Location.scopied.limit(10).order("cash_made desc")
-    @locations_by_quantity_sold = Location.scopied.limit(10).order('quantity_sold desc')
+    f, t = assign_from_to(params)
+    @from = f
+    @to = t
+    params[:limit] ||= 15
+    @items = Item.scopied.where(:updated_at => @from..@to).where("sku NOT LIKE 'DMY%'").limit(params[:limit] ).order('quantity_sold desc')
+    @categories_by_cash_made = Category.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order("cash_made desc")
+    @categories_by_quantity_sold = Category.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order('quantity_sold desc')
+    @locations_by_cash_made = Location.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order("cash_made desc")
+    @locations_by_quantity_sold = Location.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order('quantity_sold desc')
     view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     view ||= 'default'
     render "orders/reports/#{view}/page"

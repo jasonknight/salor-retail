@@ -297,10 +297,11 @@ class ApplicationController < ActionController::Base
                       p[:to  ][:month].to_i,
                       p[:to  ][:day  ].to_i) if p[:to]
     rescue
-      f = t = nil
+#       f = t = nil
+      
     end
-    #f ||= DateTime.now
-    #t ||= DateTime.now
+    f ||= DateTime.now - 1.days
+    t ||= DateTime.now + 1.days
     return f, t
   end
   def time_from_to(p)

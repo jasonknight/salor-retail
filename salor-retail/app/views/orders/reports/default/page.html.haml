@@ -5,7 +5,20 @@
 
 .tools
   %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
-    
+  %br
+  = form_tag "/orders/order_reports", :method => :get do
+    = label 'from', t('orders.report_day.from')
+    = select_date(@from, :prefix => 'from')
+    %br
+    = label 'to', t('orders.report_day.to')
+    = select_date(@to, :prefix => 'to')
+    %br
+    %select{:id => "limit_select", :name => "limit"}
+      %option 15
+      %option 25
+      %option 50
+    %br
+    = submit_tag t('helpers.submit.ok'), :onclick => '$("#progress").show()'
 .clear
 
 .paper-invoice.invoice_print
@@ -15,6 +28,7 @@
   = render 'orders/reports/default/best_selling_items'
   
   = render 'orders/reports/default/best_selling_category'
+  = render 'orders/reports/default/best_selling_locations'
   
   .center
     %img.salorlogo{ :src => '/images/salor-logo-reports.png'}

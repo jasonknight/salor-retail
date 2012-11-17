@@ -126,6 +126,7 @@ module ApplicationHelper
       :back => 'left',
       :next => 'right',
       :tax_profile => 'statistics',
+      :statistics => 'statistics',
       :employee => 'user_info',
       :reload => 'reload',
       :logout => 'logout',
