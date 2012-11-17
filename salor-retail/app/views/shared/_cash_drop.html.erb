@@ -37,6 +37,11 @@ function show_cash_drop() {
   $(".trans-button").removeClass('button-highlight');
   //$('#cash_drop_form input[type=radio]').attr('checked',false);
   focusInput($('.cash-drop-amount'));
+  setTimeout( function () {
+    make_keyboardable($('.cash-drop-amount'));
+    make_keyboardable($('#cash-drop-notes-id'));
+    
+  },150);
 
   setOnEnterKey(function(){
     cash_drop_save();
@@ -127,11 +132,11 @@ function show_coin_calculator() {
             amount = 0
           end
         %>
-        <input type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="<%= amount %>" size=3 />
+        <input type="text" name="transaction[amount]" class="cash-drop-amount text-input " value="<%= amount %>" size=3 />
       </p>
       <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
-        <textarea name="transaction[notes]" id="cash-drop-notes-id" class="keyboardable" rows="2" size=1></textarea>
+        <textarea name="transaction[notes]" id="cash-drop-notes-id" class="input" rows="3" size=1></textarea>
       </p>
 
             <% if TransactionTag.scopied.any? then %>
