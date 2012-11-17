@@ -65,7 +65,10 @@ function add_payment_method() {
   });
   
   display_change();
-  focusInput(amount);
+  setTimeout(function () {
+    focusInput(amount);
+    amount.select();
+  },100);
 }
 
 function validatePaymentMethod(element) {
