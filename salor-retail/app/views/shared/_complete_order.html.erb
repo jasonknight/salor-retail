@@ -63,8 +63,9 @@ function add_payment_method() {
       display_change();
     }
   });
-  focusInput(amount);
+  
   display_change();
+  focusInput(amount);
 }
 
 function validatePaymentMethod(element) {
@@ -108,6 +109,9 @@ function validatePaymentMethod(element) {
       cardTotal = 0;
     }
   }
+  if (cardTotal == '') {
+    cardTotal = 0;
+  }
   // Here we tag the input field, so that it is easily accessible with class access like ByCard-amount, or ByGiftCard-amount etc.
   // first we remove any classes
   $(element).find('option').each(function () {$(pay_input).removeClass($(this).val() + '-amount');} );
@@ -117,6 +121,7 @@ function validatePaymentMethod(element) {
     if (typeof bycard_show != 'undefined') {
       bycard_show();
     }
+    
     $(pay_input).val(cardTotal);
     $(pay_input).addClass('bycard-amount');
     display_change();

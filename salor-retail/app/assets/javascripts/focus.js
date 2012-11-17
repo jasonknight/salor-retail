@@ -9,4 +9,5 @@ function focusInput(inp) {
   $('.salor-focused').removeClass('salor-focused');
   inp.addClass('salor-focused');
   inp.focus();
+  inp.select();
 }

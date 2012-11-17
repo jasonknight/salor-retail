@@ -42,7 +42,12 @@ function toFloat(str, returnString) {
   if (returnString) {
     return num;
   } else {
-    return parseFloat(num);
+    num = parseFloat(num);
+    if (num+'' == 'NaN') {
+      return 0.0;
+    } else {
+      return num;
+    }
   }
 }
 
