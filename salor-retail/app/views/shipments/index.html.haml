@@ -13,7 +13,7 @@
   %th= Shipment.human_attribute_name(:paid)
   %th= Shipment.human_attribute_name(:status)
    
-  - @shipments.reverse.each do |shipment|
+  - @shipments.each do |shipment|
     - sname = shipment.shipper.nil? ? t("system.errors.value_not_set") : shipment.shipper.name
     - rname = shipment.receiver.nil? ? t("system.errors.value_not_set") : shipment.receiver.name
     %tr
@@ -28,4 +28,3 @@
       %td= link_to salor_icon(:delete,{},32,t(:delete)), shipment, :confirm => t("menu.delete_confirm"), :method => :delete
   %div.pagination{:align => 'center'}
     = paginate @shipments if @shipments
-= raw content_box_bottom
