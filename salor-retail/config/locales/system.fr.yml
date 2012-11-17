@@ -133,5 +133,7 @@ fr:
       time_short: "%H:%M"
       month_and_day: "%d. %B"
       salor: ! '%a, %b %d %H:%M'
+      just_day: "%d. %B %Y"
+      just_time: "%H:%M"
     am: ""
     pm: ""
