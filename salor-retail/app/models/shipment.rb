@@ -138,7 +138,6 @@ class Shipment < ActiveRecord::Base
 
   def move_all_to_items
     if self.receiver.nil? then
-      add_salor_error(I18n.t("system.errors.must_set_receiver_to_vendor"))
       raise "Receiver is nil"
       return
     end
@@ -149,9 +148,7 @@ class Shipment < ActiveRecord::Base
         next
       end
       i = Item.new.from_shipment_item(item)
-      i.make_valid
-#       debugger
-      
+      i.make_valid     
       if i.save then
         item.update_attribute(:in_stock,true)
       else
@@ -165,10 +162,12 @@ class Shipment < ActiveRecord::Base
   end
   
   def move_shipment_item_to_item(id)
-    if self.receiver.nil? or not self.receiver_type == 'Vendor' then
-      add_salor_error("system.errors.must_set_receiver_to_vendor")
+    
+    if self.receiver.nil? then
+      raise "Receiver is nil"
       return
     end
+
     i = self.shipment_items.find(id)
     if i.in_stock then
       add_salor_error(I18n.t("system.errors.shipment_item_already_in_stock", :sku => i.sku))

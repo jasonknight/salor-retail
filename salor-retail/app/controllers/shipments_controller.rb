@@ -62,6 +62,7 @@ class ShipmentsController < ApplicationController
   # POST /shipments.xml
   def create
     @shipment = Shipment.new(params[:shipment])
+    @shipment.shipment_items.update_all :vendor_id => $Vendor.id
 
     respond_to do |format|
       if @shipment.save
@@ -114,7 +115,7 @@ class ShipmentsController < ApplicationController
   end
   def move_shipment_item
     @shipment = Shipment.find(params[:id])
-    if salor_user.owns_this?(@shipment) then
+    if $User.owns_this?(@shipment) then
       @shipment.move_shipment_item_to_item(params[:shipment_item_id])
       @shipment.save
     end
