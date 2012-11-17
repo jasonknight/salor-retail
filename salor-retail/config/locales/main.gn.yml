@@ -316,8 +316,8 @@ gn:
         other: Lieferungen
       shipment_type:
         default_name: Auto Nachbestellung
-        one: Lieferart
-        other: Lieferarten
+        one: Lieferstatus
+        other: Lieferstatus
       shipper:
         one: Lieferant
         other: Lieferanten
@@ -557,7 +557,7 @@ gn:
     salorlive: Salor Live!
     salortrainer: Salor Trainer
     search: Suche
-    shipment_types: Status
+    shipment_types: Lieferstatus
     shipments: Lieferungen
     shippers: Lieferanten
     show: Anzeigen

@@ -38,7 +38,7 @@ class ShipmentsController < ApplicationController
     @shipment = Shipment.new
     @shipment.receiver_id = $Vendor.id
     @shipment.receiver_type = 'Vendor'
-
+    @shipment_types = ShipmentType.scopied.order(:name)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @shipment }
@@ -48,6 +48,7 @@ class ShipmentsController < ApplicationController
   # GET /shipments/1/edit
   def edit
     @shipment = Shipment.find(params[:id])
+    @shipment_types = ShipmentType.scopied.order(:name)
   end
 
   # POST /shipments
@@ -55,7 +56,7 @@ class ShipmentsController < ApplicationController
   def create
     @shipment = Shipment.new(params[:shipment])
     @shipment.shipment_items.update_all :vendor_id => $Vendor.id
-
+    @shipment_types = ShipmentType.scopied.order(:name)
     respond_to do |format|
       if @shipment.save
         format.html { redirect_to(@shipment, :notice => 'Shipment was successfully created.') }
@@ -71,7 +72,7 @@ class ShipmentsController < ApplicationController
   # PUT /shipments/1.xml
   def update
     @shipment = Shipment.find(params[:id])
-
+    @shipment_types = ShipmentType.scopied.order(:name)
     respond_to do |format|
       if @shipment.update_attributes(params[:shipment])
         format.html { redirect_to(@shipment, :notice => 'Shipment was successfully updated.') }

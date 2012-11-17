@@ -19,6 +19,7 @@ class Shipment < ActiveRecord::Base
   belongs_to :user
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
+  validates_presence_of :name
   before_create :set_model_owner
   TYPES = [
     {
@@ -48,7 +49,7 @@ class Shipment < ActiveRecord::Base
   ]
   def self.receiver_shipper_list()
     ret = []
-    Shipper.scopied.each do |shipper|
+    Shipper.scopied.order(:name).each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
     end
     $User.get_vendors(nil).each do |vendor|
@@ -163,8 +164,8 @@ class Shipment < ActiveRecord::Base
   
   def move_shipment_item_to_item(id)
     
-    if self.receiver.nil? then
-      raise "Receiver is nil"
+    if self.receiver.nil? or not self.receiver_type == 'Vendor' then
+      add_salor_error("system.errors.must_set_receiver_to_vendor")
       return
     end
 
