@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121117080813) do
+ActiveRecord::Schema.define(:version => 20121117164859) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.integer  "hidden",     :default => 0
     t.string   "field2"
     t.float    "value2"
+    t.integer  "hidden_by"
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.datetime "updated_at",                          :null => false
     t.boolean  "is_shipment_item", :default => false
     t.integer  "hidden",           :default => 0
+    t.integer  "hidden_by"
   end
 
   create_table "buttons", :force => true do |t|
@@ -122,6 +124,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.string   "color"
     t.string   "sku"
     t.integer  "hidden",          :default => 0
+    t.integer  "hidden_by"
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
@@ -133,6 +136,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.boolean  "hidden"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "hidden_by"
   end
 
   create_table "cues", :force => true do |t|
@@ -167,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.string   "company_name"
     t.string   "sku"
     t.integer  "hidden",       :default => 0
+    t.integer  "hidden_by"
   end
 
   add_index "customers", ["vendor_id"], :name => "index_customers_on_vendor_id"
@@ -186,6 +191,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.string   "amount_type"
     t.boolean  "hidden",      :default => false
     t.string   "sku"
+    t.integer  "hidden_by"
   end
 
   add_index "discounts", ["amount_type"], :name => "index_discounts_on_amount_type"
@@ -225,6 +231,8 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.integer  "order_id"
     t.integer  "order_item_id"
     t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
   end
 
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
@@ -391,6 +399,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.float    "manufacturer_price"
     t.string   "origin_country"
     t.text     "name_translations"
+    t.integer  "hidden_by"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
@@ -416,6 +425,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.float    "cash_made",     :default => 0.0
     t.integer  "hidden",        :default => 0
     t.string   "sku",           :default => ""
+    t.integer  "hidden_by"
   end
 
   add_index "locations", ["vendor_id"], :name => "index_locations_on_vendor_id"
@@ -554,6 +564,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.float    "rebate_amount",         :default => 0.0
     t.integer  "vendor_id"
     t.boolean  "tax_free",              :default => false
+    t.integer  "hidden_by"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -618,6 +629,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.text     "delivery_note_comment"
     t.integer  "nr"
     t.boolean  "is_proforma",            :default => false
+    t.integer  "hidden_by"
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"
@@ -676,6 +688,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.boolean  "hidden"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "hidden_by"
   end
 
   create_table "salor_configurations", :force => true do |t|
@@ -764,6 +777,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.datetime "updated_at",                :null => false
     t.integer  "hidden",     :default => 0
     t.integer  "vendor_id"
+    t.integer  "hidden_by"
   end
 
   add_index "shipment_types", ["name"], :name => "index_shipment_types_on_name"
@@ -786,6 +800,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.integer  "hidden",           :default => 0
     t.integer  "shipment_type_id"
     t.string   "sku"
+    t.integer  "hidden_by"
   end
 
   add_index "shipments", ["employee_id"], :name => "index_shipments_on_employee_id"
@@ -809,6 +824,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.string   "reorder_type"
     t.string   "sku"
     t.integer  "vendor_id"
+    t.integer  "hidden_by"
   end
 
   add_index "shippers", ["employee_id"], :name => "index_shippers_on_employee_id"
@@ -836,6 +852,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.string   "sku"
     t.integer  "vendor_id"
     t.string   "letter",     :default => "A"
+    t.integer  "hidden_by"
   end
 
   add_index "tax_profiles", ["hidden"], :name => "index_tax_profiles_on_hidden"
@@ -848,6 +865,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
     t.integer  "hidden",        :default => 0
+    t.integer  "hidden_by"
   end
 
   create_table "transaction_tags", :force => true do |t|
@@ -858,6 +876,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.binary   "logo_image"
     t.string   "logo_image_content_type"
     t.boolean  "hidden"
+    t.integer  "hidden_by"
   end
 
   create_table "users", :force => true do |t|
@@ -919,6 +938,7 @@ ActiveRecord::Schema.define(:version => 20121117080813) do
     t.boolean  "use_order_numbers",               :default => true
     t.string   "unused_order_numbers",            :default => "--- []\n"
     t.integer  "largest_order_number",            :default => 0
+    t.integer  "hidden_by"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

@@ -39,11 +39,13 @@ module SalorModel
       end
 #
       def kill
-        if self.has_relations? and self.respond_to? :hidden then
-          self.update_attribute(:hidden,true)
+        if self.has_relations? and self.respond_to? :hidden and self.hidden.class == Fixnum then
+          self.update_attribute(:hidden,1)
         else
-          if self.respond_to? :hidden then
+          if self.respond_to? :hidden and self.hidden.class == Fixnum then
             self.update_attribute :hidden, 1
+          elsif self.respond_to? :hidden then
+            self.update_attribute :hidden, true
           else
             self.destroy
           end
