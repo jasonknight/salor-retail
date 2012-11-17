@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121117065908) do
+ActiveRecord::Schema.define(:version => 20121117070540) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -819,6 +819,8 @@ ActiveRecord::Schema.define(:version => 20121117065908) do
     t.integer  "vendor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
   end
 
   add_index "stock_locations", ["vendor_id"], :name => "index_stock_locations_on_vendor_id"
