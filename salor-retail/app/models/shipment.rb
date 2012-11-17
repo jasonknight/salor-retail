@@ -19,6 +19,7 @@ class Shipment < ActiveRecord::Base
   belongs_to :user
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
+  validates_presence_of :name
   before_create :set_model_owner
   TYPES = [
     {
@@ -48,7 +49,7 @@ class Shipment < ActiveRecord::Base
   ]
   def self.receiver_shipper_list()
     ret = []
-    Shipper.scopied.each do |shipper|
+    Shipper.scopied.order(:name).each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
     end
     $User.get_vendors(nil).each do |vendor|
@@ -138,7 +139,6 @@ class Shipment < ActiveRecord::Base
 
   def move_all_to_items
     if self.receiver.nil? then
-      add_salor_error(I18n.t("system.errors.must_set_receiver_to_vendor"))
       raise "Receiver is nil"
       return
     end
@@ -149,9 +149,7 @@ class Shipment < ActiveRecord::Base
         next
       end
       i = Item.new.from_shipment_item(item)
-      i.make_valid
-#       debugger
-      
+      i.make_valid     
       if i.save then
         item.update_attribute(:in_stock,true)
       else
@@ -165,10 +163,12 @@ class Shipment < ActiveRecord::Base
   end
   
   def move_shipment_item_to_item(id)
+    
     if self.receiver.nil? or not self.receiver_type == 'Vendor' then
       add_salor_error("system.errors.must_set_receiver_to_vendor")
       return
     end
+
     i = self.shipment_items.find(id)
     if i.in_stock then
       add_salor_error(I18n.t("system.errors.shipment_item_already_in_stock", :sku => i.sku))

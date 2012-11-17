@@ -17,7 +17,7 @@
 <%= form_for(@shipment) do |f| %>
   <% if @shipment.errors.any? %>
     <div id="error_explanation">
-      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @shipment.errors.count,:model => t("activerecord.models.shipment.one"))%></h2>
+      <h2><%= I18n.t("activerecord.errors.template.header", :count => @shipment.errors.count,:model => Shipment.model_name.human)%></h2>
 
       <ul>
       <% @shipment.errors.full_messages.each do |msg| %>
@@ -48,7 +48,7 @@
   </tr>
   <tr>
     <td colspan="3"> <%= f.label t("activerecord.attributes.status") %> </td>
-    <td colspan="3"> <%= f.select :shipment_type_id, $User.get_all_shipment_types.collect {|t| [t[:name],t[:id]]} %> </td>
+    <td colspan="3"> <%= f.select :shipment_type_id, @shipment_types.collect {|t| [t[:name],t[:id]]}, :include_blank => true %> </td>
   </tr>
   <tr>
     <td colspan="3"> <%= f.label t("activerecord.attributes.the_receiver") %> </td>

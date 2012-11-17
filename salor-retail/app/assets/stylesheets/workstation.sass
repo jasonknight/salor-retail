@@ -2535,6 +2535,7 @@ div.dt-tags
   left: 10%
   top: 10px
   width: 80%
+  z-index: 100
   @include dialog
   @include no_select
   @include rounded_corners_all
@@ -3062,3 +3063,10 @@ table.selection
 a.new-model-button
   @include awesome_button
   @include bright_button
+
+div#error_explanation
+  :color red
+  :text-align left
+
+div.pagination
+  text-align: center

@@ -1,0 +1,14 @@
+= raw content_box_top(I18n.t("headings.shipment_types"))
+
+%table{:width=>"90%",:align=>"center"}
+  %tr
+    %td{:colspan=>2,:align=>'right'}
+      = link_to (t 'menu.new_shipment_type'), new_shipment_type_path, :class => 'links new-model-button'
+  %tr
+    %td{:colspan=>2}
+      %h2= t('activerecord.models.shipment_type.other')
+      %hr
+  - @shipment_types.each do |s|
+    %tr
+      %td{:align=>'right'}= link_to image_tag('button_small_delete.png', :title => ShipmentType.human_attribute_name(:hidden), :alt => ShipmentType.human_attribute_name(:hidden)), shipment_type_path(s), :method => :delete, :confirm => t(:are_you_sure)
+      %td= link_to s.name, edit_shipment_type_path(s)

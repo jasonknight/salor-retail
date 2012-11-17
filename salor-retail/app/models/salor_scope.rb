@@ -32,11 +32,12 @@ module SalorScope
     klass.scope(:by_keywords , lambda {
       conds = []
       vals = []
+      # TODO: Get rid of GlobalData
       words = GlobalData.params.keywords if GlobalData.params
       return if words.nil? or words.blank?
       conds << "id = '#{words}'"
-      if klass.respond_to? :name then
-        if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and model.respond_to? :base_price then
+      if klass.column_names.include?('name') then
+        if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and klass.column_names.include?('base_price') then
           parts = words.match(/([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/)
           price = SalorBase.string_to_float(parts[2]) 
           if parts[1] == '*' then
@@ -49,7 +50,7 @@ module SalorScope
           conds << "name LIKE '%#{words}%'"
         end
       end
-      if klass.respond_to? :first_name then
+      if klass.column_names.include?('first_name') then
         if words.include? " " then
           parts = words.split(" ")
           conds << "first_name LIKE '%#{parts[0]}%'"
@@ -57,7 +58,7 @@ module SalorScope
           conds << "first_name LIKE '%#{words}%'"
         end
       end
-      if klass.respond_to? :last_name then
+      if klass.column_names.include?('last_name') then
         if words.include? " " then
           parts = words.split(" ")
           conds << "last_name LIKE '%#{parts[1]}%'"
@@ -65,16 +66,16 @@ module SalorScope
           conds << "last_name LIKE '%#{words}%'"
         end
       end
-      if klass.respond_to? :sku then
+      if klass.column_names.include?('sku') then
         conds << "sku LIKE '#{words}%'"
       end
-      if klass.respond_to? :username then
+      if klass.column_names.include?('username') then
         conds << "username LIKE '#{words}%'"
       end
-      if klass.respond_to? :email then
+      if klass.column_names.include?('email') then
         conds << "email LIKE '#{words}%'"
       end
-      if klass.respond_to? :tag then
+      if klass.column_names.include?('tag') then
         conds << "tag LIKE '%#{words}%'"
       end
       klass.where(conds.join(" OR "))

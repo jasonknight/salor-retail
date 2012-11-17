@@ -1,92 +1,6 @@
 ---
 el:
-  time:
-    formats:
-      salor: ! '%a, %b %d %H:%M'
-      iso: ! '%Y-%m-%d %H:%M:%S'
-      iso_day: ! '%Y-%m-%d'
-      just_day: ! '%d. %B %Y'
-      just_time: ! '%H:%M'
-      datetime_short: ! '%y-%m-%d %H:%M'
-      datetime_iso2: ! '%Y%m%dT%H%M%S'
-      long: ! '%Y%m%dT%H%M%S'
-  date:
-    day_names:
-    - Sunday
-    - Monday
-    - Tuesday
-    - Wednesday
-    - Thursday
-    - Friday
-    - Saturday
-    abbr_day_names:
-    - Sun
-    - Mon
-    - Tue
-    - Wed
-    - Thu
-    - Fri
-    - Sat
-    month_names:
-    - 
-    - January
-    - February
-    - March
-    - April
-    - May
-    - June
-    - July
-    - August
-    - September
-    - October
-    - November
-    - December
-    abbr_month_names:
-    - 
-    - Jan
-    - Feb
-    - Mar
-    - Apr
-    - May
-    - Jun
-    - Jul
-    - Aug
-    - Sep
-    - Oct
-    - Nov
-    - Dec
-    order:
-    - :year
-    - :month
-    - :day
-    formats:
-      iso_day: ! '%Y-%m-%d'
-      just_day: ! '%d. %B %Y'
   support: XXX
-  number:
-    format:
-      separator: .
-      delimiter: ! ','
-      precision: 3
-      significant: false
-      strip_insignificant_zeros: false
-    currency:
-      format:
-        format: ! '%u%n'
-        friendly_unit: EUR
-        unit: €
-        separator: ! ','
-        delimiter: ! ' '
-        precision: 2
-        pieces: 0.01,0.02,0.05,0.10,0.20,0.50,1,2,5,10,20,50,100,200,500
-        significant: false
-        strip_insignificant_zeros: false
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
   ByCard: Μέσω Κάρτας
   ByGiftCard: Μέσω Δωροκάρτας
   InCash: Μέσω Μετρητών
@@ -253,6 +167,7 @@ el:
         note_header: Note header
         note_footer: Note footer
         sale_type_id: Sale Type
+      is_proforma: Proforma?
     models:
       action:
         one: Πράξη
@@ -342,6 +257,7 @@ el:
     divide: διαιρέστε
     multiply: πολλαπλασιάστε
     subtract: αφαιρέστε
+    discount_after_threshold: discount after threshold
   cash_registers:
     end_of_day:
       cash_drawer: Συρτάρι Μετρητών
@@ -735,6 +651,8 @@ el:
     invoice: Λογαριασμός
     invoice_numer_X_at_time: Αριθμός Παραγγελίας %{number} στις %{datetime}
     delivery_note: Lieferschein
+    offer: Offer
+    a_conto: on account
   reports:
     amount: ποσό
     description: περιγραφή
