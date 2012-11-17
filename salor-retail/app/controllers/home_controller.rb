@@ -20,6 +20,7 @@ class HomeController < ApplicationController
     end
     @from = Time.now
     @to = Time.now
+    redirect_to vendor_path($Vendor) if $User
   end
   def user_employee_index
     Session.sweep

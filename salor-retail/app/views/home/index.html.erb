@@ -1,25 +1,5 @@
-<%
-  if AppConfig.standalone then
-%>
+<% if AppConfig.standalone then %>
   <%= salor_render :partial => "shared/login" %>
-  <!--<% if not Vendor.first.salor_configuration.license_accepted then %>
-   <div id="salor_license">
-      <div id="license_header" onclick="window.location = '?license_accepted=true';">
-        <div class="generic-button">
-          <%= I18n.t("menu.ok") %>
-        </div>
-      </div>
-      <% license_file = File.join(Rails.root.to_s,'config','locales',"license_#{I18n.locale}.txt") %>
-      <%= raw Kramdown::Document.new(File.open(license_file) {|f| f.read }).to_html if File.exists? license_file %>
-      <div id="license_header">
-        <div class="generic-button" onclick="window.location = '?license_accepted=true';">
-          <%= I18n.t("menu.ok") %>
-        </div>
-      </div>
-   </div>
-  <% end %>-->
 <% else %>
   <%= salor_render :partial => "shared/front_page" %>
 <% end %>
-
-
