@@ -146,21 +146,15 @@ class OrderItem < ActiveRecord::Base
   def update_location_category_item(t,q)
     self.item.update_attribute(:quantity_sold, self.item.quantity_sold + q)
     self.item.update_attribute(:quantity, self.item.quantity + (-1 * q))
-    if self.item.location then
-      options = {
-        :table => :locations, 
-        :conditions => {:id => self.item.location_id}
-      }
-      self.item.location.update_attribute(:quantity_sold,salor_fetch_attr(:quantity_sold,options) + q) if self.quantity
-      self.item.location.update_attribute(:cash_made, salor_fetch_attr(:cash_made,options) + t) if self.total
+    loc = self.item.location
+    cat = self.item.category
+    if loc then
+      loc.update_attribute(:quantity_sold,loc.quanityt_sold + q)
+      loc.update_attribute(:cash_made, loc.cash_made + t) 
     end
-    if self.item.category then
-      options = {
-        :table => :categories, 
-        :conditions => {:id => self.item.category_id}
-      }
-      self.item.category.update_attribute(:quantity_sold, salor_fetch_attr(:quantity_sold,options) + q) if self.quantity
-      self.item.category.update_attribute(:cash_made, salor_fetch_attr(:cash_made,options) + t) if self.total
+    if cat then
+      cat.update_attribute(:quantity_sold, cat.cash_made + q)
+      cat.update_attribute(:cash_made, cat.cash_made + t)
     end
   end
   def toggle_lock=(x)
@@ -706,9 +700,11 @@ class OrderItem < ActiveRecord::Base
     return if self.order.is_proforma == true
     the_item = self.item
     if the_item.category then
+      the_item.category.cash_made ||= 0.0
       the_item.category.update_attribute(:cash_made, the_item.category.cash_made + self.total)
     end
     if the_item.location then
+      the_item.location ||= 0.0
       the_item.location.update_attribute(:cash_made, the_item.location.cash_made + self.total)
     end
   end
