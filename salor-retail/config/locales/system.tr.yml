@@ -1,0 +1,140 @@
+tr:
+# ==================================================================================
+# /usr/lib/ruby/gems/1.8/gems/activerecord-2.2.1/lib/active_record/locale/en-US.yml
+# ==================================================================================
+  activerecord:
+    errors:
+      template:
+        header:
+          one: "%{model} girişi kaydedilemedi: 1 hata."
+          other: "%{model} girişi kadedilemedi: %{count} hata."
+        body: "Lütfen aşağıdaki hataları düzeltiniz:"
+
+      messages:
+        inclusion: "kabul edilen bir kelime değil"
+        exclusion: "kullanılamaz"
+        invalid: "geçersiz"
+        confirmation: "teyidiyle uyuşmamakta"
+        accepted: "kabul edilmeli"
+        empty: "doldurulmalı"
+        blank: "doldurulmalı"
+        too_long: "çok uzun (en fazla %{count} karakter)"
+        too_short: "çok kısa (en az %{count} karakter)"
+        wrong_length: "yanlış uzunlukta (tam olarak %{count} karakter olmalı)"
+        taken: "hali hazırda kullanılmakta"
+        not_a_number: "geçerli bir sayı değil"
+        greater_than: "%{count} sayısından büyük olmalı"
+        greater_than_or_equal_to: "%{count} sayısına eşit veya büyük olmalı"
+        equal_to: "tam olarak %{count} olmalı"
+        less_than: "%{count} sayısından küçük olmalı"
+        less_than_or_equal_to: "%{count} sayısına eşit veya küçük olmalı"
+        odd: "tek olmalı"
+        even: "çift olmalı"
+        record_invalid: "Doğrulama başarısız oldu: %{errors}"
+
+  # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
+  datetime:
+    distance_in_words:
+      half_a_minute: 'yarım dakika'
+      less_than_x_seconds:
+        zero: '1 saniyeden az'
+        one: '1 saniyeden az'
+        other: '%{count} saniyeden az'
+      x_seconds:
+        one: '1 saniye'
+        other: '%{count} saniye'
+      less_than_x_minutes:
+        zero: '1 dakikadan az'
+        one: '1 dakikadan az'
+        other: '%{count} dakikadan az'
+      x_minutes:
+        one: '1 dakika'
+        other: '%{count} dakika'
+      about_x_hours:
+        one: '1 saat civarında'
+        other: '%{count} saat civarında'
+      x_days:
+        one: '1 gün'
+        other: '%{count} gün'
+      about_x_months:
+        one: '1 ay civarında'
+        other: '%{count} ay civarında'
+      x_months:
+        one: '1 ay'
+        other: '%{count} ay'
+      about_x_years:
+        one: '1 yıl civarında'
+        other: '%{count} yıl civarında'
+      over_x_years:
+        one: '1 yıldan fazla'
+        other: '%{count} yıldan fazla'
+      almost_x_years:
+        one: "neredeyse 1 yıl"
+        other: "neredeyse %{count} yıl"
+    prompts:
+      year:   "Year"
+      month:  "Month"
+      day:    "Day"
+      hour:   "Hour"
+      minute: "Minute"
+      second: "Seconds"
+
+  helpers:
+    select:
+      # default value for :prompt => true in FormOptionsHelper
+      prompt: "Lütfen seçiniz"
+      
+    # Default translation keys for submit FormHelper
+    submit:
+      create: 'Create %{model}'
+      update: 'Update %{model}'
+      submit: 'Save %{model}'
+
+# Used in array.to_sentence.
+  support:
+    array:
+      sentence_connector: "ve"
+      skip_last_comma: true
+      words_connector: ", "
+      two_words_connector: " ve "
+      last_word_connector: " ve "
+      
+# ==================================================================================
+# Adaptiert von:
+# /usr/lib/ruby/gems/1.8/gems/activesupport-2.2.1/lib/active_support/locale/en-US.yml
+# ==================================================================================
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      # When no format has been given, it uses default.
+      # You can provide other formats here if you like!
+      default: "%Y-%m-%d"
+      short: "%d. %b"
+      long: "%d. %B  %Y"
+
+    day_names: [Pazar, Pazartesi, Salı, Çarşamba, Perşembe, Cuma, Cumartesi]
+    abbr_day_names: [Pzr, Pzt, Sal, Çrş, Prş, Cum, Cts]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, Ocak, Şubat, Mart, Nisan, Mayıs, Haziran, Temmuz, Ağustos, Eylül, Ekim, Kasım, Aralık]
+    abbr_month_names: [~, Oca, Şub, Mar, Nis, May, Haz, Tem, Ağu, Eyl, Eki, Kas, Ara]
+    # Used in date_select and datime_select.
+    order:
+      - :year
+      - :month
+      - :day
+
+  time:
+    formats:
+      default: "%a, %d. %b. %Y, %H:%M:%S %z"
+      short: "%d. %b. %y  %y %H:%M"
+      long: "%d. %B %Y %H:%M:%S"
+      datetime_iso: "%Y-%m-%d %H:%M:%S"
+      datetime_iso2: "%Y%m%dT%H%M%S"
+      date_normal: "%d. %B %Y"
+      date_short: "%d. %b %y"
+      date_iso: "%Y-%m-%d"
+      time_short: "%H:%M"
+      month_and_day: "%d. %B"
+    am: "öğleden önce"
+    pm: "öğleden sonra"

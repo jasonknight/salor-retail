@@ -17,7 +17,7 @@
 <%= form_for(@shipment) do |f| %>
   <% if @shipment.errors.any? %>
     <div id="error_explanation">
-      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @shipment.errors.count,:model => t("activerecord.models.shipment.one"))%></h2>
+      <h2><%= I18n.t("activerecord.errors.template.header", :count => @shipment.errors.count,:model => Shipment.model_name.human)%></h2>
 
       <ul>
       <% @shipment.errors.full_messages.each do |msg| %>

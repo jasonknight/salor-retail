@@ -81,7 +81,7 @@ $(function () {
   <tr>
     <td colspan="2" align="right"> 
       <div class="actions">
-        <%= f.submit %>
+        <%= f.submit t('helpers.submit.save')%>
       </div>
       <% if @item.errors.any? %>
         <div id="error_explanation">
@@ -566,24 +566,6 @@ $(function () {
         
        <% end %>
        </table>
-    </td>
-  </tr>
-  
-  <tr>
-    <td>  </td>
-    <td>  </td>
-  </tr>
-  
-  <tr>
-    <td>  </td>
-    <td>  </td>
-  </tr>
-  
-  <tr>
-    <td colspan="2" align="right"> 
-      <div class="actions">
-        <%= f.submit %>
-      </div>
     </td>
   </tr>
 </table>

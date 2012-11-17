@@ -1,0 +1,249 @@
+pl:
+# ==================================================================================
+# /usr/lib/ruby/gems/1.8/gems/activerecord-2.2.1/lib/active_record/locale/en-US.yml
+# ==================================================================================
+  activerecord:
+    errors:
+      template:
+        header:
+          one:  "%{count} błąd zablokował formularz '%{model}' przed zapisem."
+          other:  "%{count} błędów zablokowało formularz '%{model}' przed zapisem."
+        body: "Proszę sprawdzić następujące dane:"
+
+      messages:
+        inclusion: "nie znajduje się na liście"
+        exclusion: "powinno znajdować się na liście"
+        invalid: "jest nieprawidłowy"
+        confirmation: "nie pasuje"
+        accepted: "musi zostać zaakceptowane"
+        empty: "nie może pozostać puste"
+        blank: "musi być puste"
+        too_long: "jest za długie (maksymalnie %{count} znaków)"
+        too_short: "jest za krótkie (minimalnie %{count} znaków)"
+        wrong_length: "ma nieprawidłową długość (powinno mieć %{count} znaków)"
+        taken: "taki wpis już istnieje"
+        not_a_number: "nie jest liczbą"
+        greater_than: "must be greater than %{count}"
+        greater_than_or_equal_to: "musi być wyższe lub równe %{count}"
+        equal_to: "musi być równe %{count}"
+        less_than: "musi być mniejsze niż %{count}"
+        less_than_or_equal_to: "musi być mniejsze lub równe %{count}"
+        odd: "musi być nieparzysty"
+        even: "musi być parzysty"
+
+# ==================================================================================
+# Adaptiert von:
+# /usr/lib/ruby/gems/1.8/gems/actionpack-2.2.1/lib/action_view/locale
+# /home/michael3/.rvm/gems/ruby-1.9.2-p136/gems/actionpack-3.0.3/lib/action_view/locale/en.yml
+# ==================================================================================
+  number:
+    # Used in number_with_delimiter()
+    # These are also the defaults for 'currency', 'percentage', 'precision', and 'human'
+    format:
+      # Sets the separator between the units, for more precision (e.g. 1.0 / 2.0 == 0.5)
+      separator: "."
+      # Delimets thousands (e.g. 1,000,000 is a million) (always in groups of three)
+      delimiter: ","
+      # Number of decimals, behind the separator (the number 1 with a precision of 2 gives: 1.00)
+      precision: 3
+      # If set to true, precision will mean the number of significant digits instead
+      # of the number of decimal digits (1234 with precision 2 becomes 1200, 1.23543 becomes 1.2)
+      significant: false
+      # If set, the zeros after the decimal separator will always be stripped (eg.: 1.200 will be 1.2)
+      strip_insignificant_zeros: false
+
+    # Used in number_to_currency()
+    currency:
+      format:
+        # Where is the currency sign? %u is the currency unit, %n the number (default: $5.00)
+        format: "%u %n"
+        unit: "$"
+        # These five are to override number.format and are optional
+        separator: "."
+        delimiter: ","
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+
+    # Used in number_to_percentage()
+    percentage:
+      format:
+        # These three are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        precision: 0
+        # significant: false
+        # strip_insignificant_zeros: false
+
+    # Used in number_to_precision()
+    precision:
+      format:
+        # These three are to override number.format and are optional
+        separator: "."
+        delimiter: ","
+        precision: 2
+        # significant: false
+        # strip_insignificant_zeros: false
+
+    # Used in number_to_human_size()
+    human:
+      format:
+        # These three are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        precision: 1
+        significant: true
+        strip_insignificant_zeros: true
+
+    # Used in number_to_human_size() and number_to_human()
+    human:
+      format:
+        # These five are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      # Used in number_to_human_size()
+      storage_units:
+        # Storage units output formatting.
+        # %u is the storage unit, %n is the number (default: 2 MB)
+        format: "%n %u"
+        units:
+          byte:
+            one:   "Bajt"
+            other: "Bajtów"
+          kb: "KB"
+          mb: "MB"
+          gb: "GB"
+          tb: "TB"
+      # Used in number_to_human()
+      decimal_units:
+        format: "%n %u"
+        # Decimal units output formatting
+        # By default we will only quantify some of the exponents
+        # but the commented ones might be defined or overridden
+        # by the user.
+        units:
+          # femto: Quadrillionth
+          # pico: Trillionth
+          # nano: Billionth
+          # micro: Millionth
+          # mili: Thousandth
+          # centi: Hundredth
+          # deci: Tenth
+          unit: ""
+          # ten:
+          #   one: Ten
+          #   other: Tens
+          # hundred: Hundred
+          thousand: Thousand
+          million: Million
+          billion: Billion
+          trillion: Trillion
+          quadrillion: Quadrillion
+
+  # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
+  datetime:
+    distance_in_words:
+      half_a_minute: "pół minuty"
+      less_than_x_seconds:
+        one:   "mniej niż 1 sekunda"
+        other: "mniej niż %{count} sekund"
+      x_seconds:
+        one:   "1 sekunda"
+        other: "%{count} sekund"
+      less_than_x_minutes:
+        one:   "mniej niż minuta"
+        other: "mniej niż %{count} minut"
+      x_minutes:
+        one:   "1 minuta"
+        other: "%{count} minut"
+      about_x_hours:
+        one:   "około 1 godziny"
+        other: "około %{count} godzin"
+      x_days:
+        one:   "1 dzień"
+        other: "%{count} dni"
+      about_x_months:
+        one:   "około 1 miesiąca"
+        other: "około %{count} miesięcy"
+      x_months:
+        one:   "1 miesiąc"
+        other: "%{count} miesięcy"
+      about_x_years:
+        one:   "około 1 roku"
+        other: "około %{count} lat"
+      over_x_years:
+        one:   "ponad 1 rok"
+        other: "ponad %{count} lat"
+      almost_x_years:
+        one:   "prawie 1 rok"
+        other: "prawie %{count} lat"
+    prompts:
+      year:   "Rok"
+      month:  "Miesiąc"
+      day:    "Dzień"
+      hour:   "Godzina"
+      minute: "Minuta"
+      second: "Sekunda"
+
+  helpers:
+    select:
+      # Default value for :prompt => true in FormOptionsHelper
+      prompt: "Prosz wybrać"
+
+    # Default translation keys for submit FormHelper
+    submit:
+      create: 'Stwórz %{model}'
+      update: 'Aktualizuj %{model}'
+      submit: 'Zapisz %{model}'
+      
+# Used in array.to_sentence.
+  support:
+    array:
+     words_connector:
+      two_words_connector: " oraz "
+      last_word_connector: ", oraz "
+      
+# ==================================================================================
+# Adaptiert von:
+# /usr/lib/ruby/gems/1.8/gems/activesupport-2.2.1/lib/active_support/locale/en-US.yml
+# ==================================================================================
+
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      # When no format has been given, it uses default.
+      # You can provide other formats here if you like!
+      default: "%d-%m-%Y"
+      short: "%d. %b"
+      long: "%d. %B  %Y"
+
+    day_names: [Niedziela, Poniedziałek, Wtorek, Środa, Czwartek, Piątek, Sobota]
+    abbr_day_names: [Ni, Pon, Wt, Śr, Czw, Pt, Sob]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, Styczeń, Luty, Marzec, Kwiecień, Maj, Czerwiec, Lipiec, Sierpień, Wrzesień, Październik, Listopad, Grudzień]
+    abbr_month_names: [~, St, Lu, Marz, Kwi, Maj, Cze, Lip, Si, Wrze, Paź, Lis, Gr]
+    # Used in date_select and datime_select.
+    order:
+      - :year
+      - :month
+      - :day
+
+  time:
+    formats:
+      default: "%a, %d. %b. %Y, %H:%M:%S %z"
+      short: "%d. %b. %y  %y %H:%M"
+      long: "%d. %B %Y %H:%M:%S"
+      datetime_iso: "%d-%m-%Y %H:%M:%S"
+      datetime_iso2: "%d%m%YT%H%M%S"
+      date_normal: "%d. %B %Y"
+      date_short: "%d. %b %y"
+      date_iso: "%d-%m-%Y"
+      time_short: "%H:%M"
+      month_and_day: "%d. %B"
+      salor: ! '%a, %b %d %H:%M'
+    am: ""
+    pm: ""
