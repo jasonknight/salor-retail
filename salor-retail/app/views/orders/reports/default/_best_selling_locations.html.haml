@@ -1,0 +1,23 @@
+%h2=I18n.t("headings.best_selling_location") + " - " + t("activerecord.attributes.quantity_sold")
+%table.striped-table2
+  %tr
+    %th{ :style => 'width: 30%' }= t("activerecord.attributes.name")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.cash_made")
+  - @locations_by_quantity_sold.each do |item|
+    %tr
+      %td= item.name
+      %td{ :align=>"center"}= item.quantity_sold
+      %td{ :align=>"center"}= number_to_currency item.cash_made
+      
+%h2=I18n.t("headings.best_selling_location") + " - " + t("activerecord.attributes.cash_made")
+%table.striped-table2
+  %tr
+    %th{ :style => 'width: 30%' }= t("activerecord.attributes.name")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.cash_made")
+  - @locations_by_cash_made.each do |item|
+    %tr
+      %td= item.name
+      %td{ :align=>"center"}= item.quantity_sold
+      %td{ :align=>"center"}= number_to_currency item.cash_made

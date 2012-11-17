@@ -1,0 +1,9 @@
+%h2=I18n.t("headings.best_sellers")
+%table.striped-table2
+  %tr
+    %th{ :style => 'width: 30%' }= t("activerecord.attributes.name")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
+  - @items.each do |item|
+    %tr
+      %td= item.get_translated_name(I18n.locale)
+      %td{ :align=>"center"}= item.quantity_sold

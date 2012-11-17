@@ -190,6 +190,32 @@ window.showOrderOptions = function () {
   // End customer code
   
   
+  // OrderTag
+  var callbacks = {
+    click: function () {
+      var id = '#option_order_tag_input';
+      var value = $(id).val();
+      var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=tag&value=' + value;
+      get(string, 'showOrderOptions', function () {
+        
+      });
+    },
+    focus: function () {
+      var inp = $(this);
+      setTimeout(function () {
+        inp.select();
+      }, 170);
+    }
+  };
+  var options = {
+    name: 'order_tag',
+    title: i18n.activerecord.attributes.tag,
+    value: Order.tag,
+    append_to: dialog
+  };
+  var tag = shared.draw.option(options,callbacks);
+  //end order tag
+  
   var callbacks = {
     click: function () {
       var id = '#option_order_rebate_input';

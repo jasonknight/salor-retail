@@ -1,0 +1,4 @@
+%table.striped-table2
+  - @items.each do |item|
+    %tr
+      %td= item.get_translated_name(I18n.locale)
