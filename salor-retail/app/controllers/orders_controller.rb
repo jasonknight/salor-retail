@@ -552,7 +552,17 @@ class OrdersController < ApplicationController
     view ||= 'default'
     render "orders/invoices/#{view}/page"
   end
-
+  #
+  def order_reports
+    @items = Item.scopied.where("sku NOT LIKE 'DMY%'").limit(25).order('quantity_sold desc')
+    @categories_by_cash_made = Category.scopied.limit(10).order("cash_made desc")
+    @categories_by_quantity_sold = Category.scopied.limit(10).order('quantity_sold desc')
+    @locations_by_cash_made = Location.scopied.limit(10).order("cash_made desc")
+    @locations_by_quantity_sold = Location.scopied.limit(10).order('quantity_sold desc')
+    view = SalorRetail::Application::CONFIGURATION[:reports][:style]
+    view ||= 'default'
+    render "orders/reports/#{view}/page"
+  end
   #
   def remove_payment_method
     if GlobalData.salor_user.is_technician? then

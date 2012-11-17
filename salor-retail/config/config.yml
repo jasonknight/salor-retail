@@ -3,6 +3,8 @@
 :exception_notification_sender: Sender Name <nobody@localhost>
 :exception_notification_receipients: nobody@localhost
 :invoice_style: default
+:reports:
+  :style: default
 app_name: "Salor"
 technician_code: U9479880090210
 stylesheets: 'darker'

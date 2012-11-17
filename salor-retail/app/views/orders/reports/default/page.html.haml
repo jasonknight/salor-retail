@@ -5,107 +5,17 @@
 
 .tools
   %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
-  - if params[:delivery_note]
-    = link_to salor_icon(:document, {}, 32, t('orders.print.invoice')), "/orders/#{ @order.id }/print"
-  - else
-    = link_to salor_icon(:gearpage, {}, 32, t('orders.print.delivery_note')), "/orders/#{ @order.id }/print?delivery_note=1"
-  = link_to salor_icon(:label, {}, 32, t('orders.print.labels')), "/items/selection?order_id=#{ @order.id }"
-  - if @order.is_proforma
-    = link_to salor_icon(:order,{},32,I18n.t("menu.new_order")),"/orders/new_from_proforma?order_id=#{@order.id}"
     
 .clear
 
 .paper-invoice.invoice_print
-  = render 'orders/invoices/default/header_page_one'
+  = render 'orders/reports/default/header_page_one'
+
+
+  = render 'orders/reports/default/best_selling_items'
   
-  - if params[:delivery_note]
-    %h2== #{ I18n.t("receipts.delivery_note") } #{ @order.nr }
-    %p= text_field_tag 'delivery_note_comment', @order.delivery_note_comment
-  - else
-    - if @order.nr
-      %h2== #{ I18n.t("receipts.invoice") } #{ @order.nr }
-    - else
-      %h2== #{ I18n.t("receipts.offer") }
-    %h3= I18n.l(@order.created_at, :format => :just_day)
-    %p= text_area_tag 'invoice_comment', @order.invoice_comment
-    %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
-  
-  - item_count = @report[:list_of_items_raw].size
-  
-  - item_pagination_count_one = 5
-  - item_pagination_count_one = item_count if item_pagination_count_one > item_count
-  - if params[:delivery_note]
-    = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => 0, :item_end => item_pagination_count_one }
-  - else
-    = render :partial => 'orders/invoices/default/item_list_invoice', :locals => { :item_start => 0, :item_end => item_pagination_count_one }
-    
-  - item_pagination_count_other = 10
-  - item_count -= item_pagination_count_one
-  - (item_count / item_pagination_count_other).times do |i|
-    - item_start = 1 + item_pagination_count_one + i * item_pagination_count_other
-    - item_end = item_start + item_pagination_count_other - 1
-    - item_end = item_count if item_end > item_count
-    = render('orders/invoices/default/header_page_other')
-    - if params[:delivery_note]
-      = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => item_start, :item_end => item_end }
-    - else
-      = render :partial => 'orders/invoices/default/item_list_invoice', :locals => { :item_start => item_start, :item_end => item_end }
-
-  - unless params[:delivery_note]
-    %table.striped-table2.has-total
-      %tr
-        %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal')
-        %td.total= number_to_currency @report[:subsubtotal]
-
-    %br
-    %br
-    - if @report[:refund_subtotal].zero?
-      %table.striped-table2.small
-        - @report[:paymentmethods].to_a.each do |pm|
-          %tr
-            %td= pm[0]
-            %td.total= number_to_currency pm[1]
-        - if not @order.is_proforma
-          %tr
-            %td= t('printr.order_receipt.change')
-            %td.total= number_to_currency @report[:change_given]
-
-    - else
-      %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
-
-    %br
-    %br
-    %table.striped-table2.small
-      %tr
-        %th
-        %th
-        %th.right= t('printr.order_receipt.net')
-        %th.right= t('printr.order_receipt.tax')
-        %th.right= t('printr.order_receipt.gross')
-      - @report[:list_of_taxes_raw].each do |tax|
-        - tax = format_tax(tax)
-        %tr
-          - tax.each do |k,v|
-            %td.total= v
-            
-    %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
-
-  %div.invoice_blurb_footer= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb_footer).to_html
+  = render 'orders/reports/default/best_selling_category'
   
   .center
     %img.salorlogo{ :src => '/images/salor-logo-reports.png'}
     
-:javascript
-  $('#invoice_comment').on('change', function() {
-    $.ajax({
-      url: '/vendors/edit_field_on_child',
-      data: {id:#{@order.id},klass:'Order',field:'invoice_comment',value:$(this).val()}    
-    })
-  })
-  
-  $('#delivery_note_comment').on('change', function() {
-    $.ajax({
-      url: '/vendors/edit_field_on_child',
-      data: {id:#{@order.id},klass:'Order',field:'delivery_note_comment',value:$(this).val()}    
-    })
-  })
