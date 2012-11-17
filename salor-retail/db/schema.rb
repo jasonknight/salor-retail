@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121115173714) do
+ActiveRecord::Schema.define(:version => 20121117065908) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -740,6 +740,9 @@ ActiveRecord::Schema.define(:version => 20121115173714) do
     t.boolean  "in_stock",       :default => false
     t.float    "quantity"
     t.float    "purchase_price"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.integer  "vendor_id"
   end
 
   add_index "shipment_items", ["category_id"], :name => "index_shipment_items_on_category_id"

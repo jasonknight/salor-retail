@@ -32,6 +32,7 @@ module SalorScope
     klass.scope(:by_keywords , lambda {
       conds = []
       vals = []
+      # TODO: Get rid of GlobalData
       words = GlobalData.params.keywords if GlobalData.params
       return if words.nil? or words.blank?
       conds << "id = '#{words}'"
