@@ -366,7 +366,7 @@ class OrdersController < ApplicationController
     
     if not @order.order_items.visible.any? then
       
-      render :js => " alert('NoVisibleItems');complete_order_hide(); " and return
+      render :js => "complete_order_hide(); " and return
     end
     
        
