@@ -308,6 +308,7 @@ class Order < ActiveRecord::Base
 	end
 	#
 	def calculate_totals(speedy = false)
+#     puts "## Calculate_Totals called #{speedy}"
 	  if self.paid == 1 and not $User.is_technician? then
 	    #GlobalErrors.append("system.errors.cannot_edit_completed_order",self)
 	    return
@@ -332,7 +333,7 @@ class Order < ActiveRecord::Base
         # Coupons are not handled here, they are handled at the end of the order.
         if oi.item_type.behavior == 'normal' or oi.item_type.behavior == 'gift_card' then
           price = oi.calculate_total self.subtotal
-          #puts "price from #{oi.item.sku} is #{price}"
+          puts "price from #{oi.item.sku} is #{price}"
           if oi.is_buyback and not self.buy_order then
             if price > 0 then
               oi.update_attribute(:price, price * -1)
@@ -347,7 +348,7 @@ class Order < ActiveRecord::Base
               b = self.subtotal
               self.subtotal = self.subtotal + price
               a = self.subtotal
-              #puts "Check:  #{b} + #{price} = #{a}"
+              puts "Check:  #{b} + #{price} = #{a}"
             end
           end
           # regular items are never activated, 
@@ -361,7 +362,7 @@ class Order < ActiveRecord::Base
             end
         end
       end
-      # #puts "Here I am in order, #{self.subtotal}"
+#       puts "Here I am in order, #{self.subtotal}"
       # Now let's consider Store Wide Discounts, for item/location/percent specific discounts,
       # see Item.price    
       if not self.subtotal_is_locked then
@@ -392,7 +393,7 @@ class Order < ActiveRecord::Base
       #if self.subtotal < 0 then
         #self.subtotal = 0
       #end
-      #puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
+#       puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
       if $Conf.calculate_tax then
         self.total = self.subtotal.round(2) + self.tax.round(2)
       else

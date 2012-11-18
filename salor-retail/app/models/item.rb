@@ -46,6 +46,20 @@ class Item < ActiveRecord::Base
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
   
+  def self.csv_headers
+    return [:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
+  end
+  def to_csv(headers=nil)
+    headers = Item.csv_headers if headers.nil?
+    values = []
+    headers.each do |h|
+      values << self.send(h)
+    end
+    return values.join("\t")
+  end
+  def tax_profile_name
+    return self.tax_profile.name
+  end
   def get_translated_name(locale)
     locale = locale.to_s
     trans = read_attribute(:name_translations)

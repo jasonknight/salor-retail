@@ -342,16 +342,16 @@ class ItemsController < ApplicationController
   end
   
   def wholesaler_update
-    a = Mechanize.new
+    
     uploader = FileUpload.new
     GlobalData.conf.csv_imports.split("\n").each do |line|
       parts = line.chomp.split(',')
       next if parts[0].nil?
       begin
       if parts[0].include? 'http://' or parts[0].include? 'https://' then
-        file = a.get(parts[0])
+        file = get_url(parts[0])
       else
-        file = a.get(GlobalData.conf.csv_imports_url + "/" + parts[0])
+        file = get_url(GlobalData.conf.csv_imports_url + "/" + parts[0])
       end
       if parts[1].include? "dist*" then
         uploader.send('dist'.to_sym, file.body,true) # i.e. dist* means an internal source
@@ -372,8 +372,9 @@ class ItemsController < ApplicationController
   end
 
   def download
-    @items = Item.scopied.where(:hidden => false)
-    render 'list.csv'
+    @items = Item.scopied
+    data = render_to_string :layout => false
+    send_data(data,:filename => 'items.csv', :type => 'text/csv')
   end
 
   def inventory_report

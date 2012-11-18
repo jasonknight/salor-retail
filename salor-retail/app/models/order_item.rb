@@ -372,7 +372,7 @@ class OrderItem < ActiveRecord::Base
         return p
       end
     end
-
+#     puts "&&& in calculat_total"
     ttl = 0
     self.quantity = 0 if self.quantity.nil?
     if self.item.parts.any? and self.item.calculate_part_price then
@@ -385,9 +385,9 @@ class OrderItem < ActiveRecord::Base
       begin
         ttl = self.price * self.quantity
       rescue
-        #puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
+        puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
       end
-      #puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
+#       puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
     end
     
     # REFUNDS
@@ -395,7 +395,7 @@ class OrderItem < ActiveRecord::Base
       ttl = ttl * -1
     end
 
-    #puts "ttl at this point is: #{ttl}"
+#     puts "ttl at this point is: #{ttl}"
 
     # i.e. sometimes the order hasn't been saved yet..
 
@@ -405,15 +405,15 @@ class OrderItem < ActiveRecord::Base
       self.order.coupon_for(self.item.sku).each do |c|
         cttl += c.coupon_total(ttl,self)
       end
-      #puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
+#       puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
       ttl -= cttl
     end
     if self.rebate then
       ttl -= (ttl * (self.rebate / 100.0))
-      #puts "self.rebate: #{ttl}"
+#       puts "self.rebate: #{ttl}"
     end
 
-    #puts "ttl at this point is: #{ttl}"
+#     puts "ttl at this point is: #{ttl}"
 
     # DISCOUNTS
     if self.discount_amount > 0 then
@@ -423,10 +423,10 @@ class OrderItem < ActiveRecord::Base
 
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
-      #puts "In update, ttl is #{ttl} and self.total is #{self.total}"
+#       puts "In update, ttl is #{ttl} and self.total is #{self.total}"
       self.update_attribute(:total,ttl) # MF MOD
     end
-    #puts "Returning total of: #{self.total}"
+#     puts "Returning total of: #{self.total}"
     return self.total
   end
   
@@ -550,6 +550,7 @@ class OrderItem < ActiveRecord::Base
 
   #
   def discover_price(item)
+    puts "&&& In Discover price"
     if self.order and self.order.buy_order or self.is_buyback then
       return item.buyback_price if self.order.buy_order
       return (item.buyback_price * -1)
@@ -580,8 +581,8 @@ class OrderItem < ActiveRecord::Base
             not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
             not (discount.category_id == item.category_id and discount.applies_to == 'Category') and
             not (discount.applies_to == 'Vendor' and discount.amount_type == 'percent') then
-#             puts "this discount doesn't match"
-#             puts "category_id is #{discount.category_id} and category_id is #{item.category_id}"
+             puts "&&& this discount doesn't match"
+             puts "&&& category_id is #{discount.category_id} and category_id is #{item.category_id}"
           next
         end
 #         puts "Applying discount"
@@ -598,13 +599,13 @@ class OrderItem < ActiveRecord::Base
         end
       end # Discount.scopied.where(conds)
     else
-#       puts "Not Applying Discounts at all..."
+      puts "Not Applying Discounts at all..."
     end
     #p -= damount
     self.update_attribute(:discount_applied,true) if self.discounts.any?
     self.update_attribute(:discount_amount,damount) if self.discounts.any?
     p = p.round(2)
-    
+    puts "&&& price for item is: #{p}"
     return p
   end
 

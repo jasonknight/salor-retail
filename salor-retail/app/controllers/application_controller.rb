@@ -4,7 +4,8 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-
+require "net/http"
+require "uri"
 class ApplicationController < ActionController::Base
   # {START}
   include SalorBase
@@ -20,6 +21,15 @@ class ApplicationController < ActionController::Base
   unless SalorRetail::Application.config.consider_all_requests_local
     rescue_from Exception, :with => :render_error
   end 
+  def get_url(url)
+    uri = URI.parse(url)
+    
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Get.new(uri.request_uri)
+    
+    response = http.request(request)
+    return response
+  end
   def is_mac?
      RUBY_PLATFORM.downcase.include?("darwin")
   end

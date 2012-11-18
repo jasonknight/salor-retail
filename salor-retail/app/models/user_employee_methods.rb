@@ -487,10 +487,10 @@ module UserEmployeeMethods
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
     if employee
-      orders = Order.scopied.where({ :vendor_id => employee.get_meta.vendor_id, :drawer_id => employee.get_drawer.id,:created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
+      orders = Order.scopied.where({ :vendor_id => employee.get_meta.vendor_id, :drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
       drawertransactions = DrawerTransaction.where({:drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
     else
-      orders = Order.scopied.where({ :vendor_id => $Vendor.id,:created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
+      orders = Order.scopied.where({ :vendor_id => $Vendor.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
       drawertransactions = DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
     end
     regular_payment_methods = PaymentMethod.types_list.collect{|pm| pm[1].to_s }
@@ -527,7 +527,7 @@ module UserEmployeeMethods
             end
           end
         end
-      end
+      end # end o.payment_methods
 
       o.order_items.visible.each do |oi|
         catname = oi.category ? oi.category.name : ''

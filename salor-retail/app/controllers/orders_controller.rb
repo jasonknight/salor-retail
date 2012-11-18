@@ -186,6 +186,7 @@ class OrdersController < ApplicationController
   end
 
   def add_item_ajax
+#     puts "!!! add_item_ajax"
     @error = nil
     @order = initialize_order
     if @order.paid == 1 and not $User.is_technician? then
@@ -204,6 +205,7 @@ class OrdersController < ApplicationController
     end
     unless @order_item.nil? then
       unless @order_item.activated or @order_item.is_buyback then
+       
         @order_item.quantity += 1
         @order_item.save
         @order_item.order.update_self_and_save
@@ -213,6 +215,7 @@ class OrdersController < ApplicationController
       end
     end
     @item = Item.get_by_code(params[:sku])
+#     puts "!!! returned Item: #{@item.sku}"
     if @item.class == Item and @item.activated == true and @item.behavior == 'gift_card' and @item.amount_remaining <= 0 then
       flash[:notice] = I18n.t("system.errors.gift_card_empty")
       render :action => :update_pos_display and return
@@ -231,6 +234,7 @@ class OrdersController < ApplicationController
         render :action => :update_pos_display and return
       end
     end
+#     puts "!!! Adding item to order"
     @order_item = @order.add_item(@item)
     if @order_item.id.nil? then
       GlobalErrors.append("system.errors.item_cannot_be_added")
@@ -239,6 +243,7 @@ class OrdersController < ApplicationController
     @order_item.reload
     if @order_item.behavior != 'normal' then
       # Recalc all if item added is not normal
+#       puts "!!! item behavior is #{@order_item.behavior}"
       @order.update_self_and_save
     else
       unless @order_item.activated or @order_item.item.is_gs1 then
@@ -247,14 +252,17 @@ class OrdersController < ApplicationController
         else
           total = @order_item.total
         end
+#         puts "!!! total is: #{total}"
         if @order.total.nil? or @order.total == 0.0 then
           @order.total = 0
           # puts  "Updating total direcly"
           @order.connection.execute("update orders set total = #{total} where id = #{@order.id}")
           @order.total += total
+#           puts "!!! Order total was nil or 0"
         else
           @order.connection.execute("update orders set total = total + #{total} where id = #{@order.id}")
           @order.total += total
+#           puts "Order Total wasn't nil or 0"
         end
       end
     end
