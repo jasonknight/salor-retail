@@ -744,8 +744,8 @@ gn:
     not_you: Nicht Sie?
     owner_mode: ADMIN MODUS
     owner_success: Administrator wurde erfolgreich aktualisiert.
-    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere,Retourgeld
+    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
     rebate_types:
       fixed: EUR
       percent: ! '%'

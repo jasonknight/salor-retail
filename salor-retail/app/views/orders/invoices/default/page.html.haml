@@ -39,7 +39,7 @@
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
     
-    %p== #{ @report[:customer][:tax_number]}
+    %p= @report[:customer][:tax_number] if @report[:customer]
   
   - item_count = @report[:list_of_items_raw].size
   

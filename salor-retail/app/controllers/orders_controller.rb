@@ -39,7 +39,7 @@ class OrdersController < ApplicationController
 
    
   def new_from_proforma
-    @proforma = initialize_order
+    @proforma = Order.scopied.find_by_id(params[:order_id]) #initialize_order
     @order = Order.new
     @order.attributes = @proforma.attributes
     @order.save
@@ -51,8 +51,10 @@ class OrdersController < ApplicationController
     item = Item.get_by_code("DMYACONTO")
     item.update_attribute :name, I18n.t("receipts.a_conto")
     item.make_valid
+    @order.update_attribute :paid, 0
     noi = @order.add_item(item)
     noi.price = @proforma.amount_paid * -1
+    noi.is_buyback = true
     noi.save
     @order.is_proforma = false
     @order.update_self_and_save

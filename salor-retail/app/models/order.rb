@@ -38,11 +38,7 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
   def amount_paid
-    amnt = 0
-    self.payment_methods.each do |pm|
-      amnt += pm.amount
-    end
-    return amnt
+    self.payment_methods.sum(:amount)
   end
   def nonrefunded_item_count
     self.order_items.visible.where(:refunded => false).count
@@ -497,17 +493,18 @@ class Order < ActiveRecord::Base
       update_self_and_save
       ottl = self.get_drawer_add
       if self.buy_order then
-        ottl *= -1 if ottl < 0
+        #ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
-        #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - self.total)
       elsif self.total < 0 then
-        ottl *= -1 if ottl < 0
+        #ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
         $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
+        if self.change_given > 0
+          PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
+        end
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
-        #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + ottl)
       end
       lc = self.loyalty_card
       self.lc_points = 0 if self.lc_points.nil?
@@ -541,6 +538,8 @@ class Order < ActiveRecord::Base
     end
   end
   def get_drawer_add
+    return self.payment_methods.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true
+    
     ottl = self.total
     self.payment_methods.each do |pm|
       next if pm.internal_type == 'InCash'

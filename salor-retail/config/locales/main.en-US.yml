@@ -737,8 +737,8 @@ en-US:
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    payment_external_types: cash,card,gift card,other,change
+    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
     rebate_types:
       fixed: $
       percent: ! '%'

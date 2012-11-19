@@ -41,7 +41,7 @@ class ItemsController < ApplicationController
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now
     @sold_times = OrderItem.scopied.find(:all, :conditions => {:sku => @item.sku, :hidden => 0, :is_buyback => false, :refunded => false, :created_at => @from..@to}).collect do |i| 
-      i.order.paid == 1 ? i.quantity : 0 
+      (i.order.paid == 1 and not i.order.is_proforma) ? i.quantity : 0 
     end.sum
   end
 
