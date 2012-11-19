@@ -149,7 +149,7 @@ class OrderItem < ActiveRecord::Base
     loc = self.item.location
     cat = self.item.category
     if loc then
-      loc.update_attribute(:quantity_sold,loc.quanityt_sold + q)
+      loc.update_attribute(:quantity_sold,loc.quantity_sold + q)
       loc.update_attribute(:cash_made, loc.cash_made + t) 
     end
     if cat then

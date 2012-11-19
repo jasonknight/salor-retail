@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121119140441) do
+ActiveRecord::Schema.define(:version => 20121119154914) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -664,6 +664,7 @@ ActiveRecord::Schema.define(:version => 20121119140441) do
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "vendor_id"
   end
 
   add_index "payment_methods", ["order_id"], :name => "index_payment_methods_on_order_id"

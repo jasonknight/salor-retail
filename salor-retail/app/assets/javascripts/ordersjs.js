@@ -216,6 +216,7 @@ window.showOrderOptions = function () {
   var tag = shared.draw.option(options,callbacks);
   //end order tag
   
+  // Rebate
   var callbacks = {
     click: function () {
       var id = '#option_order_rebate_input';
@@ -234,7 +235,9 @@ window.showOrderOptions = function () {
     append_to: dialog
   };
   var rebate = shared.draw.option(options,callbacks);
+  // end Rebate
   
+  // TaxFree
   callbacks = {change: function () {
       get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
     }
@@ -245,19 +248,22 @@ window.showOrderOptions = function () {
     value: Order.tax_free,
     append_to: dialog
   };
-  callbacks = {change: function () {
-    get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
-  }
-  };
   var tax_free_check = shared.draw.check_option(options,callbacks);
+  // end TaxFree
   
+  // Proforma
   options = {
     name: 'is_proforma',
     title: i18n.activerecord.attributes.is_proforma,
     value: Order.is_proforma,
     append_to: dialog
   };
-  var tax_free_check = shared.draw.check_option(options,callbacks);
+  callbacks = {change: function () {
+    get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
+    }
+  };
+  var proforma_check = shared.draw.check_option(options,callbacks);
+  // end Proforma
   
   // salestype and countries
   options = {

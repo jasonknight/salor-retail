@@ -310,8 +310,8 @@ class ApplicationController < ActionController::Base
 #       f = t = nil
       
     end
-    f ||= DateTime.now - 1.days
-    t ||= DateTime.now + 1.days
+    f ||= DateTime.now.beginning_of_day
+    t ||= DateTime.now.end_of_day
     return f, t
   end
   def time_from_to(p)

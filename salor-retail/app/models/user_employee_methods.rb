@@ -531,7 +531,7 @@ module UserEmployeeMethods
 
       o.order_items.visible.each do |oi|
         catname = oi.category ? oi.category.name : ''
-        taxname = oi.tax_profile.name
+        taxname = oi.tax_profile.name if oi.tax_profile
         item_price = case oi.behavior
           when 'normal' then oi.price
           when 'gift_card' then oi.activated ? - oi.total : oi.total

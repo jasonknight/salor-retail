@@ -42,6 +42,7 @@ function add_payment_method() {
   //MF $("#payment_amount_" + (numMethods - 1)).val(''); // clear the input field because mostly this will be 0
   var opts = payment_method_options();
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  //sel.on('click',function(){ alert('xxx');}); // whishlist, but does't work
   //MF var sel = $('<div class="select-widget-button payment-method" internal_type="' + payment_internal_types[numMethods] + '" id="' + "payment_type_" + numMethods + '">' + payment_external_types[numMethods] + '</div>');
 
   $(sel)[0].selectedIndex = numMethods;
