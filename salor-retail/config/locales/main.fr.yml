@@ -75,6 +75,7 @@ fr:
         customs_code: Customs Code
         manufacturer_price: Manufacturer Price
         description: Description
+        weight: Weight
       item_sku: UGS article
       itemsviewlist: Liste d'articles
       last_name: Nom
@@ -168,6 +169,8 @@ fr:
         note_footer: Note footer
         sale_type_id: Sale Type
       is_proforma: Proforma?
+      customer:
+        tax_number: Tax number
     models:
       action:
         one: Action
@@ -482,6 +485,7 @@ fr:
     void: Détruire
     wholesaler_update: Mettre à jour distributeur
     labels: Labels
+    statistics: Statistics
   notifications:
     shipments_item_could_not_be_saved: Article livraisons n'a pas pu être enregistré.
     shipments_move_all_items: Tous les articles ont été déplacés avec succès.
@@ -645,6 +649,7 @@ fr:
     delivery_note: Lieferschein
     offer: Offer
     a_conto: on account
+    proforma_invoice: Proforma Invoice
   reports:
     amount: Montant
     description: Description
