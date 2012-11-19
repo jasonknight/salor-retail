@@ -17,7 +17,7 @@
       = @report[:customer][:street2]
       %br
       == #{ @report[:customer][:postalcode]} #{ @report[:customer][:city] }
-      %br
-      == #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
+      /%br
+      /== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
       
   .clear

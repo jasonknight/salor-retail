@@ -1020,6 +1020,7 @@ class Order < ActiveRecord::Base
       customer[:street1] = self.customer.street1
       customer[:street2] = self.customer.street2
       customer[:postalcode] = self.customer.postalcode
+      customer[:tax_number] = self.customer.tax_number
       customer[:city] = self.customer.city
       customer[:current_loyalty_points] = self.loyalty_card.points
     end

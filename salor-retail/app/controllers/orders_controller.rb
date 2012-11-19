@@ -419,6 +419,7 @@ class OrdersController < ApplicationController
         payment_methods_array.each {|pm| pm.save} # otherwise, we save them
       end
       if @order.is_proforma == true then
+        @order.complete
         render :js => " window.location = '/orders/#{@order.id}/print'; " and return
       end
       params[:print].nil? ? print = 'true' : print = params[:print].to_s

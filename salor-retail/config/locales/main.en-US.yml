@@ -7,6 +7,8 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      customer:
+        tax_number: Tax number
       is_proforma: Proforma?
       tax_free: Tax Free
       order_item:
@@ -376,6 +378,7 @@ en-US:
       print: Print
   label: label
   menu:
+    statistics: Statistics
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
@@ -647,6 +650,7 @@ en-US:
   receipts:
     invoice: Invoice
     offer: Offer
+    proforma_invoice: Proforma Invoice
     invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
     delivery_note: Delivery Note
     a_conto: on account

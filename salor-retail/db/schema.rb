@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121117164859) do
+ActiveRecord::Schema.define(:version => 20121119140441) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(:version => 20121117164859) do
     t.string   "sku"
     t.integer  "hidden",       :default => 0
     t.integer  "hidden_by"
+    t.string   "tax_number"
   end
 
   add_index "customers", ["vendor_id"], :name => "index_customers_on_vendor_id"
@@ -440,6 +441,7 @@ ActiveRecord::Schema.define(:version => 20121117164859) do
     t.string   "sku"
     t.string   "customer_sku"
     t.integer  "hidden",       :default => 0
+    t.integer  "vendor_id"
   end
 
   add_index "loyalty_cards", ["customer_id"], :name => "index_loyalty_cards_on_customer_id"

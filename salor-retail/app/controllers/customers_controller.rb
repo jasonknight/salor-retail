@@ -55,7 +55,7 @@ class CustomersController < ApplicationController
     
     @customer = Customer.new(params[:customer])
     @loyalty_card = LoyaltyCard.new(params[:loyalty_card])
-
+    @loyalty_card.vendor_id = $Vendor.id
     respond_to do |format|
       if @loyalty_card.save and @customer.save
         @loyalty_card.update_attribute(:customer_id,@customer.id)
