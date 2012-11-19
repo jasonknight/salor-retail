@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.2.6'
+gem 'rake', '0.9.2.2'
 gem 'mysql2'
 gem 'serialport'
 gem 'kramdown'
@@ -11,8 +12,8 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'rmagick'
 gem 'uglifier'
-gem 'therubyracer'
 # The following have to be eliminated:
+gem 'therubyracer'
 gem 'acts_as_list'
 gem 'kaminari'
 gem 'unicode_utils'
