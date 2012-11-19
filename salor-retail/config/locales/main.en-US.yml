@@ -80,6 +80,7 @@ en-US:
         customs_code: Customs Code
         manufacturer_price: Manufacturer Price
         description: Description
+        weight: Weight
       item_sku: item sku
       itemsviewlist: List View for Items
       last_name: last name

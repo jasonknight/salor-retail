@@ -86,6 +86,7 @@ gn:
         customs_code: Export-Code
         manufacturer_price: Herstellerpreis
         description: Beschreibung
+        weight: Gewicht
       item_sku: Artikel SKU
       itemsviewlist: Listenansicht für Artikel
       last_name: Familienname
