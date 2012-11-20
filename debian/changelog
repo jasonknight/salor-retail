@@ -1,3 +1,10 @@
+salor-retail (4.0.0.16) unstable; urgency=low
+
+  * Closes #1450
+  * Closes #1451 intelligently start browsers
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 07:55:30 +0100
+
 salor-retail (4.0.0.15) unstable; urgency=low
 
   [ Michael Franzl ]
