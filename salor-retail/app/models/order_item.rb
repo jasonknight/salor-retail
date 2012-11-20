@@ -30,6 +30,27 @@ class OrderItem < ActiveRecord::Base
       return ''
     end
   end
+  def get_translated_name(locale)
+    if self.item then
+      return self.item.get_translated_name(locale)
+    else
+      return 'NoItem'
+    end
+  end
+  def get_category_name
+    if self.category then
+      return self.category.name
+    else
+      return "NoCategory"
+    end
+  end
+  def get_location_name
+    if self.item.location then
+      return self.item.location.name
+    else
+      return 'NoLocation'
+    end
+  end
   # To speed things up, we cache the discounts
   def self.reload_discounts
   end

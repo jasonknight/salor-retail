@@ -6,7 +6,6 @@ function checkFocusInput() {
 }
 
 function focusInput(inp) {
-  console.log(inp.attr('id'));
   $('.salor-focused').removeClass('salor-focused');
   inp.addClass('salor-focused');
   inp.focus();
