@@ -9,12 +9,7 @@
 # {VOCABULARY} generate_encrypted_password decrypt_password digest_password
 module UserEmployeeMethods
   def self.included(mod)
-    def User.generate_password(string)
-      return Digest::SHA2.hexdigest("#{string}")
-    end
-    def Employee.generate_password(string)
-      return Digest::SHA2.hexdigest("#{string}")
-    end
+    
     mod.class_eval do
       def generate_password(string)
         return Digest::SHA2.hexdigest("#{string}")

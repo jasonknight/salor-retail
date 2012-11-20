@@ -242,11 +242,11 @@ window.showOrderOptions = function () {
   // end Rebate
   
   // TaxFree
-  callbacks = {change: function () {
+  var callbacks = {change: function () {
       get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
     }
   };
-  options = {
+  var options = {
     name: 'tax_free',
     title: i18n.activerecord.attributes.tax_free,
     value: Order.tax_free,
@@ -256,13 +256,13 @@ window.showOrderOptions = function () {
   // end TaxFree
   
   // Proforma
-  options = {
+  var options = {
     name: 'is_proforma',
     title: i18n.activerecord.attributes.is_proforma,
     value: Order.is_proforma,
     append_to: dialog
   };
-  callbacks = {change: function () {
+  var callbacks = {change: function () {
     get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
     }
   };
@@ -270,7 +270,7 @@ window.showOrderOptions = function () {
   // end Proforma
   
   // salestype and countries
-  options = {
+  var options = {
     name: 'sales_type_and_countries',
     title: i18n.menu.additional,
     append_to: dialog,
