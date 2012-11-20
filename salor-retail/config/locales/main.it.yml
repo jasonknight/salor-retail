@@ -71,6 +71,7 @@ it:
         customs_code: Customs Code
         manufacturer_price: Manufacturer Price
         description: Description
+        weight: Weight
       item_sku: articolo sku
       itemsviewlist: Vedi Lista per Articolo
       last_name: cognome
@@ -167,6 +168,8 @@ it:
         note_footer: Note footer
         sale_type_id: Sale Type
       is_proforma: Proforma?
+      customer:
+        tax_number: Tax number
     models:
       action:
         one: Azione
@@ -486,6 +489,7 @@ it:
     new_invoice_note: New Invoice Note
     receipts: Receipts
     labels: Labels
+    statistics: Statistics
   notifications:
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
     shipments_move_all_items: tutti gli articoli sono stati spostati con successo
@@ -647,6 +651,7 @@ it:
     delivery_note: Lieferschein
     offer: Offer
     a_conto: on account
+    proforma_invoice: Proforma Invoice
   reports:
     amount: importo
     description: descrizione

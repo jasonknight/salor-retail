@@ -39,7 +39,7 @@ class OrdersController < ApplicationController
 
    
   def new_from_proforma
-    @proforma = initialize_order
+    @proforma = Order.scopied.find_by_id(params[:order_id]) #initialize_order
     @order = Order.new
     @order.attributes = @proforma.attributes
     @order.save
@@ -51,8 +51,10 @@ class OrdersController < ApplicationController
     item = Item.get_by_code("DMYACONTO")
     item.update_attribute :name, I18n.t("receipts.a_conto")
     item.make_valid
+    @order.update_attribute :paid, 0
     noi = @order.add_item(item)
     noi.price = @proforma.amount_paid * -1
+    noi.is_buyback = true
     noi.save
     @order.is_proforma = false
     @order.update_self_and_save
@@ -310,10 +312,10 @@ class OrdersController < ApplicationController
     if not @order then
       render :text => "No Order Found" and return
     end
-    @report = @order.get_report
-    text = Printr.new.sane_template('item',binding)
-    Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @cash_register.id, :content => text)
+    
     if @register.salor_printer
+      @report = @order.get_report
+      text = @order.escpos_receipt(@report)
       if params[:download] then
         send_data(text,{:filename => 'salor.bill'})
       else
@@ -321,14 +323,18 @@ class OrdersController < ApplicationController
       end
     else
       if is_mac? then
+        @report = @order.get_report
+        text = @order.escpos_receipt(@report)
         written_bytes = File.open("/tmp/" + @register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
         `lp -d #{@register.thermal_printer} /tmp/#{@register.thermal_printer}`
         print_confirmed = true if written_bytes > 0
         render :nothing => true and return
       else
-        written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+        @order.print
+        #written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       end
-      print_confirmed = true if written_bytes > 0
+      
+      #print_confirmed = true if written_bytes > 0
       render :nothing => true and return
     end
   end
@@ -419,6 +425,7 @@ class OrdersController < ApplicationController
         payment_methods_array.each {|pm| pm.save} # otherwise, we save them
       end
       if @order.is_proforma == true then
+        @order.complete
         render :js => " window.location = '/orders/#{@order.id}/print'; " and return
       end
       params[:print].nil? ? print = 'true' : print = params[:print].to_s

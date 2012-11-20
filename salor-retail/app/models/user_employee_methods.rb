@@ -509,7 +509,7 @@ module UserEmployeeMethods
           else
             paymentmethods[:refund][ptype] += p.amount
           end
-        elsif p.internal_type == 'InCash'
+        #elsif p.internal_type == 'InCash'
           #ignore those. cash will be calculated as difference between category sum and other normal payment methods
         else
           if p.amount > 0
@@ -529,9 +529,13 @@ module UserEmployeeMethods
         end
       end # end o.payment_methods
 
+      next if o.is_proforma == true # for an explanation see issue #1399
+      
       o.order_items.visible.each do |oi|
+        next if oi.sku == 'DMYACONTO'
         catname = oi.category ? oi.category.name : ''
-        taxname = oi.tax_profile.name
+        taxname = oi.tax_profile.name if oi.tax_profile
+        taxname = OrderItem.human_attribute_name(:tax_free) if oi.order.tax_free
         item_price = case oi.behavior
           when 'normal' then oi.price
           when 'gift_card' then oi.activated ? - oi.total : oi.total
@@ -603,11 +607,11 @@ module UserEmployeeMethods
 
     categories_sum[:pos][:gro] = categories[:pos].to_a.collect{|x| x[1][:gro]}.sum
     categories_sum[:pos][:net] = categories[:pos].to_a.collect{|x| x[1][:net]}.sum
-    paymentmethods[:pos]['InCash'] = categories_sum[:pos][:gro] - paymentmethods[:pos].to_a.collect{|x| x[1]}.sum
+    #XXXpaymentmethods[:pos]['InCash'] = categories_sum[:pos][:gro] - paymentmethods[:pos].to_a.collect{|x| x[1]}.sum
 
     categories_sum[:neg][:gro] = categories[:neg].to_a.collect{|x| x[1][:gro]}.sum
     categories_sum[:neg][:net] = categories[:neg].to_a.collect{|x| x[1][:net]}.sum
-    paymentmethods[:neg]['InCash'] = categories_sum[:neg][:gro] - paymentmethods[:neg].to_a.collect{|x| x[1]}.sum
+    #XXXpaymentmethods[:neg]['InCash'] = categories_sum[:neg][:gro] - paymentmethods[:neg].to_a.collect{|x| x[1]}.sum
 
     transactions = Hash.new
     transactions_sum = { :drop => 0, :payout => 0, :total => 0}
@@ -624,7 +628,14 @@ module UserEmployeeMethods
     revenue = Hash.new
     revenue[:gro] = categories[:pos].to_a.map{|x| x[1][:gro]}.sum + categories[:neg].to_a.map{|x| x[1][:gro]}.sum + refunds[:cash][:gro] + refunds[:noncash][:gro]
     revenue[:net] = categories[:pos].to_a.map{|x| x[1][:net]}.sum + categories[:neg].to_a.map{|x| x[1][:net]}.sum + refunds[:cash][:net] + refunds[:noncash][:net]
-    calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:cash][:gro] + paymentmethods[:pos]['InCash'] + paymentmethods[:neg]['InCash']
+    
+    paymentmethods[:pos][:InCash] ||= 0
+    paymentmethods[:neg][:InCash] ||= 0
+    paymentmethods[:neg][:Change] ||= 0
+    paymentmethods[:pos][:InCash] += paymentmethods[:neg][:Change]
+    paymentmethods[:neg].delete(:Change)
+    
+    calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:cash][:gro] + paymentmethods[:pos][:InCash] + paymentmethods[:neg][:InCash]
 
     report = Hash.new
     report['categories'] = categories

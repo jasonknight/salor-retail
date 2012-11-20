@@ -8,7 +8,9 @@ gn:
   activerecord:
     attributes:
       detailed_edit: xxx Detailed Edit
-      is_proforma: xxx Proforma
+      customer:
+        tax_number: Steuernummer
+      is_proforma: Proforma
       tax_free: Steuerfrei
       invoice_note:
         origin_country_id: Ursprungsland
@@ -85,6 +87,7 @@ gn:
         customs_code: Export-Code
         manufacturer_price: Herstellerpreis
         description: Beschreibung
+        weight: Gewicht
       item_sku: Artikel SKU
       itemsviewlist: Listenansicht für Artikel
       last_name: Familienname
@@ -378,6 +381,7 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    statistics: Statistik
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf
@@ -650,6 +654,7 @@ gn:
   receipts:
     invoice: Rechnung
     offer: Angebot
+    proforma_invoice: Proforma Rechnung
     delivery_note: Lieferschein
     invoice_numer_X_at_time: Rechnung Nr. %{number} am %{datetime}
     a_conto: a conto
@@ -740,8 +745,8 @@ gn:
     not_you: Nicht Sie?
     owner_mode: ADMIN MODUS
     owner_success: Administrator wurde erfolgreich aktualisiert.
-    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere,Retourgeld
+    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
     rebate_types:
       fixed: EUR
       percent: ! '%'

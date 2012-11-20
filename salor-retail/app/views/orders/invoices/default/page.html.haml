@@ -12,28 +12,34 @@
   = link_to salor_icon(:label, {}, 32, t('orders.print.labels')), "/items/selection?order_id=#{ @order.id }"
   - if @order.is_proforma
     = link_to salor_icon(:order,{},32,I18n.t("menu.new_order")),"/orders/new_from_proforma?order_id=#{@order.id}"
-  
+  %br
+  %span
+    %select{ :id=>"locale_select", :onchange=>"window.location = '?locale=' + $('#locale_select').val();"}
+      - supported_languages.each do |l|
+        %option{ :value=>"#{l[:locale]}" }= l[:name]
     
 .clear
-%div{:align=>"center"}
-  %select{ :id=>"locale_select", :onchange=>"window.location = '?locale=' + $('#locale_select').val();"}
-    - supported_languages.each do |l|
-      %option{ :value=>"#{l[:locale]}" }
-        = l[:name]
+
+      
+
 .paper-invoice.invoice_print
   = render 'orders/invoices/default/header_page_one'
   
   - if params[:delivery_note]
     %h2== #{ I18n.t("receipts.delivery_note") } #{ @order.nr }
-    %p= text_field_tag 'delivery_note_comment', @order.delivery_note_comment
+    %p= text_area_tag 'delivery_note_comment', @order.delivery_note_comment
   - else
-    - if @order.nr
+    - if @order.is_proforma
+      %h2== #{ I18n.t("receipts.proforma_invoice") } #{ @order.nr }
+    - elsif @order.paid
       %h2== #{ I18n.t("receipts.invoice") } #{ @order.nr }
     - else
-      %h2== #{ I18n.t("receipts.offer") }
+      %h2== #{ I18n.t("receipts.offer") } #{ @order.nr }
     %h3= I18n.l(@order.created_at, :format => :just_day)
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
+    
+    %p= @report[:customer][:tax_number] if @report[:customer]
   
   - item_count = @report[:list_of_items_raw].size
   
@@ -101,7 +107,7 @@
   %div.invoice_blurb_footer= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb_footer).to_html
   
   .center
-    %img.salorlogo{ :src => '/images/salor-logo-reports.png'}
+    /logo here
     
 :javascript
   $('#invoice_comment').on('change', function() {

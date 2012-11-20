@@ -5,31 +5,37 @@
     <td align="center">
       <div class='tools'>
         <div class="tool-icon">
-          <a href='orders/report_day'><img src='/images/icons/book_sun_64.png'></a><br /><span class='icon-caption'><%= I18n.t("menu.report_day") %></span>
+          <a href='orders/report_day'><img src='/images/icons/book_sun_64.png'></a><br /><span class='icon-caption'><%= t("menu.report_day") %></span>
         </div>
         <div class="tool-icon">
-          <a href='orders/order_reports'><img src='/images/icons/statistics_64.png'></a><br /><span class='icon-caption'>Stats</span>
+          <a href='orders/order_reports'><img src='/images/icons/statistics_64.png'></a><br /><span class='icon-caption'><%= t("menu.statistics") %></span>
         </div>
       </div>
     </td>
   </tr>
 </table>
 
-<table width="100%" class="stripe-me">
+<table width="80%" class="stripe-me" align='center'>
 <% @orders.each do |order| %>
   <tr>
     <td valign="top">
-      <%= order.employee_id ? order.employee.username : order.user.username %>
+      <% if order.is_proforma %>
+        <%= t('receipts.invoice.proforma_invoice') %> <%= order.nr %>
+      <% elsif order.paid %>
+        <%= t('receipts.invoice.invoice') %> <%= order.nr %>
+      <% else %>
+        <%= t('receipts.invoice.offer') %> <%= order.nr %>
+      <% end %>
     </td>
     <td valign="top">
-      <%= I18n.t("views.order_number",:id => order.nr) %>
+      <%= order.employee_id ? order.employee.username : order.user.username %>
     </td>
-    <td> <%= order.tag %></td>
+    <td width='50px'> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :salor) %></td>
     <td><%= salor_number_to_currency order.gross %></td>
-    <td><%= link_to image_tag('/images/icons/' + icon(:printer,32)), "orders/#{ order.id }/print" %></td>
-    <td><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
-    <td><%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>
+    <td width='50px' align='center'><%= link_to image_tag('/images/icons/' + icon(:document,32)), "orders/#{ order.id }/print" %></td>
+    <td width='50px' align='center'><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
+    <td width='50px' align='center'><%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>
     <!--<td><%= link_to(image_tag('/images/icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete) if not order.paid %></td>-->
   </tr>
 <% end %>

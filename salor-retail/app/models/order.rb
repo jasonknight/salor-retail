@@ -38,11 +38,7 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
   def amount_paid
-    amnt = 0
-    self.payment_methods.each do |pm|
-      amnt += pm.amount
-    end
-    return amnt
+    self.payment_methods.sum(:amount)
   end
   def nonrefunded_item_count
     self.order_items.visible.where(:refunded => false).count
@@ -497,17 +493,18 @@ class Order < ActiveRecord::Base
       update_self_and_save
       ottl = self.get_drawer_add
       if self.buy_order then
-        ottl *= -1 if ottl < 0
+        #ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
-        #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - self.total)
       elsif self.total < 0 then
-        ottl *= -1 if ottl < 0
+        #ottl *= -1 if ottl < 0
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
         $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
+        if self.change_given > 0
+          PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
+        end
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
-        #GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + ottl)
       end
       lc = self.loyalty_card
       self.lc_points = 0 if self.lc_points.nil?
@@ -541,6 +538,8 @@ class Order < ActiveRecord::Base
     end
   end
   def get_drawer_add
+    return self.payment_methods.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true
+    
     ottl = self.total
     self.payment_methods.each do |pm|
       next if pm.internal_type == 'InCash'
@@ -975,7 +974,7 @@ class Order < ActiveRecord::Base
     paymentmethods = Hash.new
     self.payment_methods.each do |pm|
       next if pm.amount.zero?
-      paymentmethods[pm.internal_type] = pm.amount
+      paymentmethods[pm.name] = pm.amount
     end
 
     list_of_taxes = ''
@@ -1020,6 +1019,7 @@ class Order < ActiveRecord::Base
       customer[:street1] = self.customer.street1
       customer[:street2] = self.customer.street2
       customer[:postalcode] = self.customer.postalcode
+      customer[:tax_number] = self.customer.tax_number
       customer[:city] = self.customer.city
       customer[:current_loyalty_points] = self.loyalty_card.points
     end
@@ -1092,5 +1092,147 @@ class Order < ActiveRecord::Base
     end
     return txt
   end
+  
+  
+  def escpos_receipt(report)
+    vendor = self.vendor
+    
+    friendly_unit = report[:unit]
+
+    vendorname =
+    "\e@"     +  # Initialize Printer
+    "\ea\x01" +  # align center
+    "\e!\x38" +  # doube tall, double wide, bold
+    vendor.name + "\n"
+
+    receiptblurb_header = ''
+    receiptblurb_header +=
+    "\e!\x01" +  # Font B
+    "\ea\x01" +  # center
+    "\n" + vendor.salor_configuration.receipt_blurb.to_s + "\n"
+    
+    header = ''
+    header +=
+    "\ea\x00" +  # align left
+    "\e!\x01" +  # Font B
+    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.created_at, :format => :iso)) + self.cash_register.name + "\n"
+
+    header += "\n\n" +
+    "\e!\x00" +  # Font A
+    "\xc4" * 42 + "\n"
+
+    list_of_items = report[:list_of_items]
+    list_of_items += "\xc4" * 42 + "\n"
+    
+    lc_points_discount = ''
+    unless report[:lc_points_discount].zero?
+      lc_points_discount += "  %19.19s        %4u %8.2f\n" % [I18n.t('printr.order_receipt.lc_points_substracted'), report[:lc_points], report[:lc_points_discount]]
+      lc_points_discount += "\xc4" * 42 + "\n"
+    end
+    
+    discount_subtotal = ''
+    unless report[:discount_subtotal].zero?
+      discount_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal1'), report[:unit], report[:subtotal1]]
+      discount_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.discount_subtotal'), report[:unit], report[:discount_subtotal]]
+      discount_subtotal += "\xc4" * 42 + "\n"
+    end
+    
+    item_rebate_subtotal = ''
+    unless report[:rebate_subtotal].zero?
+      item_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal2'), report[:unit], report[:subtotal2]]
+      item_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.rebate_subtotal'), report[:unit], report[:rebate_subtotal]]
+      item_rebate_subtotal += "\xc4" * 42 + "\n"
+    end
+    
+    coupon_subtotal = ''
+    unless report[:coupon_subtotal].zero?
+      coupon_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal3'), report[:unit], report[:subtotal3]]
+      coupon_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.coupon_subtotal'), report[:unit], report[:coupon_subtotal]]
+      coupon_subtotal += "\xc4" * 42 + "\n"
+    end
+    
+    order_rebate_subtotal = ''
+    if report[:percent_rebate_amount]
+      order_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal4'), report[:unit], report[:subtotal4]]
+      order_rebate_subtotal += "%25.25s %2i%% %s %8.2f\n" % [I18n.t('printr.order_receipt.rebate_percent'), report[:percent_rebate], report[:unit], report[:percent_rebate_amount]]
+      order_rebate_subtotal += "\xc4" * 42 + "\n"
+    elsif report[:fixed_rebate_amount]
+      order_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal4'), report[:unit], report[:subtotal4]]
+      order_rebate_subtotal += "%29.29s %s %8.2f\n" % [I18n.t('printr.order_receipt.rebate_fixed'), report[:unit], report[:fixed_rebate_amount]]
+      order_rebate_subtotal += "\xc4" * 42 + "\n"
+    end
+    
+    subsubtotal = ''
+    subsubtotal += "%29.29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subsubtotal'), report[:unit], report[:subsubtotal]]
+    
+    paymentmethods = "\n"
+    if report[:refund_subtotal].zero?
+      paymentmethods += report[:paymentmethods].to_a.collect do |pm|
+        "%29.29s %s %8.2f\n" % [pm[0], report[:unit], pm[1]]
+      end.join
+    else
+      paymentmethods += "%29.29s %s %8.2f\n" % [t('printr.order_receipt.refunded'), report[:unit], report[:refund_subtotal]]
+    end
+
+    tax_format = "\n\n" +
+    "\ea\x01" +  # align center
+    "\e!\x01" # Font A
+    tax_header = "         %5.5s     %4.4s  %6.6s\n" % [I18n.t('printr.order_receipt.net'), I18n.t('printr.order_receipt.tax'),
+ I18n.t('printr.order_receipt.gross')]
+    list_of_taxes = report[:list_of_taxes]
+ 
+    customer = ''
+    if report[:customer]
+       customer += "%s\n%s %s\n%s\n%s %s\n%s" % [report[:customer][:company_name], report[:customer][:first_name], report[:customer][:last_name], report[:customer][:street1], report[:customer][:postalcode], report[:customer][:city], report[:customer][:tax_number]]
+    end
+    
+    receiptblurb_footer = ''
+    receiptblurb_footer = 
+    "\ea\x01" +  # align center
+    "\e!\x00" + # font A
+    "\n" + vendor.salor_configuration.receipt_blurb_footer.to_s + "\n"
+
+    duplicate = self.was_printed ? " *** DUPLICATE/COPY/REPRINT *** " : ''
+
+    headerlogo = vendor.receipt_logo_header ? vendor.receipt_logo_header.encode!('ISO-8859-15') : Printr.sanitize(vendorname)
+    footerlogo = vendor.receipt_logo_footer ? vendor.receipt_logo_footer.encode!('ISO-8859-15') : ''
+
+    output = "\e@" +
+       headerlogo +
+       Printr::Printr.sanitize(receiptblurb_header +
+                       header +
+                       list_of_items +
+                       lc_points_discount +
+                       discount_subtotal +
+                       item_rebate_subtotal +
+                       coupon_subtotal +
+                       order_rebate_subtotal +
+                       subsubtotal +
+                       paymentmethods +
+                       tax_format +
+                       tax_header +
+                       list_of_taxes +
+                       customer +
+                       receiptblurb_footer +
+                       duplicate
+                      ) +
+       "\n" +
+       footerlogo +
+       "\n\n\n\n\n\n" + 
+       "\x1D\x56\x00" 
+       #"\x1DV\x00\x0C" # paper cut
+  end
+  
+  def print
+    vendor_printer = VendorPrinter.new :path => self.cash_register.thermal_printer
+    printr = Printr::Printr.new('local', vendor_printer)
+    printr.open
+    text = ""
+    text += self.escpos_receipt(self.get_report)
+    bytes_written = printr.print 0, text
+    printr.close
+    Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => text)
+  end
+  
   # {END}
 end

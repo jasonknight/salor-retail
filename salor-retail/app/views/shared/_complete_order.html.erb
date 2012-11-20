@@ -42,6 +42,7 @@ function add_payment_method() {
   //MF $("#payment_amount_" + (numMethods - 1)).val(''); // clear the input field because mostly this will be 0
   var opts = payment_method_options();
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  //sel.on('click',function(){ alert('xxx');}); // whishlist, but does't work
   //MF var sel = $('<div class="select-widget-button payment-method" internal_type="' + payment_internal_types[numMethods] + '" id="' + "payment_type_" + numMethods + '">' + payment_external_types[numMethods] + '</div>');
 
   $(sel)[0].selectedIndex = numMethods;
@@ -180,17 +181,17 @@ function complete_order_show() {
 
   setOnEnterKey(function(event) {
     if (event.keyCode == 13 && orderCompleteDisplayed) {
-      var confirmInactive = $("#confirm_complete_order_button").hasClass("button-inactive");
-      if (confirmInactive) {
-        complete_order_hide();
-      } else {
+      //var confirmInactive = $("#confirm_complete_order_button").hasClass("button-inactive");
+      //if (confirmInactive) {
+      //  complete_order_hide();
+      //} else {
         <% if $Register.no_print == true then %>
           complete_order_send(false);
         <% else %>
           complete_order_send(true);
         <% end -%>
-        focusInput($("#payment_amount_0"));
-      }
+        //focusInput($("#payment_amount_0"));
+      //}
     }
   });
 
@@ -209,7 +210,6 @@ function complete_order_show() {
   add_payment_method();
   $("#payment_amount_0").val( complete_total );
   $("#payment_amount_0").select();
-  allow_complete_order();
   display_change();
   show_denominations();
   $("#keyboard_input").attr("disabled", true);
@@ -238,15 +238,23 @@ function show_denominations() {
 }
 
 function allow_complete_order(isAllowed) {
+ //console.log('called allow_complete_order with param '+ isAllowed);
   if (isAllowed == null) isAllowed = true;
+  if (typeof(isAllowed) == 'undefined') isAllowed = true;
   //if (complete_total == 0) isAllowed = false;
   if (isAllowed || Order.is_proforma) {
-    $("#confirm_complete_order_button").removeClass("button-inactive").unbind('mousedown').mousedown(complete_order_send);
-    $("#confirm_complete_order_noprint_button").removeClass("button-inactive").unbind('mousedown').mousedown(function(){complete_order_send(false)});
+    $("#confirm_complete_order_button").removeClass("button-inactive");
+    $("#confirm_complete_order_button").unbind('mousedown');
+    $("#confirm_complete_order_button").mousedown(function(){complete_order_send(true)});
+    $("#confirm_complete_order_noprint_button").removeClass("button-inactive");
+    $("#confirm_complete_order_noprint_button").unbind('mousedown');
+    $("#confirm_complete_order_noprint_button").mousedown(function(){complete_order_send(false)});
     $("#cancel_complete_order_button").html("<%= I18n.t("helpers.submit.cancel") %>");
   } else {
-    $("#confirm_complete_order_button").addClass("button-inactive").unbind('mousedown');
-    $("#confirm_complete_order_noprint_button").addClass("button-inactive").unbind('mousedown');
+    $("#confirm_complete_order_button").addClass("button-inactive");
+    $("#confirm_complete_order_button").unbind('mousedown');
+    $("#confirm_complete_order_noprint_button").addClass("button-inactive")
+    $("#confirm_complete_order_noprint_button").unbind('mousedown');
     $("#cancel_complete_order_button").html("<%= I18n.t("menu.done") %>");
   }
 }
@@ -369,7 +377,7 @@ function get_payment_total() {
 }
 
 function display_change() {
-  //if (sendingOrder || !allow_payment_amount) return;
+  if (sendingOrder) return;
   var paymentTotal = get_payment_total();
   //if (complete_total == 0) return;
   //if (isBuyOrder) return;
@@ -386,12 +394,14 @@ function display_change() {
     get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + Order.id);
     //$('.last-completed-orders').prepend('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html() + " <br/>");
     },120);
+    //console.log('calling allow complete_order from display_change');
     allow_complete_order();
   }
   if(change > 0) { displayChangeToCustomer(); }
 }
 
 function complete_order_send(print) {
+  //console.log('called complete_order_send with param ' + print);
   if (print === false) {
     print = 'false';
   } else {
@@ -421,7 +431,7 @@ function complete_order_send(print) {
     }
   }, 'get', function() {
     sendingOrder = false;
-    allow_complete_order();
+    //allow_complete_order();
     allow_payment_amount = true;
   });
 }

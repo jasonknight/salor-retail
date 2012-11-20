@@ -1,13 +1,17 @@
 %table.striped-table2
   %tr
+    %th= Item.human_attribute_name :sku
     %th= Item.human_attribute_name :name
     %th= OrderItem.human_attribute_name :quantity
+    %th= Item.human_attribute_name :weight
     %th= Item.human_attribute_name :customs_code
     %th= Item.human_attribute_name :origin_country
   - @order.order_items.visible[item_start..item_end].each do |oi|
     %tr
+      %td= oi.sku
       %td= oi.item.name
       %td= oi.quantity
+      %td== #{ oi.item.weight } #{ oi.item.weight_metric }
       %td= oi.item.customs_code
       %td= oi.item.origin_country
       

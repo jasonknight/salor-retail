@@ -55,7 +55,7 @@ class CustomersController < ApplicationController
     
     @customer = Customer.new(params[:customer])
     @loyalty_card = LoyaltyCard.new(params[:loyalty_card])
-
+    @loyalty_card.vendor_id = $Vendor.id
     respond_to do |format|
       if @loyalty_card.save and @customer.save
         @loyalty_card.update_attribute(:customer_id,@customer.id)
@@ -112,13 +112,19 @@ class CustomersController < ApplicationController
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @customers = Customer.find_all_by_id(params[:id])
-    text = Printr.new.sane_template(params[:type],binding)
+    
+    template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}.prnt.erb")
+    erb = ERB.new(template, 0, '>')
+    text = Printr::Printr.sanitize(erb.result(binding))
     if @register.salor_printer
       render :text => text
-      #`beep -f 2000 -l 10 -r 3`
     else
       printer_path = params[:type] == 'lc_sticker' ? @register.sticker_printer : @register.thermal_printer
-      File.open(printer_path,'w:ISO-8859-15') { |f| f.write text }
+      vendor_printer = VendorPrinter.new :path => printer_path
+      printr = Printr::Printr.new('local', vendor_printer)
+      printr.open
+      printr.print 0, text
+      printr.close
       render :nothing => true
     end
   end

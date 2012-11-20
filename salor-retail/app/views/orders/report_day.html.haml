@@ -23,7 +23,7 @@
     = label 'to', t('.to')
     = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
     %br
-    %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'name_with_username', params[:employee_id])
+    %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'username', params[:employee_id])
     %br
     %br
     = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
@@ -61,7 +61,7 @@
           %th.table-center= t '.tax'
         - categories[i[0]].to_a.each do |c|
           %tr
-            %td.left= c[0].empty? ? t('.no_category') : c[0]
+            %td.left= c[0].empty? ? t('printr.eod_report.no_category') : c[0]
             %td.table-center= number_to_currency c[1][:gro]
             %td.table-center= number_to_currency c[1][:net]
             %td.table-center= number_to_currency c[1][:gro] - c[1][:net]

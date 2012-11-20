@@ -663,7 +663,7 @@ window.shared = {
         for (var attr in selection.attributes) {
           select.attr(attr,selection.attributes[attr]);
         }
-        shared.element('option',{value: ''},'N/A',select);
+        shared.element('option',{value: ''},i18n.views.single_words.choose,select);
         for (var key in selection.options) {
           var opt = shared.element('option',{value: key},selection.options[key],select);
           if (selection.value == key) {

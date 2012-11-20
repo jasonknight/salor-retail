@@ -1,0 +1,7 @@
+from = Time.now.beginning_of_day
+to= Time.now.end_of_day
+Order.where(:created_at => from..to).delete_all
+OrderItem.where(:created_at => from..to).delete_all
+PaymentMethod.where(:created_at => from..to).delete_all
+DrawerTransaction.where(:created_at => from..to).delete_all
+Drawer.find(4).update_attribute :amount, 0

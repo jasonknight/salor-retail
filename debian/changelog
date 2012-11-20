@@ -1,3 +1,78 @@
+salor-retail (4.0.0.17) unstable; urgency=low
+
+  * Closes #1454 double migration, amends #1451 desktop icon
+  * Closes #1455 Fix order report for the new Change PaymentMethod
+  * Closes #1456 Add new SalorRetail logos
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 09:02:21 +0100
+
+salor-retail (4.0.0.16) unstable; urgency=low
+
+  * Closes #1450
+  * Closes #1451 intelligently start browsers
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 07:55:30 +0100
+
+salor-retail (4.0.0.15) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * no order numbers on POS screen
+
+  [ Jason Knight ]
+  * Added new action
+  * post conflict with schema.rb
+  * Fixing broken ordering system on the js side
+  * Proforma Invoices at about 75% needs some checking and ironing out of how it will all fit together.
+  * Bug fixes and new reports template for advanced statistics
+  * Item name translations added in
+  * name translations added to invoice
+  * - added language select on invoice print page - switched invoice to show @order.amount_paid instead of report   total for proforma invoices.
+  * Closes bug #1418 sticker labels not printing
+  * Moved printr.rb to lib
+  * Altering gitignore
+  * Removing log/printr.txt
+  * fixed item labels to use translated name
+
+  [ Michael Franzl ]
+  * Closes #1419
+  * Closes #1425, #1424
+  * Closes #1426
+  * Closes #1395
+  * Closes #1359
+  * Closes #1428, #1427
+  * Closes #1429
+  * Closes #1430
+  * Closes #1432
+  * Closes #1431
+  * Closes #1433
+
+  [ Jason Knight ]
+  * Closes bug #1415 card total is NaN in some circumstances
+  * Closes bug #1399 payment amount not being focused
+  * Closes bug #1435 category and location cash_made attribute was off   due to initial nil value of that field. It has been this way since   the beginning of salor, and is now corrected.
+  * Closes bug #1434 sold quantity query was considering order_items     from non-paid orders.
+
+  [ Michael Franzl ]
+  * added more translation files
+
+  [ Jason Knight ]
+  * Closes feature #1404
+  * Closes feature #1420
+  * Closes feature #1421
+  * Closes bug #1067
+  * Closes feature #1426
+  * Closes bug 1442
+
+  [ Michael Franzl ]
+  * Closes #1447 lock Rake version
+  * Closes #1067 pressing enter on complete order popup should disable the buttons
+  * Closes #1387
+  * Improves #1393
+  * Closes #1448
+  * Closes #1412
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 19 Nov 2012 19:16:36 +0100
+
 salor-retail (4.0.0.13) unstable; urgency=low
 
   [ Jason Knight ]
