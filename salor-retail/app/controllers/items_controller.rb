@@ -245,17 +245,21 @@ class ItemsController < ApplicationController
       end
     end
 
-    text = Printr.new.sane_template("#{params[:type]}_#{params[:style]}",binding)
-
+    template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}_#{params[:style]}.prnt.erb")
+    erb = ERB.new(template, 0, '>')
+    text = Printr::Printr.sanitize(erb.result(binding))
+      
     if params[:download] == 'true'
       send_data text, :filename => '1.salor' and return
-      #render :nothing => true and return
     elsif @register.salor_printer
       render :text => text and return
-      #`beep -f 2000 -l 10 -r 3`
     else
       printer_path = params[:type] == 'sticker' ? @register.sticker_printer : @register.thermal_printer
-      File.open(printer_path,'w:ISO-8859-15') { |f| f.write text }
+      vendor_printer = VendorPrinter.new :path => printer_path
+      printr = Printr::Printr.new('local', vendor_printer)
+      printr.open
+      printr.print 0, text
+      printr.close
       render :nothing => true and return
     end
   end

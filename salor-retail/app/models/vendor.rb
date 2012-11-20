@@ -55,10 +55,14 @@ class Vendor < ActiveRecord::Base
   end
   def open_cash_drawer
     cash_register_id = $User.meta.cash_register_id
-    vendor_id = self.id
-    if cash_register_id and vendor_id
-      text = Printr.new.sane_template("drawer_transaction",binding)
-      Printr.new.direct_write($Register.thermal_printer,text)
+    cash_register = CashRegister.scopied.find_by_id cash_register_id
+    vendor_printer = VendorPrinter.new :path => cash_register.thermal_printer
+    if cash_register
+      printr = Printr::Printr.new('local', vendor_printer)
+      printr.open
+      text = "\x1B\x70\x00\x30\x01 "
+      printr.print 0, text
+      printr.close
     end
   end
 

@@ -631,6 +631,7 @@ module UserEmployeeMethods
     
     paymentmethods[:pos][:InCash] ||= 0
     paymentmethods[:neg][:InCash] ||= 0
+    paymentmethods[:neg][:Change] ||= 0
     paymentmethods[:pos][:InCash] += paymentmethods[:neg][:Change]
     paymentmethods[:neg].delete(:Change)
     

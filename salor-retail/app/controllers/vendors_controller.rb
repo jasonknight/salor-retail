@@ -181,8 +181,7 @@ class VendorsController < ApplicationController
     render :nothing => true
   end
   def render_open_cashdrawer
-    text = Printr.new.sane_template('drawer_transaction',binding)
-    render :text => text
+    render :text => "\x1B\x70\x00\x30\x01 "
   end
 
   def render_drawer_transaction_receipt
@@ -202,13 +201,15 @@ class VendorsController < ApplicationController
     if not @dt then
       render :text => "Could not find drawer_transaction" and return
     end
-    text = Printr.new.sane_template('drawer_transaction_receipt',binding)
-    Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
+    #text = Printr.new.sane_template('drawer_transaction_receipt',binding)
+    
     if @register.salor_printer
       #`beep -f 2000 -l 10 -r 3`
+      text = Printr::Printr.sanitize(@dt.escpos)
       render :text => text
     else
-      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      @dt.print
+      #File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end
@@ -231,14 +232,18 @@ class VendorsController < ApplicationController
 
     @report = UserEmployeeMethods.get_end_of_day_report(@from.beginning_of_day,@to.end_of_day,@user)
 
-    text = Printr.new.sane_template('end_of_day',binding)
+    template = File.read("#{Rails.root}/app/views/printr/end_of_day.prnt.erb")
+    erb = ERB.new(template, 0, '>')
+    text = Printr::Printr.sanitize(erb.result(binding))
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
     if @register.salor_printer
-      #`beep -f 4000`
       render :text => text
     else
-      #`beep -f 440`
-      File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+      vendor_printer = VendorPrinter.new :path => @register.thermal_printer
+      printr = Printr::Printr.new('local', vendor_printer)
+      printr.open
+      printr.print 0, text
+      printr.close
       render :nothing => true
     end
   end

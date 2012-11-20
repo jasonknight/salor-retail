@@ -41,10 +41,43 @@ class DrawerTransaction < ActiveRecord::Base
 
   def print
     if $Register.id
-      @dt = self
-      text = Printr.new.sane_template("drawer_transaction_receipt",binding)
-      Printr.new.direct_write($Register.thermal_printer,text)
+      vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
+      text = self.escpos
+      printr = Printr::Printr.new('local', vendor_printer)
+      printr.open
+      printr.print 0, Printr::Printr.sanitize(text)
+      printr.close
+      Receipt.create(:employee_id => @User.id, :cash_register_id => $Register.id, :content => text)
     end
+  end
+  
+  def escpos
+    init = 
+    "\e@"     +  # Initialize Printer
+    "\ea\x01" +  # align center
+    "\e!\x38" +
+    DrawerTransaction.model_name.human + ' ' +
+    self.id.to_s +
+    "\n\n" +
+    "\e!\x01" +
+    I18n.l(self.created_at, :format => :long) +
+    "\n\n" +
+    "\e!\x38" +
+    $User.username +
+    "\n\n" +
+    self.tag +
+    "\n\n" +
+    self.notes +
+    "\n\n" +
+    "\e!\x38" +
+    SalorBase.to_currency(self.amount) +
+    "\n\n" +
+    I18n.t(self.drop ? 'printr.word.drop' : 'printr.word.payout') +
+    "\n\n\n\n\n\n\n" +
+    "\x1D\x56\x00" +  # cut
+    "\x1B\x70\x00\x30\x01" # open cash drawer
+    
+    #GlobalData.vendor.receipt_logo_footer 
   end
   # {END}
 end
