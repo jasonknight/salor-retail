@@ -7,7 +7,7 @@
 
 module SalorScope
   def self.included(klass)
-    
+    begin
     if klass.column_names.include? 'vendor_id'
       klass.scope(:by_vendor, lambda { klass.where(:vendor_id => $User.vendor_id) if $User })
     end
@@ -80,5 +80,8 @@ module SalorScope
       end
       klass.where(conds.join(" OR "))
     })
+    rescue
+      puts "Error in SalorScope"
+    end
   end
 end

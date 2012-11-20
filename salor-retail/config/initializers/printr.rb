@@ -11,9 +11,9 @@ Printr.setup do |config|
   config.debug = false
   #config.sanitize = true
   config.encoding = 'ISO-8859-15'
-  begin
-    config.logger = File.open("log/printr.txt",'a')
-  rescue Errno::ENOENT
-    config.logger = File.open("log/printr.txt",'w+')
+  if SalorRetail::Application::SR_DEBIAN_SITEID != 'none'
+    config.logger = File.open("/var/log/salor-retail/#{ SalorRetail::Application::SR_DEBIAN_SITEID}/printr.txt",'a')
+  else
+    config.logger = File.open(File.join(Rails.root,'log','printr.txt'),'a')
   end
 end
