@@ -974,7 +974,7 @@ class Order < ActiveRecord::Base
     paymentmethods = Hash.new
     self.payment_methods.each do |pm|
       next if pm.amount.zero?
-      paymentmethods[pm.internal_type] = pm.amount
+      paymentmethods[pm.name] = pm.amount
     end
 
     list_of_taxes = ''

@@ -44,11 +44,8 @@
 
 <% if @report[:refund_subtotal].zero? %>
 <% @report[:paymentmethods].to_a.each do |pm| %>
-<%= "%9.9s %19.19s %s %8.2f\n" % [t('printr.order_receipt.given'), pm[0], @report[:unit], pm[1]] %>
+<%= "%29.29s %s %8.2f\n" % [pm[0], @report[:unit], pm[1]] %>
 <% end %>
-
-<%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.change'), @report[:unit], @report[:change_given]] %>
-<% else %>
 
 <%= "%29.29s %s %8.2f\n" % [t('printr.order_receipt.refunded'), @report[:unit], @report[:refund_subtotal]] %>
 <% end %>
