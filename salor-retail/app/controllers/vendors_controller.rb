@@ -205,7 +205,7 @@ class VendorsController < ApplicationController
     
     if @register.salor_printer
       #`beep -f 2000 -l 10 -r 3`
-      text = Printr::Printr.sanitize(@dt.escpos)
+      text = Printr.sanitize(@dt.escpos)
       render :text => text
     else
       @dt.print
@@ -234,13 +234,13 @@ class VendorsController < ApplicationController
 
     template = File.read("#{Rails.root}/app/views/printr/end_of_day.prnt.erb")
     erb = ERB.new(template, 0, '>')
-    text = Printr::Printr.sanitize(erb.result(binding))
+    text = Printr.sanitize(erb.result(binding))
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
     if @register.salor_printer
       render :text => text
     else
       vendor_printer = VendorPrinter.new :path => @register.thermal_printer
-      printr = Printr::Printr.new('local', vendor_printer)
+      printr = Printr.new('local', vendor_printer)
       printr.open
       printr.print 0, text
       printr.close

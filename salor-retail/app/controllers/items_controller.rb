@@ -247,7 +247,7 @@ class ItemsController < ApplicationController
 
     template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}_#{params[:style]}.prnt.erb")
     erb = ERB.new(template, 0, '>')
-    text = Printr::Printr.sanitize(erb.result(binding))
+    text = Printr.sanitize(erb.result(binding))
       
     if params[:download] == 'true'
       send_data text, :filename => '1.salor' and return
@@ -256,7 +256,7 @@ class ItemsController < ApplicationController
     else
       printer_path = params[:type] == 'sticker' ? @register.sticker_printer : @register.thermal_printer
       vendor_printer = VendorPrinter.new :path => printer_path
-      printr = Printr::Printr.new('local', vendor_printer)
+      printr = Printr.new('local', vendor_printer)
       printr.open
       printr.print 0, text
       printr.close
