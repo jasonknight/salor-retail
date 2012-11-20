@@ -1,3 +1,11 @@
+salor-retail (4.0.0.17) unstable; urgency=low
+
+  * Closes #1454 double migration, amends #1451 desktop icon
+  * Closes #1455 Fix order report for the new Change PaymentMethod
+  * Closes #1456 Add new SalorRetail logos
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 09:02:21 +0100
+
 salor-retail (4.0.0.16) unstable; urgency=low
 
   * Closes #1450
