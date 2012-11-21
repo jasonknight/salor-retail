@@ -203,7 +203,7 @@ class ItemsController < ApplicationController
       @items = Item.scopied.page(params[:page]).per($Conf.pagination)
     elsif params[:klass] == 'Order'
       if params[:keywords].empty? then
-        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per($CSonf.pagination)
+        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per($Conf.pagination)
       else
         @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per($Conf.pagination)
       end
@@ -247,7 +247,7 @@ class ItemsController < ApplicationController
 
     template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}_#{params[:style]}.prnt.erb")
     erb = ERB.new(template, 0, '>')
-    text = Printr::Printr.sanitize(erb.result(binding))
+    text = Printr.sanitize(erb.result(binding))
       
     if params[:download] == 'true'
       send_data text, :filename => '1.salor' and return
@@ -256,7 +256,7 @@ class ItemsController < ApplicationController
     else
       printer_path = params[:type] == 'sticker' ? @register.sticker_printer : @register.thermal_printer
       vendor_printer = VendorPrinter.new :path => printer_path
-      printr = Printr::Printr.new('local', vendor_printer)
+      printr = Printr.new('local', vendor_printer)
       printr.open
       printr.print 0, text
       printr.close
@@ -265,23 +265,17 @@ class ItemsController < ApplicationController
   end
 
   def database_distiller
-    @used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }.uniq
-    @relevant_item_ids = Item.where('quantity = 0 and quantity_sold = 0 and hidden = 0 and hidden_by_distiller = 0').collect{ |i| i.id }
-    @unused_item_ids = @relevant_item_ids - @used_item_ids
+    @all_items = Item.where(:hidden => 0).count
+    @used_item_ids = OrderItem.connection.execute('select item_id from order_items').to_a.flatten.uniq
     @hidden = Item.where('hidden = 1')
     @hidden_by_distiller = Item.where('hidden_by_distiller = 1')
-    @unused_item_ids = @relevant_item_ids - @used_item_ids
   end
 
   def distill_database
-    used_item_ids = OrderItem.all.collect{ |oi| oi.item.id }.uniq
-    relevant_item_ids = Item.where('quantity = 0 and quantity_sold = 0').collect{ |i| i.id }
-    unused_item_ids = relevant_item_ids - used_item_ids
-    unused_item_ids.each do |ui|
-      item = Item.find_by_id(ui)
-      item.update_attributes :child_id => nil, :hidden_by_distiller => true, :hidden => true, :sku => (1000 + rand(99999)).to_s[0..3] + 'OLD:' + item.sku
-    end
-    GlobalErrors << unused_item_ids.count
+    all_item_ids = Item.connection.execute('select id from items').to_a.flatten.uniq
+    used_item_ids = OrderItem.connection.execute('select item_id from order_items').to_a.flatten.uniq
+    deletion_item_ids = all_item_ids - used_item_ids
+    Item.where(:id => deletion_item_ids).update_all(:hidden => 1, :hidden_by_distiller => true, :child_id => nil, :sku => nil)
     redirect_to '/items/database_distiller'
   end
 
@@ -358,11 +352,11 @@ class ItemsController < ApplicationController
         file = get_url(GlobalData.conf.csv_imports_url + "/" + parts[0])
       end
       if parts[1].include? "dist*" then
-        uploader.send('dist'.to_sym, file.body,true) # i.e. dist* means an internal source
+        uploader.send('dist'.to_sym, parts[2], file.body,true) # i.e. dist* means an internal source
       elsif parts[1] == 'dist' then
-        uploader.send(parts[1].to_sym, file.body,false) # just dist means that it is the new salor format, but not trusted
+        uploader.send(parts[1].to_sym, parts[2], file.body,false) # just dist means that it is the new salor format, but not trusted
       else
-        uploader.send(parts[1].to_sym, file.body.split("\n")) # i.e. we dynamically call the function to process
+        uploader.send(parts[1].to_sym, parts[2], file.body.split("\n")) # i.e. we dynamically call the function to process
       end
       # this .csv file, this is set in the vendor.salor_configuration as filename.csv,type1|type2 ...
       rescue

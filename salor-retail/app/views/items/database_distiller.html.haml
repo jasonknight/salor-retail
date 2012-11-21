@@ -1,8 +1,7 @@
 = raw content_box_top(I18n.t("headings.database_distiller"))
 
+%p== #{ t('.all_item_ids') }: #{ @all_items }
 %p== #{ t('.used_item_ids') }: #{ @used_item_ids.size }
-%p== #{ t('.relevant_item_ids') }: #{ @relevant_item_ids.size }
-%p== #{ t('.unused_item_ids') }: #{ @unused_item_ids.size }
 %p== #{ t('.hidden') }: #{ @hidden.size }
 %p== #{ t('.hidden_by_distiller') }: #{ @hidden_by_distiller.size }
 

@@ -43,9 +43,9 @@ class DrawerTransaction < ActiveRecord::Base
     if $Register.id
       vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
       text = self.escpos
-      printr = Printr::Printr.new('local', vendor_printer)
+      printr = Printr.new('local', vendor_printer)
       printr.open
-      printr.print 0, Printr::Printr.sanitize(text)
+      printr.print 0, Printr.sanitize(text)
       printr.close
       Receipt.create(:employee_id => @User.id, :cash_register_id => $Register.id, :content => text)
     end

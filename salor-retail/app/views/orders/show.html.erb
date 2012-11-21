@@ -1,13 +1,10 @@
 <%= raw content_box_top(t("views.order_heading", :store => @order.vendor.name, :id => @order.id)) %>
      
-      <table id="order_items_table" width="50%" align=center class="ui-corner-all ui-widget ui-content stripe-me">
+      <table id="order_items_table" width="80%" align=center class="ui-corner-all ui-widget ui-content stripe-me">
         <tr>
           <th><%= t("activerecord.attributes.name") %></th>
           <th><%= I18n.t("activerecord.attributes.sku") %></th>
           <th><%= t("activerecord.attributes.quantity") %></th>
-          <th><%= t("activerecord.attributes.price") %></th>
-          <th><%= t("activerecord.attributes.coupon_total") %></th>
-          <th><%= t("activerecord.attributes.total") %></th>
         </tr>
         <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
         <tr>

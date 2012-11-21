@@ -42,16 +42,6 @@
             
             <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='quantity' data_type='Float' id='in_place_edit_quantity_#{oi.id}'"  %>
             <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
-            
-            <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='price' data_type='Float' id='in_place_edit_price_#{oi.id}'"  %>
-            <td align="right" class="order-item-price editme" <%= opts %>><%= salor_number_to_currency(price) %></td>
-            
-            <td align="right" class="order-item-coupon-total "><%= salor_number_to_currency(oi.coupon_amount) %></td>
-                        
-            <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='total' data_type='Float' id='in_place_edit_total_#{oi.id}'"  %>
-            <td align="right">
-              <span class="order-item-total"><%= salor_number_to_currency(total) %></span>
-            </td>
         </tr>
         
       <% end %>

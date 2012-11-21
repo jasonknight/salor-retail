@@ -59,7 +59,7 @@ class Vendor < ActiveRecord::Base
     cash_register = CashRegister.scopied.find_by_id cash_register_id
     vendor_printer = VendorPrinter.new :path => cash_register.thermal_printer
     if cash_register
-      printr = Printr::Printr.new('local', vendor_printer)
+      printr = Printr.new('local', vendor_printer)
       printr.open
       text = "\x1B\x70\x00\x30\x01 "
       printr.print 0, text
@@ -68,11 +68,19 @@ class Vendor < ActiveRecord::Base
   end
 
   def receipt_logo_header=(data)
-    write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s 
+    if data.nil?
+      write_attribute :receipt_logo_header, nil
+    else
+      write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s
+    end
   end
 
   def receipt_logo_footer=(data)
-    write_attribute :receipt_logo_footer, Escper::Image.new(data.read, :blob).to_s 
+    if data.nil?
+      write_attribute :receipt_logo_footer, nil
+    else
+      write_attribute :receipt_logo_footer, Escper::Image.new(data.read, :blob).to_s 
+    end
   end
 
   def logo=(data)

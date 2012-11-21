@@ -167,5 +167,4 @@ class Printr
       end
     end
   end
-  
 end

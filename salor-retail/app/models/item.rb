@@ -437,33 +437,38 @@ class Item < ActiveRecord::Base
   # Reorder recommendation csvs
   
   def self.recommend_reorder(type)
-    shipper = Shipper.find_by_reorder_type(type)
-    items = Item.where("quantity < min_quantity AND ignore_qty = 0 AND shipper_id = #{shipper.id}")
+    shippers = Shipper.scopied.find_all_by_reorder_type(type)
+    shippers << nil if type == 'default_export'
+    items = Item.scopied.visible.where("quantity < min_quantity AND ignore_qty = 0").where(:shipper_id => shippers)
     if not items.any? then
       return nil 
     end
-    # Now we need to create a shipment
-    s = Shipment.new({
-        :name => I18n.t("activerecord.models.shipment.default_name") + " - " + I18n.l(Time.now,:format => :salor),
-        :price => items.each.inject(0) {|x,i| x += i.purchase_price},
-        :receiver_id => GlobalData.salor_user.meta.vendor_id,
-        :receiver_type => 'Vendor',
-        :shipper => s,
-        :shipment_type => ShipmentType.scopied.first
-    })
-    s.save
-    items.each do |item|
-      si = ShipmentItem.new({
-          :name => item.name,
-          :base_price => item.base_price,
-          :category_id => item.category_id,
-          :location_id => item.location_id,
-          :item_type_id => item.item_type_id,
-          :shipment_id => s.id,
-          :sku => item.sku,
-          :quantity => item.min_quantity - item.quantity
+    unless type == 'default_export'
+      # Now we need to create a shipment
+      shipment = Shipment.new({
+          :name => I18n.t("activerecord.models.shipment.default_name") + " - " + I18n.l(Time.now,:format => :salor),
+          :price => items.sum(:purchase_price),
+          :receiver_id => $Vendor.id,
+          :receiver_type => 'Vendor',
+          :shipper_id => shippers.first.id,
+          :shipment_type => ShipmentType.scopied.first,
+          :shipper_type => 'Shipper'
       })
-      si.save
+      shipment.save
+      items.each do |item|
+        si = ShipmentItem.new({
+            :name => item.name,
+            :base_price => item.base_price,
+            :category_id => item.category_id,
+            :location_id => item.location_id,
+            :item_type_id => item.item_type_id,
+            :shipment_id => shipment.id,
+            :sku => item.sku,
+            :quantity => item.min_quantity - item.quantity,
+            :vendor_id => $Vendor.id
+        })
+        si.save
+      end
     end
     return Item.send(type.to_sym,items)
   end
@@ -478,7 +483,7 @@ class Item < ActiveRecord::Base
   def self.default_export(items)
     lines = []
     items.each do |item|
-      lines << "%s\t%s\t%d\t%f" % [item.name,item.sku.to_i,(item.min_quantity - item.quantity).to_i,item.base_price] 
+      lines << "%s\t%s\t%d\t%f" % [item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
     end
     return lines.join("\n")
   end

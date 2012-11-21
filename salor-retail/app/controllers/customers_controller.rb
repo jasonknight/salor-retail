@@ -115,13 +115,13 @@ class CustomersController < ApplicationController
     
     template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}.prnt.erb")
     erb = ERB.new(template, 0, '>')
-    text = Printr::Printr.sanitize(erb.result(binding))
+    text = Printr.sanitize(erb.result(binding))
     if @register.salor_printer
       render :text => text
     else
       printer_path = params[:type] == 'lc_sticker' ? @register.sticker_printer : @register.thermal_printer
       vendor_printer = VendorPrinter.new :path => printer_path
-      printr = Printr::Printr.new('local', vendor_printer)
+      printr = Printr.new('local', vendor_printer)
       printr.open
       printr.print 0, text
       printr.close

@@ -366,6 +366,7 @@ function detailedOrderItemMenu(event) {
     $.get('/orders/delete_order_item?id=' + item.id);
     title.remove();
     config.remove();
+    $('#order_item_' + item.id).remove();
     focusInput($('#keyboard_input'));
   });
   title.append(dicon);
@@ -424,6 +425,7 @@ function orderItemNameOption(append_to,item_id,initvalue) {
     var value = $(id).val();
     var string = '/vendors/edit_field_on_child?id='+ item_id +'&klass=Item&field=name&value=' + value;
     $.get(string,  function () {
+      $('div[model_id=' + item_id + ']').html(value);
       update_pos_display();
     });
   };

@@ -1199,7 +1199,7 @@ class Order < ActiveRecord::Base
 
     output = "\e@" +
        headerlogo +
-       Printr::Printr.sanitize(receiptblurb_header +
+       Printr.sanitize(receiptblurb_header +
                        header +
                        list_of_items +
                        lc_points_discount +
@@ -1225,8 +1225,9 @@ class Order < ActiveRecord::Base
   
   def print
     vendor_printer = VendorPrinter.new :path => self.cash_register.thermal_printer
-    printr = Printr::Printr.new('local', vendor_printer)
+    printr = Printr.new('local', vendor_printer)
     printr.open
+    
     text = ""
     text += self.escpos_receipt(self.get_report)
     bytes_written = printr.print 0, text
