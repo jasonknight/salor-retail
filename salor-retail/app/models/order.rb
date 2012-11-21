@@ -1171,7 +1171,7 @@ class Order < ActiveRecord::Base
         "%29.29s %s %8.2f\n" % [pm[0], report[:unit], pm[1]]
       end.join
     else
-      paymentmethods += "%29.29s %s %8.2f\n" % [t('printr.order_receipt.refunded'), report[:unit], report[:refund_subtotal]]
+      paymentmethods += "%29.29s %s %8.2f\n" % [I18n.t('printr.order_receipt.refunded'), report[:unit], report[:refund_subtotal]]
     end
 
     tax_format = "\n\n" +
@@ -1227,6 +1227,7 @@ class Order < ActiveRecord::Base
     vendor_printer = VendorPrinter.new :path => self.cash_register.thermal_printer
     printr = Printr.new('local', vendor_printer)
     printr.open
+    
     text = ""
     text += self.escpos_receipt(self.get_report)
     bytes_written = printr.print 0, text

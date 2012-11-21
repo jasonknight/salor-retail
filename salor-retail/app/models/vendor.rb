@@ -67,11 +67,19 @@ class Vendor < ActiveRecord::Base
   end
 
   def receipt_logo_header=(data)
-    write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s 
+    if data.nil?
+      write_attribute :receipt_logo_header, nil
+    else
+      write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s
+    end
   end
 
   def receipt_logo_footer=(data)
-    write_attribute :receipt_logo_footer, Escper::Image.new(data.read, :blob).to_s 
+    if data.nil?
+      write_attribute :receipt_logo_footer, nil
+    else
+      write_attribute :receipt_logo_footer, Escper::Image.new(data.read, :blob).to_s 
+    end
   end
 
   def logo=(data)
