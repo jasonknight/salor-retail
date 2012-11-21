@@ -573,11 +573,47 @@ class OrdersController < ApplicationController
     @from = f
     @to = t
     params[:limit] ||= 15
-    @items = Item.scopied.where(:updated_at => @from..@to).where("sku NOT LIKE 'DMY%'").limit(params[:limit] ).order('quantity_sold desc')
-    @categories_by_cash_made = Category.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order("cash_made desc")
-    @categories_by_quantity_sold = Category.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order('quantity_sold desc')
-    @locations_by_cash_made = Location.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order("cash_made desc")
-    @locations_by_quantity_sold = Location.scopied.where(:updated_at => @from..@to).limit(params[:limit] ).order('quantity_sold desc')
+    @limit = params[:limit].to_i - 1
+    
+    
+    @orders = Order.scopied.where({:paid => 1, :created_at => @from..@to})
+    
+    @reports = {
+        :items => {},
+        :categories => {},
+        :locations => {}
+    }
+    @orders.each do |o|
+      o.order_items.visible.each do |oi|
+        key = oi.item.name + " (#{oi.price})"
+        cat_key = oi.get_category_name
+        loc_key = oi.get_location_name
+        
+        @reports[:items][key] ||= {:sku => '', :quantity_sold => 0.0, :cash_made => 0.0 }
+        @reports[:items][key][:quantity_sold] += oi.quantity
+        @reports[:items][key][:cash_made] += oi.total
+        @reports[:items][key][:sku] = oi.sku
+        
+        @reports[:categories][cat_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
+        
+        @reports[:categories][cat_key][:quantity_sold] += oi.quantity
+        @reports[:categories][cat_key][:cash_made] += oi.total
+        
+        @reports[:locations][loc_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
+        
+        @reports[:locations][loc_key][:quantity_sold] += oi.quantity
+        @reports[:locations][loc_key][:cash_made] += oi.total
+      end
+    end
+    
+    
+    
+    @categories_by_cash_made = @reports[:categories].sort_by { |k,v| v[:cash_made] }
+    @categories_by_quantity_sold = @reports[:categories].sort_by { |k,v| v[:quantity_sold] }
+    @locations_by_cash_made = @reports[:locations].sort_by { |k,v| v[:cash_made] }
+    @locations_by_quantity_sold = @reports[:locations].sort_by { |k,v| v[:quantity_sold] }
+    @items = @reports[:items].sort_by { |k,v| v[:quantity_sold] }
+    
     view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     view ||= 'default'
     render "orders/reports/#{view}/page"

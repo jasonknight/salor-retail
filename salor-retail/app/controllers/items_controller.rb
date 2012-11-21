@@ -200,15 +200,15 @@ class ItemsController < ApplicationController
     @customers = []
     @orders = []
     if params[:klass] == 'Item' then
-      @items = Item.scopied.page(params[:page]).per(GlobalData.conf.pagination)
+      @items = Item.scopied.page(params[:page]).per($Conf.pagination)
     elsif params[:klass] == 'Order'
       if params[:keywords].empty? then
-        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per(GlobalData.conf.pagination)
+        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per($CSonf.pagination)
       else
-        @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per(GlobalData.conf.pagination)
+        @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per($Conf.pagination)
       end
     else
-      @customers = Customer.scopied.page(params[:page]).per(GlobalData.conf.pagination)
+      @customers = Customer.scopied.page(params[:page]).per($Conf.pagination)
     end
   end
   def item_json

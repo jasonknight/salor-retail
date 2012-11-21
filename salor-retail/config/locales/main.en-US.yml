@@ -7,6 +7,7 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      detailed_edit: Detailed Edit?
       customer:
         tax_number: Tax number
       is_proforma: Proforma?
@@ -383,7 +384,7 @@ en-US:
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
-    additional: additional
+    additional: Additional
     back: back
     broken_items: broken items
     buttons: buttons

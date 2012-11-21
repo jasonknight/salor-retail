@@ -79,6 +79,10 @@ function makeItemMenu(item) {
 
     e.unbind();
     e.mousedown(function (event) {
+        if (Register.detailed_edit == true) {
+          detailedOrderItemMenu(event);
+          return;
+        }
         $('.item-menu-div').remove();
         var menu = $("<div class='item-menu-div'></div>");
         $('body').append(menu);
@@ -131,7 +135,7 @@ function makeItemMenu(item) {
         }).mouseup(function () {
           focusInput($('#keyboard_input'));
         });
-    menu.append(btn);
+        menu.append(btn);
     });
 
   } catch (err) {
@@ -238,11 +242,11 @@ window.showOrderOptions = function () {
   // end Rebate
   
   // TaxFree
-  callbacks = {change: function () {
+  var callbacks = {change: function () {
       get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
     }
   };
-  options = {
+  var options = {
     name: 'tax_free',
     title: i18n.activerecord.attributes.tax_free,
     value: Order.tax_free,
@@ -252,13 +256,13 @@ window.showOrderOptions = function () {
   // end TaxFree
   
   // Proforma
-  options = {
+  var options = {
     name: 'is_proforma',
     title: i18n.activerecord.attributes.is_proforma,
     value: Order.is_proforma,
     append_to: dialog
   };
-  callbacks = {change: function () {
+  var callbacks = {change: function () {
     get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
     }
   };
@@ -266,7 +270,7 @@ window.showOrderOptions = function () {
   // end Proforma
   
   // salestype and countries
-  options = {
+  var options = {
     name: 'sales_type_and_countries',
     title: i18n.menu.additional,
     append_to: dialog,
@@ -341,4 +345,104 @@ window.showOrderOptions = function () {
   shared.helpers.expand(dialog,0.60,'vertical');
   shared.helpers.center(dialog);
   dialog.show();
+}
+function detailedOrderItemMenu(event) {
+  $('.item-menu-div').remove();
+  var target = $(event.currentTarget).parent();
+  item = _get('item',target);
+  var offset = $(event.currentTarget).offset();
+  var title = shared.element('div',{id: 'order_item_edit_name', class:'salor-dialog'},'',$('body'));
+  title.offset(offset);
+  title.css({padding: '3px',width: $(event.currentTarget).outerWidth() - 8, height: $(event.currentTarget).outerHeight(), 'border-bottom': 'none'});
+  config = shared.element('div',{id: 'order_item_edit_config', class: 'salor-dialog'},'',$('body'));
+  config.offset({top: offset.top + $(event.currentTarget).outerHeight() + 5, left: offset.left});
+  config.css({width: $('#header').width() - 160, 'border-top':'none', 'min-height': '100px'});
+  
+  var name = orderItemNameOption(config,target.attr('item_id'),event.currentTarget.textContent);
+  name.find('input').css({width: $('#header').width() * 0.50});
+  
+  var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete_32.png" /></div>');
+  dicon.mousedown(function () {
+    $.get('/orders/delete_order_item?id=' + item.id);
+    title.remove();
+    config.remove();
+    focusInput($('#keyboard_input'));
+  });
+  title.append(dicon);
+  
+  var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/money_32.png" /></div>');
+  buyback.addClass('pointer');
+  buyback.mousedown(function () {
+    var string = '/vendors/toggle?model_id=' +
+    item.id +'&klass=OrderItem' +
+    '&field=toggle_buyback'+
+    '&value=undefined';
+    $.get(string);
+    focusInput($('#keyboard_input'));
+  }).mouseup(function () {
+    focusInput($('#keyboard_input'));
+  });
+  title.append(buyback);
+  
+  if (!Register.scale == '') {
+    var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/weight_32.png" /></div>');
+    wicon.mousedown(function () {
+      var string = '/vendors/edit_field_on_child?id=' +
+      item.id +'&klass=OrderItem' +
+      '&field=quantity'+
+      '&value=' + Register.scale;
+      $.get(string);
+      focusInput($('#keyboard_input'));
+    }).mouseup(function () {
+      focusInput($('#keyboard_input'));
+    });
+    title.append(wicon);
+  } // end  if (!Register.scale == '') {
+    
+    var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/tick_32.png" /></div>');
+    btn.mousedown(function () {
+      title.remove();
+      config.remove();
+      focusInput($('#keyboard_input'));
+    }).mouseup(function () {
+      focusInput($('#keyboard_input'));
+    });
+    title.append(btn);
+    
+    shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item,config);
+    
+    var config_table = shared.element('table',{id: 'order_item_edit_table'},'',config);
+    var config_table_rows = [ shared.element('tr',{id: 'order_item_edit_table_row_1'},'',config_table) ];
+    
+    var config_table_cols_left = [ shared.element('td',{id: 'order_item_edit_table_lcol_1'},'',config_table_rows[0]) ];
+    var config_table_cols_right = [ shared.element('td',{id: 'order_item_edit_table_rcol_1'},'',config_table_rows[0]) ];
+}
+
+function orderItemNameOption(append_to,item_id,initvalue) {
+  var save_edit = function () {
+    var id = '#option_order_item_name_input';
+    var value = $(id).val();
+    var string = '/vendors/edit_field_on_child?id='+ item_id +'&klass=Item&field=name&value=' + value;
+    $.get(string,  function () {
+      update_pos_display();
+    });
+  };
+  var callbacks = {
+    click: save_edit,
+    focus: function () {
+      var inp = $(this);
+      setTimeout(function () {
+        inp.select();
+      }, 170);
+    },
+    blur: save_edit
+  };
+  var options = {
+    name: 'order_item_name',
+    title: i18n.activerecord.attributes.name,
+    value: initvalue,
+    append_to: append_to
+  };
+  var opt = shared.draw.option(options,callbacks);
+  return $(opt);
 }

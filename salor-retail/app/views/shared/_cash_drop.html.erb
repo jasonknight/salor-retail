@@ -17,7 +17,7 @@ function selectTransButton() {
 }
 
 function checkDropAmount() {
-  $(this).val(toFloat($(this).val(), true));
+  //$(this).val(toFloat($(this).val(), true));
   //checkContinueActive();
 }
 
@@ -40,7 +40,7 @@ function show_cash_drop() {
   setTimeout( function () {
     make_keyboardable($('.cash-drop-amount'));
     make_keyboardable($('#cash-drop-notes-id'));
-    
+    $('.cash-drop-amount').select();
   },150);
 
   setOnEnterKey(function(){

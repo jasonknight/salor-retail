@@ -203,9 +203,9 @@ class Item < ActiveRecord::Base
   end
   def self.get_by_code(code)
     # Let's see if they entered a price
-    pm = code.match(/(\d{1,5}[\.\,]\d{1,2})/)
+    pm = code.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1] then
-      i = Item.scopied.where("sku LIKE 'DMY%' and base_price = #{code}") 
+      i = Item.scopied.where("sku LIKE 'DMY%' and base_price = #{SalorBase.string_to_float(code)}") 
       if i.empty? then
         i = Item.scopied.find_or_create_by_sku("DMY" + GlobalData.salor_user.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
         i.base_price = code

@@ -4,7 +4,6 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-
 class User < ActiveRecord::Base
 	include SalorScope
 	include SalorBase
@@ -29,6 +28,10 @@ class User < ActiveRecord::Base
   has_many :drawer_transactions, :as => :owner
   has_many :shippers
   has_many :shipments
+  # Trying to define the generate_password in user_employee methods was throwing errors.
+  def self.generate_password(string)
+    return Digest::SHA2.hexdigest("#{string}")
+  end
   def vendor
     return vendors.first
   end
