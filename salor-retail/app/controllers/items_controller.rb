@@ -203,7 +203,7 @@ class ItemsController < ApplicationController
       @items = Item.scopied.page(params[:page]).per($Conf.pagination)
     elsif params[:klass] == 'Order'
       if params[:keywords].empty? then
-        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per($CSonf.pagination)
+        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per($Conf.pagination)
       else
         @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per($Conf.pagination)
       end
