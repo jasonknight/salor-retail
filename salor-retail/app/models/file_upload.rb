@@ -8,7 +8,12 @@
 
 class FileUpload
   # {START}
-  def type1(file_lines) #danczek_tobaccoland_plattner_moosmayr
+  def type1(shipper_name, file_lines) #danczek_tobaccoland_plattner_moosmayr
+    shipper = Shipper.find_by_name(shipper_name)
+    if shipper.nil?
+      shipper = Shipper.create(:name => shipper_name, :vendor_id => $Vendor.id)
+    end
+    shipper_id = shipper ? shipper.id : nil
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
     if file_lines.first.include? '#' then
      delim = '#'
@@ -69,7 +74,7 @@ class FileUpload
       category_id = category.id
 
       # carton
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
       sku_carton = columns[8].strip
       carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
       carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
@@ -91,7 +96,7 @@ class FileUpload
       end
 
       # pack
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
       sku_pack = columns[9].strip
       pack_item = Item.where( :name => name + " Packung", :hidden => false).first
       pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
@@ -116,7 +121,7 @@ class FileUpload
       end
 
       # piece
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
       sku_piece = columns[19].strip if columns[19]
       piece_item = Item.where( :name => name + " Stk.", :hidden => false).first
       piece_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
@@ -144,7 +149,13 @@ class FileUpload
   end
 
   #
-  def type2(file_lines) #house of smoke, dios
+  def type2(shipper_name, file_lines) #house of smoke, dios
+    shipper = Shipper.find_by_name(shipper_name)
+    if shipper.nil?
+      shipper = Shipper.create(:name => shipper_name, :vendor_id => $Vendor.id)
+    end
+    shipper_id = shipper ? shipper.id : nil
+    
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
     if file_lines[0].include?('#') or file_lines[1].include?('#') then
      delim = '#'
@@ -209,7 +220,7 @@ class FileUpload
       category_id = category.id
 
       # carton
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
       sku_carton = columns[8].strip
       carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
       carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
@@ -229,7 +240,7 @@ class FileUpload
       end
 
       # pack
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
       sku_pack = columns[9].strip
       pack_item = Item.where( :name => name + " Packung", :hidden => false ).first
       pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
@@ -252,7 +263,7 @@ class FileUpload
       end
 
       # piece
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id }
+      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
       sku_piece = columns[19].strip if columns[19]
       piece_item = Item.where( :name => name + " Stk.", :hidden => false ).first
       carton_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed

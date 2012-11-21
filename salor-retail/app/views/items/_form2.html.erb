@@ -306,7 +306,7 @@ $(function () {
   
   <tr>
     <td> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
-    <td> <%= f.select :shipper_id, Shipper.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',0]) %> </td>
+    <td> <%= f.select :shipper_id, Shipper.scopied.collect {|t| [t.name,t.id]}.unshift(['NA','']) %> </td>
   </tr>
   
   <tr>
