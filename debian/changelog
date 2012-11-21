@@ -1,3 +1,19 @@
+salor-retail (4.0.0.20) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes bug #1389,#1404
+  * Closes bug #1453
+  * Convert Customers Form to New Style
+  * Closes bug #1459
+  * Closes bug #1460
+
+  [ Michael Franzl ]
+  * Closes #1458 Deletion of OrderItem doesn't remove it from screen immediately
+  * Closes #1460 POS search popup: Modify search by Order attribute nr instead of id
+  * Closes #1470 Reorder system
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 21 Nov 2012 14:15:24 +0100
+
 salor-retail (4.0.0.19) unstable; urgency=low
 
   * build

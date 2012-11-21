@@ -171,6 +171,7 @@ ru:
       is_proforma: Proforma?
       customer:
         tax_number: Tax number
+      detailed_edit: Detailed Edit?
     models:
       action:
         one: Действие
