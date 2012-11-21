@@ -7,6 +7,8 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      lang: xxx Language
+      is_header: xxx Header?
       detailed_edit: xxx Detailed Edit
       customer:
         tax_number: Steuernummer
@@ -381,6 +383,9 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    invoice_blurbs: xxx Invoice Blurbs
+    edit_invoice_blurb: xxx Edit Invoice Blurb
+    new_invoice_blurb: xxx New Invoice Blurb
     statistics: Statistik
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
@@ -759,6 +764,7 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
   views:
+    listing_invoice_blurbs: xxx Listing Invoice Blurbs
     create_new_item: NEUEN ARTIKEL ANLEGEN
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

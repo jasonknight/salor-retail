@@ -31,6 +31,7 @@ class Vendor < ActiveRecord::Base
 	has_many :shipment_items, :through => :shipments
   has_many :tax_profiles
   has_many :shipment_types
+  has_many :invoice_blurbs
   serialize :unused_order_numbers
 	
   

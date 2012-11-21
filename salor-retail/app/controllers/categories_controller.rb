@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
   cache_sweeper :category_sweeper, :only => [:create, :update, :destroy]
   
   def index
-    @categories = GlobalData.salor_user.get_categories(params[:page])
+    @categories = $User.get_categories(params[:page])
     
     respond_to do |format|
       format.html # index.html.erb
@@ -37,7 +37,7 @@ class CategoriesController < ApplicationController
   end
 
   def edit
-    @category = GlobalData.salor_user.get_category(params[:id])
+    @category = $User.get_category(params[:id])
     add_breadcrumb @category.name,'edit_category_path(@category)'
   end
 
@@ -57,7 +57,7 @@ class CategoriesController < ApplicationController
   end
 
   def update
-    @category = GlobalData.salor_user.get_category(params[:id])
+    @category = $User.get_category(params[:id])
 
     respond_to do |format|
       if @category.update_attributes(params[:category])

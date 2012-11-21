@@ -4,7 +4,7 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-
+require "#{Rails.root}/lib/printr"
 class Order < ActiveRecord::Base
  # {START}
 	include SalorScope
@@ -1171,7 +1171,7 @@ class Order < ActiveRecord::Base
         "%29.29s %s %8.2f\n" % [pm[0], report[:unit], pm[1]]
       end.join
     else
-      paymentmethods += "%29.29s %s %8.2f\n" % [t('printr.order_receipt.refunded'), report[:unit], report[:refund_subtotal]]
+      paymentmethods += "%29.29s %s %8.2f\n" % [I18n.t('printr.order_receipt.refunded'), report[:unit], report[:refund_subtotal]]
     end
 
     tax_format = "\n\n" +

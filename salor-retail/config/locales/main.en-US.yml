@@ -7,6 +7,8 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      lang: Language
+      is_header: Header?
       detailed_edit: Detailed Edit?
       customer:
         tax_number: Tax number
@@ -380,6 +382,9 @@ en-US:
       print: Print
   label: label
   menu:
+    invoice_blurbs: Invoice Blurbs
+    edit_invoice_blurb: Edit Invoice Blurb
+    new_invoice_blurb: New Invoice Blurb
     statistics: Statistics
     actions: actions
     activate_gift_card: activate gift card
@@ -752,6 +757,7 @@ en-US:
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
   views:
+    listing_invoice_blurbs: Listing Invoice Blurbs
     create_new_item: Create New Article
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'

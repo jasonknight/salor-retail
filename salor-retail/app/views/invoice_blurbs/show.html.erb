@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Lang:</b>
+  <%= @invoice_blurb.lang %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%= @invoice_blurb.body %>
+</p>
+
+<p>
+  <b>Is header:</b>
+  <%= @invoice_blurb.is_header %>
+</p>
+
+
+<%= link_to 'Edit', edit_invoice_blurb_path(@invoice_blurb) %> |
+<%= link_to 'Back', invoice_blurbs_path %>

@@ -1,0 +1,33 @@
+<%= raw content_box_top(I18n.t('views.listing_invoice_blurbs')) %>
+<table width="80%" align="center">
+  <tr> <td> <%= link_to salor_icon(:add,{},32),new_invoice_blurb_path %></td> </tr> 
+</table>
+<table width="80%" class="stripe-me" align="center">
+    <tr>
+      <% [:lang,:is_header, '',''].each do |key| %>
+        <% if not key == '' %>
+          <th class="pointer" onclick="window.location = '?order_by=<%= key %>&page=<%= params[:page]%>';"><%= I18n.t("activerecord.attributes.#{key}") %></th>
+        <% else %>
+          <th> &nbsp;</th>
+        <% end %>
+      <% end %>
+    </tr>
+    <% @invoice_blurbs.each do |item| %>
+      <tr>
+        <td>
+          <%= link_to item.lang, invoice_blurb_path(item) %>
+        </td>
+        <td>
+          <%= item.is_header %>
+        </td>
+        <td>
+        <div onmousedown="window.location ='<%= edit_invoice_blurb_path(item)%>';" style="padding: 5px;">
+          <%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_invoice_blurb_path(item)) %>
+          </div>
+        </td>
+        <td>
+          <%= link_to(image_tag('/images/icons/' + icon(:delete,32)), item, :confirm => 'Are you sure?', :method => :delete) %>
+        </td>
+      </tr>
+    <% end %>   
+ </table>

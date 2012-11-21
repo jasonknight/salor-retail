@@ -1,0 +1,40 @@
+<%= form_for(@invoice_blurb) do |f| %>
+<table width="90%" align="center">
+  <tr>
+    <td colspan="2" align="right"> 
+      <% if @invoice_blurb.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @invoice_blurb.errors.count,:model => t("activerecord.models.invoice_blurb.one"))%></h2>
+          <ul>
+          <% @invoice_blurb.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+  
+<!--   Begin Form Fields -->
+  
+  <tr>
+    <td> <%= f.label :lang %> </td>
+    <td> <%= f.select :lang, supported_languages.collect {|v| [v[:name],v[:locale]]} %> </td>
+  </tr>
+  <tr>
+    <td> <%= f.label :body %> </td>
+    <td> <%= f.text_area :body, :class => 'keyboardable', :rows => 5 %> </td>
+  </tr>
+  <tr>
+    <td> <%= f.label :is_header %> </td>
+    <td> <%= f.check_box :is_header %> </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="right"> 
+      <div class="actions">
+          <%= f.submit I18n.t('helpers.submit.save'), :id => 'save_button' %>
+      </div>
+    </td>
+  </tr>
+</table>
+<% end %>

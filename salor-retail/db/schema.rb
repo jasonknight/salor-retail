@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121120082658) do
+ActiveRecord::Schema.define(:version => 20121121182455) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -318,6 +318,15 @@ ActiveRecord::Schema.define(:version => 20121120082658) do
     t.text     "params"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "invoice_blurbs", :force => true do |t|
+    t.string   "lang"
+    t.text     "body"
+    t.boolean  "is_header"
+    t.integer  "vendor_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "invoice_notes", :force => true do |t|
