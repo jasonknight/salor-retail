@@ -7,7 +7,7 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
-      detailed_edit: xxx Detailed Edit
+      detailed_edit: Detail Modus
       customer:
         tax_number: Steuernummer
       is_proforma: Proforma
@@ -411,7 +411,7 @@ gn:
     download: Herunterladen
     edit: Bearbeiten
     edit_sale_type: Verkaufs-Art bearbeiten
-    edit_invoice_note: Lieferschein bearbeiten
+    edit_invoice_note: Rechnungsnotiz bearbeiten
     edit_cash_register: Kasse bearbeiten
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten

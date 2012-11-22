@@ -41,7 +41,7 @@ class EmployeesController < ApplicationController
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s
       $User = user
-      History.record("employee_sign_in",user,5)
+      # History.record("employee_sign_in",user,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
       if cr = CashRegister.find_by_ip(request.ip) then
         user.get_meta.update_attribute :cash_register_id, cr.id
       end

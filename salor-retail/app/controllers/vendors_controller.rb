@@ -260,7 +260,7 @@ class VendorsController < ApplicationController
       if $User.class == User then
         $User.update_attribute :is_technician, false
       end
-      History.record("employee_sign_out",$User,5)
+      # History.record("employee_sign_out",$User,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
       session[:user_id] = nil
       session[:user_type] = nil
       cookies[:user_id] = nil
