@@ -239,8 +239,10 @@ class ItemsController < ApplicationController
       match = /(ORDER)(.*)/.match(params[:skus].split(",").first)
       if match[1] == 'ORDER'
         order_id = match[2].to_i
-        @items = Order.find_by_id(order_id).order_items.visible
+        @order_items = Order.find_by_id(order_id).order_items.visible
+        @items = []
       else
+        @order_items = []
         @items = Item.where(:sku => params[:skus].split(","))
       end
     end
