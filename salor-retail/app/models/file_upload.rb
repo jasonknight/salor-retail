@@ -85,13 +85,13 @@ class FileUpload
         carton_item.save
         updated_items += 1
       else
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         carton_item.set_model_owner
         Action.run(carton_item,:on_import)
         carton_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
         created_items += 1
       end
 
@@ -108,7 +108,6 @@ class FileUpload
         pack_item.save
         updated_items += 1
       else
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating pack item #{carton_item.name} #{carton_item.sku}"
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
@@ -117,6 +116,7 @@ class FileUpload
         pack_item.save
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}"
         created_items += 1
       end
 
@@ -133,7 +133,6 @@ class FileUpload
         piece_item.save
         updated_items += 1
       else
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating piece item #{carton_item.name} #{carton_item.sku}"
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
@@ -142,6 +141,7 @@ class FileUpload
         piece_item.save
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}"
         created_items += 1
       end
     end
@@ -231,13 +231,13 @@ class FileUpload
         carton_item.save
         updated_items += 1
       else
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}"
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         carton_item.set_model_owner
         Action.run(carton_item,:on_import)
         carton_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}"
         created_items += 1
       end
 
@@ -247,14 +247,13 @@ class FileUpload
       pack_item = Item.where( :name => name + " Packung", :hidden => false ).first
       pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating pack item #{carton_item.name} #{carton_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
         pack_item.update_attributes attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
         updated_items += 1
       else
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating pack item #{carton_item.name} #{carton_item.sku}"
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
@@ -263,6 +262,7 @@ class FileUpload
         pack_item.save
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating pack item #{pack_item.name} #{pack_item.sku}"
         created_items += 1
       end
 
@@ -272,14 +272,13 @@ class FileUpload
       piece_item = Item.where( :name => name + " Stk.", :hidden => false ).first
       carton_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating piece item #{carton_item.name} #{carton_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
         piece_item.update_attributes attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
         updated_items += 1
       else
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating piece item #{carton_item.name} #{carton_item.sku}"
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.nil? or sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
@@ -288,6 +287,7 @@ class FileUpload
         piece_item.save
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating piece item #{piece_item.name} #{piece_item.sku}"
         created_items += 1
       end
     end
