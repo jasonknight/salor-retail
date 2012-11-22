@@ -1,4 +1,6 @@
 SalorRetail::Application.routes.draw do
+  resources :invoice_blurbs
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

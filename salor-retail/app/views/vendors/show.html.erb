@@ -216,6 +216,16 @@
           </div>
         </div>
         <% end %>
+        <% if salor_user.can(:show_invoice_blurbs) %>
+        <div class="widget master" onmousedown="window.location = '<%= invoice_blurbs_path(:vendor_id => @vendor.id) %>';">
+          <div align="center">
+            <a href="<%= invoice_blurbs_path(:vendor_id => @vendor.id) %>">
+              <img src="/images/icons/<%= icon(:invoice_blurb,64) %>" /><br />
+              <%= t("menu.invoice_blurbs") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
         <% if salor_user.can(:show_reports) %>
         <div class="widget master onmousedown="window.location = '/reports?vendor_id=<%= @vendor.id %>';"">
           <div align="center">

@@ -563,6 +563,18 @@ class OrdersController < ApplicationController
     @vendor = @order.vendor
     @report = @order.get_report
     @invoice_note = InvoiceNote.scopied.where(:origin_country_id => @order.origin_country_id, :destination_country_id => @order.destination_country_id, :sale_type_id => @order.sale_type_id).first
+    if params[:locale]
+      tmp = InvoiceBlurb.where(:lang => params[:locale], :vendor_id => $User.vendor_id, :is_header => true)
+      if tmp.first then
+        @invoice_blurb_header = tmp.first.body
+      end
+      tmp = InvoiceBlurb.where(:lang => params[:locale], :vendor_id => $User.vendor_id).where('is_header IS NOT TRUE')
+      if tmp.first then
+        @invoice_blurb_footer = tmp.first.body
+      end
+    end
+    @invoice_blurb_header ||= @vendor.salor_configuration.invoice_blurb
+    @invoice_blurb_footer ||= @vendor.salor_configuration.invoice_blurb_footer
     view = SalorRetail::Application::CONFIGURATION[:invoice_style]
     view ||= 'default'
     render "orders/invoices/#{view}/page"

@@ -104,7 +104,7 @@
             
     %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
 
-  %div.invoice_blurb_footer= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb_footer).to_html
+  %div.invoice_blurb_footer= raw Kramdown::Document.new(@invoice_blurb_footer).to_html
   
   .center
     /logo here

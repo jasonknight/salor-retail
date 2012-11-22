@@ -182,7 +182,8 @@ module ApplicationHelper
       :label => 'label',
       :bubble => 'bubble',
       :buy => 'buy',
-      :globe => 'globe'
+      :globe => 'globe',
+      :invoice_blurb => 'book'
     }
     return icons[name] + '_' + size.to_s + '.png'
   end

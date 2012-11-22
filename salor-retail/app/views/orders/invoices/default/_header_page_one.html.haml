@@ -4,7 +4,7 @@
   
   .clear
   
-  .company_data.floatright= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb).to_html
+  .company_data.floatright= raw Kramdown::Document.new(@invoice_blurb_header).to_html
   
   .customer_data.floatleft
     - if @report[:customer]
