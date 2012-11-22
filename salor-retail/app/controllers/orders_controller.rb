@@ -563,12 +563,14 @@ class OrdersController < ApplicationController
     @vendor = @order.vendor
     @report = @order.get_report
     @invoice_note = InvoiceNote.scopied.where(:origin_country_id => @order.origin_country_id, :destination_country_id => @order.destination_country_id, :sale_type_id => @order.sale_type_id).first
-    if params[:locale]
-      tmp = InvoiceBlurb.where(:lang => params[:locale], :vendor_id => $User.vendor_id, :is_header => true)
+    locale = params[:locale]
+    locale ||= I18n.locale
+    if locale
+      tmp = InvoiceBlurb.where(:lang =>locale, :vendor_id => $User.vendor_id, :is_header => true)
       if tmp.first then
         @invoice_blurb_header = tmp.first.body
       end
-      tmp = InvoiceBlurb.where(:lang => params[:locale], :vendor_id => $User.vendor_id).where('is_header IS NOT TRUE')
+      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => $User.vendor_id).where('is_header IS NOT TRUE')
       if tmp.first then
         @invoice_blurb_footer = tmp.first.body
       end

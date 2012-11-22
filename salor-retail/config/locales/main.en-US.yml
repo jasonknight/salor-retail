@@ -17,8 +17,16 @@ en-US:
       order_item:
         quantity: Qty.
         tax_free: Tax Free
-      invoice_blurb: Invoice text
-      invoice_blurb_footer: Invoice text footer
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      salor_configuration:
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
       active: active
       address: address
       afield: field
@@ -121,8 +129,6 @@ en-US:
       real_quantity: real quantity
       rebate: rebate
       rebate_type: rebate type
-      receipt_blurb: Receipt header
-      receipt_blurb_footer: Receipt footer
       reorder_type: Reorder Type
       sales_metric: sales metric
       salor_printer: Print Client Side

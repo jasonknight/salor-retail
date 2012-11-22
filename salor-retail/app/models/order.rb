@@ -1105,17 +1105,37 @@ class Order < ActiveRecord::Base
     "\e!\x38" +  # doube tall, double wide, bold
     vendor.name + "\n"
 
+    locale = I18n.locale
+    if locale
+      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => $User.vendor_id, :is_header => true)
+      if tmp.first then
+        receipt_blurb_header = tmp.first.body_receipt
+      end
+      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => $User.vendor_id).where('is_header IS NOT TRUE')
+      if tmp.first then
+        receipt_blurb_footer = tmp.first.body_receipt
+      end
+    end
+    receipt_blurb_header ||= vendor.salor_configuration.receipt_blurb
+    receipt_blurb_footer ||= vendor.salor_configuration.receipt_blurb_footer
+    
     receiptblurb_header = ''
     receiptblurb_header +=
     "\e!\x01" +  # Font B
     "\ea\x01" +  # center
-    "\n" + vendor.salor_configuration.receipt_blurb.to_s + "\n"
+    "\n" + receipt_blurb_header.to_s + "\n"
+    
+    receiptblurb_footer = ''
+    receiptblurb_footer = 
+    "\ea\x01" +  # align center
+    "\e!\x00" + # font A
+    "\n" + receipt_blurb_footer.to_s + "\n"
     
     header = ''
     header +=
     "\ea\x00" +  # align left
     "\e!\x01" +  # Font B
-    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.created_at, :format => :iso)) + self.cash_register.name + "\n"
+    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.created_at, :format => :iso)) + ' ' + self.cash_register.name + "\n"
 
     header += "\n\n" +
     "\e!\x00" +  # Font A
@@ -1185,12 +1205,6 @@ class Order < ActiveRecord::Base
     if report[:customer]
        customer += "%s\n%s %s\n%s\n%s %s\n%s" % [report[:customer][:company_name], report[:customer][:first_name], report[:customer][:last_name], report[:customer][:street1], report[:customer][:postalcode], report[:customer][:city], report[:customer][:tax_number]]
     end
-    
-    receiptblurb_footer = ''
-    receiptblurb_footer = 
-    "\ea\x01" +  # align center
-    "\e!\x00" + # font A
-    "\n" + vendor.salor_configuration.receipt_blurb_footer.to_s + "\n"
 
     duplicate = self.was_printed ? " *** DUPLICATE/COPY/REPRINT *** " : ''
 

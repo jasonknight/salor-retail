@@ -166,28 +166,37 @@
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.receipt_blurb") %>
+      <%= conf.label t("activerecord.attributes.salor_configuration.receipt_blurb") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :receipt_blurb, :rows => 10, :class => "keyboardable" %>
+      <%= conf.text_area :receipt_blurb, :rows => 5, :class => "keyboardable" %>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.invoice_blurb") %>
+      <%= conf.label t("activerecord.attributes.salor_configuration.receipt_blurb_footer") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :invoice_blurb, :rows => 10, :class => "keyboardable" %>
+      <%= conf.text_area :receipt_blurb_footer, :rows => 5, :class => "keyboardable" %>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.invoice_blurb_footer") %>
+      <%= conf.label t("activerecord.attributes.salor_configuration.invoice_blurb") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :invoice_blurb_footer, :rows => 15, :class => "keyboardable" %>
+      <%= conf.text_area :invoice_blurb, :rows => 5, :class => "keyboardable" %>
+    </td>
+  </tr>
+  
+  <tr>
+    <td valign="top" class="attr">
+      <%= conf.label t("activerecord.attributes.salor_configuration.invoice_blurb_footer") %>
+    </td>
+    <td valign="top" class="value">
+      <%= conf.text_area :invoice_blurb_footer, :rows => 5, :class => "keyboardable" %>
     </td>
   </tr>
   
