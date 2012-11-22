@@ -1,3 +1,16 @@
+salor-retail (4.0.0.22) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes feature #1461
+
+  [ Michael Franzl ]
+  * Closes #1473 Do not create a History record for logging in and out
+  * Closes #1461 Translation of more model attributes, similar to the translation of Item.name
+  * Closes #1474 OrderItem sticker and label printing broken
+  * Closes #1475 Change puts to ActiveRecord::Base.logger.info for wholesaler import
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 22 Nov 2012 10:11:15 +0100
+
 salor-retail (4.0.0.21) unstable; urgency=low
 
   * Closes #1472 Image tag on transaction_tags#edit throws error
