@@ -1,3 +1,9 @@
+salor-retail (4.0.0.23) unstable; urgency=low
+
+  * build
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 22 Nov 2012 10:39:11 +0100
+
 salor-retail (4.0.0.22) unstable; urgency=low
 
   [ Jason Knight ]
