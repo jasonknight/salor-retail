@@ -47,10 +47,12 @@ case "$1" in
       for lInstance in $gOldInstances; do
         ucf --purge /etc/salor-retail/$lInstance/database.yml
         ucf --purge /etc/salor-retail/$lInstance/config.yml
+        ucf --purge /etc/salor-retail/$lInstance/Gemfile
       done
       for lInstance in $gInstances; do
         ucf --purge /etc/salor-retail/$lInstance/database.yml
         ucf --purge /etc/salor-retail/$lInstance/config.yml
+        ucf --purge /etc/salor-retail/$lInstance/Gemfile
       done
     fi
     

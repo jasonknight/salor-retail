@@ -192,7 +192,6 @@ class VendorsController < ApplicationController
     end
     @register = CashRegister.find_by_id(params[:cash_register_id])
     @vendor = @register.vendor if @register
-    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @dt = DrawerTransaction.find_by_id(params[:id])
@@ -201,15 +200,11 @@ class VendorsController < ApplicationController
     if not @dt then
       render :text => "Could not find drawer_transaction" and return
     end
-    #text = Printr.new.sane_template('drawer_transaction_receipt',binding)
     
     if @register.salor_printer
-      #`beep -f 2000 -l 10 -r 3`
-      text = Printr.sanitize(@dt.escpos)
-      render :text => text
+      render :text => Escper::Asciifier.new.process(@dt.escpos)
     else
       @dt.print
-      #File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       render :nothing => true
     end
   end

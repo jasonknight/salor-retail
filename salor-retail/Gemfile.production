@@ -12,6 +12,7 @@ gem 'sass-rails'
 gem 'coffee-rails'
 gem 'rmagick'
 gem 'uglifier'
+gem 'escper', '1.0.9'
 # The following have to be eliminated:
 gem 'therubyracer'
 gem 'acts_as_list'

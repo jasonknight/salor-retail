@@ -294,7 +294,7 @@ class OrdersController < ApplicationController
       @order.reload
     end
   end
-  # {END}
+
   def print_receipt
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
@@ -305,7 +305,6 @@ class OrdersController < ApplicationController
     if @register then
       @vendor = @register.vendor 
     end
-    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @order = Order.find_by_id(params[:order_id])
@@ -315,31 +314,29 @@ class OrdersController < ApplicationController
     
     if @register.salor_printer
       @report = @order.get_report
-      text = @order.escpos_receipt(@report)
+      contents = @order.escpos_receipt(@report)
+      output = Escper::Printer.merge_texts(contents[:text], contents[:raw_insertations])
       if params[:download] then
-        send_data(text,{:filename => 'salor.bill'})
+        send_data(output, {:filename => 'salor.bill'})
       else
-        render :text => text and return
+        render :text => output and return
       end
     else
       if is_mac? then
         @report = @order.get_report
-        text = @order.escpos_receipt(@report)
-        written_bytes = File.open("/tmp/" + @register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
+        contents = @order.escpos_receipt(@report)
+        output = Escper::Printer.merge_texts(contents[:text], contents[:raw_insertations])
+        File.open("/tmp/" + @register.thermal_printer,'wb') { |f| f.write output }
         `lp -d #{@register.thermal_printer} /tmp/#{@register.thermal_printer}`
-        print_confirmed = true if written_bytes > 0
         render :nothing => true and return
       else
         @order.print
-        #written_bytes = File.open(@register.thermal_printer,'w:ISO-8859-15') { |f| f.write text }
       end
-      
-      #print_confirmed = true if written_bytes > 0
       render :nothing => true and return
     end
   end
 
-  # just rendering the template is not enough for putting "copy/duplicate" on the receipt. so, let salor-bin and rails confirm if bytes were actually sent to a file.
+  # due to a report of a client, just rendering the template is not enough for putting "copy/duplicate" on the receipt. so, let salor-bin confirm if bytes were actually sent to a file.
   def print_confirmed
     o = Order.find_by_id params[:order_id]
     o.update_attribute :was_printed, true if o

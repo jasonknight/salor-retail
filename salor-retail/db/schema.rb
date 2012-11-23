@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121122082050) do
+ActiveRecord::Schema.define(:version => 20121123220026) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -928,6 +928,7 @@ ActiveRecord::Schema.define(:version => 20121122082050) do
     t.integer  "cash_register_id"
     t.string   "printer_type"
     t.integer  "copies",           :default => 1
+    t.integer  "codepage"
   end
 
   add_index "vendor_printers", ["cash_register_id"], :name => "index_vendor_printers_on_cash_register_id"
@@ -940,8 +941,8 @@ ActiveRecord::Schema.define(:version => 20121122082050) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "hidden",                          :default => 0
-    t.text     "receipt_logo_header"
-    t.text     "receipt_logo_footer"
+    t.binary   "receipt_logo_header"
+    t.binary   "receipt_logo_footer"
     t.string   "logo_image_content_type"
     t.binary   "logo_image"
     t.binary   "logo_invoice_image"

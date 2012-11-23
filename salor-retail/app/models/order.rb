@@ -1101,17 +1101,16 @@ class Order < ActiveRecord::Base
 
     vendorname =
     "\e@"     +  # Initialize Printer
-    "\ea\x01" +  # align center
     "\e!\x38" +  # doube tall, double wide, bold
     vendor.name + "\n"
 
     locale = I18n.locale
     if locale
-      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => $User.vendor_id, :is_header => true)
+      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => self.vendor_id, :is_header => true)
       if tmp.first then
         receipt_blurb_header = tmp.first.body_receipt
       end
-      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => $User.vendor_id).where('is_header IS NOT TRUE')
+      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => self.vendor_id).where('is_header IS NOT TRUE')
       if tmp.first then
         receipt_blurb_footer = tmp.first.body_receipt
       end
@@ -1208,45 +1207,57 @@ class Order < ActiveRecord::Base
 
     duplicate = self.was_printed ? " *** DUPLICATE/COPY/REPRINT *** " : ''
 
-    headerlogo = vendor.receipt_logo_header ? vendor.receipt_logo_header.encode!('ISO-8859-15') : Printr.sanitize(vendorname)
-    footerlogo = vendor.receipt_logo_footer ? vendor.receipt_logo_footer.encode!('ISO-8859-15') : ''
+    raw_insertations = {}
+    if vendor.receipt_logo_header
+      headerlogo = "{::escper}headerlogo{:/}"
+      raw_insertations.merge! :headerlogo => vendor.receipt_logo_header
+    else
+      headerlogo = vendorname
+    end
+    
+    if vendor.receipt_logo_footer
+      footerlogo = "{::escper}footerlogo{:/}"
+      raw_insertations.merge! :footerlogo => vendor.receipt_logo_footer
+    else
+      footerlogo = ''
+    end
 
-    output = "\e@" +
-       headerlogo +
-       Printr.sanitize(receiptblurb_header +
-                       header +
-                       list_of_items +
-                       lc_points_discount +
-                       discount_subtotal +
-                       item_rebate_subtotal +
-                       coupon_subtotal +
-                       order_rebate_subtotal +
-                       subsubtotal +
-                       paymentmethods +
-                       tax_format +
-                       tax_header +
-                       list_of_taxes +
-                       customer +
-                       receiptblurb_footer +
-                       duplicate
-                      ) +
-       "\n" +
-       footerlogo +
-       "\n\n\n\n\n\n" + 
-       "\x1D\x56\x00" 
-       #"\x1DV\x00\x0C" # paper cut
+    output_text =
+        "\e@" +
+        "\ea\x01" +  # align center
+        headerlogo +
+        receiptblurb_header +
+        header +
+        list_of_items +
+        lc_points_discount +
+        discount_subtotal +
+        item_rebate_subtotal +
+        coupon_subtotal +
+        order_rebate_subtotal +
+        subsubtotal +
+        paymentmethods +
+        tax_format +
+        tax_header +
+        list_of_taxes +
+        customer +
+        receiptblurb_footer +
+        duplicate +
+        "\n" +
+        footerlogo +
+        "\n\n\n\n\n\n" + 
+        "\x1D\x56\x00" 
+    return { :text => output_text, :raw_insertations => raw_insertations }
   end
   
   def print
     vendor_printer = VendorPrinter.new :path => self.cash_register.thermal_printer
-    printr = Printr.new('local', vendor_printer)
-    printr.open
+    print_engine = Escper::Printer.new('local', vendor_printer)
+    print_engine.open
     
-    text = ""
-    text += self.escpos_receipt(self.get_report)
-    bytes_written = printr.print 0, text
-    printr.close
-    Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => text)
+    contents = self.escpos_receipt(self.get_report)
+    bytes_written, content_written = print_engine.print(0, contents[:text], contents[:raw_insertations])
+    print_engine.close
+    Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => contents[:text])
   end
   
   # {END}
