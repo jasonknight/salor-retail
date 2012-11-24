@@ -1,3 +1,16 @@
+salor-retail (4.0.0.26) unstable; urgency=low
+
+  [ Jason Knight ]
+  * login modified
+  * Closes bug #1484
+  * removing console.log which can mess up other browsers
+
+  [ Michael Franzl ]
+  * Closes #1486, #1485
+  * Closes #1487
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 24 Nov 2012 14:47:16 +0100
+
 salor-retail (4.0.0.25) unstable; urgency=low
 
   * new escper version
