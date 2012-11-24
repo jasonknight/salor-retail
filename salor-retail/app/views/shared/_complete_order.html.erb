@@ -389,7 +389,7 @@ function display_change() {
   }
   var change = paymentTotal - ototal;
   change = Round(change,2);
-  if (change <= 0.0 && Order.total > 0) {
+  if (change < 0.0 && Order.total > 0) {
     recommend(0);
     $('#complete_order_change').html(toCurrency(0));
     allow_complete_order(false);

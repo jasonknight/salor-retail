@@ -119,35 +119,34 @@ class OrderItem < ActiveRecord::Base
         t -= t * ( self.order.rebate / 100.0 )
       end
       if self.order.rebate_type == "fixed" then
+        # Distribute the fixed rebate equally on all OrderItems of the Order. Ugly, but this needs to be done so that the report generation is correct.
         t -= self.order.rebate / self.order.order_items.visible.count
       end
     end
     if self.order and self.order.lc_discount_amount > 0
       t -= self.order.lc_discount_amount / self.order.order_items.visible.count
     end
+    if self.order.vendor.salor_configuration.calculate_tax == true
+      # net price
+      t += self.tax
+    end
+    
     if (($User.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash') then
-      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
-      return -1
+      # do not fail. let the user do what he wants.
+      #GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
+      #return -1
     end
 
     q = self.quantity
     if self.refunded then
       return false
-      # this should never happen right now since it's blocked by the orders#show view
-      #self.update_attribute(:refunded,false)
-      #update_location_category_item(t,q)
-      #opts = {:tag => I18n.t("activerecord.models.drawer_transaction.unrefund"),
-      #        :is_refund => true, 
-      #        :notes => I18n.t("views.notice.order_refund_dt",:id => self.order.id)
-      #}
-      #create_refund_transaction(self.total,:drop,opts) if not x.nil?
-      #self.order.update_attribute(:total, self.order.total + t)
+      # this is depreciated and should never happen right now since it's blocked by the orders#show view
     else
       self.update_attribute(:refunded,true)
       self.update_attribute(:refunded_by, $User.id)
       self.update_attribute(:refunded_by_type, $User.class.to_s)
       self.update_attribute(:refund_payment_method, refund_payment_method)
-      update_location_category_item(t * -1,q * -1)
+      update_location_category_item(t * -1, q * -1)
       self.order.update_attribute(:total, self.order.total - t)
       if refund_payment_method == 'InCash'
         if t < 0
