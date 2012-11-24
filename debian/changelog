@@ -1,3 +1,17 @@
+salor-retail (4.0.0.28) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Changed Migration Changed Item.tax_profile_name to return NoProfile when tpid notset
+  * Closes bug #1493
+  * Closes bug #1489
+  * Added Canada Localization
+  * Closes bug #1495
+
+  [ Michael Franzl ]
+  * Closes #1498 various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 24 Nov 2012 20:35:13 +0100
+
 salor-retail (4.0.0.27) unstable; urgency=low
 
   * Closes #1490 OrderItem refund sum is wrong when Vendor is configured for net prices
