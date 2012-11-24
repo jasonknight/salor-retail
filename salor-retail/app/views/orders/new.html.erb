@@ -87,12 +87,7 @@ function format_pole(name,price,quantity,weight_metric,total) {
 function updatePosItem(item) {
   
   var base_id = getOrderItemId(item);
-  try { 
-    _set('item',item,$('#order_item_' + item.id));
-  } catch (err) {
-    console.log(err);
-  }
-  console.log('got here');
+  _set('item',item,$('#order_item_' + item.id));
   //item['price'] = item['price'] - item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   if (Register.hide_discounts) {
@@ -342,7 +337,6 @@ function updateOrderItems(obj) {
     var id = getOrderItemId(item);
     if ($('.' + id).length != 0) {
       /* Item is in list, and we need to update it */
-      console.log('item is in list');
       updatePosItem(item);
     } else {
       /* Item is not in list, we need to add it */

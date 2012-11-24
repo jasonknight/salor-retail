@@ -152,7 +152,7 @@ function _push(object) {
   var payload = null;
   var callback = null;
   var error_callback = function (jqXHR,status,err) {
-    console.log(jqXHR,status,err.get_message());
+    //console.log(jqXHR,status,err.get_message());
   };
   var user_options = {};
   var url;
@@ -162,7 +162,7 @@ function _push(object) {
         if (!payload) {
           payload = {currentview: 'push', model: {}}
           $.each(arguments[i], function (key,value) {
-            console.log(key,value);
+            //console.log(key,value);
             payload[key] = value;
           });
         } else {
@@ -303,7 +303,7 @@ function days_between_dates(from, to) {
   return days;
 }
 function _log(arg1,arg2,arg3) {
- console.log(arg1,arg2,arg3);
+ //console.log(arg1,arg2,arg3);
 }
 /* Adds a delete/X button to the element. Type options  are right and append. The default callback simply slides the element up.
  if you want special behavior on click, you can pass a closure.*/
@@ -448,7 +448,7 @@ window.shared = {
       timer = new Date();
     if (!start) {
       start = 0;
-      console.log("Compressing: ",string.length," chars");
+      //console.log("Compressing: ",string.length," chars");
     }
     for (var i = start; i < dictionary.length; i++) {
       if (dictionary[i][1] == '')
@@ -463,7 +463,7 @@ window.shared = {
         return;
       }
     }
-    console.log("Compression took: ",((new Date()) - timer) / 1000,'s');
+    //console.log("Compression took: ",((new Date()) - timer) / 1000,'s');
     callback.call({},string);
   },
   decompress: function (string,dictionary,callback,start,timer) {
@@ -486,7 +486,7 @@ window.shared = {
         return;
       }
     }
-    console.log("decompression took: ",((new Date()) - timer) / 1000,'s');
+    //console.log("decompression took: ",((new Date()) - timer) / 1000,'s');
     callback.call({},string);
   },
   math: {
@@ -494,9 +494,9 @@ window.shared = {
       s1 = parseInt(s1);
       s2 = parseInt(s2);
       needle = parseInt(needle);
-      console.log(needle,s1,s2);
+      //console.log(needle,s1,s2);
       if (needle >= s1 && needle <= s2) {
-        console.log('returning true');
+        //console.log('returning true');
         return true;
       }
       return false;
@@ -718,7 +718,7 @@ window.shared = {
       }
       var results = _get('results',elem);
       var offset = elem.offset();
-      console.log("paginating",start,page_size,results.length);
+      //console.log("paginating",start,page_size,results.length);
       var width = (elem.width() / 10);
       if (width > 35) {
         width = 35;
@@ -845,7 +845,7 @@ window.shared = {
       var position = JSON.parse(localStorage.getItem(key));
       elem.css({position: 'absolute'});
       if (!position) {
-        console.log('setting to offset');
+        //console.log('setting to offset');
         position = elem.offset();
         localStorage.setItem(key, JSON.stringify(position));
       } else {
@@ -853,7 +853,7 @@ window.shared = {
       }
       elem.draggable({
         stop: function () {
-          console.log('saving position',key,$(this).offset());
+          //console.log('saving position',key,$(this).offset());
           localStorage.setItem(key, JSON.stringify($(this).offset()));
         }
       });
@@ -872,7 +872,7 @@ window.shared = {
       this.add = function (name,callback,priority,permanent,context) {
         for (var i = 0; i < self._task_set.length; i++) {
           if (self._task_set[i].name == name) {
-            console.log('that task is already scheduled');
+            //console.log('that task is already scheduled');
             return;
           }
         }
@@ -894,7 +894,7 @@ window.shared = {
         });
       }
       this.run = function () {
-        console.log('TaskManager Runnging');
+        //console.log('TaskManager Runnging');
         var time_start = new Date();
         var times = self._task_set.length;
         for (var i = 0; i < times; i++) {
@@ -908,7 +908,7 @@ window.shared = {
         }
       }
       this.run_task = function (t) {
-        console.log('calling',t);
+        //console.log('calling',t);
         t.callback.call(t.context);
         if (t.is_permanent) {
           this._task_set.push(t);
