@@ -433,6 +433,10 @@ class OrderItem < ActiveRecord::Base
       ttl -= (ttl * (self.rebate / 100.0))
 #       puts "self.rebate: #{ttl}"
     end
+    if self.order.rebate then
+      ttl -= (ttl * (self.order.rebate / 100.0))
+      #       puts "self.rebate: #{ttl}"
+    end
 
 #     puts "ttl at this point is: #{ttl}"
 

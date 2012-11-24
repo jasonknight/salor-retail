@@ -383,9 +383,9 @@ class Order < ActiveRecord::Base
           GlobalErrors.append_fatal("system.errors.lp_calculation_failed",self)
         end
       end
-      if not self.subtotal_is_locked and not self.rebate.nil? then
-        self.subtotal -= self.calculate_rebate
-      end
+#       if not self.subtotal_is_locked and not self.rebate.nil? then
+#         self.subtotal -= self.calculate_rebate
+#       end
       #if self.subtotal < 0 then
         #self.subtotal = 0
       #end
@@ -454,7 +454,11 @@ class Order < ActiveRecord::Base
 	def calculate_rebate
 	  amnt = 0.0
 	  if self.subtotal.nil? then self.subtotal = 0 end
-    amnt = (self.subtotal * (self.rebate/100)) #if self.rebate_type == 'percent'
+    self.order_items.visible.each do |oi|
+      puts "!! Oi.total is #{oi.total}"
+      amnt += (oi.total * (self.rebate/100))
+    end
+    #amnt = (self.subtotal * (self.rebate/100)) #if self.rebate_type == 'percent'
     #amnt = self.rebate if self.rebate_type == 'fixed'
     return amnt
 	end
