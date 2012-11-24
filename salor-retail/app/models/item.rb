@@ -58,7 +58,9 @@ class Item < ActiveRecord::Base
     return values.join("\t")
   end
   def tax_profile_name
-    return self.tax_profile.name
+    n = 'NoTaxProfile'
+    return self.tax_profile.name if self.tax_profile
+    return n
   end
   def get_translated_name(locale)
     locale = locale.to_s
@@ -102,6 +104,7 @@ class Item < ActiveRecord::Base
   end
   def location_name
     return self.location.name if self.location
+    return "NoLocation"
   end
   def self.repair_items
     Item.where('child_id IS NOT NULL and child_id != 0').each do |item|

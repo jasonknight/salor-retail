@@ -4,9 +4,18 @@ var current_page = 1;
 function showSearch() {
   $('#search').show();
   $('#search').css({'z-index':'1010'});
+  $('#search_keywords').val("");
   focusInput($('#search_keywords'));
-  $('#search').height($(window).height() - 50);
-  $('.search-results').height($('#search').height() - 125);
+  var inp = $('<input type="text" id="search_keywords" name="keywords" class="keyboardable" value="" />');
+  $('.search-div-input-constrainer').html(inp);
+  make_keyboardable(inp);
+  $('#search').height($(window).height() * 0.75);
+  $('#search').width($(window).width() * 0.75);
+  $('.search-results').height($('#search').height() - 136);
+  setTimeout(function () {
+    inp.focus();
+  },120);
+  shared.helpers.center($('#search'));
 }
 function hideSearch() {
   $('#search').hide();
@@ -36,7 +45,7 @@ $(document).ready(function() {
   <tr>
     <td valign="top" width="50%">
       <div class="search-div-input-constrainer">
-        <input type="text" id="search_keywords" name="keywords" class="keyboardable" value="" />
+        
       </div>
     </td>
     <td valign="top">
