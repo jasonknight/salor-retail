@@ -19,8 +19,8 @@
 %>
 <script type="text/javascript">
 var id = 0;
-var attrs_list = [ <%= js_attrs_list.join(',') %> ];
-var attrs_list_names = [ <%= js_attrs_list_names.join(',') %> ];
+var attrs_list = [ <%= raw js_attrs_list.join(',') %> ];
+var attrs_list_names = [ <%= raw js_attrs_list_names.join(',') %> ];
 
 var create_attrs = <%= raw create_attrs.to_json %>
 var attribute_names_obj = <%= raw attribute_names.to_json %>;

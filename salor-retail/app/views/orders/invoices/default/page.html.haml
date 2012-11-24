@@ -87,20 +87,21 @@
     - else
       %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
 
-    %br
-    %br
-    %table.striped-table2.small
-      %tr
-        %th
-        %th
-        %th.right= t('printr.order_receipt.net')
-        %th.right= t('printr.order_receipt.tax')
-        %th.right= t('printr.order_receipt.gross')
-      - @report[:list_of_taxes_raw].each do |tax|
-        - tax = format_tax(tax)
+    - unless @order.tax_free
+      %br
+      %br
+      %table.striped-table2.small
         %tr
-          - tax.each do |k,v|
-            %td.total= v
+          %th
+          %th
+          %th.right= t('printr.order_receipt.net')
+          %th.right= t('printr.order_receipt.tax')
+          %th.right= t('printr.order_receipt.gross')
+        - @report[:list_of_taxes_raw].each do |tax|
+          - tax = format_tax(tax)
+          %tr
+            - tax.each do |k,v|
+              %td.total= v
             
     %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
 

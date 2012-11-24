@@ -11,6 +11,6 @@ class InvoiceNote < ActiveRecord::Base
   validates_presence_of :destination_country_id
   
   def name
-    "#{ self.origin_country.name} -> #{ self.destination_country.name}: #{ self.sale_type.name }"
+    "#{ self.origin_country.name} -> #{ self.destination_country.name}: #{ self.sale_type.name if self.sale_type }"
   end
 end
