@@ -372,7 +372,6 @@ function get_payment_total() {
           }
       }
   );
-  //if (isNaN(paymentTotal)) alert("PaymentTotal is not a number!");
   return paymentTotal;
 }
 
@@ -381,19 +380,29 @@ function display_change() {
   var paymentTotal = get_payment_total();
   //if (complete_total == 0) return;
   //if (isBuyOrder) return;
-  var change = paymentTotal - complete_total;
+  if (paymentTotal < 0) {
+    paymentTotal = paymentTotal * -1;
+  }
+  var ototal = Order.total;
+  if (ototal < 0) {
+    ototal = ototal * -1;
+  }
+  var change = paymentTotal - ototal;
   change = Round(change,2);
-  if (change < 0.0) {
+  if (change <= 0.0 && Order.total > 0) {
     recommend(0);
     $('#complete_order_change').html(toCurrency(0));
     allow_complete_order(false);
   } else {
+    if (Order.total < 0) {
+      change = Order.total * -1;
+    } 
     recommend(change);
     $('#complete_order_change').html(toCurrency(change));
     setTimeout(function () {
-    get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + Order.id);
-    //$('.last-completed-orders').prepend('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html() + " <br/>");
-    },120);
+      get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + Order.id);
+      //$('.last-completed-orders').prepend('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html() + " <br/>");
+      },120);
     //console.log('calling allow complete_order from display_change');
     allow_complete_order();
   }
