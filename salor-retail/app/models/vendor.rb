@@ -71,7 +71,7 @@ class Vendor < ActiveRecord::Base
     if data.nil?
       write_attribute :receipt_logo_header, nil
     else
-      write_attribute :receipt_logo_header, Escper::Image.new(data.read, :blob).to_s
+      write_attribute :receipt_logo_header, Escper::Img.new(data.read, :blob).to_s
     end
   end
 
@@ -79,7 +79,7 @@ class Vendor < ActiveRecord::Base
     if data.nil?
       write_attribute :receipt_logo_footer, nil
     else
-      write_attribute :receipt_logo_footer, Escper::Image.new(data.read, :blob).to_s 
+      write_attribute :receipt_logo_footer, Escper::Img.new(data.read, :blob).to_s 
     end
   end
 

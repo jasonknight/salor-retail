@@ -351,10 +351,12 @@ function detailedOrderItemMenu(event) {
   var target = $(event.currentTarget).parent();
   item = _get('item',target);
   var offset = $(event.currentTarget).offset();
-  var title = shared.element('div',{id: 'order_item_edit_name', class:'salor-dialog'},'',$('body'));
+  var title = shared.element('div',{id: 'order_item_edit_name'},'',$('body'));
+  title.addClass('salor-dialog');
   title.offset(offset);
   title.css({padding: '3px',width: $(event.currentTarget).outerWidth() - 8, height: $(event.currentTarget).outerHeight(), 'border-bottom': 'none'});
-  config = shared.element('div',{id: 'order_item_edit_config', class: 'salor-dialog'},'',$('body'));
+  config = shared.element('div',{id: 'order_item_edit_config'},'',$('body'));
+  config.addClass('salor-dialog');
   config.offset({top: offset.top + $(event.currentTarget).outerHeight() + 5, left: offset.left});
   config.css({width: $('#header').width() - 160, 'border-top':'none', 'min-height': '100px'});
   
