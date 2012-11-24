@@ -207,12 +207,12 @@ class OrdersController < ApplicationController
     end
     unless @order_item.nil? then
       unless @order_item.activated or @order_item.is_buyback then
-       
+       #raise ""
         @order_item.quantity += 1
         @order_item.save
         @order_item.order.update_self_and_save
         @order = @order_item.order
-        @order_item = @order.order_items.find(@order_item.id)
+        @order_item.reload
         render and return
       end
     end
@@ -249,23 +249,9 @@ class OrdersController < ApplicationController
       @order.update_self_and_save
     else
       unless @order_item.activated or @order_item.item.is_gs1 then
-        if $Conf.calculate_tax then
-          total = @order_item.total + @order_item.tax
-        else
-          total = @order_item.total
-        end
-#         puts "!!! total is: #{total}"
-        if @order.total.nil? or @order.total == 0.0 then
-          @order.total = 0
-          # puts  "Updating total direcly"
-          @order.connection.execute("update orders set total = #{total} where id = #{@order.id}")
-          @order.total += total
-#           puts "!!! Order total was nil or 0"
-        else
-          @order.connection.execute("update orders set total = total + #{total} where id = #{@order.id}")
-          @order.total += total
-#           puts "Order Total wasn't nil or 0"
-        end
+        @order = @order_item.order
+        @order.update_self_and_save
+        @order_item.calculate_total
       end
     end
     if @item.base_price.zero? and not @item.is_gs1 and not @item.must_change_price and not @item.default_buyback
