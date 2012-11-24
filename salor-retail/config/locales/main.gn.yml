@@ -7,9 +7,9 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
-      lang: xxx Language
-      is_header: xxx Header?
-      detailed_edit: xxx Detailed Edit
+      detailed_edit: Detail Modus
+      lang: Sprache
+      is_header: Kopf
       customer:
         tax_number: Steuernummer
       is_proforma: Proforma
@@ -23,8 +23,16 @@ gn:
       order_item:
         quantity: Menge
         tax_free: Steuerfrei
-      invoice_blurb: Rechnungstext Kopf
-      invoice_blurb_footer: Rechnungstext Fuß
+      invoice_blurb:
+        body: Rechnung
+        body_receipt: Beleg
+        is_header: Kopf
+        lang: Language
+      salor_configuration:
+        receipt_blurb: Belegtext Kopf
+        receipt_blurb_footer: Belegtext Fuß
+        invoice_blurb: Rechnungstext Kopf
+        invoice_blurb_footer: Rechnungstext Fuß
       active: aktiv
       address: Adresse
       afield: Feld
@@ -127,8 +135,6 @@ gn:
       real_quantity: Inventur
       rebate: Rabatt
       rebate_type: Rabatt-Typ
-      receipt_blurb: Belegtest Kopf
-      receipt_blurb_footer: Belegtext Fuß
       reorder_type: Reorder Type
       sales_metric: Verkaufseinheit
       salor_printer: Client-seitiges Drucken
@@ -383,9 +389,9 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
-    invoice_blurbs: xxx Invoice Blurbs
-    edit_invoice_blurb: xxx Edit Invoice Blurb
-    new_invoice_blurb: xxx New Invoice Blurb
+    invoice_blurbs: Rechnungstexte
+    edit_invoice_blurb: Rechnungstext bearbeiten
+    new_invoice_blurb: Neuer Rechnungstext
     statistics: Statistik
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
@@ -416,7 +422,7 @@ gn:
     download: Herunterladen
     edit: Bearbeiten
     edit_sale_type: Verkaufs-Art bearbeiten
-    edit_invoice_note: Lieferschein bearbeiten
+    edit_invoice_note: Rechnungsnotiz bearbeiten
     edit_cash_register: Kasse bearbeiten
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten
@@ -764,7 +770,7 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
   views:
-    listing_invoice_blurbs: xxx Listing Invoice Blurbs
+    listing_invoice_blurbs: Rechnungstexte
     create_new_item: NEUEN ARTIKEL ANLEGEN
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

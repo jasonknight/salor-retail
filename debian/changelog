@@ -1,3 +1,41 @@
+salor-retail (4.0.0.25) unstable; urgency=low
+
+  * new escper version
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 24 Nov 2012 00:52:40 +0100
+
+salor-retail (4.0.0.24) unstable; urgency=low
+
+  * Closes #1482 Merge Printr into Escper
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 23 Nov 2012 23:52:26 +0100
+
+salor-retail (4.0.0.23) unstable; urgency=low
+
+  * build
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 22 Nov 2012 10:39:11 +0100
+
+salor-retail (4.0.0.22) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes feature #1461
+
+  [ Michael Franzl ]
+  * Closes #1473 Do not create a History record for logging in and out
+  * Closes #1461 Translation of more model attributes, similar to the translation of Item.name
+  * Closes #1474 OrderItem sticker and label printing broken
+  * Closes #1475 Change puts to ActiveRecord::Base.logger.info for wholesaler import
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 22 Nov 2012 10:11:15 +0100
+
+salor-retail (4.0.0.21) unstable; urgency=low
+
+  * Closes #1472 Image tag on transaction_tags#edit throws error
+  * Closes #1469 #1468 Name change of OrderItem doesn't change it on screen immediately
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 21 Nov 2012 19:09:51 +0100
+
 salor-retail (4.0.0.20) unstable; urgency=low
 
   [ Jason Knight ]

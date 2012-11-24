@@ -27,7 +27,7 @@ gem 'rmagick'
 gem 'serialport'
 gem 'haml'
 gem 'unicode_utils'
-gem "escper"
+gem 'escper', '1.1.0'
 gem "kramdown"
 gem 'exception_notification', :require => 'exception_notifier'
 gem 'nokogiri'

@@ -1,4 +1,4 @@
-<%= "\x1B\x40" %><%= "\x1D\x68\x25" %><%= "\x1D\x48\x01" %><%= "\x1D\x77\x02" %><% @items.each do |i| %>
+<%= "\x1B\x40" %><%= "\x1D\x68\x25" %><%= "\x1D\x48\x01" %><%= "\x1D\x77\x02" %><% if @items.any? %><% @items.each do |i| %>
 <%= "\e!\x18" %><%= i.name[0..30] %>
 <% if i.weight_metric == 'GR'
      factor = 1000
@@ -23,4 +23,4 @@
 
 
 
-<%= "\x1D\x56\x00" %><% end %>
+<%= "\x1D\x56\x00" %><% end %><% end %>

@@ -79,7 +79,7 @@ class FileUpload
       carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
       carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
-        puts "Updating carton item #{carton_item.name} #{carton_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
@@ -91,7 +91,7 @@ class FileUpload
         carton_item.set_model_owner
         Action.run(carton_item,:on_import)
         carton_item.save
-        puts "Creating carton item #{carton_item.name} #{carton_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
         created_items += 1
       end
 
@@ -101,7 +101,7 @@ class FileUpload
       pack_item = Item.where( :name => name + " Packung", :hidden => false).first
       pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
-        puts "Updating pack item #{pack_item.name} #{pack_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
         pack_item.attributes = attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
@@ -116,7 +116,7 @@ class FileUpload
         pack_item.save
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
-        puts "creating pack item #{pack_item.name} #{pack_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}"
         created_items += 1
       end
 
@@ -126,7 +126,7 @@ class FileUpload
       piece_item = Item.where( :name => name + " Stk.", :hidden => false).first
       piece_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
-        puts "Updating piece item #{piece_item.name} #{piece_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
         piece_item.attributes = attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
@@ -141,7 +141,7 @@ class FileUpload
         piece_item.save
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
-        puts "Creating piece item #{piece_item.name} #{piece_item.sku}"
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}"
         created_items += 1
       end
     end
@@ -225,6 +225,7 @@ class FileUpload
       carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
       carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating carton item #{carton_item.name} #{carton_item.sku}"
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
@@ -236,6 +237,7 @@ class FileUpload
         carton_item.set_model_owner
         Action.run(carton_item,:on_import)
         carton_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}"
         created_items += 1
       end
 
@@ -245,6 +247,7 @@ class FileUpload
       pack_item = Item.where( :name => name + " Packung", :hidden => false ).first
       pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
         pack_item.update_attributes attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
@@ -259,6 +262,7 @@ class FileUpload
         pack_item.save
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
         pack_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating pack item #{pack_item.name} #{pack_item.sku}"
         created_items += 1
       end
 
@@ -268,6 +272,7 @@ class FileUpload
       piece_item = Item.where( :name => name + " Stk.", :hidden => false ).first
       carton_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
         piece_item.update_attributes attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
@@ -282,6 +287,7 @@ class FileUpload
         piece_item.save
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
         piece_item.save
+        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating piece item #{piece_item.name} #{piece_item.sku}"
         created_items += 1
       end
     end
@@ -438,11 +444,9 @@ class FileUpload
     csv = Kcsv.new(file,{:header => true})
     csv.to_a.each do |rec|
       begin
-#         puts "Beginning: #{rec.inspect}"
         kls = Kernel.const_get(rec[:class])
         rec.delete(:class)
         if kls == Item then
-#           puts "KLS is Item\n"
           begin
           tp = TaxProfile.find_or_create_by_value(rec[:tax_profile_amount])
           created_tax_profiles += 1 if tp.new_record?

@@ -15,10 +15,10 @@
     <% @invoice_blurbs.each do |item| %>
       <tr>
         <td>
-          <%= link_to item.lang, invoice_blurb_path(item) %>
+          <%= item.lang %>
         </td>
         <td>
-          <%= item.is_header %>
+          <%= item.is_header ? 'X' : '' %>
         </td>
         <td>
         <div onmousedown="window.location ='<%= edit_invoice_blurb_path(item)%>';" style="padding: 5px;">

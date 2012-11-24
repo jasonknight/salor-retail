@@ -59,11 +59,11 @@ class Vendor < ActiveRecord::Base
     cash_register = CashRegister.scopied.find_by_id cash_register_id
     vendor_printer = VendorPrinter.new :path => cash_register.thermal_printer
     if cash_register
-      printr = Printr.new('local', vendor_printer)
-      printr.open
+      print_engine = Escper::Printer.new('local', vendor_printer)
+      print_engine.open
       text = "\x1B\x70\x00\x30\x01 "
-      printr.print 0, text
-      printr.close
+      print_engine.print(0, text)
+      print_engine.close
     end
   end
 

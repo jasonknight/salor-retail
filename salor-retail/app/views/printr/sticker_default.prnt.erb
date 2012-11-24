@@ -2,9 +2,11 @@ SW200
 SS0
 SF1,150
 CS2
+<% if @items.any? %>
 <% @items.each do |i| %>
 T0,0,3,1,1,0,0,N,N,F,'<%= i.get_translated_name(I18n.locale)[0..7] %>'
 T0,30,5,1,1,0,0,N,N,F,'<%= SalorBase.number_with_precision i.base_price, :precision => 2 %>'
 B120,85,1,1,2,40,0,1,'<%= i.sku %>'
 P
+<% end %>
 <% end %>

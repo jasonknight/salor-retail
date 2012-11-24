@@ -43,10 +43,10 @@ class DrawerTransaction < ActiveRecord::Base
     if $Register.id
       vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
       text = self.escpos
-      printr = Printr.new('local', vendor_printer)
-      printr.open
-      printr.print 0, Printr.sanitize(text)
-      printr.close
+      print_engine = Escper::Printer.new('local', vendor_printer)
+      print_engine.open
+      print_engine.print(0, text)
+      print_engine.close
       Receipt.create(:employee_id => @User.id, :cash_register_id => $Register.id, :content => text)
     end
   end
@@ -54,6 +54,7 @@ class DrawerTransaction < ActiveRecord::Base
   def escpos
     init = 
     "\e@"     +  # Initialize Printer
+    "\x1B\x70\x00\x30\x01" + # open cash drawer early
     "\ea\x01" +  # align center
     "\e!\x38" +
     DrawerTransaction.model_name.human + ' ' +
@@ -74,8 +75,7 @@ class DrawerTransaction < ActiveRecord::Base
     "\n\n" +
     I18n.t(self.drop ? 'printr.word.drop' : 'printr.word.payout') +
     "\n\n\n\n\n\n\n" +
-    "\x1D\x56\x00" +  # cut
-    "\x1B\x70\x00\x30\x01" # open cash drawer
+    "\x1D\x56\x00" # cut
     
     #GlobalData.vendor.receipt_logo_footer 
   end
