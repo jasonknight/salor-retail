@@ -2,21 +2,10 @@
 %div.centered-contents
   = form_tag '/reports/selector', :class => 'no-print', :method => :get do
     = label('from', t('orders.report.start_date'))
-    %br
     = select_date(@from, :prefix => 'from')
     %br
     = label('to', t('orders.report.end_date'))
-    %br
     = select_date(@to, :prefix => 'to')
-    %br
-    = label('usb_device',t("menu.usb_device"))
-    %br
-    %select{:name => 'usb_device', :id => 'usb_device_select'}
-      - Dir.entries("/media").each do |d|
-        - if not d == '.' and not d == '..'
-          %option{ :value => "/media/" + d }= d
-      %option{ :value => "#{ Dir['/home/*'].first }/Desktop" } Desktop
-    %br
     %br
     = submit_tag t('helpers.submit.save'), :onclick => '$("#progress").show()'
 
