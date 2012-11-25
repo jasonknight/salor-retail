@@ -1,3 +1,10 @@
+salor-retail (4.0.0.29) unstable; urgency=low
+
+  * Closes #1499 Allow edit_field_on_child on paid orders
+  * Closes #1449 Onscreen keyboard seems to be broken in many places
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 09:23:02 +0100
+
 salor-retail (4.0.0.28) unstable; urgency=low
 
   [ Jason Knight ]
