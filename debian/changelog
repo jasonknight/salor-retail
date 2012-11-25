@@ -1,3 +1,9 @@
+salor-retail (4.0.1.2) unstable; urgency=low
+
+  * Closes #1507 Add packaging_unit to actions and fix layout
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 23:11:00 +0100
+
 salor-retail (4.0.1.1) unstable; urgency=low
 
   [ Michael Franzl ]
