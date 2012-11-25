@@ -2,7 +2,7 @@
 
 if [ -e /usr/bin/salor-bin ]; then
   echo "Loading salor-bin. Please wait..."
-  sudo salor-bin -u http://default.sr.red-e.eu
+  sudo /usr/bin/salor-bin -u http://default.sr.red-e.eu
 
 elif [ -e /usr/bin/chromium-browser ]; then
   echo "Loading Chromium in Kiosk mode. Please wait..."

@@ -145,10 +145,10 @@ class Item < ActiveRecord::Base
     ""
   end
   def parent
-    Item.find_by_child_id(self.id) unless self.new_record?
+    Item.visible.find_by_child_id(self.id) unless self.new_record?
   end
   def child
-    Item.find_by_id(self.child_id)
+    Item.visible.find_by_id(self.child_id)
   end
   def parent_sku=(string)
     if string.empty? then
@@ -160,13 +160,14 @@ class Item < ActiveRecord::Base
       GlobalErrors.append_fatal("system.errors.parent_sku")
       return
     end
+
     p = Item.find_by_sku(string)
     if p then
       if self.child.id == p.id then
         errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
         GlobalErrors.append_fatal("system.errors.parent_sku")
       end
-      # puts "Updating child_id of parent" + p.sku;
+      self.save # this is necessary since at this point self.id is still nil
       p.update_attribute(:child_id,self.id)
     else
       errors.add(:parent_sku, I18n.t('system.errors.parent_sku_must_exist'))

@@ -31,7 +31,7 @@ class Report
     end
     File.open(File.join('/', 'tmp', 'SalorReceipts.tsv'),"w") do |f|
       @receipts.each do |r|
-        f.write("\n---\n#{r.created_at}\n#{r.ip}\n#{r.employee.username}\n---\n\n")
+        f.write("\n---\n#{r.created_at}\n#{r.ip}\n#{r.employee.username if r.employee}\n---\n\n")
         f.write r.content
       end
     end
