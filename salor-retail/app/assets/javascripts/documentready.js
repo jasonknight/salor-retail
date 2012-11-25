@@ -160,7 +160,7 @@ $(function () {
 
 
 
-  $.keyboard.layouts['de'] = {
+  $.keyboard.layouts['gn'] = {
     'default' : [
       "\u0302 1 2 3 4 5 6 7 8 9 0 \u00df \u0301 {b}",
       "{tab} q w e r t z u i o p \u00fc +",
