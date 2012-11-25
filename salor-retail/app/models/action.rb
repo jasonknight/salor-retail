@@ -31,7 +31,7 @@ class Action < ActiveRecord::Base
     [:add,:subtract,:multiply, :divide, :assign,:discount_after_threshold]
   end
   def self.afield_list
-    [:base_price, :quantity,:tax_profile_id, :purchase_price]
+    [:base_price, :quantity,:tax_profile_id, :packaging_unit]
   end
   def sku=(s)
     if not s.blank? then
