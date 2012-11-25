@@ -145,10 +145,10 @@ class Item < ActiveRecord::Base
     ""
   end
   def parent
-    Item.find_by_child_id(self.id) unless self.new_record?
+    Item.visible.find_by_child_id(self.id) unless self.new_record?
   end
   def child
-    Item.find_by_id(self.child_id)
+    Item.visible.find_by_id(self.child_id)
   end
   def parent_sku=(string)
     if string.empty? then
@@ -160,14 +160,17 @@ class Item < ActiveRecord::Base
       GlobalErrors.append_fatal("system.errors.parent_sku")
       return
     end
+
     p = Item.find_by_sku(string)
     if p then
       if self.child.id == p.id then
         errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
         GlobalErrors.append_fatal("system.errors.parent_sku")
+        p.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
+      else
+        self.save # this is necessary since at this point self.id is still nil
+        p.update_attribute(:child_id,self.id)
       end
-      # puts "Updating child_id of parent" + p.sku;
-      p.update_attribute(:child_id,self.id)
     else
       errors.add(:parent_sku, I18n.t('system.errors.parent_sku_must_exist'))
       GlobalErrors.append_fatal("system.errors.parent_sku_must_exist")
@@ -188,8 +191,10 @@ class Item < ActiveRecord::Base
       if self.parent and self.parent.id == c.id then
         errors.add(:child_sku, I18n.t("system.errors.child_sku"))
         GlobalErrors.append_fatal("system.errors.child_sku")
+        self.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
+      else
+        self.update_attribute(:child_id,c.id)
       end
-      self.update_attribute(:child_id,c.id)
     else
       errors.add(:child_sku, I18n.t('system.errors.child_sku_must_exist'))
       GlobalErrors.append_fatal("system.errors.child_sku_must_exist")

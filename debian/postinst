@@ -63,6 +63,9 @@ case "$1" in
     if [ "$result" = "0" ]; then
       echo "pcspkr" >> /etc/modules;
     fi
+    echo "  postinst: Logging version number of this installation"
+    DATE="`date +%Y%m%dT%H%M%S`"
+    echo "$DATE: Installation of version $2 $3" >> /var/log/salor-retail/updates.txt
   ;;
 
   abort-upgrade|abort-remove|abort-deconfigure)

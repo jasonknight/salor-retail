@@ -1,3 +1,10 @@
+salor-retail (4.0.1.0) unstable; urgency=low
+
+  * Closes #1500 Add iframe with documentation from the red e website
+  * Closes #1497 [FISC] A deb package update should log date and time of the update into a file
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 09:52:59 +0100
+
 salor-retail (4.0.0.29) unstable; urgency=low
 
   * Closes #1499 Allow edit_field_on_child on paid orders

@@ -28,7 +28,7 @@
       <% end %>
     </td>
     <td valign="top">
-      <%= order.employee_id ? order.employee.username : order.user.username %>
+      <%= order.employee ? order.employee.username : order.user.username %>
     </td>
     <td width='50px'> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :salor) %></td>
