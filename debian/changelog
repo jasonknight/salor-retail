@@ -1,3 +1,17 @@
+salor-retail (4.0.1.1) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * Closes #1503 cannot set child_id when creating a new item
+  * Closes #1502 Item form allows for circular parent-child relationship
+
+  [ Jason Knight ]
+  * Added purchase price to actions
+
+  [ Michael Franzl ]
+  * Closes #1505 Display packaging unit on items#index
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 22:55:43 +0100
+
 salor-retail (4.0.1.0) unstable; urgency=low
 
   * Closes #1500 Add iframe with documentation from the red e website
