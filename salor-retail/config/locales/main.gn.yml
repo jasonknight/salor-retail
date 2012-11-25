@@ -389,6 +389,7 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    documentation: Dokumentation
     invoice_blurbs: Rechnungstexte
     edit_invoice_blurb: Rechnungstext bearbeiten
     new_invoice_blurb: Neuer Rechnungstext

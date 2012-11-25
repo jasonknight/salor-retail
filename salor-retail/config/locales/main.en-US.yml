@@ -388,6 +388,7 @@ en-US:
       print: Print
   label: label
   menu:
+    documentation: Documentation
     invoice_blurbs: Invoice Blurbs
     edit_invoice_blurb: Edit Invoice Blurb
     new_invoice_blurb: New Invoice Blurb

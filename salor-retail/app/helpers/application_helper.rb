@@ -124,6 +124,7 @@ module ApplicationHelper
       :item => 'bag1',
       :item_type => 'bag1',
       :show => 'info',
+      :info => 'info',
       :back => 'left',
       :next => 'right',
       :tax_profile => 'statistics',
