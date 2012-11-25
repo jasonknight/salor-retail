@@ -288,11 +288,11 @@ class VendorsController < ApplicationController
 #           puts "## Order is Paid"
           render :layout => false and return
         end
-        if @inst.class == Order and @inst.paid == 1 then
-          @order = $User.get_new_order
-#           puts "## Order is paid 2"
-          render :layout => false and return
-        end
+#         if @inst.class == Order and @inst.paid == 1 then
+#           @order = $User.get_new_order
+# #           puts "## Order is paid 2"
+#           render :layout => false and return
+#         end
         if @inst.respond_to? params[:field]
 #            puts  "### Inst responds_to field #{params[:field]}"
           if not salor_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
