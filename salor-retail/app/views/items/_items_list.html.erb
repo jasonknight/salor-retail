@@ -2,7 +2,7 @@
   <% if $Conf.items_view_list then %>
     <table width="100%" class="stripe-me">
     <tr>
-      <% [:name,:base_price,:sku,:quantity,:quantity_sold, '',''].each do |key| %>
+      <% [:name,:base_price,:sku,:quantity,:packaging_unit, '',''].each do |key| %>
         <% if not key == '' %>
           <th class="pointer" onclick="window.location = '?order_by=<%= key %>&page=<%= params[:page]%>';"><%= I18n.t("activerecord.attributes.#{key}") %></th>
         <% else %>
@@ -28,13 +28,15 @@
         <td>
           <%= item.sku %>
         </td>
+        
         <td>
           <%= item.quantity %>
         </td>
-
+        
         <td>
-          <%= item.quantity_sold%>
+          <%= item.packaging_unit %>
         </td>
+        
         <td>
         <div onmousedown="window.location ='<%= edit_item_path(item)%>';" style="padding: 5px;">
           <%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_item_path(item)) %>
