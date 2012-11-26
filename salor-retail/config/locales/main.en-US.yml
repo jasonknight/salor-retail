@@ -7,6 +7,11 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_header: Receipt Logo Header
+        receipt_logo_footer: Receipt Logo Footer
       lang: Language
       is_header: Header?
       detailed_edit: Detailed Edit?

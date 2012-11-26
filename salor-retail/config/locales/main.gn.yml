@@ -7,6 +7,11 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      vendor:
+        logo: Bildschirm-Logo
+        logo_invoice: A4 Rechnungs-Logo
+        receipt_logo_header: Beleg Logo Kopf
+        receipt_logo_footer: Beleg Logo Fuß
       detailed_edit: Detail Modus
       lang: Sprache
       is_header: Kopf

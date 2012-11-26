@@ -139,7 +139,7 @@
   
   <tr>
     <td valign="top" class="attr">
-      <label for="vendor_logo_invoice"><%= Vendor.human_attribute_name(:logo_invoice) %></label>
+      <%= f.label :logo_invoice %>
     </td>
     <td valign="top" class="value">
       <input id="vendor_logo_invoice" name="vendor[logo_invoice]" type="file">
@@ -148,7 +148,7 @@
   
   <tr>
     <td valign="top" class="attr">
-      <%= f.label t("vendors.form.receipt_logo_header")%>
+      <%= f.label :receipt_logo_header %>
     </td>
     <td valign="top" class="value">
       <input id="vendor_receipt_logo_header" name="vendor[receipt_logo_header]" type="file">
@@ -157,7 +157,7 @@
   
   <tr>
     <td valign="top" class="attr">
-       <label for="vendor_receipt_logo_header"><%= Vendor.human_attribute_name(:receipt_logo_footer) %></label>
+       <%= f.label :receipt_logo_footer %>
     </td>
     <td valign="top" class="value">
       <input id="vendor_receipt_logo_footer" name="vendor[receipt_logo_footer]" type="file">
