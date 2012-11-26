@@ -1,5 +1,5 @@
 .header-page-one
-  - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image
+  - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_invoice_image
     %img.vendorlogo.floatright{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
   
   .clear
