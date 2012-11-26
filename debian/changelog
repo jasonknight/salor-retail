@@ -1,3 +1,15 @@
+salor-retail (4.0.1.3) unstable; urgency=low
+
+  * Closes #1511 Wholesaler import doesn't update SKU when item with matching name is imported
+  * Closes #1514 A4 Print style adaptions
+  * Closes #1515 Close button of order configuration popup should be onmousedown
+  * Closes #1516 add translations for vendors#edit page
+  * Closes #1513 Switch drawer/scale buttons on POS screen
+  * Amends #1497 [FISC] A deb package update should log date and time of the update into a file
+  * fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 26 Nov 2012 19:39:19 +0100
+
 salor-retail (4.0.1.2) unstable; urgency=low
 
   * Closes #1507 Add packaging_unit to actions and fix layout
