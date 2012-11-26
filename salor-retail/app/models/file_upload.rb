@@ -80,6 +80,7 @@ class FileUpload
       carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
+        attributes.merge! :sku => sku_carton unless sku_carton.empty?
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
@@ -102,6 +103,7 @@ class FileUpload
       pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
+        attributes.merge! :sku => sku_pack unless sku_pack.empty?
         pack_item.attributes = attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
@@ -127,6 +129,7 @@ class FileUpload
       piece_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
+        attributes.merge! :sku => sku_piece unless sku_piece.empty?
         piece_item.attributes = attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
@@ -226,6 +229,7 @@ class FileUpload
       carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating carton item #{carton_item.name} #{carton_item.sku}"
+        attributes.merge! :sku => sku_carton unless sku_carton.empty?
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
@@ -248,6 +252,7 @@ class FileUpload
       pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
+        attributes.merge! :sku => sku_pack unless sku_pack.empty?
         pack_item.update_attributes attributes
         Action.run(pack_item,:on_import)
         pack_item.parent = carton_item if not pack_item.sku == carton_item.sku
@@ -273,6 +278,7 @@ class FileUpload
       carton_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
+        attributes.merge! :sku => sku_piece unless sku_piece.empty?
         piece_item.update_attributes attributes
         Action.run(piece_item,:on_import)
         piece_item.parent = pack_item if not pack_item.sku == piece_item.sku

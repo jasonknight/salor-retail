@@ -161,7 +161,7 @@ class Item < ActiveRecord::Base
       return
     end
 
-    p = Item.find_by_sku(string)
+    p = self.vendor.items.visible.find_by_sku(string)
     if p then
       if self.child.id == p.id then
         errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
@@ -186,7 +186,7 @@ class Item < ActiveRecord::Base
         GlobalErrors.append_fatal("system.errors.child_sku")
       return
     end
-    c = Item.find_by_sku(string)
+    c = self.vendor.items.visible.find_by_sku(string)
     if c then
       if self.parent and self.parent.id == c.id then
         errors.add(:child_sku, I18n.t("system.errors.child_sku"))
