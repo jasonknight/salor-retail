@@ -33,6 +33,9 @@ case "$1" in
   ;;
   
   upgrade)
+    echo "  prerm: Logging upgrade to version $2..."
+    DATE="`date +%Y%m%dT%H%M%S`"
+    echo "$DATE: Upgrade to version $2" >> /var/log/salor-retail/updates.txt
   ;;
   
   failed-upgrade|abort-install|abort-upgrade|disappear)
