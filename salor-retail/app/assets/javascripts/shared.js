@@ -283,7 +283,7 @@ function auto_completable_show_results(elem,results) {
       // i.e. we set up the vars we will need on the callback on the element in context
       _set('auto_completable.result',result,div);
       _set('auto_completable.target',elem,div);
-      div.on('click', function () {
+      div.on('mousedown', function () {
         var target = _get('auto_completable.target',$(this));
         var result = _get('auto_completable.result',$(this));
         var key = target.attr('auto_completable_key');
@@ -317,16 +317,16 @@ function deletable(elem,type,callback) {
   if ($('#' + elem.attr('id') + '_delete').length == 0) {
     var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
     if (!callback) {
-      del_button.on('click',function () {
+      del_button.on('mousedown',function () {
         $('#' + $(this).attr('target')).slideUp();
       });
     } else {
-      del_button.on('click',callback);
+      del_button.on('mousedown',callback);
     }
   } else {
     var del_button = $('#' + elem.attr('id') + '_delete');
     if (callback) {
-      del_button.unbind('click').on('click',callback);
+      del_button.unbind('mousedown').on('mousedown',callback);
     }
   }
   var offset = elem.offset();
@@ -587,13 +587,13 @@ window.shared = {
     plus_button: function (callback) {
       var button = create_dom_element('div',{},'','');
       button.addClass('add-button');
-      button.on('click',callback);
+      button.on('mousedown',callback);
       return button;
     },
     finish_button: function (callback) {
       var button = create_dom_element('div',{},'','');
       button.addClass('finish-button');
-      button.on('click',callback);
+      button.on('mousedown',callback);
       return button;
     }
   },
@@ -644,7 +644,7 @@ window.shared = {
       input.addClass('option-actual-input');
       var div3 = shared.element('div',{}, 'OK', div);
       div3.addClass('option-button');
-      div3.on("click",callbacks.click);
+      div3.on("mousedown",callbacks.click);
       input.val(options.value);
       input.on('keyup',callbacks.keyup);
       input.focus(callbacks.focus);
@@ -741,7 +741,7 @@ window.shared = {
       left_tab.css({height: (elem.height() / 3), width: width });
       left_tab.offset({left: offset.left - left_tab.outerWidth() + 5});
       if (!_get('existed',left_tab)) {
-        left_tab.on('click',function () {
+        left_tab.on('mousedown',function () {
           var start = _get('start',$(this).parent());
           var next = start - page_size;
           if (next < 0) {
@@ -756,7 +756,7 @@ window.shared = {
       right_tab.css({height: (elem.height() / 3), width: width });
       right_tab.offset({left: offset.left + elem.outerWidth() - 5});
       if (!_get('existed',right_tab)) {
-        right_tab.on('click',function () {
+        right_tab.on('mousedown',function () {
           var start = _get('start',$(this).parent());
           var results = _get('results',elem);
           var next = start + page_size;
