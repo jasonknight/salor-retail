@@ -390,7 +390,7 @@ class Order < ActiveRecord::Base
         #self.subtotal = 0
       #end
 #       puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
-      if $Conf.calculate_tax then
+      if $Conf and $Conf.calculate_tax then
         self.total = self.subtotal.round(2) + self.tax.round(2)
       else
         self.total = self.subtotal.round(2)
