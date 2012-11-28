@@ -206,10 +206,12 @@ var shipment_items_callbacks = {
               if (tRow.length != 0) {
                 var qty = Number(tRow.val()) + 1;
                 tRow.val(qty);
-                // SCOTTIE: move this row to the top
-                var sRow = tRow.parent().parent().parent().detach();
-                //console.log(sRow);
-                sRow.insertAfter("#shipment_items * tr:first");
+                if ($("#shipment_items * tr").length > 1) {
+                  // SCOTTIE: move this row to the top
+                  var sRow = tRow.parent().parent().parent().detach();
+                  //console.log(sRow);
+                  sRow.insertAfter("#shipment_items * tr:first");
+                }
                 // END
                 var f = $('.attribute-sku').first();
                 f.val('');
@@ -285,7 +287,7 @@ function shipment_item_input(name,opts) {
   return e;
 }
 
-function addItem(values) {
+function addItem(values,nofocus) {
   var found = false;
   if (values) {
     var vs = values;
@@ -351,7 +353,9 @@ function addItem(values) {
   $('.keyboardable-int').each(function () {
       //make_keyboardable($(this));
   });
-  focusInput($('.attribute-sku-' + id));
+  if (nofocus != true) {
+    focusInput($('.attribute-sku-' + id));
+  }
   id = id + 1;
 }
 
@@ -419,11 +423,13 @@ $(function () {
     if ($('body').hasClass('shipment-items-ready-done')) {
       return;
     }
+    var values = {};
     <% items.each do |item|  %>
-      var values = <%= raw item.to_json %>;
+      values = <%= raw item.to_json %>;
       values.stock_location_ids = [<%= item.stock_location_ids.join(',') %>];
-      addItem(values);
+      addItem(values,true);
     <% end %>
+    addItem({});
     $('body').addClass('shipment-items-ready-done');
 });
 </script>
