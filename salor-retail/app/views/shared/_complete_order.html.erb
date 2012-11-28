@@ -320,17 +320,20 @@ function complete_order_hide() {
 }
 
 function get_highest(num) {
-  if (isNaN(num)) num = 0;
+  if (isNaN(num)) {
+    num = 0;
+  }
   var pieces = [
     <%= t("number.currency.format.pieces") %>
   ];
   if (num == 0) {
     return ['<%= t("views.forms.no_change") %>',0];
   }
-  var highest_piece = 0;
-  for (var i = 0; i < pieces.length; i++) {
-    if (pieces[i] > num) {
-      highest_piece = i - 1;
+  var highest_piece = pieces.length - 1;
+  for (var i = pieces.length-1; i > 0; i--) {
+    if (pieces[i] >= num) {
+      highest_piece = i-1;
+    } else {
       break;
     }
   }
@@ -344,7 +347,6 @@ function recommend(num) {
   var parts = [];
 
   var ret = get_highest(num);
-
   parts.push(div_wrap(ret[0],'complete-recommendation-item'));
   cap = 20;
   x = 0;
