@@ -102,11 +102,12 @@ class Shipment < ActiveRecord::Base
         nih[k.to_sym] = v
       end
       ih = nih
+      next if ih[:sku].empty?
+      
       if ih[:_delete].to_i == 1 then
         ih.delete(:_delete)
         next
       end
-      next if ih[:sku].blank?
       anitem = Item.find_by_sku(ih[:sku])
       if not anitem then
         next
@@ -117,9 +118,11 @@ class Shipment < ActiveRecord::Base
       if self.shipment_item_ids.include? ih[:id].to_i then
         if ShipmentItem.exists? ih[:id] then
           i = ShipmentItem.find(ih[:id])
+#           raise "Existing: " + i.inspect
           i.update_attributes(ih)
           i.set_stock_location_ids = slocs
           ids << i.id
+          i.save
         end
         next
       end
@@ -128,6 +131,7 @@ class Shipment < ActiveRecord::Base
       i = ShipmentItem.new(ih)
       i.set_stock_location_ids = slocs
       i.shipment_id = self.id
+#       raise "New: " + i.inspect
       i.save
       if i then
         ids << i.id
