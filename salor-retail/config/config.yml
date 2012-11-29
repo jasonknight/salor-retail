@@ -5,6 +5,8 @@
 :invoice_style: default
 :reports:
   :style: default
+:invoice_pagination_page_one: 200
+:invoice_pagination_page_other: 20
 app_name: "Salor"
 technician_code: U9479880090210
 stylesheets: 'darker'
