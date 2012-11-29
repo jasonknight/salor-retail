@@ -1,3 +1,9 @@
+salor-retail (4.0.1.5) unstable; urgency=low
+
+  * Closes #1542 Revert back to calculated InCash payment methods in day report
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 29 Nov 2012 21:19:35 +0100
+
 salor-retail (4.0.1.4) unstable; urgency=low
 
   [ Jason Knight ]
