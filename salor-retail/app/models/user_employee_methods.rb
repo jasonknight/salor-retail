@@ -504,7 +504,7 @@ module UserEmployeeMethods
           else
             paymentmethods[:refund][ptype] += p.amount
           end
-        #elsif p.internal_type == 'InCash'
+        elsif p.internal_type == 'InCash'
           #ignore those. cash will be calculated as difference between category sum and other normal payment methods
         else
           if p.amount > 0
@@ -602,11 +602,11 @@ module UserEmployeeMethods
 
     categories_sum[:pos][:gro] = categories[:pos].to_a.collect{|x| x[1][:gro]}.sum
     categories_sum[:pos][:net] = categories[:pos].to_a.collect{|x| x[1][:net]}.sum
-    #XXXpaymentmethods[:pos]['InCash'] = categories_sum[:pos][:gro] - paymentmethods[:pos].to_a.collect{|x| x[1]}.sum
+    paymentmethods[:pos][:InCash] = categories_sum[:pos][:gro] - paymentmethods[:pos].to_a.collect{|x| x[1]}.sum #XXX
 
     categories_sum[:neg][:gro] = categories[:neg].to_a.collect{|x| x[1][:gro]}.sum
     categories_sum[:neg][:net] = categories[:neg].to_a.collect{|x| x[1][:net]}.sum
-    #XXXpaymentmethods[:neg]['InCash'] = categories_sum[:neg][:gro] - paymentmethods[:neg].to_a.collect{|x| x[1]}.sum
+    paymentmethods[:neg][:InCash] = categories_sum[:neg][:gro] - paymentmethods[:neg].to_a.collect{|x| x[1]}.sum  #XXX
 
     transactions = Hash.new
     transactions_sum = { :drop => 0, :payout => 0, :total => 0}
@@ -624,11 +624,12 @@ module UserEmployeeMethods
     revenue[:gro] = categories[:pos].to_a.map{|x| x[1][:gro]}.sum + categories[:neg].to_a.map{|x| x[1][:gro]}.sum + refunds[:cash][:gro] + refunds[:noncash][:gro]
     revenue[:net] = categories[:pos].to_a.map{|x| x[1][:net]}.sum + categories[:neg].to_a.map{|x| x[1][:net]}.sum + refunds[:cash][:net] + refunds[:noncash][:net]
     
-    paymentmethods[:pos][:InCash] ||= 0
-    paymentmethods[:neg][:InCash] ||= 0
-    paymentmethods[:neg][:Change] ||= 0
-    paymentmethods[:pos][:InCash] += paymentmethods[:neg][:Change]
-    paymentmethods[:neg].delete(:Change)
+    #paymentmethods[:pos][:InCash] ||= 0
+    #paymentmethods[:neg][:InCash] ||= 0
+    #paymentmethods[:neg][:Change] ||= 0
+    #paymentmethods[:pos][:InCash] += paymentmethods[:neg][:Change]
+    #paymentmethods[:neg].delete(:Change)
+    #paymentmethods[:pos].delete(:Change)
     
     calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:cash][:gro] + paymentmethods[:pos][:InCash] + paymentmethods[:neg][:InCash]
 
