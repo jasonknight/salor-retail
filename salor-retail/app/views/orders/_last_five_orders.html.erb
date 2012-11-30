@@ -13,8 +13,15 @@
           style="background-color: <%= color %>;"
          >
     <%= image_tag('/images/icons/' + icon(:order,32)) %><br />
-    <span class="id"><%= order.tag.empty? ? "#{order.id} - #{order.get_owner.username}" : order.tag %></span> <br />
-    <span class="total"><%= salor_number_to_currency order.total %></span>
+    <span class="id">
+      <%= order.tag.empty? ? order.get_owner.username : order.tag %>
+    </span>
+    <br />
+    <span><%= order.customer.full_name if order.customer %></span>
+    <br />
+    <span class="total">
+      <%= salor_number_to_currency order.total %>
+    </span>
   </div>
     <% i = i + 1  %>
     <% x = x + 1  %>
