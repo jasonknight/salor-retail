@@ -1,3 +1,19 @@
+salor-retail (4.0.1.6) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes bug #1525
+  * Closes bug #1526
+  *  fixed shipment item form
+  * fixing shipments
+
+  [ Michael Franzl ]
+  * Closes #1526 Change money calculation is sometimes wrong
+  * Closes #1544 Complete order popup should retain order total
+  * Closes #1518 [RedE] Show client name on orders#index for better overview
+  * Closes #1522 Last-open-orders-popup should show the assigned customer for better overview
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 30 Nov 2012 16:07:19 +0100
+
 salor-retail (4.0.1.3) unstable; urgency=low
 
   * Closes #1511 Wholesaler import doesn't update SKU when item with matching name is imported
