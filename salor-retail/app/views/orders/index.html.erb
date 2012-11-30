@@ -27,15 +27,18 @@
         <%= t('receipts.invoice.offer') %> <%= order.nr %>
       <% end %>
     </td>
-    <td valign="top">
+    <td width='10%' valign="top">
       <%= order.employee ? order.employee.username : order.user.username %>
     </td>
-    <td width='50px'> <%= order.tag %></td>
+    <td  width='10%' valign="top">
+      <%= order.customer.full_name if order.customer %>
+    </td>
+    <td width='10%'> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :salor) %></td>
     <td><%= salor_number_to_currency order.gross %></td>
-    <td width='50px' align='center'><%= link_to image_tag('/images/icons/' + icon(:document,32)), "orders/#{ order.id }/print" %></td>
-    <td width='50px' align='center'><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
-    <td width='50px' align='center'><%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>
+    <td width='10%' align='center'><%= link_to image_tag('/images/icons/' + icon(:document,32)), "orders/#{ order.id }/print" %></td>
+    <td width='10%' align='center'><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
+    <td width='10%' align='center'><%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>
     <!--<td><%= link_to(image_tag('/images/icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete) if not order.paid %></td>-->
   </tr>
 <% end %>
