@@ -29,7 +29,7 @@ function toFloat(str, returnString) {
     }
   }
   return (returnString) ? nstr : parseFloat(nstr); */
-  var r = /([\d,\.]+)[,\.](\d{2,})/g;
+  var r = /([\d,\.]+)[,\.](\d{1,2})/g;
   var matches = r.exec(str);
   if (matches) {
     var lpart = matches[1].replace(/[\.,]+/g,'');
