@@ -1,6 +1,7 @@
 Drawer = <%= raw $User.get_drawer.to_json %>;
 $('.pos-table-left-column-items').html('');
 updateOrder(<%= raw @order.to_json %>);
+$('#complete_order_total').html(toCurrency(<%= @old_order.total %>));  // feature #1544
 $('.pos-customer').html('');
 focusInput($('#keyboard_input'));
 $('.pos-cash-register-amount').html('<%= salor_number_to_currency($User.get_drawer.amount) %>');
@@ -9,3 +10,5 @@ $('.pos-rebates').show();
 $('.last-completed-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_completed_orders" %>');
 $('#last_five_orders').replaceWith('<%= escape_javascript render :partial => "last_five_orders" %>');
 Order = <%= raw @order.to_json %>;
+Order.total = <%= @old_order.total %>; // feature #1544
+$('#payment_amount_0').focus();

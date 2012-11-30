@@ -355,6 +355,7 @@ class OrdersController < ApplicationController
   end
   def complete_order_ajax
     @order = initialize_order
+    @old_order = @order
     # Here we check to see if there are any items on the order,
     # if there aren't, then it simply hides the popup. This is a bit
     # of a hack for cigarman who sometimes accidentally presses complete order

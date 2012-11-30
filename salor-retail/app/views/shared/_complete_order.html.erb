@@ -242,7 +242,7 @@ function allow_complete_order(isAllowed) {
   if (isAllowed == null) isAllowed = true;
   if (typeof(isAllowed) == 'undefined') isAllowed = true;
   //if (complete_total == 0) isAllowed = false;
-  if (isAllowed || Order.is_proforma) {
+  if (isAllowed && $('#pos-table-left-column-items').children().length > 0 || Order.is_proforma) {
     $("#confirm_complete_order_button").removeClass("button-inactive");
     $("#confirm_complete_order_button").unbind('mousedown');
     $("#confirm_complete_order_button").mousedown(function(){complete_order_send(true)});
