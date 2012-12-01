@@ -1,3 +1,9 @@
+salor-retail (4.0.1.8) unstable; urgency=low
+
+  * cash pieces
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 01 Dec 2012 11:09:00 +0100
+
 salor-retail (4.0.1.7) unstable; urgency=low
 
   * added automatic backup to cronjobs
