@@ -9,8 +9,6 @@ cn:
       order_item:
         quantity: XXX Qty.
         tax_free: Tax Free
-      invoice_blurb: Invoice text
-      invoice_blurb_footer: Invoice text footer
       active: 活躍
       address: 地址
       afield: 領域
@@ -113,8 +111,6 @@ cn:
       real_quantity: 實際數量
       rebate: 回扣
       rebate_type: 回扣類型
-      receipt_blurb: 收據頭
-      receipt_blurb_footer: 收據腳
       reorder_type: 重新訂購類型
       sales_metric: 銷售公制
       salor_printer: 打印客戶端
@@ -172,6 +168,23 @@ cn:
       customer:
         tax_number: Tax number
       detailed_edit: Detailed Edit?
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_header: Receipt Logo Header
+        receipt_logo_footer: Receipt Logo Footer
+      lang: Language
+      is_header: Header?
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      salor_configuration:
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
     models:
       action:
         one: 行動
@@ -478,6 +491,10 @@ cn:
     wholesaler_update: 批發商更新
     labels: Labels
     statistics: Statistics
+    documentation: Documentation
+    invoice_blurbs: Invoice Blurbs
+    edit_invoice_blurb: Edit Invoice Blurb
+    new_invoice_blurb: New Invoice Blurb
   notifications:
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
@@ -840,6 +857,7 @@ cn:
     username: 用戶名
     vendor: 供應商
     wholesaler_refresh: 取批發商更新. 這可能需要幾分鐘.
+    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: 加入訂單
     always: 總是

@@ -9,8 +9,6 @@ es:
       order_item:
         quantity: XXX Qty.
         tax_free: Tax Free
-      invoice_blurb: Invoice text
-      invoice_blurb_footer: Invoice text footer
       active: Activo
       address: Dirección
       afield: Campo
@@ -113,8 +111,6 @@ es:
       real_quantity: Cantidad real
       rebate: Rebaja
       rebate_type: Tipo de rebaja
-      receipt_blurb: Encabezamiento del recibo
-      receipt_blurb_footer: Texto al pie del recibo
       reorder_type: Tipo de pedido nuevo
       sales_metric: Sistema métrico de ventas
       salor_printer: Imprimir del lado del cliente
@@ -172,6 +168,23 @@ es:
       customer:
         tax_number: Tax number
       detailed_edit: Detailed Edit?
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_header: Receipt Logo Header
+        receipt_logo_footer: Receipt Logo Footer
+      lang: Language
+      is_header: Header?
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      salor_configuration:
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
     models:
       action:
         one: Acción
@@ -486,6 +499,10 @@ es:
     wholesaler_update: Actualización del disteibuidor
     labels: Labels
     statistics: Statistics
+    documentation: Documentation
+    invoice_blurbs: Invoice Blurbs
+    edit_invoice_blurb: Edit Invoice Blurb
+    new_invoice_blurb: New Invoice Blurb
   notifications:
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
@@ -876,6 +893,7 @@ es:
     vendor: Tienda
     wholesaler_refresh: Actualización del distribuidor en curso. Esto puede llevar
       algunos minutos.
+    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: al añadir al pedido
     always: siempre

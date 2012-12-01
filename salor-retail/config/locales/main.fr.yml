@@ -9,8 +9,6 @@ fr:
       order_item:
         quantity: XXX Qty.
         tax_free: Tax Free
-      invoice_blurb: Invoice text
-      invoice_blurb_footer: Invoice text footer
       active: actif
       address: adresse
       afield: Champ
@@ -113,8 +111,6 @@ fr:
       real_quantity: quantité réelle
       rebate: remise
       rebate_type: type de remise
-      receipt_blurb: texte reçu
-      receipt_blurb_footer: Texte au pied du reçu
       reorder_type: Type de nouvelle commande
       sales_metric: syst.métrique vente
       salor_printer: Imprimer côté client
@@ -172,6 +168,23 @@ fr:
       customer:
         tax_number: Tax number
       detailed_edit: Detailed Edit?
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_header: Receipt Logo Header
+        receipt_logo_footer: Receipt Logo Footer
+      lang: Language
+      is_header: Header?
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      salor_configuration:
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
     models:
       action:
         one: Action
@@ -487,6 +500,10 @@ fr:
     wholesaler_update: Mettre à jour distributeur
     labels: Labels
     statistics: Statistics
+    documentation: Documentation
+    invoice_blurbs: Invoice Blurbs
+    edit_invoice_blurb: Edit Invoice Blurb
+    new_invoice_blurb: New Invoice Blurb
   notifications:
     shipments_item_could_not_be_saved: Article livraisons n'a pas pu être enregistré.
     shipments_move_all_items: Tous les articles ont été déplacés avec succès.
@@ -878,6 +895,7 @@ fr:
     vendor: Vendeur
     wholesaler_refresh: Recherche des mises à jour du distributeur. Ceci peut prendre
       quelques minutes.
+    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: Lors de l'ajout à une commande
     always: Toujours

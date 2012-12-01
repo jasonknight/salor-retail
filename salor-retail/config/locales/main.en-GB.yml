@@ -1,13 +1,37 @@
 ---
 en-GB:
-  support: XXX
+  are_you_sure: Are you sure you want to do this?
+  support: Support
   ByCard: By Card
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
-      invoice_blurb: Invoice text
-      invoice_blurb_footer: Invoice text footer
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_header: Receipt Logo Header
+        receipt_logo_footer: Receipt Logo Footer
+      lang: Language
+      is_header: Header?
+      detailed_edit: Detailed Edit?
+      customer:
+        tax_number: Tax number
+      is_proforma: Proforma?
+      tax_free: Tax Free
+      order_item:
+        quantity: Qty.
+        tax_free: Tax Free
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      salor_configuration:
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
       active: active
       address: address
       afield: field
@@ -110,8 +134,6 @@ en-GB:
       real_quantity: real quantity
       rebate: rebate
       rebate_type: rebate type
-      receipt_blurb: Receipt header
-      receipt_blurb_footer: Receipt footer
       reorder_type: Reorder Type
       sales_metric: sales metric
       salor_printer: Print Client Side
@@ -158,21 +180,22 @@ en-GB:
       weight: weight
       when: when
       width: width
-      tax_free: Tax Free
-      order_item:
-        quantity: Qty.
-        tax_free: Tax Free
       invoice_note:
         origin_country_id: Origin Country
         destination_country_id: Destination Country
         note_header: Note header
         note_footer: Note footer
         sale_type_id: Sale Type
-      is_proforma: Proforma?
-      customer:
-        tax_number: Tax number
-      detailed_edit: Detailed Edit?
     models:
+      sale_type:
+        one: Sale Type
+        other: Sale Types
+      country:
+        one: Country
+        other: Countries
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
       action:
         one: Action
         other: Actions
@@ -223,7 +246,7 @@ en-GB:
         other: Shipments
         default_name: Default Name
       shipment_type:
-        default_name: Auto Nachbestellung
+        default_name: Default Name
         one: Shipment Type
         other: Shipment Types
       shipper:
@@ -244,15 +267,6 @@ en-GB:
       vendor:
         one: Store
         other: Stores
-      sale_type:
-        one: Sale Type
-        other: Sale Types
-      country:
-        one: Country
-        other: Countries
-      invoice_note:
-        one: Invoice Note
-        other: Invoice Notes
   api:
     user_does_not_exist: user does not exist
   behavior_list:
@@ -322,9 +336,9 @@ en-GB:
       ok: OK
       print: print
       save: Save
+      edit: Edit
       submit: submit
       update: update
-      edit: Edit
   home:
     remote_service:
       connect_ssh: Remote service
@@ -379,10 +393,15 @@ en-GB:
       print: Print
   label: label
   menu:
+    documentation: Documentation
+    invoice_blurbs: Invoice Blurbs
+    edit_invoice_blurb: Edit Invoice Blurb
+    new_invoice_blurb: New Invoice Blurb
+    statistics: Statistics
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
-    additional: additional
+    additional: Additional
     back: back
     broken_items: broken items
     buttons: buttons
@@ -407,6 +426,8 @@ en-GB:
     done: done
     download: download
     edit: edit
+    edit_sale_type: Edit Sale type
+    edit_invoice_note: Edit Inovice Note
     edit_cash_register: edit cash register
     edit_category: edit category
     edit_customer: edit customer
@@ -431,9 +452,12 @@ en-GB:
     locations: locations
     loyalty_cards: loyalty cards
     move_shipment_item: move shipment item
-    new_action: new action
-    new_broken_item: new broken item
-    new_button: new button
+    new_country: New Country
+    new_sale_type: New Sale Type
+    new_invoice_note: New Invoice Note
+    new_action: new New Action
+    new_broken_item: New Broken Item
+    new_button: New Button
     new_cash_register: new cash register
     new_category: new category
     new_customer: new customer
@@ -456,8 +480,8 @@ en-GB:
     points: points
     pos: POS
     print: print
-    receipts: Receipts
     remote_service: Remote Service
+    receipts: Receipts
     reorder: reorder
     report: report
     report_day: report day
@@ -485,13 +509,7 @@ en-GB:
     vendors: Stores
     void: void
     wholesaler_update: wholesaler update
-    edit_sale_type: Edit Sale type
-    edit_invoice_note: Edit Inovice Note
-    new_country: New Country
-    new_sale_type: New Sale Type
-    new_invoice_note: New Invoice Note
     labels: Labels
-    statistics: Statistics
   notifications:
     shipments_item_could_not_be_saved: shipments item could not be saved
     shipments_move_all_items: all items were successfully moved
@@ -602,10 +620,10 @@ en-GB:
       sales: Sales
       system_drawer_amount: System drawer amount
       transaction_total: TOTAL
+      no_category: No Category
       warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You
         are advised to finish and start each day with a drawer amount of zero to ease
         accounting work. Make a cash payout accordingly and print this report again.
-      no_category: No Category
     formats:
       advert: ! 'The Innovative Point of Sale
 
@@ -649,12 +667,12 @@ en-GB:
       payout: payout
       sold: sold
   receipts:
-    invoice: Rechnung
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
-    delivery_note: Lieferschein
+    invoice: Invoice
     offer: Offer
-    a_conto: on account
     proforma_invoice: Proforma Invoice
+    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
+    delivery_note: Delivery Note
+    a_conto: on account
   reports:
     amount: amount
     description: description
@@ -737,8 +755,8 @@ en-GB:
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit
+    payment_external_types: cash,card,gift card,other,change
+    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -751,6 +769,7 @@ en-GB:
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
   views:
+    listing_invoice_blurbs: Listing Invoice Blurbs
     create_new_item: Create New Article
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'
@@ -811,7 +830,7 @@ en-GB:
       new_order: new order created
       order_refund_dt: ! '#%{id}'
       please_backup: Please backup your system regularly!
-      save_before: XXX Save before leaving?
+      save_before: Save before leaving?
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
         %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
         %{created_tax_profiles}'
@@ -832,8 +851,8 @@ en-GB:
     remember_me: remember me
     report: report
     reports:
-      cash_account: XXX
-      daily: XXX
+      cash_account: Cash Account
+      daily: Daily
     shipments:
       state: State
     single_words:
@@ -876,4 +895,3 @@ en-GB:
     on_export: on export
     on_import: on import
     on_save: on save
-  are_you_sure: Are you sure you want to do this?

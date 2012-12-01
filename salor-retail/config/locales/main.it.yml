@@ -5,8 +5,6 @@ it:
   InCash: Cassa
   activerecord:
     attributes:
-      invoice_blurb: Testo fattura
-      invoice_blurb_footer: Testo fattura piè di pagina
       active: attivo
       address: indirizzo
       afield: campo
@@ -109,8 +107,6 @@ it:
       real_quantity: quantità reale
       rebate: riduzione
       rebate_type: tipo riduzione
-      receipt_blurb: Intestazione ricevuta
-      receipt_blurb_footer: Piè di pagina ricevuta
       reorder_type: Tipo Riordine
       sales_metric: metrica vendite
       salor_printer: Stampa Lato Cliente
@@ -171,6 +167,23 @@ it:
       customer:
         tax_number: Tax number
       detailed_edit: Detailed Edit?
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_header: Receipt Logo Header
+        receipt_logo_footer: Receipt Logo Footer
+      lang: Language
+      is_header: Header?
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      salor_configuration:
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
     models:
       action:
         one: Azione
@@ -491,6 +504,10 @@ it:
     receipts: Receipts
     labels: Labels
     statistics: Statistics
+    documentation: Documentation
+    invoice_blurbs: Invoice Blurbs
+    edit_invoice_blurb: Edit Invoice Blurb
+    new_invoice_blurb: New Invoice Blurb
   notifications:
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
     shipments_move_all_items: tutti gli articoli sono stati spostati con successo
@@ -871,6 +888,7 @@ it:
     vendor: venditore
     wholesaler_refresh: Recupero aggiornamenti fornitori. Può richiedere diversi minuti.
     create_new_item: Create New Article
+    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: aggiungo ad ordine
     always: sempre

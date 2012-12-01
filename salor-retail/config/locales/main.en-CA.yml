@@ -1,5 +1,5 @@
 ---
-en-US:
+en-CA:
   are_you_sure: Are you sure you want to do this?
   support: Support
   ByCard: By Card
@@ -7,6 +7,11 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_header: Receipt Logo Header
+        receipt_logo_footer: Receipt Logo Footer
       lang: Language
       is_header: Header?
       detailed_edit: Detailed Edit?
@@ -388,6 +393,7 @@ en-US:
       print: Print
   label: label
   menu:
+    documentation: Documentation
     invoice_blurbs: Invoice Blurbs
     edit_invoice_blurb: Edit Invoice Blurb
     new_invoice_blurb: New Invoice Blurb
