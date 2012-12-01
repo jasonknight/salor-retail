@@ -376,9 +376,11 @@ class OrdersController < ApplicationController
       # methods, so we put them into an array before saving them and the order
       # This is kind of a validator, but we need to do it here for right now...
       payment_methods_total = 0.0
-      payment_methods_seen = []
+      payment_methods_seen = [] # In case they use the same internal type for two different payment_methods.
       PaymentMethod.types_list.each do |pmt|
         pt = pmt[1]
+        next if payment_methods_seen.include? pt
+        payment_methods_seen << pt
         if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0 then
           pm = PaymentMethod.new(:name => pmt[0],:internal_type => pt, :amount => SalorBase.string_to_float(params[pt.to_sym]))
           if pm.amount > @order.total then

@@ -641,7 +641,7 @@ en-US:
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
     order_receipt:
-      change: Change money
+      change: Change
       coupon_subtotal: Coupon Subtotal
       current_loyalty_points: Your loyalty points
       discount: Discount
@@ -775,7 +775,7 @@ en-US:
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: cash registers
     category_heading: category %{name} for %{store}
-    change: change
+    change: Change
     customers: customers
     download_may_last_long: This download may last long. Continue?
     dummy_item: dummy item
