@@ -33,7 +33,7 @@
   %div#subsubtotal= number_to_currency @report[:subsubtotal]
 
   - if params[:display_change] == '1'
-    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @report[:change_given] }
+    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @order.change_given }
 
   - if @report[:customer]
     .customerdetails
@@ -45,9 +45,5 @@
       %br
       %span== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
-  - if @report[:paymentmethods].any?
-    .paymentmethods
-      %b== #{ t('printr.order_receipt.given') }:
-      - @report[:paymentmethods].to_a.each do |pm|
-        %span== #{ number_to_currency pm[1] } (#{ pm[0] })
+
 

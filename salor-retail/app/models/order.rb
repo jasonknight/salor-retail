@@ -238,7 +238,7 @@ class Order < ActiveRecord::Base
   #
 	def change_given
 	  ttl = 0.0
-	  self.payment_methods.each do |pm|
+	  self.payment_methods.where("internal_type != 'Change' AND internal_type NOT LIKE '%Refund'").each do |pm|
 	    ttl += pm.amount
 	  end
 	  return 0 if ttl == 0.0
