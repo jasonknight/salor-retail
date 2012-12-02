@@ -78,10 +78,6 @@
           %tr
             %td= pm[0]
             %td.total= number_to_currency pm[1]
-        - if not @order.is_proforma
-          %tr
-            %td= t('printr.order_receipt.change')
-            %td.total= number_to_currency @report[:change_given]
 
     - else
       %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }

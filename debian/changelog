@@ -1,3 +1,14 @@
+salor-retail (4.0.1.9) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes bug #1552
+  * altered logo size to be less odiously large
+
+  [ Michael Franzl ]
+  * Closes #1540 Invoice pagination broken
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 02 Dec 2012 19:15:44 +0100
+
 salor-retail (4.0.1.8) unstable; urgency=low
 
   * cash pieces
