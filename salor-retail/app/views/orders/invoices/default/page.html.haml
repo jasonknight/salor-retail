@@ -43,19 +43,18 @@
   
   - item_count = @report[:list_of_items_raw].size
   
-  - item_pagination_count_one = 5
+  - item_pagination_count_one = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_one]
   - item_pagination_count_one = item_count if item_pagination_count_one > item_count
   - if params[:delivery_note]
-    = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => 0, :item_end => item_pagination_count_one }
+    = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => 0, :item_end => item_pagination_count_one - 1 }
   - else
-    = render :partial => 'orders/invoices/default/item_list_invoice', :locals => { :item_start => 0, :item_end => item_pagination_count_one }
+    = render :partial => 'orders/invoices/default/item_list_invoice', :locals => { :item_start => 0, :item_end => item_pagination_count_one - 1 }
     
-  - item_pagination_count_other = 10
-  - item_count -= item_pagination_count_one
-  - (item_count / item_pagination_count_other).times do |i|
-    - item_start = 1 + item_pagination_count_one + i * item_pagination_count_other
+  - item_pagination_count_other = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_other]
+  - ((item_count - item_pagination_count_one - 1) / item_pagination_count_other + 1).times do |i|
+    - item_start = item_pagination_count_one + i * item_pagination_count_other
     - item_end = item_start + item_pagination_count_other - 1
-    - item_end = item_count if item_end > item_count
+    - item_end = item_count - 1 if item_count <= (item_pagination_count_one + (i+1) * item_pagination_count_other)
     = render('orders/invoices/default/header_page_other')
     - if params[:delivery_note]
       = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => item_start, :item_end => item_end }
@@ -79,6 +78,10 @@
           %tr
             %td= pm[0]
             %td.total= number_to_currency pm[1]
+        - if not @order.is_proforma
+          %tr
+            %td= t('printr.order_receipt.change')
+            %td.total= number_to_currency @report[:change_given]
 
     - else
       %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
