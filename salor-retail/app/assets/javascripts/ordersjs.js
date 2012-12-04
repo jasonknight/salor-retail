@@ -350,7 +350,6 @@ function detailedOrderItemMenu(event) {
   $('.item-menu-div').remove();
   var target = $(event.currentTarget).parent();
   var item = _get('item',target);
-  console.log("item",item);
   var offset = $(event.currentTarget).offset();
   var title = shared.element('div',{id: 'order_item_edit_name'},'',$('body'));
   title.addClass('salor-dialog');
@@ -469,7 +468,6 @@ function getBehaviorById(id) {
       itid = item_type.id;
     }
   });
-  console.log('itid',itid);
   return itid;
 }
 function orderItemNameOption(append_to,item_id,initvalue) {
