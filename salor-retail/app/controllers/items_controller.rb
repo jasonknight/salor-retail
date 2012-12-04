@@ -344,29 +344,31 @@ class ItemsController < ApplicationController
   def wholesaler_update
     
     uploader = FileUpload.new
-    GlobalData.conf.csv_imports.split("\n").each do |line|
+    @report = { :updated_items => 0, :created_items => 0, :created_categories => 0, :created_tax_profiles => 0 }
+    $Conf.csv_imports.split("\n").each do |line|
       parts = line.chomp.split(',')
       next if parts[0].nil?
-      begin
+      
       if parts[0].include? 'http://' or parts[0].include? 'https://' then
         file = get_url(parts[0])
       else
-        file = get_url(GlobalData.conf.csv_imports_url + "/" + parts[0])
+        file = get_url($Conf.csv_imports_url + "/" + parts[0])
       end
+      
       if parts[1].include? "dist*" then
-        uploader.send('dist'.to_sym, parts[2], file.body,true) # i.e. dist* means an internal source
+        ret = uploader.send('dist'.to_sym, parts[2], file.body,true) # i.e. dist* means an internal source
       elsif parts[1] == 'dist' then
-        uploader.send(parts[1].to_sym, parts[2], file.body,false) # just dist means that it is the new salor format, but not trusted
+        ret = uploader.send(parts[1].to_sym, parts[2], file.body,false) # just dist means that it is the new salor format, but not trusted
       else
-        uploader.send(parts[1].to_sym, parts[2], file.body.split("\n")) # i.e. we dynamically call the function to process
+        ret = uploader.send(parts[1].to_sym, parts[2], file.body.split("\n")) # i.e. we dynamically call the function to process
       end
       # this .csv file, this is set in the vendor.salor_configuration as filename.csv,type1|type2 ...
-      rescue
-        GlobalErrors << ["WholeSaleImportError",$!.to_s + " For " + parts[0].to_s,nil]
+      ret.each do |k,v|
+        @report[k] += v
       end
     end
     respond_to do |format|
-      format.html { render :text => "Complete"}
+      format.html 
       format.js { render :content_type => 'text/javascript',:layout => false}
     end
   end

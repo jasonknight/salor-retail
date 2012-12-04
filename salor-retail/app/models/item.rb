@@ -445,9 +445,9 @@ class Item < ActiveRecord::Base
   # Reorder recommendation csvs
   
   def self.recommend_reorder(type)
-    shippers = Shipper.scopied.find_all_by_reorder_type(type)
+    shippers = Shipper.where(:vendor_id => $User.vendor_id).find_all_by_reorder_type(type)
     shippers << nil if type == 'default_export'
-    items = Item.scopied.visible.where("quantity < min_quantity AND ignore_qty = 0").where(:shipper_id => shippers)
+    items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
     if not items.any? then
       return nil 
     end

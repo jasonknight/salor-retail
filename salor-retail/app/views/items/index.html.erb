@@ -4,7 +4,8 @@ function wholesaler_update() {
   var answer = confirm('<%= escape_javascript t('.only_for_tobacco_stores') %>')
   if (!answer) { return; }
   $('.wholesaler-refresh').show();
-  $.ajax({
+  window.location = '/items/wholesaler_update';
+  /*$.ajax({
       type: 'GET',
       url: '/items/wholesaler_update',
       dataType: 'script',
@@ -18,7 +19,7 @@ function wholesaler_update() {
             $('.wholesaler-refresh').hide();
         });
       }
-  });
+  })*/;
 }
 </script>
 
@@ -63,7 +64,7 @@ function wholesaler_update() {
           <%= I18n.t("views.wholesaler_refresh") %>
         </div>
         <div class="tool-icon">
-        <%= salor_icon(:shipper,{:style => "cursor:pointer;",:onmousedown => "wholesaler_update();"},32) %><br /><span class='icon-caption'><%= I18n.t("menu.wholesaler_update") %></span>
+        <%= salor_icon(:shipper,{:style => "cursor:pointer;",:onmousedown => "wholesaler_update();win"},32) %><br /><span class='icon-caption'><%= I18n.t("menu.wholesaler_update") %></span>
         </div>
         <div class="tool-icon">
         <%= link_to salor_icon(:trash,{:style => "cursor:pointer;"},32), '/items/database_distiller', :confirm => "#{t('.database_distiller_warning')}" %><br /><span class='icon-caption'><%= I18n.t("menu.database_distiller") %></span>
@@ -78,16 +79,19 @@ function wholesaler_update() {
 </table>
 <% if AppConfig.reorder_csvs  %>
 <div id="reorder_types" class="hidden reorder-types">
-  <table>
+  <table width="90%" align="center">
     <% AppConfig.reorder_types.split(",").each do |type| 
       parts = type.split(":")
     %>
       <tr>
-        <td class="reorder_rec">
+        <td class="reorder_rec" class="button-submit">
           <a href="/items/reorder_recommendation?type=<%= parts[0] %>"> <%= parts[1] %></a>
         </td>
       </tr>
     <% end %>
+    <tr>
+      <td><hr /></td>
+    </tr>
     <tr>
       <td>
         <div class="button-row" align="right" width="100%">
