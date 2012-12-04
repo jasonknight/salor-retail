@@ -22,7 +22,10 @@ class OrderItem < ActiveRecord::Base
   belongs_to :order_item,:foreign_key => :coupon_id
 
   scope :sorted_by_modified, order('updated_at ASC')
-  
+  def item_type_id=(id)
+    write_attribute(:behavior,ItemType.find(id).behavior)
+    write_attribute(:item_type_id,id)
+  end
   def get_tax_profile_letter
     if self.item.tax_profile then
       return self.item.tax_profile.letter

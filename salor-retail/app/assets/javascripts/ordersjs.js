@@ -349,7 +349,7 @@ window.showOrderOptions = function () {
 function detailedOrderItemMenu(event) {
   $('.item-menu-div').remove();
   var target = $(event.currentTarget).parent();
-  item = _get('item',target);
+  var item = _get('item',target);
   var offset = $(event.currentTarget).offset();
   var title = shared.element('div',{id: 'order_item_edit_name'},'',$('body'));
   title.addClass('salor-dialog');
@@ -412,15 +412,64 @@ function detailedOrderItemMenu(event) {
     });
     title.append(btn);
     
-    shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item,config);
+    var edit_item_hr = shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item + '( ' + item.sku + ' )',config);
+    edit_item_hr.mousedown(function () {
+      window.location = '/items/' + item.item_id + '/edit';
+    });
+    edit_item_hr.addClass('pointer no-select');
+    edit_item_hr.css({'text-decoration': 'underline'});
     
-    var config_table = shared.element('table',{id: 'order_item_edit_table'},'',config);
+    var config_table = shared.element('table',{id: 'order_item_edit_table', width: '90%', align:'center'},'',config);
     var config_table_rows = [ shared.element('tr',{id: 'order_item_edit_table_row_1'},'',config_table) ];
     
     var config_table_cols_left = [ shared.element('td',{id: 'order_item_edit_table_lcol_1'},'',config_table_rows[0]) ];
     var config_table_cols_right = [ shared.element('td',{id: 'order_item_edit_table_rcol_1'},'',config_table_rows[0]) ];
+    
+    // Edit ItemType
+    shared.element('h4',{id: 'oi_item_type_h4'},i18n.activerecord.models.item_type.one,config_table_cols_left[0]);
+    var item_type_select = shared.element('select',{id: 'oi_item_type_select'},'',config_table_cols_left[0]);
+    item_type_select.on('change',function () {
+      editItemAndOrderItem(item,'item_type_id',$(this).val());
+      focusInput($('#keyboard_input'));
+    });
+    $.each(ItemTypes,function (i,item_type) {
+      shared.element('option',{value: item_type.id},item_type.name,item_type_select);
+    });
+    make_select_widget('Item Type',item_type_select);
+    
+    // Edit Category
+    shared.element('h4',{id: 'oi_category_h4'},i18n.activerecord.models.category.one,config_table_cols_right[0]);
+    var category_select = shared.element('select',{id: 'oi_category_select'},'',config_table_cols_right[0]);
+    category_select.on('change',function () {
+      editItemAndOrderItem(item,'category_id',$(this).val());
+      focusInput($('#keyboard_input'));
+    });
+    $.each(Categories,function (i,category) {
+      shared.element('option',{value: category.id},category.name,category_select);
+    });
+    make_select_widget('Item Type',category_select);
 }
-
+function editItemAndOrderItem(item,field,val,callback) {
+  var string = '/vendors/edit_field_on_child?id=' +
+  item.id +'&klass=OrderItem' +
+  '&field=' + field +
+  '&value=' + val;
+  $.get(string);
+  string = '/vendors/edit_field_on_child?id=' +
+  item.item_id +'&klass=Item' +
+  '&field=' + field +
+  '&value=' + val;
+  $.get(string,callback);
+}
+function getBehaviorById(id) {
+  var itid = 0;
+  $.each(ItemTypes,function (i,item_type) {
+    if (item_type.id == id) {
+      itid = item_type.id;
+    }
+  });
+  return itid;
+}
 function orderItemNameOption(append_to,item_id,initvalue) {
   var save_edit = function () {
     var id = '#option_order_item_name_input';

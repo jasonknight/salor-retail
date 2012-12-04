@@ -229,6 +229,9 @@ gn:
       item_type:
         one: Artikel
         other: Artikel
+        coupon: Kupon
+        gift_card: Gutschein
+        normal: Normal
       location:
         one: Verkaufsfläche
         other: Verkaufsflächen
