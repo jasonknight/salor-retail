@@ -229,6 +229,9 @@ en-CA:
       item_type:
         one: Item Type
         other: Item Types
+        coupon: Coupon
+        gift_card: Gift Card
+        normal: Normal
       location:
         one: Location
         other: Locations

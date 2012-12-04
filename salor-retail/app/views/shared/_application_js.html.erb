@@ -111,7 +111,8 @@ var inplace_shipmentstatuses = "<%= escape_javascript raw inplace_shipmentstatus
 var inplace_rebatetypes = "<%= escape_javascript raw inplace_rebatetypes %>";
 var SaleTypes = <%= raw SaleType.scopied.to_json %>;
 var Countries = <%= raw Country.scopied.to_json %>;
-
+var ItemTypes = <%= raw ItemType.all.to_json %>;
+var Categories = <%= raw Category.all.to_json %>;
 
 window.params = {
   action: "<%= params[:action] %>",

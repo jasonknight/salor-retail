@@ -20,7 +20,9 @@ function showSearch() {
 function hideSearch() {
   $('#search').hide();
   $('#search_results').html('');
-  focusInput($('#keyboard_input'));
+  setTimeout(function () {
+    focusInput($('#keyboard_input'));
+  },120);
 }
 function search() {
   search_last_query = '/items/search?keywords=' + $('#search_keywords').val() + '&klass=' + $('#search_models').val() + '&page=' + current_page;
