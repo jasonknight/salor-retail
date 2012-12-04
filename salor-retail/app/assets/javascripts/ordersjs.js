@@ -448,6 +448,12 @@ function detailedOrderItemMenu(event) {
       shared.element('option',{value: category.id},category.name,category_select);
     });
     make_select_widget('Item Type',category_select);
+    var print_sticker = shared.element('div',{id: 'oi_print_sticker'},i18n.helpers.submit.print,config);
+    print_sticker.mousedown(function () {
+      print_url(Register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
+    });
+    print_sticker.addClass('button-confirm');
+    shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
 }
 function editItemAndOrderItem(item,field,val,callback) {
   var string = '/vendors/edit_field_on_child?id=' +
