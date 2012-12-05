@@ -9,6 +9,7 @@
 class FileUpload
   # {START}
   def type1(shipper_name, file_lines) #danczek_tobaccoland_plattner_moosmayr
+#     return { :updated_items => 1, :created_items => 1, :created_categories => 1, :created_tax_profiles => 1 }
     shipper = Shipper.find_by_name(shipper_name)
     if shipper.nil?
       shipper = Shipper.create(:name => shipper_name, :vendor_id => $Vendor.id)
@@ -132,7 +133,7 @@ class FileUpload
         attributes.merge! :sku => sku_piece unless sku_piece.empty?
         piece_item.attributes = attributes
         Action.run(piece_item,:on_import)
-        piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
+        pack_item.update_attribute(:child_id, piece_item.id) if not pack_item.sku == piece_item.sku
         piece_item.save
         updated_items += 1
       else
@@ -142,17 +143,20 @@ class FileUpload
         piece_item.set_model_owner
         Action.run(piece_item,:on_import)
         piece_item.save
-        piece_item.parent = pack_item if not pack_item.sku == piece_item.sku
+        if not pack_item.sku == piece_item.sku
+          pack_item.update_attribute(:child_id, piece_item.id)
+        end
         piece_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}"
         created_items += 1
       end
     end
-    GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
+    return { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles }
   end
 
   #
   def type2(shipper_name, file_lines) #house of smoke, dios
+    
     shipper = Shipper.find_by_name(shipper_name)
     if shipper.nil?
       shipper = Shipper.create(:name => shipper_name, :vendor_id => $Vendor.id)
@@ -297,7 +301,7 @@ class FileUpload
         created_items += 1
       end
     end
-    GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
+    return { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles }
   end
 
   #

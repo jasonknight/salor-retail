@@ -842,16 +842,24 @@ window.shared = {
       var new_offset = {top: ntop, left: nleft};
       elem.offset(new_offset);
     }, //end center
-    bottom_right: function (elem,center_to_elem) {
+    bottom_right: function (elem,center_to_elem,pad) {
       var offset = center_to_elem.offset();
       offset.top += center_to_elem.height() - elem.outerHeight();
       offset.left += center_to_elem.width() - elem.outerWidth();
+      if (pad) {
+        offset.top += pad.top;
+        offset.left += pad.left;
+      }
       elem.css({position: 'absolute'});
       elem.offset(offset);
     },
-    top_left: function (elem,center_to_elem) {
+    top_left: function (elem,center_to_elem,pad) {
       elem.css({position: 'absolute'});
       var offset = center_to_elem.offset();
+      if (pad) {
+        offset.top += pad.top;
+        offset.left += pad.left;
+      }
       elem.offset(offset);
     },
     position_rememberable: function (elem) {
