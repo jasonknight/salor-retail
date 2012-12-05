@@ -25,7 +25,7 @@ width_metrics: MM,CM,DM,M
 weight_metrics: STK,BD,BT,CM,GR,KG,LT,ML,MT,PA,PK,PT,RL,ST,TB,WG
 sales_metrics: STK,BD,BT,CM,GR,KG,LT,ML,MT,PA,PK,PT,RL,ST,TB,WG
 reorder_csvs: true
-reorder_types: default_export:Default,tobacco_land:TobaccoLand
+reorder_types: default_export:Default,tobacco_land:Tobaccoland
 item_limit: 0
 order_limit: 0
 general:

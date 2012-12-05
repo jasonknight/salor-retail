@@ -644,7 +644,7 @@ class OrderItem < ActiveRecord::Base
     end
     if self.item then
       obj = {
-        :name => self.item.name[0..20],
+        :name => self.get_translated_name(I18n.locale)[0..20],
         :sku => self.item.sku,
         :item_id => self.item_id,
         :activated => self.item.activated,
