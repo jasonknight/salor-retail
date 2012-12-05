@@ -45,7 +45,7 @@
                 </div>
                 <div class="field">
                   <%= f.label t("activerecord.attributes.cash_drawer") %><br />
-                  <%= f.text_field :cash_drawer_path, :class => "keyboardable"%>
+                  <%= f.select :cash_drawer_path, @devicenodes, :include_blank => true %>
                 </div>
                 <div class="field">
                   <%= f.label :color %> 
@@ -59,16 +59,16 @@
         <td>
             <div class="field">
               <%= f.label t("activerecord.attributes.thermal_printer") %><br />
-              <%= f.text_field :thermal_printer, :class => "keyboardable"%>
+              <%= f.select :thermal_printer, @devicenodes, :include_blank => true %>
             </div>
             <div class="field">
               <%= f.label VendorPrinter.human_attribute_name 'sticker_printer' %><br />
-              <%= f.text_field :sticker_printer, :class => "keyboardable"%>
+              <%= f.select :sticker_printer, @devicenodes, :include_blank => true %>
             </div>
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.pole_display") %><br />
-              <%= f.text_field :pole_display, :class => "keyboardable"%>
+              <%= f.select :pole_display, @devicenodes, :include_blank => true %>
             </div>
             <br />
             <div class="field">
@@ -78,7 +78,7 @@
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.scale") %><br />
-              <%= f.text_field :scale, :class => "keyboardable"%>
+              <%= f.select :scale, @devicenodes, :include_blank => true %>
             </div>
             <div class="field">
               <%= f.label t("activerecord.attributes.address") %><br />

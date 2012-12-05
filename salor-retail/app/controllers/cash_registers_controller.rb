@@ -9,6 +9,7 @@ class CashRegistersController < ApplicationController
   before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
+  before_filter :set_devicenodes
   # GET /cash_registers
   # GET /cash_registers.xml
   def index
@@ -47,13 +48,14 @@ class CashRegistersController < ApplicationController
   def edit
     @cash_register = CashRegister.scopied.find(params[:id])
     add_breadcrumb @cash_register.name,'edit_cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
+    set_devicenodes
   end
 
   # POST /cash_registers
   # POST /cash_registers.xml
   def create
     @cash_register = CashRegister.new(params[:cash_register])
-
+ 
     respond_to do |format|
       if @cash_register.save
         @cash_register.set_model_owner(salor_user)
@@ -108,5 +110,21 @@ class CashRegistersController < ApplicationController
     @vendor = $Vendor
     add_breadcrumb @vendor.name,'vendor_path(@vendor)' if @vendor.id
     add_breadcrumb I18n.t("menu.cash_registers"),'cash_registers_path(:vendor_id => params[:vendor_id])'
+  end
+  
+  def set_devicenodes
+    nodes_usb1 = Dir['/dev/usb/lp*']
+    nodes_usb2 = Dir['/dev/usblp*']
+    nodes_serial = Dir['/dev/usb/ttyUSB*']
+    nodes_salor = Dir['/dev/salor*']
+    all_nodes = nodes_usb1 + nodes_usb2 + nodes_serial + nodes_salor
+    @devicenodes = {}
+    all_nodes.each do |n|
+      devicename = `udevadm info -a -p  $(udevadm info -q path -n #{n}) | grep ieee1284_id`
+      devicename = /^.*EL:(.*?)\;.*/.match(devicename)[1]
+      full_devicename = "#{n}: #{devicename}"
+      @devicenodes.merge! full_devicename => n
+    end
+    @devicenodes = @devicenodes.to_a
   end
 end
