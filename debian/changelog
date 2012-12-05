@@ -1,3 +1,25 @@
+salor-retail (4.0.1.10) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes feature #1564 Additional fix that SKU input was not focused when closing search popup, possibly leading to reported bug that sku input sometimes loses focus.
+  * removing console.log
+
+  [ Michael Franzl ]
+  * Closes #1561 Day report modifications
+
+  [ Jason Knight ]
+  * Closes bug #1563 this was due to two problems: 1) too many shippers were created and scoping was preventing the finding of dynamically created shippers from the wholesaler import.
+  * Closes feature #1566
+  * Allowing text passwords Login field is now a password field added coupon_applies to order_items
+  * Making customers notable
+
+  [ Michael Franzl ]
+  * Adds to #1564 Allow to create a gift card quickly from POS screen
+  * Closes #1568 Wholesaler import: Failed to save new associated parent
+  * Closes #1565 Display available printing device nodes on cash register screen
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 05 Dec 2012 20:26:11 +0100
+
 salor-retail (4.0.1.9) unstable; urgency=low
 
   [ Jason Knight ]
