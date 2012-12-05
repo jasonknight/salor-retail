@@ -96,6 +96,8 @@
       <input id="customer_vendor_id" name="customer[vendor_id]" type="hidden" value="<%= $User.vendor_id.to_s %>" />
     </td>
   </tr>
+  
+
   <tr>
     <td colspan="2">  
       <hr />
@@ -105,12 +107,12 @@
   
   <tr>
     <td> <label for="loyalty_card_points"><%= t("menu.points") %></label> </td>
-    <td> <input class="keyboardable-int" id="loyalty_card_points" name="loyalty_card[points]" value="<%= @customer.loyalty_card.points %>" size="30" type="text" /> </td>
+    <td> <input class="keyboardable-int" id="loyalty_card_points" name="customer[set_loyalty_card][points]" value="<%= @customer.loyalty_card.points %>" size="30" type="text" /> </td>
   </tr>
            
   <tr>
     <td> <label for="loyalty_card_sku">SKU</label> </td>
-    <td> <input class="keyboardable-int" id="loyalty_card_sku" name="loyalty_card[sku]" value="<%= @customer.loyalty_card.sku %>" size="30" type="text" /> </td>
+    <td> <input class="keyboardable-int" id="loyalty_card_sku" name="customer[set_loyalty_card][sku]" value="<%= @customer.loyalty_card.sku %>" size="30" type="text" /> </td>
   </tr>
   <tr>
     <td colspan="2">  
@@ -134,6 +136,20 @@
         <% end %>
     </td>
   </tr>
+    <tr id="notes_row">
+    <td colspan="2">  
+      <hr />
+      <h2><%= t("views.notes") %></h2> <br />
+      <%= link_to_add_fields(I18n.t('views.single_words.new'),f,:notes,"add_note_fields") %>
+      <br />
+      <br />
+    </td>
+  </tr>
+  <%= f.fields_for(:notes) do |notes|%>
+    
+        <%= render 'note_fields', :f => notes%>
+
+  <% end %>
   <tr>
     <td colspan="2" align="right"> 
       <div class="actions">

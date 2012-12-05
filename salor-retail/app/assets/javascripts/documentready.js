@@ -98,10 +98,10 @@ $(function () {
         handled = true;
         return false;
       }
-      if (isDiscountsEdit() || isCustomersEdit()) {
-        handled = true;
-        return false;
-      }
+//       if (isDiscountsEdit() || isCustomersEdit()) {
+//         handled = true;
+//         return false;
+//       }
       if (handled == true) {
         event.preventDefault();
         return false;

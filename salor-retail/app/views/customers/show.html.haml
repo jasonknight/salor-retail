@@ -4,8 +4,14 @@
 
   %p== #{ @last_orders.count } #{ t('activerecord.models.order.other') }
 
+  %h3= t('views.notes')
+  %table{ :id=> "notes_table", :width => "90%", :align=> "center"}
+    - @customer.notes.each do |note|
+      %tr
+        %td{:align=>'left'}= raw(Kramdown::Document.new(note.body).to_html)
+  
   %h3= t('.last_orders')
-  %table.stripe-me
+  %table{:width => "90%", :align=> "center", :class => "stripe-me"}
     %tr
       %th= t('.order_id')
       %th= t('.order_total')
@@ -15,7 +21,7 @@
         %td= number_to_currency o.total
 
   %h3= t('.bought_items')
-  %table.stripe-me
+  %table{:width => "90%", :align=> "center", :class => "stripe-me"}
     %tr
       %th= Item.human_attribute_name :name
       %th= Item.human_attribute_name :sku

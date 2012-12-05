@@ -28,6 +28,7 @@ class CustomersController < ApplicationController
   def new
     @customer = Customer.new
     @customer.loyalty_card = LoyaltyCard.new
+    @customer.notes.build
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @customer }
@@ -45,6 +46,9 @@ class CustomersController < ApplicationController
     @customer = Customer.find(params[:id])
     if not @customer.loyalty_card then
       @customer.loyalty_card = LoyaltyCard.new
+    end
+    if @customer.notes.empty? then
+      @customer.notes.build
     end
     add_breadcrumb I18n.t("menu.customer") + ' ' + @customer.full_name,'edit_customer_path(@customer,:vendor_id => params[:vendor_id])'
   end
@@ -77,7 +81,6 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.update_attributes(params[:customer])
-        @customer.loyalty_card.update_attributes params[:loyalty_card]
         format.html { redirect_to(:action => 'index', :notice => 'Customer was successfully updated.') }
         format.xml  { head :ok }
       else

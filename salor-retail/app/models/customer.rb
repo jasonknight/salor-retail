@@ -13,6 +13,8 @@ class Customer < ActiveRecord::Base
   has_one :loyalty_card
   belongs_to :vendor
   has_many :orders
+  has_many :notes, :as => :notable, :order => "id desc"
+  accepts_nested_attributes_for :notes, :reject_if => lambda {|a| a[:body].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :loyalty_card
   before_create :set_model_owner
 
@@ -67,6 +69,9 @@ class Customer < ActiveRecord::Base
     else
       self.loyalty_card.update_attribute(:points, points)
     end
+  end
+  def set_loyalty_card=(lc)
+    self.loyalty_card.update_attributes(lc)
   end
 
   #
