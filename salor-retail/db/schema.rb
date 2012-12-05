@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121123220026) do
+ActiveRecord::Schema.define(:version => 20121202085448) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -578,6 +578,13 @@ ActiveRecord::Schema.define(:version => 20121123220026) do
     t.integer  "vendor_id"
     t.boolean  "tax_free",              :default => false
     t.integer  "hidden_by"
+    t.integer  "employee_id"
+    t.string   "name"
+    t.string   "coupon_type"
+    t.boolean  "must_change_price"
+    t.string   "weight_metric"
+    t.boolean  "calculate_part_price"
+    t.string   "coupon_applies"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"

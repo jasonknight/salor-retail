@@ -1,0 +1,11 @@
+<tr class="fields">
+  <td colspan="2">
+    <div class='note'>
+      <%= f.label :body %> <br />
+      <%= f.text_area :body, :rows => 5, :width => '99%' %><br />
+      <br />
+      <%= f.hidden_field :_destroy %>
+      <%= link_to_function I18n.t('menu.destroy'),"remove_note_fields(this);" %>
+    </div>
+  </td>
+<tr>
