@@ -15,7 +15,7 @@ class FileUpload
       shipper = Shipper.create(:name => shipper_name, :vendor_id => $Vendor.id)
     end
     shipper_id = shipper ? shipper.id : nil
-    i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
+    i, updated_items, created_items, created_categories, created_tax_profiles,messages = [0,0,0,0,0,[]]
     if file_lines.first.include? '#' then
      delim = '#'
     elsif file_lines.first.include? ';'
