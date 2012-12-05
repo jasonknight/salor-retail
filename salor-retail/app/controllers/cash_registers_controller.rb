@@ -120,10 +120,12 @@ class CashRegistersController < ApplicationController
     all_nodes = nodes_usb1 + nodes_usb2 + nodes_serial + nodes_salor
     @devicenodes = {}
     all_nodes.each do |n|
-      devicename = `udevadm info -a -p  $(udevadm info -q path -n #{n}) | grep ieee1284_id`
-      devicename = /^.*EL:(.*?)\;.*/.match(devicename)[1]
-      full_devicename = "#{n}: #{devicename}"
-      @devicenodes.merge! full_devicename => n
+      # the following unfortunately doesn't work in production
+      #devicename = `udevadm info -a -p  $(udevadm info -q path -n #{n}) | grep ieee1284_id`
+      #devicename = /^.*L:(.*?)\;.*/.match(devicename)[1]
+      #full_devicename = "#{n}: #{devicename}"
+      #@devicenodes.merge! full_devicename => n
+      @devicenodes.merge! n => n
     end
     @devicenodes = @devicenodes.to_a
   end

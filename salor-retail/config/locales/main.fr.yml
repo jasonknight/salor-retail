@@ -219,6 +219,9 @@ fr:
       item_type:
         one: Type d'article
         other: Types d'article
+        coupon: Coupon
+        gift_card: Gift Card
+        normal: Normal
       location:
         one: Emplacement
         other: Emplacements

@@ -219,6 +219,9 @@ ru:
       item_type:
         one: Тип товара
         other: Типы товара
+        coupon: Coupon
+        gift_card: Gift Card
+        normal: Normal
       location:
         one: Отдел
         other: Отделы
