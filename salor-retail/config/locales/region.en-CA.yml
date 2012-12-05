@@ -26,7 +26,7 @@ en-CA:
         # Where is the currency sign? %u is the currency unit, %n the number (default: $5.00)
         format: "%u %n"
         unit: "$"
-        friendly_unit: USD
+        friendly_unit: CAD
         # These five are to override number.format and are optional
         separator: "."
         delimiter: ","

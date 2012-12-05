@@ -11,33 +11,9 @@ class EmployeesController < ApplicationController
   before_filter :crumble, :except => [:login]
   cache_sweeper :employee_sweeper, :only => [:create, :update, :destroy]
   def login
-    params[:code] = params[:code].to_i
-    check = SalorBase.check_code(params[:code])
-    if check == 37 then
-      user = User.first
-      user.update_attribute :is_technician, true
-      session[:user_id] = user.id
-      session[:user_type] = user.class.to_s
-      redirect_to vendors_path and return
-    elsif check then
       user = Employee.login(params[:code]) 
       user = User.login(params[:code]) if not user
-    else
-      redirect_to :controller => :home, :action => :index, :notice => "Check failed" and return
-    end
-
-        
     if user then
-      if check == 41 and not request.url.include? "salortrainer" then
-        t = Time.now - 61.days
-        if user.created_at <= t then
-          redirect_to :controller => :home, :action => "you_have_to_pay" and return
-        end
-      end
-      #:w
-      if session[:user_id].to_i == user.id and session[:user_type] == user.class.to_s then
-        #redirect_to :controller => :vendors, :action => :end_day and return
-      end
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s
       $User = user
@@ -50,13 +26,7 @@ class EmployeesController < ApplicationController
        elsif not user.last_path.empty?
           redirect_to user.last_path and return 
        else
-          #r = user.get_root
-          #if user.class == Employee then
-          #  redirect_to r.merge!({:notice => "Logged In",:vendor_id => user.vendor_id}) and return
-          #else
-          #  redirect_to r.merge!({:notice => "Logged In"}) and return
-          #end
-          redirect_to vendors_path
+          redirect_to '/orders/new' and return # always try to go to orders/new
        end
     else
       redirect_to :controller => :home, :action => :index, :notice => "could not find a user with code" and return

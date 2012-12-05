@@ -157,7 +157,6 @@ class Item < ActiveRecord::Base
     end
     if string == self.sku then
       errors.add(:child_sku,I18n.t("system.errors.parent_sku"))
-      GlobalErrors.append_fatal("system.errors.parent_sku")
       return
     end
 
@@ -165,7 +164,6 @@ class Item < ActiveRecord::Base
     if p then
       if self.child.id == p.id then
         errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
-        GlobalErrors.append_fatal("system.errors.parent_sku")
         p.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
       else
         self.save # this is necessary since at this point self.id is still nil
@@ -173,7 +171,6 @@ class Item < ActiveRecord::Base
       end
     else
       errors.add(:parent_sku, I18n.t('system.errors.parent_sku_must_exist'))
-      GlobalErrors.append_fatal("system.errors.parent_sku_must_exist")
     end
   end
   def child_sku=(string)

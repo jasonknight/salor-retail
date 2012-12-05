@@ -1,0 +1,6 @@
+=raw content_box_top(I18n.t("menu.wholesaler_update"))
+%table{:width => "90%", :align => "center"}
+  - @report.each do |k,v|
+    %tr
+      %td=k
+      %td=v
