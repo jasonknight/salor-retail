@@ -197,7 +197,7 @@ class OrderItem < ActiveRecord::Base
       return
     end
     p = self.string_to_float(p)
-    if (self.item.base_price == 0.0 or self.item.base_price == nil) and not self.item.must_change_price == true then
+    if self.item.base_price == 0.0 or self.item.base_price == nil and (self.item.must_change_price == false or self.item.behavior == 'gift_card') then
       self.item.update_attribute :base_price,p
     end
     if self.is_buyback == true and p > 0 then
