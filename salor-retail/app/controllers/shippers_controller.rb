@@ -14,7 +14,7 @@ class ShippersController < ApplicationController
   cache_sweeper :shipper_sweeper, :only => [:create, :update, :destroy]
 
   def index
-    @shippers = Shipper.where(:vendor_id => $User.vendor_id).order("id asc").page(params[:page]).per(25)
+    @shippers = Shipper.scopied.visible.order("name asc").page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

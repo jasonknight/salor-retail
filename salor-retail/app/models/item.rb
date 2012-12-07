@@ -444,7 +444,7 @@ class Item < ActiveRecord::Base
   # Reorder recommendation csvs
   
   def self.recommend_reorder(type)
-    shippers = Shipper.where(:vendor_id => $User.vendor_id).find_all_by_reorder_type(type)
+    shippers = Shipper.where(:vendor_id => $User.vendor_id).visible.find_all_by_reorder_type(type)
     shippers << nil if type == 'default_export'
     items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
     if not items.any? then
@@ -490,7 +490,8 @@ class Item < ActiveRecord::Base
   def self.default_export(items)
     lines = []
     items.each do |item|
-      lines << "%s\t%s\t%d\t%f" % [item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
+      shippername = item.shipper ? item.shipper.name : ''
+      lines << "%s\t%s\t%s\t%d\t%f" % [shippername,item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
     end
     return lines.join("\n")
   end
