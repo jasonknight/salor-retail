@@ -159,7 +159,7 @@ function updateCustomerView(item,order_id) {
 }
 window.retail = {container: $(window)};
 window.showOrderOptions = function () {
-  var dialog = shared.draw.dialog(i18n.menu.configuration + ' Nr.' + Order.id,"order_options");
+  var dialog = shared.draw.dialog(i18n.menu.configuration + ' ID ' + Order.id,"order_options");
   
   // Customer code
   if (Order.customer) {
