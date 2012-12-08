@@ -316,19 +316,25 @@ class Item < ActiveRecord::Base
     vid = GlobalData.salor_user.meta.vendor_id
     items.each do |item|
       i = Item.find_by_sku(item[:sku])
-      i.vendor_id = vid
-      i.is_part = 1
-      i.part_quantity = self.string_to_float(item[:part_quantity])
-      i.save
       if i then
-        ids << i.id
+        i.vendor_id = vid
+        i.is_part = 1
+        i.part_quantity = self.string_to_float(item[:part_quantity])
+        i.save
+        if i then
+          ids << i.id
+        end
+      else
+        errors.add :sku, I18n.t("system.errors.failed_to_save_parts")
+        return
       end
     end
     begin
       self.part_ids = ids if ids.any?
     rescue
-      GlobalErrors.append_fatal(I18n.t("system.errors.failed_to_save_parts"),self)
-      GlobalErrors.append_fatal($!.message,self)
+      errors.add(:sku,I18n.t("system.errors.failed_to_save_parts"));
+#       GlobalErrors.append_fatal(I18n.t("system.errors.failed_to_save_parts"),self)
+#       GlobalErrors.append_fatal($!.message,self)
     end
   end
   def batches
