@@ -1,3 +1,4 @@
+---
 ru:
   any_reports: Любое действие с отчетами
   index_reports: Индексирует отчеты
@@ -6,132 +7,140 @@ ru:
   create_reports: Создает отчеты
   destroy_reports: Удаляет отчеты
   update_reports: Обновляет отчеты
-  :employee: Работник
-  :manager: Менеджер
-  :head_cashier: Главный кассир
-  :cashier: Кассир
-  :stockboy: Кладовщик
-  :edit_others_orders: Редактирует другие заказы
-  :index_orders: Индексирует заказы
-  :edit_orders: Редактирует заказы
-  :destroy_orders: Удаляет заказы
-  :create_orders: Создает заказы
-  :update_orders: Обновляет заказы
-  :show_orders: Видит заказы
-  :any_orders: Любое действие с заказами
-  :index_items: Индексирует товары
-  :edit_items: Редактирует товары
-  :destroy_items: Удаляет товары
-  :create_items: Создает товары
-  :update_items: Обновляет товары
-  :show_items: Видит товары
-  :any_items: Любое действие с товарами
-  :index_categories: Индексирует категории
-  :edit_categories: Редактирует категории
-  :destroy_categories: Удаляет категории
-  :create_categories: Создает категории
-  :update_categories: Обновляет категории
-  :show_categories: Видит категории
-  :any_categories: Любое действие с категориями
-  :index_locations: Индексирует отделы
-  :edit_locations: Редактирует отделы
-  :destroy_locations: Удаляет отделы
-  :create_locations: Создает отделы
-  :update_locations: Обновляет отделы
-  :show_locations: Видит отделы
-  :any_locations: Любое действие с отделами
-  :index_shippers: Индексирует поставщиков
-  :edit_shippers: Редактирует поставщиков
-  :destroy_shippers: Удаляет поставщиков
-  :create_shippers: Создает поставщиков
-  :update_shippers: Обновляет поставщиков
-  :show_shippers: Видит поставщиков
-  :any_shippers: Любое действие с поставщиками
-  :index_shipments: Индексирует поставки
-  :edit_shipments: Редактирует поставки
-  :destroy_shipments: Удаляет поставки
-  :create_shipments: Создает поставки
-  :update_shipments: Обновляет поставки
-  :show_shipments: Видит поставки
-  :any_shipments: Любое действие с поставками
-  :index_vendors: Индексирует магазины
-  :edit_vendors: Редактирует магазины
-  :destroy_vendors: Удаляет магазины
-  :create_vendors: Создает магазины
-  :update_vendors: Обновляет магазины
-  :show_vendors: Видит магазины
-  :any_vendors: Любое действие с магазинами
-  :index_employees: Индексирует работников
-  :edit_employees: Редактирует работников
-  :destroy_employees: Удаляет работников
-  :create_employees: Создает работников
-  :update_employees: Обновляет работников
-  :show_employees: Видит работников
-  :any_employees: Любое действие с работниками
-  :index_discounts: Индексирует скидки
-  :edit_discounts: Редактирует скидки
-  :destroy_discounts: Удаляет скидки
-  :create_discounts: Создает скидки
-  :update_discounts: Обновляет скидки
-  :show_discounts: Видит скидки
-  :any_discounts: Любое действие со скидками
-  :index_tax_profiles: Индексирует налоговые профили
-  :edit_tax_profiles: Редактирует налоговые профили
-  :destroy_tax_profiles: Удаляет налоговые профили
-  :create_tax_profiles: Создает налоговые профили
-  :update_tax_profiles: Обновляет налоговые профили
-  :show_tax_profiles: Видит налоговые профили
-  :any_tax_profiles: Любое действие с налоговыми профилями
-  :index_customers: Индексирует покупателей
-  :edit_customers: Редактирует покупателей
-  :destroy_customers: Удаляет покупателей
-  :create_customers: Создает покупателей
-  :update_customers: Обновляет покупателей
-  :show_customers: Видит покупателей
-  :any_customers: Любое действие с покупателями
-  :index_transaction_tags: Индексирует метки транзакций
-  :edit_transaction_tags: Редактирует метки транзакций
-  :destroy_transaction_tags: Удаляет метки транзакций
-  :create_transaction_tags: Создает метки транзакций
-  :update_transaction_tags: Обновляет метки транзакций
-  :show_transaction_tags: Видит метки транзакций
-  :any_transaction_tags: Любое действие с метками транзакций
-  :index_buttons: Индексирует кнопки
-  :edit_buttons: Редактирует кнопки
-  :destroy_buttons: Удаляет кнопки
-  :create_buttons: Создает кнопки
-  :update_buttons: Обновляет кнопки
-  :show_buttons: Видит кнопки
-  :any_buttons: Любое действие с кнопками
-  :index_stock_locations: Индексирует расположения складов
-  :edit_stock_locations: Редактирует расположения складов
-  :destroy_stock_locations: Удаляет расположения складов
-  :create_stock_locations: Создает расположения складов
-  :update_stock_locations: Обновляет расположения складов
-  :show_stock_locations: Видит расположения складов
-  :any_stock_locations: Любое действие с расположениями складов
-  :clear_orders: Отчищает заказы
-  :see_header: Видит заголовок
-  :destroy_order_items: Удаляет товары в заказах
-  :change_prices: Изменяет цены
-  :index_histories: Индексирует истории
-  :edit_histories: Редактирует истории
-  :destroy_histories: Удаляет истории
-  :create_histories: Создает истории
-  :update_histories: Обновляет истории
-  :show_histories: Видит истории
-  :any_histories: Любое действие с историями
-  :index_actions: Индексирует действия
-  :edit_actions: Редактирует действия
-  :destroy_actions: Удаляет действия
-  :create_actions: Создает действия
-  :update_actions: Обновляет действия
-  :show_actions: Видит действия
-  :any_actions: Любое действие с действиями
-  :index_shipment_items: Индексирует товары в поставках
-  :edit_shipment_items: Редактирует товары в поставках
-  :destroy_shipment_items: Удаляет товары в поставках
-  :create_shipment_items: Создает товары в поставках
-  :update_shipment_items: Обновляет товары в поставках
-  :show_shipment_items: Видит товары в поставках
-  :any_shipment_items: Любое действие с товарами в поставках
+  employee: Работник
+  manager: Менеджер
+  head_cashier: Главный кассир
+  cashier: Кассир
+  stockboy: Кладовщик
+  edit_others_orders: Редактирует другие заказы
+  index_orders: Индексирует заказы
+  edit_orders: Редактирует заказы
+  destroy_orders: Удаляет заказы
+  create_orders: Создает заказы
+  update_orders: Обновляет заказы
+  show_orders: Видит заказы
+  any_orders: Любое действие с заказами
+  index_items: Индексирует товары
+  edit_items: Редактирует товары
+  destroy_items: Удаляет товары
+  create_items: Создает товары
+  update_items: Обновляет товары
+  show_items: Видит товары
+  any_items: Любое действие с товарами
+  index_categories: Индексирует категории
+  edit_categories: Редактирует категории
+  destroy_categories: Удаляет категории
+  create_categories: Создает категории
+  update_categories: Обновляет категории
+  show_categories: Видит категории
+  any_categories: Любое действие с категориями
+  index_locations: Индексирует отделы
+  edit_locations: Редактирует отделы
+  destroy_locations: Удаляет отделы
+  create_locations: Создает отделы
+  update_locations: Обновляет отделы
+  show_locations: Видит отделы
+  any_locations: Любое действие с отделами
+  index_shippers: Индексирует поставщиков
+  edit_shippers: Редактирует поставщиков
+  destroy_shippers: Удаляет поставщиков
+  create_shippers: Создает поставщиков
+  update_shippers: Обновляет поставщиков
+  show_shippers: Видит поставщиков
+  any_shippers: Любое действие с поставщиками
+  index_shipments: Индексирует поставки
+  edit_shipments: Редактирует поставки
+  destroy_shipments: Удаляет поставки
+  create_shipments: Создает поставки
+  update_shipments: Обновляет поставки
+  show_shipments: Видит поставки
+  any_shipments: Любое действие с поставками
+  index_vendors: Индексирует магазины
+  edit_vendors: Редактирует магазины
+  destroy_vendors: Удаляет магазины
+  create_vendors: Создает магазины
+  update_vendors: Обновляет магазины
+  show_vendors: Видит магазины
+  any_vendors: Любое действие с магазинами
+  index_employees: Индексирует работников
+  edit_employees: Редактирует работников
+  destroy_employees: Удаляет работников
+  create_employees: Создает работников
+  update_employees: Обновляет работников
+  show_employees: Видит работников
+  any_employees: Любое действие с работниками
+  index_discounts: Индексирует скидки
+  edit_discounts: Редактирует скидки
+  destroy_discounts: Удаляет скидки
+  create_discounts: Создает скидки
+  update_discounts: Обновляет скидки
+  show_discounts: Видит скидки
+  any_discounts: Любое действие со скидками
+  index_tax_profiles: Индексирует налоговые профили
+  edit_tax_profiles: Редактирует налоговые профили
+  destroy_tax_profiles: Удаляет налоговые профили
+  create_tax_profiles: Создает налоговые профили
+  update_tax_profiles: Обновляет налоговые профили
+  show_tax_profiles: Видит налоговые профили
+  any_tax_profiles: Любое действие с налоговыми профилями
+  index_customers: Индексирует покупателей
+  edit_customers: Редактирует покупателей
+  destroy_customers: Удаляет покупателей
+  create_customers: Создает покупателей
+  update_customers: Обновляет покупателей
+  show_customers: Видит покупателей
+  any_customers: Любое действие с покупателями
+  index_transaction_tags: Индексирует метки транзакций
+  edit_transaction_tags: Редактирует метки транзакций
+  destroy_transaction_tags: Удаляет метки транзакций
+  create_transaction_tags: Создает метки транзакций
+  update_transaction_tags: Обновляет метки транзакций
+  show_transaction_tags: Видит метки транзакций
+  any_transaction_tags: Любое действие с метками транзакций
+  index_buttons: Индексирует кнопки
+  edit_buttons: Редактирует кнопки
+  destroy_buttons: Удаляет кнопки
+  create_buttons: Создает кнопки
+  update_buttons: Обновляет кнопки
+  show_buttons: Видит кнопки
+  any_buttons: Любое действие с кнопками
+  index_stock_locations: Индексирует расположения складов
+  edit_stock_locations: Редактирует расположения складов
+  destroy_stock_locations: Удаляет расположения складов
+  create_stock_locations: Создает расположения складов
+  update_stock_locations: Обновляет расположения складов
+  show_stock_locations: Видит расположения складов
+  any_stock_locations: Любое действие с расположениями складов
+  clear_orders: Отчищает заказы
+  see_header: Видит заголовок
+  destroy_order_items: Удаляет товары в заказах
+  change_prices: Изменяет цены
+  index_histories: Индексирует истории
+  edit_histories: Редактирует истории
+  destroy_histories: Удаляет истории
+  create_histories: Создает истории
+  update_histories: Обновляет истории
+  show_histories: Видит истории
+  any_histories: Любое действие с историями
+  index_actions: Индексирует действия
+  edit_actions: Редактирует действия
+  destroy_actions: Удаляет действия
+  create_actions: Создает действия
+  update_actions: Обновляет действия
+  show_actions: Видит действия
+  any_actions: Любое действие с действиями
+  index_shipment_items: Индексирует товары в поставках
+  edit_shipment_items: Редактирует товары в поставках
+  destroy_shipment_items: Удаляет товары в поставках
+  create_shipment_items: Создает товары в поставках
+  update_shipment_items: Обновляет товары в поставках
+  show_shipment_items: Видит товары в поставках
+  any_shipment_items: Любое действие с товарами в поставках
+  index_tender_methods: Index Payment Methods
+  edit_tender_methods: Edit Payment Methods
+  destroy_tender_methods: Destroy Payment Methods
+  create_tender_methods: Create Payment Methods
+  update_tender_methods: Update Payment Methods
+  show_tender_methods: Show Payment Methods
+  any_tender_methods: Any Payment Methods
+  remove_order_items: Remove Order Items

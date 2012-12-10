@@ -8,6 +8,7 @@
 
 require 'yaml'
 require 'active_support'
+require 'json'
 
 $unused = 0
 $source = ''
@@ -278,23 +279,26 @@ namespace :translations do
   # usage: rake translations:update
   task :update do
     base_path = File.join(Rails.root,'config','locales')
-    base_name = "main.XXX.yml" # i.e. the pattern name of the files
-    langs = ['en-US','en-GB','gn','cn','el','es','fr','it','ru']
-    default_file = File.join(base_path,base_name.gsub('XXX',langs[0])) #i.e. the first file is the default file
+    base_name = "yyy.XXX.yml" # i.e. the pattern name of the files
+    langs = ['en-US','en-GB','en-CA','gn','cn','el','es','fr','it','ru']
+    
     langs.each do |lang|
-      current_file = File.join(base_path,base_name.gsub('XXX',lang))
-      if not File.exists? current_file then
-        puts "Translation file doesn't exist, copying it..."
-        `cp #{default_file} #{current_file}`
-      else
-        t = base_name.gsub('XXX',lang)
-        s = base_name.gsub('XXX',langs[0])
-        source, sourcelang, sourcefile, translation, translationlang, transfile = open_translation(s,t)
-        next if sourcelang == translationlang
-        puts "\n\nEqualizing #{sourcelang} => #{translationlang}"
-        translation = equalize(source,translation)
-        write_translation(translation, translationlang, transfile)
+      ['main','region','system','roles'].each do |ftype|
+        default_file = File.join( base_path,base_name.gsub('XXX',langs[0]).gsub('yyy',ftype) ) #i.e. the first file is the default file
+        current_file = File.join( base_path,base_name.gsub('XXX',lang).gsub('yyy',ftype) )
+        if not File.exists? current_file then
+          puts "Translation file doesn't exist, copying it... #{default_file} => #{current_file}"
+          `cp #{default_file} #{current_file}`
+        else
+          t = base_name.gsub('XXX',lang).gsub('yyy',ftype)
+          s = base_name.gsub('XXX',langs[0]).gsub('yyy',ftype)
+          source, sourcelang, sourcefile, translation, translationlang, transfile = open_translation(s,t)
+          next if sourcelang == translationlang
+          puts "\n\nEqualizing #{sourcelang}(#{s}) => #{translationlang}(#{t})"
+          translation = equalize(source,translation)
+          write_translation(translation, translationlang, transfile)
       end
+      end # each file type
     end
     write_javascript_i18n
   end
