@@ -1,5 +1,5 @@
 ---
-en-CA:
+en-GB:
   number:
     format:
       separator: .
@@ -11,7 +11,7 @@ en-CA:
       format:
         format: ! '%u %n'
         unit: $
-        friendly_unit: USD
+        friendly_unit: GBP
         separator: .
         delimiter: ! ','
         precision: 2
