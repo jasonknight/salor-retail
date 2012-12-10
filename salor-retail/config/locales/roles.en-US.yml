@@ -1,4 +1,12 @@
 en-US:
+  :remove_order_items: Remove Order Items
+  :index_tender_methods: Index Payment Methods
+  :edit_tender_methods: Edit Payment Methods
+  :destroy_tender_methods: Destroy Payment Methods
+  :create_tender_methods: Create Payment Methods
+  :update_tender_methods: Update Payment Methods
+  :show_tender_methods: Show Payment Methods
+  :any_tender_methods: Any Payment Methods
   any_reports: Any Reports
   index_reports: Index Reports
   edit_reports: Edit Reports

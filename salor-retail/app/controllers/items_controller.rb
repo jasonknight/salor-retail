@@ -113,30 +113,16 @@ class ItemsController < ApplicationController
   # PUT /items/1
   # PUT /items/1.xml
   def update
-    @item = salor_user.get_item(params[:id])
-    saved = false
+    @item = Item.scopied.find_by_id(params[:id])
     params[:item][:sku].upcase!
-    if @item.nil? then
-      # puts  "item was nil!"
-      @item = Item.new(params[:item])
-      if @item.save then
-        saved = true
-      end
+    if params[:item][:price_by_qty].to_i == 1 then
+      params[:item][:price_by_qty] = true
     else
-      # puts  "Updating Item #{params[:item][:price_by_qty].to_i}"
-      if params[:item][:price_by_qty].to_i == 1 then
-        params[:item][:price_by_qty] = true
-        # puts  "Set to true"
-      else
-        params[:item][:price_by_qty] = false
-      end
-      @item.attributes = params[:item]
-      if @item.save then
-        saved = true
-      end
+      params[:item][:price_by_qty] = false
     end
+    @item.attributes = params[:item]
     respond_to do |format|
-      if saved
+      if not @item.errors.messages.any?
         @item.set_model_owner(salor_user)
         format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_edit", :model => Item.model_name.human)) }
         format.xml  { head :ok }

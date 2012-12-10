@@ -159,7 +159,7 @@ function updateCustomerView(item,order_id) {
 }
 window.retail = {container: $(window)};
 window.showOrderOptions = function () {
-  var dialog = shared.draw.dialog(i18n.menu.configuration + ' Nr.' + Order.id,"order_options");
+  var dialog = shared.draw.dialog(i18n.menu.configuration + ' ID ' + Order.id,"order_options");
   
   // Customer code
   if (Order.customer) {
@@ -241,6 +241,16 @@ window.showOrderOptions = function () {
   var rebate = shared.draw.option(options,callbacks);
   // end Rebate
   
+  
+  var config_table = shared.element('table',{id: 'order_item_edit_table', width: '90%', align:'center'},'',dialog);
+  var config_table_rows = [ shared.element('tr',{id: 'order_item_edit_table_row_1'},'',config_table) ];
+  
+  var config_table_cols_left = [ shared.element('td',{id: 'order_item_edit_table_lcol_1'},'',config_table_rows[0]) ];
+  var config_table_cols_right = [ shared.element('td',{id: 'order_item_edit_table_rcol_1'},'',config_table_rows[0]) ];
+  
+  config_table.find('td').each(function () {
+    $(this).attr('valign','top');
+  });
   // TaxFree
   var callbacks = {change: function () {
       get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
@@ -250,7 +260,7 @@ window.showOrderOptions = function () {
     name: 'tax_free',
     title: i18n.activerecord.attributes.tax_free,
     value: Order.tax_free,
-    append_to: dialog
+    append_to: config_table_cols_left[0]
   };
   var tax_free_check = shared.draw.check_option(options,callbacks);
   // end TaxFree
@@ -260,13 +270,26 @@ window.showOrderOptions = function () {
     name: 'is_proforma',
     title: i18n.activerecord.attributes.is_proforma,
     value: Order.is_proforma,
-    append_to: dialog
+    append_to: config_table_cols_right[0]
   };
   var callbacks = {change: function () {
     get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
     }
   };
   var proforma_check = shared.draw.check_option(options,callbacks);
+  
+  // Buy Order
+  var options = {
+    name: 'is_buy_order',
+    title: i18n.menu.buy_order,
+    value: Order.buy_order,
+    append_to: config_table_cols_left[0]
+  };
+  var callbacks = {change: function () {
+    get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js",function () {});
+  }
+  };
+  var buy_order_check = shared.draw.check_option(options,callbacks);
   // end Proforma
   
   // salestype and countries

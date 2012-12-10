@@ -11,7 +11,7 @@
             <%= order.get_owner.username[0..7] %>
           </td>
           <td>
-            Nr. <%= order.id %>
+            Nr. <%= order.nr %>
             <div class="image-button"><img src="/images/icons/<%= icon(:printer,16) %>" onmousedown="print_order('<%= order.id %>');" /></div>
           </td>
         </tr>
