@@ -16,6 +16,9 @@
         items << oi.to_json
       end
     %>
+   <% if @inst.item.behavior == 'gift_card' and @inst.item.activated == false %>
+     print_url(Register.sticker_printer, '/items/labels', '&id=<%= @inst.item.id %>&type=sticker&style=default')
+   <% end %>
     updateOrderItems([<%= raw items.join(',') %>]);
   <% end %>
 <% elsif @inst.class == LoyaltyCard %>

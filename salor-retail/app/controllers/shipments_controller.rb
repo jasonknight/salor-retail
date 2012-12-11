@@ -75,6 +75,7 @@ class ShipmentsController < ApplicationController
     @shipment_types = ShipmentType.scopied.order(:name)
     respond_to do |format|
       if @shipment.update_attributes(params[:shipment])
+        @shipment.shipment_items.update_all :vendor_id => $Vendor.id
         format.html { redirect_to(@shipment, :notice => 'Shipment was successfully updated.') }
         format.xml  { head :ok }
       else

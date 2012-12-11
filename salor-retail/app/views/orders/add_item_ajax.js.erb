@@ -32,7 +32,6 @@
 <% else %>
   $('.notice-container').html('');
   $('.notice-container').html('<%= t("system.errors.unspecified_error") %>');
-  //initNotice();
 <% end %>
 <%= render :partial => "shared/js/global_errors_js" %>
 focusInput($('#keyboard_input'));

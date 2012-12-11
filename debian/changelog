@@ -1,3 +1,12 @@
+salor-retail (4.0.1.11) unstable; urgency=low
+
+  * build
+  * Closes #1573 ShipmentItems don't have vendor_id set when Shipment is updated
+  * Amends #1561 Day report modifications
+  * Closes #1571 Make the easy GiftCard feature even easier
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 07 Dec 2012 18:00:34 +0100
+
 salor-retail (4.0.1.10) unstable; urgency=low
 
   [ Jason Knight ]
