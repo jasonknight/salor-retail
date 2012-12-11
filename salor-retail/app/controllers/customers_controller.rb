@@ -12,6 +12,13 @@ class CustomersController < ApplicationController
   before_filter :initialize_instance_variables, :except => [:labels]
   before_filter :check_role, :except => [:labels]
   before_filter :crumble, :except => [:labels]
+  
+  def download
+    @customers = Customer.by_vendor.visible
+    data = render_to_string :layout => false
+      send_data(data,:filename => 'customers.csv', :type => 'text/csv')
+  end
+  
   # GET /customers
   # GET /customers.xml
   def index
@@ -58,11 +65,9 @@ class CustomersController < ApplicationController
   def create
     
     @customer = Customer.new(params[:customer])
-    @loyalty_card = LoyaltyCard.new(params[:loyalty_card])
     @loyalty_card.vendor_id = $Vendor.id
     respond_to do |format|
-      if @loyalty_card.save and @customer.save
-        @loyalty_card.update_attribute(:customer_id,@customer.id)
+      if @customer.save
         format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_create", :model => Customer.model_name.human)) }
         format.xml  { render :xml => @customer, :status => :created, :location => @customer }
       else
