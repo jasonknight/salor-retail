@@ -128,6 +128,7 @@ SalorRetail::Application.routes.draw do
   match "vendors/render_drawer_transaction_receipt" => 'vendors#render_drawer_transaction_receipt'
   match "items/render_label" => "items#render_label"
   match "customers/render_label" => "customers#render_label"
+  match "customers/download" => "customers#download"
   match "customers/upload_optimalsoft" => "customers#upload_optimalsoft"
   match 'vendors/:id/logo' => 'vendors#logo'
   match 'vendors/:id/logo_invoice' => 'vendors#logo_invoice'

@@ -17,7 +17,17 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :notes, :reject_if => lambda {|a| a[:body].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :loyalty_card
   before_create :set_model_owner
-
+  def self.csv_headers
+    return [:company_name,:first_name, :last_name,:email,:telephone, :cellphone,:tax_number,:street1,:street2,:city, :postalcode, :state,:country, :loyalty_card_sku]
+  end
+  def to_csv(headers=nil)
+    headers = Customer.csv_headers if headers.nil?
+    values = []
+    headers.each do |h|
+      values << self.send(h)
+    end
+    return values.join("\t")
+  end
   def set_sku
     self.sku = "#{self.company_name}#{self.first_name}#{self.last_name}".gsub(/[^a-zA-Z0-9]+/,'')
   end
@@ -70,8 +80,16 @@ class Customer < ActiveRecord::Base
       self.loyalty_card.update_attribute(:points, points)
     end
   end
+  def loyalty_card_sku
+    return '' if not self.loyalty_card
+    return self.loyalty_card.sku
+  end
   def set_loyalty_card=(lc)
-    self.loyalty_card.update_attributes(lc)
+    if not self.loyalty_card then
+      self.loyalty_card = LoyaltyCard.new(lc)
+    else
+      self.loyalty_card.update_attributes(lc)
+    end
   end
 
   #

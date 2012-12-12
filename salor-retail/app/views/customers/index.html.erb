@@ -4,6 +4,12 @@
     <td align="center" width="125px">
       <%= link_to(image_tag("/images/icons/" + icon(:add,32)), new_customer_path) %>              
     </td>
+    <td>
+    <div class="tool-icon" >
+            <img src='/images/icons/down_32.png' onmousedown="window.location = '/customers/download'">
+          <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
+        </div>
+    </td>
   </tr>
 </table>
 <div class="list master">
