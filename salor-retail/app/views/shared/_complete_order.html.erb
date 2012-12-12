@@ -447,6 +447,7 @@ function complete_order_send(print) {
   });
 }
 
+// this is only for text based pole displays
 function displayChangeToCustomer() {
   <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
     if (typeof(Salor) != 'undefined') {
