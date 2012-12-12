@@ -1,3 +1,24 @@
+salor-retail (4.0.1.12) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes feature #1576
+  * Closes bug #1572
+  * Closes bug #1570
+  * Translation update
+  * fixing translation
+
+  [ Michael Franzl ]
+  * Closes #1578 IP 127.0.0.1 not reachable when eth0 not connected
+
+  [ Jason Knight ]
+  * Closes feature #1579
+  * Added download button to customers
+
+  [ Michael Franzl ]
+  * Closes #1580 Racing condition for display change money
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 12 Dec 2012 13:04:02 +0100
+
 salor-retail (4.0.1.11) unstable; urgency=low
 
   * build
