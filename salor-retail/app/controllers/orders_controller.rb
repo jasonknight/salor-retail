@@ -553,6 +553,8 @@ class OrdersController < ApplicationController
     @order = Order.scopied.find_by_id(params[:id])
     GlobalData.salor_user = @order.user if @order.user
     GlobalData.salor_user = @order.employee if @order.employee
+    $User = @order.employee
+    $Conf = @order.vendor.salor_configuration
     @vendor = @order.vendor
     @report = @order.get_report
     @invoice_note = InvoiceNote.scopied.where(:origin_country_id => @order.origin_country_id, :destination_country_id => @order.destination_country_id, :sale_type_id => @order.sale_type_id).first

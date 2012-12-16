@@ -110,5 +110,9 @@ function inArray(needle, haystack) {
   return false;
 }
 
-
+function echo(str) {
+  if (typeof Salor != 'undefined') {
+    Salor.echo(str);
+  }
+}
         

@@ -68,7 +68,10 @@
         - if @order.is_proforma then
           %td.total= number_to_currency @order.amount_paid
         - else
-          %td.total= number_to_currency @report[:subsubtotal]
+          - if $Conf and $Conf.calculate_tax
+            %td.total= number_to_currency @order.total
+          - else
+            %td.total= number_to_currency @report[:subsubtotal]
 
     %br
     %br
