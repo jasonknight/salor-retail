@@ -151,7 +151,7 @@ def create_account(current_lang,lang)
     @stockboy.save()
     Drawer.create :amount => 0, :owner_id => @stockboy.id, :owner_type => 'Employee'
     @tp = TaxProfile.create(:name => "Default #{lang}",:sku => "DEFAUTLTaxProfile", :value => 7, :vendor => @vendor)
-    25.times do |i|
+    2.times do |i|
       # Create 5 categories
       Category.create({
 	:name => "Category #{lang} ##{i+1}",
@@ -170,7 +170,7 @@ def create_account(current_lang,lang)
 	:vendor => @vendor
       })
     end
-    25.times do |i|
+    2.times do |i|
       Shipper.create({
 	:name => "Shipper #{lang} ##{i+1}",
 	:vendor => @vendor
