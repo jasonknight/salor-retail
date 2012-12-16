@@ -63,8 +63,12 @@
 
   - unless params[:delivery_note]
     %table.striped-table2.has-total
+      - if @order.is_proforma
+        %tr
+          %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal').upcase
+          %td= number_to_currency @order.total
       %tr
-        %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal')
+        %td{ :colspan => 4 }= t('activerecord.attributes.total').upcase
         - if @order.is_proforma then
           %td.total= number_to_currency @order.amount_paid
         - else
