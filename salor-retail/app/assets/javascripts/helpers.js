@@ -113,6 +113,8 @@ function inArray(needle, haystack) {
 function echo(str) {
   if (typeof Salor != 'undefined') {
     Salor.echo(str);
+  } else if (typeof console != 'undefined') {
+    //console.log(str);
   }
 }
         
