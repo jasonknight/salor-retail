@@ -224,10 +224,15 @@ class OrdersController < ApplicationController
     end
     if @item.class == Item and @item.behavior == 'gift_card' and @item.sku == "G000000000000" then
       zero_tax_profile = TaxProfile.scopied.where(:value => 0).first
-      raise "No TaxProfile with value 0 found." if zero_tax_profile.nil?
+      if zero_tax_profile.nil? then
+        zero_tax_profile = TaxProfile.scopied.where(:default => 1).first
+      end
+      raise "NoTaxProfileFound" if zero_tax_profile.nil?
       timecode = Time.now.strftime('%y%m%d%H%M%S')
-      @item = Item.create(:sku => "G#{timecode}", :vendor_id => $Vendor.id, :tax_profile_id => zero_tax_profile.id, :name => "Auto Giftcard #{timecode}", :must_change_price => true)
-      @item.update_attribute :behavior, 'gift_card'
+      @item = Item.create(:sku => "G#{timecode}", :vendor_id => $Vendor.id, :tax_profile_id => zero_tax_profile.id, :name => "Auto Giftcard #{timecode}", :must_change_price => true, :behavior => 'gift_card')
+      @item.item_type = ItemType.find_by_behavior :gift_card
+      @item.behavior = 'gift_card'
+      @item.save
     end
     if @item.class == Item and @item.behavior == 'coupon' and not @order.order_items.visible.where(:sku => @item.coupon_applies).any? then
       flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")

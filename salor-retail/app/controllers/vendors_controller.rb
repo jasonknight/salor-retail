@@ -367,7 +367,7 @@ class VendorsController < ApplicationController
                 @inst.is_valid = true
                 render :layout => false and return
               end
-            elsif params[:field] == 'rebate'and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
+            elsif params[:field] == 'rebate' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
 #                puts  "### field is rebate"
               # Takes into account ITEM rebate and ORDER rebate.
               # ORDER and ITEM totals are updated in DB and in instance vars for JS
