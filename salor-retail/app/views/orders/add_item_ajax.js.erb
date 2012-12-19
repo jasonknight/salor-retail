@@ -30,8 +30,6 @@
 <% end %>
 <%= render :partial => "shared/js/global_errors_js" %>
 focusInput($('#keyboard_input'));
-//$('.last-completed-orders').replaceWith('<%= escape_javascript render :partial => "shared/last_completed_orders" %>'); // this is a very time expensive operation for adding an item, so it is disabled now
-//$('#last_five_orders').replaceWith('<%= escape_javascript render :partial => "last_five_orders" %>'); // this is a very time expensive operation for adding an item, so it is disabled now
 Order = <%= raw @order.to_json %>;
 $(".complete-order-total").html($('#pos_order_total').html());
 display_change();

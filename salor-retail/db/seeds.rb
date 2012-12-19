@@ -1,4 +1,4 @@
-if User.any?
+if User.any? or Item.any? or Order.any?
   puts "Database is already seeded. Not running seed script again."
   Process.exit 0
 end
