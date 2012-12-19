@@ -383,7 +383,7 @@ function detailedOrderItemMenu(event) {
   config.offset({top: offset.top + $(event.currentTarget).outerHeight() + 5, left: offset.left});
   config.css({width: $('#header').width() - 160, 'border-top':'none', 'min-height': '100px'});
   
-  var name = orderItemNameOption(config,target.attr('item_id'),event.currentTarget.textContent);
+  var name = orderItemNameOption(config,item,event.currentTarget.textContent);
   name.find('input').css({width: $('#header').width() * 0.50});
   
   var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete_32.png" /></div>');
@@ -499,13 +499,13 @@ function getBehaviorById(id) {
   });
   return itid;
 }
-function orderItemNameOption(append_to,item_id,initvalue) {
+function orderItemNameOption(append_to,item,initvalue) {
   var save_edit = function () {
     var id = '#option_order_item_name_input';
     var value = $(id).val();
-    var string = '/vendors/edit_field_on_child?id='+ item_id +'&klass=Item&field=name&value=' + value;
+    var string = '/vendors/edit_field_on_child?id='+ item.item_id +'&klass=Item&field=name&value=' + value;
     $.get(string,  function () {
-      $('div[model_id=' + item_id + ']').html(value);
+      $("#order_item_" + item.id).find('.pos-item-name').html(value);      
       update_pos_display();
     });
   };
@@ -516,8 +516,7 @@ function orderItemNameOption(append_to,item_id,initvalue) {
       setTimeout(function () {
         inp.select();
       }, 170);
-    },
-    blur: save_edit
+    }
   };
   var options = {
     name: 'order_item_name',
@@ -526,5 +525,6 @@ function orderItemNameOption(append_to,item_id,initvalue) {
     append_to: append_to
   };
   var opt = shared.draw.option(options,callbacks);
-  return $(opt);
+  opt.find('input').on('blur',save_edit);
+  return opt;
 }

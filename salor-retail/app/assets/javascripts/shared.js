@@ -649,7 +649,7 @@ window.shared = {
       input.on('keyup',callbacks.keyup);
       input.focus(callbacks.focus);
       input.blur(callbacks.blur);
-      return $(div);
+      return div;
     },
     check_option: function (options,callbacks) {
       var div = shared.element('div',{id: 'option_' + options.name.replace(/\s/,'')}, '', options.append_to);

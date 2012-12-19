@@ -120,7 +120,9 @@ class ItemsController < ApplicationController
     else
       params[:item][:price_by_qty] = false
     end
+    
     @item.attributes = params[:item]
+    @item.save
     respond_to do |format|
       if not @item.errors.messages.any?
         @item.set_model_owner(salor_user)

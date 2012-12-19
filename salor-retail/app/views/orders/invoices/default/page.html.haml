@@ -39,7 +39,7 @@
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
     
-    %p= @report[:customer][:tax_number] if @report[:customer]
+    %p= "Tax Nr.  " + @report[:customer][:tax_number] if @report[:customer]
   
   - item_count = @report[:list_of_items_raw].size
   
@@ -63,12 +63,19 @@
 
   - unless params[:delivery_note]
     %table.striped-table2.has-total
+      - if @order.is_proforma
+        %tr
+          %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal').upcase
+          %td= number_to_currency @order.total
       %tr
-        %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal')
+        %td{ :colspan => 4 }= t('activerecord.attributes.total').upcase
         - if @order.is_proforma then
           %td.total= number_to_currency @order.amount_paid
         - else
-          %td.total= number_to_currency @report[:subsubtotal]
+          - if $Conf and $Conf.calculate_tax
+            %td.total= number_to_currency @order.total
+          - else
+            %td.total= number_to_currency @report[:subsubtotal]
 
     %br
     %br
