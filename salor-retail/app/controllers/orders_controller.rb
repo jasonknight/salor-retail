@@ -599,6 +599,7 @@ class OrdersController < ApplicationController
     }
     @orders.each do |o|
       o.order_items.visible.each do |oi|
+        next if oi.item.nil?
         key = oi.item.name + " (#{oi.price})"
         cat_key = oi.get_category_name
         loc_key = oi.get_location_name

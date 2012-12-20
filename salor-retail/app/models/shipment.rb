@@ -181,10 +181,10 @@ class Shipment < ActiveRecord::Base
     if i then
       item = Item.new.from_shipment_item(i)
       item.make_valid
-      if item.nil? then
-        GlobalErrors.append_fatal("system.errors.shipment_item_move_failed",:sku => i.sku, :error => I18n.t("system.errors.shipment_item_nil"))
-        return
-      end
+#       if item.nil? then
+#         GlobalErrors.append_fatal("system.errors.shipment_item_move_failed",:sku => i.sku, :error => I18n.t("system.errors.shipment_item_nil"))
+#         return
+#       end
       if item.save then
         i.update_attribute(:in_stock,true)
       else

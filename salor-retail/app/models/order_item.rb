@@ -22,6 +22,13 @@ class OrderItem < ActiveRecord::Base
   belongs_to :order_item,:foreign_key => :coupon_id
 
   scope :sorted_by_modified, order('updated_at ASC')
+  def tax_profile_id=(id)
+    tp = TaxProfile.find_by_id(id)
+    if tp then
+      write_attribute(:tax_profile_id,id)
+      write_attribute(:tax_profile_amount,tp.value)
+    end
+  end
   def item_type_id=(id)
     write_attribute(:behavior,ItemType.find(id).behavior)
     write_attribute(:item_type_id,id)
@@ -438,7 +445,7 @@ class OrderItem < ActiveRecord::Base
       ttl -= (ttl * (self.rebate / 100.0))
 #       puts "self.rebate: #{ttl}"
     end
-    if self.order.rebate then
+    if self.order and self.order.rebate then
       ttl -= (ttl * (self.order.rebate / 100.0))
       #       puts "self.rebate: #{ttl}"
     end
@@ -605,6 +612,7 @@ class OrderItem < ActiveRecord::Base
     end
     pstart = p
     if not self.is_buyback and not OrderItem.get_discounts.nil? then
+      #raise OrderItem.get_discounts.inspect + self.category_id.to_s
       OrderItem.get_discounts.each do |discount|
 #         puts "Evaling discount: " + discount.inspect
         if not (discount.item_sku == item.sku and discount.applies_to == 'Item') and

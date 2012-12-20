@@ -4,7 +4,7 @@
 <%= link_to salor_icon(:add,{},32),new_discount_path(:vendor_id => salor_user.meta.vendor_id) %>
 </div>
 
-<table width="99%" cellspacing="0">
+<table width="90%" cellspacing="0" align="center">
 <% @discounts.each do |discount| %>
   <tr class="<%= cycle('even','odd') %>">
     <td><%= discount.name[0...35] %></td>
