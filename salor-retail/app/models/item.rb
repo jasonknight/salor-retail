@@ -45,7 +45,12 @@ class Item < ActiveRecord::Base
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
-  
+  def coupon_type=(t)
+    write_attribute(:coupon_type,1) if t == 'percent'
+    write_attribute(:coupon_type,2) if t == 'fixed'
+    write_attribute(:coupon_type,3) if t == 'b1g1'
+    write_attribute(:coupon_type,t) if t.class == Fixnum
+  end
   def self.csv_headers
     return [:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
   end
@@ -61,6 +66,9 @@ class Item < ActiveRecord::Base
     n = 'NoTaxProfile'
     return self.tax_profile.name if self.tax_profile
     return n
+  end
+  def behavior=(b)
+    self.item_type = ItemType.find_by_behavior(b)
   end
   def get_translated_name(locale=:en)
     locale = locale.to_s

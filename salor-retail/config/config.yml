@@ -22,8 +22,8 @@ convert_from_gross: true
 height_metrics: MM,CM,DM,M
 length_metrics: MM,CM,DM,M
 width_metrics: MM,CM,DM,M
-weight_metrics: STK,BD,BT,CM,GR,KG,LT,ML,MT,PA,PK,PT,RL,ST,TB,WG
-sales_metrics: STK,BD,BT,CM,GR,KG,LT,ML,MT,PA,PK,PT,RL,ST,TB,WG
+weight_metrics: Piece,STK,BD,BT,CM,GR,KG,LT,LB,ML,MT,OZ,PA,PK,PT,RL,ST,TB,WG
+sales_metrics: Piece,STK,BD,BT,CM,GR,KG,LT,LB,ML,MT,OZ,PA,PK,PT,RL,ST,TB,WG
 reorder_csvs: true
 reorder_types: default_export:Default,tobacco_land:Tobaccoland
 item_limit: 0
