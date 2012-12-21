@@ -12,6 +12,7 @@ class OrderItem < ActiveRecord::Base
   include SalorError
   include SalorModel
   belongs_to :order
+  belongs_to :employee
   belongs_to :item
   belongs_to :tax_profile
   belongs_to :item_type
