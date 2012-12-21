@@ -46,7 +46,10 @@ class EmployeesController < ApplicationController
   # GET /employees/1
   # GET /employees/1.xml
   def show
-    @employee = salor_user.get_employee(params[:id])
+    f, t = assign_from_to(params)
+    @from = f
+    @to = t
+    @employee = Employee.find_by_id(params[:id])
     @employee.make_valid
     add_breadcrumb @employee.username,'employee_path(@employee,:vendor_id => params[:vendor_id])'
     respond_to do |format|

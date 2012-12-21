@@ -1,24 +1,31 @@
-<%= form_for @transaction_tag, :html => { :multipart => true } do |f| %>
-  <% if @transaction_tag.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@transaction_tag.errors.count, "error") %> prohibited this transaction_tag from being saved:</h2>
+<table align="center" width="90%">
+  <tr>
+    <td>
+      <%= form_for @transaction_tag, :html => { :multipart => true } do |f| %>
+        <% if @transaction_tag.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(@transaction_tag.errors.count, "error") %> prohibited this transaction_tag from being saved:</h2>
 
-      <ul>
-      <% @transaction_tag.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+            <ul>
+            <% @transaction_tag.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="field">
+          <!-- <img src="/transaction_tags/<%= @transaction_tag.id %>/logo"><br /><br />-->
+          <%= f.label :name %><br />
+          <%= f.text_field :name %><br /><br />
+          <%= f.label :logo, t('.logo') %><br />
+          <%= f.file_field :logo, :size => 15 %><br /><br />
+        </div>
+        <div class="actions">
+          <%= f.submit %>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="field">
-    <!-- <img src="/transaction_tags/<%= @transaction_tag.id %>/logo"><br /><br />-->
-    <%= f.label :name %><br />
-    <%= f.text_field :name %><br /><br />
-    <%= f.label :logo, t('.logo') %><br />
-    <%= f.file_field :logo, :size => 15 %><br /><br />
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+    </td>
+  </tr>
+</table>

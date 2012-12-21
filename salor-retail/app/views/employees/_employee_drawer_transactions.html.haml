@@ -1,0 +1,13 @@
+%h2=I18n.t('activerecord.models.drawer_transaction.other')
+%table.striped-table2
+  %tr
+    %td= l @from, :format => :long
+    %td=raw "&nbsp;"
+    %td=raw "&nbsp;"
+    %td{:align=>'right'}= l @to, :format => :long
+  - @employee.drawer.drawer_transactions.visible.where("tag != 'CompleteOrder'").where(:created_at => @from..@to).each do |crd|
+    %tr
+      %td= l crd.created_at, :format => :short
+      %td{:align=>"right"}= number_to_currency crd.amount
+      %td{:align=>"center"}= crd.drop ? I18n.t("activerecord.attributes.drop") : I18n.t("activerecord.attributes.payout")
+      %td= raw crd.notes

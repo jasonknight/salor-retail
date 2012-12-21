@@ -29,7 +29,7 @@
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
               <div class="freefield"><%= f.label Employee.human_attribute_name :uses_drawer_id %><br />
-              <%= f.select :uses_drawer_id, Employee.scopied.where("username != '#{@employee.username}'").collect {|e| [e.username,e.get_drawer.id] }.unshift(["N/A",""]) %>
+              <%= f.select :uses_drawer_id, @current_vendor.employees.where("username != '#{@employee.username}'").collect {|e| [e.username,e.get_drawer.id] }.unshift(["N/A",""]) %>
               
               </div>
             </td>
@@ -46,7 +46,7 @@
               <%= f.hidden_field :user_id, :value => @owner.id %>
               
               <div class="freefield"><%= f.label t("activerecord.models.vendor.one") %><br />
-              <%= f.collection_select :vendor_id, GlobalData.vendors,:id,:name%></div>
+              <%= f.collection_select :vendor_id, Vendor.where(:user_id => @current_employee.user_id),:id,:name%></div>
             </td>
         </tr>
       </table>
