@@ -446,6 +446,7 @@ function detailedOrderItemMenu(event) {
     var config_table_rows = [ shared.element('tr',{id: 'order_item_edit_table_row_1'},'',config_table) ];
     
     var config_table_cols_left = [ shared.element('td',{id: 'order_item_edit_table_lcol_1'},'',config_table_rows[0]) ];
+    var config_table_cols_center = [ shared.element('td',{id: 'order_item_edit_table_ccol_1'},'',config_table_rows[0]) ];
     var config_table_cols_right = [ shared.element('td',{id: 'order_item_edit_table_rcol_1'},'',config_table_rows[0]) ];
     
     // Edit ItemType
@@ -459,6 +460,19 @@ function detailedOrderItemMenu(event) {
       shared.element('option',{value: item_type.id},item_type.name,item_type_select);
     });
     make_select_widget('Item Type',item_type_select);
+    
+    // Edit ItemType
+    shared.element('h4',{id: 'oi_tax_profile_h4'},i18n.activerecord.models.tax_profile.one,config_table_cols_center[0]);
+    var tax_profile_select = shared.element('select',{id: 'oi_tax_profile_select'},'',config_table_cols_center[0]);
+    tax_profile_select.on('change',function () {
+      editItemAndOrderItem(item,'tax_profile_id',$(this).val());
+      focusInput($('#keyboard_input'));
+    });
+    $.each(TaxProfiles,function (i,tax_profile) {
+      shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
+    });
+    make_select_widget('Item Type',tax_profile_select);
+    
     
     // Edit Category
     shared.element('h4',{id: 'oi_category_h4'},i18n.activerecord.models.category.one,config_table_cols_right[0]);
@@ -484,6 +498,7 @@ function editItemAndOrderItem(item,field,val,callback) {
   '&field=' + field +
   '&value=' + val;
   $.get(string);
+  // This is supposed to be doubled, it edits both the orderitem and the item at the same go.
   string = '/vendors/edit_field_on_child?id=' +
   item.item_id +'&klass=Item' +
   '&field=' + field +

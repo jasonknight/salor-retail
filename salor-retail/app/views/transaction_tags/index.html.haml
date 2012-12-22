@@ -1,0 +1,20 @@
+= raw content_box_top(I18n.t("menu.transaction_tags", :store => @current_vendor.name))
+%table{:align=>"center"}
+  %tr
+    %td
+      %div{:class => "tool-icon"}
+        = link_to salor_icon(:add,{},32),new_transaction_tag_path(:vendor_id => @current_vendor.id)
+        %br
+        %span= I18n.t('views.single_words.new')
+%table{:width=>"80%",:align=>"center",:class=>"stripe-me"}
+  %tr
+    - [:name,'',''].each do |h|
+      - if not h.empty?
+        %th= I18n.t("activerecord.attributes.#{h}").upcase
+      - else
+        %th= raw '&nbsp;'
+  - @transaction_tags.each do |tag|
+    %tr
+      %td= tag.name[0...35]
+      %td{:align=>"center"}= link_to salor_icon(:edit,{},16), edit_transaction_tag_path(tag)
+      %td{:align=>"center"}= link_to salor_icon(:delete,{},16), tag, :confirm => 'Are you sure?', :method => :delete

@@ -40,7 +40,7 @@
           <input type="hidden" name="location[vendor_id]" class="hidden-input" value="<%= salor_user.meta.vendor_id %>" />
         <div class="actions">
           <br />
-          <input type="submit" name="submit" class="submit-input" value="<%= t("helpers.submit.submit") %>" />
+          <input type="submit" name="submit" class="submit-input" value="<%= t("helpers.submit.submit", :model => StockLocation.model_name.human) %>" />
         </div>
         </form>
     </td>
