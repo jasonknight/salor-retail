@@ -46,7 +46,7 @@
               <%= f.hidden_field :user_id, :value => @owner.id %>
               
               <div class="freefield"><%= f.label t("activerecord.models.vendor.one") %><br />
-              <%= f.collection_select :vendor_id, Vendor.where(:user_id => @current_employee.user_id),:id,:name%></div>
+              <%= f.collection_select :vendor_id, Vendor.where(:user_id => $User.user_id),:id,:name%></div>
             </td>
         </tr>
       </table>

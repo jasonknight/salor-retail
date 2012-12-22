@@ -455,32 +455,41 @@ class FileUpload
       if not columns[12].nil? #i.e. is buyback?
         columns[12] = (columns[12].downcase == 'true' ? true : false)
       end
+      if not columns[20].nil? #i.e. is buyback?
+        columns[20] = (columns[20].downcase == 'true' ? true : false)
+      end
       attributes = { :sku => columns[0].strip, 
-		     :name => columns[1].strip, 
-		     :base_price => columns[2], 
-         :tax_profile_id => tax_profile_id, 
-         :sales_metric => columns[4], 
-         :weight => weight, 
-         :weight_metric => columns[6], 
-         :purchase_price => columns[7], 
-         :category_id => category_id,
-         :quantity => columns[9], 
-		     :shipper_sku => columns[10], 
-		     :buyback_price => columns[11],
-		     :default_buyback => columns[12],
-		     :behavior => columns[13],
-		     :coupon_applies => columns[14],
-		     :coupon_type => columns[15],
-		     :expires_on => columns[16],
-		     :track_expiry => track_expiry,
-		     :min_quantity => columns[17] }
+                    :name => columns[1].strip, 
+                    :base_price => columns[2], 
+                    :tax_profile_id => tax_profile_id, 
+                    :sales_metric => columns[4], 
+                    :weight => weight, 
+                    :weight_metric => columns[6], 
+                    :purchase_price => columns[7], 
+                    :category_id => category_id,
+                    :quantity => columns[9], 
+                    :shipper_sku => columns[10], 
+                    :buyback_price => columns[11],
+                    :default_buyback => columns[12],
+                    :behavior => columns[13],
+                    :coupon_applies => columns[14],
+                    :coupon_type => columns[15],
+                    :expires_on => columns[16],
+                    :track_expiry => track_expiry,
+                    :min_quantity => columns[17],
+                    :parent_sku => columns[18],
+                    :child_sku => columns[19],
+                    :must_change_price => columns[20],
+                    :packaging_unit => columns[21]}
 
       item = Item.find_by_sku(columns[0])
       if item
         item.update_attributes attributes
         updated_items += 1
       else
-        item = Item.new attributes
+        item = Item.get_by_code(columns[0].strip)
+        item.make_valid
+        item.update_attributes attributes
         item.set_model_owner
         item.save
         created_items += 1

@@ -69,6 +69,7 @@ class Item < ActiveRecord::Base
   end
   def behavior=(b)
     self.item_type = ItemType.find_by_behavior(b)
+    write_attribute :behavior,b
   end
   def get_translated_name(locale=:en)
     locale = locale.to_s
@@ -394,15 +395,17 @@ class Item < ActiveRecord::Base
       self.item_type_id = ItemType.find_by_behavior('normal').id
       invld = true
     end
+    if self.behavior.blank? then
+      raise self.item_type.inspect
+      self.behavior = self.item_type.behavior
+    end
     if not self.tax_profile then
       # puts "Setting Default TaxProfile"
-      if GlobalData.tax_profiles
-        tp = GlobalData.tax_profiles.find {|t| t if t.default == 1}
-        if tp then
-          self.tax_profile_id = tp.id
-        else
-          self.tax_profile_id = GlobalData.tax_profiles.first.id
-        end
+      tp = TaxProfile.scopied.where(:default => true).first
+      if tp then
+        self.tax_profile_id = tp.id
+      else
+        self.tax_profile_id = GlobalData.tax_profiles.first.id
       end
       invld = true
     end
