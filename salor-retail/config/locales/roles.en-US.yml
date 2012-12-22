@@ -7,13 +7,13 @@ en-US:
   :update_tender_methods: Update Payment Methods
   :show_tender_methods: Show Payment Methods
   :any_tender_methods: Any Payment Methods
-  any_reports: Any Reports
-  index_reports: Index Reports
-  edit_reports: Edit Reports
-  show_reports: Show Reports
-  create_reports: Create Reports
-  destroy_reports: Destroy Reports
-  update_reports: Update Reports
+  :any_reports: Any Reports
+  :index_reports: Index Reports
+  :edit_reports: Edit Reports
+  :show_reports: Show Reports
+  :create_reports: Create Reports
+  :destroy_reports: Destroy Reports
+  :update_reports: Update Reports
   :employee: Employee
   :manager: Manager
   :head_cashier: Head Cashier
@@ -143,3 +143,18 @@ en-US:
   :update_shipment_items: Update Shipment Items
   :show_shipment_items: Show Shipment Items
   :any_shipment_items: Any Shipment Items
+  :any_cash_registers: Any Cash Registers
+  :index_cash_registers: Index Cash Registers
+  :edit_cash_registers: Edit Cash Registers
+  :show_cash_registers: Show Cash Registers
+  :create_cash_registers: Create Cash Registers
+  :destroy_cash_registers: Destroy Cash Registers
+  :update_cash_registers: Update Cash Registers
+  :any_shipment_types: Any Shipment Types
+  :index_shipment_types: Index Shipment Types
+  :edit_shipment_types: Edit Shipment Types
+  :show_shipment_types: Show Shipment Types
+  :create_shipment_types: Create Shipment Types
+  :destroy_shipment_types: Destroy Shipment Types
+  :update_shipment_types: Update Shipment Types
+

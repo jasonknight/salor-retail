@@ -26,7 +26,15 @@ class EmployeesController < ApplicationController
        elsif not user.last_path.empty?
           redirect_to user.last_path and return 
        else
-          redirect_to '/orders/new' and return # always try to go to orders/new
+          if user.role_cache.include? 'stockboy' then
+            redirect_to '/shipments' + "?vendor_id=#{user.vendor_id}" and return
+          elsif user.role_cache.include? 'cashier' then
+            redirect_to '/cash_registers' + "?vendor_id=#{user.vendor_id}" and return
+          elsif user.role_cache.include? 'manager' then
+            redirect_to "/vendors/#{user.vendor_id}" and return
+          else
+            redirect_to '/orders/new' and return # always try to go to orders/new
+          end
        end
     else
       redirect_to :controller => :home, :action => :index, :notice => "could not find a user with code" and return

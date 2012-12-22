@@ -87,7 +87,8 @@ $images: "/images"
 
 h1, h2, h3, label, div.breadcrumb-container, div.list 
   text-transform: uppercase
-
+.warning,div.warning,td * input.warning,button.warning
+  background-color: $warning
 
 /* Mixins */
 @mixin dark_input 
@@ -111,6 +112,8 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 @mixin rounded_corners_all 
   -moz-border-radius: $large_border_radius
   -webkit-border-radius: $large_border_radius
+.rounded-corners-all
+  @include rounded_corners_all
   
 @mixin rounded_corners_all_small 
   -moz-border-radius: $small_border_radius
@@ -168,7 +171,8 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   -webkit-border-bottom-right-radius: $large_border_radius
   -moz-border-radius-topright: $large_border_radius
   -moz-border-radius-bottomright: $large_border_radius
-
+.rounded-corners-right
+  @include rounded_corners_right
 
 @mixin dialog 
   border: 1px solid $border_color
@@ -215,7 +219,8 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
   border-bottom: 1px solid rgba(0,0,0,0.25)
   cursor: pointer
-  
+.raised-element 
+  @include raised_element
 @mixin bright_button 
   @include awesome_button
   background-color: $orange
@@ -1305,7 +1310,11 @@ div.pos-menu div.pos-configuration
 div.pos-item-attr
   @include raised_element
   background-color: $light_background
-  
+.table-column
+  background-color: $light_background
+  padding-left: 5px
+  padding-right: 5px
+  font-size: 120%
 div.pos-item-total
   background-color: $green
   font-weight: bolder
@@ -1593,10 +1602,7 @@ span.order-lc_points,.order-points,.loyalty-points
   @include dialog
 
 .rounded-corners-left
-  @include rounded_corners_all
-
-.rounded-corners-right
-  @include rounded_corners_all
+  @include rounded_corners_left
 
 .button-cancel 
   @include rounded_corners_all
