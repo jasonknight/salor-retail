@@ -32,7 +32,8 @@ class Employee < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :uses_drawer_id,:apitoken,:js_keyboard,:role_ids,:language,:vendor_id,:user_id,:first_name,:last_name,:username, :email, :password, :password_confirmation, :remember_me
   attr_accessible :auth_code
-  
+  before_update :set_role_cache
+  before_save :set_role_cache
   # Trying to define the generate_password in user_employee methods was throwing errors.
   def self.generate_password(string)
     return Digest::SHA2.hexdigest("#{string}")

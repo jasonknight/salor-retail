@@ -314,18 +314,27 @@ module UserEmployeeMethods
       else
         # puts "No Match for #{action}"
       end
+      
       any = 'xxxxxxxxxxxxxxxxx' if any.nil?
       if self.role_cache.include?(action) or self.role_cache.include?(admin) or self.role_cache.include?(any)
+#         puts "Returning true for #{action} #{any} #{self.role_cache}"
         return true
       else
         role_list = self.role_cache.split(',').map {| r | r.to_sym}
         role_list.each do |r|
           cant_do_list = Role::CANNOTDO[r]
-          return false if cant_do_list.include? action.to_sym
-          return false if cant_do_list.include? any.to_sym
+          next if cant_do_list.nil?
+#           puts "Seeing if "
+          if cant_do_list.include? action.to_sym then
+            return false
+          end
+          if cant_do_list.include? any.to_sym then
+            return false
+          end
         end 
       end
     end
+    puts "Returning default true for #{action} #{any} #{self.role_cache}"
     return true
   end
   def owns_vendor?(id)
