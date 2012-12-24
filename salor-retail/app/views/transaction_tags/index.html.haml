@@ -15,6 +15,6 @@
         %th= raw '&nbsp;'
   - @transaction_tags.each do |tag|
     %tr
-      %td= tag.name[0...35]
-      %td{:align=>"center"}= link_to salor_icon(:edit,{},16), edit_transaction_tag_path(tag)
-      %td{:align=>"center"}= link_to salor_icon(:delete,{},16), tag, :confirm => 'Are you sure?', :method => :delete
+      %td{:width=>'70%'}= tag.name[0...35]
+      %td{:align=>"center"}= button_to t('menu.edit'),{:action => :edit, :id => tag.id}, :method => :get
+      %td{:align=>"center"}= button_to(t('menu.destroy'),tag, :method => :delete, :class => 'warning')

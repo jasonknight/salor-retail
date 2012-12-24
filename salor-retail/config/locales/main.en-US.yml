@@ -475,6 +475,7 @@ en-US:
     new_stock_location: New stock location
     new_tax_profile: New tax profile
     new_tender_method: New Payment Method
+    new_transaction_tag: New Transaction Tag
     new_vendor: New Store
     ok: OK
     order: order

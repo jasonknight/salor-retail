@@ -1,14 +1,13 @@
 = raw content_box_top(t("activerecord.models.sale_type.other"))
 %table{:width=>"90%",:align=>"center"}
   %tr
-    %td{:colspan=>2,:align=>'right'}
+    %td{:colspan=>3,:align=>'center'}
       %br
-      = link_to (t 'menu.new_sale_type'), new_sale_type_path, :class => 'links new-model-button'
-  %tr
-    %td{:colspan=>2}
-      %h2= t('activerecord.models.sale_type.other')
+      = link_to (t 'menu.new_sale_type'), new_sale_type_path, :class => 'links new-model-button' 
+      %br
       %hr
   - @sale_types.each do |s|
     %tr
-      %td= link_to s.name, edit_sale_type_path(s)
-      %td{:align=>'right'}= link_to image_tag('button_small_delete.png', :title => SaleType.human_attribute_name(:hidden), :alt => SaleType.human_attribute_name(:hidden)), country_path(s), :method => :delete, :confirm => t(:are_you_sure)
+      %td{:width=>'70%'}= s.name
+      %td{:align=>"center"}= button_to t('menu.edit'),{:action => :edit, :id => s.id}, :method => :get
+      %td{:align=>"center"}= button_to(t('menu.destroy'),s, :method => :delete, :class => 'warning')

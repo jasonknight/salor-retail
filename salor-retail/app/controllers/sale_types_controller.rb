@@ -29,7 +29,7 @@ class SaleTypesController < ApplicationController
   
   def edit
     @sale_type = SaleType.find_by_id(params[:id])
-    redirect_to sales_types_path and return unless @sale_type
+    redirect_to sale_types_path and return unless @sale_type
     render :new
   end
   
@@ -37,13 +37,13 @@ class SaleTypesController < ApplicationController
     @sale_type = SaleType.find_by_id(params[:id])
     redirect_to roles_path and return unless @sale_type
     @sale_type.update_attribute :hidden, true
-    redirect_to sales_types_path
+    redirect_to sale_types_path
   end
   before_filter :initialize_instance_variables,:authify,:crumble
   private
   def crumble
     @vendor = $User.get_vendor($User.meta.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("activerecord.models.invoice_note.other"),'invoice_notes_path(:vendor_id => params[:vendor_id])'
+    add_breadcrumb I18n.t("activerecord.models.sale_type.other"),'invoice_notes_path(:vendor_id => params[:vendor_id])'
   end
 end

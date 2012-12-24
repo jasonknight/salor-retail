@@ -1,20 +1,20 @@
 - if @sale_type.errors.any?
   .errors
-    %h3= t 'activerecord.errors.template.header', :count => @sale_type.errors.size, :model => SaleType.model_name.human
+    %h3= t('activerecord.errors.template.header', :count => @sale_type.errors.size, :model => SaleType.model_name.human)
     %ul
       - @sale_type.errors.full_messages.each do |msg|
         %li= msg
 
 .form_fields
+  = raw content_box_top(@sale_type.new_record? ? (t 'menu.new_sale_type') : (t 'menu.edit_sale_type'))
   = form_for @sale_type do |sale_type_form|
-    %table{:width=>'90%',:align=>'center'}
-      %tr
-        %td{:colspan=>2}
-          %h2= @sale_type.new_record? ? (t 'menu.new_sale_type') : (t 'menu.edit_sale_type')
-          %hr
+    %table{:width=>'400px',:align=>'center'}
       %tr
         %td= sale_type_form.label t('activerecord.attributes.name')
         %td= sale_type_form.text_field :name, :size => '10'
       %tr
-        %td{:colspan=> 2,:align=>'right'}
-          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('menu.edit')) )
+        %td{:colspan=>2}
+          %hr
+      %tr
+        %td{:colspan=> 2,:align=>'center'}
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create', :model => SaleType.model_name.human)) : (t('menu.edit')) )
