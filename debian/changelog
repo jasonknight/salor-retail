@@ -1,4 +1,4 @@
-salor-retail (4.0.1.12ubuntu1) UNRELEASED; urgency=low
+salor-retail (4.0.1.13) unstable; urgency=low
 
   [ Salor Retail ]
   * Editing seeds.rb
