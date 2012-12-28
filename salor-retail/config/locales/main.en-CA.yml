@@ -513,6 +513,7 @@ en-CA:
     void: void
     wholesaler_update: wholesaler update
     labels: Labels
+    new_transaction_tag: New Transaction Tag
   notifications:
     shipments_item_could_not_be_saved: shipments item could not be saved
     shipments_move_all_items: all items were successfully moved

@@ -514,6 +514,7 @@ gn:
     vendors: Filialen
     void: Storno
     wholesaler_update: Artikelupdate Großhändler
+    new_transaction_tag: New Transaction Tag
   notifications:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.

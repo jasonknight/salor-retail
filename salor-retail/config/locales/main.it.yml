@@ -511,6 +511,7 @@ it:
     invoice_blurbs: Invoice Blurbs
     edit_invoice_blurb: Edit Invoice Blurb
     new_invoice_blurb: New Invoice Blurb
+    new_transaction_tag: New Transaction Tag
   notifications:
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
     shipments_move_all_items: tutti gli articoli sono stati spostati con successo
