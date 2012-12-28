@@ -1,3 +1,38 @@
+salor-retail (4.0.1.12ubuntu1) UNRELEASED; urgency=low
+
+  [ Salor Retail ]
+  * Editing seeds.rb
+  * Closes feature #1582
+
+  [ Jason Knight ]
+  * Added echo function pluse order work
+  * Showing order total on proforma invoices
+  * Altered seeds.rb to create fewer categories
+  * Fixing detailed item edit box for editing name
+  * Added more debug output during change calculation
+  * Fixing auto gift cards
+
+  [ Michael Franzl ]
+  * reduced chance of db overwrite in seeds. js comment was ineffective for erb
+
+  [ Jason Knight ]
+  * Latest Fixes
+  * tweaking csv import for salor type
+  * various
+  * new migration
+  * Adding emp id to order item, and moving over haml emp show page
+  * merging fixed up templates from remove globals branch
+  * latest changes
+  * added vendors.js file
+  * Fixing roles on each user type and some form styling
+  * Fixing translations where some roles were not showing up
+  * various edits
+  * Form fixups styling and layout changes
+
+  [ Michael Franzl ]
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 28 Dec 2012 18:52:50 +0100
+
 salor-retail (4.0.1.12) unstable; urgency=low
 
   [ Jason Knight ]

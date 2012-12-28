@@ -14,7 +14,6 @@ gem 'rmagick'
 gem 'uglifier'
 gem 'escper', '1.1.0'
 # The following have to be eliminated:
-gem 'therubyracer'
 gem 'acts_as_list'
 gem 'kaminari'
 gem 'unicode_utils'
