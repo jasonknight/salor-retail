@@ -1,0 +1,19 @@
+= form_for(@shipment_type) do |f|
+  %table{:align=>"center", :width=>'400px'}
+    %tr
+      %td{:colspan=>2}
+        - if @shipment_type.errors.any?
+          %div#error_explanation
+            %h2= pluralize(@shipment_type.errors.count, "error")
+            %ul
+              - @shipment_type.errors.full_messages.each do |msg| 
+                %li= msg 
+    %tr
+      %td=t(".state")
+      %td=f.text_field(:name, :class => "keyboardable") + " " + f.hidden_field(:user_id, :value => GlobalData.salor_user.get_owner.id)
+         
+    %tr
+      %td{:colspan=>2}
+        %hr
+    %tr
+      %td{:colspan=>2,:align=>'right'}= f.submit

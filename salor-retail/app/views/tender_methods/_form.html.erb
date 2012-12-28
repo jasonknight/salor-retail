@@ -1,25 +1,32 @@
-<%= form_for(@tender_method) do |f| %>
-  <% if @tender_method.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@tender_method.errors.count, "error") %> prohibited this tender_method from being saved:</h2>
+<table align="center" width="90%">
+  <tr>
+    <td>
+      <%= form_for(@tender_method) do |f| %>
+      <% if @tender_method.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@tender_method.errors.count, "error") %> prohibited this tender_method from being saved:</h2>
 
-      <ul>
-      <% @tender_method.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+          <ul>
+          <% @tender_method.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label I18n.t("activerecord.attributes.name")%><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label I18n.t("activerecord.attributes.type") %><br />
-    <%= f.text_field :internal_type %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+      <div class="field">
+        <%= f.label I18n.t("activerecord.attributes.name")%><br />
+        <%= f.text_field :name %>
+      </div>
+      <div class="field">
+        <%= f.label I18n.t("activerecord.attributes.type") %><br />
+        <%= f.text_field :internal_type %>
+      </div>
+      <div class="actions">
+        <%= f.submit %>
+      </div>
+    <% end %>
+
+    </td>
+  </tr>
+</table>

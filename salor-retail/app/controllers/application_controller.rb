@@ -99,6 +99,7 @@ class ApplicationController < ActionController::Base
       else
         user= Employee.find_by_id(session[:user_id])
         $Vendor = user.vendor if user #Because Global State is maintained across requests.
+        
         $User = user
       end
       return user
@@ -147,6 +148,8 @@ class ApplicationController < ActionController::Base
     end
     GlobalData.vendor = @vendor
     $Vendor = @vendor
+    @current_vendor = @vendor
+    @current_employee = $User	
     GlobalData.conf = @vendor.salor_configuration if @vendor
     if @vendor then 
       $Conf = @vendor.salor_configuration
@@ -289,8 +292,7 @@ class ApplicationController < ActionController::Base
   end
   
   def role_check(p)
-    return true if AppConfig.roleless == true
-    return salor_user.can(p[:action] + '_' + p[:controller])
+    return $User.can(p[:action] + '_' + p[:controller])
   end
   
   # TODO: Remove method check_license since no longer used

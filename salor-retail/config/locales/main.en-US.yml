@@ -262,8 +262,8 @@ en-US:
         one: Tax Profile
         other: Tax Profiles
       tender_method:
-        one: Tender Method
-        other: Tender Methods
+        one: Payment Method
+        other: Payment Methods
       transaction_tag:
         one: Tag
         other: Tags
@@ -313,12 +313,12 @@ en-US:
     database_distiller: Database distiller
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
-    edit_shipper: edit shipper %{name}
+    edit_shipper: Editshipper %{name}
     employees: employees
     expiring_soon: expiring soon
     export: export
     item_selection: item selection
-    new_discount_for: new discount for %{store}
+    new_discount_for: New discount for %{store}
     notes: notes
     order_validation: Order Validation
     paylife: Paylife(Artema Hybrid)
@@ -329,19 +329,19 @@ en-US:
     update_real_quantity: update real quantity
   helpers:
     select:
-      prompt: please select
+      prompt: Please select
     submit:
-      cancel: cancel
-      clear: clear
-      complete_sale: complete sale
+      cancel: Cancel
+      clear: Clear
+      complete_sale: Complete Sale
       create: create
       get_item: get item
       ok: OK
-      print: print
+      print: Pint
       save: Save
       edit: Edit
-      submit: submit
-      update: update
+      submit: Submit
+      update: Update
   home:
     remote_service:
       connect_ssh: Remote service
@@ -419,31 +419,31 @@ en-US:
     configuration: Config.
     contact: contact
     current_order: ! 'current order: #%{id}'
-    customer: customer
-    customers: customers
+    customer: Customer
+    customers: Customers
     database_distiller: Database Distiller
     delete: delete
     delete_confirm: Are you sure?
     destroy: destroy
     discounts: discounts
-    done: done
+    done: Done
     download: download
     edit: edit
     edit_sale_type: Edit Sale type
     edit_invoice_note: Edit Inovice Note
-    edit_cash_register: edit cash register
-    edit_category: edit category
-    edit_customer: edit customer
-    edit_discount: edit discount
-    edit_employee: edit employee
-    edit_item: edit item
-    edit_location: edit location
-    edit_shipment: edit shipment
-    edit_shipment_type: edit shipment type
-    edit_shipper: edit shipper %{name}
-    edit_tax_profile: edit tax profile
-    edit_tender_method: edit tender method
-    edit_vendor: edit Store
+    edit_cash_register: Editcash register
+    edit_category: Editcategory
+    edit_customer: Editcustomer
+    edit_discount: Editdiscount
+    edit_employee: Editemployee
+    edit_item: Edititem
+    edit_location: Editlocation
+    edit_shipment: Editshipment
+    edit_shipment_type: Editshipment type
+    edit_shipper: "Edit Shipper %{name}"
+    edit_tax_profile: Edittax profile
+    edit_tender_method: Edit Payment Method
+    edit_vendor: EditStore
     employees: employees
     end_day: end day
     general_configuration: general configuration
@@ -458,24 +458,25 @@ en-US:
     new_country: New Country
     new_sale_type: New Sale Type
     new_invoice_note: New Invoice Note
-    new_action: new New Action
+    new_action: New New Action
     new_broken_item: New Broken Item
     new_button: New Button
-    new_cash_register: new cash register
-    new_category: new category
-    new_customer: new customer
-    new_discount: new discount
-    new_employee: new employee
-    new_item: new item
-    new_location: new location
+    new_cash_register: New cash register
+    new_category: New category
+    new_customer: New customer
+    new_discount: New discount
+    new_employee: New employee
+    new_item: New item
+    new_location: New location
     new_order: New
-    new_shipment: new shipment
-    new_shipment_type: new shipment type
-    new_shipper: new shipper
-    new_stock_location: new stock location
-    new_tax_profile: new tax profile
-    new_tender_method: new tender method
-    new_vendor: new Store
+    new_shipment: New shipment
+    new_shipment_type: New shipment type
+    new_shipper: New shipper
+    new_stock_location: New stock location
+    new_tax_profile: New tax profile
+    new_tender_method: New Payment Method
+    new_transaction_tag: New Transaction Tag
+    new_vendor: New Store
     ok: OK
     order: order
     orders: orders
@@ -502,7 +503,7 @@ en-US:
     stock_locations: stock locations
     support: support
     tax_profiles: tax profiles
-    tender_methods: tender methods
+    tender_methods: Payment Methods
     transaction_tags: transaction tags
     update_gift_card: update gift card
     update_location: update location
@@ -694,7 +695,7 @@ en-US:
       purchase_price_sum: Purchase price sum
   sticker: sticker
   system:
-    add_payment_method: add payment method
+    add_payment_method: Add Method
     complete_sale: Complete
     errors:
       action_code_error: Code could not be executed because %{error}
@@ -782,7 +783,7 @@ en-US:
     customers: customers
     download_may_last_long: This download may last long. Continue?
     dummy_item: dummy item
-    edit_item_heading: edit item heading
+    edit_item_heading: Edititem heading
     email: email
     errors:
       no_access_right: You do not have the right to access this resource. This error
@@ -808,7 +809,7 @@ en-US:
           canceled: canceled
           complete: complete
           in_stock: in stock
-          new: new
+          new: New
           returned: returned
           shipped: shipped
     gift_card: gift card
@@ -830,7 +831,7 @@ en-US:
       model_create: ! '%{model} was created successfully'
       model_edit: ! '%{model} was edited successfully'
       move_real_quantities_success: Item quantities were successfully updated
-      new_order: new order created
+      new_order: New order created
       order_refund_dt: ! '#%{id}'
       please_backup: Please backup your system regularly!
       save_before: Save before leaving?

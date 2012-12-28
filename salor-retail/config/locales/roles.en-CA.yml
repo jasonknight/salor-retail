@@ -144,3 +144,17 @@ en-CA:
   show_tender_methods: Show Payment Methods
   any_tender_methods: Any Payment Methods
   remove_order_items: Remove Order Items
+  any_cash_registers: Any Cash Registers
+  index_cash_registers: Index Cash Registers
+  edit_cash_registers: Edit Cash Registers
+  show_cash_registers: Show Cash Registers
+  create_cash_registers: Create Cash Registers
+  destroy_cash_registers: Destroy Cash Registers
+  update_cash_registers: Update Cash Registers
+  any_shipment_types: Any Shipment Types
+  index_shipment_types: Index Shipment Types
+  edit_shipment_types: Edit Shipment Types
+  show_shipment_types: Show Shipment Types
+  create_shipment_types: Create Shipment Types
+  destroy_shipment_types: Destroy Shipment Types
+  update_shipment_types: Update Shipment Types

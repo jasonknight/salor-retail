@@ -417,16 +417,17 @@ class FileUpload
       next if i == 1 # skip headers
       columns = row.chomp.split(delim)
 
-      tax_value = columns[3].gsub(',','.').to_f*100
-      tax_profile = TaxProfile.find_by_value(tax_value)
+      tax_value = columns[3].gsub(',','.').to_f
+      tax_profile = TaxProfile.scopied.find_by_value(tax_value)
       if tax_profile.nil?
         tax_profile = TaxProfile.create :name => tax_value, :value => tax_value
+        tax_profile.set_model_owner
         created_tax_profiles += 1
       end
       tax_profile_id = tax_profile.id
-
+      
       if columns[8]
-        category = Category.find_by_name(columns[8].strip)
+        category = Category.scopied.find_by_name(columns[8].strip)
         catname = columns[8].strip
       else
         category = nil
@@ -441,15 +442,54 @@ class FileUpload
       category_id = category.id
 
       weight = columns[5].gsub(',','.').to_f if columns[5]
-
-      attributes = { :sku => columns[0].strip, :name => columns[1].strip, :base_price => columns[2], :tax_profile_id => tax_profile_id, :sales_metric => columns[4], :weight => weight, :weight_metric => columns[6], :purchase_price => columns[7], :category_id => category_id }
+      begin
+        columns[16] = columns[16].to_date if not columns[16].nil?
+      rescue
+        raise columns.inspect
+      end
+      if columns[16] then
+        track_expiry = true
+      else
+        track_expiry = false
+      end  
+      if not columns[12].nil? #i.e. is buyback?
+        columns[12] = (columns[12].downcase == 'true' ? true : false)
+      end
+      if not columns[20].nil? #i.e. is buyback?
+        columns[20] = (columns[20].downcase == 'true' ? true : false)
+      end
+      attributes = { :sku => columns[0].strip, 
+                    :name => columns[1].strip, 
+                    :base_price => columns[2], 
+                    :tax_profile_id => tax_profile_id, 
+                    :sales_metric => columns[4], 
+                    :weight => weight, 
+                    :weight_metric => columns[6], 
+                    :purchase_price => columns[7], 
+                    :category_id => category_id,
+                    :quantity => columns[9], 
+                    :shipper_sku => columns[10], 
+                    :buyback_price => columns[11],
+                    :default_buyback => columns[12],
+                    :behavior => columns[13],
+                    :coupon_applies => columns[14],
+                    :coupon_type => columns[15],
+                    :expires_on => columns[16],
+                    :track_expiry => track_expiry,
+                    :min_quantity => columns[17],
+                    :parent_sku => columns[18],
+                    :child_sku => columns[19],
+                    :must_change_price => columns[20],
+                    :packaging_unit => columns[21]}
 
       item = Item.find_by_sku(columns[0])
       if item
         item.update_attributes attributes
         updated_items += 1
       else
-        item = Item.new attributes
+        item = Item.get_by_code(columns[0].strip)
+        item.make_valid
+        item.update_attributes attributes
         item.set_model_owner
         item.save
         created_items += 1

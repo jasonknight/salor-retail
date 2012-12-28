@@ -27,6 +27,9 @@ class Role < ActiveRecord::Base
       :any_buttons,
       :any_transaction_tags,
       :any_tender_methods,
+      :any_sale_types,
+      :any_invoice_blurbs,
+      :any_countries,
       :edit_vendors,
       :new_vendors,
       :create_vendors,
@@ -39,7 +42,23 @@ class Role < ActiveRecord::Base
       :cashier,
       :clear_orders,
       :destroy_order_items,
-      :report_day_orders
+      :report_day_orders,
+      :show_reports,
+      :show_invoice_blurbs,
+      :show_buttons,
+      :show_invoice_notes,
+      :show_sale_types,
+      :show_countries,
+      :show_tender_methods,
+      :show_actions,
+      :index_transaction_tags,
+      :index_employees,
+      :create_discounts,
+      :update_discounts,
+      :edit_discounts,
+      :destroy_discounts,
+      :index_discounts,
+      :show_tax_profiles
     ],
     :head_cashier => [
       :index_transaction_tags,
@@ -72,7 +91,9 @@ class Role < ActiveRecord::Base
       :stockboy,
       :manager,
       :clear_orders,
-      :report_day_orders
+      :report_day_orders,
+      :show_invoice_blurbs,
+      :show_invoice_notes
     ],
     :cashier => [
       :destroy_orders, # except their own orders
@@ -109,7 +130,26 @@ class Role < ActiveRecord::Base
       :change_prices,
       :create_transaction_tags,
       :create_tender_methods,
-      :edit_tender_methods
+      :edit_tender_methods,
+      :show_reports,
+      :show_invoice_blurbs,
+      :show_buttons,
+      :show_invoice_notes,
+      :show_sale_types,
+      :show_countries,
+      :show_tender_methods,
+      :show_actions,
+      :index_transaction_tags,
+      :index_employees,
+      :index_shippers,
+      :index_shipments,
+      :create_discounts,
+      :update_discounts,
+      :edit_discounts,
+      :destroy_discounts,
+      :index_discounts,
+      :index_broken_items,
+      :show_tax_profiles
     ],
     :employee => [
       :anything,

@@ -31,11 +31,11 @@
         </div>
         <div id='category' class="field" style='display: none;'>
           <%= f.label t("activerecord.models.category.one") %><br />
-          <%= f.collection_select :category_id,GlobalData.categories,:id,:name %>
+          <%= f.collection_select :category_id,Category.scopied,:id,:name %>
         </div>
         <div id='location' class="field" style='display: none;'>
           <%= f.label t("activerecord.models.location.one") %><br />
-          <%= f.collection_select :location_id,GlobalData.locations,:id,:name %>
+          <%= f.collection_select :location_id,Location.scopied,:id,:name %>
         </div>
         <div id='item' class="field" style='display: none;'>
           <%= f.label t("activerecord.attributes.item_sku") %><br />
