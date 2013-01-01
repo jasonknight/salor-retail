@@ -347,6 +347,7 @@ function to_rgb(hex) {
   var b = parseInt(h.substring(4,6),16);
   return {red: r, green: g, blue: b};
 }
+window.retail = {container: $(window)};
 window.shared = {
   element:function (tag,attrs,content,append_to) {
     if (attrs["id"] && $('#' + attrs["id"]).length != 0) {
