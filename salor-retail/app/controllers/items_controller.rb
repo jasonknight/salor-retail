@@ -396,7 +396,7 @@ class ItemsController < ApplicationController
   def inventory_report
     add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
     add_breadcrumb I18n.t("menu.inventory_report"), items_inventory_report_path
-    @items = Item.scopied.where('real_quantity > 0')
+    @items = Item.scopied.where(:real_quantity_updated => true)
     @categories = Category.scopied
   end
   
