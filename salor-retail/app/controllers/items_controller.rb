@@ -16,6 +16,7 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.xml
   def index
+    CashRegister.update_all_devicenodes
     if params[:order_by] then
       key = params[:order_by]
       session[key] = (session[key] == 'DESC') ? 'ASC' : 'DESC'

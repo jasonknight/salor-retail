@@ -100,7 +100,9 @@ class OrdersController < ApplicationController
     add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
     add_breadcrumb t("menu.order"),'new_order_path(:vendor_id => salor_user.meta.vendor_id)'
     @button_categories = Category.where(:button_category => true).order(:position)
-
+    
+    CashRegister.update_all_devicenodes
+    @cash_register.reload
   end
 
   # GET /orders/1/edit

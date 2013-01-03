@@ -1,7 +1,9 @@
 <script type="text/javascript" src="/assets/jquery.modcoder.excolor.js"></script>
 
 <script>
-  $(function(){ $("#cash_register_color").modcoder_excolor(); });
+  $(function(){
+    $("#cash_register_color").modcoder_excolor();
+  });
 </script>
 
 <table align="center" width="100%">
@@ -23,6 +25,9 @@
           <tr>
             <td>
                 <div class="field">
+        <div class="actions">
+          <%= f.submit %>
+        </div>
                   <%= f.label t("activerecord.attributes.name") %><br />
                   <%= f.text_field :name, :class => "keyboardable"%>
                   <%= f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id %>
@@ -43,10 +48,10 @@
                   <%= f.label t("activerecord.attributes.salor_printer") %><br />
                   <%= f.check_box :salor_printer %>
                 </div>
-                <div class="field">
+<!--                <div class="field">
                   <%= f.label t("activerecord.attributes.cash_drawer") %><br />
-                  <%= f.select :cash_drawer_path, @devicenodes, :include_blank => true %>
-                </div>
+                  <%= f.select :cash_drawer_path, @devices_for_select, :include_blank => true %>
+                </div>-->
                 <div class="field">
                   <%= f.label :color %> 
                   <%= f.hidden_field :color %>
@@ -55,20 +60,33 @@
                   <%= f.label t("activerecord.attributes.detailed_edit") %><br />
                   <%= f.check_box :detailed_edit %>
                 </div>
+            <div class="field">
+              <%= f.label "+/-" %><br />
+              <%= f.check_box :show_plus_minus %>
+            </div>
         </td>
         <td>
             <div class="field">
               <%= f.label t("activerecord.attributes.thermal_printer") %><br />
-              <%= f.select :thermal_printer, @devicenodes, :include_blank => true %>
+              <% if @cash_register.salor_printer != true or $Register == @cash_register %>
+                <%= f.select :thermal_printer_name, @devices_for_select, :include_blank => true %>
+              <% else %>
+                <%= f.text_field :thermal_printer %>
+              <% end %>
             </div>
+            <br />
             <div class="field">
               <%= f.label VendorPrinter.human_attribute_name 'sticker_printer' %><br />
-              <%= f.select :sticker_printer, @devicenodes, :include_blank => true %>
+              <% if @cash_register.salor_printer != true or $Register == @cash_register %>
+                <%= f.select :sticker_printer_name, @devices_for_select, :include_blank => true %>
+              <% else %>
+                <%= f.text_field :sticker_printer %>
+              <% end %>
             </div>
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.pole_display") %><br />
-              <%= f.select :pole_display, @devicenodes, :include_blank => true %>
+              <%= f.select :pole_display, @devices_for_select, :include_blank => true %>
             </div>
             <br />
             <div class="field">
@@ -78,7 +96,7 @@
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.scale") %><br />
-              <%= f.select :scale, @devicenodes, :include_blank => true %>
+              <%= f.select :scale, @devices_for_select, :include_blank => true %>
             </div>
             <div class="field">
               <%= f.label t("activerecord.attributes.address") %><br />
@@ -98,17 +116,11 @@
               <%= f.check_box :paylife %>
             </div>
             -->
-            <div class="field">
-              <%= f.label "+/-" %><br />
-              <%= f.check_box :show_plus_minus %>
-            </div>
         </td>
         </tr>
         <tr>
           <td colspan="2">
-        <div class="actions">
-          <%= f.submit %>
-        </div>
+
         </td>
         </tr>
         </table>

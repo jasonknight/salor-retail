@@ -36,5 +36,45 @@ class CashRegister < ActiveRecord::Base
     cats_tags.merge!(paymentmethod_sums)
     return cats_tags
   end
-  # {END}
+  
+  def self.update_all_devicenodes
+    # Update device paths of all Rails-printing CashRegisters AND the currently selected CashRegister, independent of being Rails or client side printing.
+    devices_for_select, devices_name_path_lookup =  CashRegister.get_devicenodes
+    $Vendor.cash_registers.visible.each do |cr|
+      next if cr.salor_printer == true and not cr == $Register
+      cr.set_device_paths_from_device_names(devices_name_path_lookup)
+      if cr == $Register
+        cr.reload
+        $Register = cr
+      end
+    end
+  end
+  
+  def self.get_devicenodes
+    nodes_usb1 = Dir['/dev/usb/lp*']
+    nodes_usb2 = Dir['/dev/usblp*']
+    nodes_serial = Dir['/dev/usb/ttyUSB*']
+    nodes_salor = Dir['/dev/salor*']
+    all_nodes = nodes_usb1 + nodes_usb2 + nodes_serial + nodes_salor
+    devices_for_select = {}
+    devices_name_path_lookup = {}
+    all_nodes.each do |n|
+      devicename = `/sbin/udevadm info -a -p  $(/sbin/udevadm info -q path -n #{n}) | grep ieee1284_id`
+      match = /^.*L:(.*?)\;.*/.match(devicename)
+      devicename = match ? match[1] : '?'
+      full_devicename = "#{devicename} (#{n})"
+      devices_for_select.merge! full_devicename => devicename
+      devices_name_path_lookup.merge! devicename => n
+    end
+    devices_for_select = devices_for_select.to_a
+    return devices_for_select, devices_name_path_lookup
+  end
+  
+  def set_device_paths_from_device_names(devices_name_path_lookup)
+    self.cash_drawer_name = self.thermal_printer_name
+    self.cash_drawer_path = devices_name_path_lookup[self.cash_drawer_name] unless self.cash_drawer_name.nil?
+    self.thermal_printer = devices_name_path_lookup[self.thermal_printer_name] unless self.thermal_printer_name.nil?
+    self.sticker_printer = devices_name_path_lookup[self.sticker_printer_name] unless self.sticker_printer_name.nil?
+    self.save
+  end
 end
