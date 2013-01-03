@@ -2,3 +2,4 @@
 /var/cache/salor-retail
 /usr/share/salor-retail/source/public/uploads
 /usr/share/salor-retail/source/public/barcodes
+/var/tmp/salor-retail

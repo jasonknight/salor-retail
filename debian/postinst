@@ -89,6 +89,7 @@ for lInstance in $gInstances; do
       rails_log=/var/log/salor-retail/$lInstance
       rails_cache=/var/cache/salor-retail/$lInstance
       rails_var=/var/lib/salor-retail/$lInstance
+      rails_tmp=/var/tmp/salor-retail/$lInstance
       
       echo "  postinst: creating directories"
       mkdir -p $rails_etc
@@ -96,6 +97,7 @@ for lInstance in $gInstances; do
       mkdir -p $rails_cache
       mkdir -p $rails_var/public/uploads
       mkdir -p $rails_var/public/barcodes
+      mkdir -p $rails_tmp
       
       use_dbconfig=false
       
@@ -135,6 +137,8 @@ for lInstance in $gInstances; do
       ln -sfn $app_root /usr/share/salor-retail/${lInstance}
       ln -sfn $rails_var/public/uploads $app_root/public/uploads/${lInstance}
       ln -sfn $rails_var/public/barcodes $app_root/public/barcodes/${lInstance}
+      rm -rf $app_root/tmp
+      ln -sfn /var/tmp/salor-retail $app_root/tmp
  
       if [ $use_dbconfig = true ]; then
         # this file prevents dbconfig-common to ask for reconfiguration of the instance during dpkg-reconfigure. see config script.
