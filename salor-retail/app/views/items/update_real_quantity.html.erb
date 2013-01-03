@@ -26,7 +26,7 @@ function setState(state) {
   var qty = parseInt($("#quantity").val());
   var confButton = $("#quantity_confirm_button");
   $(confButton).unbind("click");
-  clog("enteredSku ->", enteredSku);
+  //clog("enteredSku ->", enteredSku);
   if ($("#sku").val()) {
     if (isNaN(qty)) {
       // fetch
@@ -106,13 +106,36 @@ function clearAll() {
   enteredSku = "";
   setState();
 }
+function updateItemQuantities() {
+  var dialog = shared.draw.dialog(i18n.items.update_real_quantity.update_quantity,"update_item_quantities_dialog");
+  var div = shared.element("div",{id: 'update_item_quantities_dialog_body'},i18n.menu.delete_confirm,dialog);
+  div.css({'text-align': 'center','font-size':'200%', 'font-weight': 'bolder'});
+  var btn_row = shared.element("div", {id: "_button_row_update_quantities"},'',dialog);
+  btn_row.addClass('button-row');
+  btn_row.attr("align","right");
+  btn_row.css({width: '200px'});
+  var no_btn = shared.element("div",{id: "update_item_quantities_dialog_no"},i18n.helpers.submit.cancel,btn_row);
+  no_btn.addClass('button-cancel');
+  no_btn.on("mousedown",function () {
+    dialog.remove();
+  });
+  var yes_btn = shared.element("div",{id: "update_item_quantities_dialog_yes"},i18n.helpers.submit.ok,btn_row);
+  yes_btn.on("mousedown", function () {
+    window.location = "/items/move_real_quantity";
+  });
+  yes_btn.addClass('button-confirm');
+  dialog.show();
+  shared.helpers.center(dialog);
+  shared.helpers.bottom_right($('#_button_row_update_quantities'),$('#update_item_quantities_dialog'));
 
+  
+}
 </script>
 <%= raw content_box_top(I18n.t("headings.update_real_quantity")) %>
 
 <div class='tools'>
   <div class='tool-icon'><%= link_to salor_icon(:location, {}, 32, t('.inventory_report')), items_inventory_report_path %></div>
-  <div class='tool-icon' style="margin-left: 200px;"><%= link_to salor_icon(:wand, {}, 32, t('.update_quantity')), items_move_real_quantity_path, :confirm => t('.are_you_sure') %></div>
+  <div class='tool-icon' style="margin-left: 200px;"><%= salor_icon(:wand, {:onclick=>"updateItemQuantities();"}, 32, t('.update_quantity')) %></div>
 </div>
 
 <div class='clear'></div>
