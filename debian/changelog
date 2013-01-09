@@ -1,3 +1,21 @@
+salor-retail (4.0.1.14) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Inventory taking and real_quantity was lost if you accidentally pushed the button. To avoid that in the future, a new flag was added, as well as and inventory_report and inventory_report item etc.
+  * Make inventory report consider real_quantity_updated flag instead of > 0
+
+  [ Michael Franzl ]
+  * added /var/tmp to debian installation
+  * Feature #1620 Configure printers by name rather than device path, and automatically detect device path when going to orders#new
+
+  [ Jason Knight ]
+  * Added schema
+
+  [ Michael Franzl ]
+  * debian installation fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 09 Jan 2013 11:20:48 +0100
+
 salor-retail (4.0.1.13) unstable; urgency=low
 
   [ Salor Retail ]
