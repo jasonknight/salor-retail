@@ -49,14 +49,14 @@ class OrderItem < ActiveRecord::Base
     end
   end
   def get_category_name
-    if self.category then
+    if self.category and self.category.name then
       return self.category.name
     else
       return "NoCategory"
     end
   end
   def get_location_name
-    if self.item.location then
+    if self.item and self.item.location then
       return self.item.location.name
     else
       return 'NoLocation'
