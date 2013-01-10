@@ -67,7 +67,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     row.css({ 'background-color': "<%= order.cash_register.color %>"});
     var oname = $('<td></td>');
     oname.addClass('table-cell id');
-    oname.html("#<%= order.id %>");
+    oname.html("#<%= order.nr %>");
     
     var user_name = $('<td></td>');
     user_name.addClass('table-cell id');

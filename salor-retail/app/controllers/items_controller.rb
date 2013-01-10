@@ -38,6 +38,9 @@ class ItemsController < ApplicationController
       redirect_to :controller => "home", :action => "index" and return
     end
     @item = $User.get_item(params[:id])
+    if not @item then
+      redirect_to "/items?notice=" + I18n.t('system.errors.item_not_found') and return
+    end
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now

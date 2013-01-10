@@ -73,7 +73,7 @@ class OrdersController < ApplicationController
   # GET /orders/1.xml
   def show
     @order = Order.scopied.find_by_id(params[:id])
-    add_breadcrumb t("menu.order") + "#" + @order.id.to_s,'order_path(@order,:vendor_id => salor_user.meta.vendor_id)'
+    add_breadcrumb t("menu.order") + "#" + @order.nr.to_s,'order_path(@order,:vendor_id => salor_user.meta.vendor_id)'
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @order }

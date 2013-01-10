@@ -78,6 +78,9 @@ module SalorScope
       if klass.column_names.include?('tag') then
         conds << "tag LIKE '%#{words}%'"
       end
+      if klass.column_names.include?('nr') then
+        conds << "nr = '#{words}'"
+      end
       klass.where(conds.join(" OR "))
     })
     rescue
