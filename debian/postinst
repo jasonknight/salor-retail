@@ -139,7 +139,7 @@ for lInstance in $gInstances; do
       ln -sfn $rails_var/public/uploads $app_root/public/uploads/${lInstance}
       ln -sfn $rails_var/public/barcodes $app_root/public/barcodes/${lInstance}
       rm -rf $app_root/tmp # remove real directory in case it was created by Rails
-      ln -sfn /var/tmp/salor-retail/${lInstance} $app_root/tmp
+      ln -sfn /var/tmp/salor-retail $app_root/tmp
  
       if [ $use_dbconfig = true ]; then
         # this file prevents dbconfig-common to ask for reconfiguration of the instance during dpkg-reconfigure. see config script.
