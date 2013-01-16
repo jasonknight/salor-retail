@@ -1,3 +1,9 @@
+salor-retail (4.0.1.18) unstable; urgency=low
+
+  * debian fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 16 Jan 2013 09:27:29 +0100
+
 salor-retail (4.0.1.17) unstable; urgency=low
 
   * debian fix
