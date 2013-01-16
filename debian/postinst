@@ -53,6 +53,7 @@ for lInstance in $gOldInstances; do
   rm -rf /var/log/salor-retail/$lInstance
   rm -rf /var/cache/salor-retail/$lInstance
   rm -rf /var/lib/salor-retail/$lInstance
+  rm -rf /var/tmp/salor-retail/$lInstance
 done
 db_set salor-retail/old-instances ""
 
@@ -137,8 +138,8 @@ for lInstance in $gInstances; do
       ln -sfn $app_root /usr/share/salor-retail/${lInstance}
       ln -sfn $rails_var/public/uploads $app_root/public/uploads/${lInstance}
       ln -sfn $rails_var/public/barcodes $app_root/public/barcodes/${lInstance}
-      rm -rf $app_root/tmp
-      ln -sfn /var/tmp/salor-retail $app_root/tmp
+      rm -rf $app_root/tmp # remove real directory in case it was created by Rails
+      ln -sfn /var/tmp/salor-retail/${lInstance} $app_root/tmp
  
       if [ $use_dbconfig = true ]; then
         # this file prevents dbconfig-common to ask for reconfiguration of the instance during dpkg-reconfigure. see config script.
@@ -146,7 +147,7 @@ for lInstance in $gInstances; do
       fi
       
       echo "  postinst: Deleting the asset cache"
-      rm -rf $app_root/tmp/cache/assets
+      rm -rf /var/tmp/salor-retail/${lInstance}/cache
       
       if [ -e $app_root/db/schema.rb ]; then
         echo "  postinst: Copying schema.rb to instance directory."
@@ -221,9 +222,11 @@ chown -R $app_user:$app_user /etc/salor-retail
 chown -R $app_user:$app_user /var/log/salor-retail
 chown -R $app_user:$app_user /var/cache/salor-retail
 chown -R $app_user:$app_user /var/lib/salor-retail
+chown -R $app_user:$app_user /var/tmp/salor-retail
 
 echo "  postinst: changing permissions for user $app_user"
 chmod 770 /etc/salor-retail
+chown -R $app_user:$app_user /var/tmp/salor-retail
   
 echo "  postinst: restarting Apache ..."
 service apache2 restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
