@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130123045115) do
+ActiveRecord::Schema.define(:version => 20130123075737) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -383,6 +383,21 @@ ActiveRecord::Schema.define(:version => 20130123045115) do
 
   add_index "item_shippers", ["item_id"], :name => "index_item_shippers_on_item_id"
   add_index "item_shippers", ["shipper_id"], :name => "index_item_shippers_on_shipper_id"
+
+  create_table "item_stocks", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "stock_location_id"
+    t.float    "quantity"
+    t.integer  "location_id"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+    t.float    "stock_location_quantity"
+    t.float    "location_quantity"
+  end
+
+  add_index "item_stocks", ["item_id"], :name => "index_item_stocks_on_item_id"
+  add_index "item_stocks", ["location_id"], :name => "index_item_stocks_on_location_id"
+  add_index "item_stocks", ["stock_location_id"], :name => "index_item_stocks_on_stock_location_id"
 
   create_table "item_types", :force => true do |t|
     t.string   "name"

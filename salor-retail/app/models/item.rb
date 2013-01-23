@@ -28,6 +28,8 @@ class Item < ActiveRecord::Base
   
   has_many :item_shippers
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
+  
+  has_many :item_stocks
 
 
 

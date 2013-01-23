@@ -1,0 +1,19 @@
+.fieldset
+  %table#new_item_stock_id.fields
+    %tr
+      %td= f.label :stock_location_id
+      %td
+        = f.select :stock_location_id, StockLocation.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',''])
+    %tr
+      %td=f.label t('activerecord.models.stock_location.one') + " " +  I18n.t("activerecord.attributes.quantity")
+      %td=f.text_field :stock_location_quantity, :class => "keyboardable-int delimit-number"
+    %tr
+      %td= f.label :location_id
+      %td
+        = f.select :location_id, Location.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',''])
+        = f.hidden_field :_destroy
+    %tr
+      %td=f.label t('activerecord.models.location.one') + " " +  I18n.t("activerecord.attributes.quantity")
+      %td=f.text_field :location_quantity, :class => "keyboardable-int delimit-number"
+    %tr
+      %td{:colspan => 2, :align => "right"}= link_to_function I18n.t('menu.destroy'),"remove_item_stock_fields(this);"
