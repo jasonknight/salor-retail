@@ -1,3 +1,31 @@
+salor-retail (4.0.1.18) unstable; urgency=low
+
+  * debian fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 16 Jan 2013 09:27:29 +0100
+
+salor-retail (4.0.1.17) unstable; urgency=low
+
+  * debian fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 16 Jan 2013 08:59:39 +0100
+
+salor-retail (4.0.1.16) unstable; urgency=low
+
+  * Closes Bug #1646 Don't refer to ExceptionNotifier when config.yml setting is false
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 16 Jan 2013 08:47:25 +0100
+
+salor-retail (4.0.1.15) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes bug #1634
+  * work on issue #1637
+
+  [ Michael Franzl ]
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 15 Jan 2013 19:53:27 +0100
+
 salor-retail (4.0.1.14) unstable; urgency=low
 
   [ Jason Knight ]

@@ -199,10 +199,12 @@ class ApplicationController < ActionController::Base
   def render_error(exception)
     #log_error(exception)
     @exception = exception
-    if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier }
-      env['exception_notifier.options'] = notifier.args.first || {}                   
-      ExceptionNotifier::Notifier.exception_notification(env, exception).deliver
-      env['exception_notifier.delivered'] = true
+    if SalorRetail::Application::CONFIGURATION[:exception_notification] == true
+      if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier }
+        env['exception_notifier.options'] = notifier.args.first || {}                   
+        ExceptionNotifier::Notifier.exception_notification(env, exception).deliver
+        env['exception_notifier.delivered'] = true
+      end
     end
     render :template => '/errors/error', :layout => 'customer_display'
   end

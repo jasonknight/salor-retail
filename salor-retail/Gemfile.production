@@ -14,7 +14,7 @@ gem 'coffee-rails'
 gem 'rmagick'
 gem 'uglifier'
 gem 'escper', '1.1.0'
-# The following have to be eliminated:
+# The following are not yet part of Debian Squeeze and cause a dependency to the online API of rubygems.org
 gem 'acts_as_list'
 gem 'kaminari'
 gem 'unicode_utils'
