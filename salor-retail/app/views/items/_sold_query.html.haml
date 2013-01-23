@@ -1,0 +1,18 @@
+= form_tag item_path(@item), :method => :get do
+  %div.tools
+    %h2= t 'items.show.quantity_sold'
+    %hr
+    = label 'from', t('items.show.from')
+    = select_date(@from, :prefix => 'from')
+    %br
+    = label 'to', t('items.show.to')
+    = select_date(@to, :prefix => 'to')
+    %br
+    %br
+    = submit_tag t('items.show.query'), :onclick => '$("#progress").show()'
+    %br
+    %br
+    %br
+    %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
+
+    .item_sold_times= @sold_times

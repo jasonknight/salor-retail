@@ -41,7 +41,7 @@ en-US:
       applies_to: applies to
       auto_drop: Automatically Begin Day
       bank_machine_path: ATM
-      base_price: base price
+      base_price: List Price
       behavior: behavior
       body: body
       buyback_price: buyback price
@@ -458,7 +458,7 @@ en-US:
     new_country: New Country
     new_sale_type: New Sale Type
     new_invoice_note: New Invoice Note
-    new_action: New New Action
+    new_action: New Action
     new_broken_item: New Broken Item
     new_button: New Button
     new_cash_register: New cash register

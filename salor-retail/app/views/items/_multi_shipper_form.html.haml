@@ -1,0 +1,6 @@
+%h2=I18n.t("activerecord.models.shipper.other")
+%hr
+= link_to_add_fields(I18n.t('views.single_words.new'),form,:item_shippers,"add_item_shipper_fields")
+#item_shippers_hook
+= form.fields_for(:item_shippers) do |item_shipper|
+  = render "item_shipper_fields", :f => item_shipper
