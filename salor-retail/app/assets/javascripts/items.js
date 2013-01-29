@@ -22,3 +22,17 @@ function add_item_shipper_fields(link, association, content) {
   var elem = $("#item_item_shippers_attributes_"+new_id+"_shipper_id");
   make_select_widget("Shipper Id",elem);
 }
+
+function remove_item_stock_fields(link) {
+  $(link).prev("input[type=hidden]").val("1");
+  $(link).closest(".fields").hide();
+}
+
+function add_item_stock_fields(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g");
+  content = content.replace("new_item_stock_id","new_item_stock_" + new_id);
+  $('#item_stocks_hook').after(content.replace(regexp, new_id));
+  var elem = $("#item_item_stocks_attributes_"+new_id+"_shipper_id");
+  make_select_widget("Shipper Id",elem);
+}
