@@ -71,6 +71,8 @@ class ItemsController < ApplicationController
     if not @item then
       redirect_to(:action => 'new', :notice => I18n.t("system.errors.item_not_found")) and return
     end
+    @item.item_stocks.build if not @item.item_stocks.any?
+    @item.item_shippers.build if not @item.item_shippers.any?
     add_breadcrumb @item.name,'edit_item_path(@item,:vendor_id => params[:vendor_id])'
    
   end

@@ -11,9 +11,11 @@
       %td= f.label :location_id
       %td
         = f.select :location_id, Location.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',''])
-        = f.hidden_field :_destroy
+        
     %tr
       %td=f.label t('activerecord.models.location.one') + " " +  I18n.t("activerecord.attributes.quantity")
       %td=f.text_field :location_quantity, :class => "keyboardable-int delimit-number"
     %tr
-      %td{:colspan => 2, :align => "right"}= link_to_function I18n.t('menu.destroy'),"remove_item_stock_fields(this);"
+      %td{:colspan => 2, :align => "right"}
+        = f.hidden_field :_destroy, :class => 'destroy'
+        = link_to_function I18n.t('menu.destroy'),"remove_item_stock_fields(this);"
