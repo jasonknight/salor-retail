@@ -12,6 +12,7 @@
   SetEnv BUNDLE_GEMFILE /etc/salor-retail/INSTANCE_ID/Gemfile
   DocumentRoot /usr/share/salor-retail/INSTANCE_ID/public
   #PassengerPreStart http://INSTANCE_ID.sr.red-e.eu/
+  PassengerRestartDir /var/tmp/salor-retail/INSTANCE_ID
   
   SetEnvIf Host ^.*-b\.sr\.red-e\.eu USE_AUTH
   SetEnvIf Host ^.*-d\.sr\.red-e\.eu USE_AUTH
