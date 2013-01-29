@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130123075737) do
+ActiveRecord::Schema.define(:version => 20130129091607) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -393,6 +393,7 @@ ActiveRecord::Schema.define(:version => 20130123075737) do
     t.datetime "updated_at",              :null => false
     t.float    "stock_location_quantity"
     t.float    "location_quantity"
+    t.integer  "vendor_id"
   end
 
   add_index "item_stocks", ["item_id"], :name => "index_item_stocks_on_item_id"

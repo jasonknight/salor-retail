@@ -452,9 +452,11 @@ class Order < ActiveRecord::Base
     end
   end
   #
-	def calculate_rebate
-	  amnt = 0.0
-	  if self.subtotal.nil? then self.subtotal = 0 end
+  def calculate_rebate
+    amnt = 0.0
+    if self.subtotal.nil? then 
+        self.subtotal = 0 
+    end
     self.order_items.visible.each do |oi|
       puts "!! Oi.total is #{oi.total}"
       amnt += (oi.total * (self.rebate/100))
@@ -462,16 +464,16 @@ class Order < ActiveRecord::Base
     #amnt = (self.subtotal * (self.rebate/100)) #if self.rebate_type == 'percent'
     #amnt = self.rebate if self.rebate_type == 'fixed'
     return amnt
-	end
-	#
-	def update_self_and_save
-		calculate_totals
-		save!
-	end
-	#
-	def complete=(api_called=nil)
-	  self.complete
-	end
+  end
+  #
+  def update_self_and_save
+          calculate_totals
+          save!
+  end
+  #
+  def complete=(api_called=nil)
+    self.complete
+  end
 	#
   def complete
 #     log_action "Starting complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"

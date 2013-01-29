@@ -727,6 +727,7 @@ class OrderItem < ActiveRecord::Base
     # end Check Parts and update quantities
   end
   def update_quantity_sold
+    log_action("Updating quantity sold")
     return if self.order.is_proforma == true
     the_item = self.item
     if the_item.category then
@@ -734,6 +735,10 @@ class OrderItem < ActiveRecord::Base
     end
     if the_item.location then
       the_item.location.update_attribute(:quantity_sold,the_item.location.quantity_sold + self.quantity)
+    end
+    if the_item.item_stocks.any? then
+      stock = the_item.item_stocks.first
+      stock.update_attribute :location_quantity, stock.location_quantity - self.quantity
     end
   end
   def update_cash_made

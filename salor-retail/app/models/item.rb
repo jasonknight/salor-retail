@@ -9,13 +9,13 @@
 # {VOCABULARY} location_reversed info_on_category real_category_name part_ident part_qty2 quantity_of_sale gift_card_remainder coupon_b1g1 gift_card_owner
 class Item < ActiveRecord::Base
   # {START}
-	include SalorScope
+  include SalorScope
   include SalorError
   include SalorBase
   include SalorModel
-	belongs_to :category
-	belongs_to :vendor
-	belongs_to :location
+  belongs_to :category
+  belongs_to :vendor
+  belongs_to :location
   belongs_to :tax_profile
   belongs_to :item_type
   belongs_to :item
@@ -30,7 +30,7 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
   
   has_many :item_stocks
-
+  accepts_nested_attributes_for :item_stocks, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }, :allow_destroy => true
 
 
   validates_presence_of :sku
@@ -450,6 +450,12 @@ class Item < ActiveRecord::Base
         i.quantity -= si.quantity
       else
         i.quantity += si.quantity
+        if si.stock_locations.any? then
+          stock = i.item_stocks.find_by_stock_location_id(si.stock_locations.first.id)
+          if stock then
+            stock.update_attribute :stock_location_quantity, stock.stock_location_quantity + si.quantity
+          end
+        end
       end
       if si.purchase_price then
         i.purchase_price = si.purchase_price

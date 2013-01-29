@@ -120,8 +120,8 @@ module SalorBase
     #SalorBase.log_action(self.class.to_s,txt)
   end
   def self.log_action(from="unk",txt)
-    #File.open("#{::Rails.root.to_s}/log/#{Rails.env}}-history.log","a") do |f|
-    #  f.write "[#{Time.now}] [FROM: #{from}] " + txt + "\n"
+    #File.open("#{::Rails.root.to_s}/log/#{Rails.env}-history.log","a") do |f|
+     # f.write "[#{Time.now}] [FROM: #{from}] " + txt + "\n"
     #end
   end
   def self.string_to_float(str)
@@ -222,7 +222,7 @@ module SalorBase
         self.owner_type = user.class.to_s
       end
       if self.respond_to? :vendor_id and self.vendor_id.nil? then
-       self.vendor_id = user.get_meta.vendor_id
+       self.vendor_id = user.vendor_id
        self.set_sku if self.class == Category or self.class == Customer
       end
       if self.respond_to? :cash_register_id and self.cash_register_id.nil? then
