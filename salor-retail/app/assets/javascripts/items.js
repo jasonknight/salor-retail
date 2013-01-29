@@ -9,3 +9,16 @@ function itemsAddNameTranslation(locale) {
   inp.css({width: '50%'});
   return inp;
 }
+function remove_item_shipper_fields(link) {
+  $(link).prev("input[type=hidden]").val("1");
+  $(link).closest(".fields").hide();
+}
+
+function add_item_shipper_fields(link, association, content) {
+  var new_id = new Date().getTime();
+  var regexp = new RegExp("new_" + association, "g");
+  content = content.replace("new_item_shipper_id","new_item_shipper_" + new_id);
+  $('#item_shippers_hook').after(content.replace(regexp, new_id));
+  var elem = $("#item_item_shippers_attributes_"+new_id+"_shipper_id");
+  make_select_widget("Shipper Id",elem);
+}

@@ -37,7 +37,12 @@ class ItemsController < ApplicationController
     if not check_license() then
       redirect_to :controller => "home", :action => "index" and return
     end
-    @item = $User.get_item(params[:id])
+    if params[:id] and not params[:keywords] then
+      @item = $Vendor.items.find_by_id(params[:id])
+    end
+    if params[:keywords] then
+        @item = $Vendor.items.by_keywords.first
+    end
     if not @item then
       redirect_to "/items?notice=" + I18n.t('system.errors.item_not_found') and return
     end
@@ -53,6 +58,7 @@ class ItemsController < ApplicationController
   # GET /items/new.xml
   def new
     @item = Item.new(:vendor_id => GlobalData.salor_user.meta.vendor_id)
+    @item.item_shippers.build
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @item }

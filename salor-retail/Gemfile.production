@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.6'
 gem 'rake', '0.9.2.2'
-gem 'rack', '1.4.1'
+gem 'rack','1.4.4'
 gem 'mysql2'
 gem 'serialport'
 gem 'kramdown'

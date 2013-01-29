@@ -25,6 +25,9 @@ class Item < ActiveRecord::Base
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
   belongs_to :child, :class_name => 'Item'
   has_many :order_items
+  
+  has_many :item_shippers
+  accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
 
 
 

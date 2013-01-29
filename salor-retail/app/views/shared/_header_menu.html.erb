@@ -22,7 +22,7 @@
   </li>
   <% if $User and $User.can(:cashier) %>
     <li>
-      <div align="center" class="no-touchy cash-drop-header" onmousedown="show_cash_drop();">
+      <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onmousedown="show_cash_drop();">
         <div id='header_drawer_amount'></div>
         <%= salor_icon(:cash_drop,{},32) %><br /><span class='icon-caption'><%= I18n.t("menu.cash_drop") %></span>
       </div>

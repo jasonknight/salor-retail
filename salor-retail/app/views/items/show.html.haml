@@ -1,18 +1,7 @@
 = raw content_box_top(@item.name)
-= form_tag item_path(@item), :method => :get do
-  %div.tools
-    %h2= t '.quantity_sold'
-    = label 'from', t('.from')
-    = select_date(@from, :prefix => 'from')
-    %br
-    = label 'to', t('.to')
-    = select_date(@to, :prefix => 'to')
-    %br
-    %br
-    = submit_tag t('.query'), :onclick => '$("#progress").show()'
-    %br
-    %br
-    %br
-    %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
-
-    .item_sold_times= @sold_times
+%table{:width => "90%", :align => "center"}
+  %tr
+    %td{:valign => "top"}
+      =render(:partial => "item_info")
+    %td{:valign => "top"}
+      =render(:partial => "sold_query")

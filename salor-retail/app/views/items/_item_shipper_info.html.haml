@@ -1,0 +1,14 @@
+.fieldset
+  %table#new_item_shipper_id.fields
+    %tr
+      %td{ :colspan => 2}
+        %h3= item_shipper.shipper.name if item_shipper.shipper
+    %tr
+      %td= label_tag :shipper_sku
+      %td= item_shipper.shipper_sku
+    %tr
+      %td= label_tag I18n.t("activerecord.attributes.purchase_price")
+      %td= item_shipper.purchase_price
+    %tr>
+      %td=label_tag I18n.t("activerecord.attributes.base_price")
+      %td=item_shipper.list_price
