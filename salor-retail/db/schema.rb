@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130129091607) do
+ActiveRecord::Schema.define(:version => 20130205112836) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -253,6 +253,21 @@ ActiveRecord::Schema.define(:version => 20130129091607) do
 
   add_index "drawers", ["owner_id"], :name => "index_drawers_on_owner_id"
 
+  create_table "employee_logins", :force => true do |t|
+    t.datetime "login"
+    t.datetime "logout"
+    t.float    "hourly_rate"
+    t.integer  "employee_id"
+    t.integer  "vendor_id"
+    t.integer  "shift_seconds"
+    t.float    "amount_due"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "employee_logins", ["employee_id"], :name => "index_employee_logins_on_employee_id"
+  add_index "employee_logins", ["vendor_id"], :name => "index_employee_logins_on_vendor_id"
+
   create_table "employees", :force => true do |t|
     t.string   "email",                                 :default => "",                :null => false
     t.string   "encrypted_password",     :limit => 128, :default => "",                :null => false
@@ -280,6 +295,7 @@ ActiveRecord::Schema.define(:version => 20130129091607) do
     t.integer  "auth_code"
     t.string   "last_path",                             :default => "/cash_registers"
     t.string   "role_cache"
+    t.float    "hourly_rate"
   end
 
   add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true

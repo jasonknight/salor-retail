@@ -272,7 +272,7 @@ class ItemsController < ApplicationController
         @items = Item.where(:sku => params[:skus].split(","))
       end
     end
-
+    @currency = I18n.t('number.currency.format.friendly_unit')
     template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}_#{params[:style]}.prnt.erb")
     erb = ERB.new(template, 0, '>')
     text = erb.result(binding)

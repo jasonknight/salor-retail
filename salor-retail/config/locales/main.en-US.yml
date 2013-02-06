@@ -78,6 +78,7 @@ en-US:
       email: email
       employee:
         uses_drawer_id: Uses drawer of
+        hourly_rate: Hourly Rate
       end_amount: end amount
       end_date: end date
       eod_show: show at end of day
@@ -304,6 +305,7 @@ en-US:
     exception_in_files: ! 'The Error occurred in the following files:'
     oops_an_error_occurred: Oops! An Error occurred
   headings:
+    time_sheet: Employee Time Sheet
     almost_out: almost out
     bank_machine_types: supported bank machines
     best_sellers: bestsellers

@@ -426,6 +426,15 @@ module UserEmployeeMethods
     self.meta.cash_register_id = nil
     self.meta.save
     self.update_attribute :last_path,''
+    login = self.employee_logins.last
+    if login then
+      login.logout = Time.now
+      login.save
+    end
+  end
+  def start_day
+    login = EmployeeLogin.new(:employee_id => self.id, :hourly_rate => self.hourly_rate, :login => Time.now, :vendor_id => self.vendor_id)
+    login.save
   end
   
   def best_sellers
