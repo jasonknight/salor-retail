@@ -5,7 +5,7 @@
     %td=raw "&nbsp;"
     %td=raw "&nbsp;"
     %td{:align=>'right'}= l @to, :format => :long
-  - @employee.drawer.drawer_transactions.visible.where("tag != 'CompleteOrder'").where(:created_at => (@from-1.day)..(@to + 1.day)).each do |crd|
+  - @employee.drawer.drawer_transactions.visible.where("tag != 'CompleteOrder' and tag != 'Change'").where(:created_at => (@from-1.day)..(@to + 1.day)).each do |crd|
     %tr
       %td= l crd.created_at, :format => :short
       %td{:align=>"right"}= number_to_currency crd.amount
