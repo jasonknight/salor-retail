@@ -118,7 +118,7 @@ class ApplicationController < ActionController::Base
 
   private
   def allowed_klasses
-    ['LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem','CashRegisterDaily']
+    ['EmployeeLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem','CashRegisterDaily']
   end
   def initialize_instance_variables
     if params[:vendor_id] and not params[:vendor_id].blank? then

@@ -13,4 +13,26 @@ class EmployeeLogin < ActiveRecord::Base
       self.amount_due = hours * self.hourly_rate
     end
   end
+  def login=(d)
+    if d.class == String
+      puts "Class is string"
+      parts = d.scan(/(\d{4,4})\/(\d{2,2})\/(\d{2,2}) (\d{2,2}):(\d{2,2})/)
+      t = Time.local(parts[0][0],parts[0][1],parts[0][2],parts[0][3],parts[0][4])
+      puts t
+      write_attribute :login, t
+    else
+      write_attribute :login,d
+    end
+  end
+  def logout=(d)
+    if d.class == String
+      puts "Class is string"
+      parts = d.scan(/(\d{4,4})\/(\d{2,2})\/(\d{2,2}) (\d{2,2}):(\d{2,2})/)
+      t = Time.local(parts[0][0],parts[0][1],parts[0][2],parts[0][3],parts[0][4])
+      puts t
+      write_attribute :logout, t
+    else
+      write_attribute :logout,d
+    end
+  end
 end
