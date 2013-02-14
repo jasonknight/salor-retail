@@ -1263,6 +1263,15 @@ class Order < ActiveRecord::Base
     print_engine.close
     Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => contents[:text])
   end
-  
+  def sanity_check
+    if self.paid == 1 then
+      pms = self.payment_methods.collect { |pm| pm.internal_type}
+      if pms.include? "InCash" and not pms.include? "Change" and self.change_given > 0 then
+        puts "Order is missing Change Payment Method"
+        PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
+        self.payment_methods.reload
+      end
+    end
+  end
   # {END}
 end
