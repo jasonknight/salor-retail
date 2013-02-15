@@ -5,7 +5,7 @@ $(function () {
     lin.datetimepicker(
       {
         timeFormat: 'HH:mm:ss',
-        dateFormat: 'yy/mm/dd',
+        dateFormat: 'yy-mm-dd',
         onSelect: function (dateTimeText,picker) {
 
           var string = '/vendors/edit_field_on_child?id=' +
@@ -19,7 +19,7 @@ $(function () {
     lout.datetimepicker(
       {
         timeFormat: 'HH:mm:ss',
-        dateFormat: 'yy/mm/dd',
+        dateFormat: 'yy-mm-dd',
         onSelect: function (dateTimeText,picker) {
           
           var string = '/vendors/edit_field_on_child?id=' +

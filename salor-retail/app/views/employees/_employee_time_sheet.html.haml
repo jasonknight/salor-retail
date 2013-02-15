@@ -9,9 +9,9 @@
     %td
   - @employee.employee_logins.where(:login => (@from - 1.day)..(@to + 1.day)).each do |login|
     %tr{:model_id => login.id}
-      %td= text_field_tag("login", login.login.strftime("%Y/%m/%d %H:%M:%S"), :class=> 'employee_login_time', :model_id => login.id )
+      %td= text_field_tag("login", login.login.strftime("%Y-%m-%d %H:%M:%S"), :class=> 'employee_login_time', :model_id => login.id )
       - if login.logout
-        %td= text_field_tag("logout", login.logout.strftime("%Y/%m/%d %H:%M:%S"),:class=> 'employee_logout_time', :model_id => login.id )
+        %td= text_field_tag("logout", login.logout.strftime("%Y-%m-%d %H:%M:%S"),:class=> 'employee_logout_time', :model_id => login.id )
         %td{:align=>"right"}= (login.shift_seconds.to_f / 60 / 60 ).round(2)
         %td{:align=>"right"}= number_to_currency login.hourly_rate
         %td{:align=>"right"}= number_to_currency login.amount_due

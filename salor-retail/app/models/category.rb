@@ -15,6 +15,7 @@ class Category < ActiveRecord::Base
   has_many :shipment_items
   has_many :discounts
   has_many :buttons, :order => :position
+  has_many :actions, :as => :owner, :order => "weight asc"
   belongs_to :vendor
   has_many :order_items
   before_create :set_model_owner

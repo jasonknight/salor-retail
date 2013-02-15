@@ -28,7 +28,7 @@
     <label> <%= I18n.t("activerecord.attributes.sku")%> </label><br />
     <input type="text" name="item[sku]" value="<%= @action.sku %>" />
   </div>
-
+ 
   <div class="field">
     <label> <%= I18n.t("views.single_words.ordering") %> </label><br />
     <input type="text" name="item[weight]" value="<%= @action.weight %>" />
@@ -37,6 +37,14 @@
     </tr>
     <tr>
       <td>
+       <div class="field">
+    <label> <%= I18n.t("activerecord.models.category.one")%> </label><br />
+    <select id="action_category_id" name="item[category_id]">
+      <% Category.scopied.each do |c|  %>
+       <option value="<%= c.id %>" <%= 'selected=true' if c.id == @action.owner_id and @action.owner_type == 'Category' %>> <%= c.name %> </option>
+      <% end %>
+    </select>
+  </div>
   <div class="field">
     <label> <%= I18n.t("activerecord.attributes.when") %> </label><br />
     <select id="action_whento" name="item[whento]">
