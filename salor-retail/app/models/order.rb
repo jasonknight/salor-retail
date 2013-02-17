@@ -4,7 +4,7 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-require "#{Rails.root}/lib/printr"
+
 class Order < ActiveRecord::Base
  # {START}
 	include SalorScope

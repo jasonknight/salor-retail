@@ -229,16 +229,16 @@ class VendorsController < ApplicationController
 
     template = File.read("#{Rails.root}/app/views/printr/end_of_day.prnt.erb")
     erb = ERB.new(template, 0, '>')
-    text = Printr.sanitize(erb.result(binding))
+    text = erb.result(binding)
     Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
     if @register.salor_printer
-      render :text => text
+      render :text => Escper::Asciifier.new.process(text)
     else
       vendor_printer = VendorPrinter.new :path => @register.thermal_printer
-      printr = Printr.new('local', vendor_printer)
-      printr.open
-      printr.print 0, text
-      printr.close
+      print_engine = Escper::Printer.new('local', vendor_printer)
+      print_engine.open
+      print_engine.print(0, text)
+      print_engine.close
       render :nothing => true
     end
   end

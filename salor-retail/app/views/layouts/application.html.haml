@@ -39,6 +39,6 @@
       = yield
       .close-window{ :onclick => "if (typeof Salor != 'undefined') { Salor.shutdown();} else { self.close();}" } X
       
-      %span.version= "Salor Version: #{ SalorRetail::Application::VERSION }"
+      %span.version= SalorRetail::Application::VERSION
         
       %a.reload-window{ :href => '/orders/new' } R
