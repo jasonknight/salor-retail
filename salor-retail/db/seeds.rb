@@ -1,5 +1,5 @@
 if User.any? or Item.any? or Order.any?
-  puts "Database is already seeded. Not running seed script again."
+  puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
   Process.exit 0
 end
 
@@ -98,6 +98,7 @@ def create_account(current_lang,lang)
       }
     )
     @manager.save()
+    puts "Created Manager with password  #{current_lang}#{current_user}0"
     current_user += 1
     Drawer.create :amount => 0, :owner_id => @manager.id, :owner_type => 'Employee'
     

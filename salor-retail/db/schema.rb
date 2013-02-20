@@ -651,8 +651,8 @@ ActiveRecord::Schema.define(:version => 20130205112836) do
     t.integer  "vendor_id"
     t.boolean  "tax_free",              :default => false
     t.integer  "hidden_by"
-    t.string   "coupon_applies"
     t.integer  "employee_id"
+    t.string   "coupon_applies"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
