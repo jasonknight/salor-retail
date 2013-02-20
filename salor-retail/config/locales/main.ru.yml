@@ -228,6 +228,10 @@ ru:
       order:
         one: Заказ
         other: Заказы
+        proforma_orders: Proforma Invoices
+        unpaid_orders: Unpaid Invoices
+        quotes: Quotes
+        quote: Quote
       order_item:
         one: Товар в заказе
         other: Товары в заказе

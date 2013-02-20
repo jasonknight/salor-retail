@@ -238,6 +238,10 @@ en-GB:
       order:
         one: Order
         other: Orders
+        proforma_orders: Proforma Invoices
+        unpaid_orders: Unpaid Invoices
+        quotes: Quotes
+        quote: Quote
       order_item:
         one: Order Item
         other: Order Items

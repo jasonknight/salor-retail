@@ -228,6 +228,10 @@ es:
       order:
         one: Pedido
         other: Pedidos
+        proforma_orders: Proforma Invoices
+        unpaid_orders: Unpaid Invoices
+        quotes: Quotes
+        quote: Quote
       order_item:
         one: Artículo de pedido
         other: Otro artículo de pedido

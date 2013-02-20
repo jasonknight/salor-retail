@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
    before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt, :print_confirmed]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt, :print_confirmed]
    before_filter :crumble, :except => [:customer_display,:print, :print_receipt, :print_confirmed]
-   
+   respond_to :html, :xml, :json, :csv
    # TODO: Remove method offline since empty.
    def offline
    end
@@ -61,12 +61,22 @@ class OrdersController < ApplicationController
     redirect_to "/orders/new?order_id=#{@order.id}"
   end
   def index
-    @orders = salor_user.get_orders
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @orders }
+    params[:type] ||= 'normal'
+    case params[:type]
+    when 'normal'
+      @orders = $Vendor.orders.order("nr desc").where(:paid => 1).page(params[:page]).per(25)
+    when 'proforma'
+      @orders = $Vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(25)
+    when 'unpaid'
+      @orders = $Vendor.orders.order("nr desc").unpaid.page(params[:page]).per(25)
+    when 'quote'
+      @orders = $Vendor.orders.order("qnr desc").quotes.page(params[:page]).per(25)
+    else
+      @orders = $Vendor.orders.order("id desc").page(params[:page]).per(25)
     end
+    
+    
+    respond_with(@orders)
   end
 
   # GET /orders/1
@@ -399,6 +409,12 @@ class OrdersController < ApplicationController
         next if payment_methods_seen.include? pt
         payment_methods_seen << pt
         if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0 then
+          if pt == 'Unpaid' then
+            @order.update_attribute :unpaid_invoice, true # to support finishing invoices early so that they are inline, even though they haven't been paid yet
+          end
+          if pt == 'Quote'
+            @order.update_attribute :is_quote, true
+          end
           pm = PaymentMethod.new(:name => pmt[0],:internal_type => pt, :amount => SalorBase.string_to_float(params[pt.to_sym]))
           if pm.amount > @order.total then
             # puts  "## Entering Sanity Check"
@@ -563,6 +579,11 @@ class OrdersController < ApplicationController
     GlobalData.salor_user = @order.user if @order.user
     GlobalData.salor_user = @order.employee if @order.employee
     $User = @order.employee
+    if not @order.employee then
+      @order.employee = Employee.where(:vendor_id => @order.vendor_id).last
+      @order.save
+      $User = @order.employee
+    end
     $Conf = @order.vendor.salor_configuration
     @vendor = @order.vendor
     @report = @order.get_report

@@ -228,6 +228,10 @@ el:
       order:
         one: Παραγγελία
         other: Παραγγελίες
+        proforma_orders: Proforma Invoices
+        unpaid_orders: Unpaid Invoices
+        quotes: Quotes
+        quote: Quote
       order_item:
         one: Αντικείμενο Παραγγελίας
         other: Αντικείμενα Παραγγελίας

@@ -1,16 +1,17 @@
 <% order_items.reverse.each do |oi|%>
       <%
+        next if oi.item.nil?
         price = oi.price
         total = oi.gross
-        if (oi.item.item_type.behavior == 'gift_card' and oi.item.activated) or oi.is_buyback then
+        if (oi.item.get_item_type.behavior == 'gift_card' and oi.item.activated) or oi.is_buyback then
           price = price * -1 unless price < 0
           total = total * -1 unless total < 0
         end
-        next if oi.item.item_type.behavior == 'coupon'
+        next if oi.item.get_item_type.behavior == 'coupon'
       %>
         <tr id="order_item-<%= oi.id %>" 
             class="order-item <%= 'discount-applied' if oi.discount_applied %>" 
-            gcard="<%= oi.item.item_type.behavior == 'gift_card' ? 'true' : 'false' %>"
+            gcard="<%= oi.item.get_item_type.behavior == 'gift_card' ? 'true' : 'false' %>"
             amnt="<%= oi.item.amount_remaining %>"
             activated="<%= oi.item.activated ? 'true' : 'false' %>">
             <% opts = "update_pos_display='true' model_id='#{oi.item.id}' klass='Item' field='name' data_type='String' id='in_place_edit_item_name_#{oi.item.id}'"  %>

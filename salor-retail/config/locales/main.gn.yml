@@ -238,6 +238,10 @@ gn:
       order:
         one: Verkauf
         other: Verkäufe
+        proforma_orders: Proforma Rechnungen
+        unpaid_orders: Unbezahlte Rechnungen
+        quotes: Angebote
+        quote: Angebot
       order_item:
         one: Verkaufter Artikel
         other: Verkaufte Artikel
@@ -766,8 +770,9 @@ gn:
     not_you: Nicht Sie?
     owner_mode: ADMIN MODUS
     owner_success: Administrator wurde erfolgreich aktualisiert.
-    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere,Retourgeld
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
+    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere,Retourgeld,zukünftige
+      Bezahlung,Angebote
+    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change,Unpaid,Quote
     rebate_types:
       fixed: EUR
       percent: ! '%'

@@ -1,7 +1,12 @@
 = stylesheet_link_tag 'invoice_default'
 = stylesheet_link_tag 'invoice_default_print', :media => 'print'
-
-= raw content_box_top(t("views.orders"))
+- case @order.paid
+  - when 1
+    - title = "menu.orders"
+  - else
+    - title = 'activerecord.models.order.unpaid_order'
+- title = 'receipts.proforma_invoice' if @order.is_proforma
+= raw content_box_top(t(title))
 
 .tools
   %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))

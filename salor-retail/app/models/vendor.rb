@@ -7,42 +7,43 @@
 
 class Vendor < ActiveRecord::Base
  # {START}
-	include SalorScope
+  include SalorScope
   include SalorModel
-	belongs_to :user
-	has_one :salor_configuration
-	has_many :orders
-	has_many :categories
-	has_many :items
-	has_many :locations
-	has_many :employees
-	has_many :cash_registers
-	has_many :customers
-	has_many :broken_items
-	has_many :paylife_structs
-	has_many :nodes
-	has_many :shipments_received, :as => :receiver
-	has_many :returns_sent, :as => :shipper
-	has_many :shipments
-	has_many :vendor_printers
+  belongs_to :user
+  has_one :salor_configuration
+  has_many :orders
+  has_many :categories
+  has_many :items
+  has_many :locations
+  has_many :employees
+  has_many :cash_registers
+  has_many :customers
+  has_many :broken_items
+  has_many :paylife_structs
+  has_many :nodes
+  has_many :shipments_received, :as => :receiver
+  has_many :returns_sent, :as => :shipper
+  has_many :shipments
+  has_many :vendor_printers
   has_many :shippers, :through => :user
-	has_many :discounts
-	has_many :stock_locations
-	has_many :shipment_items, :through => :shipments
+  has_many :discounts
+  has_many :stock_locations
+  has_many :shipment_items, :through => :shipments
   has_many :tax_profiles
   has_many :shipment_types
   has_many :invoice_blurbs
   serialize :unused_order_numbers
+  serialize :unused_quote_numbers
 	
   
-	def salor_configuration_attributes=(hash)
-	  if self.salor_configuration.nil? then
-	    self.salor_configuration = SalorConfiguration.new hash
-	    self.salor_configuration.save
-	    return
-	  end
-	  self.salor_configuration.update_attributes(hash)
-	end
+  def salor_configuration_attributes=(hash)
+    if self.salor_configuration.nil? then
+      self.salor_configuration = SalorConfiguration.new hash
+      self.salor_configuration.save
+      return
+    end
+    self.salor_configuration.update_attributes(hash)
+  end
   def set_vendor_printers=(printers)
     self.connection.execute("delete from vendor_printers where vendor_id = '#{self.id}'")
     ps = []
@@ -123,8 +124,13 @@ class Vendor < ActiveRecord::Base
       self.update_attribute "largest_#{model_name_singular}_number", nr
     else
       # find Order with largest nr attribute from database. this should happen only once, when having a new database
-      last_model = self.send(model_name_plural).visible.where('nr is not NULL OR nr <> 0').last
-      nr = last_model ? last_model.nr + 1 : 1
+      if model_name_plural == 'quotes' then
+        last_model = self.send('orders').visible.where('qnr is not NULL OR qnr <> 0').last
+        nr = last_model ? last_model.qnr + 1 : 1
+      else
+        last_model = self.send(model_name_plural).visible.where('nr is not NULL OR nr <> 0').last
+        nr = last_model ? last_model.nr + 1 : 1
+      end
       self.update_attribute "largest_#{model_name_singular}_number", nr
     end
     return nr

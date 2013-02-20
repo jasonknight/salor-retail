@@ -11,9 +11,9 @@ class Order < ActiveRecord::Base
   include SalorError
   include SalorBase
   include SalorModel
-	has_many :order_items
-	has_many :payment_methods
-	has_many :paylife_structs
+  has_many :order_items
+  has_many :payment_methods
+  has_many :paylife_structs
   belongs_to :user
   belongs_to :employee
   belongs_to :customer
@@ -27,6 +27,20 @@ class Order < ActiveRecord::Base
   
   has_and_belongs_to_many :discounts
   scope :last_seven_days, lambda { where(:created_at => 7.days.ago.utc...Time.now.utc) }
+  scope :unpaid, lambda { 
+    t = self.table_name
+    where(" ( ( `#{t}`.paid IS NULL OR `#{t}`.paid = 0) AND ( `#{t}`.total > 0.0 AND `#{t}`.total IS NOT NULL )  OR  ( `#{t}`.paid = 1 AND `#{t}`.unpaid_invoice IS TRUE) )").where(:is_quote => false) 
+  }
+  scope :normal_orders, lambda {
+      where(:is_quote => false, :is_proforma => false)
+  }
+  scope :normal_completed, lambda {
+      normal_orders.where(:paid => 1)
+  }
+  scope :quotes, lambda {
+    where(:is_quote => true, :paid => 1)
+  }
+  
   # These two associations are here for eager loading to speed things up
   has_many :coupons, :class_name => "OrderItem", :conditions => "behavior = 'coupon' and hidden != 1" 
   has_many :gift_cards, :class_name => "OrderItem", :conditions => "behavior = 'gift_card' and hidden != 1"
@@ -37,6 +51,9 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.percent_off'),'percent'],
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
+  def as_csv
+    return attributes
+  end
   def amount_paid
     self.payment_methods.sum(:amount)
   end
@@ -462,16 +479,16 @@ class Order < ActiveRecord::Base
     #amnt = (self.subtotal * (self.rebate/100)) #if self.rebate_type == 'percent'
     #amnt = self.rebate if self.rebate_type == 'fixed'
     return amnt
-	end
-	#
-	def update_self_and_save
-		calculate_totals
-		save!
-	end
-	#
-	def complete=(api_called=nil)
-	  self.complete
-	end
+  end
+  #
+  def update_self_and_save
+          calculate_totals
+          save!
+  end
+  #
+  def complete=(api_called=nil)
+    self.complete
+  end
 	#
   def complete
 #     log_action "Starting complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
@@ -481,7 +498,11 @@ class Order < ActiveRecord::Base
     self.paid = 1
     self.created_at = Time.now
     self.drawer_id = $User.get_drawer.id
-    self.nr = self.vendor.get_unique_model_number('order')
+    if self.is_quote then
+      self.qnr = self.vendor.get_unique_model_number('quote')
+    else
+      self.nr = self.vendor.get_unique_model_number('order')
+    end
     self.save
     self.reload
     begin # so if all this doesn't work, then the order won't complete...
@@ -518,7 +539,7 @@ class Order < ActiveRecord::Base
           self.lc_points = lc.points
         end
         lc.update_attribute(:points,lc.points - self.lc_points)
-        np = GlobalData.conf.lp_per_dollar * self.subtotal
+        np = $Conf.lp_per_dollar * self.subtotal
         lc.update_attribute(:points,lc.points + np)
       end
     rescue
@@ -543,6 +564,7 @@ class Order < ActiveRecord::Base
     end
   end
   def get_drawer_add
+    return 0 if self.is_quote or self.unpaid_invoice
     return self.payment_methods.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true
     
     ottl = self.total
