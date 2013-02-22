@@ -45,7 +45,7 @@ class Action < ActiveRecord::Base
     end
   end
   def category_id=(id)
-    c = Category.find_by_id(id)
+    c = Category.find_by_id(id.to_s)
     if c then
       self.owner_id = c.id
       self.owner_type = "Category"
