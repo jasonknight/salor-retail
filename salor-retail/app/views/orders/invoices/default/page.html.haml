@@ -1,5 +1,6 @@
 = stylesheet_link_tag 'invoice_default'
 = stylesheet_link_tag 'invoice_default_print', :media => 'print'
+= javascript_include_tag 'invoices.js'
 - case @order.paid
   - when 1
     - title = "menu.orders"
@@ -86,10 +87,16 @@
     %br
     - if @report[:refund_subtotal].zero?
       %table.striped-table2.small
-        - @report[:paymentmethods].to_a.each do |pm|
-          %tr
-            %td= pm[0]
-            %td.total= number_to_currency pm[1]
+        - if @order.unpaid_invoice then
+          - @order.payment_methods.each do |pm|
+            %tr
+              %td{:class => 'editable-payment-method pointer', :model_id => pm.id}= pm.name
+              %td.total= number_to_currency pm.amount
+        - else
+          - @report[:paymentmethods].to_a.each do |pm|
+            %tr
+              %td= pm[0]
+              %td.total= number_to_currency pm[1]
 
     - else
       %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
