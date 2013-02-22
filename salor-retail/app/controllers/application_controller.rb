@@ -170,20 +170,21 @@ class ApplicationController < ActionController::Base
     $Notice = ""
     SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
     GlobalData.refresh # Because classes are cached across requests
-	  Job.run # Cron jobs for the application
-	  GlobalData.base_locale = AppConfig.base_locale
+    Job.run # Cron jobs for the application
+    GlobalData.base_locale = AppConfig.base_locale
     I18n.locale = AppConfig.locale
     
     if params[:license_accepted].to_s == "true" then
       Vendor.first.salor_configuration.update_attribute :license_accepted, true
     end
-	  if salor_signed_in? and salor_user then
+    if salor_signed_in? and salor_user then
       I18n.locale = salor_user.language
-		  @owner = salor_user.get_owner
-		  if salor_user.meta.nil? then
-        salor_user.meta = Meta.new
-        salor_user.meta.save
-      end
+      #raise I18n.locale.to_s + salor_user.inspect
+	@owner = salor_user.get_owner
+	if salor_user.meta.nil? then
+          salor_user.meta = Meta.new
+          salor_user.meta.save
+        end
     else 
       $User = nil # $User is being set somewhere before this is even called, which is weird.
       @owner = User.new

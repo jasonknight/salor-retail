@@ -476,8 +476,8 @@ module UserEmployeeMethods
   def get_order_totals
     totals = []
     begin
-      total_ever = self.orders.where("refunded = 0 and paid = 1").sum(:total)
-      total_today = self.orders.where("refunded = 0 and paid = 1 and created_at > '#{Time.now.beginning_of_day}'").sum(:total)
+      total_ever = self.orders.where(:paid => 1, :unpaid_invoice => false, :is_quote => false, :refunded => 0).sum(:total)
+      total_today = self.orders.where(:paid => 1, :unpaid_invoice => false, :is_quote => false, :refunded => 0).where("created_at > '#{Time.now.beginning_of_day}'").sum(:total)
       totals = [total_ever.first,total_today.first]
     rescue
       
@@ -492,10 +492,10 @@ module UserEmployeeMethods
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
     if employee
-      orders = Order.scopied.where({ :vendor_id => employee.get_meta.vendor_id, :drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
+      orders = Order.scopied.where({ :vendor_id => employee.get_meta.vendor_id, :drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false }).order("created_at ASC")
       drawertransactions = DrawerTransaction.where({:drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
     else
-      orders = Order.scopied.where({ :vendor_id => $Vendor.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1 }).order("created_at ASC")
+      orders = Order.scopied.where({ :vendor_id => $Vendor.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false  }).order("created_at ASC")
       drawertransactions = DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
     end
     regular_payment_methods = PaymentMethod.types_list.collect{|pm| pm[1].to_s }

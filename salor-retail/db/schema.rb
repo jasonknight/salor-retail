@@ -12,7 +12,6 @@
 # It's strongly recommended to check this file into your version control system.
 
 ActiveRecord::Schema.define(:version => 20130205112836) do
-
   create_table "actions", :force => true do |t|
     t.string   "name"
     t.text     "code"
@@ -651,8 +650,8 @@ ActiveRecord::Schema.define(:version => 20130205112836) do
     t.integer  "vendor_id"
     t.boolean  "tax_free",              :default => false
     t.integer  "hidden_by"
-    t.integer  "employee_id"
     t.string   "coupon_applies"
+    t.integer  "employee_id"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -718,6 +717,9 @@ ActiveRecord::Schema.define(:version => 20130205112836) do
     t.integer  "nr"
     t.boolean  "is_proforma",            :default => false
     t.integer  "hidden_by"
+    t.boolean  "unpaid_invoice",         :default => false
+    t.integer  "qnr",                    :default => 0
+    t.boolean  "is_quote",               :default => false
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"
@@ -1030,6 +1032,9 @@ ActiveRecord::Schema.define(:version => 20130205112836) do
     t.string   "unused_order_numbers",            :default => "--- []\n"
     t.integer  "largest_order_number",            :default => 0
     t.integer  "hidden_by"
+    t.boolean  "use_quote_numbers",               :default => true
+    t.string   "unused_quote_numbers",            :default => "--- []\n"
+    t.integer  "largest_quote_number",            :default => 0
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

@@ -1,14 +1,43 @@
-<%= raw content_box_top(t("menu.orders")) %>
+<%
+  case params[:type]
+    when 'normal'
+      title = "menu.orders"
+    when 'proforma'
+      title = 'activerecord.models.order.proforma_orders'
+    when 'unpaid'
+      title = 'activerecord.models.order.unpaid_orders'
+    when 'quote'
+      title = 'activerecord.models.order.quotes"'
+  end
+  
+%>
+<%= raw content_box_top(t(title)) %>
 
 <table align="center">
   <tr>
     <td align="center">
       <div class='tools'>
         <div class="tool-icon">
-          <a href='orders/report_day'><img src='/images/icons/book_sun_64.png'></a><br /><span class='icon-caption'><%= t("menu.report_day") %></span>
+          <a href='/orders/report_day'><img src='/images/icons/book_sun_32.png'></a><br /><span class='icon-caption'><%= t("menu.report_day") %></span>
         </div>
         <div class="tool-icon">
-          <a href='orders/order_reports'><img src='/images/icons/statistics_64.png'></a><br /><span class='icon-caption'><%= t("menu.statistics") %></span>
+          <a href='/orders/order_reports'><img src='/images/icons/statistics_32.png'></a><br /><span class='icon-caption'><%= t("menu.statistics") %></span>
+        </div>
+        <div class="tool-icon">
+          <a href='/orders?type=normal'><img src='/images/icons/<%= icon(:order,32)%>'></a><br /><span class='icon-caption'><%= t("activerecord.models.order.other") %></span>
+        </div>
+        <div class="tool-icon">
+          <a href='/orders?type=proforma'><img src='/images/icons/<%= icon(:proforma_order,32)%>'></a><br /><span class='icon-caption'><%= t("activerecord.models.order.proforma_orders") %></span>
+        </div>
+        <div class="tool-icon">
+          <a href='/orders?type=unpaid'><img src='/images/icons/<%= icon(:unpaid_order,32)%>'></a><br /><span class='icon-caption'><%= t("activerecord.models.order.unpaid_orders") %></span>
+        </div>
+        <div class="tool-icon">
+          <a href='/orders?type=quote'><img src='/images/icons/<%= icon(:quote,32)%>'></a><br /><span class='icon-caption'><%= t("activerecord.models.order.quotes") %></span>
+        </div>
+        <div class="tool-icon" >
+            <img src='/images/icons/down_32.png' onmousedown="window.location = '/orders?type=<%= params[:type] %>&page=<%= params[:page] %>&format=csv';">
+          <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
         </div>
       </div>
     </td>
@@ -22,7 +51,8 @@
       <% if order.is_proforma %>
         <%= t('receipts.invoice.proforma_invoice') %> <%= order.nr %>
       <% elsif order.paid %>
-        <%= t('receipts.invoice.invoice') %> <%= order.nr %>
+        <%= t('receipts.invoice.invoice') + ' ' + order.nr.to_s if not order.is_quote %>
+        <%= t('activerecord.models.order.quote') + ' ' + order.qnr.to_s if order.is_quote %>
       <% else %>
         <%= t('receipts.invoice.offer') %> <%= order.nr %>
       <% end %>
@@ -35,7 +65,7 @@
     </td>
     <td width='10%'> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :salor) %></td>
-    <td><%= salor_number_to_currency order.gross %></td>
+    <td><%= salor_number_to_currency order.gross %> <% if order.gross == 0.0 %> <small>(<%= salor_number_to_currency order.total %>)</small><% end %></td>
     <td width='10%' align='center'><%= link_to image_tag('/images/icons/' + icon(:document,32)), "orders/#{ order.id }/print" %></td>
     <td width='10%' align='center'><%= link_to image_tag('/images/icons/' + icon(:show,32)), order %></td>
     <td width='10%' align='center'><%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_order_path(order)) if not order.paid %></td>

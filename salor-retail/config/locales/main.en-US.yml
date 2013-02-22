@@ -239,6 +239,10 @@ en-US:
       order:
         one: Order
         other: Orders
+        proforma_orders: Proforma Invoices
+        unpaid_orders: Unpaid Invoices
+        quotes: Quotes
+        quote: Quote
       order_item:
         one: Order Item
         other: Order Items
@@ -761,8 +765,8 @@ en-US:
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other,change
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
+    payment_external_types: Cash,Card,Gift Card,Other,Change,To Be Paid,Quote
+    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change,Unpaid,Quote
     rebate_types:
       fixed: $
       percent: ! '%'

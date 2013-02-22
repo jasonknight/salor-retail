@@ -228,6 +228,10 @@ cn:
       order:
         one: 訂購
         other: 訂購
+        proforma_orders: Proforma Invoices
+        unpaid_orders: Unpaid Invoices
+        quotes: Quotes
+        quote: Quote
       order_item:
         one: 訂購產品
         other: 訂購產品

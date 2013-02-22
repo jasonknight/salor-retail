@@ -227,6 +227,10 @@ it:
       order:
         one: Ordine
         other: Ordini
+        proforma_orders: Proforma Invoices
+        unpaid_orders: Unpaid Invoices
+        quotes: Quotes
+        quote: Quote
       order_item:
         one: Articolo Ordine
         other: Articoli Ordine

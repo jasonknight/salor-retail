@@ -114,6 +114,7 @@ var Countries = <%= raw Country.scopied.to_json %>;
 var ItemTypes = <%= raw ItemType.all.to_json %>;
 var Categories = <%= raw Category.scopied.to_json %>;
 var TaxProfiles = <%= raw TaxProfile.scopied.to_json %>;
+var PaymentMethods = <%= raw PaymentMethod.types_list.to_json %>;
 
 window.params = {
   action: "<%= params[:action] %>",
