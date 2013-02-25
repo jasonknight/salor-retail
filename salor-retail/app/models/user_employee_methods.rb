@@ -506,6 +506,7 @@ module UserEmployeeMethods
     refunds = { :cash => { :gro => 0, :net => 0 }, :noncash => { :gro => 0, :net => 0 }}
 
     orders.each do |o|
+      o.sanity_check # Check to see if the payment methods on the order are insane due to Arel errors.
       o.payment_methods.each do |p|
         ptype = p.internal_type.to_sym
         if not regular_payment_methods.include?(p.internal_type)
@@ -637,11 +638,18 @@ module UserEmployeeMethods
     paymentmethods[:pos][:InCash] ||= 0
     paymentmethods[:neg][:InCash] ||= 0
     paymentmethods[:neg][:Change] ||= 0
+    # This is not the best way to handle change, change is a drawer transaction, not a payment method.
     paymentmethods[:pos][:InCash] += paymentmethods[:neg][:Change]
     paymentmethods[:neg].delete(:Change)
     
-    calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:cash][:gro] + paymentmethods[:pos][:InCash] + paymentmethods[:neg][:InCash]
-
+    
+    # Mathematically, this should work, but actually it does not because of the limitations of ruby itself, this leads to some obscure floating point overflow.
+    # if you perform the calculations with a calculator it will give the correct answer, but in SOME instances this will produce an astronomically large negative
+    # floating point number that will display as -0.0 on the report, but will actually be something like -9.879837419238798e-13
+    #calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:cash][:gro] + paymentmethods[:pos][:InCash] + paymentmethods[:neg][:InCash]
+    
+    # This should be the valid way to do it, because all movements of money in the system should be done as drawer transactions.
+    calculated_drawer_amount = DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day, :drop => true }).sum(:amount) - DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day, :payout => true }).sum(:amount)
     report = Hash.new
     report['categories'] = categories
     report['taxes'] = taxes
