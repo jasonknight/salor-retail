@@ -55,6 +55,7 @@ ru:
       email: email
       employee:
         uses_drawer_id: Пользуется кассой как
+        hourly_rate: Hourly Rate
       end_amount: конечное количество
       end_date: конечная дата
       eod_show: показывать в конце дня
@@ -330,6 +331,7 @@ ru:
     shipments: поставки
     update_location: обновить отдел
     update_real_quantity: обновить реальное количество
+    time_sheet: Employee Time Sheet
   helpers:
     select:
       prompt: выберете пожалуйста

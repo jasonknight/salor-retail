@@ -20,5 +20,5 @@
         %td{ :class=> 'employee_logout_time', :model_id => login.id, :align=>"right"}= "N/A"
         %td{:align=>"right"}= number_to_currency login.hourly_rate
         %td{:align=>"right"}= "N/A"
-      %td{:onclick => 'remove_employee_login(this);', :class => "pointer"}
-        %div{:class => 'black-text no-print'}=I18n.t('menu.destroy')
+      %td{:class => "pointer"}
+        %div{:class => 'black-text no-print'}=link_to I18n.t('menu.destroy'), "/employees/destroy_login?id=#{@employee.id}&login=#{login.id}"

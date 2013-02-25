@@ -55,6 +55,7 @@ fr:
       email: email
       employee:
         uses_drawer_id: Utilise la caisse de
+        hourly_rate: Hourly Rate
       end_amount: montant fin
       end_date: date fin
       eod_show: Afficher à la fin de la journée
@@ -324,6 +325,7 @@ fr:
     shipments: Livraisons
     update_location: mettre à jour emplacement
     update_real_quantity: mettre à jour quantité réelle
+    time_sheet: Employee Time Sheet
   helpers:
     select:
       prompt: Choisissez

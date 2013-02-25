@@ -55,6 +55,7 @@ cn:
       email: 電子郵件
       employee:
         uses_drawer_id: 使用的抽屜
+        hourly_rate: Hourly Rate
       end_amount: 最後金額
       end_date: 結束日期
       eod_show: 顯示在天結束
@@ -321,6 +322,7 @@ cn:
     shipments: 裝船
     update_location: 更新位置
     update_real_quantity: 更新實際數量
+    time_sheet: Employee Time Sheet
   helpers:
     select:
       prompt: 請選擇

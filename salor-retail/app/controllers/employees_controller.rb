@@ -41,6 +41,20 @@ class EmployeesController < ApplicationController
       redirect_to :controller => :home, :action => :index, :notice => "could not find a user with code" and return
     end
   end
+  def destroy_login
+    @employee = Employee.find_by_id(params[:id].to_s)
+    if @employee and @employee.vendor_id == $User.vendor_id then
+      login = EmployeeLogin.find_by_id(params[:login].to_s)
+      if login.employee_id == @employee.id and $User.role_cache.include? 'manager' then
+        login.destroy
+      else
+        raise "Ids Don't Match" + login.employee.id.to_s + " ---- " + $User.role_cache
+      end
+    else
+      redirect_to :action => :index and return
+    end
+    redirect_to :action => :show, :id => @employee.id
+  end
   # GET /employees
   # GET /employees.xml
   def index
