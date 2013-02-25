@@ -46,5 +46,6 @@ class PaymentMethod < ActiveRecord::Base
       end
       i = i + 1
     end
+    self.vendor_id = $Vendor.id
   end
 end

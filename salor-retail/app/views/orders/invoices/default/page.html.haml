@@ -90,7 +90,7 @@
         - if @order.unpaid_invoice then
           - @order.payment_methods.each do |pm|
             %tr
-              %td{:class => 'editable-payment-method pointer', :model_id => pm.id}= pm.name
+              %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
               %td.total= number_to_currency pm.amount
         - else
           - @report[:paymentmethods].to_a.each do |pm|
