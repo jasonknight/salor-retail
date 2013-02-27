@@ -1,6 +1,5 @@
+
 # Salor Description
-
-
 
 Salor is a multi-user (As in multi-account),
 multi-store Point of Sale software that comes with
