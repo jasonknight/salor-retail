@@ -1,4 +1,3 @@
-
 # Salor Description
 
 Salor is a multi-user (As in multi-account),
