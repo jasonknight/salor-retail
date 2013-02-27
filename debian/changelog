@@ -1,3 +1,36 @@
+salor-retail (4.0.1.19) unstable; urgency=low
+
+  [ Jason Knight ]
+  * various
+
+  [ Michael Franzl ]
+  * Administration #1648 Lock rack version to 1.4.1
+
+  [ Jason Knight ]
+  * xxx
+  * Closes Feature #1651
+  * tweaks for issue #1651
+
+  [ Michael Franzl ]
+  * passenger restart dir
+  * sticker barcode support for 17 chars, thermal barcode for 15 chars, cleanup
+
+  [ Jason Knight ]
+  * Closes Feature #1657
+  * New Order Options
+  * xxx
+
+  [ Jason ]
+  * xxx
+
+  [ Jason Martin ]
+  * test
+  * test
+
+  [ Jason Knight ]
+
+ -- Jason Knight <jason@red-e.eu>  Wed, 27 Feb 2013 09:53:38 -0500
+
 salor-retail (4.0.1.18) unstable; urgency=low
 
   * debian fix
