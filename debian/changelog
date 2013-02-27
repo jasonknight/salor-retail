@@ -1,3 +1,13 @@
+salor-retail (4.0.1.20) unstable; urgency=low
+
+  [ Jason Martin ]
+  * build
+  * sid
+
+  [ Jason Knight ]
+
+ -- Jason Knight <jason@red-e.eu>  Wed, 27 Feb 2013 10:06:33 -0500
+
 salor-retail (4.0.1.19) unstable; urgency=low
 
   [ Jason Martin ]
