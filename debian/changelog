@@ -1,6 +1,6 @@
 salor-retail (4.0.1.19) unstable; urgency=low
 
-  [ Jason Knight ]
+  [ Jason Martin ]
   * various
 
   [ Michael Franzl ]
@@ -29,7 +29,7 @@ salor-retail (4.0.1.19) unstable; urgency=low
 
   [ Jason Knight ]
 
- -- Jason Knight <jason@red-e.eu>  Wed, 27 Feb 2013 09:53:38 -0500
+ -- Jason Knight <jason@red-e.eu>  Wed, 27 Feb 2013 10:04:09 -0500
 
 salor-retail (4.0.1.18) unstable; urgency=low
 
