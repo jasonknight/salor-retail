@@ -332,6 +332,7 @@ ru:
     update_location: обновить отдел
     update_real_quantity: обновить реальное количество
     time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: выберете пожалуйста

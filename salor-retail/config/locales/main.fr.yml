@@ -326,6 +326,7 @@ fr:
     update_location: mettre à jour emplacement
     update_real_quantity: mettre à jour quantité réelle
     time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: Choisissez
