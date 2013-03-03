@@ -24,7 +24,7 @@
         <div class="widget master" onmousedown="window.location = '<%= categories_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= categories_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/binder_64.png" /><br />
+              <img src="/images/icons/<%= icon(:category,64) %>" /><br />
               <%= t("menu.categories") %>
             </a>
           </div>
@@ -54,7 +54,7 @@
         <div class="widget master" onmousedown="window.location = '<%= items_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= items_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/bag1_64.png" /><br />
+              <img src="/images/icons/<%= icon(:item) %>" /><br />
               <%= t("menu.items") %>
             </a>
           </div>
@@ -62,7 +62,7 @@
         <div class="widget master" onmousedown="window.location = '<%= broken_items_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= broken_items_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/broken_64.png" /><br />
+              <img src="/images/icons/<%= icon(:broken) %>" /><br />
               <%= t("menu.broken_items") %>
             </a>
           </div>
@@ -72,7 +72,7 @@
         <div class="widget master" onmousedown="window.location = '<%= cash_registers_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= cash_registers_path(:vendor_id => @vendor.id) %>">
-              <img src="/images/icons/cashbox_64.png" /><br />
+              <img src="/images/icons/<%= icon(:cash_register) %>" /><br />
               <%= t("menu.cash_registers") %>
             </a>
           </div>

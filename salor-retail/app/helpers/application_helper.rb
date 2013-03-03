@@ -123,26 +123,26 @@ module ApplicationHelper
 
     icons = {
       :location => 'clipboard',
-      :category => 'binder',
+      :category => 'category',
       :vendor => 'home',
       :edit => 'document_pencil',
       :delete => 'delete',
       :add => 'plus',
-      :item => 'bag1',
+      :item => 'item',
       :item_type => 'bag1',
       :show => 'info',
       :info => 'info',
       :back => 'left',
       :next => 'right',
-      :tax_profile => 'statistics',
-      :statistics => 'statistics',
+      :tax_profile => 'chart',
+      :statistics => 'chart',
       :employee => 'user_info',
       :reload => 'reload',
       :logout => 'logout',
       :login => 'login',
-      :settings => 'gear',
+      :settings => 'gears',
       :home => 'gear',
-      :cash_register => 'cashbox',
+      :cash_register => 'till',
       :customer => 'user',
       :shipment => 'box',
       :shipper => 'shippers',
@@ -150,8 +150,8 @@ module ApplicationHelper
       :stock_locations => 'shipment',
       :locked => 'lock',
       :unlocked => 'unlock',
-      :discount => "star1",
-      :order => "money",
+      :discount => "discount",
+      :order => "order",
       :unpaid_order => "warning",
       :proforma_order => "document",
       :quote => "user4",
@@ -197,7 +197,7 @@ module ApplicationHelper
       :globe => 'globe',
       :invoice_blurb => 'book'
     }
-    return icons[name] + '_' + size.to_s + '.png'
+    return icons[name] + '.svg'
   end
   def salor_icon(name, options = {}, size = '64', caption=nil,caption_class='')
     if caption then
@@ -205,7 +205,7 @@ module ApplicationHelper
       options.each do |k,v|
         o << "#{k}=\"#{v}\""
       end
-      return raw("<div class=\"salor-icon\"><img src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
+      return raw("<div class=\"salor-icon\"><img width=\"#{size}\" src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
     else
       return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }</div>")
     end

@@ -31,7 +31,8 @@
   <% if $User and $User.can(:index_orders) %>
   <li>
     <div align="center" id="btn-orders-new" class="">
-      <%= link_to salor_icon(:order,{},32), "/orders/new" %><br /><span class='icon-caption'><%= I18n.t("menu.pos") %></span>
+    <%=  link_to raw(salor_icon(:cash_register,{},32,I18n.t("menu.pos"))), "/order/new" %>
+<!--       <%= link_to salor_icon(:cash_register,{},32), "/orders/new" %><br /><span class='icon-caption'><%= I18n.t("menu.pos") %></span> -->
     </div>
   </li>
   <% end %>
