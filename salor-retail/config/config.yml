@@ -1,4 +1,5 @@
 ---
+signup: true
 :exception_notification: false
 :exception_notification_sender: Sender Name <nobody@localhost>
 :exception_notification_receipients: nobody@localhost

@@ -6,10 +6,15 @@
 # See license.txt for the license applying to all files within this software.
 class EmployeesController < ApplicationController
   before_filter :authify, :only => [:show, :index,:new, :edit, :destroy, :create, :update]
-  before_filter :initialize_instance_variables, :except => [:login]
+  before_filter :initialize_instance_variables, :except => [:login, :signup]
   before_filter :check_role, :except => [:crumble,:login]
-  before_filter :crumble, :except => [:login]
+  before_filter :crumble, :except => [:login, :signup]
   cache_sweeper :employee_sweeper, :only => [:create, :update, :destroy]
+  def signup
+    if not AppConfig.signup == true then
+      redirect_to :action => :login and return
+    end
+  end
   def login
       user = Employee.login(params[:code]) 
       user = User.login(params[:code]) if not user

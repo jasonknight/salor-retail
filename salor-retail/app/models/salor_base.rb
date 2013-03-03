@@ -53,7 +53,7 @@ module SalorBase
   def atomize(isfile, cpath, special = nil)
     if special.nil? then
       tmp_cache_str = '-' + [Process.pid, Time.now.to_i, rand(0xffff)].to_s
-      path = UnicodeUtils.nfkd(cpath.to_s).gsub(/[^\x00-\x7F]/,'').to_s
+      path = cpath.to_s #UnicodeUtils.nfkd(cpath.to_s).gsub(/[^\x00-\x7F]/,'').to_s
       paths = ['tmp', 'cache', 'views']
       nodes = path.split('/')
       lnode = nodes.pop
@@ -266,7 +266,7 @@ module SalorBase
   end
       # Converts all accented chars in txt into normal ASCII
   def normaleyes(txt)
-    return UnicodeUtils.nfkd(txt.to_s).gsub(/[^\x00-\x7F]/,'').to_s
+    return txt #UnicodeUtils.nfkd(txt.to_s).gsub(/[^\x00-\x7F]/,'').to_s
   end
 
   def self.beep(freq, length, repeat, delay)

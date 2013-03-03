@@ -3,7 +3,8 @@ SalorRetail::Application.routes.draw do
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
-
+  
+  match "employees/signup" => "employees#signup"
   match "vendors/csv" => "vendors#csv"
   match "vendors/backup" => "vendors#backup"
   match "nodes/send_msg" => "nodes#send_msg"

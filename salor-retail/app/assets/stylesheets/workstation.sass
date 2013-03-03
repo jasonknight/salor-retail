@@ -943,7 +943,9 @@ div.list > div.master
 
 div.list > div.widget a
   text-decoration: none
-
+div.widget
+  @include widget
+  padding: 10px
 div.list > div.master-wide 
   @include rounded_corners_all
   border-color: $border_color

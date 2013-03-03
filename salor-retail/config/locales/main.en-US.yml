@@ -309,6 +309,7 @@ en-US:
     exception_in_files: ! 'The Error occurred in the following files:'
     oops_an_error_occurred: Oops! An Error occurred
   headings:
+    signup: Signup for a 14 day free trial!
     time_sheet: Employee Time Sheet
     almost_out: almost out
     bank_machine_types: supported bank machines

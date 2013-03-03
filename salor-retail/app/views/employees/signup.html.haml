@@ -1,0 +1,37 @@
+%table{:width => '60%', :align => :center}
+  %tr
+    %td{:align => :center}
+      %div.widget
+        %img{:src => '/images/salor-logo-reports.png'}
+  %tr
+    %td
+      %h1=t('headings.signup')
+    %tr
+      %td
+        %div.widget
+          =form_tag '/employees/signup' do
+            %table
+              %tr
+                %td
+                  =label_tag t('activerecord.attributes.username')
+                %td
+                  =label_tag t('activerecord.models.vendor.one') + ' ' + t('activerecord.attributes.name')
+              %tr
+                %td
+                  =text_field_tag 'username'
+                %td
+                  =text_field_tag 'storename'
+            %table
+              %tr
+                %td
+                  =label_tag t('activerecord.attributes.password')
+                %tr
+                  %td
+                    =text_field_tag 'password'
+            %table
+              %tr
+                %td
+                  =label_tag t('activerecord.attributes.email')
+              %tr
+                %td
+                  =text_field_tag 'email'
