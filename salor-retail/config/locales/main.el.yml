@@ -333,6 +333,7 @@ el:
     update_location: ενημέρωση τοποθεσίας
     update_real_quantity: ενημέρωση πραγματικής ποσότητας
     time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: παρακαλώ επιλέξτε

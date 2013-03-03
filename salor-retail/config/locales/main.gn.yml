@@ -333,6 +333,7 @@ gn:
     update_location: Lagerort aktualisieren
     update_real_quantity: Tatsächliche Menge aktualisieren
     time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: Bitte auswählen

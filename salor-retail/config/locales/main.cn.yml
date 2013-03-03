@@ -323,6 +323,7 @@ cn:
     update_location: 更新位置
     update_real_quantity: 更新實際數量
     time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: 請選擇
