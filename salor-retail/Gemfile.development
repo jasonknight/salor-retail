@@ -8,7 +8,7 @@ gem 'rack', '1.4.1'
 gem 'mysql2'
 gem 'serialport'
 gem "kramdown"
-gem 'jquery-rails'
+gem 'jquery-rails','2.0.2'
 gem 'haml'
 gem 'sass'
 gem 'sass-rails'
