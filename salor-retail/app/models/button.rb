@@ -12,7 +12,7 @@ class Button < ActiveRecord::Base
 
   belongs_to :category
   before_save :set_flags
-  acts_as_list
+
   def category_sku=(sku)
     self.category = Category.where(:sku => sku).first
   end
