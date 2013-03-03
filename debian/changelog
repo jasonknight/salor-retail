@@ -1,3 +1,12 @@
+salor-retail (4.0.1.24) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Fixing some versions of things
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sun, 03 Mar 2013 09:11:27 -0500
+
 salor-retail (4.0.1.23) unstable; urgency=low
 
   [ Jason Knight ]

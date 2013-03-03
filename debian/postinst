@@ -169,6 +169,7 @@ for lInstance in $gInstances; do
         echo "  postinst: All required gems are available as Debian packages. Nothing to be done."
       else
         echo "  postinst: Some of the required gems are not available as Debian packages. We have to run bundle install to download gems from rubygems.org."
+	rm -f ${rails_etc}/Gemfile.lock
         salor-installgems r ${lInstance}
       fi
       
