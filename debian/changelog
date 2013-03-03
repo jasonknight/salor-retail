@@ -1,3 +1,13 @@
+salor-retail (4.0.1.25) unstable; urgency=low
+
+  [ Jason Knight ]
+  * fixing xlation
+
+  [ Jason Martin ]
+  * removing the rm for Gemfile.lock
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sun, 03 Mar 2013 09:23:10 -0500
+
 salor-retail (4.0.1.24) unstable; urgency=low
 
   [ Jason Knight ]
