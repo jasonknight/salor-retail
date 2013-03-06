@@ -13,7 +13,7 @@ class CashRegistersController < ApplicationController
   # GET /cash_registers
   # GET /cash_registers.xml
   def index
-    @cash_registers = CashRegister.scopied.all
+    @cash_registers = CashRegister.scopied.page(params[:page])
     CashRegister.update_all_devicenodes
     respond_to do |format|
       format.html # index.html.erb

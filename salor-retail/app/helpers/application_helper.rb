@@ -115,70 +115,73 @@ module ApplicationHelper
       </div>
     ]
   end
+  
   def content_box_bottom
     ''
   end
-  def icon(name, size = '64')
-    size = 32 if size == 16
-
+  def get_icons_map
     icons = {
-      :location => 'clipboard',
+      :location => 'location',
       :category => 'category',
       :vendor => 'home',
-      :edit => 'document_pencil',
+      :edit => 'edit',
       :delete => 'delete',
-      :add => 'plus',
+      :add => 'add',
       :item => 'item',
       :item_type => 'bag1',
-      :show => 'info',
+      :show => 'play',
       :info => 'info',
       :back => 'left',
       :next => 'right',
-      :tax_profile => 'chart',
+      :tax_profile => 'percent',
       :statistics => 'chart',
-      :employee => 'user_info',
+      :employee => 'employee',
       :reload => 'reload',
-      :logout => 'logout',
-      :login => 'login',
-      :settings => 'gears',
-      :home => 'gear',
+      :logout => 'key',
+      :login => 'key',
+      :settings => 'gear',
+      :home => 'vendor',
       :cash_register => 'till',
-      :customer => 'user',
-      :shipment => 'box',
-      :shipper => 'shippers',
-      :shipment_type => 'box_types',
-      :stock_locations => 'shipment',
+      :customer => 'customer',
+      :shipment => 'shipment',
+      :shipper => 'shipper',
+      :shipment_type => 'status',
+      :stock_locations => 'stock_locations',
+      :stock_location => 'stock_locations',
       :locked => 'lock',
       :unlocked => 'unlock',
       :discount => "discount",
       :order => "order",
-      :unpaid_order => "warning",
-      :proforma_order => "document",
-      :quote => "user4",
+      :unpaid_order => "unpaid_order",
+      :proforma_order => "proforma_order",
+      :quote => "quote_order",
       :help => "help",
       :up => 'up',
       :down => 'down',
-      :cash_drop => 'coin_stack_gold',
+      :cash_drop => 'coin',
       :refund => "arrow_down",
       :refunded => "arrow_up",
       :activate => "tick",
       :split => "arrow_divide",
       :ok => "tick",
       :printer => "print",
-      :weight => "weight",
+      :weight => "scale",
+      :weigh => "scale",
       :broken => "broken",
-      :reorder => "reorder",
+      :broken_item => "broken",
+      :reorder => "redo",
       :address => "address",
       :book => 'book',
       :book_balance => 'book_balance',
       :book_detail => 'book_detail',
       :book_sun => 'book_sun',
-      :cash_drawer => 'drawer',
+      :cash_drawer => 'calculator_down_arrow',
       :counter => 'counter',
       :wand => 'wand',
-      :action => 'action',
-      :payment => 'wallet',
-      :locations => 'locations',
+      :action => 'gears',
+      :payment => 'payment_method',
+      :tender_method => 'payment_method',
+      :locations => 'location',
       :camera => "camera",
       :button => 'button',
       :card => 'credit_card',
@@ -195,8 +198,19 @@ module ApplicationHelper
       :bubble => 'bubble',
       :buy => 'buy',
       :globe => 'globe',
-      :invoice_blurb => 'book'
+      :country => "globe",
+      :invoice_blurb => 'bubble',
+      :invoice_note => 'edit_pad',
+      :tags => 'tag',
+      :transaction_tag => 'tag',
+      :sale_type => 'pad',
+      :save_download => 'save_download',
+      :report => 'edit_pad'
     }
+    return icons
+  end
+  def icon(name, size = '64')
+    icons = get_icons_map
     return icons[name] + '.svg'
   end
   def salor_icon(name, options = {}, size = '64', caption=nil,caption_class='')
@@ -205,8 +219,9 @@ module ApplicationHelper
       options.each do |k,v|
         o << "#{k}=\"#{v}\""
       end
-      return raw("<div class=\"salor-icon\"><img width=\"#{size}\" src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
+      return raw("<div class=\"salor-icon\"><img height=\"#{size}\" src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
     else
+      options[:height] ||= size
       return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }</div>")
     end
   end

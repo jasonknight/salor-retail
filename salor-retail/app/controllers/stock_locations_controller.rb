@@ -12,7 +12,7 @@ class StockLocationsController < ApplicationController
   # GET /locations
   # GET /locations.xml
   def index
-    @locations = StockLocation.scopied
+    @stock_locations = StockLocation.scopied.page(params[:page]).per(params[:per])
 
     respond_to do |format|
       format.html # index.html.erb

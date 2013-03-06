@@ -5,7 +5,7 @@ class InvoiceBlurbsController < ApplicationController
   before_filter :check_role, :except => [:crumble]
 
   def index
-    @invoice_blurbs = InvoiceBlurb.where(:vendor_id => $User.vendor_id).limit(100)
+    @invoice_blurbs = $Vendor.invoice_blurbs.page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

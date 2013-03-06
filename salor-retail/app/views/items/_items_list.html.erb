@@ -1,5 +1,4 @@
 <div class="list">
-  <% if $Conf.items_view_list then %>
     <table width="100%" class="stripe-me">
     <tr>
       <% [:name,:base_price,:sku,:quantity,:packaging_unit, '',''].each do |key| %>
@@ -39,34 +38,14 @@
         
         <td>
         <div onmousedown="window.location ='<%= edit_item_path(item)%>';" style="padding: 5px;">
-          <%= link_to(image_tag('/images/icons/' + icon(:edit,32)), edit_item_path(item)) %>
+          <%= link_to(salor_icon(:edit,{},20), edit_item_path(item)) %>
           </div>
         </td>
         <td>
-          <%= link_to(image_tag('/images/icons/' + icon(:delete,32)), item, :confirm => 'Are you sure?', :method => :delete) %>
+          <%= link_to(salor_icon(:delete,{},20), item, :confirm => 'Are you sure?', :method => :delete) %>
         </td>
       </tr>
     <% end %>
     </table>
-  <% else %>
-    <% @items.each do |item| %>
-      <div class="widget master-wide">
-          <a href="<%= edit_item_path(item) %>" onmousedown="window.location = '<%= edit_item_path(item) %>';">
-            <img src="/images/icons/<%= icon(:item,32) %>" /><br />
-            <% if item.behavior != 'coupon' %>
-              <%= raw  "<small>#{item.name}<br />[#{salor_number_to_currency(item.base_price)}] [#{item.sku}]</small>" %>
-            <% else  %>
-              <%= raw "<small>#{item.name}<br />[#{number_to_percentage(item.base_price)}] [#{item.sku}]</small>" %>
-            <% end %>
-          </a>
-            <div class="list slave">
-              <div>
-                <%= link_to image_tag('/images/icons/' + icon(:delete,16)), item , :confirm => 'Are you sure?', :method => :delete %>
-              </div>
-            </div>
-            <!-- End ul.list -->
-      </div>
-    <% end  %>
-  <% end %>
 </div> 
  

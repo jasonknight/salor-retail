@@ -1,0 +1,13 @@
+= raw content_box_top(I18n.t("headings.shipment_types"))
+
+%table{:width=>"90%",:align=>"center"}
+  %tr
+    %td{:colspan=>3,:align=>'center'}
+      = link_to (t 'menu.new_shipment_type'), new_shipment_type_path, :class => 'links new-model-button'
+      %br
+      %hr
+  - @shipment_types.each do |s|
+    %tr
+      %td{:width=>"70%"}=s.name
+      %td{:align=>"center"}= button_to t('menu.edit'),{:action => :edit, :id => s.id}, :method => :get
+      %td{:align=>"center"}= button_to(t('menu.destroy'),s, :method => :delete, :class => 'warning')

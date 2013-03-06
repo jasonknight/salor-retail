@@ -21,6 +21,6 @@
               %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }
                 = b.name
                 - if params[:controller] == 'buttons'
-                  %div{:style => 'width:74px;height:32px;padding-top:12px;'}
-                    = link_to image_tag('/images/icons/' + icon(:edit,32), :style => 'float:left; padding-right:5px;'), edit_button_path(b)
-                    = link_to image_tag('/images/icons/' + icon(:delete,32), :style => 'float:left; padding-left:5px;'), b, :confirm => 'Are you sure?', :method => :delete
+                  %div{:style => 'width:100px;height:18px;padding-top:12px;'}
+                    = link_to salor_icon(:edit,{ :style => 'float:left; padding-right:5px;'},16), edit_button_path(b)
+                    = link_to salor_icon(:delete,{:style => 'float:left; padding-left:5px;'},16), b, :confirm => 'Are you sure?', :method => :delete

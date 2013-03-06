@@ -9,9 +9,8 @@
   </li>
   <li>
     <div align="center" id="btn-vendors-index" class="">
-      <a href="<%= vendor_path($Vendor) %>">
-        <img src="/images/icons/<%= icon(:vendor,32) %>" /><br /><span class='icon-caption'><%= I18n.t("menu.home") %></span>
-      </a>
+        <%=  link_to raw(salor_icon(:vendor,{},32,I18n.t("menu.home"))), vendor_path($Vendor) %>
+<!--         <img src="/images/icons/<%= icon(:vendor,32) %>" /><br /><span class='icon-caption'><%= I18n.t("menu.home") %></span> -->
     </div>
   </li>
   <% if $User and $User.can(:index_items) %>
@@ -24,14 +23,14 @@
     <li>
       <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onmousedown="show_cash_drop();">
         <div id='header_drawer_amount'></div>
-        <%= salor_icon(:cash_drop,{},32) %><br /><span class='icon-caption'><%= I18n.t("menu.cash_drop") %></span>
+        <%= salor_icon(:cash_drop,{},20) %><br /><div style="margin-top:12px;"><span class='icon-caption'><%= I18n.t("menu.cash_drop") %></span></div>
       </div>
     </li>
   <% end %>
   <% if $User and $User.can(:index_orders) %>
   <li>
     <div align="center" id="btn-orders-new" class="">
-    <%=  link_to raw(salor_icon(:cash_register,{},32,I18n.t("menu.pos"))), "/order/new" %>
+    <%=  link_to raw(salor_icon(:cash_register,{},32,I18n.t("menu.pos"))), "/orders/new" %>
 <!--       <%= link_to salor_icon(:cash_register,{},32), "/orders/new" %><br /><span class='icon-caption'><%= I18n.t("menu.pos") %></span> -->
     </div>
   </li>
@@ -45,9 +44,10 @@
   <% end %>
   <li>
     <div align="center" id="end_of_day_button">
-      <a href="/cash_registers/end_of_day">
+    <%= link_to salor_icon(:logout,{},32,I18n.t("system.logout")), "/cash_registers/end_of_day" %><br />
+<!--      <a href="/cash_registers/end_of_day">
         <img src="/images/icons/<%= icon(:logout,32) %>" /><br /><span class='icon-caption'><%= I18n.t("system.logout") %></span>
-      </a>
+      </a>-->
     </div>
   </li>
 <% end -%>

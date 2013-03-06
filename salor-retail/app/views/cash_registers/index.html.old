@@ -10,11 +10,11 @@
           <div class="list slave">
              <% if $User.can(:edit_cash_registers) %>
                <a href="<%= edit_cash_register_path(cash_register) %>">
-                  <img src="/images/icons/<%= icon(:edit,16) %>" />
+                  <%= salor_icon(:edit,{},16) %>
                 </a>
              <% end %>
             <br/>
-            <%= link_to(image_tag('/images/icons/' + icon(:delete,16)), cash_register, :confirm => 'Are you sure?', :method => :delete) if $User.can(:destroy_cash_registers) %>
+            <%= link_to(salor_icon(:delete,{},16), cash_register, :confirm => 'Are you sure?', :method => :delete) if $User.can(:destroy_cash_registers) %>
           </div>
           <!-- End ul.list -->
       </div>

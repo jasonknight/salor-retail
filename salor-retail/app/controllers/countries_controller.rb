@@ -4,7 +4,7 @@ class CountriesController < ApplicationController
     puts "i am a test"
   end
   def index
-    @countries = Country.scopied
+    @countries = Country.scopied.page(params[:page]).per(25)
   end
   
   def new

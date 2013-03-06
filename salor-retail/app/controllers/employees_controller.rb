@@ -63,7 +63,7 @@ class EmployeesController < ApplicationController
   # GET /employees
   # GET /employees.xml
   def index
-    @employees = salor_user.get_employees(salor_user.meta.vendor_id,params[:page])
+    @employees = $Vendor.employees.scopied.order("created_at desc").page(params[:page]).per(25)
     
     respond_to do |format|
       format.html # index.html.erb

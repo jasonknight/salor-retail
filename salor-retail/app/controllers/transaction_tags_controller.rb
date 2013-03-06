@@ -12,7 +12,7 @@ class TransactionTagsController < ApplicationController
   # GET /transaction_tags
   # GET /transaction_tags.xml
   def index
-    @transaction_tags = TransactionTag.scopied.all
+    @transaction_tags = TransactionTag.scopied.page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb
