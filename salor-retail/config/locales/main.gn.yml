@@ -84,6 +84,7 @@ gn:
       email: E-Mail
       employee:
         uses_drawer_id: Kassenlade von
+        hourly_rate: Hourly Rate
       end_amount: Schlussbetrag
       end_date: Ende
       eod_show: Zeige bei Tagesabschluss
@@ -331,6 +332,8 @@ gn:
     shipments: Lieferungen
     update_location: Lagerort aktualisieren
     update_real_quantity: Tatsächliche Menge aktualisieren
+    time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: Bitte auswählen

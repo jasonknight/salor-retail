@@ -9,7 +9,7 @@ ActiveSupport::Cache::FileStore.module_eval do
 		#		'thingie'						 -> thingie.cache
 		#   'cash_drop/admin'    -> cash_drop/adm/admin.cache
 		#   'orders/123456/main' -> orders/123/123456/main.cache
-		fname = UnicodeUtils.nfkd(key.to_s).gsub(/[^\x00-\x7F]/,'').to_s # no accented chars
+		fname = key.to_s #UnicodeUtils.nfkd(key.to_s).gsub(/[^\x00-\x7F]/,'').to_s # no accented chars
 		nodes = fname.split('/')
 		return File.join(cache_path, "#{fname}.cache") if nodes.length == 2 # key contains "views/" by default
 		lnode = nodes.pop

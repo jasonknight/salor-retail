@@ -1,0 +1,447 @@
+Drawer Transactions 	
+4	4616.57	true		Übertrag	0.0
+4	4116.57		true	Bank	4616.57
+4	3.8	true		CompleteOrder	500.0
+4	29.0		true	Taxi	503.8
+4	76.2		true	Werbung	474.8
+4	8.6	true		CompleteOrder	398.6
+4	45.0	true		CompleteOrder	407.2
+4	4.0	true		CompleteOrder	452.2
+4	15.5	true		CompleteOrder	456.2
+4	4.2	true		CompleteOrder	471.7
+4	104.0	true		CompleteOrder	475.9
+4	4.2	true		CompleteOrder	579.9
+4	3.8	true		CompleteOrder	584.1
+4	9.0	true		CompleteOrder	587.9
+4	37.5	true		CompleteOrder	596.9
+4	7.6	true		CompleteOrder	634.4
+4	6.0	true		CompleteOrder	642.0
+4	20.0	true		CompleteOrder	648.0
+4	1.0	true		CompleteOrder	668.0
+4	3.75	true		CompleteOrder	669.0
+4	3.0	true		CompleteOrder	672.75
+4	5.0	false	true	CompleteOrder	675.75
+4	4.0	true		CompleteOrder	670.75
+4	2.0	false	true	CompleteOrder	674.75
+4	7.6	true		CompleteOrder	672.75
+4	9.0	true		CompleteOrder	680.35
+4	10.3	true		CompleteOrder	689.35
+4	0.0	true		CompleteOrder	699.65
+4	4.0	true		CompleteOrder	699.65
+4	4.2	true		CompleteOrder	703.65
+4	0.7	false	true	CompleteOrder	707.85
+4	4.5	true		CompleteOrder	707.15
+4	9.2	true		CompleteOrder	711.65
+4	100.0	true		CompleteOrder	720.85
+4	9.0	true		CompleteOrder	820.85
+4	52.5	true		CompleteOrder	829.85
+4	0.0	true		CompleteOrder	882.35
+4	4.1	true		CompleteOrder	882.35
+4	19.0	true		CompleteOrder	886.45
+4	3.8	true		CompleteOrder	905.45
+4	3.8	true		CompleteOrder	909.25
+4	3.8	true		CompleteOrder	913.05
+4	5.8	true		CompleteOrder	916.85
+4	4.5	true		CompleteOrder	922.65
+4	4.5	true		CompleteOrder	927.15
+4	3.9	true		CompleteOrder	931.65
+4	5.3	true		CompleteOrder	935.55
+4	86.0	true		CompleteOrder	940.85
+4	1.15	true		CompleteOrder	1026.85
+4	5.0	true		CompleteOrder	1028.0
+4	4.2	true		CompleteOrder	1033.0
+4	7.6	true		CompleteOrder	1037.2
+4	0.0	true		CompleteOrder	1044.8
+4	3.8	true		CompleteOrder	1044.8
+4	7.0	true		CompleteOrder	1048.6
+4	0.0	true		CompleteOrder	1055.6
+4	2.0	true		CompleteOrder	1055.6
+4	4.8	true		CompleteOrder	1057.6
+4	84.0	true		CompleteOrder	1062.4
+4	2.0	true		CompleteOrder	1146.4
+4	3.8	true		CompleteOrder	1148.4
+4	2.0	true		CompleteOrder	1152.2
+4	3.8	true		CompleteOrder	1154.2
+4	1.0	false	true	CompleteOrder	1158.0
+4	25.12	true		CompleteOrder	1157.0
+4	20.0	true		CompleteOrder	1182.12
+4	4.0	true		CompleteOrder	1202.12
+4	3.0	false	true	CompleteOrder	1206.12
+4	3.0	true		CompleteOrder	1203.12
+4	3.7	true		CompleteOrder	1206.12
+4	4.5	true		CompleteOrder	1209.82
+4	11.0	true		CompleteOrder	1214.32
+4	8.1	true		CompleteOrder	1225.32
+4	4.2	true		CompleteOrder	1233.42
+4	9.0	true		CompleteOrder	1237.62
+4	5.8	true		CompleteOrder	1246.62
+4	10.0	true		CompleteOrder	1252.42
+4	11.0	true		CompleteOrder	1262.42
+4	6.0	true		CompleteOrder	1273.42
+4	3.8	true		CompleteOrder	1279.42
+4	1.2	true		CompleteOrder	1283.22
+4	38.8	true		CompleteOrder	1284.42
+4	2.1	true		CompleteOrder	1323.22
+4	11.25	true		CompleteOrder	1325.32
+4	6.2	true		CompleteOrder	1336.57
+4	4.5	true		CompleteOrder	1342.77
+4	3.0	true		CompleteOrder	1347.27
+4	3.8	true		CompleteOrder	1350.27
+4	0.0	true		CompleteOrder	1354.07
+4	4.2	true		CompleteOrder	1354.07
+4	3.8	true		CompleteOrder	1358.27
+4	7.5	true		CompleteOrder	1362.07
+4	107.05	true		CompleteOrder	1369.57
+4	9.0	true		CompleteOrder	1476.62
+4	4.5	true		CompleteOrder	1485.62
+4	0.7	true		CompleteOrder	1490.12
+4	16.8	true		CompleteOrder	1490.82
+4	4.2	true		CompleteOrder	1507.62
+4	4.2	true		CompleteOrder	1511.82
+4	8.4	true		CompleteOrder	1516.02
+4	3.0	true		CompleteOrder	1524.42
+4	6.0	false	true	CompleteOrder	1527.42
+4	3.8	true		CompleteOrder	1521.42
+4	7.8	true		CompleteOrder	1525.22
+4	4.2	true		CompleteOrder	1533.02
+4	4.5	true		CompleteOrder	1537.22
+4	8.2	true		CompleteOrder	1541.72
+4	11.6	true		CompleteOrder	1549.92
+4	4.3	true		CompleteOrder	1561.52
+4	12.8	true		CompleteOrder	1565.82
+4	18.75	true		CompleteOrder	1578.62
+4	4.5	true		CompleteOrder	1597.37
+4	3.8	true		CompleteOrder	1601.87
+4	3.8	true		CompleteOrder	1605.67
+4	4.2	true		CompleteOrder	1609.47
+4	0.0	true		CompleteOrder	1613.67
+4	4.5	true		CompleteOrder	1613.67
+4	3.8	true		CompleteOrder	1618.17
+4	9.0	true		CompleteOrder	1621.97
+4	8.4	true		CompleteOrder	1630.97
+4	4.2	true		CompleteOrder	1639.37
+4	4.0	true		CompleteOrder	1643.57
+4	7.6	true		CompleteOrder	1647.57
+4	3.7	true		CompleteOrder	1655.17
+4	3.75	true		CompleteOrder	1658.87
+4	60.0	true		CompleteOrder	1662.62
+4	2.0	true		CompleteOrder	1722.62
+4	4.0	true		CompleteOrder	1724.62
+4	3.8	true		CompleteOrder	1728.62
+4	4.2	true		CompleteOrder	1732.42
+4	10.0	true		CompleteOrder	1736.62
+4	27.9	true		CompleteOrder	1746.62
+4	3.8	true		CompleteOrder	1774.52
+4	5.0	true		CompleteOrder	1778.32
+4	7.9	true		CompleteOrder	1783.32
+4	3.8	true		CompleteOrder	1791.22
+4	3.8	true		CompleteOrder	1795.02
+4	10.0	true		CompleteOrder	1798.82
+4	4.5	true		CompleteOrder	1808.82
+4	3.75	true		CompleteOrder	1813.32
+4	4.2	true		CompleteOrder	1817.07
+4	4.0	true		CompleteOrder	1821.27
+4	10.0	true		CompleteOrder	1825.27
+4	3.8	true		CompleteOrder	1835.27
+4	3.0	true		CompleteOrder	1839.07
+4	14.8	true		CompleteOrder	1842.07
+4	4.5	true		CompleteOrder	1856.87
+4	4.5	true		CompleteOrder	1861.37
+4	8.4	true		CompleteOrder	1865.87
+4	7.6	true		CompleteOrder	1874.27
+4	3.8	true		CompleteOrder	1881.87
+4	7.3	true		CompleteOrder	1885.67
+4	7.5	true		CompleteOrder	1892.97
+4	10.0	true		CompleteOrder	1900.47
+4	23.5	true		CompleteOrder	1910.47
+4	86.0	true		CompleteOrder	1933.97
+4	4.5	true		CompleteOrder	2019.97
+4	10.9	true		CompleteOrder	2024.47
+4	11.4	true		CompleteOrder	2035.37
+4	4.2	true		CompleteOrder	2046.77
+4	4.2	true		CompleteOrder	2050.97
+4	7.1	true		CompleteOrder	2055.17
+4	20.0	true		CompleteOrder	2062.27
+4	3.5	true		CompleteOrder	2082.27
+4	25.9	true		CompleteOrder	2085.77
+4	8.2	true		CompleteOrder	2111.67
+4	3.8	true		CompleteOrder	2119.87
+4	10.5	true		CompleteOrder	2123.67
+4	4.0	true		CompleteOrder	2134.17
+4	12.8	true		CompleteOrder	2138.17
+4	4.3	true		CompleteOrder	2150.97
+4	6.5	true		CompleteOrder	2155.27
+4	3.8	true		CompleteOrder	2161.77
+4	7.6	true		CompleteOrder	2165.57
+4	29.75	true		CompleteOrder	2173.17
+4	3.8	true		CompleteOrder	2202.92
+4	4.2	true		CompleteOrder	2206.72
+4	11.25	true		CompleteOrder	2210.92
+4	0.0	true		CompleteOrder	2222.17
+4	4.5	true		CompleteOrder	2222.17
+4	4.4	true		CompleteOrder	2226.67
+4	3.8	true		CompleteOrder	2231.07
+4	2234.87		true	Kassensaldo	2234.87
+Payment Methods 	
+Bargeld	InCash	3.8	66225
+Bargeld	InCash	10.0	66227
+Retourgeld	Change	-1.4	66227
+Bargeld	InCash	100.0	66228
+Retourgeld	Change	-55.0	66228
+Bargeld	InCash	4.0	66229
+Bargeld	InCash	20.0	66230
+Retourgeld	Change	-4.5	66230
+Bargeld	InCash	5.0	66231
+Retourgeld	Change	-0.8	66231
+Bargeld	InCash	104.0	66232
+Bargeld	InCash	4.2	66233
+Bargeld	InCash	3.8	66234
+Bargeld	InCash	9.0	66235
+Bargeld	InCash	50.0	66236
+Retourgeld	Change	-12.5	66236
+Bargeld	InCash	20.0	66237
+Retourgeld	Change	-12.4	66237
+Bargeld	InCash	10.0	66238
+Retourgeld	Change	-4.0	66238
+Bargeld	InCash	50.0	66239
+Retourgeld	Change	-30.0	66239
+Bargeld	InCash	1.0	66240
+Bargeld	InCash	5.0	66241
+Retourgeld	Change	-1.25	66241
+Bargeld	InCash	3.0	66242
+Bargeld	InCash	-5.0	66243
+Bargeld	InCash	4.0	66244
+Bargeld	InCash	-2.0	66245
+Bargeld	InCash	100.0	66246
+Retourgeld	Change	-92.4	66246
+Bargeld	InCash	10.0	66247
+Retourgeld	Change	-1.0	66247
+Bargeld	InCash	20.0	66248
+Retourgeld	Change	-9.7	66248
+Mit Karte	ByCard	231.0	66249
+Bargeld	InCash	4.0	66250
+Bargeld	InCash	10.0	66251
+Retourgeld	Change	-5.8	66251
+Bargeld	InCash	-0.7	66252
+Bargeld	InCash	4.5	66253
+Bargeld	InCash	10.0	66254
+Retourgeld	Change	-0.8	66254
+Bargeld	InCash	100.0	66255
+Bargeld	InCash	9.0	66256
+Bargeld	InCash	52.5	66257
+Mit Karte	ByCard	79.6	66258
+Bargeld	InCash	10.0	66259
+Retourgeld	Change	-5.9	66259
+Bargeld	InCash	50.0	66260
+Retourgeld	Change	-31.0	66260
+Bargeld	InCash	3.8	66261
+Bargeld	InCash	10.0	66262
+Retourgeld	Change	-6.2	66262
+Bargeld	InCash	5.0	66263
+Retourgeld	Change	-1.2	66263
+Bargeld	InCash	10.0	66264
+Retourgeld	Change	-4.2	66264
+Bargeld	InCash	4.5	66266
+Bargeld	InCash	20.0	66265
+Retourgeld	Change	-15.5	66265
+Bargeld	InCash	3.9	66267
+Bargeld	InCash	10.0	66269
+Retourgeld	Change	-4.7	66269
+Bargeld	InCash	100.0	66271
+Retourgeld	Change	-14.0	66271
+Bargeld	InCash	1.15	66272
+Bargeld	InCash	5.0	66273
+Bargeld	InCash	10.0	66274
+Retourgeld	Change	-5.8	66274
+Bargeld	InCash	10.0	66275
+Retourgeld	Change	-2.4	66275
+Bargeld	InCash	5.0	66277
+Retourgeld	Change	-1.2	66277
+Bargeld	InCash	7.0	66278
+Bargeld	InCash	20.0	66280
+Retourgeld	Change	-18.0	66280
+Bargeld	InCash	4.8	66281
+Bargeld	InCash	100.0	66282
+Retourgeld	Change	-16.0	66282
+Bargeld	InCash	2.0	66283
+Bargeld	InCash	3.8	66284
+Bargeld	InCash	2.0	66285
+Bargeld	InCash	3.8	66286
+Bargeld	InCash	-1.0	66287
+Bargeld	InCash	25.12	66288
+Bargeld	InCash	20.0	66289
+Bargeld	InCash	4.0	66290
+Bargeld	InCash	-3.0	66291
+Bargeld	InCash	3.0	66292
+Bargeld	InCash	3.7	66293
+Bargeld	InCash	4.5	66294
+Bargeld	InCash	11.0	66295
+Bargeld	InCash	10.0	66298
+Retourgeld	Change	-1.9	66298
+Bargeld	InCash	4.2	66299
+Bargeld	InCash	9.0	66300
+Bargeld	InCash	10.0	66301
+Retourgeld	Change	-4.2	66301
+Bargeld	InCash	10.0	66302
+Bargeld	InCash	11.0	66303
+Bargeld	InCash	6.0	66304
+Bargeld	InCash	20.0	66305
+Retourgeld	Change	-16.2	66305
+Bargeld	InCash	2.0	66306
+Retourgeld	Change	-0.8	66306
+Bargeld	InCash	50.0	66307
+Retourgeld	Change	-11.2	66307
+Bargeld	InCash	2.1	66308
+Bargeld	InCash	11.25	66309
+Bargeld	InCash	6.2	66310
+Bargeld	InCash	4.5	66311
+Bargeld	InCash	5.0	66312
+Retourgeld	Change	-2.0	66312
+Bargeld	InCash	4.0	66313
+Retourgeld	Change	-0.2	66313
+Mit Karte	ByCard	50.2	66314
+Bargeld	InCash	10.0	66315
+Retourgeld	Change	-5.8	66315
+Bargeld	InCash	5.0	66316
+Retourgeld	Change	-1.2	66316
+Bargeld	InCash	7.5	66317
+Bargeld	InCash	107.05	66318
+Bargeld	InCash	9.0	66319
+Bargeld	InCash	6.0	66320
+Retourgeld	Change	-1.5	66320
+Bargeld	InCash	1.0	66321
+Retourgeld	Change	-0.3	66321
+Bargeld	InCash	20.0	66322
+Retourgeld	Change	-3.2	66322
+Bargeld	InCash	4.2	66323
+Bargeld	InCash	5.0	66324
+Retourgeld	Change	-0.8	66324
+Bargeld	InCash	10.0	66325
+Retourgeld	Change	-1.6	66325
+Bargeld	InCash	10.0	66326
+Retourgeld	Change	-7.0	66326
+Bargeld	InCash	-6.0	66327
+Bargeld	InCash	3.8	66328
+Bargeld	InCash	10.0	66329
+Retourgeld	Change	-2.2	66329
+Bargeld	InCash	5.0	66330
+Retourgeld	Change	-0.8	66330
+Bargeld	InCash	50.0	66331
+Retourgeld	Change	-45.5	66331
+Bargeld	InCash	8.2	66332
+Bargeld	InCash	11.6	66333
+Bargeld	InCash	4.3	66334
+Bargeld	InCash	15.0	66335
+Retourgeld	Change	-2.2	66335
+Bargeld	InCash	20.0	66336
+Retourgeld	Change	-1.25	66336
+Bargeld	InCash	5.0	66337
+Retourgeld	Change	-0.5	66337
+Bargeld	InCash	3.8	66338
+Bargeld	InCash	10.0	66339
+Retourgeld	Change	-6.2	66339
+Bargeld	InCash	4.2	66340
+Bargeld	InCash	10.0	66342
+Retourgeld	Change	-5.5	66342
+Bargeld	InCash	5.0	66343
+Retourgeld	Change	-1.2	66343
+Bargeld	InCash	9.0	66344
+Bargeld	InCash	100.0	66345
+Retourgeld	Change	-91.6	66345
+Bargeld	InCash	10.0	66346
+Retourgeld	Change	-5.8	66346
+Bargeld	InCash	4.0	66347
+Bargeld	InCash	20.0	66348
+Retourgeld	Change	-12.4	66348
+Bargeld	InCash	5.0	66349
+Retourgeld	Change	-1.3	66349
+Bargeld	InCash	10.0	66350
+Retourgeld	Change	-6.25	66350
+Bargeld	InCash	100.0	66351
+Retourgeld	Change	-40.0	66351
+Bargeld	InCash	2.0	66352
+Bargeld	InCash	4.0	66353
+Bargeld	InCash	4.0	66354
+Retourgeld	Change	-0.2	66354
+Bargeld	InCash	410.0	66355
+Retourgeld	Change	-405.8	66355
+Bargeld	InCash	10.0	66356
+Bargeld	InCash	30.0	66357
+Retourgeld	Change	-2.1	66357
+Bargeld	InCash	3.8	66358
+Bargeld	InCash	50.0	66359
+Retourgeld	Change	-45.0	66359
+Bargeld	InCash	10.0	66360
+Retourgeld	Change	-2.1	66360
+Bargeld	InCash	3.8	66361
+Bargeld	InCash	10.0	66362
+Retourgeld	Change	-6.2	66362
+Bargeld	InCash	10.0	66363
+Bargeld	InCash	4.5	66364
+Bargeld	InCash	10.0	66365
+Retourgeld	Change	-6.25	66365
+Bargeld	InCash	10.0	66366
+Retourgeld	Change	-5.8	66366
+Bargeld	InCash	4.0	66367
+Bargeld	InCash	10.0	66368
+Bargeld	InCash	5.0	66369
+Retourgeld	Change	-1.2	66369
+Bargeld	InCash	100.0	66370
+Retourgeld	Change	-97.0	66370
+Bargeld	InCash	15.0	66371
+Retourgeld	Change	-0.2	66371
+Bargeld	InCash	4.5	66372
+Bargeld	InCash	4.5	66373
+Bargeld	InCash	10.0	66374
+Retourgeld	Change	-1.6	66374
+Bargeld	InCash	20.0	66375
+Retourgeld	Change	-12.4	66375
+Bargeld	InCash	10.0	66376
+Retourgeld	Change	-6.2	66376
+Bargeld	InCash	10.0	66377
+Retourgeld	Change	-2.7	66377
+Bargeld	InCash	50.0	66378
+Retourgeld	Change	-42.5	66378
+Bargeld	InCash	10.0	66379
+Bargeld	InCash	50.0	66380
+Retourgeld	Change	-26.5	66380
+Bargeld	InCash	86.0	66381
+Bargeld	InCash	50.0	66382
+Retourgeld	Change	-45.5	66382
+Bargeld	InCash	50.0	66383
+Retourgeld	Change	-39.1	66383
+Bargeld	InCash	100.0	66384
+Retourgeld	Change	-88.6	66384
+Bargeld	InCash	4.2	66385
+Bargeld	InCash	4.2	66386
+Bargeld	InCash	7.1	66387
+Bargeld	InCash	20.0	66388
+Bargeld	InCash	3.5	66389
+Bargeld	InCash	30.0	66390
+Retourgeld	Change	-4.1	66390
+Bargeld	InCash	20.2	66391
+Retourgeld	Change	-12.0	66391
+Bargeld	InCash	5.0	66392
+Retourgeld	Change	-1.2	66392
+Bargeld	InCash	10.5	66393
+Bargeld	InCash	4.0	66394
+Bargeld	InCash	50.0	66395
+Retourgeld	Change	-37.2	66395
+Bargeld	InCash	4.3	66396
+Bargeld	InCash	10.0	66397
+Retourgeld	Change	-3.5	66397
+Bargeld	InCash	5.0	66398
+Retourgeld	Change	-1.2	66398
+Bargeld	InCash	10.0	66399
+Retourgeld	Change	-2.4	66399
+Bargeld	InCash	50.0	66400
+Retourgeld	Change	-20.25	66400
+Bargeld	InCash	10.0	66401
+Retourgeld	Change	-6.2	66401
+Bargeld	InCash	4.2	66402
+Bargeld	InCash	11.25	66403
+Mit Karte	ByCard	22.5	66404
+Bargeld	InCash	4.5	66405
+Bargeld	InCash	4.4	66406
+Bargeld	InCash	10.0	66407
+Retourgeld	Change	-6.2	66407

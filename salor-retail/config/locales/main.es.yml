@@ -55,6 +55,7 @@ es:
       email: E-mail
       employee:
         uses_drawer_id: Utiliza la caja de
+        hourly_rate: Hourly Rate
       end_amount: Monto final
       end_date: Fecha final
       eod_show: Mostrar al final del día
@@ -324,6 +325,8 @@ es:
     shipments: Envíos
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
+    time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: Por favor seleccione

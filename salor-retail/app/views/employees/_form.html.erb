@@ -26,6 +26,9 @@
               <div class="freefield"><%= f.label t("activerecord.attributes.username") %><br />
               <%= f.text_field :username, :class => "keyboardable"%></div>
               
+              <div class="freefield"><%= f.label t("activerecord.attributes.employee.hourly_rate") %><br />
+              <%= f.text_field :hourly_rate, :class => "keyboardable"%></div>
+              
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
               <div class="freefield"><%= f.label Employee.human_attribute_name :uses_drawer_id %><br />

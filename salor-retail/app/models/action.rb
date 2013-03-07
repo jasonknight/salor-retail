@@ -44,6 +44,13 @@ class Action < ActiveRecord::Base
       end
     end
   end
+  def category_id=(id)
+    c = Category.find_by_id(id.to_s)
+    if c then
+      self.owner_id = c.id
+      self.owner_type = "Category"
+    end
+  end
   def sku
     owner = self.owner
     if owner and owner.respond_to? :sku then
@@ -52,6 +59,54 @@ class Action < ActiveRecord::Base
       return ''
     end
   end
+  def self.apply_action(action,item,act)
+    # puts "Considering action: #{action.behavior} #{action.whento}"
+    if act == action.whento.to_sym or action.whento.to_sym == :always  then
+      # puts "Running action: #{action.behavior} #{action.whento}"
+      if action.value > 0 then
+        begin
+          eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add and not item.action_applied
+          eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract and not item.action_applied
+          eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply  and not item.action_applied
+          eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide and not item.action_applied
+          eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign and not item.action_applied
+          if action.behavior.to_sym == :discount_after_threshold and act == :add_to_order and item.class == OrderItem then
+#                 debugger
+            if (item.quantity / action.value2).floor >= 1 then
+              num_of_discountables = (item.quantity / action.value2).floor
+              total_2_discount = num_of_discountables * item.price
+              item.rebate = 0
+              percentage = total_2_discount / item.calculate_total
+              item.rebate = percentage * 100
+            else
+              item.rebate = 0
+            end
+            #puts "### item.#{action.afield} -= (item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor.to_i"
+            # eval("item.#{action.afield} =  ((item.item.base_price * item.quantity) - ((item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor))")
+            item.save
+          end
+          if item.class == OrderItem then
+            item.update_attribute :action_applied, true
+          end
+        rescue
+          # puts "Error: #{$!}"
+          GlobalErrors.append("system.errors.action_error",action,{:error => $!})
+        end
+      else
+        # puts "ActionValue is #{action.value}"
+      end
+      if not action.code.blank? then
+        begin
+          # puts "evaluating code"
+          #eval(action.code)
+        rescue
+          # puts "There was an error #{$!}"
+          GlobalErrors.append("system.errors.action_code_error",action,{:error => $!})
+        end
+      end
+    end
+    return item
+  end
   def self.run(item,act)
     if item.class == OrderItem then
       base_item = item.item
@@ -59,54 +114,15 @@ class Action < ActiveRecord::Base
       base_item = item
     end
       base_item.actions.each do |action|
-        # puts "Considering action: #{action.behavior} #{action.whento}"
-        if act == action.whento.to_sym or action.whento.to_sym == :always  then
-          # puts "Running action: #{action.behavior} #{action.whento}"
-          if action.value > 0 then
-            begin
-              eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add and not item.action_applied
-              eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract and not item.action_applied
-              eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply  and not item.action_applied
-              eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide and not item.action_applied
-              eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign and not item.action_applied
-              if action.behavior.to_sym == :discount_after_threshold and act == :add_to_order and item.class == OrderItem then
-#                 debugger
-                if (item.quantity / action.value2).floor >= 1 then
-                  num_of_discountables = (item.quantity / action.value2).floor
-                  total_2_discount = num_of_discountables * item.price
-                  item.rebate = 0
-                  percentage = total_2_discount / item.calculate_total
-                  item.rebate = percentage * 100
-                else
-                  item.rebate = 0
-                end
-                #puts "### item.#{action.afield} -= (item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor.to_i"
-               # eval("item.#{action.afield} =  ((item.item.base_price * item.quantity) - ((item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor))")
-                item.save
-              end
-              if item.class == OrderItem then
-               item.update_attribute :action_applied, true
-              end
-            rescue
-              # puts "Error: #{$!}"
-              GlobalErrors.append("system.errors.action_error",action,{:error => $!})
-            end
-          else
-            # puts "ActionValue is #{action.value}"
-          end
-          if not action.code.blank? then
-            begin
-              # puts "evaluating code"
-              #eval(action.code)
-            rescue
-              # puts "There was an error #{$!}"
-              GlobalErrors.append("system.errors.action_code_error",action,{:error => $!})
-            end
-          end
-        end
+        item = Action.apply_action(action,item,act)
       end
       # puts "At the end of actions, #{item.price}"
-      
+      if base_item.category then
+        base_item.category.actions.each do |action|
+          #raise "Applying Action"
+          item = Action.apply_action(action,item,act)
+        end
+      end
     return item
   end
   def self.simulate(item,action)

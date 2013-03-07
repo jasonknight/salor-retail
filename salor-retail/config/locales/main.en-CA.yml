@@ -78,6 +78,7 @@ en-CA:
       email: email
       employee:
         uses_drawer_id: Uses drawer of
+        hourly_rate: Hourly Rate
       end_amount: end amount
       end_date: end date
       eod_show: show at end of day
@@ -331,6 +332,8 @@ en-CA:
     shipments: shipments
     update_location: update location
     update_real_quantity: update real quantity
+    time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: please select

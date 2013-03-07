@@ -55,6 +55,7 @@ el:
       email: ηλεκτρονική διεύθυνση
       employee:
         uses_drawer_id: Χρήση συρταριού του/της
+        hourly_rate: Hourly Rate
       end_amount: τελικό ποσό
       end_date: ημερομηνία λήξης
       eod_show: προβολή τέλους μέρας
@@ -331,6 +332,8 @@ el:
     shipments: αποστολές
     update_location: ενημέρωση τοποθεσίας
     update_real_quantity: ενημέρωση πραγματικής ποσότητας
+    time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: παρακαλώ επιλέξτε

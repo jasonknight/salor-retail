@@ -10,4 +10,5 @@ updateOrderItems([<%= raw items.join(',') %>]);
 updateCustomerView(false, <%= @order.id %>);
 Order = <%= raw @order.to_json %>;
 $(".complete-order-total").html($('#pos_order_total').html());
+Order = <%= raw @order.to_json %>;
 focusInput($('#keyboard_input'));

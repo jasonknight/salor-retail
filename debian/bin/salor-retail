@@ -2,14 +2,14 @@
 
 if [ -e /usr/bin/salor-bin ]; then
   echo "Loading salor-bin. Please wait..."
-  sudo /usr/bin/salor-bin -u http://default.sr.red-e.eu
+  sudo /usr/bin/salor-bin -u http://default.sr.localhost
 
 elif [ -e /usr/bin/chromium-browser ]; then
   echo "Loading Chromium in Kiosk mode. Please wait..."
-  chromium-browser --kiosk --incognito -start-maximized http://default.sr.red-e.eu
+  chromium-browser --kiosk --incognito -start-maximized http://default.sr.localhost
 
 elif [ -e /usr/bin/firefox ]; then
   echo "Loading Firefox. Please wait..."
-  firefox http://default.sr.red-e.eu
+  firefox http://default.sr.localhost
 
 fi

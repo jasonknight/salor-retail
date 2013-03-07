@@ -20,7 +20,6 @@ class Vendor < ActiveRecord::Base
   has_many :customers
   has_many :broken_items
   has_many :paylife_structs
-  has_many :nodes
   has_many :shipments_received, :as => :receiver
   has_many :returns_sent, :as => :shipper
   has_many :shipments
@@ -32,10 +31,10 @@ class Vendor < ActiveRecord::Base
   has_many :tax_profiles
   has_many :shipment_types
   has_many :invoice_blurbs
+  has_many :item_stocks
   serialize :unused_order_numbers
   serialize :unused_quote_numbers
-	
-  
+
   def salor_configuration_attributes=(hash)
     if self.salor_configuration.nil? then
       self.salor_configuration = SalorConfiguration.new hash

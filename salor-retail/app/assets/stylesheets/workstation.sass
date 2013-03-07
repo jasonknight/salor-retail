@@ -943,7 +943,9 @@ div.list > div.master
 
 div.list > div.widget a
   text-decoration: none
-
+div.widget
+  @include widget
+  padding: 10px
 div.list > div.master-wide 
   @include rounded_corners_all
   border-color: $border_color
@@ -3096,3 +3098,6 @@ div.pagination
   padding: 10px
   width: 300px
   margin: 5px
+  
+div.black-text,td.black-text, a.black-text, div.black-text a
+  color: black

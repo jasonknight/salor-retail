@@ -8,11 +8,10 @@ function make_editabl_pm(pm) {
   pm = $(pm);
   pm.click(function () {
     var dialog = shared.draw.dialog(i18n.menu.edit_tender_method,'edit_payment_method');
-    dialog.show();
-    dialog.offset({left: MX - 100, top: MY - 20});
+    
     var options = {
-      name: 'sales_type_and_countries',
-      title: i18n.activerecord.attributes.name,
+      name: 'payment_methods',
+      title: i18n.activerecord.models.tender_method.one,
       append_to: dialog,
       selections: [
       // begin sale_types
@@ -28,17 +27,39 @@ function make_editabl_pm(pm) {
           return stys;
         })(),
            change: function () {
-             var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=sale_type_id&value=' + $(this).val();
-             get(string, 'invoices->payment_method_name', function () {
-               //
-             });
+             var pm = _get('pm',$(this));
+             
+             var string = '?pm_id=' + pm.attr('model_id') + '&pm_name=' + $(this).val();
+             window.location = string;
            },
            attributes: {name: i18n.activerecord.models.sale_type.one},
-           value: Order.sale_type_id,
+           value: ''
       }
       ]
     } // end var options
     var additional = shared.draw.select_option(options);
-    additional.find('select').each(function () {make_select_widget($(this).attr('payment_method_name'),$(this));});
+    additional.find('select').each(function () {make_select_widget($(this).attr('payment_method_name'),$(this));_set('pm',pm,$(this));});
+    // Amount
+    var callbacks = {
+      click: function () {
+        var id = '#option_payment_method_amount_input';
+        var pm = _get('pm',$('#option_payment_method_amount_input'));
+        var value = $(id).val();
+        var string = '?pm_id='+ pm.attr('model_id') +'&pm_amount=' + value;
+        window.location = string;
+      }
+    };
+    var options = {
+      name: 'payment_method_amount',
+      title: i18n.activerecord.attributes.amount,
+      value: pm.attr('amount'),
+      append_to: dialog
+    };
+    var amount = shared.draw.option(options,callbacks);
+    _set('pm',pm,$('#option_payment_method_amount_input'));
+    dialog.show();
+    dialog.offset({left: MX - 100, top: MY - 20});
+    shared.helpers.expand(dialog,0.10,'vertical');
+    
   });
 }

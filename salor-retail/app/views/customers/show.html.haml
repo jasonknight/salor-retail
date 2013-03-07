@@ -17,7 +17,7 @@
       %th= t('.order_total')
     - @last_orders.each do |o|
       %tr
-        %td= link_to o.id, "/orders/#{o.id}/print"
+        %td= link_to o.nr, "/orders/#{o.id}/print"
         %td= number_to_currency o.total
 
   %h3= t('.bought_items')

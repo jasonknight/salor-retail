@@ -469,9 +469,11 @@ class Order < ActiveRecord::Base
     end
   end
   #
-	def calculate_rebate
-	  amnt = 0.0
-	  if self.subtotal.nil? then self.subtotal = 0 end
+  def calculate_rebate
+    amnt = 0.0
+    if self.subtotal.nil? then 
+        self.subtotal = 0 
+    end
     self.order_items.visible.each do |oi|
       puts "!! Oi.total is #{oi.total}"
       amnt += (oi.total * (self.rebate/100))
@@ -527,7 +529,7 @@ class Order < ActiveRecord::Base
       else
         $User.meta.update_attribute :last_order_id, self.id
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
-        if self.change_given > 0
+        if self.change_given > 0 and not self.is_quote
           PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
         end
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
@@ -1287,6 +1289,15 @@ class Order < ActiveRecord::Base
     print_engine.close
     Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => contents[:text])
   end
-  
+  def sanity_check
+    if self.paid == 1 then
+      pms = self.payment_methods.collect { |pm| pm.internal_type}
+      if pms.include? "InCash" and not pms.include? "Change" and self.change_given > 0 then
+        puts "Order is missing Change Payment Method"
+        PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
+        self.payment_methods.reload
+      end
+    end
+  end
   # {END}
 end

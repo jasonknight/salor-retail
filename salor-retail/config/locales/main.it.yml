@@ -51,6 +51,7 @@ it:
       email: email
       employee:
         uses_drawer_id: usa cassa id
+        hourly_rate: Hourly Rate
       end_amount: importo finale
       end_date: fine data
       eod_show: mostra a fine giornata
@@ -329,6 +330,8 @@ it:
     shipments: spedizioni
     update_location: aggiorna posizione
     update_real_quantity: aggiorna quantità reale
+    time_sheet: Employee Time Sheet
+    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: prego selezionare

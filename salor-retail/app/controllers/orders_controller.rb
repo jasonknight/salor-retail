@@ -10,7 +10,7 @@ class OrdersController < ApplicationController
    before_filter :authify, :except => [:customer_display,:print, :print_receipt, :print_confirmed]
    before_filter :initialize_instance_variables, :except => [:customer_display,:add_item_ajax, :print_receipt, :print_confirmed]
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt, :print_confirmed]
-   before_filter :crumble, :except => [:customer_display,:print, :print_receipt, :print_confirmed]
+   before_filter :crumble, :except => [:customer_display,:print_receipt, :print_confirmed]
    respond_to :html, :xml, :json, :csv
    # TODO: Remove method offline since empty.
    def offline
@@ -578,6 +578,31 @@ class OrdersController < ApplicationController
     @order = Order.scopied.find_by_id(params[:id])
     GlobalData.salor_user = @order.user if @order.user
     GlobalData.salor_user = @order.employee if @order.employee
+    if params[:pm_id] then
+      pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
+      any = @order.payment_methods.find_by_internal_type('Unpaid')
+      if any and params[:pm_name] and not ['Unpaid','Change'].include? params[:pm_name] then
+        # it should not allow doubles of this type
+        if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
+          npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
+          @order.payment_methods << npm
+          @order.save
+        end
+      end # end handling new pms by name
+      
+      if not pm.internal_type == 'Unpaid' then
+        pm.update_attribute :amount, params[:pm_amount]
+        diff = any.amount - pm.amount
+        if diff == 0 then
+          any.destroy
+          @order.update_attribute :unpaid_invoice, false
+        elsif diff < 0 then
+          raise "Cannot pay more than is due"
+        else
+          any.update_attribute :amount, diff
+        end
+      end
+    end
     $User = @order.employee
     if not @order.employee then
       @order.employee = Employee.where(:vendor_id => @order.vendor_id).last

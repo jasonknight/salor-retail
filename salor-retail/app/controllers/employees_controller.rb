@@ -6,10 +6,15 @@
 # See license.txt for the license applying to all files within this software.
 class EmployeesController < ApplicationController
   before_filter :authify, :only => [:show, :index,:new, :edit, :destroy, :create, :update]
-  before_filter :initialize_instance_variables, :except => [:login]
+  before_filter :initialize_instance_variables, :except => [:login, :signup]
   before_filter :check_role, :except => [:crumble,:login]
-  before_filter :crumble, :except => [:login]
+  before_filter :crumble, :except => [:login, :signup]
   cache_sweeper :employee_sweeper, :only => [:create, :update, :destroy]
+  def signup
+    if not AppConfig.signup == true then
+      redirect_to :action => :login and return
+    end
+  end
   def login
       user = Employee.login(params[:code]) 
       user = User.login(params[:code]) if not user
@@ -17,6 +22,7 @@ class EmployeesController < ApplicationController
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s
       $User = user
+      $User.start_day
       # History.record("employee_sign_in",user,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
       if cr = CashRegister.find_by_ip(request.ip) then
         user.get_meta.update_attribute :cash_register_id, cr.id
@@ -39,6 +45,20 @@ class EmployeesController < ApplicationController
     else
       redirect_to :controller => :home, :action => :index, :notice => "could not find a user with code" and return
     end
+  end
+  def destroy_login
+    @employee = Employee.find_by_id(params[:id].to_s)
+    if @employee and @employee.vendor_id == $User.vendor_id then
+      login = EmployeeLogin.find_by_id(params[:login].to_s)
+      if login.employee_id == @employee.id and $User.role_cache.include? 'manager' then
+        login.destroy
+      else
+        raise "Ids Don't Match" + login.employee.id.to_s + " ---- " + $User.role_cache
+      end
+    else
+      redirect_to :action => :index and return
+    end
+    redirect_to :action => :show, :id => @employee.id
   end
   # GET /employees
   # GET /employees.xml

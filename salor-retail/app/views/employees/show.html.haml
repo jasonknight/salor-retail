@@ -1,5 +1,7 @@
 = stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'timepicker'
 = stylesheet_link_tag 'invoice_default_print', :media => 'print'
+=javascript_include_tag 'timepicker'
 
 = raw content_box_top(t("views.orders"))
 
@@ -23,6 +25,8 @@
 
 .paper-invoice.invoice_print
   =render "employee_details"
+  =render "employee_time_sheet"
   =render "employee_drawer_transactions"
+  
   .center
     %img.salorlogo{ :src => '/images/salor-logo-reports.png'}

@@ -99,7 +99,6 @@ class ApplicationController < ActionController::Base
       else
         user= Employee.find_by_id(session[:user_id])
         $Vendor = user.vendor if user #Because Global State is maintained across requests.
-        
         $User = user
       end
       return user
@@ -118,7 +117,7 @@ class ApplicationController < ActionController::Base
 
   private
   def allowed_klasses
-    ['LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem','CashRegisterDaily']
+    ['EmployeeLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem','CashRegisterDaily']
   end
   def initialize_instance_variables
     if params[:vendor_id] and not params[:vendor_id].blank? then
@@ -131,20 +130,20 @@ class ApplicationController < ActionController::Base
       salor_user.meta.update_attribute(:cash_register_id,params[:cash_register_id])
     end
     if salor_user then
-	    @tax_profiles = salor_user.get_tax_profiles
-	    if salor_user.meta.cash_register_id then
-	      @cash_register = CashRegister.find_by_id(salor_user.meta.cash_register_id)
-	    else
-	      @cash_register = CashRegister.new(:name => 'Unk')
-	    end
-	    $Register = @cash_register
-	    GlobalData.cash_register = @cash_register
-	    if Vendor.exists?(salor_user.meta.vendor_id) then
-	       @vendor = Vendor.find(salor_user.meta.vendor_id)
-	    else 
-	       @vendor = Vendor.new
-	       @vendor.name = I18n.t("views.errors.unknown_vendor")
-	    end
+      @tax_profiles = salor_user.get_tax_profiles
+      if salor_user.meta.cash_register_id then
+        @cash_register = CashRegister.find_by_id(salor_user.meta.cash_register_id)
+      else
+        @cash_register = CashRegister.new(:name => 'Unk')
+      end
+      $Register = @cash_register
+      GlobalData.cash_register = @cash_register
+      if Vendor.exists?(salor_user.meta.vendor_id) then
+          @vendor = Vendor.find(salor_user.meta.vendor_id)
+      else 
+          @vendor = Vendor.new
+          @vendor.name = I18n.t("views.errors.unknown_vendor")
+      end
     end
     GlobalData.vendor = @vendor
     $Vendor = @vendor
@@ -186,7 +185,6 @@ class ApplicationController < ActionController::Base
           salor_user.meta.save
         end
     else 
-      $User = nil # $User is being set somewhere before this is even called, which is weird.
       @owner = User.new
     end
     I18n.locale = params[:locale] if params[:locale]
@@ -274,15 +272,12 @@ class ApplicationController < ActionController::Base
       GlobalData.salor_user = salor_user
       GlobalData.cash_register = @cash_register
       GlobalData.user_id = salor_user.get_owner.id
-      $User = salor_user
-      $Vendor = $User.vendor
-      $Meta = salor_user.get_meta
-      tps = salor_user.get_tax_profiles
-      if tps.any? then
-        GlobalData.tax_profiles = tps
-      else
-        GlobalData.tax_profiles = nil
+      # $User is setup is salor_user
+      if $User and $User.role_cache.blank? then
+        $User.set_role_cache
+        $User.update_attribute :role_cache, $User.role_cache
       end
+      $Meta = $User.get_meta
     end
   end
   def check_role

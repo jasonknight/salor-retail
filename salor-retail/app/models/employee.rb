@@ -8,8 +8,8 @@
 require 'digest/sha2'
 class Employee < ActiveRecord::Base
   # {START}
-	include SalorScope
-	include SalorBase
+  include SalorScope
+  include SalorBase
   include SalorModel
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
@@ -29,8 +29,9 @@ class Employee < ActiveRecord::Base
   has_one :drawer, :as => :owner
   has_many :drawer_transactions, :as => :owner
   has_many :histories, :as => :owner
+  has_many :employee_logins
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :uses_drawer_id,:apitoken,:js_keyboard,:role_ids,:language,:vendor_id,:user_id,:first_name,:last_name,:username, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :uses_drawer_id,:apitoken,:js_keyboard,:role_ids,:language,:vendor_id,:user_id,:first_name,:last_name,:username, :email, :password, :password_confirmation, :remember_me, :hourly_rate
   attr_accessible :auth_code
   before_update :set_role_cache
   before_save :set_role_cache
@@ -46,6 +47,11 @@ class Employee < ActiveRecord::Base
     if self.email.blank? then
       e = Digest::SHA256.hexdigest(Time.now.to_s)[0..12]
       self.email = "#{e}@salorpos.com"
+    end
+    login = self.employee_logins.last
+    if login then
+      login.hourly_rate = self.hourly_rate
+      login.save
     end
   end
   
