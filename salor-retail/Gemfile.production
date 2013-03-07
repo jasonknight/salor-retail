@@ -1,4 +1,6 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
+
+# The following are already part of Debian Jessie/sid and do not cause a dependency to the online API of rubygems.org
 
 gem 'rails', '3.2.6'
 gem 'rake', '0.9.2.2'
@@ -14,9 +16,12 @@ gem 'rmagick'
 gem 'uglifier'
 gem 'nokogiri'
 gem 'mechanize'
+gem 'json'
+
+# The following are not yet part of Debian Jessie/sid but of the Red E repository and do NOT cause a dependency to the online API of rubygems.org
+
 gem 'escper', '1.1.6'
 
-# The following are not yet part of Debian Squeeze and cause a dependency to the online API of rubygems.org
+# The following are not yet part of Debian Jessie/sid and cause a dependency to the online API of rubygems.org
 
-gem 'kaminari','0.14.1'
-
+gem 'kaminari', '0.14.1'
