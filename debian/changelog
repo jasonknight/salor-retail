@@ -1,3 +1,11 @@
+salor-retail (4.0.1.26) unstable; urgency=low
+
+  * removed acts-as-list
+  * allow number passwords for database
+  * cleaned up and fixed dependencies
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 07 Mar 2013 14:10:49 +0100
+
 salor-retail (4.0.1.25) unstable; urgency=low
 
   [ Jason Knight ]
