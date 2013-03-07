@@ -4,6 +4,6 @@ production:
   reconnect: true
   database: _DBC_DBNAME_
   username: _DBC_DBUSER_
-  password: _DBC_DBPASS_
+  password: '_DBC_DBPASS_'
   host: _DBC_DBSERVER_
   port: _DBC_DBPORT_
