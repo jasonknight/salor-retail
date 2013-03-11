@@ -18,7 +18,6 @@ along with port forwarding. salor-bin has been ported to both Mac and Windows, a
 downloads are available upon request.
 
 
-
 ## Salor Can:
 
 * Track Coupons and Gift Cards
@@ -33,20 +32,39 @@ downloads are available upon request.
 * Super fast and easy to use interface
 * Scale to just about any size without much issue.
 
+# Salor Technology
+
+Salor Retail is intrinsically networked, it is meant to be installed on a central server and
+be accessed by client machines. There is no need for addons to become multi-lane, and it
+is possible to setup impromptu cash registers with a laptop, or iPad when existing points of
+sale are bogged down. 
+
+Salor's Feature set is above and beyond practically every other Point of Sale system out there.
+Because of this, it's a resource hog, so it requires a real computer to run, you can't get
+away with running it on some antiquated machine. It will require at least 512mb of ram, 2gb is
+better. Our largest client to date has about 12,000 items and 70,000 sales each averaging about
+4 line items per sale.
+
+The location of the central server is arbitrary, it can be next to the screen, in the building,
+or in another country. 
+
+# i18n Support
+
+Salor Retail has already been translated into French, Spanish, German, Greek, Russian, Chinese
+and Polish. Finnish, Turkish, and Arabic and on the way.
+
 # Salor Installation
 
-Use RVM, or a clean installation...seriously. (You will need to have the RVM build tools installed)
+Clone the repository
 
-gem install rake --version=0.8.7 [not optional, seriously!]
+    cd salor-retail/salor-retail
+    bundle install
+    {{edit config/database.yml}}
+    rake db:create
+    rake salor:seed
+    rails s
 
-gem install bundle
+Navigate to http://localhost:3000 and login in 110
 
-cd path/to/salor
-
-bundle install
-
-If this above gives you errors, try futzing!
-
-export RAILS_ENV=production # if you want to run in production
-
-bundle exec rake salor:seed
+Visit http://www.salorpos.com/demo-of-salor-pos for more info and to view live demos in
+various languages.
