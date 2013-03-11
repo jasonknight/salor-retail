@@ -68,3 +68,17 @@ Navigate to http://localhost:3000 and login in 110
 
 Visit http://www.salorpos.com/demo-of-salor-pos for more info and to view live demos in
 various languages.
+
+# Commercial Support and Installation
+
+Salor Retail is not easy to install, it has many moving parts. While all of those parts
+are opensource, and provided by us on github, all the compilations and configurations
+require a broad understanding of the technology involved. You are welcome to install the
+system yourself, but if you have trouble, we offer pre-installed systems as well as
+tech-support packages.
+
+You can purchase a pre-installed Salor Retail system on [Amazon.com](http://www.amazon.com/Salor-Retail-Point-Sale-Server/dp/B00BOOEZGG/ref=sr_1_1?ie=UTF8&qid=1363017791&sr=8-1&keywords=salor+retail)
+
+Or contact us directly at office@red-e.eu
+
+
