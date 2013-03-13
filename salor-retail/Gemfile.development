@@ -17,10 +17,11 @@ gem 'uglifier'
 gem 'nokogiri'
 gem 'mechanize'
 gem 'json'
+gem 'serialport'
 
 # The following are not yet part of Debian Jessie/sid but of the Red E repository and do NOT cause a dependency to the online API of rubygems.org
 
-gem 'escper', '1.1.6'
+gem 'escper', '1.1.8'
 
 # The following are not yet part of Debian Jessie/sid and cause a dependency to the online API of rubygems.org
 

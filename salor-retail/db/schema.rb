@@ -253,6 +253,21 @@ ActiveRecord::Schema.define(:version => 20130220135344) do
 
   add_index "drawers", ["owner_id"], :name => "index_drawers_on_owner_id"
 
+  create_table "employee_logins", :force => true do |t|
+    t.datetime "login"
+    t.datetime "logout"
+    t.float    "hourly_rate"
+    t.integer  "employee_id"
+    t.integer  "vendor_id"
+    t.integer  "shift_seconds"
+    t.float    "amount_due"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "employee_logins", ["employee_id"], :name => "index_employee_logins_on_employee_id"
+  add_index "employee_logins", ["vendor_id"], :name => "index_employee_logins_on_vendor_id"
+
   create_table "employees", :force => true do |t|
     t.string   "email",                                 :default => "",                :null => false
     t.string   "encrypted_password",     :limit => 128, :default => "",                :null => false
@@ -280,6 +295,7 @@ ActiveRecord::Schema.define(:version => 20130220135344) do
     t.integer  "auth_code"
     t.string   "last_path",                             :default => "/cash_registers"
     t.string   "role_cache"
+    t.float    "hourly_rate"
   end
 
   add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
@@ -383,6 +399,22 @@ ActiveRecord::Schema.define(:version => 20130220135344) do
 
   add_index "item_shippers", ["item_id"], :name => "index_item_shippers_on_item_id"
   add_index "item_shippers", ["shipper_id"], :name => "index_item_shippers_on_shipper_id"
+
+  create_table "item_stocks", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "stock_location_id"
+    t.float    "quantity"
+    t.integer  "location_id"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+    t.float    "stock_location_quantity"
+    t.float    "location_quantity"
+    t.integer  "vendor_id"
+  end
+
+  add_index "item_stocks", ["item_id"], :name => "index_item_stocks_on_item_id"
+  add_index "item_stocks", ["location_id"], :name => "index_item_stocks_on_location_id"
+  add_index "item_stocks", ["stock_location_id"], :name => "index_item_stocks_on_stock_location_id"
 
   create_table "item_types", :force => true do |t|
     t.string   "name"
