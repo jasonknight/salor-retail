@@ -12,7 +12,7 @@ class ShipmentTypesController < ApplicationController
   # GET /shipment_types
   # GET /shipment_types.xml
   def index
-    @shipment_types = GlobalData.salor_user.get_shipment_types
+    @shipment_types = $Vendor.shipment_types.visible.order("created_at desc").page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

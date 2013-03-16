@@ -1,0 +1,53 @@
+%table{:class => 'tools', :width=> width, :align=> 'center'}
+  %tr{:class=>'no-stripe'}
+    %td{:align=>:center}
+      %div.tool-icon
+        =link_to(salor_icon(:add,{},20),"/#{collection.first.class.table_name}/new")
+        %br
+        %span.icon-caption=I18n.t('views.single_words.new')
+      - if collection.first.class == BrokenItem then
+        %div.tool-icon
+          =link_to(salor_icon(:save_download,{},20),"/items/export_broken_items")
+          %br
+          %span.icon-caption=I18n.t('menu.download')
+%table{:class => 'tools', :width=> width, :align=> 'center'}
+  %tr{:class=>'no-stripe'}
+    %td{:align=>:center}
+      %hr
+%table{:class => 'list-view', :width=> width, :align=> 'center'}
+  - if collection.length > 24 then
+    %tr{:class=> 'no-stripe'}
+      %td{:colspan => columns.length + 3}
+        %div.pagination
+          = paginate collection if collection
+    %tr{:class=>'no-stripe'}
+      %td{:colspan => columns.length + 3}
+        %hr
+  %tr
+    %th
+    - columns.each do |col|
+      %th=I18n.t('activerecord.attributes.' + col.to_s).upcase
+    %th=""
+    %th=""
+  - collection.each do |entry|
+    %tr
+      - if entry.class == CashRegister then
+        %td{:width => "40px"}=link_to(salor_icon(:cash_register,{},48),"/orders/new?cash_register_id=#{entry.id}")
+      - else
+        %td{:width => "40px"}=link_to(salor_icon(collection.first.class.table_name.singularize.to_sym,{},48),"/#{entry.class.table_name}/#{entry.id}")
+      - columns.each do |col|
+        - if entry.class == TaxProfile and col == :value then
+          %td{:align=>:center}=number_to_percentage(entry.send(col))
+        - elsif entry.class == Action and col == :whento then
+          %td=I18n.t("when_list.#{entry.whento}") if entry.whento
+        - else
+          %td=entry.send(col)
+      %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:edit,{},16), "/#{entry.class.table_name}/#{entry.id}/edit" 
+      %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:delete,{},16), "/#{entry.class.table_name}/#{entry.id}", :confirm => 'Are you sure?', :method => :delete 
+  %tr{:class=>'no-stripe'}
+    %td{:colspan => columns.length + 3}
+      %div.pagination
+        = paginate collection if collection
+  %tr{:class=>'no-stripe'}
+    %td{:colspan => columns.length + 3}
+      %hr

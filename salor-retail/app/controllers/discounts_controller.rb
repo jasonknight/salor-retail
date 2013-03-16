@@ -13,7 +13,7 @@ class DiscountsController < ApplicationController
   # GET /discounts
   # GET /discounts.xml
   def index
-    @discounts = salor_user.get_discounts
+    @discounts = $Vendor.discounts.visible.order("created_at desc").page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

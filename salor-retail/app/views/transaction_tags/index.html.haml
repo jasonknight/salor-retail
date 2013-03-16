@@ -1,20 +1,3 @@
-= raw content_box_top(I18n.t("menu.transaction_tags", :store => @current_vendor.name))
-%table{:align=>"center"}
-  %tr
-    %td
-      %div{:class => "tool-icon"}
-        = link_to salor_icon(:add,{},32),new_transaction_tag_path(:vendor_id => @current_vendor.id)
-        %br
-        %span= I18n.t('views.single_words.new')
-%table{:width=>"80%",:align=>"center",:class=>"stripe-me"}
-  %tr
-    - [:name,'',''].each do |h|
-      - if not h.empty?
-        %th= I18n.t("activerecord.attributes.#{h}").upcase
-      - else
-        %th= raw '&nbsp;'
-  - @transaction_tags.each do |tag|
-    %tr
-      %td{:width=>'70%'}= tag.name[0...35]
-      %td{:align=>"center"}= button_to t('menu.edit'),{:action => :edit, :id => tag.id}, :method => :get
-      %td{:align=>"center"}= button_to(t('menu.destroy'),tag, :method => :delete, :class => 'warning')
+=raw content_box_top(t "menu.transaction_tags")
+- width ||= "90%"
+= render :partial => 'shared/list_view', :locals => { :width => '60%',:collection => @transaction_tags, :columns => [:name]}

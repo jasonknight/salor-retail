@@ -1,0 +1,3 @@
+=raw content_box_top(t "menu.actions")
+- width ||= "90%"
+= render :partial => 'shared/list_view', :locals => { :width => '60%',:collection => @actions, :columns => [:name, :sku,:whento]}

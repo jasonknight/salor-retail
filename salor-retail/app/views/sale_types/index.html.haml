@@ -1,13 +1,3 @@
-= raw content_box_top(t("activerecord.models.sale_type.other"))
-%table{:width=>"90%",:align=>"center"}
-  %tr
-    %td{:colspan=>3,:align=>'center'}
-      %br
-      = link_to (t 'menu.new_sale_type'), new_sale_type_path, :class => 'links new-model-button' 
-      %br
-      %hr
-  - @sale_types.each do |s|
-    %tr
-      %td{:width=>'70%'}= s.name
-      %td{:align=>"center"}= button_to t('menu.edit'),{:action => :edit, :id => s.id}, :method => :get
-      %td{:align=>"center"}= button_to(t('menu.destroy'),s, :method => :delete, :class => 'warning')
+=raw content_box_top(t "menu.sale_types")
+- width ||= "90%"
+= render :partial => 'shared/list_view', :locals => { :width => '60%',:collection => @sale_types, :columns => [:name]}

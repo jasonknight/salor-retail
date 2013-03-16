@@ -12,7 +12,7 @@
           </td>
           <td>
             Nr. <%= order.nr %>
-            <div class="image-button"><img src="/images/icons/<%= icon(:printer,16) %>" onmousedown="print_order('<%= order.id %>');" /></div>
+            <div class="image-button"><%= salor_icon(:thermal_printer,{ :onmousedown=>"print_order('#{order.id}');"},32) %></div>
           </td>
         </tr>
        </table>

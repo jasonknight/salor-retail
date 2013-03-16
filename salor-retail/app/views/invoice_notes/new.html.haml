@@ -14,7 +14,7 @@
           %hr
       %tr
         %td{:colspan=> 2,:align=>'right'}
-          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('menu.edit')) )
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create', :model => InvoiceNote.model_name.human)) : (t('menu.edit', :model => InvoiceNote.model_name.human)) )
       %tr
         %td{:valign=>'top'}= invoice_note_form.label :origin_country_id
         %td= invoice_note_form.collection_select :origin_country_id, @countries, :id, :name, { :include_blank => true }

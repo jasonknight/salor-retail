@@ -1,7 +1,7 @@
 class InvoiceNotesController < ApplicationController
   
   def index
-    @invoice_notes = InvoiceNote.scopied
+    @invoice_notes = InvoiceNote.scopied.page(params[:page]).per(25)
   end
   
   def new

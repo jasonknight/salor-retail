@@ -13,7 +13,7 @@ class TaxProfilesController < ApplicationController
   # GET /tax_profiles
   # GET /tax_profiles.xml
   def index
-    @tax_profiles = salor_user.get_tax_profiles
+    @tax_profiles = $Vendor.tax_profiles.page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

@@ -17,4 +17,4 @@
         %td= country_form.text_field :name, :size => '10'
       %tr
         %td{:colspan=> 2,:align=>'right'}
-          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create')) : (t('menu.edit')) )
+          %p= submit_tag( controller.action_name == 'new' ? (t('helpers.submit.create', :model => Country.model_name.human)) : (t('menu.edit', :model => Country.model_name.human)) )

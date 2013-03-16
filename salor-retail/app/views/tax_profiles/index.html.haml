@@ -1,0 +1,3 @@
+=raw content_box_top(t "menu.tax_profiles")
+- width ||= "90%"
+= render :partial => 'shared/list_view', :locals => { :width => '60%',:collection => @tax_profiles, :columns => [:name,:value]}

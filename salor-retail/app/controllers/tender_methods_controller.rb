@@ -12,7 +12,7 @@ class TenderMethodsController < ApplicationController
   # GET /tender_methods
   # GET /tender_methods.xml
   def index
-    @tender_methods = TenderMethod.scopied.all
+    @tender_methods = TenderMethod.scopied.page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

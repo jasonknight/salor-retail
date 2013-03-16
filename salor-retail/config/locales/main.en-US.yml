@@ -7,6 +7,11 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      internal_type: Type
+      whento: When
+      roles: Roles
+      role_cache: Roles
+      full_name: Name
       vendor:
         logo: Screen Logo
         logo_invoice: Paper Invoice Logo
@@ -434,8 +439,8 @@ en-US:
     destroy: destroy
     discounts: discounts
     done: Done
-    download: download
-    edit: edit
+    download: Download
+    edit: Edit
     edit_sale_type: Edit Sale type
     edit_invoice_note: Edit Inovice Note
     edit_cash_register: Editcash register

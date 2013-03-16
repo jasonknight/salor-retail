@@ -578,6 +578,7 @@ class OrdersController < ApplicationController
     @order = Order.scopied.find_by_id(params[:id])
     GlobalData.salor_user = @order.user if @order.user
     GlobalData.salor_user = @order.employee if @order.employee
+    unsound = false
     if params[:pm_id] then
       pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
       any = @order.payment_methods.find_by_internal_type('Unpaid')
@@ -586,6 +587,7 @@ class OrdersController < ApplicationController
         if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
           npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
           @order.payment_methods << npm
+          pm = npm
           @order.save
         end
       end # end handling new pms by name
@@ -601,6 +603,8 @@ class OrdersController < ApplicationController
         else
           any.update_attribute :amount, diff
         end
+      else
+        raise "Cannot because unsound"
       end
     end
     $User = @order.employee

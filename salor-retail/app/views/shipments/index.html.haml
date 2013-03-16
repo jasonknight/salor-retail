@@ -3,21 +3,21 @@
 %div.pagination= paginate @shipments if @shipments
 
 
-%table{:width=>"90%",:align=>"center"}
-  %tr
+%table{:width=>"90%",:align=>"center", :class => 'stripe-me'}
+  %tr{:class => 'no-stripe'}
     %td{:colspan=>9,:align=>'right'}
       = link_to (t 'menu.new_shipment'), new_shipment_path, :class => 'links new-model-button'
-  %tr
+  %tr{:class => 'no-stripe'}
     %td{:colspan=>9}
       %h2= t('activerecord.models.shipment.other')
       %hr
   %tr
-    %th= Shipment.human_attribute_name(:name)
-    %th= Shipment.human_attribute_name(:from)
-    %th= Shipment.human_attribute_name(:to)
-    %th= Shipment.human_attribute_name(:price)
-    %th= Shipment.human_attribute_name(:paid)
-    %th= Shipment.human_attribute_name(:status)
+    %th= Shipment.human_attribute_name(:name).upcase
+    %th= Shipment.human_attribute_name(:from).upcase
+    %th= Shipment.human_attribute_name(:to).upcase
+    %th= Shipment.human_attribute_name(:price).upcase
+    %th= Shipment.human_attribute_name(:paid).upcase
+    %th= Shipment.human_attribute_name(:status).upcase
     %th
     %th
    
@@ -31,5 +31,5 @@
       %td= salor_number_to_currency(s.price)
       %td= s.paid
       %td= s.shipment_type.name if s.shipment_type
-      %td= link_to salor_icon(:edit,{},32,t(:edit)), edit_shipment_path(s)
-      %td= link_to image_tag('button_small_delete.png', :title => Shipment.human_attribute_name(:hidden), :alt => Shipment.human_attribute_name(:hidden)), shipment_path(s), :method => :delete, :confirm => t(:are_you_sure)
+      %td{:align=>:center}= link_to salor_icon(:edit,{},32,t(:edit)), edit_shipment_path(s)
+      %td{:align=>:center}= link_to salor_icon(:delete,{},32,t("menu.destroy")), shipment_path(s), :method => :delete, :confirm => t(:are_you_sure)

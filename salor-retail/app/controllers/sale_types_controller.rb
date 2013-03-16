@@ -1,7 +1,7 @@
 class SaleTypesController < ApplicationController
   
   def index
-    @sale_types = SaleType.scopied
+    @sale_types = SaleType.scopied.page(params[:page]).per(25)
   end
   
   def new

@@ -23,7 +23,7 @@ class CustomersController < ApplicationController
   # GET /customers.xml
   def index
     CashRegister.update_all_devicenodes
-    @customers = Customer.scopied.page(GlobalData.params.page).per(GlobalData.conf.pagination)
+    @customers = Customer.scopied.page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb

@@ -1,8 +1,8 @@
 <%= form_tag do %>
-<%= label('from', t('orders.report_range.start_date')) %><br />
+<%= label('from', t('orders.report.start_date')) %><br />
   <%= select_date(@from, :prefix => 'from') %>
   <br />
-  <%= label('to', t('orders.report_range.end_date')) %><br />
+  <%= label('to', t('orders.report.end_date')) %><br />
   <%= select_date(@to, :prefix => 'to') %>
   <br />
   <div class="actions">

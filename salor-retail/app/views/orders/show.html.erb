@@ -7,7 +7,7 @@
           <th><%= t("activerecord.attributes.quantity") %></th>
         </tr>
         <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
-        <tr>
+        <tr class="no-stripe">
             <td align=center colspan=6>
               <select id='refund_payment_method'>
               <%= options_for_select PaymentMethod.types_list %>

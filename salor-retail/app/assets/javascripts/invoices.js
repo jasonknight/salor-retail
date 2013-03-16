@@ -27,10 +27,10 @@ function make_editabl_pm(pm) {
           return stys;
         })(),
            change: function () {
-             var pm = _get('pm',$(this));
+             //var pm = _get('pm',$(this));
              
-             var string = '?pm_id=' + pm.attr('model_id') + '&pm_name=' + $(this).val();
-             window.location = string;
+             //var string = '?pm_id=' + pm.attr('model_id') + '&pm_name=' + $(this).val() + '&pm_amount=' + $('#option_payment_method_amount_input').val();
+             //window.location = string;
            },
            attributes: {name: i18n.activerecord.models.sale_type.one},
            value: ''
@@ -46,6 +46,7 @@ function make_editabl_pm(pm) {
         var pm = _get('pm',$('#option_payment_method_amount_input'));
         var value = $(id).val();
         var string = '?pm_id='+ pm.attr('model_id') +'&pm_amount=' + value;
+        string = string + '&pm_name=' + $("#option_payment_method_name_0").val()
         window.location = string;
       }
     };

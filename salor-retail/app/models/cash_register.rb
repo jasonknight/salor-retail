@@ -7,8 +7,8 @@
 
 class CashRegister < ActiveRecord::Base
   # {START}
-	include SalorScope
-	include SalorBase
+  include SalorScope
+  include SalorBase
   include SalorModel
   has_many :cash_register_dailies
   has_many :vendor_printers
@@ -38,6 +38,7 @@ class CashRegister < ActiveRecord::Base
   end
   
   def self.update_all_devicenodes
+    return # this is crazy complicated.
     # Update device paths of all Rails-printing CashRegisters AND the currently selected CashRegister, independent of being Rails or client side printing.
     devices_for_select, devices_name_path_lookup =  CashRegister.get_devicenodes
     $Vendor.cash_registers.visible.each do |cr|
@@ -55,26 +56,33 @@ class CashRegister < ActiveRecord::Base
     nodes_usb2 = Dir['/dev/usblp*']
     nodes_serial = Dir['/dev/usb/ttyUSB*']
     nodes_salor = Dir['/dev/salor*']
-    all_nodes = nodes_usb1 + nodes_usb2 + nodes_serial + nodes_salor
-    devices_for_select = {}
-    devices_name_path_lookup = {}
+    nodes_test = Dir['/tmp/salor-test*']
+    all_nodes = nodes_usb1 + nodes_usb2 + nodes_serial + nodes_salor + nodes_test
+    devices_for_select = []
     all_nodes.each do |n|
-      devicename = `/sbin/udevadm info -a -p  $(/sbin/udevadm info -q path -n #{n}) | grep ieee1284_id`
-      match = /^.*L:(.*?)\;.*/.match(devicename)
-      devicename = match ? match[1] : '?'
-      full_devicename = "#{devicename} (#{n})"
-      devices_for_select.merge! full_devicename => devicename
-      devices_name_path_lookup.merge! devicename => n
+      if not n.include? '.txt' then
+        devicename = `/sbin/udevadm info -a -p  $(/sbin/udevadm info -q path -n #{n}) | grep ieee1284_id`
+      else
+        devicename = n
+      end
+      # Why not just be direct about it? You have the name, and you have the path, you can choose what you display in the select
+      # Why would we even need a lookup table?
+      if not devicename.include? '.txt' then
+        match = /^.*L:(.*?)\;.*/.match(devicename)
+        devicename = match ? match[1] : '?' + n
+      end
+      devices_for_select << [devicename,n]
     end
-    devices_for_select = devices_for_select.to_a
-    return devices_for_select, devices_name_path_lookup
+   return devices_for_select
   end
   
   def set_device_paths_from_device_names(devices_name_path_lookup)
+    return
     self.cash_drawer_name = self.thermal_printer_name
     self.cash_drawer_path = devices_name_path_lookup[self.cash_drawer_name] unless self.cash_drawer_name.nil?
     self.thermal_printer = devices_name_path_lookup[self.thermal_printer_name] unless self.thermal_printer_name.nil?
     self.sticker_printer = devices_name_path_lookup[self.sticker_printer_name] unless self.sticker_printer_name.nil?
+    self.scale = devices_name_path_lookup[self.scale_name] unless self.scale_name.nil?
     self.save
   end
 end
