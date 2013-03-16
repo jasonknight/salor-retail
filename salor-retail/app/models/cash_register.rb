@@ -67,6 +67,10 @@ class CashRegister < ActiveRecord::Base
       end
       # Why not just be direct about it? You have the name, and you have the path, you can choose what you display in the selected
       # Why would we even need a lookup table?
+      if not devicename.include? '.txt' then
+        match = /^.*L:(.*?)\;.*/.match(devicename)
+        devicename = match ? match[1] : '?' + n
+      end
       devices_for_select << [devicename,n]
     end
    return devices_for_select
