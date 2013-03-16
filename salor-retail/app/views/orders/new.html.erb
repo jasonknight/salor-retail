@@ -371,7 +371,7 @@ $(function () {
     try {
       var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
       <% if not @cash_register.scale.blank? then  %>
-        var weight = Salor.<%= @cash_register.scale %>;
+        var weight = Salor.toperScale('<%= @cash_register.scale %>');
       <% else %>
         var weight = 0;
       <% end %>

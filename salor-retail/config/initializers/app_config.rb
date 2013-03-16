@@ -104,3 +104,11 @@ class Array
   end
   
 end
+class Hash
+  def get_name
+    return self[:name]
+  end
+  def get_path
+    return self[:path]
+  end
+end
