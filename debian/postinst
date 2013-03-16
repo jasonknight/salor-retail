@@ -197,9 +197,10 @@ for lInstance in $gInstances; do
       done
      
       echo "  postinst: Adding salor-retail to /etc/hosts if not yet there..."
-      result=`cat /etc/hosts | grep "${lInstance}.sr.red-e.eu" | wc -l`
+      result=`cat /etc/hosts | grep "${lInstance}.sr.localhost" | wc -l`
       if [ "$result" = "0" ]; then
-        echo "::1 ${lInstance}.sr.red-e.eu" >> /etc/hosts;
+        echo "::1 ${lInstance}.sr.localhost" >> /etc/hosts;
+        echo "127.0.0.1 ${lInstance}.sr.localhost" >> /etc/hosts;
       fi
       ;;
 

@@ -1,8 +1,22 @@
-# Salor Description
+# Salor Retail
 
-Salor is a multi-user (As in multi-account),
-multi-store Point of Sale software that comes with
-some basic stock management features are well.
+Salor Retail is a Rails based Point of Sale system that is intended for
+desktop or web deployment. It can be deployed like any Rails application,
+and will work in all modern browsers, even I.E.
+
+Salor Retail has a flexible deployment strategy:
+
+* Deploy it like a simple website and access it via a browser
+* Deploy it as a desktop application coupled with salor-bin thin client
+* Deploy it as a SaaS
+
+To facilitate desktop deployment, all the components for Salor Retail are packaged
+as .debs and can easily be installed on any Debian based distribution (Ubuntu, Kubunut etc).
+
+To deploy to windows, a virtual box running a supported Linux distribution is needed
+along with port forwarding. salor-bin has been ported to both Mac and Windows, and client
+downloads are available upon request.
+
 
 ## Salor Can:
 
@@ -18,20 +32,53 @@ some basic stock management features are well.
 * Super fast and easy to use interface
 * Scale to just about any size without much issue.
 
+# Salor Technology
+
+Salor Retail is intrinsically networked, it is meant to be installed on a central server and
+be accessed by client machines. There is no need for addons to become multi-lane, and it
+is possible to setup impromptu cash registers with a laptop, or iPad when existing points of
+sale are bogged down. 
+
+Salor's Feature set is above and beyond practically every other Point of Sale system out there.
+Because of this, it's a resource hog, so it requires a real computer to run, you can't get
+away with running it on some antiquated machine. It will require at least 512mb of ram, 2gb is
+better. Our largest client to date has about 12,000 items and 70,000 sales each averaging about
+4 line items per sale.
+
+The location of the central server is arbitrary, it can be next to the screen, in the building,
+or in another country. 
+
+# i18n Support
+
+Salor Retail has already been translated into French, Spanish, German, Greek, Russian, Chinese
+and Polish. Finnish, Turkish, and Arabic and on the way.
+
 # Salor Installation
 
-Use RVM, or a clean installation...seriously. (You will need to have the RVM build tools installed)
+Clone the repository
 
-gem install rake --version=0.8.7 [not optional, seriously!]
+    cd salor-retail/salor-retail
+    bundle install
+    {{edit config/database.yml}}
+    rake db:create
+    rake salor:seed
+    rails s
 
-gem install bundle
+Navigate to http://localhost:3000 and login in 110
 
-cd path/to/salor
+Visit http://www.salorpos.com/demo-of-salor-pos for more info and to view live demos in
+various languages.
 
-bundle install
+# Commercial Support and Installation
 
-If this above gives you errors, try futzing!
+Salor Retail is not easy to install, it has many moving parts. While all of those parts
+are opensource, and provided by us on github, all the compilations and configurations
+require a broad understanding of the technology involved. You are welcome to install the
+system yourself, but if you have trouble, we offer pre-installed systems as well as
+tech-support packages.
 
-export RAILS_ENV=production # if you want to run in production
+You can purchase a pre-installed Salor Retail system on [Amazon.com](http://www.amazon.com/Salor-Retail-Point-Sale-Server/dp/B00BOOEZGG/ref=sr_1_1?ie=UTF8&qid=1363017791&sr=8-1&keywords=salor+retail)
 
-bundle exec rake salor:seed
+Or contact us directly at office@red-e.eu
+
+

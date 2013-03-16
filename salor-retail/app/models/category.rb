@@ -20,7 +20,6 @@ class Category < ActiveRecord::Base
   has_many :order_items
   before_create :set_model_owner
   before_create :set_sku
-  acts_as_list
   def set_sku
     # This might cause issues down the line with a SAAS version so we need to make sure
     # that the request for a category by sku is scopied.

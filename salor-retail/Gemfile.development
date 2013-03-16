@@ -1,35 +1,38 @@
 source 'https://rubygems.org'
 
-# The following are already part of Debian Squeeze and do not cause a dependency to the online API of rubygems.org
+# The following are already part of Debian Jessie/sid and do not cause a dependency to the online API of rubygems.org
 
 gem 'rails', '3.2.6'
 gem 'rake', '0.9.2.2'
-gem 'rack', '1.4.1'
+gem 'rack','1.4.1'
 gem 'mysql2'
-gem 'serialport'
-gem "kramdown"
+gem 'kramdown'
 gem 'jquery-rails','2.0.2'
-gem 'haml'
+gem 'haml','4.0.0'
 gem 'sass'
 gem 'sass-rails'
-gem 'coffee-rails'
+gem 'coffee-rails','3.2.2'
 gem 'rmagick'
 gem 'uglifier'
-
-# The following are not yet part of Debian Squeeze and cause a dependency to the online API of rubygems.org
-
-gem 'escper', '1.1.0'
-gem 'acts_as_list'
-gem 'kaminari'
-#gem 'unicode_utils'
 gem 'nokogiri'
 gem 'mechanize'
+gem 'json'
+gem 'serialport'
+
+# The following are not yet part of Debian Jessie/sid but of the Red E repository and do NOT cause a dependency to the online API of rubygems.org
+
+gem 'escper', '1.1.8'
+
+# The following are not yet part of Debian Jessie/sid and cause a dependency to the online API of rubygems.org
+
+gem 'kaminari', '0.14.1'
+
+
+# The following are only required in development
 
 gem 'i18n-js'
 gem 'therubyracer'
 gem 'coffee-filter'
-
-
 
 group :test, :development do
   gem 'turn', '< 0.8.3'
