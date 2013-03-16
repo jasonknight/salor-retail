@@ -50,13 +50,13 @@ $(function () {
   <tr>
     <td >
         <div class="tool-icon" style="width: 100px;">
-          <%= link_to image_tag('/images/icons/' + icon(:broken, 32)), new_broken_item_path(:sku => @item.sku, :name => @item.name, :base_price => @item.base_price) %><br />
+          <%= link_to salor_icon(:broken, {},32), new_broken_item_path(:sku => @item.sku, :name => @item.name, :base_price => @item.base_price) %><br />
           <span class="icon-caption"> <%= I18n.t("menu.new_broken_item") %></span>
         </div>
     </td>
     <td>
       <div class="tool-icon" style="width: 100px;">
-        <%= link_to image_tag('/images/icons/' + icon(:action, 32)), new_action_path(:item => { :sku => @item.sku, :name => @item.name + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
+        <%= link_to salor_icon(:action, {},32), new_action_path(:item => { :sku => @item.sku, :name => @item.name + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
         <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
       </div>
     </td>
@@ -68,7 +68,7 @@ $(function () {
               cat_name = ''
             end
         %>
-        <%= link_to image_tag('/images/icons/' + icon(:button, 32)), new_button_path(:item => { :sku => @item.sku, :name => @item.name, :category_sku => cat_name}) %><br />
+        <%= link_to salor_icon(:button, {},32), new_button_path(:item => { :sku => @item.sku, :name => @item.name, :category_sku => cat_name}) %><br />
         <span class="icon-caption"><%= I18n.t("menu.new_button") %></span>
       </div>
     </td>
@@ -185,11 +185,11 @@ $(function () {
           </td>
           <td valign="middle" align="center"> 
                 <div class="new-item-field">
-                <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@item.sku).gsub('.png','.eps') %> 
-                &nbsp;&nbsp;&nbsp;
-                <%= image_tag "/images/icons/print_sticker_48.png", :onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')" %> 
+                <!--<%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@item.sku).gsub('.png','.eps') %> 
+                &nbsp;&nbsp;&nbsp;-->
+                <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
       &nbsp;&nbsp;&nbsp;
-                <%= image_tag "/images/icons/print_48.png", :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')" %> 
+                <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
                 </div>
               <div class="clear">
                 &nbsp;
@@ -449,7 +449,7 @@ $(function () {
       <table width="99%" align="right">
         <tr>
           <td width="50%" align="center">
-            <%= image_tag "/images/icons/" + icon(:add,32), :onclick => "addPart();" %>
+            <%= salor_icon(:add,{ :onclick => "addPart();"},32) %>
           </td>
           <td class="parts-options" align="right">
             <div align="right">
