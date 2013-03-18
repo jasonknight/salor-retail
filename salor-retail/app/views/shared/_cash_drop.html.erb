@@ -1,3 +1,4 @@
+<%= cache(SalorBase.get_cache_name_for_user("cash_drop")) do %>
 <script type="text/javascript">
 var filename = "_cash_drop.html.erb";
 
@@ -109,13 +110,13 @@ function show_coin_calculator() {
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>
   <span class='cash_drop_label'><%= I18n.t("menu.cash_register") %>:</span>
-  <span class="pos-cash-register-amount"><%= salor_number_to_currency(GlobalData.salor_user.get_drawer.amount) if GlobalData.salor_user %></span>
+  <span class="pos-cash-register-amount"><%= salor_number_to_currency($User.get_drawer.amount) if $User %></span>
 
-  <% if GlobalData.salor_user and GlobalData.salor_user.can(:manager)  %>
+  <% if $User and $User.can(:manager)  %>
       <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.models.employee.one") %></span>
         <select name="employee_id" id="employee_id">
-          <option value="self" selected><%= GlobalData.salor_user.username %></option>
+          <option value="self" selected><%= $User.username %></option>
           <% Employee.scopied.each do |emp|  %>
             <option value="<%= emp.id %>"><%= emp.username %></option>
           <% end %>
@@ -159,4 +160,5 @@ function show_coin_calculator() {
       <div class="button-cancel" onmousedown="hide_cash_drop();"><%= I18n.t("helpers.submit.cancel") %></div>
 </div>
 </div>
+<% end %>
 

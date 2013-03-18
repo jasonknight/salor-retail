@@ -4,6 +4,7 @@ var filename = "_application_js.html.erb";
 
 $(function () {
   try {
+    positionSearchInput();
     $('.click-help').click(function (event) {
       var url = $(this).attr('url');
       var offset = {'top' : event.pageY, 'left' : event.pageX, 'position' : 'absolute'}

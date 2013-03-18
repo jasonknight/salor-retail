@@ -1,27 +1,9 @@
+<%= cache(SalorBase.get_cache_name_for_user("application_js")) do %>
 <script type="text/javascript">
 /*
   Prefer using these global JS variables instead of having erb all over the place so that js code can more easily be moved to the assets directory.
  */
-<% if $Conf  %>
-  window.Conf = <%= raw $Conf.attributes.to_json %>;
-  <% else  %>
-  window.Conf = {};
-<% end %>
-<% if $User then %>
-  window.User = <%= raw $User.attributes.to_json %>;
-  window.User.type = '<%= $User.class.to_s %>';
-  window.Drawer = <%= raw $User.get_drawer.attributes.to_json %>;
-  window.Meta = <%= raw $User.get_meta.attributes.to_json %>;
-<% else %>
-  window.User = {};  
-  window.Meta = {};
-  window.Drawer = {};
-<% end %>
-<% if $Register then %>
-  window.Register = <%= raw $Register.attributes.to_json %>;
-<% else %>
-  window.Register = {};
-<% end %>
+
 var IS_APPLE_DEVICE = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
 var IS_IPAD = navigator.userAgent.match(/iPad/i) != null;
 var IS_IPOD = navigator.userAgent.match(/iPod/i) != null;
@@ -115,10 +97,30 @@ var ItemTypes = <%= raw ItemType.all.to_json %>;
 var Categories = <%= raw Category.scopied.to_json %>;
 var TaxProfiles = <%= raw TaxProfile.scopied.to_json %>;
 var PaymentMethods = <%= raw PaymentMethod.types_list.to_json %>;
-
+<% end %>
 window.params = {
   action: "<%= params[:action] %>",
   controller: "<%= params[:controller] %>",
   user: { name: "<%= salor_user.username if salor_user %>" }
 };
+<% if $Conf  %>
+  window.Conf = <%= raw $Conf.attributes.to_json %>;
+  <% else  %>
+  window.Conf = {};
+<% end %>
+<% if $User then %>
+  window.User = <%= raw $User.attributes.to_json %>;
+  window.User.type = '<%= $User.class.to_s %>';
+  window.Drawer = <%= raw $User.get_drawer.attributes.to_json %>;
+  window.Meta = <%= raw $User.get_meta.attributes.to_json %>;
+<% else %>
+  window.User = {};  
+  window.Meta = {};
+  window.Drawer = {};
+<% end %>
+<% if $Register then %>
+  window.Register = <%= raw $Register.attributes.to_json %>;
+<% else %>
+  window.Register = {};
+<% end %>
 </script>

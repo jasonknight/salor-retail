@@ -21,6 +21,8 @@ module ApplicationHelper
     link_to_function(name, "#{jsfunc}(this, \"#{association}\", \"#{escape_javascript(fields)}\")")
   end
   
+  
+  
   def add_param(p)
    @_params ||= {}
    @_params.merge!(p)

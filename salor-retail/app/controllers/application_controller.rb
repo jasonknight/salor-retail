@@ -277,6 +277,11 @@ class ApplicationController < ActionController::Base
         $User.set_role_cache
         $User.update_attribute :role_cache, $User.role_cache
       end
+      if $User and [:create,:update,:destroy].include? params[:action].to_sym then
+        [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
+          expire_fragment(SalorBase.get_cache_name_for_user(c))
+        end
+      end
       $Meta = $User.get_meta
     end
   end

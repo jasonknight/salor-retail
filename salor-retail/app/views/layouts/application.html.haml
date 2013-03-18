@@ -35,7 +35,7 @@
       = render :partial => "shared/notice"
       .errors.hidden
       .help.hidden
-      = salor_render :partial => "shared/cash_drop"
+      = salor_render :partial => "shared/cash_drop" if $User
       
       = yield
       .close-window{ :onclick => "if (typeof Salor != 'undefined') { Salor.shutdown();} else { self.close();}" } X
