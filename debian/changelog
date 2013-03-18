@@ -1,3 +1,24 @@
+salor-retail (4.0.1.29) unstable; urgency=low
+
+  [ Jason Knight ]
+  * New icons
+  * salor_icons
+  * Fixing to be paid payment method creation
+
+  [ Michael Franzl ]
+  * re-added serialport and new escper version, better invoice logo size
+
+  [ Jason Knight ]
+  * modifying scale/tprint etc code
+  * tweaking device node detection
+  * icon work
+  * Icon Work done
+
+  [ Jason Martin ]
+  * build
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sat, 16 Mar 2013 08:50:50 -0400
+
 salor-retail (4.0.1.28) unstable; urgency=low
 
   [ Jason Knight ]
@@ -7,7 +28,7 @@ salor-retail (4.0.1.28) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 12 Mar 2013 06:23:24 -0400
+ -- Jason Martin <jason@jason-knight-martin.com>  Sat, 16 Mar 2013 08:50:13 -0400
 
 salor-retail (4.0.1.27) unstable; urgency=low
 
