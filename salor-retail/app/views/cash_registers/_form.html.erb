@@ -102,7 +102,10 @@
               <%= f.label t("activerecord.attributes.address") %><br />
               <%= f.text_field :ip, :class => "keyboardable"%>
             </div>
-
+            <div class="field">
+              <%= f.label "Always open drawer" %><br />
+              <%= f.check_box :always_open_drawer %>
+            </div>
             <!--
             <br />
             <div class="field">

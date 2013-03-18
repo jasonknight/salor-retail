@@ -432,7 +432,7 @@ function complete_order_send(print) {
   sendingOrder = true;
   allow_complete_order(false);
   displayChangeToCustomer();
-  if ( serializePayments().indexOf('InCash') != -1 ) {
+  if ( serializePayments().indexOf('InCash') != -1 || Register.always_open_drawer == true) {
     quick_open_drawer();
     if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
       setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
