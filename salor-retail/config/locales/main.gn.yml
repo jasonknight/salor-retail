@@ -187,6 +187,11 @@ gn:
       weight: Gewicht
       when: Wenn
       width: Breite
+      internal_type: Type
+      whento: When
+      roles: Roles
+      role_cache: Roles
+      full_name: Name
     models:
       sale_type:
         one: Verkaufs-Art

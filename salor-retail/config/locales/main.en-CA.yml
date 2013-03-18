@@ -187,6 +187,11 @@ en-CA:
         note_header: Note header
         note_footer: Note footer
         sale_type_id: Sale Type
+      internal_type: Type
+      whento: When
+      roles: Roles
+      role_cache: Roles
+      full_name: Name
     models:
       sale_type:
         one: Sale Type
