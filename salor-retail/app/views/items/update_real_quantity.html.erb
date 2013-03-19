@@ -135,7 +135,7 @@ function updateItemQuantities() {
 
 <div class='tools'>
   <div class='tool-icon'><%= link_to salor_icon(:location, {}, 32, t('.inventory_report')), items_inventory_report_path %></div>
-  <div class='tool-icon' style="margin-left: 200px;"><%= salor_icon(:wand, {:onclick=>"updateItemQuantities();"}, 32, t('.update_quantity')) %></div>
+  <div class='tool-icon' style="margin-left: 200px;"><%= salor_icon(:update_real_quantity, {:onclick=>"updateItemQuantities();"}, 32, t('.update_quantity')) %></div>
 </div>
 
 <div class='clear'></div>

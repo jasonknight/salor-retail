@@ -183,6 +183,7 @@ module ApplicationHelper
       :cash_drawer => 'cash_drawer',
       :counter => 'counter',
       :wand => 'wand',
+      :update_real_quantity => 'okay',
       :action => 'gears',
       :payment => 'payment_method',
       :tender_method => 'payment_method',
