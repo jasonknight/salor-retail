@@ -87,7 +87,7 @@ function makeItemMenu(item) {
         var menu = $("<div class='item-menu-div'></div>");
         $('body').append(menu);
         menu.css({position: 'absolute', left: event.pageX, top: event.pageY});
-        var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" height="32" /></div>');
+        var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" width="31px" height="32px" /></div>');
         dicon.mousedown(function () {
             $('.' + base_id).remove();
             get('/orders/delete_order_item?id=' + item.id, filename);
@@ -97,7 +97,7 @@ function makeItemMenu(item) {
         });
         menu.append(dicon);
         
-        var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/bill.svg" height="28" /></div>');
+        var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/bill.svg" width="46px" height="28px" /></div>');
         buyback.addClass('pointer');
         buyback.mousedown(function () {
             var string = '/vendors/toggle?model_id=' +
@@ -112,7 +112,7 @@ function makeItemMenu(item) {
         });
         menu.append(buyback);
         if (!Register.scale == '') {
-          var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" height="32" /></div>');
+          var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
           wicon.mousedown(function () {
               var string = '/vendors/edit_field_on_child?id=' +
                             item.id +'&klass=OrderItem' +
@@ -128,7 +128,7 @@ function makeItemMenu(item) {
           menu.append(wicon);
         } // end  if (!Register.scale == '') {
 
-        var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" height="32" /></div>');
+        var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" height="32px" /></div>');
         btn.mousedown(function () {
             menu.remove();
             focusInput($('#keyboard_input'));
@@ -386,7 +386,7 @@ function detailedOrderItemMenu(event) {
   var name = orderItemNameOption(config,item,event.currentTarget.textContent);
   name.find('input').css({width: $('#header').width() * 0.50});
   
-  var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" height="32" /></div>');
+  var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" width="31px" height="32px" /></div>');
   dicon.mousedown(function () {
     $.get('/orders/delete_order_item?id=' + item.id);
     title.remove();
@@ -396,7 +396,7 @@ function detailedOrderItemMenu(event) {
   });
   title.append(dicon);
   
-  var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/bill.svg" height="28" /></div>');
+  var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/bill.svg" width="46px" height="28px" /></div>');
   buyback.addClass('pointer');
   buyback.mousedown(function () {
     var string = '/vendors/toggle?model_id=' +
@@ -411,7 +411,7 @@ function detailedOrderItemMenu(event) {
   title.append(buyback);
   
   if (!Register.scale == '') {
-    var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" height="32" /></div>');
+    var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
     wicon.mousedown(function () {
       var string = '/vendors/edit_field_on_child?id=' +
       item.id +'&klass=OrderItem' +
@@ -425,7 +425,7 @@ function detailedOrderItemMenu(event) {
     title.append(wicon);
   } // end  if (!Register.scale == '') {
     
-    var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" height="32" /></div>');
+    var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
     btn.mousedown(function () {
       title.remove();
       config.remove();

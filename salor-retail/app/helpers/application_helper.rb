@@ -195,7 +195,7 @@ module ApplicationHelper
       :trash => 'trash',
       :user6 => 'user6',
       :user7 => 'user7',
-      :nurse => 'user2',
+      :nurse => 'help',
       :save => 'save',
       :gearpage => 'gearpage',
       :label => 'label',
