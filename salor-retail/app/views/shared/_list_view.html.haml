@@ -2,7 +2,7 @@
   %tr{:class=>'no-stripe'}
     %td{:align=>:center}
       %div.tool-icon
-        =link_to(salor_icon(:add,{},20),"/#{collection.first.class.table_name}/new")
+        =link_to(salor_icon(:add,{},20),"/#{klass.table_name}/new")
         %br
         %span.icon-caption=I18n.t('views.single_words.new')
       - if collection.first.class == BrokenItem then
@@ -34,7 +34,7 @@
       - if entry.class == CashRegister then
         %td{:width => "40px"}=link_to(salor_icon(:cash_register,{},48),"/orders/new?cash_register_id=#{entry.id}")
       - else
-        %td{:width => "40px"}=link_to(salor_icon(collection.first.class.table_name.singularize.to_sym,{},48),"/#{entry.class.table_name}/#{entry.id}")
+        %td{:width => "40px"}=link_to(salor_icon(klass.table_name.singularize.to_sym,{},48),"/#{entry.class.table_name}/#{entry.id}")
       - columns.each do |col|
         - if entry.class == TaxProfile and col == :value then
           %td{:align=>:center}=number_to_percentage(entry.send(col))

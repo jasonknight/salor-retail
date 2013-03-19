@@ -1,3 +1,3 @@
 =raw content_box_top(t "menu.tender_methods")
 - width ||= "90%"
-= render :partial => 'shared/list_view', :locals => { :width => '60%',:collection => @tender_methods, :columns => [:name, :internal_type]}
+= render :partial => 'shared/list_view', :locals => {  :klass => TenderMethod, :width => '60%',:collection => @tender_methods, :columns => [:name, :internal_type]}
