@@ -5,6 +5,9 @@ function updateDrawer(obj) {
 }
 function positionSearchInput() {
   var elem = $("#generic_search");
+  if (elem.length == 0) {
+    return;
+  }
   shared.helpers.top_right(elem,$('body'),{left: -20,top: 0});
   var off = elem.offset();
   off.top = 0;

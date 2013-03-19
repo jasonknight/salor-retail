@@ -74,7 +74,8 @@ module ApplicationHelper
       if session[:user_type] == "User" then
         return User.find_by_id(session[:user_id])
       else
-        return Employee.find_by_id(session[:user_id])
+        $User = Employee.find_by_id(session[:user_id])
+        return $User
       end
     end
   end

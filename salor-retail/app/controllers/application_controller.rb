@@ -93,6 +93,7 @@ class ApplicationController < ActionController::Base
   end
 
   def salor_user
+    $User = nil
     if session[:user_id] then
       if session[:user_type] == "User" then
         user= User.find_by_id(session[:user_id].to_i)
