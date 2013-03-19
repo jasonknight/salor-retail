@@ -21,6 +21,15 @@ var _currentSelectButton;
 
 function make_select_widget(name,elem) {
   elem.hide();
+  // Find the max length
+  var max_len = 0;
+  elem.children("option").each(function () {
+    var txt = $(this).text();
+    if (txt.length > max_len) {
+      max_len = txt.length;
+    }
+  });
+  var char_width = 8;
   var button = $('<div id="select_widget_button_for_' + elem.attr("id") + '"></div>');
   button.html($(elem).find("option:selected").text());
   if (button.html() == "")
@@ -30,6 +39,9 @@ function make_select_widget(name,elem) {
   button.insertAfter(elem);
   button.attr('select_target',"#" + elem.attr("id"));
   button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
+  button.css({width: max_len * char_width});
+  
+  
   button.mousedown(function () {
     var pos = $(this).position();
     var off = $(this).offset();
@@ -37,12 +49,14 @@ function make_select_widget(name,elem) {
     _currentSelectTarget = $(this).attr("select_target");
     _currentSelectButton = $(this);
     mdiv.addClass("select-widget-display select-widget-display-" + _currentSelectTarget.replace("#",""));
+    mdiv.css({width: (max_len * char_width + 50) * 2});
     var x = 0;
     $(_currentSelectTarget).children("option").each(function () {
       var d = $('<div id="active_select_'+$(this).attr('value').replace(':','-')+'"></div>');
       d.html($(this).text());
       d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
-      d.attr("value", $(this).attr('value'))
+      d.attr("value", $(this).attr('value'));
+      d.css({width: max_len * char_width, overflow: 'hidden'});
       d.mousedown(function () {
        $(_currentSelectTarget).find("option:selected").removeAttr("selected"); 
        $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected");
