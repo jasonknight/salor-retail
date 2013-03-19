@@ -69,7 +69,7 @@
             <div class="field">
               <%= f.label t("activerecord.attributes.thermal_printer") %><br />
               <% if @cash_register.salor_printer != true or $Register == @cash_register %>
-                <%= f.collection_select :thermal_printer, @devices_for_select, :first, :last, {:include_blank => true} %>
+                <%= f.collection_select :thermal_printer, @devices_for_select,:last, :first, {:include_blank => true} %>
               <% else %>
                 <%= f.text_field :thermal_printer %>
               <% end %>
@@ -78,7 +78,7 @@
             <div class="field">
               <%= f.label VendorPrinter.human_attribute_name 'sticker_printer' %><br />
               <% if @cash_register.salor_printer != true or $Register == @cash_register %>
-                <%= f.collection_select :sticker_printer, @devices_for_select, :first, :last, {:include_blank => true} %>
+                <%= f.collection_select :sticker_printer, @devices_for_select,:last, :first, {:include_blank => true} %>
               <% else %>
                 <%= f.text_field :sticker_printer %>
               <% end %>
@@ -86,7 +86,7 @@
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.pole_display") %><br />
-              <%= f.collection_select :pole_display, @devices_for_select, :first, :last, :include_blank => true %>
+              <%= f.collection_select :pole_display, @devices_for_select,:last, :first, :include_blank => true %>
             </div>
             <br />
             <div class="field">
@@ -96,7 +96,7 @@
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.scale") %><br />
-              <%= f.collection_select :scale, @devices_for_select, :first, :last, {:include_blank => true} %>
+              <%= f.collection_select :scale, @devices_for_select,:last, :first, {:include_blank => true} %>
             </div>
             <div class="field">
               <%= f.label t("activerecord.attributes.address") %><br />
