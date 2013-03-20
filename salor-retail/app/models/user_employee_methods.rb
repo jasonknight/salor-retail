@@ -433,8 +433,11 @@ module UserEmployeeMethods
     end
   end
   def start_day
-    login = EmployeeLogin.new(:employee_id => self.id, :hourly_rate => self.hourly_rate, :login => Time.now, :vendor_id => self.vendor_id)
-    login.save
+    login = EmployeeLogin.where(["login > ?",Time.now - 12.hours]).where(:employee_id => self.id,:logout => nil).order("id desc").limit(1);
+    if not login.any?
+      login = EmployeeLogin.new(:employee_id => self.id, :hourly_rate => self.hourly_rate, :login => Time.now, :vendor_id => self.vendor_id)
+      login.save
+    end
   end
   
   def best_sellers

@@ -192,6 +192,8 @@ en-GB:
       roles: Roles
       role_cache: Roles
       full_name: Name
+      always_open_drawer: Always Open Drawer
+      require_password: Require Password
     models:
       sale_type:
         one: Sale Type

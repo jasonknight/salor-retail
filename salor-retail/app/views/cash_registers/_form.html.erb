@@ -50,7 +50,7 @@
                 </div>
 <!--                <div class="field">
                   <%= f.label t("activerecord.attributes.cash_drawer") %><br />
-                  <%= f.select :cash_drawer_path, @devices_for_select, :include_blank => true %>
+                  <%= f.select :cash_drawer_name, @devices_for_select, :include_blank => true %>
                 </div>-->
                 <div class="field">
                   <%= f.label :color %> 
@@ -69,7 +69,7 @@
             <div class="field">
               <%= f.label t("activerecord.attributes.thermal_printer") %><br />
               <% if @cash_register.salor_printer != true or $Register == @cash_register %>
-                <%= f.collection_select :thermal_printer, @devices_for_select,:last, :first, {:include_blank => true} %>
+                <%= f.collection_select :thermal_printer_name, @devices_for_select,:first, :first, {:include_blank => true} %>
               <% else %>
                 <%= f.text_field :thermal_printer %>
               <% end %>
@@ -78,7 +78,7 @@
             <div class="field">
               <%= f.label VendorPrinter.human_attribute_name 'sticker_printer' %><br />
               <% if @cash_register.salor_printer != true or $Register == @cash_register %>
-                <%= f.collection_select :sticker_printer, @devices_for_select,:last, :first, {:include_blank => true} %>
+                <%= f.collection_select :sticker_printer_name, @devices_for_select,:first, :first, {:include_blank => true} %>
               <% else %>
                 <%= f.text_field :sticker_printer %>
               <% end %>
@@ -86,7 +86,7 @@
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.pole_display") %><br />
-              <%= f.collection_select :pole_display, @devices_for_select,:last, :first, :include_blank => true %>
+              <%= f.collection_select :pole_display_name, @devices_for_select,:first, :first, :include_blank => true %>
             </div>
             <br />
             <div class="field">
@@ -96,15 +96,19 @@
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.scale") %><br />
-              <%= f.collection_select :scale, @devices_for_select,:last, :first, {:include_blank => true} %>
+              <%= f.collection_select :scale_name, @devices_for_select,:first, :first, {:include_blank => true} %>
             </div>
             <div class="field">
               <%= f.label t("activerecord.attributes.address") %><br />
               <%= f.text_field :ip, :class => "keyboardable"%>
             </div>
             <div class="field">
-              <%= f.label "Always open drawer" %><br />
+              <%= f.label t("activerecord.attributes.always_open_drawer") %><br />
               <%= f.check_box :always_open_drawer %>
+            </div>
+            <div class="field">
+              <%= f.label t("activerecord.attributes.require_password") %><br />
+              <%= f.check_box :require_password %>
             </div>
             <!--
             <br />

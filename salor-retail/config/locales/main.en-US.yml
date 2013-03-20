@@ -7,6 +7,8 @@ en-US:
   InCash: In Cash
   activerecord:
     attributes:
+      always_open_drawer: Always Open Drawer
+      require_password: Require Password
       internal_type: Type
       whento: When
       roles: Roles

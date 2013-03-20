@@ -43,3 +43,7 @@
       %span.version= SalorRetail::Application::VERSION
         
       %a.reload-window{ :href => '/orders/new' } R
+    #simple_input_dialog{:title => "Salor Dialog", :class => "salor-dialog hidden"}
+      %label{ :for => "input", :class => "input_label" }None
+      %input{ :type=>"text", :name=>"input", :id=> "dialog_input", :class=>"text ui-widget-content ui-corner-all"}
+      %p.validateTips

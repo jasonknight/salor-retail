@@ -5,6 +5,7 @@ SalorRetail::Application.routes.draw do
   # first created -> highest priority.
   
   match "employees/signup" => "employees#signup"
+  match "employees/verify" => "employees#verify"
   match "vendors/csv" => "vendors#csv"
   match "vendors/backup" => "vendors#backup"
   match "nodes/send_msg" => "nodes#send_msg"

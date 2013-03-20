@@ -276,5 +276,4 @@ $(function () {
   };
 
   setInterval('checkFocusInput()',200);
-
 });

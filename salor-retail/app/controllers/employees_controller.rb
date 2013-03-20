@@ -10,6 +10,16 @@ class EmployeesController < ApplicationController
   before_filter :check_role, :except => [:crumble,:login]
   before_filter :crumble, :except => [:login, :signup]
   cache_sweeper :employee_sweeper, :only => [:create, :update, :destroy]
+  def verify
+    if params[:password] then
+      emp = Employee.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
   def signup
     if not AppConfig.signup == true then
       redirect_to :action => :login and return
