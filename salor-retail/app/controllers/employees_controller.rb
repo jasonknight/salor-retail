@@ -163,6 +163,9 @@ class EmployeesController < ApplicationController
       if @employee.update_attributes(params[:employee])
         @employee.set_role_cache
         @employee.save
+        [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
+          expire_fragment(SalorBase.get_cache_name_for_user(@employee))
+        end
         format.html { redirect_to :action => 'edit', :id => @employee.id, :notice => 'Employee was successfully updated.' }
         format.xml  { head :ok }
       else
