@@ -1,2 +1,6 @@
+:javascript
+  $(function () {
+    $("#documentation_iframe").css({width: $(window).width() * 0.9, height: $(window).height() * 0.8 });
+  });
 .center
-  %iframe{ :src => "http://documentation.red-e.eu", :style => 'width:850px;height:500px;border:none' }
+  %iframe{ :id => "documentation_iframe",:src => "http://documentation.red-e.eu" }

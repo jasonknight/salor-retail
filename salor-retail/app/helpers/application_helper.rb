@@ -133,7 +133,7 @@ module ApplicationHelper
       :item => 'item',
       :item_type => 'bag1',
       :show => 'play',
-      :info => 'info',
+      :info => 'puzzle',
       :back => 'left',
       :next => 'right',
       :tax_profile => 'percent',
