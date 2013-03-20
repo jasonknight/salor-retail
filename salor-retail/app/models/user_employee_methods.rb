@@ -434,7 +434,7 @@ module UserEmployeeMethods
     self.update_attribute :last_path,''
     login = self.employee_logins.last
     if login then
-      login.logout = Time.now
+      login.logout = Time.now.strftime("%Y-%m-%d %H:%M:%S")
       login.save
     end
   end
@@ -443,7 +443,8 @@ module UserEmployeeMethods
     if login and login.logout.nil? then
       return
     end
-    login = EmployeeLogin.new(:employee_id => self.id, :hourly_rate => self.hourly_rate, :login => Time.now, :vendor_id => self.vendor_id)
+    
+    login = EmployeeLogin.new(:employee_id => self.id, :hourly_rate => self.hourly_rate, :login => Time.now.strftime("%Y-%m-%d %H:%M:%S"), :vendor_id => self.vendor_id)
     login.save
 
   end
