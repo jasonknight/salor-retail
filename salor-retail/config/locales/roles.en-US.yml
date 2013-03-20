@@ -1,4 +1,5 @@
 en-US:
+  :assistant: Assistant Manager
   :remove_order_items: Remove Order Items
   :index_tender_methods: Index Payment Methods
   :edit_tender_methods: Edit Payment Methods

@@ -677,7 +677,7 @@ function addPosItem(item) {
         if (
               (User.role_cache.indexOf('change_prices') != -1) || 
               (User.role_cache.indexOf("manager") != -1) ||
-              item["must_change_price"] == true
+              (item["must_change_price"] == true)
            ) {
               make_in_place_edit(col);
               col.addClass('editme pointer no-select');

@@ -38,11 +38,11 @@
         
         <td>
         <div onmousedown="window.location ='<%= edit_item_path(item)%>';" style="padding: 5px;">
-          <%= link_to(salor_icon(:edit,{},20), edit_item_path(item)) %>
+          <%= link_to(salor_icon(:edit,{},20), edit_item_path(item)) if $User.can(:edit_items) %>
           </div>
         </td>
         <td>
-          <%= link_to(salor_icon(:delete,{},20), item, :confirm => 'Are you sure?', :method => :delete) %>
+          <%= link_to(salor_icon(:delete,{},20), item, :confirm => 'Are you sure?', :method => :delete) if $User.can(:destroy_items) %>
         </td>
       </tr>
     <% end %>

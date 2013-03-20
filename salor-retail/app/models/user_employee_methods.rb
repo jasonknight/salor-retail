@@ -303,12 +303,17 @@ module UserEmployeeMethods
   end
   
   def can(action)
-    if self.class == User then
+    if self.class == User or self.role_cache.include? "manager" then
       return true
     else
       action = action.to_s
       admin = 'manager'
       any = nil
+      if not action.to_s.include? "destroy" then
+        if self.role_cache.include? "assistant" then
+          return true
+        end
+      end
       if action.match(/new|index|edit|destroy|create|update|show/) then
         any = action.gsub(/new|index|edit|destroy|create|update|show/,'any')
       else
@@ -323,6 +328,7 @@ module UserEmployeeMethods
         role_list = self.role_cache.split(',').map {| r | r.to_sym}
         role_list.each do |r|
           cant_do_list = Role::CANNOTDO[r]
+          return false if cant_do_list.include? :anything
           next if cant_do_list.nil?
 #           puts "Seeing if "
           if cant_do_list.include? action.to_sym then
