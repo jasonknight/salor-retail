@@ -128,7 +128,7 @@ function makeItemMenu(item) {
           menu.append(wicon);
         } // end  if (!Register.scale == '') {
 
-        var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" height="32px" /></div>');
+        var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
         btn.mousedown(function () {
             menu.remove();
             focusInput($('#keyboard_input'));
