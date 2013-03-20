@@ -42,7 +42,6 @@ SalorRetail::Application.routes.draw do
   match "reports" => "reports#selector"
   match "items/search" => "items#search"
   match "items/export_broken_items" => "items#export_broken_items"
-  match "items/report" => "items#report"
   match "items/update_location" => "items#update_location"
   match "items/reorder_recommendation" => "items#reorder_recommendation"
   match "items/update_location" => "items#update_location"

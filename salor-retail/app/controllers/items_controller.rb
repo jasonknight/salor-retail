@@ -214,9 +214,6 @@ class ItemsController < ApplicationController
     end
   end
   #
-  def report
-
-  end
   #
   def search
     if not salor_user.owns_vendor? salor_user.meta.vendor_id then
