@@ -41,3 +41,68 @@ function updateTips( t ) {
   .addClass( "ui-state-highlight" );
 
 }
+function showClockin() {
+  
+  var el = $("#simple_input_dialog").dialog({
+    modal: true,
+    buttons: {
+      "Cancel": function() {
+        var bValid = true;
+        $('#dialog_input').removeClass("ui-state-error");
+        updateTips("");
+        bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
+        if (bValid) {            
+            jQuery.post("/employees/clockout",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
+              if (data == "NO") {
+                updateTips("Wrong Password");
+              } else {
+                $("#simple_input_dialog").dialog( "close" );
+              }
+            }).fail(function () {
+              updateTips("Login to server failed due to server error, call tech support!");
+            });
+        } // end if bValid
+      }, // end of cancel
+      "Complete": function () {
+        var bValid = true;
+        $('#dialog_input').removeClass("ui-state-error");
+        updateTips("");
+        bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
+        if (bValid) {            
+            jQuery.post("/employees/clockin",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
+              console.log(data);
+              if (data == "NO") {
+                updateTips("Wrong Password");
+              } else if (data == "ALREADY") {
+                updateTips("You are already clocked in!");
+              } else {
+                $("#simple_input_dialog").dialog( "close" );
+              }
+            }).fail(function () {
+              updateTips("Login to server failed due to server error, call tech support!");
+            });
+        } // end if bValid
+      }, // end of Complete
+    } // end of buttons
+  }); // end dialog
+
+  setTimeout(function () {
+    try {
+    $('#dialog_input').val("");
+    $(".ui-dialog * button > span:contains('Complete')").text(i18n.system.login);
+    $(".ui-dialog * button > span:contains('Cancel')").text(i18n.system.logout);
+    $('#dialog_input').keyup(function (event) {
+      if (event.which == 13) {
+        $(".ui-dialog * button:contains('"+i18n.system.login+"')").trigger("click");
+      }
+    });
+        focusInput($('#dialog_input'));
+    var ttl = el.parent().find('.ui-dialog-title');
+    ttl.html(i18n.system.login); 
+    ttl = el.parent().find('.input_label');
+    ttl.html(i18n.activerecord.attributes.password);
+    } catch (err) {
+      console.log(err);
+    }
+  },55);
+}

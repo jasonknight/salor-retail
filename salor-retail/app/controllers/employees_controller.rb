@@ -20,6 +20,32 @@ class EmployeesController < ApplicationController
       end
     end
   end
+  def clockin
+    if params[:password] then
+      emp = Employee.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        login = EmployeeLogin.where(:employee_id => emp.id).last
+        if login and login.logout.nil? then
+          render :text => "ALREADY" and return
+        end
+        emp.start_day
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
+  def clockout
+    if params[:password] then
+      emp = Employee.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        emp.end_day
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
   def signup
     if not AppConfig.signup == true then
       redirect_to :action => :login and return

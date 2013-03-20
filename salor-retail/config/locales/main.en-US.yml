@@ -768,8 +768,8 @@ en-US:
       value_not_set: NotSet
     inventory_updated: inventory updated
     logged_in_as: logged in as
-    login: login
-    logout: logout
+    login: Clockin
+    logout: Clockout
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated

@@ -345,17 +345,17 @@ en-CA:
     select:
       prompt: please select
     submit:
-      cancel: cancel
-      clear: clear
-      complete_sale: complete sale
-      create: create
-      get_item: get item
-      ok: OK
-      print: print
+      cancel: Cancel
+      clear: Clear
+      complete_sale: Complete Sale
+      create: Create
+      get_item: Get Item
+      ok: Okay
+      print: Print
       save: Save
       edit: Edit
-      submit: submit
-      update: update
+      submit: Submit
+      update: Update
   home:
     remote_service:
       connect_ssh: Remote service
@@ -768,8 +768,8 @@ en-CA:
       value_not_set: NotSet
     inventory_updated: inventory updated
     logged_in_as: logged in as
-    login: login
-    logout: logout
+    login: Clockin
+    logout: Clockout
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
