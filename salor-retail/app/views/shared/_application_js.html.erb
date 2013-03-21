@@ -113,10 +113,16 @@ var SaleTypes = <%= raw SaleType.scopied.to_json %>;
 var Countries = <%= raw Country.scopied.to_json %>;
 var ItemTypes = <%= raw ItemType.all.to_json %>;
 var Categories = <%= raw Category.all.to_json %>;
+var PaymentMethods = <%= raw PaymentMethod.types_list.to_json %>;
+var PaymentMethodObjects = <%= raw PaymentMethod.as_objects.to_json %>;
 
 window.params = {
   action: "<%= params[:action] %>",
   controller: "<%= params[:controller] %>",
   user: { name: "<%= salor_user.username if salor_user %>" }
+};
+_.templateSettings = {
+    interpolate: /\{\{\=(.+?)\}\}/g,
+    evaluate: /\{\{(.+?)\}\}/g
 };
 </script>

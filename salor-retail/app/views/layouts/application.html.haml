@@ -13,11 +13,11 @@
       %link{ :rel => "apple-touch-icon", :sizes => "114x114", :href => "apple-touch-icon-114x114.png"}
 
     = stylesheet_link_tag 'print', :media => 'print'
-    = stylesheet_link_tag 'generic'
+    = stylesheet_link_tag 'generic','jquery-ui'
     = stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
 
     = javascript_include_tag 'application'
-    = javascript_include_tag "locales/main.#{I18n.locale}.js"
+    = javascript_include_tag "locales/main.#{I18n.locale}.js",'underscore'
     = salor_render :partial => "shared/application_js"
     - if mobile?
       = javascript_include_tag 'mobile'
@@ -42,3 +42,5 @@
       %span.version= "Salor Version: #{ SalorRetail::Application::VERSION }"
         
       %a.reload-window{ :href => '/orders/new' } R
+      =render :partial => "shared/new_complete_order_popup"
+    

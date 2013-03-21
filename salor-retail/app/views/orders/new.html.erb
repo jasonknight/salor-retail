@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/assets/complete_order.js"></script>
 <script type="text/javascript">
 Order = <%= raw @order.to_json %>;
 var filename = "new.html.erb";
@@ -371,7 +372,7 @@ $(function () {
     try {
       var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
       <% if not @cash_register.scale.blank? then  %>
-        var weight = Salor.<%= @cash_register.scale %>;
+        var weight = Salor.toperScale('<%= @cash_register.scale %>');
       <% else %>
         var weight = 0;
       <% end %>
@@ -422,5 +423,6 @@ $(function () {
 
 <%= salor_render :partial => "shared/last_completed_orders" %>
 <%= salor_render :partial => "shared/search" %>
-<%= salor_render :partial => "shared/complete_order" %>
+<%= #salor_render :partial => "shared/complete_order" 
+%>
 <%= salor_render :partial => "last_five_orders" %>
