@@ -333,9 +333,9 @@ class ItemsController < ApplicationController
 
   def upload
     if params[:file]
-      lines = params[:file].read.split("\n")
+#       lines = params[:file].read.split("\n")
       # This works like x,y,z = list(array) in PHP, i.e. multiple assignment from an array. Just FYI
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.salor(lines)
+      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.dist(params[:file].read,true)
       redirect_to(:action => 'upload')
     end
   end

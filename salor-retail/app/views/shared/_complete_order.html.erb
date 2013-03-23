@@ -219,22 +219,22 @@ function complete_order_show() {
 
 function show_denominations() {
    var pieces = [<%= I18n.t("number.currency.format.pieces").split(',').find_all { |piece| piece.to_f > 2.0}.join(',') %>];
-		var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
-		var doc = 99; // radius
-		var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
-		for (var i in pieces) {
-		  p = $('<div id="complete_piece_'+ pieces[i] + '">'+toCurrency(pieces[i])+'</div>');
-		  p.css({height: '35px',width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
-		  p.addClass("pieces-button shadow");
-			cpos = {x: cpos.x, y: cpos.y + 54};
-			p.attr('amount',pieces[i]);
-			p.mousedown(function () {
-			            var val = toFloat($(this).attr('amount'));
-			            $("#payment_amount_0").val( val );
-			            display_change();
-			} );
-			$('body').append(p);
-		}
+    var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
+    var doc = 99; // radius
+    var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
+    for (var i in pieces) {
+      p = $('<div id="complete_piece_'+ pieces[i] + '">'+toCurrency(pieces[i])+'</div>');
+      p.css({height: '35px',width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
+      p.addClass("pieces-button shadow");
+        cpos = {x: cpos.x, y: cpos.y + 54};
+        p.attr('amount',pieces[i]);
+        p.mousedown(function () {
+          var val = toFloat($(this).attr('amount'));
+          $("#payment_amount_0").val( val );
+          display_change();
+        } );
+        $('body').append(p);
+    }
 }
 
 function allow_complete_order(isAllowed) {
@@ -442,6 +442,8 @@ function complete_order_send(print) {
   print_order_id = Order.id;
   // begin require password code
   if (Register.require_password) {
+    _set("print_order",print,$("#simple_input_dialog"));
+    _set("print_order_id",print_order_id,$("#simple_input_dialog"));
     var el = $("#simple_input_dialog").dialog({
       modal: true,
       buttons: {
@@ -460,8 +462,9 @@ function complete_order_send(print) {
                 updateTips("Wrong Password");
               } else {
                 get('/orders/complete_order_ajax?employee_id=' + data.id + 'order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
-                    if (print == 'true') { print_order(print_order_id); }
+                    if (_get("print_order",$("#simple_input_dialog")) == 'true') { print_order(_get("print_order_id",$("#simple_input_dialog"))); }
                     sendingOrder = false;
+                    _set("print_order",'false',$("#simple_input_dialog"));
                     if (typeof(Salor) != 'undefined') {
                       if (Register.pole_display == "") {
                         Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
