@@ -458,7 +458,6 @@ function complete_order_send(print) {
                 get('/orders/complete_order_ajax?employee_id=' + data.id + 'order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
                     if (_get("print_order",$("#simple_input_dialog")) == 'true') { 
                       print_order(_get("print_order_id",$("#simple_input_dialog")), function () {
-                        console.log("callback tripped!");
                         if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
                           quick_open_drawer();
                           if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
