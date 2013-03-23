@@ -50,7 +50,7 @@ function wholesaler_update() {
         </div>
         
         <div class="tool-icon" >
-            <%= link_to salor_icon(:down,{},24),'/items/download' %>
+            <%= link_to salor_icon(:down,{},24),"/items/download?page=#{params[:page]}" %>
             
           <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
         </div>

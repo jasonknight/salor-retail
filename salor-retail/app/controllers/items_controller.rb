@@ -397,7 +397,11 @@ class ItemsController < ApplicationController
   end
 
   def download
-    @items = Item.scopied
+    if params[:page] then
+      @items = Item.scopied.page(params[:page]).per(25)
+    else
+      @items = Item.scopied
+    end
     data = render_to_string :layout => false
     send_data(data,:filename => 'items.csv', :type => 'text/csv')
   end
