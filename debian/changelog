@@ -1,3 +1,14 @@
+salor-retail (4.0.1.42) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Printer/Drawer fighting
+  * Drawer vs Print
+  * Drawer vs Print
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 13:48:10 -0400
+
 salor-retail (4.0.1.41) unstable; urgency=low
 
   [ Jason Knight ]
