@@ -468,14 +468,6 @@ function complete_order_send(print) {
                     }
                     sendingOrder = false;
                     _set("print_order",'false',$("#simple_input_dialog"));
-                    setTimeout(function () {
-                      if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
-                        quick_open_drawer();
-                        if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-                          setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
-                        }
-                      }
-                    },1000);
                     if (typeof(Salor) != 'undefined') {
                       if (Register.pole_display == "") {
                         Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
