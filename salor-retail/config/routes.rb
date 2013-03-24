@@ -78,6 +78,7 @@ SalorRetail::Application.routes.draw do
   match "orders/report_day_range" => "orders#report_day_range"
   match "orders/:id/print" => "orders#print"
   match "orders/print" => "orders#print"
+  match "orders/log" => "orders#log"
   match "orders/:id/customer_display" => 'orders#customer_display'
   match "vendors/:id/display_logo" => 'vendors#display_logo'
   match "employees/index" => "employees#index"
