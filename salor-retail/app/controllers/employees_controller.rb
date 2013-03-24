@@ -10,6 +10,42 @@ class EmployeesController < ApplicationController
   before_filter :check_role, :except => [:crumble,:login]
   before_filter :crumble, :except => [:login, :signup]
   cache_sweeper :employee_sweeper, :only => [:create, :update, :destroy]
+  def verify
+    if params[:password] then
+      emp = Employee.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
+  def clockin
+    if params[:password] then
+      emp = Employee.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        login = EmployeeLogin.where(:employee_id => emp.id).last
+        if login and login.logout.nil? then
+          render :text => "ALREADY" and return
+        end
+        emp.start_day
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
+  def clockout
+    if params[:password] then
+      emp = Employee.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        emp.end_day
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
   def signup
     if not AppConfig.signup == true then
       redirect_to :action => :login and return
@@ -127,6 +163,9 @@ class EmployeesController < ApplicationController
       if @employee.update_attributes(params[:employee])
         @employee.set_role_cache
         @employee.save
+        [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
+          expire_fragment(SalorBase.get_cache_name_for_user(@employee))
+        end
         format.html { redirect_to :action => 'edit', :id => @employee.id, :notice => 'Employee was successfully updated.' }
         format.xml  { head :ok }
       else

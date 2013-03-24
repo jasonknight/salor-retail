@@ -2,11 +2,13 @@
 en-US:
   are_you_sure: Are you sure you want to do this?
   support: Support
-  ByCard: By Card
+  ByCard: By Debit
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
+      always_open_drawer: Always Open Drawer
+      require_password: Require Password
       internal_type: Type
       whento: When
       roles: Roles
@@ -766,12 +768,12 @@ en-US:
       value_not_set: NotSet
     inventory_updated: inventory updated
     logged_in_as: logged in as
-    login: login
-    logout: logout
+    login: Clockin
+    logout: Clockout
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
-    payment_external_types: Cash,Card,Gift Card,Other,Change,To Be Paid,Quote
+    payment_external_types: Cash,Debit,Gift Card,Other,Change,To Be Paid,Quote
     payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change,Unpaid,Quote
     rebate_types:
       fixed: $

@@ -104,6 +104,12 @@ module SalorBase
     atomize(nil, nil, 'css')
     atomize(nil, nil, 'js')    
   end
+  def self.get_cache_name_for_user(fragment_name)
+    if not $User then
+      return "#{fragment_name}_nouser_0"
+    end
+    return "#{fragment_name}_#{$User.username}_#{$User.id}"
+  end
   def self.numbers
     return "0123456789"
   end

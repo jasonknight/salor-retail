@@ -16,6 +16,7 @@ class CashRegister < ActiveRecord::Base
   has_many :orders
   has_many :meta
   has_many :drawer_transactions
+  attr_accessible :pole_display_name, :sticker_printer_name,:scale_name,:thermal_printer_name, :name
   def end_of_day_report
     table = {}
     cats_tags = Category.cats_report($User.get_drawer.id)
@@ -38,26 +39,28 @@ class CashRegister < ActiveRecord::Base
   end
   
   def self.update_all_devicenodes
-    return # this is crazy complicated.
     # Update device paths of all Rails-printing CashRegisters AND the currently selected CashRegister, independent of being Rails or client side printing.
-    devices_for_select, devices_name_path_lookup =  CashRegister.get_devicenodes
-    $Vendor.cash_registers.visible.each do |cr|
-      next if cr.salor_printer == true and not cr == $Register
-      cr.set_device_paths_from_device_names(devices_name_path_lookup)
-      if cr == $Register
-        cr.reload
-        $Register = cr
-      end
+    devices_for_select = CashRegister.get_devicenodes
+    #"[[TM T20,"/dev..."]"]"
+    if $Register then
+      $Register.set_device_paths_from_device_names(devices_for_select)
     end
+    #$Vendor.cash_registers.visible.each do |cr|
+    #  next if cr.salor_printer == true and not cr == $Register
+    #  cr.set_device_paths_from_device_names(devices_for_select)
+    #  if cr == $Register
+    #    cr.reload
+    #    $Register = cr
+    #  end
+    #end
   end
   
   def self.get_devicenodes
+    #return [["TM-T20","/dev/myusb/lp0"],["TM-T21","/dev/myusb/lp1"],["Super Pole","/dev/myusb/pole"],["Cash Drawer","/dev/myusb/cdrawer"]]
     nodes_usb1 = Dir['/dev/usb/lp*']
-    nodes_usb2 = Dir['/dev/usblp*']
     nodes_serial = Dir['/dev/usb/ttyUSB*']
-    nodes_salor = Dir['/dev/salor*']
     nodes_test = Dir['/tmp/salor-test*']
-    all_nodes = nodes_usb1 + nodes_usb2 + nodes_serial + nodes_salor + nodes_test
+    all_nodes = nodes_usb1 + nodes_serial +  nodes_test
     devices_for_select = []
     all_nodes.each do |n|
       if not n.include? '.txt' then
@@ -76,13 +79,29 @@ class CashRegister < ActiveRecord::Base
    return devices_for_select
   end
   
-  def set_device_paths_from_device_names(devices_name_path_lookup)
-    return
-    self.cash_drawer_name = self.thermal_printer_name
-    self.cash_drawer_path = devices_name_path_lookup[self.cash_drawer_name] unless self.cash_drawer_name.nil?
-    self.thermal_printer = devices_name_path_lookup[self.thermal_printer_name] unless self.thermal_printer_name.nil?
-    self.sticker_printer = devices_name_path_lookup[self.sticker_printer_name] unless self.sticker_printer_name.nil?
-    self.scale = devices_name_path_lookup[self.scale_name] unless self.scale_name.nil?
+  def set_device_paths_from_device_names(devices_for_select)
+    devices_for_select.each do |dev|
+      [:cash_drawer,:thermal_printer,:sticker_printer,:scale,:pole_display].each do |a|
+        # on each pass it will look like this: self.send("thermal_printer_name","TM-T20")
+        # This holds true for pole_display, scale, etc...
+        if self.send("#{a}_name") == dev.first then
+          # on each pass it would look like this: self.send("thermal_printer=","/dev/usb/lp0") etc
+           next if a == :cash_drawer # We have to intercept this one, cause it doesn't fit the pattern
+          if a == :thermal_printer then
+            self.send("#{a}=",dev.last)
+            self.cash_drawer_path = dev.last
+          else
+            self.send("#{a}=",dev.last)
+          end 
+        end
+      end
+    end
     self.save
+    #self.cash_drawer_name = self.thermal_printer_name
+    #self.cash_drawer_path = devices_name_path_lookup[self.cash_drawer_name] unless self.cash_drawer_name.nil?
+    #self.thermal_printer = devices_name_path_lookup[self.thermal_printer_name] unless self.thermal_printer_name.nil?
+    #self.sticker_printer = devices_name_path_lookup[self.sticker_printer_name] unless self.sticker_printer_name.nil?
+    #self.scale = devices_name_path_lookup[self.scale_name] unless self.scale_name.nil?
+    #self.save
   end
 end

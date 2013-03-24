@@ -499,7 +499,7 @@ class FileUpload
   end
   def dist(file,trusted)
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
-    csv = Kcsv.new(file,{:header => true})
+    csv = Kcsv.new(file,{:header => true,:separator => "\t"})
     csv.to_a.each do |rec|
       begin
         kls = Kernel.const_get(rec[:class])

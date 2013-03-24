@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130316104807) do
+ActiveRecord::Schema.define(:version => 20130320113537) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -111,6 +111,9 @@ ActiveRecord::Schema.define(:version => 20130316104807) do
     t.string   "thermal_printer_name"
     t.string   "sticker_printer_name"
     t.string   "scale_name"
+    t.boolean  "always_open_drawer"
+    t.string   "pole_display_name"
+    t.boolean  "require_password"
   end
 
   add_index "cash_registers", ["vendor_id"], :name => "index_cash_registers_on_vendor_id"

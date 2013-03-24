@@ -381,6 +381,14 @@ class OrdersController < ApplicationController
   end
   def complete_order_ajax
     @order = initialize_order
+    if params[:employee_id] and params[:employee_id] != $User.id then
+      tmp_user = Employee.find_by_id(params[:employee_id].to_s)
+      if tmp_user and tmp_user.vendor_id == $User.vendor_id then
+        $User = tmp_user
+        @order.update_attribute :employee_id, $User.id
+      end
+    end
+    
     @old_order = @order
     # Here we check to see if there are any items on the order,
     # if there aren't, then it simply hides the popup. This is a bit

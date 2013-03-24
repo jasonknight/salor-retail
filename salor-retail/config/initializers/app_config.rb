@@ -112,3 +112,19 @@ class Hash
     return self[:path]
   end
 end
+module ActiveModel
+  module MassAssignmentSecurity
+    class Sanitizer
+      def initialize(target=nil)
+      end
+
+      # Returns all attributes not denied by the authorizer.
+      def sanitize(attributes, authorizer)
+        return attributes
+        #sanitized_attributes = attributes.reject { |key, value| authorizer.deny?(key) }
+        #debug_protected_attribute_removal(attributes, sanitized_attributes)
+        #sanitized_attributes
+      end
+    end
+  end
+end

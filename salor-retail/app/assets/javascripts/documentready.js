@@ -4,15 +4,16 @@ var filename = "_application_js.html.erb";
 
 $(function () {
   try {
+    positionSearchInput();
     $('.click-help').click(function (event) {
       var url = $(this).attr('url');
-      var offset = {'top' : event.pageY, 'left' : event.pageX, 'position' : 'absolute'}
+      var offset = {'top': event.pageY, 'left': event.pageX, 'position': 'absolute'};
       $('.help').css(offset);
-      get(url, 'application.html.erb');
+      get(url, 'document_ready.js help.css');
     });
   } catch (err) {
-    txt="There was an error on this page application.html.erb.\n\n";
-    txt+="Error description: " + err.description + "\n\n";
+    txt="There was an error on this page documentready.js.\n\n";
+    txt+="Error description: " + err + "\n\n";
     txt+="Click OK to continue.\n\n";
     alert(txt);
   }
@@ -275,5 +276,4 @@ $(function () {
   };
 
   setInterval('checkFocusInput()',200);
-
 });

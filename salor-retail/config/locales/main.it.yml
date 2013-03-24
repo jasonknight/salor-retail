@@ -185,6 +185,13 @@ it:
         receipt_blurb_footer: Receipt Blurb Footer
         invoice_blurb: Invoice Blurb Header
         invoice_blurb_footer: Invoice Blurb Footer
+      internal_type: Type
+      whento: When
+      roles: Roles
+      role_cache: Roles
+      full_name: Name
+      always_open_drawer: Always Open Drawer
+      require_password: Require Password
     models:
       action:
         one: Azione

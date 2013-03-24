@@ -214,9 +214,6 @@ class ItemsController < ApplicationController
     end
   end
   #
-  def report
-
-  end
   #
   def search
     if not salor_user.owns_vendor? salor_user.meta.vendor_id then
@@ -336,9 +333,9 @@ class ItemsController < ApplicationController
 
   def upload
     if params[:file]
-      lines = params[:file].read.split("\n")
+#       lines = params[:file].read.split("\n")
       # This works like x,y,z = list(array) in PHP, i.e. multiple assignment from an array. Just FYI
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.salor(lines)
+      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.dist(params[:file].read,true)
       redirect_to(:action => 'upload')
     end
   end
@@ -400,7 +397,11 @@ class ItemsController < ApplicationController
   end
 
   def download
-    @items = Item.scopied
+    if params[:page] then
+      @items = Item.scopied.page(params[:page]).per(25)
+    else
+      @items = Item.scopied
+    end
     data = render_to_string :layout => false
     send_data(data,:filename => 'items.csv', :type => 'text/csv')
   end

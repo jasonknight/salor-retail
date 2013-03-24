@@ -73,9 +73,9 @@ class CashRegistersController < ApplicationController
     @cash_register = CashRegister.scopied.find(params[:id])
     respond_to do |format|
       if @cash_register.update_attributes(params[:cash_register])
-#         @cash_register.thermal_printer_name = nil unless params[:cash_register][:thermal_printer].empty?
-#         @cash_register.sticker_printer_name = nil unless params[:cash_register][:sticker_printer].empty?
-#         @cash_register.scale_name = nil unless params[:cash_register][:scale_name].empty?
+         @cash_register.thermal_printer_name = nil unless params[:cash_register][:thermal_printer].empty?
+         @cash_register.sticker_printer_name = nil unless params[:cash_register][:sticker_printer].empty?
+         @cash_register.scale_name = nil unless params[:cash_register][:scale_name].empty?
         @cash_register.save
         format.html { redirect_to cash_registers_path }
         format.xml  { head :ok }

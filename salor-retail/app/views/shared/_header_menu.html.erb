@@ -1,3 +1,4 @@
+<%= cache(SalorBase.get_cache_name_for_user("header_menu")) do %>
 <div id="header" class="header">
 <ul class="header-list">
   <li>
@@ -13,12 +14,18 @@
 <!--         <img src="/images/icons/<%= icon(:vendor,32) %>" /><br /><span class='icon-caption'><%= I18n.t("menu.home") %></span> -->
     </div>
   </li>
+  <li>
+    <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="showClockin();">
+      <%= raw(salor_icon(:employee,{},32,I18n.t("system.login"))) %>
+    </div>
+  </li>
   <% if $User and $User.can(:index_items) %>
   <li>
     <div align="center" id="btn-items-index" class="">
-      <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => $User.meta.vendor_id) %>
+      <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => $User.vendor_id) %>
     </div>
   </li>
+  <% end %>
   <% if $User and $User.can(:cashier) %>
     <li>
       <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onmousedown="show_cash_drop();">
@@ -38,7 +45,7 @@
   <% if $User and $User.can(:index_customers) %>
   <li>
     <div align="center" id="btn-customers-new" class="">
-      <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => $User.meta.vendor_id) %><br />
+      <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => $User.vendor_id) %><br />
     </div>
   </li>
   <% end %>
@@ -50,7 +57,6 @@
       </a>-->
     </div>
   </li>
-<% end -%>
   <li >
     <div id="clockbox" class="no-touchy">
       <%= get_clock_content %>
@@ -61,6 +67,7 @@
     <%= salor_render :partial => "shared/generic_search" %>
   <% end %>
 </div>
+<% end %>
 <!-- End ul.list -->
 <script type="text/javascript">
   /* Select tab on menu bar */

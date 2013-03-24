@@ -1,3 +1,147 @@
+salor-retail (4.0.1.44) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Double cdrawer open
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 14:28:00 -0400
+
+salor-retail (4.0.1.43) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Double cdrawer open
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 14:03:47 -0400
+
+salor-retail (4.0.1.42) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Printer/Drawer fighting
+  * Drawer vs Print
+  * Drawer vs Print
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 13:48:10 -0400
+
+salor-retail (4.0.1.41) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Verifying that print is sent
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 12:26:14 -0400
+
+salor-retail (4.0.1.40) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Expiring employee fragments on update
+  * xxx
+  * Fiddled with documentation iframe and icon
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 10:31:39 -0400
+
+salor-retail (4.0.1.39) unstable; urgency=low
+
+  [ Jason Knight ]
+  * various
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 10:01:52 -0400
+
+salor-retail (4.0.1.38) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Fixing localization of time sheet
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 09:53:05 -0400
+
+salor-retail (4.0.1.37) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes feature #1678, require password at the pos screen to complete an order.
+  * Allowing clockin/clockout
+  * Closes feature #1680 added assistant manager role
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 08:02:49 -0400
+
+salor-retail (4.0.1.36) unstable; urgency=low
+
+  [ Jason Knight ]
+  * various
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 11:48:59 -0400
+
+salor-retail (4.0.1.35) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Fixing list_view errors
+  * tweaking icons
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 10:42:36 -0400
+
+salor-retail (4.0.1.34) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Fixing js error
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 09:55:33 -0400
+
+salor-retail (4.0.1.33) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Cosmetic stuff
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 09:37:56 -0400
+
+salor-retail (4.0.1.32) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Stupid Sass
+  * Cosmetic changes
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 06:39:00 -0400
+
+salor-retail (4.0.1.31) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Cosmetic stuff, up/down arrows
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 18 Mar 2013 15:01:23 -0400
+
+salor-retail (4.0.1.30) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes feature #1676, #1677
+  * updated translations
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 18 Mar 2013 13:38:30 -0400
+
 salor-retail (4.0.1.29) unstable; urgency=low
 
   [ Jason Knight ]

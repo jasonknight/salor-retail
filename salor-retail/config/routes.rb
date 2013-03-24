@@ -5,6 +5,9 @@ SalorRetail::Application.routes.draw do
   # first created -> highest priority.
   
   match "employees/signup" => "employees#signup"
+  match "employees/clockin" => "employees#clockin"
+  match "employees/clockout" => "employees#clockout"
+  match "employees/verify" => "employees#verify"
   match "vendors/csv" => "vendors#csv"
   match "vendors/backup" => "vendors#backup"
   match "nodes/send_msg" => "nodes#send_msg"
@@ -39,7 +42,6 @@ SalorRetail::Application.routes.draw do
   match "reports" => "reports#selector"
   match "items/search" => "items#search"
   match "items/export_broken_items" => "items#export_broken_items"
-  match "items/report" => "items#report"
   match "items/update_location" => "items#update_location"
   match "items/reorder_recommendation" => "items#reorder_recommendation"
   match "items/update_location" => "items#update_location"

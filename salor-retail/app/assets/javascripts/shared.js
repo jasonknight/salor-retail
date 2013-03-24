@@ -863,6 +863,16 @@ window.shared = {
       }
       elem.offset(offset);
     },
+    top_right: function (elem,center_to_elem,pad) {
+      elem.css({position: 'absolute'});
+      var offset = center_to_elem.offset();
+      offset.left += center_to_elem.width() - elem.outerWidth();
+      if (pad) {
+        offset.top += pad.top;
+        offset.left += pad.left;
+      }
+      elem.offset(offset);
+    },
     position_rememberable: function (elem) {
       var key = 'position_rememberable.' + elem.attr('id');
       var position = JSON.parse(localStorage.getItem(key));

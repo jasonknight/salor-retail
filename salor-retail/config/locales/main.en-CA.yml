@@ -2,7 +2,7 @@
 en-CA:
   are_you_sure: Are you sure you want to do this?
   support: Support
-  ByCard: By Card
+  ByCard: Debit
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
@@ -187,6 +187,13 @@ en-CA:
         note_header: Note header
         note_footer: Note footer
         sale_type_id: Sale Type
+      internal_type: Type
+      whento: When
+      roles: Roles
+      role_cache: Roles
+      full_name: Name
+      always_open_drawer: Always Open Drawer
+      require_password: Require Password
     models:
       sale_type:
         one: Sale Type
@@ -338,17 +345,17 @@ en-CA:
     select:
       prompt: please select
     submit:
-      cancel: cancel
-      clear: clear
-      complete_sale: complete sale
-      create: create
-      get_item: get item
-      ok: OK
-      print: print
+      cancel: Cancel
+      clear: Clear
+      complete_sale: Complete Sale
+      create: Create
+      get_item: Get Item
+      ok: Okay
+      print: Print
       save: Save
       edit: Edit
-      submit: submit
-      update: update
+      submit: Submit
+      update: Update
   home:
     remote_service:
       connect_ssh: Remote service
@@ -761,12 +768,12 @@ en-CA:
       value_not_set: NotSet
     inventory_updated: inventory updated
     logged_in_as: logged in as
-    login: login
-    logout: logout
+    login: Clockin
+    logout: Clockout
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other,change
+    payment_external_types: Cash,Debit,Gift Card,Other,Change
     payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
     rebate_types:
       fixed: $

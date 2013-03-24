@@ -158,6 +158,9 @@ class Role < ActiveRecord::Base
       :show_orders,
       :index_customers,
       :report_day_orders
+    ],
+    :assistant => [
+      :anything
     ]
   }
 end

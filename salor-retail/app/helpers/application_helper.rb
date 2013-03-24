@@ -21,6 +21,8 @@ module ApplicationHelper
     link_to_function(name, "#{jsfunc}(this, \"#{association}\", \"#{escape_javascript(fields)}\")")
   end
   
+  
+  
   def add_param(p)
    @_params ||= {}
    @_params.merge!(p)
@@ -72,7 +74,8 @@ module ApplicationHelper
       if session[:user_type] == "User" then
         return User.find_by_id(session[:user_id])
       else
-        return Employee.find_by_id(session[:user_id])
+        $User = Employee.find_by_id(session[:user_id])
+        return $User
       end
     end
   end
@@ -130,7 +133,7 @@ module ApplicationHelper
       :item => 'item',
       :item_type => 'bag1',
       :show => 'play',
-      :info => 'info',
+      :info => 'puzzle',
       :back => 'left',
       :next => 'right',
       :tax_profile => 'percent',
@@ -180,6 +183,7 @@ module ApplicationHelper
       :cash_drawer => 'cash_drawer',
       :counter => 'counter',
       :wand => 'wand',
+      :update_real_quantity => 'okay',
       :action => 'gears',
       :payment => 'payment_method',
       :tender_method => 'payment_method',
@@ -193,7 +197,7 @@ module ApplicationHelper
       :trash => 'trash',
       :user6 => 'user6',
       :user7 => 'user7',
-      :nurse => 'user2',
+      :nurse => 'help',
       :save => 'save',
       :gearpage => 'gearpage',
       :label => 'label',
