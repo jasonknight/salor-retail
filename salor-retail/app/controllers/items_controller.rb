@@ -398,9 +398,11 @@ class ItemsController < ApplicationController
 
   def download
     params[:page] ||= 1
+    params[:order_by] ||= "created_at"
+    params[:order_by] = "created_at" if not params[:order_by] or params[:order_by].blank?
     if params[:order_by] then
       key = params[:order_by]
-      session[key] ||= 'DESC'
+      session[key] ||= 'ASC'
       @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("#{key} #{session[key]}")
     else
       @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("id desc")
