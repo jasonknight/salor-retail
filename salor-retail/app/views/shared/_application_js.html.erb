@@ -97,6 +97,7 @@ var ItemTypes = <%= raw ItemType.all.to_json %>;
 var Categories = <%= raw Category.all.to_json %>;
 var PaymentMethods = <%= raw PaymentMethod.types_list.to_json %>;
 var PaymentMethodObjects = <%= raw PaymentMethod.as_objects.to_json %>;
+<% end %>
 window.params = {
   action: "<%= params[:action] %>",
   controller: "<%= params[:controller] %>",

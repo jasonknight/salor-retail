@@ -309,7 +309,7 @@ module UserEmployeeMethods
       action = action.to_s
       admin = 'manager'
       any = nil
-      if not action.to_s.include? "destroy" then
+      if not (action.to_s.include? "destroy_employees" or action.to_s.include? "edit_employees" or action.to_s.include? "create_employees") then
         if self.role_cache.include? "assistant" then
           return true
         end
