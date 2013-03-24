@@ -1159,15 +1159,14 @@ td.keyboard-input
 
 .complete-order-total 
   text-transform: uppercase
-  text-align: center
   font-size: $text_size_massive
-  background-color: $light_background
+  background-color: $green
   @include rounded_corners_all
   padding: 5px
 
 #complete_order_change 
   text-transform: uppercase
-  text-align: center
+  text-align: right
   font-size: $text_size_massive
   background-color: $text_color_highlight
   color: $background
@@ -3088,7 +3087,6 @@ div#error_explanation
 
 div.pagination
   text-align: center
-
 .fieldset
   border: 2px solid $middleground2
   @include rounded_corners_all
@@ -3119,3 +3117,12 @@ div.black-text,td.black-text, a.black-text, div.black-text a
   border: 1px solid #052f57
   background: $warning
   color: #ffffff
+#add_payment_method_button
+  @include awesome_button
+  background-color: $orange
+input.payment-method-input 
+  @include rounded_corners_all
+  @include left_right_pad_wide
+  @include stylish_input_no_bg
+  @include dark_input
+  width: 200px

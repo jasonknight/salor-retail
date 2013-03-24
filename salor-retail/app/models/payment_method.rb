@@ -25,6 +25,21 @@ class PaymentMethod < ActiveRecord::Base
     end
     return types
   end
+  def self.as_objects
+    types = []
+    pmx = I18n.t("system.payment_external_types").split(',')
+    pmi = I18n.t("system.payment_internal_types").split(',')
+    tms = TenderMethod.scopied.all
+    i = 0
+    pmi.each do |p|
+      types << {:name => pmx[i],:internal_type => p} if p != 'Change'
+      i  = i + 1
+    end
+    tms.each do |tm|
+      types << {:name => tm.name,:internal_type => tm.internal_type}
+    end
+    return types
+  end
   def self.total(type)
     ttl = 0.0
     Orders.scopied.each do |o| 

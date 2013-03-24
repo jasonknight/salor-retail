@@ -94,10 +94,9 @@ var inplace_rebatetypes = "<%= escape_javascript raw inplace_rebatetypes %>";
 var SaleTypes = <%= raw SaleType.scopied.to_json %>;
 var Countries = <%= raw Country.scopied.to_json %>;
 var ItemTypes = <%= raw ItemType.all.to_json %>;
-var Categories = <%= raw Category.scopied.to_json %>;
-var TaxProfiles = <%= raw TaxProfile.scopied.to_json %>;
+var Categories = <%= raw Category.all.to_json %>;
 var PaymentMethods = <%= raw PaymentMethod.types_list.to_json %>;
-<% end %>
+var PaymentMethodObjects = <%= raw PaymentMethod.as_objects.to_json %>;
 window.params = {
   action: "<%= params[:action] %>",
   controller: "<%= params[:controller] %>",
@@ -123,4 +122,8 @@ window.params = {
 <% else %>
   window.Register = {};
 <% end %>
+_.templateSettings = {
+    interpolate: /\{\{\=(.+?)\}\}/g,
+    evaluate: /\{\{(.+?)\}\}/g
+};
 </script>

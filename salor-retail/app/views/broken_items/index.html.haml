@@ -1,3 +1,3 @@
 =raw content_box_top(t "menu.broken_items")
 - width ||= "90%"
-= render :partial => 'shared/list_view', :locals => { :klass => BrokernItem, :width => '60%',:collection => @broken_items, :columns => [:name,:sku,:quantity,:base_price]}
+= render :partial => 'shared/list_view', :locals => { :klass => BrokenItem, :width => '60%',:collection => @broken_items, :columns => [:name,:sku,:quantity,:base_price]}

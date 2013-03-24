@@ -753,5 +753,20 @@ class OrderItem < ActiveRecord::Base
       the_item.location.update_attribute(:cash_made, the_item.location.cash_made + self.total)
     end
   end
+  def recover_item
+    i = Item.find_by_sku(self.sku)
+    if i then
+      self.item = i
+      self.save
+      return
+    else
+      i = Item.get_by_code(self.sku)
+      i.item_type_id = self.item_type_id
+      i.base_price = self.price
+      i.save
+      self.item = i
+      self.save
+    end
+  end
   # {END}
 end
