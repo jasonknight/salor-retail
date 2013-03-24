@@ -106,3 +106,11 @@ function showClockin() {
     }
   },55);
 }
+
+function ajax_log(data) {
+  $.ajax({
+    url:'/orders/log',
+    type:'post',
+    data:data
+  });
+}

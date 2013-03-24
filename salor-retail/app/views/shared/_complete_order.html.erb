@@ -38,12 +38,11 @@ function add_payment_method() {
   var numMethods = $(".payment-amount").size();
   d.addClass('payment-method');
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
-  //MF $(amount).val($("#payment_amount_" + (numMethods-1)).val()); // if a new methods is added, this should get the orders total
-  //MF $("#payment_amount_" + (numMethods - 1)).val(''); // clear the input field because mostly this will be 0
   var opts = payment_method_options();
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
-  //sel.on('click',function(){ alert('xxx');}); // whishlist, but does't work
-  //MF var sel = $('<div class="select-widget-button payment-method" internal_type="' + payment_internal_types[numMethods] + '" id="' + "payment_type_" + numMethods + '">' + payment_external_types[numMethods] + '</div>');
+  sel.on('change', function(){
+    ajax_log({log_action:'select_payment_method', button_id:sel.attr('id'), value:sel.val(), order_id:Order.id});
+  });
 
   $(sel)[0].selectedIndex = numMethods;
   $("#payment_methods").append(sel).append(amount);
@@ -61,15 +60,16 @@ function add_payment_method() {
       $("." + cls).select();
     },
     accepted: function () {
-      display_change();
+      display_change('keyboard '+sel.val());
     }
   });
   
-  display_change();
+  display_change('function add_payment_method');
   setTimeout(function () {
     focusInput(amount);
     amount.select();
   },100);
+  ajax_log({log_action:'add_payment_method', order_id:Order.id, value:sel.val()});
 }
 
 function validatePaymentMethod(element) {
@@ -98,8 +98,6 @@ function validatePaymentMethod(element) {
   }
   var index = $(element).attr('id').split("_")[2];
   var pay_input = $("#payment_amount_" + index);
-  // The following var is never used?
-  // var pay_amount = (toFloat($(pay_input).val())) ? 0 : $(pay_input).val();
 
   // Since cardTotal is the remaining amount, and it's calculated automatically, the 
   // cardTotal calc will cycle between 0 and the remaining amount for every other
@@ -128,7 +126,7 @@ function validatePaymentMethod(element) {
     
     $(pay_input).val(cardTotal);
     $(pay_input).addClass('bycard-amount');
-    display_change();
+    display_change('function validatePaymentMethod');
   } else {
     $(pay_input).val(cardTotal);
   }
@@ -210,7 +208,7 @@ function complete_order_show() {
   add_payment_method();
   $("#payment_amount_0").val( complete_total );
   $("#payment_amount_0").select();
-  display_change();
+  display_change('function complete_order_show');
   show_denominations();
   $("#keyboard_input").attr("disabled", true);
   allow_payment_amount = true;
@@ -231,7 +229,8 @@ function show_denominations() {
         p.mousedown(function () {
           var val = toFloat($(this).attr('amount'));
           $("#payment_amount_0").val( val );
-          display_change();
+          display_change('pieces-button ' + val);
+          ajax_log({log_action:'pieces-button', value:val, order_id:Order.id});
         } );
         $('body').append(p);
     }
@@ -264,7 +263,7 @@ function addCashAmount() {
   var addAmount = toFloat($(this).val());
   var curAmount = toFloat($("#complete_in_cash").val());
   $("#complete_in_cash").val(curAmount + addAmount);
-  display_change();
+  display_change('function addCashAmount');
   focusInput($("#complete_in_cash"));
 }
 
@@ -317,6 +316,7 @@ function complete_order_hide() {
   if ( parseInt( Order.id ) % 20 == 0) { 
     window.location = '/orders/new'; 
   } // trigger intensified garbage collection regularly
+  ajax_log({log_action:'complete_order_hide', order_id:Order.id});
 }
 
 function get_highest(num) {
@@ -369,18 +369,18 @@ function get_payment_total() {
   var paymentTotal = 0;
   $(".payment-amount:visible").each(
       function () {
-          if ($(this).attr("id")) {
+          //if ($(this).attr("id")) {
             echo("Payment entry found, value is: " + $(this).val());
             var tval = toFloat($(this).val());
             paymentTotal += tval;
             echo("Payment entry converts to: " + tval);
-          }
+          //}
       }
   );
   return paymentTotal;
 }
 
-function display_change() {
+function display_change(called_from) {
   echo("Displaying change calculation for Order #" + Order.id + " displayed total is " + $('#pos_order_total').html()); 
   if (sendingOrder) {
     echo("sendingOrder is true");
@@ -410,14 +410,12 @@ function display_change() {
     } 
     //recommend(change);
     $('#complete_order_change').html(toCurrency(change));
-    setTimeout(function () {
-      get('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + Order.id);
-      //$('.last-completed-orders').prepend('/vendors/edit_field_on_child?klass=Order&field=front_end_change&value=' + change + '&order_id=' + $('.order-id').html() + " <br/>");
-      },120);
     echo('calling allow complete_order from display_change');
     allow_complete_order();
   }
   if(change > 0) { displayChangeToCustomer(); }
+  ajax_log({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:ototal, change:change, called_from:called_from});
+  return change;
 }
 
 function complete_order_send(print) {
@@ -547,8 +545,6 @@ function displayChangeToCustomer() {
 function serializePayments() {
   var returnArr = [];
   $.each($(".payment-method"), function(){
-    //MFvar index = $(this)[0].id.split("_")[2];
-    //MFvar method = $(this).attr('internal_type');
     var index = $(this).attr('id').split("_")[2];
     var method = $(this).val();
     var amount = $("#payment_amount_" + index).val();
@@ -561,7 +557,7 @@ function serializePayments() {
 var orderCompleteDisplayed = false;
 $(document).ready(function() {
   $(".payment-amount").live('keyup', function(event){
-    display_change();
+    display_change('documentready');
   });
   $(".payment-method").live("change", function(){
     validatePaymentMethod($(this));
