@@ -1,4 +1,4 @@
 <%= Item.csv_headers.join("\t") %>
 <% @items.each do |item| %>
-  <%= item.to_csv%>
+<%= item.to_csv%>
 <% end %>

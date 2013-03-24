@@ -20,6 +20,7 @@ class HomeController < ApplicationController
     end
     @from = Time.now
     @to = Time.now
+    Error.where(["created_at < ?", (Time.now - 10.days)]).delete_all
     redirect_to vendor_path($Vendor) if $User
   end
   def user_employee_index

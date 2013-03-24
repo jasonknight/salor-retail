@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
   cache_sweeper :category_sweeper, :only => [:create, :update, :destroy]
   
   def index
-    @categories = $User.get_categories(params[:page])
+    @categories = $Vendor.categories.scopied.page(params[:page]).per($Conf.pagination)
     
     respond_to do |format|
       format.html # index.html.erb
@@ -37,16 +37,16 @@ class CategoriesController < ApplicationController
   end
 
   def edit
-    @category = $User.get_category(params[:id])
+    @category = $Vendor.categories.find_by_id(params[:id])
     add_breadcrumb @category.name,'edit_category_path(@category)'
   end
 
   def create
     @category = Category.new(params[:category])
-
+    @category.set_model_owner($User)
     respond_to do |format|
       if @category.save
-        GlobalData.reload(:categories)
+        
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Category.model_name.human)) }
         format.xml  { render :xml => @category, :status => :created, :location => @category }
       else
@@ -57,7 +57,7 @@ class CategoriesController < ApplicationController
   end
 
   def update
-    @category = $User.get_category(params[:id])
+    @category = $Vendor.categories.find_by_id(params[:id])
 
     respond_to do |format|
       if @category.update_attributes(params[:category])
@@ -71,11 +71,11 @@ class CategoriesController < ApplicationController
     end
   end
   def categories_json
-    @categories = Category.scopie.page(params[:page]).per(params[:per_page])
+    @categories = Category.scopie.page(params[:page]).per($Conf.pagination)
     render :text => @categories.to_json
   end
   def items_json
-    @items = Item.scopied.find_by_category_id(params[:id]).page(params[:page]).per(params[:per_page])
+    @items = Item.scopied.find_by_category_id(params[:id]).page(params[:page]).per($Conf.pagination)
     render :text => @items.to_json
   end
 

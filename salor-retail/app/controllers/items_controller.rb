@@ -20,9 +20,9 @@ class ItemsController < ApplicationController
     if params[:order_by] then
       key = params[:order_by]
       session[key] = (session[key] == 'DESC') ? 'ASC' : 'DESC'
-      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(25).order("#{key} #{session[key]}")
+      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("#{key} #{session[key]}")
     else
-      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(25).order("id desc")
+      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("id desc")
     end
     Node.flush
     respond_to do |format|
@@ -397,10 +397,13 @@ class ItemsController < ApplicationController
   end
 
   def download
-    if params[:page] then
-      @items = Item.scopied.page(params[:page]).per(25)
+    params[:page] ||= 1
+    if params[:order_by] then
+      key = params[:order_by]
+      session[key] ||= 'DESC'
+      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("#{key} #{session[key]}")
     else
-      @items = Item.scopied
+      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("id desc")
     end
     data = render_to_string :layout => false
     send_data(data,:filename => 'items.csv', :type => 'text/csv')

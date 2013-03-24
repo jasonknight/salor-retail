@@ -559,7 +559,7 @@ class FileUpload
 #           puts "Saved #{item.sku} #{item.base_price}"
         end
       rescue 
-         GlobalErrors << ["Error"]
+         GlobalErrors << ["Error " + $!.inspect]
       end
       $Notice = I18n.t("wholesaler_upload_report",{ :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
     end # end csv.to_a.each

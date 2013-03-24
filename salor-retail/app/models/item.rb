@@ -57,7 +57,7 @@ class Item < ActiveRecord::Base
     write_attribute(:coupon_type,t) if t.class == Fixnum
   end
   def self.csv_headers
-    return [:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
+    return [:class,:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
   end
   def get_item_type
     if not self.item_type then
