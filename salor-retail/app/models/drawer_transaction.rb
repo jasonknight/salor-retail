@@ -79,5 +79,24 @@ class DrawerTransaction < ActiveRecord::Base
     
     #GlobalData.vendor.receipt_logo_footer 
   end
+  
+  def self.check_range(from_to)
+    messages = []
+    dts = DrawerTransaction.where(:created_at => from..to)
+    1.upto(dts.size-1).each do |i|
+        if dts[i-1].payout
+            factor = -1
+        else
+            factor = 1
+        end
+        
+        if dts[i].drawer_amount.round(2) == (dts[i-1].drawer_amount + dts[i-1].amount * factor).round(2)
+            messages << ""
+        else
+            messages << "#{dts[i].id} not ok: #{dts[i].drawer_amount.round(2)} #{(dts[i-1].drawer_amount + dts[i-1].amount * factor).round(2)}"
+        end
+    end
+    puts messages.inspect
+  end
   # {END}
 end

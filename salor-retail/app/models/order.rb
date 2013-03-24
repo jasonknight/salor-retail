@@ -617,6 +617,7 @@ class Order < ActiveRecord::Base
 
   #
   def create_drawer_transaction(amount,type,opts={})
+    #Mikey: argument "type" is overridden below according to the sign of amount, so can be removed
     dt = DrawerTransaction.new(opts)
     dt.amount = amount
     dt[type] = true
@@ -629,9 +630,9 @@ class Order < ActiveRecord::Base
       dt.amount *= -1
     end
     if dt.save then
-      if type == :payout then
+      if dt.payout then
         $User.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)
-      elsif type == :drop then
+      elsif dt.drop then
         $User.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
       end
       $User.reload
@@ -1301,6 +1302,42 @@ class Order < ActiveRecord::Base
         self.payment_methods.reload
       end
     end
+  end
+  
+  def check
+    messages = []
+    tests = []
+    
+    if self.paid
+      tests[1] = self.payment_methods.sum(:amount).round(2) == self.total.round(2)
+    end
+    
+    0.upto(tests.size-1).each do |i|
+      messages << "Order #{ self.id }: test#{i} failed." if tests[i] == false
+    end
+    return messages
+  end
+  
+  def self.check_range(from, to)
+    orders = Order.where(:paid => 1, :created_at => from..to)
+    
+    messages = []
+    tests = []
+    
+    orders.each do |o|
+      if o.paid
+        tests[1] = o.payment_methods.sum(:amount).round(2) == o.total.round(2)
+      end
+    
+      0.upto(tests.size-1).each do |i|
+        if tests[i] == false
+          messages << "Order #{ o.id }: test#{i} failed." 
+        else
+          messages << []
+        end
+      end
+    end
+    return messages
   end
   # {END}
 end

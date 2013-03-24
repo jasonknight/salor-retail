@@ -93,6 +93,8 @@ class ApplicationController < ActionController::Base
   end
 
   def salor_user
+    logger.info "XXX session[:user_id] is #{ session[:user_id] }"
+    logger.info "XXX session[:user_type] is #{ session[:user_type] }"
     if session[:user_id] then
       if session[:user_type] == "User" then
         user= User.find_by_id(session[:user_id].to_i)
