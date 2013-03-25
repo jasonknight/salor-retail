@@ -160,9 +160,11 @@ def write_javascript_i18n
   yaml_root = File.join(Rails.root, 'config', 'locales')
   js_root = File.join(Rails.root, 'app','assets','javascripts', 'locales')
   js_namespace = 'i18n = '
-
+  
   Dir[File.join(yaml_root, 'main.*.yml')].sort.each { |locale| 
     locale_yml = YAML::load(IO.read(locale))
+    region_locale = File.join(yaml_root,"region.#{File.basename(locale, '.*').split('.')[1]}.yml")
+    region_yml = YAML::load(IO.read(region_locale))
     puts 'Filename: ' + locale
     File.open(
       File.join(js_root, File.basename(locale, '.*') + '.js'), 'w') {|f| 
@@ -171,6 +173,11 @@ def write_javascript_i18n
         tmp.each do |k,v|
           final[k] = v if not [:time,:date].include? k.to_sym
         end
+                                                                    puts File.basename(locale, '.*').split('.').inspect
+        tmp = region_yml[File.basename(locale, '.*').split('.')[1]]
+        tmp.each do |k,v|
+          final[k] = v if not [:time,:date].include? k.to_sym
+        end if tmp
       f.write(js_namespace + final.to_json)
     }
   }
@@ -300,6 +307,9 @@ namespace :translations do
       end
       end # each file type
     end
+    write_javascript_i18n
+  end
+  task :write_i18n_js do 
     write_javascript_i18n
   end
 end
