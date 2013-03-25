@@ -398,7 +398,7 @@ class OrdersController < ApplicationController
     
     if not @order.order_items.visible.any? then
       
-      render :js => "complete_order_hide(); " and return
+      render :js => "complete_order_hide();/*No visible order items*/ " and return
     end
     
        
@@ -430,6 +430,7 @@ class OrdersController < ApplicationController
             # puts  "#{sanity_check}"
             if sanity_check > 500 then
               GlobalErrors.append_fatal("system.errors.sanity_check")
+              $Notice = "Sanity Check 1 Failed"
               render :action => :update_pos_display and return
             end
           end
@@ -444,6 +445,7 @@ class OrdersController < ApplicationController
       
       if payment_methods_total.round(2) < @order.total.round(2) and @order.is_proforma == false then
         GlobalErrors.append_fatal("system.errors.sanity_check")
+        $Notice = "Sanity Check 2 Failed"
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return
@@ -458,12 +460,12 @@ class OrdersController < ApplicationController
       # Receipt printing moved into Order.rb, line 497
       @order.complete
       atomize(ISDIR, 'cash_drop')
-      GlobalData.salor_user.meta.order_id = nil
-      @order = GlobalData.salor_user.get_new_order
+      $User.meta.order_id = nil
+      @order = $User.get_new_order
     end
   end
   def new_order_ajax
-    GlobalData.salor_user.meta.order_id = nil
+    $User.meta.order_id = nil
     @order = initialize_order
     flash[:notice] = I18n.t("views.notice.new_order")
   end
@@ -485,7 +487,7 @@ class OrdersController < ApplicationController
   def update_pos_display
     @order = initialize_order
     if @order.paid == 1 and not $User.is_technician? then
-      @order = GlobalData.salor_user.get_new_order
+      @order = $User.get_new_order
     end
   end
   def split_order_item
