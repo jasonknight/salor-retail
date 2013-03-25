@@ -1,3 +1,12 @@
+salor-retail (4.0.1.46) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Fixing download error
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sun, 24 Mar 2013 10:00:03 -0400
+
 salor-retail (4.0.1.45) unstable; urgency=low
 
   [ Jason Knight ]
