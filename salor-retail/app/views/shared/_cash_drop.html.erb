@@ -41,7 +41,7 @@ function show_cash_drop() {
   setTimeout( function () {
     make_keyboardable($('.cash-drop-amount'));
     make_keyboardable($('#cash-drop-notes-id'));
-    $('.cash-drop-amount').htm($("#header_drawer_amount").html());
+    $('.cash-drop-amount').html(toCurrency(Drawer.amount));
     $('.cash-drop-amount').select();
   },150);
 
