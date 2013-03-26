@@ -133,7 +133,7 @@ function validatePaymentMethod(element) {
 }
 function showOrderTotalOnPoleDisplay() {
   <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
+    if ( !useMimo() ) {
       blurb = ('<%= t('activerecord.attributes.total') %>' + '               ').substring(0,10);
       currency = '<%= t('number.currency.format.friendly_unit') %>';
       total = parseFloat(($('#pos_order_total').html()).replace(',','.').substring(1));
@@ -154,7 +154,7 @@ function complete_order_show() {
   $('#complete_order').show();
 
   <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
+    if ( ! useMimo() ) {
       blurb = ('<%= t('activerecord.attributes.total') %>' + '               ').substring(0,10);
       currency = '<%= t('number.currency.format.friendly_unit') %>';
       total = parseFloat(($('#pos_order_total').html()).replace(',','.').substring(1));
@@ -539,8 +539,8 @@ function complete_order_send(print) {
 
 // this is only for text based pole displays
 function displayChangeToCustomer() {
-  <% unless GlobalData.cash_register.pole_display.nil? or GlobalData.cash_register.pole_display.empty? %>
-    if (typeof(Salor) != 'undefined') {
+  <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
+    if ( !useMimo() ) {
       currency = '<%= t('number.currency.format.friendly_unit') %>';
       given = parseFloat(get_payment_total());
       given = sprintf(" %s %6.2f", currency, given);
