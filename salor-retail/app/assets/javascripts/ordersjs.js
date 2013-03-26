@@ -145,7 +145,7 @@ function makeItemMenu(item) {
 
 function updateCustomerView(item,order_id) {
   if (typeof(Salor) != 'undefined') {
-    if(Register.pole_display == "") {
+    if( useMimo() ) {
       Salor.mimoRefresh(Conf.url+"/orders/"+order_id+"/customer_display",800,480);
     } else {
       if (item == false) {

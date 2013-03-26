@@ -18,11 +18,11 @@ $(function () {
     alert(txt);
   }
 
-  if (typeof(Salor) != 'undefined' && Register.pole_display != '') {
+  if ( !useMimo() ) {
     Salor.poleDancer(Register.pole_display, '     S A L O R      Next Generation POS' );
   }
 
-  if (typeof(Salor) != 'undefined' && Register.pole_display == '') {
+  if ( useMimo() ) {
     Salor.mimoImage('/opt/salor/support/salor-retail-customerscreen-advertising.bmp');
   }
 
