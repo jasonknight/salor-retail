@@ -276,8 +276,9 @@ class OrdersController < ApplicationController
     else
       unless @order_item.activated or @order_item.item.is_gs1 then
         @order = @order_item.order
-        @order.update_self_and_save
+        @order_item = Action.run(@order_item,:add_to_order)
         @order_item.calculate_total
+        @order.update_self_and_save
       end
     end
     if @item.base_price.zero? and not @item.is_gs1 and not @item.must_change_price and not @item.default_buyback

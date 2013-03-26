@@ -341,7 +341,8 @@ class OrderItem < ActiveRecord::Base
     else
       # NORMAL
       self.price = discover_price(item)
-      oi = Action.run(self,:add_to_order)
+      #oi = Action.run(self,:add_to_order)
+      oi = self
       oi.calculate_total
       #oi.total =  #oi.price * oi.quantity
       oi.calculate_tax(true)

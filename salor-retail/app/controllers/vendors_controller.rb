@@ -393,9 +393,10 @@ class VendorsController < ApplicationController
               if params[:field] == 'quantity' and params[:value] > @inst.quantity then
                 @inst.update_attribute(params[:field].to_sym,params[:value])
                 puts "### field being updated is quantity"
-                Action.run(@inst,:add_to_order)
+                @inst = Action.run(@inst,:add_to_order)
               else
                 @inst.update_attribute(params[:field].to_sym,params[:value])
+                @inst = Action.run(@inst,:add_to_order)
               end
               
               

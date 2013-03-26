@@ -71,10 +71,25 @@ class Action < ActiveRecord::Base
           eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide and not item.action_applied
           eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign and not item.action_applied
           if action.behavior.to_sym == :discount_after_threshold and act == :add_to_order and item.class == OrderItem then
-#                 debugger
-            if (item.quantity / action.value2).floor >= 1 then
-              num_of_discountables = (item.quantity / action.value2).floor
-              total_2_discount = num_of_discountables * item.price
+          
+            # now we need to know the quantity... but that quantity depends on how many
+            # items on the order belong to a category...sometimes
+            quantity = item.quantity
+            item_price = item.price
+            if item.class == OrderItem and item.order then
+              # we are already in an order.
+              # Now we need to know if this action is a category applying action
+              if action.owner and action.owner.class == Category then
+                items_in_cat = item.order.order_items.visible.where(:category_id => action.owner.id)
+                total_quantity = items_in_cat.sum(:quantity)
+                items_in_cat.update_all :rebate => 0
+                quantity = total_quantity
+                item_price = items_in_cat.minimum(:price)
+              end
+            end
+            if (quantity / action.value2).floor >= 1 then
+              num_of_discountables = (quantity / action.value2).floor
+              total_2_discount = num_of_discountables * item_price
               item.rebate = 0
               percentage = total_2_discount / item.calculate_total
               item.rebate = percentage * 100
@@ -95,15 +110,6 @@ class Action < ActiveRecord::Base
       else
         # puts "ActionValue is #{action.value}"
       end
-      if not action.code.blank? then
-        begin
-          # puts "evaluating code"
-          #eval(action.code)
-        rescue
-          # puts "There was an error #{$!}"
-          GlobalErrors.append("system.errors.action_code_error",action,{:error => $!})
-        end
-      end
     end
     return item
   end
@@ -117,7 +123,7 @@ class Action < ActiveRecord::Base
         item = Action.apply_action(action,item,act)
       end
       # puts "At the end of actions, #{item.price}"
-      if base_item.category then
+      if base_item.category and base_item.category.actions.any? then
         base_item.category.actions.each do |action|
           #raise "Applying Action"
           item = Action.apply_action(action,item,act)
