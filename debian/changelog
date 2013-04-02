@@ -1,3 +1,13 @@
+salor-retail (4.0.1.51) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Testing Actions Rules
+
+  [ Jason Martin ]
+  * sid
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 02 Apr 2013 06:20:50 -0400
+
 salor-retail (4.0.1.50) unstable; urgency=low
 
   [ Jason Knight ]
