@@ -10,7 +10,7 @@
 <div class='report-container'>
   <div>
     <img class='right' src='/images/salor-logo-reports.png'>
-    <% if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image %>
+    <% if Vendor.find_by_id($User.meta.vendor_id).logo_image %>
       <img class=left src="/vendors/<%= GlobalData.salor_user.meta.vendor_id %>/logo_invoice">
     <% end %>
     <div class='clear'></div>
@@ -52,7 +52,7 @@
 <div>
 <h3><%= I18n.t("headings.shipment_items") %></h3>
 
-<div style="display:inline;"><a href="/shipments/move_all_to_items?vendor_id=<%= $Vendor.id %>&id=<%= @shipment.id %>"><img id='button-move-all-shipment-items' src='/images/icons/return.svg'></img></a></div>
+<div style="display:inline;"><a href="/shipments/move_all_to_items?vendor_id=<%= $Vendor.id %>&id=<%= @shipment.id %>"><img id='button-move-all-shipment-items' src='/images/icons/return.svg' width="32"></img></a></div>
 
 <table class='shipments-edit'>
   <tr>
@@ -100,7 +100,7 @@
           <%= item.location.name if item and item.location %>
         <% else %>
           <div align="center">
-            <img id='button-move-item-<%= sitem.id %>' class='button-move-item' src='/images/icons/return.svg' onclick="get('/shipments/move_shipment_item?id=<%= @shipment.id %>&shipment_item_id=<%= sitem.id %>', 'show.html.erb')"></img>
+            <img id='button-move-item-<%= sitem.id %>' class='button-move-item' src='/images/icons/return.svg' width="32" onclick="get('/shipments/move_shipment_item?id=<%= @shipment.id %>&shipment_item_id=<%= sitem.id %>', 'show.html.erb')"></img>
           </div>
         <% end %>
       </td>

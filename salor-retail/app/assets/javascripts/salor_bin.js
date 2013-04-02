@@ -25,3 +25,6 @@ function playSound(file) {
 function useMimo() {
   return (typeof(Salor) != 'undefined' && (Register.pole_display == "" || !Register.pole_display));
 }
+function isSalor() {
+  return (typeof(Salor) != 'undefined' );
+}

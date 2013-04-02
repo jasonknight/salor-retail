@@ -18,7 +18,7 @@ $(function () {
     alert(txt);
   }
 
-  if ( !useMimo() ) {
+  if ( !useMimo() && isSalor()) {
     Salor.poleDancer(Register.pole_display, '     S A L O R      Next Generation POS' );
   }
 
