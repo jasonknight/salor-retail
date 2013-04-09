@@ -5,6 +5,7 @@
           <th><%= t("activerecord.attributes.name") %></th>
           <th><%= I18n.t("activerecord.attributes.sku") %></th>
           <th><%= t("activerecord.attributes.quantity") %></th>
+          <th>&nbsp;</th>
         </tr>
         <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
         <tr class="no-stripe">

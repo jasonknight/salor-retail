@@ -33,8 +33,12 @@ module SalorScope
       conds = []
       vals = []
       # TODO: Get rid of GlobalData
-      words = GlobalData.params.keywords if GlobalData.params
+      words = $Params[:keywords] if $Params
       return if words.nil? or words.blank?
+      if klass == Order then
+        conds << "nr = '#{words}' or qnr = '#{words}' or tag LIKE '#{words}%'"  
+        return klass.where(conds.join())
+      end
       conds << "id = '#{words}'"
       if klass.column_names.include?('name') then
         if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and klass.column_names.include?('base_price') then
@@ -53,17 +57,17 @@ module SalorScope
       if klass.column_names.include?('first_name') then
         if words.include? " " then
           parts = words.split(" ")
-          conds << "first_name LIKE '%#{parts[0]}%'"
+          conds << "first_name LIKE '#{parts[0]}%'"
         else
-          conds << "first_name LIKE '%#{words}%'"
+          conds << "first_name LIKE '#{words}%'"
         end
       end
       if klass.column_names.include?('last_name') then
         if words.include? " " then
           parts = words.split(" ")
-          conds << "last_name LIKE '%#{parts[1]}%'"
+          conds << "last_name LIKE '#{parts[1]}%'"
         else
-          conds << "last_name LIKE '%#{words}%'"
+          conds << "last_name LIKE '#{words}%'"
         end
       end
       if klass.column_names.include?('sku') then
@@ -74,12 +78,6 @@ module SalorScope
       end
       if klass.column_names.include?('email') then
         conds << "email LIKE '#{words}%'"
-      end
-      if klass.column_names.include?('tag') then
-        conds << "tag LIKE '%#{words}%'"
-      end
-      if klass.column_names.include?('nr') then
-        conds << "nr = '#{words}'"
       end
       klass.where(conds.join(" OR "))
     })

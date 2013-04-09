@@ -493,14 +493,25 @@ class OrdersController < ApplicationController
   end
   def split_order_item
     @oi = OrderItem.find_by_id(params[:id])
+    restore_paid = false
     if @oi then
-      noi = OrderItem.new(@oi.attributes)
-      new_quantity = @oi.quantity - 1
-      new_total = @oi.price * new_quantity
-      noi.order_id = @oi.order_id
-      noi.save
-      OrderItem.connection.execute("update order_items set quantity = '#{new_quantity}', total = '#{new_total}' where id = #{@oi.id}") 
-      OrderItem.connection.execute("update order_items set quantity = '#{1}', total = '#{@oi.price}', price = '#{@oi.price}' where id = #{noi.id}")
+      @order = @oi.order
+      noi = @oi.dup
+      if @order.paid == 1 then
+        @order.paid = 0
+        @oi.order.paid = 0
+        noi.order.paid = 0
+        restore_paid = true
+      end
+      @oi.quantity = @oi.quantity - 1
+      @oi.save!
+      noi.update_attribute :quantity, 1
+      noi.save!
+      @order.update_self_and_save
+      if restore_paid then
+        @order.paid = 1
+        @order.save
+      end
     end
     redirect_to "/orders/#{@oi.order.id}"
   end

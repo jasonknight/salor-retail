@@ -24,27 +24,31 @@
                 reverse = salor_icon(:refunded,{},32)
               end
             %>
-            <td class='order_table_item_name'><span class="editme item-name" <%= opts %>><%= oi.item.name %></span></td>
+            <td class='order_table_item_name'><span class="editme item-name" <%= opts %>><%= oi.item.name %> (<%= oi.id %>)</span></td>
             <td>
               <%= oi.item.sku %>
-              <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
-                <% topts = {:rev => reverse, :refresh => 'true',:class => "order-item-refund-small toggle pointer refund-#{oi.id}", :field => 'toggle_refund', :value => 'nil', :klass => 'OrderItem', :model_id => oi.id } %>
-               <%= oi.refunded ? salor_icon(:refunded,{},32) : salor_icon(:refund,{:onclick => "refund_item(#{ oi.id });"},32) %>
-              <% end %>
-              <%
-                if params[:action] == 'show' then
-                  refresh = true
-                else
-                  refresh = false
-                end
-              %>
-              <% if oi.quantity > 1 then  %>
-                <%= salor_icon(:split,{:onclick => "window.location = '/orders/split_order_item?id=#{oi.id}&order_id=#{oi.order.id}';"},16) %>
-              <% end %>
+              
             </td>
+
             
             <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='quantity' data_type='Float' id='in_place_edit_quantity_#{oi.id}'"  %>
             <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
+             <td>
+              <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
+                  <% topts = {:rev => reverse, :refresh => 'true',:class => "order-item-refund-small toggle pointer refund-#{oi.id}", :field => 'toggle_refund', :value => 'nil', :klass => 'OrderItem', :model_id => oi.id } %>
+                <%= oi.refunded ? salor_icon(:refunded,{},32) : salor_icon(:refund,{:onclick => "refund_item(#{ oi.id });",:style => "cursor:pointer"},32) %>
+                <% end %>
+                <%
+                  if params[:action] == 'show' then
+                    refresh = true
+                  else
+                    refresh = false
+                  end
+                %>
+                <% if oi.quantity > 1 then  %>
+                  <%= salor_icon(:split,{:onclick => "window.location = '/orders/split_order_item?id=#{oi.id}&order_id=#{oi.order.id}';",:style => "cursor:pointer"},32) %>
+                <% end %>
+            </td>
         </tr>
         
       <% end %>

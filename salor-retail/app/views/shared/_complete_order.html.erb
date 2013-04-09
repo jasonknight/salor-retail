@@ -427,6 +427,7 @@ function complete_order_send(print) {
     print = 'true';
   }
   if (sendingOrder) return;
+  if (Order.order_items.length == 0) { complete_order_hide(); return;}
   allow_payment_amount = false;
   sendingOrder = true;
   allow_complete_order(false);

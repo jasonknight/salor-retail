@@ -703,7 +703,8 @@ class Order < ActiveRecord::Base
       :sale_type  => self.sale_type,
       :origin => self.origin_country,
       :destination => self.destination_country,
-      :is_proforma => self.is_proforma
+      :is_proforma => self.is_proforma,
+      :order_items => self.order_items
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs
