@@ -124,6 +124,11 @@ window.params = {
 <% else %>
   window.Register = {};
 <% end %>
+<% if $Vendor then %>
+  window.Vendor = <%= raw $Vendor.attributes.to_json %>;
+<% else %>
+  window.Vendor = {};
+<% end %>
 _.templateSettings = {
     interpolate: /\{\{\=(.+?)\}\}/g,
     evaluate: /\{\{(.+?)\}\}/g

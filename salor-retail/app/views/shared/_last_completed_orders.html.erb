@@ -6,7 +6,7 @@
           <td align="right" colspan="2">
             <%= salor_number_to_currency(order.total) %>
             <br />
-            <%= salor_number_to_currency(order.front_end_change) %>
+            <%= salor_number_to_currency(order.change_given) %>
             <br />
             <%= order.get_owner.username[0..7] %>
           </td>

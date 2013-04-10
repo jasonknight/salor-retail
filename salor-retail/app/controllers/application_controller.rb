@@ -102,6 +102,7 @@ class ApplicationController < ActionController::Base
       else
         user= Employee.find_by_id(session[:user_id])
         $Vendor = user.vendor if user #Because Global State is maintained across requests.
+        Time.zone = $Vendor.time_zone if $Vendor and not $Vendor.time_zone.nil?
         $User = user
       end
       return user

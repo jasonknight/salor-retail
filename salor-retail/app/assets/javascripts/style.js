@@ -20,9 +20,13 @@ var _currentSelectTarget = '';
 var _currentSelectButton;
 
 function make_select_widget(name,elem) {
+  if (elem.children("option").length > 10) {
+    return;
+  }
   elem.hide();
   // Find the max length
   var max_len = 0;
+  
   elem.children("option").each(function () {
     var txt = $(this).text();
     if (txt.length > max_len) {

@@ -255,12 +255,17 @@ class Order < ActiveRecord::Base
   #
 	def change_given
 	  ttl = 0.0
-          collection = PaymentMethod.where({:order_id => self.id}).where("internal_type != 'Change' AND internal_type NOT LIKE '%Refund'")
-	  #collection = self.payment_methods.where("internal_type != 'Change' AND internal_type NOT LIKE '%Refund'")
-          #raise collection.inspect
-          collection.each do |pm|
-	    ttl += pm.amount.to_f
-	  end
+    collection = PaymentMethod.where({:order_id => self.id}).where("internal_type != 'Change' AND internal_type NOT LIKE '%Refund'")
+    #collection = self.payment_methods.where("internal_type != 'Change' AND internal_type NOT LIKE '%Refund'")
+    #raise collection.inspect
+    seen = []
+    collection.each do |pm|
+      if seen.include? pm.internal_type then
+        next
+      end
+      seen << pm.internal_type
+      ttl += pm.amount.to_f
+    end
 	  return 0 if ttl == 0.0
 	  return ttl - self.total
 	end
@@ -536,6 +541,7 @@ class Order < ActiveRecord::Base
           PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
         end
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
+        log_action("End of Complete: " + self.payment_methods.inspect)
       end
       lc = self.loyalty_card
       self.lc_points = 0 if self.lc_points.nil?

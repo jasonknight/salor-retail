@@ -33,6 +33,7 @@
             
             <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='quantity' data_type='Float' id='in_place_edit_quantity_#{oi.id}'"  %>
             <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
+            <td align="right"><%= number_to_currency(oi.price) %></td>
              <td>
               <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
                   <% topts = {:rev => reverse, :refresh => 'true',:class => "order-item-refund-small toggle pointer refund-#{oi.id}", :field => 'toggle_refund', :value => 'nil', :klass => 'OrderItem', :model_id => oi.id } %>
@@ -49,6 +50,7 @@
                   <%= salor_icon(:split,{:onclick => "window.location = '/orders/split_order_item?id=#{oi.id}&order_id=#{oi.order.id}';",:style => "cursor:pointer"},32) %>
                 <% end %>
             </td>
+            
         </tr>
         
       <% end %>

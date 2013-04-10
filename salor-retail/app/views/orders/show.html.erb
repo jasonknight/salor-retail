@@ -5,9 +5,16 @@
           <th><%= t("activerecord.attributes.name") %></th>
           <th><%= I18n.t("activerecord.attributes.sku") %></th>
           <th><%= t("activerecord.attributes.quantity") %></th>
+          <th><%= t("activerecord.attributes.base_price") %></th>
           <th>&nbsp;</th>
         </tr>
         <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
+        <% @order.payment_methods.each do |pm| %>
+          <tr>
+            <td colspan="4" align="right"><%= pm.name %></td>
+            <td align="right"><%= number_to_currency pm.amount %></td>
+          </tr>
+        <% end %>
         <tr class="no-stripe">
             <td align=center colspan=6>
               <select id='refund_payment_method'>

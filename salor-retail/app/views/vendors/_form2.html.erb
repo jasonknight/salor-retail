@@ -35,6 +35,15 @@
   
   <tr>
     <td valign="top" class="attr">
+      <%= f.label "Time Zone" %>
+    </td>
+    <td valign="top" class="value">
+      <%= f.time_zone_select :time_zone %>
+    </td>
+  </tr>
+  
+  <tr>
+    <td valign="top" class="attr">
       <%= f.label "Token" %>
     </td>
     <td valign="top" class="value">
