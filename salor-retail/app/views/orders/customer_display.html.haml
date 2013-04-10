@@ -30,7 +30,7 @@
       %span.total= number_to_currency @report[:fixed_rebate_amount]
 
 
-  %div#subsubtotal= number_to_currency @report[:subsubtotal]
+  %div#subsubtotal= number_to_currency @order.gross
 
   - if params[:display_change] == '1'
     %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @order.change_given }
