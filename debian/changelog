@@ -1,3 +1,12 @@
+salor-retail (4.0.1.53) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Closes bug #1690
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Wed, 10 Apr 2013 03:46:19 -0400
+
 salor-retail (4.0.1.52) unstable; urgency=low
 
   [ Jason Knight ]
