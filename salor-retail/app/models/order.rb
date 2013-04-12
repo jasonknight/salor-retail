@@ -14,6 +14,7 @@ class Order < ActiveRecord::Base
   has_many :order_items
   has_many :payment_methods
   has_many :paylife_structs
+  has_many :histories, :as => :owner
   belongs_to :user
   belongs_to :employee
   belongs_to :customer
@@ -1308,6 +1309,16 @@ class Order < ActiveRecord::Base
         PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
         self.payment_methods.reload
       end
+      pms_seen = []
+      self.payment_methods.each do |pm|
+        if pms_seen.include? pm.internal_type then
+          puts "Deleting pm..."
+          pm.delete
+        else
+          pms_seen << pm.internal_type
+        end
+      end
+      self.payment_methods.reload
     end
   end
   

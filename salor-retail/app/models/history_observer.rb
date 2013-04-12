@@ -12,14 +12,14 @@ class HistoryObserver < ActiveRecord::Observer
     if object.class == Order then
       #order rules go here
       object.changes.keys.each do |k|
-        if [:hidden, :total, :paid].include? k.to_sym then
+        if [:hidden, :total, :paid,:rebate].include? k.to_sym then
           History.record('order_edit_' + k,object,2)
           return
         end
       end
     elsif object.class == OrderItem then
       object.changes.keys.each do |k|
-        if [:price, :hidden, :total].include? k.to_sym then
+        if [:price, :hidden, :total, :rebate,:action_applied, :discount_amount].include? k.to_sym then
           History.record('order_item_edit_' + k,object,3)
           return
         end

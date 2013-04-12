@@ -40,9 +40,9 @@ class OrdersController < ApplicationController
    
   def new_from_proforma
     @proforma = Order.scopied.find_by_id(params[:order_id]) #initialize_order
-    @order = Order.new
-    @order.attributes = @proforma.attributes
+    @order = @proforma.dup
     @order.save
+    @order.reload
     @proforma.order_items.each do |oi|
        noi = oi.dup
        noi.order_id = @order.id

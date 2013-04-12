@@ -131,6 +131,7 @@ module ApplicationHelper
       :delete => 'delete',
       :add => 'add',
       :item => 'item',
+      :history => "agenda",
       :item_type => 'bag1',
       :show => 'play',
       :info => 'puzzle',

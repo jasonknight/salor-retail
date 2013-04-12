@@ -1,0 +1,3 @@
+=raw content_box_top("History")
+- width ||= "90%"
+= render :partial => 'shared/list_view', :locals => {  :klass => History, :width => '60%',:collection => @histories, :columns => [:url,:action_taken, :changes_made,:owner_type,:owner_id]}

@@ -24,7 +24,7 @@
                 reverse = salor_icon(:refunded,{},32)
               end
             %>
-            <td class='order_table_item_name'><span class="editme item-name" <%= opts %>><%= oi.item.name %> (<%= oi.id %>)</span></td>
+            <td class='order_table_item_name'><span class="editme item-name" <%= opts %>><%= oi.item.name %> (<%= oi.id %>) [<%= oi.action_applied == true ? 'A' : '' %>]</span></td>
             <td>
               <%= oi.item.sku %>
               
@@ -33,6 +33,7 @@
             
             <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='quantity' data_type='Float' id='in_place_edit_quantity_#{oi.id}'"  %>
             <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
+            <td align="right"><%= number_to_percentage(oi.rebate) %></td>
             <td align="right"><%= number_to_currency(oi.price) %></td>
              <td>
               <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>

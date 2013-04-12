@@ -480,6 +480,9 @@ class VendorsController < ApplicationController
     render :layout => false
   end
   #
+  def history
+    @histories = History.order("created_at desc").page(params[:page]).per($Conf.pagination)
+  end
   # {START}
   def toggle
     if allowed_klasses.include? params[:klass]
