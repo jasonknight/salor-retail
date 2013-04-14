@@ -41,6 +41,7 @@ function add_payment_method() {
   var opts = payment_method_options();
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
   sel.on('change', function(){
+    checkAndDisplayChange();
     ajax_log({log_action:'select_payment_method', button_id:sel.attr('id'), value:sel.val(), order_id:Order.id});
   });
 
@@ -49,6 +50,9 @@ function add_payment_method() {
   $('#payment_methods').append('<br />');
   oldSelectedIndex = null;
   validatePaymentMethod($(sel));
+  amount.on("keyup",function (event) {
+    checkAndDisplayChange("payment-amount.onKeyUp " + event.which + " " + _get("sel",$(this)).val());
+  });
   make_select_widget($(sel).find("option:selected"),$(sel));
   make_keyboardable_with_options(amount, {
     visible: function () {
@@ -69,6 +73,7 @@ function add_payment_method() {
     focusInput(amount);
     amount.select();
   },100);
+  _set("sel",sel,amount);
   ajax_log({log_action:'add_payment_method', order_id:Order.id, value:sel.val()});
 }
 
@@ -564,13 +569,23 @@ function serializePayments() {
   });
   return returnArr.join("&");
 }
-
+function checkAndDisplayChange(from) {
+  if ( ! from ) {
+    from = 'checkAndDisplayChange:from not set';
+  }
+  if ($('.payment-amount').is(":visible")) {
+     //console.log("checkAndDisplayChange Called from " + from);
+     display_change(from);
+  }
+}
 // init some stuff
 var orderCompleteDisplayed = false;
 $(document).ready(function() {
-  $(".payment-amount").live('keyup', function(event){
-    display_change('documentready');
-  });
+  /*
+    $(".payment-amount").live('keyup', function(event){
+      display_change('documentready');
+    });
+  */
   $(".payment-method").live("change", function(){
     validatePaymentMethod($(this));
   });
