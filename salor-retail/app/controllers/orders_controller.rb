@@ -478,7 +478,7 @@ class OrdersController < ApplicationController
   end
   def new_order_ajax
     $User.meta.order_id = nil
-    @order = initialize_order
+    @order = $User.get_new_order
     flash[:notice] = I18n.t("views.notice.new_order")
   end
   def activate_gift_card

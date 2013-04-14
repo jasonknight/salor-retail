@@ -207,7 +207,7 @@ module UserEmployeeMethods
   
   # Locations related functions
   def get_locations(page=nil)
-    id = GlobalData.salor_user.meta.vendor_id
+    id = $User.get_meta.vendor_id
     return Location.scopied.order('id DESC').page($Params[:page])
   end
   def get_location(id)
@@ -237,15 +237,15 @@ module UserEmployeeMethods
   def get_new_order
     # puts "##Creating a new order"
     o = Order.new
-    if owns_vendor?(GlobalData.salor_user.meta.vendor_id) then
-      o.vendor_id = GlobalData.salor_user.meta.vendor_id
+    if owns_vendor?($User.get_meta.vendor_id) then
+      o.vendor_id = $User.get_meta.vendor_id
     else
       o.vendor_id = get_default_vendor.id
     end
     o.set_model_owner(self)
-    o.cash_register_id = GlobalData.salor_user.meta.cash_register_id
+    o.cash_register_id = $User.get_meta.cash_register_id
     o.save!
-    GlobalData.salor_user.meta.update_attribute :order_id,o.id
+    $User.get_meta.update_attribute :order_id,o.id
     return o
   end
   
@@ -717,8 +717,8 @@ module UserEmployeeMethods
   def auto_drop
     return
     if $Conf and $Conf.auto_drop then
-      bod = DrawerTransaction.where(:tag => 'beginning_of_day', :drawer_id => GlobalData.salor_user.get_drawer.id).order("id desc").limit(1)
-      last_eod = DrawerTransaction.where(:tag => 'end_of_day', :drawer_id => GlobalData.salor_user.get_drawer.id).order("id desc").limit(1)
+      bod = DrawerTransaction.where(:tag => 'beginning_of_day', :drawer_id => $User.get_drawer.id).order("id desc").limit(1)
+      last_eod = DrawerTransaction.where(:tag => 'end_of_day', :drawer_id => $User.get_drawer.id).order("id desc").limit(1)
       if last_eod.any? and (not bod.any? or bod.first.id < last_eod.first.id) then
         amount = last_eod.first.amount
         dt = DrawerTransaction.new(:owner_type => self.class.to_s,
@@ -732,7 +732,7 @@ module UserEmployeeMethods
         if not dt.save then
           GlobalErrors.append("system.errors.auto_drop_failed",self,nil)
         else
-          GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
+          $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
           atomize(ISDIR, 'cash_drop')
         end
       else
