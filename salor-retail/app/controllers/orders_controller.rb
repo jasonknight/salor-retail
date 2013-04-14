@@ -39,11 +39,11 @@ class OrdersController < ApplicationController
 
    
   def new_from_proforma
-    @proforma = Order.scopied.find_by_id(params[:order_id]) #initialize_order
+    @proforma = Order.scopied.find_by_id(params[:order_id].to_s) #initialize_order
     @order = @proforma.dup
     @order.save
     @order.reload
-    @proforma.order_items.each do |oi|
+    @proforma.order_items.visible.each do |oi|
        noi = oi.dup
        noi.order_id = @order.id
        noi.save
@@ -59,6 +59,17 @@ class OrdersController < ApplicationController
     @order.is_proforma = false
     @order.update_self_and_save
     redirect_to "/orders/new?order_id=#{@order.id}"
+  end
+  def merge_into_current_order
+    @current = initialize_order
+    @to_merge = Order.scopied.find_by_id(params[:id].to_s)
+    @to_merge.order_items.visible.each do |oi|
+       noi = oi.dup
+       noi.order_id = @current.id
+       noi.save
+    end
+    @current.reload.update_self_and_save
+    redirect_to "/orders/new?order_id=#{@current.id}"
   end
   def index
     params[:type] ||= 'normal'

@@ -410,6 +410,7 @@ en-US:
       print: Print
   label: label
   menu:
+    merge_into_current_order: Merge into current order
     documentation: Documentation
     invoice_blurbs: Invoice Blurbs
     edit_invoice_blurb: Edit Invoice Blurb

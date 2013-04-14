@@ -241,11 +241,11 @@ class ApplicationController < ActionController::Base
       $User.get_meta.update_attribute :order_id, o.id
       return o if o
     end
-    if not GlobalData.salor_user.meta.order_id or not Order.exists? GlobalData.salor_user.meta.order_id then
-      order = GlobalData.salor_user.get_new_order
-      GlobalData.salor_user.meta.update_attribute(:order_id,order.id)
+    if not $User.get_meta.order_id or not Order.exists? $User.get_meta.order_id then
+      order = $User.get_new_order
+      $User.meta.update_attribute(:order_id,order.id)
     else
-      order = GlobalData.salor_user.get_order(GlobalData.salor_user.meta.order_id)
+      order = $User.get_order($User.meta.order_id)
     end
     return order
   end

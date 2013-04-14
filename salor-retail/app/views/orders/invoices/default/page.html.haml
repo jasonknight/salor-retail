@@ -18,8 +18,11 @@
   = link_to salor_icon(:label, {}, 32, t('orders.print.labels')), "/items/selection?order_id=#{ @order.id }"
   - if @order.is_proforma
     = link_to salor_icon(:order,{},32,I18n.t("menu.new_order")),"/orders/new_from_proforma?order_id=#{@order.id}"
+  - if @order.unpaid_invoice or @order.paid == 0
+    = link_to salor_icon(:merge,{},32,I18n.t("menu.merge_into_current_order")),"/orders/merge_into_current_order?id=#{@order.id}"
   %br
   %span
+    =@order.paid
     %select{ :id=>"locale_select", :onchange=>"window.location = '?locale=' + $('#locale_select').val();"}
       - supported_languages.each do |l|
         %option{ :value=>"#{l[:locale]}" }= l[:name]
