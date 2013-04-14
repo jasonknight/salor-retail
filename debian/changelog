@@ -1,3 +1,14 @@
+salor-retail (4.0.1.57) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Adding merge ability for orders
+  * Merging change calc from Cigar
+  * Various
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Sun, 14 Apr 2013 06:56:47 -0400
+
 salor-retail (4.0.1.56) unstable; urgency=low
 
   [ Jason Knight ]
