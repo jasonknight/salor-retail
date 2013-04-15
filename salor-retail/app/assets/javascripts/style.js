@@ -46,7 +46,7 @@ function make_select_widget(name,elem) {
   button.css({width: max_len * char_width});
   
   
-  button.mousedown(function () {
+  button.click(function () {
     var pos = $(this).position();
     var off = $(this).offset();
     var mdiv = div();
@@ -61,12 +61,15 @@ function make_select_widget(name,elem) {
       d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
       d.attr("value", $(this).attr('value'));
       d.css({width: max_len * char_width, overflow: 'hidden'});
-      d.mousedown(function () {
+      d.click(function () {
        $(_currentSelectTarget).find("option:selected").removeAttr("selected"); 
        $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected");
        $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").change(); 
        _currentSelectButton.html($(this).html());
+       var input_id = _currentSelectTarget.replace("type","amount");
+       setTimeout(function () { $(input_id).select(); },55);
        $('.select-widget-display').hide();
+       _
       });
       mdiv.append(d);
       x++;

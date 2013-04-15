@@ -2,7 +2,7 @@ function make_keyboardable(elem) {
   if (elem.hasClass('keyboardable-done')) {
     return;
   }
-  var kbd = $('<div class="kbd-show-button">&crarr;</div>');
+  var kbd = $('<div id="' + elem.attr("id") + '_kbd"class="kbd-show-button">&crarr;</div>');
 
   kbd.mousedown(function () {
     elem.getkeyboard().reveal();
@@ -70,7 +70,7 @@ function make_keyboardable_with_options(elem,opts) {
   if (elem.hasClass('keyboardable-done')) {
     return;
   }
-  var kbd = $('<div class="kbd-show-button">&crarr;</div>');
+  var kbd = $('<div id="' + elem.attr("id") + '_kbd"class="kbd-show-button">&crarr;</div>');
   kbd.attr('target_id',"#" + elem.attr('id'));
   kbd.click(function () {
     var target = $(this).attr('target_id');
