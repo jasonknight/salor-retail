@@ -22,31 +22,31 @@ function clickBuyOrderButton(id) {
 }
 </script>
 <div class="pos-menu">
-        <div id="new_order_button" onmousedown="get('/orders/new_order_ajax', '_menu.html.erb')" class="input pos-button new-order">
+        <div id="new_order_button" onclick="get('/orders/new_order_ajax', '_menu.html.erb')" class="input pos-button new-order">
           <%= t("menu.new_order")%>
         </div>
-        <div id="clear_button" onmousedown="clearOrder();" class="input pos-button pos-configuration" style="width: 3%;background-color: red;">
+        <div id="clear_button" onclick="clearOrder();" class="input pos-button pos-configuration" style="width: 3%;background-color: red;">
         C
         </div>
         <!--<div id="buy_order_button" class="input pos-button pos-configuration" onclick="clickBuyOrderButton(Order.id);">
         <%= t("menu.buy_order")%>
         </div>-->
-        <div id="configuration_button" onmousedown="showOrderOptions();" class="input pos-button pos-configuration">
+        <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button pos-configuration">
           <%= t("menu.configuration")%>
         </div> 
-        <div id="show_customers" onmousedown="$('.last-five-orders').show();" class="input pos-button">
+        <div id="show_customers" onclick="$('.last-five-orders').show();" class="input pos-button">
           <%= t("activerecord.models.customer.other")%>
         </div>
-        <div id="show_butons" onmousedown="$('#buttons').show();" class="input pos-button">
+        <div id="show_butons" onclick="$('#buttons').show();" class="input pos-button">
           <%= t("menu.buttons")%>
         </div>
-        <div id="show_search" onmousedown="showSearch();" class="input pos-button">
+        <div id="show_search" onclick="showSearch();" class="input pos-button">
           <%= t("menu.search")%>
         </div>
-        <div id="print_receipt_button" onmousedown="get('/orders/show_payment_ajax?order_id=' + Order.id);" class="input pos-button print-receipt">
+        <div id="print_receipt_button" onclick="get('/orders/show_payment_ajax?order_id=' + Order.id);" class="input pos-button print-receipt">
           <%= t("system.complete_sale")[0...5] %>
         </div>
-        <!--<div id="print_receipt_button" onmousedown="showCompleteOrderPopup();" class="input pos-button print-receipt">
+        <!--<div id="print_receipt_button" onclick="showCompleteOrderPopup();" class="input pos-button print-receipt">
           <%= t("system.complete_sale")[0...5] %>
         </div>-->
 

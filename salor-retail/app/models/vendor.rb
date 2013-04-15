@@ -134,5 +134,17 @@ class Vendor < ActiveRecord::Base
     end
     return nr
   end
+  def self.reset_for_tests
+    t = Time.now - 24.hours
+    Drawer.update_all :amount => 0
+    Order.where(:created_at => t...(Time.now)).delete_all
+    OrderItem.where(:created_at => t...(Time.now)).delete_all
+    DrawerTransaction.where(:created_at => t...(Time.now)).delete_all
+    PaymentMethod.where(:created_at => t...(Time.now)).delete_all
+    Category.update_all :cash_made => 0
+    Category.update_all :quantity_sold => 0
+    Location.update_all :cash_made => 0
+    Location.update_all :quantity_sold => 0
+  end
   # {END}
 end

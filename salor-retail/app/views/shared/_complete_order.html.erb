@@ -174,7 +174,7 @@ function complete_order_show() {
   var cpos = {x: width + left + 21, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
   a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
   relevant_order_id = Order.id;
-  a4print.mousedown(function () {
+  a4print.click(function () {
     window.location = '/orders/' + relevant_order_id + '/print';      
   });
   $("body").append(a4print);
@@ -232,7 +232,7 @@ function show_denominations() {
       p.addClass("pieces-button shadow");
         cpos = {x: cpos.x, y: cpos.y + 54};
         p.attr('amount',pieces[i]);
-        p.mousedown(function () {
+        p.click(function () {
           var val = toFloat($(this).attr('amount'));
           $("#payment_amount_0").val( val );
           display_change('pieces-button ' + val);
@@ -249,17 +249,17 @@ function allow_complete_order(isAllowed) {
   //if (complete_total == 0) isAllowed = false;
   if (isAllowed && $('#pos-table-left-column-items').children().length > 0 || Order.is_proforma) {
     $("#confirm_complete_order_button").removeClass("button-inactive");
-    $("#confirm_complete_order_button").unbind('mousedown');
-    $("#confirm_complete_order_button").mousedown(function(){complete_order_send(true)});
+    $("#confirm_complete_order_button").unbind('click');
+    $("#confirm_complete_order_button").click(function(){complete_order_send(true)});
     $("#confirm_complete_order_noprint_button").removeClass("button-inactive");
-    $("#confirm_complete_order_noprint_button").unbind('mousedown');
-    $("#confirm_complete_order_noprint_button").mousedown(function(){complete_order_send(false)});
+    $("#confirm_complete_order_noprint_button").unbind('click');
+    $("#confirm_complete_order_noprint_button").click(function(){complete_order_send(false)});
     $("#cancel_complete_order_button").html("<%= I18n.t("helpers.submit.cancel") %>");
   } else {
     $("#confirm_complete_order_button").addClass("button-inactive");
-    $("#confirm_complete_order_button").unbind('mousedown');
+    $("#confirm_complete_order_button").unbind('click');
     $("#confirm_complete_order_noprint_button").addClass("button-inactive")
-    $("#confirm_complete_order_noprint_button").unbind('mousedown');
+    $("#confirm_complete_order_noprint_button").unbind('click');
     $("#cancel_complete_order_button").html("<%= I18n.t("menu.done") %>");
   }
 }
@@ -591,8 +591,8 @@ $(document).ready(function() {
   });
   $(".payment-method").live("focus", function(){
   });
-  $(".currency").mousedown(addCashAmount);
-  $("#cancel_complete_order_button").mousedown(complete_order_hide);
+  $(".currency").click(addCashAmount);
+  $("#cancel_complete_order_button").click(complete_order_hide);
   $(".payment-amount").live("keydown", function(event){
     if (!allow_payment_amount && event.which != 13)
     {
@@ -612,7 +612,7 @@ $(document).ready(function() {
       -->
     </p>
     <div class="actions" width="300" style="padding-bottom:3px">
-      <input type="submit" id="add_payment_method_button" value="<%= I18n.t("system.add_payment_method") %>" onmousedown="add_payment_method()"/>
+      <input type="submit" id="add_payment_method_button" value="<%= I18n.t("system.add_payment_method") %>" onclick="add_payment_method()"/>
     </div>
     <div id="payment_methods">
       </div>

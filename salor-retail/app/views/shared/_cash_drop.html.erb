@@ -3,7 +3,7 @@
 var filename = "_cash_drop.html.erb";
 
 $(document).ready(function(){
-  $(".trans-button").mousedown(selectTransButton);
+  $(".trans-button").click(selectTransButton);
   $(".cash-drop-amount").keyup(checkDropAmount);
   $('#header_drawer_amount').html(toCurrency(Drawer.amount));
 });
@@ -134,7 +134,7 @@ function show_coin_calculator() {
             amount = 0
           end
         %>
-        <input type="text" name="transaction[amount]" class="cash-drop-amount text-input " value="<%= amount %>" size=3 />
+        <input id="cash_drop_amount" type="text" name="transaction[amount]" class="cash-drop-amount text-input " value="<%= amount %>" size=3 />
       </p>
       <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
@@ -158,7 +158,7 @@ function show_coin_calculator() {
 </form>
 <div class="clear-hr"></div>
 <div class="button-row" align="right">
-      <div class="button-cancel" onmousedown="hide_cash_drop();"><%= I18n.t("helpers.submit.cancel") %></div>
+      <div id="cancel_cash_drop" class="button-cancel" click="hide_cash_drop();"><%= I18n.t("helpers.submit.cancel") %></div>
 </div>
 </div>
 <% end %>

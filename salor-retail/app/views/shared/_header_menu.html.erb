@@ -15,7 +15,7 @@
     </div>
   </li>
   <li>
-    <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="showClockin();">
+    <div align="center" id="header_show_clockin" class="no-touchy cash-drop-header" onclick="showClockin();">
       <%= raw(salor_icon(:employee,{},32,I18n.t("system.login"))) %>
     </div>
   </li>
@@ -28,7 +28,7 @@
   <% end %>
   <% if $User and $User.can(:cashier) %>
     <li>
-      <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onmousedown="show_cash_drop();">
+      <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
         <div id='header_drawer_amount'></div>
         <%= salor_icon(:cash_drop,{},20) %><br /><div style="margin-top:12px;"><span class='icon-caption'><%= I18n.t("menu.cash_drop") %></span></div>
       </div>
