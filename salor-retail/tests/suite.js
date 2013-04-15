@@ -4,6 +4,7 @@ include("conventional_sales/add_item_of_10.js");
 include("conventional_sales/add_item_of_5.js");
 include("conventional_sales/add_item_of_20.js");
 include("conventional_sales/add_item_of_40.js");
+include("conventional_sales/add_buybackitem_of_10.js");
 var VIEW = new Chrome("ConventionalSalesMachine");
 
 /*
@@ -36,8 +37,10 @@ var add_20            = new env.modules.Add20();
     add_20.view       = VIEW
 var add_40            = new env.modules.Add40();
     add_40.view       = VIEW
+var add_buyback_10            = new env.modules.AddBuyback10();
+    add_buyback_10.view       = VIEW;
 //login.run("http://localhost:3000").next(function () { 
 //  cash_drop.run("http://localhost:3000/orders/new").next(env.report); // end sales.run
 //}); // end login.run
-add_40.run("http://localhost:3000/orders/new").next(env.report);
+add_buyback_10.run("http://localhost:3000/orders/new").next(env.report);
 

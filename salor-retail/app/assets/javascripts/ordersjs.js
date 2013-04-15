@@ -387,7 +387,7 @@ function detailedOrderItemMenu(event) {
   name.find('input').css({width: $('#header').width() * 0.50});
   
   var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" width="31px" height="32px" /></div>');
-  dicon.mousedown(function () {
+  dicon.click(function () {
     $.get('/orders/delete_order_item?id=' + item.id);
     title.remove();
     config.remove();
@@ -398,7 +398,7 @@ function detailedOrderItemMenu(event) {
   
   var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/bill.svg" width="46px" height="28px" /></div>');
   buyback.addClass('pointer');
-  buyback.mousedown(function () {
+  buyback.click(function () {
     var string = '/vendors/toggle?model_id=' +
     item.id +'&klass=OrderItem' +
     '&field=toggle_buyback'+
@@ -412,7 +412,7 @@ function detailedOrderItemMenu(event) {
   
   if (!Register.scale == '') {
     var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
-    wicon.mousedown(function () {
+    wicon.click(function () {
       var string = '/vendors/edit_field_on_child?id=' +
       item.id +'&klass=OrderItem' +
       '&field=quantity'+
@@ -426,7 +426,7 @@ function detailedOrderItemMenu(event) {
   } // end  if (!Register.scale == '') {
     
     var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
-    btn.mousedown(function () {
+    btn.click(function () {
       title.remove();
       config.remove();
       focusInput($('#keyboard_input'));
@@ -436,7 +436,7 @@ function detailedOrderItemMenu(event) {
     title.append(btn);
     
     var edit_item_hr = shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item + '( ' + item.sku + ' )',config);
-    edit_item_hr.mousedown(function () {
+    edit_item_hr.click(function () {
       window.location = '/items/' + item.item_id + '/edit';
     });
     edit_item_hr.addClass('pointer no-select');

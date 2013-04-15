@@ -45,6 +45,7 @@ env.modules.Add20 = function () {
           var button = self.view.getElement("#payment_amount_0_kbd");
           self.view.click(button);
           self.state++;
+          self.tries = 0;
         } else {
           var complete_button = self.view.getElement("#print_receipt_button");
           self.view.click(complete_button);
@@ -52,7 +53,7 @@ env.modules.Add20 = function () {
         }
         break;
       case 2:
-       self.tries = 0;
+       
        var kbd = self.view.getElement(".ui-keyboard");
        if (kbd.isVisible == false) {
           if (self.tries > 4) {
