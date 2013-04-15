@@ -227,7 +227,6 @@ chown -R $app_user:$app_user /var/tmp/salor-retail
 
 echo "  postinst: changing permissions for user $app_user"
 chmod 770 /etc/salor-retail
-chown -R $app_user:$app_user /var/tmp/salor-retail
   
 echo "  postinst: restarting Apache ..."
 service apache2 restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null

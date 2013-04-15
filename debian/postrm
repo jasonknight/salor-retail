@@ -48,19 +48,24 @@ case "$1" in
         ucf --purge /etc/salor-retail/$lInstance/database.yml
         ucf --purge /etc/salor-retail/$lInstance/config.yml
         ucf --purge /etc/salor-retail/$lInstance/Gemfile
+        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-http
+        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-https
       done
       for lInstance in $gInstances; do
         ucf --purge /etc/salor-retail/$lInstance/database.yml
         ucf --purge /etc/salor-retail/$lInstance/config.yml
         ucf --purge /etc/salor-retail/$lInstance/Gemfile
+        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-http
+        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-https
       done
     fi
     
     rm -rf /usr/share/salor-retail
-    rm -rf /var/log/salor-retail/*
-    rm -rf /var/cache/salor-retail/*
+    rm -rf /var/log/salor-retail
+    #rm -rf /var/cache/salor-retail/*
     rm -rf /etc/salor-retail
-    rm -rf /var/lib/salor-retail/*
+    rm -rf /var/lib/salor-retail
+    rm -rf /var/tmp/salor-retail
   ;;
     
   remove)
