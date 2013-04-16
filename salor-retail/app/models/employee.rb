@@ -82,5 +82,11 @@ class Employee < ActiveRecord::Base
   def name_with_username
     "#{ first_name } #{ last_name } (#{ username })"
   end
+  def debug_info
+    text  = "#{self.last_name}, #{self.first_name} as #{self.username}: \n"
+    text += "\tDrawer: #{self.drawer.id} Actual: #{self.get_drawer.id}\n"
+    text += "\tOrders: #{self.orders.order('created_at desc').limit(5).collect {|o| o.id }.join(',') }\n"
+    return text
+  end
   # {END}
 end

@@ -502,9 +502,9 @@ class Order < ActiveRecord::Base
   end
 	#
   def complete
-#     log_action "Starting complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
-#     log_action "User Is: #{GlobalData.salor_user.username}"
-#     log_action "DrawerId Is: #{GlobalData.salor_user.get_drawer.id}"
+#     log_action "Starting complete order. Drawer amount is: #{$User.get_drawer.amount}"
+#     log_action "User Is: #{$User.username}"
+#     log_action "DrawerId Is: #{$User.get_drawer.id}"
 #     log_action "OrderId Is: #{self.id}"
     self.paid = 1
     self.created_at = Time.now
@@ -514,9 +514,7 @@ class Order < ActiveRecord::Base
     else
       self.nr = self.vendor.get_unique_model_number('order')
     end
-    self.save
-    self.reload
-    begin # so if all this doesn't work, then the order won't complete...
+    #begin
       log_action "Updating quantities"
       order_items.visible.each do |oi|
         # These methods are defined on OrderItem model.
@@ -526,19 +524,23 @@ class Order < ActiveRecord::Base
       end
       log_action "Updating Category Gift Cards"
       activate_gift_cards
-      
-      update_self_and_save
+
       ottl = self.get_drawer_add
+      log_action "ottl = self.get_drawer_add #{ottl}"
       if self.buy_order then
         #ottl *= -1 if ottl < 0
+        log_action "It's a buy order..."
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       elsif self.total < 0 then
         #ottl *= -1 if ottl < 0
+        log_action "Not a buy order, but total < 0"
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
         $User.meta.update_attribute :last_order_id, self.id
+        log_action "Creating :drop for complete order with #{ottl}"
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
         if self.change_given > 0 and not self.is_quote
+          log_action "Creating change PM"
           PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
         end
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
@@ -547,21 +549,26 @@ class Order < ActiveRecord::Base
       lc = self.loyalty_card
       self.lc_points = 0 if self.lc_points.nil?
       if lc and not self.lc_points.nil? and not lc.points.nil? then
+        log_action "LC Points present"
         if self.lc_points > lc.points then
+          log_action "Too many points on order"
           self.lc_points = lc.points
         end
+        log_action "Updating loyalty card points to #{lc.points - self.lc_points}" 
         lc.update_attribute(:points,lc.points - self.lc_points)
         np = $Conf.lp_per_dollar * self.subtotal
+        log_action "Updating lc card with points of amount #{lc.points + np}"
         lc.update_attribute(:points,lc.points + np)
       end
-    rescue
-      # #puts $!.to_s
-      self.update_attribute :paid, 0
-      GlobalErrors.append_fatal("system.errors.order_failed",self)
-      log_action $!.to_s
-      #puts $!.to_s
-    end
-    #log_action "Ending complete order. Drawer amount is: #{GlobalData.salor_user.get_drawer.amount}"
+    #rescue
+    #  # #puts $!.to_s
+    #  self.update_attribute :paid, 0
+    #  GlobalErrors.append_fatal("system.errors.order_failed",self)
+    #  log_action $!.to_s
+    #  #puts $!.to_s
+    #end
+    #log_action "Ending complete order. Drawer amount is: #{$User.get_drawer.amount}"
+    self.save
   end
   def activate_gift_cards
     self.gift_cards.each do |gc|
@@ -638,9 +645,9 @@ class Order < ActiveRecord::Base
     end
     if dt.save then
       if dt.payout then
-        $User.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)
+        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount - dt.amount)
       elsif dt.drop then
-        $User.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
+        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
       end
       $User.reload
     end
@@ -665,11 +672,11 @@ class Order < ActiveRecord::Base
       #self.update_attribute(:refunded, false)
       #create_drawer_transaction(self.total,:drop)
     else
-      return if (GlobalData.salor_user.get_drawer.amount - self.total) < 0
+      return if ($User.get_drawer.amount - self.total) < 0
 
       self.update_attribute(:refunded, true)
-      self.update_attribute(:refunded_by, GlobalData.salor_user.id)
-      self.update_attribute(:refunded_by_type, GlobalData.salor_user.class.to_s)
+      self.update_attribute(:refunded_by, $User.id)
+      self.update_attribute(:refunded_by_type, $User.class.to_s)
       if refund_payment_method == 'InCash'
         opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
         create_drawer_transaction(self.total, :payout, opts)
@@ -1097,9 +1104,9 @@ class Order < ActiveRecord::Base
   # new methods from test
   
   def self.generate
-    if GlobalData.salor_user.get_meta.order_id then
+    if $User.get_meta.order_id then
       # #puts "OrderId found"
-      o = Order.find(GlobalData.salor_user.get_meta.order_id)
+      o = Order.find($User.get_meta.order_id)
       if o and (not o.paid and not o.order_items.any?) then
         # We already have an empty order.
         return o
@@ -1112,11 +1119,11 @@ class Order < ActiveRecord::Base
     else
       # #puts o.errors.inspect
     end
-    GlobalData.salor_user.get_meta.update_attribute :order_id, o.id
+    $User.get_meta.update_attribute :order_id, o.id
     return o
   end
   def belongs_to_current_user?
-    if not self.get_user == GlobalData.salor_user then
+    if not self.get_user == $User then
       return false
     end
     return true

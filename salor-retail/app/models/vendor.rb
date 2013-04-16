@@ -146,5 +146,44 @@ class Vendor < ActiveRecord::Base
     Location.update_all :cash_made => 0
     Location.update_all :quantity_sold => 0
   end
+  def self.debug_setup
+    i = 100
+    text = ""
+    Employee.all.each do |e|
+      e.update_attribute :password, i.to_s
+      text += "#{e.username}: #{i}\n"
+      i += 1
+    end
+    puts text
+  end
+  def self.debug_employee_info
+    text = ""
+    Employee.all.each do |e|
+      text += e.debug_info
+    end
+    puts text
+  end
+  def self.debug_order_info(fname,limit=1000)
+    File.open(fname,"w+") do |f|
+      Order.order("created_at desc").limit(limit).each do |order|
+        pms = {}
+        order.payment_methods.each do |pm|
+          pms[pm.internal_type] ||= { :count => 0, :name => "", :values => []}
+          pms[pm.internal_type][:count] += 1
+          if pms[pm.internal_type][:count] > 1 then
+            f.write "!Problem: more than one of the same pm on an order\n"
+          end
+          pms[pm.internal_type][:name] = pm.name
+          pms[pm.internal_type][:values] << pm.amount
+        end
+        f.write "Order: #{order.id} with NR #{order.nr} or QNR #{order.qnr}\n"
+        f.write "\t Date: #{order.created_at}\n"
+        f.write "\t Owner: #{order.employee.last_name}, #{order.employee.first_name} as #{order.employee.username}\n"
+        f.write "\t Order Items: #{order.order_items.visible.count} visible of #{order.order_items.count}\n"
+        f.write "\t Payment Methods: #{pms.to_json}\n"
+      end
+    end
+    return "Done"
+  end
   # {END}
 end
