@@ -235,7 +235,7 @@ class Item < ActiveRecord::Base
     if pm and pm[1] then
       i = Item.scopied.where("sku LIKE 'DMY%' and base_price = #{SalorBase.string_to_float(code)}") 
       if i.empty? then
-        i = Item.scopied.find_or_create_by_sku("DMY" + GlobalData.salor_user.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
+        i = Item.scopied.find_or_create_by_sku("DMY" + $User.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
         i.base_price = code
         i.make_valid
         i.save
@@ -334,7 +334,7 @@ class Item < ActiveRecord::Base
   end
   def part_skus=(items)
     ids = []
-    vid = GlobalData.salor_user.meta.vendor_id
+    vid = $User.meta.vendor_id
     items.each do |item|
       i = Item.find_by_sku(item[:sku])
       if i then

@@ -40,7 +40,7 @@ class Category < ActiveRecord::Base
 	# key value pairs to make a pretty table
 	def self.cats_report(drawer_id=nil)
 	  cats_tags = {}
-	  drawer_id = GlobalData.salor_user.get_drawer_id if drawer_id.nil?
+	  drawer_id = $User.get_drawer.id if drawer_id.nil?
 	  Category.scopied.where(:eod_show => true).each do |category|  
       tag = category.get_tag
       category.order_items.where(:refunded => false,:created_at => Time.now.beginning_of_day..Time.now).joins(:order).where("`orders`.`drawer_id` = #{drawer_id}").each do |oi|

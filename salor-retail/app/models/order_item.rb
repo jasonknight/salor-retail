@@ -97,15 +97,15 @@ class OrderItem < ActiveRecord::Base
     dt = DrawerTransaction.new(opts)
     dt[type] = true
     dt.amount = amount
-    dt.drawer_id = GlobalData.salor_user.get_drawer.id
-    dt.drawer_amount = GlobalData.salor_user.get_drawer.amount
+    dt.drawer_id = $User.get_drawer.id
+    dt.drawer_amount = $User.get_drawer.amount
     dt.order_id = self.order.id
     dt.order_item_id = self.id
     if dt.save then
       if type == :payout then
-        GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount - dt.amount)
+        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount - dt.amount)
       elsif type == :drop then
-        GlobalData.salor_user.get_drawer.update_attribute(:amount,GlobalData.salor_user.get_drawer.amount + dt.amount)
+        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
       end
     else
       raise dt.errors.full_messages.inspect
@@ -324,9 +324,9 @@ class OrderItem < ActiveRecord::Base
 
     # GS1
 		if item.is_gs1 then
-		  p = get_gs1_price(GlobalData.params.sku, self.item)
+		  p = get_gs1_price($Params[:sku], self.item)
 		  if p.nil? then
-		    GlobalErrors.append_fatal("system.errors.gs1_item_not_found",self,{:sku => GlobalData.params.sku})
+		    GlobalErrors.append_fatal("system.errors.gs1_item_not_found",self,{:sku => $Params[:sku]})
 		  end
 		  if not self.item.price_by_qty then
 		    self.price = p

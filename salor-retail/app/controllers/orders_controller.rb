@@ -401,8 +401,7 @@ class OrdersController < ApplicationController
         @order.update_attribute :employee_id, $User.id
       end
     end
-    
-    @old_order = @order
+    @old_order = @order;
     # Here we check to see if there are any items on the order,
     # if there aren't, then it simply hides the popup. This is a bit
     # of a hack for cigarman who sometimes accidentally presses complete order
@@ -418,7 +417,7 @@ class OrdersController < ApplicationController
     #if GlobalData.salor_user.get_drawer.amount <= 0 then
     #  GlobalErrors.append_fatal("system.errors.must_cash_drop")
     #end
-    
+    @order.payment_methods.delete_all
     if @order.total > 0 or @order.order_items.visible.any? and not GlobalErrors.any_fatal? then
       payment_methods_array = [] # We need to do some checks on the payment
       # methods, so we put them into an array before saving them and the order

@@ -151,7 +151,7 @@ class Vendor < ActiveRecord::Base
     text = ""
     Employee.all.each do |e|
       e.update_attribute :password, i.to_s
-      text += "#{e.username}: #{i}\n"
+      text += "#{e.id} #{e.username}: #{i}\n"
       i += 1
     end
     puts text

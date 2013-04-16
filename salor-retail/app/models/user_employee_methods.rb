@@ -247,7 +247,7 @@ module UserEmployeeMethods
     begin
       o.save!
     rescue ActiveRecord::RecordInvalid => invalid
-      log_action "CouldNotSave! : " + invalid.record.errors.inspect
+      log_action "CouldNotSave! : " + invalid.record.errors.messages.inspect
       raise "Could not save!"
     end
     $User.get_meta.update_attribute :order_id,o.id
