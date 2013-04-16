@@ -1,3 +1,12 @@
+salor-retail (4.0.1.62) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Taxes not showing on receipt
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 16 Apr 2013 12:41:36 -0400
+
 salor-retail (4.0.1.61) unstable; urgency=low
 
   [ Jason Knight ]
