@@ -96,13 +96,13 @@ en-GB:
     - Friday
     - Saturday
     abbr_day_names:
-    - So
-    - Mo
-    - Di
-    - Mi
-    - Do
-    - Fr
-    - Sa
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
     month_names:
     - 
     - January

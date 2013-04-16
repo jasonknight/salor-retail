@@ -108,7 +108,7 @@ en-US:
       long: "%d. %B  %Y"
 
     day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [So, Mo, Di, Mi, Do, Fr, Sa]
+    abbr_day_names: [Sun, Mon, Tue, Wed, Thu, Fri, Sat]
 
     # Don't forget the nil at the beginning; there's no such thing as a 0th month
     month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]

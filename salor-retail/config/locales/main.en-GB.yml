@@ -528,6 +528,7 @@ en-GB:
     wholesaler_update: wholesaler update
     labels: Labels
     new_transaction_tag: New Transaction Tag
+    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: shipments item could not be saved
     shipments_move_all_items: all items were successfully moved

@@ -529,6 +529,7 @@ gn:
     void: Storno
     wholesaler_update: Artikelupdate Großhändler
     new_transaction_tag: New Transaction Tag
+    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.

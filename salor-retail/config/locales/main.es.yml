@@ -521,6 +521,7 @@ es:
     edit_invoice_blurb: Edit Invoice Blurb
     new_invoice_blurb: New Invoice Blurb
     new_transaction_tag: New Transaction Tag
+    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
