@@ -20,7 +20,7 @@ class CategoriesController < ApplicationController
   end
 
   def show
-    @category = Category.by_vendor.visible.find_by_id(params[:id])
+    @category = Category.by_vendor.visible.find_by_id(params[:id].to_s)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -37,7 +37,7 @@ class CategoriesController < ApplicationController
   end
 
   def edit
-    @category = $Vendor.categories.find_by_id(params[:id])
+    @category = $Vendor.categories.find_by_id(params[:id].to_s)
     add_breadcrumb @category.name,'edit_category_path(@category)'
   end
 
@@ -57,7 +57,7 @@ class CategoriesController < ApplicationController
   end
 
   def update
-    @category = $Vendor.categories.find_by_id(params[:id])
+    @category = $Vendor.categories.find_by_id(params[:id].to_s)
 
     respond_to do |format|
       if @category.update_attributes(params[:category])
@@ -75,12 +75,12 @@ class CategoriesController < ApplicationController
     render :text => @categories.to_json
   end
   def items_json
-    @items = Item.scopied.find_by_category_id(params[:id]).page(params[:page]).per($Conf.pagination)
+    @items = Item.scopied.find_by_category_id(params[:id].to_s).page(params[:page]).per($Conf.pagination)
     render :text => @items.to_json
   end
 
   def destroy
-    @category = GlobalData.salor_user.get_category(params[:id])
+    @category = $Vendor.categories.find_by_id(params[:id].to_s)
     @category.kill
     GlobalData.reload(:categories)
     respond_to do |format|
@@ -92,7 +92,7 @@ class CategoriesController < ApplicationController
   private 
 
   def crumble
-    @vendor = GlobalData.salor_user.get_vendor(GlobalData.salor_user.meta.vendor_id)
+    @vendor = $Vendor
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.categories"),'categories_path(:vendor_id => params[:vendor_id])'
   end

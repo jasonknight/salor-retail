@@ -13,7 +13,7 @@ class TaxProfilesController < ApplicationController
   # GET /tax_profiles
   # GET /tax_profiles.xml
   def index
-    @tax_profiles = $Vendor.tax_profiles.page(params[:page]).per(25)
+    @tax_profiles = $Vendor.tax_profiles.visible.page(params[:page]).per(25)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -24,7 +24,7 @@ class TaxProfilesController < ApplicationController
   # GET /tax_profiles/1
   # GET /tax_profiles/1.xml
   def show
-    @tax_profile = salor_user.get_tax_profile(params[:id])
+    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -45,7 +45,7 @@ class TaxProfilesController < ApplicationController
 
   # GET /tax_profiles/1/edit
   def edit
-    @tax_profile = salor_user.get_tax_profile(params[:id])
+    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
     add_breadcrumb @tax_profile.name,'edit_tax_profile_path(@tax_profile)'
   end
 
@@ -53,7 +53,7 @@ class TaxProfilesController < ApplicationController
   # POST /tax_profiles.xml
   def create
     @tax_profile = TaxProfile.new(params[:tax_profile])
-
+  
     respond_to do |format|
       if @tax_profile.save
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => TaxProfile.model_name.human)) }
@@ -68,7 +68,7 @@ class TaxProfilesController < ApplicationController
   # PUT /tax_profiles/1
   # PUT /tax_profiles/1.xml
   def update
-    @tax_profile = salor_user.get_tax_profile(params[:id])
+    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
     
     respond_to do |format|
       if @tax_profile.update_attributes(params[:tax_profile]) and not @tax_profile.order_items.any?
@@ -84,7 +84,7 @@ class TaxProfilesController < ApplicationController
   # DELETE /tax_profiles/1
   # DELETE /tax_profiles/1.xml
   def destroy
-    @tax_profile = salor_user.get_tax_profile(params[:id])
+    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
     @tax_profile.kill
 
     respond_to do |format|
