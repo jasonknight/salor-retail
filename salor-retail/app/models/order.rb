@@ -1018,6 +1018,8 @@ class Order < ActiveRecord::Base
       order_rebate = fixed_rebate_amount
     end
     subsubtotal = subtotal4 + order_rebate
+    
+
 
     paymentmethods = Hash.new
     self.payment_methods.each do |pm|
@@ -1090,7 +1092,7 @@ class Order < ActiveRecord::Base
     report[:percent_rebate_amount] = percent_rebate_amount
     report[:percent_rebate] = percent_rebate
     report[:fixed_rebate_amount] = fixed_rebate_amount
-    report[:subsubtotal] = subsubtotal
+    report[:subsubtotal] = self.gross
     report[:paymentmethods] = paymentmethods
     report[:change_given] = self.change_given
     report[:list_of_taxes] = list_of_taxes

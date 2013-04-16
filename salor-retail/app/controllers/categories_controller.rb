@@ -71,7 +71,7 @@ class CategoriesController < ApplicationController
     end
   end
   def categories_json
-    @categories = Category.scopie.page(params[:page]).per($Conf.pagination)
+    @categories = Category.scopied.page(params[:page]).per($Conf.pagination)
     render :text => @categories.to_json
   end
   def items_json
