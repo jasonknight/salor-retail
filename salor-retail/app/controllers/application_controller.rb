@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   helper_method [:user_cache_name]
 
   unless SalorRetail::Application.config.consider_all_requests_local
-    rescue_from Exception, :with => :render_error
+    #rescue_from Exception, :with => :render_error
   end 
   def get_url(url)
     uri = URI.parse(url)

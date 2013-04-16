@@ -396,6 +396,7 @@ class OrdersController < ApplicationController
     if params[:employee_id] and params[:employee_id] != $User.id then
       tmp_user = Employee.find_by_id(params[:employee_id].to_s)
       if tmp_user and tmp_user.vendor_id == $User.vendor_id then
+        tmp_user.get_meta.update_attribute :cash_register_id, $User.get_meta.cash_register_id
         $User = tmp_user
         @order.update_attribute :employee_id, $User.id
       end
@@ -457,7 +458,8 @@ class OrdersController < ApplicationController
       
       if payment_methods_total.round(2) < @order.total.round(2) and @order.is_proforma == false then
         GlobalErrors.append_fatal("system.errors.sanity_check")
-        $Notice = "Sanity Check 2 Failed"
+        log_action "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
+        $Notice = "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return

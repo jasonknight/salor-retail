@@ -244,7 +244,12 @@ module UserEmployeeMethods
     end
     o.set_model_owner(self)
     o.cash_register_id = $User.get_meta.cash_register_id
-    o.save!
+    begin
+      o.save!
+    rescue ActiveRecord::RecordInvalid => invalid
+      log_action "CouldNotSave! : " + invalid.record.errors.inspect
+      raise "Could not save!"
+    end
     $User.get_meta.update_attribute :order_id,o.id
     return o
   end
