@@ -63,7 +63,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
         <td><%= dt.drop ? 'Drop' : 'Payout' %></td>
         <td><%= dt.owner ? dt.owner.username : 'Unknown' %></td>
         <td><%= dt.tag %></td>
-        <td <%= dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr %> ID: <%= dt.order.id %></small></td>
+        <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
     </tr>
   <% end %>
   <tr>
