@@ -184,6 +184,7 @@ function complete_order_show() {
 
   setOnEnterKey(function(event) {
     if (event.keyCode == 13 && orderCompleteDisplayed) {
+      ajax_log({log_action:'complete_order_show:setOnEnterKey', order_id:Order.id, value:event.keyCode});
       //var confirmInactive = $("#confirm_complete_order_button").hasClass("button-inactive");
       //if (confirmInactive) {
       //  complete_order_hide();
@@ -319,10 +320,11 @@ function complete_order_hide() {
   }
   focuseKeyboardInput = true;
   $('body').triggerHandler({type: "CompleteOrderHide"});
+  ajax_log({log_action:'complete_order_hide', order_id:Order.id});
   if ( parseInt( Order.id ) % 20 == 0) { 
     window.location = '/orders/new'; 
   } // trigger intensified garbage collection regularly
-  ajax_log({log_action:'complete_order_hide', order_id:Order.id});
+  
 }
 
 function get_highest(num) {
@@ -458,33 +460,42 @@ function complete_order_send(print) {
           if (bValid) {            
             jQuery.post("/employees/verify",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
               if (data == "NO") {
+                ajax_log({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
                 updateTips("Wrong Password");
               } else {
-                if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) { quick_open_drawer(); }
-                get('/orders/complete_order_ajax?employee_id=' + data.id + 'order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
-                    if (_get("print_order",$("#simple_input_dialog")) == 'true') {
-                      print_order(_get("print_order_id",$("#simple_input_dialog")), function () {
-                        if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
-                          if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-                            setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                if ( 
+                      (serializePayments().indexOf('InCash') != -1) || 
+                      Register.always_open_drawer == true
+                   ) { quick_open_drawer(); }
+                get('/orders/complete_order_ajax?employee_id=' + data.id + '&order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), 
+                    filename, 
+                    function() {
+                          ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: true});
+                          if (_get("print_order",$("#simple_input_dialog")) == 'true') {
+                            print_order(_get("print_order_id",$("#simple_input_dialog")), function () {
+                              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                                }
+                              }
+                            }); 
+                          } else {
+                              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                                }
+                              }
                           }
-                        }
-                      }); 
-                    } else {
-                        if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
-                          if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-                            setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                          sendingOrder = false;
+                          _set("print_order",'false',$("#simple_input_dialog"));
+                          if ( useMimo() ) {
+                            Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
                           }
-                        }
-                    }
-                    sendingOrder = false;
-                    _set("print_order",'false',$("#simple_input_dialog"));
-                    if ( useMimo() ) {
-                      Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
-                    }
-                  }, 'get', null);
+                    }, /* end anon func*/
+                    'get', 
+                    null); // end get()
                  $("#simple_input_dialog").dialog( "close" );
-              }
+              } // end else
             }).fail(function () {
               updateTips("Login to server failed due to server error, call tech support!");
             });
@@ -501,6 +512,7 @@ function complete_order_send(print) {
       $(".ui-dialog * button > span:contains('Cancel')").text(i18n.menu.cancel);
       $('#dialog_input').keyup(function (event) {
         if (event.which == 13) {
+          ajax_log({log_action:'Keyup enter on password dlg', order_id:Order.id});
           $(".ui-dialog * button:contains('"+i18n.menu.ok+"')").trigger("click");
         }
       });
@@ -513,30 +525,35 @@ function complete_order_send(print) {
     return; // we return from here so that we stop the sending of the order
   }
   /* end require password code */
+  
+  
   if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) { quick_open_drawer();}
-  get('/orders/complete_order_ajax?order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), filename, function() {
-    if (print == 'true') { 
-      print_order(print_order_id,function () {
-        if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
-          if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-            setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+  get('/orders/complete_order_ajax?order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), 
+      filename, 
+      function() {
+          ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
+          if (print == 'true') { 
+            print_order(print_order_id,function () {
+              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                }
+              }
+            }); // end print_order 
+          } else {
+              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                }
+              }
           }
-        }
-      }); // end print_order 
-    } else {
-        if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
-          if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-            setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+          sendingOrder = false;
+          if (typeof(Salor) != 'undefined') {
+            if ( useMimo() ) {
+              Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
+            }
           }
-        }
-    }
-    sendingOrder = false;
-    if (typeof(Salor) != 'undefined') {
-      if ( useMimo() ) {
-        Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
-      }
-    }
-  }, 'get', function() {
+    }, 'get', function() {
     sendingOrder = false;
     //allow_complete_order();
     allow_payment_amount = true;

@@ -16,13 +16,14 @@ class History < ActiveRecord::Base
     if self.owner_id.nil? then
       self.owner = $User
     end
-    self.url = $Request.url if $Request
+    self.url = $Request.url if $Request and not self.url
     self.params = $Params.to_json if $Params
     self.ip = $Request.ip if $Request
   end
-  def self.record(action,object,sen=5)
+  def self.record(action,object,sen=5,url=nil)
     # sensitivity is from 5 (least sensitive) to 1 (most sensitive)
     h = History.new
+    h.url = url
     h.sensitivity = sen
     h.model = object if object
     h.action_taken = action
@@ -30,6 +31,17 @@ class History < ActiveRecord::Base
       h.changes_made = object.changes.to_json
     end
     h.save
+  end
+  def self.direct(url,model,params,action_taken,changes_made)
+      h = History.new
+      h.url = url
+      h.params = params
+      h.model = model
+      h.action_taken = action_taken
+      h.changes_made = changes_made
+      if not h.save then
+        raise h.errors.messages.inspect
+      end
   end
   # {END}
 end

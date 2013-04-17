@@ -14,7 +14,8 @@ class Order < ActiveRecord::Base
   has_many :order_items
   has_many :payment_methods
   has_many :paylife_structs
-  has_many :histories, :as => :owner
+  has_many :histories, :as => :model
+  has_many :drawer_transactions
   belongs_to :user
   belongs_to :employee
   belongs_to :customer
@@ -506,6 +507,19 @@ class Order < ActiveRecord::Base
 #     log_action "User Is: #{$User.username}"
 #     log_action "DrawerId Is: #{$User.get_drawer.id}"
 #     log_action "OrderId Is: #{self.id}"
+
+    # History
+    h = History.new
+    h.url = "Order::complete"
+    h.params = $Params
+    h.model_id = self.id
+    h.model_type = 'Order'
+    h.action_taken = "CompleteOrder"
+    h.changes_made = "Beginning complete order"
+    h.save
+    #end history
+    
+    
     self.paid = 1
     self.created_at = Time.now
     self.drawer_id = $User.get_drawer.id
@@ -631,6 +645,8 @@ class Order < ActiveRecord::Base
 
   #
   def create_drawer_transaction(amount,type,opts={})
+    
+    
     #Mikey: argument "type" is overridden below according to the sign of amount, so can be removed
     dt = DrawerTransaction.new(opts)
     dt.amount = amount
@@ -645,11 +661,24 @@ class Order < ActiveRecord::Base
     end
     if dt.save then
       if dt.payout then
+        if ($User.get_drawer.amount - dt.amount) < 0 or $User.get_drawer.amount < 0 then
+          History.record("PayoutDrawerInsufficient",self,1,"Order::create_drawer_transaction:payout")
+        else
+          History.record("PayoutDrawerSufficient",self,1,"Order::create_drawer_transaction:drop")
+        end
         $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount - dt.amount)
       elsif dt.drop then
+        if ($User.get_drawer.amount + dt.amount) < 0 then
+          History.record("DropDrawerInsufficient",self,1,"Order::create_drawer_transaction:drop")
+        else
+          History.record("DropDrawerSufficient",self,1,"Order::create_drawer_transaction:drop")
+        end
         $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
       end
       $User.reload
+      # History
+      History.direct("Order::create_drawer_transaction",self,{:amount => amount, :type => type, :opts => opts, :drawer_transaction_id => dt.id},"","");
+      #end history
     end
   end
     

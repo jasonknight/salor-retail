@@ -23,19 +23,6 @@
               </select>
             </td>
         </tr>
-        <% DrawerTransaction.where(["created_at between ? and ?",@order.created_at - 10.minutes, @order.created_at + 10.minutes]).order("id desc").each do |dt| %>
-          <tr >
-              <td><%= number_to_currency(dt.amount) %></td>
-              <td><%= dt.drop ? 'Drop' : 'Payout' %></td>
-              <td><%= dt.owner ? dt.owner.username : 'Unknown' %></td>
-              <td colspan=2><%= dt.tag %></td>
-              <td <%= dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>>Nr: <%= dt.order.nr %>, QNr: <%= dt.order.qnr %>, ID: <%= dt.order.id %></td>
-          </tr>
-        <% end %>
-        <tr>
-          <td>GDA:</td>
-          <td><%= @order.get_drawer_add%></td>
-        </tr>
       </table>
 <%
   if @order.refunded then
@@ -56,8 +43,66 @@
 </table>
 
 <script>
-var payment_internal_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
-var payment_external_types = [<%= PaymentMethod.types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
+var payment_internal_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
+var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
 </script>
+<style>
+  table.overflowing-table td {
+    width: 20%;
+    vertical-align: top;
+    font-size: 12px;
+  }
+</style>
+<table width="80%" align="center" class="ui-corner-all ui-widget ui-content stripe-me overflowing-table">
+  <tr class="no-stripe">
+    <td colspan=5 ><h2>Drawer Transactions: </h2><br /><hr /></td>
+  </tr>
+  <% DrawerTransaction.where(["created_at between ? and ?",@order.created_at - 20.minutes, @order.created_at + 20.minutes]).order("id desc").each do |dt| %>
+    <tr >
+        <td><%= number_to_currency(dt.amount) %></td>
+        <td><%= dt.drop ? 'Drop' : 'Payout' %></td>
+        <td><%= dt.owner ? dt.owner.username : 'Unknown' %></td>
+        <td><%= dt.tag %></td>
+        <td <%= dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr %> ID: <%= dt.order.id %></small></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>GDA:</td>
+    <td colspan=4><%= @order.get_drawer_add%></td>
+  </tr>
+  <tr class="no-stripe">
+    <td colspan=5 ><h2>History: </h2><br /><hr /></td>
+  </tr>
+  <% @order.histories.order("id desc").each do |h| %>
+    <tr>
+      <td colspan="5"><%= h.url[0,h.url.index("?")] rescue h.url %></td>
+    </tr>
+    <tr>
+      <td title="<%= h.url %>">&nbsp;</td>
+      <td title="<%= h.action_taken %>"><%= h.action_taken[0..45] %></td>
+      <td onclick="$('#changes_made_<%= h.id %>').toggle();">
+        <%= h.changes_made[0..25] %>
+        <div id="changes_made_<%= h.id %>" class="hidden">
+          <pre>
+<%= JSON.pretty_unparse(JSON.parse(h.changes_made)) rescue "" %>
+          </pre>
+        </div>
+      </td>
+      <td colspan=2 onclick="$('#params_<%= h.id %>').toggle();">
+      
+        <%= h.params[0..25] %>
+        <div id="params_<%= h.id %>" class="hidden">
+          <pre>
+<%= JSON.pretty_unparse(JSON.parse(h.params)) rescue "" %>
+          </pre>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<br />
+<br />
+<br />
+<br />
 
 

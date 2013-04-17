@@ -400,11 +400,13 @@ class OrdersController < ApplicationController
   end
   def complete_order_ajax
     @order = initialize_order
+    History.record("initialized order for complete",@order,5)
     render :status => 401 and return if not_my_vendor?(@order)
     if params[:employee_id] and params[:employee_id] != $User.id then
       tmp_user = Employee.find_by_id(params[:employee_id].to_s)
       if tmp_user and tmp_user.vendor_id == $User.vendor_id then
         tmp_user.get_meta.update_attribute :cash_register_id, $User.get_meta.cash_register_id
+        History.record("swapped user #{$User.id} with #{tmp_user.id}",@order,3)
         $User = tmp_user
         @order.update_attribute :employee_id, $User.id
       end
@@ -416,7 +418,8 @@ class OrdersController < ApplicationController
     # twice. Because of the recalculate change magic, it's difficult to know
     # in javascript if an order is completable or not.
     
-    if not @order.order_items.visible.any? then     
+    if not @order.order_items.visible.any? then  
+      History.record("No visible items on order",@order,5);   
       render :js => "complete_order_hide();/*No visible order items*/ " and return
     end
     
@@ -450,6 +453,7 @@ class OrdersController < ApplicationController
             if sanity_check > 500 then
               GlobalErrors.append_fatal("system.errors.sanity_check")
               $Notice = "Sanity Check 1 Failed"
+              History.record("Sanity Check 1 Failed: #{sanity_check} > 500",@order,5)
               render :action => :update_pos_display and return
             end
           end
@@ -465,6 +469,7 @@ class OrdersController < ApplicationController
       if payment_methods_total.round(2) < @order.total.round(2) and @order.is_proforma == false then
         GlobalErrors.append_fatal("system.errors.sanity_check")
         log_action "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
+        History.record("Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}",@order,5);
         $Notice = "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
@@ -473,6 +478,7 @@ class OrdersController < ApplicationController
         payment_methods_array.each {|pm| pm.save} # otherwise, we save them
       end
       if @order.is_proforma == true then
+        History.record("Order is proforma, completing",@order,5)
         @order.complete
         render :js => " window.location = '/orders/#{@order.id}/print'; " and return
       end
@@ -494,8 +500,10 @@ class OrdersController < ApplicationController
     @order = initialize_order
     @order_item = @order.activate_gift_card(params[:id],params[:amount])
     if not @order_item then
+      History.record("Failed to activate gift card",@order,5)
       @error = true
     else
+      History.record("Activated Gift Card #{@order_item.sku}",@order,5)
       @item = @order_item.item
     end
     @order.reload
@@ -515,6 +523,7 @@ class OrdersController < ApplicationController
     restore_paid = false
     if @oi then
       @order = @oi.order
+      History.record("Splitting items on order",@order,5)
       noi = @oi.dup
       if @order.paid == 1 then
         @order.paid = 0
@@ -528,6 +537,7 @@ class OrdersController < ApplicationController
       noi.save!
       @order.update_self_and_save
       if restore_paid then
+        History.record("Restored paid on Order",@order,1)
         @order.paid = 1
         @order.save
       end
@@ -741,10 +751,12 @@ class OrdersController < ApplicationController
   def clear
     @order = initialize_order
     if not $User.can(:clear_orders) then
+      History.record(:failed_to_clear,@order,1)
       GlobalErrors.append_fatal("system.errors.no_role",@order,{})
       render :action => :update_pos_display and return
     end
     if not @order.paid then
+      History.record("Destroying #{@order.order_items.visible} items",@order,1)
       @order.order_items.visible.each do |oi|
         oi.destroy
       end
@@ -755,6 +767,7 @@ class OrdersController < ApplicationController
       @order.tax = 0
       @order.update_self_and_save
     else
+      History.record("No Role to Clear Order",@order,1)
       GlobalErrors.append_fatal("system.errors.no_role",@order,{})
       render :action => :update_pos_display and return
     end
