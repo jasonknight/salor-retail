@@ -92,12 +92,12 @@ env.modules.Add4 = function () {
         break;
       case 5:
         var drawer_amount = self.view.getContentOfElement("#header_drawer_amount");
-        if (drawer_amount.indexOf("115.00") == -1) {
+        if (drawer_amount.indexOf("150.00") == -1) {
           // It may take some time for the element to update...
           if (self.tries < 3) {
             self.tries++;
           } else {
-            fatal("Add item of $5.00 failed or cash drawer failed to update to value 115.00");
+            fatal("Add item of $4.00 failed or cash drawer failed to update to value 150.00");
           }
         } else {
           var button = self.view.getElement("#cancel_complete_order_button");

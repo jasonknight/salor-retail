@@ -23,6 +23,19 @@
               </select>
             </td>
         </tr>
+        <% DrawerTransaction.where(["created_at between ? and ?",@order.created_at - 10.minutes, @order.created_at + 10.minutes]).order("id desc").each do |dt| %>
+          <tr >
+              <td><%= number_to_currency(dt.amount) %></td>
+              <td><%= dt.drop ? 'Drop' : 'Payout' %></td>
+              <td><%= dt.owner ? dt.owner.username : 'Unknown' %></td>
+              <td colspan=2><%= dt.tag %></td>
+              <td <%= dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>>Nr: <%= dt.order.nr %>, QNr: <%= dt.order.qnr %>, ID: <%= dt.order.id %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td>GDA:</td>
+          <td><%= @order.get_drawer_add%></td>
+        </tr>
       </table>
 <%
   if @order.refunded then

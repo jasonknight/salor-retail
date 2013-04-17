@@ -12,6 +12,9 @@
 *~
 *.deb
 salor-retail/tmp/sass-cache
+salor-retail/tests/.cache
+salor-retail/tests/.IchabodCookieJar
+
 salor-retail/tmp/pids
 salor-retail/tmp/cache
 salor-retail/tmp/capybara
