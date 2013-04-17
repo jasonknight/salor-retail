@@ -10,7 +10,9 @@ function print_url(printer_path,url,params,confirmation_url, callback) {
   } else if (typeof SalorPrinter != 'undefined' && Register.salor_printer == true) {
     Salor.stopDrawerObserver(Register.cash_drawer_path);
     SalorPrinter.printURL(printer_path, Conf.url + url + param_string, c_url);
-    callback.call();
+    if (typeof callback == "function") {
+      callback.call();
+    }
   } else {
     $.get(url + param_string,callback);
   }

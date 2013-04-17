@@ -2,7 +2,7 @@
 function show_cash_drop() {
   $('#cash_drop').show();
   $("#transaction_type").val('');
-  $(".pos-cash-register-amount").html(toCurrency(Drawer.amount));
+  focusInput($("#cash_drop_amount"));
 }
 function hide_cash_drop() {
   $('#cash_drop').hide();
