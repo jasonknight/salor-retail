@@ -93,7 +93,7 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.xml
   def show
-    @order = Order.scopied.find_by_id(params[:id])
+    @order = Order.scopied.find_by_id(params[:id].to_s)
     add_breadcrumb t("menu.order") + "#" + @order.nr.to_s,'order_path(@order,:vendor_id => salor_user.meta.vendor_id)'
     respond_to do |format|
       format.html # show.html.erb
@@ -128,7 +128,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
-    @order = Order.scopied.find_by_id(params[:id])
+    @order = Order.scopied.find_by_id(params[:id].to_s)
     if @order.paid == 1 and not $User.is_technician? then
       redirect_to :action => :new, :notice => I18n.t("system.errors.cannot_edit_completed_order") and return
     end
@@ -140,7 +140,7 @@ class OrdersController < ApplicationController
     redirect_to :action => :new, :order_id => @order.id
   end
   def swap
-    @order = Order.scopied.find_by_id(params[:id])
+    @order = Order.scopied.find_by_id(params[:id].to_s)
     if @order and (not @order.paid == 1 or $User.is_technician?) then
       GlobalData.salor_user.meta.update_attribute(:order_id,@order.id)
     end
@@ -149,7 +149,8 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.xml
   def create
-    @order = Order.find(params[:id])
+    @order = Order.find(params[:id].to_s)
+    render :status => 401 and return if not_my_vendor?(@order)
     respond_to do |format|
       if @order.save
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Order.model_name.human)) }
@@ -164,7 +165,8 @@ class OrdersController < ApplicationController
   # PUT /orders/1
   # PUT /orders/1.xml
   def update
-    @order = Order.find(params[:id])
+    @order = Order.find(params[:id].to_s)
+    render :status => 401 and return if not_my_vendor?(@order)
     if @order.paid == 1 and not $User.is_technician? then
       GlobalErrors.append("system.errors.cannot_edit_completed_order",@order)
     end
@@ -182,7 +184,7 @@ class OrdersController < ApplicationController
   # DELETE /orders/1
   # DELETE /orders/1.xml
   def destroy
-    @order = Order.by_vendor.find(params[:id])
+    @order = Order.by_vendor.find(params[:id].to_s)
     @order.kill
     respond_to do |format|
       format.html { redirect_to(orders_url) }
@@ -195,13 +197,14 @@ class OrdersController < ApplicationController
     render :text => @orders.to_json
   end
   def prev_order
-    salor_user.meta.order_id = session[:prev_order_id]
+    $User.get_meta.order_id = session[:prev_order_id]
     session[:prev_order_id] = nil
     redirect_to :action => :new
   end
 
   def connect_loyalty_card
     @order = initialize_order
+    render :status => 401 and return if not_my_vendor?(@order)
     @loyalty_card = LoyaltyCard.scopied.find_by_sku(params[:sku])
     if @loyalty_card then
       @order.customer = @loyalty_card.customer
@@ -214,6 +217,7 @@ class OrdersController < ApplicationController
 #     puts "!!! add_item_ajax"
     @error = nil
     @order = initialize_order
+    render :status => 401 and return if not_my_vendor?(@order)
     if @order.paid == 1 and not $User.is_technician? then
       @order = $User.get_new_order 
       @item = Item.get_by_code(params[:sku])
@@ -301,14 +305,15 @@ class OrdersController < ApplicationController
   #
   def delete_order_item
     @order = initialize_order
+    render :status => 401 and return if not_my_vendor?(@order)
     if not $User.can(:destroy_order_items) then
       GlobalErrors.append("system.errors.no_role",$User)
       @include_order_items = true
       render :action => :update_pos_display and return
     end
 
-    if OrderItem.exists?(params[:id])
-      @order_item = OrderItem.find(params[:id])
+    if OrderItem.exists?(params[:id].to_s)
+      @order_item = OrderItem.find(params[:id].to_s)
       @roi = @order.remove_order_item(@order_item)
       @order.update_self_and_save
       if @roi then
@@ -329,6 +334,7 @@ class OrdersController < ApplicationController
     if @register then
       @vendor = @register.vendor 
     end
+    
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @order = Order.find_by_id(params[:order_id])
@@ -363,6 +369,7 @@ class OrdersController < ApplicationController
   # due to a report of a client, just rendering the template is not enough for putting "copy/duplicate" on the receipt. so, let salor-bin confirm if bytes were actually sent to a file.
   def print_confirmed
     o = Order.find_by_id params[:order_id]
+    
     o.update_attribute :was_printed, true if o
     render :nothing => true
   end
@@ -393,6 +400,7 @@ class OrdersController < ApplicationController
   end
   def complete_order_ajax
     @order = initialize_order
+    render :status => 401 and return if not_my_vendor?(@order)
     if params[:employee_id] and params[:employee_id] != $User.id then
       tmp_user = Employee.find_by_id(params[:employee_id].to_s)
       if tmp_user and tmp_user.vendor_id == $User.vendor_id then
@@ -408,8 +416,7 @@ class OrdersController < ApplicationController
     # twice. Because of the recalculate change magic, it's difficult to know
     # in javascript if an order is completable or not.
     
-    if not @order.order_items.visible.any? then
-      
+    if not @order.order_items.visible.any? then     
       render :js => "complete_order_hide();/*No visible order items*/ " and return
     end
     
@@ -504,7 +511,7 @@ class OrdersController < ApplicationController
     end
   end
   def split_order_item
-    @oi = OrderItem.find_by_id(params[:id])
+    @oi = OrderItem.find_by_id(params[:id].to_s)
     restore_paid = false
     if @oi then
       @order = @oi.order
@@ -528,7 +535,7 @@ class OrdersController < ApplicationController
     redirect_to "/orders/#{@oi.order.id}"
   end
   def refund_item
-    @oi = OrderItem.scopied.find_by_id(params[:id])
+    @oi = OrderItem.scopied.find_by_id(params[:id].to_s)
     x = @oi.toggle_refund(true, params[:pm])
     if x == -1 then
       flash[:notice] = I18n.t("system.errors.not_enough_in_drawer")
@@ -541,13 +548,13 @@ class OrdersController < ApplicationController
     
   end
   def refund_order
-    @order = Order.scopied.find_by_id(params[:id])
+    @order = Order.scopied.find_by_id(params[:id].to_s)
     @order.toggle_refund(true, params[:pm])
     @order.save
     redirect_to order_path(@order)
   end
   def customer_display
-    @order = Order.find_by_id(params[:id])
+    @order = Order.find_by_id(params[:id].to_s)
     GlobalData.salor_user = @order.get_user
     $User = @order.get_user
     @vendor = Vendor.find(@order.vendor_id)
@@ -609,9 +616,10 @@ class OrdersController < ApplicationController
   end
 
   def print
-    @order = Order.scopied.find_by_id(params[:id])
-    GlobalData.salor_user = @order.user if @order.user
-    GlobalData.salor_user = @order.employee if @order.employee
+    @order = Order.scopied.find_by_id(params[:id].to_s)
+    raise "Orphaned Order" if not @order.employee
+    GlobalData.salor_user = @order.employee
+    
     unsound = false
     if params[:pm_id] then
       pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
@@ -724,7 +732,7 @@ class OrdersController < ApplicationController
   #
   def remove_payment_method
     if GlobalData.salor_user.is_technician? then
-      @order = Order.find(params[:id])
+      @order = Order.find(params[:id].to_s)
       if @order then
         @order.payment_methods.find(params[:pid]).destroy
       end
@@ -732,7 +740,7 @@ class OrdersController < ApplicationController
   end
   def clear
     @order = initialize_order
-    if not GlobalData.salor_user.can(:clear_orders) then
+    if not $User.can(:clear_orders) then
       GlobalErrors.append_fatal("system.errors.no_role",@order,{})
       render :action => :update_pos_display and return
     end

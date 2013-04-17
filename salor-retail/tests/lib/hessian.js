@@ -9,6 +9,9 @@ env.Hessian = function (name) {
     nkey = nkey.replace(/\(.*\)/,'');
     this[nkey] = this.p_inner_object[key];
   }
+  this.ready = function () {
+    return self.p_inner_object.ready;
+  }
   this.center = function () {
     var screen = window().geometry;
     var hgeo = self.getGeometry();

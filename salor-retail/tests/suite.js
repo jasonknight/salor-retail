@@ -1,10 +1,13 @@
 include("login.js");
+include("choose_register.js");
 include("conventional_sales/cash_drop_100.js");
 include("conventional_sales/add_item_of_10.js");
 include("conventional_sales/add_item_of_5.js");
 include("conventional_sales/add_item_of_20.js");
 include("conventional_sales/add_item_of_40.js");
 include("conventional_sales/add_buybackitem_of_10.js");
+include("conventional_sales/add_buybackitem_of_10and20.js");
+include("conventional_sales/add_item_of_4.js");
 var VIEW = new Chrome("ConventionalSalesMachine");
 
 /*
@@ -27,6 +30,8 @@ var VIEW = new Chrome("ConventionalSalesMachine");
 var login             = new env.modules.LoginMachine();
     login.view        = VIEW; // We reuse the same view here because we aren't perf testing.
                               // Thus we reuse the cache, localdb, log, and cookies etc.
+var choose            = new env.modules.ChooseRegister();
+    choose.view       = VIEW;
 var cash_drop         = new env.modules.CashDrop();
     cash_drop.view    = VIEW;
 var add_10            = new env.modules.Add10();
@@ -39,8 +44,15 @@ var add_40            = new env.modules.Add40();
     add_40.view       = VIEW
 var add_buyback_10            = new env.modules.AddBuyback10();
     add_buyback_10.view       = VIEW;
-//login.run("http://localhost:3000").next(function () { 
-//  cash_drop.run("http://localhost:3000/orders/new").next(env.report); // end sales.run
-//}); // end login.run
-add_buyback_10.run("http://localhost:3000/orders/new").next(env.report);
+var add_buyback_10and20       = new env.modules.AddBuyback10And20();
+    add_buyback_10and20.view  = VIEW;
+var add_4             = new env.modules.Add4();
+    add_4.view        = VIEW;
+login.run("http://localhost:3000").next(function () { 
+  //cash_drop.run("http://localhost:3000/orders/new").next(function () {
+    //choose.run("http://localhost:3000/cash_registers").next(env.report);
+    add_4.run("http://localhost:3000/orders/new").next(env.report);
+  //}); // end sales.run
+}); // end login.run
+
 

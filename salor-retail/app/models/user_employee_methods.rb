@@ -349,19 +349,10 @@ module UserEmployeeMethods
     return true
   end
   def owns_vendor?(id)
-    if self.class == User then
-      vs = self.vendors
-    else
-      vs = self.user.vendors
-    end
-    vs.each do |v|
-      if v.id == id.to_i then
-        return true
-      end
-    end
-    return false
+    return self.vendor_id == id
   end
   def owns_this?(model)
+    
     if model.class == LoyaltyCard then
       return owns_this?(model.customer)
     end
@@ -374,20 +365,7 @@ module UserEmployeeMethods
     end
    
     if model.respond_to? :employee_id then
-       if self.class == User
-         if Employee.exists?(model.employee_id) then
-           begin
-             emp = Employee.find(model.employee_id) 
-           rescue
-             return false
-           end
-           if emp then
-             return true if emp.user_id == self.id
-           end
-         end
-       end
-       return true if self.id == model.employee_id
-       return false
+       return model.employee_id == self.id
     end
     if model.class == ShipmentItem then
       return owns_this?(model.shipment)
@@ -395,6 +373,7 @@ module UserEmployeeMethods
     if model.class == OrderItem then
       return owns_this?(model.order)
     end
+    raise "You cannot do what you are trying to do. Please stop."
     return false
   end
   

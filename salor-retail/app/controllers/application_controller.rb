@@ -302,6 +302,13 @@ class ApplicationController < ActionController::Base
     return $User.can(p[:action] + '_' + p[:controller])
   end
   
+  def not_my_vendor?(model)
+    if $User.vendor_id != model.vendor_id then
+      return true
+    end
+    return false
+  end
+  
   # TODO: Remove method check_license since no longer used
   def check_license()
     return true

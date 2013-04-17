@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
     else
       @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("id desc")
     end
-    Node.flush
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @items }

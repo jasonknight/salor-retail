@@ -30,11 +30,13 @@
     %th=""
     %th=""
   - collection.each do |entry|
+    - row_id = "#{klass.table_name.singularize}_#{entry.id}"
+    - to_location = "window.location = '/#{entry.class.table_name}/#{entry.id}';"
     %tr
       - if entry.class == CashRegister then
-        %td{:width => "40px"}=link_to(salor_icon(:cash_register,{},48),"/orders/new?cash_register_id=#{entry.id}")
+        %td{:width => "40px"}=salor_icon(:cash_register,{:id => row_id,:onclick => "window.location = '/orders/new?cash_register_id=#{entry.id}';", :class => "choose-register-icon"},48)
       - else
-        %td{:width => "40px"}=link_to(salor_icon(klass.table_name.singularize.to_sym,{},48),"/#{entry.class.table_name}/#{entry.id}")
+        %td{:width => "40px"}=salor_icon(klass.table_name.singularize.to_sym,{:id => row_id,:onclick => to_location},48)
       - columns.each do |col|
         - if entry.class == TaxProfile and col == :value then
           %td{:align=>:center}=number_to_percentage(entry.send(col))

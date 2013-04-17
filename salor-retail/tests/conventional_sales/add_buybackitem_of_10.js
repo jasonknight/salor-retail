@@ -8,6 +8,7 @@ env.modules.AddBuyback10 = function () {
   this.run = function (start_url) {
     self.view.load(start_url);
     self.view.resize(1024,768);
+    self.view.center();
     self.interval_id = setInterval(self.event_loop,self.interval);
     return self;
   } // end run
@@ -55,39 +56,43 @@ env.modules.AddBuyback10 = function () {
         }
       break;
       case 3:
-        var item_menu = self.view.getElement("#order_item_edit_name");
-        print(dump(item_menu));
-        if (item_menu.isVisible == true) {
-          var button = self.view.getElement("#item_menu_buyback");
-          self.view.click(button);
-          var button = self.view.getElement("#item_menu_done");
-          self.view.click(button);
-          self.tries = 0;
-          self.state++;
-        } else {
-          self.tries++;
-          if (self.tries > 4) {
-            fatal("item menu div never showed up");
+        if (self.view.ready() == true) {
+          var item_menu = self.view.getElement("#order_item_edit_name");
+          print(dump(item_menu));
+          if (item_menu.isVisible == true) {
+            var button = self.view.getElement("#item_menu_buyback");
+            self.view.click(button);
+            var button = self.view.getElement("#item_menu_done");
+            self.view.click(button);
+            self.tries = 0;
+            self.state++;
+          } else {
+            self.tries++;
+            if (self.tries > 4) {
+              fatal("item menu div never showed up");
+            }
           }
         }
       break;
       case 4:
-        var items = self.view.getElements(".pos-item-price");
-        var first_item = items["0"];
-        if (first_item.isVisible) {
-          self.tries = 0;
-          if ( self.view.getContentOfElement(first_item.id).indexOf("0.00") == -1) {
-            fatal("Item was not changed to buyback");
+        if (self.view.ready() == true) {
+          var items = self.view.getElements(".pos-item-price");
+          var first_item = items["0"];
+          if (first_item.isVisible) {
+            self.tries = 0;
+            if ( self.view.getContentOfElement(first_item.id).indexOf("0.00") == -1) {
+              fatal("Item was not changed to buyback");
+            } else {
+              self.view.click(first_item);
+              self.state++;
+            }
           } else {
-            self.view.click(first_item);
-            self.state++;
-          }
-        } else {
-          self.tries++;
-          if (self.tries > 4) {
-            fatal("couldn't grab pos-item-price");
-          }
-        } 
+            self.tries++;
+            if (self.tries > 4) {
+              fatal("couldn't grab pos-item-price");
+            }
+          } 
+        }
       break;
       case 5:
          var kbd = self.view.getElement(".ui-keyboard");
@@ -104,39 +109,46 @@ env.modules.AddBuyback10 = function () {
       case 6:
         self.view.executeJS("$(\"input[name='key_2_0']\").trigger('mousedown');");
         self.view.executeJS("$(\"input[name='key_accept']\").trigger('mousedown');");
-        self.state = 99;
+        self.state++;
       break;
-      case 2:
+      case 7:
+        var complete_button = self.view.getElement("#print_receipt_button");
+        self.view.click(complete_button);
+        self.state++;
+      break;
+      case 8:
         var complete_order_popup = self.view.getElement("#complete_order");
         if (complete_order_popup.isVisible == true) {
           var total = self.view.getContentOfElement("#complete_order_total");
           var change = self.view.getContentOfElement("#complete_order_change");
-          if (total.indexOf("10.00") == -1) {
-            fatal("Order Total should be 10.00");
-          } else if (change.indexOf("0.00") == -1) {
-            fatal("Change should be 0.00 at case 5");
-          } else {
-            var button = self.view.getElement("#confirm_complete_order_button");
-            self.view.click(button);
-            self.state++;
+          if (total.indexOf("-1.00") == -1) {
+            fail("Order Total should be -1.00");
+          } else if (change.indexOf("1.00") == -1) {
+            fail("Change should be 1.00 at case 8");
           }
+          var button = self.view.getElement("#confirm_complete_order_button");
+          self.view.click(button);
+          self.state++;
         } else {
           print("Waiting for complete order popup");
         }
         break;
-      case 3:
+      case 9:
+        if (self.view.ready() == true) {
+          self.state++; //just waiting a bit
+        }
+      case 10:
         var drawer_amount = self.view.getContentOfElement("#header_drawer_amount");
         print("Drawer amount is: " + drawer_amount);
-        if (drawer_amount.indexOf("110.00") == -1) {
+        if (drawer_amount.indexOf("159.00") == -1) {
           // It may take some time for the element to update...
           if (self.tries < 3) {
             self.tries++;
           } else {
-            fatal("Add item of $10.00 failed or cash drawer failed to update");
+            fatal("Add item of buyback item failed or cash drawer failed to update");
           }
         } else {
           var button = self.view.getElement("#cancel_complete_order_button");
-          print("button is: " + dump(button));
           self.view.click(button);
           self.state++;
         }
