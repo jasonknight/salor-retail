@@ -1,6 +1,56 @@
-<%= cache(SalorBase.get_cache_name_for_user("cash_drop")) do %>
 <script type="text/javascript">
-var filename = "_cash_drop.html.erb";
+function show_cash_drop() {
+  $('#cash_drop').show();
+  $("#transaction_type").val('');
+}
+function hide_cash_drop() {
+  $('#cash_drop').hide();
+  $('.cash-drop-amount').removeClass('error-input');
+  $('.cash-drop-amount').val('');
+  focusInput($('#keyboard_input'));
+}
+function cash_drop_save() {
+  if ($('.cash-drop-amount').val() == '') {
+    $('.cash-drop-amount').addClass('error-input');
+    $('.trans-button').removeClass('button-highlight');
+    alert("NoAmountSet");
+    focusInput($('.cash-drop-amount'));
+    return;
+  }
+  if ( ($("#transaction_type").val() == 'payout') && ( Drawer.amount - parseFloat($('.cash-drop-amount').val()) ) < 0) {
+    $(".cash-drop-amount").addClass('error-input');
+    alert("NotEnough");
+    return;
+  }
+  $('.cash-drop-amount').removeClass('error-input');
+  if($("#transaction_type").val() == '') {
+    $("#transButtonRow").addClass('error-input');
+    alert("NoTypeSet");
+    return;
+  }
+  $("transButtonRow").removeClass('error-input');
+  $.ajax({
+      type: 'POST',
+      url: '/vendors/new_drawer_transaction',
+      data: $('#cash_drop_form').serialize(),
+      dataType: 'script',
+      success: function (data) {
+        $('textarea#cash-drop-notes-id').val('');
+        $('.dt-tag-button').removeClass("highlight");
+        $('input#dt_tag').val('None');
+        $('div.dt-tag-target').html(' Tag ');
+        hide_cash_drop();
+      },
+      error: function (data,status,err) {
+        alert(err);
+      }
+  });
+  focusInput($('#keyboard_input'));
+}
+$(document).ready(function(){
+  $('#header_drawer_amount').html(toCurrency(Drawer.amount));
+});
+/*var filename = "_cash_drop.html.erb";
 
 $(document).ready(function(){
   $(".trans-button").click(selectTransButton);
@@ -102,7 +152,7 @@ function cash_drop_save() {
 
 function show_coin_calculator() {
   $('#coincalculator').slideToggle();
-}
+}*/
 </script>
 
 <div id="cash_drop" class="cash-drop hidden">
@@ -151,15 +201,27 @@ function show_coin_calculator() {
             <% end %>
 
             <div align="center" style="width:186px;margin:0 auto;">
-              <div id="confirm_cash_drop" class="button-confirm-left trans-button" name="drop" style="margin-left:0;margin-right:10px;width:64px;height:64px;background-color:#26ad74;display:block;float:left;padding-right:10px;color: white;font-size: 60px;line-height: 60px;">+</div>
-              <div id="confirm_cash_payout" class="button-confirm trans-button" name="payout" style="margin-left:10px;margin-right:0;width:64px;height:64px;background-color:#db422b;display:block;float:left;padding-left:10px;color: white;font-size: 60px;line-height: 60px;">&ndash;</div>
+              <div id="confirm_cash_drop" 
+                   class="button-confirm-left trans-button" 
+                   name="drop" 
+                   onclick="$('#transaction_type').val('drop');cash_drop_save();"
+                   style="margin-left:0;margin-right:10px;width:64px;height:64px;background-color:#26ad74;display:block;float:left;padding-right:10px;color: white;font-size: 60px;line-height: 60px;">
+                   +
+              </div>
+              <div id="confirm_cash_payout" 
+                   class="button-confirm trans-button" 
+                   name="payout" 
+                   onclick="$('#transaction_type').val('payout');cash_drop_save();"
+                   style="margin-left:10px;margin-right:0;width:64px;height:64px;background-color:#db422b;display:block;float:left;padding-left:10px;color: white;font-size: 60px;line-height: 60px;">
+                   &ndash;
+              </div>
             </div>
 
 </form>
 <div class="clear-hr"></div>
 <div class="button-row" align="right">
-      <div id="cancel_cash_drop" class="button-cancel" click="hide_cash_drop();"><%= I18n.t("helpers.submit.cancel") %></div>
+      <div id="cancel_cash_drop" class="button-cancel" onclick="hide_cash_drop();"><%= I18n.t("helpers.submit.cancel") %></div>
 </div>
 </div>
-<% end %>
+
 
