@@ -618,7 +618,7 @@ module UserEmployeeMethods
     transactions = Hash.new
     transactions_sum = { :drop => 0, :payout => 0, :total => 0}
     drawertransactions.each do |d|
-      transactions[d.id] = { :drop => d.drop, :is_refund => d.is_refund, :time => d.created_at, :notes => d.notes, :tag => d.tag, :amount => d.amount }
+      transactions[d.id] = { :drop => d.drop, :is_refund => d.is_refund, :time => d.created_at, :notes => d.notes, :tag => d.tag.to_s + "(#{d.id})", :amount => d.amount }
       if d.drop and not d.is_refund
         transactions_sum[:drop] += d.amount
       elsif d.payout and not d.is_refund
