@@ -481,6 +481,9 @@ class OrdersController < ApplicationController
           payment_methods_array << pm
         end
       end
+      # FIXME: Payment methods should be put on the order, and then saved, otherwise they are not present
+      # for get_drawer_add. THis is fixed by a reload for the time being.
+      # @order.payment_methods = mayment_methods_array
       # Now we check the payment_methods_total to make sure that it matches
       # what we think the order.total should be
       @order.reload
