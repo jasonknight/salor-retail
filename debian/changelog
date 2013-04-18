@@ -1,3 +1,12 @@
+salor-retail (4.0.1.72) unstable; urgency=low
+
+  [ Jason Knight ]
+  * adding tid
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Thu, 18 Apr 2013 15:41:29 -0400
+
 salor-retail (4.0.1.71) unstable; urgency=low
 
   [ Jason Knight ]
