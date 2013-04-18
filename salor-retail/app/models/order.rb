@@ -521,6 +521,9 @@ class Order < ActiveRecord::Base
     
     
     self.paid = 1
+    # We need to save now and reload!
+    self.save
+    self.reload
     self.created_at = Time.now
     self.drawer_id = $User.get_drawer.id
     if self.is_quote then
@@ -528,6 +531,7 @@ class Order < ActiveRecord::Base
     else
       self.nr = self.vendor.get_unique_model_number('order')
     end
+    
     #begin
       log_action "Updating quantities"
       order_items.visible.each do |oi|
@@ -598,10 +602,10 @@ class Order < ActiveRecord::Base
   end
   def get_drawer_add
     return 0 if self.is_quote or self.unpaid_invoice
-    return self.payment_methods.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true
+    return self.payment_methods.reload.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true
     
     ottl = self.total
-    self.payment_methods.each do |pm|
+    self.payment_methods.reload.each do |pm|
       next if pm.internal_type == 'InCash'
       ottl -= pm.amount
     end
