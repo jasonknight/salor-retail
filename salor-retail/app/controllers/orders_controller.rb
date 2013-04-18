@@ -12,6 +12,25 @@ class OrdersController < ApplicationController
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt, :print_confirmed, :log]
    before_filter :crumble, :except => [:customer_display,:print_receipt, :print_confirmed, :log]
    respond_to :html, :xml, :json, :csv
+   
+   def undo_drawer_transaction
+      @order = $Vendor.orders.find_by_id(params[:oid].to_s)
+      @dt = DrawerTransaction.find_by_id(params[:id].to_s)
+      @drawer = @dt.drawer
+      if @dt.order_id == @order.id then
+        if @dt.drop then
+          @drawer.update_attribute :amount, @drawer.amount - @dt.amount
+        else
+          @drawer.update_attribute :amount, @drawer.amount + @dt.amount
+        end
+        @dt.delete
+        History.record("DTDeletedBy:#{$User.id}:#{$User.username}",@order,1,"orders_controller#undo_drawer_transaction");
+        $Notice = "DT Deleted";
+      end
+      redirect_to "/orders/#{@order.id}" and return
+   end
+   
+   
    # TODO: Remove method offline since empty.
    def offline
    end

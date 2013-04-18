@@ -20,6 +20,7 @@ SalorRetail::Application.routes.draw do
   match "buttons/position" => "buttons#position"
   match "categories/categories_json" => "categories#categories_json"
   match "categories/items_json" => "categories#items_json"
+  match "orders/undo_drawer_transaction" => "orders#undo_drawer_transaction"
   match "orders/add_item_ajax" => "orders#add_item_ajax"
   match "orders/order_reports" => "orders#order_reports"
   match "orders/merge_into_current_order" => "orders#merge_into_current_order"

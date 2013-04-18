@@ -10,12 +10,20 @@
           <th>&nbsp;</th>
         </tr>
         <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
+        <tr>
+          <td colspan=5 align="right"><%=  I18n.t("activerecord.attributes.total")%>:</td>
+          <td align="right"><%= @order.gross%></td>
+        </tr>
         <% @order.payment_methods.each do |pm| %>
           <tr>
             <td colspan="5" align="right"><%= pm.name %></td>
             <td align="right"><%= number_to_currency pm.amount %></td>
           </tr>
         <% end %>
+        <tr>
+          <td colspan=5 align="right">GDA:</td>
+          <td align="right"><%= @order.get_drawer_add%></td>
+        </tr>
         <tr class="no-stripe">
             <td align=center colspan=6>
               <select id='refund_payment_method'>
@@ -23,6 +31,7 @@
               </select>
             </td>
         </tr>
+        
       </table>
 <%
   if @order.refunded then
@@ -55,27 +64,38 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
 </style>
 <table width="80%" align="center" class="ui-corner-all ui-widget ui-content stripe-me overflowing-table">
   <tr class="no-stripe">
-    <td colspan=5 ><h2>Drawer Transactions: </h2><br /><hr /></td>
+    <td colspan=6 ><h2>Drawer Transactions: </h2><br /><hr /></td>
   </tr>
-  <% DrawerTransaction.where(["created_at between ? and ?",@order.created_at - 20.minutes, @order.created_at + 20.minutes]).order("id desc").each do |dt| %>
+  <% @order.drawer_transactions.order("id desc").each do |dt| %>
     <tr >
-        <td><%= number_to_currency(dt.amount) %></td>
-        <td><%= dt.drop ? 'Drop' : 'Payout' %></td>
-        <td><%= dt.owner ? dt.owner.username : 'Unknown' %></td>
+        <td><%= number_to_currency(dt.amount) %> (<%= dt.drawer_amount %>)</td>
+        <td><%= dt.drop ? 'Drop' : 'Payout' %> <%= l dt.created_at, :format => "%H:%I:%S" %></td>
+        <td><%= dt.owner ? dt.owner.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
         <td><%= dt.tag %></td>
         <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
+        <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if $User.role_cache.include? "manager"%></td>
     </tr>
   <% end %>
-  <tr>
-    <td>GDA:</td>
-    <td colspan=4><%= @order.get_drawer_add%></td>
-  </tr>
   <tr class="no-stripe">
-    <td colspan=5 ><h2>History: </h2><br /><hr /></td>
+    <td colspan=6 ><h2>Surrounding Drawer Transactions: </h2><br /><hr /></td>
+  </tr>
+  <% DrawerTransaction.where(["created_at between ? and ?",@order.created_at - 20.minutes,@order.created_at + 20.minutes]).order("id desc").each do |dt| %>
+    <tr >
+        <td><%= number_to_currency(dt.amount) %> (<%= dt.drawer_amount %>)</td>
+        <td><%= dt.drop ? 'Drop' : 'Payout' %> <%= l dt.created_at, :format => "%H:%I:%S" %></td>
+        <td><%= dt.owner ? dt.owner.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
+        <td><%= dt.tag %></td>
+        <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
+        <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if $User.role_cache.include? "manager"%></td>
+    </tr>
+  <% end %>
+  
+  <tr class="no-stripe">
+    <td colspan=6 ><h2>History: </h2><br /><hr /></td>
   </tr>
   <% @order.histories.order("id desc").each do |h| %>
     <tr>
-      <td colspan="5"><%= h.url[0,h.url.index("?")] rescue h.url %></td>
+      <td colspan="6">[<%= l h.created_at, :format => "%H:%I:%S" %>] <b><%= h.url[0,h.url.index("?")] rescue h.url %></b></td>
     </tr>
     <tr>
       <td title="<%= h.url %>">&nbsp;</td>
@@ -88,7 +108,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
           </pre>
         </div>
       </td>
-      <td colspan=2 onclick="$('#params_<%= h.id %>').toggle();">
+      <td colspan=3 onclick="$('#params_<%= h.id %>').toggle();">
       
         <%= h.params[0..25] %>
         <div id="params_<%= h.id %>" class="hidden">

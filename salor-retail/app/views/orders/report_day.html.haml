@@ -17,21 +17,26 @@
 
 = form_tag orders_report_day_path, :class => 'no-print', :id => 'date_range', :method => :get do
   %div.tools
-    = label 'from', t('.from')
-    = select_date(@from, :prefix => 'from', :order => [:day,:month,:year])
-    %br
-    = label 'to', t('.to')
-    = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
-    %br
-    %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'username', params[:employee_id])
-    %br
-    %br
-    = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
-    %br
-    %br
-    %br
-    = salor_icon(:print, {:onclick => 'Salor.printPage();'}, 32, t('.a4'))
-    = salor_icon(:print, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt',decodeURIComponent($('#date_range').serialize()));" }, 32, t('.thermal'))
+    %table{:align => :center}
+      %tr
+        %td{:align => :left, :width => "20%"}
+          = label 'from', t('.from')
+        %td{:align => :right}
+          = select_date(@from, :prefix => 'from', :order => [:day,:month,:year])
+      %tr
+        %td{:align => :left}
+          = label 'to', t('.to')
+        %td{:align => :right}
+          = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
+      %tr
+        %td{:align => :left}
+          %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'username', params[:employee_id])
+        %td{ :align => :right}
+          = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
+      %tr
+        %td{:colspan => 2, :align => :center}
+          = salor_icon(:print, {:onclick => 'Salor.printPage();'}, 32, t('.a4'))
+          = salor_icon(:print, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt',decodeURIComponent($('#date_range').serialize()));" }, 32, t('.thermal'))
     %br
     %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 
