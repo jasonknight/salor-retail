@@ -50,8 +50,8 @@
   </li>
   <% end %>
   <li>
-    <div align="center" id="end_of_day_button">
-    <%= link_to salor_icon(:logout,{},32,I18n.t("system.logout")), "/cash_registers/end_of_day" %><br />
+    <div align="center" id="end_of_day_button" onclick="window.location = '/cash_registers/end_of_day';">
+    <%= salor_icon(:logout,{},32,I18n.t("system.logout")) %><br />
 <!--      <a href="/cash_registers/end_of_day">
         <img src="/images/icons/<%= icon(:logout,32) %>" /><br /><span class='icon-caption'><%= I18n.t("system.logout") %></span>
       </a>-->

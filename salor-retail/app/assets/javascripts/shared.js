@@ -317,16 +317,16 @@ function deletable(elem,type,callback) {
   if ($('#' + elem.attr('id') + '_delete').length == 0) {
     var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
     if (!callback) {
-      del_button.on('mousedown',function () {
+      del_button.on('click',function () {
         $('#' + $(this).attr('target')).slideUp();
       });
     } else {
-      del_button.on('mousedown',callback);
+      del_button.on('click',callback);
     }
   } else {
     var del_button = $('#' + elem.attr('id') + '_delete');
     if (callback) {
-      del_button.unbind('mousedown').on('mousedown',callback);
+      del_button.unbind('click').on('click',callback);
     }
   }
   var offset = elem.offset();
@@ -642,10 +642,16 @@ window.shared = {
       var div2 = shared.element('div',{}, '', div);
       div2.addClass('option-input');
       var input = shared.element('input',{id: 'option_' + options.name + '_input', type:'text'},'',div2);
+      input.on("click",function () {
+        var inp = $(this);
+        setTimeout(function () {
+          inp.select();
+        },55);
+      });
       input.addClass('option-actual-input');
-      var div3 = shared.element('div',{}, 'OK', div);
+      var div3 = shared.element('div',{id: 'option_' + options.name + '_button'}, 'OK', div);
       div3.addClass('option-button');
-      div3.on("mousedown",callbacks.click);
+      div3.on("click",callbacks.click);
       input.val(options.value);
       input.on('keyup',callbacks.keyup);
       input.focus(callbacks.focus);

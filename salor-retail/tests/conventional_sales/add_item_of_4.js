@@ -6,7 +6,9 @@ env.modules.Add4 = function () {
   this.next_func = null;
   this.tries = 0;
   this.run = function (start_url) {
-    self.view.load(start_url);
+    if (start_url != "") {
+      self.view.load(start_url);
+    }
     self.interval_id = setInterval(self.event_loop,self.interval);
     return self;
   } // end run
@@ -15,10 +17,10 @@ env.modules.Add4 = function () {
   }
   
   this.event_loop = function () {
-    print("Conventional Sales Event Loop Beginning. State: " + self.state + "\n");
+    print("Add4 Beginning. State: " + self.state + "\n");
     switch(self.state) {
       /////////////////////////////////////////////
-      //  Add an item of 5
+      //  Add an item of 4
       ////////////////////////////////////////////
       case 0:
         self.tries = 0;
@@ -64,19 +66,23 @@ env.modules.Add4 = function () {
         }
         break;
       case 3:
+        self.state++; //pause
+      break;
+      case 4:
         var button = self.view.getElement("#active_select_ByCard");
-        if (button.isVisible == true) {
+        //print(dump(button));
+        if (button.isNull != true) { // sometime isVisible is false even when it's visible...
           self.view.click(button);
           self.state++;
           self.tries = 0;
         } else {
           self.tries++;
           if (self.tries >= 4 ) {
-            fatal("active widget button never showed");
+            fail("active widget button never showed");
           }
         }
         break;
-      case 4:
+      case 5:
         var total = self.view.getContentOfElement("#complete_order_total");
         var change = self.view.getContentOfElement("#complete_order_change");
         if (total.indexOf("4.00") == -1) {
@@ -90,7 +96,7 @@ env.modules.Add4 = function () {
           self.state++;
         }
         break;
-      case 5:
+      case 6:
         var drawer_amount = self.view.getContentOfElement("#header_drawer_amount");
         if (drawer_amount.indexOf("150.00") == -1) {
           // It may take some time for the element to update...

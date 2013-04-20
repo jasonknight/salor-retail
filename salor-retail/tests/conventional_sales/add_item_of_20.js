@@ -6,7 +6,9 @@ env.modules.Add20 = function () {
   this.next_func = null;
   this.tries = 0;
   this.run = function (start_url) {
-    self.view.load(start_url);
+    if (start_url != "") {
+      self.view.load(start_url);
+    }
     self.interval_id = setInterval(self.event_loop,self.interval);
     return self;
   } // end run
@@ -15,7 +17,7 @@ env.modules.Add20 = function () {
   }
   
   this.event_loop = function () {
-    print("Conventional Sales Event Loop Beginning. State: " + self.state + "\n");
+    print("Add20 Beginning. State: " + self.state + "\n");
     switch(self.state) { 
       /////////////////////////////////////////////
       //  Add an item of 20

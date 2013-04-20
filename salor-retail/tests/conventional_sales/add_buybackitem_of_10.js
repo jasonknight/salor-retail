@@ -6,9 +6,9 @@ env.modules.AddBuyback10 = function () {
   this.next_func = null;
   this.tries = 0;
   this.run = function (start_url) {
-    self.view.load(start_url);
-    self.view.resize(1024,768);
-    self.view.center();
+    if (start_url != "") {
+      self.view.load(start_url);
+    }
     self.interval_id = setInterval(self.event_loop,self.interval);
     return self;
   } // end run
@@ -17,7 +17,7 @@ env.modules.AddBuyback10 = function () {
   }
   
   this.event_loop = function () {
-    print("Conventional Sales Event Loop Beginning. State: " + self.state + "\n");
+    print("Add Buyback of 10 Beginning. State: " + self.state + "\n");
     switch(self.state) {
       /////////////////////////////////////////////
       //  Verify that we are at the POS screen

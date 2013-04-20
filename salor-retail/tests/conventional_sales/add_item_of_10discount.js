@@ -1,4 +1,4 @@
-env.modules.Add10 = function () {
+env.modules.Add10Discount= function () {
   var self = this;
   this.state = 0;
   this.interval = 1200;
@@ -17,7 +17,7 @@ env.modules.Add10 = function () {
   }
   
   this.event_loop = function () {
-    print("Add 10 Loop Beginning. State: " + self.state + "\n");
+    print("Add10Discount Beginning. State: " + self.state + "\n");
     switch(self.state) {
       /////////////////////////////////////////////
       //  Verify that we are at the POS screen
@@ -37,46 +37,68 @@ env.modules.Add10 = function () {
         var input = self.view.getElement("#keyboard_input");
         self.view.fill(input,"10.00");
         sendKey(self.view,"Enter");
-        var complete_button = self.view.getElement("#print_receipt_button");
-        self.view.click(complete_button);
         self.state++;
         break;
       case 2:
+        var total = self.view.getContentOfElement("#pos_order_total");
+        if (total.indexOf("10.00") != -1) {
+          self.state++;
+        } else {
+          print("Waiting for total to update");
+        }
+        break;
+      case 3: 
+        self.view.click(".pos-item-rebate");
+        self.state++;
+        break;
+      case 4:
+        var kbd = self.view.getElement(".ui-keyboard");
+         if (kbd.isVisible == false) {
+            if (self.tries > 4) {
+              fatal("keyboard never showed up");
+            } else {
+              self.tries++;
+            }
+         } else {
+          self.state++;
+         }
+         break;
+      case 5:
+        self.view.fill(".inplaceeditinput",20);
+        sendKey(self.view,"Enter");
+        self.state++;
+        break;
+      case 6:
+        var total = self.view.getContentOfElement("#pos_order_total");
+        if (total.indexOf("8.00") != -1) {
+          var complete_button = self.view.getElement("#print_receipt_button");
+          self.view.click(complete_button);
+          self.state++;
+        } else {
+          print("Waiting for total to update");
+        }
+        break;
+      case 7:
         var complete_order_popup = self.view.getElement("#complete_order");
         if (complete_order_popup.isVisible == true) {
-          var total = self.view.getContentOfElement("#complete_order_total");
-          var change = self.view.getContentOfElement("#complete_order_change");
-          if (total.indexOf("10.00") == -1) {
-            fatal("Order Total should be 10.00");
-          } else if (change.indexOf("0.00") == -1) {
-            fatal("Change should be 0.00 at case 5");
-          } else {
             var button = self.view.getElement("#confirm_complete_order_button");
             self.view.click(button);
             self.state++;
-          }
         } else {
           print("Waiting for complete order popup");
         }
         break;
-      case 3:
-        var drawer_amount = self.view.getContentOfElement("#header_drawer_amount");
-        print("Drawer amount is: " + drawer_amount);
-        if (drawer_amount.indexOf("110.00") == -1) {
-          // It may take some time for the element to update...
-          if (self.tries < 3) {
-            self.tries++;
-          } else {
-            fatal("Add item of $10.00 failed or cash drawer failed to update");
-          }
-        } else {
+      case 8:
+        var total = self.view.getContentOfElement("#pos_order_total");
+        if (total.indexOf("0.00") != -1) {
           var button = self.view.getElement("#cancel_complete_order_button");
-          print("button is: " + dump(button));
           self.view.click(button);
           self.state++;
+        } else {
+          print("Waiting for total to update");
         }
         break;
-        
+      
       default:
         clearInterval(self.interval_id);
         if (self.next_func) {

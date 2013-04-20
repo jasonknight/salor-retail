@@ -6,7 +6,9 @@ env.modules.Add40 = function () {
   this.next_func = null;
   this.tries = 0;
   this.run = function (start_url) {
-    self.view.load(start_url);
+    if (start_url != "") {
+      self.view.load(start_url);
+    }
     self.interval_id = setInterval(self.event_loop,self.interval);
     return self;
   } // end run
@@ -15,7 +17,7 @@ env.modules.Add40 = function () {
   }
   
   this.event_loop = function () {
-    print("Conventional Sales Event Loop Beginning. State: " + self.state + "\n");
+    print("Add40 Beginning. State: " + self.state + "\n");
     switch(self.state) { 
       /////////////////////////////////////////////
       //  Add an item of 20
@@ -78,29 +80,25 @@ env.modules.Add40 = function () {
         if (button.isVisible == true) {
           self.view.click(button);
           self.state++;
-          self.tries = 0;
+
         } else {
-          self.tries++;
-          if (self.tries >= 4 ) {
-            fatal("active widget button never showed");
-          }
+          print("Waiting for OtherCredit to show up");
         }
         break;
       case 6:
-        if (self.tries < 1) {
-          self.tries++;
-        } else {
-          sendText("5");
+          sendText(self.view,"5");
           self.state++;
           self.tries = 0;
-        }
       case 7:
+        self.state++; // pause for ui update
+      break;
+      case 8:
         var total = self.view.getContentOfElement("#complete_order_total");
         var change = self.view.getContentOfElement("#complete_order_change");
         if (total.indexOf("40.00") == -1) {
-          fatal("Order Total should be 40.00");
+          fail("Order Total should be 40.00");
         } else if (change.indexOf("15.00") == -1) {
-          fatal("Change should be 15.00 at case 9");
+          fail("Change should be 15.00 at case 8 but is " + change);
           self.state++;
         } else {
           var button = self.view.getElement("#confirm_complete_order_button");
@@ -108,19 +106,22 @@ env.modules.Add40 = function () {
           self.state++;
         }
         break;
-      case 8:
+      case 9:
         var button = self.view.getElement("#confirm_complete_order_button");
         self.view.click(button);
         self.state++;
         break;
-      case 9:
+      case 10:
         var drawer_amount = self.view.getContentOfElement("#header_drawer_amount");
         if (drawer_amount.indexOf("160.00") == -1) {
           // It may take some time for the element to update...
           if (self.tries < 3) {
             self.tries++;
           } else {
-            fatal("Add item of $40.00 failed or cash drawer failed to update to value 160.00");
+            fail("Add item of $40.00 failed or cash drawer failed to update to value 160.00");
+            self.state++;
+            var button = self.view.getElement("#cancel_complete_order_button");
+            self.view.click(button);
           }
         } else {
           var button = self.view.getElement("#cancel_complete_order_button");

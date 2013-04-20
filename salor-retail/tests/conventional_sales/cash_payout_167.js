@@ -1,4 +1,4 @@
-env.modules.CashDrop = function () {
+env.modules.CashPayout = function () {
   var self = this;
   this.state = 0;
   this.interval = 1200;
@@ -17,7 +17,7 @@ env.modules.CashDrop = function () {
   }
   
   this.event_loop = function () {
-    print("CashDrop100 Beginning. State: " + self.state + "\n");
+    print("CashPayout167 Beginning. State: " + self.state + "\n");
     switch(self.state) {
       /////////////////////////////////
       //  Show cash drop
@@ -26,8 +26,8 @@ env.modules.CashDrop = function () {
         
         if (self.view.getElement("#header_drawer_amount").isVisible == true) {
           var drawer_total = self.view.getContentOfElement("#header_drawer_amount");
-          if (drawer_total.indexOf("$0.00") == -1) {
-            fatal("Drawer amount must be $0.00 but is " + drawer_total);
+          if (drawer_total.indexOf("167.00") == -1) {
+            fatal("Drawer amount must be $167.00 but is " + drawer_total);
           } else {
             // we make a cash drop of 100
             var button = self.view.getElement("#header_cash_drop");
@@ -44,8 +44,8 @@ env.modules.CashDrop = function () {
       case 1:
         var cash_drop = self.view.getElement("#cash_drop");
         if (cash_drop.isVisible == true) {
-          self.view.fill("#cash_drop_amount","100");
-          var button = self.view.getElement("#confirm_cash_drop");
+          self.view.fill("#cash_drop_amount","167");
+          var button = self.view.getElement("#confirm_cash_payout");
           self.view.click(button);
           self.state++;
         }
@@ -55,8 +55,8 @@ env.modules.CashDrop = function () {
       ////////////////////////////////
       case 2:
         var drawer_amount = self.view.getContentOfElement("#header_drawer_amount");
-        if (drawer_amount.indexOf("$100.00") == -1) {
-          fail("Cash Drop of 100 failed");
+        if (drawer_amount.indexOf("$0.00") == -1) {
+          fail("Cash Payout of 167 failed");
         } else {
           self.state++;
         }
