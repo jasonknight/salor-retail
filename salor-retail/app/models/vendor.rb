@@ -32,6 +32,7 @@ class Vendor < ActiveRecord::Base
   has_many :shipment_types
   has_many :invoice_blurbs
   has_many :item_stocks
+  has_many :receipts
   serialize :unused_order_numbers
   serialize :unused_quote_numbers
 

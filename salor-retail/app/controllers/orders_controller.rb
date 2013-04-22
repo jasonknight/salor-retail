@@ -646,7 +646,26 @@ class OrdersController < ApplicationController
     to2 = @to.beginning_of_day + 1.day
     @taxes = TaxProfile.scopied.where( :hidden => 0)
   end
-
+  
+  def receipts
+    @from, @to = assign_from_to(params)
+    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
+    @receipts = $Vendor.receipts.where(["created_at between ? and ?", @from, @to])
+    if params[:print] == "true" and params[:cash_register_id] then
+      $Register = $Vendor.cash_registers.find_by_id(params[:cash_register_id].to_s)
+      vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
+      print_engine = Escper::Printer.new('local', vendor_printer)
+      print_engine.open
+      
+      @receipts.each do |r|
+        contents = r.content
+        bytes_written, content_written = print_engine.print(0, contents)
+      end
+      print_engine.close
+    end
+  end
+  
   def print
     @order = Order.scopied.find_by_id(params[:id].to_s)
     raise "Orphaned Order" if not @order.employee

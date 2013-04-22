@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130410181903) do
+ActiveRecord::Schema.define(:version => 20130422091325) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20130410181903) do
     t.boolean  "always_open_drawer"
     t.string   "pole_display_name"
     t.boolean  "require_password"
+    t.string   "locale"
   end
 
   add_index "cash_registers", ["vendor_id"], :name => "index_cash_registers_on_vendor_id"
@@ -655,8 +656,8 @@ ActiveRecord::Schema.define(:version => 20130410181903) do
     t.integer  "vendor_id"
     t.boolean  "tax_free",              :default => false
     t.integer  "hidden_by"
-    t.integer  "employee_id"
     t.string   "coupon_applies"
+    t.integer  "employee_id"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -769,6 +770,7 @@ ActiveRecord::Schema.define(:version => 20130410181903) do
     t.text     "content"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
+    t.integer  "vendor_id"
   end
 
   create_table "roles", :force => true do |t|

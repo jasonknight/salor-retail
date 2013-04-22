@@ -16,6 +16,7 @@ class Order < ActiveRecord::Base
   has_many :paylife_structs
   has_many :histories, :as => :model
   has_many :drawer_transactions
+  has_one :receipt
   belongs_to :user
   belongs_to :employee
   belongs_to :customer
@@ -1341,7 +1342,7 @@ class Order < ActiveRecord::Base
     contents = self.escpos_receipt(self.get_report)
     bytes_written, content_written = print_engine.print(0, contents[:text], contents[:raw_insertations])
     print_engine.close
-    Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => contents[:text])
+    Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => contents[:text], :order_id => self.id)
   end
   def sanity_check
     if self.paid == 1 then
