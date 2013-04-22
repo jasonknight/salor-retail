@@ -14,6 +14,7 @@ class Receipt < ActiveRecord::Base
     elem = false
     center = false
     h1 = false
+    bold = false
     begin
       if self.content[i] == "\e" then
         b1,b2,b3 = [self.content[i+1],self.content[i+2],self.content[i+3]]
@@ -21,6 +22,7 @@ class Receipt < ActiveRecord::Base
         if b1 == "!" and b2 == "\x18" then
           i += 1
           html += "<span class=\"tall-bold\">"
+          bold = true
         elsif b1 == "@" then
           # initialize, so move on
           puts "init"
@@ -47,6 +49,10 @@ class Receipt < ActiveRecord::Base
           puts "select print mode"
           if b2 == "\x00" then
             puts "normal font"
+            if bold then
+              html += "</span>"
+              bold = false
+            end
             if center then
               html += "</center>"
             end

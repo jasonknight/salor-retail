@@ -39,6 +39,10 @@
           <%= link_to salor_icon(:save_download,{},32),"/orders?type=#{params[:type]}&page=#{params[:page]}&format=csv" %>
           <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
         </div>
+        <div class="tool-icon" >
+          <%= link_to salor_icon(:thermal_printer,{},32),"/orders/receipts" %>
+          <br /><span class='icon-caption'><%= I18n.t("menu.receipts") %></span>
+        </div>
       </div>
     </td>
   </tr>
