@@ -12,6 +12,13 @@ class VendorsController < ApplicationController
     before_filter :crumble, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
 
+  def get_configuration
+    if $Vendor then
+      render :json => $Vendor.salor_configuration and return
+    else
+      render :text => "{}"
+    end
+  end
   # GET /vendors
   # GET /vendors.xml
   def csv
@@ -275,7 +282,7 @@ class VendorsController < ApplicationController
       o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value]) if o
       render :nothing => true and return
     end
-    if allowed_klasses.include? params[:klass] or GlobalData.salor_user.is_technician?
+    if allowed_klasses.include? params[:klass] or $User.is_technician?
 #        puts  "### Class is allowed"
       kls = Kernel.const_get(params[:klass])
       if not params[:id] and params[:order_id] then

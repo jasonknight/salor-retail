@@ -93,6 +93,7 @@ SalorRetail::Application.routes.draw do
 
   match "items/create_ajax" => "items#create_ajax"
   match "vendors/edit_field_on_child" => "vendors#edit_field_on_child"
+  match "vendors/get_configuration" => "vendors#get_configuration"
   match "vendors/toggle" => "vendors#toggle"
   match "vendors/destroy/:id" => "vendors#destroy"
   match "vendors/end_day" => "vendors#end_day"

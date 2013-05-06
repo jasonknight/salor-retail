@@ -32,6 +32,7 @@ var VIEW = new Chrome("ConventionalSalesMachine");
   
 */
 
+// Conventional Sales Testing
 var login             = new env.modules.LoginMachine();
     login.view        = VIEW; // We reuse the same view here because we aren't perf testing.
                               // Thus we reuse the cache, localdb, log, and cookies etc.
@@ -62,20 +63,25 @@ var check_drawer_calculator            = new env.modules.CheckDrawerCalculator()
 var cash_payout        = new env.modules.CashPayout();
     cash_payout.view    = VIEW;
 var check_detail_report            = new env.modules.CheckDetailReport();
-    check_detail_report.view       = VIEW;   
-/* 
-login.run("http://localhost:3000").next(function () { 
-  //cash_drop.run("http://localhost:3000/orders/new").next(function () {
-    //choose.run("http://localhost:3000/cash_registers").next(env.report);
-    //add_4.run("http://localhost:3000/orders/new").next(env.report);
-    //check_drawer_calculator.run("").next(function () { env.report(); });
-    //check_detail_report.run("http://localhost:3000/cash_registers/end_of_day").next(function () { env.report(); });
-   // add_20d.run("http://localhost:3000/orders/new").next(env.report);
-  //}); // end cash_drop.run
-}); // end login.run
-*/
+    check_detail_report.view       = VIEW;  
+    
+// Tax related modules 
+include("tax_calculations/get_vendor_config.js");
+include("tax_calculations/set_calculate_tax.js");
+include("tax_calculations/make_taxable_order.js");
+var get_vendor_config                           = new env.modules.GetVendorConfig();
+    get_vendor_config.view                      = VIEW;
+var set_calc_tax                                = new env.modules.SetCalculateTax();
+    set_calc_tax.view                           = VIEW;
+var make_taxable_order                          = new env.modules.MakeTaxableOrder();
+    make_taxable_order.view                     = VIEW;
+
+function run_with_taxes() {
+  make_taxable_order.run(url + "/orders/new").next(env.report);
+}
 
 var url = "http://localhost:3000";
+
 login.run(url).next(function () { 
   choose.run(url + "/cash_registers").next(function () {
     cash_drop.run("").next(function () {
@@ -91,7 +97,34 @@ login.run(url).next(function () {
                         check_drawer_calculator.run("").next(function () {
                           cash_payout.run("").next(function () {
                             check_detail_report.run("").next(function () {
-                              env.report();
+                            
+                                // Test with taxes
+                                var Conf = 'xxx';
+                                get_vendor_config.run(url + "/vendors/get_configuration").next(
+                                  function () {
+                                    Conf = this.cnf;
+                                    if (Conf.calculate_tax) {
+                                      print("Taxes are to be calculated");
+                                      run_with_taxes();
+                                    } else {
+                                      print("Need to turn on tax calculation");
+                                      print(url + "/vendors/edit_field_on_child?id=" + Conf.id + "&klass=SalorConfiguration&field=calculate_tax&value=1");
+                                      set_calc_tax.run(url + "/vendors/edit_field_on_child?id=" + Conf.id + "&klass=SalorConfiguration&field=calculate_tax&value=1").next(function () {
+                                        get_vendor_config.run(url + "/vendors/get_configuration").next(function () {
+                                          Conf = this.cnf;
+                                          if (Conf.calculate_tax) {
+                                            print("Successfully changed calculate tax");
+                                            run_with_taxes();
+                                          } else {
+                                            fail("Could not update configuration");
+                                          }
+                                        });
+                                      });
+                                    }
+                                  }
+                                ); // get_vendor_config
+                                // End test with taxes
+                                
                             }); //check_detail_report
                           }); //cash_payout
                         }); //check_drawer_calculator
@@ -109,5 +142,18 @@ login.run(url).next(function () {
 }); // login
 
 
+/*login.run(url).next(function () { 
+  // Use this area to test an individual function
+  
+  
+  
+}); // end login.run
+*/
+// Scratch Area
+/* login.run(url).next(function () { 
+
+  
+}); // end login.run
+*/
 
 
