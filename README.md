@@ -64,7 +64,11 @@ Clone the repository
     rake salor:seed
     rails s
 
-Navigate to http://localhost:3000 and login in 110
+Navigate to http://localhost:3000 and login with either :
+* 010
+* 020
+* 030
+* 040
 
 Visit http://www.salorpos.com/demo-of-salor-pos for more info and to view live demos in
 various languages.
