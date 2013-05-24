@@ -146,6 +146,8 @@ class Vendor < ActiveRecord::Base
     Category.update_all :quantity_sold => 0
     Location.update_all :cash_made => 0
     Location.update_all :quantity_sold => 0
+    SalorConfiguration.update_all :calculate_tax => false
+    CashRegister.update_all :require_password => false
   end
   def self.debug_setup
     i = 100
