@@ -14,8 +14,8 @@
   #PassengerPreStart http://INSTANCE_ID.sr.localhost/
   PassengerRestartDir /var/tmp/salor-retail/INSTANCE_ID
   
-  SetEnvIf Host ^.*-b\.sr\.localhost USE_AUTH
-  SetEnvIf Host ^.*-d\.sr\.localhost USE_AUTH
+  SetEnvIf Host ^.*2\.sr\.localhost USE_AUTH
+  SetEnvIf Host ^.*4\.sr\.localhost USE_AUTH
 
   <Location />
     Order allow,deny

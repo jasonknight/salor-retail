@@ -343,7 +343,7 @@ class ItemsController < ApplicationController
   def upload_danczek_tobaccoland_plattner
     if params[:file]
       lines = params[:file].read.split("\n")
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type1(lines)
+      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type1("tobaccoland", lines)
       redirect_to(:action => 'index')
     end
   end
@@ -351,7 +351,7 @@ class ItemsController < ApplicationController
   def upload_house_of_smoke
     if params[:file]
       lines = params[:file].read.split("\n")
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type2(lines)
+      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type2("dios", lines)
       redirect_to(:action => 'index')
     end
   end
@@ -359,7 +359,7 @@ class ItemsController < ApplicationController
   def upload_optimalsoft
     if params[:file]
       lines = params[:file].read.split("\n")
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type3(lines)
+      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type3("Optimalsoft", lines)
       redirect_to(:action => 'index')
     end
   end
