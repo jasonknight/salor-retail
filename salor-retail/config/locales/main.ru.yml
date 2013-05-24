@@ -1,17 +1,14 @@
 ---
 ru:
-  support: XXX
   ByCard: Картой
   ByGiftCard: Подарочной картой
   InCash: Наличными
   activerecord:
     attributes:
-      order_item:
-        quantity: XXX Qty.
-        tax_free: Tax Free
       active: активный
       address: адрес
       afield: поле
+      always_open_drawer: Always Open Drawer
       amount: количество
       amount_remaining: осталось
       amount_type: единица измерения
@@ -46,37 +43,56 @@ ru:
       created_at: Создан
       csv_imports: Импорт CSV
       csv_imports_url: URL для импорта CSV
+      customer:
+        tax_number: Tax number
       customer_screen_blurb: Стандартный текст для экрана покупателя
       decimal_points: количество разрядов
       default: По умолчанию
       default_buyback: выкуп по умолчанию
+      detailed_edit: Detailed Edit?
       dollar_per_lp: рублей за единицу бонуса
       drop: внесение
       email: email
       employee:
-        uses_drawer_id: Пользуется кассой как
         hourly_rate: Hourly Rate
+        uses_drawer_id: Пользуется кассой как
       end_amount: конечное количество
       end_date: конечная дата
       eod_show: показывать в конце дня
       expires_on: истекает
       first_name: имя
+      full_name: Name
       height: высота
       hide_buttons: Скрыть кнопки
       hide_discounts: Скрыть скидки
       ignore_qty: Игнорировать кол-во
+      internal_type: Type
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      invoice_note:
+        destination_country_id: Destination Country
+        note_footer: Note footer
+        note_header: Note header
+        origin_country_id: Origin Country
+        sale_type_id: Sale Type
+      is_header: Header?
+      is_proforma: Proforma?
       is_refund: Это возврат ?
       is_shipment_item: товар из поставки
       item:
+        customs_code: Customs Code
+        description: Description
+        manufacturer_price: Manufacturer Price
+        origin_country: Origin Country
         purchase_price: Цена закупки
         quantity: Количество
-        origin_country: Origin Country
-        customs_code: Customs Code
-        manufacturer_price: Manufacturer Price
-        description: Description
         weight: Weight
       item_sku: SKU товара
       itemsviewlist: Товары в виде списка
+      lang: Language
       last_name: фамилия
       lc_points: очки бонусной карты
       length: длина
@@ -90,6 +106,9 @@ ru:
       notes: заметки
       open_cash_drawer: открыть кассу
       order_id: заказ
+      order_item:
+        quantity: XXX Qty.
+        tax_free: Tax Free
       owner_id: Владелец
       owner_type: Тип владельца
       packaging_unit: упаковочная единица
@@ -113,7 +132,15 @@ ru:
       rebate: скидка
       rebate_type: тип скидки
       reorder_type: Тип повторного заказа
+      require_password: Require Password
+      role_cache: Roles
+      roles: Roles
       sales_metric: метрика продаж
+      salor_configuration:
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
       salor_printer: Печатать у клиента
       scale: размер
       shipment:
@@ -139,6 +166,7 @@ ru:
       subtotal: подытог
       tag: метка
       tax: налог
+      tax_free: Tax Free
       tax_profile_id: налог
       telephone: телефон
       the_receiver: получатель
@@ -152,47 +180,18 @@ ru:
       username: имя пользователя
       uses_drawer_id: Использует кассу как
       value: объем
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_footer: Receipt Logo Footer
+        receipt_logo_header: Receipt Logo Header
       vendor_id: Магазин
       vendor_printers: принтеры
       weigh_compulsory: обязательное взвешивание
       weight: вес
       when: когда
-      width: ширина
-      tax_free: Tax Free
-      invoice_note:
-        origin_country_id: Origin Country
-        destination_country_id: Destination Country
-        note_header: Note header
-        note_footer: Note footer
-        sale_type_id: Sale Type
-      is_proforma: Proforma?
-      customer:
-        tax_number: Tax number
-      detailed_edit: Detailed Edit?
-      vendor:
-        logo: Screen Logo
-        logo_invoice: Paper Invoice Logo
-        receipt_logo_header: Receipt Logo Header
-        receipt_logo_footer: Receipt Logo Footer
-      lang: Language
-      is_header: Header?
-      invoice_blurb:
-        body: Invoice
-        body_receipt: Receipt
-        is_header: Header
-        lang: Language
-      salor_configuration:
-        receipt_blurb: Receipt Blurb Header
-        receipt_blurb_footer: Receipt Blurb Footer
-        invoice_blurb: Invoice Blurb Header
-        invoice_blurb_footer: Invoice Blurb Footer
-      internal_type: Type
       whento: When
-      roles: Roles
-      role_cache: Roles
-      full_name: Name
-      always_open_drawer: Always Open Drawer
-      require_password: Require Password
+      width: ширина
     models:
       action:
         one: Действие
@@ -206,6 +205,9 @@ ru:
       category:
         one: Категория
         other: Категории
+      country:
+        one: Country
+        other: Countries
       customer:
         one: Покупатель
         other: Покупатели
@@ -221,15 +223,18 @@ ru:
       employee:
         one: Работник
         other: Работники
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
       item:
         one: Товар
         other: Товары
       item_type:
-        one: Тип товара
-        other: Типы товара
         coupon: Coupon
         gift_card: Gift Card
         normal: Normal
+        one: Тип товара
+        other: Типы товара
       location:
         one: Отдел
         other: Отделы
@@ -237,19 +242,22 @@ ru:
         one: Заказ
         other: Заказы
         proforma_orders: Proforma Invoices
-        unpaid_orders: Unpaid Invoices
-        quotes: Quotes
         quote: Quote
+        quotes: Quotes
+        unpaid_orders: Unpaid Invoices
       order_item:
         one: Товар в заказе
         other: Товары в заказе
       payment_method:
         one: Способ оплаты
         other: Способы оплаты
+      sale_type:
+        one: Sale Type
+        other: Sale Types
       shipment:
+        default_name: Default Name
         one: Поставка
         other: Поставки
-        default_name: Default Name
       shipment_type:
         default_name: Автоповтор заказа
         one: Тип поставки
@@ -272,24 +280,16 @@ ru:
       vendor:
         one: Магазин
         other: Магазины
-      sale_type:
-        one: Sale Type
-        other: Sale Types
-      country:
-        one: Country
-        other: Countries
-      invoice_note:
-        one: Invoice Note
-        other: Invoice Notes
   api:
     user_does_not_exist: пользователь не существует
+  are_you_sure: Are you sure you want to do this?
   behavior_list:
     add: добавить
     assign: назначить
+    discount_after_threshold: discount after threshold
     divide: разделить
     multiply: умножить
     subtract: отнять
-    discount_after_threshold: discount after threshold
   cash_registers:
     end_of_day:
       cash_drawer: Кассовый аппарат
@@ -336,10 +336,10 @@ ru:
     shipment_items: товары в поставке
     shipment_types: виды поставок
     shipments: поставки
+    signup: Signup for a 14 day free trial!
+    time_sheet: Employee Time Sheet
     update_location: обновить отдел
     update_real_quantity: обновить реальное количество
-    time_sheet: Employee Time Sheet
-    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: выберете пожалуйста
@@ -348,13 +348,13 @@ ru:
       clear: отчистить
       complete_sale: завершить продажу
       create: создать
+      edit: Edit
       get_item: получить товар
       ok: OK
       print: печатать
       save: Сохранить
       submit: отправить
       update: обновить
-      edit: Edit
   home:
     remote_service:
       connect_ssh: Удаленное обслуживание
@@ -393,6 +393,8 @@ ru:
       title: Инвентарный отчёт
       total_buying_price: Суммарная цена покупки
       total_selling_price: Суммарная цена продажи
+    selection:
+      print: Print
     show:
       from: от
       quantity_sold: Проданое количество
@@ -405,8 +407,6 @@ ru:
       update_quantity: Обновить инвентарные данные
     upload:
       upload: загрузить
-    selection:
-      print: Print
   label: ярлык
   menu:
     actions: действия
@@ -434,18 +434,20 @@ ru:
     delete_confirm: Вы уверены?
     destroy: уничтожить
     discounts: скидки
+    documentation: Documentation
     done: готово
     download: скачать
     edit: XXX Edit Country
-    edit_sale_type: XXX Edit Sale Type
-    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: редактировать кассовый аппарат
     edit_category: редактировать категорию
     edit_customer: редактировать покупателя
     edit_discount: редактировать скидку
     edit_employee: редактировать работника
+    edit_invoice_blurb: Edit Invoice Blurb
+    edit_invoice_note: XXX Edit Invoice Note
     edit_item: редактировать товар
     edit_location: редактировать отдел
+    edit_sale_type: XXX Edit Sale Type
     edit_shipment: редактировать поставку
     edit_shipment_type: редактировать тип поставки
     edit_shipper: редактировать поставщика %{name}
@@ -457,32 +459,37 @@ ru:
     general_configuration: основные настройки
     home: домой
     inventory_report: Отчет по товарам
+    invoice_blurbs: Invoice Blurbs
     item_types: типы товаров
     items: товары
+    labels: Labels
     law_reports: Скачать отчет
     locations: отделы
     loyalty_cards: бонусные карты
+    merge_into_current_order: Merge into current order
     move_shipment_item: новый поставляемый товар
-    new_country: XXX new country
-    new_sale_type: XXX new sale type
-    new_invoice_note: XXX New Invoice Note
     new_action: новое действие
     new_broken_item: новый некондиционный товар
     new_button: новая кнопка
     new_cash_register: новый кассовый аппарат
     new_category: новая категория
+    new_country: XXX new country
     new_customer: новый покупатель
     new_discount: новая скидка
     new_employee: новый работник
+    new_invoice_blurb: New Invoice Blurb
+    new_invoice_note: XXX New Invoice Note
     new_item: новый товар
     new_location: новый отдел
     new_order: новый заказ
+    new_sale_type: XXX new sale type
     new_shipment: новая поставка
     new_shipment_type: новый тип поставки
     new_shipper: новый поставщик
     new_stock_location: новое расположение склада
     new_tax_profile: новый налоговый профиль
     new_tender_method: новый метод оплаты
+    new_transaction_tag: New Transaction Tag
     new_vendor: новый магазин
     ok: OK
     order: заказ
@@ -507,6 +514,7 @@ ru:
     shippers: поставщики
     show: показать
     split: разбить
+    statistics: Statistics
     stock_locations: расположения складов
     support: поддержка
     tax_profiles: налоговые профили
@@ -520,19 +528,16 @@ ru:
     vendors: магазины
     void: пусто
     wholesaler_update: обновление оптового поставщика
-    labels: Labels
-    statistics: Statistics
-    documentation: Documentation
-    invoice_blurbs: Invoice Blurbs
-    edit_invoice_blurb: Edit Invoice Blurb
-    new_invoice_blurb: New Invoice Blurb
-    new_transaction_tag: New Transaction Tag
-    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: товар поставки не может быть сохранен
     shipments_move_all_items: все товары были успешно перемещёны
     shipments_move_item: товар был успешно перемещён
   orders:
+    print:
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
+      print: Print-Dialog
     report:
       display: показать
       end_date: конечная дата
@@ -615,11 +620,6 @@ ru:
       transaction_tag: метка транзакции
       transaction_total: итого за транзакцию
       transactions: транзакции
-    print:
-      print: Print-Dialog
-      delivery_note: Delivery note
-      invoice: Invoice
-      labels: Labels
   printr:
     eod_report:
       None: Без имени
@@ -628,6 +628,7 @@ ru:
       calculated_drawer_amount: Рассчитанный кассовый баланс
       cash-refunds: Возвраты наличными
       cash_refunds_total: ИТОГО
+      no_category: No Category
       noncash-refunds: Безналичные возвраты
       orders_total: Всего заказов
       payment_method_total: ИТОГО
@@ -642,7 +643,6 @@ ru:
         Рекомендуется заканчивать и начинать каждый день с нулевым балансом для упрощения
         бухгалтерских расчетов. Сделайте выплату наличных в соответствии с балансом
         и напечатайте отчет снова.
-      no_category: No Category
     formats:
       advert: Инновационная точка продаж www.salorpos.com
       cancel: Отмена                  РУБ %8.2f
@@ -684,11 +684,11 @@ ru:
       payout: выплата
       sold: продан
   receipts:
+    a_conto: on account
+    delivery_note: Lieferschein
     invoice: Rechnung
     invoice_numer_X_at_time: Заказ № %{number} от %{datetime}
-    delivery_note: Lieferschein
     offer: Offer
-    a_conto: on account
     proforma_invoice: Proforma Invoice
   reports:
     amount: количество
@@ -707,6 +707,7 @@ ru:
     show:
       purchase_price_sum: Сумма покупки
   sticker: наклейка
+  support: XXX
   system:
     add_payment_method: добавить метод оплаты
     complete_sale: Готово
@@ -789,12 +790,12 @@ ru:
       receipt_logo_footer: низ логотипа квитанции
       receipt_logo_header: верх логотипа квитанции
   views:
-    create_new_item: xxx Create New Article
     advanced_field: дополнительное поле
     cash_register_heading: ! '%{name} для %{store}'
     cash_registers: кассовые аппараты
     category_heading: категория %{name} для %{store}
     change: сдача
+    create_new_item: xxx Create New Article
     customers: покупатели
     download_may_last_long: Скачивание может длится долго. Продолжить?
     dummy_item: фиктивный товар
@@ -833,6 +834,7 @@ ru:
     item: товар
     language: язык
     listing: список
+    listing_invoice_blurbs: Listing Invoice Blurbs
     listing_items: товары в списке
     locations: отделы
     loyalty_card: бонусная карта
@@ -847,11 +849,11 @@ ru:
       move_real_quantities_success: Количество товара было успешно обновлено
       new_order: новый заказ создан
       order_refund_dt: ! '#%{id}'
+      please_backup: Please backup your system regularly!
       save_before: Сохранить перед выходом?
       wholesaler_upload_report: ! 'Обновленные товары: %{updated_items}, Созданные
         товары: %{created_items}, Созданные категории: %{created_categories}, Созданные
         налоговые профили %{created_tax_profiles}'
-      please_backup: Please backup your system regularly!
     order_heading: ! 'Заказ #%{id} для %{store}'
     order_number: ! 'Заказ #%{id}'
     pagination:
@@ -878,6 +880,7 @@ ru:
       body: тело
       bottom: низ
       camera: камера
+      choose: choose
       continue: продолжить
       coupons: Купоны
       delete: удалить
@@ -897,7 +900,6 @@ ru:
       to: кому
       top: верх
       waiting: ожидание...
-      choose: choose
     sticky_ticket: Наклейка
     stock_locations: расположения складов
     subtotal: подытог
@@ -908,11 +910,9 @@ ru:
     vendor: магазин
     wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять
       несколько минут.
-    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: при добавлении к заказу
     always: всегда
     on_export: при экспорте
     on_import: при импорте
     on_save: при сохранении
-  are_you_sure: Are you sure you want to do this?

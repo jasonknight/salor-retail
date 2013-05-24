@@ -2,101 +2,34 @@
 gn:
   activerecord:
     errors:
+      messages:
+        accepted: must be accepted
+        blank: muss eingegeben werden
+        confirmation: stimmt nicht überein
+        empty: darf nicht leer sein
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: ist reserviert
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        inclusion: ist nicht in der Liste
+        invalid: ist ungültig
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        not_a_number: ist keine Zahl
+        odd: must be odd
+        taken: wird bereits verwendet
+        too_long: ist zu lang (maximal %{count} Zeichen)
+        too_short: ist zu kurz (minimum ist %{count} Zeichen)
+        wrong_length: is the wrong length (should be %{count} characters)
       template:
+        body: ! 'Bitte überprüfen Sie die folgenden Eingaben:'
         header:
           one: ! '%{count} Fehler hat verhindert, dass das Formular ''%{model}'' gespeichert
             wird.'
           other: ! '%{count} Fehler haben verhindert, dass das Formular ''%{model}''
             gespeichert wird.'
-        body: ! 'Bitte überprüfen Sie die folgenden Eingaben:'
-      messages:
-        inclusion: ist nicht in der Liste
-        exclusion: ist reserviert
-        invalid: ist ungültig
-        confirmation: stimmt nicht überein
-        accepted: must be accepted
-        empty: darf nicht leer sein
-        blank: muss eingegeben werden
-        too_long: ist zu lang (maximal %{count} Zeichen)
-        too_short: ist zu kurz (minimum ist %{count} Zeichen)
-        wrong_length: is the wrong length (should be %{count} characters)
-        taken: wird bereits verwendet
-        not_a_number: ist keine Zahl
-        greater_than: must be greater than %{count}
-        greater_than_or_equal_to: must be greater than or equal to %{count}
-        equal_to: must be equal to %{count}
-        less_than: must be less than %{count}
-        less_than_or_equal_to: must be less than or equal to %{count}
-        odd: must be odd
-        even: must be even
-  datetime:
-    distance_in_words:
-      half_a_minute: half a minute
-      less_than_x_seconds:
-        one: less than 1 second
-        other: less than %{count} seconds
-      x_seconds:
-        one: 1 second
-        other: ! '%{count} seconds'
-      less_than_x_minutes:
-        one: less than a minute
-        other: less than %{count} minutes
-      x_minutes:
-        one: 1 minute
-        other: ! '%{count} minutes'
-      about_x_hours:
-        one: about 1 hour
-        other: about %{count} hours
-      x_days:
-        one: 1 Tag
-        other: ! '%{count} Tage'
-      about_x_months:
-        one: about 1 month
-        other: about %{count} months
-      x_months:
-        one: 1 month
-        other: ! '%{count} months'
-      about_x_years:
-        one: about 1 year
-        other: about %{count} years
-      over_x_years:
-        one: over 1 year
-        other: over %{count} years
-      almost_x_years:
-        one: almost 1 year
-        other: almost %{count} years
-    prompts:
-      year: Year
-      month: Month
-      day: Day
-      hour: Hour
-      minute: Minute
-      second: Seconds
-  helpers:
-    select:
-      prompt: Please select
-    submit:
-      create: Create %{model}
-      update: Update %{model}
-      submit: Save %{model}
-  support:
-    array:
-      words_connector:
-        two_words_connector: ! ' und '
-        last_word_connector: ! ', und '
   date:
-    formats:
-      default: ! '%Y-%m-%d'
-      short: ! '%d. %b'
-      long: ! '%d. %B  %Y'
-    day_names:
-    - Sonntag
-    - Montag
-    - Dienstag
-    - Mittwoch
-    - Donnerstag
-    - Freitag
-    - Samstag
     abbr_day_names:
     - So
     - Mo
@@ -105,20 +38,6 @@ gn:
     - Do
     - Fr
     - Sa
-    month_names:
-    - 
-    - Januar
-    - Februar
-    - März
-    - April
-    - Mai
-    - Juni
-    - Juli
-    - August
-    - September
-    - Oktober
-    - November
-    - Dezember
     abbr_month_names:
     - 
     - Jan
@@ -133,25 +52,106 @@ gn:
     - Okt
     - Nov
     - Dez
+    day_names:
+    - Sonntag
+    - Montag
+    - Dienstag
+    - Mittwoch
+    - Donnerstag
+    - Freitag
+    - Samstag
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%d. %B  %Y'
+      short: ! '%d. %b'
+    month_names:
+    - 
+    - Januar
+    - Februar
+    - März
+    - April
+    - Mai
+    - Juni
+    - Juli
+    - August
+    - September
+    - Oktober
+    - November
+    - Dezember
     order:
     - :year
     - :month
     - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about 1 hour
+        other: about %{count} hours
+      about_x_months:
+        one: about 1 month
+        other: about %{count} months
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than 1 second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 Tag
+        other: ! '%{count} Tage'
+      x_minutes:
+        one: 1 minute
+        other: ! '%{count} minutes'
+      x_months:
+        one: 1 month
+        other: ! '%{count} months'
+      x_seconds:
+        one: 1 second
+        other: ! '%{count} seconds'
+    prompts:
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
+  helpers:
+    select:
+      prompt: Please select
+    submit:
+      create: Create %{model}
+      submit: Save %{model}
+      update: Update %{model}
+  support:
+    array:
+      words_connector:
+        last_word_connector: ! ', und '
+        two_words_connector: ! ' und '
   time:
+    am: ''
     formats:
-      default: ! '%a, %d. %b. %Y, %H:%M:%S %z'
-      short: ! '%d. %b. %y  %y %H:%M'
-      long: ! '%d. %B %Y %H:%M:%S'
-      datetime_iso: ! '%Y-%m-%d %H:%M:%S'
-      iso: ! '%Y-%m-%d %H:%M:%S'
-      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      date_iso: ! '%Y-%m-%d'
       date_normal: ! '%d. %B %Y'
       date_short: ! '%d. %b %y'
-      date_iso: ! '%Y-%m-%d'
-      time_short: ! '%H:%M'
-      month_and_day: ! '%d. %B'
-      salor: ! '%a, %b %d %H:%M'
+      datetime_iso: ! '%Y-%m-%d %H:%M:%S'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      default: ! '%a, %d. %b. %Y, %H:%M:%S %z'
+      iso: ! '%Y-%m-%d %H:%M:%S'
       just_day: ! '%d. %B %Y'
       just_time: ! '%H:%M'
-    am: ''
+      long: ! '%d. %B %Y %H:%M:%S'
+      month_and_day: ! '%d. %B'
+      salor: ! '%a, %b %d %H:%M'
+      short: ! '%d. %b. %y  %y %H:%M'
+      time_short: ! '%H:%M'
     pm: ''

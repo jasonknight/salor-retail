@@ -1,161 +1,161 @@
 ---
 cn:
-  any_reports: 任何報告
-  index_reports: 指數報告
-  edit_reports: 編輯報告
-  show_reports: 顯示報告
-  create_reports: 創建報告
-  destroy_reports: 銷毀報告
-  update_reports: 更新報告
-  employee: 僱員
-  manager: 經理
-  head_cashier: 頭出納員
-  cashier: 出納員
-  stockboy: 補充庫存的人
-  edit_others_orders: 編輯其他人的訂單
-  index_orders: 指數訂單
-  edit_orders: 編輯訂單
-  destroy_orders: 銷毀訂單
-  create_orders: 創建訂單
-  update_orders: 更新訂單
-  show_orders: 顯示訂單
-  any_orders: 任何訂單
-  index_items: 指數項目
-  edit_items: 編輯項目
-  destroy_items: 銷毀項目
-  create_items: 創建項目
-  update_items: 更新項目
-  show_items: 顯示項目
-  any_items: 任何項目
-  index_categories: 指數類別
-  edit_categories: 編輯類別
-  destroy_categories: 銷毀類別
-  create_categories: 創建類別
-  update_categories: 更新類別
-  show_categories: 顯示類別
-  any_categories: 任何類別
-  index_locations: 指數位置
-  edit_locations: 編輯位置
-  destroy_locations: 銷毀位置
-  create_locations: 創建位置
-  update_locations: 更新位置
-  show_locations: 顯示位置
-  any_locations: 任何位置
-  index_shippers: 指數貨主
-  edit_shippers: 編輯貨主
-  destroy_shippers: 銷毀貨主
-  create_shippers: 創建貨主
-  update_shippers: 更新貨主
-  show_shippers: 顯示貨主
-  any_shippers: 任何貨主
-  index_shipments: 指數出貨
-  edit_shipments: 編輯出貨
-  destroy_shipments: 銷毀出貨
-  create_shipments: 創建出貨
-  update_shipments: 更新出貨
-  show_shipments: 顯示出貨
-  any_shipments: 任何出貨
-  index_vendors: 指數供應商
-  edit_vendors: 編輯供應商
-  destroy_vendors: 銷毀供應商
-  create_vendors: 創建供應商
-  update_vendors: 更新供應商
-  show_vendors: 顯示供應商
-  any_vendors: 任何供應商
-  index_employees: 指數員工
-  edit_employees: 編輯員工
-  destroy_employees: 銷毀員工
-  create_employees: 創建員工
-  update_employees: 更新員工
-  show_employees: 顯示員工
-  any_employees: 任何員工
-  index_discounts: 指數折扣
-  edit_discounts: 編輯折扣
-  destroy_discounts: 銷毀折扣
-  create_discounts: 創建折扣
-  update_discounts: 更新折扣
-  show_discounts: 顯示折扣
-  any_discounts: 任何折扣
-  index_tax_profiles: 指數稅務個人資料
-  edit_tax_profiles: 編輯稅務個人資料
-  destroy_tax_profiles: 銷毀稅務個人資料
-  create_tax_profiles: 創建稅務個人資料
-  update_tax_profiles: 更新稅務個人資料
-  show_tax_profiles: 顯示稅務個人資料
-  any_tax_profiles: 任何稅務個人資料
-  index_customers: 指數客戶
-  edit_customers: 編輯客戶
-  destroy_customers: 銷毀客戶
-  create_customers: 創建客戶
-  update_customers: 更新客戶
-  show_customers: 顯示客戶
-  any_customers: 任何客戶
-  index_transaction_tags: 指數交易標籤
-  edit_transaction_tags: 編輯交易標籤
-  destroy_transaction_tags: 銷毀交易標籤
-  create_transaction_tags: 創建交易標籤
-  update_transaction_tags: 更新交易標籤
-  show_transaction_tags: 顯示交易標籤
-  any_transaction_tags: 任何交易標籤
-  index_buttons: 指數按鈕
-  edit_buttons: 編輯按鈕
-  destroy_buttons: 銷毀按鈕
-  create_buttons: 創建按鈕
-  update_buttons: 更新按鈕
-  show_buttons: 顯示按鈕
-  any_buttons: 任何按鈕
-  index_stock_locations: 指數貨物位置
-  edit_stock_locations: 編輯貨物位置
-  destroy_stock_locations: 銷毀貨物位置
-  create_stock_locations: 創建貨物位置
-  update_stock_locations: 更新貨物位置
-  show_stock_locations: 顯示貨物位置
-  any_stock_locations: 任何貨物位置
-  clear_orders: 清除訂單
-  see_header: 看頭
-  destroy_order_items: 銷毀訂購產品
-  change_prices: 改變價格
-  index_histories: 指數歷史
-  edit_histories: 編輯歷史
-  destroy_histories: 銷毀歷史
-  create_histories: 創建歷史
-  update_histories: 更新歷史
-  show_histories: 顯示歷史
-  any_histories: 任何歷史
-  index_actions: 指數行動
-  edit_actions: 編輯行動
-  destroy_actions: 銷毀行動
-  create_actions: 創建行動
-  update_actions: 更新行動
-  show_actions: 顯示行動
   any_actions: 任何行動
-  index_shipment_items: 指數運費產品
-  edit_shipment_items: 編輯運費產品
-  destroy_shipment_items: 銷毀運費產品
-  create_shipment_items: 創建運費產品
-  update_shipment_items: 更新運費產品
-  show_shipment_items: 顯示運費產品
-  any_shipment_items: 任何運費產品
-  index_tender_methods: Index Payment Methods
-  edit_tender_methods: Edit Payment Methods
-  destroy_tender_methods: Destroy Payment Methods
-  create_tender_methods: Create Payment Methods
-  update_tender_methods: Update Payment Methods
-  show_tender_methods: Show Payment Methods
-  any_tender_methods: Any Payment Methods
-  remove_order_items: Remove Order Items
+  any_buttons: 任何按鈕
   any_cash_registers: Any Cash Registers
-  index_cash_registers: Index Cash Registers
-  edit_cash_registers: Edit Cash Registers
-  show_cash_registers: Show Cash Registers
-  create_cash_registers: Create Cash Registers
-  destroy_cash_registers: Destroy Cash Registers
-  update_cash_registers: Update Cash Registers
+  any_categories: 任何類別
+  any_customers: 任何客戶
+  any_discounts: 任何折扣
+  any_employees: 任何員工
+  any_histories: 任何歷史
+  any_items: 任何項目
+  any_locations: 任何位置
+  any_orders: 任何訂單
+  any_reports: 任何報告
+  any_shipment_items: 任何運費產品
   any_shipment_types: Any Shipment Types
-  index_shipment_types: Index Shipment Types
-  edit_shipment_types: Edit Shipment Types
-  show_shipment_types: Show Shipment Types
-  create_shipment_types: Create Shipment Types
-  destroy_shipment_types: Destroy Shipment Types
-  update_shipment_types: Update Shipment Types
+  any_shipments: 任何出貨
+  any_shippers: 任何貨主
+  any_stock_locations: 任何貨物位置
+  any_tax_profiles: 任何稅務個人資料
+  any_tender_methods: Any Payment Methods
+  any_transaction_tags: 任何交易標籤
+  any_vendors: 任何供應商
   assistant: Assistant Manager
+  cashier: 出納員
+  change_prices: 改變價格
+  clear_orders: 清除訂單
+  create_actions: 創建行動
+  create_buttons: 創建按鈕
+  create_cash_registers: Create Cash Registers
+  create_categories: 創建類別
+  create_customers: 創建客戶
+  create_discounts: 創建折扣
+  create_employees: 創建員工
+  create_histories: 創建歷史
+  create_items: 創建項目
+  create_locations: 創建位置
+  create_orders: 創建訂單
+  create_reports: 創建報告
+  create_shipment_items: 創建運費產品
+  create_shipment_types: Create Shipment Types
+  create_shipments: 創建出貨
+  create_shippers: 創建貨主
+  create_stock_locations: 創建貨物位置
+  create_tax_profiles: 創建稅務個人資料
+  create_tender_methods: Create Payment Methods
+  create_transaction_tags: 創建交易標籤
+  create_vendors: 創建供應商
+  destroy_actions: 銷毀行動
+  destroy_buttons: 銷毀按鈕
+  destroy_cash_registers: Destroy Cash Registers
+  destroy_categories: 銷毀類別
+  destroy_customers: 銷毀客戶
+  destroy_discounts: 銷毀折扣
+  destroy_employees: 銷毀員工
+  destroy_histories: 銷毀歷史
+  destroy_items: 銷毀項目
+  destroy_locations: 銷毀位置
+  destroy_order_items: 銷毀訂購產品
+  destroy_orders: 銷毀訂單
+  destroy_reports: 銷毀報告
+  destroy_shipment_items: 銷毀運費產品
+  destroy_shipment_types: Destroy Shipment Types
+  destroy_shipments: 銷毀出貨
+  destroy_shippers: 銷毀貨主
+  destroy_stock_locations: 銷毀貨物位置
+  destroy_tax_profiles: 銷毀稅務個人資料
+  destroy_tender_methods: Destroy Payment Methods
+  destroy_transaction_tags: 銷毀交易標籤
+  destroy_vendors: 銷毀供應商
+  edit_actions: 編輯行動
+  edit_buttons: 編輯按鈕
+  edit_cash_registers: Edit Cash Registers
+  edit_categories: 編輯類別
+  edit_customers: 編輯客戶
+  edit_discounts: 編輯折扣
+  edit_employees: 編輯員工
+  edit_histories: 編輯歷史
+  edit_items: 編輯項目
+  edit_locations: 編輯位置
+  edit_orders: 編輯訂單
+  edit_others_orders: 編輯其他人的訂單
+  edit_reports: 編輯報告
+  edit_shipment_items: 編輯運費產品
+  edit_shipment_types: Edit Shipment Types
+  edit_shipments: 編輯出貨
+  edit_shippers: 編輯貨主
+  edit_stock_locations: 編輯貨物位置
+  edit_tax_profiles: 編輯稅務個人資料
+  edit_tender_methods: Edit Payment Methods
+  edit_transaction_tags: 編輯交易標籤
+  edit_vendors: 編輯供應商
+  employee: 僱員
+  head_cashier: 頭出納員
+  index_actions: 指數行動
+  index_buttons: 指數按鈕
+  index_cash_registers: Index Cash Registers
+  index_categories: 指數類別
+  index_customers: 指數客戶
+  index_discounts: 指數折扣
+  index_employees: 指數員工
+  index_histories: 指數歷史
+  index_items: 指數項目
+  index_locations: 指數位置
+  index_orders: 指數訂單
+  index_reports: 指數報告
+  index_shipment_items: 指數運費產品
+  index_shipment_types: Index Shipment Types
+  index_shipments: 指數出貨
+  index_shippers: 指數貨主
+  index_stock_locations: 指數貨物位置
+  index_tax_profiles: 指數稅務個人資料
+  index_tender_methods: Index Payment Methods
+  index_transaction_tags: 指數交易標籤
+  index_vendors: 指數供應商
+  manager: 經理
+  remove_order_items: Remove Order Items
+  see_header: 看頭
+  show_actions: 顯示行動
+  show_buttons: 顯示按鈕
+  show_cash_registers: Show Cash Registers
+  show_categories: 顯示類別
+  show_customers: 顯示客戶
+  show_discounts: 顯示折扣
+  show_employees: 顯示員工
+  show_histories: 顯示歷史
+  show_items: 顯示項目
+  show_locations: 顯示位置
+  show_orders: 顯示訂單
+  show_reports: 顯示報告
+  show_shipment_items: 顯示運費產品
+  show_shipment_types: Show Shipment Types
+  show_shipments: 顯示出貨
+  show_shippers: 顯示貨主
+  show_stock_locations: 顯示貨物位置
+  show_tax_profiles: 顯示稅務個人資料
+  show_tender_methods: Show Payment Methods
+  show_transaction_tags: 顯示交易標籤
+  show_vendors: 顯示供應商
+  stockboy: 補充庫存的人
+  update_actions: 更新行動
+  update_buttons: 更新按鈕
+  update_cash_registers: Update Cash Registers
+  update_categories: 更新類別
+  update_customers: 更新客戶
+  update_discounts: 更新折扣
+  update_employees: 更新員工
+  update_histories: 更新歷史
+  update_items: 更新項目
+  update_locations: 更新位置
+  update_orders: 更新訂單
+  update_reports: 更新報告
+  update_shipment_items: 更新運費產品
+  update_shipment_types: Update Shipment Types
+  update_shipments: 更新出貨
+  update_shippers: 更新貨主
+  update_stock_locations: 更新貨物位置
+  update_tax_profiles: 更新稅務個人資料
+  update_tender_methods: Update Payment Methods
+  update_transaction_tags: 更新交易標籤
+  update_vendors: 更新供應商

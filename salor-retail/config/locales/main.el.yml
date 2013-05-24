@@ -1,17 +1,14 @@
 ---
 el:
-  support: XXX
   ByCard: Μέσω Κάρτας
   ByGiftCard: Μέσω Δωροκάρτας
   InCash: Μέσω Μετρητών
   activerecord:
     attributes:
-      order_item:
-        quantity: XXX Qty.
-        tax_free: Tax Free
       active: ενεργό
       address: διεύθυνση
       afield: πεδίο
+      always_open_drawer: Always Open Drawer
       amount: ποσό
       amount_remaining: υπόλοιπο ποσό
       amount_type: τύπος ποσού
@@ -46,37 +43,56 @@ el:
       created_at: Δημιουργήθηκε στις
       csv_imports: CSV Εισαγόμενων Προϊόντων
       csv_imports_url: CSV Εισαγόμενων Προϊόντων URL
+      customer:
+        tax_number: Tax number
       customer_screen_blurb: Οθόνη πελάτη βασικού κειμένου
       decimal_points: δεκαδικά ψηφία
       default: Προεπιλογή
       default_buyback: προεπιλογή αγοράς ιδίων
+      detailed_edit: Detailed Edit?
       dollar_per_lp: ευρώ ανά πόντους επιβράβευσης
       drop: προσθήκη μετρητών
       email: ηλεκτρονική διεύθυνση
       employee:
-        uses_drawer_id: Χρήση συρταριού του/της
         hourly_rate: Hourly Rate
+        uses_drawer_id: Χρήση συρταριού του/της
       end_amount: τελικό ποσό
       end_date: ημερομηνία λήξης
       eod_show: προβολή τέλους μέρας
       expires_on: λήγει στις
       first_name: όνομα
+      full_name: Name
       height: ύψος
       hide_buttons: Απόκρυψη Κουμπιών
       hide_discounts: Απόκρυψη Εκπτώσεων
       ignore_qty: Αγνοήστε την ποσότητα
+      internal_type: Type
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      invoice_note:
+        destination_country_id: Destination Country
+        note_footer: Note footer
+        note_header: Note header
+        origin_country_id: Origin Country
+        sale_type_id: Sale Type
+      is_header: Header?
+      is_proforma: Proforma?
       is_refund: Είναι επιστροφή;
       is_shipment_item: είναι προϊόν αποστολής
       item:
+        customs_code: Customs Code
+        description: Description
+        manufacturer_price: Manufacturer Price
+        origin_country: Origin Country
         purchase_price: Τιμή Αγοράς
         quantity: Ποσότητα
-        origin_country: Origin Country
-        customs_code: Customs Code
-        manufacturer_price: Manufacturer Price
-        description: Description
         weight: Weight
       item_sku: αντικείμενο SKU
       itemsviewlist: Προβολή Λίστας Προϊόντων
+      lang: Language
       last_name: Επώνυμο
       lc_points: κάρτα πόντων επιβράβευσης
       length: μήκος
@@ -90,6 +106,9 @@ el:
       notes: σημειώσεις
       open_cash_drawer: ανοίξτε συρτάρι μετρητών
       order_id: παραγγελία
+      order_item:
+        quantity: XXX Qty.
+        tax_free: Tax Free
       owner_id: Ιδιοκτήτης
       owner_type: Τύπος Ιδιοκτήτη
       packaging_unit: μονάδα συσκευασίας
@@ -113,7 +132,15 @@ el:
       rebate: επιστροφή
       rebate_type: τύπος επιστροφής
       reorder_type: Είδος Αναπαραγγελίας
+      require_password: Require Password
+      role_cache: Roles
+      roles: Roles
       sales_metric: μετρικό πωλήσεων
+      salor_configuration:
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
       salor_printer: Εκτυπώστε την Πλευρά του Πελάτη
       scale: ζυγαριά
       shipment:
@@ -139,6 +166,7 @@ el:
       subtotal: υποσύνολο
       tag: ετικέτα
       tax: φόρος
+      tax_free: Tax Free
       tax_profile_id: φόρος
       telephone: τηλέφωνο
       the_receiver: ο παραλήπτης
@@ -152,47 +180,18 @@ el:
       username: όνομα χρήστη
       uses_drawer_id: Χρήση συρταριού του/της
       value: αξία
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_footer: Receipt Logo Footer
+        receipt_logo_header: Receipt Logo Header
       vendor_id: Προμηθευτής
       vendor_printers: εκτυπωτές
       weigh_compulsory: υποχρεωτικό ζύγισμα
       weight: βάρος
       when: πότε
-      width: πλάτος
-      tax_free: Tax Free
-      invoice_note:
-        origin_country_id: Origin Country
-        destination_country_id: Destination Country
-        note_header: Note header
-        note_footer: Note footer
-        sale_type_id: Sale Type
-      is_proforma: Proforma?
-      customer:
-        tax_number: Tax number
-      detailed_edit: Detailed Edit?
-      vendor:
-        logo: Screen Logo
-        logo_invoice: Paper Invoice Logo
-        receipt_logo_header: Receipt Logo Header
-        receipt_logo_footer: Receipt Logo Footer
-      lang: Language
-      is_header: Header?
-      invoice_blurb:
-        body: Invoice
-        body_receipt: Receipt
-        is_header: Header
-        lang: Language
-      salor_configuration:
-        receipt_blurb: Receipt Blurb Header
-        receipt_blurb_footer: Receipt Blurb Footer
-        invoice_blurb: Invoice Blurb Header
-        invoice_blurb_footer: Invoice Blurb Footer
-      internal_type: Type
       whento: When
-      roles: Roles
-      role_cache: Roles
-      full_name: Name
-      always_open_drawer: Always Open Drawer
-      require_password: Require Password
+      width: πλάτος
     models:
       action:
         one: Πράξη
@@ -206,6 +205,9 @@ el:
       category:
         one: Κατηγορία
         other: Κατηγορίες
+      country:
+        one: Country
+        other: Countries
       customer:
         one: Πελάτης
         other: Πελάτες
@@ -221,15 +223,18 @@ el:
       employee:
         one: Υπάλληλος
         other: Υπάλληλοι
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
       item:
         one: Αντικείμενο
         other: Αντικείμενα
       item_type:
-        one: Τύπος Αντικείμενου
-        other: Τύποι Αντικείμενου
         coupon: Coupon
         gift_card: Gift Card
         normal: Normal
+        one: Τύπος Αντικείμενου
+        other: Τύποι Αντικείμενου
       location:
         one: Τοποθεσία
         other: Τοποθεσίες
@@ -237,19 +242,22 @@ el:
         one: Παραγγελία
         other: Παραγγελίες
         proforma_orders: Proforma Invoices
-        unpaid_orders: Unpaid Invoices
-        quotes: Quotes
         quote: Quote
+        quotes: Quotes
+        unpaid_orders: Unpaid Invoices
       order_item:
         one: Αντικείμενο Παραγγελίας
         other: Αντικείμενα Παραγγελίας
       payment_method:
         one: Μέθοδος Πληρωμής
         other: Μέθοδοι Πληρωμής
+      sale_type:
+        one: Sale Type
+        other: Sale Types
       shipment:
+        default_name: Default Name
         one: Αποστολή
         other: Αποστολές
-        default_name: Default Name
       shipment_type:
         default_name: Αυτόματη αναπαραγγελία
         one: Τύπος Αποστολής
@@ -272,24 +280,16 @@ el:
       vendor:
         one: Κατάστημα
         other: Καταστήματα
-      sale_type:
-        one: Sale Type
-        other: Sale Types
-      country:
-        one: Country
-        other: Countries
-      invoice_note:
-        one: Invoice Note
-        other: Invoice Notes
   api:
     user_does_not_exist: ο χρήστης δεν υπάρχει
+  are_you_sure: Are you sure you want to do this?
   behavior_list:
     add: προσθέστε
     assign: απονείμετε
+    discount_after_threshold: discount after threshold
     divide: διαιρέστε
     multiply: πολλαπλασιάστε
     subtract: αφαιρέστε
-    discount_after_threshold: discount after threshold
   cash_registers:
     end_of_day:
       cash_drawer: Συρτάρι Μετρητών
@@ -337,10 +337,10 @@ el:
     shipment_items: αντικείμενα αποστολής
     shipment_types: τύποι αποστολής
     shipments: αποστολές
+    signup: Signup for a 14 day free trial!
+    time_sheet: Employee Time Sheet
     update_location: ενημέρωση τοποθεσίας
     update_real_quantity: ενημέρωση πραγματικής ποσότητας
-    time_sheet: Employee Time Sheet
-    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: παρακαλώ επιλέξτε
@@ -349,13 +349,13 @@ el:
       clear: Διαγραφή
       complete_sale: Ολοκλήρωση πώλησης
       create: Δημιουργία
+      edit: Edit
       get_item: Αναζήτηση αντικείμενου
       ok: OK
       print: Εκτύπωση
       save: Αποθήκευση
       submit: Υποβολή
       update: Ενημέρωση
-      edit: Edit
   home:
     remote_service:
       connect_ssh: Εξ’ αποστάσεως τεχνική υποστήριξη
@@ -396,6 +396,8 @@ el:
       title: Έκθεση Απογραφής
       total_buying_price: Άθροισμα Τιμής Αγοράς
       total_selling_price: Άθροισμα Τιμής Πώλησης
+    selection:
+      print: Print
     show:
       from: από
       quantity_sold: Πωληθέντα Ποσότητα
@@ -408,8 +410,6 @@ el:
       update_quantity: Ενημερώστε τις ποσότητες αποθέματος
     upload:
       upload: φορτώστε
-    selection:
-      print: Print
   label: κατατάξτε
   menu:
     actions: πράξεις
@@ -437,18 +437,20 @@ el:
     delete_confirm: Είστε σίγουροι;
     destroy: καταστρέψτε
     discounts: εκπτώσεις
+    documentation: Documentation
     done: ολοκληρωμένο
     download: μεταφορτώστε
     edit: XXX Edit Country
-    edit_sale_type: XXX Edit Sale Type
-    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: επεξεργασία ταμειακής μηχανής
     edit_category: επεξεργασία κατηγορίας
     edit_customer: επεξεργασία πελάτη
     edit_discount: επεξεργασία έκπτωσης
     edit_employee: επεξεργασία υπαλλήλου
+    edit_invoice_blurb: Edit Invoice Blurb
+    edit_invoice_note: XXX Edit Invoice Note
     edit_item: επεξεργασία αντικειμένου
     edit_location: επεξεργασία τοποθεσίας
+    edit_sale_type: XXX Edit Sale Type
     edit_shipment: επεξεργασία αποστολής
     edit_shipment_type: επεξεργασία τύπου αποστολής
     edit_shipper: επεξεργασία αποστολέα %{name}
@@ -460,32 +462,37 @@ el:
     general_configuration: γενικές ρυθμίσεις
     home: κύριο μενού
     inventory_report: Αναφορά απογραφής
+    invoice_blurbs: Invoice Blurbs
     item_types: τύποι αντικειμένου
     items: αντικείμενα
+    labels: Labels
     law_reports: Αναφορά Μεταφόρτωσης
     locations: τοποθεσίες
     loyalty_cards: κάρτες επιβράβευσης
+    merge_into_current_order: Merge into current order
     move_shipment_item: μετακινήστε αντικείμενο αποστολής
-    new_country: XXX new country
-    new_sale_type: XXX new sale type
-    new_invoice_note: XXX New Invoice Note
     new_action: νέα πράξη
     new_broken_item: νέο σπασμένο αντικείμενο
     new_button: νέο κουμπί
     new_cash_register: νέα ταμειακή μηχανή
     new_category: νέα κατηγορία
+    new_country: XXX new country
     new_customer: νέος πελάτης
     new_discount: νέα έκπτωση
     new_employee: νέος υπάλληλος
+    new_invoice_blurb: New Invoice Blurb
+    new_invoice_note: XXX New Invoice Note
     new_item: νέο αντικείμενο
     new_location: νέα τοποθεσία
     new_order: νέα παραγγελία
+    new_sale_type: XXX new sale type
     new_shipment: νέα αποστολή
     new_shipment_type: νέο είδος αποστολής
     new_shipper: νέος αποστολέας
     new_stock_location: νέα τοποθεσία αποθέματος
     new_tax_profile: νέο φορολογικό προφίλ
     new_tender_method: νέα μέθοδος πληρωμής
+    new_transaction_tag: New Transaction Tag
     new_vendor: νέος προμηθευτής
     ok: OK
     order: παραγγελία
@@ -494,8 +501,8 @@ el:
     points: πόντοι
     pos: Σημείο Πώλησης (POS)
     print: εκτύπωση
-    remote_service: Εξ’ Αποστάσεως Τεχνική Υποστήριξη
     receipts: XXX Receipts
+    remote_service: Εξ’ Αποστάσεως Τεχνική Υποστήριξη
     reorder: αναπαραγγελία
     report: αναφορά
     report_day: μέρα αναφοράς
@@ -510,6 +517,7 @@ el:
     shippers: αποστολείς
     show: προβολή
     split: διαχωρισμός
+    statistics: Statistics
     stock_locations: τοποθεσίες αποθέματος
     support: υποστήριξη
     tax_profiles: φορολογικά προφίλ
@@ -523,19 +531,16 @@ el:
     vendors: προμηθευτές
     void: άκυρο
     wholesaler_update: ενημέρωση χονδρέμπορου
-    labels: Labels
-    statistics: Statistics
-    documentation: Documentation
-    invoice_blurbs: Invoice Blurbs
-    edit_invoice_blurb: Edit Invoice Blurb
-    new_invoice_blurb: New Invoice Blurb
-    new_transaction_tag: New Transaction Tag
-    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
     shipments_move_all_items: όλα τα αντικείμενα μεταφέρθηκαν επιτυχώς
     shipments_move_item: το αντικείμενο μεταφέρθηκε επιτυχώς
   orders:
+    print:
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
+      print: Print-Dialog
     report:
       display: ανάρτηση
       end_date: ημερομηνία λήξης
@@ -618,11 +623,6 @@ el:
       transaction_tag: ετικέτα συναλλαγής
       transaction_total: ολικό συναλλαγής
       transactions: συναλλαγές
-    print:
-      print: Print-Dialog
-      delivery_note: Delivery note
-      invoice: Invoice
-      labels: Labels
   printr:
     eod_report:
       None: Μη ονομαζόμενα
@@ -631,6 +631,7 @@ el:
       calculated_drawer_amount: Υπολογισμένο ποσό συρταριού
       cash-refunds: Επιστροφή μετρητών
       cash_refunds_total: ΟΛΙΚΟ
+      no_category: No Category
       noncash-refunds: Επιστροφή μη-μετρητών
       orders_total: Ολικό παραγγελιών
       payment_method_total: ΟΛΙΚΟ
@@ -645,7 +646,6 @@ el:
         είναι μηδέν. Σας συνιστούμε να τελειώνετε και να ξεκινάτε τη μέρα σας με ποσό
         συρταριού μηδέν για να διευκολύνετε τα λογιστικά. Κάντε αποπληρωμή μετρητών
         αναλόγως και εκτυπώστε ξανά αυτή την αναφορά.
-      no_category: No Category
     formats:
       advert: ! 'Το καινοτόμο Σημείο Πώλησης
 
@@ -689,11 +689,11 @@ el:
       payout: αποπληρωμή
       sold: πωλημένο
   receipts:
+    a_conto: on account
+    delivery_note: Lieferschein
     invoice: Λογαριασμός
     invoice_numer_X_at_time: Αριθμός Παραγγελίας %{number} στις %{datetime}
-    delivery_note: Lieferschein
     offer: Offer
-    a_conto: on account
     proforma_invoice: Proforma Invoice
   reports:
     amount: ποσό
@@ -712,6 +712,7 @@ el:
     show:
       purchase_price_sum: Σύνολο τιμής αγοράς
   sticker: αυτοκόλλητο
+  support: XXX
   system:
     add_payment_method: προσθέστε τη μέθοδο πληρωμής
     complete_sale: Ολοκληρωμένο
@@ -802,12 +803,12 @@ el:
       receipt_logo_footer: λογότυπο απόδειξης υποσέλιδο
       receipt_logo_header: λογότυπο απόδειξης κεφαλίδα
   views:
-    create_new_item: xxx Create New Article
     advanced_field: προηγμένο πεδίο
     cash_register_heading: ! '%{name} για %{store}'
     cash_registers: ταμειακές μηχανές
     category_heading: κατηγορία %{name} για %{store}
     change: αλλαγή
+    create_new_item: xxx Create New Article
     customers: πελάτες
     download_may_last_long: Αυτή η μεταφόρτωση μπορεί να διαρκέσει πολύ. Θα συνεχίσετε;
     dummy_item: εικονικό αντικείμενο
@@ -847,6 +848,7 @@ el:
     item: αντικείμενο
     language: γλώσσα
     listing: καταγραφή
+    listing_invoice_blurbs: Listing Invoice Blurbs
     listing_items: καταγραφή αντικειμένων
     locations: τοποθεσίες
     loyalty_card: κάρτα επιβράβευσης
@@ -861,12 +863,12 @@ el:
       move_real_quantities_success: Οι ποσότητες των προϊόντων ενημερώθηκαν επιτυχώς
       new_order: δημιουργήθηκε νέα παραγγελία
       order_refund_dt: ! '#%{id}'
+      please_backup: Please backup your system regularly!
       save_before: Θέλετε να αποθηκεύσετε πριν αποχωρήσετε;
       wholesaler_upload_report: ! 'Ενημερωμένα αντικείμενα: %{ενημερωμένα_αντικείμενα
         }, Δημιουργημένα αντικείμενα: %{δημιουργημένα_αντικείμενα}, Δημιουργημένες
         κατηγορίες: %{δημιουργημένες_κατηγορίες}, Δημιουργημένα φορολογικά προφίλ
         %{δημιουργημένα_φορολογικά_προφίλ}'
-      please_backup: Please backup your system regularly!
     order_heading: ! 'Παραγγελία #%{id} για %{store}'
     order_number: ! 'Παραγγελία #%{id}'
     pagination:
@@ -893,6 +895,7 @@ el:
       body: κύριο τμήμα
       bottom: κάτω μέρος
       camera: κάμερα
+      choose: choose
       continue: συνεχίστε
       coupons: Κουπόνια
       delete: διαγράψτε
@@ -912,7 +915,6 @@ el:
       to: προς
       top: πάνω μέρος
       waiting: αναμονή...
-      choose: choose
     sticky_ticket: Αυτοκόλλητη ετικέτα
     stock_locations: τοποθεσίες_αποθέματος
     subtotal: υποσύνολο
@@ -923,11 +925,9 @@ el:
     vendor: προμηθευτής
     wholesaler_refresh: Ψάχνουμε για ενημερώσεις χονδρεμπόρου. Αυτό μπορεί να διαρκέσει
       λίγα λεπτά.
-    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: προσθέστε για παραγγελία
     always: πάντα
     on_export: κατά την εξαγωγή
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
-  are_you_sure: Are you sure you want to do this?

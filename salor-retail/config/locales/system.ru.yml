@@ -1,139 +1,155 @@
+---
 en-US:
-# ==================================================================================
-# /usr/lib/ruby/gems/1.8/gems/activerecord-2.2.1/lib/active_record/locale/en-US.yml
-# ==================================================================================
   activerecord:
     errors:
-      template:
-        header:
-          one:  "%{count} error prevented the form '%{model}' from being saved."
-          other:  "%{count} errors prevented the form '%{model}' from being saved."
-        body: "Please check the following inputs:"
-
       messages:
-        inclusion: "is not in the list"
-        exclusion: "should not be in the list"
-        invalid: "is invalid"
-        confirmation: "does not match"
-        accepted: "must be accepted"
-        empty: "must not be empty"
-        blank: "must not be blank"
-        too_long: "is too long (maximum %{count} characters)"
-        too_short: "is too short (minimum %{count} characters)"
-        wrong_length: "is the wrong length (should be %{count} characters)"
-        taken: "is already taken"
-        not_a_number: "is not a number"
-        greater_than: "must be greater than %{count}"
-        greater_than_or_equal_to: "must be greater than or equal to %{count}"
-        equal_to: "must be equal to %{count}"
-        less_than: "must be less than %{count}"
-        less_than_or_equal_to: "must be less than or equal to %{count}"
-        odd: "must be odd"
-        even: "must be even"
-
-  # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
+        accepted: must be accepted
+        blank: must not be blank
+        confirmation: does not match
+        empty: must not be empty
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: should not be in the list
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        inclusion: is not in the list
+        invalid: is invalid
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        not_a_number: is not a number
+        odd: must be odd
+        taken: is already taken
+        too_long: is too long (maximum %{count} characters)
+        too_short: is too short (minimum %{count} characters)
+        wrong_length: is the wrong length (should be %{count} characters)
+      template:
+        body: ! 'Please check the following inputs:'
+        header:
+          one: ! '%{count} error prevented the form ''%{model}'' from being saved.'
+          other: ! '%{count} errors prevented the form ''%{model}'' from being saved.'
+  date:
+    abbr_day_names:
+    - So
+    - Mo
+    - Di
+    - Mi
+    - Do
+    - Fr
+    - Sa
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%d. %B  %Y'
+      short: ! '%d. %b'
+    month_names:
+    - 
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    order:
+    - :year
+    - :month
+    - :day
   datetime:
     distance_in_words:
-      half_a_minute: "half a minute"
-      less_than_x_seconds:
-        one:   "less than 1 second"
-        other: "less than %{count} seconds"
-      x_seconds:
-        one:   "1 second"
-        other: "%{count} seconds"
-      less_than_x_minutes:
-        one:   "less than a minute"
-        other: "less than %{count} minutes"
-      x_minutes:
-        one:   "1 minute"
-        other: "%{count} minutes"
       about_x_hours:
-        one:   "about 1 hour"
-        other: "about %{count} hours"
-      x_days:
-        one:   "1 day"
-        other: "%{count} days"
+        one: about 1 hour
+        other: about %{count} hours
       about_x_months:
-        one:   "about 1 month"
-        other: "about %{count} months"
-      x_months:
-        one:   "1 month"
-        other: "%{count} months"
+        one: about 1 month
+        other: about %{count} months
       about_x_years:
-        one:   "about 1 year"
-        other: "about %{count} years"
-      over_x_years:
-        one:   "over 1 year"
-        other: "over %{count} years"
+        one: about 1 year
+        other: about %{count} years
       almost_x_years:
-        one:   "almost 1 year"
-        other: "almost %{count} years"
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than 1 second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 day
+        other: ! '%{count} days'
+      x_minutes:
+        one: 1 minute
+        other: ! '%{count} minutes'
+      x_months:
+        one: 1 month
+        other: ! '%{count} months'
+      x_seconds:
+        one: 1 second
+        other: ! '%{count} seconds'
     prompts:
-      year:   "Year"
-      month:  "Month"
-      day:    "Day"
-      hour:   "Hour"
-      minute: "Minute"
-      second: "Seconds"
-
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
   helpers:
     select:
-      # Default value for :prompt => true in FormOptionsHelper
-      prompt: "Please select"
-
-    # Default translation keys for submit FormHelper
+      prompt: Please select
     submit:
-      create: 'Create %{model}'
-      update: 'Update %{model}'
-      submit: 'Save %{model}'
-
-# Used in array.to_sentence.
+      create: Create %{model}
+      submit: Save %{model}
+      update: Update %{model}
   support:
     array:
-     words_connector:
-      two_words_connector: " and "
-      last_word_connector: ", and "
-      
-# ==================================================================================
-# Adaptiert von:
-# /usr/lib/ruby/gems/1.8/gems/activesupport-2.2.1/lib/active_support/locale/en-US.yml
-# ==================================================================================
-  date:
-    formats:
-      # Use the strftime parameters for formats.
-      # When no format has been given, it uses default.
-      # You can provide other formats here if you like!
-      default: "%Y-%m-%d"
-      short: "%d. %b"
-      long: "%d. %B  %Y"
-
-    day_names: [Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday]
-    abbr_day_names: [So, Mo, Di, Mi, Do, Fr, Sa]
-
-    # Don't forget the nil at the beginning; there's no such thing as a 0th month
-    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
-    abbr_month_names: [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
-    # Used in date_select and datime_select.
-    order:
-      - :year
-      - :month
-      - :day
-
+      words_connector:
+        last_word_connector: ! ', and '
+        two_words_connector: ! ' and '
   time:
+    am: ''
     formats:
-      default: "%a, %d. %b. %Y, %H:%M:%S %z"
-      short: "%d. %b. %y  %y %H:%M"
-      long: "%d. %B %Y %H:%M:%S"
-      datetime_iso: "%Y-%m-%d %H:%M:%S"
-      iso: "%Y-%m-%d %H:%M:%S"
-      datetime_iso2: "%Y%m%dT%H%M%S"
-      date_normal: "%d. %B %Y"
-      date_short: "%d. %b %y"
-      date_iso: "%Y-%m-%d"
-      time_short: "%H:%M"
-      month_and_day: "%d. %B"
+      date_iso: ! '%Y-%m-%d'
+      date_normal: ! '%d. %B %Y'
+      date_short: ! '%d. %b %y'
+      datetime_iso: ! '%Y-%m-%d %H:%M:%S'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      default: ! '%a, %d. %b. %Y, %H:%M:%S %z'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      long: ! '%d. %B %Y %H:%M:%S'
+      month_and_day: ! '%d. %B'
       salor: ! '%a, %b %d %H:%M'
-      just_day: "%d. %B %Y"
-      just_time: "%H:%M"
-    am: ""
-    pm: ""
+      short: ! '%d. %b. %y  %y %H:%M'
+      time_short: ! '%H:%M'
+    pm: ''
