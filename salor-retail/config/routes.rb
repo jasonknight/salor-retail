@@ -144,7 +144,6 @@ SalorRetail::Application.routes.draw do
   match 'employees/login' => 'employees#login'
   match 'home/edit_owner' => 'home#edit_owner'
   match 'home/update_owner' => 'home#update_owner'
-  match 'home/you_have_to_pay' => 'home#you_have_to_pay'
   match 'employees/destroy_login' => 'employees#destroy_login'
   
   
