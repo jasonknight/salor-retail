@@ -145,21 +145,17 @@ class VendorsController < ApplicationController
       elsif @drawer_transaction.amount > 15000.00 then
         render :nothing => true and return
       end
-      if params[:employee_id] and salor_user.can(:edit_users) then
+      if params[:employee_id] then
         if params[:employee_id] == 'self' then
-          @drawer_transaction.drawer_id = salor_user.get_drawer.id
-          @drawer_transaction.owner = salor_user
+          @drawer_transaction.drawer_id = $User.get_drawer.id
+          @drawer_transaction.owner = $User
         else
           emp = Employee.scopied.find_by_id(params[:employee_id])
-          if emp.drawer.nil? then
-            emp.drawer = Drawer.new
-            emp.drawer.save
-          end
-          @drawer_transaction.drawer_id = emp.get_drawer
+          @drawer_transaction.drawer_id = emp.get_drawer.id
           @drawer_transaction.owner = emp
         end
       else
-        @drawer_transaction.drawer_id = salor_user.get_drawer.id
+        @drawer_transaction.drawer_id = $User.get_drawer.id
       end
       if @drawer_transaction.save then
         # @drawer_transaction.print if not $Register.salor_printer == true
