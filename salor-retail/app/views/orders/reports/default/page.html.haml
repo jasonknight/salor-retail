@@ -14,9 +14,11 @@
     = select_date(@to, :prefix => 'to')
     %br
     %select{:id => "limit_select", :name => "limit"}
-      %option 15
-      %option 25
-      %option 50
+      - [15,25,50,100].each do |lim|
+        - if lim.to_s == params[:limit].to_s
+          %option{:value=> lim, :selected => true}=lim
+        - else
+          %option{:value=> lim}=lim
     %br
     = submit_tag t('helpers.submit.ok'), :onclick => '$("#progress").show()'
 .clear
