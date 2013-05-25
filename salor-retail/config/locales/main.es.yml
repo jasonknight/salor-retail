@@ -1,17 +1,14 @@
 ---
 es:
-  support: XXX
   ByCard: Con tarjeta de crédito
   ByGiftCard: Con tarjeta de regalo
   InCash: En efectivo
   activerecord:
     attributes:
-      order_item:
-        quantity: XXX Qty.
-        tax_free: Tax Free
       active: Activo
       address: Dirección
       afield: Campo
+      always_open_drawer: Always Open Drawer
       amount: Monto
       amount_remaining: Monto restante
       amount_type: Tipo de monto
@@ -46,37 +43,56 @@ es:
       created_at: Creado
       csv_imports: Importaciones CSV
       csv_imports_url: URL de importaciones CSV
+      customer:
+        tax_number: Tax number
       customer_screen_blurb: Texto estánda pantalla cliente
       decimal_points: Puntos decimales
       default: Por defecto
       default_buyback: Recompra por defecto
+      detailed_edit: Detailed Edit?
       dollar_per_lp: dólar por punto de fidelización
       drop: Depósito
       email: E-mail
       employee:
-        uses_drawer_id: Utiliza la caja de
         hourly_rate: Hourly Rate
+        uses_drawer_id: Utiliza la caja de
       end_amount: Monto final
       end_date: Fecha final
       eod_show: Mostrar al final del día
       expires_on: Fecha de vencimiento
       first_name: Nombre
+      full_name: Name
       height: Altura
       hide_buttons: Ocultar Botones
       hide_discounts: Ocultar descuentos
       ignore_qty: Ignorar cantidad
+      internal_type: Type
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      invoice_note:
+        destination_country_id: Destination Country
+        note_footer: Note footer
+        note_header: Note header
+        origin_country_id: Origin Country
+        sale_type_id: Sale Type
+      is_header: Header?
+      is_proforma: Proforma?
       is_refund: ¿Es un descuento?
       is_shipment_item: es un artículo de envío
       item:
+        customs_code: Customs Code
+        description: Description
+        manufacturer_price: Manufacturer Price
+        origin_country: Origin Country
         purchase_price: Precio de compra
         quantity: Cantidad
-        origin_country: Origin Country
-        customs_code: Customs Code
-        manufacturer_price: Manufacturer Price
-        description: Description
         weight: Weight
       item_sku: SKU del artículo
       itemsviewlist: Ver lista de artículos
+      lang: Language
       last_name: Apellido
       lc_points: Puntos de tarjeta de fidelización
       length: largo
@@ -90,6 +106,9 @@ es:
       notes: Notas
       open_cash_drawer: Abrir caja
       order_id: Pedido
+      order_item:
+        quantity: XXX Qty.
+        tax_free: Tax Free
       owner_id: Dueño
       owner_type: Tipo de dueño
       packaging_unit: Unidad de embalaje
@@ -113,7 +132,15 @@ es:
       rebate: Rebaja
       rebate_type: Tipo de rebaja
       reorder_type: Tipo de pedido nuevo
+      require_password: Require Password
+      role_cache: Roles
+      roles: Roles
       sales_metric: Sistema métrico de ventas
+      salor_configuration:
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
       salor_printer: Imprimir del lado del cliente
       scale: Balanza
       shipment:
@@ -139,6 +166,7 @@ es:
       subtotal: Subtotal
       tag: Etiqueta
       tax: IVA
+      tax_free: Tax Free
       tax_profile_id: IVA
       telephone: Teléfono
       the_receiver: El receptor
@@ -152,47 +180,18 @@ es:
       username: Nombre de usuario
       uses_drawer_id: Utiliza la caja de
       value: Valor
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_footer: Receipt Logo Footer
+        receipt_logo_header: Receipt Logo Header
       vendor_id: Tienda
       vendor_printers: Impresora
       weigh_compulsory: Peso obligatorio
       weight: Peso
       when: Cuándo
-      width: Ancho
-      tax_free: Tax Free
-      invoice_note:
-        origin_country_id: Origin Country
-        destination_country_id: Destination Country
-        note_header: Note header
-        note_footer: Note footer
-        sale_type_id: Sale Type
-      is_proforma: Proforma?
-      customer:
-        tax_number: Tax number
-      detailed_edit: Detailed Edit?
-      vendor:
-        logo: Screen Logo
-        logo_invoice: Paper Invoice Logo
-        receipt_logo_header: Receipt Logo Header
-        receipt_logo_footer: Receipt Logo Footer
-      lang: Language
-      is_header: Header?
-      invoice_blurb:
-        body: Invoice
-        body_receipt: Receipt
-        is_header: Header
-        lang: Language
-      salor_configuration:
-        receipt_blurb: Receipt Blurb Header
-        receipt_blurb_footer: Receipt Blurb Footer
-        invoice_blurb: Invoice Blurb Header
-        invoice_blurb_footer: Invoice Blurb Footer
-      internal_type: Type
       whento: When
-      roles: Roles
-      role_cache: Roles
-      full_name: Name
-      always_open_drawer: Always Open Drawer
-      require_password: Require Password
+      width: Ancho
     models:
       action:
         one: Acción
@@ -206,6 +205,9 @@ es:
       category:
         one: Categoría
         other: Categorías
+      country:
+        one: Country
+        other: Countries
       customer:
         one: Cliente
         other: Cliente
@@ -221,15 +223,18 @@ es:
       employee:
         one: Empleado
         other: Empleados
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
       item:
         one: Artículo
         other: Artículos
       item_type:
-        one: Tipo de artículo
-        other: Tipo de artículo
         coupon: Coupon
         gift_card: Gift Card
         normal: Normal
+        one: Tipo de artículo
+        other: Tipo de artículo
       location:
         one: Ubicación
         other: Ubicaciones
@@ -237,19 +242,22 @@ es:
         one: Pedido
         other: Pedidos
         proforma_orders: Proforma Invoices
-        unpaid_orders: Unpaid Invoices
-        quotes: Quotes
         quote: Quote
+        quotes: Quotes
+        unpaid_orders: Unpaid Invoices
       order_item:
         one: Artículo de pedido
         other: Otro artículo de pedido
       payment_method:
         one: Método de pago
         other: Métodos de pago
+      sale_type:
+        one: Sale Type
+        other: Sale Types
       shipment:
+        default_name: Default Name
         one: Envío
         other: Envíos
-        default_name: Default Name
       shipment_type:
         default_name: Renovación automática del pedido
         one: Tipo de Envío
@@ -272,24 +280,16 @@ es:
       vendor:
         one: Tienda
         other: Tiendas
-      sale_type:
-        one: Sale Type
-        other: Sale Types
-      country:
-        one: Country
-        other: Countries
-      invoice_note:
-        one: Invoice Note
-        other: Invoice Notes
   api:
     user_does_not_exist: Este usuario no existe
+  are_you_sure: Are you sure you want to do this?
   behavior_list:
     add: Sumar
     assign: Asignar
+    discount_after_threshold: discount after threshold
     divide: Dividir
     multiply: Multiplicar
     subtract: Restar
-    discount_after_threshold: discount after threshold
   cash_registers:
     end_of_day:
       cash_drawer: Caja
@@ -297,6 +297,13 @@ es:
       difference: Diferencia
       end_of_day_thermal_report: Imprimir informe
       paper_report: Informe detallado
+  customers:
+    show:
+      bought_items: Bought items
+      last_orders: Last orders
+      order_id: Order Number
+      order_total: Order total
+      sold_count: sold count
   delete: Borrar
   edit: Editar
   end_of_day: Fin del día
@@ -330,10 +337,10 @@ es:
     shipment_items: Artículos de un envío
     shipment_types: Tipos de envío
     shipments: Envíos
+    signup: Signup for a 14 day free trial!
+    time_sheet: Employee Time Sheet
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
-    time_sheet: Employee Time Sheet
-    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: Por favor seleccione
@@ -342,13 +349,13 @@ es:
       clear: Borrar
       complete_sale: Finalizar la venta
       create: Crear
+      edit: Edit
       get_item: Obtener artículo
       ok: OK
       print: Imprimir
       save: Guardar
       submit: Someter
       update: Actualizar
-      edit: Edit
   home:
     remote_service:
       connect_ssh: Servicio a distancia
@@ -387,6 +394,8 @@ es:
       title: Informe de inventario
       total_buying_price: Total del precio de compra
       total_selling_price: Total del precio de venta
+    selection:
+      print: Print
     show:
       from: De
       quantity_sold: Cantidad vendida
@@ -399,8 +408,6 @@ es:
       update_quantity: Actualizar cantidades en inventario
     upload:
       upload: Cargar
-    selection:
-      print: Print
   label: Etiqueta
   menu:
     actions: XXX actions
@@ -428,18 +435,20 @@ es:
     delete_confirm: ¿Está ud. seguro?
     destroy: Destruir
     discounts: Descuentos
+    documentation: Documentation
     done: Listo
     download: Bajar de la red
     edit: XXX Edit Country
-    edit_sale_type: XXX Edit Sale Type
-    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: Editar caja
     edit_category: Editar categoría
     edit_customer: Editar cliente
     edit_discount: Editar descuento
     edit_employee: Editar empleado
+    edit_invoice_blurb: Edit Invoice Blurb
+    edit_invoice_note: XXX Edit Invoice Note
     edit_item: Editar artículo
     edit_location: Editar ubicación
+    edit_sale_type: XXX Edit Sale Type
     edit_shipment: Editar envío
     edit_shipment_type: Editar tipo de envío
     edit_shipper: Editar transportador %{name}
@@ -451,32 +460,37 @@ es:
     general_configuration: Configuración general
     home: Inicio
     inventory_report: Resúmen de inventario
+    invoice_blurbs: Invoice Blurbs
     item_types: Tipos de artículo
     items: Artículos
+    labels: Labels
     law_reports: Descargar el informe
     locations: Ubicaciones
     loyalty_cards: Tarjetas de fidelización
+    merge_into_current_order: Merge into current order
     move_shipment_item: Desplazar artículo de envío
-    new_country: XXX new country
-    new_sale_type: XXX new sale type
-    new_invoice_note: XXX New Invoice Note
     new_action: Nueva acción
     new_broken_item: Nuevo artículo dañado
     new_button: Nuevo botón
     new_cash_register: Nueva caja
     new_category: Nueva categoría
+    new_country: XXX new country
     new_customer: Nuevo cliente
     new_discount: Nuevo descuento
     new_employee: Nuevo empleado
+    new_invoice_blurb: New Invoice Blurb
+    new_invoice_note: XXX New Invoice Note
     new_item: Nuevo artículo
     new_location: Nueva ubicación
     new_order: Nuevo
+    new_sale_type: XXX new sale type
     new_shipment: Nuevo envío
     new_shipment_type: Nuevo tipo de envío
     new_shipper: Nuevo transportador
     new_stock_location: Nueva ubicación de stock
     new_tax_profile: Nuevo tipo de IVA
     new_tender_method: Nuevo método de pago
+    new_transaction_tag: New Transaction Tag
     new_vendor: Nueva tienda
     ok: OK
     order: Pedido
@@ -501,6 +515,7 @@ es:
     shippers: Transportadores
     show: Mostrar
     split: Separar
+    statistics: Statistics
     stock_locations: Ubicaciones del stock
     support: Soporte
     tax_profiles: Tipos de IVA
@@ -514,19 +529,16 @@ es:
     vendors: Tiendas
     void: Anular
     wholesaler_update: Actualización del disteibuidor
-    labels: Labels
-    statistics: Statistics
-    documentation: Documentation
-    invoice_blurbs: Invoice Blurbs
-    edit_invoice_blurb: Edit Invoice Blurb
-    new_invoice_blurb: New Invoice Blurb
-    new_transaction_tag: New Transaction Tag
-    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
     shipments_move_item: El artículo ha sido desplazado con éxito.
   orders:
+    print:
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
+      print: Print-Dialog
     report:
       display: Mostrar
       end_date: Fecha final
@@ -609,11 +621,6 @@ es:
       transaction_tag: Etiqueta de transacción
       transaction_total: transacción total
       transactions: transacción
-    print:
-      print: Print-Dialog
-      delivery_note: Delivery note
-      invoice: Invoice
-      labels: Labels
   printr:
     eod_report:
       None: Sin nombre
@@ -622,6 +629,7 @@ es:
       calculated_drawer_amount: Total calculado en caja
       cash-refunds: Reintegros en efectivo
       cash_refunds_total: TOTAL
+      no_category: No Category
       noncash-refunds: Reintegros no en efectivo
       orders_total: Total de pedidos
       payment_method_total: TOTAL
@@ -636,7 +644,6 @@ es:
         aconsejamos terminar y empazar cada día con la caja vacía a fin de facilitar
         su contabilidad. Realice la extracción de efectivo correspondiente e imprima
         nuevamente este informe.
-      no_category: No Category
     formats:
       advert: ! 'El punto de venta innovador
 
@@ -680,11 +687,11 @@ es:
       payout: Extracción
       sold: Vendido
   receipts:
+    a_conto: on account
+    delivery_note: Lieferschein
     invoice: Factura
     invoice_numer_X_at_time: Pedido Nro. %{number} at %{datetime}
-    delivery_note: Lieferschein
     offer: Offer
-    a_conto: on account
     proforma_invoice: Proforma Invoice
   reports:
     amount: Monto
@@ -703,6 +710,7 @@ es:
     show:
       purchase_price_sum: Suma precio de venta
   sticker: Etiqueta adhesiva
+  support: XXX
   system:
     add_payment_method: Añadir método de pago
     complete_sale: Terminar
@@ -791,12 +799,12 @@ es:
       receipt_logo_footer: Pie del recibo con logo
       receipt_logo_header: Encabezamiento del recibo con logo
   views:
-    create_new_item: xxx Create New Article
     advanced_field: Campo avanzado
     cash_register_heading: ! '%{name} para %{store}'
     cash_registers: Cajas
     category_heading: Categoría %{name} para %{store}
     change: Vuelto
+    create_new_item: xxx Create New Article
     customers: Clientes
     download_may_last_long: Esta dercarga puede llevar tiempo. ¿Continuar?
     dummy_item: Artículo general
@@ -836,6 +844,7 @@ es:
     item: Artículo
     language: Idioma
     listing: Listado
+    listing_invoice_blurbs: Listing Invoice Blurbs
     listing_items: Artículos de lista
     locations: Ubicaciones
     loyalty_card: Tarjeta de fidelización
@@ -882,6 +891,7 @@ es:
       body: Cuerpo
       bottom: Debajo
       camera: Cámara
+      choose: choose
       continue: Continuar
       coupons: Cupones
       delete: Borrar
@@ -901,7 +911,6 @@ es:
       to: A
       top: Arriba
       waiting: Esperando...
-      choose: choose
     sticky_ticket: Etiqueta adhesiva
     stock_locations: Ubicaciones_de_stock
     subtotal: Subtotal
@@ -912,18 +921,9 @@ es:
     vendor: Tienda
     wholesaler_refresh: Actualización del distribuidor en curso. Esto puede llevar
       algunos minutos.
-    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: al añadir al pedido
     always: siempre
     on_export: al exportar
     on_import: al importar
     on_save: al guardar
-  are_you_sure: Are you sure you want to do this?
-  customers:
-    show:
-      bought_items: Bought items
-      last_orders: Last orders
-      order_id: Order Number
-      order_total: Order total
-      sold_count: sold count

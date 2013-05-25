@@ -1,17 +1,14 @@
 ---
 cn:
-  support: 支持
   ByCard: By Card
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
-      order_item:
-        quantity: XXX Qty.
-        tax_free: Tax Free
       active: 活躍
       address: 地址
       afield: 領域
+      always_open_drawer: Always Open Drawer
       amount: 金額
       amount_remaining: 剩餘金額
       amount_type: 金額類型
@@ -46,37 +43,56 @@ cn:
       created_at: 創建了
       csv_imports: CSV 進口
       csv_imports_url: CSV 進口的 URL
+      customer:
+        tax_number: Tax number
       customer_screen_blurb: 標準文本顧客屏幕
       decimal_points: 小數點
       default: 默認
       default_buyback: 默認的下回購
+      detailed_edit: Detailed Edit?
       dollar_per_lp: 美元每忠誠點
       drop: 下拉
       email: 電子郵件
       employee:
-        uses_drawer_id: 使用的抽屜
         hourly_rate: Hourly Rate
+        uses_drawer_id: 使用的抽屜
       end_amount: 最後金額
       end_date: 結束日期
       eod_show: 顯示在天結束
       expires_on: 到期
       first_name: 名字
+      full_name: Name
       height: 高度
       hide_buttons: 隱藏按鈕
       hide_discounts: 隱藏折扣
       ignore_qty: 忽略數量
+      internal_type: Type
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      invoice_note:
+        destination_country_id: Destination Country
+        note_footer: Note footer
+        note_header: Note header
+        origin_country_id: Origin Country
+        sale_type_id: Sale Type
+      is_header: Header?
+      is_proforma: Proforma?
       is_refund: 有退款嗎?
       is_shipment_item: 裝運產品
       item:
+        customs_code: Customs Code
+        description: Description
+        manufacturer_price: Manufacturer Price
+        origin_country: Origin Country
         purchase_price: 購買價格
         quantity: 數量
-        origin_country: Origin Country
-        customs_code: Customs Code
-        manufacturer_price: Manufacturer Price
-        description: Description
         weight: Weight
       item_sku: 產品的SKU
       itemsviewlist: 為產品的列表視圖
+      lang: Language
       last_name: 姓
       lc_points: 忠誠卡點
       length: 長度
@@ -90,6 +106,9 @@ cn:
       notes: 筆記
       open_cash_drawer: 打開錢抽屜
       order_id: 訂購
+      order_item:
+        quantity: XXX Qty.
+        tax_free: Tax Free
       owner_id: 雇主
       owner_type: 雇主類型
       packaging_unit: 包裝單位
@@ -113,7 +132,15 @@ cn:
       rebate: 回扣
       rebate_type: 回扣類型
       reorder_type: 重新訂購類型
+      require_password: Require Password
+      role_cache: Roles
+      roles: Roles
       sales_metric: 銷售公制
+      salor_configuration:
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
       salor_printer: 打印客戶端
       scale: 規模
       shipment:
@@ -139,6 +166,7 @@ cn:
       subtotal: 小計
       tag: 標籤
       tax: 稅
+      tax_free: Tax Free
       tax_profile_id: 稅
       telephone: 電話
       the_receiver: 收到人
@@ -152,47 +180,18 @@ cn:
       username: 用戶名
       uses_drawer_id: 使用的抽屜
       value: 價值
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_footer: Receipt Logo Footer
+        receipt_logo_header: Receipt Logo Header
       vendor_id: 供應商
       vendor_printers: 打印機
       weigh_compulsory: 強制稱重
       weight: 重量
       when: 何時
-      width: 寬度
-      tax_free: Tax Free
-      invoice_note:
-        origin_country_id: Origin Country
-        destination_country_id: Destination Country
-        note_header: Note header
-        note_footer: Note footer
-        sale_type_id: Sale Type
-      is_proforma: Proforma?
-      customer:
-        tax_number: Tax number
-      detailed_edit: Detailed Edit?
-      vendor:
-        logo: Screen Logo
-        logo_invoice: Paper Invoice Logo
-        receipt_logo_header: Receipt Logo Header
-        receipt_logo_footer: Receipt Logo Footer
-      lang: Language
-      is_header: Header?
-      invoice_blurb:
-        body: Invoice
-        body_receipt: Receipt
-        is_header: Header
-        lang: Language
-      salor_configuration:
-        receipt_blurb: Receipt Blurb Header
-        receipt_blurb_footer: Receipt Blurb Footer
-        invoice_blurb: Invoice Blurb Header
-        invoice_blurb_footer: Invoice Blurb Footer
-      internal_type: Type
       whento: When
-      roles: Roles
-      role_cache: Roles
-      full_name: Name
-      always_open_drawer: Always Open Drawer
-      require_password: Require Password
+      width: 寬度
     models:
       action:
         one: 行動
@@ -206,6 +205,9 @@ cn:
       category:
         one: 類別
         other: 類別
+      country:
+        one: Country
+        other: Countries
       customer:
         one: 顧客
         other: 顧客
@@ -221,15 +223,18 @@ cn:
       employee:
         one: 僱員
         other: 僱員
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
       item:
         one: 產品
         other: 產品
       item_type:
-        one: 產品類型
-        other: 產品類型
         coupon: Coupon
         gift_card: Gift Card
         normal: Normal
+        one: 產品類型
+        other: 產品類型
       location:
         one: 位置
         other: 位置
@@ -237,19 +242,22 @@ cn:
         one: 訂購
         other: 訂購
         proforma_orders: Proforma Invoices
-        unpaid_orders: Unpaid Invoices
-        quotes: Quotes
         quote: Quote
+        quotes: Quotes
+        unpaid_orders: Unpaid Invoices
       order_item:
         one: 訂購產品
         other: 訂購產品
       payment_method:
         one: 付款方式
         other: 付款方式
+      sale_type:
+        one: Sale Type
+        other: Sale Types
       shipment:
+        default_name: Default Name
         one: 裝船
         other: 裝船
-        default_name: Default Name
       shipment_type:
         default_name: 默認名稱
         one: 裝船類型
@@ -272,24 +280,16 @@ cn:
       vendor:
         one: 商店
         other: 商店
-      sale_type:
-        one: Sale Type
-        other: Sale Types
-      country:
-        one: Country
-        other: Countries
-      invoice_note:
-        one: Invoice Note
-        other: Invoice Notes
   api:
     user_does_not_exist: 用戶不存在
+  are_you_sure: Are you sure you want to do this?
   behavior_list:
     add: 加
     assign: 分配
+    discount_after_threshold: discount after threshold
     divide: 分
     multiply: 乘
     subtract: 減
-    discount_after_threshold: discount after threshold
   cash_registers:
     end_of_day:
       cash_drawer: 錢抽屜
@@ -297,6 +297,13 @@ cn:
       difference: 區別
       end_of_day_thermal_report: 打印報告
       paper_report: 詳細報告
+  customers:
+    show:
+      bought_items: Bought items
+      last_orders: Last orders
+      order_id: Order Number
+      order_total: Order total
+      sold_count: sold count
   delete: 刪除
   edit: 編輯
   end_of_day: 天結束
@@ -327,10 +334,10 @@ cn:
     shipment_items: 裝運產品
     shipment_types: 裝船類型
     shipments: 裝船
+    signup: Signup for a 14 day free trial!
+    time_sheet: Employee Time Sheet
     update_location: 更新位置
     update_real_quantity: 更新實際數量
-    time_sheet: Employee Time Sheet
-    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: 請選擇
@@ -339,13 +346,13 @@ cn:
       clear: 清洗
       complete_sale: 完成銷售
       create: 創建
+      edit: Edit
       get_item: 獲得產品
       ok: OK
       print: 打印
       save: 儲存
       submit: 提交
       update: 更新
-      edit: Edit
   home:
     remote_service:
       connect_ssh: 遠程服務
@@ -380,6 +387,8 @@ cn:
       title: 庫存報告
       total_buying_price: 總和購買價格
       total_selling_price: 總和銷售價格
+    selection:
+      print: Print
     show:
       from: 從
       quantity_sold: 銷售數量
@@ -391,8 +400,6 @@ cn:
       update_quantity: 更新庫存數量
     upload:
       upload: 上載
-    selection:
-      print: Print
   label: 標籤
   menu:
     actions: actions 行動
@@ -420,18 +427,20 @@ cn:
     delete_confirm: 確定嗎?
     destroy: 摧毀
     discounts: discounts 折扣
+    documentation: Documentation
     done: 完成
     download: 下載
     edit: XXX Edit Country
-    edit_sale_type: XXX Edit Sale Type
-    edit_invoice_note: XXX Edit Invoice Note
     edit_cash_register: 編輯收款台
     edit_category: 編輯類別
     edit_customer: 編輯顧客
     edit_discount: 編輯折扣
     edit_employee: 編輯僱員
+    edit_invoice_blurb: Edit Invoice Blurb
+    edit_invoice_note: XXX Edit Invoice Note
     edit_item: 編輯產品
     edit_location: 編輯位置
+    edit_sale_type: XXX Edit Sale Type
     edit_shipment: 編輯裝船
     edit_shipment_type: 編輯裝船類型
     edit_shipper: 編輯發貨人 %{name}
@@ -443,32 +452,37 @@ cn:
     general_configuration: 一般組態
     home: 主頁
     inventory_report: 庫存報告
+    invoice_blurbs: Invoice Blurbs
     item_types: 產品類型
     items: 產品
+    labels: Labels
     law_reports: 報告下載
     locations: 位置
     loyalty_cards: 忠誠卡
+    merge_into_current_order: Merge into current order
     move_shipment_item: 移動裝船產品
-    new_country: XXX new country
-    new_sale_type: XXX new sale type
-    new_invoice_note: XXX New Invoice Note
     new_action: 新行動
     new_broken_item: 新破碎的產品
     new_button: 新按鈕
     new_cash_register: 新收款台
     new_category: 新類別
+    new_country: XXX new country
     new_customer: 新顧客
     new_discount: 新折扣
     new_employee: 新僱員
+    new_invoice_blurb: New Invoice Blurb
+    new_invoice_note: XXX New Invoice Note
     new_item: 新產品
     new_location: 新位置
     new_order: 新
+    new_sale_type: XXX new sale type
     new_shipment: 新裝船
     new_shipment_type: 新裝船類型
     new_shipper: 新發貨人
     new_stock_location: 新貨物位置
     new_tax_profile: 新稅務個人資料
     new_tender_method: new 新貨幣方法
+    new_transaction_tag: New Transaction Tag
     new_vendor: 新供應商
     ok: OK
     order: 訂購
@@ -493,6 +507,7 @@ cn:
     shippers: 發貨人
     show: 顯示
     split: 分裂
+    statistics: Statistics
     stock_locations: 貨物位置
     support: 支持
     tax_profiles: 稅務個人資料
@@ -506,19 +521,16 @@ cn:
     vendors: 供應商
     void: 廢止
     wholesaler_update: 批發商更新
-    labels: Labels
-    statistics: Statistics
-    documentation: Documentation
-    invoice_blurbs: Invoice Blurbs
-    edit_invoice_blurb: Edit Invoice Blurb
-    new_invoice_blurb: New Invoice Blurb
-    new_transaction_tag: New Transaction Tag
-    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
     shipments_move_item: 項目均順利搬遷
   orders:
+    print:
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
+      print: Print-Dialog
     report:
       display: 顯示
       end_date: 結束日期
@@ -601,11 +613,6 @@ cn:
       transaction_tag: 交易標籤
       transaction_total: 交易總計
       transactions: 交易
-    print:
-      print: Print-Dialog
-      delivery_note: Delivery note
-      invoice: Invoice
-      labels: Labels
   printr:
     eod_report:
       None: 未命名
@@ -614,6 +621,7 @@ cn:
       calculated_drawer_amount: 計算抽屜金額
       cash-refunds: 現金的退款
       cash_refunds_total: 總計
+      no_category: No Category
       noncash-refunds: 非現金的退款
       orders_total: 訂購總計
       payment_method_total: 總計
@@ -625,7 +633,6 @@ cn:
       system_drawer_amount: 系統抽屜金額
       transaction_total: 總計
       warning_drawer_amount_not_zero: 警告！你的抽屜金額不為零。建議你來完成，並開始與零的抽屜數量，以紓緩會     計工作的每一天。相應地作出現金支付，並再次打印此報告。
-      no_category: No Category
     formats:
       advert: ! '銷售創新點
 
@@ -669,11 +676,11 @@ cn:
       payout: 派息
       sold: 出售了
   receipts:
+    a_conto: on account
+    delivery_note: Lieferschein
     invoice: 發票
     invoice_numer_X_at_time: 訂單號 %{number} 在 %{datetime}
-    delivery_note: Lieferschein
     offer: Offer
-    a_conto: on account
     proforma_invoice: Proforma Invoice
   reports:
     amount: 金額
@@ -692,6 +699,7 @@ cn:
     show:
       purchase_price_sum: 購買價格的總和
   sticker: 貼紙
+  support: 支持
   system:
     add_payment_method: 添加付款方式
     complete_sale: 完成
@@ -760,12 +768,12 @@ cn:
       receipt_logo_footer: 收據標誌頁腳
       receipt_logo_header: 收據標誌頭
   views:
-    create_new_item: xxx Create New Article
     advanced_field: 先進的現場
     cash_register_heading: ! '%{name} 為 %{store}'
     cash_registers: 收款台
     category_heading: 類別 %{name} 為 %{store}
     change: 零錢
+    create_new_item: xxx Create New Article
     customers: 客戶
     download_may_last_long: 此下載可能會持續很長時間. 繼續嗎?
     dummy_item: 虛擬產品
@@ -781,6 +789,7 @@ cn:
       buy_one_get_one: 買一贈一
       cashier: 出納員
       fixed_amount_off: 固定數量折扣
+      items: items
       manager: 經理
       no_change: 沒有變化
       notes: 筆記
@@ -796,7 +805,6 @@ cn:
           new: 新
           returned: 返回了
           shipped: 運了
-      items: items
     gift_card: 禮品卡
     gift_card_amount: 禮品卡金額
     given: 送了
@@ -804,6 +812,7 @@ cn:
     item: 產品
     language: 語言
     listing: 單
+    listing_invoice_blurbs: Listing Invoice Blurbs
     listing_items: 單項目
     locations: 位置
     loyalty_card: 忠誠卡
@@ -847,6 +856,7 @@ cn:
       body: 身體
       bottom: 底部
       camera: 相機
+      choose: choose
       continue: 繼續
       coupons: 優惠券
       delete: 刪除
@@ -866,7 +876,6 @@ cn:
       to: 至
       top: 頂部
       waiting: 等候...
-      choose: choose
     sticky_ticket: 黏標籤
     stock_locations: 貨物位置
     subtotal: 小計
@@ -876,18 +885,9 @@ cn:
     username: 用戶名
     vendor: 供應商
     wholesaler_refresh: 取批發商更新. 這可能需要幾分鐘.
-    listing_invoice_blurbs: Listing Invoice Blurbs
   when_list:
     add_to_order: 加入訂單
     always: 總是
     on_export: 在出口
     on_import: 在進口
     on_save: 在儲存
-  are_you_sure: Are you sure you want to do this?
-  customers:
-    show:
-      bought_items: Bought items
-      last_orders: Last orders
-      order_id: Order Number
-      order_total: Order total
-      sold_count: sold count

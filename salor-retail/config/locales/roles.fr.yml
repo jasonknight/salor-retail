@@ -1,161 +1,161 @@
 ---
 fr:
-  any_reports: Tous les rapports
-  index_reports: Indexer les rapports
-  edit_reports: Editer les rapports
-  show_reports: Montrer les rapports
-  create_reports: Créer des rapports
-  destroy_reports: Effacer des rapports
-  update_reports: Mettre à jour les rapports
-  employee: Employé
-  manager: Gérant
-  head_cashier: Chef de caissières
-  cashier: Caissière
-  stockboy: Magasinier
-  edit_others_orders: Editer les commandes des autres
-  index_orders: Indexer les commandes
-  edit_orders: Editer les commandes
-  destroy_orders: Effacer des commandes
-  create_orders: Créer des les commandes
-  update_orders: Mettre à jour les commandes
-  show_orders: Montrer les commandes
-  any_orders: Toutes les commandes
-  index_items: Indexer les articles
-  edit_items: Editer les articles
-  destroy_items: Effacer des articles
-  create_items: Créer des articles
-  update_items: Mettre à jour les articles
-  show_items: Montrer les articles
-  any_items: Tous les articles
-  index_categories: Indexer les catégories
-  edit_categories: Editer les catégories
-  destroy_categories: Effacer des catégories
-  create_categories: Créer des catégories
-  update_categories: Mettre à jour les catégories
-  show_categories: Montrer les catégories
-  any_categories: Toutes les catégories
-  index_locations: Indexer les emplacements
-  edit_locations: Editer les emplacements
-  destroy_locations: Effacer des emplacements
-  create_locations: Créer des emplacements
-  update_locations: Mettre à jour les emplacements
-  show_locations: Montrer les emplacements
-  any_locations: Tous les emplacements
-  index_shippers: Indexer les livreurs
-  edit_shippers: Editer les livreurs
-  destroy_shippers: Effacer des livreurs
-  create_shippers: Créer des livreurs
-  update_shippers: Mettre à jour les livreurs
-  show_shippers: Montrer les livreurs
-  any_shippers: Tous les livreurs
-  index_shipments: Indexer les livraisons
-  edit_shipments: Editer les livraisons
-  destroy_shipments: Effacer des livraisons
-  create_shipments: Créer des livraisons
-  update_shipments: Mettre à jour les livraisons
-  show_shipments: Montrer les livraisons
-  any_shipments: Toutes les livraisons
-  index_vendors: Indexer les vendeurs
-  edit_vendors: Editer les vendeurs
-  destroy_vendors: Effacer des vendeurs
-  create_vendors: Créer des vendeurs
-  update_vendors: Mettre à jour les vendeurs
-  show_vendors: Montrer les vendeurs
-  any_vendors: Tous les vendeurs
-  index_employees: Indexer les employés
-  edit_employees: Editer les employés
-  destroy_employees: Effacer des employés
-  create_employees: Créer des employés
-  update_employees: Mettre à jour les employés
-  show_employees: Montrer les employés
-  any_employees: Tous les employés
-  index_discounts: Indexer les remises
-  edit_discounts: Editer les remises
-  destroy_discounts: Effacer des remises
-  create_discounts: Créer des remises
-  update_discounts: Mettre à jour les remises
-  show_discounts: Montrer les remises
-  any_discounts: Toutes les remises
-  index_tax_profiles: Indexer les types de taxe
-  edit_tax_profiles: Editer les types de taxe
-  destroy_tax_profiles: Effacer des types de taxe
-  create_tax_profiles: Créer des types de taxe
-  update_tax_profiles: Mettre à jour les types de taxe
-  show_tax_profiles: Montrer les types de taxe
-  any_tax_profiles: Tous les types de taxe
-  index_customers: Indexer les clients
-  edit_customers: Editer les clients
-  destroy_customers: Effacer des clients
-  create_customers: Créer des clients
-  update_customers: Mettre à jour les clients
-  show_customers: Montrer les clients
-  any_customers: Tous les clients
-  index_transaction_tags: Indexer les étiquettes de transaction
-  edit_transaction_tags: Editer les étiquettes de transaction
-  destroy_transaction_tags: Effacer des étiquettes de transaction
-  create_transaction_tags: Créer des étiquettes de transaction
-  update_transaction_tags: Mettre à jour les étiquettes de transaction
-  show_transaction_tags: Montrer les étiquettes de transaction
-  any_transaction_tags: Toutes les étiquettes de transaction
-  index_buttons: Indexer les boutons
-  edit_buttons: Editer les boutons
-  destroy_buttons: Effacer des boutons
-  create_buttons: Créer des boutons
-  update_buttons: Mettre à jour les boutons
-  show_buttons: Montrer les boutons
-  any_buttons: Tous les boutons
-  index_stock_locations: Indexer les emplacements de stock
-  edit_stock_locations: Editer les emplacements de stock
-  destroy_stock_locations: Effacer des emplacements de stock
-  create_stock_locations: Créer des emplacements de stock
-  update_stock_locations: Mettre à jour les emplacements de stock
-  show_stock_locations: Montrer les emplacements de stock
-  any_stock_locations: Tous les emplacements de stock
-  clear_orders: Effacer le contenu des commandes
-  see_header: Voir en-tête
-  destroy_order_items: Effacer les articles d'une commande
-  change_prices: Modifier les prix
-  index_histories: Indexer les historiques
-  edit_histories: Editer les historiques
-  destroy_histories: Effacer des historiques
-  create_histories: Créer des historiques
-  update_histories: Mettre à jour les historiques
-  show_histories: Montrer les historiques
-  any_histories: Tous les historiques
-  index_actions: Indexer les actions
-  edit_actions: Editer les actions
-  destroy_actions: Effacer les actions
-  create_actions: Créer des actions
-  update_actions: Mettre à jour les actions
-  show_actions: Montrer les actions
   any_actions: Toutes les actions
-  index_shipment_items: Indexer les articles de livraison
-  edit_shipment_items: Editer les articles de livraison
-  destroy_shipment_items: Effacer des articles de livraison
-  create_shipment_items: Créer des articles de livraison
-  update_shipment_items: Update les articles de livraison
-  show_shipment_items: Montrer les articles de livraison
-  any_shipment_items: Tous les articles de livraison
-  index_tender_methods: Index Payment Methods
-  edit_tender_methods: Edit Payment Methods
-  destroy_tender_methods: Destroy Payment Methods
-  create_tender_methods: Create Payment Methods
-  update_tender_methods: Update Payment Methods
-  show_tender_methods: Show Payment Methods
-  any_tender_methods: Any Payment Methods
-  remove_order_items: Remove Order Items
+  any_buttons: Tous les boutons
   any_cash_registers: Any Cash Registers
-  index_cash_registers: Index Cash Registers
-  edit_cash_registers: Edit Cash Registers
-  show_cash_registers: Show Cash Registers
-  create_cash_registers: Create Cash Registers
-  destroy_cash_registers: Destroy Cash Registers
-  update_cash_registers: Update Cash Registers
+  any_categories: Toutes les catégories
+  any_customers: Tous les clients
+  any_discounts: Toutes les remises
+  any_employees: Tous les employés
+  any_histories: Tous les historiques
+  any_items: Tous les articles
+  any_locations: Tous les emplacements
+  any_orders: Toutes les commandes
+  any_reports: Tous les rapports
+  any_shipment_items: Tous les articles de livraison
   any_shipment_types: Any Shipment Types
-  index_shipment_types: Index Shipment Types
-  edit_shipment_types: Edit Shipment Types
-  show_shipment_types: Show Shipment Types
-  create_shipment_types: Create Shipment Types
-  destroy_shipment_types: Destroy Shipment Types
-  update_shipment_types: Update Shipment Types
+  any_shipments: Toutes les livraisons
+  any_shippers: Tous les livreurs
+  any_stock_locations: Tous les emplacements de stock
+  any_tax_profiles: Tous les types de taxe
+  any_tender_methods: Any Payment Methods
+  any_transaction_tags: Toutes les étiquettes de transaction
+  any_vendors: Tous les vendeurs
   assistant: Assistant Manager
+  cashier: Caissière
+  change_prices: Modifier les prix
+  clear_orders: Effacer le contenu des commandes
+  create_actions: Créer des actions
+  create_buttons: Créer des boutons
+  create_cash_registers: Create Cash Registers
+  create_categories: Créer des catégories
+  create_customers: Créer des clients
+  create_discounts: Créer des remises
+  create_employees: Créer des employés
+  create_histories: Créer des historiques
+  create_items: Créer des articles
+  create_locations: Créer des emplacements
+  create_orders: Créer des les commandes
+  create_reports: Créer des rapports
+  create_shipment_items: Créer des articles de livraison
+  create_shipment_types: Create Shipment Types
+  create_shipments: Créer des livraisons
+  create_shippers: Créer des livreurs
+  create_stock_locations: Créer des emplacements de stock
+  create_tax_profiles: Créer des types de taxe
+  create_tender_methods: Create Payment Methods
+  create_transaction_tags: Créer des étiquettes de transaction
+  create_vendors: Créer des vendeurs
+  destroy_actions: Effacer les actions
+  destroy_buttons: Effacer des boutons
+  destroy_cash_registers: Destroy Cash Registers
+  destroy_categories: Effacer des catégories
+  destroy_customers: Effacer des clients
+  destroy_discounts: Effacer des remises
+  destroy_employees: Effacer des employés
+  destroy_histories: Effacer des historiques
+  destroy_items: Effacer des articles
+  destroy_locations: Effacer des emplacements
+  destroy_order_items: Effacer les articles d'une commande
+  destroy_orders: Effacer des commandes
+  destroy_reports: Effacer des rapports
+  destroy_shipment_items: Effacer des articles de livraison
+  destroy_shipment_types: Destroy Shipment Types
+  destroy_shipments: Effacer des livraisons
+  destroy_shippers: Effacer des livreurs
+  destroy_stock_locations: Effacer des emplacements de stock
+  destroy_tax_profiles: Effacer des types de taxe
+  destroy_tender_methods: Destroy Payment Methods
+  destroy_transaction_tags: Effacer des étiquettes de transaction
+  destroy_vendors: Effacer des vendeurs
+  edit_actions: Editer les actions
+  edit_buttons: Editer les boutons
+  edit_cash_registers: Edit Cash Registers
+  edit_categories: Editer les catégories
+  edit_customers: Editer les clients
+  edit_discounts: Editer les remises
+  edit_employees: Editer les employés
+  edit_histories: Editer les historiques
+  edit_items: Editer les articles
+  edit_locations: Editer les emplacements
+  edit_orders: Editer les commandes
+  edit_others_orders: Editer les commandes des autres
+  edit_reports: Editer les rapports
+  edit_shipment_items: Editer les articles de livraison
+  edit_shipment_types: Edit Shipment Types
+  edit_shipments: Editer les livraisons
+  edit_shippers: Editer les livreurs
+  edit_stock_locations: Editer les emplacements de stock
+  edit_tax_profiles: Editer les types de taxe
+  edit_tender_methods: Edit Payment Methods
+  edit_transaction_tags: Editer les étiquettes de transaction
+  edit_vendors: Editer les vendeurs
+  employee: Employé
+  head_cashier: Chef de caissières
+  index_actions: Indexer les actions
+  index_buttons: Indexer les boutons
+  index_cash_registers: Index Cash Registers
+  index_categories: Indexer les catégories
+  index_customers: Indexer les clients
+  index_discounts: Indexer les remises
+  index_employees: Indexer les employés
+  index_histories: Indexer les historiques
+  index_items: Indexer les articles
+  index_locations: Indexer les emplacements
+  index_orders: Indexer les commandes
+  index_reports: Indexer les rapports
+  index_shipment_items: Indexer les articles de livraison
+  index_shipment_types: Index Shipment Types
+  index_shipments: Indexer les livraisons
+  index_shippers: Indexer les livreurs
+  index_stock_locations: Indexer les emplacements de stock
+  index_tax_profiles: Indexer les types de taxe
+  index_tender_methods: Index Payment Methods
+  index_transaction_tags: Indexer les étiquettes de transaction
+  index_vendors: Indexer les vendeurs
+  manager: Gérant
+  remove_order_items: Remove Order Items
+  see_header: Voir en-tête
+  show_actions: Montrer les actions
+  show_buttons: Montrer les boutons
+  show_cash_registers: Show Cash Registers
+  show_categories: Montrer les catégories
+  show_customers: Montrer les clients
+  show_discounts: Montrer les remises
+  show_employees: Montrer les employés
+  show_histories: Montrer les historiques
+  show_items: Montrer les articles
+  show_locations: Montrer les emplacements
+  show_orders: Montrer les commandes
+  show_reports: Montrer les rapports
+  show_shipment_items: Montrer les articles de livraison
+  show_shipment_types: Show Shipment Types
+  show_shipments: Montrer les livraisons
+  show_shippers: Montrer les livreurs
+  show_stock_locations: Montrer les emplacements de stock
+  show_tax_profiles: Montrer les types de taxe
+  show_tender_methods: Show Payment Methods
+  show_transaction_tags: Montrer les étiquettes de transaction
+  show_vendors: Montrer les vendeurs
+  stockboy: Magasinier
+  update_actions: Mettre à jour les actions
+  update_buttons: Mettre à jour les boutons
+  update_cash_registers: Update Cash Registers
+  update_categories: Mettre à jour les catégories
+  update_customers: Mettre à jour les clients
+  update_discounts: Mettre à jour les remises
+  update_employees: Mettre à jour les employés
+  update_histories: Mettre à jour les historiques
+  update_items: Mettre à jour les articles
+  update_locations: Mettre à jour les emplacements
+  update_orders: Mettre à jour les commandes
+  update_reports: Mettre à jour les rapports
+  update_shipment_items: Update les articles de livraison
+  update_shipment_types: Update Shipment Types
+  update_shipments: Mettre à jour les livraisons
+  update_shippers: Mettre à jour les livreurs
+  update_stock_locations: Mettre à jour les emplacements de stock
+  update_tax_profiles: Mettre à jour les types de taxe
+  update_tender_methods: Update Payment Methods
+  update_transaction_tags: Mettre à jour les étiquettes de transaction
+  update_vendors: Mettre à jour les vendeurs

@@ -1,7 +1,3 @@
-function onCashDrawerClose() {
-  complete_order_hide();
-}
-
 function showCompleteOrderPopup() {
   var tmpl = getCompleteOrderTemplate();
   tmpl.dialog({

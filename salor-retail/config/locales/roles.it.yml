@@ -1,161 +1,161 @@
 ---
 it:
-  any_reports: Rapporti
-  index_reports: Indice Rapporti
-  edit_reports: Modifica Rapporti
-  show_reports: Mostra Rapporti
-  create_reports: Crea Rapporti
-  destroy_reports: Distruggi Rapporti
-  update_reports: Aggiorna Rapporti
-  employee: Impiegato
-  manager: Manager
-  head_cashier: Capo Cassiere
-  cashier: Cassiere
-  stockboy: Stockboy
-  edit_others_orders: Modifica Altri Ordini
-  index_orders: Indice Ordini
-  edit_orders: Modifica Ordini
-  destroy_orders: Distruggi Ordini
-  create_orders: Crea Ordini
-  update_orders: Aggiorna Ordini
-  show_orders: Mostra Ordini
-  any_orders: Ordini
-  index_items: Indice Articoli
-  edit_items: Modifica Articoli
-  destroy_items: Distruggi Articoli
-  create_items: Crea Articoli
-  update_items: Aggiorna Articoli
-  show_items: Mostra Articoli
-  any_items: Articoli
-  index_categories: Indice Categorie
-  edit_categories: Modifica Categorie
-  destroy_categories: Distruggi Categorie
-  create_categories: Crea Categorie
-  update_categories: Aggiorna Categorie
-  show_categories: Mostra Categorie
-  any_categories: Categorie
-  index_locations: Indice Posizioni
-  edit_locations: Modifica Posizioni
-  destroy_locations: Distruggi Posizioni
-  create_locations: Crea Posizioni
-  update_locations: Aggiorna Posizioni
-  show_locations: Mostra Posizioni
-  any_locations: Posizioni
-  index_shippers: Indice Spedizionieri
-  edit_shippers: Modifica Spedizionieri
-  destroy_shippers: Distruggi Spedizionieri
-  create_shippers: Crea Spedizionieri
-  update_shippers: Aggiorna Spedizionieri
-  show_shippers: Mostra Spedizionieri
-  any_shippers: Spedizionieri
-  index_shipments: Indice Spedizioni
-  edit_shipments: Modifica Spedizioni
-  destroy_shipments: Distruggi Spedizioni
-  create_shipments: Crea Spedizioni
-  update_shipments: Aggiorna Spedizioni
-  show_shipments: Mostra Spedizioni
-  any_shipments: Any Spedizioni
-  index_vendors: Indice Venditori
-  edit_vendors: Modifica Venditori
-  destroy_vendors: Distruggi Venditori
-  create_vendors: Crea Venditori
-  update_vendors: Aggiorna Venditori
-  show_vendors: Mostra Venditori
-  any_vendors: Venditori
-  index_employees: Indice Impiegati
-  edit_employees: Modifica Impiegati
-  destroy_employees: Distruggi Impiegati
-  create_employees: Crea Impiegati
-  update_employees: Aggiorna Impiegati
-  show_employees: Mostra Impiegati
-  any_employees: Any Impiegati
-  index_discounts: Indice Sconti
-  edit_discounts: Modifica Sconti
-  destroy_discounts: Distruggi Sconti
-  create_discounts: Crea Sconti
-  update_discounts: Aggiorna Sconti
-  show_discounts: Mostra Sconti
-  any_discounts: Sconti
-  index_tax_profiles: Indice Profili Tassa
-  edit_tax_profiles: Modifica Profili Tassa
-  destroy_tax_profiles: Distruggi Profili Tassa
-  create_tax_profiles: Crea Profili Tassa
-  update_tax_profiles: Aggiorna Profili Tassa
-  show_tax_profiles: Mostra Profili Tassa
-  any_tax_profiles: Profili Tassa
-  index_customers: Indice Clienti
-  edit_customers: Modifica Clienti
-  destroy_customers: Distruggi Clienti
-  create_customers: Crea Clienti
-  update_customers: Aggiorna Clienti
-  show_customers: Mostra Clienti
-  any_customers: Clienti
-  index_transaction_tags: Indice Etichette Transazione
-  edit_transaction_tags: Modifica Etichette Transazione
-  destroy_transaction_tags: Distruggi Etichette Transazione
-  create_transaction_tags: Crea Etichette Transazione
-  update_transaction_tags: Aggiorna Etichette Transazione
-  show_transaction_tags: Mostra Etichette Transazione
-  any_transaction_tags: Etichette Transazione
-  index_buttons: Indice Pulsanti
-  edit_buttons: Modifica Pulsanti
-  destroy_buttons: Distruggi Pulsanti
-  create_buttons: Crea Pulsanti
-  update_buttons: Aggiorna Pulsanti
-  show_buttons: Mostra Pulsanti
-  any_buttons: Pulsanti
-  index_stock_locations: Indice Posizioni Stock
-  edit_stock_locations: Modifica Posizioni Stock
-  destroy_stock_locations: Distruggi Posizioni Stock
-  create_stock_locations: Crea Stock Locations
-  update_stock_locations: Aggiorna Posizioni Stock
-  show_stock_locations: Mostra Posizioni Stock
-  any_stock_locations: Posizioni Stock
-  clear_orders: Cancella Ordini
-  see_header: Vedi Intestazione
-  destroy_order_items: Distruggi Articoli Ordine
-  change_prices: Cambia Prezzi
-  index_histories: Indice Storico
-  edit_histories: Modifica Storico
-  destroy_histories: Distruggi Storico
-  create_histories: Crea Storico
-  update_histories: Aggiorna Storico
-  show_histories: Mostra Storico
-  any_histories: Storico
-  index_actions: Indice Azioni
-  edit_actions: Modifica Azioni
-  destroy_actions: Distruggi Azioni
-  create_actions: Crea Azioni
-  update_actions: Aggiorna Azioni
-  show_actions: Mostra Azioni
   any_actions: Azioni
-  index_shipment_items: Indice Articoli Spedizione
-  edit_shipment_items: Modifica Articoli Spedizione
-  destroy_shipment_items: Distruggi Articoli Spedizione
-  create_shipment_items: Crea Articoli Spedizione
-  update_shipment_items: Aggiorna Articoli Spedizione
-  show_shipment_items: Mostra Articoli Spedizione
-  any_shipment_items: Articoli Spedizione
-  index_tender_methods: Index Payment Methods
-  edit_tender_methods: Edit Payment Methods
-  destroy_tender_methods: Destroy Payment Methods
-  create_tender_methods: Create Payment Methods
-  update_tender_methods: Update Payment Methods
-  show_tender_methods: Show Payment Methods
-  any_tender_methods: Any Payment Methods
-  remove_order_items: Remove Order Items
+  any_buttons: Pulsanti
   any_cash_registers: Any Cash Registers
-  index_cash_registers: Index Cash Registers
-  edit_cash_registers: Edit Cash Registers
-  show_cash_registers: Show Cash Registers
-  create_cash_registers: Create Cash Registers
-  destroy_cash_registers: Destroy Cash Registers
-  update_cash_registers: Update Cash Registers
+  any_categories: Categorie
+  any_customers: Clienti
+  any_discounts: Sconti
+  any_employees: Any Impiegati
+  any_histories: Storico
+  any_items: Articoli
+  any_locations: Posizioni
+  any_orders: Ordini
+  any_reports: Rapporti
+  any_shipment_items: Articoli Spedizione
   any_shipment_types: Any Shipment Types
-  index_shipment_types: Index Shipment Types
-  edit_shipment_types: Edit Shipment Types
-  show_shipment_types: Show Shipment Types
-  create_shipment_types: Create Shipment Types
-  destroy_shipment_types: Destroy Shipment Types
-  update_shipment_types: Update Shipment Types
+  any_shipments: Any Spedizioni
+  any_shippers: Spedizionieri
+  any_stock_locations: Posizioni Stock
+  any_tax_profiles: Profili Tassa
+  any_tender_methods: Any Payment Methods
+  any_transaction_tags: Etichette Transazione
+  any_vendors: Venditori
   assistant: Assistant Manager
+  cashier: Cassiere
+  change_prices: Cambia Prezzi
+  clear_orders: Cancella Ordini
+  create_actions: Crea Azioni
+  create_buttons: Crea Pulsanti
+  create_cash_registers: Create Cash Registers
+  create_categories: Crea Categorie
+  create_customers: Crea Clienti
+  create_discounts: Crea Sconti
+  create_employees: Crea Impiegati
+  create_histories: Crea Storico
+  create_items: Crea Articoli
+  create_locations: Crea Posizioni
+  create_orders: Crea Ordini
+  create_reports: Crea Rapporti
+  create_shipment_items: Crea Articoli Spedizione
+  create_shipment_types: Create Shipment Types
+  create_shipments: Crea Spedizioni
+  create_shippers: Crea Spedizionieri
+  create_stock_locations: Crea Stock Locations
+  create_tax_profiles: Crea Profili Tassa
+  create_tender_methods: Create Payment Methods
+  create_transaction_tags: Crea Etichette Transazione
+  create_vendors: Crea Venditori
+  destroy_actions: Distruggi Azioni
+  destroy_buttons: Distruggi Pulsanti
+  destroy_cash_registers: Destroy Cash Registers
+  destroy_categories: Distruggi Categorie
+  destroy_customers: Distruggi Clienti
+  destroy_discounts: Distruggi Sconti
+  destroy_employees: Distruggi Impiegati
+  destroy_histories: Distruggi Storico
+  destroy_items: Distruggi Articoli
+  destroy_locations: Distruggi Posizioni
+  destroy_order_items: Distruggi Articoli Ordine
+  destroy_orders: Distruggi Ordini
+  destroy_reports: Distruggi Rapporti
+  destroy_shipment_items: Distruggi Articoli Spedizione
+  destroy_shipment_types: Destroy Shipment Types
+  destroy_shipments: Distruggi Spedizioni
+  destroy_shippers: Distruggi Spedizionieri
+  destroy_stock_locations: Distruggi Posizioni Stock
+  destroy_tax_profiles: Distruggi Profili Tassa
+  destroy_tender_methods: Destroy Payment Methods
+  destroy_transaction_tags: Distruggi Etichette Transazione
+  destroy_vendors: Distruggi Venditori
+  edit_actions: Modifica Azioni
+  edit_buttons: Modifica Pulsanti
+  edit_cash_registers: Edit Cash Registers
+  edit_categories: Modifica Categorie
+  edit_customers: Modifica Clienti
+  edit_discounts: Modifica Sconti
+  edit_employees: Modifica Impiegati
+  edit_histories: Modifica Storico
+  edit_items: Modifica Articoli
+  edit_locations: Modifica Posizioni
+  edit_orders: Modifica Ordini
+  edit_others_orders: Modifica Altri Ordini
+  edit_reports: Modifica Rapporti
+  edit_shipment_items: Modifica Articoli Spedizione
+  edit_shipment_types: Edit Shipment Types
+  edit_shipments: Modifica Spedizioni
+  edit_shippers: Modifica Spedizionieri
+  edit_stock_locations: Modifica Posizioni Stock
+  edit_tax_profiles: Modifica Profili Tassa
+  edit_tender_methods: Edit Payment Methods
+  edit_transaction_tags: Modifica Etichette Transazione
+  edit_vendors: Modifica Venditori
+  employee: Impiegato
+  head_cashier: Capo Cassiere
+  index_actions: Indice Azioni
+  index_buttons: Indice Pulsanti
+  index_cash_registers: Index Cash Registers
+  index_categories: Indice Categorie
+  index_customers: Indice Clienti
+  index_discounts: Indice Sconti
+  index_employees: Indice Impiegati
+  index_histories: Indice Storico
+  index_items: Indice Articoli
+  index_locations: Indice Posizioni
+  index_orders: Indice Ordini
+  index_reports: Indice Rapporti
+  index_shipment_items: Indice Articoli Spedizione
+  index_shipment_types: Index Shipment Types
+  index_shipments: Indice Spedizioni
+  index_shippers: Indice Spedizionieri
+  index_stock_locations: Indice Posizioni Stock
+  index_tax_profiles: Indice Profili Tassa
+  index_tender_methods: Index Payment Methods
+  index_transaction_tags: Indice Etichette Transazione
+  index_vendors: Indice Venditori
+  manager: Manager
+  remove_order_items: Remove Order Items
+  see_header: Vedi Intestazione
+  show_actions: Mostra Azioni
+  show_buttons: Mostra Pulsanti
+  show_cash_registers: Show Cash Registers
+  show_categories: Mostra Categorie
+  show_customers: Mostra Clienti
+  show_discounts: Mostra Sconti
+  show_employees: Mostra Impiegati
+  show_histories: Mostra Storico
+  show_items: Mostra Articoli
+  show_locations: Mostra Posizioni
+  show_orders: Mostra Ordini
+  show_reports: Mostra Rapporti
+  show_shipment_items: Mostra Articoli Spedizione
+  show_shipment_types: Show Shipment Types
+  show_shipments: Mostra Spedizioni
+  show_shippers: Mostra Spedizionieri
+  show_stock_locations: Mostra Posizioni Stock
+  show_tax_profiles: Mostra Profili Tassa
+  show_tender_methods: Show Payment Methods
+  show_transaction_tags: Mostra Etichette Transazione
+  show_vendors: Mostra Venditori
+  stockboy: Stockboy
+  update_actions: Aggiorna Azioni
+  update_buttons: Aggiorna Pulsanti
+  update_cash_registers: Update Cash Registers
+  update_categories: Aggiorna Categorie
+  update_customers: Aggiorna Clienti
+  update_discounts: Aggiorna Sconti
+  update_employees: Aggiorna Impiegati
+  update_histories: Aggiorna Storico
+  update_items: Aggiorna Articoli
+  update_locations: Aggiorna Posizioni
+  update_orders: Aggiorna Ordini
+  update_reports: Aggiorna Rapporti
+  update_shipment_items: Aggiorna Articoli Spedizione
+  update_shipment_types: Update Shipment Types
+  update_shipments: Aggiorna Spedizioni
+  update_shippers: Aggiorna Spedizionieri
+  update_stock_locations: Aggiorna Posizioni Stock
+  update_tax_profiles: Aggiorna Profili Tassa
+  update_tender_methods: Update Payment Methods
+  update_transaction_tags: Aggiorna Etichette Transazione
+  update_vendors: Aggiorna Venditori

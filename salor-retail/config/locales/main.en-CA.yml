@@ -1,40 +1,14 @@
 ---
 en-CA:
-  are_you_sure: Are you sure you want to do this?
-  support: Support
   ByCard: Debit
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
     attributes:
-      vendor:
-        logo: Screen Logo
-        logo_invoice: Paper Invoice Logo
-        receipt_logo_header: Receipt Logo Header
-        receipt_logo_footer: Receipt Logo Footer
-      lang: Language
-      is_header: Header?
-      detailed_edit: Detailed Edit?
-      customer:
-        tax_number: Tax number
-      is_proforma: Proforma?
-      tax_free: Tax Free
-      order_item:
-        quantity: Qty.
-        tax_free: Tax Free
-      invoice_blurb:
-        body: Invoice
-        body_receipt: Receipt
-        is_header: Header
-        lang: Language
-      salor_configuration:
-        receipt_blurb: Receipt Blurb Header
-        receipt_blurb_footer: Receipt Blurb Footer
-        invoice_blurb: Invoice Blurb Header
-        invoice_blurb_footer: Invoice Blurb Footer
       active: active
       address: address
       afield: field
+      always_open_drawer: Always Open Drawer
       amount: amount
       amount_remaining: amount remaining
       amount_type: amount type
@@ -69,37 +43,56 @@ en-CA:
       created_at: Created
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
+      customer:
+        tax_number: Tax number
       customer_screen_blurb: Standard text customer screen
       decimal_points: decimal points
       default: Default
       default_buyback: default buyback
+      detailed_edit: Detailed Edit?
       dollar_per_lp: dollar per loyalty point
       drop: drop
       email: email
       employee:
-        uses_drawer_id: Uses drawer of
         hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       end_amount: end amount
       end_date: end date
       eod_show: show at end of day
       expires_on: expires on
       first_name: first name
+      full_name: Name
       height: height
       hide_buttons: Hide Buttons
       hide_discounts: Hide Discounts
       ignore_qty: Ignore Qty
+      internal_type: Type
+      invoice_blurb:
+        body: Invoice
+        body_receipt: Receipt
+        is_header: Header
+        lang: Language
+      invoice_note:
+        destination_country_id: Destination Country
+        note_footer: Note footer
+        note_header: Note header
+        origin_country_id: Origin Country
+        sale_type_id: Sale Type
+      is_header: Header?
+      is_proforma: Proforma?
       is_refund: Is Refund?
       is_shipment_item: is shipment item
       item:
+        customs_code: Customs Code
+        description: Description
+        manufacturer_price: Manufacturer Price
+        origin_country: Origin Country
         purchase_price: Purchase Price
         quantity: Quantity
-        origin_country: Origin Country
-        customs_code: Customs Code
-        manufacturer_price: Manufacturer Price
-        description: Description
         weight: Weight
       item_sku: item sku
       itemsviewlist: List View for Items
+      lang: Language
       last_name: last name
       lc_points: loyalty card points
       length: length
@@ -113,6 +106,9 @@ en-CA:
       notes: notes
       open_cash_drawer: open cash drawer
       order_id: order
+      order_item:
+        quantity: Qty.
+        tax_free: Tax Free
       owner_id: Owner
       owner_type: Owner Type
       packaging_unit: packaging unit
@@ -136,7 +132,15 @@ en-CA:
       rebate: rebate
       rebate_type: rebate type
       reorder_type: Reorder Type
+      require_password: Require Password
+      role_cache: Roles
+      roles: Roles
       sales_metric: sales metric
+      salor_configuration:
+        invoice_blurb: Invoice Blurb Header
+        invoice_blurb_footer: Invoice Blurb Footer
+        receipt_blurb: Receipt Blurb Header
+        receipt_blurb_footer: Receipt Blurb Footer
       salor_printer: Print Client Side
       scale: scale
       shipment:
@@ -162,6 +166,7 @@ en-CA:
       subtotal: subtotal
       tag: tag
       tax: tax
+      tax_free: Tax Free
       tax_profile_id: tax
       telephone: telephone
       the_receiver: the receiver
@@ -175,35 +180,19 @@ en-CA:
       username: username
       uses_drawer_id: Uses Drawer of
       value: value
+      vendor:
+        logo: Screen Logo
+        logo_invoice: Paper Invoice Logo
+        receipt_logo_footer: Receipt Logo Footer
+        receipt_logo_header: Receipt Logo Header
       vendor_id: Store
       vendor_printers: printers
       weigh_compulsory: compulsory weighing
       weight: weight
       when: when
-      width: width
-      invoice_note:
-        origin_country_id: Origin Country
-        destination_country_id: Destination Country
-        note_header: Note header
-        note_footer: Note footer
-        sale_type_id: Sale Type
-      internal_type: Type
       whento: When
-      roles: Roles
-      role_cache: Roles
-      full_name: Name
-      always_open_drawer: Always Open Drawer
-      require_password: Require Password
+      width: width
     models:
-      sale_type:
-        one: Sale Type
-        other: Sale Types
-      country:
-        one: Country
-        other: Countries
-      invoice_note:
-        one: Invoice Note
-        other: Invoice Notes
       action:
         one: Action
         other: Actions
@@ -216,6 +205,9 @@ en-CA:
       category:
         one: Category
         other: Categories
+      country:
+        one: Country
+        other: Countries
       customer:
         one: Customer
         other: Customers
@@ -231,15 +223,18 @@ en-CA:
       employee:
         one: Employee
         other: Employees
+      invoice_note:
+        one: Invoice Note
+        other: Invoice Notes
       item:
         one: Item
         other: Items
       item_type:
-        one: Item Type
-        other: Item Types
         coupon: Coupon
         gift_card: Gift Card
         normal: Normal
+        one: Item Type
+        other: Item Types
       location:
         one: Location
         other: Locations
@@ -247,19 +242,22 @@ en-CA:
         one: Order
         other: Orders
         proforma_orders: Proforma Invoices
-        unpaid_orders: Unpaid Invoices
-        quotes: Quotes
         quote: Quote
+        quotes: Quotes
+        unpaid_orders: Unpaid Invoices
       order_item:
         one: Order Item
         other: Order Items
       payment_method:
         one: Payment Method
         other: Payment Methods
+      sale_type:
+        one: Sale Type
+        other: Sale Types
       shipment:
+        default_name: Default Name
         one: Shipment
         other: Shipments
-        default_name: Default Name
       shipment_type:
         default_name: Default Name
         one: Shipment Type
@@ -284,13 +282,14 @@ en-CA:
         other: Stores
   api:
     user_does_not_exist: user does not exist
+  are_you_sure: Are you sure you want to do this?
   behavior_list:
     add: add
     assign: assign
+    discount_after_threshold: discount after threshold
     divide: divide
     multiply: multiply
     subtract: subtract
-    discount_after_threshold: discount after threshold
   cash_registers:
     end_of_day:
       cash_drawer: Cash Drawer
@@ -337,10 +336,10 @@ en-CA:
     shipment_items: shipment items
     shipment_types: shipment types
     shipments: shipments
+    signup: Signup for a 14 day free trial!
+    time_sheet: Employee Time Sheet
     update_location: update location
     update_real_quantity: update real quantity
-    time_sheet: Employee Time Sheet
-    signup: Signup for a 14 day free trial!
   helpers:
     select:
       prompt: please select
@@ -349,11 +348,11 @@ en-CA:
       clear: Clear
       complete_sale: Complete Sale
       create: Create
+      edit: Edit
       get_item: Get Item
       ok: Okay
       print: Print
       save: Save
-      edit: Edit
       submit: Submit
       update: Update
   home:
@@ -394,6 +393,8 @@ en-CA:
       title: Inventory Report
       total_buying_price: Sum Purchase Price
       total_selling_price: Sum Selling Price
+    selection:
+      print: Print
     show:
       from: from
       quantity_sold: Sold quantity
@@ -406,15 +407,8 @@ en-CA:
       update_quantity: Update inventory quantities
     upload:
       upload: upload
-    selection:
-      print: Print
   label: label
   menu:
-    documentation: Documentation
-    invoice_blurbs: Invoice Blurbs
-    edit_invoice_blurb: Edit Invoice Blurb
-    new_invoice_blurb: New Invoice Blurb
-    statistics: Statistics
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
@@ -440,18 +434,20 @@ en-CA:
     delete_confirm: Are you sure?
     destroy: destroy
     discounts: discounts
+    documentation: Documentation
     done: done
     download: download
     edit: Edit
-    edit_sale_type: Edit Sale type
-    edit_invoice_note: Edit Inovice Note
     edit_cash_register: Edit cash register
     edit_category: Edit category
     edit_customer: Edit customer
     edit_discount: Edit discount
     edit_employee: Edit employee
+    edit_invoice_blurb: Edit Invoice Blurb
+    edit_invoice_note: Edit Inovice Note
     edit_item: Edit item
     edit_location: Edit location
+    edit_sale_type: Edit Sale type
     edit_shipment: Edit shipment
     edit_shipment_type: Edit shipment type
     edit_shipper: Edit shipper %{name}
@@ -463,32 +459,37 @@ en-CA:
     general_configuration: general configuration
     home: home
     inventory_report: Inventory report
+    invoice_blurbs: Invoice Blurbs
     item_types: item types
     items: items
+    labels: Labels
     law_reports: Report Download
     locations: locations
     loyalty_cards: loyalty cards
+    merge_into_current_order: Merge into current order
     move_shipment_item: move shipment item
-    new_country: New Country
-    new_sale_type: New Sale Type
-    new_invoice_note: New Invoice Note
     new_action: New New Action
     new_broken_item: New Broken Item
     new_button: New Button
     new_cash_register: New cash register
     new_category: New category
+    new_country: New Country
     new_customer: New customer
     new_discount: New discount
     new_employee: New employee
+    new_invoice_blurb: New Invoice Blurb
+    new_invoice_note: New Invoice Note
     new_item: New item
     new_location: New location
     new_order: New
+    new_sale_type: New Sale Type
     new_shipment: New shipment
     new_shipment_type: New shipment type
     new_shipper: New shipper
     new_stock_location: New stock location
     new_tax_profile: New tax profile
     new_tender_method: New Payment Method
+    new_transaction_tag: New Transaction Tag
     new_vendor: New Store
     ok: OK
     order: order
@@ -497,8 +498,8 @@ en-CA:
     points: points
     pos: POS
     print: print
-    remote_service: Remote Service
     receipts: Receipts
+    remote_service: Remote Service
     reorder: reorder
     report: report
     report_day: report day
@@ -513,6 +514,7 @@ en-CA:
     shippers: shippers
     show: show
     split: split
+    statistics: Statistics
     stock_locations: stock locations
     support: support
     tax_profiles: tax profiles
@@ -526,14 +528,16 @@ en-CA:
     vendors: Stores
     void: void
     wholesaler_update: wholesaler update
-    labels: Labels
-    new_transaction_tag: New Transaction Tag
-    merge_into_current_order: Merge into current order
   notifications:
     shipments_item_could_not_be_saved: shipments item could not be saved
     shipments_move_all_items: all items were successfully moved
     shipments_move_item: item was successfully moved
   orders:
+    print:
+      delivery_note: Delivery note
+      invoice: Invoice
+      labels: Labels
+      print: Print-Dialog
     report:
       display: display
       end_date: end date
@@ -616,11 +620,6 @@ en-CA:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
-    print:
-      print: Print-Dialog
-      delivery_note: Delivery note
-      invoice: Invoice
-      labels: Labels
   printr:
     eod_report:
       None: Not named
@@ -629,6 +628,7 @@ en-CA:
       calculated_drawer_amount: Calculated drawer amount
       cash-refunds: Cash-Refunds
       cash_refunds_total: TOTAL
+      no_category: No Category
       noncash-refunds: Noncash-Refunds
       orders_total: Orders total
       payment_method_total: TOTAL
@@ -639,7 +639,6 @@ en-CA:
       sales: Sales
       system_drawer_amount: System drawer amount
       transaction_total: TOTAL
-      no_category: No Category
       warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You
         are advised to finish and start each day with a drawer amount of zero to ease
         accounting work. Make a cash payout accordingly and print this report again.
@@ -686,12 +685,12 @@ en-CA:
       payout: payout
       sold: sold
   receipts:
+    a_conto: on account
+    delivery_note: Delivery Note
     invoice: Invoice
+    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
     offer: Offer
     proforma_invoice: Proforma Invoice
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
-    delivery_note: Delivery Note
-    a_conto: on account
   reports:
     amount: amount
     description: description
@@ -709,6 +708,7 @@ en-CA:
     show:
       purchase_price_sum: Purchase price sum
   sticker: sticker
+  support: Support
   system:
     add_payment_method: add payment method
     complete_sale: Complete
@@ -788,13 +788,12 @@ en-CA:
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
   views:
-    listing_invoice_blurbs: Listing Invoice Blurbs
-    create_new_item: Create New Article
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: cash registers
     category_heading: category %{name} for %{store}
     change: change
+    create_new_item: Create New Article
     customers: customers
     download_may_last_long: This download may last long. Continue?
     dummy_item: dummy item
@@ -834,6 +833,7 @@ en-CA:
     item: item
     language: language
     listing: listing
+    listing_invoice_blurbs: Listing Invoice Blurbs
     listing_items: listing items
     locations: locations
     loyalty_card: loyalty card
@@ -879,6 +879,7 @@ en-CA:
       body: body
       bottom: bottom
       camera: camera
+      choose: choose
       continue: continue
       coupons: Coupons
       delete: delete
@@ -898,7 +899,6 @@ en-CA:
       to: to
       top: top
       waiting: waiting...
-      choose: choose
     sticky_ticket: Sticky label
     stock_locations: stock_locations
     subtotal: subtotal

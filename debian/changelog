@@ -1,3 +1,30 @@
+salor-retail (4.0.1.73) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Successful test suite for the ordering process
+  * Adding receipts display
+  * Added link to receipts
+  * testing
+
+  [ Michael Franzl ]
+  * fixed FileUpload API and updated apache configs for saas
+  * added wrapper function for new salor-bin API
+
+  [ Jim ]
+  * Update README.md
+
+  [ Jason Knight ]
+  * xxx
+  * Employee dts not showing up
+  * Maintain limit param across requests
+
+  [ Michael Franzl ]
+  * updated and sorted translations
+  * api of salor-bin has changed
+  * added a load file to prevent the white screen of annoyance at startup
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 24 May 2013 17:29:18 +0200
+
 salor-retail (4.0.1.72) unstable; urgency=low
 
   [ Jason Knight ]
