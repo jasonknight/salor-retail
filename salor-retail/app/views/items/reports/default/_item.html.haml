@@ -1,0 +1,25 @@
+%table{ :class => "item-report-entry",:width => '100%'}
+  %tr
+    %td{ :colspan => 3 }=link_to item.name,"/items/#{item.id}/edit", :target => "_blank"
+    %td{:align=>:right}=item.sku
+  %tr
+    %td
+      %label=I18n.t("activerecord.models.category.one")
+    %td=item.category.name rescue 'NoCat'
+    %td
+      %label=I18n.t("activerecord.models.location.one")
+    %td=item.location.name rescue 'NoLocation'
+  %tr
+    %td
+      %label=I18n.t("activerecord.attributes.quantity")
+    %td=item.quantity
+    %td
+      %label=I18n.t("activerecord.attributes.base_price")
+    %td=number_to_currency(item.base_price)
+  %tr
+    - b = Barcode.new
+    - path = b.create(item.sku)
+    %td{:align=>:center,:colspan=>4}=image_tag(path)
+  %tr
+    %td{:colspan => 4, :class => "small-text"}="ID:#{item.id}"
+    

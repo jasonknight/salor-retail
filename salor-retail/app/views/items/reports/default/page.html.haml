@@ -1,0 +1,22 @@
+= stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'invoice_default_print', :media => 'print'
+
+= raw content_box_top(t("views.items"))
+
+.tools
+  %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+.clear
+
+.paper-invoice.invoice_print
+  %h2 Inventory Report
+  %table{ :width => "100%"}
+    - @items.each do |item|
+      %tr
+        %td=render(:partial => "items/reports/#{@view}/item",:locals => {:item => item})
+      %tr
+        %td
+          %hr
+  
+  .center
+    %img.salorlogo{ :src => '/images/salor-logo-reports.png'}
+    
