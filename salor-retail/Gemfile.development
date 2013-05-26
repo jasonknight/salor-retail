@@ -28,6 +28,7 @@ gem 'escper', '1.1.8'
 gem 'kaminari', '0.14.1'
 
 
+
 # The following are only required in development
 
 gem 'i18n-js'
