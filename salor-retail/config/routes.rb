@@ -110,7 +110,6 @@ SalorRetail::Application.routes.draw do
   match "shipments/move_all_to_items" => "shipments#move_all_to_items"
   match "shipments/new_shipments" => "shipments#new_shipments"
   match "shipments/move_shipment_item" => "shipments#move_shipment_item"
-  match "home/load_clock" => "home#load_clock"
   match "home/backup_database" => "home#backup_database"
   match "home/errors_display" => "home#errors_display"
   match "home/backup_logfile" => "home#backup_logfile"

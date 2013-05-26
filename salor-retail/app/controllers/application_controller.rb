@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :workstation?, :mobile?
   protect_from_forgery
-  before_filter :loadup, :except => [:load_clock, :add_item_ajax, :login, :render_error]
+  before_filter :loadup, :except => [:add_item_ajax, :login, :render_error]
   before_filter :pre_load, :except => [:render_error]
   before_filter :setup_global_data, :except => [:login, :render_error]
   layout :layout_by_response
@@ -113,10 +113,6 @@ class ApplicationController < ActionController::Base
   def user_cache_name
     return salor_user.username if salor_signed_in?
     return 'loggedout'
-  end
-
-  def load_clock
-    render :layout => false
   end
 
   private

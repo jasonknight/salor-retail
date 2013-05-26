@@ -5,7 +5,7 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class HomeController < ApplicationController
-  before_filter :authify, :except => [:index, :load_clock, :remote_service, :connect_remote_service, :get_connection_status]
+  before_filter :authify, :except => [:index, :remote_service, :connect_remote_service, :get_connection_status]
   before_filter :initialize_instance_variables, :only => [:user_employee_index, :edit_owner, :update_owner, :remote_service, :connect_remote_service, :get_connection_status]
   before_filter :check_role, :only => [:edit_owner, :update_owner], :except => [:remote_service, :connect_remote_service, :get_connection_status]
   def errors_display
