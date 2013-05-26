@@ -1,12 +1,3 @@
-salor-retail (4.0.1.74) unstable; urgency=low
-
-  [ Jason Knight ]
-  * Adding in simple inventory report as requested by Customer
-
-  [ Jason Martin ]
-
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 25 May 2013 13:20:41 -0400
-
 salor-retail (4.0.1.73) unstable; urgency=low
 
   [ Jason Knight ]
