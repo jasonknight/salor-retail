@@ -427,7 +427,12 @@ class ItemsController < ApplicationController
       @skus = nil
     end
   end
-
+  def report
+    @items = $Vendor.items.includes(:location,:category).by_keywords
+    @view = SalorRetail::Application::CONFIGURATION[:reports][:style]
+    @view ||= 'default'
+    render "items/reports/#{@view}/page"
+  end
   private 
   def crumble
     @vendor = salor_user.get_vendor(salor_user.meta.vendor_id)

@@ -49,6 +49,10 @@ function wholesaler_update() {
           <a href='/items/upload'><%= salor_icon(:up,{},24) %></a><br /><span class='icon-caption'><%= I18n.t("menu.upload") %></span>
         </div>
         
+        <div class="tool-icon">
+          <a href='/items/report'><%= salor_icon(:report,{},24) %></a><br /><span class='icon-caption'><%= t('.inventory_report') %></span>
+        </div>
+        
         <div class="tool-icon" >
             <%= link_to salor_icon(:down,{},24),"/items/download?page=#{params[:page]}&keywords=#{params[:keywords]}&order_by=#{params[:order_by]}" %>
             
