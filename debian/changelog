@@ -1,3 +1,14 @@
+salor-retail (4.0.1.75) unstable; urgency=low
+
+  * build
+  * sid
+  * build
+  * sid
+  * build
+  * sid
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 14:25:44 -0400
+
 salor-retail (4.0.1.74) unstable; urgency=low
 
   [ Michael Franzl ]
@@ -13,8 +24,15 @@ salor-retail (4.0.1.74) unstable; urgency=low
   * removed clock
   * test
   * onload
+  * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 May 2013 14:04:57 +0200
+  [ Jason Martin ]
+  * build
+  * sid
+  * build
+  * sid
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 14:21:36 -0400
 
 salor-retail (4.0.1.73) unstable; urgency=low
 

@@ -1,3 +1,4 @@
+
 # Salor Retail
 
 Salor Retail is a Rails based Point of Sale system that is intended for
