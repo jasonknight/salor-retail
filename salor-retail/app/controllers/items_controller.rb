@@ -428,7 +428,7 @@ class ItemsController < ApplicationController
     end
   end
   def report
-    @items = $Vendor.items.includes(:location,:category).by_keywords
+    @items = $Vendor.items.includes(:location,:category).by_keywords.page(params[:page]).per(100)
     @view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     @view ||= 'default'
     render "items/reports/#{@view}/page"

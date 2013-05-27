@@ -16,6 +16,10 @@
       %tr
         %td
           %hr
+    %tr{:class=>'no-stripe'}
+      %td
+        %div.pagination
+          = paginate @items if @items
   
   .center
     %img.salorlogo{ :src => '/images/salor-logo-reports.png'}
