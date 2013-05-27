@@ -70,7 +70,7 @@ class Item < ActiveRecord::Base
     headers = Item.csv_headers if headers.nil?
     values = []
     headers.each do |h|
-      values << '"' + self.send(h) + '"'
+      values << '"' + self.send(h).to_s + '"'
     end
     return values.join("\t")
   end
