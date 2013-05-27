@@ -1,3 +1,15 @@
+salor-retail (4.0.1.77) unstable; urgency=low
+
+  [ Jason Knight ]
+  * trimming down stock report
+  * wrapping csv fields in quotes
+  * xxx
+  * Fixing errors and looknfeel of csv uploading
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 16:14:59 -0400
+
 salor-retail (4.0.1.76) unstable; urgency=low
 
   [ Jason Knight ]
