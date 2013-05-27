@@ -14,7 +14,9 @@ salor-retail (4.0.1.74) unstable; urgency=low
   * test
   * onload
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 May 2013 14:04:57 +0200
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 14:10:07 -0400
 
 salor-retail (4.0.1.73) unstable; urgency=low
 
