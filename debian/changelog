@@ -1,3 +1,26 @@
+salor-retail (4.0.1.74) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * cleaned youhavetopay
+
+  [ Jason Knight ]
+  * Adding in simple inventory report as requested by Customer
+
+  [ Jason Martin ]
+  * build
+
+  [ Michael Franzl ]
+  * removed clock
+  * test
+  * onload
+  * build
+
+  [ Jason Martin ]
+  * build
+  * sid
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 14:13:33 -0400
+
 salor-retail (4.0.1.73) unstable; urgency=low
 
   [ Jason Knight ]
