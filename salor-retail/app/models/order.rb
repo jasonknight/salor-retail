@@ -524,7 +524,9 @@ class Order < ActiveRecord::Base
     self.paid = 1
     # We need to save now and reload!
     self.save
+    log_action "Saved"
     self.reload
+    log_action "Reloaded"
     self.created_at = Time.now
     self.drawer_id = $User.get_drawer.id
     if self.is_quote then
@@ -586,23 +588,30 @@ class Order < ActiveRecord::Base
     #  log_action $!.to_s
     #  #puts $!.to_s
     #end
-    #log_action "Ending complete order. Drawer amount is: #{$User.get_drawer.amount}"
+    log_action "Ending complete order. Drawer amount is: #{$User.get_drawer.amount}"
     self.save
   end
   def activate_gift_cards
+    log_action "Activating giftcards"
     self.gift_cards.each do |gc|
       if gc.item.activated then
+        log_action "GC Already Activated, updating"
         gc.item.amount_remaining -= gc.price
         gc.item.amount_remaining = 0 if gc.item.amount_remaining < 0
         gc.item.save
+        log_action "gc_saved"
       else
+        log_action "Updating GC to Activated"
         gc.item.update_attribute(:activated,true)
         gc.item.update_attribute(:amount_remaining, gc.item.base_price)
       end
     end
   end
   def get_drawer_add
-    return 0 if self.is_quote or self.unpaid_invoice
+    if self.is_quote or self.unpaid_invoice then
+      log_action "Returning 0 because it's a quote #{self.is_quote} or unpaid invoice #{self.unpaid_invoic}"
+      return 0 
+    end
     return self.payment_methods.reload.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true
     
     ottl = self.total
@@ -664,40 +673,50 @@ class Order < ActiveRecord::Base
       dt.drop = false
       dt.amount *= -1
     end
-    if dt.save then
-      if dt.payout then
-        if ($User.get_drawer.amount - dt.amount) < 0 or $User.get_drawer.amount < 0 then
-          History.record("PayoutDrawerInsufficient",self,1,"Order::create_drawer_transaction:payout")
-        else
-          History.record("PayoutDrawerSufficient",self,1,"Order::create_drawer_transaction:drop")
-        end
-        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount - dt.amount)
-      elsif dt.drop then
-        if ($User.get_drawer.amount + dt.amount) < 0 then
-          History.record("DropDrawerInsufficient",self,1,"Order::create_drawer_transaction:drop")
-        else
-          History.record("DropDrawerSufficient",self,1,"Order::create_drawer_transaction:drop")
-        end
-        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
-      end
-      $User.reload
-      # History
-      History.direct("Order::create_drawer_transaction",self,{:amount => amount, :type => type, :opts => opts, :drawer_transaction_id => dt.id},"","");
-      #end history
+     sql = %Q[
+      INSERT INTO `drawer_transactions` 
+        (`drawer_id`, `amount`, `drop`, `payout`, `drawer_amount`, `order_id`, `created_at`,`tag`)
+      VALUES
+        ( '#{dt.drawer_id}',
+          '#{dt.amount}',
+          #{dt.drop ? 'TRUE' : 'FALSE'},
+          #{dt.payout ? 'TRUE' : 'FALSE'},
+          '#{dt.drawer_amount}',
+          '#{dt.order_id}',
+          '#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}',
+          '#{opts[:tag]}'
+        );
+    ]
+    
+    log_action "sql: #{sql}"
+    DrawerTransaction.connection.execute(sql)
+    if dt.payout then
+      $User.get_drawer.update_attribute(:amount, $User.get_drawer.amount - dt.amount)
+      log_action "updated drawer_amount for payout"
+    elsif dt.drop then
+      $User.get_drawer.update_attribute(:amount, $User.get_drawer.amount + dt.amount)
+      log_action "updated drawer_amount for drop"
     end
+    $User.reload
+    log_action "creating drawer transaction complete"
+    History.direct("Order::create_drawer_transaction",self,{:amount => amount, :type => type, :opts => opts, :drawer_transaction_id => dt.id},"","");
   end
     
   #
   def create_refund_payment_method(amount, refund_payment_method)
-    PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
+    pm = PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
                          :name => (refund_payment_method + 'Refund'), 
                          :amount => - amount, 
                          :order_id => self.id
     ) # end of PaymentMethod.create
+    log_action "Created payment method: #{pm.inspect}"
+    return pm
   end
 
   def toggle_refund(x, refund_payment_method)
+    log_action "toggle_refund called"
     if not $User.get_drawer.amount >= self.total then
+      log_action "Not enough in drawer"
       GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
       return
     end
@@ -706,7 +725,9 @@ class Order < ActiveRecord::Base
       #self.update_attribute(:refunded, false)
       #create_drawer_transaction(self.total,:drop)
     else
-      return if ($User.get_drawer.amount - self.total) < 0
+      if ($User.get_drawer.amount - self.total) < 0 then
+        log_action "drawer amount - total < 0"
+      end
 
       self.update_attribute(:refunded, true)
       self.update_attribute(:refunded_by, $User.id)
@@ -714,8 +735,10 @@ class Order < ActiveRecord::Base
       if refund_payment_method == 'InCash'
         opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
         create_drawer_transaction(self.total, :payout, opts)
+        log_action "InCash refund created"
       else
         create_refund_payment_method(self.total, refund_payment_method)
+        log_action "created dt for payment method #{payment_method}"
       end
       self.order_items.visible.each do |oi|
         if not oi.refunded == true then
@@ -731,6 +754,7 @@ class Order < ActiveRecord::Base
       t = t + oi.total
     end
     t -= self.calculate_rebate
+    log_action "Returning refund_total of #{t}"
     return t
   end
 
@@ -771,13 +795,14 @@ class Order < ActiveRecord::Base
   # to make it easier to fix as there were some errors.
   def payment_method_sums
     sums = Hash.new
-      self.payment_methods.each do |pm|
-        s = pm.internal_type.to_sym
-        next if s.nil?
-        sums[s] = 0 if sums[s].nil?
-        pm.amount = 0 if pm.amount.nil?
-        sums[s] += pm.amount
-      end
+    self.payment_methods.each do |pm|
+      s = pm.internal_type.to_sym
+      next if s.nil?
+      sums[s] = 0 if sums[s].nil?
+      pm.amount = 0 if pm.amount.nil?
+      sums[s] += pm.amount
+    end
+    log_action "payment_method_sums #{sums.inspect}"
     return sums
   end
 

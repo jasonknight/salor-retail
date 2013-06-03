@@ -126,14 +126,7 @@ module SalorBase
     SalorBase.log_action(self.class.to_s,txt)
   end
   def self.log_action(from="unk",txt)
-    return if not File.exists? "#{::Rails.root.to_s}/log/#{Rails.env}-history.log"
-    begin
-      File.open("#{::Rails.root.to_s}/log/#{Rails.env}-history.log","a") do |f|
-        f.write "[#{Time.now}] [FROM: #{from}] " + txt + "\n"
-      end
-    rescue
-      return
-    end
+   ActiveRecord::Base.logger.info "[#{from}] #{txt}"
   end
   def self.string_to_float(str)
     return str if str.class == Float or str.class == Fixnum

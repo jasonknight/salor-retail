@@ -419,6 +419,7 @@ class OrdersController < ApplicationController
   end
   def complete_order_ajax
     @order = initialize_order
+    SalorBase.log_action("OrdersController","complete_order_ajax order initialized")
     History.record("initialized order for complete",@order,5)
     render :status => 401 and return if not_my_vendor?(@order)
     if params[:employee_id] and params[:employee_id] != $User.id then
@@ -428,6 +429,10 @@ class OrdersController < ApplicationController
         History.record("swapped user #{$User.id} with #{tmp_user.id}",@order,3)
         $User = tmp_user
         @order.update_attribute :employee_id, $User.id
+        SalorBase.log_action("OrdersController","tmp_user swapped")
+      else
+        SalorBase.log_action("OrdersController","tmp_user does not belong to this store")
+        render :js => "alert('InCorrectUser');"
       end
     end
     @old_order = @order;
@@ -438,7 +443,8 @@ class OrdersController < ApplicationController
     # in javascript if an order is completable or not.
     
     if not @order.order_items.visible.any? then  
-      History.record("No visible items on order",@order,5);   
+      History.record("No visible items on order",@order,5);  
+      SalorBase.log_action("OrdersController","no visible items on this order") 
       render :js => "complete_order_hide();/*No visible order items*/ " and return
     end
     
@@ -447,6 +453,7 @@ class OrdersController < ApplicationController
     #  GlobalErrors.append_fatal("system.errors.must_cash_drop")
     #end
     @order.payment_methods.delete_all
+    SalorBase.log_action("OrdersController","payment methods on order removed")
     if @order.total > 0 or @order.order_items.visible.any? and not GlobalErrors.any_fatal? then
       payment_methods_array = [] # We need to do some checks on the payment
       # methods, so we put them into an array before saving them and the order
@@ -493,12 +500,14 @@ class OrdersController < ApplicationController
         log_action "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
         History.record("Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}",@order,5);
         $Notice = "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
+        SalorBase.log_action("OrdersController","Failed sanity_check")
         # update_pos_display should update the interface to show
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return
       else
         payment_methods_array.each {|pm| pm.save} # otherwise, we save them
       end
+      SalorBase.log_action("OrdersController","payment_methods saved")
       if @order.is_proforma == true then
         History.record("Order is proforma, completing",@order,5)
         @order.complete
@@ -507,6 +516,7 @@ class OrdersController < ApplicationController
       params[:print].nil? ? print = 'true' : print = params[:print].to_s
       # Receipt printing moved into Order.rb, line 497
       @order.complete
+      SalorBase.log_action("OrdersController","@order.complete called")
       atomize(ISDIR, 'cash_drop')
       $User.meta.order_id = nil
       @order = $User.get_new_order
