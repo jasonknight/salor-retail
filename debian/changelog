@@ -1,3 +1,12 @@
+salor-retail (4.0.1.81) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Added telephone/cellphone tracking for employees
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 04 Jun 2013 17:24:31 -0400
+
 salor-retail (4.0.1.80) unstable; urgency=low
 
   [ Jason Knight ]
