@@ -150,7 +150,7 @@ class Vendor < ActiveRecord::Base
     CashRegister.update_all :require_password => false
   end
   def self.debug_setup
-    i = 100
+    i = 110
     text = ""
     Employee.all.each do |e|
       e.update_attribute :password, i.to_s

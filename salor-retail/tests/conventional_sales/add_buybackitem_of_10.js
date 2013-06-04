@@ -1,7 +1,7 @@
 env.modules.AddBuyback10 = function () {
   var self = this;
   this.state = 0;
-  this.interval = 1200;
+  this.interval = 500;
   this.interval_id = null;
   this.next_func = null;
   this.tries = 0;
@@ -46,6 +46,7 @@ env.modules.AddBuyback10 = function () {
         if (first_item.isVisible == true) {
           print(dump(first_item));
           self.view.mouseDown(first_item);
+          self.view.click(first_item);
           self.state++;
           self.tries = 0;
         } else {
@@ -67,6 +68,11 @@ env.modules.AddBuyback10 = function () {
             self.tries = 0;
             self.state++;
           } else {
+            var items = self.view.getElements(".pos-item-name");
+            var first_item = items["0"];
+            print( dump(first_item) );
+            self.view.mouseDown(first_item);
+            self.view.click(first_item);
             self.tries++;
             if (self.tries > 4) {
               fatal("item menu div never showed up");

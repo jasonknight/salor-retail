@@ -26,8 +26,10 @@ env.modules.CheckDrawerCalculator = function () {
       case 1:
         if (self.view.ready()) {
           var total = self.view.getContentOfElement("#eod-drawer-total");
+         
           if (total.indexOf("167.00") == -1) {
             fail("eod drawer total did not contain 167.00");
+            print( dump(total) );
           }
           self.state++;
         }

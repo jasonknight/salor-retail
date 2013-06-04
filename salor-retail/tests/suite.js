@@ -98,32 +98,7 @@ login.run(url).next(function () {
                           cash_payout.run("").next(function () {
                             check_detail_report.run("").next(function () {
                             
-                                // Test with taxes
-                                var Conf = 'xxx';
-                                get_vendor_config.run(url + "/vendors/get_configuration").next(
-                                  function () {
-                                    Conf = this.cnf;
-                                    if (Conf.calculate_tax) {
-                                      print("Taxes are to be calculated");
-                                      run_with_taxes();
-                                    } else {
-                                      print("Need to turn on tax calculation");
-                                      print(url + "/vendors/edit_field_on_child?id=" + Conf.id + "&klass=SalorConfiguration&field=calculate_tax&value=1");
-                                      set_calc_tax.run(url + "/vendors/edit_field_on_child?id=" + Conf.id + "&klass=SalorConfiguration&field=calculate_tax&value=1").next(function () {
-                                        get_vendor_config.run(url + "/vendors/get_configuration").next(function () {
-                                          Conf = this.cnf;
-                                          if (Conf.calculate_tax) {
-                                            print("Successfully changed calculate tax");
-                                            run_with_taxes();
-                                          } else {
-                                            fail("Could not update configuration");
-                                          }
-                                        });
-                                      });
-                                    }
-                                  }
-                                ); // get_vendor_config
-                                // End test with taxes
+                                env.report();
                                 
                             }); //check_detail_report
                           }); //cash_payout

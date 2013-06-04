@@ -1,7 +1,7 @@
 env.modules.ChooseRegister = function () {
   var self = this;
   this.state = 0;
-  this.interval = 1200; // make sure this allows enough time between steps. Otherwise
+  this.interval = 800; // make sure this allows enough time between steps. Otherwise
                         // we will have to make checks to ensure readyness
   this.interval_id = null;
   this.view = null;

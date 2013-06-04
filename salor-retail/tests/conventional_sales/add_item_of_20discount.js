@@ -1,7 +1,7 @@
 env.modules.Add20Discount= function () {
   var self = this;
   this.state = 0;
-  this.interval = 1200;
+  this.interval = 800;
   this.interval_id = null;
   this.next_func = null;
   this.tries = 0;
