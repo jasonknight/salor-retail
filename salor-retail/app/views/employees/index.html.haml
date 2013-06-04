@@ -1,3 +1,3 @@
 =raw content_box_top(t "menu.employees")
 - width ||= "90%"
-= render :partial => 'shared/list_view', :locals => {  :klass => Employee, :width => '60%',:collection => @employees, :columns => [:first_name,:last_name,:username,:role_cache]}
+= render :partial => 'shared/list_view', :locals => {  :klass => Employee, :width => '60%',:collection => @employees, :columns => [:username,:cellphone,:telephone,:role_cache]}

@@ -50,8 +50,26 @@
               
               <div class="freefield"><%= f.label t("activerecord.models.vendor.one") %><br />
               <%= f.collection_select :vendor_id, Vendor.where(:user_id => $User.user_id),:id,:name%></div>
+              
+              <div class="freefield"><%= f.label t("activerecord.attributes.telephone") %><br />
+              <%= f.text_field :telephone, :class => "keyboardable"%></div>
+              
+              <div class="freefield"><%= f.label t("activerecord.attributes.cellphone") %><br />
+              <%= f.text_field :cellphone, :class => "keyboardable"%></div>
+              
+              
             </td>
         </tr>
+      </table>
+      <table align="center" width="80%">
+        <tr>
+          <td>
+              <div >
+                <%= f.label t("activerecord.attributes.address") %><br />
+                <%= f.text_area :address, :class => "keyboardable", :rows => 4, :cols => 40, :style => 'width: 400px;'%>
+              </div>
+            </td>
+          </tr>
       </table>
       <div class="actions">
           <%= f.submit %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422091852) do
+ActiveRecord::Schema.define(:version => 20130604211039) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -301,6 +301,9 @@ ActiveRecord::Schema.define(:version => 20130422091852) do
     t.string   "last_path",                             :default => "/cash_registers"
     t.string   "role_cache"
     t.float    "hourly_rate"
+    t.string   "telephone"
+    t.string   "cellphone"
+    t.text     "address"
   end
 
   add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
