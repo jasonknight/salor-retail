@@ -1,3 +1,12 @@
+salor-retail (4.0.1.82) unstable; urgency=low
+
+  [ Jason Knight ]
+  * fixing for salor-bin the old version
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 10 Jun 2013 07:07:10 -0400
+
 salor-retail (4.0.1.81) unstable; urgency=low
 
   [ Jason Knight ]
