@@ -1,8 +1,9 @@
 salor-retail (4.0.1.85) unstable; urgency=low
 
   * switched back to gksu instead of gksudo.
+  * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 21:48:45 +0200
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 21:59:35 +0200
 
 salor-retail (4.0.1.84) unstable; urgency=low
 
