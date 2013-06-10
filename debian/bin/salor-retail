@@ -2,7 +2,7 @@
 
 if [ -e /usr/bin/salor-bin ]; then
   echo "Loading salor-bin. Please wait..."
-  gksudo "/usr/bin/salor-bin -u http://default.sr.localhost/onload.html"
+  gksu "/usr/bin/salor-bin -u http://default.sr.localhost/onload.html"
 
 elif [ -e /usr/bin/chromium-browser ]; then
   echo "Loading Chromium in Kiosk mode. Please wait..."
@@ -13,3 +13,5 @@ elif [ -e /usr/bin/firefox ]; then
   firefox http://default.sr.localhost/onload.html
 
 fi
+
+sleep 2
