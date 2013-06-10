@@ -111,7 +111,7 @@ function inArray(needle, haystack) {
 }
 
 function echo(str) {
-  if (typeof Salor != 'undefined') {
+  if (typeof Salor != 'undefined' && typeof Salor.echo != 'undefined' ) {
     Salor.echo(str);
   } else if (typeof console != 'undefined') {
     //console.log(str);
