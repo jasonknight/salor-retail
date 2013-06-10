@@ -1,3 +1,9 @@
+salor-retail (4.0.1.84) unstable; urgency=low
+
+  * added printer feedback since epson doesnt work with the old salor-bin method
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 14:10:33 +0200
+
 salor-retail (4.0.1.83) unstable; urgency=low
 
   * fix for old salor-bin
