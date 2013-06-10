@@ -184,7 +184,7 @@ class VendorsController < ApplicationController
     render :nothing => true
   end
   def render_open_cashdrawer
-    render :text => "\x1B\x70\x00\x30\x01 "
+    render :text => "\x1D\x61\x01" + "\x1B\x70\x00\x30\x01 "
   end
 
   def render_drawer_transaction_receipt
