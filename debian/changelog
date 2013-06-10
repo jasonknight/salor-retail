@@ -1,3 +1,9 @@
+salor-retail (4.0.1.83) unstable; urgency=low
+
+  * fix for old salor-bin
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 13:26:13 +0200
+
 salor-retail (4.0.1.82) unstable; urgency=low
 
   [ Jason Knight ]
