@@ -1,3 +1,9 @@
+salor-retail (4.0.1.86) unstable; urgency=low
+
+  * sudo is the only thing that works
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 22:21:09 +0200
+
 salor-retail (4.0.1.85) unstable; urgency=low
 
   * switched back to gksu instead of gksudo.
