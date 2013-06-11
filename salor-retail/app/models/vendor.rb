@@ -10,7 +10,7 @@ class Vendor < ActiveRecord::Base
   include SalorScope
   include SalorModel
   belongs_to :user
-  has_one :salor_configuration
+  has_one  :salor_configuration
   has_many :orders
   has_many :categories
   has_many :items
