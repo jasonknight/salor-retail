@@ -1,3 +1,37 @@
+salor-retail (4.0.1.86) unstable; urgency=low
+
+  * sudo is the only thing that works
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 22:21:09 +0200
+
+salor-retail (4.0.1.85) unstable; urgency=low
+
+  * switched back to gksu instead of gksudo.
+  * build
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 21:59:35 +0200
+
+salor-retail (4.0.1.84) unstable; urgency=low
+
+  * added printer feedback since epson doesnt work with the old salor-bin method
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 14:10:33 +0200
+
+salor-retail (4.0.1.83) unstable; urgency=low
+
+  * fix for old salor-bin
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 13:26:13 +0200
+
+salor-retail (4.0.1.82) unstable; urgency=low
+
+  [ Jason Knight ]
+  * fixing for salor-bin the old version
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 10 Jun 2013 07:07:10 -0400
+
 salor-retail (4.0.1.81) unstable; urgency=low
 
   [ Jason Knight ]

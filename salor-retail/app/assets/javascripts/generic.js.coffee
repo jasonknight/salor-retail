@@ -24,6 +24,9 @@ window.quick_open_drawer = () ->
   if Register.cash_drawer_path != ''
     if typeof Salor != 'undefined'
       Salor.stopDrawerObserver(Register.cash_drawer_path)
-      setTimeout("Salor.newOpenCashDrawer(Register.cash_drawer_path);",150);
+      if Register.salor_printer == true
+        setTimeout("Salor.newOpenCashDrawer(Register.cash_drawer_path);",150);
+      else
+        $.get('/vendors/open_cash_drawer')
     else
       $.get('/vendors/open_cash_drawer')

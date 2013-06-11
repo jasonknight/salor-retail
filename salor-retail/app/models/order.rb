@@ -1355,7 +1355,8 @@ class Order < ActiveRecord::Base
         "\n" +
         footerlogo +
         "\n\n\n\n\n\n" + 
-        "\x1D\x56\x00" 
+        "\x1D\x56\x00" +
+        "\x1D\x61\x01"
     return { :text => output_text, :raw_insertations => raw_insertations }
   end
   
