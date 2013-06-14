@@ -373,9 +373,9 @@ class ItemsController < ApplicationController
       next if parts[0].nil?
       
       if parts[0].include? 'http://' or parts[0].include? 'https://' then
-        file = get_url(parts[0])
+        file = get_url(parts[0],parts[3],parts[4])
       else
-        file = get_url($Conf.csv_imports_url + "/" + parts[0])
+        file = get_url($Conf.csv_imports_url + "/" + parts[0],parts[3],parts[4])
       end
       
       if parts[1].include? "dist*" then

@@ -21,11 +21,14 @@ class ApplicationController < ActionController::Base
   unless SalorRetail::Application.config.consider_all_requests_local
     rescue_from Exception, :with => :render_error
   end 
-  def get_url(url)
+  def get_url(url, user=nil, pass=nil)
     uri = URI.parse(url)
     
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
+    if user and pass then
+      request.basic_auth(user,pass)
+    end
     
     response = http.request(request)
     return response
