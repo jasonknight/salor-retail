@@ -609,7 +609,7 @@ class Order < ActiveRecord::Base
   end
   def get_drawer_add
     if self.is_quote or self.unpaid_invoice then
-      log_action "Returning 0 because it's a quote #{self.is_quote} or unpaid invoice #{self.unpaid_invoic}"
+      log_action "Returning 0 because it's a quote #{self.is_quote} or unpaid invoice #{self.unpaid_invoice}"
       return 0 
     end
     return self.payment_methods.reload.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true

@@ -8,6 +8,13 @@ class Receipt < ActiveRecord::Base
   belongs_to :employee
   belongs_to :vendor
   belongs_to :order
+  before_save :set_vendor_id
+  
+  def set_vendor_id
+    if $Vendor then
+      self.vendor_id = $Vendor.id
+    end
+  end
   def to_html
     i = 0
     html = ''
@@ -15,9 +22,11 @@ class Receipt < ActiveRecord::Base
     center = false
     h1 = false
     bold = false
+    the_content = self.content.to_s.encode("UTF-8", {:invalid => :replace, :replace => '', :undef => :replace})
+    puts "Receipt content is: [[ #{the_content} ]]"
     begin
-      if self.content[i] == "\e" then
-        b1,b2,b3 = [self.content[i+1],self.content[i+2],self.content[i+3]]
+      if the_content[i] == "\e" then
+        b1,b2,b3 = [the_content[i+1],the_content[i+2],the_content[i+3]]
         puts "0x#{b1.unpack('H*')[0]} + 0x#{b2.unpack('H*')[0]}"
         if b1 == "!" and b2 == "\x18" then
           i += 1
@@ -75,26 +84,27 @@ class Receipt < ActiveRecord::Base
           i += 1
         end
         puts "-----"
-      elsif self.content[i] == "\n" then
+      elsif the_content[i] == "\n" then
         if h1 then
           html += "</h1>"
           h1 = false
         end
         html += "</br>"
-      elsif self.content[i] == "?" then
+      elsif the_content[i] == "?" then
         if h1 then
           html += "</h1>"
           h1 = false
         end
         html += '-'
-      elsif self.content[i] == " " then
+      elsif the_content[i] == " " then
         html += "&nbsp;"
       else
-        html += self.content[i] 
+        html += the_content[i] 
+        
       end
       i += 1
       
-    end while i < self.content.length
+    end while i < the_content.length
     return html
   end
 end
