@@ -142,8 +142,6 @@ class VendorsController < ApplicationController
          @drawer_transaction.amount *= -1
          @drawer_transaction.drop = false
          @drawer_transaction.payout = true
-      elsif @drawer_transaction.amount > 15000.00 then
-        render :nothing => true and return
       end
       if params[:employee_id] then
         if params[:employee_id] == 'self' then
