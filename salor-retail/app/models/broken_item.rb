@@ -13,7 +13,7 @@ class BrokenItem < ActiveRecord::Base
   belongs_to :shipper
   after_create :decrement_item_quantity
   def decrement_item_quantity
-    if not self.is_shipment_item then
+    if item and not self.is_shipment_item then
       item = Item.scopied.find_by_sku self.sku
       item.quantity -= self.quantity
       item.save
