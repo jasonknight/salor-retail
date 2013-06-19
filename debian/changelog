@@ -1,3 +1,12 @@
+salor-retail (4.0.1.90) unstable; urgency=low
+
+  [ Jason Knight ]
+  * added more logging
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Wed, 19 Jun 2013 08:08:49 -0400
+
 salor-retail (4.0.1.89) unstable; urgency=low
 
   [ Jason Knight ]
