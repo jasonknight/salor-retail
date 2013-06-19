@@ -730,29 +730,48 @@ class OrderItem < ActiveRecord::Base
   end
   def update_quantity_sold
     log_action("Updating quantity sold")
-    return if self.order.is_proforma == true
+    if self.order.is_proforma == true
+      log_action "Returning because order is_proforma"
+      return
+    end
     the_item = self.item
+    log_action "the_item id is #{the_item.id}"
     if the_item.category then
+      log_action "Updating category #{the_item.category.id}"
       the_item.category.update_attribute(:quantity_sold, the_item.category.quantity_sold + self.quantity)
+      log_action "Updating category #{the_item.category.id} complete"
     end
     if the_item.location then
+      log_action "Updating location #{the_item.location.id}"
       the_item.location.update_attribute(:quantity_sold,the_item.location.quantity_sold + self.quantity)
+      log_action "Updating location #{the_item.location.id} complete"
     end
     if the_item.item_stocks.any? then
+      log_action "Updating item_stocks"
       stock = the_item.item_stocks.first
       stock.update_attribute :location_quantity, stock.location_quantity - self.quantity
+      log_action "ItemStocks updated"
     end
   end
   def update_cash_made
-    return if self.order.is_proforma == true
+    log_action "Updating cash_made"
+    if self.order.is_proforma == true
+      log_action "Returning from cash_made because order is_proforma"
+      return
+    end
     the_item = self.item
+    log_action "the_item id is #{the_item.id}"
     if the_item.category then
       the_item.category.cash_made ||= 0.0
+      log_action "Updating category #{the_item.category.id}"
       the_item.category.update_attribute(:cash_made, the_item.category.cash_made + self.total)
+      log_action "Updating category #{the_item.category.id} complete"
     end
     if the_item.location then
       the_item.location ||= 0.0
+      log_action "Updating location #{the_item.location.id}"
       the_item.location.update_attribute(:cash_made, the_item.location.cash_made + self.total)
+      log_action "Updating location #{the_item.location.id} complete"
     end
   end
   def recover_item

@@ -541,7 +541,9 @@ class Order < ActiveRecord::Base
         # These methods are defined on OrderItem model.
         oi.set_sold
         oi.update_quantity_sold
+        log_action "quantity sold updated"
         oi.update_cash_made
+        log_action "cash_made updated"
       end
       log_action "Updating Category Gift Cards"
       activate_gift_cards
