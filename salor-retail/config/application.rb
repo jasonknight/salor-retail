@@ -27,6 +27,16 @@ module SalorRetail
     else
       SR_DEBIAN_SITEID = 'none'
     end
+    if File.exists? '/etc/redhat-release' then
+      SR_DEPLOY = 'REDHAT'
+      OS_RELEASE = `cat /etc/redhat-release`
+    elsif File.exists? '/etc/debian_version' then
+      SR_DEPLOY = 'DEBIAN'
+      OS_RELEASE = `cat /etc/debian_version`
+    elsif File.exists? '/mach_kernel' then
+      SR_DEPLOY = 'MAC'
+      OS_RELEASE = `uname -r`
+    end
     
     puts "Using database set by environment variable SR_DEBIAN_SITEID (#{SR_DEBIAN_SITEID})"
     
