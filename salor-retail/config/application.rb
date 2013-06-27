@@ -20,6 +20,15 @@ if defined?(Bundler)
 end
 
 module SalorRetail
+  
+  mattr_accessor :tailor
+  mattr_accessor :old_tailors
+  mattr_accessor :requestcount
+  
+  @@tailor = nil
+  @@old_tailors = []
+  @@requestcount = 0
+  
   class Application < Rails::Application
     
     if ENV['SR_DEBIAN_SITEID']

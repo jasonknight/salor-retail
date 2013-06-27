@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   before_filter :loadup, :except => [:add_item_ajax, :login, :render_error]
   before_filter :pre_load, :except => [:render_error]
   before_filter :setup_global_data, :except => [:login, :render_error]
+  before_filter :set_tailor
   layout :layout_by_response
   helper_method [:user_cache_name]
 
@@ -96,19 +97,16 @@ class ApplicationController < ActionController::Base
   end
 
   def salor_user
-    #logger.info "XXX session[:user_id] is #{ session[:user_id] }"
-    #logger.info "XXX session[:user_type] is #{ session[:user_type] }"
     $User = nil
     if session[:user_id] then
       if session[:user_type] == "User" then
-        user= User.find_by_id(session[:user_id].to_i)
+        user = User.find_by_id(session[:user_id])
       else
-        user= Employee.find_by_id(session[:user_id])
-        $Vendor = user.vendor if user #Because Global State is maintained across requests.
-        Time.zone = $Vendor.time_zone if $Vendor and not $Vendor.time_zone.nil?
-        $User = user
+        @current_user = user = $User = Employee.find_by_id(session[:user_id])
+        @current_vendor = $Vendor = user.vendor if user
+        Time.zone = $Vendor.time_zone if @current_vendor and not @current_vendor.time_zone.nil?
       end
-      return user
+      return @current_user
     end
     return nil
   end
@@ -119,9 +117,11 @@ class ApplicationController < ActionController::Base
   end
 
   private
+  
   def allowed_klasses
     ['SalorConfiguration','EmployeeLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem']
   end
+  
   def initialize_instance_variables
     if params[:vendor_id] and not params[:vendor_id].blank? then
       salor_user.meta.update_attribute(:vendor_id,params[:vendor_id])
@@ -170,15 +170,11 @@ class ApplicationController < ActionController::Base
   
   def loadup
     $Notice = ""
-    SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
+    
     GlobalData.refresh # Because classes are cached across requests
-    Job.run # Cron jobs for the application
     GlobalData.base_locale = AppConfig.base_locale
     I18n.locale = AppConfig.locale
     
-    if params[:license_accepted].to_s == "true" then
-      Vendor.first.salor_configuration.update_attribute :license_accepted, true
-    end
     if salor_signed_in? and salor_user then
       I18n.locale = salor_user.language
       #raise I18n.locale.to_s + salor_user.inspect
@@ -192,9 +188,42 @@ class ApplicationController < ActionController::Base
     end
     I18n.locale = params[:locale] if params[:locale]
     add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
-    @page_title = "Salor"
-    @page_title_options = {}
   end
+  
+    def set_tailor
+      return unless @current_vendor and SalorRetail::Application::CONFIGURATION[:tailor] and SalorRetail::Application::CONFIGURATION[:tailor] == true
+    
+      t = SalorRetail.tailor
+      if t
+        #logger.info "[TAILOR] Checking if socket #{ t.inspect } is healthy"
+        begin
+          t.puts "PING|#{ @current_vendor.hash_id }|#{ Process.pid }"
+        rescue Errno::EPIPE
+          logger.info "[TAILOR] Error: Broken pipe for #{ t.inspect } #{ t }"
+          SalorRetail.old_tailors << t
+          t = nil
+        rescue Errno::ECONNRESET
+          logger.info "[TAILOR] Error: Connection reset by peer for #{ t.inspect } #{ t }"
+          SalorRetail.old_tailors << t
+          t = nil
+        rescue Exception => e
+          logger.info "[TAILOR] Other Error: #{ e.inspect } for #{ t.inspect } #{ t }"
+          SalorRetail.old_tailors << t
+          t = nil
+        end
+      end
+      
+      if t.nil?
+        begin
+          t = TCPSocket.new 'localhost', 2001
+          logger.info "[TAILOR] Info: New TCPSocket #{ t.inspect } #{ t } created"
+        rescue Errno::ECONNREFUSED
+          t = nil
+          logger.info "[TAILOR] Warning: Connection refused. No tailor.rb server running?"
+        end
+        SalorRetail.tailor = t
+      end
+    end
 
   protected
 

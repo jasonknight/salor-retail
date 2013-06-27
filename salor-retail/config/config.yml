@@ -72,6 +72,6 @@ mail:
   port: 110
   user_name: None
   password: None
-  
+:tailor: true
   
   
