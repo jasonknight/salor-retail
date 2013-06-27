@@ -14,7 +14,7 @@
          >
     <%= image_tag('/images/icons/' + icon(:order,32)) %><br />
     <span class="id">
-      <%= order.tag.empty? ? order.get_owner.username : order.tag %>
+      <%= order.tag.nil? or order.tag.empty? ? order.get_owner.username : order.tag %>
     </span>
     <br />
     <span><%= order.customer.full_name if order.customer %></span>

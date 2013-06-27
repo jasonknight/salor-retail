@@ -276,6 +276,8 @@ class VendorsController < ApplicationController
       o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value]) if o
       render :nothing => true and return
     end
+    
+    
     if allowed_klasses.include? params[:klass] or $User.is_technician?
 #        puts  "### Class is allowed"
       kls = Kernel.const_get(params[:klass])
@@ -289,6 +291,20 @@ class VendorsController < ApplicationController
 #           puts "## Order is Paid"
           render :layout => false and return
         end
+        
+        if @inst.class == Order
+          @order = @inst
+        elsif @inst.class == OrderItem
+          @order = @inst.order
+        end
+        
+          # --- push notification to refresh the customer screen
+          t = SalorRetail.tailor
+          if t
+            t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+          end
+          # ---
+          
 #         if @inst.class == Order and @inst.paid == 1 then
 #           @order = $User.get_new_order
 # #           puts "## Order is paid 2"

@@ -131,6 +131,12 @@ class OrdersController < ApplicationController
     $User.auto_drop
     
     @order = initialize_order
+    # --- push notification to refresh the customer screen
+    t = SalorRetail.tailor
+    if t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+    end
+    # ---
     if @order.paid == 1 and not $User.is_technician? then
       @order = $User.get_new_order
     end
@@ -233,9 +239,16 @@ class OrdersController < ApplicationController
   end
 
   def add_item_ajax
-#     puts "!!! add_item_ajax"
-    @error = nil
     @order = initialize_order
+    t = SalorRetail.tailor
+    
+    # --- push notification to refresh the customer screen
+    if t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+    end
+    # ---
+    
+    @error = nil
     render :status => 401 and return if not_my_vendor?(@order)
     if @order.paid == 1 and not $User.is_technician? then
       @order = $User.get_new_order 
@@ -324,6 +337,14 @@ class OrdersController < ApplicationController
   #
   def delete_order_item
     @order = initialize_order
+    
+    # --- push notification to refresh the customer screen
+    t = SalorRetail.tailor
+    if t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+    end
+    # ---
+      
     render :status => 401 and return if not_my_vendor?(@order)
     if not $User.can(:destroy_order_items) then
       GlobalErrors.append("system.errors.no_role",$User)
@@ -519,6 +540,14 @@ class OrdersController < ApplicationController
       SalorBase.log_action("OrdersController","@order.complete called")
       atomize(ISDIR, 'cash_drop')
       $User.meta.order_id = nil
+      
+      # --- push notification to refresh the customer screen
+      t = SalorRetail.tailor
+      if t
+        t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
+      end
+      # ---
+      
       @order = $User.get_new_order
     end
   end
@@ -603,12 +632,7 @@ class OrdersController < ApplicationController
     $Conf = @vendor.salor_configuration
     @order_items = @order.order_items.visible.order('id ASC')
     @report = @order.get_report
-    if @order_items
-    puts "### Order items are present."
-      render :layout => 'customer_display', :nothing => :true
-    else
-      render :layout => 'customer_display'
-    end
+    render :layout => 'customer_display'
   end
 
   def report

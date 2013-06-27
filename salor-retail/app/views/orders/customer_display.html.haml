@@ -45,5 +45,9 @@
       %br
       %span== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
-
-
+- if params[:display_change] == '1'
+  :javascript
+    setTimeout(function() {
+      window.location = window.location.origin + "/vendors/#{ @vendor.id }/display_logo";
+    },
+    5000);
