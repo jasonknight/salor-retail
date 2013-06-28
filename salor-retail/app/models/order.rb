@@ -335,6 +335,7 @@ class Order < ActiveRecord::Base
 #     puts "## Calculate_Totals called #{speedy}"
 	  if self.paid == 1 and not $User.is_technician? then
 	    #GlobalErrors.append("system.errors.cannot_edit_completed_order",self)
+      log_action "Attempted to edit completed order."
 	    return
 	  end
 	  unless speedy == true then
@@ -408,6 +409,7 @@ class Order < ActiveRecord::Base
             self.update_attribute(:lc_discount_amount, disc)
           end
         rescue
+          log_action "LP Calculation has failed."
           GlobalErrors.append_fatal("system.errors.lp_calculation_failed",self)
         end
       end
@@ -495,8 +497,10 @@ class Order < ActiveRecord::Base
   end
   #
   def update_self_and_save
-          calculate_totals
-          save!
+    log_action "update_self_and_save called"
+    calculate_totals
+    save!
+    log_action "update_self_and_save ended."
   end
   #
   def complete=(api_called=nil)
@@ -569,8 +573,15 @@ class Order < ActiveRecord::Base
         log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
         log_action("End of Complete: " + self.payment_methods.inspect)
       end
+      self.save
+      log_action "Fetching loyalty card"
       lc = self.loyalty_card
-      self.lc_points = 0 if self.lc_points.nil?
+      log_action "LoyaltyCard fetched: #{lc.id} with sku #{lc.sku}"
+      if self.lc_points.nil? then
+        log_action "order lc_points was nil"
+        self.lc_points = 0 
+      end
+      log_action "Checking lc"
       if lc and not self.lc_points.nil? and not lc.points.nil? then
         log_action "LC Points present"
         if self.lc_points > lc.points then
@@ -582,6 +593,8 @@ class Order < ActiveRecord::Base
         np = $Conf.lp_per_dollar * self.subtotal
         log_action "Updating lc card with points of amount #{lc.points + np}"
         lc.update_attribute(:points,lc.points + np)
+      else
+        log_action "Nothing to do with LC points."
       end
     #rescue
     #  # #puts $!.to_s
