@@ -576,7 +576,7 @@ class Order < ActiveRecord::Base
       self.save
       log_action "Fetching loyalty card"
       lc = self.loyalty_card
-      log_action "LoyaltyCard fetched: #{lc.id} with sku #{lc.sku}"
+      log_action "LoyaltyCard fetched"
       if self.lc_points.nil? then
         log_action "order lc_points was nil"
         self.lc_points = 0 
