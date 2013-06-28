@@ -120,6 +120,7 @@ module ApplicationHelper
       :login => 'key',
       :settings => 'gear',
       :home => 'vendor',
+      :current_register => 'till',
       :cash_register => 'till',
       :customer => 'customer',
       :shipment => 'shipment',
@@ -191,10 +192,12 @@ module ApplicationHelper
     }
     return icons
   end
+  
   def icon(name, size = '64')
     icons = get_icons_map
     return icons[name] + '.svg'
   end
+  
   def salor_icon(name, options = {}, size = '64', caption=nil,caption_class='')
     if caption then
       o = []

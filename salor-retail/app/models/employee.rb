@@ -23,7 +23,7 @@ class Employee < ActiveRecord::Base
   has_many :receipts
   has_many :vendors, :through => :user
   has_many :paylife_structs, :as => :owner
-  has_many :cash_register_dailies
+  has_many :current_register_dailies
   has_and_belongs_to_many :roles
   has_one :drawer, :as => :owner
   has_many :drawer_transactions, :as => :owner

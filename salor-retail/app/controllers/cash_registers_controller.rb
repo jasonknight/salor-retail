@@ -8,97 +8,97 @@ class CashRegistersController < ApplicationController
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
   before_filter :get_devicenodes
-  # GET /cash_registers
-  # GET /cash_registers.xml
+
+  
   def index
-    @cash_registers = CashRegister.scopied.page(params[:page])
+    @registers = CashRegister.scopied.page(params[:page])
     CashRegister.update_all_devicenodes
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @cash_registers }
+      format.xml  { render :xml => @current_registers }
     end
   end
 
-  # GET /cash_registers/1
-  # GET /cash_registers/1.xml
+
+  
   def show
-    if params[:cash_register_id]
-      session[:cash_register_id] = params[:cash_register_id]
+    if params[:current_register_id]
+      session[:current_register_id] = params[:cid]
     end
     redirect_to new_order_path
   end
 
-  # GET /cash_registers/new
-  # GET /cash_registers/new.xml
+  # GET /current_registers/new
+  # GET /current_registers/new.xml
   def new
-    @cash_register = CashRegister.scopied.new
+    @current_register = CashRegister.scopied.new
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @cash_register }
+      format.xml  { render :xml => @current_register }
     end
   end
 
-  # GET /cash_registers/1/edit
+  # GET /current_registers/1/edit
   def edit
-    @cash_register = CashRegister.scopied.find(params[:id])
-    add_breadcrumb @cash_register.name,'edit_cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
+    @current_register = CashRegister.scopied.find(params[:id])
+    add_breadcrumb @current_register.name,'edit_current_register_path(@current_register,:vendor_id => params[:vendor_id])'
   end
 
-  # POST /cash_registers
-  # POST /cash_registers.xml
+  # POST /current_registers
+  # POST /current_registers.xml
   def create
-    @cash_register = CashRegister.new(params[:cash_register])
+    @current_register = CashRegister.new(params[:current_register])
  
     respond_to do |format|
-      if @cash_register.save
-        @cash_register.set_model_owner(@current_user)
-        format.html { redirect_to cash_registers_path }
-        format.xml  { render :xml => @cash_register, :status => :created, :location => @cash_register }
+      if @current_register.save
+        @current_register.set_model_owner(@current_user)
+        format.html { redirect_to current_registers_path }
+        format.xml  { render :xml => @current_register, :status => :created, :location => @current_register }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @cash_register.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @current_register.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # PUT /cash_registers/1
-  # PUT /cash_registers/1.xml
+  # PUT /current_registers/1
+  # PUT /current_registers/1.xml
   def update
-    @cash_register = CashRegister.scopied.find(params[:id])
+    @current_register = CashRegister.scopied.find(params[:id])
     respond_to do |format|
-      if @cash_register.update_attributes(params[:cash_register])
-         @cash_register.thermal_printer_name = nil unless params[:cash_register][:thermal_printer].empty?
-         @cash_register.sticker_printer_name = nil unless params[:cash_register][:sticker_printer].empty?
-         @cash_register.scale_name = nil unless params[:cash_register][:scale_name].empty?
-        @cash_register.save
-        format.html { redirect_to cash_registers_path }
+      if @current_register.update_attributes(params[:current_register])
+         @current_register.thermal_printer_name = nil unless params[:current_register][:thermal_printer].empty?
+         @current_register.sticker_printer_name = nil unless params[:current_register][:sticker_printer].empty?
+         @current_register.scale_name = nil unless params[:current_register][:scale_name].empty?
+        @current_register.save
+        format.html { redirect_to current_registers_path }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @cash_register.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @current_register.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /cash_registers/1
-  # DELETE /cash_registers/1.xml
+  # DELETE /current_registers/1
+  # DELETE /current_registers/1.xml
   def destroy
-    @cash_register = CashRegister.scopied.find(params[:id])
-    if @cash_register.orders.any? then
-      @cash_register.update_attribute(:hidden,1)
-      if @cash_register.id == @current_register then
+    @current_register = CashRegister.scopied.find(params[:id])
+    if @current_register.orders.any? then
+      @current_register.update_attribute(:hidden,1)
+      if @current_register.id == @current_register then
         @current_register = nil
       end
     else
-      if @cash_register.id == @current_register then
+      if @current_register.id == @current_register then
         @current_register = nil
       end
-      @cash_register.kill
+      @current_register.kill
     end
     
     respond_to do |format|
-      format.html { redirect_to(cash_registers_url) }
+      format.html { redirect_to(current_registers_url) }
       format.xml  { head :ok }
     end
   end
@@ -106,7 +106,7 @@ class CashRegistersController < ApplicationController
   def crumble
     @vendor = $Vendor
     add_breadcrumb @vendor.name,'vendor_path(@vendor)' if @vendor.id
-    add_breadcrumb I18n.t("menu.cash_registers"),'cash_registers_path(:vendor_id => params[:vendor_id])'
+    add_breadcrumb I18n.t("menu.current_registers"),'current_registers_path(:vendor_id => params[:vendor_id])'
   end
   
   def get_devicenodes

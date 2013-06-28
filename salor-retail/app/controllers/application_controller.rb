@@ -127,7 +127,7 @@ class ApplicationController < ActionController::Base
         @current_vendor = @current_user.vendor
         Time.zone = @current_vendor.time_zone if @current_vendor
         
-        @current_register = CashRegister.find_by_id(session[:cash_register_id])
+        @current_register = CashRegister.find_by_id(session[:current_register_id])
       return @current_user
       
   
@@ -135,7 +135,7 @@ class ApplicationController < ActionController::Base
     
     $Notice = ""
     
-    add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
+    #add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
   end
   
     def set_tailor
@@ -222,9 +222,7 @@ class ApplicationController < ActionController::Base
   end
   
   def role_check_failed
-    if @current_user
       return @current_user.get_root.merge({:notice => I18n.t("system.errors.no_role")})
-    end
   end
   
   def role_check(p)

@@ -65,7 +65,7 @@ class Report
    return lines.join("\n")
   end
   def drawer_transactions_csv(drawer_transactions)
-    cols = [:id, :drawer_id, :amount, :drop, :payout, :created_at, :updated_at, :notes, :is_refund, :tag, :drawer_amount, :cash_register_id, :order_item_id]
+    cols = [:id, :drawer_id, :amount, :drop, :payout, :created_at, :updated_at, :notes, :is_refund, :tag, :drawer_amount, :current_register_id, :order_item_id]
     cols.unshift(:class)
     lines = []
     lines << cols.join("\t")
@@ -93,7 +93,7 @@ class Report
   end
   def orders_csv(orders)
     # FIXME add in payment methods
-    cols = [:id,:class,:hidden,:created_at,:updated_at,:employee_id,:rebate,:rebate_type,:discount_amount,:buy_order,:drawer_id,:subtotal,:tax,:total,:front_end_change,:vendor_id,:cash_register_id, :customer_id, :lc_points, :lc_discount_amount,:tag]
+    cols = [:id,:class,:hidden,:created_at,:updated_at,:employee_id,:rebate,:rebate_type,:discount_amount,:buy_order,:drawer_id,:subtotal,:tax,:total,:front_end_change,:vendor_id,:current_register_id, :customer_id, :lc_points, :lc_discount_amount,:tag]
     oi_cols = [:id,:class,:order_id,:hidden,:created_at,:updated_at,:item_id,:sku,:behavior,:quantity,:price,:tax,:total,:coupon_applied,:coupon_amount,:discount_applied, :discount_amount,:rebate,:is_buyback,:tax_profile_amount,:amount_remaining,:refunded,:refund_payment_method,:action_applied]
     pm_cols = [:order_id, "name", "internal_type", "amount", "created_at", "updated_at"]
     pm_cols.unshift(:class)

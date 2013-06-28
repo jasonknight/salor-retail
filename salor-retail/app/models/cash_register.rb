@@ -10,7 +10,7 @@ class CashRegister < ActiveRecord::Base
   include SalorScope
   include SalorBase
   include SalorModel
-  has_many :cash_register_dailies
+  has_many :current_register_dailies
   has_many :vendor_printers
   belongs_to :vendor
   has_many :orders
@@ -45,7 +45,7 @@ class CashRegister < ActiveRecord::Base
     if $Register then
       $Register.set_device_paths_from_device_names(devices_for_select)
     end
-    #$Vendor.cash_registers.visible.each do |cr|
+    #$Vendor.current_registers.visible.each do |cr|
     #  next if cr.salor_printer == true and not cr == $Register
     #  cr.set_device_paths_from_device_names(devices_for_select)
     #  if cr == $Register

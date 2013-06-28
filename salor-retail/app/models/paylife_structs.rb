@@ -14,7 +14,7 @@ class PaylifeStructs < ActiveRecord::Base
     if user then
       self.owner_type = user.class.to_s
       self.owner_id = user.id
-      self.cash_register_id = user.cash_register_id
+      self.current_register_id = user.current_register_id
       self.order_id = user.order_id
       self.vendor_id = user.vendor_id
     end

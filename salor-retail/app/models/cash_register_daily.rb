@@ -7,7 +7,7 @@
 class CashRegisterDaily < ActiveRecord::Base
 	include SalorScope
 	include SalorBase
-  belongs_to :cash_register
+  belongs_to :current_register
   belongs_to :employee
   belongs_to :user
   has_many :orders

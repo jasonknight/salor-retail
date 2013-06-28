@@ -249,9 +249,9 @@ class ItemsController < ApplicationController
     else
       @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id(params[:cash_register_id])
+    @register = CashRegister.find_by_id(params[:current_register_id])
     @vendor = @register.vendor if @register
-    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    #`espeak -s 50 -v en "#{ params[:current_register_id] }"`
     render :text => "No User#{@user}, or Register#{@register}, or Vendor#{@vendor}" and return if @register.nil? or @vendor.nil? or @user.nil?
 
     if params[:id]

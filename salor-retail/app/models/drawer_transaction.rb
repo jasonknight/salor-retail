@@ -12,7 +12,7 @@ class DrawerTransaction < ActiveRecord::Base
   include SalorModel
   belongs_to :drawer
   validate :validify
-  belongs_to :cash_register
+  belongs_to :current_register
   belongs_to :owner, :polymorphic => true
   belongs_to :order
   
@@ -33,7 +33,7 @@ class DrawerTransaction < ActiveRecord::Base
       GlobalErrors.append_fatal("system.errors.must_specify_drop_or_payout")
       errors.add(:drop,I18n.t("system.errors.must_specify_drop_or_payout"))
     end
-    if self.cash_register_id.nil? then
+    if self.current_register_id.nil? then
       self.set_model_owner
     end
   end
@@ -49,7 +49,7 @@ class DrawerTransaction < ActiveRecord::Base
       print_engine.open
       print_engine.print(0, text)
       print_engine.close
-      Receipt.create(:employee_id => @User.id, :cash_register_id => $Register.id, :content => text)
+      Receipt.create(:employee_id => @User.id, :current_register_id => $Register.id, :content => text)
     end
   end
   

@@ -20,8 +20,8 @@ class Order < ActiveRecord::Base
   belongs_to :employee
   belongs_to :customer
   belongs_to :vendor
-  belongs_to :cash_register
-  belongs_to :cash_register_daily
+  belongs_to :current_register
+  belongs_to :current_register_daily
 
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
@@ -126,8 +126,8 @@ class Order < ActiveRecord::Base
     if not self.vendor then
       errors.add(:vendor_id, I18n.t("system.errors.order_vendor_required"))
     end
-    if not self.cash_register then
-      errors.add(:cash_register_id,I18n.t("system.errors.order_register_required"))
+    if not self.current_register then
+      errors.add(:current_register_id,I18n.t("system.errors.order_register_required"))
     end
   end
   def total=(p)
@@ -1258,7 +1258,7 @@ class Order < ActiveRecord::Base
     header +=
     "\ea\x00" +  # align left
     "\e!\x01" +  # Font B
-    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.created_at, :format => :iso)) + ' ' + self.cash_register.name + "\n"
+    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.created_at, :format => :iso)) + ' ' + self.current_register.name + "\n"
 
     header += "\n\n" +
     "\e!\x00" +  # Font A
@@ -1382,7 +1382,7 @@ class Order < ActiveRecord::Base
     contents = self.escpos_receipt(self.get_report)
     bytes_written, content_written = print_engine.print(0, contents[:text], contents[:raw_insertations])
     print_engine.close
-    Receipt.create(:employee_id => self.user_id, :cash_register_id => self.cash_register_id, :content => contents[:text], :order_id => self.id)
+    Receipt.create(:employee_id => self.user_id, :current_register_id => self.current_register_id, :content => contents[:text], :order_id => self.id)
   end
   def sanity_check
     if self.paid == 1 then

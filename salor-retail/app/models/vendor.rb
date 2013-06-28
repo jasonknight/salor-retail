@@ -10,13 +10,14 @@ class Vendor < ActiveRecord::Base
   include SalorScope
   include SalorModel
   belongs_to :user
+  has_many :cash_registers
   has_one  :salor_configuration
   has_many :orders
   has_many :categories
   has_many :items
   has_many :locations
   has_many :employees
-  has_many :cash_registers
+  has_many :current_registers
   has_many :customers
   has_many :broken_items
   has_many :paylife_structs
@@ -56,10 +57,10 @@ class Vendor < ActiveRecord::Base
     self.vendor_printer_ids = ps
   end
   def open_cash_drawer
-    cash_register_id = @current_register
-    cash_register = CashRegister.scopied.find_by_id cash_register_id
-    vendor_printer = VendorPrinter.new :path => cash_register.thermal_printer
-    if cash_register
+    current_register_id = @current_register
+    current_register = CashRegister.scopied.find_by_id current_register_id
+    vendor_printer = VendorPrinter.new :path => current_register.thermal_printer
+    if current_register
       print_engine = Escper::Printer.new('local', vendor_printer)
       print_engine.open
       text = "\x1B\x70\x00\x30\x01 "

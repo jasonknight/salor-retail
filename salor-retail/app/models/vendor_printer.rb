@@ -9,6 +9,6 @@ class VendorPrinter < ActiveRecord::Base
   include SalorScope
   include SalorModel
   belongs_to :vendor
-  belongs_to :cash_register
+  belongs_to :current_register
   scope :by_vendor, lambda { where("vendor_id = ?", @current_user.vendor_id)}
 end

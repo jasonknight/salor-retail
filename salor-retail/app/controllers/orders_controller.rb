@@ -4,9 +4,10 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-# {VOCABULARY} orders_item item_price oi_price customer_payments payments_type payments_method paying_agent agent_has_paid agent_will_pay_later gift_card_applies coupon_percentage coupon_updated gift_cards_used item_price_update item_discount_percentage cash_register_used cash_register_inc include_register_codes employee_vendor
+
+
 class OrdersController < ApplicationController
-# {START}
+
    before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt, :print_confirmed, :log]
    before_filter :crumble, :except => [:customer_display,:print_receipt, :print_confirmed, :log]
    respond_to :html, :xml, :json, :csv
@@ -39,14 +40,14 @@ class OrdersController < ApplicationController
 #         redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
 #       end
 #       if not @current_register then
-#         redirect_to :controller => 'cash_registers', :notice => I18n.t("system.errors.must_choose_register") and return
+#         redirect_to :controller => 'current_registers', :notice => I18n.t("system.errors.must_choose_register") and return
 #       end
 #       #if @current_user.get_drawer.amount <= 0 then
 #       #  GlobalErrors.append("system.errors.must_cash_drop")
 #       #end
 #       @order = initialize_order
 # 
-#       add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
+#       add_breadcrumb @current_register.name,'current_register_path(@current_register,:vendor_id => params[:vendor_id])'
 #       add_breadcrumb t("menu.order") + "#" + @order.id.to_s,'new_order_path(:vendor_id => @current_user.vendor_id)'
 #       respond_to do |format|
 #         format.html {render :layout => "application"}
@@ -119,33 +120,23 @@ class OrdersController < ApplicationController
   end
 
   def new    
-    if not @current_user or not @current_user.vendor_id then
-      redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
-    end
-    if not @current_register then
-      redirect_to :controller => 'cash_registers', :notice => I18n.t("system.errors.must_choose_register") and return
-    end
+    
+   redirect_to cash_registers_path and return unless @current_register
     
     
     initialize_order
+    
     # --- push notification to refresh the customer screen
     t = SalorRetail.tailor
     if t
       t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
-    # ---
-    if @current_order.paid == 1 and not @current_user.is_technician? then
-      @current_order = @current_user.get_new_order
-    end
-    if @current_order.order_items.visible.any? then
-      @current_order.update_self_and_save
-    end
-    add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
-    add_breadcrumb t("menu.order"),'new_order_path(:vendor_id => @current_user.vendor_id)'
+ 
+    
     @button_categories = Category.where(:button_category => true).order(:position)
     
     CashRegister.update_all_devicenodes
-    @cash_register.reload
+    @current_register.reload
   end
 
   # GET /orders/1/edit
@@ -157,7 +148,7 @@ class OrdersController < ApplicationController
     if @order and (not @order.paid == 1 or @current_user.is_technician?) then
       session[:prev_order_id] = @current_user.order_id
       @current_user.update_attributes(:order_id => @order.id)
-      @order.update_attributes(:cash_register_id => @current_register)
+      @order.update_attributes(:current_register_id => @current_register)
     end
     redirect_to :action => :new, :order_id => @order.id
   end
@@ -241,7 +232,7 @@ class OrdersController < ApplicationController
     
     # --- push notification to refresh the customer screen
     if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
     # ---
     
@@ -338,7 +329,7 @@ class OrdersController < ApplicationController
     # --- push notification to refresh the customer screen
     t = SalorRetail.tailor
     if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
     # ---
       
@@ -367,7 +358,7 @@ class OrdersController < ApplicationController
     else
       @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id(params[:cash_register_id])
+    @register = CashRegister.find_by_id(params[:current_register_id])
     if @register then
       @vendor = @register.vendor 
     end
@@ -443,7 +434,7 @@ class OrdersController < ApplicationController
     if params[:employee_id] and params[:employee_id] != @current_user.id then
       tmp_user = Employee.find_by_id(params[:employee_id].to_s)
       if tmp_user and tmp_user.vendor_id == @current_user.vendor_id then
-        tmp_user.get.update_attribute :cash_register_id, @current_register
+        tmp_user.get.update_attribute :current_register_id, @current_register
         History.record("swapped user #{@current_user.id} with #{tmp_user.id}",@order,3)
         @current_user = tmp_user
         @order.update_attribute :employee_id, @current_user.id
@@ -540,7 +531,7 @@ class OrdersController < ApplicationController
       # --- push notification to refresh the customer screen
       t = SalorRetail.tailor
       if t
-        t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
+        t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
       end
       # ---
       
@@ -683,8 +674,8 @@ class OrdersController < ApplicationController
     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
     @receipts = $Vendor.receipts.where(["created_at between ? and ?", @from, @to])
-    if params[:print] == "true" and params[:cash_register_id] then
-      $Register = $Vendor.cash_registers.find_by_id(params[:cash_register_id].to_s)
+    if params[:print] == "true" and params[:current_register_id] then
+      $Register = $Vendor.current_registers.find_by_id(params[:current_register_id].to_s)
       vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
       print_engine = Escper::Printer.new('local', vendor_printer)
       print_engine.open
@@ -859,12 +850,12 @@ class OrdersController < ApplicationController
   end
 
   private
+  
   def crumble
-    return if not @current_user
-    @vendor = @current_user.vendor(@current_user.vendor_id) if @vendor.nil?
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("menu.orders"),'orders_path(:vendor_id => params[:vendor_id])'
+    add_breadcrumb #@current_vendor.name,'vendor_path(@current_vendor)'
+    #add_breadcrumb I18n.t("menu.orders"), 'orders_path(:vendor_id => params[:vendor_id])'
   end
+  
   def currency(number,options={})
     options.symbolize_keys!
     defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})

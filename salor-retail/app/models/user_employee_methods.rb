@@ -224,7 +224,7 @@ module UserEmployeeMethods
       o.vendor_id = get_default_vendor.id
     end
     o.set_model_owner(self)
-    o.cash_register_id = @current_register
+    o.current_register_id = @current_register
     begin
       o.save!
     rescue ActiveRecord::RecordInvalid => invalid
@@ -235,8 +235,8 @@ module UserEmployeeMethods
     return o
   end
   
-  def get_new_cash_register_daily
-    d = CashRegisterDaily.new(:start_amount => 0, :end_amount => 0, :cash_register_id => GlobalData.session.cash_register_id)
+  def get_new_current_register_daily
+    d = CashRegisterDaily.new(:start_amount => 0, :end_amount => 0, :current_register_id => GlobalData.session.current_register_id)
     d.employee_id = self.id
     d.save
     return d
@@ -344,7 +344,7 @@ module UserEmployeeMethods
         return :controller => 'vendors',:action => :show, :id => self.vendor_id
       end
       if role.name == 'cashier' or role.name == 'head_cashier' then
-        return :controller => 'cash_registers'
+        return :controller => 'current_registers'
       elsif role.name == 'stockboy' then
         return :controller => 'shipments'
       end
@@ -367,10 +367,10 @@ module UserEmployeeMethods
       # puts "##OrderDoesNotExist"
     end
     vendor_id = self.vendor_id
-    cash_register_id = self.cash_register_id
+    current_register_id = self.current_register_id
     self.order_id = nil
     self.last_order_id = nil
-    self.cash_register_id = nil
+    self.current_register_id = nil
     self.save
     self.update_attribute :last_path,''
     login = self.employee_logins.last

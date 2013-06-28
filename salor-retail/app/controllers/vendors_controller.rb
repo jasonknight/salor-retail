@@ -186,7 +186,7 @@ class VendorsController < ApplicationController
     else
       @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id(params[:cash_register_id])
+    @register = CashRegister.find_by_id(params[:current_register_id])
     @vendor = @register.vendor if @register
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
@@ -212,9 +212,9 @@ class VendorsController < ApplicationController
     else
       @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id(params[:cash_register_id])
+    @register = CashRegister.find_by_id(params[:current_register_id])
     @vendor = @register.vendor if @register
-    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    #`espeak -s 50 -v en "#{ params[:current_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @from, @to = assign_from_to(params)
@@ -226,7 +226,7 @@ class VendorsController < ApplicationController
     template = File.read("#{Rails.root}/app/views/printr/end_of_day.prnt.erb")
     erb = ERB.new(template, 0, '>')
     text = erb.result(binding)
-    Receipt.create(:ip => request.ip, :employee_id => @user.id, :cash_register_id => @register.id, :content => text)
+    Receipt.create(:ip => request.ip, :employee_id => @user.id, :current_register_id => @register.id, :content => text)
     if @register.salor_printer
       render :text => Escper::Asciifier.new.process(text)
     else
@@ -295,7 +295,7 @@ class VendorsController < ApplicationController
           # --- push notification to refresh the customer screen
           t = SalorRetail.tailor
           if t
-            t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+            t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
           end
           # ---
           

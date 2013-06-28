@@ -113,9 +113,9 @@ class CustomersController < ApplicationController
     else
       @user = Employee.find_by_id(params[:user_id])
     end
-    @register = CashRegister.find_by_id(params[:cash_register_id])
+    @register = CashRegister.find_by_id(params[:current_register_id])
     @vendor = @register.vendor if @register
-    #`espeak -s 50 -v en "#{ params[:cash_register_id] }"`
+    #`espeak -s 50 -v en "#{ params[:current_register_id] }"`
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @customers = Customer.find_all_by_id(params[:id])

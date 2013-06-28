@@ -34,9 +34,9 @@ class Category < ActiveRecord::Base
     end
     self.tag.gsub(' ','')
   end
-	# We don't really call this function directly, it is called by @cash_register.end_of_day_report, which
+	# We don't really call this function directly, it is called by @current_register.end_of_day_report, which
 	# returns a hash that is merged with this one. This way, we delegate the reponsibilities up the chain
-	# so that in the view, we can just call: hash = @cash_register.end_of_day_report and then loop over the
+	# so that in the view, we can just call: hash = @current_register.end_of_day_report and then loop over the
 	# key value pairs to make a pretty table
 	def self.cats_report(drawer_id=nil)
 	  cats_tags = {}

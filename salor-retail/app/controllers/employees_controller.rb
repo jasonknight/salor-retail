@@ -59,7 +59,7 @@ class EmployeesController < ApplicationController
       @current_user.start_day
       # History.record("employee_sign_in",user,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
       if cr = CashRegister.find_by_ip(request.ip) then
-        user.get.update_attribute :cash_register_id, cr.id
+        user.get.update_attribute :current_register_id, cr.id
       end
        if params[:redirect]
           redirect_to CGI.unescape(params[:redirect]) and return
@@ -69,7 +69,7 @@ class EmployeesController < ApplicationController
           if user.role_cache.include? 'stockboy' then
             redirect_to '/shipments' + "?vendor_id=#{user.vendor_id}" and return
           elsif user.role_cache.include? 'cashier' then
-            redirect_to '/cash_registers' + "?vendor_id=#{user.vendor_id}" and return
+            redirect_to '/current_registers' + "?vendor_id=#{user.vendor_id}" and return
           elsif user.role_cache.include? 'manager' then
             redirect_to "/vendors/#{user.vendor_id}" and return
           else

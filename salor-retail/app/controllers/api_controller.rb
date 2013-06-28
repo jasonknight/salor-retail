@@ -263,7 +263,7 @@ class ApiController < ApplicationController
   # You should only be able to access these objects
   def allowed_classes
     [
-     :employee,:cash_register,:category,
+     :employee,:current_register,:category,
      :location,:order,:order_item,:discount,
      :customer, :table,:settlement, :quantity,
      :option, :order_items_printoption, :order_items_option,
@@ -297,8 +297,8 @@ class ApiController < ApplicationController
     if @cmd[:vendor_id] then
       @current_user.vendor_id = @cmd[:vendor_id]
     end
-    if @cmd[:cash_register_id] then
-      @current_register = @cmd[:cash_register_id]
+    if @cmd[:current_register_id] then
+      @current_register = @cmd[:current_register_id]
     end
     return user
   end

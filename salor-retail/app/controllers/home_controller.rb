@@ -48,11 +48,11 @@ class HomeController < ApplicationController
     end
   end
   def edit_owner
-    redirect_to '/cash_registers' and return unless admin_signed_in?
+    redirect_to '/current_registers' and return unless admin_signed_in?
     @user = User.find(current_user.id)
   end
   def update_owner
-    redirect_to '/cash_registers' and return unless admin_signed_in?
+    redirect_to '/current_registers' and return unless admin_signed_in?
     @user = User.find(current_user.id)
     params[:user].delete(:password) if params[:user][:password].nil? or params[:user][:password].blank?
     params[:user].delete(:user_id)

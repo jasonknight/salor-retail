@@ -133,8 +133,8 @@ module SalorBase
        self.vendor_id = user.vendor_id
        self.set_sku if self.class == Category or self.class == Customer
       end
-      if self.respond_to? :cash_register_id and self.cash_register_id.nil? then
-        self.cash_register_id = user.get.cash_register_id
+      if self.respond_to? :current_register_id and self.current_register_id.nil? then
+        self.current_register_id = user.get.current_register_id
       end
       if self.respond_to? :user_id and self.user_id.nil? then
        self.user_id = user.get_owner.id
