@@ -2,8 +2,8 @@
   <% @order_item.reload if @order_item.behavior == 'coupon' or @order_item.behavior == 'gift_card'  %>
    order_item_json = <%= raw @order_item.to_json %>;
    updateOrderItems([order_item_json]);
-   updateOrder(<%= raw @order.to_json %>);
-   updateCustomerView(order_item_json,<%= @order.id %>);
+   updateOrder(<%= raw @current_order.to_json %>);
+   updateCustomerView(order_item_json,<%= @current_order.id %>);
    if (order_item_json.price == 0 ) {
      playSound('medium_warning');
    } else {
@@ -14,7 +14,7 @@
     }
    <%
      if @order_item.behavior == 'coupon' then
-     ois = @order.order_items.visible.joins(:item).where("`items`.sku = '#{@order_item.item.coupon_applies}'")
+     ois = @current_order.order_items.visible.joins(:item).where("`items`.sku = '#{@order_item.item.coupon_applies}'")
        if ois then
          ois.each do |oi|
          %>
@@ -30,6 +30,6 @@
 <% end %>
 <%= render :partial => "shared/js/global_errors_js" %>
 focusInput($('#keyboard_input'));
-Order = <%= raw @order.to_json %>;
+Order = <%= raw @current_order.to_json %>;
 $(".complete-order-total").html($('#pos_order_total').html());
 display_change();

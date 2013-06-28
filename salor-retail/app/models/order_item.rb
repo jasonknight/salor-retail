@@ -23,6 +23,14 @@ class OrderItem < ActiveRecord::Base
   has_many :histories, :as => :owner
 
   scope :sorted_by_modified, order('updated_at ASC')
+  
+  validate :validify
+  
+  def validify
+    order = self.order
+    errors.add(:order_id, 'cannot change anything since it belongs to a paid order') if order.paid == 1
+  end
+  
   def tax_profile_id=(id)
     tp = TaxProfile.find_by_id(id)
     if tp then
@@ -281,11 +289,9 @@ class OrderItem < ActiveRecord::Base
   end
   
 	def set_item(item,qty=1)
-    item.make_valid
-    if self.order and self.order.paid == 1 then
+    if self.order.paid == 1 then
       return false
     end
-	  #item.make_valid # MF: this should be done only when saving an item, I guess it's a slowdown on each barcode scan
 
     # GIFT CARD
 		if item.item_type.behavior == 'gift_card' then
@@ -652,9 +658,6 @@ class OrderItem < ActiveRecord::Base
   #
   def to_json
     obj = {}
-    if self.order and self.order.buy_order and self.is_buyback then
-      self.update_attribute :is_buyback, false
-    end
     if self.item then
       obj = {
         :name => self.get_translated_name(I18n.locale)[0..20],

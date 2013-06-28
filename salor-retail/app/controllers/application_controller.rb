@@ -13,9 +13,9 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :workstation?, :mobile?
   
-  protect_from_forgery
+  #protect_from_forgery
   
-  before_filter :loadup, :except => [:add_item_ajax, :render_error]
+  before_filter :loadup
   before_filter :set_tailor
   
   layout :layout_by_response
@@ -78,26 +78,6 @@ class ApplicationController < ActionController::Base
     not workstation?
   end
 
-  def salor_signed_in?
-    if session[:user_id] and session[:user_type] and (Employee.exists? session[:user_id] or User.exists? session[:user_id]) then
-      return true
-    else
-      return false
-    end
-  end
-
-  def admin_signed_in?
-    if session[:user_id] and session[:user_type] == "User" then
-      return true
-    else
-      return false
-    end
-  end
-
-  def current_user
-    return User.find session[:user_id] if session[:user_type] == "User"
-  end
-
 
 
   def user_cache_name
@@ -119,23 +99,21 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
-    
-    
+
         @current_user = Employee.find_by_id(session[:user_id])
-        render :nothing => true and return if @current_user.nil?
+        redirect_to home_index_path and return if @current_user.nil?
         
         @current_vendor = @current_user.vendor
         Time.zone = @current_vendor.time_zone if @current_vendor
         
-        @current_register = CashRegister.find_by_id(session[:current_register_id])
-      return @current_user
+        @current_register = CashRegister.find_by_id(session[:cash_register_id])
+      
       
   
     I18n.locale = @current_user.language
     
     $Notice = ""
-    
-    #add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
+    return @current_user
   end
   
     def set_tailor
@@ -187,34 +165,8 @@ class ApplicationController < ActionController::Base
     end
     render :template => '/errors/error', :layout => 'customer_display'
   end
-
-
-  def add_breadcrumb(name, url = '')
-    begin
-    @breadcrumbs ||= []
-      url = eval(url) if url =~ /_path|_url|@/
-      @breadcrumbs << [name, url]
-    rescue
-
-    end
-  end
- 
-  def self.add_breadcrumb(name, url, options = {})
-    before_filter options do |controller|
-      controller.send(:add_breadcrumb, name, url)
-    end
-  end
   
-  def initialize_order
-    if params[:order_id] then
-      @current_order = Order.scopied.where("id = #{params[:order_id]} and (paid IS NULL or paid = 0)").first
-    else
-      @current_order = Order.new
-      @current_order.vendor = @current_vendor
-      @current_order.employee = @current_user
-    end
-  end
-  
+
   def check_role
     if not role_check(params) then 
       redirect_to(role_check_failed) and return

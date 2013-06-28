@@ -7,6 +7,7 @@
 
 class PaymentMethod < ActiveRecord::Base
   belongs_to :order
+  belongs_to :vendor
   before_save :process
   include SalorModel
   include SalorBase
@@ -51,6 +52,7 @@ class PaymentMethod < ActiveRecord::Base
     end
     return ttl
   end
+  
   def process
     pmx = I18n.t("system.payment_external_types").split(',')
     pmi = I18n.t("system.payment_internal_types").split(',')
@@ -61,6 +63,5 @@ class PaymentMethod < ActiveRecord::Base
       end
       i = i + 1
     end
-    self.vendor_id = $Vendor.id
   end
 end

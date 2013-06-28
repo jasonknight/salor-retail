@@ -228,43 +228,7 @@ class Item < ActiveRecord::Base
       return Item.scopied.where("name LIKE '%#{parts[1]}%'")
     end
   end
-  def self.get_by_code(code)
-    # Let's see if they entered a price
-    pm = code.match(/(\d{1,9}[\.\,]\d{1,2})/)
-    if pm and pm[1] then
-      i = Item.scopied.where("sku LIKE 'DMY%' and base_price = #{SalorBase.string_to_float(code)}") 
-      if i.empty? then
-        i = Item.scopied.find_or_create_by_sku("DMY" + @current_user.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
-        i.base_price = code
-        i.make_valid
-        i.save
-        return i
-      end 
-      if i.respond_to? :first and i.first
-        i = i.first
-      end
-      return i
-    end # end if pm
 
-    item = Item.scopied.find_by_sku(code)
-    return item if item
-    #We didn't find it, so let's see if we can parse the code.
-    m = code.match(/\d{2}(\d{5})(\d{5})/)
-    item = Item.scopied.find_by_sku(m[1]) if m
-    if item then
-      if not item.is_gs1 == true then
-        item.update_attribute(:is_gs1, true)
-      end
-      return item
-    end
-    lcard = LoyaltyCard.find_by_sku(code)
-    return lcard if lcard
-    #oops, still haven't found it, let's creat a dummy item
-    i = Item.scopied.find_or_create_by_sku(code)
-    i.vendor_id = $Vendor.id
-    i.make_valid
-    return i
-  end
 
   def price
     conds = "(item_sku = '#{self.sku}' and applies_to = 'Item') OR (location_id = '#{self.location_id}' and applies_to = 'Location') OR (category_id = '#{self.category_id}' and applies_to = 'Category') OR (applies_to = 'Vendor' and amount_type = 'percent')"
@@ -378,52 +342,30 @@ class Item < ActiveRecord::Base
   def coupon?
     self.item_type.behavior == 'coupon'
   end
+  
   def make_valid
     self.sku = self.sku.upcase
-    invld = false
-    if self.vendor_id.nil? then
-      self.vendor_id = $Vendor.id
-      invld = true
-    end
-    if self.name.blank? then
+    
+    if self.name.nil? or self.name.blank? then
       self.name = I18n.t("views.dummy_item")
       invld = true
     end
-    if self.quantity.nil? then
-      self.quantity = 0
+
+    if self.item_type_id.blank? then
+      self.item_type_id = self.vendor.item_types.find_by_behavior('normal').id
       invld = true
     end
-    if self.quantity_sold.nil? then
-      self.quantity_sold = 0
-      invld = true
-    end
-    if self.base_price.nil? then
-      self.base_price = 0
-      invld = true
-    end
-    if not self.item_type_id then
-      # puts "Setting Default ItemType"
-      self.item_type_id = ItemType.find_by_behavior('normal').id
-      invld = true
-    end
+    
     if self.behavior.blank? then
-      raise self.item_type.inspect
       self.behavior = self.item_type.behavior
     end
-    if not self.tax_profile then
-      # puts "Setting Default TaxProfile"
-      tp = TaxProfile.scopied.where(:default => true).first
-      if tp then
-        self.tax_profile_id = tp.id
-      else
-        self.tax_profile_id = GlobalData.tax_profiles.first.id
-      end
-      invld = true
-    end
-    if invld then
-      save(:validate => false)
+    
+    if self.tax_profile.nil? then
+      tp = self.vendor.tax_profiles.where(:default => true).first
+      self.tax_profile_id = tp.id
     end
   end
+  
   def validify
     @item = Item.all_seeing.find_by_sku(self.sku)
     if not @item.nil? and not self.id == @item.id then
@@ -431,7 +373,6 @@ class Item < ActiveRecord::Base
       GlobalErrors.append_fatal('system.errors.sku_must_be_unique',self,{:sku => self.sku});
       return
     end
-    make_valid
     if self.item_type.behavior == 'coupon' then
       unless Item.find_by_sku(self.coupon_applies) then
         errors.add(:coupon_applies,I18n.t('views.item_must_exist'))
@@ -445,6 +386,7 @@ class Item < ActiveRecord::Base
         errors.add(:coupon_applies,I18n.t('system.errors.child_sku'))
     end 
   end
+  
   def set_amount_remaining
     self.update_attribute(:amount_remaining,self.base_price)
   end

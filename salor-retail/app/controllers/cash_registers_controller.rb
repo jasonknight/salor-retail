@@ -5,25 +5,18 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class CashRegistersController < ApplicationController
-  before_filter :check_role, :except => [:crumble]
-  before_filter :crumble
   before_filter :get_devicenodes
 
-  
   def index
     @registers = CashRegister.scopied.page(params[:page])
     CashRegister.update_all_devicenodes
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @current_registers }
-    end
   end
 
 
   
   def show
-    if params[:current_register_id]
-      session[:current_register_id] = params[:cid]
+    if params[:id]
+      session[:cash_register_id] = params[:id]
     end
     redirect_to new_order_path
   end
@@ -42,7 +35,6 @@ class CashRegistersController < ApplicationController
   # GET /current_registers/1/edit
   def edit
     @current_register = CashRegister.scopied.find(params[:id])
-    add_breadcrumb @current_register.name,'edit_current_register_path(@current_register,:vendor_id => params[:vendor_id])'
   end
 
   # POST /current_registers
@@ -103,11 +95,6 @@ class CashRegistersController < ApplicationController
     end
   end
   private 
-  def crumble
-    @vendor = $Vendor
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)' if @vendor.id
-    add_breadcrumb I18n.t("menu.current_registers"),'current_registers_path(:vendor_id => params[:vendor_id])'
-  end
   
   def get_devicenodes
     @devices_for_select = CashRegister.get_devicenodes

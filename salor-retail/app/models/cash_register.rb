@@ -12,11 +12,23 @@ class CashRegister < ActiveRecord::Base
   include SalorModel
   has_many :current_register_dailies
   has_many :vendor_printers
+  has_many :drawer_transactions
+  
   belongs_to :vendor
   has_many :orders
   has_many :meta
-  has_many :drawer_transactions
+
   attr_accessible :pole_display_name, :sticker_printer_name,:scale_name,:thermal_printer_name, :name
+  
+  def open_cash_drawer
+    vendor_printer = VendorPrinter.new :path => self.thermal_printer
+    print_engine = Escper::Printer.new('local', vendor_printer)
+    print_engine.open
+    text = "\x1B\x70\x00\x30\x01 "
+    print_engine.print(0, text)
+    print_engine.close
+  end
+  
   def end_of_day_report
     table = {}
     cats_tags = Category.cats_report(@current_user.get_drawer.id)

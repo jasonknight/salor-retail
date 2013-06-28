@@ -137,7 +137,7 @@ function validatePaymentMethod(element) {
   }
 }
 function showOrderTotalOnPoleDisplay() {
-  <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
+  <% unless @current_register.pole_display.nil? or @current_register.pole_display.empty? %>
     if ( !useMimo() && isSalor() ) {
       blurb = ('<%= t('activerecord.attributes.total') %>' + '               ').substring(0,10);
       currency = '<%= t('number.currency.format.friendly_unit') %>';
@@ -158,7 +158,7 @@ function complete_order_show() {
   //allow_complete_order(isBuyOrder); // need to get the total money tended > complete_total before active unless this isBuyOrder
   $('#complete_order').show();
 
-  <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
+  <% unless @current_register.pole_display.nil? or @current_register.pole_display.empty? %>
     if ( !useMimo() && isSalor() ) {
       blurb = ('<%= t('activerecord.attributes.total') %>' + '               ').substring(0,10);
       currency = '<%= t('number.currency.format.friendly_unit') %>';
@@ -189,7 +189,7 @@ function complete_order_show() {
       //if (confirmInactive) {
       //  complete_order_hide();
       //} else {
-        <% if $Register.no_print == true then %>
+        <% if @current_register.no_print == true then %>
           complete_order_send(false);
         <% else %>
           complete_order_send(true);
@@ -561,7 +561,7 @@ function complete_order_send(print) {
 
 // this is only for text based pole displays
 function displayChangeToCustomer() {
-  <% unless $Register.pole_display.nil? or $Register.pole_display.empty? %>
+  <% unless @current_register.pole_display.nil? or @current_register.pole_display.empty? %>
     if ( !useMimo() && isSalor() ) {
       currency = '<%= t('number.currency.format.friendly_unit') %>';
       given = parseFloat(get_payment_total());
@@ -590,18 +590,14 @@ function checkAndDisplayChange(from) {
     from = 'checkAndDisplayChange:from not set';
   }
   if ($('.payment-amount').is(":visible")) {
-     //console.log("checkAndDisplayChange Called from " + from);
      display_change(from);
   }
 }
-// init some stuff
+
+
 var orderCompleteDisplayed = false;
+
 $(document).ready(function() {
-  /*
-    $(".payment-amount").live('keyup', function(event){
-      display_change('documentready');
-    });
-  */
   $(".payment-method").live("change", function(){
     validatePaymentMethod($(this));
   });
@@ -609,12 +605,6 @@ $(document).ready(function() {
   });
   $(".currency").click(addCashAmount);
   $("#cancel_complete_order_button").click(complete_order_hide);
-  $(".payment-amount").live("keydown", function(event){
-    if (!allow_payment_amount && event.which != 13)
-    {
-      //event.preventDefault();
-    }
-  });
 });
 
 </script>
@@ -622,10 +612,7 @@ $(document).ready(function() {
 
     <p>
       <span class='complete_order_label'><%= I18n.t("views.total") %></span>
-      <span id="complete_order_total" class="complete-order-total"><%= @order.total %></span>
-      <!--
-      <span class="complete-order-total"><%= salor_number_to_currency(@order.total) %></span>
-      -->
+      <span id="complete_order_total" class="complete-order-total"><%= @current_order.total %></span>
     </p>
     <div class="actions" width="300" style="padding-bottom:3px">
       <input type="submit" id="add_payment_method_button" value="<%= I18n.t("system.add_payment_method") %>" onclick="add_payment_method()"/>

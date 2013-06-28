@@ -9,6 +9,12 @@ class Vendor < ActiveRecord::Base
  # {START}
   include SalorScope
   include SalorModel
+  
+  has_many :item_types
+  has_many :loyalty_cards
+  has_many :payment_methods
+  has_many :drawer_transactions
+  
   belongs_to :user
   has_many :cash_registers
   has_one  :salor_configuration
@@ -25,7 +31,7 @@ class Vendor < ActiveRecord::Base
   has_many :returns_sent, :as => :shipper
   has_many :shipments
   has_many :vendor_printers
-  has_many :shippers, :through => :user
+  has_many :shippers
   has_many :discounts
   has_many :stock_locations
   has_many :shipment_items, :through => :shipments
@@ -34,6 +40,8 @@ class Vendor < ActiveRecord::Base
   has_many :invoice_blurbs
   has_many :item_stocks
   has_many :receipts
+  
+
   serialize :unused_order_numbers
   serialize :unused_quote_numbers
 
@@ -56,18 +64,8 @@ class Vendor < ActiveRecord::Base
     end
     self.vendor_printer_ids = ps
   end
-  def open_cash_drawer
-    current_register_id = @current_register
-    current_register = CashRegister.scopied.find_by_id current_register_id
-    vendor_printer = VendorPrinter.new :path => current_register.thermal_printer
-    if current_register
-      print_engine = Escper::Printer.new('local', vendor_printer)
-      print_engine.open
-      text = "\x1B\x70\x00\x30\x01 "
-      print_engine.print(0, text)
-      print_engine.close
-    end
-  end
+  
+
 
   def receipt_logo_header=(data)
     if data.nil?

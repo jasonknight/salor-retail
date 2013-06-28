@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 class HomeController < ApplicationController
   
-  skip_before_filter :loadup
+  skip_before_filter :loadup, :only => :index
   
   def errors_display
     @exception = $!
@@ -17,27 +17,10 @@ class HomeController < ApplicationController
   end
   
   def index
-    @from = Time.now
-    @to = Time.now
-    redirect_to vendor_path($Vendor) if @current_user
+
   end
   
-  def user_employee_index
-    Session.sweep
-    if not check_license() then
-      render :action => "402", :status => 402 and return
-    end
-    r = @current_user.get_root
-    if r then
-      redirect_to r and return
-    end
-  end
-  def set_user_theme_ajax
-    if admin_signed_in? then
-      current_user.set_theme(params[:theme])
-    end
-    render :layout => false
-  end
+
   def set_language
     if @current_user then
       supported_language.each do |lang|

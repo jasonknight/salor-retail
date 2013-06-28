@@ -4,11 +4,10 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-class EmployeesController < ApplicationController
-  before_filter :check_role, :except => [:crumble,:login]
-  before_filter :crumble, :except => [:login, :signup]
+class EmployeesController < ApplicationController 
   
   skip_before_filter :loadup
+  
   def verify
     if params[:password] then
       emp = Employee.login(params[:password])
@@ -19,6 +18,7 @@ class EmployeesController < ApplicationController
       end
     end
   end
+  
   def clockin
     if params[:password] then
       emp = Employee.login(params[:password])
@@ -34,6 +34,7 @@ class EmployeesController < ApplicationController
       end
     end
   end
+  
   def clockout
     if params[:password] then
       emp = Employee.login(params[:password])
@@ -45,41 +46,20 @@ class EmployeesController < ApplicationController
       end
     end
   end
-  def signup
-    if not AppConfig.signup == true then
-      redirect_to :action => :login and return
-    end
-  end
+
+  
   def login
     user = Employee.login(params[:code]) 
     if user then
       session[:user_id] = user.id
-      session[:user_type] = user.class.to_s
-      @current_user = user
-      @current_user.start_day
-      # History.record("employee_sign_in",user,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
-      if cr = CashRegister.find_by_ip(request.ip) then
-        user.get.update_attribute :current_register_id, cr.id
-      end
-       if params[:redirect]
-          redirect_to CGI.unescape(params[:redirect]) and return
-       elsif not user.last_path.empty?
-          redirect_to user.last_path and return 
-       else
-          if user.role_cache.include? 'stockboy' then
-            redirect_to '/shipments' + "?vendor_id=#{user.vendor_id}" and return
-          elsif user.role_cache.include? 'cashier' then
-            redirect_to '/current_registers' + "?vendor_id=#{user.vendor_id}" and return
-          elsif user.role_cache.include? 'manager' then
-            redirect_to "/vendors/#{user.vendor_id}" and return
-          else
-            redirect_to '/orders/new' and return # always try to go to orders/new
-          end
-       end
+      session[:vendor_id] = user.vendor_id
+      user.start_day
+      redirect_to new_order_path
     else
-      redirect_to :controller => :home, :action => :index, :notice => "could not find a user with code" and return
+      redirect_to home_index_path
     end
   end
+  
   def destroy_login
     @employee = Employee.find_by_id(params[:id].to_s)
     if @employee and @employee.vendor_id == @current_user.vendor_id then

@@ -11,7 +11,7 @@
 <br/>
 <div  align="center" width="100%">
 
-      <div id="eod-drawer-total"><span class='eod-drawer-total'><%= t '.cash_drawer' %>: <%= number_to_currency $User.get_drawer.reload.amount %></span></div>
+      <div id="eod-drawer-total"><span class='eod-drawer-total'><%= t '.cash_drawer' %>: <%= number_to_currency @current_user.get_drawer.reload.amount %></span></div>
           
 
 </div>

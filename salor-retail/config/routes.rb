@@ -66,7 +66,7 @@ SalorRetail::Application.routes.draw do
   match "orders/prev_order" => "orders#prev_order"
   match "orders/show_payment_ajax" => "orders#show_payment_ajax"
   match "orders/complete_order_ajax" => "orders#complete_order_ajax"
-  match "orders/new_order_ajax" => "orders#new_order_ajax"
+  match "orders/new_order" => "orders#new_order"
   match "orders/activate_gift_card" => "orders#activate_gift_card"
   match "orders/update_order_items" => "orders#update_order_items"
   match "orders/update_pos_display" => "orders#update_pos_display"
@@ -177,5 +177,5 @@ SalorRetail::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => "home#index"
+  root :to => "orders#new"
 end

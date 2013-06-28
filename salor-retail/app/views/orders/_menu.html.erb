@@ -22,7 +22,7 @@ function clickBuyOrderButton(id) {
 }
 </script>
 <div class="pos-menu">
-        <div id="new_order_button" onclick="get('/orders/new_order_ajax', '_menu.html.erb')" class="input pos-button new-order">
+        <div id="new_order_button" onclick="window.location = '/orders/new_order'" class="input pos-button new-order">
           <%= t("menu.new_order")%>
         </div>
         <div id="clear_button" onclick="clearOrder();" class="input pos-button pos-configuration" style="width: 3%;background-color: red;">

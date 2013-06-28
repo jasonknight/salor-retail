@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130627145835) do
+ActiveRecord::Schema.define(:version => 20130628164130) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -304,6 +304,7 @@ ActiveRecord::Schema.define(:version => 20130627145835) do
     t.string   "telephone"
     t.string   "cellphone"
     t.text     "address"
+    t.integer  "current_order_id"
   end
 
   add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
@@ -429,6 +430,7 @@ ActiveRecord::Schema.define(:version => 20130627145835) do
     t.string   "behavior"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "vendor_id"
   end
 
   create_table "items", :force => true do |t|

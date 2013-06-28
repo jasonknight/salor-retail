@@ -5,19 +5,8 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class VendorsController < ApplicationController
-    # {START}
-    before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
-    before_filter :crumble, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
 
-  def get_configuration
-    if $Vendor then
-      render :json => $Vendor.salor_configuration and return
-    else
-      render :text => "{}"
-    end
-  end
-  # GET /vendors
-  # GET /vendors.xml
+
   def csv
     @vendor = Vendor.find_by_token(params[:token])
     if @vendor then
@@ -29,6 +18,7 @@ class VendorsController < ApplicationController
     end
     render :layout => false
   end
+  
   def index
     @vendors = @current_user.vendors(params[:page])
     respond_to do |format|
@@ -37,18 +27,11 @@ class VendorsController < ApplicationController
     end
   end
 
-  # GET /vendors/1
-  # GET /vendors/1.xml
   def show
     if not check_license() then
       redirect_to :controller => "home", :action => "index" and return
     end
     @vendor = @current_user.vendor(params[:id])
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @vendor }
-    end
   end
 
   # GET /vendors/new
@@ -72,7 +55,6 @@ class VendorsController < ApplicationController
     if not @vendor.vendor_printers.any? then
       @vendor.vendor_printers.build
     end
-    add_breadcrumb I18n.t("menu.edit") + ' ' + @vendor.name,'edit_vendor_path(@vendor)'
   end
 
   # POST /vendors
@@ -172,10 +154,10 @@ class VendorsController < ApplicationController
   end
 
   def open_cash_drawer
-    @vendor ||= Vendor.find_by_id(@current_user.vendor_id)
-    @vendor.open_cash_drawer
+    @current_register.open_cash_drawer
     render :nothing => true
   end
+  
   def render_open_cashdrawer
     render :text => "\x1D\x61\x01" + "\x1B\x70\x00\x30\x01 "
   end
@@ -239,7 +221,6 @@ class VendorsController < ApplicationController
     end
   end
 
-  #
   def end_day
     begin
       @order = initialize_order if @current_user.order_id
@@ -250,60 +231,43 @@ class VendorsController < ApplicationController
       if @current_user.class == User then
         @current_user.update_attribute :is_technician, false
       end
-      # History.record("employee_sign_out",@current_user,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
       session[:user_id] = nil
-      session[:user_type] = nil
-      cookies[:user_id] = nil
-      cookies[:user_type] = nil
       redirect_to :controller => :home, :action => :index
       @current_user = nil
     end
   end
-  # {END}
+  
+  
   def edit_field_on_child
-    # If possible, this tries to avoid calling calculate_totals / update_self_and_save
-    # for ORDER and ORDER_ITEM operations. Calling above funcs recalculates everything
-    # puts  "### Begining edit_field_on_child"
-    # and takes up to 2s for lots of items!!
     if params[:field] == "front_end_change" then
-      o = Order.scopied.find_by_id(params[:order_id])
+      o = @current_vendor.order.find_by_id(params[:order_id])
       o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value]) if o
       render :nothing => true and return
     end
     
     
-    if allowed_klasses.include? params[:klass] or @current_user.is_technician?
-#        puts  "### Class is allowed"
+    if allowed_klasses.include? params[:klass]
       kls = Kernel.const_get(params[:klass])
       if not params[:id] and params[:order_id] then
         params[:id] = params[:order_id]
       end
-      if kls.exists? params[:id] then
-#          puts  "### Class Exists"
-        @inst = kls.find(params[:id])
-        if @inst.class == OrderItem and @inst.order.paid == 1 then
-#           puts "## Order is Paid"
-          render :layout => false and return
-        end
-        
+      
+      @inst = kls.where(:vendor_id => @current_vendor, :id => params[:id])
+      if @inst       
         if @inst.class == Order
           @order = @inst
         elsif @inst.class == OrderItem
           @order = @inst.order
         end
         
-          # --- push notification to refresh the customer screen
-          t = SalorRetail.tailor
-          if t
-            t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
-          end
-          # ---
+        # --- push notification to refresh the customer screen
+        t = SalorRetail.tailor
+        if t
+          t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+        end
+        # ---
           
-#         if @inst.class == Order and @inst.paid == 1 then
-#           @order = @current_user.get_new_order
-# #           puts "## Order is paid 2"
-#           render :layout => false and return
-#         end
+
         if @inst.respond_to? params[:field]
 #            puts  "### Inst responds_to field #{params[:field]}"
           if not @current_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
@@ -320,40 +284,10 @@ class VendorsController < ApplicationController
               render :layout => false and return
             end
           end
-          # Replace , with . for for float calcs to work properly
-#            puts  " --- " + params[:value].to_s
+
           params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
 #            puts  " --- " + params[:value].to_s
           if kls == OrderItem then
-#              puts  "### klass is OrderItem"
-#             if params[:field] == 'quantity' and 
-#                @inst.behavior == 'normal' and 
-#                @inst.coupon_applied == false and 
-#                @inst.is_buyback == false and 
-#                @inst.order.buy_order == false and (not @inst.weigh_compulsory == true) then
-#                puts  "### field is qty, behav normal, coup_applied false, and not is_buyback"
-#               unless @inst.activated and true == false then
-# #                  puts  "### inst is not activated."
-#                 # Takes into account ITEM rebate and ORDER rebate.
-#                 # ORDER and ITEM totals are updated in DB and in instance vars for JS
-#                 newval = params[:value]
-#                 origttl = @inst.total
-#                 @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
-#                 @inst.quantity = newval
-#                 @inst.calculate_total_with_rebate
-#                 @inst.calculate_rebate_amount
-#                 # Calculate OI tax, but update DB below instead
-#                 @inst.calculate_tax(true)
-#                 # Only include ORDER rebate in calculation if type = 'percent'
-#                 @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
-#                 # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
-#                 @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-#                 @inst.connection.execute("update `order_items` set total = #{@inst.total},`quantity` = #{newval}, tax = #{@inst.tax}, rebate_amount = #{ @inst.rebate_amount } where id = #{@inst.id}")
-#                 @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
-#                 @inst.is_valid = true
-#                 render :layout => false and return
-#               end
-            #els
             if params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
 #                puts  "### field is price"
               unless @inst.activated then
@@ -490,11 +424,11 @@ class VendorsController < ApplicationController
     end #end allowed_klass
     render :layout => false
   end
-  #
+
   def history
     @histories = History.order("created_at desc").page(params[:page]).per($Conf.pagination)
   end
-  # {START}
+
   def toggle
     if allowed_klasses.include? params[:klass]
       kls = Kernel.const_get(params[:klass])
@@ -515,14 +449,6 @@ class VendorsController < ApplicationController
     render :layout => false
   end
   
-  #
-  
-  def help
-   
-  end
-  
-  #
-  
   def export
     if params[:file] then
       manager = CsvManager.new(params[:file],"\t")
@@ -542,9 +468,6 @@ class VendorsController < ApplicationController
     render :layout => false    
   end
 
-  def clearcache
-  end
-
   def logo
     @vendor = Vendor.find(params[:id])
     send_data @vendor.logo_image, :type => @vendor.logo_image_content_type, :filename => 'abc', :disposition => 'inline'
@@ -554,11 +477,13 @@ class VendorsController < ApplicationController
     @vendor = Vendor.find(params[:id])
     send_data @vendor.logo_invoice_image, :type => @vendor.logo_invoice_image_content_type, :filename => 'abc', :disposition => 'inline'
   end
-  #
+
+  
   def display_logo
     @vendor = Vendor.find(params[:id])
     render :layout => 'customer_display'
   end
+  
   def backup
     configpath = SalorRetail::Application::SR_DEBIAN_SITEID == 'none' ? 'config/database.yml' : "/etc/salor-retail/#{SalorRetail::Application::SR_DEBIAN_SITEID}/database.yml"
     dbconfig = YAML::load(File.open(configpath))
@@ -567,19 +492,15 @@ class VendorsController < ApplicationController
     password = dbconfig[mode]['password']
     database = dbconfig[mode]['database']
     `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
-    #`mysqldump -u #{username} -p#{password} #{database} -w "vendor_id='#{$Vendor.id}'" | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2` # TODO: limiting by vendor was not working, so I disabled it.
+
 
     send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
-   #redirect_to "/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2"
-    #`cp -f #{Rails.root.to_s}/log/production.log #{params[:path]}/production-#{Time.now.strftime("%Y-%m-%d")}.log`
+
   end
 
-  # Employee Editing Functions
+
   private
-  def crumble
-    
-    add_breadcrumb I18n.t("menu.vendors"),'vendors_path'
-  end
+
   def send_csv(lines,name)
     ftype = 'tsv'
     send_data(lines, :filename => "#{name}_#{Time.now.year}#{Time.now.month}#{Time.now.day}-#{Time.now.hour}#{Time.now.min}.#{ftype}", :type => 'application-x/csv') and return

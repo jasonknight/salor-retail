@@ -21,7 +21,7 @@ var i18n_transaction_tag_one = '<%= I18n.t("activerecord.models.transaction_tag.
 
 <%
   if @current_user
-    shippers = @current_user.get_shippers(nil)
+    shippers = @current_vendor.shippers
     ships = []
     shippers.each do |ship|
       ships << "<option value='Shipper:#{ship.id}'>#{ship.name}</option>"

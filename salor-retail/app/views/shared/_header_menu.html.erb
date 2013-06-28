@@ -1,4 +1,5 @@
 <div id="header" class="header">
+
 <ul class="header-list">
   <li>
     <div align="center" class="first">
@@ -9,8 +10,7 @@
   </li>
   <li>
     <div align="center" id="btn-vendors-index" class="">
-        <%=  link_to raw(salor_icon(:vendor,{},32,I18n.t("menu.home"))), vendor_path($Vendor) %>
-<!--         <img src="/images/icons/<%= icon(:vendor,32) %>" /><br /><span class='icon-caption'><%= I18n.t("menu.home") %></span> -->
+        <%=  link_to raw(salor_icon(:vendor,{},32,I18n.t("menu.home"))), vendor_path(@current_vendor) %>
     </div>
   </li>
   <li>
@@ -25,7 +25,7 @@
     </div>
   </li>
   <% end %>
-  <% if @current_user and @current_user.can(:cashier) and params[:controller] == "orders" and params[:action] = "new" %>
+  <% if @current_user and @current_user.can(:cashier) %>
     <li>
       <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
         <div id='header_drawer_amount'></div>
@@ -37,7 +37,6 @@
   <li>
     <div align="center" id="btn-orders-new" class="">
     <%=  link_to raw(salor_icon(:cash_register,{},32,I18n.t("menu.pos"))), "/orders/new" %>
-<!--       <%= link_to salor_icon(:cash_register,{},32), "/orders/new" %><br /><span class='icon-caption'><%= I18n.t("menu.pos") %></span> -->
     </div>
   </li>
   <% end %>
@@ -51,9 +50,6 @@
   <li>
     <div align="center" id="end_of_day_button" onclick="window.location = '/cash_registers/end_of_day';" class="no-touchy">
     <%= salor_icon(:logout,{},32,I18n.t("system.logout")) %><br />
-<!--      <a href="/cash_registers/end_of_day">
-        <img src="/images/icons/<%= icon(:logout,32) %>" /><br /><span class='icon-caption'><%= I18n.t("system.logout") %></span>
-      </a>-->
     </div>
   </li>
   <li >
@@ -61,13 +57,14 @@
       <%= get_clock_content %>
     </div>
   </li>
-  </ul>
-  <% if @current_user  %>
-    <%= render :partial => "shared/generic_search" %>
-  <% end %>
+</ul>
+
+<% if @current_user  %>
+  <%= render :partial => "shared/generic_search" %>
+<% end %>
 </div>
-<!-- End ul.list -->
+
+
 <script type="text/javascript">
-  /* Select tab on menu bar */
   $('#btn-' + params.controller + '-' + params.action).addClass('active');
 </script>

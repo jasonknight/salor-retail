@@ -1,6 +1,6 @@
 <script type="text/javascript" src="/assets/complete_order.js"></script>
 <script type="text/javascript">
-Order = <%= raw @order.to_json %>;
+Order = <%= raw @current_order.to_json %>;
 var filename = "new.html.erb";
 var isBuyOrder = false;
 var highlightAttrs = ['sku','price','total'];
@@ -49,11 +49,11 @@ setInterval(function () {
 
 $(document).ready(function () {
     //scrollable_div($('.pos-table-left-column-items'));
-    var order = <%= raw @order.to_json %>;
+    var order = <%= raw @current_order.to_json %>;
     updateOrder(order);
     <%
       items = []
-      @order.order_items.visible.each do |oi|
+      @current_order.order_items.visible.each do |oi|
         items << oi.to_json
       end
     %>
@@ -77,7 +77,7 @@ $(function () {
 });
 </script>
 
-<%= render :partial => "menu", :locals => {:order => @order} %>
+<%= render :partial => "menu", :locals => {:order => @current_order} %>
 <%= render :partial => "buttons/popup", :layout => false %>
 
 <div class='clear'></div>
@@ -85,9 +85,9 @@ $(function () {
 <div class="pos-customer shown"></div>
 
 <div id="order_rebate_options" class='rebate'>
-  <%= edit_me(:rebate,@order,@order.rebate,'','pos_order_rebate','true') %>
-  <%= edit_me(:rebate_type,@order,@order.rebate_type_display,'','pos_order_rebate_type',true) %>
-  <%= edit_me(:tag,@order,@order.tag,'','pos_order_tag','true') %>
+  <%= edit_me(:rebate,@current_order,@current_order.rebate,'','pos_order_rebate','true') %>
+  <%= edit_me(:rebate_type,@current_order,@current_order.rebate_type_display,'','pos_order_rebate_type',true) %>
+  <%= edit_me(:tag,@current_order,@current_order.tag,'','pos_order_tag','true') %>
 </div>
 
 <div class='clear'></div>
@@ -95,8 +95,8 @@ $(function () {
     function weigh_last_item() {
     try {
       var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
-      <% if not @cash_register.scale.blank? then  %>
-        var weight = Salor.toperScale('<%= @cash_register.scale %>');
+      <% if not @current_register.scale.blank? then  %>
+        var weight = Salor.toperScale('<%= @current_register.scale %>');
       <% else %>
         var weight = 0;
       <% end %>
@@ -112,7 +112,7 @@ $(function () {
      }
     }
   </script>
-<% if not @cash_register.scale.blank? then  %>
+<% if not @current_register.scale.blank? then  %>
   
   <div class="uniscalebutton" align="center" onmousedown="weigh_last_item();">
     <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32) %>
@@ -122,17 +122,20 @@ $(function () {
   </div>
 <% end %>
 
-  <div class="pos-drawer-button" onmousedown="quick_open_drawer();">
-    <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32) %>
-  </div>
+<div class="pos-drawer-button" onmousedown="quick_open_drawer();">
+  <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32) %>
+</div>
+
 <div class='center'>
-<% if $User.can(:change_prices) %>
-  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
+<% if @current_user.can(:change_prices) %>
+  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @current_order.id %>" klass="Order" field="total"></div>
 <% else %>
-  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
+  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @current_order.id %>" klass="Order" field="total"></div>
 <% end -%>
 </div>
+
 <div class='clear'></div>
+
 <div class='main_sku'>
   <input type="text" class="keyboard-input keyboardable" id="keyboard_input" name="keyboard_input" value="" style="background: white;color:black;"/>
 </div>

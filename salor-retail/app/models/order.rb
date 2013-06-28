@@ -20,8 +20,9 @@ class Order < ActiveRecord::Base
   belongs_to :employee
   belongs_to :customer
   belongs_to :vendor
-  belongs_to :current_register
+  belongs_to :cash_register
   belongs_to :current_register_daily
+  belongs_to :drawer
 
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
@@ -46,7 +47,6 @@ class Order < ActiveRecord::Base
   # These two associations are here for eager loading to speed things up
   has_many :coupons, :class_name => "OrderItem", :conditions => "behavior = 'coupon' and hidden != 1" 
   has_many :gift_cards, :class_name => "OrderItem", :conditions => "behavior = 'gift_card' and hidden != 1"
-  validate :validify
 
   I18n.locale = AppConfig.locale
   REBATE_TYPES = [
@@ -116,20 +116,8 @@ class Order < ActiveRecord::Base
     end
     return self.rebate_type
   end
-  def validify
-    if self.total.nil? then
-      self.total = 0.0
-    end
-    if not self.user and not self.employee then
-      errors.add(:user_id,I18n.t("system.errors.order_must_have_user"))
-    end
-    if not self.vendor then
-      errors.add(:vendor_id, I18n.t("system.errors.order_vendor_required"))
-    end
-    if not self.current_register then
-      errors.add(:current_register_id,I18n.t("system.errors.order_register_required"))
-    end
-  end
+
+  
   def total=(p)
     return if self.paid == 1
     p = self.string_to_float(p)
@@ -214,7 +202,7 @@ class Order < ActiveRecord::Base
   end
 
   #
-	def add_item(item)
+	def add_item(item, params={})
     return if self.paid == 1
 	  if not item then
 	    GlobalErrors.append("system.errors.item_not_found",self)
@@ -231,6 +219,7 @@ class Order < ActiveRecord::Base
       update_self_and_save
       return oi
     end
+    
     oi = self.order_items.visible.find_by_item_id(item.id)
     if oi and not oi.is_buyback and not oi.no_inc then
       # just increment OrderItem
@@ -246,7 +235,8 @@ class Order < ActiveRecord::Base
 	  end
 	  oi.order_id = self.id
     oi.vendor_id = self.vendor_id
-	  oi.no_inc = true if GlobalData.params and GlobalData.params.no_inc
+
+	  oi.no_inc = true if params[:no_inc]
 	  ret = oi.set_item(item)
 	  return oi if not ret
 	  # self.order_items << oi
@@ -254,6 +244,44 @@ class Order < ActiveRecord::Base
 	  return oi
 	end
 
+  def get_item_by_code(code)     
+    # a sku was entered
+    item = self.vendor.items.find_by_sku(code)
+    return item if item
+
+
+    # a GS1 barcode was entered
+    m = code.match(/\d{2}(\d{5})(\d{5})/)
+    item = self.vendor.items.find_by_sku(m[1]) if m
+    return item if item
+
+
+    # a loyalty card was entered
+    lcard = self.vendor.loyalty_cards.find_by_sku(code)
+    return lcard if lcard
+    
+    
+    i = Item.new
+    i.item_type = self.vendor.item_types.find_by_behavior('normal')
+    i.behavior = i.item_type.behavior
+    i.tax_profile = self.vendor.tax_profiles.where(:default => true).first
+    i.vendor = self.vendor
+    
+    pm = code.match(/(\d{1,9}[\.\,]\d{1,2})/)
+    if pm and pm[1]
+      # a price in the format xx,xx was entered
+      i.sku = "DMY" + Time.now.strftime("%y%m%d") + rand(999).to_s
+      i.name = i.sku
+      i.base_price = code
+    else
+      # dummy item
+      item.sku = code
+    end
+    i.save
+    return i
+  end
+  
+  
   #
 	def change_given
 	  ttl = 0.0
@@ -501,17 +529,8 @@ class Order < ActiveRecord::Base
     save!
     log_action "update_self_and_save ended."
   end
-  #
-  def complete=(api_called=nil)
-    self.complete
-  end
-	#
-  def complete
-#     log_action "Starting complete order. Drawer amount is: #{@current_user.get_drawer.amount}"
-#     log_action "User Is: #{@current_user.username}"
-#     log_action "DrawerId Is: #{@current_user.get_drawer.id}"
-#     log_action "OrderId Is: #{self.id}"
 
+  def complete
     # History
     h = History.new
     h.url = "Order::complete"
@@ -521,90 +540,62 @@ class Order < ActiveRecord::Base
     h.action_taken = "CompleteOrder"
     h.changes_made = "Beginning complete order"
     h.save
-    #end history
+
     
     
     self.paid = 1
-    # We need to save now and reload!
-    self.save
-    log_action "Saved"
-    self.reload
-    log_action "Reloaded"
     self.created_at = Time.now
-    self.drawer_id = @current_user.get_drawer.id
+    self.drawer = self.employee.get_drawer
+    
     if self.is_quote then
       self.qnr = self.vendor.get_unique_model_number('quote')
     else
       self.nr = self.vendor.get_unique_model_number('order')
     end
     
-    #begin
-      log_action "Updating quantities"
-      order_items.visible.each do |oi|
-        # These methods are defined on OrderItem model.
-        oi.set_sold
-        oi.update_quantity_sold
-        log_action "quantity sold updated"
-        oi.update_cash_made
-        log_action "cash_made updated"
-      end
-      log_action "Updating Category Gift Cards"
-      activate_gift_cards
+    self.save
 
-      ottl = self.get_drawer_add
-      log_action "ottl = self.get_drawer_add #{ottl}"
-      if self.buy_order then
-        #ottl *= -1 if ottl < 0
-        log_action "It's a buy order..."
-        create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
-      elsif self.total < 0 then
-        #ottl *= -1 if ottl < 0
-        log_action "Not a buy order, but total < 0"
-        create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
-      else
-        @current_user.update_attribute :last_order_id, self.id
-        log_action "Creating :drop for complete order with #{ottl}"
-        create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
-        if self.change_given > 0 and not self.is_quote
-          log_action "Creating change PM"
-          PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
-        end
-        log_action("OID: #{self.id} USER: #{@current_user.username} OTTL: #{ottl} DRW: #{@current_user.get_drawer.amount}")
-        log_action("End of Complete: " + self.payment_methods.inspect)
+    log_action "Updating quantities"
+    order_items.visible.each do |oi|
+      oi.set_sold
+      oi.update_quantity_sold
+      log_action "quantity sold updated"
+      oi.update_cash_made
+      log_action "cash_made updated"
+    end
+    log_action "Updating Category Gift Cards"
+    activate_gift_cards
+
+    ottl = self.get_drawer_add
+    log_action "ottl = self.get_drawer_add #{ottl}"
+    if self.buy_order then
+      log_action "It's a buy order..."
+      create_drawer_transaction(self.get_drawer_add,{:tag => "CompleteOrder"})
+    elsif self.total < 0 then
+      log_action "Not a buy order, but total < 0"
+      create_drawer_transaction(self.get_drawer_add,{:tag => "CompleteOrder"})
+    else
+      log_action "Creating :drop for complete order with #{ottl}"
+      create_drawer_transaction(ottl,{:tag => "CompleteOrder"})
+      if self.change_given > 0 and not self.is_quote
+        log_action "Creating change PM"
+        pm = PaymentMethod.new
+        pm.vendor = self.vendor
+        pm.internal_type = 'Change'
+        pm.amount = - self.change_given
+        pm.order = self
+        pm.save
       end
-      self.save
-      log_action "Fetching loyalty card"
-      lc = self.loyalty_card
-      log_action "LoyaltyCard fetched"
-      if self.lc_points.nil? then
-        log_action "order lc_points was nil"
-        self.lc_points = 0 
-      end
-      log_action "Checking lc"
-      if lc and not self.lc_points.nil? and not lc.points.nil? then
-        log_action "LC Points present"
-        if self.lc_points > lc.points then
-          log_action "Too many points on order"
-          self.lc_points = lc.points
-        end
-        log_action "Updating loyalty card points to #{lc.points - self.lc_points}" 
-        lc.update_attribute(:points,lc.points - self.lc_points)
-        np = $Conf.lp_per_dollar * self.subtotal
-        log_action "Updating lc card with points of amount #{lc.points + np}"
-        lc.update_attribute(:points,lc.points + np)
-      else
-        log_action "Nothing to do with LC points."
-      end
-    #rescue
-    #  # #puts $!.to_s
-    #  self.update_attribute :paid, 0
-    #  GlobalErrors.append_fatal("system.errors.order_failed",self)
-    #  log_action $!.to_s
-    #  #puts $!.to_s
-    #end
-    log_action "Ending complete order. Drawer amount is: #{@current_user.get_drawer.amount}"
+      log_action("OID: #{self.id} USER: #{self.employee.username} OTTL: #{ottl} DRW: #{self.employee.get_drawer.amount}")
+      log_action("End of Complete: " + self.payment_methods.inspect)
+    end
+    
+    self.save
+
+    log_action "Ending complete order. Drawer amount is: #{self.employee.get_drawer.amount}"
     self.save
   end
+  
   def activate_gift_cards
     log_action "Activating giftcards"
     self.gift_cards.each do |gc|
@@ -671,52 +662,33 @@ class Order < ActiveRecord::Base
     return oi
   end
 
-  #
-  def create_drawer_transaction(amount,type,opts={})
-    
-    
-    #Mikey: argument "type" is overridden below according to the sign of amount, so can be removed
+  def create_drawer_transaction(amount,opts={})
+    drawer = self.employee.get_drawer
     dt = DrawerTransaction.new(opts)
+    dt.vendor = self.vendor
     dt.amount = amount
-    dt[type] = true
-    dt.drawer_id = @current_user.get_drawer.id
-    dt.drawer_amount = @current_user.get_drawer.amount
-    dt.order_id = self.id
+    dt.drawer = drawer
+    dt.drawer_amount = drawer.amount
+    dt.order = self
     if dt.amount < 0 then
       dt.payout = true
       dt.drop = false
       dt.amount *= -1
     end
-     sql = %Q[
-      INSERT INTO `drawer_transactions` 
-        (`drawer_id`, `amount`, `drop`, `payout`, `drawer_amount`, `order_id`, `created_at`,`tag`)
-      VALUES
-        ( '#{dt.drawer_id}',
-          '#{dt.amount}',
-          #{dt.drop ? 'TRUE' : 'FALSE'},
-          #{dt.payout ? 'TRUE' : 'FALSE'},
-          '#{dt.drawer_amount}',
-          '#{dt.order_id}',
-          '#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}',
-          '#{opts[:tag]}'
-        );
-    ]
+    dt.save
     
-    log_action "sql: #{sql}"
-    DrawerTransaction.connection.execute(sql)
-    if dt.payout then
-      @current_user.get_drawer.update_attribute(:amount, @current_user.get_drawer.amount - dt.amount)
-      log_action "updated drawer_amount for payout"
-    elsif dt.drop then
-      @current_user.get_drawer.update_attribute(:amount, @current_user.get_drawer.amount + dt.amount)
-      log_action "updated drawer_amount for drop"
+    if dt.payout == true then
+      drawer.amount -= dt.amount
+    elsif dt.drop == true then
+      drawer.amount += dt.amount
     end
-    @current_user.reload
+    drawer.save
+    
     log_action "creating drawer transaction complete"
-    History.direct("Order::create_drawer_transaction",self,{:amount => amount, :type => type, :opts => opts, :drawer_transaction_id => dt.id},"","");
+    History.direct("Order::create_drawer_transaction",self,{:amount => amount, :opts => opts, :drawer_transaction_id => dt.id},"","");
   end
     
-  #
+
   def create_refund_payment_method(amount, refund_payment_method)
     pm = PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
                          :name => (refund_payment_method + 'Refund'), 

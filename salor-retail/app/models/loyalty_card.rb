@@ -10,6 +10,7 @@ class LoyaltyCard < ActiveRecord::Base
 	include SalorBase
   include SalorModel
   belongs_to :customer
+  belongs_to :vendor
   has_many :orders, :through => :customer
   before_save :clean_model
   before_update :clean_model

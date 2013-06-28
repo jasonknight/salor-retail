@@ -5,50 +5,25 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class TaxProfilesController < ApplicationController
-   before_filter :check_role, :except => [:crumble]
-   before_filter :crumble
+   before_filter :check_role
    
-  # GET /tax_profiles
-  # GET /tax_profiles.xml
+
   def index
-    @tax_profiles = $Vendor.tax_profiles.visible.page(params[:page]).per(25)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @tax_profiles }
-    end
+    @tax_profiles = @current_vendor.tax_profiles.visible.page(params[:page]).per(25)
   end
 
-  # GET /tax_profiles/1
-  # GET /tax_profiles/1.xml
   def show
-    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @tax_profile }
-    end
+    @tax_profile = @current_vendor.tax_profiles.find(params[:id])
   end
 
-  # GET /tax_profiles/new
-  # GET /tax_profiles/new.xml
   def new
     @tax_profile = TaxProfile.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @tax_profile }
-    end
   end
 
-  # GET /tax_profiles/1/edit
   def edit
-    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
-    add_breadcrumb @tax_profile.name,'edit_tax_profile_path(@tax_profile)'
+    @tax_profile = @current_vendor.tax_profiles.find(params[:id])
   end
 
-  # POST /tax_profiles
-  # POST /tax_profiles.xml
   def create
     @tax_profile = TaxProfile.new(params[:tax_profile])
   
@@ -66,7 +41,7 @@ class TaxProfilesController < ApplicationController
   # PUT /tax_profiles/1
   # PUT /tax_profiles/1.xml
   def update
-    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
+    @tax_profile = @current_vendor.tax_profiles.find(params[:id].to_s)
     
     respond_to do |format|
       if @tax_profile.update_attributes(params[:tax_profile]) and not @tax_profile.order_items.any?
@@ -82,7 +57,7 @@ class TaxProfilesController < ApplicationController
   # DELETE /tax_profiles/1
   # DELETE /tax_profiles/1.xml
   def destroy
-    @tax_profile = $Vendor.tax_profiles.find(params[:id].to_s)
+    @tax_profile = @current_vendor.tax_profiles.find(params[:id].to_s)
     @tax_profile.kill
 
     respond_to do |format|

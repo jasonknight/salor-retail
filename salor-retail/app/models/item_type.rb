@@ -8,6 +8,9 @@
 class ItemType < ActiveRecord::Base
 	include SalorScope
   include SalorModel
+  
+  belongs_to :vendor
+  
   has_many :items
   has_many :order_items
   has_many :shipment_items

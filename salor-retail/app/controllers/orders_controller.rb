@@ -8,12 +8,10 @@
 
 class OrdersController < ApplicationController
 
-   before_filter :check_role, :only => [:new_pos, :index, :show, :new, :edit, :create, :update, :destroy, :report_day], :except => [:print_receipt, :print_confirmed, :log]
-   before_filter :crumble, :except => [:customer_display,:print_receipt, :print_confirmed, :log]
    respond_to :html, :xml, :json, :csv
    
    def undo_drawer_transaction
-      @order = $Vendor.orders.find_by_id(params[:oid].to_s)
+      @order = @current_vendor.orders.find_by_id(params[:oid].to_s)
       @dt = DrawerTransaction.find_by_id(params[:id].to_s)
       @drawer = @dt.drawer
       if @dt.order_id == @order.id then
@@ -28,36 +26,10 @@ class OrdersController < ApplicationController
       end
       redirect_to "/orders/#{@order.id}" and return
    end
-   
-   
-   # TODO: Remove method offline since empty.
-   def offline
-   end
-
-  # TODO: Remove method new_pos since apparanlty no longer used.
-#    def new_pos
-#       if not @current_user.vendor_id then
-#         redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
-#       end
-#       if not @current_register then
-#         redirect_to :controller => 'current_registers', :notice => I18n.t("system.errors.must_choose_register") and return
-#       end
-#       #if @current_user.get_drawer.amount <= 0 then
-#       #  GlobalErrors.append("system.errors.must_cash_drop")
-#       #end
-#       @order = initialize_order
-# 
-#       add_breadcrumb @current_register.name,'current_register_path(@current_register,:vendor_id => params[:vendor_id])'
-#       add_breadcrumb t("menu.order") + "#" + @order.id.to_s,'new_order_path(:vendor_id => @current_user.vendor_id)'
-#       respond_to do |format|
-#         format.html {render :layout => "application"}
-#         format.xml  { render :xml => @order }
-#       end
-#    end
 
    
   def new_from_proforma
-    @proforma = Order.scopied.find_by_id(params[:order_id].to_s) #initialize_order
+    @proforma = Order.scopied.find_by_id(params[:order_id].to_s)
     @order = @proforma.dup
     @order.save
     @order.reload
@@ -78,9 +50,10 @@ class OrdersController < ApplicationController
     @order.update_self_and_save
     redirect_to "/orders/new?order_id=#{@order.id}"
   end
+  
   def merge_into_current_order
-    @current = initialize_order
-    @to_merge = Order.scopied.find_by_id(params[:id].to_s)
+    @current = @current_vendor.orders.find_by_id(params[:order_id])
+    @to_merge = @current_vendor.orders.find_by_id(params[:id])
     @to_merge.order_items.visible.each do |oi|
        noi = oi.dup
        noi.order_id = @current.id
@@ -89,134 +62,85 @@ class OrdersController < ApplicationController
     @current.reload.update_self_and_save
     redirect_to "/orders/new?order_id=#{@current.id}"
   end
+  
   def index
     params[:type] ||= 'normal'
     case params[:type]
     when 'normal'
-      @orders = $Vendor.orders.order("nr desc").where(:paid => 1).page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("nr desc").where(:paid => 1).page(params[:page]).per(25)
     when 'proforma'
-      @orders = $Vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(25)
     when 'unpaid'
-      @orders = $Vendor.orders.order("nr desc").unpaid.page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("nr desc").unpaid.page(params[:page]).per(25)
     when 'quote'
-      @orders = $Vendor.orders.order("qnr desc").quotes.page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("qnr desc").quotes.page(params[:page]).per(25)
     else
-      @orders = $Vendor.orders.order("id desc").page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(25)
     end
     
     
     respond_with(@orders)
   end
 
-  # GET /orders/1
-  # GET /orders/1.xml
+
   def show
     @order = Order.scopied.find_by_id(params[:id].to_s)
-    add_breadcrumb t("menu.order") + "#" + @order.nr.to_s,'order_path(@order,:vendor_id => @current_user.vendor_id)'
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @order }
     end
   end
 
-  def new    
+  def new
+    # need a cash register
+    redirect_to cash_registers_path and return unless @current_register
     
-   redirect_to cash_registers_path and return unless @current_register
+    # get an order from params
+    if params[:order_id].to_i != 0 then
+      @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+    end
     
+    # get employee's last order if unpaid
+    unless @current_order
+      @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(@current_user.current_order_id)
+    end
     
-    initialize_order
-    
-    # --- push notification to refresh the customer screen
+    # create new order if all of the previous fails
+    unless @current_order
+      @current_order = Order.new
+      @current_order.vendor = @current_vendor
+      @current_order.employee = @current_user
+      @current_order.cash_register = @current_register
+      @current_order.save
+      @current_user.current_order_id = @current_order.id
+      @current_user.save
+    end
+
+    # push notification to refresh the customer screen
     t = SalorRetail.tailor
     if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @current_order.id }/customer_display"
     end
  
-    
     @button_categories = Category.where(:button_category => true).order(:position)
     
     CashRegister.update_all_devicenodes
     @current_register.reload
   end
 
-  # GET /orders/1/edit
+
   def edit
-    @order = Order.scopied.find_by_id(params[:id].to_s)
-    if @order.paid == 1 and not @current_user.is_technician? then
-      redirect_to :action => :new, :notice => I18n.t("system.errors.cannot_edit_completed_order") and return
-    end
-    if @order and (not @order.paid == 1 or @current_user.is_technician?) then
-      session[:prev_order_id] = @current_user.order_id
-      @current_user.update_attributes(:order_id => @order.id)
-      @order.update_attributes(:current_register_id => @current_register)
-    end
-    redirect_to :action => :new, :order_id => @order.id
-  end
-  def swap
-    @order = Order.scopied.find_by_id(params[:id].to_s)
-    if @order and (not @order.paid == 1 or @current_user.is_technician?) then
-      @current_user.update_attribute(:order_id,@order.id)
-    end
-    redirect_to :action => "new"
-  end
-  # POST /orders
-  # POST /orders.xml
-  def create
-    @order = Order.find(params[:id].to_s)
-    render :status => 401 and return if not_my_vendor?(@order)
-    respond_to do |format|
-      if @order.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Order.model_name.human)) }
-        format.xml  { render :xml => @order, :status => :created, :location => @order }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
-      end
-    end
+    @current_user.current_order_id = params[:id]
+    @current_user.save
+    redirect_to new_order_path
   end
 
-  # PUT /orders/1
-  # PUT /orders/1.xml
-  def update
-    @order = Order.find(params[:id].to_s)
-    render :status => 401 and return if not_my_vendor?(@order)
-    if @order.paid == 1 and not @current_user.is_technician? then
-      GlobalErrors.append("system.errors.cannot_edit_completed_order",@order)
-    end
-    respond_to do |format|
-      if (not @order.paid == 1 or @current_user.is_technician?) and @order.update_attributes(params[:order])
-        format.html { redirect_to(@order, :notice => 'Order was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /orders/1
-  # DELETE /orders/1.xml
-  def destroy
-    @order = Order.by_vendor.find(params[:id].to_s)
-    @order.kill
-    respond_to do |format|
-      format.html { redirect_to(orders_url) }
-      format.xml  { head :ok }
-    end
-  end
+ 
   
-  def recently_tagged
-    @orders = Order.where("tag != '' and tag IS NOT NULL").scopied.order("id DESC").limit(5)
-    render :text => @orders.to_json
-  end
-  def prev_order
-    @current_user.order_id = session[:prev_order_id]
-    session[:prev_order_id] = nil
-    redirect_to :action => :new
-  end
+
 
   def connect_loyalty_card
-    @order = initialize_order
+    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     render :status => 401 and return if not_my_vendor?(@order)
     @loyalty_card = LoyaltyCard.scopied.find_by_sku(params[:sku])
     if @loyalty_card then
@@ -227,26 +151,16 @@ class OrdersController < ApplicationController
   end
 
   def add_item_ajax
-    @order = initialize_order
-    t = SalorRetail.tailor
+    @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     
     # --- push notification to refresh the customer screen
+    t = SalorRetail.tailor
     if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @current_order.id }/customer_display"
     end
     # ---
     
-    @error = nil
-    render :status => 401 and return if not_my_vendor?(@order)
-    if @order.paid == 1 and not @current_user.is_technician? then
-      @order = @current_user.get_new_order 
-      @item = Item.get_by_code(params[:sku])
-      @order_item = @order.add_item(@item)
-      @order.update_self_and_save
-      @order_item.reload
-      render and return
-    end
-    @order_item = @order.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+    @order_item = @current_order.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
     # We cannot sell multiples of gift cards.
     if @order_item and @order_item.behavior == 'gift_card' then
       flash[:notice] = I18n.t("system.errors.insufficient_quantity_on_item", :sku => @order_item.sku)
@@ -258,13 +172,14 @@ class OrdersController < ApplicationController
         @order_item.quantity += 1
         @order_item.save
         @order_item.order.update_self_and_save
-        @order = @order_item.order
+        @current_order = @order_item.order
         @order_item.reload
         render and return
       end
     end
-    @item = Item.get_by_code(params[:sku])
-#     puts "!!! returned Item: #{@item.sku}"
+    
+    @item = @current_order.get_item_by_code(params[:sku])
+
     if @item.class == Item and @item.activated == true and @item.behavior == 'gift_card' and @item.amount_remaining <= 0 then
       flash[:notice] = I18n.t("system.errors.gift_card_empty")
       render :action => :update_pos_display and return
@@ -276,20 +191,20 @@ class OrdersController < ApplicationController
       end
       raise "NoTaxProfileFound" if zero_tax_profile.nil?
       timecode = Time.now.strftime('%y%m%d%H%M%S')
-      @item = Item.create(:sku => "G#{timecode}", :vendor_id => $Vendor.id, :tax_profile_id => zero_tax_profile.id, :name => "Auto Giftcard #{timecode}", :must_change_price => true, :behavior => 'gift_card', :item_type => ItemType.find_by_behavior('gift_card'))
+      @item = Item.create(:sku => "G#{timecode}", :vendor_id => @current_vendor.id, :tax_profile_id => zero_tax_profile.id, :name => "Auto Giftcard #{timecode}", :must_change_price => true, :behavior => 'gift_card', :item_type => ItemType.find_by_behavior('gift_card'))
       @item.item_type = ItemType.find_by_behavior :gift_card
       @item.behavior = 'gift_card'
       if not @item.save then
         raise "Failed to Save Auto Giftcard"
       end
     end
-    if @item.class == Item and @item.behavior == 'coupon' and not @order.order_items.visible.where(:sku => @item.coupon_applies).any? then
+    if @item.class == Item and @item.behavior == 'coupon' and not @current_order.order_items.visible.where(:sku => @item.coupon_applies).any? then
       flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
       render :action => :update_pos_display and return
     end
     if @item.class == LoyaltyCard then
       @loyalty_card = @item
-      @order.customer = @loyalty_card.customer
+      @current_order.customer = @loyalty_card.customer
       if @order.save then
         render :action => "connect_loyalty_card" and return
       else
@@ -297,8 +212,9 @@ class OrdersController < ApplicationController
         render :action => :update_pos_display and return
       end
     end
-#     puts "!!! Adding item to order"
-    @order_item = @order.add_item(@item)
+
+    @order_item = @current_order.add_item(@item, params)
+    
     if @order_item.id.nil? then
       GlobalErrors.append("system.errors.item_cannot_be_added")
       render :action => "errors" and return
@@ -307,13 +223,13 @@ class OrdersController < ApplicationController
     if @order_item.behavior != 'normal' then
       # Recalc all if item added is not normal
 #       puts "!!! item behavior is #{@order_item.behavior}"
-      @order.update_self_and_save
+      @current_order.update_self_and_save
     else
       unless @order_item.activated or @order_item.item.is_gs1 then
-        @order = @order_item.order
+        @current_order = @order_item.order
         @order_item = Action.run(@order_item,:add_to_order)
         @order_item.calculate_total
-        @order.update_self_and_save
+        @current_order.update_self_and_save
       end
     end
     if @item.base_price.zero? and not @item.is_gs1 and not @item.must_change_price and not @item.default_buyback
@@ -322,7 +238,7 @@ class OrdersController < ApplicationController
     end
   end
 
-  #
+
   def delete_order_item
     @order = initialize_order
     
@@ -333,7 +249,7 @@ class OrdersController < ApplicationController
     end
     # ---
       
-    render :status => 401 and return if not_my_vendor?(@order)
+
     if not @current_user.can(:destroy_order_items) then
       GlobalErrors.append("system.errors.no_role",@current_user)
       @include_order_items = true
@@ -353,11 +269,7 @@ class OrdersController < ApplicationController
   end
 
   def print_receipt
-    if params[:user_type] == 'User'
-      @user = User.find_by_id(params[:user_id])
-    else
-      @user = Employee.find_by_id(params[:user_id])
-    end
+    @user = Employee.find_by_id(params[:user_id])
     @register = CashRegister.find_by_id(params[:current_register_id])
     if @register then
       @vendor = @register.vendor 
@@ -402,15 +314,13 @@ class OrdersController < ApplicationController
     render :nothing => true
   end
 
-  # {START}
+
   def show_payment_ajax
-    # Recalculate everything and then show Payment Popup
-    @order = initialize_order
-    # MF: speedy version of calculate_totals is completely commented out in order.rb, so that would explain why in case of a racing condition (e.g. where 2 items are scanned and the first ajax request is handled AFTER the second ajax request due to passenger instance queue) the order total was not recalculated and was therefore missing one item.
-    # I changed below to "false", which means, every time the "complete" button is pressed, it will update the order total according to the items. In dev mode, it is still speedy, so I think it's safe for the live systems. This makes screen masking unnecessary and passenger instances can now be more than 1 again.
-    @order.calculate_totals(false)
-    @order.save!
+    @order = @current_vendor.orders.where(:paid => nil).find_by_id(@current_user.current_order_id)
+    #@order.calculate_totals(false)
+    #@order.save!
   end
+  
   def last_five_orders
     @text = render_to_string('shared/_last_five_orders',:layout => false)
     render :text => @text
@@ -426,15 +336,17 @@ class OrdersController < ApplicationController
     end
     render :nothing => true
   end
+  
   def complete_order_ajax
-    @order = initialize_order
+    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+    
     SalorBase.log_action("OrdersController","complete_order_ajax order initialized")
     History.record("initialized order for complete",@order,5)
-    render :status => 401 and return if not_my_vendor?(@order)
+
     if params[:employee_id] and params[:employee_id] != @current_user.id then
-      tmp_user = Employee.find_by_id(params[:employee_id].to_s)
+      tmp_user = Employee.find_by_id(params[:employee_id])
       if tmp_user and tmp_user.vendor_id == @current_user.vendor_id then
-        tmp_user.get.update_attribute :current_register_id, @current_register
+        tmp_user.update_attribute :current_register_id, @current_register
         History.record("swapped user #{@current_user.id} with #{tmp_user.id}",@order,3)
         @current_user = tmp_user
         @order.update_attribute :employee_id, @current_user.id
@@ -444,31 +356,18 @@ class OrdersController < ApplicationController
         render :js => "alert('InCorrectUser');"
       end
     end
-    @old_order = @order;
-    # Here we check to see if there are any items on the order,
-    # if there aren't, then it simply hides the popup. This is a bit
-    # of a hack for cigarman who sometimes accidentally presses complete order
-    # twice. Because of the recalculate change magic, it's difficult to know
-    # in javascript if an order is completable or not.
     
-    if not @order.order_items.visible.any? then  
-      History.record("No visible items on order",@order,5);  
-      SalorBase.log_action("OrdersController","no visible items on this order") 
-      render :js => "complete_order_hide();/*No visible order items*/ " and return
-    end
-    
-       
-    #if @current_user.get_drawer.amount <= 0 then
-    #  GlobalErrors.append_fatal("system.errors.must_cash_drop")
-    #end
+
     @order.payment_methods.delete_all
     SalorBase.log_action("OrdersController","payment methods on order removed")
+    
     if @order.total > 0 or @order.order_items.visible.any? and not GlobalErrors.any_fatal? then
       payment_methods_array = [] # We need to do some checks on the payment
       # methods, so we put them into an array before saving them and the order
       # This is kind of a validator, but we need to do it here for right now...
       payment_methods_total = 0.0
       payment_methods_seen = [] # In case they use the same internal type for two different payment_methods.
+      
       PaymentMethod.types_list.each do |pmt|
         pt = pmt[1]
         next if payment_methods_seen.include? pt
@@ -480,7 +379,12 @@ class OrdersController < ApplicationController
           if pt == 'Quote'
             @order.update_attribute :is_quote, true
           end
-          pm = PaymentMethod.new(:name => pmt[0],:internal_type => pt, :amount => SalorBase.string_to_float(params[pt.to_sym]))
+          pm = PaymentMethod.new
+          pm.name = pmt[0]
+          pm.internal_type = pt
+          pm.amount = SalorBase.string_to_float(params[pt.to_sym])
+          pm.vendor = @current_vendor
+
           if pm.amount > @order.total then
             # puts  "## Entering Sanity Check"
             sanity_check = pm.amount - @order.total
@@ -514,8 +418,9 @@ class OrdersController < ApplicationController
         # the correct total, this was the bug found by CigarMan
         render :action => :update_pos_display and return
       else
-        payment_methods_array.each {|pm| pm.save} # otherwise, we save them
+        payment_methods_array.each {|pm| pm.save } # otherwise, we save them
       end
+      
       SalorBase.log_action("OrdersController","payment_methods saved")
       if @order.is_proforma == true then
         History.record("Order is proforma, completing",@order,5)
@@ -523,26 +428,40 @@ class OrdersController < ApplicationController
         render :js => " window.location = '/orders/#{@order.id}/print'; " and return
       end
       params[:print].nil? ? print = 'true' : print = params[:print].to_s
-      # Receipt printing moved into Order.rb, line 497
+
       @order.complete
       SalorBase.log_action("OrdersController","@order.complete called")
-      @current_user.order_id = nil
       
       # --- push notification to refresh the customer screen
       t = SalorRetail.tailor
       if t
-        t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
+        t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
       end
       # ---
+     
+      @old_order = @order
       
-      @order = @current_user.get_new_order
+      o = Order.new
+      o.vendor = @current_vendor
+      o.employee = @current_user
+      o.cash_register = @current_register
+      o.save
+      @current_user.current_order_id = o.id
+      @current_user.save
     end
   end
-  def new_order_ajax
-    @current_user.order_id = nil
-    @order = @current_user.get_new_order
-    flash[:notice] = I18n.t("views.notice.new_order")
+  
+  def new_order
+    o = Order.new
+    o.vendor = @current_vendor
+    o.employee = @current_user
+    o.cash_register = @current_register
+    o.save
+    @current_user.current_order_id = o.id
+    @current_user.save
+    redirect_to new_order_path
   end
+  
   def activate_gift_card
     @error = nil
     @order = initialize_order
@@ -560,12 +479,14 @@ class OrdersController < ApplicationController
   def update_order_items
     @order = initialize_order
   end
+  
   def update_pos_display
     @order = initialize_order
     if @order.paid == 1 and not @current_user.is_technician? then
       @order = @current_user.get_new_order
     end
   end
+  
   def split_order_item
     @oi = OrderItem.find_by_id(params[:id].to_s)
     restore_paid = false
@@ -673,9 +594,9 @@ class OrdersController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
-    @receipts = $Vendor.receipts.where(["created_at between ? and ?", @from, @to])
+    @receipts = @current_vendor.receipts.where(["created_at between ? and ?", @from, @to])
     if params[:print] == "true" and params[:current_register_id] then
-      $Register = $Vendor.current_registers.find_by_id(params[:current_register_id].to_s)
+      $Register = @current_vendor.current_registers.find_by_id(params[:current_register_id].to_s)
       vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
       print_engine = Escper::Printer.new('local', vendor_printer)
       print_engine.open
@@ -728,7 +649,7 @@ class OrdersController < ApplicationController
       @order.save
       @current_user = @order.employee
     end
-    $Conf = @order.vendor.salor_configuration
+
     @vendor = @order.vendor
     @report = @order.get_report
     @invoice_note = InvoiceNote.scopied.where(:origin_country_id => @order.origin_country_id, :destination_country_id => @order.destination_country_id, :sale_type_id => @order.sale_type_id).first
@@ -811,29 +732,36 @@ class OrdersController < ApplicationController
       end
     end
   end
+  
   def clear
-    @order = initialize_order
     if not @current_user.can(:clear_orders) then
       History.record(:failed_to_clear,@order,1)
       GlobalErrors.append_fatal("system.errors.no_role",@order,{})
-      render :action => :update_pos_display and return
+      render 'update_pos_display' and return
     end
-    if not @order.paid then
+    
+    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+    
+    if @order then
       History.record("Destroying #{@order.order_items.visible} items",@order,1)
+      
       @order.order_items.visible.each do |oi|
-        oi.destroy
+        oi.hidden = 1
+        oi.hidden_by = @current_user.id
+        oi.save
       end
+      
       @order.customer_id = nil
-      @order.tag = 'NotSet'
+      @order.tag = nil
       @order.subtotal = 0
       @order.total = 0
       @order.tax = 0
       @order.update_self_and_save
     else
-      History.record("No Role to Clear Order",@order,1)
-      GlobalErrors.append_fatal("system.errors.no_role",@order,{})
-      render :action => :update_pos_display and return
+      History.record("cannot clear order because already paid", @order, 1)
+      GlobalErrors.append_fatal("cannot clear order because already paid", @order, {})
     end
+    render 'update_pos_display' and return
   end
   
   def log
@@ -850,11 +778,7 @@ class OrdersController < ApplicationController
   end
 
   private
-  
-  def crumble
-    add_breadcrumb #@current_vendor.name,'vendor_path(@current_vendor)'
-    #add_breadcrumb I18n.t("menu.orders"), 'orders_path(:vendor_id => params[:vendor_id])'
-  end
+ 
   
   def currency(number,options={})
     options.symbolize_keys!

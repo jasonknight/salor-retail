@@ -63,11 +63,10 @@ module ApplicationHelper
     end
   end
   
-  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :breadcrumb => true, :classes => []}, hideowner = false)
+  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []}, hideowner = false)
     clses = ['box-title','shadow']
     bbt = '<div class="left-blank"></div>'
     rbtn = '<div class="right-blank"></div>'
-    crumbs = ''
     options[:classes] ||= []
     adminclass = ''
     adminbox = ''
@@ -78,7 +77,6 @@ module ApplicationHelper
       unless options[:menu] == false
         bbt = '<div onclick="history.go(-1);" class="back-button' + adminclass + '"> &lt; </div>'
         rbtn = '<div onclick="window.location.reload();" class="reload-button' + adminclass + '"> &#x267A; </div>'
-        crumbs = breadcrumbs
       end
     end
 
@@ -86,9 +84,6 @@ module ApplicationHelper
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
       <div class="title-container">
           #{bbt} <div class="title-box #{clses.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
-          <div class="breadcrumb-container">
-            #{crumbs}
-          </div>
       </div>
     ]
   end
@@ -224,21 +219,7 @@ module ApplicationHelper
     logger.info("### Recv: #{i} returning #{days[i - 1]}")
     return days[i-1]
   end
-  def breadcrumbs
-    path = []
-    if not @breadcrumbs.nil? then
-      if @breadcrumbs.length == 1 then
-        return
-      end
-      if params[:action].to_s == 'edit' or params[:action].to_s == 'create' then
-        #@breadcrumbs << [I18n.t("menu.new_#{params[:controller].to_s.singularize}"),eval("new_#{params[:controller].to_s.singularize}_path")]
-      end
-      @breadcrumbs.each do |l|
-        path << link_to(l[0],l[1])
-      end
-      return path.join(' / ')
-    end
-  end
+
   def edit_me(field,model,initvalue='',withstring='',id=nil,update_pos_display='false')
     field = field.to_s
     if initvalue.blank? then
