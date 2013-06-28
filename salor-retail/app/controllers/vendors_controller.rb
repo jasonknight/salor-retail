@@ -10,7 +10,6 @@ class VendorsController < ApplicationController
     before_filter :initialize_instance_variables, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
     before_filter :crumble, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
-    cache_sweeper :vendor_sweeper, :only => [:create, :update, :destroy]
 
   def get_configuration
     if $Vendor then

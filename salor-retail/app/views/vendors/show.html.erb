@@ -1,5 +1,4 @@
 <%= raw(content_box_top(@vendor.name, {:width => '90%'})) %>
-<%= cache(SalorBase.get_cache_name_for_user("vendors_show")) do %>
   <div class="list">
       <% if salor_user.can(:edit_vendors) %>
         <div id="edit_vendor" class="widget master" onmousedown="window.location = '<%= edit_vendor_path(@vendor) %>';">
@@ -260,6 +259,4 @@
         <% end %>
 
       </div>    
-      <% end %> 
-<!-- End ul. -->
 <%= raw(content_box_bottom) %>

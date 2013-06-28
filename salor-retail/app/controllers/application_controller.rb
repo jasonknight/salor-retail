@@ -311,7 +311,6 @@ class ApplicationController < ActionController::Base
       end
       if $User and [:create,:update,:destroy].include? params[:action].to_sym then
         [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
-          expire_fragment(SalorBase.get_cache_name_for_user(c))
         end
       end
       $Meta = $User.get_meta
@@ -323,11 +322,15 @@ class ApplicationController < ActionController::Base
     end  
   end
   def role_check_failed
-    return salor_user.get_root.merge({:notice => I18n.t("system.errors.no_role")})
+    if salor_user
+      return salor_user.get_root.merge({:notice => I18n.t("system.errors.no_role")})
+    end
   end
   
   def role_check(p)
-    return $User.can(p[:action] + '_' + p[:controller])
+    if $User
+      return $User.can(p[:action] + '_' + p[:controller])
+    end
   end
   
   def not_my_vendor?(model)

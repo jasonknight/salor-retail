@@ -8,7 +8,6 @@ class CategoriesController < ApplicationController
   # {START}
   before_filter :authify, :initialize_instance_variables, :crumble, :get_tags
   before_filter :check_role, :except => [:crumble]
-  cache_sweeper :category_sweeper, :only => [:create, :update, :destroy]
   
   def index
     @categories = $Vendor.categories.scopied.page(params[:page]).per($Conf.pagination)

@@ -11,7 +11,6 @@ class ShippersController < ApplicationController
   before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
-  cache_sweeper :shipper_sweeper, :only => [:create, :update, :destroy]
 
   def index
     @shippers = Shipper.scopied.visible.order("name asc").page(params[:page]).per(25)

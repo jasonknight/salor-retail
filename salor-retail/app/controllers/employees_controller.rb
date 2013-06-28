@@ -9,7 +9,6 @@ class EmployeesController < ApplicationController
   before_filter :initialize_instance_variables, :except => [:login, :signup]
   before_filter :check_role, :except => [:crumble,:login]
   before_filter :crumble, :except => [:login, :signup]
-  cache_sweeper :employee_sweeper, :only => [:create, :update, :destroy]
   def verify
     if params[:password] then
       emp = Employee.login(params[:password])
@@ -164,7 +163,6 @@ class EmployeesController < ApplicationController
         @employee.set_role_cache
         @employee.save
         [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
-          expire_fragment(SalorBase.get_cache_name_for_user(@employee))
         end
         format.html { redirect_to :action => 'edit', :id => @employee.id, :notice => 'Employee was successfully updated.' }
         format.xml  { head :ok }

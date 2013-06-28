@@ -9,7 +9,6 @@ class LocationsController < ApplicationController
   before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
-  cache_sweeper :location_sweeper, :only => [:create, :update, :destroy]
 
   # GET /locations
   # GET /locations.xml
