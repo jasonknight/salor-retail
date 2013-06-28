@@ -624,6 +624,7 @@ class OrdersController < ApplicationController
     @order.save
     redirect_to order_path(@order)
   end
+  
   def customer_display
     @order = Order.find_by_id(params[:id].to_s)
     GlobalData.salor_user = @order.get_user
