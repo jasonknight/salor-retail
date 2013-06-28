@@ -126,6 +126,8 @@ class ApplicationController < ActionController::Base
         
         @current_vendor = @current_user.vendor
         Time.zone = @current_vendor.time_zone if @current_vendor
+        
+        @current_register = CashRegister.find_by_id(session[:cash_register_id])
       return @current_user
       
   
@@ -205,10 +207,11 @@ class ApplicationController < ActionController::Base
   
   def initialize_order
     if params[:order_id] then
-      o = Order.scopied.where("id = #{params[:order_id]} and (paid IS NULL or paid = 0)").first
-      # puts  "!!!!!!!! Found order from params!"
-      @current_user.update_attribute :order_id, o.id
-      return o if o
+      @current_order = Order.scopied.where("id = #{params[:order_id]} and (paid IS NULL or paid = 0)").first
+    else
+      @current_order = Order.new
+      @current_order.vendor = @current_vendor
+      @current_order.employee = @current_user
     end
   end
   

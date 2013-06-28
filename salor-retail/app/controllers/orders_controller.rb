@@ -38,7 +38,7 @@ class OrdersController < ApplicationController
 #       if not @current_user.vendor_id then
 #         redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
 #       end
-#       if not @current_user.cash_register_id then
+#       if not @current_register then
 #         redirect_to :controller => 'cash_registers', :notice => I18n.t("system.errors.must_choose_register") and return
 #       end
 #       #if @current_user.get_drawer.amount <= 0 then
@@ -118,28 +118,27 @@ class OrdersController < ApplicationController
     end
   end
 
-  def new
+  def new    
     if not @current_user or not @current_user.vendor_id then
       redirect_to :controller => 'vendors', :notice => I18n.t("system.errors.must_choose_vendor") and return
     end
-    if not @current_user.cash_register_id then
+    if not @current_register then
       redirect_to :controller => 'cash_registers', :notice => I18n.t("system.errors.must_choose_register") and return
     end
     
-    @current_user.auto_drop
     
-    @order = initialize_order
+    initialize_order
     # --- push notification to refresh the customer screen
     t = SalorRetail.tailor
     if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
     # ---
-    if @order.paid == 1 and not @current_user.is_technician? then
-      @order = @current_user.get_new_order
+    if @current_order.paid == 1 and not @current_user.is_technician? then
+      @current_order = @current_user.get_new_order
     end
-    if @order.order_items.visible.any? then
-      @order.update_self_and_save
+    if @current_order.order_items.visible.any? then
+      @current_order.update_self_and_save
     end
     add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
     add_breadcrumb t("menu.order"),'new_order_path(:vendor_id => @current_user.vendor_id)'
@@ -158,7 +157,7 @@ class OrdersController < ApplicationController
     if @order and (not @order.paid == 1 or @current_user.is_technician?) then
       session[:prev_order_id] = @current_user.order_id
       @current_user.update_attributes(:order_id => @order.id)
-      @order.update_attributes(:cash_register_id => @current_user.cash_register_id)
+      @order.update_attributes(:cash_register_id => @current_register)
     end
     redirect_to :action => :new, :order_id => @order.id
   end
@@ -444,7 +443,7 @@ class OrdersController < ApplicationController
     if params[:employee_id] and params[:employee_id] != @current_user.id then
       tmp_user = Employee.find_by_id(params[:employee_id].to_s)
       if tmp_user and tmp_user.vendor_id == @current_user.vendor_id then
-        tmp_user.get.update_attribute :cash_register_id, @current_user.cash_register_id
+        tmp_user.get.update_attribute :cash_register_id, @current_register
         History.record("swapped user #{@current_user.id} with #{tmp_user.id}",@order,3)
         @current_user = tmp_user
         @order.update_attribute :employee_id, @current_user.id

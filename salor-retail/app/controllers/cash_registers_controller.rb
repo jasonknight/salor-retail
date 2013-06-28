@@ -22,13 +22,10 @@ class CashRegistersController < ApplicationController
   # GET /cash_registers/1
   # GET /cash_registers/1.xml
   def show
-    @cash_register = CashRegister.scopied.find(params[:id])
-    @orders = @cash_register.orders.order(AppConfig.orders.order).scopied.page(params[:page]).per(GlobalData.conf.pagination)
-    add_breadcrumb @cash_register.name,'cash_register_path(@cash_register,:vendor_id => params[:vendor_id])'
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @cash_register }
+    if params[:cash_register_id]
+      session[:cash_register_id] = params[:cash_register_id]
     end
+    redirect_to new_order_path
   end
 
   # GET /cash_registers/new
@@ -90,12 +87,12 @@ class CashRegistersController < ApplicationController
     @cash_register = CashRegister.scopied.find(params[:id])
     if @cash_register.orders.any? then
       @cash_register.update_attribute(:hidden,1)
-      if @cash_register.id == @current_user.cash_register_id then
-        @current_user.cash_register_id = nil
+      if @cash_register.id == @current_register then
+        @current_register = nil
       end
     else
-      if @cash_register.id == @current_user.cash_register_id then
-        @current_user.cash_register_id = nil
+      if @cash_register.id == @current_register then
+        @current_register = nil
       end
       @cash_register.kill
     end

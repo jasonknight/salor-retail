@@ -298,7 +298,7 @@ class ApiController < ApplicationController
       @current_user.vendor_id = @cmd[:vendor_id]
     end
     if @cmd[:cash_register_id] then
-      @current_user.cash_register_id = @cmd[:cash_register_id]
+      @current_register = @cmd[:cash_register_id]
     end
     return user
   end

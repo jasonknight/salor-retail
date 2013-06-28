@@ -224,7 +224,7 @@ module UserEmployeeMethods
       o.vendor_id = get_default_vendor.id
     end
     o.set_model_owner(self)
-    o.cash_register_id = @current_user.cash_register_id
+    o.cash_register_id = @current_register
     begin
       o.save!
     rescue ActiveRecord::RecordInvalid => invalid

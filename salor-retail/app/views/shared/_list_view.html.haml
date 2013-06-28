@@ -33,10 +33,7 @@
     - row_id = "#{klass.table_name.singularize}_#{entry.id}"
     - to_location = "window.location = '/#{entry.class.table_name}/#{entry.id}';"
     %tr
-      - if entry.class == CashRegister then
-        %td{:width => "40px"}=salor_icon(:cash_register,{:id => row_id,:onclick => "window.location = '/orders/new?cash_register_id=#{entry.id}';", :class => "choose-register-icon"},48)
-      - else
-        %td{:width => "40px"}=salor_icon(klass.table_name.singularize.to_sym,{:id => row_id,:onclick => to_location},48)
+      %td{:width => "40px"}=salor_icon(klass.table_name.singularize.to_sym,{:id => row_id,:onclick => to_location},48)
       - columns.each do |col|
         - if entry.class == TaxProfile and col == :value then
           %td{:align=>:center}=number_to_percentage(entry.send(col))
@@ -44,11 +41,11 @@
           %td=I18n.t("when_list.#{entry.whento}") if entry.whento
         - else
           %td=entry.send(col)
-      - if $User.can("edit_#{klass.table_name}")
+      - if @current_user.can("edit_#{klass.table_name}")
         %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:edit,{},16), "/#{entry.class.table_name}/#{entry.id}/edit" 
       - else
         %td
-      - if $User.can("destroy_#{klass.table_name}".to_sym)
+      - if @current_user.can("destroy_#{klass.table_name}".to_sym)
         %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:delete,{},16), "/#{entry.class.table_name}/#{entry.id}", :confirm => 'Are you sure?', :method => :delete 
       - else
         %td
