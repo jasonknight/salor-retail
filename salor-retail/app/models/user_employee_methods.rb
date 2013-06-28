@@ -34,10 +34,6 @@ module UserEmployeeMethods
         end
         string = string.strip
         if not string.empty? then
-          if SalorBase.check_code(string) == false then
-            self.errors[:password] << "incorrect format"
-            return
-          end
           self.encrypted_password_will_change!
           write_attribute(:encrypted_password,self.generate_password(string))
         end
