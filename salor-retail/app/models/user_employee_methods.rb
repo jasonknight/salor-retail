@@ -713,7 +713,6 @@ module UserEmployeeMethods
           GlobalErrors.append("system.errors.auto_drop_failed",self,nil)
         else
           $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
-          atomize(ISDIR, 'cash_drop')
         end
       else
         GlobalErrors.append("system.errors.auto_drop_failed2",self,nil)

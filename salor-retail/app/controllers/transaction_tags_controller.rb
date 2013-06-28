@@ -54,7 +54,6 @@ class TransactionTagsController < ApplicationController
 
     respond_to do |format|
       if @transaction_tag.save
-        atomize(ISDIR, 'cash_drop')
         format.html { redirect_to(:action => "new", :notice => 'Transaction tag was successfully created.') }
         format.xml  { render :xml => @transaction_tag, :status => :created, :location => @transaction_tag }
       else
@@ -71,7 +70,6 @@ class TransactionTagsController < ApplicationController
 
     respond_to do |format|
       if @transaction_tag.update_attributes(params[:transaction_tag])
-        atomize(ISDIR, 'cash_drop')
         format.html { redirect_to(:action => 'index', :notice => 'Transaction tag was successfully updated.') }
         format.xml  { head :ok }
       else
@@ -86,7 +84,6 @@ class TransactionTagsController < ApplicationController
   def destroy
     @transaction_tag = TransactionTag.scopied.find(params[:id])
     @transaction_tag.kill
-    atomize(ISDIR, 'cash_drop')
     respond_to do |format|
       format.html { redirect_to(transaction_tags_url) }
       format.xml  { head :ok }

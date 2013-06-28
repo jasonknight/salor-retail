@@ -538,7 +538,6 @@ class OrdersController < ApplicationController
       # Receipt printing moved into Order.rb, line 497
       @order.complete
       SalorBase.log_action("OrdersController","@order.complete called")
-      atomize(ISDIR, 'cash_drop')
       $User.meta.order_id = nil
       
       # --- push notification to refresh the customer screen

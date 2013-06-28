@@ -57,7 +57,6 @@ class HomeController < ApplicationController
     @user = User.find(current_user.id)
     params[:user].delete(:password) if params[:user][:password].nil? or params[:user][:password].blank?
     params[:user].delete(:user_id)
-    atomize_all
     respond_to do |format|
       if @user.update_attributes(params[:user])
         format.html { redirect_to :action => 'edit_owner', :notice => t(:"system.owner_success") }

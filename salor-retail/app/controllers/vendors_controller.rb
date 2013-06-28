@@ -101,7 +101,6 @@ class VendorsController < ApplicationController
     
     respond_to do |format|
       if @vendor.update_attributes(params[:vendor])
-        atomize_all
         format.html { redirect_to :action => 'edit', :notice => 'Vendor was successfully updated.' }
         format.xml  { head :ok }
       else
@@ -169,7 +168,6 @@ class VendorsController < ApplicationController
           GlobalErrors.append_fatal("system.errors.must_specify_drop_or_payout")
         end
         # Do this here - sweeping a different model!
-        atomize(ISDIR, 'cash_drop')
       else
         raise "Failed to save..."
       end
@@ -252,7 +250,6 @@ class VendorsController < ApplicationController
     end
     if not GlobalErrors.any_fatal? then
       $User.end_day
-      atomize(ISDIR, 'cash_drop')
       if $User.class == User then
         $User.update_attribute :is_technician, false
       end
@@ -549,7 +546,6 @@ class VendorsController < ApplicationController
   end
 
   def clearcache
-    atomize_all
   end
 
   def logo
