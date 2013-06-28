@@ -14,7 +14,7 @@ class History < ActiveRecord::Base
   before_create :set_fields
   def set_fields
     if self.owner_id.nil? then
-      self.owner = $User
+      self.owner = @current_user
     end
     self.url = $Request.url if $Request and not self.url
     self.params = $Params.to_json if $Params

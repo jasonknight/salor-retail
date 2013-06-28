@@ -20,8 +20,6 @@
 %div.report-container
   %div
     %img.right{ :src => '/images/salor-logo-reports.png'}
-    - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image
-      %img.left{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
   %div.clear
   %div
     %h2= t '.title'

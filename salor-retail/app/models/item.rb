@@ -10,7 +10,6 @@
 class Item < ActiveRecord::Base
   # {START}
   include SalorScope
-  include SalorError
   include SalorBase
   include SalorModel
   belongs_to :category
@@ -104,7 +103,7 @@ class Item < ActiveRecord::Base
   end
   def name_translations
     text = read_attribute(:name_translations)
-    if text.empty? or text.nil? then
+    if text.nil? or text.empty? then
       return {}
     else
       return ActiveSupport::JSON.decode(text)
@@ -235,7 +234,7 @@ class Item < ActiveRecord::Base
     if pm and pm[1] then
       i = Item.scopied.where("sku LIKE 'DMY%' and base_price = #{SalorBase.string_to_float(code)}") 
       if i.empty? then
-        i = Item.scopied.find_or_create_by_sku("DMY" + $User.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
+        i = Item.scopied.find_or_create_by_sku("DMY" + @current_user.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
         i.base_price = code
         i.make_valid
         i.save
@@ -334,7 +333,7 @@ class Item < ActiveRecord::Base
   end
   def part_skus=(items)
     ids = []
-    vid = $User.meta.vendor_id
+    vid = @current_user.vendor_id
     items.each do |item|
       i = Item.find_by_sku(item[:sku])
       if i then
@@ -479,7 +478,7 @@ class Item < ActiveRecord::Base
   # Reorder recommendation csvs
   
   def self.recommend_reorder(type)
-    shippers = Shipper.where(:vendor_id => $User.vendor_id).visible.find_all_by_reorder_type(type)
+    shippers = Shipper.where(:vendor_id => @current_user.vendor_id).visible.find_all_by_reorder_type(type)
     shippers << nil if type == 'default_export'
     items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
     if not items.any? then

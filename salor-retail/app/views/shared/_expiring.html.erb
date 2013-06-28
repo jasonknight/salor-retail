@@ -1,4 +1,4 @@
-<% if GlobalData.salor_user.expiring.any?  %>
+<% if GlobalData.@current_user.expiring.any?  %>
 <%= raw content_box_top(I18n.t("headings.expiring_soon"),{:width => '100%',:menu => false, :breadcrumb => false}, true) %>
 <table align="center" width="100%" class="stripe-me">
         <thead>

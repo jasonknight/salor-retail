@@ -5,15 +5,13 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class LocationsController < ApplicationController
-  before_filter :authify
-  before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
 
   # GET /locations
   # GET /locations.xml
   def index
-    @locations = salor_user.get_locations(params[:page])
+    @locations = @current_user.get_locations(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -45,7 +43,7 @@ class LocationsController < ApplicationController
 
   # GET /locations/1/edit
   def edit
-    @location = salor_user.get_location(params[:id])
+    @location = @current_user.get_location(params[:id])
     
     add_breadcrumb @location.name,'edit_location_path(@location,:vendor_id => params[:vendor_id], :type => params[:type])'
   end
@@ -70,7 +68,7 @@ class LocationsController < ApplicationController
   # PUT /locations/1
   # PUT /locations/1.xml
   def update
-    @location = salor_user.get_location(params[:id])
+    @location = @current_user.get_location(params[:id])
 
     respond_to do |format|
       if @location.update_attributes(params[:location])
@@ -87,7 +85,7 @@ class LocationsController < ApplicationController
   # DELETE /locations/1
   # DELETE /locations/1.xml
   def destroy
-    @location = $User.get_location(params[:id])
+    @location = @current_user.get_location(params[:id])
     @location.kill
     GlobalData.reload(:locations)
     respond_to do |format|
@@ -97,7 +95,7 @@ class LocationsController < ApplicationController
   end
   private 
   def crumble
-    @vendor = salor_user.get_vendor(salor_user.meta.vendor_id)
+    @vendor = @current_user.vendor(@current_user.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.locations"),'locations_path(:vendor_id => params[:vendor_id], :type => params[:type])'
   end

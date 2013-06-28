@@ -15,7 +15,7 @@ class ApiController < ApplicationController
     end
     cls = Kernel.const_get(@cmd[:data][:class_name])
     if cls == Order then
-      model = GlobalData.salor_user.get_new_order
+      model = @current_user.get_new_order
       model.attributes = @cmd[:data][:attributes]
       model.save
       model.reload
@@ -169,7 +169,7 @@ class ApiController < ApplicationController
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @vendors = GlobalData.salor_user.get_vendors(params[:page])
+      @vendors = @current_user.vendors(params[:page])
     end
     respond_to do |format|
       if @vendors then
@@ -185,7 +185,7 @@ class ApiController < ApplicationController
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @locations = GlobalData.salor_user.get_locations(params[:page])
+      @locations = @current_user.get_locations(params[:page])
     end
     respond_to do |format|
       if @locations then
@@ -201,7 +201,7 @@ class ApiController < ApplicationController
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @categories = GlobalData.salor_user.get_categories(params[:page])
+      @categories = @current_user.get_categories(params[:page])
     end
     respond_to do |format|
       if @categories then
@@ -217,7 +217,7 @@ class ApiController < ApplicationController
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @items = GlobalData.salor_user.get_items
+      @items = @current_user.get_items
     end
     respond_to do |format|
       if @items then
@@ -233,7 +233,7 @@ class ApiController < ApplicationController
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @customers = GlobalData.salor_user.get_customers(params[:page])
+      @customers = @current_user.get_customers(params[:page])
     end
     respond_to do |format|
       if @customers then
@@ -249,7 +249,7 @@ class ApiController < ApplicationController
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @discounts = GlobalData.salor_user.get_discounts(params[:page])
+      @discounts = @current_user.get_discounts(params[:page])
     end
     respond_to do |format|
       if @discounts then
@@ -273,19 +273,18 @@ class ApiController < ApplicationController
   def auth
     has_right_params(@cmd) # This is where input validation is taking place
     # Employee.apitoken can be gotten from editing the Employee and saving the edit. 
-    user = Employee.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(:meta,:roles).first
+    user = Employee.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(,:roles).first
     if not user then
       GlobalErrors.append_fatal("api.user_does_not_exist")
       return nil
     end
-    GlobalData.salor_user = user
-    if GlobalData.salor_user.meta.nil? then
-      GlobalData.salor_user.meta = Meta.new
-      GlobalData.salor_user.meta.save
+    @current_user = user
+    if @current_user.nil? then
+      @current_user.save
     end
-    if GlobalData.salor_user.get_drawer.nil? then
-      GlobalData.salor_user.get_drawer = Drawer.new
-      GlobalData.salor_user.get_drawer.save
+    if @current_user.get_drawer.nil? then
+      @current_user.get_drawer = Drawer.new
+      @current_user.get_drawer.save
     end
     vars = {}
     var_names = [:sku,:controller,:action,:page,:vendor_id,:keywords]
@@ -296,10 +295,10 @@ class ApiController < ApplicationController
     GlobalData.params = vars
     
     if @cmd[:vendor_id] then
-      GlobalData.salor_user.meta.vendor_id = @cmd[:vendor_id]
+      @current_user.vendor_id = @cmd[:vendor_id]
     end
     if @cmd[:cash_register_id] then
-      GlobalData.salor_user.meta.cash_register_id = @cmd[:cash_register_id]
+      @current_user.cash_register_id = @cmd[:cash_register_id]
     end
     return user
   end
@@ -308,7 +307,7 @@ class ApiController < ApplicationController
       :success => true,
       :data => data,
       :count => cnt,
-      :user => GlobalData.salor_user
+      :user => @current_user
     }.to_json
   end
   def failure(data)

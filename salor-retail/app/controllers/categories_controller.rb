@@ -6,7 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 class CategoriesController < ApplicationController
   # {START}
-  before_filter :authify, :initialize_instance_variables, :crumble, :get_tags
   before_filter :check_role, :except => [:crumble]
   
   def index
@@ -42,7 +41,7 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(params[:category])
-    @category.set_model_owner($User)
+    @category.set_model_owner(@current_user)
     respond_to do |format|
       if @category.save
         

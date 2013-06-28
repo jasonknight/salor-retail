@@ -1,6 +1,6 @@
 <%= raw(content_box_top(@vendor.name, {:width => '90%'})) %>
   <div class="list">
-      <% if salor_user.can(:edit_vendors) %>
+      <% if @current_user.can(:edit_vendors) %>
         <div id="edit_vendor" class="widget master" onmousedown="window.location = '<%= edit_vendor_path(@vendor) %>';">
           <div align="center">
             <a href="<%= edit_vendor_path(@vendor) %>">
@@ -11,7 +11,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_tax_profiles) %>
+        <% if @current_user.can(:show_tax_profiles) %>
         <div class="widget master" onmousedown="window.location = '<%= tax_profiles_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= tax_profiles_path(:vendor_id => @vendor.id) %>">
@@ -22,7 +22,7 @@
           </div>
           </div>
         <% end %>
-        <% if salor_user.can(:index_categories) %>
+        <% if @current_user.can(:index_categories) %>
         <div class="widget master" onmousedown="window.location = '<%= categories_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= categories_path(:vendor_id => @vendor.id) %>">
@@ -33,7 +33,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_locations) %>
+        <% if @current_user.can(:index_locations) %>
         <div class="widget master" onmousedown="window.location = '<%= locations_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= locations_path(:vendor_id => @vendor.id) %>">
@@ -44,7 +44,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_locations) %>
+        <% if @current_user.can(:index_locations) %>
         <div class="widget master" onmousedown="window.location = '<%= stock_locations_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= stock_locations_path(:vendor_id => @vendor.id) %>">
@@ -55,7 +55,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_items) %>
+        <% if @current_user.can(:index_items) %>
         <div class="widget master" onmousedown="window.location = '<%= items_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= items_path(:vendor_id => @vendor.id) %>">
@@ -75,7 +75,7 @@
           </div>
         </div>
         <% end %>
-      <% if salor_user.can(:index_cash_registers) %>
+      <% if @current_user.can(:index_cash_registers) %>
         <div class="widget master" onmousedown="window.location = '<%= cash_registers_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= cash_registers_path(:vendor_id => @vendor.id) %>">
@@ -86,7 +86,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_discounts) %>
+        <% if @current_user.can(:index_discounts) %>
         <div class="widget master" onmousedown="window.location = '<%= discounts_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= discounts_path(:vendor_id => @vendor.id) %>">
@@ -96,7 +96,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_shipments) %>
+        <% if @current_user.can(:index_shipments) %>
          <div class="widget master" onmousedown="window.location = '<%= shipments_path %>';">
           <div align="center">
             <a href="<%= shipments_path %>">
@@ -116,7 +116,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_shippers) %>
+        <% if @current_user.can(:index_shippers) %>
          <div class="widget master" onmousedown="window.location = '<%= shippers_path %>';">
           <div align="center">
             <a href="<%= shippers_path %>">
@@ -127,7 +127,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_orders) %>
+        <% if @current_user.can(:index_orders) %>
         <div class="widget master" onmousedown="window.location = '<%= orders_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= orders_path(:vendor_id => @vendor.id) %>">
@@ -137,7 +137,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_employees) %>
+        <% if @current_user.can(:index_employees) %>
         <div class="widget master" onmousedown="window.location = '/employees/index?vendor_id=<%= @vendor.id %>';">
           <div align="center">
             <a href="/employees/index?vendor_id=<%= @vendor.id %>">
@@ -148,7 +148,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_customers) %>
+        <% if @current_user.can(:index_customers) %>
          <div class="widget master" onmousedown="window.location = '/customers?vendor_id=<%= @vendor.id %>';">
           <div align="center">
             <a href="/customers?vendor_id=<%= @vendor.id %>">
@@ -159,7 +159,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:index_transaction_tags) %>
+        <% if @current_user.can(:index_transaction_tags) %>
         <div class="widget master" onmousedown="window.location = '<%= transaction_tags_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= transaction_tags_path(:vendor_id => @vendor.id) %>">
@@ -170,7 +170,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_actions) %>
+        <% if @current_user.can(:show_actions) %>
         <div class="widget master" onmousedown="window.location = '<%= actions_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= actions_path(:vendor_id => @vendor.id) %>">
@@ -181,7 +181,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_tender_methods) %>
+        <% if @current_user.can(:show_tender_methods) %>
         <div class="widget master" onmousedown="window.location = '<%= tender_methods_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= tender_methods_path(:vendor_id => @vendor.id) %>">
@@ -192,7 +192,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_countries) %>
+        <% if @current_user.can(:show_countries) %>
         <div class="widget master" onmousedown="window.location = '<%= countries_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= countries_path(:vendor_id => @vendor.id) %>">
@@ -203,7 +203,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_sale_types) %>
+        <% if @current_user.can(:show_sale_types) %>
         <div class="widget master" onmousedown="window.location = '<%= sale_types_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= sale_types_path(:vendor_id => @vendor.id) %>">
@@ -214,7 +214,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_invoice_notes) %>
+        <% if @current_user.can(:show_invoice_notes) %>
         <div class="widget master" onmousedown="window.location = '<%= invoice_notes_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= invoice_notes_path(:vendor_id => @vendor.id) %>">
@@ -225,7 +225,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_buttons) %>
+        <% if @current_user.can(:show_buttons) %>
         <div class="widget master" onmousedown="window.location = '<%= buttons_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= buttons_path(:vendor_id => @vendor.id) %>">
@@ -236,7 +236,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_invoice_blurbs) %>
+        <% if @current_user.can(:show_invoice_blurbs) %>
         <div class="widget master" onmousedown="window.location = '<%= invoice_blurbs_path(:vendor_id => @vendor.id) %>';">
           <div align="center">
             <a href="<%= invoice_blurbs_path(:vendor_id => @vendor.id) %>">
@@ -247,7 +247,7 @@
           </div>
         </div>
         <% end %>
-        <% if salor_user.can(:show_reports) %>
+        <% if @current_user.can(:show_reports) %>
         <div class="widget master onmousedown="window.location = '/reports?vendor_id=<%= @vendor.id %>';"">
           <div align="center">
             <a href="/reports?vendor_id=<%= @vendor.id %>">

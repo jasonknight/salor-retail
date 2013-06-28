@@ -6,8 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 class ShipmentsController < ApplicationController
   # {START}
-  before_filter :authify
-  before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble, :move_all_to_items, :move_shipment_item]
   before_filter :crumble
   # GET /shipments
@@ -98,7 +96,7 @@ class ShipmentsController < ApplicationController
   end
   def move_all_to_items
     @shipment = Shipment.find(params[:id])
-    if $User.owns_this?(@shipment) then
+    if @current_user.owns_this?(@shipment) then
       @shipment.move_all_to_items
       @shipment.save
       redirect_to shipment_path(params[:id], :notice => "Items moved.") and return
@@ -109,7 +107,7 @@ class ShipmentsController < ApplicationController
   end
   def move_shipment_item
     @shipment = Shipment.find(params[:id])
-    if $User.owns_this?(@shipment) then
+    if @current_user.owns_this?(@shipment) then
       @shipment.move_shipment_item_to_item(params[:shipment_item_id])
       @shipment.save
     end

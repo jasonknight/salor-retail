@@ -3,8 +3,8 @@
      <table align="center" width="100%">
        <tr>
          <td valign="top">
-            <%= t "system.logged_in_as"%> <%= salor_user.username %>. <%= t "system.not_you"%>
-            <%= link_to t("system.logout"), salor_user.is_employee? ? destroy_employee_session_path : destroy_user_session_path %>
+            <%= t "system.logged_in_as"%> <%= @current_user.username %>. <%= t "system.not_you"%>
+            <%= link_to t("system.logout"), @current_user.is_employee? ? destroy_employee_session_path : destroy_user_session_path %>
          </td>
          <td valign="top">
            <div id="switcher"></div>

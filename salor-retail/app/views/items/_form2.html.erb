@@ -56,7 +56,7 @@ $(function () {
     </td>
     <td>
       <div class="tool-icon" style="width: 100px;">
-        <%= link_to salor_icon(:action, {},32), new_action_path(:item => { :sku => @item.sku, :name => @item.name + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
+        <%= link_to salor_icon(:action, {},32), new_action_path(:item => { :sku => @item.sku, :name => @item.name.to_s + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
         <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
       </div>
     </td>
@@ -153,7 +153,7 @@ $(function () {
   
   <tr>
     <td> <%= f.label I18n.t("activerecord.models.vendor.one") %> </td>
-    <td> <%= f.collection_select :vendor_id,GlobalData.vendors,:id,:name %> </td>
+    <td> <%= f.collection_select :vendor_id, Vendor.all,:id,:name %> </td>
   </tr>
   
   <tr>

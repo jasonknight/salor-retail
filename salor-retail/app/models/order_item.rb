@@ -9,7 +9,6 @@ class OrderItem < ActiveRecord::Base
   # {START}
   include SalorScope
   include SalorBase
-  include SalorError
   include SalorModel
   belongs_to :order
   belongs_to :employee
@@ -97,15 +96,15 @@ class OrderItem < ActiveRecord::Base
     dt = DrawerTransaction.new(opts)
     dt[type] = true
     dt.amount = amount
-    dt.drawer_id = $User.get_drawer.id
-    dt.drawer_amount = $User.get_drawer.amount
+    dt.drawer_id = @current_user.get_drawer.id
+    dt.drawer_amount = @current_user.get_drawer.amount
     dt.order_id = self.order.id
     dt.order_item_id = self.id
     if dt.save then
       if type == :payout then
-        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount - dt.amount)
+        @current_user.get_drawer.update_attribute(:amount,@current_user.get_drawer.amount - dt.amount)
       elsif type == :drop then
-        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
+        @current_user.get_drawer.update_attribute(:amount,@current_user.get_drawer.amount + dt.amount)
       end
     else
       raise dt.errors.full_messages.inspect
@@ -143,7 +142,7 @@ class OrderItem < ActiveRecord::Base
       t += self.tax
     end
     
-    if (($User.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash') then
+    if ((@current_user.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash') then
       # do not fail. let the user do what he wants.
       #GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
       #return -1
@@ -155,8 +154,8 @@ class OrderItem < ActiveRecord::Base
       # this is depreciated and should never happen right now since it's blocked by the orders#show view
     else
       self.update_attribute(:refunded,true)
-      self.update_attribute(:refunded_by, $User.id)
-      self.update_attribute(:refunded_by_type, $User.class.to_s)
+      self.update_attribute(:refunded_by, @current_user.id)
+      self.update_attribute(:refunded_by_type, @current_user.class.to_s)
       self.update_attribute(:refund_payment_method, refund_payment_method)
       update_location_category_item(t * -1, q * -1)
       self.order.update_attribute(:total, self.order.total - t)
@@ -170,7 +169,7 @@ class OrderItem < ActiveRecord::Base
         create_refund_payment_method(t,refund_payment_method) if not x.nil?
       end
 
-      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
+      # @current_user.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
      return true
     end
     return false

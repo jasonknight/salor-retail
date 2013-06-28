@@ -7,7 +7,6 @@
 
 class Shipment < ActiveRecord::Base
 	include SalorScope
-  include SalorError
   include SalorBase
   include SalorModel
   belongs_to :shipper, :polymorphic => true
@@ -52,7 +51,7 @@ class Shipment < ActiveRecord::Base
     Shipper.scopied.order(:name).each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
     end
-    $User.get_vendors(nil).each do |vendor|
+    Vendor.all.each do |vendor|
       ret << {:name => vendor.name, :value => 'Vendor:' + vendor.id.to_s}
     end
     return ret
@@ -94,7 +93,7 @@ class Shipment < ActiveRecord::Base
   end
   def set_items=(items_list)
     ids = []
-    vid = GlobalData.salor_user.meta.vendor_id
+    vid = @current_user.vendor_id
     items_list.each do |li|
       ih = li[1]
       nih = {}

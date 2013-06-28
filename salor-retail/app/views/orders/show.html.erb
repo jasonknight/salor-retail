@@ -9,7 +9,7 @@
           <th><%= t("activerecord.attributes.base_price") %></th>
           <th>&nbsp;</th>
         </tr>
-        <%= salor_render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
+        <%= render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
         <tr>
           <td colspan=5 align="right"><%=  I18n.t("activerecord.attributes.total")%>:</td>
           <td align="right"><%= @order.gross%></td>

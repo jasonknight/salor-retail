@@ -6,13 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 module ApplicationHelper
  
-  # TODO: salor_render should be depreciated in favor of plain Rails render, since it does nothing
-  def salor_render(h)
-    #t = "<!-- begin-partial #{h[:partial]}-->\n"
-    t = raw(render(h))
-    #t += "\n<!-- end-partial  #{h[:partial]}-->\n"
-    return raw(t)
-  end
+
   def link_to_add_fields(name, f, association,jsfunc)
     new_object = f.object.class.reflect_on_association(association).klass.new
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
@@ -69,17 +63,6 @@ module ApplicationHelper
     end
   end
   
-  def salor_user
-    if session[:user_id] then
-      if session[:user_type] == "User" then
-        return User.find_by_id(session[:user_id])
-      else
-        $User = Employee.find_by_id(session[:user_id])
-        return $User
-      end
-    end
-  end
-  
   def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :breadcrumb => true, :classes => []}, hideowner = false)
     clses = ['box-title','shadow']
     bbt = '<div class="left-blank"></div>'
@@ -88,16 +71,7 @@ module ApplicationHelper
     options[:classes] ||= []
     adminclass = ''
     adminbox = ''
-    if salor_signed_in? and salor_user.class == User and not hideowner then
-      adminclass = '-admin'
-      adminbox = '
-        <div class="title-box-admin #{clses.join(" ")}">
-          &#8226; ' + t("system.owner_mode") + ' &#8226;
-#           <div class="button-row-admin">
-            <div class="button-admin" onclick="javascript:window.location.href=\'/home/edit_owner\';">' + t(:"menu.configuration") + '</div>
-          </div>
-        </div>'
-    end
+
     if options[:small] then
       classes = ['small-title','shadow']
     else
@@ -299,14 +273,7 @@ module ApplicationHelper
     end
     return salor_icon(:help, {:url => "/vendors/help?key=#{k}", :class => 'click-help', :style => "cursor:pointer;"},size)
   end
-  def curl(url)
-    c = "#{GlobalData.params[:controller]}##{GlobalData.params[:action]}"
-    if c == url then
-      return true
-    else
-      return false
-    end
-  end
+
 
   def generate_default_calendar_options
     options = []
@@ -332,11 +299,9 @@ module ApplicationHelper
   end
 
   def get_clock_content
-    ret = ''
-    reg = CashRegister.find_by_id($User.meta.cash_register_id) if $User
-    ret << "#{$User.username if $User}<br />#{ reg.name if reg }"
-    return ret.html_safe
+    return "#{@current_user.username if @current_user}<br />#{ @current_register.name if @current_register }"
   end
+  
   def num2name(num)
     num = num.to_s.gsub('0.','').gsub(',','').gsub('.','')
   end

@@ -1,7 +1,6 @@
 class InvoiceBlurbsController < ApplicationController
   # GET /invoice_blurbs
   # GET /invoice_blurbs.json
-  before_filter :authify, :initialize_instance_variables, :crumble
   before_filter :check_role, :except => [:crumble]
 
   def index
@@ -16,7 +15,7 @@ class InvoiceBlurbsController < ApplicationController
   # GET /invoice_blurbs/1
   # GET /invoice_blurbs/1.json
   def show
-    @invoice_blurb = InvoiceBlurb.where(:vendor_id => $User.vendor_id).find(params[:id])
+    @invoice_blurb = InvoiceBlurb.where(:vendor_id => @current_user.vendor_id).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -37,14 +36,14 @@ class InvoiceBlurbsController < ApplicationController
 
   # GET /invoice_blurbs/1/edit
   def edit
-    @invoice_blurb = InvoiceBlurb.where(:vendor_id => $User.vendor_id).find(params[:id])
+    @invoice_blurb = InvoiceBlurb.where(:vendor_id => @current_user.vendor_id).find(params[:id])
   end
 
   # POST /invoice_blurbs
   # POST /invoice_blurbs.json
   def create
     @invoice_blurb = InvoiceBlurb.new(params[:invoice_blurb])
-    @invoice_blurb.vendor_id = $User.vendor_id
+    @invoice_blurb.vendor_id = @current_user.vendor_id
     respond_to do |format|
       if @invoice_blurb.save
         format.html { redirect_to :action => :index, notice: 'Invoice blurb was successfully created.' }
@@ -59,8 +58,8 @@ class InvoiceBlurbsController < ApplicationController
   # PUT /invoice_blurbs/1
   # PUT /invoice_blurbs/1.json
   def update
-    @invoice_blurb = InvoiceBlurb.where(:vendor_id => $User.vendor_id).find(params[:id])
-    @invoice_blurb.vendor_id = $User.vendor_id
+    @invoice_blurb = InvoiceBlurb.where(:vendor_id => @current_user.vendor_id).find(params[:id])
+    @invoice_blurb.vendor_id = @current_user.vendor_id
     respond_to do |format|
       if @invoice_blurb.update_attributes(params[:invoice_blurb])
         format.html { redirect_to :action => :index, notice: 'Invoice blurb was successfully updated.' }
@@ -75,7 +74,7 @@ class InvoiceBlurbsController < ApplicationController
   # DELETE /invoice_blurbs/1
   # DELETE /invoice_blurbs/1.json
   def destroy
-    @invoice_blurb = InvoiceBlurb.where(:vendor_id => $User.vendor_id).find(params[:id])
+    @invoice_blurb = InvoiceBlurb.where(:vendor_id => @current_user.vendor_id).find(params[:id])
     @invoice_blurb.destroy
 
     respond_to do |format|
@@ -86,7 +85,7 @@ class InvoiceBlurbsController < ApplicationController
   private 
   
   def crumble
-    @vendor = $User.get_vendor($User.vendor_id)
+    @vendor = @current_user.vendor(@current_user.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.invoice_blurbs"),'invoice_blurbs_path(:vendor_id => params[:vendor_id])'
   end

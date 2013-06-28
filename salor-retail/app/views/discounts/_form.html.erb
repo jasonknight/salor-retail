@@ -1,6 +1,5 @@
 <div align=center>
         <%= form_for(@discount) do |f| %>
-        <%= f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id%>
         <% if @discount.errors.any? %>
           <div id="error_explanation">
             <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @discount.errors.count,:model => t("activerecord.models.discount.one"))%></h2>

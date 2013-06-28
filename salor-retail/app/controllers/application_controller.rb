@@ -6,22 +6,24 @@
 # See license.txt for the license applying to all files within this software.
 require "net/http"
 require "uri"
+
 class ApplicationController < ActionController::Base
-  # {START}
   include SalorBase
+  
   helper :all
   helper_method :workstation?, :mobile?
+  
   protect_from_forgery
-  before_filter :loadup, :except => [:add_item_ajax, :login, :render_error]
-  before_filter :pre_load, :except => [:render_error]
-  before_filter :setup_global_data, :except => [:login, :render_error]
+  
+  before_filter :loadup, :except => [:add_item_ajax, :render_error]
   before_filter :set_tailor
+  
   layout :layout_by_response
-  helper_method [:user_cache_name]
 
   unless SalorRetail::Application.config.consider_all_requests_local
-    rescue_from Exception, :with => :render_error
-  end 
+    #rescue_from Exception, :with => :render_error
+  end
+  
   def get_url(url, user=nil, pass=nil)
     uri = URI.parse(url)
     
@@ -45,8 +47,8 @@ class ApplicationController < ActionController::Base
   def is_linux?
      RUBY_PLATFORM.downcase.include?("linux")
   end   
-  def pre_load
-  end
+
+  
   def render_csv(filename = nil,text = nil)
     filename ||= params[:action]
     filename += '.csv'
@@ -96,23 +98,10 @@ class ApplicationController < ActionController::Base
     return User.find session[:user_id] if session[:user_type] == "User"
   end
 
-  def salor_user
-    $User = nil
-    if session[:user_id] then
-      if session[:user_type] == "User" then
-        user = User.find_by_id(session[:user_id])
-      else
-        @current_user = user = $User = Employee.find_by_id(session[:user_id])
-        @current_vendor = $Vendor = user.vendor if user
-        Time.zone = $Vendor.time_zone if @current_vendor and not @current_vendor.time_zone.nil?
-      end
-      return @current_user
-    end
-    return nil
-  end
+
 
   def user_cache_name
-    return salor_user.username if salor_signed_in?
+    return @current_user.username if salor_signed_in?
     return 'loggedout'
   end
 
@@ -120,45 +109,6 @@ class ApplicationController < ActionController::Base
   
   def allowed_klasses
     ['SalorConfiguration','EmployeeLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem']
-  end
-  
-  def initialize_instance_variables
-    if params[:vendor_id] and not params[:vendor_id].blank? then
-      salor_user.meta.update_attribute(:vendor_id,params[:vendor_id])
-    end
-    if salor_user and salor_user.meta.vendor_id.nil? then
-      salor_user.meta.update_attribute(:vendor_id,salor_user.get_default_vendor.id)
-    end
-    if params[:cash_register_id] then
-      salor_user.meta.update_attribute(:cash_register_id,params[:cash_register_id])
-    end
-    if salor_user then
-      @tax_profiles = salor_user.get_tax_profiles
-      if salor_user.meta.cash_register_id then
-        @cash_register = CashRegister.find_by_id(salor_user.meta.cash_register_id)
-      else
-        @cash_register = CashRegister.new(:name => 'Unk')
-      end
-      $Register = @cash_register
-      GlobalData.cash_register = @cash_register
-      if Vendor.exists?(salor_user.meta.vendor_id) then
-          @vendor = Vendor.find(salor_user.meta.vendor_id)
-      else 
-          @vendor = Vendor.new
-          @vendor.name = I18n.t("views.errors.unknown_vendor")
-      end
-    end
-    GlobalData.vendor = @vendor
-    $Vendor = @vendor
-    @current_vendor = @vendor
-    @current_employee = $User	
-    GlobalData.conf = @vendor.salor_configuration if @vendor
-    if @vendor then 
-      $Conf = @vendor.salor_configuration
-    end
-    if !$Conf then
-      $Conf = Vendor.first.salor_configuration
-    end
   end
 
   def layout_by_response
@@ -169,24 +119,20 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
+    
+    
+        @current_user = Employee.find_by_id(session[:user_id])
+        render :nothing => true and return if @current_user.nil?
+        
+        @current_vendor = @current_user.vendor
+        Time.zone = @current_vendor.time_zone if @current_vendor
+      return @current_user
+      
+  
+    I18n.locale = @current_user.language
+    
     $Notice = ""
     
-    GlobalData.refresh # Because classes are cached across requests
-    GlobalData.base_locale = AppConfig.base_locale
-    I18n.locale = AppConfig.locale
-    
-    if salor_signed_in? and salor_user then
-      I18n.locale = salor_user.language
-      #raise I18n.locale.to_s + salor_user.inspect
-	@owner = salor_user.get_owner
-	if salor_user.meta.nil? then
-          salor_user.meta = Meta.new
-          salor_user.meta.save
-        end
-    else 
-      @owner = User.new
-    end
-    I18n.locale = params[:locale] if params[:locale]
     add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
   end
   
@@ -240,13 +186,7 @@ class ApplicationController < ActionController::Base
     render :template => '/errors/error', :layout => 'customer_display'
   end
 
-  def authify
-    if not salor_signed_in? then
-      # puts  "Not Signed in..";
-      redirect_to '/home/index' and return
-    end
-    return true
-  end
+
   def add_breadcrumb(name, url = '')
     begin
     @breadcrumbs ||= []
@@ -262,79 +202,34 @@ class ApplicationController < ActionController::Base
       controller.send(:add_breadcrumb, name, url)
     end
   end
+  
   def initialize_order
     if params[:order_id] then
       o = Order.scopied.where("id = #{params[:order_id]} and (paid IS NULL or paid = 0)").first
       # puts  "!!!!!!!! Found order from params!"
-      $User.get_meta.update_attribute :order_id, o.id
+      @current_user.update_attribute :order_id, o.id
       return o if o
     end
-    if not $User.get_meta.order_id or not Order.exists? $User.get_meta.order_id then
-      order = $User.get_new_order
-      $User.meta.update_attribute(:order_id,order.id)
-    else
-      order = $User.get_order($User.meta.order_id)
-    end
-    return order
   end
-  #
-  def setup_global_data
-    vars = {}
-    var_names = [:vendor_id,:order_id,:cash_register_id]
-    var_names.each do |var|
-      if session[var].nil? then
-        vars[var.to_s] = params[var]
-      else
-        vars[var.to_s] = session[var]
-      end
-    end
-    
-    GlobalData.session = vars
-    GlobalData.request = request
-    $Request = request
-    $Params = params
-    vars = {}
-    var_names = [:no_inc,:sku,:controller,:action,:page,:vendor_id,:keywords]
-    var_names.each do |var|
-      vars[var.to_s] = params[var] 
-    end
-    
-    GlobalData.params = vars
-    if salor_user
-      GlobalData.salor_user = salor_user
-      GlobalData.cash_register = @cash_register
-      GlobalData.user_id = salor_user.get_owner.id
-      # $User is setup is salor_user
-      if $User and $User.role_cache.blank? then
-        $User.set_role_cache
-        $User.update_attribute :role_cache, $User.role_cache
-      end
-      if $User and [:create,:update,:destroy].include? params[:action].to_sym then
-        [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
-        end
-      end
-      $Meta = $User.get_meta
-    end
-  end
+  
   def check_role
     if not role_check(params) then 
       redirect_to(role_check_failed) and return
     end  
   end
+  
   def role_check_failed
-    if salor_user
-      return salor_user.get_root.merge({:notice => I18n.t("system.errors.no_role")})
+    if @current_user
+      return @current_user.get_root.merge({:notice => I18n.t("system.errors.no_role")})
     end
   end
   
   def role_check(p)
-    if $User
-      return $User.can(p[:action] + '_' + p[:controller])
-    end
+    return @current_user.can(p[:action] + '_' + p[:controller])
   end
   
   def not_my_vendor?(model)
-    if $User.vendor_id != model.vendor_id then
+    if @current_user.vendor_id != model.vendor_id then
       return true
     end
     return false

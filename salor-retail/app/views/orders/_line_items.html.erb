@@ -61,6 +61,6 @@
             <%= I18n.t("views.single_words.coupons") %>
           </td>
         </tr>
-        <%= salor_render :partial => "shared/order_coupons", :locals => {:coupons => @order.coupons} %>
+        <%= render :partial => "shared/order_coupons", :locals => {:coupons => @order.coupons} %>
       <% end %>
 

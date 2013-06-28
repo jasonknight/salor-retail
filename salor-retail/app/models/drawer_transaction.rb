@@ -66,7 +66,7 @@ class DrawerTransaction < ActiveRecord::Base
     I18n.l(self.created_at, :format => :long) +
     "\n\n" +
     "\e!\x38" +
-    $User.username +
+    @current_user.username +
     "\n\n" +
     self.tag +
     "\n\n" +

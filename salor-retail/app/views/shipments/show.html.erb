@@ -10,8 +10,6 @@
 <div class='report-container'>
   <div>
     <img class='right' src='/images/salor-logo-reports.png'>
-    <% if Vendor.find_by_id($User.meta.vendor_id).logo_image %>
-      <img class=left src="/vendors/<%= GlobalData.salor_user.meta.vendor_id %>/logo_invoice">
     <% end %>
     <div class='clear'></div>
   </div>

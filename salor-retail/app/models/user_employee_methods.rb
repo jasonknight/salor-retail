@@ -14,13 +14,12 @@ module UserEmployeeMethods
       def generate_password(string)
         return Digest::SHA2.hexdigest("#{string}")
       end
-      def get_meta
-        if self.meta.nil? then
-          self.meta = Meta.new
+      def get
+        if self.nil? then
           self.save
-          return self.meta
+          return self
         else
-          return self.meta
+          return self
         end
       end
       def self.login(pass)
@@ -90,32 +89,18 @@ module UserEmployeeMethods
       self.drawer = Drawer.new
       self.drawer.save
     end
-    if self.meta.nil? then
-      self.meta = Meta.new
-      self.meta.save
+    if self.nil? then
+      self.save
     end
   end
   def full_name
   	return self.first_name + " " + self.last_name if self.class == Employee
   	return self.username
   end
-  def is_owner?
-	  return true if self.class == User
-	  return false
-  end
-  def is_employee?
-    return true if self.class == Employee
-	  return false
-  end
-  def get_theme
-    return '/overcast'
-  end
-  def set_theme(tname)
-    update_attribute(:theme,tname)
-  end
+
+  
   def add_vendor(name)
   	  v = Vendor.new(:name => name)
-  	  v.user = self if self.class == User
   	  v.user = self.user if self.class == Employee
   	  v.salor_configuration = SalorConfiguration.new
   	  v.save!
@@ -203,7 +188,7 @@ module UserEmployeeMethods
   
   # Locations related functions
   def get_locations(page=nil)
-    id = $User.get_meta.vendor_id
+    id = @current_user.vendor_id
     return Location.scopied.order('id DESC').page($Params[:page])
   end
   def get_location(id)
@@ -233,41 +218,26 @@ module UserEmployeeMethods
   def get_new_order
     # puts "##Creating a new order"
     o = Order.new
-    if owns_vendor?($User.get_meta.vendor_id) then
-      o.vendor_id = $User.get_meta.vendor_id
+    if owns_vendor?(@current_user.vendor_id) then
+      o.vendor_id = @current_user.vendor_id
     else
       o.vendor_id = get_default_vendor.id
     end
     o.set_model_owner(self)
-    o.cash_register_id = $User.get_meta.cash_register_id
+    o.cash_register_id = @current_user.cash_register_id
     begin
       o.save!
     rescue ActiveRecord::RecordInvalid => invalid
       log_action "CouldNotSave! : " + invalid.record.errors.messages.inspect
       raise "Could not save!"
     end
-    $User.get_meta.update_attribute :order_id,o.id
+    @current_user.update_attribute :order_id,o.id
     return o
-  end
-  
-  # Vendors related functions
-  def get_vendors(page)
-    if page.nil? then
-      return self.vendors.visible
-    else
-      return self.vendors.visible.page(page).per($Conf.pagination)
-    end
-  end
-  def get_vendor(id)
-    ven = Vendor.find(id)
-    return ven if owns_vendor?(ven.id)
-    return Vendor.new
   end
   
   def get_new_cash_register_daily
     d = CashRegisterDaily.new(:start_amount => 0, :end_amount => 0, :cash_register_id => GlobalData.session.cash_register_id)
-    d.user_id = self.id if self.class == User
-    d.employee_id = self.id if self.class == Employee
+    d.employee_id = self.id
     d.save
     return d
   end
@@ -280,13 +250,6 @@ module UserEmployeeMethods
     employee = Employee.find(id)
     return employee if employee.user_id = self.id
     return Employee.new
-  end
-  
-  def get_owner
-    return self if self.class == User
-    return self.user if self.class == Employee
-    return self.employee if self.respond_to? :employee_id
-    return self.user
   end
   
   def get_drawer
@@ -304,7 +267,7 @@ module UserEmployeeMethods
   end
   
   def can(action)
-    if self.class == User or self.role_cache.include? "manager" then
+    if self.role_cache.include? "manager" then
       return true
     else
       action = action.to_s
@@ -356,7 +319,6 @@ module UserEmployeeMethods
       return true if owns_vendor?(model.vendor_id)  
     end
     if model.respond_to? :user_id then
-      return true if self.class == User and model.user_id == self.id
       return true if self.class == Employee and model.user_id == self.user.id
     end
    
@@ -376,7 +338,6 @@ module UserEmployeeMethods
   #
   
   def get_root
-    return :controller => 'vendors' if self.class == User
     self.roles.each do |role|
       # puts "GetRoot evaluating role: #{role.name}"
       if role.name == 'manager' then
@@ -392,8 +353,8 @@ module UserEmployeeMethods
   end
   
   def end_day
-    if Order.exists? self.meta.order_id then
-      o = Order.find_by_id(self.meta.order_id)
+    if Order.exists? self.order_id then
+      o = Order.find_by_id(self.order_id)
       if not o.nil? then
         o.total = 0 if o.total.nil? 
         if o.total == 0 and not o.order_items.visible.any? then
@@ -405,12 +366,12 @@ module UserEmployeeMethods
     else
       # puts "##OrderDoesNotExist"
     end
-    vendor_id = self.meta.vendor_id
-    cash_register_id = self.meta.cash_register_id
-    self.meta.order_id = nil
-    self.meta.last_order_id = nil
-    self.meta.cash_register_id = nil
-    self.meta.save
+    vendor_id = self.vendor_id
+    cash_register_id = self.cash_register_id
+    self.order_id = nil
+    self.last_order_id = nil
+    self.cash_register_id = nil
+    self.save
     self.update_attribute :last_path,''
     login = self.employee_logins.last
     if login then
@@ -430,19 +391,11 @@ module UserEmployeeMethods
   end
   
   def best_sellers
-    if self.class == User then
-      return self.items.order('quantity_sold DESC').limit(10)
-    else
       return self.user.items.order('quantity_sold DESC').limit(10)
-    end
   end
   
   def almost_out
-    if self.class == User then
-      return self.items.where("quantity < min_quantity AND ignore_qty = 0 AND (active IS TRUE or active = 1)").order('quantity ASC').page($Params[:page]).per(10)
-    else
       return self.user.items.where("quantity < min_quantity AND ignore_qty = 0 AND (active IS TRUE or active = 1)").order('quantity ASC').page($Params[:page]).per(10)
-    end
   end
   
   def best_selling_categories
@@ -484,7 +437,7 @@ module UserEmployeeMethods
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
     if employee
-      orders = Order.scopied.where({ :vendor_id => employee.get_meta.vendor_id, :drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false }).order("created_at ASC")
+      orders = Order.scopied.where({ :vendor_id => employee.get.vendor_id, :drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false }).order("created_at ASC")
       drawertransactions = DrawerTransaction.where({:drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
     else
       orders = Order.scopied.where({ :vendor_id => $Vendor.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false  }).order("created_at ASC")
@@ -687,40 +640,9 @@ module UserEmployeeMethods
     r = no_nils(r)
     return r
   end
-  def is_technician?
-    if self.class == User and self.is_technician == true then
-      return true
-    else
-      return false
-    end
-  end
-  def auto_drop
-    return
-    if $Conf and $Conf.auto_drop then
-      bod = DrawerTransaction.where(:tag => 'beginning_of_day', :drawer_id => $User.get_drawer.id).order("id desc").limit(1)
-      last_eod = DrawerTransaction.where(:tag => 'end_of_day', :drawer_id => $User.get_drawer.id).order("id desc").limit(1)
-      if last_eod.any? and (not bod.any? or bod.first.id < last_eod.first.id) then
-        amount = last_eod.first.amount
-        dt = DrawerTransaction.new(:owner_type => self.class.to_s,
-                                   :owner_id => self.id,
-                                   :drop => true,
-                                   :amount => amount,
-                                   :drawer_id => self.get_drawer.id,
-                                   :drawer_amount => self.get_drawer.amount,
-                                   :cash_register_id => self.meta.cash_register_id,
-                                   :tag => "beginning_of_day")
-        if not dt.save then
-          GlobalErrors.append("system.errors.auto_drop_failed",self,nil)
-        else
-          $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
-        end
-      else
-        GlobalErrors.append("system.errors.auto_drop_failed2",self,nil)
-      end
-    else
-      # puts "Autodrop not set"
-    end
-  end
+
+
+  
   def set_role_cache
     rs = []
     self.roles.each do |r|

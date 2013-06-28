@@ -5,30 +5,29 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class HomeController < ApplicationController
-  before_filter :authify, :except => [:index, :remote_service, :connect_remote_service, :get_connection_status]
-  before_filter :initialize_instance_variables, :only => [:user_employee_index, :edit_owner, :update_owner, :remote_service, :connect_remote_service, :get_connection_status]
-  before_filter :check_role, :only => [:edit_owner, :update_owner], :except => [:remote_service, :connect_remote_service, :get_connection_status]
+  
+  skip_before_filter :loadup
+  
   def errors_display
     @exception = $!
   end
+  
   def exception_test
     nil.whine
   end
+  
   def index
-    if AppConfig.standalone and User.count == 0 then
-      raise "NoUser" and return
-    end
     @from = Time.now
     @to = Time.now
-    Error.where(["created_at < ?", (Time.now - 10.days)]).delete_all
-    redirect_to vendor_path($Vendor) if $User
+    redirect_to vendor_path($Vendor) if @current_user
   end
+  
   def user_employee_index
     Session.sweep
     if not check_license() then
       render :action => "402", :status => 402 and return
     end
-    r = salor_user.get_root
+    r = @current_user.get_root
     if r then
       redirect_to r and return
     end
@@ -40,10 +39,10 @@ class HomeController < ApplicationController
     render :layout => false
   end
   def set_language
-    if salor_user then
+    if @current_user then
       supported_language.each do |lang|
         if params[:lang] == lang[:locale] then
-          salor_user.update_attribute(:language,params[:lang])
+          @current_user.update_attribute(:language,params[:lang])
         end
       end
     end

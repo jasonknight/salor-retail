@@ -7,6 +7,7 @@
 
 module SalorBase
   VERSION = '{{VERSION}}'
+  
   def self.symbolize_keys arg
     case arg
     when Array
@@ -22,20 +23,15 @@ module SalorBase
       arg
     end
   end
-
-
-  def self.setup_testing
-    GlobalData.salor_user = User.first
-    GlobalData.vendor = Vendor.first
-    GlobalData.salor_user.meta.vendor_id = Vendor.first.id
-    GlobalData.salor_user.meta.cash_register_id = CashRegister.first.id
-  end
+  
   def log_action(txt)
     SalorBase.log_action(self.class.to_s,txt)
   end
+  
   def self.log_action(from="unk",txt)
-   ActiveRecord::Base.logger.info "[#{from}] #{txt}"
+    ActiveRecord::Base.logger.info "[#{from}] #{txt}"
   end
+  
   def self.string_to_float(str)
     return str if str.class == Float or str.class == Fixnum
       string = "#{str}"
@@ -63,9 +59,11 @@ module SalorBase
       #puts string
       return string
    end
+   
    def string_to_float(string)
       return SalorBase.string_to_float(string)
    end
+   
    def get_gs1_price(code, item=nil)
      m = code.match(/\d{2}(\d{5})(\d{5})\d{0,1}/)
      if not m then
@@ -80,15 +78,18 @@ module SalorBase
      num = "#{parts[1]}.#{parts[2]}".to_f
      return num
    end
+   
    def get_html_id
      return [self.class.to_s,self.id.to_s,rand(9999)].join('_').to_s
    end
+   
    def self.rebate_types
      return [
      [I18n.t("system.rebates.percent"),'Percent'],
      [I18n.t("system.rebates.fixed"),'Fixed']
      ]
    end
+   
    def salor_fetch_attr(attr,options = {})
      begin
        conn = ActiveRecord::Base.connection();
@@ -116,16 +117,11 @@ module SalorBase
        return 0
      end
    end
-   # This method should be called when creating any object, you should use this
-   # format when creating new objects:
-   # @inst = Model.new
-   # @inst.set_model_owner
-   # @inst.attributes = attribs
-   # Conversely, you could use
-   # @inst.new attribs
+
+   
    def set_model_owner(user=nil)
       if user.nil? then
-       user = $User
+       user = @current_user
       end
       return if user.nil?
 
@@ -138,7 +134,7 @@ module SalorBase
        self.set_sku if self.class == Category or self.class == Customer
       end
       if self.respond_to? :cash_register_id and self.cash_register_id.nil? then
-        self.cash_register_id = user.get_meta.cash_register_id
+        self.cash_register_id = user.get.cash_register_id
       end
       if self.respond_to? :user_id and self.user_id.nil? then
        self.user_id = user.get_owner.id
@@ -149,46 +145,8 @@ module SalorBase
          end
       end
    end
-   # requires a stacktrace i.e. parse_caller(caller(2).first).last 
-   # where caller is a magic function
-   def parse_caller(at)
-      if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
-        file = Regexp.last_match[1]
-        line = Regexp.last_match[2].to_i
-        method = Regexp.last_match[3]
-        return [file, line, method]
-      end
-  end
-  # generally use this function when you don't want nil int/floats in an array
-  # or hash, nil should be 0, ruby is sometimes crazy, and no auto-casting
-  # takes place when trying to perform something like nil.round(2)
-  def no_nils(obj)
-    if obj.class == Hash or obj.class == Array then
-      tmp = {}
-      obj.each do |k,v|
-        v = no_nils(v) if v.class == Hash or v.class == Array
-        v = 0 if v.nil?
-        tmp[k] = v
-      end
-      obj = tmp
-    else
-      obj = 0 if obj.nil?
-    end
-    return obj
-  end
-      # Converts all accented chars in txt into normal ASCII
-  def normaleyes(txt)
-    return txt #UnicodeUtils.nfkd(txt.to_s).gsub(/[^\x00-\x7F]/,'').to_s
-  end
 
-  def self.beep(freq, length, repeat, delay)
-    args = Array.new
-    args.push(" -f #{freq.to_i}") unless freq.nil?
-    args.push(" -l #{length.to_i}") unless length.nil?
-    args.push(" -r #{repeat.to_i}") unless repeat.nil?
-    args.push(" -d #{delay.to_i}") unless delay.nil?
-    system("beep" + args.join)
-  end
+  
   def self.to_currency(number,options={})
     options.symbolize_keys!
     defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
@@ -204,6 +162,7 @@ module SalorBase
     value = self.number_with_precision(number)
     format.gsub(/%n/, value).gsub(/%u/, unit)
   end
+  
   def self.number_to_currency(number,options={})
     options.symbolize_keys!
     defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
@@ -258,6 +217,7 @@ module SalorBase
     formatted_number = self.number_with_delimiter("%01.#{precision}f" % rounded_number, options)
     return formatted_number
   end
+  
   def self.number_with_delimiter(number, options = {})
     options.symbolize_keys!
 
@@ -278,6 +238,7 @@ module SalorBase
     parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{options[:delimiter]}")
     return parts.join(options[:separator])
   end
+  
   def csv_header(sep=";")
     values = []
     self.class.content_columns.each do |col|
@@ -285,6 +246,7 @@ module SalorBase
     end
     values.join(sep)
   end
+  
   def to_csv(sep=";")
     values = []
     self.class.content_columns.each do |col|
@@ -292,14 +254,4 @@ module SalorBase
     end
     return values.join(sep)
   end
-  def get_meta
-    if self.meta.nil? then
-      m = Meta.new(:ownable => self)
-      m.save
-      return m
-    else
-      return self.meta
-    end
-  end
-  
 end

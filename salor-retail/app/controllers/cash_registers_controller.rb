@@ -5,8 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class CashRegistersController < ApplicationController
-  before_filter :authify
-  before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
   before_filter :get_devicenodes
@@ -57,7 +55,7 @@ class CashRegistersController < ApplicationController
  
     respond_to do |format|
       if @cash_register.save
-        @cash_register.set_model_owner(salor_user)
+        @cash_register.set_model_owner(@current_user)
         format.html { redirect_to cash_registers_path }
         format.xml  { render :xml => @cash_register, :status => :created, :location => @cash_register }
       else
@@ -92,12 +90,12 @@ class CashRegistersController < ApplicationController
     @cash_register = CashRegister.scopied.find(params[:id])
     if @cash_register.orders.any? then
       @cash_register.update_attribute(:hidden,1)
-      if @cash_register.id == salor_user.meta.cash_register_id then
-        salor_user.meta.cash_register_id = nil
+      if @cash_register.id == @current_user.cash_register_id then
+        @current_user.cash_register_id = nil
       end
     else
-      if @cash_register.id == salor_user.meta.cash_register_id then
-        salor_user.meta.cash_register_id = nil
+      if @cash_register.id == @current_user.cash_register_id then
+        @current_user.cash_register_id = nil
       end
       @cash_register.kill
     end

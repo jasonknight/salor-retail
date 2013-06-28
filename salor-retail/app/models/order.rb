@@ -8,7 +8,6 @@
 class Order < ActiveRecord::Base
  # {START}
 	include SalorScope
-  include SalorError
   include SalorBase
   include SalorModel
   has_many :order_items
@@ -282,7 +281,7 @@ class Order < ActiveRecord::Base
 	#end
 	#
 	def remove_order_item(oi)
-	  if self.paid == 1 and not $User.is_technician? then
+	  if self.paid == 1 and not @current_user.is_technician? then
 	    GlobalErrors.append("system.errors.cannot_edit_completed_order")
 	    return
 	  end
@@ -333,7 +332,7 @@ class Order < ActiveRecord::Base
 	#
 	def calculate_totals(speedy = false)
 #     puts "## Calculate_Totals called #{speedy}"
-	  if self.paid == 1 and not $User.is_technician? then
+	  if self.paid == 1 and not @current_user.is_technician? then
 	    #GlobalErrors.append("system.errors.cannot_edit_completed_order",self)
       log_action "Attempted to edit completed order."
 	    return
@@ -508,9 +507,9 @@ class Order < ActiveRecord::Base
   end
 	#
   def complete
-#     log_action "Starting complete order. Drawer amount is: #{$User.get_drawer.amount}"
-#     log_action "User Is: #{$User.username}"
-#     log_action "DrawerId Is: #{$User.get_drawer.id}"
+#     log_action "Starting complete order. Drawer amount is: #{@current_user.get_drawer.amount}"
+#     log_action "User Is: #{@current_user.username}"
+#     log_action "DrawerId Is: #{@current_user.get_drawer.id}"
 #     log_action "OrderId Is: #{self.id}"
 
     # History
@@ -532,7 +531,7 @@ class Order < ActiveRecord::Base
     self.reload
     log_action "Reloaded"
     self.created_at = Time.now
-    self.drawer_id = $User.get_drawer.id
+    self.drawer_id = @current_user.get_drawer.id
     if self.is_quote then
       self.qnr = self.vendor.get_unique_model_number('quote')
     else
@@ -563,14 +562,14 @@ class Order < ActiveRecord::Base
         log_action "Not a buy order, but total < 0"
         create_drawer_transaction(self.get_drawer_add,:payout,{:tag => "CompleteOrder"})
       else
-        $User.meta.update_attribute :last_order_id, self.id
+        @current_user.update_attribute :last_order_id, self.id
         log_action "Creating :drop for complete order with #{ottl}"
         create_drawer_transaction(ottl,:drop,{:tag => "CompleteOrder"})
         if self.change_given > 0 and not self.is_quote
           log_action "Creating change PM"
           PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
         end
-        log_action("OID: #{self.id} USER: #{$User.username} OTTL: #{ottl} DRW: #{$User.get_drawer.amount}")
+        log_action("OID: #{self.id} USER: #{@current_user.username} OTTL: #{ottl} DRW: #{@current_user.get_drawer.amount}")
         log_action("End of Complete: " + self.payment_methods.inspect)
       end
       self.save
@@ -603,7 +602,7 @@ class Order < ActiveRecord::Base
     #  log_action $!.to_s
     #  #puts $!.to_s
     #end
-    log_action "Ending complete order. Drawer amount is: #{$User.get_drawer.amount}"
+    log_action "Ending complete order. Drawer amount is: #{@current_user.get_drawer.amount}"
     self.save
   end
   def activate_gift_cards
@@ -680,8 +679,8 @@ class Order < ActiveRecord::Base
     dt = DrawerTransaction.new(opts)
     dt.amount = amount
     dt[type] = true
-    dt.drawer_id = $User.get_drawer.id
-    dt.drawer_amount = $User.get_drawer.amount
+    dt.drawer_id = @current_user.get_drawer.id
+    dt.drawer_amount = @current_user.get_drawer.amount
     dt.order_id = self.id
     if dt.amount < 0 then
       dt.payout = true
@@ -706,13 +705,13 @@ class Order < ActiveRecord::Base
     log_action "sql: #{sql}"
     DrawerTransaction.connection.execute(sql)
     if dt.payout then
-      $User.get_drawer.update_attribute(:amount, $User.get_drawer.amount - dt.amount)
+      @current_user.get_drawer.update_attribute(:amount, @current_user.get_drawer.amount - dt.amount)
       log_action "updated drawer_amount for payout"
     elsif dt.drop then
-      $User.get_drawer.update_attribute(:amount, $User.get_drawer.amount + dt.amount)
+      @current_user.get_drawer.update_attribute(:amount, @current_user.get_drawer.amount + dt.amount)
       log_action "updated drawer_amount for drop"
     end
-    $User.reload
+    @current_user.reload
     log_action "creating drawer transaction complete"
     History.direct("Order::create_drawer_transaction",self,{:amount => amount, :type => type, :opts => opts, :drawer_transaction_id => dt.id},"","");
   end
@@ -730,7 +729,7 @@ class Order < ActiveRecord::Base
 
   def toggle_refund(x, refund_payment_method)
     log_action "toggle_refund called"
-    if not $User.get_drawer.amount >= self.total then
+    if not @current_user.get_drawer.amount >= self.total then
       log_action "Not enough in drawer"
       GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
       return
@@ -740,13 +739,13 @@ class Order < ActiveRecord::Base
       #self.update_attribute(:refunded, false)
       #create_drawer_transaction(self.total,:drop)
     else
-      if ($User.get_drawer.amount - self.total) < 0 then
+      if (@current_user.get_drawer.amount - self.total) < 0 then
         log_action "drawer amount - total < 0"
       end
 
       self.update_attribute(:refunded, true)
-      self.update_attribute(:refunded_by, $User.id)
-      self.update_attribute(:refunded_by_type, $User.class.to_s)
+      self.update_attribute(:refunded_by, @current_user.id)
+      self.update_attribute(:refunded_by_type, @current_user.class.to_s)
       if refund_payment_method == 'InCash'
         opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
         create_drawer_transaction(self.total, :payout, opts)
@@ -1180,9 +1179,9 @@ class Order < ActiveRecord::Base
   # new methods from test
   
   def self.generate
-    if $User.get_meta.order_id then
+    if @current_user.order_id then
       # #puts "OrderId found"
-      o = Order.find($User.get_meta.order_id)
+      o = Order.find(@current_user.order_id)
       if o and (not o.paid and not o.order_items.any?) then
         # We already have an empty order.
         return o
@@ -1195,11 +1194,11 @@ class Order < ActiveRecord::Base
     else
       # #puts o.errors.inspect
     end
-    $User.get_meta.update_attribute :order_id, o.id
+    @current_user.update_attribute :order_id, o.id
     return o
   end
   def belongs_to_current_user?
-    if not self.get_user == $User then
+    if not self.get_user == @current_user then
       return false
     end
     return true

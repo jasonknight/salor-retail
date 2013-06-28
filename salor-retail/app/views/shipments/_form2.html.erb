@@ -70,14 +70,14 @@
   </tr>
   <tr>
     <td colspan="6">
-      <%= salor_render :partial => "shared/shipment_item_form", :locals => {:f => f,:model => 'shipment', :items => @shipment.shipment_items} %>
+      <%= render :partial => "shared/shipment_item_form", :locals => {:f => f,:model => 'shipment', :items => @shipment.shipment_items} %>
     </td>
   </tr>
   <tr>
     <td colspan="6" align="right"> <div class="actions"><%= f.submit t 'helpers.submit.save' %></div> </td>
   </tr>
 </table>
-<%= f.hidden_field(:user_id, :value => salor_user.id) if not salor_user.is_employee? %>
-<%= f.hidden_field(:employee_id, :value => salor_user.id) if salor_user.is_employee? %>
+<%= f.hidden_field(:user_id, :value => @current_user.id) if not @current_user.is_employee? %>
+<%= f.hidden_field(:employee_id, :value => @current_user.id) if @current_user.is_employee? %>
 
 <% end %>

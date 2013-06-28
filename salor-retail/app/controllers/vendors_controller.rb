@@ -6,8 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 class VendorsController < ApplicationController
     # {START}
-    before_filter :authify, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
-    before_filter :initialize_instance_variables, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
     before_filter :check_role, :only => [:index, :show, :new, :create, :edit, :update, :destroy]
     before_filter :crumble, :except => [:csv,:labels, :logo, :logo_invoice, :render_drawer_transaction_receipt, :render_open_cashdrawer, :display_logo, :render_end_of_day_receipt]
 
@@ -32,7 +30,7 @@ class VendorsController < ApplicationController
     render :layout => false
   end
   def index
-    @vendors = $User.get_vendors(params[:page])
+    @vendors = @current_user.vendors(params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @vendors }
@@ -45,7 +43,7 @@ class VendorsController < ApplicationController
     if not check_license() then
       redirect_to :controller => "home", :action => "index" and return
     end
-    @vendor = salor_user.get_vendor(params[:id])
+    @vendor = @current_user.vendor(params[:id])
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     respond_to do |format|
       format.html # show.html.erb
@@ -96,7 +94,7 @@ class VendorsController < ApplicationController
   # PUT /vendors/1
   # PUT /vendors/1.xml
   def update
-    @vendor = salor_user.get_vendor(params[:id])
+    @vendor = @current_user.vendor(params[:id])
     
     respond_to do |format|
       if @vendor.update_attributes(params[:vendor])
@@ -112,7 +110,7 @@ class VendorsController < ApplicationController
   # DELETE /vendors/1
   # DELETE /vendors/1.xml
   def destroy
-    @vendor = salor_user.get_vendor(params[:id])
+    @vendor = @current_user.vendor(params[:id])
     @vendor.kill
 
     respond_to do |format|
@@ -131,10 +129,10 @@ class VendorsController < ApplicationController
       # Normally, it is important to ensure that the total shown represents 100%
       # real, physically present money. You cannot half use Dts, you either track
       # everything with Dts, or you track nothing with them.
-      @drawer_transaction.drawer_amount = $User.get_drawer.amount
+      @drawer_transaction.drawer_amount = @current_user.get_drawer.amount
       # Ideally, we don't allow a payout of more than is in the drawer.
-      if @drawer_transaction.amount > $User.get_drawer.amount and @drawer_transaction.payout == true then
-        @drawer_transaction.amount = $User.get_drawer.amount
+      if @drawer_transaction.amount > @current_user.get_drawer.amount and @drawer_transaction.payout == true then
+        @drawer_transaction.amount = @current_user.get_drawer.amount
       end
       if @drawer_transaction.amount < 0 then
          @drawer_transaction.amount *= -1
@@ -143,15 +141,15 @@ class VendorsController < ApplicationController
       end
       if params[:employee_id] then
         if params[:employee_id] == 'self' then
-          @drawer_transaction.drawer_id = $User.get_drawer.id
-          @drawer_transaction.owner = $User
+          @drawer_transaction.drawer_id = @current_user.get_drawer.id
+          @drawer_transaction.owner = @current_user
         else
           emp = Employee.scopied.find_by_id(params[:employee_id])
           @drawer_transaction.drawer_id = emp.get_drawer.id
           @drawer_transaction.owner = emp
         end
       else
-        @drawer_transaction.drawer_id = $User.get_drawer.id
+        @drawer_transaction.drawer_id = @current_user.get_drawer.id
       end
       if @drawer_transaction.save then
         # @drawer_transaction.print if not $Register.salor_printer == true
@@ -170,11 +168,11 @@ class VendorsController < ApplicationController
       else
         raise "Failed to save..."
       end
-    $User.get_drawer.reload
+    @current_user.get_drawer.reload
   end
 
   def open_cash_drawer
-    @vendor ||= Vendor.find_by_id($User.vendor_id)
+    @vendor ||= Vendor.find_by_id(@current_user.vendor_id)
     @vendor.open_cash_drawer
     render :nothing => true
   end
@@ -193,8 +191,8 @@ class VendorsController < ApplicationController
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @dt = DrawerTransaction.find_by_id(params[:id])
-    GlobalData.vendor = @dt.owner.get_meta.vendor
-    $User = @dt.owner
+    GlobalData.vendor = @dt.owner.get.vendor
+    @current_user = @dt.owner
     if not @dt then
       render :text => "Could not find drawer_transaction" and return
     end
@@ -244,21 +242,21 @@ class VendorsController < ApplicationController
   #
   def end_day
     begin
-      @order = initialize_order if salor_user.meta.order_id
+      @order = initialize_order if @current_user.order_id
     rescue
     end
     if not GlobalErrors.any_fatal? then
-      $User.end_day
-      if $User.class == User then
-        $User.update_attribute :is_technician, false
+      @current_user.end_day
+      if @current_user.class == User then
+        @current_user.update_attribute :is_technician, false
       end
-      # History.record("employee_sign_out",$User,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
+      # History.record("employee_sign_out",@current_user,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
       session[:user_id] = nil
       session[:user_type] = nil
       cookies[:user_id] = nil
       cookies[:user_type] = nil
       redirect_to :controller => :home, :action => :index
-      $User = nil
+      @current_user = nil
     end
   end
   # {END}
@@ -274,7 +272,7 @@ class VendorsController < ApplicationController
     end
     
     
-    if allowed_klasses.include? params[:klass] or $User.is_technician?
+    if allowed_klasses.include? params[:klass] or @current_user.is_technician?
 #        puts  "### Class is allowed"
       kls = Kernel.const_get(params[:klass])
       if not params[:id] and params[:order_id] then
@@ -302,13 +300,13 @@ class VendorsController < ApplicationController
           # ---
           
 #         if @inst.class == Order and @inst.paid == 1 then
-#           @order = $User.get_new_order
+#           @order = @current_user.get_new_order
 # #           puts "## Order is paid 2"
 #           render :layout => false and return
 #         end
         if @inst.respond_to? params[:field]
 #            puts  "### Inst responds_to field #{params[:field]}"
-          if not salor_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
+          if not @current_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
              puts  "### User doesn't own resource"
             raise I18n.t("views.errors.no_access_right")
           end
@@ -503,7 +501,7 @@ class VendorsController < ApplicationController
       if kls.exists? params[:model_id] then
         @inst = kls.find(params[:model_id])
         if @inst.respond_to? params[:field]
-          if not salor_user.owns_this?(@inst) then
+          if not @current_user.owns_this?(@inst) then
             raise I18n.t("views.errors.no_access_right")
           end
           @inst.send(params[:field].to_sym,params[:value])

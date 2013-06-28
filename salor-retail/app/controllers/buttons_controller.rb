@@ -5,8 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class ButtonsController < ApplicationController
-  before_filter :authify
-  before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
   
@@ -68,7 +66,7 @@ class ButtonsController < ApplicationController
   private 
 
   def crumble
-    @vendor = salor_user.get_vendor(salor_user.meta.vendor_id)
+    @vendor = @current_user.vendor(@current_user.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.buttons"),'buttons_path(:vendor_id => params[:vendor_id])'
   end

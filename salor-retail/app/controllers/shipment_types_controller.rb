@@ -5,8 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class ShipmentTypesController < ApplicationController
-  before_filter :authify
-  before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
   # GET /shipment_types
@@ -44,7 +42,7 @@ class ShipmentTypesController < ApplicationController
 
   # GET /shipment_types/1/edit
   def edit
-    @shipment_type = GlobalData.salor_user.get_shipment_type(params[:id])
+    @shipment_type = @current_user.get_shipment_type(params[:id])
   end
 
   # POST /shipment_types
@@ -92,7 +90,7 @@ class ShipmentTypesController < ApplicationController
   end
   private 
   def crumble
-    @vendor = GlobalData.salor_user.get_vendor(GlobalData.salor_user.meta.vendor_id)
+    @vendor = @current_user.vendor(GlobalData.@current_user.vendor_id)
     add_breadcrumb I18n.t("menu.vendors"),'vendors_path'
     add_breadcrumb @vendor.name,'vendor_path(@vendor)' if @vendor
     add_breadcrumb I18n.t("menu.shipment_types"),'shipment_types_path(:vendor_id => params[:vendor_id])'

@@ -19,8 +19,8 @@ class CashRegister < ActiveRecord::Base
   attr_accessible :pole_display_name, :sticker_printer_name,:scale_name,:thermal_printer_name, :name
   def end_of_day_report
     table = {}
-    cats_tags = Category.cats_report($User.get_drawer.id)
-    @orders = Order.by_vendor.by_user.where(:refunded => false,:drawer_id => $User.get_drawer.id,:paid => true,:created_at => Time.now.beginning_of_day..Time.now)
+    cats_tags = Category.cats_report(@current_user.get_drawer.id)
+    @orders = Order.by_vendor.by_user.where(:refunded => false,:drawer_id => @current_user.get_drawer.id,:paid => true,:created_at => Time.now.beginning_of_day..Time.now)
     paymentmethod_sums = Hash.new
     cashtotal = 0.0
     @orders.each do |o|

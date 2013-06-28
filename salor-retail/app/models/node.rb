@@ -44,7 +44,7 @@ class Node < ActiveRecord::Base
           n = NodeMessage.new(:source_sku => self.sku, :dest_sku => @target.sku, :mdhash => @md5)
           n.save
         end
-      GlobalData.salor_user = @target.vendor.user
+      @current_user = @target.vendor.user
       GlobalData.vendor = @target.vendor
       GlobalData.vendor_id = @target.vendor.id
       if @record.class == Array then

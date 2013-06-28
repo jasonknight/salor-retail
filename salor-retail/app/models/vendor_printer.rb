@@ -10,5 +10,5 @@ class VendorPrinter < ActiveRecord::Base
   include SalorModel
   belongs_to :vendor
   belongs_to :cash_register
-  scope :by_vendor, lambda { where("vendor_id = ?", GlobalData.salor_user.meta.vendor_id)}
+  scope :by_vendor, lambda { where("vendor_id = ?", @current_user.vendor_id)}
 end

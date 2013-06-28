@@ -9,7 +9,7 @@ module SalorScope
   def self.included(klass)
     begin
     if klass.column_names.include? 'vendor_id'
-      klass.scope(:by_vendor, lambda { klass.where("`#{klass.table_name}`.vendor_id = #{$User.vendor_id}") if $User })
+      klass.scope(:by_vendor, lambda { klass.where("`#{klass.table_name}`.vendor_id = #{@current_user.vendor_id}") if @current_user })
     end
 
     if klass.column_names.include? 'hidden'
@@ -18,9 +18,9 @@ module SalorScope
     end
   
     if klass.class == Order
-      klass.scope(:by_user , lambda { klass.where("`#{klass.table_name}`.employee_id = #{$User.id}") if $User and $User.is_employee? and not $User.can(:head_cashier) and not $User.can(:edit_orders) })
+      klass.scope(:by_user , lambda { klass.where("`#{klass.table_name}`.employee_id = #{@current_user.id}") if @current_user and $User.is_employee? and not $User.can(:head_cashier) and not $User.can(:edit_orders) })
     elsif klass.column_names.include?('user_id') and [TaxProfile,Shipper,ShipmentType,TransactionTag].include?(klass.class) == false
-      klass.scope(:by_user , lambda { klass.where(:user_id => $User.get_owner.id.to_s) if $User })
+      klass.scope(:by_user , lambda { klass.where(:user_id => @current_user.get_owner.id.to_s) if @current_user })
     else
       klass.scope(:by_user, lambda {})
     end

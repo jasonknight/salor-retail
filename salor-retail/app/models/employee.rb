@@ -25,7 +25,6 @@ class Employee < ActiveRecord::Base
   has_many :paylife_structs, :as => :owner
   has_many :cash_register_dailies
   has_and_belongs_to_many :roles
-  has_one :meta, :as => :ownable
   has_one :drawer, :as => :owner
   has_many :drawer_transactions, :as => :owner
   has_many :histories, :as => :owner

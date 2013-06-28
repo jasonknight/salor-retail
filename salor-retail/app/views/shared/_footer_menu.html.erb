@@ -9,7 +9,7 @@
       </a>
     </div>
   </li>
-  <% if salor_user.can(:show_tax_profiles) %>
+  <% if @current_user.can(:show_tax_profiles) %>
   <li>
     <div align="center">
       <a href="<%= tax_profiles_path %>">
@@ -25,7 +25,7 @@
       </a>
     </div>
   </li>
-  <% if salor_user.can(:cashier) %>
+  <% if @current_user.can(:cashier) %>
     <li>
       <div align="center">
         <%= salor_icon(:cash_drop,{:onclick => 'show_cash_drop();'},32) %><br />
@@ -42,7 +42,7 @@
     </div>
   </li>
   -->
-  <% if salor_user.can(:index_shipments) %>
+  <% if @current_user.can(:index_shipments) %>
   <li>
     <div align="center">
       <a href="<%= shipments_path %>">
@@ -52,17 +52,16 @@
   </li>
   <% end %>
   
-  <% if salor_user.can(:index_orders) %>
+  <% if @current_user.can(:index_orders) %>
   <li>
     <div align="center">
       <%= link_to salor_icon(:order,{},32), new_order_path %><br />
     </div>
   </li>
   <% end %>
-  <% if salor_user.can(:new_customers) %>
+  <% if @current_user.can(:new_customers) %>
   <li>
     <div align="center">
-      <%= link_to salor_icon(:customer,{},32), new_customer_path(:vendor_id => salor_user.meta.vendor_id) %><br />
     </div>
   </li>
   <% end %>
@@ -77,7 +76,7 @@
     <span class="version">v<%= AppConfig.version %></span>
   </li>
 <% end -%>
-    <% if salor_user and not curl("orders#new") then  %>
+    <% if @current_user and not curl("orders#new") then  %>
       <%= render :partial => "shared/generic_search" %>
     <% end %>
   

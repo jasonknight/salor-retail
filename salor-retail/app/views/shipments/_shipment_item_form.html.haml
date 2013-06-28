@@ -6,5 +6,5 @@
     = salor_icon(:add, {:class => 'pointer', :onclick => "addShipmentItem();"},32)
   .shipment_items
     - @shipment.shipment_items.each do |item|
-      = salor_render :partial => "shipment_item", :locals => {:item => item }
+      = render :partial => "shipment_item", :locals => {:item => item }
   

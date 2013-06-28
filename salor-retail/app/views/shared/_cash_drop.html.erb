@@ -157,18 +157,18 @@ function show_coin_calculator() {
 </script>
 
 <div id="cash_drop" class="cash-drop hidden">
-<%= salor_render :partial => "shared/dt_tags" %>
+<%= render :partial => "shared/dt_tags" %>
 <div class="cash-drop-error"></div>
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>
   <span class='cash_drop_label'><%= I18n.t("menu.cash_register") %>:</span>
-  <span class="pos-cash-register-amount"><%= salor_number_to_currency($User.get_drawer.amount) if $User %></span>
+  <span class="pos-cash-register-amount"><%= salor_number_to_currency(@current_user.get_drawer.amount) if @current_user %></span>
 
-  <% if $User and $User.can(:manager)  %>
+  <% if @current_user and @current_user.can(:manager)  %>
       <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.models.employee.one") %></span>
         <select name="employee_id" id="employee_id">
-          <option value="self" selected><%= $User.username %></option>
+          <option value="self" selected><%= @current_user.username %></option>
           <% Employee.scopied.each do |emp|  %>
             <option value="<%= emp.id %>"><%= emp.username %></option>
           <% end %>
@@ -184,7 +184,7 @@ function show_coin_calculator() {
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
         <%
           # prefil amount if cash_drawer is empty
-          if $User and $User.drawer and DrawerTransaction.last and $User.get_drawer.amount == 0 then
+          if @current_user and @current_user.drawer and DrawerTransaction.last and @current_user.get_drawer.amount == 0 then
             amount = DrawerTransaction.last.amount
           else
             amount = 0

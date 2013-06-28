@@ -56,7 +56,7 @@ class Vendor < ActiveRecord::Base
     self.vendor_printer_ids = ps
   end
   def open_cash_drawer
-    cash_register_id = $User.meta.cash_register_id
+    cash_register_id = @current_user.cash_register_id
     cash_register = CashRegister.scopied.find_by_id cash_register_id
     vendor_printer = VendorPrinter.new :path => cash_register.thermal_printer
     if cash_register

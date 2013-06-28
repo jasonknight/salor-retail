@@ -6,8 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 class DiscountsController < ApplicationController
   # {START}
-  before_filter :authify
-  before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
   # GET /discounts
@@ -24,7 +22,7 @@ class DiscountsController < ApplicationController
   # GET /discounts/1
   # GET /discounts/1.xml
   def show
-    @discount = salor_user.get_discount(params[:id])
+    @discount = @current_user.get_discount(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -45,7 +43,7 @@ class DiscountsController < ApplicationController
 
   # GET /discounts/1/edit
   def edit
-    @discount = salor_user.get_discount(params[:id])
+    @discount = @current_user.get_discount(params[:id])
   end
 
   # POST /discounts
@@ -67,7 +65,7 @@ class DiscountsController < ApplicationController
   # PUT /discounts/1
   # PUT /discounts/1.xml
   def update
-    @discount = salor_user.get_discount(params[:id])
+    @discount = @current_user.get_discount(params[:id])
     OrderItem.reload_discounts
     respond_to do |format|
       if @discount.update_attributes(params[:discount])
@@ -83,7 +81,7 @@ class DiscountsController < ApplicationController
   # DELETE /discounts/1
   # DELETE /discounts/1.xml
   def destroy
-    @discount = salor_user.get_discount(params[:id])
+    @discount = @current_user.get_discount(params[:id])
     if @discount then
       @discount.kill
     end
@@ -95,7 +93,7 @@ class DiscountsController < ApplicationController
   end
   private 
   def crumble
-    @vendor = salor_user.get_vendor(salor_user.meta.vendor_id) if @vendor.nil?
+    @vendor = @current_user.vendor(@current_user.vendor_id) if @vendor.nil?
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.discounts"),'discounts_path(:vendor_id => params[:vendor_id])'
   end

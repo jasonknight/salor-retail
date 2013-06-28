@@ -18,14 +18,14 @@
       <%= raw(salor_icon(:employee,{},32,I18n.t("system.login"))) %>
     </div>
   </li>
-  <% if $User and $User.can(:index_items) %>
+  <% if @current_user and @current_user.can(:index_items) %>
   <li>
     <div align="center" id="btn-items-index" class="">
-      <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => $User.vendor_id) %>
+      <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => @current_user.vendor_id) %>
     </div>
   </li>
   <% end %>
-  <% if $User and $User.can(:cashier) and params[:controller] == "orders" and params[:action] = "new" %>
+  <% if @current_user and @current_user.can(:cashier) and params[:controller] == "orders" and params[:action] = "new" %>
     <li>
       <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
         <div id='header_drawer_amount'></div>
@@ -33,7 +33,7 @@
       </div>
     </li>
   <% end %>
-  <% if $User and $User.can(:index_orders) %>
+  <% if @current_user and @current_user.can(:index_orders) %>
   <li>
     <div align="center" id="btn-orders-new" class="">
     <%=  link_to raw(salor_icon(:cash_register,{},32,I18n.t("menu.pos"))), "/orders/new" %>
@@ -41,10 +41,10 @@
     </div>
   </li>
   <% end %>
-  <% if $User and $User.can(:index_customers) %>
+  <% if @current_user and @current_user.can(:index_customers) %>
   <li>
     <div align="center" id="btn-customers-new" class="">
-      <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => $User.vendor_id) %><br />
+      <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => @current_user.vendor_id) %><br />
     </div>
   </li>
   <% end %>
@@ -62,8 +62,8 @@
     </div>
   </li>
   </ul>
-  <% if $User and not curl("orders#new") then  %>
-    <%= salor_render :partial => "shared/generic_search" %>
+  <% if @current_user  %>
+    <%= render :partial => "shared/generic_search" %>
   <% end %>
 </div>
 <!-- End ul.list -->

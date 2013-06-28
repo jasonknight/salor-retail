@@ -2,7 +2,7 @@
 $(function () {
 try {
   <% if GlobalErrors.any? or GlobalErrors.any_fatal?  %>
-  <%= salor_render :partial => "shared/js/global_errors_js" %>
+  <%= render :partial => "shared/js/global_errors_js" %>
   <% end %>
 } catch (err) {
       txt="There was an error on this page end_day.\n\n";

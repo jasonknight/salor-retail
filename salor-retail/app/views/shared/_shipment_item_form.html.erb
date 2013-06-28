@@ -71,7 +71,7 @@ var shipment_items_callbacks = {
   },
   vendor_id: function (value) {
       <%
-        vendors = salor_user.get_vendors(nil)
+        vendors = @current_user.vendors(nil)
         stores = []
         vendors.each do |store|
           stores << "<option value='#{store.id}'>#{store.name}</option>"
@@ -121,7 +121,7 @@ var shipment_items_callbacks = {
   },
   category_id: function (value) {
       <%
-        categories = GlobalData.salor_user.get_all_categories
+        categories = GlobalData.@current_user.get_all_categories
         cats = []
         categories.each do |cat|
         cats << "<option value='#{cat.id}'>#{cat.name.gsub('"','\"')}</option>"

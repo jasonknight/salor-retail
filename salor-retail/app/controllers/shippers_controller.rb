@@ -7,8 +7,6 @@
 class ShippersController < ApplicationController
   # GET /shippers
   # GET /shippers.xml
-  before_filter :authify
-  before_filter :initialize_instance_variables
   before_filter :check_role, :except => [:crumble]
   before_filter :crumble
 

@@ -5,8 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class TaxProfilesController < ApplicationController
-   before_filter :authify
-   before_filter :initialize_instance_variables
    before_filter :check_role, :except => [:crumble]
    before_filter :crumble
    

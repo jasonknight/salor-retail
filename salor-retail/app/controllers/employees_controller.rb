@@ -5,10 +5,10 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class EmployeesController < ApplicationController
-  before_filter :authify, :only => [:show, :index,:new, :edit, :destroy, :create, :update]
-  before_filter :initialize_instance_variables, :except => [:login, :signup]
   before_filter :check_role, :except => [:crumble,:login]
   before_filter :crumble, :except => [:login, :signup]
+  
+  skip_before_filter :loadup
   def verify
     if params[:password] then
       emp = Employee.login(params[:password])
@@ -51,16 +51,15 @@ class EmployeesController < ApplicationController
     end
   end
   def login
-      user = Employee.login(params[:code]) 
-      user = User.login(params[:code]) if not user
+    user = Employee.login(params[:code]) 
     if user then
       session[:user_id] = user.id
       session[:user_type] = user.class.to_s
-      $User = user
-      $User.start_day
+      @current_user = user
+      @current_user.start_day
       # History.record("employee_sign_in",user,5) # disabled this because it would break databse replication as soon as one logs into the mirror machine
       if cr = CashRegister.find_by_ip(request.ip) then
-        user.get_meta.update_attribute :cash_register_id, cr.id
+        user.get.update_attribute :cash_register_id, cr.id
       end
        if params[:redirect]
           redirect_to CGI.unescape(params[:redirect]) and return
@@ -83,12 +82,12 @@ class EmployeesController < ApplicationController
   end
   def destroy_login
     @employee = Employee.find_by_id(params[:id].to_s)
-    if @employee and @employee.vendor_id == $User.vendor_id then
+    if @employee and @employee.vendor_id == @current_user.vendor_id then
       login = EmployeeLogin.find_by_id(params[:login].to_s)
-      if login.employee_id == @employee.id and $User.role_cache.include? 'manager' then
+      if login.employee_id == @employee.id and @current_user.role_cache.include? 'manager' then
         login.destroy
       else
-        raise "Ids Don't Match" + login.employee.id.to_s + " ---- " + $User.role_cache
+        raise "Ids Don't Match" + login.employee.id.to_s + " ---- " + @current_user.role_cache
       end
     else
       redirect_to :action => :index and return
@@ -134,7 +133,7 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
-    @employee = salor_user.get_employee(params[:id])
+    @employee = @current_user.get_employee(params[:id])
     add_breadcrumb @employee.username,'edit_employee_path(@employee,:vendor_id => params[:vendor_id])'
   end
 
@@ -157,7 +156,7 @@ class EmployeesController < ApplicationController
   # PUT /employees/1
   # PUT /employees/1.xml
   def update
-    @employee = $User.get_employee(params[:id])
+    @employee = @current_user.get_employee(params[:id])
     respond_to do |format|
       if @employee.update_attributes(params[:employee])
         @employee.set_role_cache
@@ -186,7 +185,7 @@ class EmployeesController < ApplicationController
   end
   private 
   def crumble
-    @vendor = salor_user.get_vendor(salor_user.meta.vendor_id)
+    @vendor = @current_user.vendor(@current_user.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
     add_breadcrumb I18n.t("menu.employees"),'employees_index_path(:vendor_id => params[:vendor_id])'
   end

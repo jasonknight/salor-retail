@@ -10,13 +10,13 @@ class PaylifeStructs < ActiveRecord::Base
   include SalorScope
   belongs_to :owner, :polymorphic => true
   def set_model_owner
-    user = GlobalData.salor_user
+    user = @current_user
     if user then
       self.owner_type = user.class.to_s
       self.owner_id = user.id
-      self.cash_register_id = user.meta.cash_register_id
-      self.order_id = user.meta.order_id
-      self.vendor_id = user.meta.vendor_id
+      self.cash_register_id = user.cash_register_id
+      self.order_id = user.order_id
+      self.vendor_id = user.vendor_id
     end
   end
   def paylife_blurb

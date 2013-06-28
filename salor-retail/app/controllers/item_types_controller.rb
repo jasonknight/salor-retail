@@ -7,7 +7,6 @@
 class ItemTypesController < ApplicationController
   # GET /item_types
   # GET /item_types.xml
-  before_filter :authify
   before_filter :crumble
 
   def index

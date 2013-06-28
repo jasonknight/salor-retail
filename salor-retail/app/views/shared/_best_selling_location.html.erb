@@ -13,7 +13,7 @@
                     </th>
                   </tr>
                 </thead>
-                <% salor_user.best_selling_locations.each do |location| %>
+                <% @current_user.best_selling_locations.each do |location| %>
                     <tr>
                       <td valign="top">
                         <%=  edit_me(:name,location,location.name,'',location.get_html_id + '_best_location') %>
