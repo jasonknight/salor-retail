@@ -20,7 +20,7 @@ module SalorScope
     if klass.class == Order
       klass.scope(:by_user , lambda { klass.where("`#{klass.table_name}`.user_id = #{@current_user.id}") if @current_user and $User.is_user? and not $User.can(:head_cashier) and not $User.can(:edit_orders) })
     elsif klass.column_names.include?('user_id') and [TaxProfile,Shipper,ShipmentType,TransactionTag].include?(klass.class) == false
-      klass.scope(:by_user , lambda { klass.where(:user_id => @current_user.get_owner.id.to_s) if @current_user })
+      klass.scope(:by_user , lambda { klass.where(:user_id => @current_user.get_user.id.to_s) if @current_user })
     else
       klass.scope(:by_user, lambda {})
     end

@@ -63,7 +63,7 @@ module ApplicationHelper
     end
   end
   
-  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []}, hideowner = false)
+  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []}, hideuser = false)
     clses = ['box-title','shadow']
     bbt = '<div class="left-blank"></div>'
     rbtn = '<div class="right-blank"></div>'

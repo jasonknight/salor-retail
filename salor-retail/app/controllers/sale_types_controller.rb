@@ -10,7 +10,7 @@ class SaleTypesController < ApplicationController
   
   def create
     @sale_type = SaleType.new(params[:sale_type])
-    @sale_type.set_model_owner
+    @sale_type.set_model_user
     if @sale_type.save
       redirect_to sale_types_path
     else

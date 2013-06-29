@@ -13,7 +13,7 @@ class InvoiceNotesController < ApplicationController
   def create
     #debugger
     @invoice_note = InvoiceNote.new(params[:invoice_note])
-    @invoice_note.set_model_owner
+    @invoice_note.set_model_user
     @sale_types = SaleType.scopied
     @countries = Country.scopied
     if @invoice_note.save

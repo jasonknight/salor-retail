@@ -16,7 +16,7 @@ class DrawerTransaction < ActiveRecord::Base
   
   belongs_to :current_register
   
-  belongs_to :owner, :polymorphic => true
+  belongs_to :user
   belongs_to :order
   
   def trans_type=(x)

@@ -52,8 +52,8 @@
      </td>
    </tr>
  </table>
-    <%= f.hidden_field :owner_id, :value => GlobalData.@current_user.id %>
-    <%= f.hidden_field :owner_type, :value => GlobalData.@current_user.class.to_s %>
+    <%= f.hidden_field :user_id, :value => GlobalData.@current_user.id %>
+    <%= f.hidden_field :user_type, :value => GlobalData.@current_user.class.to_s %>
   <div class="field">
     <%= f.label :note %><br />
     <%= f.text_area :note, :class => "keyboardable", :cols => 40, :rows => 5 %>

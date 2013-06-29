@@ -98,7 +98,7 @@ class ItemsController < ApplicationController
     @item.tax_profile_id = params[:item][:tax_profile_id]
     @item.attributes = params[:item]
     @item.sku.upcase!
-    @item.set_model_owner(@current_user)
+    @item.set_model_user(@current_user)
     respond_to do |format|
       if @item.save
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Item.model_name.human)) }
@@ -116,7 +116,7 @@ class ItemsController < ApplicationController
     @item.attributes = params[:item]
     respond_to do |format|
       if @current_user.owns_vendor?(@item.vendor_id) and @item.save
-        @item.set_model_owner(@current_user)
+        @item.set_model_user(@current_user)
         format.json  { render :json => @item }
       else
         format.json  { render :json => @item.errors, :status => :unprocessable_entity }
@@ -139,7 +139,7 @@ class ItemsController < ApplicationController
     @item.save
     respond_to do |format|
       if not @item.errors.messages.any?
-        @item.set_model_owner(@current_user)
+        @item.set_model_user(@current_user)
         format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_edit", :model => Item.model_name.human)) }
         format.xml  { head :ok }
       else

@@ -10,7 +10,7 @@ class Node < ActiveRecord::Base
   include SalorScope
   include SalorModel
   belongs_to :vendor
-  before_create :set_model_owner
+  before_create :set_model_user
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
   @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
   def node_type=(t)

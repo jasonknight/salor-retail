@@ -40,7 +40,7 @@ class Report
   end
   
   def history_csv(histories)
-   cols = [:created_at,:ip, :action_taken, :model_type,:model_id, :owner_type,:owner_id, :sensitivity,:url] 
+   cols = [:created_at,:ip, :action_taken, :model_type,:model_id, :user_type,:user_id, :sensitivity,:url] 
    lines = []
    lines << cols.join("\t")
    histories.each do |h|

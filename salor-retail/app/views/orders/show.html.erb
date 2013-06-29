@@ -70,7 +70,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
     <tr >
         <td><%= number_to_currency(dt.amount) %> (<%= dt.drawer_amount %>)</td>
         <td><%= dt.drop ? 'Drop' : 'Payout' %> <%= l dt.created_at, :format => "%H:%I:%S" %></td>
-        <td><%= dt.owner ? dt.owner.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
+        <td><%= dt.user ? dt.user.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
         <td><%= dt.tag %></td>
         <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
         <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if $User.role_cache.include? "manager"%></td>
@@ -83,7 +83,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
     <tr >
         <td><%= number_to_currency(dt.amount) %> (<%= dt.drawer_amount %>)</td>
         <td><%= dt.drop ? 'Drop' : 'Payout' %> <%= l dt.created_at, :format => "%H:%I:%S" %></td>
-        <td><%= dt.owner ? dt.owner.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
+        <td><%= dt.user ? dt.user.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
         <td><%= dt.tag %></td>
         <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
         <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if $User.role_cache.include? "manager"%></td>

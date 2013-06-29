@@ -6,12 +6,12 @@
 # See license.txt for the license applying to all files within this software.
 
 class Error < ActiveRecord::Base
-  belongs_to :owner, :polymorphic => true
+  belongs_to :user
   belongs_to :applies_to, :polymorphic => true
   include SalorBase
   include SalorScope
   include SalorModel
-  before_create :set_model_owner
+  before_create :set_model_user
   before_create :set_url
   def set_url
     if GlobalData.request then

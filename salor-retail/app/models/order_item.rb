@@ -20,7 +20,7 @@ class OrderItem < ActiveRecord::Base
   attr_accessor :is_valid
   has_many :coupons, :class_name => 'OrderItem', :foreign_key => :coupon_id
   belongs_to :order_item,:foreign_key => :coupon_id
-  has_many :histories, :as => :owner
+  has_many :histories, :as => :user
 
   scope :sorted_by_modified, order('updated_at ASC')
   

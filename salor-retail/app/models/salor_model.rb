@@ -8,8 +8,8 @@
 module SalorModel
   def self.included(mod)
     mod.class_eval do
-      has_many :salor_errors, :as => :owner, :class_name => "Error"
-      has_many :unseen_salor_errors, :as => :owner, :class_name => "Error", :conditions => "seen IS FALSE"
+      has_many :salor_errors, :as => :user, :class_name => "Error"
+      has_many :unseen_salor_errors, :as => :user, :class_name => "Error", :conditions => "seen IS FALSE"
       has_many :salor_errors_applied, :as => :applies_to, :class_name => "Error"
       attr_accessor :node_skip
       def _get_id_field_from(sku_field_name)

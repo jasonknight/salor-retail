@@ -42,7 +42,7 @@
     <select id="action_category_id" name="item[category_id]">
       <option value="0"> N/A </option>
       <% Category.scopied.each do |c|  %>
-       <option value="<%= c.id %>" <%= 'selected=true' if c.id == @action.owner_id and @action.owner_type == 'Category' %>> <%= c.name %> </option>
+       <option value="<%= c.id %>" <%= 'selected=true' if c.id == @action.user_id and @action.user_type == 'Category' %>> <%= c.name %> </option>
       <% end %>
     </select>
   </div>

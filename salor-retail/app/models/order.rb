@@ -176,7 +176,7 @@ class Order < ActiveRecord::Base
     self.update_attribute(:is_proforma, !self.is_proforma)
   end
   #
-  def get_owner
+  def get_user
     return self.user if self.user
     return self.user if self.user  
   end
@@ -1160,7 +1160,7 @@ class Order < ActiveRecord::Base
       end
     end
     o = Order.new(:tax => 0.0, :subtotal => 0.0, :total => 0.0)
-    o.set_model_owner
+    o.set_model_user
     if o.save then
       # #puts "Updating :order_id"
     else

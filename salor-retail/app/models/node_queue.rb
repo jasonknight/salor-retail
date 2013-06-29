@@ -7,7 +7,7 @@
 class NodeQueue < ActiveRecord::Base
 #include SalorBase
 #include SalorModel
-#before_create :set_model_owner
+#before_create :set_model_user
  def self.send_all_pending
      req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
      NodeQueue.where(:send => true, :handled => false).all.each do |msg|

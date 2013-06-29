@@ -51,7 +51,7 @@ class BrokenItemsController < ApplicationController
   # POST /broken_items.xml
   def create
     @broken_item = BrokenItem.new(params[:broken_item])
-    @broken_item.set_model_owner
+    @broken_item.set_model_user
     respond_to do |format|
       if @broken_item.save
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => BrokenItem.model_name.human)) }

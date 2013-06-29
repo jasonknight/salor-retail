@@ -19,11 +19,11 @@ class BrokenItem < ActiveRecord::Base
       item.save
     end
   end
-  def owner
-    if self.owner_type == 'User' then
-      return User.where(["id = ?", self.owner_id]).first
+  def user
+    if self.user_type == 'User' then
+      return User.where(["id = ?", self.user_id]).first
     else
-      return User.where(["id = ?", self.owner_id]).first
+      return User.where(["id = ?", self.user_id]).first
     end
   end
   

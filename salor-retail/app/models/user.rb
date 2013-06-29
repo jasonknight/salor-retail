@@ -11,21 +11,22 @@ class User < ActiveRecord::Base
   include SalorScope
   include SalorBase
   include SalorModel
+  
+  belongs_to :vendor
 
   
   validate :validify
-  belongs_to :user
-  belongs_to :vendor
+
   has_many :orders
   has_many :order_items
   has_many :receipts
   has_many :vendors, :through => :user
-  has_many :paylife_structs, :as => :owner
+  has_many :paylife_structs, :as => :user
   has_many :current_register_dailies
   has_and_belongs_to_many :roles
-  has_one :drawer, :as => :owner
-  has_many :drawer_transactions, :as => :owner
-  has_many :histories, :as => :owner
+  has_one :drawer, :as => :user
+  has_many :drawer_transactions, :as => :user
+  has_many :histories, :as => :user
   has_many :user_logins
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :uses_drawer_id,:apitoken,:js_keyboard,:role_ids,:language,:vendor_id,:user_id,:first_name,:last_name,:username, :email, :password, :password_confirmation, :remember_me, :hourly_rate
@@ -111,15 +112,15 @@ class User < ActiveRecord::Base
   end
   
   def user_select(opts={})
-    user = self.get_owner
+    user = self.get_user
     emps = User.scopied.all
     if opts[:name] then
-      name = "#{opts[:name]}[set_owner_to]"
+      name = "#{opts[:name]}[set_user_to]"
     else
-      name = "set_owner_to"
+      name = "set_user_to"
     end
-    opts[:id] ||= "set_owner_to"
-    opts[:class] ||= "set-owner-to"
+    opts[:id] ||= "set_user_to"
+    opts[:class] ||= "set-user-to"
     txt = "<select name='#{name}' id='#{opts[:id]}' class='#{opts[:class]}'>"
     options = []
     if self == user then
@@ -512,7 +513,7 @@ class User < ActiveRecord::Base
       Vendor.scopied.each do |v|
         r[:order_items_count] = v.orders.each.inject(0) {|x,o| x += o.order_items.visible.where('refunded = 0').count}
       end
-      #r[:order_items_count] = OrderItem.connection.execute("select count(oi.id) from order_items as oi, orders as o, vendors as v where v.id IN (#{self.get_owner.vendor_ids.join(',')}) and o.vendor_id = v.id and oi.order_id = o.id").to_a.first.first
+      #r[:order_items_count] = OrderItem.connection.execute("select count(oi.id) from order_items as oi, orders as o, vendors as v where v.id IN (#{self.get_user.vendor_ids.join(',')}) and o.vendor_id = v.id and oi.order_id = o.id").to_a.first.first
     rescue
       r[:order_items_count] = 0
     end

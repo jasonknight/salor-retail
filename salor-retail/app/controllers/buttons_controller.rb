@@ -28,7 +28,7 @@ class ButtonsController < ApplicationController
 
   def create
     @button = Button.new(params[:button])
-    @button.set_model_owner
+    @button.set_model_user
     respond_to do |format|
       if @button.save
         format.html { redirect_to(buttons_url, :notice => 'Button was successfully created.') }

@@ -8,7 +8,7 @@
 class Drawer < ActiveRecord::Base
   include SalorBase
   include SalorModel
-  belongs_to :owner, :polymorphic => true
+  belongs_to :user
   has_many :orders
   has_many :drawer_transactions
   def add(num)

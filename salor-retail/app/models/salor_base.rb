@@ -119,15 +119,15 @@ module SalorBase
    end
 
    
-   def set_model_owner(user=nil)
+   def set_model_user(user=nil)
       if user.nil? then
        user = @current_user
       end
       return if user.nil?
 
-      if self.respond_to? :owner_id and self.owner_id.nil? then
-        self.owner_id = user.id
-        self.owner_type = user.class.to_s
+      if self.respond_to? :user_id and self.user_id.nil? then
+        self.user_id = user.id
+        self.user_type = user.class.to_s
       end
       if self.respond_to? :vendor_id and self.vendor_id.nil? then
        self.vendor_id = user.vendor_id
@@ -137,7 +137,7 @@ module SalorBase
         self.current_register_id = user.get.current_register_id
       end
       if self.respond_to? :user_id and self.user_id.nil? then
-       self.user_id = user.get_owner.id
+       self.user_id = user.get_user.id
       end
       if self.respond_to? :user_id and self.user_id.nil? then
          if user.is_user? then

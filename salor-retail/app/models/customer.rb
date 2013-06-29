@@ -16,7 +16,7 @@ class Customer < ActiveRecord::Base
   has_many :notes, :as => :notable, :order => "id desc"
   accepts_nested_attributes_for :notes, :reject_if => lambda {|a| a[:body].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :loyalty_card
-  before_create :set_model_owner
+  before_create :set_model_user
   def self.csv_headers
     return [:company_name,:first_name, :last_name,:email,:telephone, :cellphone,:tax_number,:street1,:street2,:city, :postalcode, :state,:country, :loyalty_card_sku]
   end

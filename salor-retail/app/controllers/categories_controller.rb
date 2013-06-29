@@ -41,7 +41,7 @@ class CategoriesController < ApplicationController
 
   def create
     @category = Category.new(params[:category])
-    @category.set_model_owner(@current_user)
+    @category.set_model_user(@current_user)
     respond_to do |format|
       if @category.save
         

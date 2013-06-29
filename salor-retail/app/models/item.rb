@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 
 # {VOCABULARY} item_price item_category item_location_id tax_profile_info info foreign_key_constraint logging_time coupon_amount_paid paying_agent reimburseable unknown_item
-# {VOCABULARY} location_reversed info_on_category real_category_name part_ident part_qty2 quantity_of_sale gift_card_remainder coupon_b1g1 gift_card_owner
+# {VOCABULARY} location_reversed info_on_category real_category_name part_ident part_qty2 quantity_of_sale gift_card_remainder coupon_b1g1 gift_card_user
 class Item < ActiveRecord::Base
   # {START}
   include SalorScope
@@ -19,7 +19,7 @@ class Item < ActiveRecord::Base
   belongs_to :item_type
   belongs_to :item
   belongs_to :shipper
-  has_many :actions, :as => :owner, :order => "weight asc"
+  has_many :actions, :as => :user, :order => "weight asc"
   has_many :parts, :class_name => 'Item', :foreign_key => :part_id
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
   belongs_to :child, :class_name => 'Item'
@@ -329,7 +329,7 @@ class Item < ActiveRecord::Base
     batches.each do |batch|
       batch[:expires_on] = Date.parse(batch[:expires_on])
       b = Batch.find_or_create_by_sku(batch[:sku])
-      b.set_model_owner
+      b.set_model_user
       b.add_item(self)
       b.update_attributes(batch)
       b.save

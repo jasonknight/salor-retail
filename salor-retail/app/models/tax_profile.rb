@@ -13,7 +13,7 @@ class TaxProfile < ActiveRecord::Base
   has_many :order_items
   belongs_to :user
   belongs_to :vendor
-  before_create :set_model_owner
+  before_create :set_model_user
   validates_presence_of :name,:value
   def set_sku
     self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')

@@ -49,7 +49,7 @@ class ShipmentTypesController < ApplicationController
   # POST /shipment_types.xml
   def create
     @shipment_type = ShipmentType.new(params[:shipment_type])
-    @shipment_type.set_model_owner
+    @shipment_type.set_model_user
     respond_to do |format|
       if @shipment_type.save
         format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => ShipmentType.model_name.human))}

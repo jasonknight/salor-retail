@@ -1,6 +1,6 @@
 <%= raw content_box_top(t("views.cash_register_heading", :name => @cash_register.name, :store => @vendor.name)) %>
 
-<%= raw content_box_top(I18n.t("menu.orders"),{:width => '100%', :small => true}, :hideowner => true) %>
+<%= raw content_box_top(I18n.t("menu.orders"),{:width => '100%', :small => true}, :hideuser => true) %>
 <table align="center" width="100%" class="stripe-me middle-text">
 <% @orders.each do |order| %>
   <tr>

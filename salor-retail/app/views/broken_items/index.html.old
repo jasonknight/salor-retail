@@ -7,7 +7,7 @@
     <th><%= t("activerecord.attributes.quantity") %></th>
     <th><%= t("activerecord.attributes.base_price") %></th>
     <th><%= t("activerecord.models.vendor.one") %></th>
-    <th><%= t("activerecord.attributes.owner") %></th>
+    <th><%= t("activerecord.attributes.user") %></th>
     <th><%= t("activerecord.models.shipper.one") %></th>
     <th></th>
     <th></th>
@@ -20,7 +20,7 @@
     <td><%= broken_item.quantity %></td>
     <td><%= broken_item.base_price %></td>
     <td><%= broken_item.vendor.name %></td>
-    <td><%= broken_item.owner.username if broken_item.owner %></td>
+    <td><%= broken_item.user.username if broken_item.user %></td>
     <td><%= broken_item.shipper.name if broken_item.shipper%></td>
     <td><%= link_to 'Edit', edit_broken_item_path(broken_item) %></td>
     <td><%= link_to 'Destroy', broken_item, :confirm => 'Are you sure?', :method => :delete %></td>

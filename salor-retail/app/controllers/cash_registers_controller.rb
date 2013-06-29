@@ -44,7 +44,7 @@ class CashRegistersController < ApplicationController
  
     respond_to do |format|
       if @current_register.save
-        @current_register.set_model_owner(@current_user)
+        @current_register.set_model_user(@current_user)
         format.html { redirect_to current_registers_path }
         format.xml  { render :xml => @current_register, :status => :created, :location => @current_register }
       else

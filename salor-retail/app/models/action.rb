@@ -4,7 +4,7 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-# {VOCABULARY} actions_done roles_completed owner_info on_import_new on_import_old
+# {VOCABULARY} actions_done roles_completed user_info on_import_new on_import_old
 # {VOCABULARY} added multiplied subtracted deferred code_completed action_report
 class Action < ActiveRecord::Base
   # {START}
@@ -13,7 +13,7 @@ class Action < ActiveRecord::Base
   include SalorModel
   belongs_to :role
   belongs_to :vendor
-  belongs_to :owner, :polymorphic => true
+  belongs_to :user
   def value=(v)
     v = v.gsub(',','.') if v.class == String
     write_attribute(:value,v)
@@ -37,8 +37,8 @@ class Action < ActiveRecord::Base
     if not s.blank? then
       item = Item.find_by_sku(s)
       if item then
-        self.owner_id = item.id
-        self.owner_type = 'Item'
+        self.user_id = item.id
+        self.user_type = 'Item'
       else
         self.errors[:base] << I18n.t("system.errors.no_such_item")
       end
@@ -47,14 +47,14 @@ class Action < ActiveRecord::Base
   def category_id=(id)
     c = Category.find_by_id(id.to_s)
     if c then
-      self.owner_id = c.id
-      self.owner_type = "Category"
+      self.user_id = c.id
+      self.user_type = "Category"
     end
   end
   def sku
-    owner = self.owner
-    if owner and owner.respond_to? :sku then
-      return owner.sku
+    user = self.user
+    if user and user.respond_to? :sku then
+      return user.sku
     else
       return ''
     end
@@ -79,8 +79,8 @@ class Action < ActiveRecord::Base
             if item.class == OrderItem and item.order then
               # we are already in an order.
               # Now we need to know if this action is a category applying action
-              if action.owner and action.owner.class == Category then
-                items_in_cat = item.order.order_items.visible.where(:category_id => action.owner.id)
+              if action.user and action.user.class == Category then
+                items_in_cat = item.order.order_items.visible.where(:category_id => action.user.id)
                 total_quantity = items_in_cat.sum(:quantity)
                 items_in_cat.update_all :rebate => 0
                 quantity = total_quantity

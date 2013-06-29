@@ -1,7 +1,7 @@
 <table align="center" width="100%">
   <tr>
     <td valign="top" align="center">
-      <%= form_for(@user, :url => "/home/update_owner", :html => { :method => :post }) do |f| %>
+      <%= form_for(@user, :url => "/home/update_user", :html => { :method => :post }) do |f| %>
         <% if @user.errors.any? %>
           <div id="error_explanation">
             <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @user.errors.count,:model => t("activerecord.models.user.one"))%></h2>
@@ -28,7 +28,7 @@
                   <%= f.select :language, supported_languages.collect {|l| [l[:name],l[:locale]]} %>
               </div>
 
-              <%= f.hidden_field :user_id, :value => @owner.id %>
+              <%= f.hidden_field :user_id, :value => @user.id %>
 
             </td>
         </tr>

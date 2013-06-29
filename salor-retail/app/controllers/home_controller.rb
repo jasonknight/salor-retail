@@ -30,21 +30,21 @@ class HomeController < ApplicationController
       end
     end
   end
-  def edit_owner
+  def edit_user
     redirect_to '/current_registers' and return unless admin_signed_in?
     @user = User.find(current_user.id)
   end
-  def update_owner
+  def update_user
     redirect_to '/current_registers' and return unless admin_signed_in?
     @user = User.find(current_user.id)
     params[:user].delete(:password) if params[:user][:password].nil? or params[:user][:password].blank?
     params[:user].delete(:user_id)
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to :action => 'edit_owner', :notice => t(:"system.owner_success") }
+        format.html { redirect_to :action => 'edit_user', :notice => t(:"system.user_success") }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit_owner" }
+        format.html { render :action => "edit_user" }
         format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end

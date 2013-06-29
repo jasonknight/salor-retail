@@ -124,11 +124,11 @@ class VendorsController < ApplicationController
       if params[:user_id] then
         if params[:user_id] == 'self' then
           @drawer_transaction.drawer_id = @current_user.get_drawer.id
-          @drawer_transaction.owner = @current_user
+          @drawer_transaction.user = @current_user
         else
           emp = User.scopied.find_by_id(params[:user_id])
           @drawer_transaction.drawer_id = emp.get_drawer.id
-          @drawer_transaction.owner = emp
+          @drawer_transaction.user = emp
         end
       else
         @drawer_transaction.drawer_id = @current_user.get_drawer.id
@@ -136,12 +136,12 @@ class VendorsController < ApplicationController
       if @drawer_transaction.save then
         # @drawer_transaction.print if not $Register.salor_printer == true
         if @drawer_transaction.drop then
-          @drawer_transaction.owner.get_drawer.update_attribute(:amount,@drawer_transaction.owner.get_drawer.amount + @drawer_transaction.amount)
+          @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount + @drawer_transaction.amount)
         elsif @drawer_transaction.payout then
-          if @drawer_transaction.amount > @drawer_transaction.owner.get_drawer.amount then
+          if @drawer_transaction.amount > @drawer_transaction.user.get_drawer.amount then
             GlobalErrors.append_fatal("system.errors.not_enough_in_drawer")
           else
-            @drawer_transaction.owner.get_drawer.update_attribute(:amount,@drawer_transaction.owner.get_drawer.amount - @drawer_transaction.amount)
+            @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount - @drawer_transaction.amount)
           end
         else
           GlobalErrors.append_fatal("system.errors.must_specify_drop_or_payout")
@@ -173,8 +173,8 @@ class VendorsController < ApplicationController
     render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
 
     @dt = DrawerTransaction.find_by_id(params[:id])
-    GlobalData.vendor = @dt.owner.get.vendor
-    @current_user = @dt.owner
+    GlobalData.vendor = @dt.user.get.vendor
+    @current_user = @dt.user
     if not @dt then
       render :text => "Could not find drawer_transaction" and return
     end

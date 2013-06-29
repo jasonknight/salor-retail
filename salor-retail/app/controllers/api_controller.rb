@@ -23,7 +23,7 @@ class ApiController < ApplicationController
     else
       model = cls.new(@cmd[:data][:attributes])
     end
-    model.set_model_owner(@user)
+    model.set_model_user(@user)
     respond_to do |format|
       if not GlobalErrors.any_fatal? and @user and model.save then
         if model.class == Order then
