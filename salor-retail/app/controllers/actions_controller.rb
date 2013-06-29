@@ -54,7 +54,6 @@ class ActionsController < ApplicationController
     else
       @action.attributes  = params[:item]
     end
-    @action.set_model_user
     respond_to do |format|
       if @action.save
         format.html { redirect_to(:action => :index, :notice => 'Action was successfully created.') }

@@ -19,7 +19,6 @@ class Shipment < ActiveRecord::Base
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
   validates_presence_of :name
-  before_create :set_model_user
   TYPES = [
     {
       :value => 'new',

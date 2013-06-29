@@ -1,5 +1,11 @@
 class ChangeOwnerAndEmployeeToUser < ActiveRecord::Migration
   def up
+    
+    add_column :actions, :model_type, :string
+    add_column :actions, :model_id, :integer
+    Action.reset_column_information
+    Action.connection.execute("UPDATE actions SET model_type=owner_type,model_id=owner_id;")
+    
     ActiveRecord::Base.connection.tables.each do |t|      
       begin
         model = t.classify.constantize

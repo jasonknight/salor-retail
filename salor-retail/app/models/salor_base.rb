@@ -6,7 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 
 module SalorBase
-  VERSION = '{{VERSION}}'
   
   def self.symbolize_keys arg
     case arg
@@ -88,62 +87,6 @@ module SalorBase
      [I18n.t("system.rebates.percent"),'Percent'],
      [I18n.t("system.rebates.fixed"),'Fixed']
      ]
-   end
-   
-   def salor_fetch_attr(attr,options = {})
-     begin
-       conn = ActiveRecord::Base.connection();
-       options[:table] ||= self.table_name
-       options[:return_cast] ||= :to_f
-       if options[:conditions] then
-         if options[:conditions].class == String then
-           conditions = options[:conditions]
-         else
-           pairs = []
-           options[:conditions].each do |k,v|
-            pairs << "`#{k}` = '#{v}'"
-           end
-           conditions = pairs.join(" AND ")
-         end
-       end
-       sql = "select `#{options[:table]}`.`#{attr}` from `#{options[:table]}` where #{conditions}"
-       value = conn.execute(sql)
-       value = value.to_a.first if value.respond_to? :to_a
-       return 0 if value.nil?
-       value = value.first
-       value = 0 if value.nil?
-       return value.send(options[:return_cast])
-     rescue
-       return 0
-     end
-   end
-
-   
-   def set_model_user(user=nil)
-      if user.nil? then
-       user = @current_user
-      end
-      return if user.nil?
-
-      if self.respond_to? :user_id and self.user_id.nil? then
-        self.user_id = user.id
-        self.user_type = user.class.to_s
-      end
-      if self.respond_to? :vendor_id and self.vendor_id.nil? then
-       self.vendor_id = user.vendor_id
-       self.set_sku if self.class == Category or self.class == Customer
-      end
-      if self.respond_to? :current_register_id and self.current_register_id.nil? then
-        self.current_register_id = user.get.current_register_id
-      end
-      if self.respond_to? :user_id and self.user_id.nil? then
-       self.user_id = user.get_user.id
-      end
-      if self.respond_to? :user_id and self.user_id.nil? then
-         if user.is_user? then
-           self.user_id = user.id
-         end
-      end
    end
 
   

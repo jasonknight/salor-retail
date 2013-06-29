@@ -18,7 +18,6 @@ class Category < ActiveRecord::Base
   has_many :actions, :as => :user, :order => "weight asc"
   belongs_to :vendor
   has_many :order_items
-  before_create :set_model_user
   before_create :set_sku
   def set_sku
     # This might cause issues down the line with a SAAS version so we need to make sure

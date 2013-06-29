@@ -13,7 +13,6 @@ class CountriesController < ApplicationController
   
   def create
     @country = Country.new(params[:country])
-    @country.set_model_user
     if @country.save
       redirect_to countries_path
     else

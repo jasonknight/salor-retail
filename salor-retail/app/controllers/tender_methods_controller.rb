@@ -49,7 +49,6 @@ class TenderMethodsController < ApplicationController
   # POST /tender_methods.xml
   def create
     @tender_method = TenderMethod.new(params[:tender_method])
-    @tender_method.set_model_user
     respond_to do |format|
       if @tender_method.save
         format.html { redirect_to(tender_methods_url, :notice => 'Tender method was successfully created.') }

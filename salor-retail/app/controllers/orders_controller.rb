@@ -329,7 +329,6 @@ class OrdersController < ApplicationController
     if params[:msg] then
         nm = JSON.parse(params[:msg]) 
         @p = PaylifeStructs.new(:sa => nm['sa'],:ind => nm['ind'],:struct => CGI::unescape(nm['msg']), :json => params[:msg])
-        @p.set_model_user
         if not @p.save then
           render :text => "alert('Saving Struct Failed!!');" and return
         end

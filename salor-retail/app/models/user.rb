@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   include SalorModel
   
   belongs_to :vendor
+  has_one :drawer
 
   
   validate :validify
@@ -24,7 +25,7 @@ class User < ActiveRecord::Base
   has_many :paylife_structs, :as => :user
   has_many :current_register_dailies
   has_and_belongs_to_many :roles
-  has_one :drawer, :as => :user
+  
   has_many :drawer_transactions, :as => :user
   has_many :histories, :as => :user
   has_many :user_logins

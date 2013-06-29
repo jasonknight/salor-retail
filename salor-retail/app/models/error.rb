@@ -11,7 +11,6 @@ class Error < ActiveRecord::Base
   include SalorBase
   include SalorScope
   include SalorModel
-  before_create :set_model_user
   before_create :set_url
   def set_url
     if GlobalData.request then

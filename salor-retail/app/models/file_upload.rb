@@ -69,7 +69,6 @@ class FileUpload
       catname = columns[6].strip
       if category.nil?
         category = Category.new :name => catname
-        category.set_model_user
         category.save
         created_categories += 1
       end
@@ -91,7 +90,6 @@ class FileUpload
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
-        carton_item.set_model_user
         Action.run(carton_item,:on_import)
         carton_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
@@ -116,7 +114,6 @@ class FileUpload
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
-        pack_item.set_model_user
         Action.run(pack_item,:on_import)
         pack_item.save
         carton_item.reload
@@ -144,7 +141,6 @@ class FileUpload
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
-        piece_item.set_model_user
         Action.run(piece_item,:on_import)
         piece_item.save
         pack_item.reload
@@ -224,7 +220,6 @@ class FileUpload
       catname = columns[6].strip
       if category.nil?
         category = Category.new :name => catname
-        category.set_model_user
         category.save
         created_categories += 1
       end
@@ -246,7 +241,6 @@ class FileUpload
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
-        carton_item.set_model_user
         Action.run(carton_item,:on_import)
         carton_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}"
@@ -271,7 +265,6 @@ class FileUpload
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
-        pack_item.set_model_user
         Action.run(pack_item,:on_import)
         pack_item.save
         carton_item.reload
@@ -299,7 +292,6 @@ class FileUpload
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.nil? or sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
-        piece_item.set_model_user
         Action.run(piece_item,:on_import)
         piece_item.save
         pack_item.reload
@@ -370,7 +362,6 @@ class FileUpload
         updated_items += 1
       else
         item = Item.new attributes
-        item.set_model_user
         Action.run(item,:on_import)
         item.save
         created_items += 1
@@ -394,7 +385,6 @@ class FileUpload
         updated_items += 1
       else
         customer = Customer.new :first_name => columns[2].gsub('"',''), :last_name => columns[1]
-        customer.set_model_user
         customer.save
         card = LoyaltyCard.create :sku => sku, :customer_id => customer.id
         created_items += 1
@@ -421,7 +411,6 @@ class FileUpload
       tax_profile = TaxProfile.scopied.find_by_value(tax_value)
       if tax_profile.nil?
         tax_profile = TaxProfile.create :name => tax_value, :value => tax_value
-        tax_profile.set_model_user
         created_tax_profiles += 1
       end
       tax_profile_id = tax_profile.id
@@ -435,7 +424,6 @@ class FileUpload
       end
       if category.nil?
         category = Category.new :name => catname
-        category.set_model_user
         category.save
         created_categories += 1
       end
@@ -490,7 +478,6 @@ class FileUpload
         item = Item.get_by_code(columns[0].strip)
         item.make_valid
         item.update_attributes attributes
-        item.set_model_user
         item.save
         created_items += 1
       end

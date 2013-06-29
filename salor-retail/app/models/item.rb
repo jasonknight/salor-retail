@@ -329,7 +329,6 @@ class Item < ActiveRecord::Base
     batches.each do |batch|
       batch[:expires_on] = Date.parse(batch[:expires_on])
       b = Batch.find_or_create_by_sku(batch[:sku])
-      b.set_model_user
       b.add_item(self)
       b.update_attributes(batch)
       b.save
