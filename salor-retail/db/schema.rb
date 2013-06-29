@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130629062710) do
+ActiveRecord::Schema.define(:version => 20130629063328) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -286,73 +286,6 @@ ActiveRecord::Schema.define(:version => 20130629062710) do
     t.integer  "company_id"
     t.integer  "user_id"
   end
-
-  create_table "employee_logins", :force => true do |t|
-    t.datetime "login"
-    t.datetime "logout"
-    t.float    "hourly_rate"
-    t.integer  "vendor_id"
-    t.integer  "shift_seconds"
-    t.float    "amount_due"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-    t.boolean  "hidden"
-    t.integer  "hidden_by"
-    t.datetime "hidden_at"
-    t.integer  "company_id"
-    t.integer  "user_id"
-  end
-
-  add_index "employee_logins", ["vendor_id"], :name => "index_employee_logins_on_vendor_id"
-
-  create_table "employees", :force => true do |t|
-    t.string   "email",                                 :default => "",                :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",                :null => false
-    t.string   "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                         :default => 0
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip"
-    t.string   "last_sign_in_ip"
-    t.integer  "user_id"
-    t.datetime "created_at",                                                           :null => false
-    t.datetime "updated_at",                                                           :null => false
-    t.string   "username"
-    t.integer  "vendor_id"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "language"
-    t.string   "theme"
-    t.boolean  "js_keyboard",                           :default => false
-    t.boolean  "hidden",                                :default => false
-    t.string   "apitoken"
-    t.integer  "uses_drawer_id"
-    t.integer  "auth_code"
-    t.string   "last_path",                             :default => "/cash_registers"
-    t.string   "role_cache"
-    t.float    "hourly_rate"
-    t.string   "telephone"
-    t.string   "cellphone"
-    t.text     "address"
-    t.integer  "current_order_id"
-    t.integer  "hidden_by"
-    t.datetime "hidden_at"
-    t.integer  "company_id"
-  end
-
-  add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
-  add_index "employees", ["reset_password_token"], :name => "index_employees_on_reset_password_token", :unique => true
-  add_index "employees", ["user_id"], :name => "index_employees_on_user_id"
-  add_index "employees", ["vendor_id"], :name => "index_employees_on_vendor_id"
-
-  create_table "employees_roles", :id => false, :force => true do |t|
-    t.integer "employee_id"
-    t.integer "role_id"
-  end
-
-  add_index "employees_roles", ["employee_id", "role_id"], :name => "index_employees_roles_on_employee_id_and_role_id"
 
   create_table "errors", :force => true do |t|
     t.text     "msg"
@@ -1122,9 +1055,25 @@ ActiveRecord::Schema.define(:version => 20130629062710) do
     t.integer  "user_id"
   end
 
+  create_table "user_logins", :force => true do |t|
+    t.datetime "login"
+    t.datetime "logout"
+    t.float    "hourly_rate"
+    t.integer  "vendor_id"
+    t.integer  "shift_seconds"
+    t.float    "amount_due"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
+  end
+
   create_table "users", :force => true do |t|
-    t.string   "email",                                 :default => "",         :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",         :null => false
+    t.string   "email",                                 :default => "",                :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "",                :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -1133,20 +1082,36 @@ ActiveRecord::Schema.define(:version => 20130629062710) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
+    t.integer  "user_id"
+    t.datetime "created_at",                                                           :null => false
+    t.datetime "updated_at",                                                           :null => false
     t.string   "username"
+    t.integer  "vendor_id"
+    t.string   "first_name"
+    t.string   "last_name"
     t.string   "language"
     t.string   "theme"
     t.boolean  "js_keyboard",                           :default => false
-    t.boolean  "is_technician"
+    t.boolean  "hidden",                                :default => false
+    t.string   "apitoken"
+    t.integer  "uses_drawer_id"
     t.integer  "auth_code"
-    t.string   "last_path",                             :default => "/vendors"
+    t.string   "last_path",                             :default => "/cash_registers"
     t.string   "role_cache"
+    t.float    "hourly_rate"
+    t.string   "telephone"
+    t.string   "cellphone"
+    t.text     "address"
+    t.integer  "current_order_id"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
-  add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  create_table "users_roles", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
 
   create_table "vendor_printers", :force => true do |t|
     t.string   "name"
