@@ -218,7 +218,7 @@ class Order < ActiveRecord::Base
       # simply increment and return
       item.quantity += 1
       item.save
-      self.update_self_and_save
+
       return item
     end
     
@@ -378,7 +378,7 @@ class Order < ActiveRecord::Base
 	  end
 	  @cs = nil
 	  @gfs = nil
-	  update_self_and_save
+
 	  return roi
 	end
 	#

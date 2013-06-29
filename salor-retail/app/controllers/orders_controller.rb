@@ -47,7 +47,7 @@ class OrdersController < ApplicationController
     noi.is_buyback = true
     noi.save
     @order.is_proforma = false
-    @order.update_self_and_save
+
     redirect_to "/orders/new?order_id=#{@order.id}"
   end
   
@@ -59,7 +59,7 @@ class OrdersController < ApplicationController
        noi.order_id = @current.id
        noi.save
     end
-    @current.reload.update_self_and_save
+
     redirect_to "/orders/new?order_id=#{@current.id}"
   end
   
@@ -172,7 +172,7 @@ class OrdersController < ApplicationController
     if OrderItem.exists?(params[:id].to_s)
       @order_item = OrderItem.find(params[:id].to_s)
       @roi = @order.remove_order_item(@order_item)
-      @order.update_self_and_save
+
       if @roi then
         @roi.calculate_total
         @roi.reload
@@ -388,7 +388,7 @@ class OrdersController < ApplicationController
       @item = @order_item.item
     end
     @order.reload
-    @order.update_self_and_save
+
   end
   def update_order_items
     @order = initialize_order
@@ -418,7 +418,7 @@ class OrdersController < ApplicationController
       @oi.save!
       noi.update_attribute :quantity, 1
       noi.save!
-      @order.update_self_and_save
+
       if restore_paid then
         History.record("Restored paid on Order",@order,1)
         @order.paid = 1
@@ -670,7 +670,7 @@ class OrdersController < ApplicationController
       @order.subtotal = 0
       @order.total = 0
       @order.tax = 0
-      @order.update_self_and_save
+
     else
       History.record("cannot clear order because already paid", @order, 1)
       GlobalErrors.append_fatal("cannot clear order because already paid", @order, {})

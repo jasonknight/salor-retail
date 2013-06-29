@@ -26,7 +26,7 @@ class ApiController < ApplicationController
     respond_to do |format|
       if not GlobalErrors.any_fatal? and @user and model.save then
         if model.class == Order then
-          model.update_self_and_save
+
         end
         format.json { render :text => success(model) }
       else
