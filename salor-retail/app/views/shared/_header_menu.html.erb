@@ -26,7 +26,7 @@
     </div>
   </li>
   <% end %>
-  <% if $User and $User.can(:cashier) and params[:controller] == "orders" and params[:action] = "new" %>
+  <% if $User and $User.can(:cashier) %>
     <li>
       <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
         <div id='header_drawer_amount'></div>
