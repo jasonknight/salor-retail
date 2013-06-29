@@ -10,7 +10,7 @@ class Action < ActiveRecord::Base
   # {START}
   include SalorScope
   include SalorBase
-  include SalorModel
+
   
   belongs_to :role
   belongs_to :vendor

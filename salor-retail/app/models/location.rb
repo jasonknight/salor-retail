@@ -8,7 +8,7 @@
 class Location < ActiveRecord::Base
 	include SalorScope
 	include SalorBase
-  include SalorModel
+
 	belongs_to :vendor
 	has_many :items, :conditions => "items.behavior = 'normal'"
 	has_many :shipment_items

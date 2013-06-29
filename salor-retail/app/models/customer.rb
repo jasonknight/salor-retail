@@ -8,7 +8,7 @@
 class Customer < ActiveRecord::Base
   # {START}
   include SalorScope
-  include SalorModel
+
   include SalorBase
   has_one :loyalty_card
   belongs_to :vendor

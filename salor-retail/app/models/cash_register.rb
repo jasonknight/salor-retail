@@ -9,7 +9,7 @@ class CashRegister < ActiveRecord::Base
   # {START}
   include SalorScope
   include SalorBase
-  include SalorModel
+
   has_many :current_register_dailies
   has_many :vendor_printers
   has_many :drawer_transactions

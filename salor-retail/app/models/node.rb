@@ -8,7 +8,7 @@
 class Node < ActiveRecord::Base
   include SalorBase
   include SalorScope
-  include SalorModel
+
   belongs_to :vendor
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
   @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]

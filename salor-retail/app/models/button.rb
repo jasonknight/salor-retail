@@ -8,7 +8,7 @@
 class Button < ActiveRecord::Base
   include SalorScope
   include SalorBase
-  include SalorModel
+
 
   belongs_to :category
   before_save :set_flags

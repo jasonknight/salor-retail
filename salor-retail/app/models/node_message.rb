@@ -6,5 +6,5 @@
 # See license.txt for the license applying to all files within this software.
 class NodeMessage < ActiveRecord::Base
   include SalorBase
-  include SalorModel
+
 end

@@ -7,7 +7,7 @@
 
 class Role < ActiveRecord::Base
 	include SalorScope
-  include SalorModel
+
   include SalorBase
   has_and_belongs_to_many :users
   # This is a role black list, if it isn't here

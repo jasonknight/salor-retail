@@ -9,7 +9,7 @@ class OrderItem < ActiveRecord::Base
   # {START}
   include SalorScope
   include SalorBase
-  include SalorModel
+
   belongs_to :order
   belongs_to :user
   belongs_to :item

@@ -8,7 +8,7 @@
 class BrokenItem < ActiveRecord::Base
   include SalorScope
   include SalorBase
-  include SalorModel
+
   belongs_to :vendor
   belongs_to :shipper
   after_create :decrement_item_quantity

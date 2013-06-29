@@ -7,7 +7,7 @@
 
 class TaxProfile < ActiveRecord::Base
 	include SalorScope
-  include SalorModel
+
   include SalorBase
   has_many :items
   has_many :order_items

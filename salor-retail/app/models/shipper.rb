@@ -7,7 +7,7 @@
 
 class Shipper < ActiveRecord::Base
 	include SalorScope
-  include SalorModel
+
   has_many :shipments, :as => :shipper
   has_many :returns, :as => :receiver
   has_many :items

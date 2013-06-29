@@ -8,7 +8,7 @@
 class Vendor < ActiveRecord::Base
 
   include SalorScope
-  include SalorModel
+
   
   belongs_to :company
   

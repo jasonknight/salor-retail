@@ -8,7 +8,7 @@
 class Discount < ActiveRecord::Base
   include SalorBase
 	include SalorScope
-  include SalorModel
+
   belongs_to :vendor
   belongs_to :location
   belongs_to :category

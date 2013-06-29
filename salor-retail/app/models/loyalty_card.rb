@@ -8,7 +8,7 @@
 class LoyaltyCard < ActiveRecord::Base
 	include SalorScope
 	include SalorBase
-  include SalorModel
+
   belongs_to :customer
   belongs_to :vendor
   has_many :orders, :through => :customer

@@ -10,7 +10,7 @@ class Error < ActiveRecord::Base
   belongs_to :applies_to, :polymorphic => true
   include SalorBase
   include SalorScope
-  include SalorModel
+
   before_create :set_url
   def set_url
     if GlobalData.request then

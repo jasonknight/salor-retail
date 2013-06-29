@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
 
   include SalorScope
   include SalorBase
-  include SalorModel
+
   
   belongs_to :vendor
   has_one :drawer

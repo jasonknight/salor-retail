@@ -7,7 +7,7 @@
 
 class ShipmentItem < ActiveRecord::Base
 	include SalorScope
-  include SalorModel
+
   belongs_to :shipment
   belongs_to :category
   belongs_to :location

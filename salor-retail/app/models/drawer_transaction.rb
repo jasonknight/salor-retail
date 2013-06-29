@@ -9,7 +9,7 @@ class DrawerTransaction < ActiveRecord::Base
   # {START}
   include SalorBase
   include SalorScope
-  include SalorModel
+
   belongs_to :vendor
   belongs_to :drawer
   belongs_to :cash_register

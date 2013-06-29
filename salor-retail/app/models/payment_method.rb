@@ -9,7 +9,7 @@ class PaymentMethod < ActiveRecord::Base
   belongs_to :order
   belongs_to :vendor
   before_save :process
-  include SalorModel
+
   include SalorBase
   def self.types_list
     types = []

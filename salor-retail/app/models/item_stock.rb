@@ -1,5 +1,5 @@
 class ItemStock < ActiveRecord::Base
-  include SalorModel
+
   include SalorBase
   belongs_to :item
   belongs_to :stock_location

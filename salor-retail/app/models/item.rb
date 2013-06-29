@@ -11,7 +11,7 @@ class Item < ActiveRecord::Base
   # {START}
   include SalorScope
   include SalorBase
-  include SalorModel
+
   belongs_to :category
   belongs_to :vendor
   belongs_to :location

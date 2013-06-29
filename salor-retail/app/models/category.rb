@@ -10,7 +10,7 @@ class Category < ActiveRecord::Base
   # {START}
   include SalorScope
   include SalorBase
-  include SalorModel
+
   has_many :items
   has_many :shipment_items
   has_many :discounts

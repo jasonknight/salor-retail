@@ -7,7 +7,7 @@
 
 class ItemType < ActiveRecord::Base
 	include SalorScope
-  include SalorModel
+
   
   belongs_to :vendor
   

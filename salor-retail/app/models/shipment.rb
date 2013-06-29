@@ -8,7 +8,7 @@
 class Shipment < ActiveRecord::Base
 	include SalorScope
   include SalorBase
-  include SalorModel
+
   belongs_to :shipper, :polymorphic => true
   belongs_to :receiver, :polymorphic => true
   belongs_to :shipment_type

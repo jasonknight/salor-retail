@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 class NodeQueue < ActiveRecord::Base
 #include SalorBase
-#include SalorModel
+
  def self.send_all_pending
      req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
      NodeQueue.where(:send => true, :handled => false).all.each do |msg|

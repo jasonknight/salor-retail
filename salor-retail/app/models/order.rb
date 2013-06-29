@@ -9,7 +9,7 @@ class Order < ActiveRecord::Base
  # {START}
 	include SalorScope
   include SalorBase
-  include SalorModel
+
   has_many :order_items
   has_many :payment_methods
   has_many :paylife_structs

@@ -7,7 +7,7 @@
 
 class SalorConfiguration < ActiveRecord::Base
   include SalorScope
-  include SalorModel
+
   belongs_to :vendor
   def make_valid
     [:dollar_per_lp,:lp_per_dollar].each do |f|

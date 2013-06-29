@@ -9,7 +9,7 @@ class History < ActiveRecord::Base
   belongs_to :user
   belongs_to :model, :polymorphic => true
   include SalorBase
-  include SalorModel
+
   include SalorScope
   before_create :set_fields
   def set_fields

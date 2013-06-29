@@ -8,7 +8,7 @@
 class TenderMethod < ActiveRecord::Base
   include SalorScope
   include SalorBase
-  include SalorModel
+
   validate :validify
   
   def validify
