@@ -1,8 +1,8 @@
 <div align="center">
   <script type="text/javascript">
   $(document).ready(function () {
-      $('.employee-sign-in-form-container').show();
-      $('#employee').find(".keyboardable:first").focus();
+      $('.user-sign-in-form-container').show();
+      $('#user').find(".keyboardable:first").focus();
       $('.link').mousedown(function () {
           $('.active').removeClass('active');
           $(this).addClass('active');
@@ -21,7 +21,7 @@
   });
   
   function doSubmit() {
-      $('#new_employee').submit();
+      $('#new_user').submit();
   }
   </script>
 
@@ -37,7 +37,7 @@
   <img src='/images/salor-logo-reports.png'>
 
 
-                <%= form_for(Employee.new, :url => '/employees/login') do |f| %>
+                <%= form_for(User.new, :url => '/users/login') do |f| %>
                   <br />
                   <br />
                   <%= password_field_tag :code, "", :class => "keyboardable big-input"%></p>

@@ -137,13 +137,13 @@
           </div>
         </div>
         <% end %>
-        <% if @current_user.can(:index_employees) %>
-        <div class="widget master" onmousedown="window.location = '/employees/index?vendor_id=<%= @vendor.id %>';">
+        <% if @current_user.can(:index_users) %>
+        <div class="widget master" onmousedown="window.location = '/users/index?vendor_id=<%= @vendor.id %>';">
           <div align="center">
-            <a href="/employees/index?vendor_id=<%= @vendor.id %>">
-              <%= salor_icon(:employee,{},64) %>
+            <a href="/users/index?vendor_id=<%= @vendor.id %>">
+              <%= salor_icon(:user,{},64) %>
               <br />
-              <%= t("menu.employees") %>
+              <%= t("menu.users") %>
             </a>
           </div>
         </div>

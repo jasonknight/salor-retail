@@ -457,7 +457,7 @@ function complete_order_send(print) {
           updateTips("");
           bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
           if (bValid) {            
-            jQuery.post("/employees/verify",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
+            jQuery.post("/users/verify",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
               if (data == "NO") {
                 ajax_log({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
                 updateTips("Wrong Password");
@@ -466,7 +466,7 @@ function complete_order_send(print) {
                       (serializePayments().indexOf('InCash') != -1) || 
                       Register.always_open_drawer == true
                    ) { quick_open_drawer(); }
-                get('/orders/complete_order_ajax?employee_id=' + data.id + '&order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), 
+                get('/orders/complete_order_ajax?user_id=' + data.id + '&order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), 
                     filename, 
                     function() {
                           ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: true});

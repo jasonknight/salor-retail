@@ -166,17 +166,17 @@ function show_coin_calculator() {
 
   <% if @current_user and @current_user.can(:manager)  %>
       <p>
-        <span class='cash_drop_label'><%= I18n.t("activerecord.models.employee.one") %></span>
-        <select name="employee_id" id="employee_id">
+        <span class='cash_drop_label'><%= I18n.t("activerecord.models.user.one") %></span>
+        <select name="user_id" id="user_id">
           <option value="self" selected><%= @current_user.username %></option>
-          <% Employee.scopied.each do |emp|  %>
+          <% User.scopied.each do |emp|  %>
             <option value="<%= emp.id %>"><%= emp.username %></option>
           <% end %>
         </select>
       </p>
   <% else %>
      <p>
-        <span class='cash_drop_label'><%= I18n.t("activerecord.models.employee.one") %></span>
+        <span class='cash_drop_label'><%= I18n.t("activerecord.models.user.one") %></span>
         <input type="password" name="password" id="cash_drop_password" class="keyboardable text-input"/>
         </p>
   <% end %>

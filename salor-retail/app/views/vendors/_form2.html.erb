@@ -1,5 +1,5 @@
 <%= form_for @vendor, :html => { :enctype => "multipart/form-data" } do |f| %>
-<%= f.hidden_field :user_id, :value => $User.is_employee? ? $User.user.id : $User.id %>
+<%= f.hidden_field :user_id, :value => $User.is_user? ? $User.user.id : $User.id %>
   <%= f.fields_for :salor_configuration do |conf| %>
   <%= conf.hidden_field :vendor_id %>
 <table width="90%" align="center">

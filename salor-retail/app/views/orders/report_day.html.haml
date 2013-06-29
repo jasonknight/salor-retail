@@ -30,7 +30,7 @@
           = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
       %tr
         %td{:align => :left}
-          %select{:id => 'employee_select', :name => 'employee_id' }= options_from_collection_for_select(@employees, 'id', 'username', params[:employee_id])
+          %select{:id => 'user_select', :name => 'user_id' }= options_from_collection_for_select(@users, 'id', 'username', params[:user_id])
         %td{ :align => :right}
           = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
       %tr
@@ -46,7 +46,7 @@
   %div.clear
 
   %div
-    %h2== #{ t '.title' } #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @vendor.name }<br />#{ @employee.name_with_username if @employee }
+    %h2== #{ t '.title' } #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @vendor.name }<br />#{ @user.name_with_username if @user }
 
     %p== #{ t '.count_orders' }: #{ orders_count }
 
@@ -167,8 +167,8 @@
 
       %h3= t '.cash_drawer'
 
-      - if @from.beginning_of_day == Time.now.beginning_of_day and @employee
-        %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency @employee.get_drawer.amount }
+      - if @from.beginning_of_day == Time.now.beginning_of_day and @user
+        %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency @user.get_drawer.amount }
 
       %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
 

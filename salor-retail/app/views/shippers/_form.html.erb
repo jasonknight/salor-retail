@@ -48,9 +48,9 @@
     </td>
     <td width="270px" style="padding-bottom:10px;">
       &nbsp;
-      <%= f.hidden_field :user_id, :value => @current_user.get_owner.id if @current_user.is_employee? %>
+      <%= f.hidden_field :user_id, :value => @current_user.get_owner.id if @current_user.is_user? %>
       <%= f.hidden_field :vendor_id, :value => $Vendor.id %>
-      <%= f.hidden_field @current_user.is_employee? ? :employee_id : :user_id, :value => @current_user.id%>
+      <%= f.hidden_field @current_user.is_user? ? :user_id : :user_id, :value => @current_user.id%>
     </td>
   </tr>
   <tr>

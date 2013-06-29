@@ -62,7 +62,7 @@
       <% end %>
     </td>
     <td width='10%' valign="top">
-      <%= order.employee ? order.employee.username : order.user.username %>
+      <%= order.user ? order.user.username : order.user.username %>
     </td>
     <td  width='10%' valign="top">
       <%= order.customer.full_name if order.customer %>

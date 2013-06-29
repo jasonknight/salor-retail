@@ -14,10 +14,10 @@
         = select_datetime(@to, :prefix => 'to')
       .from-user
         = label('from_user', 'From User')
-        = raw $User.employee_select :name => 'from_emp',:id => 'from_emp'
+        = raw $User.user_select :name => 'from_emp',:id => 'from_emp'
       .to-user
         = label('to_user', 'To User')
-        =  raw $User.employee_select :name => 'to_emp', :id => 'to_emp'
+        =  raw $User.user_select :name => 'to_emp', :id => 'to_emp'
       .actions
         %p{:align => 'center', :style => 'margin-left: 20px;'}
           = submit_tag 'Move Transactions' 

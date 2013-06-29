@@ -64,8 +64,8 @@
               <%= f.label t("activerecord.attributes.the_shipper") %><br />
               <%= f.select :the_shipper, Shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]} %>
             </div>
-            <%= f.hidden_field(:user_id, :value => @current_user.id) if not @current_user.is_employee? %>
-            <%= f.hidden_field(:employee_id, :value => @current_user.id) if @current_user.is_employee? %>
+            <%= f.hidden_field(:user_id, :value => @current_user.id) if not @current_user.is_user? %>
+            <%= f.hidden_field(:user_id, :value => @current_user.id) if @current_user.is_user? %>
     </div> <!-- end id="general" -->
     <div id="items" class="hidden form-container shipment-items-form-container">
     <div class="actions">

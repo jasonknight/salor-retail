@@ -8,7 +8,7 @@
       <%= order.vendor.name %>
     </td>
     <td valign="top">
-      <%= order.employee_id ? order.employee.username : order.user.username %>
+      <%= order.user_id ? order.user.username : order.user.username %>
     </td>
     <td valign="top">
       <%= I18n.t("views.order_number",:id => order.id) %>

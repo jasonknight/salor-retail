@@ -15,7 +15,7 @@ function add_item(sku, additional_params) {
     var oid = Order.id;
     var cid = Meta['cash_register_id'];
     var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
-    window.location = "/employees/login?" + p.join("&");
+    window.location = "/users/login?" + p.join("&");
     return;
   }
   var user_line = "&user_id=" + User.id + "&user_type=" + User.type;

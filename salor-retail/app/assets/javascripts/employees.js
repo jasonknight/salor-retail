@@ -1,8 +1,8 @@
 $(function () {
   if (User.role_cache.indexOf('manager') != -1) {
     try {
-      var lin = $('.employee_login_time');
-      var lout = $('.employee_logout_time');
+      var lin = $('.user_login_time');
+      var lout = $('.user_logout_time');
       lin.datetimepicker(
         {
           timeFormat: 'HH:mm:ss',
@@ -10,7 +10,7 @@ $(function () {
           onSelect: function (dateTimeText,picker) {
             
             var string = '/vendors/edit_field_on_child?id=' +
-            $(picker.$input).attr('model_id') +'&klass=EmployeeLogin' +
+            $(picker.$input).attr('model_id') +'&klass=UserLogin' +
             '&field=login'+
             '&value=' + dateTimeText;
             $.get(string);
@@ -24,7 +24,7 @@ $(function () {
                 onSelect: function (dateTimeText,picker) {
                   
                   var string = '/vendors/edit_field_on_child?id=' +
-                  $(picker.$input).attr('model_id') +'&klass=EmployeeLogin' +
+                  $(picker.$input).attr('model_id') +'&klass=UserLogin' +
                   '&field=logout'+
                   '&value=' + dateTimeText;
                   $.get(string);
@@ -35,6 +35,6 @@ $(function () {
   } // if user.role_cache
 });
 
-function remove_employee_login(thetd) {
+function remove_user_login(thetd) {
   var thetr = $(thetd).closest("tr")
 }

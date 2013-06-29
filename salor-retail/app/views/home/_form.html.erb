@@ -4,7 +4,7 @@
       <%= form_for(@user, :url => "/home/update_owner", :html => { :method => :post }) do |f| %>
         <% if @user.errors.any? %>
           <div id="error_explanation">
-            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @user.errors.count,:model => t("activerecord.models.employee.one"))%></h2>
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @user.errors.count,:model => t("activerecord.models.user.one"))%></h2>
 
             <ul>
             <% @user.errors.full_messages.each do |msg| %>

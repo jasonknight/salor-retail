@@ -52,7 +52,7 @@ function showClockin() {
         updateTips("");
         bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
         if (bValid) {            
-            jQuery.post("/employees/clockout",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
+            jQuery.post("/users/clockout",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
               if (data == "NO") {
                 updateTips("Wrong Password");
               } else {
@@ -69,7 +69,7 @@ function showClockin() {
         updateTips("");
         bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
         if (bValid) {            
-            jQuery.post("/employees/clockin",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
+            jQuery.post("/users/clockin",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
               console.log(data);
               if (data == "NO") {
                 updateTips("Wrong Password");

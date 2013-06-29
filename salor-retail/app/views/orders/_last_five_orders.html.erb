@@ -3,7 +3,7 @@
   <div class="generic-button-cool popup-hide-button" onclick="$('.last-five-orders').hide();">X</div>
   <% i = 49  %>
   <% x = 1 %>
-  <% @current_vendor.orders.where(:paid => nil).where(:employee_id => @current_user.id).order("id desc").limit(5).each do |order| %>
+  <% @current_vendor.orders.where(:paid => nil).where(:user_id => @current_user.id).order("id desc").limit(5).each do |order| %>
   <%
     color = order.cash_register.color
   %>
@@ -13,7 +13,7 @@
          >
     <%= image_tag('/images/icons/' + icon(:order,32)) %><br />
     <span class="id">
-      <%= order.tag.nil? or order.tag.empty? ? order.employee.username : order.tag %>
+      <%= order.tag.nil? or order.tag.empty? ? order.user.username : order.tag %>
     </span>
     <br />
     <span><%= order.customer.full_name if order.customer %></span>

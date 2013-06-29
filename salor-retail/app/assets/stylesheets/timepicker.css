@@ -15,7 +15,7 @@ div.ui-slider-horizontal {
 div#ui-datepicker-div a {
   color: white;
 }
-input.employee_logout_time,input.employee_login_time {
+input.user_logout_time,input.user_login_time {
   background-color: white;
   color: black;
   border: none;
