@@ -17,7 +17,7 @@ class Order < ActiveRecord::Base
   has_many :drawer_transactions
   has_one :receipt
   belongs_to :user
-  belongs_to :employee
+  belongs_to :user
   belongs_to :customer
   belongs_to :vendor
   belongs_to :cash_register
@@ -177,7 +177,7 @@ class Order < ActiveRecord::Base
   end
   #
   def get_owner
-    return self.employee if self.employee
+    return self.user if self.user
     return self.user if self.user  
   end
   # This function is mainly used by the api
@@ -545,7 +545,7 @@ class Order < ActiveRecord::Base
     
     self.paid = 1
     self.created_at = Time.now
-    self.drawer = self.employee.get_drawer
+    self.drawer = self.user.get_drawer
     
     if self.is_quote then
       self.qnr = self.vendor.get_unique_model_number('quote')
@@ -586,13 +586,13 @@ class Order < ActiveRecord::Base
         pm.order = self
         pm.save
       end
-      log_action("OID: #{self.id} USER: #{self.employee.username} OTTL: #{ottl} DRW: #{self.employee.get_drawer.amount}")
+      log_action("OID: #{self.id} USER: #{self.user.username} OTTL: #{ottl} DRW: #{self.user.get_drawer.amount}")
       log_action("End of Complete: " + self.payment_methods.inspect)
     end
     
     self.save
 
-    log_action "Ending complete order. Drawer amount is: #{self.employee.get_drawer.amount}"
+    log_action "Ending complete order. Drawer amount is: #{self.user.get_drawer.amount}"
     self.save
   end
   
@@ -663,7 +663,7 @@ class Order < ActiveRecord::Base
   end
 
   def create_drawer_transaction(amount,opts={})
-    drawer = self.employee.get_drawer
+    drawer = self.user.get_drawer
     dt = DrawerTransaction.new(opts)
     dt.vendor = self.vendor
     dt.amount = amount
@@ -802,12 +802,12 @@ class Order < ActiveRecord::Base
     end
   end
   def get_user
-    return self.employee if self.employee
+    return self.user if self.user
     return self.user if self.user
     if AppConfig.standalone then
       return User.first
     end
-    raise "Cannot return Employee on this order."
+    raise "Cannot return User on this order."
   end
   
   def paylife_blurb
@@ -1354,7 +1354,7 @@ class Order < ActiveRecord::Base
     contents = self.escpos_receipt(self.get_report)
     bytes_written, content_written = print_engine.print(0, contents[:text], contents[:raw_insertations])
     print_engine.close
-    Receipt.create(:employee_id => self.user_id, :current_register_id => self.current_register_id, :content => contents[:text], :order_id => self.id)
+    Receipt.create(:user_id => self.user_id, :current_register_id => self.current_register_id, :content => contents[:text], :order_id => self.id)
   end
   def sanity_check
     if self.paid == 1 then

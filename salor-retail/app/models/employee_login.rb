@@ -1,9 +1,9 @@
-class EmployeeLogin < ActiveRecord::Base
-  belongs_to :employee
+class UserLogin < ActiveRecord::Base
+  belongs_to :user
   belongs_to :vendor
   before_save :set_totals
   before_update :set_totals
-  attr_accessible :amount_due, :hourly_rate, :login, :logout, :shift_seconds, :employee_id,:vendor_id
+  attr_accessible :amount_due, :hourly_rate, :login, :logout, :shift_seconds, :user_id,:vendor_id
   DATE_PATTERN = /(\d{4,4})\/(\d{2,2})\/(\d{2,2}) (\d{2,2}):(\d{2,2}):(\d{2,2})/
   def set_totals
     if self.logout then

@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_one :drawer, :as => :owner
   has_many :drawer_transactions, :as => :owner
   has_many :histories, :as => :owner
-  has_many :employee_logins
+  has_many :user_logins
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :uses_drawer_id,:apitoken,:js_keyboard,:role_ids,:language,:vendor_id,:user_id,:first_name,:last_name,:username, :email, :password, :password_confirmation, :remember_me, :hourly_rate
   #attr_accessible :auth_code
@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
       e = Digest::SHA256.hexdigest(Time.now.to_s)[0..12]
       self.email = "#{e}@salorpos.com"
     end
-    login = self.employee_logins.last
+    login = self.user_logins.last
     if login then
       login.hourly_rate = self.hourly_rate
       login.save
@@ -110,9 +110,9 @@ class User < ActiveRecord::Base
     return text
   end
   
-  def employee_select(opts={})
+  def user_select(opts={})
     user = self.get_owner
-    emps = Employee.scopied.all
+    emps = User.scopied.all
     if opts[:name] then
       name = "#{opts[:name]}[set_owner_to]"
     else
@@ -139,7 +139,7 @@ class User < ActiveRecord::Base
 
   
   def full_name
-    return self.first_name + " " + self.last_name if self.class == Employee
+    return self.first_name + " " + self.last_name if self.class == User
     return self.username
   end
 
@@ -153,20 +153,20 @@ class User < ActiveRecord::Base
   
   def get_new_current_register_daily
     d = CashRegisterDaily.new(:start_amount => 0, :end_amount => 0, :current_register_id => GlobalData.session.current_register_id)
-    d.employee_id = self.id
+    d.user_id = self.id
     d.save
     return d
   end
   
-  # Employees related functions
-  def get_employees(id,page)
-    return Employee.scopied.page(page).per($Conf.pagination)
+  # Users related functions
+  def get_users(id,page)
+    return User.scopied.page(page).per($Conf.pagination)
   end
   
-  def get_employee(id)
-    employee = Employee.find(id)
-    return employee if employee.user_id = self.id
-    return Employee.new
+  def get_user(id)
+    user = User.find(id)
+    return user if user.user_id = self.id
+    return User.new
   end
   
   def get_drawer
@@ -188,7 +188,7 @@ class User < ActiveRecord::Base
       action = action.to_s
       admin = 'manager'
       any = nil
-      if not (action.to_s.include? "destroy_employees" or action.to_s.include? "edit_employees" or action.to_s.include? "create_employees") then
+      if not (action.to_s.include? "destroy_users" or action.to_s.include? "edit_users" or action.to_s.include? "create_users") then
         if self.role_cache.include? "assistant" then
           return true
         end
@@ -236,11 +236,11 @@ class User < ActiveRecord::Base
       return true if owns_vendor?(model.vendor_id)  
     end
     if model.respond_to? :user_id then
-      return true if self.class == Employee and model.user_id == self.user.id
+      return true if self.class == User and model.user_id == self.user.id
     end
    
-    if model.respond_to? :employee_id then
-       return model.employee_id == self.id
+    if model.respond_to? :user_id then
+       return model.user_id == self.id
     end
     if model.class == ShipmentItem then
       return owns_this?(model.shipment)
@@ -253,7 +253,7 @@ class User < ActiveRecord::Base
   end
   
   def end_day
-    login = self.employee_logins.last
+    login = self.user_logins.last
     if login then
       login.logout = Time.now
       login.save
@@ -261,10 +261,10 @@ class User < ActiveRecord::Base
   end
   
   def start_day
-    login = self.employee_logins.last
+    login = self.user_logins.last
     return if login and login.logout.nil?
-    login = EmployeeLogin.new
-    login.employee_id = self.id
+    login = UserLogin.new
+    login.user_id = self.id
     login.hourly_rate = self.hourly_rate
     login.login = Time.now
     login.vendor_id = self.vendor_id
@@ -314,12 +314,12 @@ class User < ActiveRecord::Base
   end
 
   #
-  def self.get_end_of_day_report(from,to,employee)
+  def self.get_end_of_day_report(from,to,user)
     categories = Category.scopied
     taxes = TaxProfile.scopied.where( :hidden => 0 )
-    if employee
-      orders = Order.scopied.where({ :vendor_id => employee.get.vendor_id, :drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false }).order("created_at ASC")
-      drawertransactions = DrawerTransaction.where({:drawer_id => employee.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
+    if user
+      orders = Order.scopied.where({ :vendor_id => user.get.vendor_id, :drawer_id => user.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false }).order("created_at ASC")
+      drawertransactions = DrawerTransaction.where({:drawer_id => user.get_drawer.id, :created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
     else
       orders = Order.scopied.where({ :vendor_id => $Vendor.id, :created_at => from.beginning_of_day..to.end_of_day, :paid => 1, :unpaid_invoice => false, :is_quote => false  }).order("created_at ASC")
       drawertransactions = DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day }).where("tag != 'CompleteOrder'")
@@ -491,9 +491,9 @@ class User < ActiveRecord::Base
     report[:date_from] = I18n.l(from, :format => :just_day)
     report[:date_to] = I18n.l(to, :format => :just_day)
     report[:unit] = I18n.t('number.currency.format.friendly_unit')
-    if employee
-      report[:drawer_amount] = employee.get_drawer.amount
-      report[:username] = "#{ employee.first_name } #{ employee.last_name } (#{ employee.username })"
+    if user
+      report[:drawer_amount] = user.get_drawer.amount
+      report[:username] = "#{ user.first_name } #{ user.last_name } (#{ user.username })"
     else
       report[:drawer_amount] = 0
       report[:username] = ''

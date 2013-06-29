@@ -11,7 +11,7 @@ class OrderItem < ActiveRecord::Base
   include SalorBase
   include SalorModel
   belongs_to :order
-  belongs_to :employee
+  belongs_to :user
   belongs_to :item
   belongs_to :tax_profile
   belongs_to :item_type

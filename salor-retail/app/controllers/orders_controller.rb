@@ -100,7 +100,7 @@ class OrdersController < ApplicationController
       @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     end
     
-    # get employee's last order if unpaid
+    # get user's last order if unpaid
     unless @current_order
       @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(@current_user.current_order_id)
     end
@@ -109,7 +109,7 @@ class OrdersController < ApplicationController
     unless @current_order
       @current_order = Order.new
       @current_order.vendor = @current_vendor
-      @current_order.employee = @current_user
+      @current_order.user = @current_user
       @current_order.cash_register = @current_register
       @current_order.save
       @current_user.current_order_id = @current_order.id
@@ -269,7 +269,7 @@ class OrdersController < ApplicationController
   end
 
   def print_receipt
-    @user = Employee.find_by_id(params[:user_id])
+    @user = User.find_by_id(params[:user_id])
     @register = CashRegister.find_by_id(params[:current_register_id])
     if @register then
       @vendor = @register.vendor 
@@ -343,13 +343,13 @@ class OrdersController < ApplicationController
     SalorBase.log_action("OrdersController","complete_order_ajax order initialized")
     History.record("initialized order for complete",@order,5)
 
-    if params[:employee_id] and params[:employee_id] != @current_user.id then
-      tmp_user = Employee.find_by_id(params[:employee_id])
+    if params[:user_id] and params[:user_id] != @current_user.id then
+      tmp_user = User.find_by_id(params[:user_id])
       if tmp_user and tmp_user.vendor_id == @current_user.vendor_id then
         tmp_user.update_attribute :current_register_id, @current_register
         History.record("swapped user #{@current_user.id} with #{tmp_user.id}",@order,3)
         @current_user = tmp_user
-        @order.update_attribute :employee_id, @current_user.id
+        @order.update_attribute :user_id, @current_user.id
         SalorBase.log_action("OrdersController","tmp_user swapped")
       else
         SalorBase.log_action("OrdersController","tmp_user does not belong to this store")
@@ -443,7 +443,7 @@ class OrdersController < ApplicationController
       
       o = Order.new
       o.vendor = @current_vendor
-      o.employee = @current_user
+      o.user = @current_user
       o.cash_register = @current_register
       o.save
       @current_user.current_order_id = o.id
@@ -454,7 +454,7 @@ class OrdersController < ApplicationController
   def new_order
     o = Order.new
     o.vendor = @current_vendor
-    o.employee = @current_user
+    o.user = @current_user
     o.cash_register = @current_register
     o.save
     @current_user.current_order_id = o.id
@@ -568,7 +568,7 @@ class OrdersController < ApplicationController
     @from = @from.beginning_of_day
     @to = @to.end_of_day
     @vendor = GlobalData.vendor
-    @report = UserEmployeeMethods.get_end_of_day_report(@from,@to,nil)
+    @report = UserUserMethods.get_end_of_day_report(@from,@to,nil)
   end
 
   def report_day
@@ -576,9 +576,9 @@ class OrdersController < ApplicationController
     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
     @vendor = GlobalData.vendor
-    @employees = @vendor.employees.where(:hidden => 0)
-    @employee = Employee.scopied.find_by_id(params[:employee_id])
-    @report = UserEmployeeMethods.get_end_of_day_report(@from,@to,@employee)
+    @users = @vendor.users.where(:hidden => 0)
+    @user = User.scopied.find_by_id(params[:user_id])
+    @report = UserUserMethods.get_end_of_day_report(@from,@to,@user)
   end
 
   def report_day_range
@@ -611,8 +611,8 @@ class OrdersController < ApplicationController
   
   def print
     @order = Order.scopied.find_by_id(params[:id].to_s)
-    raise "Orphaned Order" if not @order.employee
-    @current_user = @order.employee
+    raise "Orphaned Order" if not @order.user
+    @current_user = @order.user
     
     unsound = false
     if params[:pm_id] then
@@ -643,11 +643,11 @@ class OrdersController < ApplicationController
         raise "Cannot because unsound"
       end
     end
-    @current_user = @order.employee
-    if not @order.employee then
-      @order.employee = Employee.where(:vendor_id => @order.vendor_id).last
+    @current_user = @order.user
+    if not @order.user then
+      @order.user = User.where(:vendor_id => @order.vendor_id).last
       @order.save
-      @current_user = @order.employee
+      @current_user = @order.user
     end
 
     @vendor = @order.vendor

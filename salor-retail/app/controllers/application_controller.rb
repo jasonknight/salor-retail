@@ -88,7 +88,7 @@ class ApplicationController < ActionController::Base
   private
   
   def allowed_klasses
-    ['SalorConfiguration','EmployeeLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem']
+    ['SalorConfiguration','UserLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem']
   end
 
   def layout_by_response
@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
   
   def loadup
 
-        @current_user = Employee.find_by_id(session[:user_id])
+        @current_user = User.find_by_id(session[:user_id])
         redirect_to home_index_path and return if @current_user.nil?
         
         @current_vendor = @current_user.vendor

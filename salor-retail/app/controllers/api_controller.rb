@@ -263,7 +263,7 @@ class ApiController < ApplicationController
   # You should only be able to access these objects
   def allowed_classes
     [
-     :employee,:current_register,:category,
+     :user,:current_register,:category,
      :location,:order,:order_item,:discount,
      :customer, :table,:settlement, :quantity,
      :option, :order_items_printoption, :order_items_option,
@@ -272,8 +272,8 @@ class ApiController < ApplicationController
   end
   def auth
     has_right_params(@cmd) # This is where input validation is taking place
-    # Employee.apitoken can be gotten from editing the Employee and saving the edit. 
-    user = Employee.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(,:roles).first
+    # User.apitoken can be gotten from editing the User and saving the edit. 
+    user = User.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(,:roles).first
     if not user then
       GlobalErrors.append_fatal("api.user_does_not_exist")
       return nil

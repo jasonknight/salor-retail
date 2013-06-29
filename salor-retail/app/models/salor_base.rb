@@ -139,9 +139,9 @@ module SalorBase
       if self.respond_to? :user_id and self.user_id.nil? then
        self.user_id = user.get_owner.id
       end
-      if self.respond_to? :employee_id and self.employee_id.nil? then
-         if user.is_employee? then
-           self.employee_id = user.id
+      if self.respond_to? :user_id and self.user_id.nil? then
+         if user.is_user? then
+           self.user_id = user.id
          end
       end
    end

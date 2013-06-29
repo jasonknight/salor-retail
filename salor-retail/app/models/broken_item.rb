@@ -23,7 +23,7 @@ class BrokenItem < ActiveRecord::Base
     if self.owner_type == 'User' then
       return User.where(["id = ?", self.owner_id]).first
     else
-      return Employee.where(["id = ?", self.owner_id]).first
+      return User.where(["id = ?", self.owner_id]).first
     end
   end
   

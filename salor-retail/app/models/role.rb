@@ -9,7 +9,7 @@ class Role < ActiveRecord::Base
 	include SalorScope
   include SalorModel
   include SalorBase
-  has_and_belongs_to_many :employees
+  has_and_belongs_to_many :users
   # This is a role black list, if it isn't here
   # it means they can do it. Only put roles here
   # that the user cannot do, this should be over-
@@ -17,7 +17,7 @@ class Role < ActiveRecord::Base
   CANNOTDO = {
     :stockboy => [
       :any_orders,
-      :any_employees,
+      :any_users,
       :any_discounts,
       :any_current_registers,
       :any_tax_profiles,
@@ -52,7 +52,7 @@ class Role < ActiveRecord::Base
       :show_tender_methods,
       :show_actions,
       :index_transaction_tags,
-      :index_employees,
+      :index_users,
       :create_discounts,
       :update_discounts,
       :edit_discounts,
@@ -72,7 +72,7 @@ class Role < ActiveRecord::Base
       :any_locations,
       :any_discounts,
       :any_shipment_items,
-      :any_employees,
+      :any_users,
       :create_transaction_tags,
       :create_tender_methods,
       :edit_tender_methods,
@@ -99,7 +99,7 @@ class Role < ActiveRecord::Base
       :destroy_orders, # except their own orders
       :any_shippers,
       :any_shipments,
-      :any_employees,
+      :any_users,
       :any_categories,
       :any_buttons,
       :any_actions,
@@ -140,7 +140,7 @@ class Role < ActiveRecord::Base
       :show_tender_methods,
       :show_actions,
       :index_transaction_tags,
-      :index_employees,
+      :index_users,
       :index_shippers,
       :index_shipments,
       :create_discounts,
@@ -151,7 +151,7 @@ class Role < ActiveRecord::Base
       :index_broken_items,
       :show_tax_profiles
     ],
-    :employee => [
+    :user => [
       :anything,
       :edit_tender_methods,
       :edit_items,

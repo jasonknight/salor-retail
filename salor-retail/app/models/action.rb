@@ -22,7 +22,7 @@ class Action < ActiveRecord::Base
     [:add_to_order,:always,:on_save,:on_import,:on_export]
   end
   def code=(text)
-    if code.match(/User|Employee|Vendor|Order|OrderItem|DrawerTransaction/) then
+    if code.match(/User|User|Vendor|Order|OrderItem|DrawerTransaction/) then
       self.errors[:base] << I18n.t("system.errors.cannot_use_in_code")
     end
     write_attribute(:code,text)

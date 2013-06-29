@@ -111,7 +111,7 @@ class CustomersController < ApplicationController
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id(params[:user_id])
+      @user = User.find_by_id(params[:user_id])
     end
     @register = CashRegister.find_by_id(params[:current_register_id])
     @vendor = @register.vendor if @register

@@ -39,7 +39,7 @@ class DrawerTransaction < ActiveRecord::Base
       print_engine.open
       print_engine.print(0, text)
       print_engine.close
-      Receipt.create(:employee_id => @User.id, :current_register_id => $Register.id, :content => text)
+      Receipt.create(:user_id => @User.id, :current_register_id => $Register.id, :content => text)
     end
   end
   

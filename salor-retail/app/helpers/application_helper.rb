@@ -109,7 +109,7 @@ module ApplicationHelper
       :next => 'right',
       :tax_profile => 'percent',
       :statistics => 'chart',
-      :employee => 'employee',
+      :user => 'user',
       :reload => 'reload',
       :logout => 'key',
       :login => 'key',

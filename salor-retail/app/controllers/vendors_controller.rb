@@ -121,12 +121,12 @@ class VendorsController < ApplicationController
          @drawer_transaction.drop = false
          @drawer_transaction.payout = true
       end
-      if params[:employee_id] then
-        if params[:employee_id] == 'self' then
+      if params[:user_id] then
+        if params[:user_id] == 'self' then
           @drawer_transaction.drawer_id = @current_user.get_drawer.id
           @drawer_transaction.owner = @current_user
         else
-          emp = Employee.scopied.find_by_id(params[:employee_id])
+          emp = User.scopied.find_by_id(params[:user_id])
           @drawer_transaction.drawer_id = emp.get_drawer.id
           @drawer_transaction.owner = emp
         end
@@ -166,7 +166,7 @@ class VendorsController < ApplicationController
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id(params[:user_id])
+      @user = User.find_by_id(params[:user_id])
     end
     @register = CashRegister.find_by_id(params[:current_register_id])
     @vendor = @register.vendor if @register
@@ -192,7 +192,7 @@ class VendorsController < ApplicationController
     if params[:user_type] == 'User'
       @user = User.find_by_id(params[:user_id])
     else
-      @user = Employee.find_by_id(params[:user_id])
+      @user = User.find_by_id(params[:user_id])
     end
     @register = CashRegister.find_by_id(params[:current_register_id])
     @vendor = @register.vendor if @register
@@ -203,12 +203,12 @@ class VendorsController < ApplicationController
     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
 
-    @report = UserEmployeeMethods.get_end_of_day_report(@from.beginning_of_day,@to.end_of_day,@user)
+    @report = UserUserMethods.get_end_of_day_report(@from.beginning_of_day,@to.end_of_day,@user)
 
     template = File.read("#{Rails.root}/app/views/printr/end_of_day.prnt.erb")
     erb = ERB.new(template, 0, '>')
     text = erb.result(binding)
-    Receipt.create(:ip => request.ip, :employee_id => @user.id, :current_register_id => @register.id, :content => text)
+    Receipt.create(:ip => request.ip, :user_id => @user.id, :current_register_id => @register.id, :content => text)
     if @register.salor_printer
       render :text => Escper::Asciifier.new.process(text)
     else

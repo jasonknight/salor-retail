@@ -4,13 +4,13 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-class EmployeesController < ApplicationController 
+class UsersController < ApplicationController 
   
   skip_before_filter :loadup
   
   def verify
     if params[:password] then
-      emp = Employee.login(params[:password])
+      emp = User.login(params[:password])
       if not emp then
         render :text => "NO" and return
       else
@@ -21,11 +21,11 @@ class EmployeesController < ApplicationController
   
   def clockin
     if params[:password] then
-      emp = Employee.login(params[:password])
+      emp = User.login(params[:password])
       if not emp then
         render :text => "NO" and return
       else
-        login = EmployeeLogin.where(:employee_id => emp.id).last
+        login = UserLogin.where(:user_id => emp.id).last
         if login and login.logout.nil? then
           render :text => "ALREADY" and return
         end
@@ -37,7 +37,7 @@ class EmployeesController < ApplicationController
   
   def clockout
     if params[:password] then
-      emp = Employee.login(params[:password])
+      emp = User.login(params[:password])
       if not emp then
         render :text => "NO" and return
       else
@@ -49,7 +49,7 @@ class EmployeesController < ApplicationController
 
   
   def login
-    user = Employee.login(params[:code]) 
+    user = User.login(params[:code]) 
     if user then
       session[:user_id] = user.id
       session[:vendor_id] = user.vendor_id
@@ -61,102 +61,102 @@ class EmployeesController < ApplicationController
   end
   
   def destroy_login
-    @employee = Employee.find_by_id(params[:id].to_s)
-    if @employee and @employee.vendor_id == @current_user.vendor_id then
-      login = EmployeeLogin.find_by_id(params[:login].to_s)
-      if login.employee_id == @employee.id and @current_user.role_cache.include? 'manager' then
+    @user = User.find_by_id(params[:id].to_s)
+    if @user and @user.vendor_id == @current_user.vendor_id then
+      login = UserLogin.find_by_id(params[:login].to_s)
+      if login.user_id == @user.id and @current_user.role_cache.include? 'manager' then
         login.destroy
       else
-        raise "Ids Don't Match" + login.employee.id.to_s + " ---- " + @current_user.role_cache
+        raise "Ids Don't Match" + login.user.id.to_s + " ---- " + @current_user.role_cache
       end
     else
       redirect_to :action => :index and return
     end
-    redirect_to :action => :show, :id => @employee.id
+    redirect_to :action => :show, :id => @user.id
   end
-  # GET /employees
-  # GET /employees.xml
+  # GET /users
+  # GET /users.xml
   def index
-    @employees = $Vendor.employees.scopied.order("created_at desc").page(params[:page]).per(25)
+    @users = $Vendor.users.scopied.order("created_at desc").page(params[:page]).per(25)
     
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @employees }
+      format.xml  { render :xml => @users }
     end
   end
 
-  # GET /employees/1
-  # GET /employees/1.xml
+  # GET /users/1
+  # GET /users/1.xml
   def show
     f, t = assign_from_to(params)
     @from = f
     @to = t
-    @employee = Employee.find_by_id(params[:id])
-    @employee.make_valid
-    add_breadcrumb @employee.username,'employee_path(@employee,:vendor_id => params[:vendor_id])'
+    @user = User.find_by_id(params[:id])
+    @user.make_valid
+    add_breadcrumb @user.username,'user_path(@user,:vendor_id => params[:vendor_id])'
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @employee }
+      format.xml  { render :xml => @user }
     end
   end
 
-  # GET /employees/new
-  # GET /employees/new.xml
+  # GET /users/new
+  # GET /users/new.xml
   def new
-    @employee = Employee.new
+    @user = User.new
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @employee }
+      format.xml  { render :xml => @user }
     end
   end
 
-  # GET /employees/1/edit
+  # GET /users/1/edit
   def edit
-    @employee = @current_user.get_employee(params[:id])
-    add_breadcrumb @employee.username,'edit_employee_path(@employee,:vendor_id => params[:vendor_id])'
+    @user = @current_user.get_user(params[:id])
+    add_breadcrumb @user.username,'edit_user_path(@user,:vendor_id => params[:vendor_id])'
   end
 
-  # POST /employees
-  # POST /employees.xml
+  # POST /users
+  # POST /users.xml
   def create
-    @employee = Employee.new(params[:employee])
-    @employee.make_valid
+    @user = User.new(params[:user])
+    @user.make_valid
     respond_to do |format|
-      if @employee.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Employee.model_name.human)) }
-        format.xml  { render :xml => @employee, :status => :created, :location => @employee }
+      if @user.save
+        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => User.model_name.human)) }
+        format.xml  { render :xml => @user, :status => :created, :location => @user }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @employee.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # PUT /employees/1
-  # PUT /employees/1.xml
+  # PUT /users/1
+  # PUT /users/1.xml
   def update
-    @employee = @current_user.get_employee(params[:id])
+    @user = @current_user.get_user(params[:id])
     respond_to do |format|
-      if @employee.update_attributes(params[:employee])
-        @employee.set_role_cache
-        @employee.save
+      if @user.update_attributes(params[:user])
+        @user.set_role_cache
+        @user.save
         [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
         end
-        format.html { redirect_to :action => 'edit', :id => @employee.id, :notice => 'Employee was successfully updated.' }
+        format.html { redirect_to :action => 'edit', :id => @user.id, :notice => 'User was successfully updated.' }
         format.xml  { head :ok }
       else
-        format.html { redirect_to :action => 'edit', :id => @employee.id, :notice => "Employee could not be saved." }
-        format.xml  { render :xml => @employee.errors, :status => :unprocessable_entity }
+        format.html { redirect_to :action => 'edit', :id => @user.id, :notice => "User could not be saved." }
+        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /employees/1
-  # DELETE /employees/1.xml
+  # DELETE /users/1
+  # DELETE /users/1.xml
   def destroy
-    @employee = Employee.scopied.find(params[:id])
-    @employee.kill
+    @user = User.scopied.find(params[:id])
+    @user.kill
 
     respond_to do |format|
       format.html { redirect_to :action => 'index' }
@@ -167,6 +167,6 @@ class EmployeesController < ApplicationController
   def crumble
     @vendor = @current_user.vendor(@current_user.vendor_id)
     add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("menu.employees"),'employees_index_path(:vendor_id => params[:vendor_id])'
+    add_breadcrumb I18n.t("menu.users"),'users_index_path(:vendor_id => params[:vendor_id])'
   end
 end
