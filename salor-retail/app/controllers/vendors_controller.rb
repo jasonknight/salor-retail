@@ -235,190 +235,27 @@ class VendorsController < ApplicationController
   
   
   def edit_field_on_child
-    if params[:field] == "front_end_change" then
-      o = @current_vendor.order.find_by_id(params[:order_id])
-      o.update_attribute :front_end_change, SalorBase.string_to_float(params[:value]) if o
-      render :nothing => true and return
-    end
-    
-    
-    if allowed_klasses.include? params[:klass]
-      kls = Kernel.const_get(params[:klass])
-      if not params[:id] and params[:order_id] then
-        params[:id] = params[:order_id]
-      end
+    klass = params[:klass].constantize
+    inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
       
-      @inst = kls.where(:vendor_id => @current_vendor, :id => params[:id])
-      if @inst       
-        if @inst.class == Order
-          @order = @inst
-        elsif @inst.class == OrderItem
-          @order = @inst.order
-        end
+    render :nothing => true and return unless inst   
+      
+    if inst.class == Order
+      order = inst
+    elsif inst.class == OrderItem
+      order = inst.order
+    end
         
-        # --- push notification to refresh the customer screen
-        t = SalorRetail.tailor
-        if t
-          t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
-        end
-        # ---
-          
+    # --- push notification to refresh the customer screen
+    t = SalorRetail.tailor
+    if order and t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ order.id }/customer_display"
+    end
+    # ---
 
-        if @inst.respond_to? params[:field]
-#            puts  "### Inst responds_to field #{params[:field]}"
-          if not @current_user.owns_this?(@inst) and not GlobalData.salor_user.is_technician? then
-             puts  "### User doesn't own resource"
-            raise I18n.t("views.errors.no_access_right")
-          end
-#           puts "## Locked stuff"
-          if @inst.class == Order or @inst.class == OrderItem then
-#              puts  "### Checking for locked ..."
-            meth = "#{params[:field]}_is_locked"
-            if @inst.respond_to? meth.to_sym then
-#                puts  "### inst responds_to #{meth}"
-              @inst.update_attribute(meth.to_sym,true)
-              render :layout => false and return
-            end
-          end
-
-          params[:value] = SalorBase.string_to_float(params[:value]) if ['quantity','price','base_price'].include? params[:field]
-#            puts  " --- " + params[:value].to_s
-          if kls == OrderItem then
-            if params[:field] == 'price' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
-#                puts  "### field is price"
-              unless @inst.activated then
-                # Takes into account ITEM rebate and ORDER rebate.
-                # ORDER and ITEM totals are updated in DB and in instance vars for JS
-                newval = params[:value].to_s.gsub(/[^\d\.]/,'').to_f.round(2)
-                origttl = @inst.total
-                @inst.rebate.nil? ? oi_rebate = 0 : oi_rebate = @inst.rebate
-                @inst.price = newval
-                @inst.calculate_total_with_rebate
-                @inst.calculate_rebate_amount
-                # Calculate OI tax, but update DB below instead
-                @inst.calculate_tax(true)
-                # Only include ORDER rebate in calculation if type = 'percent'
-                @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
-                # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
-                @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-                # @inst.connection.execute("update order_items set total = #{@inst.total}, price = #{@inst.price}, tax = #{@inst.tax} where id = #{@inst.id}")
-                @inst.save
-
-                @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
-                @inst.is_valid = true
-                render :layout => false and return
-              end
-            elsif params[:field] == 'rebate' and @inst.behavior == 'normal' and @inst.coupon_applied == false and @inst.is_buyback == false and @inst.order.buy_order == false then
-#                puts  "### field is rebate"
-              # Takes into account ITEM rebate and ORDER rebate.
-              # ORDER and ITEM totals are updated in DB and in instance vars for JS
-              rebate = params[:value].gsub(',','.').to_f
-              origttl = @inst.total
-              @inst.calculate_total_with_rebate(rebate)
-              @inst.calculate_rebate_amount
-              # Calculate OI tax, but update DB below instead
-              @inst.calculate_tax(true)
-              # Only include ORDER rebate in calculation if type = 'percent'
-              @inst.order.rebate_type == 'fixed' ? order_rebate = 0 : order_rebate = @inst.order.rebate
-              # NEW ORDER TOTAL =  OLD_ORDER_TOTAL - (OLD_OI_TOTAL - ORDER_REBATE) + NEW_OI_TOTAL_WITH_OI_REBATE - ORDER_REBATE_FOR_OI 
-              @inst.order.total = @inst.order.total - (origttl - (origttl * (order_rebate / 100.0))) + @inst.total - @inst.calculate_oi_order_rebate
-              @inst.connection.execute("update `order_items` set total = #{@inst.total}, rebate = #{rebate}, rebate_amount = #{ @inst.rebate_amount }, tax = #{@inst.tax} where id = #{@inst.id}")
-              @inst.connection.execute("update `orders` set `total` = #{@inst.order.total} where `id` = #{@inst.order.id}")
-              @inst.is_valid = true
-              @inst.rebate = rebate
-              render :layout => false and return
-            else
-#                puts  "### Other OrderItem updates executing"
-              # For all other OrderItem updates
-              # puts  "### update(#{params[:field].to_sym},#{params[:value]})"
-              if params[:field] == 'quantity' and params[:value] > @inst.quantity then
-                @inst.update_attribute(params[:field].to_sym,params[:value])
-                puts "### field being updated is quantity"
-                @inst = Action.run(@inst,:add_to_order)
-              else
-                @inst.update_attribute(params[:field].to_sym,params[:value])
-                @inst = Action.run(@inst,:add_to_order)
-              end
-              
-              
-              @inst.calculate_total
-              @inst.order.update_self_and_save
-              @inst.reload
-              
-              render :layout => false and return
-            end
-          end
- 
-          if kls == Order then
-            puts "klass is Order"
-            # Tax for order is calculated before payment
-            if params[:field] == 'rebate' and false == true then
-
-#               puts "Updating scotty on order"
-              # ORDER rebate updating
-              old_rebate = @inst.rebate
-              newvalue = params[:value].gsub(',','.').to_f
-              if @inst.rebate_type == 'percent' then
-                # Add old % rebate back to order total
-                @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
-                # Subtract new % rebate from order total
-                @inst.total = @inst.total - (@inst.total * (newvalue / 100.0))
-                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
-                @inst.rebate = newvalue
-                render :layout => false and return
-              else
-                # Fixed rebate is easier: + old, - new
-                @inst.total = @inst.total + old_rebate - newvalue
-                @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate` = #{newvalue} where `id` = #{@inst.id}")
-                @inst.rebate = newvalue
-                render :layout => false and return
-              end
-            elsif params[:field] == "front_end_change" then
-              @inst.front_end_change = params[:value]
-            elsif params[:field] == 'rebate_type' then
-              # Changing rebate type means recalculating ORDER total
-              old_rebate = @inst.rebate
-              old_rebate_type = @inst.rebate_type
-              newvalue = params[:value]
-              unless newvalue == old_rebate_type then
-                if old_rebate_type == 'percent' then
-                  # Add old % rebate back to order total
-                  @inst.total = @inst.total + ((@inst.total * (old_rebate / 100.0)) / (1 - (old_rebate / 100.0)))
-                  # Subtract fixed rebate
-                  @inst.total -= old_rebate
-                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
-                  @inst.rebate_type = newvalue
-                  render :layout => false and return
-                else
-                  # fixed rebate
-                  @inst.total += old_rebate
-                  @inst.total = @inst.total - (@inst.total * (old_rebate / 100.0))
-                  @inst.connection.execute("update `orders` set `total` = #{@inst.total}, `rebate_type` = '#{newvalue}' where `id` = #{@inst.id}")
-                  @inst.rebate_type = newvalue
-                  render :layout => false and return
-                end
-              end
-            else
-              # For all other Order updates
-              puts "Updating directly on order"
-              @inst.update_attribute(params[:field].to_sym,params[:value])
-              @inst.calculate_totals
-              @inst.update_self_and_save
-              render :layout => false and return
-            end
-          end
-          # Else update attribute for other classes
-          @inst.update_attribute(params[:field].to_sym,params[:value])
-        else
-          #raise "ModelKnowsNot"
-        end # @inst.responds_to?
-      else
-        #raise "ModelNotFound"
-      end #end klass.exists?
-    else
-      #raise "ModelNotAllowed!"
-    end #end allowed_klass
-    render :layout => false
+    value = SalorBase.string_to_float(params[:value])
+    inst.update_attribute(params[:field], value) if inst.respond_to?(params[:field])      
+    render :nothing => true and return
   end
 
   def history

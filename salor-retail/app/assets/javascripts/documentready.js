@@ -56,7 +56,7 @@ $(function () {
         cf.trigger('blur');
         handled = true;
       } else if (cf.attr('id') == 'search_keywords') {
-        search();
+        search('documentready');
         event.preventDefault();
         return false;
       }

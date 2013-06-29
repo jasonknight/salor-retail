@@ -304,6 +304,7 @@ class OrderItem < ActiveRecord::Base
     self.sku = item.sku
     self.activated = item.activated
     self.quantity = self.weigh_compulsory ? 0 : 1
+    self.user = self.order.user
     self.discover_price
     #self.save
     self.calculate_totals

@@ -160,6 +160,7 @@ function handleKeyboardInput(event) {
   key = event.which;
   if ((key == 13) && handleKeyboardEnter){ //i.e. enter key
     var cf = $('.salor-focused');
+    console.log("cf", cf);
     if (cf.hasClass('inplaceeditinput') && cf.val() != '') {
       $('#inplaceeditsave').trigger('click');
       handled = true;
@@ -167,7 +168,7 @@ function handleKeyboardInput(event) {
       cf.trigger('blur');
       handled = true;
     } else if (cf.attr('id') == 'search_keywords') {
-      search();
+      search('handleKeyboardInput');
       event.preventDefault();
       return false;
     }

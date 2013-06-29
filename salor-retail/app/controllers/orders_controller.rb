@@ -109,8 +109,10 @@ class OrdersController < ApplicationController
     unless @current_order
       @current_order = Order.new
       @current_order.vendor = @current_vendor
+      @current_order.company = @current_company
       @current_order.user = @current_user
       @current_order.cash_register = @current_register
+      @current_order.drawer = @currrent_user.get_drawer
       @current_order.save
       @current_user.current_order_id = @current_order.id
       @current_user.save
@@ -364,7 +366,9 @@ class OrdersController < ApplicationController
   def new_order
     o = Order.new
     o.vendor = @current_vendor
+    o.company = @current_company
     o.user = @current_user
+    o.drawer = @current_user.get_drawer
     o.cash_register = @current_register
     o.save
     @current_user.current_order_id = o.id

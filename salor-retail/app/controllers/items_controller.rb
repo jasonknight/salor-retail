@@ -7,12 +7,9 @@
 require 'rubygems'
 require 'mechanize'
 class ItemsController < ApplicationController
-  # {START}
-  before_filter :check_role, :except => [:info, :search, :labels, :crumble, :wholesaler_update]
-  before_filter :crumble, :except => [:wholesaler_update, :labels]
+  before_filter :check_role, :except => [:info, :search]
   
-  # GET /items
-  # GET /items.xml
+
   def index
     CashRegister.update_all_devicenodes
     if params[:order_by] then

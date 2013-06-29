@@ -1,6 +1,7 @@
 <script type="text/javascript">
-  function generic_search() {
-    window.location = '?keywords=' + $('#generic_search_input').val() + '&<%= raw flatten_params %>';
+  function generic_search(caller) {
+    console.log('generic search', caller);
+    window.location = '?keywords=' + $('#generic_search_input').val() + '&<%= raw flatten_params %>;'
   }
 </script>
 <div id="generic_search" class="generic-search">

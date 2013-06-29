@@ -24,23 +24,22 @@ function hideSearch() {
     focusInput($('#keyboard_input'));
   },120);
 }
-function search() {
+
+function search(caller) {
+  console.log('search', caller);
   search_last_query = '/items/search?keywords=' + $('#search_keywords').val() + '&klass=' + $('#search_models').val() + '&page=' + current_page;
   get(search_last_query, '_search.html.erb');
 }
+
 function search_get_next_page() {
   current_page = current_page + 1;
-  search();
+  search('search_get_next_page');
 }
 function search_get_prev_page() {
   current_page = current_page - 1;
-  search();
+  search('search_get_prev_page');
 }
-$(document).ready(function() {
-  $("input[name=key_accept]").live('mousedown', function(){
-    search();
-  });
-});
+
 </script>
 <div id="search" class="search hidden">
 <table align="center" width="100%">
