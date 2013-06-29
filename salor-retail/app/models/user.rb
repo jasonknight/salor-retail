@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 
 require 'digest/sha2'
-class Employee < ActiveRecord::Base
+class User < ActiveRecord::Base
 
   include SalorScope
   include SalorBase
@@ -170,10 +170,8 @@ class Employee < ActiveRecord::Base
   end
   
   def get_drawer
-    # This method allows for more than one user to have money
-    # put into the same drawer, i.e. for CigarMan
-    if self.class == Employee and self.uses_drawer_id then
-      d = Drawer.find_by_id(self.uses_drawer_id)
+    if self.uses_drawer_id then
+      return self.vendor.Drawer.find_by_id(self.uses_drawer_id)
       return d if d
     end
     if self.drawer.nil? then
