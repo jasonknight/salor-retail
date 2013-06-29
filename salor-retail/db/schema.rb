@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130628164130) do
+ActiveRecord::Schema.define(:version => 20130629062710) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -19,18 +19,18 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "vendor_id"
     t.integer  "user_id"
     t.string   "whento"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
-    t.integer  "owner_id"
-    t.string   "owner_type"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.string   "behavior"
     t.integer  "weight",     :default => 0
     t.string   "afield"
     t.float    "value",      :default => 0.0
-    t.integer  "hidden",     :default => 0
+    t.boolean  "hidden",     :default => false
     t.string   "field2"
     t.float    "value2"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"
@@ -42,15 +42,16 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.float    "quantity"
     t.float    "base_price"
     t.integer  "vendor_id"
-    t.integer  "owner_id"
     t.integer  "shipper_id"
-    t.string   "owner_type"
     t.text     "note"
     t.datetime "created_at",                          :null => false
     t.datetime "updated_at",                          :null => false
     t.boolean  "is_shipment_item", :default => false
-    t.integer  "hidden",           :default => 0
+    t.boolean  "hidden",           :default => false
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "buttons", :force => true do |t|
@@ -65,22 +66,29 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "category_id"
     t.string   "color"
     t.integer  "position"
-    t.integer  "hidden",            :default => 0
+    t.boolean  "hidden",            :default => false
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "cash_register_dailies", :force => true do |t|
     t.float    "start_amount"
     t.float    "end_amount"
     t.integer  "cash_register_id"
-    t.integer  "employee_id"
     t.integer  "user_id"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.datetime "logout_time"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
   end
 
   add_index "cash_register_dailies", ["cash_register_id"], :name => "index_cash_register_dailies_on_cash_register_id"
-  add_index "cash_register_dailies", ["employee_id"], :name => "index_cash_register_dailies_on_employee_id"
   add_index "cash_register_dailies", ["user_id"], :name => "index_cash_register_dailies_on_user_id"
 
   create_table "cash_registers", :force => true do |t|
@@ -115,6 +123,10 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "pole_display_name"
     t.boolean  "require_password"
     t.string   "locale"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "cash_registers", ["vendor_id"], :name => "index_cash_registers_on_vendor_id"
@@ -132,8 +144,11 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "position"
     t.string   "color"
     t.string   "sku"
-    t.integer  "hidden",          :default => 0
+    t.boolean  "hidden",          :default => false
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
@@ -146,6 +161,8 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   create_table "cues", :force => true do |t|
@@ -156,10 +173,14 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "url"
     t.string   "source_sku"
     t.string   "destination_sku"
-    t.string   "owner_type"
-    t.integer  "owner_id"
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "customers", :force => true do |t|
@@ -174,14 +195,17 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "telephone"
     t.string   "cellphone"
     t.string   "email"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.integer  "vendor_id"
     t.string   "company_name"
     t.string   "sku"
-    t.integer  "hidden",       :default => 0
+    t.boolean  "hidden",       :default => false
     t.integer  "hidden_by"
     t.string   "tax_number"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "customers", ["vendor_id"], :name => "index_customers_on_vendor_id"
@@ -202,6 +226,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.boolean  "hidden",      :default => false
     t.string   "sku"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "discounts", ["amount_type"], :name => "index_discounts_on_amount_type"
@@ -236,41 +263,46 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "tag",              :default => "None"
     t.float    "drawer_amount",    :default => 0.0
     t.integer  "cash_register_id"
-    t.integer  "owner_id"
-    t.string   "owner_type"
     t.integer  "order_id"
     t.integer  "order_item_id"
     t.integer  "vendor_id"
     t.boolean  "hidden"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
 
   create_table "drawers", :force => true do |t|
     t.float    "amount",     :default => 0.0
-    t.integer  "owner_id"
-    t.string   "owner_type"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
-    t.integer  "hidden",     :default => 0
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "hidden",     :default => false
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
-
-  add_index "drawers", ["owner_id"], :name => "index_drawers_on_owner_id"
 
   create_table "employee_logins", :force => true do |t|
     t.datetime "login"
     t.datetime "logout"
     t.float    "hourly_rate"
-    t.integer  "employee_id"
     t.integer  "vendor_id"
     t.integer  "shift_seconds"
     t.float    "amount_due"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
-  add_index "employee_logins", ["employee_id"], :name => "index_employee_logins_on_employee_id"
   add_index "employee_logins", ["vendor_id"], :name => "index_employee_logins_on_vendor_id"
 
   create_table "employees", :force => true do |t|
@@ -294,7 +326,7 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "language"
     t.string   "theme"
     t.boolean  "js_keyboard",                           :default => false
-    t.integer  "hidden",                                :default => 0
+    t.boolean  "hidden",                                :default => false
     t.string   "apitoken"
     t.integer  "uses_drawer_id"
     t.integer  "auth_code"
@@ -305,6 +337,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "cellphone"
     t.text     "address"
     t.integer  "current_order_id"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
@@ -322,8 +357,6 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
   create_table "errors", :force => true do |t|
     t.text     "msg"
     t.integer  "vendor_id"
-    t.string   "owner_type"
-    t.integer  "owner_id"
     t.string   "applies_to_type"
     t.integer  "applies_to_id"
     t.boolean  "seen",            :default => false
@@ -331,12 +364,15 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "updated_at",                         :null => false
     t.string   "url"
     t.string   "referer"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "histories", :force => true do |t|
     t.string   "url"
-    t.string   "owner_type"
-    t.integer  "owner_id"
     t.string   "action_taken"
     t.string   "model_type"
     t.string   "ip"
@@ -346,6 +382,12 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.text     "params"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "inventory_report_items", :force => true do |t|
@@ -356,6 +398,11 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
     t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "inventory_report_items", ["inventory_report_id"], :name => "index_inventory_report_items_on_inventory_report_id"
@@ -367,6 +414,11 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "inventory_reports", ["vendor_id"], :name => "index_inventory_reports_on_vendor_id"
@@ -379,6 +431,11 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.text     "body_receipt"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "invoice_notes", :force => true do |t|
@@ -393,6 +450,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "sale_type_id"
     t.datetime "created_at",             :null => false
     t.datetime "updated_at",             :null => false
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   create_table "item_shippers", :force => true do |t|
@@ -404,6 +464,12 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "shipper_sku"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "item_shippers", ["item_id"], :name => "index_item_shippers_on_item_id"
@@ -419,6 +485,11 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.float    "stock_location_quantity"
     t.float    "location_quantity"
     t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "item_stocks", ["item_id"], :name => "index_item_stocks_on_item_id"
@@ -431,6 +502,11 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "items", :force => true do |t|
@@ -453,7 +529,7 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "coupon_applies"
     t.float    "quantity",              :default => 0.0
     t.float    "quantity_sold",         :default => 0.0
-    t.integer  "hidden",                :default => 0
+    t.boolean  "hidden",                :default => false
     t.integer  "part_id"
     t.boolean  "calculate_part_price",  :default => false
     t.float    "height",                :default => 0.0
@@ -495,6 +571,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.text     "name_translations"
     t.integer  "hidden_by"
     t.boolean  "real_quantity_updated"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
@@ -513,14 +592,17 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.float    "y"
     t.string   "shape"
     t.integer  "vendor_id"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.string   "applies_to"
     t.float    "quantity_sold", :default => 0.0
     t.float    "cash_made",     :default => 0.0
-    t.integer  "hidden",        :default => 0
+    t.boolean  "hidden",        :default => false
     t.string   "sku",           :default => ""
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "locations", ["vendor_id"], :name => "index_locations_on_vendor_id"
@@ -530,12 +612,16 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "num_swipes"
     t.integer  "num_used"
     t.integer  "customer_id"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.string   "sku"
     t.string   "customer_sku"
-    t.integer  "hidden",       :default => 0
+    t.boolean  "hidden",       :default => false
     t.integer  "vendor_id"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "loyalty_cards", ["customer_id"], :name => "index_loyalty_cards_on_customer_id"
@@ -567,6 +653,12 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "mdhash"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "node_queues", :force => true do |t|
@@ -577,10 +669,15 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "url"
     t.string   "source_sku"
     t.string   "destination_sku"
-    t.string   "owner_type"
     t.integer  "owner_ir"
     t.datetime "created_at",                         :null => false
     t.datetime "updated_at",                         :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "nodes", :force => true do |t|
@@ -596,7 +693,7 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "updated_at",                               :null => false
     t.string   "status"
     t.boolean  "is_busy",               :default => false
-    t.integer  "hidden",                :default => 0
+    t.boolean  "hidden",                :default => false
     t.boolean  "accepts_tax_profiles",  :default => true
     t.boolean  "accepts_buttons",       :default => true
     t.boolean  "accepts_categories",    :default => true
@@ -604,6 +701,10 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.boolean  "accepts_customers",     :default => true
     t.boolean  "accepts_loyalty_cards", :default => true
     t.boolean  "accepts_discounts",     :default => true
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "notes", :force => true do |t|
@@ -612,12 +713,15 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "notable_id"
     t.string   "notable_type"
     t.integer  "user_id"
-    t.integer  "employee_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
   end
 
-  add_index "notes", ["employee_id"], :name => "index_notes_on_employee_id"
   add_index "notes", ["notable_id"], :name => "index_notes_on_notable_id"
   add_index "notes", ["user_id"], :name => "index_notes_on_user_id"
 
@@ -656,13 +760,15 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.boolean  "no_inc",                :default => false
     t.string   "refund_payment_method"
     t.boolean  "action_applied",        :default => false
-    t.integer  "hidden",                :default => 0
+    t.boolean  "hidden",                :default => false
     t.float    "rebate_amount",         :default => 0.0
     t.integer  "vendor_id"
     t.boolean  "tax_free",              :default => false
     t.integer  "hidden_by"
-    t.integer  "employee_id"
     t.string   "coupon_applies"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -685,10 +791,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "vendor_id"
     t.integer  "user_id"
     t.integer  "location_id"
-    t.integer  "paid"
+    t.boolean  "paid"
     t.boolean  "refunded",               :default => false
-    t.integer  "employee_id"
-    t.integer  "hidden",                 :default => 0
+    t.boolean  "hidden",                 :default => false
     t.integer  "cash_register_id"
     t.integer  "customer_id"
     t.boolean  "total_is_locked",        :default => false
@@ -731,12 +836,13 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.boolean  "unpaid_invoice",         :default => false
     t.integer  "qnr",                    :default => 0
     t.boolean  "is_quote",               :default => false
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
-  add_index "orders", ["employee_id"], :name => "index_orders_on_employee_id"
   add_index "orders", ["location_id"], :name => "index_orders_on_location_id"
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
   add_index "orders", ["vendor_id"], :name => "index_orders_on_vendor_id"
@@ -764,25 +870,40 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
     t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "payment_methods", ["order_id"], :name => "index_payment_methods_on_order_id"
 
   create_table "receipts", :force => true do |t|
     t.string   "ip"
-    t.integer  "employee_id"
     t.integer  "cash_register_id"
     t.binary   "content"
     t.datetime "created_at",       :null => false
     t.datetime "updated_at",       :null => false
     t.integer  "vendor_id"
     t.integer  "order_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "roles", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "sale_types", :force => true do |t|
@@ -793,6 +914,8 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   create_table "salor_configurations", :force => true do |t|
@@ -860,6 +983,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.integer  "vendor_id"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "shipment_items", ["category_id"], :name => "index_shipment_items_on_category_id"
@@ -877,11 +1003,13 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
   create_table "shipment_types", :force => true do |t|
     t.string   "name"
     t.integer  "user_id"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
-    t.integer  "hidden",     :default => 0
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "hidden",     :default => false
     t.integer  "vendor_id"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   add_index "shipment_types", ["name"], :name => "index_shipment_types_on_name"
@@ -895,19 +1023,19 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.float    "price"
     t.boolean  "paid"
     t.integer  "user_id"
-    t.integer  "employee_id"
     t.string   "status"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.string   "name"
     t.integer  "vendor_id"
-    t.integer  "hidden",           :default => 0
+    t.boolean  "hidden",           :default => false
     t.integer  "shipment_type_id"
     t.string   "sku"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
-  add_index "shipments", ["employee_id"], :name => "index_shipments_on_employee_id"
   add_index "shipments", ["receiver_id"], :name => "index_shipments_on_receiver_id"
   add_index "shipments", ["shipper_id"], :name => "index_shipments_on_shipper_id"
   add_index "shipments", ["user_id"], :name => "index_shipments_on_user_id"
@@ -920,18 +1048,18 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "contact_fax"
     t.string   "contact_email"
     t.integer  "user_id"
-    t.integer  "employee_id"
     t.text     "contact_address"
-    t.datetime "created_at",                     :null => false
-    t.datetime "updated_at",                     :null => false
-    t.integer  "hidden",          :default => 0
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.boolean  "hidden",          :default => false
     t.string   "reorder_type"
     t.string   "sku"
     t.integer  "vendor_id"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
-  add_index "shippers", ["employee_id"], :name => "index_shippers_on_employee_id"
   add_index "shippers", ["user_id"], :name => "index_shippers_on_user_id"
 
   create_table "stock_locations", :force => true do |t|
@@ -941,6 +1069,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.datetime "updated_at", :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "stock_locations", ["vendor_id"], :name => "index_stock_locations_on_vendor_id"
@@ -949,14 +1080,16 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "name"
     t.float    "value"
     t.integer  "default"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
     t.integer  "user_id"
-    t.integer  "hidden",     :default => 0
+    t.boolean  "hidden",     :default => false
     t.string   "sku"
     t.integer  "vendor_id"
     t.string   "letter",     :default => "A"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
   end
 
   add_index "tax_profiles", ["hidden"], :name => "index_tax_profiles_on_hidden"
@@ -966,10 +1099,13 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "name"
     t.string   "internal_type"
     t.integer  "vendor_id"
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
-    t.integer  "hidden",        :default => 0
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.boolean  "hidden",        :default => false
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "transaction_tags", :force => true do |t|
@@ -981,6 +1117,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "logo_image_content_type"
     t.boolean  "hidden"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   create_table "users", :force => true do |t|
@@ -1019,6 +1158,11 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.string   "printer_type"
     t.integer  "copies",           :default => 1
     t.integer  "codepage"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
   end
 
   add_index "vendor_printers", ["cash_register_id"], :name => "index_vendor_printers_on_cash_register_id"
@@ -1030,7 +1174,7 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.text     "description"
     t.datetime "created_at",                                              :null => false
     t.datetime "updated_at",                                              :null => false
-    t.integer  "hidden",                          :default => 0
+    t.boolean  "hidden",                          :default => false
     t.binary   "receipt_logo_header"
     t.binary   "receipt_logo_footer"
     t.string   "logo_image_content_type"
@@ -1050,6 +1194,9 @@ ActiveRecord::Schema.define(:version => 20130628164130) do
     t.integer  "largest_quote_number",            :default => 0
     t.string   "time_zone"
     t.string   "hash_id"
+    t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

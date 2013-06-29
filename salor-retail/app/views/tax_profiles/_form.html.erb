@@ -30,9 +30,6 @@
           <%= f.label t("activerecord.attributes.default") %><br />
           <%= f.check_box :default %>
         </div>
-        <br />
-          <%= f.hidden_field :user_id, :value => @current_user.is_employee? ? @current_user.user.id : salor_user.id %>
-          <%= f.hidden_field :vendor_id, :value => $Vendor.id %>
         <div class="actions">
           <%= f.submit %>
         </div>
