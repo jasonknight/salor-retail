@@ -14,6 +14,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :category
   belongs_to :vendor
+  belongs_to :company
   belongs_to :location
   belongs_to :tax_profile
   belongs_to :item_type
@@ -34,6 +35,7 @@ class Item < ActiveRecord::Base
 
 
   validates_presence_of :sku
+  validates_uniqueness_of :sku, :scope => :vendor_id
   validate :validify
 
 
@@ -367,12 +369,6 @@ class Item < ActiveRecord::Base
   end
   
   def validify
-    @item = Item.all_seeing.find_by_sku(self.sku)
-    if not @item.nil? and not self.id == @item.id then
-      errors.add(:sku, I18n.t('system.errors.sku_must_be_unique',:sku => self.sku))
-      GlobalErrors.append_fatal('system.errors.sku_must_be_unique',self,{:sku => self.sku});
-      return
-    end
     if self.item_type.behavior == 'coupon' then
       unless Item.find_by_sku(self.coupon_applies) then
         errors.add(:coupon_applies,I18n.t('views.item_must_exist'))

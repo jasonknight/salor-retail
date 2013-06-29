@@ -17,6 +17,10 @@ class Vendor < ActiveRecord::Base
   has_many :payment_methods
   has_many :drawer_transactions
   has_many :drawers
+  has_many :sale_types
+  has_many :countries
+  has_many :tender_methods
+  has_many :transaction_tags
   
   has_many :cash_registers
   has_one  :salor_configuration
@@ -55,6 +59,43 @@ class Vendor < ActiveRecord::Base
     end
     self.salor_configuration.update_attributes(hash)
   end
+  
+  def payment_methods_types_list
+    types = []
+    pmx = I18n.t("system.payment_external_types").split(',')
+    pmi = I18n.t("system.payment_internal_types").split(',')
+    tms = self.tender_methods.visible
+    i = 0
+    pmi.each do |p|
+      types << [pmx[i],p]
+      i  = i + 1
+    end
+    tms.each do |tm|
+      types << [tm.name,tm.internal_type]
+    end
+    return types
+  end
+  
+  def payment_methods_as_objects
+    types = []
+    pmx = I18n.t("system.payment_external_types").split(',')
+    pmi = I18n.t("system.payment_internal_types").split(',')
+    tms = self.tender_methods.visible
+    i = 0
+    pmi.each do |p|
+      types << {:name => pmx[i],:internal_type => p} if p != 'Change'
+      i  = i + 1
+    end
+    tms.each do |tm|
+      types << {:name => tm.name,:internal_type => tm.internal_type}
+    end
+    return types
+  end
+  
+  def get_current_discounts
+    self.discounts.where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
+  end
+  
   def set_vendor_printers=(printers)
     self.connection.execute("delete from vendor_printers where vendor_id = '#{self.id}'")
     ps = []
@@ -94,22 +135,7 @@ class Vendor < ActiveRecord::Base
     write_attribute :logo_invoice_image_content_type, data.content_type.chomp
     write_attribute :logo_invoice_image, data.read
   end
-  def get_stats
-    # this method shows what features are being used, and how often.
-    features = Hash.new
-    features[:actions] = true if Action.scopied.count > 0
-    features[:coupons] = true if OrderItem.scopied.where('coupon_amount > 0').count > 0
-    features[:discounts] = true if Discount.by_vendor.all_seeing.count > 0
-    features[:item_level_rebates] = true if OrderItem.scopied.where('rebate > 0').count > 0
-      if features[:item_level_rebates] == true then
-        features[:item_level_rebates_count] = OrderItem.scopied.where('rebate IS NOT NULL AND rebate != 0.0').count
-      end
-    features[:order_level_rebates] = true if Order.scopied.where('rebate > 0').count > 0
-    if features[:order_level_rebates] == true then
-      features[:order_level_rebates_count] = Order.scopied.where('rebate IS NOT NULL AND rebate != 0.0').count
-    end
-    @features = features
-  end
+
   
   def get_unique_model_number(model_name_singular)
     model_name_plural = model_name_singular + 's'

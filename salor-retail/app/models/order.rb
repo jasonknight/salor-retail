@@ -17,7 +17,7 @@ class Order < ActiveRecord::Base
   has_many :drawer_transactions
   has_one :receipt
   belongs_to :user
-  belongs_to :user
+  belongs_to :company
   belongs_to :customer
   belongs_to :vendor
   belongs_to :cash_register
@@ -201,82 +201,129 @@ class Order < ActiveRecord::Base
     end # end list.each
   end
 
-  #
-	def add_item(item, params={})
+
+  def add_order_item(params={})
     return if self.paid == 1
-	  if not item then
-	    GlobalErrors.append("system.errors.item_not_found",self)
-	    return false
-	  end
-	  if item.is_gs1 == true then
-      # this is a gs1 item.
-      oi = OrderItem.new
-      oi.set_item(item)
-      oi.is_valid = true
-      oi.order_id = self.id
-      oi.vendor_id = self.vendor_id
-      self.order_items << oi
-      update_self_and_save
-      return oi
+    
+    
+    # try to get existing regular item, except coupons
+    item = self.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+    
+    if item and item.behavior == 'gift_card' then
+      # a gift card has already been added to the order. cannot proceed.
+      return nil
     end
     
-    oi = self.order_items.visible.find_by_item_id(item.id)
-    if oi and not oi.is_buyback and not oi.no_inc then
-      # just increment OrderItem
-      oi.update_attribute(:quantity, oi.quantity + 1)
-      update_self_and_save
-      return oi
+    if item and not (item.activated or item.is_buyback)
+      # simply increment and return
+      item.quantity += 1
+      item.save
+      self.update_self_and_save
+      return item
     end
+    
+    # at this point, we know that the added order item is not yet in the order. so we add a new one
+    
+    i = self.get_item_by_code(params[:sku])
 
-    # create new OrderItem
-	  oi = OrderItem.new
-	  if oi.nil? then
-	    oi = OrderItem.new # MF: doesn't make sense?
-	  end
-	  oi.order_id = self.id
-    oi.vendor_id = self.vendor_id
+    if i.class == Item and i.activated == true and i.behavior == 'gift_card' and i.amount_remaining <= 0 then
+      # gift card empty. cannot add the order item
+      return nil
+    end   
+    
+    if i.class == Item and i.behavior == 'coupon' and not self.order_items.visible.where(:sku => i.coupon_applies).any?
+      flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
+      return nil
+    end
+    
+    if i.class == LoyaltyCard then
+      self.customer = i.customer
+      self.tag = self.customer.full_name
+      self.save
+      # this is not to be added as an order item, so we return
+      return i
+    end
+    
+    if i.class == Item and i.item_type.behavior == 'gift_card' and i.sku == "G000000000000"
+      # note that we work with a new item from now on
+      i = create_dynamic_gift_card_item
+    end
+    
+    # finally create the order item
+    oi = OrderItem.new
+    oi.order = self
+    oi.set_attrs_from_item(i)
+    oi.no_inc = true if params[:no_inc]
+    self.order_items << oi
+    self.calculate_totals
 
-	  oi.no_inc = true if params[:no_inc]
-	  ret = oi.set_item(item)
-	  return oi if not ret
-	  # self.order_items << oi
-	  # update_self_and_save
-	  return oi
+    # warning about zero price
+    if i.base_price.zero? and not i.is_gs1 and not i.must_change_price and not i.default_buyback
+      GlobalErrors.append("system.errors.item_price_is_zero")
+      SalorBase.beep(1500, 100, 3, 10)
+    end
+    
+    return oi
 	end
 
+  
+  
+  def create_dynamic_gift_card_item
+    zero_tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
+    raise "NoTaxProfileFound" if zero_tax_profile.nil?
+    timecode = Time.now.strftime('%y%m%d%H%M%S')
+    i = Item.new
+    i.sku = "G#{timecode}"
+    i.vendor = self.vendor
+    i.order = self
+    i.tax_profile = zero_tax_profile
+    i.name = "Auto Giftcard #{timecode}"
+    i.must_change_price = true
+    i.behavior = 'gift_card'
+    i.item_type = self.vendor.item_types.visible.find_by_behavior('gift_card')
+    i.behavior = 'gift_card'
+    if not i.save then
+      raise "Failed to Save Auto Giftcard"
+    end
+    return i
+  end
+  
+  
+  
   def get_item_by_code(code)     
     # a sku was entered
-    item = self.vendor.items.find_by_sku(code)
+    item = self.vendor.items.visible.find_by_sku(code)
     return item if item
-
 
     # a GS1 barcode was entered
     m = code.match(/\d{2}(\d{5})(\d{5})/)
-    item = self.vendor.items.find_by_sku(m[1]) if m
+    item = self.vendor.items.visible.find_by_sku(m[1]) if m
     return item if item
 
 
     # a loyalty card was entered
-    lcard = self.vendor.loyalty_cards.find_by_sku(code)
+    lcard = self.vendor.loyalty_cards.visible.find_by_sku(code)
     return lcard if lcard
     
-    
+    # if nothing existing has been found, create a new item
     i = Item.new
     i.item_type = self.vendor.item_types.find_by_behavior('normal')
     i.behavior = i.item_type.behavior
     i.tax_profile = self.vendor.tax_profiles.where(:default => true).first
     i.vendor = self.vendor
+    i.company = self.company
     
     pm = code.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1]
       # a price in the format xx,xx was entered
       i.sku = "DMY" + Time.now.strftime("%y%m%d") + rand(999).to_s
-      i.name = i.sku
       i.base_price = code
     else
       # dummy item
       item.sku = code
+      item.base_price = 0
     end
+    i.name = i.sku
     i.save
     return i
   end
@@ -354,132 +401,17 @@ class Order < ActiveRecord::Base
 	    return cps
 	  end
 	end
-	#
-	def apply_coupon(cp,oi)
-	end
-	#
-	def calculate_totals(speedy = false)
-#     puts "## Calculate_Totals called #{speedy}"
-	  if self.paid == 1 and not @current_user.is_technician? then
-	    #GlobalErrors.append("system.errors.cannot_edit_completed_order",self)
-      log_action "Attempted to edit completed order."
-	    return
-	  end
-	  unless speedy == true then
-	    # #puts "Speedy is not true"
-      # EVERYTHING is recalculated in normal mode only
-      self.total = 0 unless self.total_is_locked and not self.total.nil?
-      self.subtotal = 0 unless self.subtotal_is_locked and not self.subtotal.nil?
-      self.tax = 0 unless self.tax_is_locked and not self.tax.nil?
-      self.order_items.visible.reload.order("id ASC").each do |oi|
-        if oi.item.nil? then
-          remove_order_item(oi)
-          next
-        end
-        if oi.refunded then
-          next
-        end
-        if self.buy_order and oi.is_buyback then
-          oi.update_attribute :is_buyback, false
-        end
-        # Coupons are not handled here, they are handled at the end of the order.
-        if oi.item_type.behavior == 'normal' or oi.item_type.behavior == 'gift_card' then
-          price = oi.calculate_total self.subtotal
-          puts "price from #{oi.item.sku} is #{price}"
-          if oi.is_buyback and not self.buy_order then
-            if price > 0 then
-              oi.update_attribute(:price, price * -1)
-              self.subtotal = self.subtotal - price
-            else
-              self.subtotal = self.subtotal + price  
-            end
-          else
-            if oi.behavior == 'gift_card' and oi.item.activated then
-              self.subtotal = self.subtotal - oi.price
-            else
-              b = self.subtotal
-              self.subtotal = self.subtotal + price
-              a = self.subtotal
-              puts "Check:  #{b} + #{price} = #{a}"
-            end
-          end
-          # regular items are never activated, 
-          # if a gift card is not activated, it 
-          # counts as a normal item, if it is
-          # activated, then it is not a taxable item, 
-          # as it is not being sold.
-            if not oi.activated then
-              self.tax ||= 0
-              self.tax += oi.calculate_tax unless oi.is_buyback == true
-            end
-        end
-      end
-#       puts "Here I am in order, #{self.subtotal}"
-      # Now let's consider Store Wide Discounts, for item/location/percent specific discounts,
-      # see Item.price    
-      if not self.subtotal_is_locked then
-        @vendor_discounts ||= Discount.scopied.where("applies_to = 'Vendor' and amount_type = 'fixed'")
-        dids = []
-        self.discount_amount = 0
-        @vendor_discounts.each do |discount|
-            self.subtotal -= discount.amount
-            self.discount_amount += discount.amount
-            dids << discount.id
-        end
-        if dids.any? then
-          self.discount_ids = dids
-        end
-        begin
-          if $Conf and self.lc_points then
-            disc = $Conf.dollar_per_lp * self.lc_points
-            self.subtotal -= disc
-            self.update_attribute(:lc_discount_amount, disc)
-          end
-        rescue
-          log_action "LP Calculation has failed."
-          GlobalErrors.append_fatal("system.errors.lp_calculation_failed",self)
-        end
-      end
-#       if not self.subtotal_is_locked and not self.rebate.nil? then
-#         self.subtotal -= self.calculate_rebate
-#       end
-      #if self.subtotal < 0 then
-        #self.subtotal = 0
-      #end
-#       puts "AND FINALLY: #{self.subtotal} + #{self.tax} "
-      if $Conf and $Conf.calculate_tax then
-        self.total = self.subtotal.round(2) + self.tax.round(2) if self.subtotal != 0
-        self.total = 0 if self.subtotal == 0
-      else
-        self.total = self.subtotal.round(2)
-      end
-    else
-      # Here we do speedy version calculations for show_payment_ajax processing
-      # self.total = 0 if self.total.nil?
-      # self.subtotal = self.total
-      # self.calculate_tax
-      # Order.connection.execute("update orders set total = #{self.total}, subtotal = #{self.subtotal}, tax = #{self.tax} where id = #{self.id}")
-    end
-    # Coupon stuff is done in both speedy and normal modes
-    # coupons.each do |oi|
-      # If the coupn applies to an entire order, like $10 off any order etc
-      # Users should be able to specify this in their own language.
-#     WE AREN'T USING ORDER LEVEL COUPONS
-#     if oi.item.coupon_applies == I18n.t('views.single_words.order') then
-#        if oi.item.coupon_type == 1 then #percent off coupon type
-#          self.total -= (oi.price / 100) * self.total
-#        elsif oi.item.coupon_type == 2 then #fixed amount off
-#          self.total -= oi.price
-#        elsif oi.item.coupon_type == 3 then
-#          GlobalErrors.append("system.errors.coupon_cannot_be_buy_one_get_one", self,{:sku => oi.item.sku, :applies => oi.item.coupon_applies})
-#        end
-#      end
-#    end if coupons and not self.total_is_locked
-    self.update_attribute(:total, self.total)
-    # #puts "End of calculate_totals, total is: #{self.total}"
-	end
 
-	#
+  
+
+  def calculate_totals
+    return nil if self.paid
+    self.total = self.order_items.visible.sum(:total)
+    self.tax = self.order_items.visible.sum(:tax)
+    self.save
+  end
+
+
   def calculate_tax
     # Add together tax for all items in order
     if self.tax_free then
@@ -522,13 +454,8 @@ class Order < ActiveRecord::Base
     #amnt = self.rebate if self.rebate_type == 'fixed'
     return amnt
   end
-  #
-  def update_self_and_save
-    log_action "update_self_and_save called"
-    calculate_totals
-    save!
-    log_action "update_self_and_save ended."
-  end
+
+  
 
   def complete
     # History

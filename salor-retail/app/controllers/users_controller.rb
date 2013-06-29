@@ -53,6 +53,7 @@ class UsersController < ApplicationController
     if user then
       session[:user_id] = user.id
       session[:vendor_id] = user.vendor_id
+      session[:company_id] = user.company_id
       user.start_day
       redirect_to new_order_path
     else
@@ -74,8 +75,8 @@ class UsersController < ApplicationController
     end
     redirect_to :action => :show, :id => @user.id
   end
-  # GET /users
-  # GET /users.xml
+
+  
   def index
     @users = $Vendor.users.scopied.order("created_at desc").page(params[:page]).per(25)
     

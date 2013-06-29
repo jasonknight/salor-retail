@@ -1,3 +1,6 @@
+
+
+
 function getByCardAmount() {
   var val = 0;
   $(".payment-method").each(function () {
@@ -747,9 +750,9 @@ function addPosItem(item) {
   
 }
 
-function updateOrder(obj) {
+function updateOrder(order) {
   var button = $('#buy_order_button');
-  if (obj.buy_order) {
+  if (order.buy_order) {
     $(button).addClass('pos-highlight');
     $(button).removeClass('pos-configuration');
     $('#pos_order_total').addClass("pos-highlight");
@@ -758,20 +761,19 @@ function updateOrder(obj) {
     $(button).addClass('pos-configuration');
     $('#pos_order_total').removeClass("pos-highlight");
   }
-  if (obj.customer) { showCustomer(obj.customer,obj.loyalty_card); }
-  $('#pos_order_total').html(toCurrency(obj.total));
-  $('.complete-order-total').html(toCurrency(obj.total));
-  $('.order-rebate_type').html(obj.rebate_type);
-  $('.order-rebate').attr('model_id',obj.id);
-  $('.order-tag').attr('model_id',obj.id);
-  $('.order-rebate_type').attr('model_id',obj.id);
-  $('.order-rebate').html(obj.rebate);
-  $('.order-tag').html(obj.tag);
-  //$('.order-id').html(obj.id);
-  if (!obj.lc_points > 0) {
-    obj.lc_points = 0;
+  if (order.customer) { showCustomer(order.customer,order.loyalty_card); }
+  $('#pos_order_total').html(toCurrency(order.total));
+  $('.complete-order-total').html(toCurrency(order.total));
+  $('.order-rebate_type').html(order.rebate_type);
+  $('.order-rebate').attr('model_id',order.id);
+  $('.order-tag').attr('model_id',order.id);
+  $('.order-rebate_type').attr('model_id',order.id);
+  $('.order-rebate').html(order.rebate);
+  $('.order-tag').html(order.tag);
+  if (!order.lc_points > 0) {
+    order.lc_points = 0;
   }
-  $('.order-points').html(obj.lc_points);
+  $('.order-points').html(order.lc_points);
 }
 
 function showCustomer(obj,lc) {
@@ -816,8 +818,7 @@ function highlight(elem) {
   }
 }
 
-function updateOrderItems(obj) {
-  var items = obj;
+function updateOrderItems(items) {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     var id = getOrderItemId(item);

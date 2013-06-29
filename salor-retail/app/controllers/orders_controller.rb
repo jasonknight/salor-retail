@@ -135,107 +135,18 @@ class OrdersController < ApplicationController
     redirect_to new_order_path
   end
 
- 
-  
-
-
-  def connect_loyalty_card
-    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    render :status => 401 and return if not_my_vendor?(@order)
-    @loyalty_card = LoyaltyCard.scopied.find_by_sku(params[:sku])
-    if @loyalty_card then
-      @order.customer = @loyalty_card.customer
-      @order.tag = @order.customer.full_name
-      @order.save
-    end
-  end
 
   def add_item_ajax
-    @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+    
+    @order_item = @order.add_order_item(params)
     
     # --- push notification to refresh the customer screen
     t = SalorRetail.tailor
     if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @current_order.id }/customer_display"
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
     # ---
-    
-    @order_item = @current_order.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
-    # We cannot sell multiples of gift cards.
-    if @order_item and @order_item.behavior == 'gift_card' then
-      flash[:notice] = I18n.t("system.errors.insufficient_quantity_on_item", :sku => @order_item.sku)
-      render :action => :update_pos_display and return
-    end
-    unless @order_item.nil? then
-      unless @order_item.activated or @order_item.is_buyback then
-       #raise ""
-        @order_item.quantity += 1
-        @order_item.save
-        @order_item.order.update_self_and_save
-        @current_order = @order_item.order
-        @order_item.reload
-        render and return
-      end
-    end
-    
-    @item = @current_order.get_item_by_code(params[:sku])
-
-    if @item.class == Item and @item.activated == true and @item.behavior == 'gift_card' and @item.amount_remaining <= 0 then
-      flash[:notice] = I18n.t("system.errors.gift_card_empty")
-      render :action => :update_pos_display and return
-    end
-    if @item.class == Item and @item.item_type.behavior == 'gift_card' and @item.sku == "G000000000000" then
-      zero_tax_profile = TaxProfile.scopied.where(:value => 0).first
-      if zero_tax_profile.nil? then
-        zero_tax_profile = TaxProfile.scopied.where(:default => 1).first
-      end
-      raise "NoTaxProfileFound" if zero_tax_profile.nil?
-      timecode = Time.now.strftime('%y%m%d%H%M%S')
-      @item = Item.create(:sku => "G#{timecode}", :vendor_id => @current_vendor.id, :tax_profile_id => zero_tax_profile.id, :name => "Auto Giftcard #{timecode}", :must_change_price => true, :behavior => 'gift_card', :item_type => ItemType.find_by_behavior('gift_card'))
-      @item.item_type = ItemType.find_by_behavior :gift_card
-      @item.behavior = 'gift_card'
-      if not @item.save then
-        raise "Failed to Save Auto Giftcard"
-      end
-    end
-    if @item.class == Item and @item.behavior == 'coupon' and not @current_order.order_items.visible.where(:sku => @item.coupon_applies).any? then
-      flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
-      render :action => :update_pos_display and return
-    end
-    if @item.class == LoyaltyCard then
-      @loyalty_card = @item
-      @current_order.customer = @loyalty_card.customer
-      if @order.save then
-        render :action => "connect_loyalty_card" and return
-      else
-        flash[:notice] = "Customer NIL?"
-        render :action => :update_pos_display and return
-      end
-    end
-
-    @order_item = @current_order.add_item(@item, params)
-    
-    if @order_item.id.nil? then
-      GlobalErrors.append("system.errors.item_cannot_be_added")
-      render :action => "errors" and return
-    end
-    @order_item.reload
-    if @order_item.behavior != 'normal' then
-      # Recalc all if item added is not normal
-#       puts "!!! item behavior is #{@order_item.behavior}"
-      @current_order.update_self_and_save
-    else
-      unless @order_item.activated or @order_item.item.is_gs1 then
-        @current_order = @order_item.order
-        @order_item = Action.run(@order_item,:add_to_order)
-        @order_item.calculate_total
-        @current_order.update_self_and_save
-      end
-    end
-    if @item.base_price.zero? and not @item.is_gs1 and not @item.must_change_price and not @item.default_buyback
-      GlobalErrors.append("system.errors.item_price_is_zero")
-      SalorBase.beep(1500, 100, 3, 10)
-    end
   end
 
 
@@ -316,7 +227,7 @@ class OrdersController < ApplicationController
 
 
   def show_payment_ajax
-    @order = @current_vendor.orders.where(:paid => nil).find_by_id(@current_user.current_order_id)
+    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     #@order.calculate_totals(false)
     #@order.save!
   end

@@ -99,19 +99,19 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
+    @current_user = User.find_by_id(session[:user_id])
+    redirect_to home_index_path and return if @current_user.nil?
 
-        @current_user = User.find_by_id(session[:user_id])
-        redirect_to home_index_path and return if @current_user.nil?
-        
-        @current_vendor = @current_user.vendor
-        Time.zone = @current_vendor.time_zone if @current_vendor
-        
-        @current_register = CashRegister.find_by_id(session[:cash_register_id])
-      
-      
-  
+    @current_company = @current_user.company
+
+    @current_vendor = @current_company.vendors.find_by_id(session[:vendor_id])
+
+    Time.zone = @current_vendor.time_zone if @current_vendor
+
+    @current_register = CashRegister.find_by_id(session[:cash_register_id])
+
     I18n.locale = @current_user.language
-    
+
     $Notice = ""
     return @current_user
   end

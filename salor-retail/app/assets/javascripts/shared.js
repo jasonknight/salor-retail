@@ -1,14 +1,24 @@
-/*
-# BillGastro -- The innovative Point Of Sales Software for your Restaurant
-# Copyright (C) 2012-2013  Red (E) Tools LTD
-# 
-# See license.txt for the license applying to all files within this software.
-*/
+var IS_APPLE_DEVICE = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
+var IS_IPAD = navigator.userAgent.match(/iPad/i) != null;
+var IS_IPOD = navigator.userAgent.match(/iPod/i) != null;
+var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
+
+
 var automatic_printing = false;
 var debugmessages = [];
 var _CTRL_DOWN = false;
 var _key_codes = {tab: 9,shift: 16, ctrl: 17, alt: 18, f2: 113};
 var _keys_down = {tab: false,shift: false, ctrl: false, alt: false, f2: false};
+
+var oldPaymentMethod = "";
+var allow_payment_amount = true;
+var orderCompleteDisplayed = false;
+
+var _called = 0;
+var complete_total = 0;
+var sendingOrder = false;
+
+// documentready
 $(function(){
   jQuery.ajaxSetup({
       'beforeSend': function(xhr) {
@@ -17,11 +27,6 @@ $(function(){
       }
   })
 
-  if (typeof(automatic_printing_timeout) == 'undefined') {
-    automatic_printing_timeout = window.setInterval(function() {
-      if ( automatic_printing == true ) { window.location.href = '/items.bill'; }
-    }, 10000);
-  }
   $(window).keydown(function(e){
     for (var key in _key_codes) {
       if (e.keyCode == _key_codes[key]) {
@@ -29,6 +34,7 @@ $(function(){
       }
     }
   });
+  
   $(window).keyup(function(e){
     for (var key in _key_codes) {
       if (e.keyCode == _key_codes[key]) {
@@ -36,13 +42,567 @@ $(function(){
       }
     }
   });
-})
+  
+  $(".payment-method").live("change", function(){
+    validatePaymentMethod($(this));
+  });
+  
+  $(".currency").click(addCashAmount);
+  
+  $("#cancel_complete_order_button").click(complete_order_hide);
+});
+
+function payment_method_options() {
+  var txt = '';
+  for (var i=0; i<payment_internal_types.length; i++) {
+    txt = txt + '<option value="' + payment_internal_types[i] + '">'+payment_external_types[i]+'</option>';
+  }
+  return txt;
+}
+
+function add_payment_method() {
+  if ($(".payment-amount").size() >= payment_internal_types.length) return;
+  var d = div();
+  var numMethods = $(".payment-amount").size();
+  d.addClass('payment-method');
+  var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
+  var opts = payment_method_options();
+  var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  sel.on('change', function(){
+    checkAndDisplayChange();
+    ajax_log({log_action:'select_payment_method', button_id:sel.attr('id'), value:sel.val(), order_id:Order.id});
+  });
+
+  $(sel)[0].selectedIndex = numMethods;
+  $("#payment_methods").append(sel).append(amount);
+  $('#payment_methods').append('<br />');
+  oldSelectedIndex = null;
+  validatePaymentMethod($(sel));
+  amount.on("keyup",function (event) {
+    checkAndDisplayChange("payment-amount.onKeyUp " + event.which + " " + _get("sel",$(this)).val());
+  });
+  make_select_widget($(sel).find("option:selected"),$(sel));
+  make_keyboardable_with_options(amount, {
+    visible: function () {
+      var cls = $(sel).val() + '-amount';
+      $(".ui-keyboard-preview").removeClass('payment-amount');
+      if (IS_APPLE_DEVICE) {
+        $(".ui-keyboard-preview").val("");
+      }
+      $("." + cls).select();
+    },
+    accepted: function () {
+      display_change('keyboard '+sel.val());
+    }
+  });
+  
+  display_change('function add_payment_method');
+  setTimeout(function () {
+    focusInput(amount);
+    amount.select();
+  },100);
+  _set("sel",sel,amount);
+  ajax_log({log_action:'add_payment_method', order_id:Order.id, value:sel.val()});
+}
+
+
+function complete_order_show() {
+  sendingOrder = false;
+  $(".payment-amount").remove();
+  complete_total = Order.total;
+  if (isBuyOrder) complete_total *= -1;
+  $(".complete-order-total").html($('#pos_order_total').html());
+  $("#complete_order_change").html('');
+  $("#recommendation").html('');
+  //allow_complete_order(isBuyOrder); // need to get the total money tended > complete_total before active unless this isBuyOrder
+  $('#complete_order').show();
+  
+  $('.a4-print-button').remove(); 
+  var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print.svg' height='32' /></div>");
+  var left = $('#complete_order').position().left;
+  var width = $('#complete_order').width();
+  var cpos = {x: width + left + 21, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
+  a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
+  relevant_order_id = Order.id;
+  a4print.click(function () {
+    window.location = '/orders/' + relevant_order_id + '/print';      
+  });
+  $("body").append(a4print);
+  bindInplaceEnter(false);
+  handleKeyboardEnter = false;
+  orderCompleteDisplayed = true;
+
+  setOnEnterKey(function(event) {
+    if (event.keyCode == 13 && orderCompleteDisplayed) {
+      ajax_log({log_action:'complete_order_show:setOnEnterKey', order_id:Order.id, value:event.keyCode});
+      if (Register.no_print == true) {
+          complete_order_send(false);
+      } else {
+          complete_order_send(true);
+      }
+      event.preventDefault();
+    }
+  });
+
+  setOnEscKey(function() {
+    complete_order_hide();
+  });
+
+  if (isBuyOrder) {
+    $("#add_payment_method_button").hide();
+    $("#payment_methods").hide();
+  } else {
+    $("#add_payment_method_button").show();
+    $("#payment_methods").show();
+  }
+  $("#payment_methods").html("");
+  add_payment_method();
+  $("#payment_amount_0").val( complete_total );
+  $("#payment_amount_0").select();
+  display_change('function complete_order_show');
+  show_denominations();
+  $("#keyboard_input").attr("disabled", true);
+  allow_payment_amount = true;
+  $('body').triggerHandler({type: "CompleteOrderShow"});
+}
+
+function show_denominations() {
+    var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
+    var doc = 99; // radius
+    var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
+    for (var i in i18n_pieces) {
+      p = $('<div id="complete_piece_'+ i18n_pieces[i] + '">'+toCurrency(i18n_pieces[i])+'</div>');
+      p.css({height: '35px',width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
+      p.addClass("pieces-button shadow");
+        cpos = {x: cpos.x, y: cpos.y + 54};
+        p.attr('amount',i18n_pieces[i]);
+        p.click(function () {
+          var val = toFloat($(this).attr('amount'));
+          $("#payment_amount_0").val( val );
+          display_change('pieces-button ' + val);
+          ajax_log({log_action:'pieces-button', value:val, order_id:Order.id});
+        } );
+        $('body').append(p);
+    }
+}
+
+function allow_complete_order(isAllowed) {
+  if (isAllowed == null) isAllowed = true;
+  if (typeof(isAllowed) == 'undefined') isAllowed = true;
+  if (isAllowed && $('#pos-table-left-column-items').children().length > 0 || Order.is_proforma) {
+    $("#confirm_complete_order_button").removeClass("button-inactive");
+    $("#confirm_complete_order_button").unbind('click');
+    $("#confirm_complete_order_button").click(function(){complete_order_send(true)});
+    $("#confirm_complete_order_noprint_button").removeClass("button-inactive");
+    $("#confirm_complete_order_noprint_button").unbind('click');
+    $("#confirm_complete_order_noprint_button").click(function(){complete_order_send(false)});
+    $("#cancel_complete_order_button").html(i18n_menu_cancel);
+  } else {
+    $("#confirm_complete_order_button").addClass("button-inactive");
+    $("#confirm_complete_order_button").unbind('click');
+    $("#confirm_complete_order_noprint_button").addClass("button-inactive")
+    $("#confirm_complete_order_noprint_button").unbind('click');
+    $("#cancel_complete_order_button").html(i18n_menu_done);
+  }
+}
+
+
+
+function addCashAmount() {
+  if (complete_total == 0) return;
+  var addAmount = toFloat($(this).val());
+  var curAmount = toFloat($("#complete_in_cash").val());
+  $("#complete_in_cash").val(curAmount + addAmount);
+  display_change('function addCashAmount');
+  focusInput($("#complete_in_cash"));
+}
+
+function initInput(type) {
+  var input = $("#complete_in_" + type);
+  if (isBuyOrder) {
+    $(input).attr('disabled', true);
+  } else {
+    if ($(input).val() == "0") $(input).val('');
+    $(input).attr('disabled', false);
+ }
+}
+
+function blurInput(type) {
+  var input = $("#complete_in_" + type);
+  if ($(input).val() == "") $(input).val("0");
+}
+
+function displayAdvertising() {
+  
+}
+
+function complete_order_hide() {
+  if (typeof Salor != 'undefined') {
+    if (Register.cash_drawer_path != "" ) {
+      Salor.stopDrawerObserver();
+    }
+    if ( useMimo() ) {
+    } else {
+      Salor.poleDancer(Register.pole_display, Register.customer_screen_blurb);
+    }
+  }
+  $("#payment_methods").html("");
+  $(".payment-amount").attr("disabled", true);
+  $('#complete_order').hide();
+  bindInplaceEnter(true);
+  handleKeyboardEnter = true;
+  orderCompleteDisplayed = false;
+  unsetOnEnterKey();
+  unsetOnEscKey();
+  $('.a4-print-button').remove();
+  $('.pieces-button ').remove();
+  $("#keyboard_input").attr("disabled", false);
+  if (typeof bycard_hide != 'undefined') {
+    bycard_hide();
+  }
+  focuseKeyboardInput = true;
+  $('body').triggerHandler({type: "CompleteOrderHide"});
+  ajax_log({log_action:'complete_order_hide', order_id:Order.id});
+  if ( parseInt( Order.id ) % 20 == 0) { 
+    window.location = '/orders/new'; 
+  } // trigger intensified garbage collection regularly
+  
+}
+
+function get_highest(num) {
+  if (isNaN(num)) {
+    num = 0;
+  }
+  if (num == 0) {
+    return ['<%= t("views.forms.no_change") %>',0];
+  }
+  var highest_piece = i18n_pieces.length - 1;
+  for (var i = i18n_pieces.length-1; i > 0; i--) {
+    if (i18n_pieces[i] >= num) {
+      highest_piece = i-1;
+    } else {
+      break;
+    }
+  }
+  var times = Math.floor(num / i18n_pieces[highest_piece]);
+  var display_line = times + ' x ' + toCurrency(i18n_pieces[highest_piece]);
+  var remainder = roundNumber(num - (times * i18n_pieces[highest_piece]),2);
+  return [display_line,remainder];
+}
+
+
+function recommend(num) {
+  var parts = [];
+
+  var ret = get_highest(num);
+  parts.push(div_wrap(ret[0],'complete-recommendation-item'));
+  cap = 20;
+  x = 0;
+  while (ret[1] > 0) {
+    var ret = get_highest(ret[1]);
+    parts.push(div_wrap(ret[0],'complete-recommendation-item'));
+    x = x + 1;
+    if (x > cap) {
+      break;
+    }
+  }
+  $('#recommendation').html(parts.join(' '));
+}
+
+function get_payment_total() {
+  var paymentTotal = 0;
+  $(".payment-amount:visible").each(
+    function () {
+      echo("Payment entry found, value is: " + $(this).val());
+      var tval = toFloat($(this).val());
+      paymentTotal += tval;
+      echo("Payment entry converts to: " + tval);
+    }
+  );
+  return paymentTotal;
+}
+
+function display_change(called_from) {
+  echo("Displaying change calculation for Order #" + Order.id + " displayed total is " + $('#pos_order_total').html()); 
+  if (sendingOrder) {
+    echo("sendingOrder is true");
+    return;
+  }
+  var paymentTotal = get_payment_total();
+  echo("paymentTotal is " + paymentTotal);
+  if (paymentTotal < 0) {
+    paymentTotal = paymentTotal * -1;
+  }
+  var ototal = Order.total;
+  if (ototal < 0) {
+    ototal = ototal * -1;
+  }
+  var change = paymentTotal - ototal;
+  change = Round(change,2);
+  echo("Calculated change thus far is " + change);
+  if (change < 0.0 && Order.total > 0) {
+    //recommend(0);
+    $('#complete_order_change').html(toCurrency(0));
+    allow_complete_order(false);
+  } else {
+    if (Order.total < 0) {
+      change = Order.total * -1;
+    } 
+    //recommend(change);
+    $('#complete_order_change').html(toCurrency(change));
+    echo('calling allow complete_order from display_change');
+    allow_complete_order();
+  }
+  if(change > 0) { displayChangeToCustomer(); }
+  ajax_log({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:ototal, change:change, called_from:called_from});
+  return change;
+}
+
+
+function complete_order_send(print) {
+  if (print === false) {
+    print = 'false';
+  } else {
+    print = 'true';
+  }
+  if (sendingOrder) return;
+  if (Order.order_items.length == 0) { complete_order_hide(); return;}
+  allow_payment_amount = false;
+  sendingOrder = true;
+  allow_complete_order(false);
+  displayChangeToCustomer();
+  print_order_id = Order.id;
+  // begin require password code
+  if (Register.require_password) {
+    _set("print_order",print,$("#simple_input_dialog"));
+    _set("print_order_id",print_order_id,$("#simple_input_dialog"));
+    var el = $("#simple_input_dialog").dialog({
+      modal: true,
+      buttons: {
+        "Cancel": function() {
+          $("#simple_input_dialog").dialog( "close" );
+        },
+        "Complete": function () {
+          var bValid = true;
+          $('#dialog_input').removeClass("ui-state-error");
+          updateTips("");
+          bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
+          if (bValid) {            
+            jQuery.post("/users/verify",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
+              if (data == "NO") {
+                ajax_log({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
+                updateTips("Wrong Password");
+              } else {
+                if ( 
+                      (serializePayments().indexOf('InCash') != -1) || 
+                      Register.always_open_drawer == true
+                   ) { quick_open_drawer(); }
+                get('/orders/complete_order_ajax?user_id=' + data.id + '&order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), 
+                    filename, 
+                    function() {
+                          ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: true});
+                          if (_get("print_order",$("#simple_input_dialog")) == 'true') {
+                            print_order(_get("print_order_id",$("#simple_input_dialog")), function () {
+                              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                                }
+                              }
+                            }); 
+                          } else {
+                              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                                }
+                              }
+                          }
+                          sendingOrder = false;
+                          _set("print_order",'false',$("#simple_input_dialog"));
+                          if ( useMimo() ) {
+                            Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
+                          }
+                    }, /* end anon func*/
+                    'get', 
+                    null); // end get()
+                 $("#simple_input_dialog").dialog( "close" );
+              } // end else
+            }).fail(function () {
+              updateTips("Login to server failed due to server error, call tech support!");
+            });
+
+          } // end if bValid
+        },
+        
+      }
+    });
+    
+    setTimeout(function () {
+      $('#dialog_input').val("");
+      $(".ui-dialog * button > span:contains('Complete')").text(i18n.menu.ok);
+      $(".ui-dialog * button > span:contains('Cancel')").text(i18n.menu.cancel);
+      $('#dialog_input').keyup(function (event) {
+        if (event.which == 13) {
+          ajax_log({log_action:'Keyup enter on password dlg', order_id:Order.id});
+          $(".ui-dialog * button:contains('"+i18n.menu.ok+"')").trigger("click");
+        }
+      });
+      focusInput($('#dialog_input'));
+      var ttl = el.parent().find('.ui-dialog-title');
+      ttl.html(i18n.activerecord.attributes.require_password); 
+      ttl = el.parent().find('.input_label');
+      ttl.html(i18n.activerecord.attributes.password);
+    },20);
+    return; // we return from here so that we stop the sending of the order
+  }
+  /* end require password code */
+  
+  
+  if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) { quick_open_drawer();}
+  get('/orders/complete_order_ajax?order_id='+Order.id+'&ajax=true&change='+toFloat($('#complete_order_change').html())+'&print=' + print + '&' + decodeURIComponent(serializePayments()), 
+      filename, 
+      function() {
+          ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
+          if (print == 'true') { 
+            print_order(print_order_id,function () {
+              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                }
+              }
+            }); // end print_order 
+          } else {
+              if ( (serializePayments().indexOf('InCash') != -1) || Register.always_open_drawer == true) {
+                if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+                  setTimeout("Salor.startDrawerObserver(Register.cash_drawer_path);",2000);
+                }
+              }
+          }
+          sendingOrder = false;
+          if (typeof(Salor) != 'undefined') {
+            if ( useMimo() ) {
+              Salor.mimoRefresh(Conf.url + "/orders/" + print_order_id + "/customer_display?display_change=1",800,480);
+            }
+          }
+    }, 'get', function() {
+    sendingOrder = false;
+    //allow_complete_order();
+    allow_payment_amount = true;
+  });
+}
+
+
+
+
+
+function number_to_currency(num) {
+  return i18nlocale + num;
+}
+
+
+
+
+function validatePaymentMethod(element) {
+  var unusedPaymentTypes = payment_internal_types.slice(0);
+  $.each($(".payment-method"), function(){
+    if ($(element).attr("id") != $(this).attr("id")) {
+      var index = unusedPaymentTypes.indexOf($(this).val());
+      if (index > -1) unusedPaymentTypes[index] = ""; // need to keep all indexes in place
+    }
+  });
+  if (unusedPaymentTypes.indexOf($(element).val()) == -1) {
+    var setIndex;
+    if (oldSelectedIndex === null) {
+      // find first open iundex
+      for (i=0; i<unusedPaymentTypes.length; i++) {
+        if (unusedPaymentTypes[i]) {
+          setIndex = i;
+          i = unusedPaymentTypes.length;
+        }
+      }
+      $(element).attr('selectedIndex');
+    } else {
+      setIndex = oldPaymentMethod;
+    }
+    $(element).attr('selectedIndex', setIndex);
+  }
+  var index = $(element).attr('id').split("_")[2];
+  var pay_input = $("#payment_amount_" + index);
+
+  // Since cardTotal is the remaining amount, and it's calculated automatically, the 
+  // cardTotal calc will cycle between 0 and the remaining amount for every other
+  // payment-method change! So, we fix it:
+  var cardTotal = Math.round((complete_total - get_payment_total()) * 100);
+  if (cardTotal <= 0) {
+    cardTotal = pay_input.val();
+  } else {
+    cardTotal = parseInt(cardTotal) / 100;
+    if (cardTotal + get_payment_total() > complete_total) {
+      cardTotal = 0;
+    }
+  }
+  if (cardTotal == '') {
+    cardTotal = 0;
+  }
+  // Here we tag the input field, so that it is easily accessible with class access like ByCard-amount, or ByGiftCard-amount etc.
+  // first we remove any classes
+  $(element).find('option').each(function () {$(pay_input).removeClass($(this).val() + '-amount');} );
+  // then we add the currently selected value as a class, i.e. PayBox-amount
+  $(pay_input).addClass($(element).val() + '-amount');
+  if ($(element).val() == "ByCard") {
+    if (typeof bycard_show != 'undefined') {
+      bycard_show();
+    }
+    
+    $(pay_input).val(cardTotal);
+    $(pay_input).addClass('bycard-amount');
+    display_change('function validatePaymentMethod');
+  } else {
+    $(pay_input).val(cardTotal);
+  }
+}
+
+// this is only for text based pole displays
+function displayChangeToCustomer() {
+    if ( !useMimo() && isSalor() ) {
+      given = parseFloat(get_payment_total());
+      given = sprintf(" %s %6.2f", i18nunit, given);
+      change = parseFloat($('#complete_order_change').html().replace(',','.').substring(1));
+      change = sprintf(" %s %6.2f", i18nunit, change);
+      blurb_line1 = (i18n_money_given + '       ').substring(0,9);
+      blurb_line2 = (i18n_money_change + '       ').substring(0,9);
+      Salor.poleDancer(Register.pole_display, blurb_line1 + given + blurb_line2 + change );
+    }
+}
+
+function serializePayments() {
+  var returnArr = [];
+  $.each($(".payment-method"), function(){
+    var index = $(this).attr('id').split("_")[2];
+    var method = $(this).val();
+    var amount = $("#payment_amount_" + index).val();
+    returnArr.push(method + "=" + amount);
+  });
+  return returnArr.join("&");
+}
+
+function checkAndDisplayChange(from) {
+  if ( ! from ) {
+    from = 'checkAndDisplayChange:from not set';
+  }
+  if ($('.payment-amount').is(":visible")) {
+     display_change(from);
+  }
+}
+
+
 /*
  *  Allows us to latch onto events in the UI for adding menu items, i.e. in this case, customers, but later more.
  */
 function emit(msg,packet) {
   $('body').triggerHandler({type: msg, packet:packet});
 }
+
+
 
 function connect(unique_name,msg,fun) {
   var pcd = _get('plugin_callbacks_done');

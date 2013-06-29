@@ -13,6 +13,9 @@ class User < ActiveRecord::Base
 
   
   belongs_to :vendor
+  belongs_to :company
+  
+  
   has_one :drawer
 
   

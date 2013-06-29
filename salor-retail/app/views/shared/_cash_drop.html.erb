@@ -169,7 +169,7 @@ function show_coin_calculator() {
         <span class='cash_drop_label'><%= I18n.t("activerecord.models.user.one") %></span>
         <select name="user_id" id="user_id">
           <option value="self" selected><%= @current_user.username %></option>
-          <% User.scopied.each do |emp|  %>
+          <% @current_vendor.users.visible.each do |emp|  %>
             <option value="<%= emp.id %>"><%= emp.username %></option>
           <% end %>
         </select>
@@ -197,7 +197,7 @@ function show_coin_calculator() {
         <textarea name="transaction[notes]" id="cash-drop-notes-id" class="input" rows="3" size=1></textarea>
       </p>
 
-            <% if TransactionTag.scopied.any? then %>
+            <% if @current_vendor.transaction_tags.visible.any? then %>
             <div align="center">
              <input type="hidden" id="dt_tag" name="transaction[tag]" value="None">
             <div class="generic-button dt-tag-target" onmousedown="$('.dt-tags').show();">

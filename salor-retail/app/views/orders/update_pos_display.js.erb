@@ -1,14 +1,20 @@
 Order = <%= raw @order.to_json %>;
 updateOrder(<%= raw @order.to_json %>);
-    <%
-      items = []
-      @order.order_items.visible.reload.each do |oi|
-        items << oi.to_json
-      end
-    %>
-<% if items.any? then %>
-  updateOrderItems( [<%= raw items.join(",") %>]);
-  <% else %>
-    $('.pos-table-left-column-items').html('');
+<%
+  items = []
+  @order.order_items.visible.each do |oi|
+    items << oi.to_json
+  end
+  
+  if items.any? then
+%>
+
+updateOrderItems( [<%= raw items.join(",") %>]);
+
+<% else %>
+
+$('.pos-table-left-column-items').html('');
+
 <% end -%>
+
 <%= render :partial => "shared/js/global_errors_js" %>

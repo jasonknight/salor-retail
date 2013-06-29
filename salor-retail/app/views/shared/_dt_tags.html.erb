@@ -2,7 +2,7 @@
       <div class="generic-button dt-tag-button" value="None" >
             None
         </div>
-      <% TransactionTag.scopied.each do |tag| %>
+      <% @current_vendor.transaction_tags.visible.each do |tag| %>
         <div class="generic-button dt-tag-button" value="<%= tag.name %>" >
             <% if tag.logo_image then  %>
               <img src="/transaction_tags/<%= tag.id  %>/logo" />

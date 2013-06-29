@@ -9,11 +9,14 @@ class OrderItem < ActiveRecord::Base
   # {START}
   include SalorScope
   include SalorBase
-
+  
+  belongs_to :vendor
+  belongs_to :company
   belongs_to :order
   belongs_to :user
   belongs_to :item
   belongs_to :tax_profile
+  belongs_to :location
   belongs_to :item_type
   belongs_to :category
   has_and_belongs_to_many :discounts
@@ -70,14 +73,9 @@ class OrderItem < ActiveRecord::Base
       return 'NoLocation'
     end
   end
-  # To speed things up, we cache the discounts
-  def self.reload_discounts
-  end
-  def OrderItem.get_discounts
-    Discount.scopied.select("name,amount,item_sku,id,location_id,category_id,applies_to,amount_type").where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
-  end
+  
   def toggle_buyback(x)
-    #puts "Order.buy_order #{self.order.buy_order}"
+    #ActiveRecord::Base.logger.info "Order.buy_order #{self.order.buy_order}"
     if self.is_buyback then
       self.update_attribute(:is_buyback,false)
       self.price = discover_price(self.item)
@@ -288,132 +286,75 @@ class OrderItem < ActiveRecord::Base
     write_attribute(:quantity,q)
   end
   
-	def set_item(item,qty=1)
-    if self.order.paid == 1 then
-      return false
-    end
-
-    # GIFT CARD
-		if item.item_type.behavior == 'gift_card' then
-		  if item.activated and item.amount_remaining <= 0 then
-		    GlobalErrors.append('system.errors.gift_card_empty',self)
-		    self.is_valid = nil
-		    return false
-		  end
-		end
-		
+  def set_attrs_from_item(item)
+    return nil if self.order.paid
     # Copying Item attributes over to OrderItem attributes
-		self.is_valid = true
-		self.tax_profile_id = item.tax_profile_id
-		self.item_type_id = item.item_type_id
-		self.item_id = item.id
-		self.weigh_compulsory = item.weigh_compulsory
-		if item.default_buyback then
-		  self.is_buyback = true # MF: can be written into one line
-		end
-		if self.weigh_compulsory then
-		  self.quantity = 0
-		else
-		  self.quantity = qty # usually 1 as default
-		end
-		self.category_id = item.category_id
-		self.location_id = item.location_id
-		self.behavior = item.item_type.behavior
-		self.tax_profile_amount = item.tax_profile.value if item.tax_profile
-		self.amount_remaining = item.amount_remaining
-		self.sku = item.sku
-		self.activated = item.activated
-		#if self.quantity > item.quantity or self.quantity == 0 then
-		#  GlobalErrors.append('system.errors.insufficient_quantity_on_item',self,{:sku => item.sku})
-		#end
+    self.tax_profile = item.tax_profile
+    self.vendor = item.vendor
+    self.company = item.company
+    self.item_type = item.item_type
+    self.item = item
+    self.weigh_compulsory = item.weigh_compulsory
+    self.is_buyback = item.default_buyback
+    self.category = item.category
+    self.location = item.location
+    self.behavior = item.behavior # acts as a cache
+    self.tax_profile_amount = item.tax_profile.value
+    self.amount_remaining = item.amount_remaining
+    self.sku = item.sku
+    self.activated = item.activated
+    self.quantity = self.weigh_compulsory ? 0 : 1
+    self.discover_price
+    #self.save
+    self.calculate_totals
+  end
 
-    # GS1
-		if item.is_gs1 then
-		  p = get_gs1_price($Params[:sku], self.item)
-		  if p.nil? then
-		    GlobalErrors.append_fatal("system.errors.gs1_item_not_found",self,{:sku => $Params[:sku]})
-		  end
-		  if not self.item.price_by_qty then
-		    self.price = p
-		  else
-		    self.quantity = p
-		    self.price = self.item.base_price
-		  end
-		end
 
-		if item.activated and item.amount_remaining >= 1 then
-      # GIFT CARD
-      self.price = item.amount_remaining
-    else
-      # NORMAL
-      self.price = discover_price(item)
-      #oi = Action.run(self,:add_to_order)
-      oi = self
-      oi.calculate_total
-      #oi.total =  #oi.price * oi.quantity
-      oi.calculate_tax(true)
-      oi.save!
-      return oi
-    end
-		self.save!
-		return self
-	end
-
-	#
-  def calculate_total(order_subtotal=0)
-    # i.e. we should not be able to alter the total of an order item once the order is marked as paid.
-    if self.order and self.order.paid == 1 then
-      return self.total
-    end
+  def calculate_totals
+    return nil if self.order.paid
 
     # COUPONS
-    if self.behavior == 'coupon' then
-      self.update_attribute :total,self.price
-      return self.price
+    if self.behavior == 'coupon'
+      self.total = self.price
+      self.save
+      return
     end
 
     # BUY ORDER, BUYBACK ITEM
-    if self.order and self.order.buy_order or self.is_buyback then
-      ttl = self.price * self.quantity
-      if not ttl == self.total then
-        self.update_attribute(:total,ttl)
-      end
-      return ttl
+    if self.order.buy_order or self.is_buyback
+      self.total = self.price * self.quantity
+      self.save
+      return
     end
 
     # GIFT CARDS
-    if self.behavior == 'gift_card' then
-      if self.item.activated then
-        #puts "Item is an activated gift_card"
-        if self.amount_remaining <= 0 then
-          #puts "Amount remaining is 0"
+    if self.behavior == 'gift_card'
+      if self.item.activated
+        if self.amount_remaining <= 0
           return 0
         end
         if self.price == 0 then
           self.price = self.amount_remaining
         end
         if self.price < 0 then
-          self.price *= -1 # we do this so we can better set the price later
-          # it will be reconverted to negative later on
+          self.price *= -1
         end
         if self.price > self.amount_remaining then
           self.price = self.amount_remaining
-        end
-        #puts "Price: #{self.price} Subtotal: #{order_subtotal}"
-        if self.price > order_subtotal then
-          self.price = order_subtotal
         end
         if self.price > 0 then
           p = self.price * -1
         else
           p = self.price
         end
-        self.update_attribute(:price, self.price) #if self.order and self.order.paid == 1 #MF MOD
-        self.update_attribute(:total,self.price)  #if self.order and self.order.paid == 1
+        self.update_attribute(:price, self.price)
+        self.update_attribute(:total,self.price)
         return p
       end
     end
-#     puts "&&& in calculat_total"
+    
+    
+
     ttl = 0
     self.quantity = 0 if self.quantity.nil?
     if self.item.parts.any? and self.item.calculate_part_price then
@@ -423,12 +364,7 @@ class OrderItem < ActiveRecord::Base
       end
         ttl = ttl * self.quantity
     else
-      begin
-        ttl = self.price * self.quantity
-      rescue
-        puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
-      end
-#       puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
+      ttl = self.price * self.quantity
     end
     
     # REFUNDS
@@ -436,9 +372,6 @@ class OrderItem < ActiveRecord::Base
       ttl = ttl * -1
     end
 
-#     puts "ttl at this point is: #{ttl}"
-
-    # i.e. sometimes the order hasn't been saved yet..
 
     # COUPONS
     if self.order and self.order.coupon_for(self.item.sku) then
@@ -446,34 +379,32 @@ class OrderItem < ActiveRecord::Base
       self.order.coupon_for(self.item.sku).each do |c|
         cttl += c.coupon_total(ttl,self)
       end
-#       puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
       ttl -= cttl
     end
     if self.rebate then
       ttl -= (ttl * (self.rebate / 100.0))
-#       puts "self.rebate: #{ttl}"
     end
     if self.order and self.order.rebate then
       ttl -= (ttl * (self.order.rebate / 100.0))
-      #       puts "self.rebate: #{ttl}"
     end
-
-#     puts "ttl at this point is: #{ttl}"
 
     # DISCOUNTS
     if self.discount_amount > 0 then
-#       puts "Subtracting discount amount"
-      ttl -= self.discount_amount # MF MOD
+      ttl -= self.discount_amount
     end
 
     if not self.total == ttl and not self.total_is_locked then
       self.total = ttl.round(2)
-#       puts "In update, ttl is #{ttl} and self.total is #{self.total}"
       self.update_attribute(:total,ttl) # MF MOD
     end
-#     puts "Returning total of: #{self.total}"
     return self.total
   end
+  
+  
+  
+  
+  
+  
   
   def calculate_total_with_rebate(rebate = nil)
     # This calculates OrderItem total for ITEM rebate
@@ -538,7 +469,7 @@ class OrderItem < ActiveRecord::Base
   end
   #
   def coupon_total(ttl,oi)
-    # #puts "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
+    # #ActiveRecord::Base.logger.info "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
     amnt = 0
     return 0 if ttl <= 0
     if self.quantity > oi.quantity then
@@ -550,17 +481,17 @@ class OrderItem < ActiveRecord::Base
       q = self.quantity
       amnt = (oi.price * quantity) * (self.price / 100)
     elsif self.item.coupon_type == 2 then #fixed amount off
-      # #puts "Coupon is fixed"
+      # #ActiveRecord::Base.logger.info "Coupon is fixed"
       if self.price > ttl then
         #add_salor_error("system.errors.self_fixed_amount_greater_than_total",:sku => self.item.sku, :item => self.item.coupon_applies)
         amnt = ttl * self.quantity
-        # #puts "Setting to ttl " + ttl.to_s
+        # #ActiveRecord::Base.logger.info "Setting to ttl " + ttl.to_s
       else
         amnt = self.item.base_price * self.quantity
-        # #puts "Setting to self.total " + self.item.base_price.to_s
+        # #ActiveRecord::Base.logger.info "Setting to self.total " + self.item.base_price.to_s
       end
       self.update_attribute(:total,amnt)
-      # #puts "Fixed amnt = " + amnt.to_s
+      # #ActiveRecord::Base.logger.info "Fixed amnt = " + amnt.to_s
     elsif self.item.coupon_type == 3 then #buy 1 get 1 free
       if oi.quantity > 1 then
         if self.quantity > 1 then
@@ -577,11 +508,11 @@ class OrderItem < ActiveRecord::Base
       end
       self.update_attribute(:total,amnt)
     else
-      # #puts "couldn't figure out coupon type"
+      # #ActiveRecord::Base.logger.info "couldn't figure out coupon type"
     end
     oi.update_attribute(:coupon_amount,amnt)
     oi.update_attribute(:coupon_applied, true)
-    # #puts "## Updating Attribute to #{amnt}"
+    # #ActiveRecord::Base.logger.info "## Updating Attribute to #{amnt}"
     if amnt > 0 then
       oi.coupons << self
       oi.save
@@ -593,66 +524,46 @@ class OrderItem < ActiveRecord::Base
   def split
   end
 
-  #
-  def discover_price(item)
-    puts "&&& In Discover price"
-    if self.order and self.order.buy_order or self.is_buyback then
-      return item.buyback_price if self.order.buy_order
-      return (item.buyback_price * -1)
+
+  def discover_price
+    if self.order.buy_order or self.is_buyback
+      self.price = - item.buyback_price
+      self.save
+      return
     end
-    if not item.behavior == 'normal' then
-      if item.behavior == 'gift_card' and item.activated then
-        return item.amount_remaining
-      elsif item.behavior == 'coupon' then
-        return item.base_price
+
+    if item.behavior == 'gift_card' and item.activated then
+      self.price = item.amount_remaining
+      self.save
+      return
+    elsif item.behavior == 'coupon' then
+      self.price = item.base_price
+      self.save
+      return
+    end
+
+    self.price = item.base_price
+    
+    discounts = self.vendor.get_current_discounts
+    discounts.each do |d|
+      if (d.item_sku == item.sku and d.applies_to == 'Item') or
+          (d.location_id == item.location_id and d.applies_to == 'Location') or
+          (d.category_id == item.category_id and d.applies_to == 'Category') or
+          (d.applies_to == 'Vendor' and d.amount_type == 'percent')
+
+        self.discounts << d
+
+        if d.amount_type == 'percent'
+          self.discount_amount = self.price * d.amount / 100
+        elsif d.amount_type == 'fixed'
+          self.discount_amount = d.amount
+        end
+        self.price -= self.discount_amount
+        self.discounts << d
+        self.discount_applied = true
+        self.save
       end
     end
-    damount = 0
-    if item.is_gs1 then
-      p = self.price
-    elsif item.parts.any? and item.calculate_part_price
-      p = 0
-      item.parts.each do |part|
-        p += part.base_price * part.part_quantity
-      end
-    else
-      p = item.base_price
-    end
-    pstart = p
-    if not self.is_buyback and not OrderItem.get_discounts.nil? then
-      #raise OrderItem.get_discounts.inspect + self.category_id.to_s
-      OrderItem.get_discounts.each do |discount|
-#         puts "Evaling discount: " + discount.inspect
-        if not (discount.item_sku == item.sku and discount.applies_to == 'Item') and
-            not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
-            not (discount.category_id == item.category_id and discount.applies_to == 'Category') and
-            not (discount.applies_to == 'Vendor' and discount.amount_type == 'percent') then
-             puts "&&& this discount doesn't match"
-             puts "&&& category_id is #{discount.category_id} and category_id is #{item.category_id}"
-          next
-        end
-#         puts "Applying discount"
-        if discount.amount_type == 'percent' then
-          d = discount.amount / 100
-          damount += (pstart * d)
-          self.discounts << discount
-#           puts "discount is percent"
-        elsif discount.amount_type == 'fixed' then
-          damount += discount.amount
-          self.discounts << discount
-        else
-#           puts "no amount_type"
-        end
-      end # Discount.scopied.where(conds)
-    else
-      puts "Not Applying Discounts at all..."
-    end
-    #p -= damount
-    self.update_attribute(:discount_applied,true) if self.discounts.any?
-    self.update_attribute(:discount_amount,damount) if self.discounts.any?
-    p = p.round(2)
-    puts "&&& price for item is: #{p}"
-    return p
   end
 
   #
@@ -691,7 +602,7 @@ class OrderItem < ActiveRecord::Base
   
   def set_sold
     the_item = self.item
-    # #puts "My quantity is: #{self.quantity} and my #{self.behavior}"
+    # #ActiveRecord::Base.logger.info "My quantity is: #{self.quantity} and my #{self.behavior}"
     #
     # begin update the quantities of the item
     if the_item.ignore_qty == false and self.behavior == 'normal' and self.order.is_proforma == false then

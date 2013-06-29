@@ -1,5 +1,4 @@
 function onCashDrawerClose() {
-  // the JSApi of salor-bin has changed. this is just a wrapper function
   complete_order_hide();
 }
 
@@ -30,8 +29,9 @@ function playSound(file) {
 }
 
 function useMimo() {
-  return (typeof(Salor) != 'undefined' && (Register.pole_display == "" || !Register.pole_display));
+  return (isSalor() && (Register.pole_display == "" || !Register.pole_display));
 }
+
 function isSalor() {
   return (typeof(Salor) != 'undefined' );
 }
