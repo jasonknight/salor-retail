@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130629064120) do
+ActiveRecord::Schema.define(:version => 20130629092141) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -841,6 +841,11 @@ ActiveRecord::Schema.define(:version => 20130629064120) do
     t.integer  "user_id"
   end
 
+  create_table "roles_users", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
   create_table "sale_types", :force => true do |t|
     t.string   "name"
     t.integer  "vendor_id"
@@ -1061,7 +1066,7 @@ ActiveRecord::Schema.define(:version => 20130629064120) do
     t.datetime "login"
     t.datetime "logout"
     t.float    "hourly_rate"
-    t.integer  "employee_id"
+    t.integer  "user_id"
     t.integer  "vendor_id"
     t.integer  "shift_seconds"
     t.float    "amount_due"
@@ -1069,7 +1074,7 @@ ActiveRecord::Schema.define(:version => 20130629064120) do
     t.datetime "updated_at",    :null => false
   end
 
-  add_index "user_logins", ["employee_id"], :name => "index_employee_logins_on_employee_id"
+  add_index "user_logins", ["user_id"], :name => "index_employee_logins_on_employee_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "",                :null => false
@@ -1103,11 +1108,6 @@ ActiveRecord::Schema.define(:version => 20130629064120) do
     t.string   "cellphone"
     t.text     "address"
     t.integer  "current_order_id"
-  end
-
-  create_table "users_roles", :id => false, :force => true do |t|
-    t.integer "user_id"
-    t.integer "role_id"
   end
 
   create_table "vendor_printers", :force => true do |t|
