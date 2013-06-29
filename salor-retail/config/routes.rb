@@ -1,32 +1,4 @@
 SalorRetail::Application.routes.draw do
-  resources :invoice_blurbs
-  resources :tender_methods
-  resources :reports
-  resources :transaction_tags
-  resources :buttons
-  resources :broken_items
-  resources :shipment_types
-  resources :discounts
-  resources :shippers
-  resources :shipments
-  resources :configurations
-  resources :customers
-  resources :cash_registers
-  resources :item_types
-  resources :tax_profiles
-  resources :users
-  resources :actions
-  resources :order_items
-  resources :orders
-  resources :items
-  resources :locations
-  resources :stock_locations
-  resources :categories
-  resources :vendors
-  resources :nodes
-  resources :countries
-  resources :invoice_notes
-  resources :sale_types
   
   match "users/signup" => "users#signup"
   match "users/clockin" => "users#clockin"
@@ -201,7 +173,34 @@ SalorRetail::Application.routes.draw do
   
   match 'nodes/receive' => 'nodes#receive'
 
-  
+  resources :invoice_blurbs
+  resources :tender_methods
+  resources :reports
+  resources :transaction_tags
+  resources :buttons
+  resources :broken_items
+  resources :shipment_types
+  resources :discounts
+  resources :shippers
+  resources :shipments
+  resources :configurations
+  resources :customers
+  resources :cash_registers
+  resources :item_types
+  resources :tax_profiles
+  resources :users
+  resources :actions
+  resources :order_items
+  resources :orders
+  resources :items
+  resources :locations
+  resources :stock_locations
+  resources :categories
+  resources :vendors
+  resources :nodes
+  resources :countries
+  resources :invoice_notes
+  resources :sale_types
 
 
   root :to => "orders#new"

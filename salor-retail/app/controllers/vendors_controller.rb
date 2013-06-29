@@ -20,11 +20,7 @@ class VendorsController < ApplicationController
   end
   
   def index
-    @vendors = @current_user.vendors(params[:page])
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @vendors }
-    end
+    @vendors = @current_company.vendors(params[:page])
   end
 
   def show
@@ -134,7 +130,7 @@ class VendorsController < ApplicationController
         @drawer_transaction.drawer_id = @current_user.get_drawer.id
       end
       if @drawer_transaction.save then
-        # @drawer_transaction.print if not $Register.salor_printer == true
+        # @drawer_transaction.print if not @current_register.salor_printer == true
         if @drawer_transaction.drop then
           @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount + @drawer_transaction.amount)
         elsif @drawer_transaction.payout then

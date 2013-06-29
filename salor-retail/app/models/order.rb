@@ -1346,7 +1346,7 @@ class Order < ActiveRecord::Base
   end
   
   def print
-    vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
+    vendor_printer = VendorPrinter.new :path => @current_register.thermal_printer
     print_engine = Escper::Printer.new('local', vendor_printer)
     print_engine.open
     

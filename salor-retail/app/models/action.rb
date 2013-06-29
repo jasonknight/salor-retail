@@ -11,9 +11,11 @@ class Action < ActiveRecord::Base
   include SalorScope
   include SalorBase
   include SalorModel
+  
   belongs_to :role
   belongs_to :vendor
   belongs_to :user
+  
   def value=(v)
     v = v.gsub(',','.') if v.class == String
     write_attribute(:value,v)

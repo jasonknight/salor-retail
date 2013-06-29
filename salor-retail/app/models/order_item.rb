@@ -177,7 +177,7 @@ class OrderItem < ActiveRecord::Base
         create_refund_payment_method(t,refund_payment_method) if not x.nil?
       end
 
-      # @current_user.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
+      # @current_user.vendor.open_cash_drawer unless @current_register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
      return true
     end
     return false

@@ -116,8 +116,8 @@ window.params = {
   window.User = {};  
   window.Drawer = {};
 <% end %>
-<% if $Register then %>
-  window.Register = <%= raw $Register.attributes.to_json %>;
+<% if @current_register then %>
+  window.Register = <%= raw @current_register.attributes.to_json %>;
 <% else %>
   window.Register = {};
 <% end %>

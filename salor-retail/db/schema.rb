@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130629092141) do
+ActiveRecord::Schema.define(:version => 20130629094924) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -154,6 +154,29 @@ ActiveRecord::Schema.define(:version => 20130629092141) do
   end
 
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
+
+  create_table "companies", :force => true do |t|
+    t.string   "name"
+    t.string   "identifier"
+    t.string   "mode"
+    t.string   "subdomain"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.boolean  "active",             :default => true
+    t.string   "email"
+    t.string   "auth_user"
+    t.string   "full_subdomain"
+    t.string   "full_url"
+    t.string   "virtualhost_filter"
+    t.integer  "auth_https_mode"
+    t.boolean  "https"
+    t.boolean  "auth"
+    t.string   "domain"
+    t.boolean  "removal_pending"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
 
   create_table "countries", :force => true do |t|
     t.string   "name"

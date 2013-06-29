@@ -173,12 +173,8 @@ class User < ActiveRecord::Base
   
   def get_drawer
     if self.uses_drawer_id then
-      return self.vendor.Drawer.find_by_id(self.uses_drawer_id)
+      return self.vendor.drawers.find_by_id(self.uses_drawer_id)
       return d if d
-    end
-    if self.drawer.nil? then
-      self.drawer = Drawer.new
-      self.drawer.save
     end
     return self.drawer
   end

@@ -32,14 +32,14 @@ class DrawerTransaction < ActiveRecord::Base
   end
 
   def print
-    if $Register.id
-      vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
+    if @current_register.id
+      vendor_printer = VendorPrinter.new :path => @current_register.thermal_printer
       text = self.escpos
       print_engine = Escper::Printer.new('local', vendor_printer)
       print_engine.open
       print_engine.print(0, text)
       print_engine.close
-      Receipt.create(:user_id => @User.id, :current_register_id => $Register.id, :content => text)
+      Receipt.create(:user_id => @User.id, :current_register_id => @current_register.id, :content => text)
     end
   end
   

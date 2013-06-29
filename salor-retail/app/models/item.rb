@@ -19,7 +19,8 @@ class Item < ActiveRecord::Base
   belongs_to :item_type
   belongs_to :item
   belongs_to :shipper
-  has_many :actions, :as => :user, :order => "weight asc"
+  
+  has_many :actions, :as => :model, :order => "weight asc"
   has_many :parts, :class_name => 'Item', :foreign_key => :part_id
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
   belongs_to :child, :class_name => 'Item'

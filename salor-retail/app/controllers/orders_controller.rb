@@ -595,8 +595,8 @@ class OrdersController < ApplicationController
     @to = @to ? @to.end_of_day : @from.end_of_day
     @receipts = @current_vendor.receipts.where(["created_at between ? and ?", @from, @to])
     if params[:print] == "true" and params[:current_register_id] then
-      $Register = @current_vendor.current_registers.find_by_id(params[:current_register_id].to_s)
-      vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
+      @current_register = @current_vendor.current_registers.find_by_id(params[:current_register_id].to_s)
+      vendor_printer = VendorPrinter.new :path => @current_register.thermal_printer
       print_engine = Escper::Printer.new('local', vendor_printer)
       print_engine.open
       

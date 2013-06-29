@@ -54,15 +54,15 @@ class CashRegister < ActiveRecord::Base
     # Update device paths of all Rails-printing CashRegisters AND the currently selected CashRegister, independent of being Rails or client side printing.
     devices_for_select = CashRegister.get_devicenodes
     #"[[TM T20,"/dev..."]"]"
-    if $Register then
-      $Register.set_device_paths_from_device_names(devices_for_select)
+    if @current_register then
+      @current_register.set_device_paths_from_device_names(devices_for_select)
     end
     #$Vendor.current_registers.visible.each do |cr|
-    #  next if cr.salor_printer == true and not cr == $Register
+    #  next if cr.salor_printer == true and not cr == @current_register
     #  cr.set_device_paths_from_device_names(devices_for_select)
-    #  if cr == $Register
+    #  if cr == @current_register
     #    cr.reload
-    #    $Register = cr
+    #    @current_register = cr
     #  end
     #end
   end

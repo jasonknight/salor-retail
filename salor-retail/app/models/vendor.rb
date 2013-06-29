@@ -6,16 +6,18 @@
 # See license.txt for the license applying to all files within this software.
 
 class Vendor < ActiveRecord::Base
- # {START}
+
   include SalorScope
   include SalorModel
+  
+  belongs_to :company
   
   has_many :item_types
   has_many :loyalty_cards
   has_many :payment_methods
   has_many :drawer_transactions
+  has_many :drawers
   
-  belongs_to :user
   has_many :cash_registers
   has_one  :salor_configuration
   has_many :orders
