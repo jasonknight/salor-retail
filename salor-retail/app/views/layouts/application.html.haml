@@ -17,7 +17,8 @@
 
     = javascript_include_tag 'application'
     = javascript_include_tag "locales/main.#{I18n.locale}.js",'underscore'
-    = render :partial => "shared/application_js"
+    - if @current_user
+      = render :partial => "shared/application_js"
     - if mobile?
       = javascript_include_tag 'mobile'
     - else
@@ -35,11 +36,9 @@
       = render :partial => "shared/cash_drop" if @current_user
       
       = yield
-      .close-window{ :onclick => "if (typeof Salor != 'undefined') { Salor.shutdown();} else { self.close();}" } X
       
       %span.version= SalorRetail::Application::VERSION
-        
-      %a.reload-window{ :href => '/orders/new' } R
+
     #simple_input_dialog{:title => "Salor Dialog", :class => "salor-dialog hidden"}
       %label{ :for => "input", :class => "input_label" }None
       %input{ :type=>"password", :name=>"input", :id=> "dialog_input", :class=>"text ui-widget-content ui-corner-all"}

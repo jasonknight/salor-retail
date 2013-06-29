@@ -218,19 +218,9 @@ class VendorsController < ApplicationController
   end
 
   def end_day
-    begin
-      @order = initialize_order if @current_user.order_id
-    rescue
-    end
-    if not GlobalErrors.any_fatal? then
-      @current_user.end_day
-      if @current_user.class == User then
-        @current_user.update_attribute :is_technician, false
-      end
-      session[:user_id] = nil
-      redirect_to :controller => :home, :action => :index
-      @current_user = nil
-    end
+    @current_user.end_day
+    session[:user_id] = session[:vendor_id] = session[:company_id] = nil
+    redirect_to home_index_path
   end
   
   
@@ -241,21 +231,26 @@ class VendorsController < ApplicationController
     render :nothing => true and return unless inst   
       
     if inst.class == Order
-      order = inst
+      @order = inst
     elsif inst.class == OrderItem
-      order = inst.order
+      @order = inst.order
     end
         
     # --- push notification to refresh the customer screen
     t = SalorRetail.tailor
-    if order and t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ order.id }/customer_display"
+    if @order and t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
     # ---
 
     value = SalorBase.string_to_float(params[:value])
-    inst.update_attribute(params[:field], value) if inst.respond_to?(params[:field])      
-    render :nothing => true and return
+    inst.update_attribute(params[:field], value) if inst.respond_to?(params[:field])
+    
+    if inst.class == OrderItem
+      render 'orders/update_pos_display'
+    else
+      render :nothing => true
+    end
   end
 
   def history

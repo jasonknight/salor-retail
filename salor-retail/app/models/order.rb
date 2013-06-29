@@ -154,8 +154,8 @@ class Order < ActiveRecord::Base
       self.update_attribute(:buy_order,true)
     end
     self.order_items.each do |oi|
-      oi.price = oi.discover_price(oi.item)
-      oi.calculate_total
+      oi.price = oi.discover_price
+      oi.calculate_totals
     end
   end
   def toggle_lock(type)
@@ -346,41 +346,25 @@ class Order < ActiveRecord::Base
 	  return 0 if ttl == 0.0
 	  return ttl - self.total
 	end
-	#
-	#def coupons
-	#  @cs ||= order_items.where(:behavior => 'coupon') #trying to speed things up a bit.
-	#  if not @cs.any? then
-	#    return []
-	#  end
-	#  return @cs 
-	#end
-	#
-	def remove_order_item(oi)
-	  if self.paid == 1 and not @current_user.is_technician? then
-	    GlobalErrors.append("system.errors.cannot_edit_completed_order")
-	    return
-	  end
-	  nl = []
-	  roi = nil
-	  order_items.each do |oo|
-	    if oo == oi
-	      # so we won't add it, but now we need to do some magic if it is a coupon
-        oo.update_attribute :hidden, 1
-	      if oi.behavior == 'coupon' then
-	        roi = self.order_items.joins(:item).readonly(false).where("items.sku = '#{oi.item.coupon_applies}'")
-	        if roi then
-	          roi = roi.first
-	          roi.update_attribute(:coupon_amount,0) if roi
-	          roi.update_attribute(:coupon_applied, false) if roi
-	        end
-	      end
-	    end
-	  end
-	  @cs = nil
-	  @gfs = nil
 
-	  return roi
-	end
+  
+  def remove_order_item(oi)
+    return if self.paid
+    
+    oi.hidden = true
+    oi.save
+    
+    if oi.behavior == 'coupon' then
+      roi = self.order_items.joins(:item).readonly(false).where("items.sku = '#{oi.item.coupon_applies}'")
+      if roi then
+        roi = roi.first
+        roi.update_attribute(:coupon_amount,0) if roi
+        roi.update_attribute(:coupon_applied, false) if roi
+      end
+    end
+  end
+  
+  
 	#
 	#def gift_cards
 	#  @gfs ||= order_items.where(:behavior => 'gift_card')

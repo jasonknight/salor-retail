@@ -153,32 +153,16 @@ class OrdersController < ApplicationController
 
 
   def delete_order_item
-    @order = initialize_order
+    oi = @current_vendor.order_items.find_by_id(params[:id])
+    @order = oi.order
+    @order.remove_order_item(oi)
     
     # --- push notification to refresh the customer screen
     t = SalorRetail.tailor
-    if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+    if t and @order
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
     # ---
-      
-
-    if not @current_user.can(:destroy_order_items) then
-      GlobalErrors.append("system.errors.no_role",@current_user)
-      @include_order_items = true
-      render :action => :update_pos_display and return
-    end
-
-    if OrderItem.exists?(params[:id].to_s)
-      @order_item = OrderItem.find(params[:id].to_s)
-      @roi = @order.remove_order_item(@order_item)
-
-      if @roi then
-        @roi.calculate_total
-        @roi.reload
-      end
-      @order.reload
-    end
   end
 
   def print_receipt
@@ -280,7 +264,7 @@ class OrdersController < ApplicationController
       payment_methods_total = 0.0
       payment_methods_seen = [] # In case they use the same internal type for two different payment_methods.
       
-      PaymentMethod.types_list.each do |pmt|
+      @current_vendor.payment_methods_types_list.each do |pmt|
         pt = pmt[1]
         next if payment_methods_seen.include? pt
         payment_methods_seen << pt

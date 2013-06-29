@@ -533,17 +533,17 @@ class OrderItem < ActiveRecord::Base
       return
     end
 
-    if item.behavior == 'gift_card' and item.activated then
-      self.price = item.amount_remaining
+    if self.item.behavior == 'gift_card' and self.item.activated then
+      self.price = self.item.amount_remaining
       self.save
       return
-    elsif item.behavior == 'coupon' then
-      self.price = item.base_price
+    elsif self.item.behavior == 'coupon' then
+      self.price = self.item.base_price
       self.save
       return
     end
 
-    self.price = item.base_price
+    self.price = self.item.base_price
     
     discounts = self.vendor.get_current_discounts
     discounts.each do |d|
