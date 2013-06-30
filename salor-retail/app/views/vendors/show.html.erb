@@ -138,9 +138,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_users) %>
-        <div class="widget master" onmousedown="window.location = '/users/index?vendor_id=<%= @vendor.id %>';">
+        <div class="widget master" onmousedown="window.location = '<%= users_path %>';">
           <div align="center">
-            <a href="/users/index?vendor_id=<%= @vendor.id %>">
+            <a href="<%= users_path %>">
               <%= salor_icon(:user,{},64) %>
               <br />
               <%= t("menu.users") %>

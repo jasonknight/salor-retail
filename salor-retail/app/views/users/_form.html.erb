@@ -2,9 +2,12 @@
   <tr>
     <td valign="top" align="center">
       <%= form_for(@user) do |f| %>
+        <div class="actions">
+          <%= f.submit %>
+        </div>
         <% if @user.errors.any? %>
           <div id="error_explanation">
-            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @user.errors.count,:model => t("activerecord.models.user.one"))%></h2>
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @user.errors.count,:model => t("activerecord.models.employee.one"))%></h2>
       
             <ul>
             <% @user.errors.full_messages.each do |msg| %>
@@ -16,6 +19,10 @@
       <table align="center" width="80%">
         <tr>
            <td valign="top">
+           
+              <div class="freefield"><%= f.label t("activerecord.attributes.username") %><br />
+              <%= f.text_field :username, :class => "keyboardable"%></div>
+              
               <div class="freefield"><%= f.label t("activerecord.attributes.first_name") %><br />
               <%= f.text_field :first_name, :class => "keyboardable"%></div>
       
@@ -23,16 +30,15 @@
               <%= f.text_field :last_name, :class => "keyboardable"%></div>
       
       
-              <div class="freefield"><%= f.label t("activerecord.attributes.username") %><br />
-              <%= f.text_field :username, :class => "keyboardable"%></div>
+
               
-              <div class="freefield"><%= f.label t("activerecord.attributes.user.hourly_rate") %><br />
+              <div class="freefield"><%= f.label t("activerecord.attributes.employee.hourly_rate") %><br />
               <%= f.text_field :hourly_rate, :class => "keyboardable"%></div>
               
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
               <div class="freefield"><%= f.label User.human_attribute_name :uses_drawer_id %><br />
-              <%= f.select :uses_drawer_id, @current_vendor.users.where("username != '#{@user.username}'").collect {|e| [e.username,e.drawer.id] }.unshift(["N/A",""]) %>
+              <%= f.collection_select :uses_drawer_id, @current_vendor.users.visible.where("username != '#{@user.username}'"), :id, :username, :include_blank => true %>
               
               </div>
             </td>
@@ -45,11 +51,8 @@
               <div class="freefield"><%= f.label t("activerecord.attributes.password") %><br />
               <%= f.text_field :password, :class => 'keyboardable' %></div>
               
-              
-              <%= f.hidden_field :user_id, :value => @user.id %>
-              
               <div class="freefield"><%= f.label t("activerecord.models.vendor.one") %><br />
-              <%= f.collection_select :vendor_id, Vendor.where(:user_id => $User.user_id),:id,:name%></div>
+
               
               <div class="freefield"><%= f.label t("activerecord.attributes.telephone") %><br />
               <%= f.text_field :telephone, :class => "keyboardable"%></div>
@@ -71,15 +74,13 @@
             </td>
           </tr>
       </table>
-      <div class="actions">
-          <%= f.submit %>
-        </div>
+
 
       <table valign="top" width="98%">
         <tr>
           <td colspan="2">
           <!--
-            API: <input type="text" name="user[apitoken]" class="text-input" value="<%= @user.apitoken.blank? ? @user.make_token : @user.apitoken  %>" /> -->
+            API: <input type="text" name="employee[apitoken]" class="text-input" value="<%= @user.apitoken.blank? ? @user.make_token : @user.apitoken  %>" /> -->
           </td>
         </tr>
         <tr>
@@ -109,7 +110,7 @@
             <br />
               <% for role in Role.order('name asc').all  %>
                 <div class="role-check" name="<%= role.name.titleize%>">
-                  <%= check_box_tag "user[role_ids][]", role.id, @user.role_ids.include?(role.id)  %>
+                  <%= check_box_tag "employee[role_ids][]", role.id, @user.role_ids.include?(role.id)  %>
                   <%= I18n.t(role.name) %>
                 </div>
               <% end %>

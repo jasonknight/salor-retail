@@ -101,55 +101,48 @@ class ApplicationController < ActionController::Base
   def loadup
     @current_user = User.find_by_id(session[:user_id])
     redirect_to home_index_path and return if @current_user.nil?
-
     @current_company = @current_user.company
-
     @current_vendor = @current_company.vendors.find_by_id(session[:vendor_id])
-
     Time.zone = @current_vendor.time_zone if @current_vendor
-
     @current_register = CashRegister.find_by_id(session[:cash_register_id])
-
     I18n.locale = @current_user.language
-
-    $Notice = ""
     return @current_user
   end
   
-    def set_tailor
-      return unless @current_vendor and SalorRetail::Application::CONFIGURATION[:tailor] and SalorRetail::Application::CONFIGURATION[:tailor] == true
-    
-      t = SalorRetail.tailor
-      if t
-        #logger.info "[TAILOR] Checking if socket #{ t.inspect } is healthy"
-        begin
-          t.puts "PING|#{ @current_vendor.hash_id }|#{ Process.pid }"
-        rescue Errno::EPIPE
-          logger.info "[TAILOR] Error: Broken pipe for #{ t.inspect } #{ t }"
-          SalorRetail.old_tailors << t
-          t = nil
-        rescue Errno::ECONNRESET
-          logger.info "[TAILOR] Error: Connection reset by peer for #{ t.inspect } #{ t }"
-          SalorRetail.old_tailors << t
-          t = nil
-        rescue Exception => e
-          logger.info "[TAILOR] Other Error: #{ e.inspect } for #{ t.inspect } #{ t }"
-          SalorRetail.old_tailors << t
-          t = nil
-        end
-      end
-      
-      if t.nil?
-        begin
-          t = TCPSocket.new 'localhost', 2001
-          logger.info "[TAILOR] Info: New TCPSocket #{ t.inspect } #{ t } created"
-        rescue Errno::ECONNREFUSED
-          t = nil
-          logger.info "[TAILOR] Warning: Connection refused. No tailor.rb server running?"
-        end
-        SalorRetail.tailor = t
+  def set_tailor
+    return unless @current_vendor and SalorRetail::Application::CONFIGURATION[:tailor] and SalorRetail::Application::CONFIGURATION[:tailor] == true
+  
+    t = SalorRetail.tailor
+    if t
+      #logger.info "[TAILOR] Checking if socket #{ t.inspect } is healthy"
+      begin
+        t.puts "PING|#{ @current_vendor.hash_id }|#{ Process.pid }"
+      rescue Errno::EPIPE
+        logger.info "[TAILOR] Error: Broken pipe for #{ t.inspect } #{ t }"
+        SalorRetail.old_tailors << t
+        t = nil
+      rescue Errno::ECONNRESET
+        logger.info "[TAILOR] Error: Connection reset by peer for #{ t.inspect } #{ t }"
+        SalorRetail.old_tailors << t
+        t = nil
+      rescue Exception => e
+        logger.info "[TAILOR] Other Error: #{ e.inspect } for #{ t.inspect } #{ t }"
+        SalorRetail.old_tailors << t
+        t = nil
       end
     end
+    
+    if t.nil?
+      begin
+        t = TCPSocket.new 'localhost', 2001
+        logger.info "[TAILOR] Info: New TCPSocket #{ t.inspect } #{ t } created"
+      rescue Errno::ECONNREFUSED
+        t = nil
+        logger.info "[TAILOR] Warning: Connection refused. No tailor.rb server running?"
+      end
+      SalorRetail.tailor = t
+    end
+  end
 
   protected
 
@@ -166,7 +159,6 @@ class ApplicationController < ActionController::Base
     render :template => '/errors/error', :layout => 'customer_display'
   end
   
-
   def check_role
     if not role_check(params) then 
       redirect_to(role_check_failed) and return

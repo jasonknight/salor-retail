@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130630042823) do
+ActiveRecord::Schema.define(:version => 20130630143008) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -100,11 +100,9 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.integer  "vendor_id"
     t.string   "scale"
     t.boolean  "hidden"
-    t.boolean  "paylife",               :default => false
-    t.string   "bank_machine_path"
     t.string   "cash_drawer_path"
-    t.boolean  "big_buttons",           :default => false
-    t.boolean  "hide_discounts",        :default => false
+    t.boolean  "big_buttons"
+    t.boolean  "hide_discounts"
     t.boolean  "no_print"
     t.string   "thermal_printer",       :default => "/dev/usb/lp0"
     t.string   "sticker_printer",       :default => "/dev/usb/lp1"
@@ -140,8 +138,6 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.datetime "updated_at"
     t.float    "quantity_sold",   :default => 0.0
     t.float    "cash_made"
-    t.boolean  "eod_show",        :default => false
-    t.string   "tag"
     t.boolean  "button_category"
     t.integer  "position"
     t.string   "color"
@@ -286,7 +282,7 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.text     "notes"
     t.boolean  "is_refund"
     t.string   "tag"
-    t.float    "drawer_amount",    :default => 0.0
+    t.float    "drawer_amount"
     t.integer  "cash_register_id"
     t.integer  "order_id"
     t.integer  "order_item_id"
@@ -308,23 +304,6 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "vendor_id"
-    t.integer  "company_id"
-    t.integer  "user_id"
-  end
-
-  create_table "errors", :force => true do |t|
-    t.text     "msg"
-    t.integer  "vendor_id"
-    t.string   "applies_to_type"
-    t.integer  "applies_to_id"
-    t.boolean  "seen",            :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "url"
-    t.string   "referer"
-    t.boolean  "hidden"
-    t.integer  "hidden_by"
-    t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
   end
@@ -520,7 +499,7 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.float    "packaging_unit",        :default => 1.0
     t.boolean  "ignore_qty"
     t.integer  "child_id",              :default => 0
-    t.boolean  "must_change_price",     :default => false
+    t.boolean  "must_change_price"
     t.boolean  "hidden_by_distiller"
     t.boolean  "track_expiry"
     t.string   "customs_code"
@@ -1003,13 +982,17 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.float    "amount_due"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.integer  "company_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
   end
 
   add_index "user_logins", ["user_id"], :name => "index_employee_logins_on_employee_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                 :default => "",                :null => false
-    t.string   "encrypted_password",     :limit => 128, :default => "",                :null => false
+    t.string   "email",                                 :default => "", :null => false
+    t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -1018,7 +1001,6 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "username"
@@ -1027,12 +1009,12 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.string   "last_name"
     t.string   "language"
     t.string   "theme"
-    t.boolean  "js_keyboard",                           :default => false
-    t.integer  "hidden"
+    t.boolean  "js_keyboard"
+    t.boolean  "hidden"
     t.string   "apitoken"
     t.integer  "uses_drawer_id"
     t.integer  "auth_code"
-    t.string   "last_path",                             :default => "/cash_registers"
+    t.string   "last_path"
     t.string   "role_cache"
     t.float    "hourly_rate"
     t.string   "telephone"
@@ -1040,6 +1022,8 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.text     "address"
     t.integer  "current_order_id"
     t.integer  "company_id"
+    t.datetime "hidden_at"
+    t.integer  "hidden_by"
   end
 
   create_table "vendor_printers", :force => true do |t|
@@ -1075,7 +1059,7 @@ ActiveRecord::Schema.define(:version => 20130630042823) do
     t.binary   "logo_image"
     t.binary   "logo_invoice_image"
     t.binary   "logo_invoice_image_content_type"
-    t.boolean  "multi_currency",                  :default => false
+    t.boolean  "multi_currency"
     t.string   "sku"
     t.string   "token"
     t.string   "email"

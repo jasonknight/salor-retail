@@ -1,6 +1,7 @@
 class UserLogin < ActiveRecord::Base
   belongs_to :user
   belongs_to :vendor
+  belongs_to :company
   before_save :set_totals
   before_update :set_totals
   attr_accessible :amount_due, :hourly_rate, :login, :logout, :shift_seconds, :user_id,:vendor_id

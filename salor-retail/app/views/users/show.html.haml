@@ -3,12 +3,12 @@
 = stylesheet_link_tag 'invoice_default_print', :media => 'print'
 =javascript_include_tag 'timepicker'
 
-= raw content_box_top(t("views.orders"))
+= raw content_box_top(t("views.users"))
 
 .tools
   %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
   %br
-  = form_tag "/users/#{@user.id}", :method => :get do
+  = form_tag "/employees/#{@user.id}", :method => :get do
     = label 'from', t('orders.report_day.from')
     = select_date(@from, :prefix => 'from')
     %br
@@ -24,9 +24,9 @@
 .clear
 
 .paper-invoice.invoice_print
-  =render "user_details"
-  =render "user_time_sheet"
-  =render "user_drawer_transactions"
+  = render :partial => "details"
+  = render :partial => "time_sheet"
+  = render :partial => "drawer_transactions"
   
   .center
     %img.salorlogo{ :src => '/images/salor-logo-reports.png'}

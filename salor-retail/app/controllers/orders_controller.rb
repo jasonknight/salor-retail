@@ -108,7 +108,7 @@ class OrdersController < ApplicationController
       @current_order.company = @current_company
       @current_order.user = @current_user
       @current_order.cash_register = @current_register
-      @current_order.drawer = @currrent_user.get_drawer
+      @current_order.drawer = @current_user.get_drawer
       @current_order.save
       @current_user.current_order_id = @current_order.id
       @current_user.save
@@ -470,10 +470,9 @@ class OrdersController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
-    @vendor = GlobalData.vendor
-    @users = @vendor.users.where(:hidden => 0)
-    @user = User.scopied.find_by_id(params[:user_id])
-    @report = UserUserMethods.get_end_of_day_report(@from,@to,@user)
+    @users = @current_vendor.users.visible
+    @user = @current_vendor.users.visible.find_by_id(params[:user_id])
+    @report = @current_vendor.get_end_of_day_report(@from, @to, @user)
   end
 
   def report_day_range

@@ -46,7 +46,7 @@
   %div.clear
 
   %div
-    %h2== #{ t '.title' } #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @vendor.name }<br />#{ @user.name_with_username if @user }
+    %h2== #{ t '.title' } #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @current_vendor.name }<br />#{ @user.name_with_username if @user }
 
     %p== #{ t '.count_orders' }: #{ orders_count }
 

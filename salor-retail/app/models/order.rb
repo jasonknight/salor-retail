@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 
 class Order < ActiveRecord::Base
- # {START}
+
 	include SalorScope
   include SalorBase
 
@@ -53,63 +53,48 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.percent_off'),'percent'],
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
-  def as_csv
-    return attributes
-  end
+  
+#   def as_csv
+#     return attributes
+#   end
+  
   def amount_paid
     self.payment_methods.sum(:amount)
   end
+  
   def nonrefunded_item_count
-    self.order_items.visible.where(:refunded => false).count
+    self.order_items.visible.where(:refunded => nil).count
   end
 
-  def has_cute_credit_message?
-    config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
-    conn = Mysql2::Client.new(config)
-    sql = "SELECT count(*) as num FROM cute_credit.cute_credit_messages where ref_id = '#{self.id}'"
-    cnt = conn.query(sql).first
-    if cnt then
-      num = cnt["num"]
-    else
-      num = 0
-    end
-    if num > 0 then
-      return true
-    else
-      return false
-    end
-  end
-  def cute_credit_message
-    config = ActiveRecord::Base.configurations[Rails.env].symbolize_keys
-    conn = Mysql2::Client.new(config)
-    sql = "SELECT * FROM cute_credit.cute_credit_messages where ref_id = '#{self.id}'"
-    rec = conn.query(sql).first
-    return rec
-  end
-  def add_payment_methods(params)
-    if params[:payment_methods] then
-      npms = []
-      params[:payment_methods].each do |pm|
-        m = PaymentMethod.new(pm)
-        m.order_id = self.id
-        if m.save then
-          self.payment_methods << m
-        end
-      end
-    end
-  end
-  def remove_payment_method(id)
-    pm = self.payment_methods.find_by_id(id)
-    if pm then
-      pm.destroy
-      self.payment_methods.reload
-    end
-  end
+
+  
+#   def add_payment_methods(params)
+#     if params[:payment_methods] then
+#       npms = []
+#       params[:payment_methods].each do |pm|
+#         m = PaymentMethod.new(pm)
+#         m.order_id = self.id
+#         if m.save then
+#           self.payment_methods << m
+#         end
+#       end
+#     end
+#   end
+  
+#   def remove_payment_method(id)
+#     pm = self.payment_methods.find_by_id(id)
+#     if pm then
+#       pm.destroy
+#       self.payment_methods.reload
+#     end
+#   end
+  
   def loyalty_card
     if self.customer
       return self.customer.loyalty_card
     end
   end
+  
   def rebate_type_display
     REBATE_TYPES.each do |rt|
       return rt[0] if rt[1] == self.rebate_type
@@ -118,36 +103,42 @@ class Order < ActiveRecord::Base
   end
 
   
-  def total=(p)
-    return if self.paid == 1
-    p = self.string_to_float(p)
-    p = p * -1 if self.buy_order == true and p > 0
-    write_attribute(:total,p) 
-  end
-  def front_end_change=(p)
-    if self.paid == 1 then
-      return
-    end
-    write_attribute(:front_end_change,self.string_to_float(p)) 
-  end
-  def rebate=(p)
-    return if self.paid == 1
-    write_attribute(:rebate,self.string_to_float(p)) 
-  end
-  def subtotal=(p)
-    return if self.paid == 1
-    write_attribute(:subtotal,self.string_to_float(p)) 
-  end
-  def tax=(p)
-    return if self.paid == 1
-    write_attribute(:tax,self.string_to_float(p)) 
-  end
+#   def total=(p)
+#     return if self.paid == 1
+#     p = self.string_to_float(p)
+#     p = p * -1 if self.buy_order == true and p > 0
+#     write_attribute(:total,p) 
+#   end
+  
+#   def front_end_change=(p)
+#     if self.paid then
+#       return
+#     end
+#     write_attribute(:front_end_change,self.string_to_float(p)) 
+#   end
+  
+#   def rebate=(p)
+#     return if self.paid
+#     write_attribute(:rebate,self.string_to_float(p)) 
+#   end
+  
+#   def subtotal=(p)
+#     return if self.paid
+#     write_attribute(:subtotal,self.string_to_float(p)) 
+#   end
+  
+#   def tax=(p)
+#     return if self.paid
+#     write_attribute(:tax,self.string_to_float(p)) 
+#   end
+  
   def toggle_buy_order=(x)
-    return if self.paid == 1
+    return if self.paid
     toggle_buy_order(x)
   end
+  
   def toggle_buy_order(x)
-    return if self.paid == 1
+    return if self.paid
     if self.buy_order then
       self.update_attribute(:buy_order, false)
     else
@@ -158,29 +149,28 @@ class Order < ActiveRecord::Base
       oi.calculate_totals
     end
   end
-  def toggle_lock(type)
-    if type == 'total' then
-      self.update_attribute(:total_is_locked,!self.total_is_locked)
-    elsif type == 'subtotal' then
-      self.update_attribute(:subtotal_is_locked,!self.subtotal_is_locked)
-    elsif type == 'tax' then
-      self.update_attribute(:tax_is_locked,!self.tax_is_locked)
-    end
-  end
-  #
-  def toggle_tax_free(x)
-    self.update_attribute(:tax_free, !self.tax_free)
-  end
-  #
-  def toggle_is_proforma(x)
-    self.update_attribute(:is_proforma, !self.is_proforma)
-  end
-  #
-  def get_user
-    return self.user if self.user
-    return self.user if self.user  
-  end
-  # This function is mainly used by the api
+  
+#   def toggle_lock(type)
+#     if type == 'total' then
+#       self.update_attribute(:total_is_locked,!self.total_is_locked)
+#     elsif type == 'subtotal' then
+#       self.update_attribute(:subtotal_is_locked,!self.subtotal_is_locked)
+#     elsif type == 'tax' then
+#       self.update_attribute(:tax_is_locked,!self.tax_is_locked)
+#     end
+#   end
+
+#   def toggle_tax_free(x)
+#     self.update_attribute(:tax_free, !self.tax_free)
+#   end
+# 
+#   def toggle_is_proforma(x)
+#     self.update_attribute(:is_proforma, !self.is_proforma)
+#   end
+
+  
+  
+  
   def skus=(list)
     list.each do |s|
       if s.class == Array then
@@ -327,25 +317,6 @@ class Order < ActiveRecord::Base
     i.save
     return i
   end
-  
-  
-  #
-	def change_given
-	  ttl = 0.0
-    collection = PaymentMethod.where({:order_id => self.id}).where("internal_type != 'Change' AND internal_type NOT LIKE '%Refund'")
-    #collection = self.payment_methods.where("internal_type != 'Change' AND internal_type NOT LIKE '%Refund'")
-    #raise collection.inspect
-    seen = []
-    collection.each do |pm|
-      if seen.include? pm.internal_type then
-        next
-      end
-      seen << pm.internal_type
-      ttl += pm.amount.to_f
-    end
-	  return 0 if ttl == 0.0
-	  return ttl - self.total
-	end
 
   
   def remove_order_item(oi)
@@ -409,36 +380,35 @@ class Order < ActiveRecord::Base
     taxttl.nil? ? self.tax = 0 : self.tax = taxttl.to_f.round(2)
     taxttl
   end
-  #
+
   def gross
-    refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total).round(2)
-    if self.vendor.calculate_tax then
-      taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax).round(2)
-      if self.tax_free then
-        taxttl = 0
-      end
-      nval = self.subtotal.to_i + taxttl - refunded_ttl
-      return nval.round(2)
-    else
-      nval = self.subtotal.to_i - refunded_ttl
-      return nval.round(2)
-    end
+    return self.total
+    
+    # Mikey: the following should go into calculate totals and cached on the model
+#     refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total).round(2)
+#     if self.vendor.calculate_tax then
+#       taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax).round(2)
+#       if self.tax_free then
+#         taxttl = 0
+#       end
+#       nval = self.subtotal.to_i + taxttl - refunded_ttl
+#       return nval.round(2)
+#     else
+#       nval = self.subtotal.to_i - refunded_ttl
+#       return nval.round(2)
+#     end
   end
-  #
+
   def calculate_rebate
     amnt = 0.0
     if self.subtotal.nil? then 
         self.subtotal = 0 
     end
     self.order_items.visible.each do |oi|
-      puts "!! Oi.total is #{oi.total}"
       amnt += (oi.total * (self.rebate/100))
     end
-    #amnt = (self.subtotal * (self.rebate/100)) #if self.rebate_type == 'percent'
-    #amnt = self.rebate if self.rebate_type == 'fixed'
     return amnt
   end
-
   
 
   def complete
@@ -452,9 +422,7 @@ class Order < ActiveRecord::Base
     h.changes_made = "Beginning complete order"
     h.save
 
-    
-    
-    self.paid = 1
+    self.paid = true
     self.created_at = Time.now
     self.drawer = self.user.get_drawer
     
@@ -507,43 +475,47 @@ class Order < ActiveRecord::Base
     self.save
   end
   
-  def activate_gift_cards
-    log_action "Activating giftcards"
-    self.gift_cards.each do |gc|
-      if gc.item.activated then
-        log_action "GC Already Activated, updating"
-        gc.item.amount_remaining -= gc.price
-        gc.item.amount_remaining = 0 if gc.item.amount_remaining < 0
-        gc.item.save
-        log_action "gc_saved"
-      else
-        log_action "Updating GC to Activated"
-        gc.item.update_attribute(:activated,true)
-        gc.item.update_attribute(:amount_remaining, gc.item.base_price)
-      end
-    end
-  end
+#   def activate_gift_cards
+#     log_action "Activating giftcards"
+#     self.gift_cards.each do |gc|
+#       if gc.item.activated then
+#         log_action "GC Already Activated, updating"
+#         gc.item.amount_remaining -= gc.price
+#         gc.item.amount_remaining = 0 if gc.item.amount_remaining < 0
+#         gc.item.save
+#         log_action "gc_saved"
+#       else
+#         log_action "Updating GC to Activated"
+#         gc.item.update_attribute(:activated,true)
+#         gc.item.update_attribute(:amount_remaining, gc.item.base_price)
+#       end
+#     end
+#   end
+  
   def get_drawer_add
     if self.is_quote or self.unpaid_invoice then
-      log_action "Returning 0 because it's a quote #{self.is_quote} or unpaid invoice #{self.unpaid_invoice}"
       return 0 
-    end
-    return self.payment_methods.reload.where(:internal_type => 'InCash').sum(:amount) if self.is_proforma == true
     
-    ottl = self.total
-    self.payment_methods.reload.each do |pm|
-      next if pm.internal_type == 'InCash'
-      ottl -= pm.amount
+    elsif self.is_proforma == true
+      return self.payment_methods.where(:internal_type => 'InCash').sum(:amount) 
+    
+    else
+      ottl = self.total
+      self.payment_methods.each do |pm|
+        next if pm.internal_type == 'InCash'
+        ottl -= pm.amount
+      end
+      return ottl
     end
-    #puts "get_drawer_add returning #{ottl}"
-    return ottl
   end
-  def get_in_cash_amount
-    pm = self.payment_methods.where(:internal_type => 'InCash').first
-    return pm.amount if pm
-    return 0
-  end
-  def activate_gift_card(id,amount)
+  
+#   def get_in_cash_amount
+#     pm = self.payment_methods.where(:internal_type => 'InCash').first
+#     return pm.amount if pm
+#     return 0
+#   end
+  
+  def activate_gift_card(id, amount)
     log_action "## Activating Gift Card"
     amount = string_to_float(amount)
     if id.class == OrderItem then
@@ -587,7 +559,6 @@ class Order < ActiveRecord::Base
       dt.amount *= -1
     end
     dt.save
-    
     if dt.payout == true then
       drawer.amount -= dt.amount
     elsif dt.drop == true then
@@ -609,41 +580,7 @@ class Order < ActiveRecord::Base
     log_action "Created payment method: #{pm.inspect}"
     return pm
   end
-
-  def toggle_refund(x, refund_payment_method)
-    log_action "toggle_refund called"
-    if not @current_user.get_drawer.amount >= self.total then
-      log_action "Not enough in drawer"
-      GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
-      return
-    end
-    if self.refunded then
-      # this is disabled in the view currently
-      #self.update_attribute(:refunded, false)
-      #create_drawer_transaction(self.total,:drop)
-    else
-      if (@current_user.get_drawer.amount - self.total) < 0 then
-        log_action "drawer amount - total < 0"
-      end
-
-      self.update_attribute(:refunded, true)
-      self.update_attribute(:refunded_by, @current_user.id)
-      self.update_attribute(:refunded_by_type, @current_user.class.to_s)
-      if refund_payment_method == 'InCash'
-        opts = {:tag => 'OrderRefund',:is_refund => true,:amount => self.total, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}
-        create_drawer_transaction(self.total, :payout, opts)
-        log_action "InCash refund created"
-      else
-        create_refund_payment_method(self.total, refund_payment_method)
-        log_action "created dt for payment method #{payment_method}"
-      end
-      self.order_items.visible.each do |oi|
-        if not oi.refunded == true then
-          oi.toggle_refund(nil, refund_payment_method)
-        end
-      end  
-    end
-  end
+  
   def refund_total
     t = 0
     self.order_items.where("refunded = 1").each do |oi|
@@ -681,58 +618,50 @@ class Order < ActiveRecord::Base
     end
     attrs.to_json
   end
-  def order_items_as_array
-    items = []
-    self.order_items.visible.each do |oi|
-      items << oi.to_json
-    end
-    return items
-  end
-  # I moved this stuff here to clean up the views and
-  # to make it easier to fix as there were some errors.
-  def payment_method_sums
-    sums = Hash.new
-    self.payment_methods.each do |pm|
-      s = pm.internal_type.to_sym
-      next if s.nil?
-      sums[s] = 0 if sums[s].nil?
-      pm.amount = 0 if pm.amount.nil?
-      sums[s] += pm.amount
-    end
-    log_action "payment_method_sums #{sums.inspect}"
-    return sums
-  end
-
-  def payment_display
-    if self.payment_methods.length > 1 then
-      return ["Mix",self.total]
-    else
-      pm = self.payment_methods.first
-      return ['Unk',0] if pm.nil?
-      return [pm.internal_type,self.total]
-    end
-  end
-  def get_user
-    return self.user if self.user
-    return self.user if self.user
-    if AppConfig.standalone then
-      return User.first
-    end
-    raise "Cannot return User on this order."
-  end
   
-  def paylife_blurb
-    
-  end
-  def to_list_of_items_raw(array)
-    ret = {}
-    i = 0
-    [:letter,:name,:price,:quantity,:total,:type].each do |k|
-      ret[k] = array[i]
-      i += 1
-    end
-    return ret
-  end
+#   def order_items_as_array
+#     items = []
+#     self.order_items.visible.each do |oi|
+#       items << oi.to_json
+#     end
+#     return items
+#   end
+
+#   def payment_method_sums
+#     sums = Hash.new
+#     self.payment_methods.each do |pm|
+#       s = pm.internal_type.to_sym
+#       next if s.nil?
+#       sums[s] = 0 if sums[s].nil?
+#       pm.amount = 0 if pm.amount.nil?
+#       sums[s] += pm.amount
+#     end
+#     log_action "payment_method_sums #{sums.inspect}"
+#     return sums
+#   end
+
+#   def payment_display
+#     if self.payment_methods.length > 1 then
+#       return ["Mix",self.total]
+#     else
+#       pm = self.payment_methods.first
+#       return ['Unk',0] if pm.nil?
+#       return [pm.internal_type,self.total]
+#     end
+#   end
+  
+
+  
+
+#   def to_list_of_items_raw(array)
+#     ret = {}
+#     i = 0
+#     [:letter,:name,:price,:quantity,:total,:type].each do |k|
+#       ret[k] = array[i]
+#       i += 1
+#     end
+#     return ret
+#   end
   
   
   def get_report
@@ -1061,45 +990,21 @@ class Order < ActiveRecord::Base
     return report
   end
   
-  # new methods from test
+ 
   
-  def self.generate
-    if @current_user.order_id then
-      # #puts "OrderId found"
-      o = Order.find(@current_user.order_id)
-      if o and (not o.paid and not o.order_items.any?) then
-        # We already have an empty order.
-        return o
-      end
-    end
-    o = Order.new(:tax => 0.0, :subtotal => 0.0, :total => 0.0)
-    if o.save then
-      # #puts "Updating :order_id"
-    else
-      # #puts o.errors.inspect
-    end
-    @current_user.update_attribute :order_id, o.id
-    return o
-  end
-  def belongs_to_current_user?
-    if not self.get_user == @current_user then
-      return false
-    end
-    return true
-  end
-  def inspectify
-    txt = "Order[#{self.id}]"
-    [:total,:subtotal,:tax,:gross].each do |f|
-       txt += " #{f}=#{self.send(f)}"
-    end
-    self.order_items.each do |oi|
-      txt += "\n\tOrderItem[#{oi.id}]"
-      [:quantity,:price,:total,:amount_remaining,:activated].each do |f|
-        txt += " #{f}=#{oi.send(f)}"
-      end
-    end
-    return txt
-  end
+#   def inspectify
+#     txt = "Order[#{self.id}]"
+#     [:total,:subtotal,:tax,:gross].each do |f|
+#        txt += " #{f}=#{self.send(f)}"
+#     end
+#     self.order_items.each do |oi|
+#       txt += "\n\tOrderItem[#{oi.id}]"
+#       [:quantity,:price,:total,:amount_remaining,:activated].each do |f|
+#         txt += " #{f}=#{oi.send(f)}"
+#       end
+#     end
+#     return txt
+#   end
   
   
   def escpos_receipt(report)
@@ -1268,26 +1173,27 @@ class Order < ActiveRecord::Base
     print_engine.close
     Receipt.create(:user_id => self.user_id, :current_register_id => self.current_register_id, :content => contents[:text], :order_id => self.id)
   end
-  def sanity_check
-    if self.paid == 1 then
-      pms = self.payment_methods.collect { |pm| pm.internal_type}
-      if pms.include? "InCash" and not pms.include? "Change" and self.change_given > 0 then
-        puts "Order is missing Change Payment Method"
-        PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
-        self.payment_methods.reload
-      end
-      pms_seen = []
-      self.payment_methods.each do |pm|
-        if pms_seen.include? pm.internal_type then
-          puts "Deleting pm..."
-          pm.delete
-        else
-          pms_seen << pm.internal_type
-        end
-      end
-      self.payment_methods.reload
-    end
-  end
+  
+#   def sanity_check
+#     if self.paid then
+#       pms = self.payment_methods.collect { |pm| pm.internal_type}
+#       if pms.include? "InCash" and not pms.include? "Change" and self.change_given > 0 then
+#         puts "Order is missing Change Payment Method"
+#         PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
+#         self.payment_methods.reload
+#       end
+#       pms_seen = []
+#       self.payment_methods.each do |pm|
+#         if pms_seen.include? pm.internal_type then
+#           puts "Deleting pm..."
+#           pm.delete
+#         else
+#           pms_seen << pm.internal_type
+#         end
+#       end
+#       self.payment_methods.reload
+#     end
+#   end
   
   def check
     messages = []
@@ -1310,9 +1216,7 @@ class Order < ActiveRecord::Base
     tests = []
     
     orders.each do |o|
-      if o.paid
-        tests[1] = o.payment_methods.sum(:amount).round(2) == o.total.round(2)
-      end
+      messages << o.check
     
       0.upto(tests.size-1).each do |i|
         if tests[i] == false
@@ -1326,41 +1230,41 @@ class Order < ActiveRecord::Base
   end
 
   # Mikey: not sure what this does, seems like fixing unsound orders. i think it would be better to fix the core logic instead of adding more and more sanity checks on top.
-  def run_new_sanitization
-    unsound = false
-    if params[:pm_id] then
-      pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
-      any = @order.payment_methods.find_by_internal_type('Unpaid')
-      if any and params[:pm_name] and not ['Unpaid','Change'].include? params[:pm_name] then
-        # it should not allow doubles of this type
-        if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
-          npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
-          @order.payment_methods << npm
-          pm = npm
-          @order.save
-        end
-      end # end handling new pms by name
-      
-      if not pm.internal_type == 'Unpaid' then
-        pm.update_attribute :amount, params[:pm_amount]
-        diff = any.amount - pm.amount
-        if diff == 0 then
-          any.destroy
-          @order.update_attribute :unpaid_invoice, false
-        elsif diff < 0 then
-          raise "Cannot pay more than is due"
-        else
-          any.update_attribute :amount, diff
-        end
-      else
-        raise "Cannot because unsound"
-      end
-    end
-    @current_user = @order.user
-    if not @order.user then
-      @order.user = User.where(:vendor_id => @order.vendor_id).last
-      @order.save
-      @current_user = @order.user
-    end
-  end
+#   def run_new_sanitization
+#     unsound = false
+#     if params[:pm_id] then
+#       pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
+#       any = @order.payment_methods.find_by_internal_type('Unpaid')
+#       if any and params[:pm_name] and not ['Unpaid','Change'].include? params[:pm_name] then
+#         # it should not allow doubles of this type
+#         if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
+#           npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
+#           @order.payment_methods << npm
+#           pm = npm
+#           @order.save
+#         end
+#       end # end handling new pms by name
+#       
+#       if not pm.internal_type == 'Unpaid' then
+#         pm.update_attribute :amount, params[:pm_amount]
+#         diff = any.amount - pm.amount
+#         if diff == 0 then
+#           any.destroy
+#           @order.update_attribute :unpaid_invoice, false
+#         elsif diff < 0 then
+#           raise "Cannot pay more than is due"
+#         else
+#           any.update_attribute :amount, diff
+#         end
+#       else
+#         raise "Cannot because unsound"
+#       end
+#     end
+#     @current_user = @order.user
+#     if not @order.user then
+#       @order.user = User.where(:vendor_id => @order.vendor_id).last
+#       @order.save
+#       @current_user = @order.user
+#     end
+#   end
 end

@@ -217,5 +217,207 @@ class Vendor < ActiveRecord::Base
     end
     return "Done"
   end
-  # {END}
+  
+  def get_end_of_day_report(from, to, user)
+    categories = self.categories.visible
+    taxes = self.tax_profiles.visible
+    if user
+      orders = self.orders.visible.where(
+        :drawer_id => user.get_drawer.id,
+        :created_at => from.beginning_of_day..to.end_of_day,
+        :paid => true,
+        :unpaid_invoice => nil, #migration!
+        :is_quote => nil #migration!
+      ).order("created_at ASC")
+      drawertransactions = self.drawer_transactions.visible.where(
+        :drawer_id => user.get_drawer.id,
+        :created_at => from.beginning_of_day..to.end_of_day
+      ).where("tag != 'CompleteOrder'")
+    else
+      orders = self.orders.visible.where(
+        :created_at => from.beginning_of_day..to.end_of_day,
+        :paid => true,
+        :unpaid_invoice => nil, #migration!
+        :is_quote => nil #migration!
+      ).order("created_at ASC")
+      drawertransactions = self.drawer_transactions.where(
+        :created_at => from.beginning_of_day..to.end_of_day
+      ).where("tag != 'CompleteOrder'")
+    end
+    
+    regular_payment_methods = self.payment_methods_types_list.collect{|pm| pm[1].to_s }
+
+    categories = {:pos => {}, :neg => {}}
+    taxes = {:pos => {}, :neg => {}}
+    paymentmethods = {:pos => {}, :neg => {}, :refund => {}}
+    refunds = { :cash => { :gro => 0, :net => 0 }, :noncash => { :gro => 0, :net => 0 }}
+
+    orders.each do |o|
+      o.payment_methods.each do |p|
+        ptype = p.internal_type.to_sym
+        if not regular_payment_methods.include?(p.internal_type)
+          if not paymentmethods[:refund].has_key?(ptype)
+            paymentmethods[:refund][ptype] = p.amount
+          else
+            paymentmethods[:refund][ptype] += p.amount
+          end
+        #elsif p.internal_type == 'InCash'
+          #ignore those. cash will be calculated as difference between category sum and other normal payment methods
+        else
+          if p.amount > 0
+            if not paymentmethods[:pos].has_key?(ptype)
+              paymentmethods[:pos][ptype] = p.amount
+            else
+              paymentmethods[:pos][ptype] += p.amount
+            end
+          end
+          if p.amount < 0
+            if not paymentmethods[:neg].has_key?(ptype)
+              paymentmethods[:neg][ptype] = p.amount
+            else
+              paymentmethods[:neg][ptype] += p.amount
+            end
+          end
+        end
+      end # end o.payment_methods
+
+      next if o.is_proforma == true # for an explanation see issue #1399
+      
+      o.order_items.visible.each do |oi|
+        next if oi.sku == 'DMYACONTO'
+        catname = oi.category ? oi.category.name : ''
+        taxname = oi.tax_profile.name if oi.tax_profile
+        taxname = OrderItem.human_attribute_name(:tax_free) if oi.order.tax_free
+        item_price = case oi.behavior
+          when 'normal' then oi.price
+          when 'gift_card' then oi.activated ? - oi.total : oi.total
+          when 'coupon' then oi.order_item ? - oi.order_item.coupon_amount / oi.quantity  : 0
+        end
+        item_price = oi.price * ( 1 - oi.rebate / 100.0 ) if oi.rebate
+        item_price = - oi.price if o.buy_order
+        item_total = oi.total_is_locked ? oi.total : item_price * oi.quantity
+        item_total = item_total * ( 1 - o.rebate / 100.0 ) if o.rebate_type == 'percent' # spread order percent rebate equally
+        item_total -= o.rebate / o.order_items.visible.count if o.rebate_type == 'fixed' # spread order fixed rebate equally
+        item_total -= o.lc_discount_amount / o.order_items.visible.count  # spread order lc discount amount 
+        item_total -= oi.discount_amount if oi.discount_applied
+        
+        if o.tax_free == true
+          gro = item_total
+          net = item_total
+        else
+          fact = oi.tax_profile_amount / 100
+          # How much of the sum goes to the store after taxes
+          if not self.calculate_tax then
+            net = item_total / (1.00 + fact)
+            gro = item_total
+          else
+            # I.E. The net total is the item total because the tax is outside that price.
+            net = item_total
+            gro = item_total * (1 + fact)
+          end
+        end
+        if item_total > 0.0
+          if not categories[:pos].has_key?(catname)
+            categories[:pos].merge! catname => { :gro => gro, :net => net }
+          else
+            categories[:pos][catname][:gro] += gro
+            categories[:pos][catname][:net] += net
+          end
+          if not taxes[:pos].has_key?(taxname)
+            taxes[:pos].merge! taxname => { :gro => gro, :net => net }
+          else
+            taxes[:pos][taxname][:gro] += gro
+            taxes[:pos][taxname][:net] += net
+          end
+        elsif item_total < 0.0
+          if not categories[:neg].has_key?(catname)
+            categories[:neg].merge! catname => { :gro => gro, :net => net }
+          else
+            categories[:neg][catname][:gro] += gro
+            categories[:neg][catname][:net] += net
+          end
+          if not taxes[:neg].has_key?(taxname)
+            taxes[:neg].merge! taxname => { :gro => gro, :net => net }
+          else
+            taxes[:neg][taxname][:gro] += gro
+            taxes[:neg][taxname][:net] += net
+          end
+        end
+        if oi.refunded
+          if oi.refund_payment_method == 'InCash'
+            refunds[:cash][:gro] -= gro
+            refunds[:cash][:net] -= net
+          else
+            refunds[:noncash][:gro] -= gro
+            refunds[:noncash][:net] -= net
+          end
+        end
+      end
+    end
+
+    categories_sum = { :pos => { :gro => 0, :net => 0 }, :neg => { :gro => 0, :net => 0 }}
+
+    categories_sum[:pos][:gro] = categories[:pos].to_a.collect{|x| x[1][:gro]}.sum
+    categories_sum[:pos][:net] = categories[:pos].to_a.collect{|x| x[1][:net]}.sum
+    #XXXpaymentmethods[:pos]['InCash'] = categories_sum[:pos][:gro] - paymentmethods[:pos].to_a.collect{|x| x[1]}.sum
+
+    categories_sum[:neg][:gro] = categories[:neg].to_a.collect{|x| x[1][:gro]}.sum
+    categories_sum[:neg][:net] = categories[:neg].to_a.collect{|x| x[1][:net]}.sum
+    #XXXpaymentmethods[:neg]['InCash'] = categories_sum[:neg][:gro] - paymentmethods[:neg].to_a.collect{|x| x[1]}.sum
+
+    transactions = Hash.new
+    transactions_sum = { :drop => 0, :payout => 0, :total => 0}
+    drawertransactions.each do |d|
+      transactions[d.id] = { :drop => d.drop, :is_refund => d.is_refund, :time => d.created_at, :notes => d.notes, :tag => d.tag.to_s + "(#{d.id})", :amount => d.amount }
+      if d.drop and not d.is_refund
+        transactions_sum[:drop] += d.amount
+      elsif d.payout and not d.is_refund
+        transactions_sum[:payout] -= d.amount
+      end
+        transactions_sum[:total] = transactions_sum[:drop] + transactions_sum[:payout]
+    end
+
+    revenue = Hash.new
+    revenue[:gro] = categories[:pos].to_a.map{|x| x[1][:gro]}.sum + categories[:neg].to_a.map{|x| x[1][:gro]}.sum + refunds[:cash][:gro] + refunds[:noncash][:gro]
+    revenue[:net] = categories[:pos].to_a.map{|x| x[1][:net]}.sum + categories[:neg].to_a.map{|x| x[1][:net]}.sum + refunds[:cash][:net] + refunds[:noncash][:net]
+    
+    paymentmethods[:pos][:InCash] ||= 0
+    paymentmethods[:neg][:InCash] ||= 0
+    paymentmethods[:neg][:Change] ||= 0
+    # This is not the best way to handle change, change is a drawer transaction, not a payment method.
+    paymentmethods[:pos][:InCash] += paymentmethods[:neg][:Change]
+    paymentmethods[:neg].delete(:Change)
+    
+    
+    # Mathematically, this should work, but actually it does not because of the limitations of ruby itself, this leads to some obscure floating point overflow.
+    # if you perform the calculations with a calculator it will give the correct answer, but in SOME instances this will produce an astronomically large negative
+    # floating point number that will display as -0.0 on the report, but will actually be something like -9.879837419238798e-13
+    #calculated_drawer_amount = transactions_sum[:drop] + transactions_sum[:payout] + refunds[:cash][:gro] + paymentmethods[:pos][:InCash] + paymentmethods[:neg][:InCash]
+    
+    # This should be the valid way to do it, because all movements of money in the system should be done as drawer transactions.
+    calculated_drawer_amount = DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day, :drop => true }).sum(:amount) - DrawerTransaction.where({:created_at => from.beginning_of_day..to.end_of_day, :payout => true }).sum(:amount)
+    report = Hash.new
+    report['categories'] = categories
+    report['taxes'] = taxes
+    report['paymentmethods'] = paymentmethods
+    report['regular_payment_methods'] = regular_payment_methods
+    report['refunds'] = refunds
+    report['revenue'] = revenue
+    report['transactions'] = transactions
+    report['transactions_sum'] = transactions_sum
+    report['calculated_drawer_amount'] = calculated_drawer_amount
+    report['orders_count'] = orders.count
+    report['categories_sum'] = categories_sum
+    report[:date_from] = I18n.l(from, :format => :just_day)
+    report[:date_to] = I18n.l(to, :format => :just_day)
+    report[:unit] = I18n.t('number.currency.format.friendly_unit')
+    if user
+      report[:drawer_amount] = user.get_drawer.amount
+      report[:username] = "#{ user.first_name } #{ user.last_name } (#{ user.username })"
+    else
+      report[:drawer_amount] = 0
+      report[:username] = ''
+    end
+    return report
+  end
 end

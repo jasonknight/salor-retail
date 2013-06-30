@@ -19,7 +19,7 @@
             = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
         %tr
           %td{:align => :left}
-            %select{:id => 'cash_register_select', :name => 'cash_register_id' }= options_from_collection_for_select($Vendor.cash_registers.visible, 'id', 'name', params[:cash_register_id])
+            %select{:id => 'cash_register_select', :name => 'cash_register_id' }= options_from_collection_for_select(@current_vendor.cash_registers.visible, 'id', 'name', params[:cash_register_id])
           %td{ :align => :right}
             = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
         %tr

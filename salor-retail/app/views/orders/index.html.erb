@@ -72,8 +72,7 @@
     <td><%= salor_number_to_currency order.total %> <% if order.total == 0.0 %> <small>(<%= salor_number_to_currency order.total %>)</small><% end %></td>
     <td width='10%' align='center'><%= link_to salor_icon(:print,{},32), "orders/#{ order.id }/print" %></td>
     <td width='10%' align='center'><%= link_to salor_icon(:show,{},32), order %></td>
-    <td width='10%' align='center'><%=link_to(salor_icon(:cash_register,{},32), edit_order_path(order)) if not order.paid == 1 %></td>
-    <!--<td><%= link_to(image_tag('/images/icons/' + icon(:delete,32)), order, :confirm => 'Are you sure?', :method => :delete) if not order.paid %></td>-->
+    <td width='10%' align='center'><%=link_to(salor_icon(:cash_register,{},32), edit_order_path(order)) unless order.paid %></td>
   </tr>
 <% end %>
 </table>
