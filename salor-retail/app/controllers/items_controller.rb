@@ -334,13 +334,13 @@ class ItemsController < ApplicationController
   
   def selection
     if params[:order_id]
-      order = Order.scopied.find_by_id(params[:order_id])
+      order = @current_vendor.orders.visible.find_by_id(params[:order_id])
       @skus = "ORDER#{order.id}"
-      #order.order_items.visible.collect{ |oi| "{OI#{oi.id}}" }.join("\n")
     else
       @skus = nil
     end
   end
+  
   def report
     @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.base_price,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords.page(params[:page]).per(100)
     @view = SalorRetail::Application::CONFIGURATION[:reports][:style]

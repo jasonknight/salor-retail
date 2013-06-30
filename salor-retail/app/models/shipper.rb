@@ -14,5 +14,6 @@ class Shipper < ActiveRecord::Base
   has_many :broken_items
   belongs_to :user
   belongs_to :vendor
+  belongs_to :company
   validates_presence_of :name
 end

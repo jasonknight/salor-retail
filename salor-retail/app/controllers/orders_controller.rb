@@ -84,11 +84,7 @@ class OrdersController < ApplicationController
 
 
   def show
-    @order = Order.scopied.find_by_id(params[:id].to_s)
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @order }
-    end
+    @order = @current_vendor.orders.visible.find_by_id(params[:id])
   end
 
   def new
@@ -411,9 +407,10 @@ class OrdersController < ApplicationController
     end
     redirect_to "/orders/#{@oi.order.id}"
   end
+  
   def refund_item
-    @oi = OrderItem.scopied.find_by_id(params[:id].to_s)
-    x = @oi.toggle_refund(true, params[:pm])
+    @oi = @current_vendor.order_items.visible.find_by_id(params[:id])
+    x = @oi.toggle_refund(true, params[:pm], @current_user)
     if x == -1 then
       flash[:notice] = I18n.t("system.errors.not_enough_in_drawer")
     end
@@ -422,8 +419,8 @@ class OrdersController < ApplicationController
     end
     @oi.save
     redirect_to request.referer
-    
   end
+  
   def refund_order
     @order = Order.scopied.find_by_id(params[:id].to_s)
     @order.toggle_refund(true, params[:pm])
@@ -508,49 +505,15 @@ class OrdersController < ApplicationController
   end
   
   def print
-    @order = Order.scopied.find_by_id(params[:id].to_s)
-    raise "Orphaned Order" if not @order.user
-    @current_user = @order.user
-    
-    unsound = false
-    if params[:pm_id] then
-      pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
-      any = @order.payment_methods.find_by_internal_type('Unpaid')
-      if any and params[:pm_name] and not ['Unpaid','Change'].include? params[:pm_name] then
-        # it should not allow doubles of this type
-        if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
-          npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
-          @order.payment_methods << npm
-          pm = npm
-          @order.save
-        end
-      end # end handling new pms by name
-      
-      if not pm.internal_type == 'Unpaid' then
-        pm.update_attribute :amount, params[:pm_amount]
-        diff = any.amount - pm.amount
-        if diff == 0 then
-          any.destroy
-          @order.update_attribute :unpaid_invoice, false
-        elsif diff < 0 then
-          raise "Cannot pay more than is due"
-        else
-          any.update_attribute :amount, diff
-        end
-      else
-        raise "Cannot because unsound"
-      end
-    end
-    @current_user = @order.user
-    if not @order.user then
-      @order.user = User.where(:vendor_id => @order.vendor_id).last
-      @order.save
-      @current_user = @order.user
-    end
-
-    @vendor = @order.vendor
+    @order = @current_vendor.orders.visible.find_by_id(params[:id])
+    # @order.run_new_sanitization # Mikey: moved this into the model. doesn't make much sense to me to fix the order here when it simply should show the print page.
     @report = @order.get_report
-    @invoice_note = InvoiceNote.scopied.where(:origin_country_id => @order.origin_country_id, :destination_country_id => @order.destination_country_id, :sale_type_id => @order.sale_type_id).first
+    @invoice_note = @current_vendor.invoice_notes.visible.where(
+      :origin_country_id => @order.origin_country_id, 
+      :destination_country_id => @order.destination_country_id, 
+      :sale_type_id => @order.sale_type_id
+    ).first
+    
     locale = params[:locale]
     locale ||= I18n.locale
     if locale
@@ -563,13 +526,16 @@ class OrdersController < ApplicationController
         @invoice_blurb_footer = tmp.first.body
       end
     end
-    @invoice_blurb_header ||= @vendor.salor_configuration.invoice_blurb
-    @invoice_blurb_footer ||= @vendor.salor_configuration.invoice_blurb_footer
+    
+    @invoice_blurb_header ||= @current_vendor.invoice_blurb
+    @invoice_blurb_footer ||= @current_vendor.invoice_blurb_footer
+    
+    
     view = SalorRetail::Application::CONFIGURATION[:invoice_style]
     view ||= 'default'
     render "orders/invoices/#{view}/page"
   end
-  #
+  
   def order_reports
     f, t = assign_from_to(params)
     @from = f

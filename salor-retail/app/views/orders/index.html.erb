@@ -13,7 +13,7 @@
 %>
 <%= raw content_box_top(t(title)) %>
 
-<table align="center">
+<table class="tools" align="center">
   <tr>
     <td align="center">
       <div class='tools'>
@@ -69,7 +69,7 @@
     </td>
     <td width='10%'> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :salor) %></td>
-    <td><%= salor_number_to_currency order.gross %> <% if order.gross == 0.0 %> <small>(<%= salor_number_to_currency order.total %>)</small><% end %></td>
+    <td><%= salor_number_to_currency order.total %> <% if order.total == 0.0 %> <small>(<%= salor_number_to_currency order.total %>)</small><% end %></td>
     <td width='10%' align='center'><%= link_to salor_icon(:print,{},32), "orders/#{ order.id }/print" %></td>
     <td width='10%' align='center'><%= link_to salor_icon(:show,{},32), order %></td>
     <td width='10%' align='center'><%=link_to(salor_icon(:cash_register,{},32), edit_order_path(order)) if not order.paid == 1 %></td>

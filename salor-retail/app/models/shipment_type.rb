@@ -11,4 +11,7 @@ class ShipmentType < ActiveRecord::Base
 
   has_many :shipments
   belongs_to :vendor
+  belongs_to :company
+  
+  validates_presence_of :name
 end

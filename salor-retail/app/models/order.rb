@@ -412,15 +412,15 @@ class Order < ActiveRecord::Base
   #
   def gross
     refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total).round(2)
-    if $Conf.calculate_tax then
+    if self.vendor.calculate_tax then
       taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax).round(2)
       if self.tax_free then
         taxttl = 0
       end
-      nval = self.subtotal + taxttl - refunded_ttl
+      nval = self.subtotal.to_i + taxttl - refunded_ttl
       return nval.round(2)
     else
-      nval = self.subtotal - refunded_ttl
+      nval = self.subtotal.to_i - refunded_ttl
       return nval.round(2)
     end
   end
@@ -733,11 +733,13 @@ class Order < ActiveRecord::Base
     end
     return ret
   end
+  
+  
   def get_report
     # sum_taxes is the taxable sum of money charged by the system
     sum_taxes = Hash.new
     # we turn sum_taxes into a hash of hashes 
-    TaxProfile.scopied.each { |t| sum_taxes[t.id] = {:total => 0, :letter => t.letter, :value => 0} }
+    self.vendor.tax_profiles.visible.each { |t| sum_taxes[t.id] = {:total => 0, :letter => t.letter, :value => 0} }
     subtotal1 = 0
     discount_subtotal = 0
     rebate_subtotal = 0
@@ -1322,5 +1324,43 @@ class Order < ActiveRecord::Base
     end
     return messages
   end
-  # {END}
+
+  # Mikey: not sure what this does, seems like fixing unsound orders. i think it would be better to fix the core logic instead of adding more and more sanity checks on top.
+  def run_new_sanitization
+    unsound = false
+    if params[:pm_id] then
+      pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
+      any = @order.payment_methods.find_by_internal_type('Unpaid')
+      if any and params[:pm_name] and not ['Unpaid','Change'].include? params[:pm_name] then
+        # it should not allow doubles of this type
+        if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
+          npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
+          @order.payment_methods << npm
+          pm = npm
+          @order.save
+        end
+      end # end handling new pms by name
+      
+      if not pm.internal_type == 'Unpaid' then
+        pm.update_attribute :amount, params[:pm_amount]
+        diff = any.amount - pm.amount
+        if diff == 0 then
+          any.destroy
+          @order.update_attribute :unpaid_invoice, false
+        elsif diff < 0 then
+          raise "Cannot pay more than is due"
+        else
+          any.update_attribute :amount, diff
+        end
+      else
+        raise "Cannot because unsound"
+      end
+    end
+    @current_user = @order.user
+    if not @order.user then
+      @order.user = User.where(:vendor_id => @order.vendor_id).last
+      @order.save
+      @current_user = @order.user
+    end
+  end
 end

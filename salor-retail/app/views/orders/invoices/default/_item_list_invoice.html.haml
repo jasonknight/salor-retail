@@ -11,7 +11,7 @@
       - formatted_item.each do |k,v|
         - next if k == :type
         %td{ :class => k }= v
-  - unless @report[:lc_points_discount].zero?
+  - unless @report[:lc_points_discount].blank?
     %tr
       %td{ :colspan => 3 }= t('printr.order_receipt.lc_points_substracted')
       %td.quantity= Integer(@report[:lc_points])

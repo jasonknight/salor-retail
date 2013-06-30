@@ -27,7 +27,7 @@
         <tr class="no-stripe">
             <td align=center colspan=6>
               <select id='refund_payment_method'>
-              <%= options_for_select PaymentMethod.types_list %>
+              <%= options_for_select @current_vendor.payment_methods_types_list %>
               </select>
             </td>
         </tr>
@@ -52,8 +52,8 @@
 </table>
 
 <script>
-var payment_internal_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
-var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
+var payment_internal_types = [<%= raw @current_vendor.payment_methods_types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
+var payment_external_types = [<%= raw @current_vendor.payment_methods_types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
 </script>
 <style>
   table.overflowing-table td {
@@ -73,7 +73,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
         <td><%= dt.user ? dt.user.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
         <td><%= dt.tag %></td>
         <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
-        <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if $User.role_cache.include? "manager"%></td>
+        <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if @current_user.role_cache.include? "manager"%></td>
     </tr>
   <% end %>
   <tr class="no-stripe">
@@ -86,7 +86,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
         <td><%= dt.user ? dt.user.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
         <td><%= dt.tag %></td>
         <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
-        <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if $User.role_cache.include? "manager"%></td>
+        <td><%= salor_icon(:delete,{:onclick => "window.location = '/orders/undo_drawer_transaction?id=#{dt.id}&oid=#{@order.id}'", :class => "pointer"},16) if @current_user.role_cache.include? "manager"%></td>
     </tr>
   <% end %>
   
@@ -101,7 +101,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
       <td title="<%= h.url %>">&nbsp;</td>
       <td title="<%= h.action_taken %>"><%= h.action_taken[0..45] %></td>
       <td onclick="$('#changes_made_<%= h.id %>').toggle();">
-        <%= h.changes_made[0..25] %>
+        <%= h.changes_made[0..25] if h.changes_made %>
         <div id="changes_made_<%= h.id %>" class="hidden">
           <pre>
 <%= JSON.pretty_unparse(JSON.parse(h.changes_made)) rescue "" %>
@@ -110,7 +110,7 @@ var payment_external_types = [<%= raw PaymentMethod.types_list.map {|pm| "'#{pm[
       </td>
       <td colspan=3 onclick="$('#params_<%= h.id %>').toggle();">
       
-        <%= h.params[0..25] %>
+        <%= h.params[0..25] if h.params %>
         <div id="params_<%= h.id %>" class="hidden">
           <pre>
 <%= JSON.pretty_unparse(JSON.parse(h.params)) rescue "" %>

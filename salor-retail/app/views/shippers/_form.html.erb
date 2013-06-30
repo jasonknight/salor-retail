@@ -10,6 +10,11 @@
       </ul>
     </div>
   <% end %>
+  
+    <div class="actions">
+    <%= f.submit :id => "submit" %>
+  </div>
+  
 <table width="540px">
   <tr>
     <td width="270px" style="padding-bottom:10px;">
@@ -46,12 +51,6 @@
         <%= f.text_field :contact_email, :class => "keyboardable"%>
       </div>
     </td>
-    <td width="270px" style="padding-bottom:10px;">
-      &nbsp;
-      <%= f.hidden_field :user_id, :value => @current_user.get_user.id if @current_user.is_user? %>
-      <%= f.hidden_field :vendor_id, :value => $Vendor.id %>
-      <%= f.hidden_field @current_user.is_user? ? :user_id : :user_id, :value => @current_user.id%>
-    </td>
   </tr>
   <tr>
     <td colspan="2" width="540px">
@@ -67,7 +66,5 @@
   </tr>
 </table>
 <br />
-  <div class="actions">
-    <%= f.submit :id => "submit" %>
-  </div>
+
 <% end %>

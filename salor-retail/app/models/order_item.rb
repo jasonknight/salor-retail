@@ -98,39 +98,38 @@ class OrderItem < ActiveRecord::Base
       calculate_total
     end
   end
-  def create_refund_transaction(amount,type,opts)
+  def create_refund_transaction(amount, type, user, opts)
     dt = DrawerTransaction.new(opts)
     dt[type] = true
     dt.amount = amount
-    dt.drawer_id = @current_user.get_drawer.id
-    dt.drawer_amount = @current_user.get_drawer.amount
+    dt.drawer_id = user.get_drawer.id
+    dt.drawer_amount = user.get_drawer.amount
     dt.order_id = self.order.id
     dt.order_item_id = self.id
     if dt.save then
       if type == :payout then
-        @current_user.get_drawer.update_attribute(:amount,@current_user.get_drawer.amount - dt.amount)
+        user.get_drawer.update_attribute(:amount, user.get_drawer.amount - dt.amount)
       elsif type == :drop then
-        @current_user.get_drawer.update_attribute(:amount,@current_user.get_drawer.amount + dt.amount)
+        @current_user.get_drawer.update_attribute(:amount, user.get_drawer.amount + dt.amount)
       end
     else
       raise dt.errors.full_messages.inspect
     end
   end
-  #
+  
   def create_refund_payment_method(amount,refund_payment_method)
     PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
                          :name => (refund_payment_method + 'Refund'), 
                          :amount => - amount, 
                          :order_id => self.order.id
-        ) # end of PaymentMethod.create
+                        )
   end
   
-  #
-  def toggle_refund(x, refund_payment_method)
-    # -1 = Not Enough in Drawer
-    # false is general failure
-    # true is everything went according to plan  
-    t = (self.calculate_total)
+
+  def toggle_refund(x, refund_payment_method, user)
+    return if self.refunded
+    
+    t = self.total
     if self.order and self.order.rebate > 0
       if self.order.rebate_type == "percent" then
         t -= t * ( self.order.rebate / 100.0 )
@@ -143,43 +142,37 @@ class OrderItem < ActiveRecord::Base
     if self.order and self.order.lc_discount_amount > 0
       t -= self.order.lc_discount_amount / self.order.order_items.visible.count
     end
-    if self.order.vendor.salor_configuration.calculate_tax == true
+    if self.order.vendor.calculate_tax == true
       # net price
       t += self.tax
     end
-    
-    if ((@current_user.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash') then
-      # do not fail. let the user do what he wants.
-      #GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
-      #return -1
-    end
 
     q = self.quantity
-    if self.refunded then
-      return false
-      # this is depreciated and should never happen right now since it's blocked by the orders#show view
-    else
-      self.update_attribute(:refunded,true)
-      self.update_attribute(:refunded_by, @current_user.id)
-      self.update_attribute(:refunded_by_type, @current_user.class.to_s)
-      self.update_attribute(:refund_payment_method, refund_payment_method)
-      update_location_category_item(t * -1, q * -1)
-      self.order.update_attribute(:total, self.order.total - t)
-      if refund_payment_method == 'InCash'
-        if t < 0
-          create_refund_transaction(-t,:drop, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
-        else
-          create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
-        end
+    self.update_attribute(:refunded,true)
+    self.update_attribute(:refunded_by, user.id)
+    self.update_attribute(:refunded_by_type, user.class.to_s)
+    self.update_attribute(:refund_payment_method, refund_payment_method)
+    update_location_category_item(t * -1, q * -1)
+    self.order.update_attribute(:total, self.order.total - t)
+    if refund_payment_method == 'InCash'
+      if t < 0
+        create_refund_transaction(-t, :drop, user, {:tag => 'OrderItemRefund',
+                                              :is_refund => true,
+                                              :notes => I18n.t("views.notice.order_refund_dt", :id => self.id)
+                                              }) unless x.nil?
       else
-        create_refund_payment_method(t,refund_payment_method) if not x.nil?
+        create_refund_transaction(t, :payout, user, {
+                                                :tag => 'OrderItemRefund',
+                                                :is_refund => true,
+                                                :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)
+                                              }) unless x.nil?
       end
-
-      # @current_user.vendor.open_cash_drawer unless @current_register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
-     return true
+    else
+      create_refund_payment_method(t, refund_payment_method) if not x.nil?
     end
-    return false
+
   end
+
   def update_location_category_item(t,q)
     self.item.update_attribute(:quantity_sold, self.item.quantity_sold + q)
     self.item.update_attribute(:quantity, self.item.quantity + (-1 * q))
