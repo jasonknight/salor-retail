@@ -152,18 +152,13 @@ $(function () {
   </tr>
   
   <tr>
-    <td> <%= f.label I18n.t("activerecord.models.vendor.one") %> </td>
-    <td> <%= f.collection_select :vendor_id, Vendor.all,:id,:name %> </td>
-  </tr>
-  
-  <tr>
     <td> <%= f.label I18n.t("activerecord.models.category.one") %> </td>
-    <td> <%= f.collection_select :category_id, Category.scopied.all,:id,:name %> </td>
+    <td> <%= f.collection_select :category_id, @item.vendor.categories.visible, :id, :name, :include_blank => true %> </td>
   </tr>
   
   <tr>
     <td> <%= f.label I18n.t("activerecord.models.location.one") %> </td>
-    <td> <%= f.collection_select :location_id, Location.scopied.all,:id,:name %> </td>
+    <td> <%= f.collection_select :location_id, @item.vendor.locations.visible, :id, :name %> </td>
   </tr>
   
   <% if not @item.sku.blank?  %>
@@ -254,7 +249,7 @@ $(function () {
   
   <tr>
     <td>  <%= f.label I18n.t("activerecord.models.tax_profile.one") %> </td>
-    <td> <%= f.collection_select :tax_profile_id,TaxProfile.scopied.all,:id,:name %> </td>
+    <td> <%= f.collection_select :tax_profile_id, @item.vendor.tax_profiles.visible, :id, :name %> </td>
   </tr>
   
   <tr>
@@ -306,7 +301,7 @@ $(function () {
   
   <tr>
     <td> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
-    <td> <%= f.select :shipper_id, Shipper.scopied.collect {|t| [t.name,t.id]}.unshift(['NA','']) %> </td>
+    <td> <%= f.select :shipper_id, @item.vendor.shippers.visible.collect {|t| [t.name,t.id]}.unshift(['NA','']) %> </td>
   </tr>
   
   <tr>
@@ -500,7 +495,9 @@ $(function () {
    </tr>
    
   <tr>
-    <td colspan="2"> <%= render :partial => "multi_shipper_form", :locals => {:item => @item, :form => f}%> </td>
+    <td colspan="2">
+      <%= render :partial => "multi_shipper_form", :locals => { :item => @item, :form => f }%>
+    </td>
   </tr>
   
   <tr>
@@ -544,7 +541,7 @@ $(function () {
           </tr>
         <% end %>
        <% end %>
-       <% discounts = OrderItem.get_discounts.find_all {|disc| 
+       <% discounts = @item.vendor.get_current_discounts.find_all {|disc| 
           (disc.applies_to == 'Item' and disc.item_sku == @item.sku) or 
           (disc.applies_to == 'Category' and disc.category_id == @item.category_id) or
           (disc.applies_to == 'Location' and disc.location_id == @item.location_id)
@@ -569,7 +566,7 @@ $(function () {
             </tr>
           <% end %>
        <% end %>
-       <% coupons = Item.scopied.where(["coupon_applies = ?",@item.sku]) %>
+       <% coupons = @item.vendor.items.visible.where(["coupon_applies = ?",@item.sku]) %>
        <% if coupons.any? then  %>
         
        <% end %>

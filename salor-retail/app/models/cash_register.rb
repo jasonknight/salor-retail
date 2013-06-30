@@ -6,7 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 
 class CashRegister < ActiveRecord::Base
-  # {START}
   include SalorScope
   include SalorBase
 
@@ -15,10 +14,11 @@ class CashRegister < ActiveRecord::Base
   has_many :drawer_transactions
   
   belongs_to :vendor
+  belongs_to :company
+  
   has_many :orders
-  has_many :meta
-
-  attr_accessible :pole_display_name, :sticker_printer_name,:scale_name,:thermal_printer_name, :name
+  
+  validates_presence_of :name
   
   def open_cash_drawer
     vendor_printer = VendorPrinter.new :path => self.thermal_printer

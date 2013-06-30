@@ -619,7 +619,7 @@ body
   text-decoration: none
 
 div.tool-icon 
-  float: left
+  display: inline-block
   margin-right: 10px
   text-align: center
   span 
@@ -1822,8 +1822,13 @@ a#inplaceeditsave
 div.pagination 
   clear: both
 
+table.tools
+  clear: both
+  width: 90%
+  align: center
 
 div.tools 
+  clear: both
   margin: 10px 5px
 
 
@@ -3086,6 +3091,7 @@ a.new-model-button
   @include bright_button
 
 div#error_explanation
+  :clear both
   :color red
   :text-align left
 

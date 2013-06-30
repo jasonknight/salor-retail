@@ -10,27 +10,26 @@ class BrokenItem < ActiveRecord::Base
   include SalorBase
 
   belongs_to :vendor
+  belongs_to :company
   belongs_to :shipper
+  
   after_create :decrement_item_quantity
+  validates_presence_of :sku
+  validates_presence_of :quantity
+  
   def decrement_item_quantity
-    if item and not self.is_shipment_item then
-      item = Item.scopied.find_by_sku self.sku
+    if self.item and not self.is_shipment_item then
+      item = self.vendor.items.visible.find_by_sku(self.sku)
       item.quantity -= self.quantity
       item.save
-    end
-  end
-  def user
-    if self.user_type == 'User' then
-      return User.where(["id = ?", self.user_id]).first
-    else
-      return User.where(["id = ?", self.user_id]).first
     end
   end
   
   def item
     if self.is_shipment_item then
-      return ShipmentItem.scopied.find_by_sku(self.sku)
+      return self.vendor.shipment_items.visible.find_by_sku(self.sku)
+    else
+      return self.vendor.items.visible.find_by_sku(self.sku)
     end
-    return Item.scopied.find_by_sku(self.sku)
   end
 end

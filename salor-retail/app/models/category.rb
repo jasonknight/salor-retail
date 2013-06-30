@@ -7,18 +7,23 @@
 
 
 class Category < ActiveRecord::Base
-  # {START}
   include SalorScope
   include SalorBase
 
+  belongs_to :vendor
+  belongs_to :company
+  
   has_many :items
   has_many :shipment_items
   has_many :discounts
   has_many :buttons, :order => :position
-  has_many :actions, :as => :user, :order => "weight asc"
-  belongs_to :vendor
+  has_many :actions, :as => :model, :order => "weight asc"
+  
   has_many :order_items
   before_create :set_sku
+  
+  validates_presence_of :name
+  
   def set_sku
     # This might cause issues down the line with a SAAS version so we need to make sure
     # that the request for a category by sku is scopied.
@@ -27,12 +32,14 @@ class Category < ActiveRecord::Base
     # category named stüff then the sku would come out: stff
     self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'') if self.sku.blank?
   end
+  
   def get_tag
     if not self.tag or self.tag == '' then
       return self.name.gsub(" ",'')
     end
     self.tag.gsub(' ','')
   end
+  
 	# We don't really call this function directly, it is called by @current_register.end_of_day_report, which
 	# returns a hash that is merged with this one. This way, we delegate the reponsibilities up the chain
 	# so that in the view, we can just call: hash = @current_register.end_of_day_report and then loop over the
@@ -49,5 +56,4 @@ class Category < ActiveRecord::Base
     end
     return cats_tags
 	end
-  # {END}
 end

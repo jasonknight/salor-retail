@@ -1,58 +1,59 @@
 <div align=center>
-        <%= form_for(@discount) do |f| %>
-        <% if @discount.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @discount.errors.count,:model => t("activerecord.models.discount.one"))%></h2>
-      
-            <ul>
-            <% @discount.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-            </ul>
-          </div>
-        <% end %>
-      
-        <div class="field">
-          <%= f.label t("activerecord.attributes.name") %><br />
-          <%= f.text_field :name, :class => 'keyboardable' %>
-        </div>
-        <div class="field">
-          <%= f.label t("activerecord.attributes.start_date") %><br />
-          <%= f.datetime_select :start_date %>
-        </div>
-        <div class="field">
-          <%= f.label t("activerecord.attributes.end_date") %><br />
-          <%= f.datetime_select :end_date %>
-        </div>
-        <div class="field">
-          <%= f.label t("activerecord.attributes.applies_to") %><br />
-          <%= f.select :applies_to, Discount::APPLIES.collect {|ap| [ap[0],ap[1]]}, {:include_blank => true} %>
-        </div>
-        <div id='category' class="field" style='display: none;'>
-          <%= f.label t("activerecord.models.category.one") %><br />
-          <%= f.collection_select :category_id,Category.scopied,:id,:name %>
-        </div>
-        <div id='location' class="field" style='display: none;'>
-          <%= f.label t("activerecord.models.location.one") %><br />
-          <%= f.collection_select :location_id,Location.scopied,:id,:name %>
-        </div>
-        <div id='item' class="field" style='display: none;'>
-          <%= f.label t("activerecord.attributes.item_sku") %><br />
-          <%= f.text_field :item_sku, :class => 'keyboardable', :onblur => "$(this).val($(this).val().toUpperCase())" %>
-        </div>
-        <div id='amount' class="field" style='display: none;'>
-          <br /><br />
-          <%= f.label t("activerecord.attributes.amount") %> &nbsp;&nbsp; <br />
-          <%= f.text_field :amount, :size => 7, :class => 'keyboardable-int' %>
-          <br /><br />
-          <%= f.hidden_field :amount_type,  :value => 'percent' %>
-          <br /><br />
-        </div>
-        <div id="actions" style='display: none;'>
-          <%= f.submit %>
-        </div>
-      <% end %>      
+  <%= form_for(@discount) do |f| %>
+  <% if @discount.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @discount.errors.count,:model => t("activerecord.models.discount.one"))%></h2>
+
+      <ul>
+      <% @discount.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label t("activerecord.attributes.name") %><br />
+    <%= f.text_field :name, :class => 'keyboardable' %>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.start_date") %><br />
+    <%= f.datetime_select :start_date %>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.end_date") %><br />
+    <%= f.datetime_select :end_date %>
+  </div>
+  <div class="field">
+    <%= f.label t("activerecord.attributes.applies_to") %><br />
+    <%= f.select :applies_to, Discount::APPLIES.collect {|ap| [ap[0],ap[1]]}, {:include_blank => true} %>
+  </div>
+  <div id='category' class="field" style='display: none;'>
+    <%= f.label t("activerecord.models.category.one") %><br />
+    <%= f.collection_select :category_id, @discount.vendor.categories.visible, :id, :name, :include_blank => true %>
+  </div>
+  <div id='location' class="field" style='display: none;'>
+    <%= f.label t("activerecord.models.location.one") %><br />
+    <%= f.collection_select :location_id, @discount.vendor.locations.visible, :id, :name, :include_blank => true %>
+  </div>
+  <div id='item' class="field" style='display: none;'>
+    <%= f.label t("activerecord.attributes.item_sku") %><br />
+    <%= f.text_field :item_sku, :class => 'keyboardable', :onblur => "$(this).val($(this).val().toUpperCase())" %>
+  </div>
+  <div id='amount' class="field" style='display: none;'>
+    <br /><br />
+    <%= f.label t("activerecord.attributes.amount") %> &nbsp;&nbsp; <br />
+    <%= f.text_field :amount, :size => 7, :class => 'keyboardable-int' %>
+    <br /><br />
+    <%= f.hidden_field :amount_type,  :value => 'percent' %>
+    <br /><br />
+  </div>
+  <div id="actions" style='display: none;'>
+    <%= f.submit %>
+  </div>
+  <% end %>      
 </div>
+
 <script>
 $(function(){
   $('#discount_applies_to').on('change', function(){ 

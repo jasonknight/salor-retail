@@ -5,11 +5,6 @@
         =link_to(salor_icon(:add,{},20),"/#{klass.table_name}/new")
         %br
         %span.icon-caption=I18n.t('views.single_words.new')
-      - if collection.first.class == BrokenItem then
-        %div.tool-icon
-          =link_to(salor_icon(:save_download,{},20),"/items/export_broken_items")
-          %br
-          %span.icon-caption=I18n.t('menu.download')
 %table{:class => 'tools', :width=> width, :align=> 'center'}
   %tr{:class=>'no-stripe'}
     %td{:align=>:center}

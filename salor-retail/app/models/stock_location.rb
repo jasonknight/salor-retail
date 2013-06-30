@@ -11,4 +11,5 @@ class StockLocation < ActiveRecord::Base
 
   has_and_belongs_to_many :shipment_items
   belongs_to :vendor
+  belongs_to :company
 end

@@ -54,7 +54,7 @@ var shipment_items_callbacks = {
   },
   tax_profile_id: function (value) {
     <%
-      tax_profiles = TaxProfile.scopied
+      tax_profiles = @current_vendor.tax_profiles.visible
       tps = []
       tax_profiles.each do |tp|
         tps << "<option value='#{tp.id}'>#{tp.name}</option>"
@@ -71,7 +71,7 @@ var shipment_items_callbacks = {
   },
   vendor_id: function (value) {
       <%
-        vendors = @current_user.vendors(nil)
+        vendors = @current_company.vendors.visible
         stores = []
         vendors.each do |store|
           stores << "<option value='#{store.id}'>#{store.name}</option>"
@@ -89,7 +89,7 @@ var shipment_items_callbacks = {
   stock_location_ids: function (value) {
       var base_id = 'attribute-stock_location_id-' + id;
       <%
-        locations = StockLocation.scopied
+        locations = @current_vendor.stock_locations.visible
         locs = []
         locs << "<option value=''></option>"
         locations.each do |loc|
@@ -121,7 +121,7 @@ var shipment_items_callbacks = {
   },
   category_id: function (value) {
       <%
-        categories = GlobalData.@current_user.get_all_categories
+        categories = @current_vendor.categories.visible
         cats = []
         categories.each do |cat|
         cats << "<option value='#{cat.id}'>#{cat.name.gsub('"','\"')}</option>"
@@ -138,7 +138,7 @@ var shipment_items_callbacks = {
   },
   location_id: function (value) {
       <%
-        locations = Location.scopied
+        locations = @current_vendor.locations.visible
         locs = []
         locations.each do |loc|
           locs << "<option value='#{loc.id}'>#{loc.name}</option>"
@@ -288,6 +288,7 @@ function shipment_item_input(name,opts) {
 }
 
 function addItem(values,nofocus) {
+  window.onbeforeunload = onNavigateAway;
   var found = false;
   if (values) {
     var vs = values;

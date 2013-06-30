@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130629100208) do
+ActiveRecord::Schema.define(:version => 20130630042823) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -585,26 +585,6 @@ ActiveRecord::Schema.define(:version => 20130629100208) do
   add_index "loyalty_cards", ["customer_id"], :name => "index_loyalty_cards_on_customer_id"
   add_index "loyalty_cards", ["sku"], :name => "index_loyalty_cards_on_sku"
 
-  create_table "meta", :force => true do |t|
-    t.integer  "vendor_id"
-    t.integer  "crd_id"
-    t.integer  "order_id"
-    t.integer  "ownable_id"
-    t.string   "ownable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "cash_register_id"
-    t.integer  "last_order_id"
-    t.string   "color"
-  end
-
-  add_index "meta", ["cash_register_id"], :name => "index_meta_on_cash_register_id"
-  add_index "meta", ["crd_id"], :name => "index_meta_on_crd_id"
-  add_index "meta", ["order_id"], :name => "index_meta_on_order_id"
-  add_index "meta", ["ownable_id"], :name => "index_meta_on_ownable_id"
-  add_index "meta", ["ownable_type"], :name => "index_meta_on_ownable_type"
-  add_index "meta", ["vendor_id"], :name => "index_meta_on_vendor_id"
-
   create_table "node_messages", :force => true do |t|
     t.string   "source_sku"
     t.string   "dest_sku"
@@ -770,14 +750,6 @@ ActiveRecord::Schema.define(:version => 20130629100208) do
     t.string   "tag"
     t.boolean  "buy_order"
     t.float    "lc_discount_amount",     :default => 0.0
-    t.text     "bk_msgs_received"
-    t.string   "p_result"
-    t.string   "p_text"
-    t.text     "p_struct"
-    t.text     "m_struct"
-    t.text     "j_struct"
-    t.text     "j_text"
-    t.string   "j_ind"
     t.boolean  "was_printed"
     t.float    "front_end_change",       :default => 0.0
     t.string   "sku"
@@ -804,21 +776,6 @@ ActiveRecord::Schema.define(:version => 20130629100208) do
   add_index "orders", ["location_id"], :name => "index_orders_on_location_id"
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
   add_index "orders", ["vendor_id"], :name => "index_orders_on_vendor_id"
-
-  create_table "paylife_structs", :force => true do |t|
-    t.string   "owner_type"
-    t.integer  "owner_id"
-    t.integer  "vendor_id"
-    t.integer  "cash_register_id"
-    t.integer  "order_id"
-    t.text     "struct"
-    t.text     "json"
-    t.boolean  "tes",              :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "sa"
-    t.string   "ind"
-  end
 
   create_table "payment_methods", :force => true do |t|
     t.string   "name"
@@ -880,55 +837,6 @@ ActiveRecord::Schema.define(:version => 20130629100208) do
     t.datetime "hidden_at"
     t.integer  "company_id"
   end
-
-  create_table "salor_configurations", :force => true do |t|
-    t.integer  "vendor_id"
-    t.float    "lp_per_dollar"
-    t.float    "dollar_per_lp"
-    t.text     "address"
-    t.string   "telephone"
-    t.text     "receipt_blurb"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "pagination",            :default => 12
-    t.string   "stylesheets"
-    t.string   "cash_drawer"
-    t.boolean  "open_cash_drawer",      :default => false
-    t.datetime "last_wholesaler_check"
-    t.text     "csv_imports"
-    t.string   "csv_imports_url"
-    t.string   "paylife_sa",            :default => "E"
-    t.string   "paylife_version",       :default => "1"
-    t.string   "paylife_euro"
-    t.string   "paylife_konto",         :default => "01"
-    t.string   "paylife_ind",           :default => "U"
-    t.boolean  "auto_drop",             :default => false
-    t.boolean  "items_view_list",       :default => true
-    t.string   "url",                   :default => "http://salor"
-    t.boolean  "salor_printer",         :default => false
-    t.text     "receipt_blurb_footer"
-    t.boolean  "calculate_tax",         :default => false
-    t.boolean  "license_accepted",      :default => false
-    t.boolean  "csv_categories"
-    t.boolean  "csv_buttons"
-    t.boolean  "csv_discounts"
-    t.boolean  "csv_customers"
-    t.boolean  "csv_loyalty_cards"
-    t.text     "invoice_blurb"
-    t.text     "invoice_blurb_footer"
-  end
-
-  add_index "salor_configurations", ["vendor_id"], :name => "index_configurations_on_vendor_id"
-
-  create_table "sessions", :force => true do |t|
-    t.string   "session_id", :null => false
-    t.text     "data"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
-  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "shipment_items", :force => true do |t|
     t.string   "name"
@@ -1183,6 +1091,31 @@ ActiveRecord::Schema.define(:version => 20130629100208) do
     t.datetime "hidden_at"
     t.integer  "vendor_id"
     t.integer  "company_id"
+    t.float    "lp_per_dollar"
+    t.float    "dollar_per_lp"
+    t.text     "address"
+    t.string   "telephone"
+    t.text     "receipt_blurb"
+    t.integer  "pagination",                      :default => 10
+    t.string   "stylesheets"
+    t.string   "cash_drawer"
+    t.boolean  "open_cash_drawer"
+    t.datetime "last_wholesaler_check"
+    t.text     "csv_imports"
+    t.string   "csv_imports_url"
+    t.boolean  "items_view_list"
+    t.string   "url",                             :default => "http://default.sr.localhost"
+    t.boolean  "salor_printer"
+    t.text     "receipt_blurb_footer"
+    t.boolean  "calculate_tax"
+    t.boolean  "license_accepted"
+    t.boolean  "csv_categories"
+    t.boolean  "csv_buttons"
+    t.boolean  "csv_discounts"
+    t.boolean  "csv_customers"
+    t.boolean  "csv_loyalty_cards"
+    t.text     "invoice_blurb"
+    t.text     "invoice_blurb_footer"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

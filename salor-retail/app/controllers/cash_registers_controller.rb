@@ -8,91 +8,50 @@ class CashRegistersController < ApplicationController
   before_filter :get_devicenodes
 
   def index
-    @registers = CashRegister.scopied.page(params[:page])
+    @registers = @current_vendor.cash_registers.visible.page(params[:page]).order("created_at DESC")
     CashRegister.update_all_devicenodes
   end
-
-
   
   def show
-    if params[:id]
-      session[:cash_register_id] = params[:id]
-    end
+    session[:cash_register_id] = params[:id]
     redirect_to new_order_path
   end
 
-  # GET /current_registers/new
-  # GET /current_registers/new.xml
   def new
-    @current_register = CashRegister.scopied.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @current_register }
-    end
+    @cash_register = CashRegister.new
   end
 
-  # GET /current_registers/1/edit
   def edit
-    @current_register = CashRegister.scopied.find(params[:id])
+    @cash_register = @current_vendor.cash_registers.visible.find_by_id(params[:id])
   end
 
-  # POST /current_registers
-  # POST /current_registers.xml
   def create
-    @current_register = CashRegister.new(params[:current_register])
- 
-    respond_to do |format|
-      if @current_register.save
-        format.html { redirect_to current_registers_path }
-        format.xml  { render :xml => @current_register, :status => :created, :location => @current_register }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @current_register.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /current_registers/1
-  # PUT /current_registers/1.xml
-  def update
-    @current_register = CashRegister.scopied.find(params[:id])
-    respond_to do |format|
-      if @current_register.update_attributes(params[:current_register])
-         @current_register.thermal_printer_name = nil unless params[:current_register][:thermal_printer].empty?
-         @current_register.sticker_printer_name = nil unless params[:current_register][:sticker_printer].empty?
-         @current_register.scale_name = nil unless params[:current_register][:scale_name].empty?
-        @current_register.save
-        format.html { redirect_to current_registers_path }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @current_register.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /current_registers/1
-  # DELETE /current_registers/1.xml
-  def destroy
-    @current_register = CashRegister.scopied.find(params[:id])
-    if @current_register.orders.any? then
-      @current_register.update_attribute(:hidden,1)
-      if @current_register.id == @current_register then
-        @current_register = nil
-      end
+    @cash_register = CashRegister.new(params[:cash_register])
+    @cash_register.vendor = @current_vendor
+    @cash_register.company = @current_company
+    if @cash_register.save
+      redirect_to cash_registers_path
     else
-      if @current_register.id == @current_register then
-        @current_register = nil
-      end
-      @current_register.kill
-    end
-    
-    respond_to do |format|
-      format.html { redirect_to(current_registers_url) }
-      format.xml  { head :ok }
+      render :new
     end
   end
+
+  def update
+    @cash_register = @current_vendor.cash_registers.visible.find_by_id(params[:id])
+    
+    if @cash_register.update_attributes(params[:current_register])
+      redirect_to cash_registers_path
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @cash_register = @current_vendor.cash_registers.visible.find_by_id(params[:id])
+    @cash_register.hide(@current_user)
+    redirect_to cash_registers_path
+  end
+  
   private 
   
   def get_devicenodes

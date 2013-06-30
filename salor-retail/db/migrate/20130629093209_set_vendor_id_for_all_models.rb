@@ -8,7 +8,7 @@ class SetVendorIdForAllModels < ActiveRecord::Migration
         next
       end
 
-      vendor_id = Order.last.vendor_id
+      vendor_id = Order.last.vendor_id if Order.last
       vendor_id ||= Vendor.first.id
       if model.column_names.include? 'vendor_id' then
         puts "Setting #{ t } to vendor_id #{ vendor_id }"

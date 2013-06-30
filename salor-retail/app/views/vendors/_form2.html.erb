@@ -1,9 +1,10 @@
 <%= form_for @vendor, :html => { :enctype => "multipart/form-data" } do |f| %>
-<%= f.hidden_field :user_id, :value => $User.is_user? ? $User.user.id : $User.id %>
-  <%= f.fields_for :salor_configuration do |conf| %>
-  <%= conf.hidden_field :vendor_id %>
-<table width="90%" align="center">
 
+
+
+<%= f.hidden_field :vendor_id %>
+
+<table width="90%" align="center">
   <tr>
     <td valign="top" colspan="2" align="right">
       <div class="actions">
@@ -23,7 +24,8 @@
         <% end %>  
     </td>
   </tr>
-<!--  Begin Form Content  -->
+
+  
   <tr>
     <td valign="top" class="attr">
       <%= f.label t("activerecord.attributes.name") %>
@@ -60,19 +62,19 @@
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.lp_per_dollar") %>
+      <%= f.label t("activerecord.attributes.lp_per_dollar") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_field :lp_per_dollar, :class => "keyboardable"%>
+      <%= f.text_field :lp_per_dollar, :class => "keyboardable"%>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.dollar_per_lp") %>
+      <%= f.label t("activerecord.attributes.dollar_per_lp") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_field :dollar_per_lp, :class => "keyboardable"%>
+      <%= f.text_field :dollar_per_lp, :class => "keyboardable"%>
     </td>
   </tr>
   
@@ -85,19 +87,19 @@
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.calculate_tax") %>
+      <%= f.label t("activerecord.attributes.calculate_tax") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.check_box :calculate_tax, :id => "set_calculate_tax" %> <br /> <br />
+      <%= f.check_box :calculate_tax, :id => "set_calculate_tax" %> <br /> <br />
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.itemsviewlist") %>
+      <%= f.label t("activerecord.attributes.itemsviewlist") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.check_box :items_view_list %><br /> <br />
+      <%= f.check_box :items_view_list %><br /> <br />
     </td>
   </tr>
   
@@ -114,19 +116,19 @@
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.pagination") %>
+      <%= f.label t("activerecord.attributes.pagination") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_field :pagination, :class => "keyboardable-int" %>
+      <%= f.text_field :pagination, :class => "keyboardable-int" %>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.url") %>
+      <%= f.label t("activerecord.attributes.url") %>
     </td>
     <td valign="top" class="value">
-       <%= conf.text_field :url, :class => "keyboardable" %>
+       <%= f.text_field :url, :class => "keyboardable" %>
     </td>
   </tr>
   
@@ -175,37 +177,37 @@
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.salor_configuration.receipt_blurb") %>
+      <%= f.label t("activerecord.attributes.salor_configuration.receipt_blurb") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :receipt_blurb, :rows => 5, :class => "keyboardable" %>
+      <%= f.text_area :receipt_blurb, :rows => 5, :class => "keyboardable" %>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.salor_configuration.receipt_blurb_footer") %>
+      <%= f.label t("activerecord.attributes.salor_configuration.receipt_blurb_footer") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :receipt_blurb_footer, :rows => 5, :class => "keyboardable" %>
+      <%= f.text_area :receipt_blurb_footer, :rows => 5, :class => "keyboardable" %>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.salor_configuration.invoice_blurb") %>
+      <%= f.label t("activerecord.attributes.salor_configuration.invoice_blurb") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :invoice_blurb, :rows => 5, :class => "keyboardable" %>
+      <%= f.text_area :invoice_blurb, :rows => 5, :class => "keyboardable" %>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.salor_configuration.invoice_blurb_footer") %>
+      <%= f.label t("activerecord.attributes.salor_configuration.invoice_blurb_footer") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :invoice_blurb_footer, :rows => 5, :class => "keyboardable" %>
+      <%= f.text_area :invoice_blurb_footer, :rows => 5, :class => "keyboardable" %>
     </td>
   </tr>
   
@@ -218,45 +220,45 @@
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.csv_imports_url") %>
+      <%= f.label t("activerecord.attributes.csv_imports_url") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_field :csv_imports_url, :style => "width: 80%;", :class => 'keyboardable' %>
+      <%= f.text_field :csv_imports_url, :style => "width: 80%;", :class => 'keyboardable' %>
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("activerecord.attributes.csv_imports") %>
+      <%= f.label t("activerecord.attributes.csv_imports") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.text_area :csv_imports, :rows => 10, :style => 'width: 80%;',:class => "keyboardable" %> 
+      <%= f.text_area :csv_imports, :rows => 10, :style => 'width: 80%;',:class => "keyboardable" %> 
     </td>
   </tr>
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("menu.buttons") %>
+      <%= f.label t("menu.buttons") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.check_box :csv_buttons %><br /> <br />
-    </td>
-  </tr>
-  
-  <tr>
-    <td valign="top" class="attr">
-      <%= conf.label t("menu.customers") %>
-    </td>
-    <td valign="top" class="value">
-      <%= conf.check_box :csv_customers %><br /> <br />
+      <%= f.check_box :csv_buttons %><br /> <br />
     </td>
   </tr>
   
   <tr>
     <td valign="top" class="attr">
-      <%= conf.label t("menu.discounts") %>
+      <%= f.label t("menu.customers") %>
     </td>
     <td valign="top" class="value">
-      <%= conf.check_box :csv_discounts %><br /> <br />
+      <%= f.check_box :csv_customers %><br /> <br />
+    </td>
+  </tr>
+  
+  <tr>
+    <td valign="top" class="attr">
+      <%= f.label t("menu.discounts") %>
+    </td>
+    <td valign="top" class="value">
+      <%= f.check_box :csv_discounts %><br /> <br />
     </td>
   </tr>
   
@@ -278,5 +280,4 @@
   </tr>
   
 </table>
-  <% end %>
 <% end %>

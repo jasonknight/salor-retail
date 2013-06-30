@@ -4,105 +4,55 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-require 'rubygems'
-require 'mechanize'
+
+
 class ItemsController < ApplicationController
   before_filter :check_role, :except => [:info, :search]
   
 
   def index
     CashRegister.update_all_devicenodes
-    if params[:order_by] then
-      key = params[:order_by]
-      session[key] = (session[key] == 'DESC') ? 'ASC' : 'DESC'
-      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("#{key} #{session[key]}")
-    else
-      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("id desc")
-    end
-    
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @items }
-    end
+    orderby = "id DESC"
+    orderby ||= params[:order_by]
+    @items = @current_vendor.items.visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
   end
 
-  # GET /items/1
-  # GET /items/1.xml
   def show
-    if not check_license() then
-      redirect_to :controller => "home", :action => "index" and return
-    end
-    if params[:id] and not params[:keywords] then
-      @item = $Vendor.items.find_by_id(params[:id])
-    end
     if params[:keywords] then
-        @item = $Vendor.items.by_keywords.first
+      @item = @current_vendor.items.visible.by_keywords(params[:keywords]).first
     end
-    if not @item then
-      redirect_to "/items?notice=" + I18n.t('system.errors.item_not_found') and return
-    end
+
+    @item ||= @current_vendor.items.visible.find_by_id(params[:id])
+
+    redirect_to items_path if not @item
+    
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now
-    @sold_times = OrderItem.scopied.find(:all, :conditions => {:sku => @item.sku, :hidden => 0, :is_buyback => false, :refunded => false, :created_at => @from..@to}).collect do |i| 
-      (i.order.paid == 1 and not i.order.is_proforma) ? i.quantity : 0 
+    @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :is_buyback => nil, :refunded => nil, :created_at => @from..@to).collect do |i| 
+      (i.order.paid and not i.order.is_proforma) ? i.quantity : 0 
     end.sum
   end
 
-  # GET /items/new
-  # GET /items/new.xml
   def new
-    @item = Item.new(:vendor_id => @current_user.vendor_id)
-    @item.item_shippers.build
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @item }
-    end
+    @item = @current_vendor.items.build
   end
 
-  # GET /items/1/edit
   def edit
-    @item = Item.scopied.where(["id = ? or sku = ? or sku = ?",params[:id],params[:id],params[:keywords]]).first
-    if not @item then
-      redirect_to(:action => 'new', :notice => I18n.t("system.errors.item_not_found")) and return
-    end
-    @item.item_stocks.build if not @item.item_stocks.any?
-    @item.item_shippers.build if not @item.item_shippers.any?
-    add_breadcrumb @item.name,'edit_item_path(@item,:vendor_id => params[:vendor_id])'
-   
+    @item = @current_vendor.items.visible.where(["id = ? or sku = ?",params[:id],params[:keywords]]).first
+    #@item.item_stocks.build if not @item.item_stocks.any?
+    #@item.item_shippers.build if not @item.item_shippers.any?
   end
 
-  # POST /items
-  # POST /items.xml
-  def create
-    # We must insure that tax_profile is set first, otherwise, the
-    # gross magic won't work
-    # TODO Test this as it's no longer necessary
-    if params[:item][:price_by_qty].to_i == 1 then
-      params[:item][:price_by_qty] = true
-    else
-      params[:item][:price_by_qty] = false
-    end
-    @item = Item.all_seeing.find_by_sku(params[:item][:sku])
-    if @item then
-      @item.attributes = params[:item]
-      @item.save
-      flash[:notice] = I18n.t('system.errors.sku_must_be_unique',:sku => @item.sku)
-      render :action => "new" and return
-    end
 
-    @item = Item.new
-    @item.tax_profile_id = params[:item][:tax_profile_id]
-    @item.attributes = params[:item]
-    @item.sku.upcase!
-    respond_to do |format|
-      if @item.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Item.model_name.human)) }
-        format.xml  { render :xml => @item, :status => :created, :location => @item }
-      else
-        format.html { render :action => "new", :notice => "Failed" }
-        format.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
-      end
+  def create
+    @item = Item.new(params[:item])
+    @item.vendor = @current_vendor
+    @item.company = @current_company
+    if @item.save
+      redirect_to items_path
+    else
+      render :new
     end
   end
   
@@ -119,29 +69,16 @@ class ItemsController < ApplicationController
     end
   end
 
-  # PUT /items/1
-  # PUT /items/1.xml
   def update
-    @item = Item.scopied.find_by_id(params[:id])
-    params[:item][:sku].upcase!
-    if params[:item][:price_by_qty].to_i == 1 then
-      params[:item][:price_by_qty] = true
+    @item = @current_vendor.items.visible.find_by_id(params[:id])
+    if @item.update_attributes(params[:item])
+      redirect_to items_path
     else
-      params[:item][:price_by_qty] = false
-    end
-    
-    @item.attributes = params[:item]
-    @item.save
-    respond_to do |format|
-      if not @item.errors.messages.any?
-        format.html { redirect_to(:action => 'index', :notice => I18n.t("views.notice.model_edit", :model => Item.model_name.human)) }
-        format.xml  { head :ok }
-      else
-        format.html { flash[:notice] = "There was an error!";render :action => "edit" }
-        format.xml  { render :xml => @item.errors, :status => :unprocessable_entity }
-      end
+      render :edit
     end
   end
+  
+  
   def update_real_quantity
     add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
     if request.post? then
@@ -226,9 +163,11 @@ class ItemsController < ApplicationController
       @customers = Customer.scopied.page(params[:page]).per($Conf.pagination)
     end
   end
+  
   def item_json
-    @item = Item.all_seeing.find_by_sku(params[:sku], :select => "name,sku,id,purchase_price")
+    @item = @current_vendor.items.visible.find_by_sku(params[:sku], :select => "name,sku,id,purchase_price")
   end
+  
   def edit_location
     respond_to do |format|
       format.html 
@@ -294,23 +233,6 @@ class ItemsController < ApplicationController
     deletion_item_ids = all_item_ids - used_item_ids
     Item.where(:id => deletion_item_ids).update_all(:hidden => 1, :hidden_by_distiller => true, :child_id => nil, :sku => nil)
     redirect_to '/items/database_distiller'
-  end
-
-  def export_broken_items
-    @from, @to = assign_from_to(params)
-    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
-    @to = @to ? @to.end_of_day : @from.end_of_day
-    if params[:from] then
-      @items = BrokenItem.scopied.where(["created_at between ? and ?", @from, @to])
-      text = []
-      if @items.any? then
-        text << @items.first.csv_header
-      end
-      @items.each do |item|
-        text << item.to_csv
-      end
-      render_csv "broken_items", text.join("\n") and return
-    end
   end
   
   def reorder_recommendation
@@ -420,7 +342,7 @@ class ItemsController < ApplicationController
     end
   end
   def report
-    @items = $Vendor.items.select("items.quantity,items.name,items.sku,items.base_price,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords.page(params[:page]).per(100)
+    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.base_price,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords.page(params[:page]).per(100)
     @view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     @view ||= 'default'
     render "items/reports/#{@view}/page"

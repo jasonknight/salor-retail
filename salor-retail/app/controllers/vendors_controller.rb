@@ -6,7 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 class VendorsController < ApplicationController
 
-
   def csv
     @vendor = Vendor.find_by_token(params[:token])
     if @vendor then
@@ -24,91 +23,41 @@ class VendorsController < ApplicationController
   end
 
   def show
-    if not check_license() then
-      redirect_to :controller => "home", :action => "index" and return
-    end
-    @vendor = @current_user.vendor(params[:id])
+    @vendor = @current_company.vendors.visible.find_by_id(params[:id])
   end
 
-  # GET /vendors/new
-  # GET /vendors/new.xml
   def new
     @vendor = Vendor.new
-    @vendor.salor_configuration = SalorConfiguration.new
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @vendor }
-    end
   end
 
-  # GET /vendors/1/edit
   def edit
-    @vendor = Vendor.find(params[:id])
-    if @vendor.salor_configuration.nil? then
-      @vendor.salor_configuration = SalorConfiguration.new
-    end
-    
-    if not @vendor.vendor_printers.any? then
-      @vendor.vendor_printers.build
-    end
+    @vendor = @current_company.vendors.visible.find_by_id(params[:id])
   end
 
-  # POST /vendors
-  # POST /vendors.xml
   def create
     @vendor = Vendor.new(params[:vendor])
-
-    respond_to do |format|
-      if @vendor.save
-        format.html { redirect_to(:action => 'new', :notice => I18n.t("views.notice.model_create", :model => Vendor.model_name.human)) }
-        format.xml  { render :xml => @vendor, :status => :created, :location => @vendor }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @vendor.errors, :status => :unprocessable_entity }
-      end
+    @vendor.company = @current_company
+    if @vendor.save
+      redirect_to vendors_path
+    else
+      render :new
     end
   end
 
-  # PUT /vendors/1
-  # PUT /vendors/1.xml
+
   def update
-    @vendor = @current_user.vendor(params[:id])
-    
-    respond_to do |format|
-      if @vendor.update_attributes(params[:vendor])
-        format.html { redirect_to :action => 'edit', :notice => 'Vendor was successfully updated.' }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @vendor.errors, :status => :unprocessable_entity }
-      end
+    @vendor = @current_company.vendors.visible.find_by_id(params[:id])
+    if @vendor.update_attributes(params[:vendor])
+      redirect_to vendors_path
+    else
+      render :edit
     end
   end
 
-  # DELETE /vendors/1
-  # DELETE /vendors/1.xml
-  def destroy
-    @vendor = @current_user.vendor(params[:id])
-    @vendor.kill
 
-    respond_to do |format|
-      format.html { redirect_to(vendors_url) }
-      format.xml  { head :ok }
-    end
-  end
-  
-  #
   def new_drawer_transaction
       @drawer_transaction = DrawerTransaction.new(params[:transaction])
-      # Before we do any transaction, we need to know how much was in the drawer
-      # at the time of the transaction for error checking purposes later, as
-      # some users have had trouble remembering how they handled their drawer money.
-      #
-      # Normally, it is important to ensure that the total shown represents 100%
-      # real, physically present money. You cannot half use Dts, you either track
-      # everything with Dts, or you track nothing with them.
       @drawer_transaction.drawer_amount = @current_user.get_drawer.amount
-      # Ideally, we don't allow a payout of more than is in the drawer.
       if @drawer_transaction.amount > @current_user.get_drawer.amount and @drawer_transaction.payout == true then
         @drawer_transaction.amount = @current_user.get_drawer.amount
       end

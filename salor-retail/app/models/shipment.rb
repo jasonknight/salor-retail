@@ -15,6 +15,7 @@ class Shipment < ActiveRecord::Base
   has_many :notes, :as => :notable, :order => "id desc"
   has_many :shipment_items
   belongs_to :vendor
+  belongs_to :company
   belongs_to :user
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
@@ -45,32 +46,37 @@ class Shipment < ActiveRecord::Base
       :display => I18n.t("views.forms.shipment.types.in_stock")
     }
   ]
-  def self.receiver_shipper_list()
+  def receiver_shipper_list()
     ret = []
-    Shipper.scopied.order(:name).each do |shipper|
+    self.vendor.shippers.visible.order(:name).each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
     end
-    Vendor.all.each do |vendor|
+    self.company.vendors.visible.all.each do |vendor|
       ret << {:name => vendor.name, :value => 'Vendor:' + vendor.id.to_s}
     end
     return ret
   end
+  
   def the_receiver=(val)
     parts = val.split(':')
-    self.update_attribute :receiver_type,parts[0]
-    self.update_attribute :receiver_id,parts[1].to_i
+    self.receiver_type = parts[0]
+    self.receiver_id = parts[1].to_i
+    self.save
   end
   
   def the_receiver
     return "#{self.receiver_type}:#{self.receiver_id}"
   end
+  
   def price=(p)
     write_attribute(:price,self.string_to_float(p))
   end
+  
   def the_shipper=(val)
     parts = val.split(':')
-    self.update_attribute :shipper_type,parts[0]
-    self.update_attribute :shipper_id, parts[1]
+    self.shipper_type = parts[0]
+    self.shipper_id = parts[1].to_i
+    self.save
   end
   
   def the_shipper
@@ -90,9 +96,10 @@ class Shipment < ActiveRecord::Base
     end
     self.note_ids = ids
   end
+  
   def set_items=(items_list)
     ids = []
-    vid = @current_user.vendor_id
+    vid = self.vendor_id
     items_list.each do |li|
       ih = li[1]
       nih = {}

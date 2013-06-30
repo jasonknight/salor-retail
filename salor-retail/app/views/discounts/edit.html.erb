@@ -1,3 +1,2 @@
-<%= raw content_box_top(I18n.t("headings.discount_for", :store => @vendor.name)) %>
+<%= raw content_box_top(I18n.t("headings.discount_for", :store => @discount.vendor.name)) %>
 <%= render 'form' %>
-<%= raw content_box_bottom %>

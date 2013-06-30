@@ -8,6 +8,17 @@
 module SalorScope
   
   def self.included(klass)
+    
+    klass.class_eval do
+      def hide(by)
+        self.hidden = true
+        self.hidden_at = Time.now
+        self.hidden_by = by
+        self.save
+      end
+    end
+    
+    
     begin
 
 

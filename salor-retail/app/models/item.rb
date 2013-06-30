@@ -20,38 +20,52 @@ class Item < ActiveRecord::Base
   belongs_to :item_type
   belongs_to :item
   belongs_to :shipper
-  
+  has_many :item_stocks
   has_many :actions, :as => :model, :order => "weight asc"
   has_many :parts, :class_name => 'Item', :foreign_key => :part_id
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
   belongs_to :child, :class_name => 'Item'
   has_many :order_items
-  
   has_many :item_shippers
+  
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
   
-  has_many :item_stocks
+  
   accepts_nested_attributes_for :item_stocks, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }, :allow_destroy => true
-
 
   validates_presence_of :sku
   validates_uniqueness_of :sku, :scope => :vendor_id
   validate :validify
 
-
-  #scope :by_vendor, lambda {|vid| where(:vendor_id => vid)}
-  #scope :visible, lambda { where("hidden = 0") }
-  #scope :by_keywords, lambda {|keywords| where("name LIKE '%#{keywords}%' OR sku LIKE '#{keywords}%'")}
-
   after_create :set_amount_remaining
-  
   before_save :run_actions
+  
   COUPON_TYPES = [
       {:text => I18n.t('views.forms.percent_off'), :value => 1},
       {:text => I18n.t('views.forms.fixed_amount_off'), :value => 2},
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
   REORDER_TYPES = ['default_export','tobacco_land']
+  
+  
+  
+  
+  def validify
+    if self.item_type.behavior == 'coupon' then
+      unless Item.find_by_sku(self.coupon_applies) then
+        errors.add(:coupon_applies,I18n.t('views.item_must_exist'))
+        GlobalErrors.append_fatal('views.item_must_exist');
+      end
+    end
+    
+    if self.parent_sku == self.sku then
+        errors.add(:parent_sku, I18n.t('system.errors.parent_sku'))
+    end
+    if self.child_sku == self.sku then
+        errors.add(:child_sku, I18n.t('system.errors.child_sku'))
+    end 
+  end
+  
   def coupon_type=(t)
     write_attribute(:coupon_type,1) if t == 'percent'
     write_attribute(:coupon_type,2) if t == 'fixed'
@@ -157,24 +171,28 @@ class Item < ActiveRecord::Base
       Action.run(self, :on_save)
     end
   end
+  
   def parent_sku
     if self.parent then
       return self.parent.sku
     end
     ""
   end
+  
   def child_sku
     if self.child then
       return self.child.sku
     end
     ""
   end
-  def parent
-    Item.visible.find_by_child_id(self.id) unless self.new_record?
-  end
-  def child
-    Item.visible.find_by_id(self.child_id)
-  end
+  
+#   def parent
+#     Item.visible.find_by_child_id(self.id) unless self.new_record?
+#   end
+#   def child
+#     Item.visible.find_by_id(self.child_id)
+#   end
+  
   def parent_sku=(string)
     if string.empty? then
       self.parent = nil
@@ -198,6 +216,7 @@ class Item < ActiveRecord::Base
       errors.add(:parent_sku, I18n.t('system.errors.parent_sku_must_exist'))
     end
   end
+  
   def child_sku=(string)
     if string.empty? then
       self.child = nil
@@ -222,6 +241,7 @@ class Item < ActiveRecord::Base
       GlobalErrors.append_fatal("system.errors.child_sku_must_exist")
     end
   end
+  
   def self.search(keywords)
     if keywords =~ /([\w]+) (\d{1,2}[\.\,]\d{1,2})/ then
       parts = keywords.match(/([\w]+) (\d{1,2}[\.\,]\d{1,2})/)
@@ -367,21 +387,7 @@ class Item < ActiveRecord::Base
       self.tax_profile_id = tp.id
     end
   end
-  
-  def validify
-    if self.item_type.behavior == 'coupon' then
-      unless Item.find_by_sku(self.coupon_applies) then
-        errors.add(:coupon_applies,I18n.t('views.item_must_exist'))
-        GlobalErrors.append_fatal('views.item_must_exist');
-      end
-    end
-    if self.parent_sku == self.sku then
-        errors.add(:coupon_applies,I18n.t('system.errors.parent_sku'))
-    end
-    if self.child_sku == self.sku then
-        errors.add(:coupon_applies,I18n.t('system.errors.child_sku'))
-    end 
-  end
+
   
   def set_amount_remaining
     self.update_attribute(:amount_remaining,self.base_price)

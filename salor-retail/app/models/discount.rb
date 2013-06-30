@@ -11,9 +11,12 @@ class Discount < ActiveRecord::Base
 
   belongs_to :vendor
   belongs_to :location
+  belongs_to :company
   belongs_to :category
   has_and_belongs_to_many :order_items
   has_and_belongs_to_many :orders
+  
+  validates_presence_of :name
   
   APPLIES = [
     [I18n.t("activerecord.models.vendor.one"),"Vendor"],
