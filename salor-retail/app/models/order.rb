@@ -251,7 +251,6 @@ class Order < ActiveRecord::Base
     
     # warning about zero price
     if i.base_price.zero? and not i.is_gs1 and not i.must_change_price and not i.default_buyback
-      GlobalErrors.append("system.errors.item_price_is_zero")
       SalorBase.beep(1500, 100, 3, 10)
     end
     

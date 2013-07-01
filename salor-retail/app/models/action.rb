@@ -114,7 +114,6 @@ class Action < ActiveRecord::Base
           end
         rescue
           # puts "Error: #{$!}"
-          GlobalErrors.append("system.errors.action_error",action,{:error => $!})
         end
       else
         # puts "ActionValue is #{action.value}"
@@ -151,7 +150,6 @@ class Action < ActiveRecord::Base
           item[action.afield.to_sym] /= action.value if action.behavior.to_sym == :divide
           item[action.afield.to_sym] = action.value if action.behavior.to_sym == :assign
         rescue
-          GlobalErrors.append("system.errors.action_error",action,{:error => $!})
         end
       end
       return item

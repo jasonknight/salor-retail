@@ -535,7 +535,6 @@ class OrdersController < ApplicationController
   def clear
     if not @current_user.can(:clear_orders) then
       History.record(:failed_to_clear,@order,1)
-      GlobalErrors.append_fatal("system.errors.no_role",@order,{})
       render 'update_pos_display' and return
     end
     
@@ -558,7 +557,6 @@ class OrdersController < ApplicationController
 
     else
       History.record("cannot clear order because already paid", @order, 1)
-      GlobalErrors.append_fatal("cannot clear order because already paid", @order, {})
     end
     render 'update_pos_display' and return
   end

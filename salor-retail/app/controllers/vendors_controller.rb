@@ -84,12 +84,10 @@ class VendorsController < ApplicationController
           @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount + @drawer_transaction.amount)
         elsif @drawer_transaction.payout then
           if @drawer_transaction.amount > @drawer_transaction.user.get_drawer.amount then
-            GlobalErrors.append_fatal("system.errors.not_enough_in_drawer")
           else
             @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount - @drawer_transaction.amount)
           end
         else
-          GlobalErrors.append_fatal("system.errors.must_specify_drop_or_payout")
         end
         # Do this here - sweeping a different model!
       else

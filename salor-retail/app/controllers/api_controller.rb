@@ -10,7 +10,7 @@ class ApiController < ApplicationController
   # This should allow you to create an arbitrary object.
   def create
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     cls = Kernel.const_get(@cmd[:data][:class_name])
@@ -24,7 +24,7 @@ class ApiController < ApplicationController
       model = cls.new(@cmd[:data][:attributes])
     end
     respond_to do |format|
-      if not GlobalErrors.any_fatal? and @user and model.save then
+      if not nil and @user and model.save then
         if model.class == Order then
 
         end
@@ -36,13 +36,12 @@ class ApiController < ApplicationController
   end
   def update
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
       cls = Kernel.const_get(@cmd[:data][:class_name])
       model = cls.scopied.find_by_id(@cmd[:data][:id])
       if not model
-        GlobalErrors.append_fatal("api.object_does_not_exist")
       end
       respond_to do |format|
         if @user and model and model.update_attributes(@cmd[:data][:attributes]) then
@@ -54,7 +53,7 @@ class ApiController < ApplicationController
   end
   def destroy
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
       cls = Kernel.const_get(@cmd[:data][:class_name])
@@ -70,7 +69,7 @@ class ApiController < ApplicationController
   end
   def authenticate
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     respond_to do |format|
@@ -83,7 +82,7 @@ class ApiController < ApplicationController
   end
   def time
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     respond_to do |format|
@@ -96,7 +95,7 @@ class ApiController < ApplicationController
   end
   def search
    @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -116,7 +115,7 @@ class ApiController < ApplicationController
   end
   def order
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -132,7 +131,7 @@ class ApiController < ApplicationController
   end
   def order_items
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -148,7 +147,7 @@ class ApiController < ApplicationController
   end
   def registers
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -164,7 +163,7 @@ class ApiController < ApplicationController
   end
   def vendors
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -180,7 +179,7 @@ class ApiController < ApplicationController
   end
   def locations
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -196,7 +195,7 @@ class ApiController < ApplicationController
   end
   def categories
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -212,7 +211,7 @@ class ApiController < ApplicationController
   end
   def items
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -228,7 +227,7 @@ class ApiController < ApplicationController
   end
   def customers
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -244,7 +243,7 @@ class ApiController < ApplicationController
   end
   def discounts
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -274,7 +273,6 @@ class ApiController < ApplicationController
     # User.apitoken can be gotten from editing the User and saving the edit. 
     user = User.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(,:roles).first
     if not user then
-      GlobalErrors.append_fatal("api.user_does_not_exist")
       return nil
     end
     @current_user = user
@@ -315,7 +313,6 @@ class ApiController < ApplicationController
       errors << error[1]
     end
     errors << data
-    GlobalErrors.flush
     {
       :success => false,
       :data => errors,
@@ -344,17 +341,13 @@ class ApiController < ApplicationController
     end
     required[:every].each do |k,v|
       if not cmd[k] then
-        GlobalErrors.append_fatal("api.field_missing",nil,{:name => "#{k}"})
       end
       if cmd[k] and not cmd[k].class == v then
-        GlobalErrors.append_fatal("api.field_missing",nil,{:name => "#{k}"})
       end
     end
     if [:create,:update,:destroy,:search].include? action then
       if cmd[:data][:class_name] and not allowed_classes.include? cmd[:data][:class_name].downcase.to_sym then
-        GlobalErrors.append_fatal("api.object_doesnt_exist",nil,{:name => cmd[:data][:class_name]})
       elsif not cmd[:data][:class_name]
-        GlobalErrors.append_fatal("api.field_missing",nil,{:name => 'data.class_name'})
       end
     end
     # puts  GlobalErrors.all.inspect

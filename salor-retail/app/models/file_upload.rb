@@ -368,7 +368,6 @@ class FileUpload
       end
 
     end
-    GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
   end
 
   #
@@ -482,7 +481,6 @@ class FileUpload
         created_items += 1
       end
     end
-    GlobalErrors.append('views.notice.wholesaler_upload_report', nil, { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
   end
   def dist(file,trusted)
     i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
@@ -546,7 +544,6 @@ class FileUpload
 #           puts "Saved #{item.sku} #{item.base_price}"
         end
       rescue 
-         GlobalErrors << ["Error " + $!.inspect]
       end
       $Notice = I18n.t("wholesaler_upload_report",{ :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
     end # end csv.to_a.each

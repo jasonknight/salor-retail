@@ -52,7 +52,6 @@ class Item < ActiveRecord::Base
     if self.item_type.behavior == 'coupon' then
       unless Item.find_by_sku(self.coupon_applies) then
         errors.add(:coupon_applies,I18n.t('views.item_must_exist'))
-        GlobalErrors.append_fatal('views.item_must_exist');
       end
     end
     
@@ -226,21 +225,18 @@ class Item < ActiveRecord::Base
     end
     if self.sku == string then
       errors.add(:child_sku,I18n.t("system.errors.child_sku"))
-        GlobalErrors.append_fatal("system.errors.child_sku")
       return
     end
     c = self.vendor.items.visible.find_by_sku(string)
     if c then
       if self.parent and self.parent.id == c.id then
         errors.add(:child_sku, I18n.t("system.errors.child_sku"))
-        GlobalErrors.append_fatal("system.errors.child_sku")
         self.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
       else
         self.update_attribute(:child_id,c.id)
       end
     else
       errors.add(:child_sku, I18n.t('system.errors.child_sku_must_exist'))
-      GlobalErrors.append_fatal("system.errors.child_sku_must_exist")
     end
   end
   
@@ -352,8 +348,6 @@ class Item < ActiveRecord::Base
       self.part_ids = ids if ids.any?
     rescue
       errors.add(:sku,I18n.t("system.errors.failed_to_save_parts"));
-#       GlobalErrors.append_fatal(I18n.t("system.errors.failed_to_save_parts"),self)
-#       GlobalErrors.append_fatal($!.message,self)
     end
   end
   def batches
@@ -425,7 +419,6 @@ class Item < ActiveRecord::Base
       return i
     else
       # puts "No item found..."
-      GlobalErrors.append_fatal("system.errors.item_not_found")
     end
     return nil
   end
