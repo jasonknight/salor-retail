@@ -170,12 +170,9 @@ class VendorsController < ApplicationController
     redirect_to home_index_path
   end
   
-  
   def edit_field_on_child
     klass = params[:klass].constantize
     inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
-      
-    render :nothing => true and return unless inst   
       
     if inst.class == Order
       @order = inst
@@ -190,12 +187,21 @@ class VendorsController < ApplicationController
     end
     # ---
 
-    value = SalorBase.string_to_float(params[:value])
-    inst.update_attribute(params[:field], value) if inst.respond_to?(params[:field])
+    #value = SalorBase.string_to_float(params[:value])
+    value = params[:value]
+    if inst.respond_to?("#{ params[:field] }=".to_sym)
+      inst.send("#{ params[:field] }=", value)
+      inst.save
+    else
+      raise "VendorsController#edit_field_on_child: #{ klass } does not respond well to setter method #{ params[:field] }!"
+    end
     
     if inst.class == OrderItem
       inst.calculate_totals
       @order.calculate_totals
+      render 'orders/update_pos_display'
+    elsif inst.class == Order
+      inst.calculate_totals
       render 'orders/update_pos_display'
     else
       render :nothing => true
@@ -204,26 +210,6 @@ class VendorsController < ApplicationController
 
   def history
     @histories = History.order("created_at desc").page(params[:page]).per($Conf.pagination)
-  end
-
-  def toggle
-    if allowed_klasses.include? params[:klass]
-      kls = Kernel.const_get(params[:klass])
-      if kls.exists? params[:model_id] then
-        @inst = kls.find(params[:model_id])
-        if @inst.respond_to? params[:field]
-          if not @current_user.owns_this?(@inst) then
-            raise I18n.t("views.errors.no_access_right")
-          end
-          @inst.send(params[:field].to_sym,params[:value])
-        end # @inst.responds_to?
-      else
-        raise "RecordNotFound"
-      end # klass.exists?
-    end # allowed_klasses
-    render(:nothing => true) and return if params[:field] == 'toggle_refund'
-    @inst.reload
-    render :layout => false
   end
   
   def export

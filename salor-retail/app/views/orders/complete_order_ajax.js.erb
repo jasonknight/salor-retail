@@ -9,6 +9,6 @@ $('#header_drawer_amount').html('<%= salor_number_to_currency(@current_user.get_
 $('.pos-rebates').show();
 $('.last-completed-orders').replaceWith('<%= escape_javascript render :partial => "last_completed_orders" %>');
 $('#last_five_orders').replaceWith('<%= escape_javascript render :partial => "last_five_orders" %>');
-Order = <%= raw @current_order.to_json %>;
+Order = <%= raw @order.to_json %>;
 Order.total = <%= @old_order.total %>; // feature #1544
 $('#payment_amount_0').focus();

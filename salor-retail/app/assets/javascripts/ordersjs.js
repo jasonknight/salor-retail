@@ -215,7 +215,7 @@ function update_pos_display() {
 }
 
 //function refund_item(id) {
-//  get('/vendors/toggle?' +
+//  get('/vendors/edit_field_on_child?' +
 //    'field=toggle_refund' +
 //    '&klass=OrderItem' +
 //    '&value=true' +
@@ -260,7 +260,7 @@ function makeItemMenu(item) {
         var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/bill.svg" width="46px" height="28px" /></div>');
         buyback.addClass('pointer');
         buyback.mousedown(function () {
-            var string = '/vendors/toggle?model_id=' +
+            var string = '/vendors/edit_field_on_child?id=' +
                           item.id +'&klass=OrderItem' +
                           '&field=toggle_buyback'+
                           '&value=undefined';
@@ -413,7 +413,7 @@ window.showOrderOptions = function () {
   });
   // TaxFree
   var callbacks = {change: function () {
-      get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
+      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
     }
   };
   var options = {
@@ -433,7 +433,7 @@ window.showOrderOptions = function () {
     append_to: config_table_cols_right[0]
   };
   var callbacks = {change: function () {
-    get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
+    get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
     }
   };
   var proforma_check = shared.draw.check_option(options,callbacks);
@@ -446,7 +446,7 @@ window.showOrderOptions = function () {
     append_to: config_table_cols_left[0]
   };
   var callbacks = {change: function () {
-    get("/vendors/toggle?model_id=" + Order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js",function () {});
+    get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js",function () {});
   }
   };
   var buy_order_check = shared.draw.check_option(options,callbacks);
@@ -559,7 +559,7 @@ function detailedOrderItemMenu(event) {
   var buyback = $('<div id="item_menu_buyback" class="oi-menu-icon"><img src="/images/icons/bill.svg" width="46px" height="28px" /></div>');
   buyback.addClass('pointer');
   buyback.click(function () {
-    var string = '/vendors/toggle?model_id=' +
+    var string = '/vendors/edit_field_on_child?id=' +
     item.id +'&klass=OrderItem' +
     '&field=toggle_buyback'+
     '&value=undefined';
@@ -732,15 +732,15 @@ function updatePosItem(item) {
   //item['price'] = item['price'] - item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   if (Register.hide_discounts) {
-    var attrs = ['name','quantity','price','subtotal'];
+    var attrs = ['name','quantity','price','subtotal', 'tax'];
   } else {
-    var attrs = ['name','quantity','price','coupon_amount','rebate','subtotal'];
+    var attrs = ['name','quantity','price','coupon_amount','rebate','subtotal','tax'];
   }
   for (var i = 0; i < attrs.length; i++) {
     var key = attrs[i];
     var id = '.' + base_id + '-' + key;
     if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && key == 'coupon_amount') { $(id).addClass('discount_applied'); };
-    if (key == 'price' || key == 'coupon_amount' || key == 'subtotal' || key == 'rebate') {
+    if (key == 'price' || key == 'coupon_amount' || key == 'subtotal' || key == 'rebate' || key == 'tax') {
       if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || key == 'rebate') {
         $(id).html(toPercent(item[key]));
       } else {
@@ -753,12 +753,14 @@ function updatePosItem(item) {
       }
       $(id).html(item[key]);
     }
+    
     if (item['is_buyback'] & highlightAttrs.indexOf(key) != -1) {
       highlight($(id));
     } else {
       $(id).removeClass("pos-highlight");
     }
   }
+  
   makeItemMenu(item);
   if (item["must_change_price"] == true) {
     var id = '.' + base_id + '-price';

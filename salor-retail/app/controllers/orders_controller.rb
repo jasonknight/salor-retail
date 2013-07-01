@@ -270,12 +270,13 @@ class OrdersController < ApplicationController
     
     @old_order = @order
     
-    o = Order.new
-    o.vendor = @current_vendor
-    o.user = @current_user
-    o.cash_register = @current_register
-    o.save
-    @current_user.current_order_id = o.id
+    @order = Order.new
+    @order.vendor = @current_vendor
+    @order.company = @current_company
+    @order.user = @current_user
+    @order.cash_register = @current_register
+    @order.save
+    @current_user.current_order_id = @order.id
     @current_user.save
   end
   
@@ -522,15 +523,7 @@ class OrdersController < ApplicationController
     view ||= 'default'
     render "orders/reports/#{view}/page"
   end
-  #
-  def remove_payment_method
-    if @current_user.is_technician? then
-      @order = Order.find(params[:id].to_s)
-      if @order then
-        @order.payment_methods.find(params[:pid]).destroy
-      end
-    end
-  end
+
   
   def clear
     if not @current_user.can(:clear_orders) then

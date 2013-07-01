@@ -30,9 +30,8 @@ class Item < ActiveRecord::Base
   
   accepts_nested_attributes_for :item_stocks, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }, :allow_destroy => true
 
-  validates_presence_of :sku
+  validates_presence_of :sku, :item_type, :vendor_id, :company_id
   validates_uniqueness_of :sku, :scope => :vendor_id
-  validate :validify
 
   after_create :set_amount_remaining
   before_save :run_actions
@@ -46,22 +45,7 @@ class Item < ActiveRecord::Base
   REORDER_TYPES = ['default_export','tobacco_land']
   
   
-  
-  
-  def validify
-    if self.item_type.behavior == 'coupon' then
-      unless Item.find_by_sku(self.coupon_applies) then
-        errors.add(:coupon_applies,I18n.t('views.item_must_exist'))
-      end
-    end
-    
-    if self.parent_sku == self.sku then
-        errors.add(:parent_sku, I18n.t('system.errors.parent_sku'))
-    end
-    if self.child_sku == self.sku then
-        errors.add(:child_sku, I18n.t('system.errors.child_sku'))
-    end 
-  end
+
   
   def coupon_type=(t)
     write_attribute(:coupon_type,1) if t == 'percent'
@@ -92,10 +76,7 @@ class Item < ActiveRecord::Base
     return self.tax_profile.name if self.tax_profile
     return n
   end
-  def behavior=(b)
-    self.item_type = ItemType.find_by_behavior(b)
-    write_attribute :behavior,b
-  end
+  
   def get_translated_name(locale=:en)
     locale = locale.to_s
     trans = read_attribute(:name_translations)
@@ -123,12 +104,12 @@ class Item < ActiveRecord::Base
       return ActiveSupport::JSON.decode(text)
     end
   end
-  def item_type_name=(name)
-    it = ItemType.find_by_behavior(name)
-    if it then
-      self.item_type_id = it.id
-    end
-  end
+#   def item_type_name=(name)
+#     it = ItemType.find_by_behavior(name)
+#     if it then
+#       self.item_type_id = it.id
+#     end
+#   end
   def category_name
     return self.category.name if self.category
   end
@@ -298,10 +279,10 @@ class Item < ActiveRecord::Base
       write_attribute(:tax_profile_id,id)
     end
   end
-  def item_type_id=(id)
-    write_attribute(:behavior,ItemType.find(id).behavior)
-    write_attribute(:item_type_id,id)
-  end
+#   def item_type_id=(id)
+#     write_attribute(:behavior,ItemType.find(id).behavior)
+#     write_attribute(:item_type_id,id)
+#   end
   def height=(p)
     p = self.string_to_float(p)
     write_attribute(:height,p)
@@ -361,36 +342,6 @@ class Item < ActiveRecord::Base
       b.add_item(self)
       b.update_attributes(batch)
       b.save
-    end
-  end
-
-  def gift_card?
-    self.item_type.behavior == 'gift_card'
-  end
-  def coupon?
-    self.item_type.behavior == 'coupon'
-  end
-  
-  def make_valid
-    self.sku = self.sku.upcase
-    
-    if self.name.nil? or self.name.blank? then
-      self.name = I18n.t("views.dummy_item")
-      invld = true
-    end
-
-    if self.item_type_id.blank? then
-      self.item_type_id = self.vendor.item_types.find_by_behavior('normal').id
-      invld = true
-    end
-    
-    if self.behavior.blank? then
-      self.behavior = self.item_type.behavior
-    end
-    
-    if self.tax_profile.nil? then
-      tp = self.vendor.tax_profiles.where(:default => true).first
-      self.tax_profile_id = tp.id
     end
   end
 

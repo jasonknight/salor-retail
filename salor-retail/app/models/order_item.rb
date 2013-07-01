@@ -49,29 +49,15 @@ class OrderItem < ActiveRecord::Base
     end
   end
   
-#   def toggle_buyback(x)
-#     if self.is_buyback then
-#       self.update_attribute(:is_buyback,false)
-#       self.price = discover_price(self.item)
-#       calculate_total
-#     else
-#       if self.quantity > 1 then
-#         oi = self.clone
-#         oi.quantity = 1
-#         oi.order = self.order 
-#         oi.is_buyback = true if not self.order.buy_order == true
-#         oi.item = self.item
-#         oi.price = oi.discover_price(oi.item)
-#         oi.save
-#         self.quantity -= 1
-#         self.save
-#         return
-#       end
-#       self.update_attribute(:is_buyback,true) if not self.order.buy_order == true
-#       self.price = discover_price(self.item)
-#       calculate_total
-#     end
-#   end
+  def toggle_buyback(x)
+    self.is_buyback = ! self.is_buyback
+    if self.is_buyback
+      self.price = - self.item.buyback_price
+    else
+      self.price = self.item.base_price
+    end
+    self.calculate_totals
+  end
   
   def create_refund_transaction(amount, type, user, opts)
     dt = DrawerTransaction.new(opts)
@@ -154,6 +140,20 @@ class OrderItem < ActiveRecord::Base
 #     end
 #   end
   
+  
+  def price=(p)
+    if self.behavior == 'gift_card'
+      p = self.string_to_float(p)
+      i = self.item
+      if i.activated.nil?
+        i.base_price = p
+        i.amount_remaining = p
+        i.save
+      end
+    end
+    write_attribute :price, p
+  end
+      
 #   def price=(p)
 #     if self.order and self.order.paid == 1 then
 #       return
@@ -258,9 +258,8 @@ class OrderItem < ActiveRecord::Base
     self.category = item.category
     self.location = item.location
     
-    # for gift cards
-    self.amount_remaining = item.amount_remaining
     self.activated = item.activated
+    self.amount_remaining = item.amount_remaining
     
     self.weigh_compulsory = item.weigh_compulsory
     self.quantity = self.weigh_compulsory ? 0 : 1
@@ -269,45 +268,69 @@ class OrderItem < ActiveRecord::Base
   
   
   def modify_price
-    if self.is_buyback
-      self.price *= -1
-    end
-    
-    if self.behavior == 'gift_card' and self.activated
-      if self.amount_remaining > self.order.subtotal
-        self.price -= self.order_subtotal
+    self.modify_price_for_giftcards
+    self.modify_price_for_parts   
+    self.save
+  end
+  
+  
+  def modify_price_for_giftcards
+    if self.behavior == 'gift_card' and self.item.activated
+      if self.amount_remaining > self.order.total.to_f
+        self.price = - self.order.total
       else
-        self.price -= self.amount_remaining
+        self.price = - self.amount_remaining
       end
       self.price = self.price.round(2)
     end
-    
-    # part price calculation goes here
   end
   
-
-
-
-  def calculate_totals   
-    t = (self.price * self.quantity).round(2)
-    
-    if self.rebate
-      self.rebate_amount = (t * self.rebate / 100.0).round(2)
-      st = t - self.rebate_amount
-    elsif self.discount_applies
-      self.discount_amount = (t * self.discount / 100.0).round(2)
-      st = t - self.discount_amount
-    elsif self.coupon_applies
-      self.coupon_amount = 0.77 # add a method here
-      st = t - self.coupon_amount
-    end
-    
+  def modify_price_for_parts
+    # TODO
+  end
+  
+  def calculate_totals
+    t = (self.price * self.quantity).round(2)    
     self.total = t.round(2)
-    self.subtotal = st.round(2)
+    self.subtotal = self.total
+    self.apply_discount
+    self.apply_rebate
+    self.apply_coupon
     self.calculate_tax
     self.save
   end
   
+  def apply_rebate
+    if self.rebate
+      self.rebate_amount = (self.subtotal * self.rebate / 100.0).round(2)
+      self.subtotal -= self.rebate_amount
+    end
+  end
+  
+  def apply_coupon
+    # TODO
+  end
+  
+  def apply_discount
+    # Vendor
+    discount = self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Vendor").first
+    
+    # Category
+    discount ||= self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Category", :category_id => self.category ).first
+    
+    # Location
+    discount ||= self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Location", :location_id => self.location ).first
+    
+    # Item
+    discount ||= self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Item", :item_sku => self.sku ).first
+    
+    if discount
+      self.discount = discount.amount
+      self.discount_amount = (self.subtotal * discount.amount / 100.0).round(2)
+      self.subtotal -= self.discount_amount
+    end
+  end
+
   
   def calculate_tax
     if self.vendor.calculate_tax == true
@@ -318,6 +341,12 @@ class OrderItem < ActiveRecord::Base
     self.tax_amount = t.round(2)
   end
   
+  
+  def quantity=(q)
+    q = self.string_to_float(q)
+    return if self.behavior == 'gift_card' and q != 1
+    write_attribute :quantity, q
+  end
   
   
   
@@ -522,7 +551,7 @@ class OrderItem < ActiveRecord::Base
     items.flatten!
     
     items.each do |i|
-      if i.ignore_qty.nil? and i.behavior == 'normal' and o.is_proforma.nil?
+      if i.ignore_qty.nil? and i.behavior == 'normal' and self.order.is_proforma.nil?
         if self.is_buyback
           i.quantity += self.quantity
           i.quantity_buyback += self.quantity
@@ -550,5 +579,19 @@ class OrderItem < ActiveRecord::Base
 #       self.save
 #     end
 #   end
+  
+  def debug
+    if self.behavior == 'gift_card'
+      puts "GIFT CARD"
+      puts "---------"
+      puts "self.price              = #{ self.price.inspect }"
+      puts "self.total              = #{ self.total.inspect }"
+      puts "self.activated          = #{ self.activated.inspect }"
+      puts "self.amount_remaining   = #{ self.amount_remaining.inspect }"
+      puts "self.item.base_price         = #{ self.item.base_price.inspect }"
+      puts "self.item.activated          = #{ self.item.activated.inspect }"
+      puts "self.item.amount_remaining   = #{ self.item.amount_remaining.inspect }"
+    end
+  end
 
 end

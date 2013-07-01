@@ -23,6 +23,7 @@ class Order < ActiveRecord::Base
   belongs_to :cash_register
   belongs_to :current_register_daily
   belongs_to :drawer
+  belongs_to :tax_profile
 
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
@@ -133,40 +134,39 @@ class Order < ActiveRecord::Base
 #   end
   
   def toggle_buy_order=(x)
-    return if self.paid
-    toggle_buy_order(x)
-  end
-  
-  def toggle_buy_order(x)
-    return if self.paid
-    if self.buy_order then
-      self.update_attribute(:buy_order, false)
-    else
-      self.update_attribute(:buy_order,true)
+    self.buy_order = !self.buy_order
+    self.order_items.visible.each do |oi|
+      oi.toggle_buyback(x)
     end
-    self.order_items.each do |oi|
-      oi.price = oi.discover_price
-      oi.calculate_totals
-    end
+    self.calculate_totals
   end
-  
-#   def toggle_lock(type)
-#     if type == 'total' then
-#       self.update_attribute(:total_is_locked,!self.total_is_locked)
-#     elsif type == 'subtotal' then
-#       self.update_attribute(:subtotal_is_locked,!self.subtotal_is_locked)
-#     elsif type == 'tax' then
-#       self.update_attribute(:tax_is_locked,!self.tax_is_locked)
-#     end
-#   end
 
-#   def toggle_tax_free(x)
-#     self.update_attribute(:tax_free, !self.tax_free)
-#   end
-# 
-#   def toggle_is_proforma(x)
-#     self.update_attribute(:is_proforma, !self.is_proforma)
-#   end
+  def toggle_tax_free=(x)
+    if self.tax_profile
+      self.tax_profile = nil
+      self.tax = nil
+      self.order_items.visible.each do |oi|
+        oi.tax_profile = oi.item.tax_profile
+        oi.tax = oi.tax_profile.value
+        oi.calculate_totals
+      end
+    else
+      zero_tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
+      raise "A TaxProfile with 0% is missing" unless zero_tax_profile
+      self.tax_profile = zero_tax_profile
+      self.tax = zero_tax_profile.value
+      self.order_items.visible.each do |oi|
+        oi.tax_profile = zero_tax_profile
+        oi.tax = zero_tax_profile.value
+        oi.calculate_totals
+      end
+    end
+    self.calculate_totals
+  end
+
+  def toggle_is_proforma=(x)
+    self.update_attribute(:is_proforma, !self.is_proforma)
+  end
 
   
   
@@ -196,30 +196,20 @@ class Order < ActiveRecord::Base
     return if self.paid
     
     
-#     # try to get existing regular item, except coupons
-#     item = self.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
-#     if item
-#       if item.behavior == 'gift_card' then
-#         # a gift card has already been added to the order. cannot proceed.
-#         return nil
-#       end
-#       
-#       if not (item.activated or item.is_buyback)
-#         # simply increment and return
-#         item.quantity += 1
-#         item.save
-#         return item
-#       end
-#     end
+    # try to get existing regular item, except coupons
+    item = self.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+    if item      
+      if not (item.activated or item.is_buyback)
+        # simply increment and return
+        item.quantity += 1
+        item.save
+        return item
+      end
+    end
     
     # at this point, we know that the added order item is not yet in the order. so we add a new one
     
     i = self.get_item_by_code(params[:sku])
-
-#     if i.class == Item and i.activated == true and i.behavior == 'gift_card' and i.amount_remaining <= 0 then
-#       # gift card empty. cannot add the order item
-#       return nil
-#     end   
     
     if i.class == Item and i.behavior == 'coupon' and not self.order_items.visible.where(:sku => i.coupon_applies).any?
       flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
@@ -243,8 +233,8 @@ class Order < ActiveRecord::Base
     oi = OrderItem.new
     oi.order = self
     oi.set_attrs_from_item(i)
-    oi.modify_price
     oi.no_inc = true if params[:no_inc]
+    oi.modify_price
     oi.calculate_totals
     self.order_items << oi
     self.calculate_totals
@@ -272,7 +262,7 @@ class Order < ActiveRecord::Base
     i.must_change_price = true
     i.item_type = self.vendor.item_types.visible.find_by_behavior('gift_card')
     if not i.save then
-      raise "Failed to Save Auto Giftcard"
+      raise "order.create_dynamic_gift_card_item: #{ i.errors.messages }"
     end
     return i
   end
@@ -281,8 +271,8 @@ class Order < ActiveRecord::Base
   def update_giftcard_remaining_amounts
     gcs = self.order_items.visible.where(:behavior => 'gift_card', :activated => true)
     gcs.each do |gc|
-      i = gcs.item
-      i.amount_remaining -= gc.price
+      i = gc.item
+      i.amount_remaining += gc.price
       i.amount_remaining = i.amount_remaining.round(2)
       i.save
     end
@@ -355,6 +345,7 @@ class Order < ActiveRecord::Base
         roi.update_attribute(:coupon_applied, false) if roi
       end
     end
+    self.calculate_totals
   end
 
 	def coupon_for(sku)
@@ -374,11 +365,13 @@ class Order < ActiveRecord::Base
   
 
   def calculate_totals
-    self.total = self.order_items.visible.sum(:subtotal).round(2)
-    self.tax = self.order_items.visible.sum(:tax_amount).round(2)
+    # total contain only subtotal sum of normal items
+    self.total = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal).round(2)
+    
+    # subtotal contains everything
+    self.subtotal = self.order_items.visible.sum(:subtotal).round(2)
     
     # subtotal will include order rebates
-    self.subtotal = self.total
     self.save
   end
 
@@ -416,6 +409,7 @@ class Order < ActiveRecord::Base
     end
     
     self.activate_giftcard_items
+    self.update_giftcard_remaining_amounts
     self.create_payment_methods(params)
     
     dt = DrawerTransaction.new
@@ -483,31 +477,7 @@ class Order < ActiveRecord::Base
 
   
   
-  def to_json
-    self.total = 0 if self.total.nil?
-    attrs = {
-      :total => self.total.round(2),
-      :rebate_type => self.rebate_type_display,
-      :rebate => self.rebate.round(2),
-      :lc_points => self.lc_points,
-      :id => self.id,
-      :buy_order => self.buy_order,
-      :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag,
-      :sale_type_id => self.sale_type_id,
-      :destination_country_id => self.destination_country_id,
-      :origin_country_id => self.origin_country_id,
-      :sale_type  => self.sale_type,
-      :origin => self.origin_country,
-      :destination => self.destination_country,
-      :is_proforma => self.is_proforma,
-      :order_items => self.order_items
-    }
-    if self.customer then
-      attrs[:customer] = self.customer.json_attrs
-      attrs[:loyalty_card] = self.customer.loyalty_card.json_attrs
-    end
-    attrs.to_json
-  end
+  
   
 #   def order_items_as_array
 #     items = []
@@ -1157,4 +1127,30 @@ class Order < ActiveRecord::Base
 #       @current_user = @order.user
 #     end
 #   end
+  
+  def to_json
+    self.total = 0 if self.total.nil?
+    attrs = {
+      :total => self.subtotal.to_f.round(2),
+      :rebate_type => self.rebate_type_display,
+      :rebate => self.rebate.to_f.round(2),
+      :lc_points => self.lc_points,
+      :id => self.id,
+      :buy_order => self.buy_order,
+      :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag,
+      :sale_type_id => self.sale_type_id,
+      :destination_country_id => self.destination_country_id,
+      :origin_country_id => self.origin_country_id,
+      :sale_type  => self.sale_type,
+      :origin => self.origin_country,
+      :destination => self.destination_country,
+      :is_proforma => self.is_proforma,
+      :order_items => self.order_items
+    }
+    if self.customer then
+      attrs[:customer] = self.customer.json_attrs
+      attrs[:loyalty_card] = self.customer.loyalty_card.json_attrs
+    end
+    attrs.to_json
+  end
 end

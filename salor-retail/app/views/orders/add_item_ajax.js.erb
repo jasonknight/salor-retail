@@ -28,7 +28,6 @@
   $('.notice-container').html('');
   $('.notice-container').html('<%= t("system.errors.unspecified_error") %>');
 <% end %>
-<%= render :partial => "shared/js/global_errors_js" %>
 focusInput($('#keyboard_input'));
 Order = <%= raw @order.to_json %>;
 $(".complete-order-total").html($('#pos_order_total').html());
