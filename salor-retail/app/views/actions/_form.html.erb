@@ -9,7 +9,8 @@
       </ul>
     </div>
   <% end %>
-<div class="form-container" width="90%" align="center">
+  
+<div class="form-container" width="90%" align="center" style="clear:both">
  <form id="action_form" method="post" action="/actions/create">
    <div style="margin:0;padding:0;display:inline;display: none;">
      <input type="hidden" name="id" value="<%= @action.id %>" />
@@ -18,70 +19,57 @@
    </div>
   <table width="90%" align="center">
     <tr>
+      <td><%= @action.model.name %></td>
+    </tr>
+    <tr>
       <td>
-  <div class="field">
-    <label> <%= I18n.t("activerecord.attributes.name") %> </label><br />
-    <input type="text" name="item[name]" value="<%= @action.name %>" />
-  </div>
+        <div class="field">
+          <label> <%= I18n.t("activerecord.attributes.name") %> </label><br />
+          <input type="text" name="item[name]" value="<%= @action.name %>" />
+        </div>
 
-  <div class="field">
-    <label> <%= I18n.t("activerecord.attributes.sku")%> </label><br />
-    <input type="text" name="item[sku]" value="<%= @action.sku %>" />
-  </div>
- 
-  <div class="field">
-    <label> <%= I18n.t("views.single_words.ordering") %> </label><br />
-    <input type="text" name="item[weight]" value="<%= @action.weight %>" />
-  </div>
+        <!--
+        <div class="field">
+          <label> <%= I18n.t("activerecord.attributes.sku")%> </label><br />
+          <input type="text" name="item[sku]" value="<%= @action.sku %>" />
+        </div>
+        
+      
+        <div class="field">
+          <label> <%= I18n.t("views.single_words.ordering") %> </label><br />
+          <input type="text" name="item[weight]" value="<%= @action.weight %>" />
+        </div>
+        -->
       </td>
     </tr>
     <tr>
       <td>
-       <div class="field">
-    <label> <%= I18n.t("activerecord.models.category.one")%> </label><br />
-    <select id="action_category_id" name="item[category_id]">
-      <option value="0"> N/A </option>
-      <% Category.scopied.each do |c|  %>
-       <option value="<%= c.id %>" <%= 'selected=true' if c.id == @action.user_id and @action.user_type == 'Category' %>> <%= c.name %> </option>
-      <% end %>
-    </select>
-  </div>
-  <div class="field">
-    <label> <%= I18n.t("activerecord.attributes.when") %> </label><br />
-    <select id="action_whento" name="item[whento]">
-      <% Action.when_list.each do |w|  %>
-       <option value="<%= w %>" <%= @action.whento.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("when_list.#{w}") %> </option>
-      <% end %>
-    </select>
-  </div>
+        <!--
+        <div class="field">
+          <label> <%= I18n.t("activerecord.models.category.one")%> </label><br />
+          <select id="action_category_id" name="item[category_id]">
+            <option value=""></option>
+            <% @current_vendor.categories.visible.each do |c|  %>
+            <option value="<%= c.id %>" <%= 'selected=true' if c.id == @action.user_id and @action.user_type == 'Category' %>> <%= c.name %> </option>
+            <% end %>
+          </select>
+        </div>
+        -->
+        <div class="field">
+          <label> <%= I18n.t("activerecord.attributes.when") %> </label><br />
+          <select id="action_whento" name="item[whento]">
+            <% Action.when_list.each do |w|  %>
+            <option value="<%= w %>" <%= @action.whento.to_s.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("when_list.#{w}") %> </option>
+            <% end %>
+          </select>
+        </div>
 
 
-  <div class="field">
-    <label> <%= I18n.t("activerecord.attributes.behavior")%> </label><br />
-    <select id="action_behavior" name="item[behavior]">
-      <% Action.behavior_list.each do |behavior|  %>
-       <option value="<%= behavior %>" <%= @action.behavior.to_sym == behavior ? 'selected="selected"' : "" %>> <%=I18n.t("behavior_list.#{behavior}") %> </option>
-      <% end %>
-    </select>
-  </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-  <div class="field">
-   <label>  <%= I18n.t("activerecord.attributes.afield")%> </label><br />
-    <select id="action_afield" name="item[afield]">
-      <% Action.afield_list.each do |w|  %>
-       <option value="<%= w %>" <%= @action.afield.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("activerecord.attributes.#{w}") %> </option>
-      <% end %>
-    </select>
-  </div>
-
-      <div class="field">
-        <label>  <%= I18n.t("activerecord.attributes.afield")%> </label><br />
-          <select id="action_field2" name="item[field2]">
-            <% Action.afield_list.each do |w|  %>
-            <option value="<%= w %>" <%= @action.field2.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("activerecord.attributes.#{w}") %> </option>
+        <div class="field">
+          <label> <%= I18n.t("activerecord.attributes.behavior")%> </label><br />
+          <select id="action_behavior" name="item[behavior]">
+            <% Action.behavior_list.each do |behavior|  %>
+            <option value="<%= behavior %>" <%= @action.behavior.to_s.to_sym == behavior ? 'selected="selected"' : "" %>> <%=I18n.t("behavior_list.#{behavior}") %> </option>
             <% end %>
           </select>
         </div>
@@ -89,26 +77,50 @@
     </tr>
     <tr>
       <td>
+        <div class="field">
+        <label>  <%= I18n.t("activerecord.attributes.afield")%> </label><br />
+          <select id="action_afield" name="item[afield]">
+            <% Action.afield_list.each do |w|  %>
+            <option value="<%= w %>" <%= @action.afield.to_s.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("activerecord.attributes.#{w}") %> </option>
+            <% end %>
+          </select>
+        </div>
 
+        <!--
+        <div class="field">
+          <label>  <%= I18n.t("activerecord.attributes.afield")%> </label><br />
+            <select id="action_field2" name="item[field2]">
+              <% Action.afield_list.each do |w|  %>
+              <option value="<%= w %>" <%= @action.field2.to_s.to_sym == w ? 'selected="selected"' : '' %>> <%=I18n.t("activerecord.attributes.#{w}") %> </option>
+              <% end %>
+            </select>
+          </div>
+          -->
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="field">
+          <label> <%= I18n.t("activerecord.attributes.value") %> </label><br />
+          <input type="text" name="item[value]" value="<%= @action.value %>" />
+        </div>
+        
+        <!--
+        <div class="field">
+          <label> <%= I18n.t("activerecord.attributes.value") %> </label><br />
+          <input type="text" name="item[value2]" value="<%= @action.value2 %>" />
+        </div>
+        -->
 
-  <div class="field">
-    <label> <%= I18n.t("activerecord.attributes.value") %> </label><br />
-    <input type="text" name="item[value]" value="<%= @action.value %>" />
-  </div>
-  
-  <div class="field">
-    <label> <%= I18n.t("activerecord.attributes.value") %> </label><br />
-    <input type="text" name="item[value2]" value="<%= @action.value2 %>" />
-  </div>
-
-    <div class="actions">
-      <input type="submit" name="submit" value="<%=  I18n.t("helpers.submit.ok") %>" />
-    </div>
+        <div class="actions">
+          <input type="submit" name="submit" value="<%=  I18n.t("helpers.submit.ok") %>" />
+        </div>
         </td>
       </tr>
     </table>
  </form>
  </div>
+ 
 <script type="text/javascript">
   $(document).ready(function(){
     setOnEnterKey(function(event){

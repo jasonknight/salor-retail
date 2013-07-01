@@ -56,7 +56,7 @@ $(function () {
     </td>
     <td>
       <div class="tool-icon" style="width: 100px;">
-        <%= link_to salor_icon(:action, {},32), new_action_path(:item => { :sku => @item.sku, :name => @item.name.to_s + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
+        <%= link_to salor_icon(:action, {},32), item_new_action_path(@item) %><br />
         <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
       </div>
     </td>

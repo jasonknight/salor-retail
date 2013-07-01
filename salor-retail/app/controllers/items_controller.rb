@@ -347,11 +347,10 @@ class ItemsController < ApplicationController
     @view ||= 'default'
     render "items/reports/#{@view}/page"
   end
-  private 
-  def crumble
-    @vendor = @current_user.vendor(@current_user.vendor_id)
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("menu.items"),'items_path(:vendor_id => params[:vendor_id])'
+
+  def new_action
+    item = @current_vendor.items.visible.find_by_id(params[:item_id])
+    action = item.create_action
+    redirect_to action_path(action)
   end
-  # {END}
 end

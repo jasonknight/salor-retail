@@ -4,6 +4,7 @@ class InvoiceNote < ActiveRecord::Base
   
   belongs_to :vendor
   belongs_to :company
+  
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
   belongs_to :sale_type

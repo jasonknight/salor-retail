@@ -1,29 +1,30 @@
 class InvoiceNotesController < ApplicationController
   
   def index
-    @invoice_notes = InvoiceNote.scopied.page(params[:page]).per(25)
+    @invoice_notes = @current_vendor.invoice_notes.visible.page(params[:page]).per(@current_vendor.pagination)
   end
   
   def new
-    @sale_types = SaleType.scopied
-    @countries = Country.scopied
     @invoice_note = InvoiceNote.new
+    @sale_types = @current_vendor.sale_types.visible
+    @countries = @current_vendor.countries.visible
   end
   
   def create
-    #debugger
     @invoice_note = InvoiceNote.new(params[:invoice_note])
-    @sale_types = SaleType.scopied
-    @countries = Country.scopied
+    @invoice_note.vendor = @current_vendor
+    @invoice_note.company = @current_company
     if @invoice_note.save
       redirect_to invoice_notes_path
     else
+      @sale_types = @current_vendor.sale_types.visible
+      @countries = @current_vendor.countries.visible
       render :new
     end
   end
   
   def update
-    @invoice_note = InvoiceNote.find_by_id(params[:id])
+    @invoice_note = @current_vendor.invoice_notes.visible.find_by_id(params[:id])
     if @invoice_note.update_attributes(params[:invoice_note])
       redirect_to invoice_notes_path
     else
@@ -32,23 +33,16 @@ class InvoiceNotesController < ApplicationController
   end
   
   def edit
-    @sale_types = SaleType.scopied
-    @countries = Country.scopied
-    @invoice_note = InvoiceNote.find_by_id(params[:id])
+    @invoice_note = @current_vendor.invoice_notes.visible.find_by_id(params[:id])
+    @sale_types = @current_vendor.sale_types.visible
+    @countries = @current_vendor.countries.visible
     redirect_to invoice_notes_path and return unless @invoice_note
     render :new
   end
   
   def destroy
-    @invoice_note = InvoiceNote.find_by_id(params[:id])
-    redirect_to invoice_notes_path and return unless @invoice_note
-    @invoice_note.update_attribute :hidden, true
+    @invoice_note = @current_vendor.invoice_notes.visible.find_by_id(params[:id])
+    @invoice_note.hide(@current_user)
     redirect_to invoice_notes_path
-  end
-  private
-  def crumble
-    @vendor = @current_user.vendor(@current_user.vendor_id)
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("activerecord.models.invoice_note.other"),'invoice_notes_path(:vendor_id => params[:vendor_id])'
   end
 end

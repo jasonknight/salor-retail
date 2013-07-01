@@ -8,7 +8,7 @@
 # {VOCABULARY} item_price item_category item_location_id tax_profile_info info foreign_key_constraint logging_time coupon_amount_paid paying_agent reimburseable unknown_item
 # {VOCABULARY} location_reversed info_on_category real_category_name part_ident part_qty2 quantity_of_sale gift_card_remainder coupon_b1g1 gift_card_user
 class Item < ActiveRecord::Base
-  # {START}
+
   include SalorScope
   include SalorBase
 
@@ -250,6 +250,16 @@ class Item < ActiveRecord::Base
     else
       return Item.scopied.where("name LIKE '%#{parts[1]}%'")
     end
+  end
+  
+  def create_action
+    action = Action.new
+    action.vendor = self.vendor
+    action.company = self.company
+    action.model = self
+    action.name = Time.now.strftime("%Y%m%d%H%M%S")
+    action.save
+    return action
   end
 
 

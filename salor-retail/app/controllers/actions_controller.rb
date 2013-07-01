@@ -5,97 +5,48 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class ActionsController < ApplicationController
-  before_filter :check_role, :except => [:crumble]
-  before_filter :crumble
-  # GET /actions
-  # GET /actions.xml
+  before_filter :check_role
+
   def index
-    @actions = Action.scopied.order("id desc").page(params[:page]).per(25)
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @actions }
-    end
+    @actions = @current_vendor.actions.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
   end
 
-  # GET /actions/1
-  # GET /actions/1.xml
   def show
-    @action = Action.scopied.find_by_id(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @action }
-    end
+    @action = @current_vendor.actions.visible.find_by_id(params[:id])
+    redirect_to edit_action_path(@action)
   end
 
-  # GET /actions/new
-  # GET /actions/new.xml
   def new
-    @action = Action.new(params[:item])
-    
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @action }
-    end
+    @action = Action.new
   end
 
-  # GET /actions/1/edit
   def edit
-    @action = Action.scopied.find_by_id(params[:id])
+    @action = @current_vendor.actions.visible.find_by_id(params[:id])
   end
 
-  # POST /actions
-  # POST /actions.xml
   def create
-    @action = Action.find_by_id(params[:id])
-    if not @action then
-      @action = Action.new(params[:item])
+    @action = Action.new(params[:item])
+    @action.vendor = @current_vendor
+    @action.company = @current_company
+    if @action.save
+      redirect_to actions_path
     else
-      @action.attributes  = params[:item]
-    end
-    respond_to do |format|
-      if @action.save
-        format.html { redirect_to(:action => :index, :notice => 'Action was successfully created.') }
-        format.xml  { render :xml => @action, :status => :created, :location => @action }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @action.errors, :status => :unprocessable_entity }
-      end
+      render :new
     end
   end
 
-  # PUT /actions/1
-  # PUT /actions/1.xml
   def update
-    @action = Action.scopied.find(params[:id])
-
-    respond_to do |format|
-      if @action.update_attributes(params[:item])
-        format.html { redirect_to(:action => :index, :notice => 'Action was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @action.errors, :status => :unprocessable_entity }
-      end
+    @action = @current_vendor.actions.visible.find_by_id(params[:id])
+    if @action.update_attributes(params[:item])
+      redirect_to actions_path
+    else
+      render :edit
     end
   end
 
-  # DELETE /actions/1
-  # DELETE /actions/1.xml
   def destroy
-    @action = Action.scopied.find(params[:id])
-    @action.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(request.referer) }
-      format.xml  { head :ok }
-    end
-  end
-  private
-  def crumble
-    @vendor = @current_user.vendor(GlobalData.@current_user.vendor_id)
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("menu.actions"),'actions_path(:vendor_id => params[:vendor_id])'
+    @action = @current_vendor.actions.visible.find_by_id(params[:id])
+    @action.hide(@current_user)
+    redirect_to actions_path
   end
 end

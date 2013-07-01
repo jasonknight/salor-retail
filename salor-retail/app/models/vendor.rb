@@ -22,6 +22,8 @@ class Vendor < ActiveRecord::Base
   has_many :tender_methods
   has_many :transaction_tags
   has_many :order_items
+  has_many :actions
+  has_many :buttons
   
   has_many :cash_registers
   has_one  :salor_configuration

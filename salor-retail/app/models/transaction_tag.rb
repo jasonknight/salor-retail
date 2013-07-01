@@ -9,9 +9,6 @@ class TransactionTag < ActiveRecord::Base
   include SalorScope
   include SalorBase
 
-
-  def logo=(data)
-    write_attribute :logo_image_content_type, data.content_type.chomp
-    write_attribute :logo_image, data.read
-  end
+  belongs_to :vendor
+  belongs_to :company
 end

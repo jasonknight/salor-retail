@@ -4,37 +4,42 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-# {VOCABULARY} actions_done roles_completed user_info on_import_new on_import_old
-# {VOCABULARY} added multiplied subtracted deferred code_completed action_report
+
 class Action < ActiveRecord::Base
-  # {START}
+
   include SalorScope
   include SalorBase
 
-  
   belongs_to :role
   belongs_to :vendor
+  belongs_to :company
   belongs_to :user
+  belongs_to :model, :polymorphic => true
   
   def value=(v)
     v = v.gsub(',','.') if v.class == String
     write_attribute(:value,v)
   end
+  
   def self.when_list
     [:add_to_order,:always,:on_save,:on_import,:on_export]
   end
+  
   def code=(text)
     if code.match(/User|User|Vendor|Order|OrderItem|DrawerTransaction/) then
       self.errors[:base] << I18n.t("system.errors.cannot_use_in_code")
     end
     write_attribute(:code,text)
   end
+  
   def self.behavior_list
     [:add,:subtract,:multiply, :divide, :assign,:discount_after_threshold]
   end
+  
   def self.afield_list
     [:base_price, :quantity,:tax_profile_id, :packaging_unit]
   end
+  
   def sku=(s)
     if not s.blank? then
       item = Item.find_by_sku(s)
@@ -46,6 +51,7 @@ class Action < ActiveRecord::Base
       end
     end
   end
+  
   def category_id=(id)
     c = Category.find_by_id(id.to_s)
     if c then

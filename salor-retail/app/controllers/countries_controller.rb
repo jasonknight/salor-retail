@@ -1,18 +1,23 @@
 class CountriesController < ApplicationController
   
-  def testing
-    puts "i am a test"
-  end
+
   def index
-    @countries = Country.scopied.page(params[:page]).per(25)
+    @countries = @current_vendor.countries.visible.page(params[:page]).per(@current_vendor.pagination)
   end
   
   def new
     @country = Country.new
   end
   
+  def show
+    @country = @current_vendor.countries.visible.find_by_id(params[:id])
+    redirect_to edit_country_path(@country)
+  end
+  
   def create
     @country = Country.new(params[:country])
+    @country.vendor = @current_vendor
+    @country.company = @current_company
     if @country.save
       redirect_to countries_path
     else
@@ -21,7 +26,7 @@ class CountriesController < ApplicationController
   end
   
   def update
-    @country = Country.find_by_id(params[:id])
+    @country = @current_vendor.countries.visible.find_by_id(params[:id])
     if @country.update_attributes(params[:country])
       redirect_to countries_path
     else
@@ -30,21 +35,13 @@ class CountriesController < ApplicationController
   end
   
   def edit
-    @country = Country.find_by_id(params[:id])
-    redirect_to countries_path and return unless @country
+    @country = @current_vendor.countries.visible.find_by_id(params[:id])
     render :new
   end
   
   def destroy
-    @country = Country.find_by_id(params[:id])
-    redirect_to countries_path and return unless @country
-    @country.update_attribute :hidden, true
+    @country = @current_vendor.countries.visible.find_by_id(params[:id])
+    @country.hide(@current_user)
     redirect_to countries_path
-  end
-  private
-  def crumble
-    @vendor = @current_user.vendor(@current_user.vendor_id)
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("activerecord.models.country.other"),'countries_path(:vendor_id => params[:vendor_id])'
   end
 end

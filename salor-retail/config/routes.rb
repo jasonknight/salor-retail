@@ -192,7 +192,9 @@ SalorRetail::Application.routes.draw do
   resources :actions
   resources :order_items
   resources :orders
-  resources :items
+  resources :items do
+    get :new_action
+  end
   resources :locations
   resources :stock_locations
   resources :categories
