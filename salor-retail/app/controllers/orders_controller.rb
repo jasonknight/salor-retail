@@ -151,7 +151,7 @@ class OrdersController < ApplicationController
   def delete_order_item
     oi = @current_vendor.order_items.find_by_id(params[:id])
     @order = oi.order
-    @order.remove_order_item(oi)
+    @order.delete_order_item(oi)
     
     # --- push notification to refresh the customer screen
     t = SalorRetail.tailor

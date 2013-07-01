@@ -49,7 +49,7 @@ class OrderItem < ActiveRecord::Base
     end
   end
   
-  def toggle_buyback(x)
+  def toggle_buyback=(x)
     self.is_buyback = ! self.is_buyback
     if self.is_buyback
       self.price = - self.item.buyback_price
@@ -269,7 +269,8 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price
     self.modify_price_for_giftcards
-    self.modify_price_for_parts   
+    self.modify_price_for_parts
+    #self.modify_price_for_coupon
     self.save
   end
   
@@ -289,15 +290,44 @@ class OrderItem < ActiveRecord::Base
     # TODO
   end
   
+
+  
   def calculate_totals
     t = (self.price * self.quantity).round(2)    
     self.total = t.round(2)
     self.subtotal = self.total
+    self.apply_coupon
     self.apply_discount
     self.apply_rebate
-    self.apply_coupon
     self.calculate_tax
     self.save
+  end
+  
+  def apply_coupon
+    if self.behavior == 'coupon'
+      item = self.item
+      return if item.activated
+      coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
+      if coitem
+        ctype = self.item.coupon_type
+        if ctype == 1
+          # percent rebate
+          coitem.coupon_amount = (coitem.subtotal * item.amount_remaining / 100.0).round(2)
+        elsif ctype == 2
+          # fixed amount
+          coitem.coupon_amount = coitem.subtotal - self.amount_remaining
+        elsif ctype == 3
+          # buy 1 get 1
+          if coitem.quantity >= 2
+            coitem.coupon_amount = (coitem.subtotal / 2).round(2)
+          end
+        end
+        coitem.subtotal -= coitem.coupon_amount
+        coitem.save
+        item.activated = true
+        item.save
+      end
+    end
   end
   
   def apply_rebate
@@ -305,10 +335,6 @@ class OrderItem < ActiveRecord::Base
       self.rebate_amount = (self.subtotal * self.rebate / 100.0).round(2)
       self.subtotal -= self.rebate_amount
     end
-  end
-  
-  def apply_coupon
-    # TODO
   end
   
   def apply_discount
@@ -344,10 +370,14 @@ class OrderItem < ActiveRecord::Base
   
   def quantity=(q)
     q = self.string_to_float(q)
-    return if self.behavior == 'gift_card' and q != 1
+    return if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
     write_attribute :quantity, q
   end
   
+  
+  def hide(by)
+    puts "XXXX"
+  end
   
   
   

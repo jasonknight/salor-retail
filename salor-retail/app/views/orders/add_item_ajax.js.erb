@@ -14,14 +14,10 @@
     }
    <%
      if @order_item.behavior == 'coupon' then
-     ois = @order.order_items.visible.joins(:item).where("`items`.sku = '#{@order_item.item.coupon_applies}'")
-       if ois then
-         ois.each do |oi|
+     oi = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
          %>
             updateOrderItems([<%= raw oi.to_json %>]);
          <%
-         end
-       end
      end
    %>
 <% else %>

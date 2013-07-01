@@ -45,14 +45,7 @@ class Item < ActiveRecord::Base
   REORDER_TYPES = ['default_export','tobacco_land']
   
   
-
   
-  def coupon_type=(t)
-    write_attribute(:coupon_type,1) if t == 'percent'
-    write_attribute(:coupon_type,2) if t == 'fixed'
-    write_attribute(:coupon_type,3) if t == 'b1g1'
-    write_attribute(:coupon_type,t) if t.class == Fixnum
-  end
   def self.csv_headers
     return [:class,:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
   end

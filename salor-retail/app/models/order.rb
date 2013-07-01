@@ -196,8 +196,8 @@ class Order < ActiveRecord::Base
     return if self.paid
     
     
-    # try to get existing regular item, except coupons
-    item = self.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+    # try to get existing regular item
+    item = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
     if item      
       if not (item.activated or item.is_buyback)
         # simply increment and return
@@ -210,11 +210,6 @@ class Order < ActiveRecord::Base
     # at this point, we know that the added order item is not yet in the order. so we add a new one
     
     i = self.get_item_by_code(params[:sku])
-    
-    if i.class == Item and i.behavior == 'coupon' and not self.order_items.visible.where(:sku => i.coupon_applies).any?
-      flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
-      return nil
-    end
     
     if i.class == LoyaltyCard then
       self.customer = i.customer
@@ -238,11 +233,6 @@ class Order < ActiveRecord::Base
     oi.calculate_totals
     self.order_items << oi
     self.calculate_totals
-    
-    # warning about zero price
-    if i.base_price.zero? and not i.is_gs1 and not i.must_change_price and not i.default_buyback
-      SalorBase.beep(1500, 100, 3, 10)
-    end
     
     return oi
 	end
@@ -322,8 +312,8 @@ class Order < ActiveRecord::Base
       i.base_price = code
     else
       # dummy item
-      item.sku = code
-      item.base_price = 0
+      i.sku = code
+      i.base_price = 0
     end
     i.name = i.sku
     i.save
@@ -331,7 +321,7 @@ class Order < ActiveRecord::Base
   end
 
   
-  def remove_order_item(oi)
+  def delete_order_item(oi)
     return if self.paid
     
     oi.hidden = true
