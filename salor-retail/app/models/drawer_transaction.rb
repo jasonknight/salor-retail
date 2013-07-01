@@ -6,26 +6,15 @@
 # See license.txt for the license applying to all files within this software.
 
 class DrawerTransaction < ActiveRecord::Base
-  # {START}
   include SalorBase
   include SalorScope
 
   belongs_to :vendor
+  belongs_to :company
   belongs_to :drawer
-  belongs_to :cash_register
-  
-  belongs_to :current_register
-  
   belongs_to :user
   belongs_to :order
-  
-  def trans_type=(x)
-    if x == 'drop' then
-      self.drop = true
-    else
-      self.payout = true
-    end
-  end
+  belongs_to :order_id
   
   def amount=(p)
     write_attribute(:amount,self.string_to_float(p))
@@ -90,5 +79,4 @@ class DrawerTransaction < ActiveRecord::Base
     end
     puts messages.inspect
   end
-  # {END}
 end

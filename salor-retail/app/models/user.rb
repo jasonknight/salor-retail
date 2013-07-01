@@ -34,24 +34,20 @@ class User < ActiveRecord::Base
   before_save :set_role_cache, :update_hourly_rate
 
   
-  def generate_password(string)
-    return Digest::SHA2.hexdigest("#{string}")
-  end
-  
   def find_for_authentication(conditions={})
     conditions[:hidden] = false
     find(:first, :conditions => conditions)
   end 
   
   def self.login(pass)
-    user = self.find_by_encrypted_password(generate_password(pass))
+    user = self.find_by_encrypted_password(Digest::SHA2.hexdigest(pass))
     return user
   end
   
   def password=(string)
     string = string.strip
     return if string.empty?
-    write_attribute(:encrypted_password, generate_password(string))
+    write_attribute(:encrypted_password, Digest::SHA2.hexdigest(string))
   end
   
   def password

@@ -193,33 +193,33 @@ class Order < ActiveRecord::Base
 
 
   def add_order_item(params={})
-    return if self.paid == 1
+    return if self.paid
     
     
-    # try to get existing regular item, except coupons
-    item = self.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
-    
-    if item and item.behavior == 'gift_card' then
-      # a gift card has already been added to the order. cannot proceed.
-      return nil
-    end
-    
-    if item and not (item.activated or item.is_buyback)
-      # simply increment and return
-      item.quantity += 1
-      item.save
-
-      return item
-    end
+#     # try to get existing regular item, except coupons
+#     item = self.order_items.visible.where(['(no_inc IS NULL or no_inc = 0) AND sku = ? AND behavior != ?', params[:sku], 'coupon']).first
+#     if item
+#       if item.behavior == 'gift_card' then
+#         # a gift card has already been added to the order. cannot proceed.
+#         return nil
+#       end
+#       
+#       if not (item.activated or item.is_buyback)
+#         # simply increment and return
+#         item.quantity += 1
+#         item.save
+#         return item
+#       end
+#     end
     
     # at this point, we know that the added order item is not yet in the order. so we add a new one
     
     i = self.get_item_by_code(params[:sku])
 
-    if i.class == Item and i.activated == true and i.behavior == 'gift_card' and i.amount_remaining <= 0 then
-      # gift card empty. cannot add the order item
-      return nil
-    end   
+#     if i.class == Item and i.activated == true and i.behavior == 'gift_card' and i.amount_remaining <= 0 then
+#       # gift card empty. cannot add the order item
+#       return nil
+#     end   
     
     if i.class == Item and i.behavior == 'coupon' and not self.order_items.visible.where(:sku => i.coupon_applies).any?
       flash[:notice] = I18n.t("system.errors.coupon_not_enough_items")
@@ -243,10 +243,12 @@ class Order < ActiveRecord::Base
     oi = OrderItem.new
     oi.order = self
     oi.set_attrs_from_item(i)
+    oi.modify_price
     oi.no_inc = true if params[:no_inc]
+    oi.calculate_totals
     self.order_items << oi
     self.calculate_totals
-
+    
     # warning about zero price
     if i.base_price.zero? and not i.is_gs1 and not i.must_change_price and not i.default_buyback
       GlobalErrors.append("system.errors.item_price_is_zero")
@@ -265,18 +267,39 @@ class Order < ActiveRecord::Base
     i = Item.new
     i.sku = "G#{timecode}"
     i.vendor = self.vendor
-    i.order = self
+    i.company = self.company
     i.tax_profile = zero_tax_profile
     i.name = "Auto Giftcard #{timecode}"
     i.must_change_price = true
-    i.behavior = 'gift_card'
     i.item_type = self.vendor.item_types.visible.find_by_behavior('gift_card')
-    i.behavior = 'gift_card'
     if not i.save then
       raise "Failed to Save Auto Giftcard"
     end
     return i
   end
+  
+  # called by complete
+  def update_giftcard_remaining_amounts
+    gcs = self.order_items.visible.where(:behavior => 'gift_card', :activated => true)
+    gcs.each do |gc|
+      i = gcs.item
+      i.amount_remaining -= gc.price
+      i.amount_remaining = i.amount_remaining.round(2)
+      i.save
+    end
+  end
+  
+  # called by complete
+  def activate_giftcard_items
+    gcs = self.order_items.visible.where(:behavior => 'gift_card', :activated => nil)
+    gcs.each do |gc|
+      i = gc.item
+      i.activated = true
+      i.save
+    end
+  end
+  
+
   
   
   
@@ -334,15 +357,7 @@ class Order < ActiveRecord::Base
       end
     end
   end
-  
-  
-	#
-	#def gift_cards
-	#  @gfs ||= order_items.where(:behavior => 'gift_card')
-	#  return [] if not @gfs.any?
-	#  return @gfs
-	#end
-	#
+
 	def coupon_for(sku)
 	  cps = []
 	  coupons.each do |oi|
@@ -360,58 +375,22 @@ class Order < ActiveRecord::Base
   
 
   def calculate_totals
-    return nil if self.paid
-    self.total = self.order_items.visible.sum(:total)
-    self.tax = self.order_items.visible.sum(:tax)
+    self.total = self.order_items.visible.sum(:subtotal).round(2)
+    self.tax = self.order_items.visible.sum(:tax_amount).round(2)
+    
+    # subtotal will include order rebates
+    self.subtotal = self.total
     self.save
   end
 
 
-  def calculate_tax
-    # Add together tax for all items in order
-    if self.tax_free then
-      self.tax = 0
-      return self.tax
-    end
-    self.tax = 0 if self.tax.nil?
-    return self.tax if self.tax_is_locked
-    #res = OrderItem.connection.execute("select sum(tax) as taxtotal from order_items where order_id = #{self.id} and behavior = 'normal' and is_buyback is false")
-    taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior = 'normal' and is_buyback is false").sum(:tax)
-    taxttl.nil? ? self.tax = 0 : self.tax = taxttl.to_f.round(2)
-    taxttl
-  end
 
-  def gross
-    return self.total
-    
-    # Mikey: the following should go into calculate totals and cached on the model
-#     refunded_ttl = self.order_items.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is TRUE").sum(:total).round(2)
-#     if self.vendor.calculate_tax then
-#       taxttl = self.order_items.visible.where("order_id = #{self.id} and behavior != 'coupon' and is_buyback is false and activated is false and refunded is FALSE").sum(:tax).round(2)
-#       if self.tax_free then
-#         taxttl = 0
-#       end
-#       nval = self.subtotal.to_i + taxttl - refunded_ttl
-#       return nval.round(2)
-#     else
-#       nval = self.subtotal.to_i - refunded_ttl
-#       return nval.round(2)
-#     end
-  end
 
-  def calculate_rebate
-    amnt = 0.0
-    if self.subtotal.nil? then 
-        self.subtotal = 0 
-    end
-    self.order_items.visible.each do |oi|
-      amnt += (oi.total * (self.rebate/100))
-    end
-    return amnt
-  end
   
 
-  def complete
+  def complete(params)
+    raise "cannot complete a paid order" if self.paid
+    
     # History
     h = History.new
     h.url = "Order::complete"
@@ -423,8 +402,7 @@ class Order < ActiveRecord::Base
     h.save
 
     self.paid = true
-    self.created_at = Time.now
-    self.drawer = self.user.get_drawer
+    self.paid_at = Time.now
     
     if self.is_quote then
       self.qnr = self.vendor.get_unique_model_number('quote')
@@ -434,164 +412,78 @@ class Order < ActiveRecord::Base
     
     self.save
 
-    log_action "Updating quantities"
-    order_items.visible.each do |oi|
-      oi.set_sold
-      oi.update_quantity_sold
-      log_action "quantity sold updated"
-      oi.update_cash_made
-      log_action "cash_made updated"
+    self.order_items.visible.each do |oi|
+      oi.update_item_quantities
     end
-    log_action "Updating Category Gift Cards"
-    activate_gift_cards
+    
+    self.activate_giftcard_items
+    self.create_payment_methods(params)
+    
+    dt = DrawerTransaction.new
+    dt.vendor = self.vendor
+    dt.company = self.company
+    dt.user = self.user
+    dt.order = self
+    dt.complete_order = true
+    dt.amount = self.cash - self.change
+    dt.drawer_amount = self.user.get_drawer.amount
+    dt.drawer = self.user.get_drawer
+    dt.save
+    
+    self.save
+  end
+  
 
-    ottl = self.get_drawer_add
-    log_action "ottl = self.get_drawer_add #{ottl}"
-    if self.buy_order then
-      log_action "It's a buy order..."
-      create_drawer_transaction(self.get_drawer_add,{:tag => "CompleteOrder"})
-    elsif self.total < 0 then
-      log_action "Not a buy order, but total < 0"
-      create_drawer_transaction(self.get_drawer_add,{:tag => "CompleteOrder"})
-    else
-      log_action "Creating :drop for complete order with #{ottl}"
-      create_drawer_transaction(ottl,{:tag => "CompleteOrder"})
-      if self.change_given > 0 and not self.is_quote
-        log_action "Creating change PM"
+  
+  def create_payment_methods(params)
+    self.payment_methods.delete_all
+    self.vendor.payment_methods_types_list.each do |pmt|
+      pt = pmt[1]
+      if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0
+        
+        if pt == 'Unpaid'
+          self.unpaid_invoice = true
+        end
+        
+        if pt == 'Quote'
+          self.is_quote = true
+        end
+        
         pm = PaymentMethod.new
         pm.vendor = self.vendor
-        pm.internal_type = 'Change'
-        pm.amount = - self.change_given
-        pm.order = self
+        pm.company = self.company
+        pm.internal_type = pt
+        pm.user = self.user
+        pm.amount = SalorBase.string_to_float(params[pt.to_sym]).round(2)
         pm.save
+        self.payment_methods << pm
       end
-      log_action("OID: #{self.id} USER: #{self.user.username} OTTL: #{ottl} DRW: #{self.user.get_drawer.amount}")
-      log_action("End of Complete: " + self.payment_methods.inspect)
     end
     
     self.save
-
-    log_action "Ending complete order. Drawer amount is: #{self.user.get_drawer.amount}"
+    
+    payment_cash = self.payment_methods.visible.where(:internal_type => 'InCash').sum(:amount).round(2)
+    payment_total = self.payment_methods.visible.sum(:amount).round(2)
+    payment_noncash = (payment_total - payment_cash).round(2)
+    change = (payment_total - self.subtotal).round(2)
+                                  
+    pm = PaymentMethod.new
+    pm.vendor = self.vendor
+    pm.company = self.company
+    pm.internal_type = 'Change'
+    pm.amount = change
+    pm.user = self.user
+    pm.save
+    
+    self.payment_methods << pm
+    self.cash = payment_cash
+    self.noncash = payment_noncash
+    self.change = change
     self.save
   end
-  
-#   def activate_gift_cards
-#     log_action "Activating giftcards"
-#     self.gift_cards.each do |gc|
-#       if gc.item.activated then
-#         log_action "GC Already Activated, updating"
-#         gc.item.amount_remaining -= gc.price
-#         gc.item.amount_remaining = 0 if gc.item.amount_remaining < 0
-#         gc.item.save
-#         log_action "gc_saved"
-#       else
-#         log_action "Updating GC to Activated"
-#         gc.item.update_attribute(:activated,true)
-#         gc.item.update_attribute(:amount_remaining, gc.item.base_price)
-#       end
-#     end
-#   end
-  
-  def get_drawer_add
-    if self.is_quote or self.unpaid_invoice then
-      return 0 
-    
-    elsif self.is_proforma == true
-      return self.payment_methods.where(:internal_type => 'InCash').sum(:amount) 
-    
-    else
-      ottl = self.total
-      self.payment_methods.each do |pm|
-        next if pm.internal_type == 'InCash'
-        ottl -= pm.amount
-      end
-      return ottl
-    end
-  end
-  
-#   def get_in_cash_amount
-#     pm = self.payment_methods.where(:internal_type => 'InCash').first
-#     return pm.amount if pm
-#     return 0
-#   end
-  
-  def activate_gift_card(id, amount)
-    log_action "## Activating Gift Card"
-    amount = string_to_float(amount)
-    if id.class == OrderItem then
-      oi = id
-    else
-      oi = self.order_items.visible.find_by_id(id)
-    end
-    if not oi then
-      log_action"## not oi, returning"
-      return false 
-    end
-    if not oi.item.activated then
-      log_action "Setting activated..."
-      oi.item.update_attribute(:activated,true)
-      oi.item.update_attribute(:amount_remaining, oi.item.base_price)
-      oi.update_attribute(:activated, true)
-    end
-    if oi.item.amount_remaining < amount then
-      log_action "updating attr to #{oi.item.amount_remaining}"
-      oi.update_attribute(:price,oi.item.amount_remaining)
-      oi.update_attribute(:activated, true)
-    else
-      log_action "updating attr"
-      oi.update_attribute(:price,amount)
-      oi.update_attribute(:activated, true)
-    end
-    return oi
-  end
 
-  def create_drawer_transaction(amount,opts={})
-    drawer = self.user.get_drawer
-    dt = DrawerTransaction.new(opts)
-    dt.vendor = self.vendor
-    dt.amount = amount
-    dt.drawer = drawer
-    dt.drawer_amount = drawer.amount
-    dt.order = self
-    if dt.amount < 0 then
-      dt.payout = true
-      dt.drop = false
-      dt.amount *= -1
-    end
-    dt.save
-    if dt.payout == true then
-      drawer.amount -= dt.amount
-    elsif dt.drop == true then
-      drawer.amount += dt.amount
-    end
-    drawer.save
-    
-    log_action "creating drawer transaction complete"
-    History.direct("Order::create_drawer_transaction",self,{:amount => amount, :opts => opts, :drawer_transaction_id => dt.id},"","");
-  end
-    
-
-  def create_refund_payment_method(amount, refund_payment_method)
-    pm = PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
-                         :name => (refund_payment_method + 'Refund'), 
-                         :amount => - amount, 
-                         :order_id => self.id
-    ) # end of PaymentMethod.create
-    log_action "Created payment method: #{pm.inspect}"
-    return pm
-  end
   
-  def refund_total
-    t = 0
-    self.order_items.where("refunded = 1").each do |oi|
-      oi.total = 0 if oi.total.nil?
-      t = t + oi.total
-    end
-    t -= self.calculate_rebate
-    log_action "Returning refund_total of #{t}"
-    return t
-  end
-
+  
   def to_json
     self.total = 0 if self.total.nil?
     attrs = {
@@ -602,7 +494,6 @@ class Order < ActiveRecord::Base
       :id => self.id,
       :buy_order => self.buy_order,
       :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag,
-      :tax_free => self.tax_free,
       :sale_type_id => self.sale_type_id,
       :destination_country_id => self.destination_country_id,
       :origin_country_id => self.origin_country_id,

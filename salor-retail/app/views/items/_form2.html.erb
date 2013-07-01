@@ -54,12 +54,14 @@ $(function () {
           <span class="icon-caption"> <%= I18n.t("menu.new_broken_item") %></span>
         </div>
     </td>
-    <td>
-      <div class="tool-icon" style="width: 100px;">
-        <%= link_to salor_icon(:action, {},32), item_new_action_path(@item) %><br />
-        <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
-      </div>
-    </td>
+    <% unless @item.new_record? %>
+      <td>
+        <div class="tool-icon" style="width: 100px;">
+          <%= link_to salor_icon(:action, {},32), item_new_action_path(@item) %><br />
+          <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
+        </div>
+      </td>
+    <% end %>
     <td>
         <div class="tool-icon" style="width: 100px;">
         <% if @item.category then

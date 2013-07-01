@@ -245,102 +245,38 @@ class OrdersController < ApplicationController
         SalorBase.log_action("OrdersController","tmp_user swapped")
       else
         SalorBase.log_action("OrdersController","tmp_user does not belong to this store")
-        render :js => "alert('InCorrectUser');"
+        render :js => "alert('InCorrectUser');" and return
       end
     end
     
+    @order.user = @current_user
+    @order.complete(params)
 
-    @order.payment_methods.delete_all
-    SalorBase.log_action("OrdersController","payment methods on order removed")
-    
-    if @order.total > 0 or @order.order_items.visible.any? and not GlobalErrors.any_fatal? then
-      payment_methods_array = [] # We need to do some checks on the payment
-      # methods, so we put them into an array before saving them and the order
-      # This is kind of a validator, but we need to do it here for right now...
-      payment_methods_total = 0.0
-      payment_methods_seen = [] # In case they use the same internal type for two different payment_methods.
-      
-      @current_vendor.payment_methods_types_list.each do |pmt|
-        pt = pmt[1]
-        next if payment_methods_seen.include? pt
-        payment_methods_seen << pt
-        if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0 then
-          if pt == 'Unpaid' then
-            @order.update_attribute :unpaid_invoice, true # to support finishing invoices early so that they are inline, even though they haven't been paid yet
-          end
-          if pt == 'Quote'
-            @order.update_attribute :is_quote, true
-          end
-          pm = PaymentMethod.new
-          pm.name = pmt[0]
-          pm.internal_type = pt
-          pm.amount = SalorBase.string_to_float(params[pt.to_sym])
-          pm.vendor = @current_vendor
 
-          if pm.amount > @order.total then
-            # puts  "## Entering Sanity Check"
-            sanity_check = pm.amount - @order.total
-            # puts  "#{sanity_check}"
-            if sanity_check > 500 then
-              GlobalErrors.append_fatal("system.errors.sanity_check")
-              $Notice = "Sanity Check 1 Failed"
-              History.record("Sanity Check 1 Failed: #{sanity_check} > 500",@order,5)
-              render :action => :update_pos_display and return
-            end
-          end
-          payment_methods_total += pm.amount
-          pm.order_id = @order.id
-          payment_methods_array << pm
-        end
-      end
-      # FIXME: Payment methods should be put on the order, and then saved, otherwise they are not present
-      # for get_drawer_add. THis is fixed by a reload for the time being.
-      # @order.payment_methods = mayment_methods_array
-      # Now we check the payment_methods_total to make sure that it matches
-      # what we think the order.total should be
-      @order.reload
-      
-      if payment_methods_total.round(2) < @order.total.round(2) and @order.is_proforma == false then
-        GlobalErrors.append_fatal("system.errors.sanity_check")
-        log_action "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
-        History.record("Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}",@order,5);
-        $Notice = "Sanity Check 2 Failed: #{payment_methods_total.round(2)} < #{@order.total.round(2)} and #{@order.is_proforma == false}"
-        SalorBase.log_action("OrdersController","Failed sanity_check")
-        # update_pos_display should update the interface to show
-        # the correct total, this was the bug found by CigarMan
-        render :action => :update_pos_display and return
-      else
-        payment_methods_array.each {|pm| pm.save } # otherwise, we save them
-      end
-      
-      SalorBase.log_action("OrdersController","payment_methods saved")
-      if @order.is_proforma == true then
-        History.record("Order is proforma, completing",@order,5)
-        @order.complete
-        render :js => " window.location = '/orders/#{@order.id}/print'; " and return
-      end
-      params[:print].nil? ? print = 'true' : print = params[:print].to_s
-
-      @order.complete
-      SalorBase.log_action("OrdersController","@order.complete called")
-      
-      # --- push notification to refresh the customer screen
-      t = SalorRetail.tailor
-      if t
-        t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
-      end
-      # ---
-     
-      @old_order = @order
-      
-      o = Order.new
-      o.vendor = @current_vendor
-      o.user = @current_user
-      o.cash_register = @current_register
-      o.save
-      @current_user.current_order_id = o.id
-      @current_user.save
+    if @order.is_proforma == true then
+      History.record("Order is proforma, completing",@order,5)
+      render :js => " window.location = '/orders/#{@order.id}/print'; " and return
     end
+    
+    
+    params[:print].nil? ? print = 'true' : print = params[:print].to_s
+      
+    # --- push notification to refresh the customer screen
+    t = SalorRetail.tailor
+    if t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
+    end
+    # ---
+    
+    @old_order = @order
+    
+    o = Order.new
+    o.vendor = @current_vendor
+    o.user = @current_user
+    o.cash_register = @current_register
+    o.save
+    @current_user.current_order_id = o.id
+    @current_user.save
   end
   
   def new_order

@@ -1,4 +1,161 @@
+function updateOrderItems(items) {
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    var id = getOrderItemId(item);
+    if ($('.' + id).length != 0) {
+      /* Item is in list, and we need to update it */
+      updatePosItem(item);
+    } else {
+      /* Item is not in list, we need to add it */
+      addPosItem(item);
+    }
+  }
+}
 
+
+
+
+
+
+function addPosItem(item) {
+  var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
+  var base_id = getOrderItemId(item);
+  var attrs;
+  
+  if (Register.hide_discounts == true) {
+    attrs = ['name','quantity','price','subtotal'];
+  } else {
+    attrs = ['name','quantity','price','coupon_amount','rebate','subtotal','tax'];
+  }
+  
+  row.addClass(base_id);
+
+  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
+  
+  $('.pos-table-left-column-items').prepend(row);
+  _set('item',item,row);
+
+
+  
+  for (var i = 0; i < attrs.length; i++) {
+    var attr = attrs[i];
+    var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
+
+    
+    if (attr == 'price' || attr == 'coupon_amount' || attr == 'subtotal' || attr == 'rebate' || attr == 'tax') {
+      if (item["action_applied"] == true && attr != 'subtotal' && attr != 'tax') {
+        col.addClass("pos-action-applied");
+      }
+      
+      // those need special formatting
+      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || attr == 'rebate' || attr == 'tax' ) {
+        col.html(toPercent(item[attr]));
+      } else {
+        col.html(toCurrency(item[attr]));
+      }
+      
+    } else {
+      col.html(item[attr]);
+    }
+    
+    col.addClass('table-column pos-item-attr');
+    col.addClass(base_id + '-' + attr + ' pos-item-' + attr);
+    
+    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied');
+    };
+    
+    if ( attr == 'tax') {
+      if (item['tax'] == 0) {
+        col.css('backgroundColor', '#9a809e');
+      } else if ( item['tax'] == 10 ) {
+        col.css('backgroundColor', '#7a607e');
+      } else if (item['tax'] == 20 ) {
+        col.css('backgroundColor', '#7D5285');
+      };
+    };
+    
+    if (attr != 'sku' && attr != 'coupon_amount') {
+      if (attr == 'name') {
+        col.attr('model_id',item.item_id);
+        col.attr('klass','Item');
+      } else {
+        col.attr('model_id',item.id);
+        col.attr('klass','OrderItem');
+      }
+      col.attr('field',attr);
+      if (attr == "price" || attr == "rebate" || attr == "name" || attr == "tax") {
+        if (
+              (User.role_cache.indexOf('change_prices') != -1) || 
+              (User.role_cache.indexOf("manager") != -1) ||
+              (item["must_change_price"] == true)
+           ) {
+              make_in_place_edit(col);
+              col.addClass('editme pointer no-select');
+          }
+          
+      } else if (attr == "quantity") {
+        make_in_place_edit(col);
+        col.addClass('editme pointer no-select');
+      }
+    }
+    if (attr == 'quantity') {
+      if (Register.show_plus_minus == true) {
+        var up = td().removeClass('jtable-cell').addClass('table-cell');
+        
+        up.mousedown(function () {
+          var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
+          var string = '/vendors/edit_field_on_child?id=' +
+          item.id +'&klass=OrderItem' +
+          '&field=quantity'+
+          '&value=' + v;
+          get(string, filename);
+          focusInput($('#keyboard_input'));
+        });
+          up.html("<div><img src=\"/images/icons/up.svg\" height='32' />");
+          up.addClass('pointer quantity-button');
+          row.append(up);
+      }
+      row.append(col);
+      if (Register.show_plus_minus == true) {
+        var d = td().removeClass('jtable-cell').addClass('table-cell');
+        d.mousedown(function () {
+          var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
+          var string = '/vendors/edit_field_on_child?id=' +
+          item.id +'&klass=OrderItem' +
+          '&field=quantity'+
+          '&value=' + v;
+          get(string, filename);
+          focusInput($('#keyboard_input'));
+        });
+          d.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
+          d.addClass('pointer quantity-button');
+          row.append(d);
+      }
+    } else {
+      row.append(col);
+    }
+    if (item['is_buyback'] && highlightAttrs.indexOf(attr) != -1) {
+      highlight(col);
+    }
+  }
+  makeItemMenu(item);
+  //setScrollerState();
+  if (item["must_change_price"] == true) {
+    var id = '.' + base_id + '-price';
+    var price = toFloat($(id).html());
+    if (price == 0) {
+      $(id).trigger('click');
+      setTimeout( function () {
+        if (IS_APPLE_DEVICE) {
+          $('.ui-keyboard-preview').val("");
+        }
+        $(".ui-keyboard-preview").select();
+      },100);
+    }
+  }
+  if(item['quantity']==0 && item['weigh_compulsory']) { weigh_last_item(); }
+  
+}
 
 
 function getByCardAmount() {
@@ -154,7 +311,7 @@ function updateCustomerView(item,order_id) {
       if (item == false) {
         showOrderTotalOnPoleDisplay(); 
       } else {
-        output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['total']); 
+        output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['subtotal']); 
         Salor.poleDancer(Register.pole_display, output );
       }
     }
@@ -575,15 +732,15 @@ function updatePosItem(item) {
   //item['price'] = item['price'] - item['discount_amount'];
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   if (Register.hide_discounts) {
-    var attrs = ['name','quantity','price','total'];
+    var attrs = ['name','quantity','price','subtotal'];
   } else {
-    var attrs = ['name','quantity','price','coupon_amount','rebate','total'];
+    var attrs = ['name','quantity','price','coupon_amount','rebate','subtotal'];
   }
   for (var i = 0; i < attrs.length; i++) {
     var key = attrs[i];
     var id = '.' + base_id + '-' + key;
     if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && key == 'coupon_amount') { $(id).addClass('discount_applied'); };
-    if (key == 'price' || key == 'coupon_amount' || key == 'total' || key == 'rebate') {
+    if (key == 'price' || key == 'coupon_amount' || key == 'subtotal' || key == 'rebate') {
       if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || key == 'rebate') {
         $(id).html(toPercent(item[key]));
       } else {
@@ -619,136 +776,7 @@ function updatePosItem(item) {
   }
 }
 
-function addPosItem(item) {
-  var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
-  var base_id = getOrderItemId(item);
-  
-  row.addClass(base_id);
-  //item['price'] = item['price'] + item['discount_amount'];
-  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
-  $('.pos-table-left-column-items').prepend(row);
-  _set('item',item,row);
-  var attrs;
-  if (Register.hide_discounts == true) {
-    attrs = ['name','quantity','price','total'];
-  } else {
-    attrs = ['name','quantity','price','coupon_amount','rebate','total','tax_profile_amount'];
-  }
-  for (var i = 0; i < attrs.length; i++) {
-    var attr = attrs[i];
-    var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
-    // those need number formatting
-    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax_profile_amount') {
-      if (item["action_applied"] == true && attr != 'total' && attr != 'tax_profile_amount') {
-        col.addClass("pos-action-applied");
-      }
-      
-      // those need special formatting
-      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || attr == 'rebate' || attr == 'tax_profile_amount' ) {
-        col.html(toPercent(item[attr]));
-      } else {
-        col.html(toCurrency(item[attr]));
-      }
-    } else {
-      col.html(item[attr]);
-    }
-    col.addClass('table-column pos-item-attr');
-    col.addClass(base_id + '-' + attr + ' pos-item-' + attr);
-    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
-    if ( attr == 'tax_profile_amount') {
-      //MF: these percentages are hard coded for Austria since I don't have a quick possibility to fetch a TaxProfile color. Items having right taxes is important for the Fisc, so we give the users the opportunity to see them and change if necessary.
-      if (item['tax_profile_amount'] == 0) {
-        col.css('backgroundColor', '#9a809e');
-      } else if ( item['tax_profile_amount'] == 10 ) {
-        col.css('backgroundColor', '#7a607e');
-      } else if (item['tax_profile_amount'] == 20 ) {
-        col.css('backgroundColor', '#7D5285');
-      };
-    };
-    if (attr == 'sku' || attr == 'coupon_amount') {
-      
-    } else {
-      if (attr == 'name') {
-        col.attr('model_id',item.item_id);
-        col.attr('klass','Item');
-      } else {
-        col.attr('model_id',item.id);
-        col.attr('klass','OrderItem');
-      }
-      col.attr('field',attr);
-      if (attr == "price" || attr == "rebate" || attr == "name" || attr == "tax_profile_amount") {
-        if (
-              (User.role_cache.indexOf('change_prices') != -1) || 
-              (User.role_cache.indexOf("manager") != -1) ||
-              (item["must_change_price"] == true)
-           ) {
-              make_in_place_edit(col);
-              col.addClass('editme pointer no-select');
-          }
-      } else if (attr == "quantity") {
-        make_in_place_edit(col);
-        col.addClass('editme pointer no-select');
-      }
-    }
-    if (attr == 'quantity') {
-      //MF: Why is this special in editing? Why not use just class editme for editing?
-      if (Register.show_plus_minus == true) {
-        var up = td().removeClass('jtable-cell').addClass('table-cell');
-        
-        up.mousedown(function () {
-          var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
-          var string = '/vendors/edit_field_on_child?id=' +
-          item.id +'&klass=OrderItem' +
-          '&field=quantity'+
-          '&value=' + v;
-          get(string, filename);
-          focusInput($('#keyboard_input'));
-        });
-          up.html("<div><img src=\"/images/icons/up.svg\" height='32' />");
-          up.addClass('pointer quantity-button');
-          row.append(up);
-      }
-      row.append(col);
-      if (Register.show_plus_minus == true) {
-        var d = td().removeClass('jtable-cell').addClass('table-cell');
-        d.mousedown(function () {
-          var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
-          var string = '/vendors/edit_field_on_child?id=' +
-          item.id +'&klass=OrderItem' +
-          '&field=quantity'+
-          '&value=' + v;
-          get(string, filename);
-          focusInput($('#keyboard_input'));
-        });
-          d.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
-          d.addClass('pointer quantity-button');
-          row.append(d);
-      }
-    } else {
-      row.append(col);
-    }
-    if (item['is_buyback'] && highlightAttrs.indexOf(attr) != -1) {
-      highlight(col);
-    }
-  }
-  makeItemMenu(item);
-  //setScrollerState();
-  if (item["must_change_price"] == true) {
-    var id = '.' + base_id + '-price';
-    var price = toFloat($(id).html());
-    if (price == 0) {
-      $(id).trigger('click');
-      setTimeout( function () {
-        if (IS_APPLE_DEVICE) {
-          $('.ui-keyboard-preview').val("");
-        }
-        $(".ui-keyboard-preview").select();
-      },100);
-    }
-  }
-  if(item['quantity']==0 && item['weigh_compulsory']) { weigh_last_item(); }
-  
-}
+
 
 function updateOrder(order) {
   var button = $('#buy_order_button');
@@ -818,16 +846,4 @@ function highlight(elem) {
   }
 }
 
-function updateOrderItems(items) {
-  for (var i = 0; i < items.length; i++) {
-    var item = items[i];
-    var id = getOrderItemId(item);
-    if ($('.' + id).length != 0) {
-      /* Item is in list, and we need to update it */
-      updatePosItem(item);
-    } else {
-      /* Item is not in list, we need to add it */
-      addPosItem(item);
-    }
-  }
-}
+

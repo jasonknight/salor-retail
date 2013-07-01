@@ -8,10 +8,14 @@
 class PaymentMethod < ActiveRecord::Base
   belongs_to :order
   belongs_to :vendor
+  belongs_to :company
   before_save :process
+  belongs_to :user
 
   include SalorBase
+  include SalorScope
   
+  # other methods only have to set internal type, this method transates it
   def process
     pmx = I18n.t("system.payment_external_types").split(',')
     pmi = I18n.t("system.payment_internal_types").split(',')

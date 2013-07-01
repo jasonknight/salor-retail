@@ -67,6 +67,7 @@ class Action < ActiveRecord::Base
       return ''
     end
   end
+  
   def self.apply_action(action,item,act)
     # puts "Considering action: #{action.behavior} #{action.whento}"
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
@@ -121,6 +122,7 @@ class Action < ActiveRecord::Base
     end
     return item
   end
+  
   def self.run(item,act)
     if item.class == OrderItem then
       base_item = item.item
@@ -139,6 +141,7 @@ class Action < ActiveRecord::Base
       end
     return item
   end
+  
   def self.simulate(item,action)
      if action.value > 0 then
         begin

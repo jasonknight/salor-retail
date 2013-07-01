@@ -196,6 +196,8 @@ class VendorsController < ApplicationController
     inst.update_attribute(params[:field], value) if inst.respond_to?(params[:field])
     
     if inst.class == OrderItem
+      inst.calculate_totals
+      @order.calculate_totals
       render 'orders/update_pos_display'
     else
       render :nothing => true

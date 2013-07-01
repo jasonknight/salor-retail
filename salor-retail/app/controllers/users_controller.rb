@@ -6,6 +6,8 @@
 # See license.txt for the license applying to all files within this software.
 class UsersController < ApplicationController
   
+  skip_before_filter :loadup, :only => :login
+  
   def clockin
     if params[:password] then
       u = User.login(params[:password])

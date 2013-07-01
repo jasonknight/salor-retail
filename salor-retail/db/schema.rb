@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130630143008) do
+ActiveRecord::Schema.define(:version => 20130701123208) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -275,15 +275,12 @@ ActiveRecord::Schema.define(:version => 20130630143008) do
   create_table "drawer_transactions", :force => true do |t|
     t.integer  "drawer_id"
     t.float    "amount"
-    t.boolean  "drop"
-    t.boolean  "payout"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "notes"
     t.boolean  "is_refund"
     t.string   "tag"
     t.float    "drawer_amount"
-    t.integer  "cash_register_id"
     t.integer  "order_id"
     t.integer  "order_item_id"
     t.integer  "vendor_id"
@@ -292,6 +289,7 @@ ActiveRecord::Schema.define(:version => 20130630143008) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.boolean  "complete_order"
   end
 
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
@@ -652,22 +650,19 @@ ActiveRecord::Schema.define(:version => 20130630143008) do
     t.integer  "tax_profile_id"
     t.integer  "item_type_id"
     t.boolean  "activated"
-    t.boolean  "total_is_locked"
-    t.boolean  "tax_is_locked"
     t.float    "total",                 :default => 0.0
     t.float    "tax",                   :default => 0.0
     t.float    "coupon_amount",         :default => 0.0
     t.string   "behavior"
-    t.float    "tax_profile_amount",    :default => 0.0
+    t.float    "tax_amount",            :default => 0.0
     t.integer  "category_id"
     t.integer  "location_id"
     t.float    "amount_remaining",      :default => 0.0
     t.boolean  "refunded"
-    t.boolean  "discount_applied"
-    t.boolean  "coupon_applied"
+    t.boolean  "discount_applies"
+    t.boolean  "coupon_applies"
     t.datetime "refunded_at"
     t.integer  "refunded_by"
-    t.string   "refunded_by_type"
     t.float    "discount_amount",       :default => 0.0
     t.float    "rebate",                :default => 0.0
     t.integer  "coupon_id",             :default => 0
@@ -676,16 +671,16 @@ ActiveRecord::Schema.define(:version => 20130630143008) do
     t.boolean  "weigh_compulsory"
     t.boolean  "no_inc"
     t.string   "refund_payment_method"
-    t.boolean  "action_applied"
+    t.boolean  "action_applies"
     t.boolean  "hidden"
     t.float    "rebate_amount",         :default => 0.0
     t.integer  "vendor_id"
-    t.boolean  "tax_free"
     t.integer  "hidden_by"
-    t.string   "coupon_applies"
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.float    "discount"
+    t.float    "subtotal"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -709,31 +704,20 @@ ActiveRecord::Schema.define(:version => 20130630143008) do
     t.integer  "user_id"
     t.integer  "location_id"
     t.boolean  "paid"
-    t.boolean  "refunded"
     t.boolean  "hidden"
     t.integer  "cash_register_id"
     t.integer  "customer_id"
-    t.boolean  "total_is_locked"
-    t.boolean  "tax_is_locked"
-    t.boolean  "subtotal_is_locked"
-    t.integer  "cash_register_daily_id"
     t.float    "rebate",                 :default => 0.0
     t.string   "rebate_type",            :default => "percent"
     t.integer  "lc_points"
-    t.float    "in_cash",                :default => 0.0
-    t.float    "by_card",                :default => 0.0
-    t.datetime "refunded_at"
-    t.integer  "refunded_by"
-    t.string   "refunded_by_type"
-    t.float    "discount_amount",        :default => 0.0
+    t.float    "cash",                   :default => 0.0
     t.string   "tag"
     t.boolean  "buy_order"
     t.float    "lc_discount_amount",     :default => 0.0
     t.boolean  "was_printed"
-    t.float    "front_end_change",       :default => 0.0
+    t.float    "change"
     t.string   "sku"
     t.integer  "drawer_id"
-    t.boolean  "tax_free"
     t.integer  "origin_country_id"
     t.integer  "destination_country_id"
     t.integer  "sale_type_id"
@@ -743,13 +727,15 @@ ActiveRecord::Schema.define(:version => 20130630143008) do
     t.boolean  "is_proforma"
     t.integer  "hidden_by"
     t.boolean  "unpaid_invoice"
-    t.integer  "qnr",                    :default => 0
+    t.integer  "qnr"
     t.boolean  "is_quote"
     t.datetime "hidden_at"
     t.integer  "company_id"
+    t.datetime "paid_at"
+    t.float    "payment_total"
+    t.float    "noncash"
   end
 
-  add_index "orders", ["cash_register_daily_id"], :name => "index_orders_on_cash_register_daily_id"
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
   add_index "orders", ["location_id"], :name => "index_orders_on_location_id"

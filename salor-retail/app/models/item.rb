@@ -5,8 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
-# {VOCABULARY} item_price item_category item_location_id tax_profile_info info foreign_key_constraint logging_time coupon_amount_paid paying_agent reimburseable unknown_item
-# {VOCABULARY} location_reversed info_on_category real_category_name part_ident part_qty2 quantity_of_sale gift_card_remainder coupon_b1g1 gift_card_user
 class Item < ActiveRecord::Base
 
   include SalorScope
@@ -30,7 +28,6 @@ class Item < ActiveRecord::Base
   
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
   
-  
   accepts_nested_attributes_for :item_stocks, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }, :allow_destroy => true
 
   validates_presence_of :sku
@@ -39,6 +36,7 @@ class Item < ActiveRecord::Base
 
   after_create :set_amount_remaining
   before_save :run_actions
+  before_save :cache_behavior
   
   COUPON_TYPES = [
       {:text => I18n.t('views.forms.percent_off'), :value => 1},
@@ -172,6 +170,10 @@ class Item < ActiveRecord::Base
     end
   end
   
+  def cache_behavior
+    write_attribute :behavior, self.vendor.item_types.visible.find_by_id(self.item_type_id).behavior
+  end
+  
   def parent_sku
     if self.parent then
       return self.parent.sku
@@ -263,24 +265,24 @@ class Item < ActiveRecord::Base
   end
 
 
-  def price
-    conds = "(item_sku = '#{self.sku}' and applies_to = 'Item') OR (location_id = '#{self.location_id}' and applies_to = 'Location') OR (category_id = '#{self.category_id}' and applies_to = 'Category') OR (applies_to = 'Vendor' and amount_type = 'percent')"
-    price = self.base_price
-    discounted = false
-    damount = 0
-    Discount.scopied.where(conds).each do |discount|
-      if discount.amount_type == 'percent' then
-        d = discount.amount / 100
-        damount = (self.base_price * d)
-        price -= damount
-      elsif discount.amount_type == 'fixed' then
-        damount = discount.amount
-        price -= damount
-      end
-      discounted = true
-    end
-    return [price,discounted,damount]
-  end
+#   def price
+#     conds = "(item_sku = '#{self.sku}' and applies_to = 'Item') OR (location_id = '#{self.location_id}' and applies_to = 'Location') OR (category_id = '#{self.category_id}' and applies_to = 'Category') OR (applies_to = 'Vendor' and amount_type = 'percent')"
+#     price = self.base_price
+#     discounted = false
+#     damount = 0
+#     Discount.scopied.where(conds).each do |discount|
+#       if discount.amount_type == 'percent' then
+#         d = discount.amount / 100
+#         damount = (self.base_price * d)
+#         price -= damount
+#       elsif discount.amount_type == 'fixed' then
+#         damount = discount.amount
+#         price -= damount
+#       end
+#       discounted = true
+#     end
+#     return [price,discounted,damount]
+#   end
 
   def base_price=(p)
     p = self.string_to_float(p)
