@@ -18,13 +18,14 @@ class Item < ActiveRecord::Base
   belongs_to :item_type
   belongs_to :item
   belongs_to :shipper
+  has_many :order_items
+  has_many :item_shippers
   has_many :item_stocks
   has_many :actions, :as => :model, :order => "weight asc"
   has_many :parts, :class_name => 'Item', :foreign_key => :part_id
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
   belongs_to :child, :class_name => 'Item'
-  has_many :order_items
-  has_many :item_shippers
+
   
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
   
@@ -33,7 +34,6 @@ class Item < ActiveRecord::Base
   validates_presence_of :sku, :item_type, :vendor_id, :company_id
   validates_uniqueness_of :sku, :scope => :vendor_id
 
-  after_create :set_amount_remaining
   before_save :run_actions
   before_save :cache_behavior
   
@@ -258,24 +258,17 @@ class Item < ActiveRecord::Base
     p = self.string_to_float(p)
     write_attribute(:base_price,p.to_f)
   end
+  
   def purchase_price=(p)
     p = self.string_to_float(p)
     write_attribute(:purchase_price,p)
   end
+  
   def amount_remaining=(p)
     write_attribute(:amount_remaining,self.string_to_float(p))
   end
-  def tax_profile_id=(id)
-    tp = TaxProfile.find_by_id(id)
-    if tp then
-      write_attribute(:tax_profile_amount,tp.value)
-      write_attribute(:tax_profile_id,id)
-    end
-  end
-#   def item_type_id=(id)
-#     write_attribute(:behavior,ItemType.find(id).behavior)
-#     write_attribute(:item_type_id,id)
-#   end
+  
+
   def height=(p)
     p = self.string_to_float(p)
     write_attribute(:height,p)
@@ -300,48 +293,27 @@ class Item < ActiveRecord::Base
     p = self.string_to_float(p)
     write_attribute(:packaging_unit,p)
   end
-  def part_skus=(items)
-    ids = []
-    vid = @current_user.vendor_id
-    items.each do |item|
-      i = Item.find_by_sku(item[:sku])
+  
+  
+  def assign_parts(hash={})
+    self.parts = []
+    hash ||= {}
+    hash.each do |h|
+      i = self.vendor.items.visible.find_by_sku(h[:sku])
       if i then
-        i.vendor_id = vid
-        i.is_part = 1
-        i.part_quantity = self.string_to_float(item[:part_quantity])
+        i.is_part = true
+        i.part_quantity = self.string_to_float(h[:part_quantity])
         i.save
-        if i then
-          ids << i.id
-        end
-      else
-        errors.add :sku, I18n.t("system.errors.failed_to_save_parts")
-        return
+        self.parts << i
       end
     end
-    begin
-      self.part_ids = ids if ids.any?
-    rescue
-      errors.add(:sku,I18n.t("system.errors.failed_to_save_parts"));
-    end
+    self.save
   end
-  def batches
-    []
-  end
-  def batch_skus=(batches)
-    ids = []
-    batches.each do |batch|
-      batch[:expires_on] = Date.parse(batch[:expires_on])
-      b = Batch.find_or_create_by_sku(batch[:sku])
-      b.add_item(self)
-      b.update_attributes(batch)
-      b.save
-    end
-  end
+  
+
 
   
-  def set_amount_remaining
-    self.update_attribute(:amount_remaining,self.base_price)
-  end
+
   
   def from_shipment_item(si)
     i = Item.find_by_sku(si.sku)
@@ -424,32 +396,38 @@ class Item < ActiveRecord::Base
   end
 
   def quantity=(q)
-    q = 0 if q.nil? or q.blank?
-    q = q.to_s.gsub(',','.')
-    q = q.to_f.round(3)
-    difference = q - self.quantity
-    write_attribute(:quantity, q) and return unless difference < 0 and q == q.round and self.quantity == self.quantity.round
-    # continue only for integer quantities and decrementation
-    difference.to_i.abs.times do
-      i = self.quantity - 1
-      if i == -1
-        if self.parent.class == Item
-          #puts "Updating parent #{self.parent.name} qty";
-          before = self.parent.quantity
-          #puts "Before #{before}"
-          self.parent.update_attribute :quantity, before - 1 # recursion
-          after = self.parent.quantity
-          #puts "After #{after}"
-          parent_reducable = before != after
-          write_attribute(:quantity, self.parent.packaging_unit - 1) if parent_reducable
+    if self.parent or self.child
+      q = 0 if q.nil? or q.blank?
+      q = q.to_s.gsub(',','.')
+      q = q.to_f.round(3)
+      difference = q - self.quantity
+      write_attribute(:quantity, q) and return unless difference < 0 and q == q.round and self.quantity == self.quantity.round
+      # continue only for integer quantities and decrementation
+      difference.to_i.abs.times do
+        i = self.quantity - 1
+        if i == -1
+          if self.parent.class == Item
+            #puts "Updating parent #{self.parent.name} qty";
+            before = self.parent.quantity
+            #puts "Before #{before}"
+            self.parent.update_attribute :quantity, before - 1 # recursion
+            after = self.parent.quantity
+            #puts "After #{after}"
+            parent_reducable = before != after
+            write_attribute(:quantity, self.parent.packaging_unit - 1) if parent_reducable
+          else
+            b = write_attribute :quantity, 0
+          end
         else
-          b = write_attribute :quantity, 0
+          c = write_attribute :quantity, i
         end
-      else
-        c = write_attribute :quantity, i
       end
+    else
+      puts "WRITING #{ q }"
+      write_attribute :quantity, q
     end
   end
+  
   def to_record
     attrs = self.attributes.clone
     attrs[:category] = self.category.name if self.category
@@ -466,5 +444,4 @@ class Item < ActiveRecord::Base
     end
     attrs
   end
-  # {END}
 end

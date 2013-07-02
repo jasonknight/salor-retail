@@ -57,6 +57,11 @@ function roundNumber(num, dec) {
 }
 
 function toDelimited(number) {
+  if (typeof number == 'undefined') {
+    console.log("warning in toDelimited");
+    return "";
+  }
+  
   var match, property, integerPart, fractionalPart;
   var settings = {
     precision: 2,
@@ -76,6 +81,10 @@ function toDelimited(number) {
 }
 
 function toCurrency(number) {
+  if (typeof number == 'undefined') {
+    console.log("warning in toCurrency");
+    return "";
+  }
   
   var match, property, integerPart, fractionalPart;
   var settings = {         precision: 2,
@@ -100,6 +109,10 @@ function toCurrency(number) {
 }
 
 function toPercent(number) {
+  if (typeof number == 'undefined') {
+    console.log("warning in toPercent");
+    return "";
+  }
   var match, property, integerPart, fractionalPart;
   var settings = {         precision: 0,
     unit: "%",

@@ -69,27 +69,6 @@ class Order < ActiveRecord::Base
 
 
   
-#   def add_payment_methods(params)
-#     if params[:payment_methods] then
-#       npms = []
-#       params[:payment_methods].each do |pm|
-#         m = PaymentMethod.new(pm)
-#         m.order_id = self.id
-#         if m.save then
-#           self.payment_methods << m
-#         end
-#       end
-#     end
-#   end
-  
-#   def remove_payment_method(id)
-#     pm = self.payment_methods.find_by_id(id)
-#     if pm then
-#       pm.destroy
-#       self.payment_methods.reload
-#     end
-#   end
-  
   def loyalty_card
     if self.customer
       return self.customer.loyalty_card
@@ -102,41 +81,11 @@ class Order < ActiveRecord::Base
     end
     return self.rebate_type
   end
-
-  
-#   def total=(p)
-#     return if self.paid == 1
-#     p = self.string_to_float(p)
-#     p = p * -1 if self.buy_order == true and p > 0
-#     write_attribute(:total,p) 
-#   end
-  
-#   def front_end_change=(p)
-#     if self.paid then
-#       return
-#     end
-#     write_attribute(:front_end_change,self.string_to_float(p)) 
-#   end
-  
-#   def rebate=(p)
-#     return if self.paid
-#     write_attribute(:rebate,self.string_to_float(p)) 
-#   end
-  
-#   def subtotal=(p)
-#     return if self.paid
-#     write_attribute(:subtotal,self.string_to_float(p)) 
-#   end
-  
-#   def tax=(p)
-#     return if self.paid
-#     write_attribute(:tax,self.string_to_float(p)) 
-#   end
   
   def toggle_buy_order=(x)
     self.buy_order = !self.buy_order
     self.order_items.visible.each do |oi|
-      oi.toggle_buyback(x)
+      oi.toggle_buyback=(x)
     end
     self.calculate_totals
   end
@@ -169,36 +118,32 @@ class Order < ActiveRecord::Base
   end
 
   
-  
-  
-  def skus=(list)
-    list.each do |s|
-      if s.class == Array then
-        qty = s[1]
-        s = s[0]
-      end
-      item = Item.get_by_code(s)
-      if item then
-        if item.class == LoyaltyCard then
-          self.customer = item
-        else
-          oi = self.add_item(item)
-          if qty then
-            oi.quantity = qty
-          end
-        end
-      end #if item
-    end # end list.each
-  end
+#   def skus=(list)
+#     list.each do |s|
+#       if s.class == Array then
+#         qty = s[1]
+#         s = s[0]
+#       end
+#       item = Item.get_by_code(s)
+#       if item then
+#         if item.class == LoyaltyCard then
+#           self.customer = item
+#         else
+#           oi = self.add_item(item)
+#           if qty then
+#             oi.quantity = qty
+#           end
+#         end
+#       end #if item
+#     end # end list.each
+#   end
 
 
   def add_order_item(params={})
     return if self.paid
-    
-    
-    # try to get existing regular item
+    # get existing regular item
     item = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
-    if item      
+    if item
       if not (item.activated or item.is_buyback)
         # simply increment and return
         item.quantity += 1
@@ -208,8 +153,7 @@ class Order < ActiveRecord::Base
     end
     
     # at this point, we know that the added order item is not yet in the order. so we add a new one
-    
-    i = self.get_item_by_code(params[:sku])
+    i = self.get_item_by_sku(params[:sku])
     
     if i.class == LoyaltyCard then
       self.customer = i.customer
@@ -228,14 +172,15 @@ class Order < ActiveRecord::Base
     oi = OrderItem.new
     oi.order = self
     oi.set_attrs_from_item(i)
-    oi.no_inc = true if params[:no_inc]
+    oi.sku = params[:sku]
+    oi.no_inc ||= params[:no_inc]
     oi.modify_price
     oi.calculate_totals
     self.order_items << oi
     self.calculate_totals
     
     return oi
-	end
+  end
 
   
   
@@ -282,20 +227,16 @@ class Order < ActiveRecord::Base
   
   
   
-  def get_item_by_code(code)     
-    # a sku was entered
-    item = self.vendor.items.visible.find_by_sku(code)
-    return item if item
+  def get_item_by_sku(sku)    
+    item = self.vendor.items.visible.find_by_sku(sku)
+    return item if item # a sku was entered
 
-    # a GS1 barcode was entered
-    m = code.match(/\d{2}(\d{5})(\d{5})/)
-    item = self.vendor.items.visible.find_by_sku(m[1]) if m
-    return item if item
+    m = self.vendor.gs1_regexp.match(sku)
+    item = self.vendor.items.visible.where(:is_gs1 => true).find_by_sku(m[1]) if m
+    return item if item # a GS1 barcode was entered
 
-
-    # a loyalty card was entered
-    lcard = self.vendor.loyalty_cards.visible.find_by_sku(code)
-    return lcard if lcard
+    lcard = self.vendor.loyalty_cards.visible.find_by_sku(sku)
+    return lcard if lcard # a loyalty card was entered
     
     # if nothing existing has been found, create a new item
     i = Item.new
@@ -305,14 +246,14 @@ class Order < ActiveRecord::Base
     i.vendor = self.vendor
     i.company = self.company
     
-    pm = code.match(/(\d{1,9}[\.\,]\d{1,2})/)
+    pm = sku.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1]
       # a price in the format xx,xx was entered
       i.sku = "DMY" + Time.now.strftime("%y%m%d") + rand(999).to_s
-      i.base_price = code
+      i.base_price = sku
     else
       # dummy item
-      i.sku = code
+      i.sku = sku
       i.base_price = 0
     end
     i.name = i.sku
@@ -363,12 +304,11 @@ class Order < ActiveRecord::Base
       self.nr = self.vendor.get_unique_model_number('order')
     end
     
-    self.save
-
-    self.order_items.visible.each do |oi|
-      oi.update_item_quantities
-    end
     
+    
+    self.save
+    
+    self.update_item_quantities
     self.activate_giftcard_items
     self.update_giftcard_remaining_amounts
     self.create_payment_methods(params)
@@ -385,6 +325,27 @@ class Order < ActiveRecord::Base
     dt.save
     
     self.save
+  end
+  
+  def update_item_quantities
+    self.order_items.visible.each do |oi|
+      items = []
+      items << oi.item
+      items << oi.item.parts
+      items.flatten!
+      items.each do |i|
+        if not i.ignore_qty and i.behavior == 'normal' and not self.is_proforma
+          if oi.is_buyback
+            i.quantity += oi.quantity
+            i.quantity_buyback += self.quantity
+          else
+            i.quantity -= oi.quantity
+            i.quantity_sold += oi.quantity
+          end
+        end
+        i.save
+      end
+    end
   end
   
 

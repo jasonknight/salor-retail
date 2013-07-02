@@ -419,11 +419,7 @@ $(function () {
     <td>  <%= f.label I18n.t("activerecord.attributes.price_by_qty") %> </td>
     <td> <%= f.check_box :price_by_qty, :onchange => "price_by_qty_change();", :class => "price-by-qty delimit-number" %> </td>
   </tr>
-  
-  <tr>
-    <td> <%= f.label I18n.t("activerecord.attributes.decimal_points") %> </td>
-    <td> <%= f.text_field :decimal_points, :class => "keyboardable-int decimal-points" %> </td>
-  </tr>
+
   <tr>
     <td> <%= f.label I18n.t("activerecord.attributes.must_change_price") %> </td>
     <td> <%= f.check_box :must_change_price %> </td>
@@ -461,11 +457,11 @@ $(function () {
         var elem = $("<div class='part'></div>");
         var inp_id = 'inp-'+Math.floor(Math.random() * 1000);
         elem.append($('<%= label_tag I18n.t("activerecord.attributes.sku") %><br />'));
-        var inp = shared.element('input',{id: inp_id,type: "text", name: "item[part_skus][][sku]", class: "text-input keyboardable part-input"},'',elem);
+        var inp = shared.element('input',{id: inp_id,type: "text", name: "part_skus[][sku]", class: "text-input keyboardable part-input"},'',elem);
         elem.append('<br />');
         var qinp_id = 'qinp-'+Math.floor(Math.random() * 1000);
         elem.append($('<%= label_tag I18n.t("activerecord.attributes.part_quantity") %> <br />'));
-        var inp = shared.element('input',{id: qinp_id,type: "text", name: "item[part_skus][][part_quantity]", class: "text-input keyboardable part-input"},'',elem);
+        var inp = shared.element('input',{id: qinp_id,type: "text", name: "part_skus[][part_quantity]", class: "text-input keyboardable part-input"},'',elem);
         elem.append('<br />');
         var del = $('<div align="center" style="padding-top: 10px;"><%= image_tag "/images/icons/" + icon(:delete,16) %></div>');
         del.click(function () {
@@ -483,9 +479,9 @@ $(function () {
           <% @item.parts.each do |part|  %>
             <div id="part-<%= part.id %>" class="part">
               <%= label_tag I18n.t("activerecord.attributes.sku") %> <br />
-              <%= text_field_tag "item[part_skus][][sku]", part.sku, :class => 'keyboardable' %><br />
+              <%= text_field_tag "part_skus[][sku]", part.sku, :class => 'keyboardable' %><br />
               <%= label_tag I18n.t("activerecord.attributes.part_quantity") %> <br />
-              <%= text_field_tag "item[part_skus][][part_quantity]", part.part_quantity, :class => 'keyboardable-int delimit-number' %><br />
+              <%= text_field_tag "part_skus[][part_quantity]", part.part_quantity, :class => 'keyboardable-int delimit-number' %><br />
               <div id="" class="" align="right" style="padding-top: 10px;">
                 <%= image_tag("/images/icons/" + icon(:delete,16), :onclick => "$('#part-#{part.id}').remove();") %>
               </div>

@@ -54,6 +54,11 @@ class Vendor < ActiveRecord::Base
 
   serialize :unused_order_numbers
   serialize :unused_quote_numbers
+  
+  def gs1_regexp
+    parts = self.gs1_format.split("|")
+    return Regexp.new "\\d{#{ parts[0] }}(\\d{#{ parts[1] }})(\\d{#{ parts[2] }})(\\d{#{ parts[3] }})"
+  end
 
   def salor_configuration_attributes=(hash)
     if self.salor_configuration.nil? then

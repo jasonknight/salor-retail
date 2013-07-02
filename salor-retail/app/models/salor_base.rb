@@ -63,20 +63,7 @@ module SalorBase
       return SalorBase.string_to_float(string)
    end
    
-#    def get_gs1_price(code, item=nil)
-#      m = code.match(/\d{2}(\d{5})(\d{5})\d{0,1}/)
-#      if not m then
-#        return nil
-#      end
-#      if item and item.decimal_points.to_i == 3 then
-#        parts = m[2].match(/(\d{2})(\d{3})/)
-#        # puts parts.inspect
-#      else
-#        parts = m[2].match(/(\d{3})(\d{2})/)
-#      end
-#      num = "#{parts[1]}.#{parts[2]}".to_f
-#      return num
-#    end
+
    
    def get_html_id
      return [self.class.to_s,self.id.to_s,rand(9999)].join('_').to_s

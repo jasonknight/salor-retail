@@ -50,28 +50,31 @@ class ItemsController < ApplicationController
     @item.vendor = @current_vendor
     @item.company = @current_company
     if @item.save
+      @item.assign_parts(params[:part_skus])
       redirect_to items_path
     else
       render :new
     end
   end
   
-  def create_ajax
-    @item = Item.new()
-    @item.tax_profile_id = params[:item][:tax_profile_id]
-    @item.attributes = params[:item]
-    respond_to do |format|
-      if @current_user.owns_vendor?(@item.vendor_id) and @item.save
-        format.json  { render :json => @item }
-      else
-        format.json  { render :json => @item.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+#   def create_ajax
+#     @item = Item.new
+#     @item
+#     @item.tax_profile_id = params[:item][:tax_profile_id]
+#     @item.attributes = params[:item]
+#     respond_to do |format|
+#       if @current_user.owns_vendor?(@item.vendor_id) and @item.save
+#         format.json  { render :json => @item }
+#       else
+#         format.json  { render :json => @item.errors, :status => :unprocessable_entity }
+#       end
+#     end
+#   end
 
   def update
     @item = @current_vendor.items.visible.find_by_id(params[:id])
     if @item.update_attributes(params[:item])
+      @item.assign_parts(params[:part_skus])
       redirect_to items_path
     else
       render :edit

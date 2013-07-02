@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130701153239) do
+ActiveRecord::Schema.define(:version => 20130702064025) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -475,13 +475,11 @@ ActiveRecord::Schema.define(:version => 20130701153239) do
     t.float    "width",                 :default => 0.0
     t.string   "length_metric"
     t.string   "width_metric"
-    t.integer  "is_part"
+    t.boolean  "is_part"
     t.boolean  "is_gs1"
     t.boolean  "price_by_qty"
-    t.integer  "decimal_points"
     t.float    "part_quantity",         :default => 0.0
     t.string   "behavior"
-    t.float    "tax_profile_amount",    :default => 0.0
     t.string   "sales_metric"
     t.float    "purchase_price",        :default => 0.0
     t.date     "expires_on"
@@ -659,8 +657,6 @@ ActiveRecord::Schema.define(:version => 20130701153239) do
     t.integer  "location_id"
     t.float    "amount_remaining",      :default => 0.0
     t.boolean  "refunded"
-    t.boolean  "discount_applies"
-    t.boolean  "coupon_applies"
     t.datetime "refunded_at"
     t.integer  "refunded_by"
     t.float    "discount_amount",       :default => 0.0
@@ -671,7 +667,6 @@ ActiveRecord::Schema.define(:version => 20130701153239) do
     t.boolean  "weigh_compulsory"
     t.boolean  "no_inc"
     t.string   "refund_payment_method"
-    t.boolean  "action_applies"
     t.boolean  "hidden"
     t.float    "rebate_amount",         :default => 0.0
     t.integer  "vendor_id"
@@ -681,6 +676,7 @@ ActiveRecord::Schema.define(:version => 20130701153239) do
     t.integer  "user_id"
     t.float    "discount"
     t.float    "subtotal"
+    t.boolean  "calculate_part_price"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -1089,6 +1085,7 @@ ActiveRecord::Schema.define(:version => 20130701153239) do
     t.boolean  "csv_loyalty_cards"
     t.text     "invoice_blurb"
     t.text     "invoice_blurb_footer"
+    t.string   "gs1_format",                      :default => "2|5|2|3"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"
