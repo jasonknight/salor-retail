@@ -320,37 +320,8 @@ class Order < ActiveRecord::Base
     return i
   end
 
-  
-  def delete_order_item(oi)
-    return if self.paid
-    
-    oi.hidden = true
-    oi.save
-    
-    if oi.behavior == 'coupon' then
-      roi = self.order_items.joins(:item).readonly(false).where("items.sku = '#{oi.item.coupon_applies}'")
-      if roi then
-        roi = roi.first
-        roi.update_attribute(:coupon_amount,0) if roi
-        roi.update_attribute(:coupon_applied, false) if roi
-      end
-    end
-    self.calculate_totals
-  end
+ 
 
-	def coupon_for(sku)
-	  cps = []
-	  coupons.each do |oi|
-	    if oi.item.coupon_applies == sku then
-	      cps << oi
-	    end
-	  end if coupons
-	  if not cps.any? then
-	    return false
-	  else
-	    return cps
-	  end
-	end
 
   
 

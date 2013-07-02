@@ -303,6 +303,8 @@ class OrderItem < ActiveRecord::Base
     self.save
   end
   
+  # coupons have to be added after the matching product
+  # coupons do not have a price by themselves, they just reduce the quantity of the matching oi
   def apply_coupon
     if self.behavior == 'coupon'
       item = self.item
@@ -315,11 +317,14 @@ class OrderItem < ActiveRecord::Base
           coitem.coupon_amount = (coitem.subtotal * item.amount_remaining / 100.0).round(2)
         elsif ctype == 2
           # fixed amount
-          coitem.coupon_amount = coitem.subtotal - self.amount_remaining
+          coitem.coupon_amount = self.amount_remaining
         elsif ctype == 3
-          # buy 1 get 1
-          if coitem.quantity >= 2
-            coitem.coupon_amount = (coitem.subtotal / 2).round(2)
+          puts 'xx'
+          # buy x get y free
+          x = 2
+          y = 1
+          if coitem.quantity >= x
+            coitem.coupon_amount = coitem.subtotal / coitem.quantity * y
           end
         end
         coitem.subtotal -= coitem.coupon_amount
@@ -376,7 +381,19 @@ class OrderItem < ActiveRecord::Base
   
   
   def hide(by)
-    puts "XXXX"
+    self.hidden = true
+    self.hidden_by = by
+    self.hidden_at = Time.now
+    self.save
+    if self.behavior == 'coupon'
+      item = self.item
+      item.activated = nil
+      item.save
+      coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
+      coitem.coupon_amount = 0.0
+      coitem.calculate_totals
+      self.order.calculate_totals
+    end
   end
   
   
