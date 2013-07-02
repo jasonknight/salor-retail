@@ -25,7 +25,7 @@ class ActionsController < ApplicationController
   end
 
   def create
-    @action = Action.new(params[:item])
+    @action = Action.new(params[:act])
     @action.vendor = @current_vendor
     @action.company = @current_company
     if @action.save
@@ -37,7 +37,7 @@ class ActionsController < ApplicationController
 
   def update
     @action = @current_vendor.actions.visible.find_by_id(params[:id])
-    if @action.update_attributes(params[:item])
+    if @action.update_attributes(params[:act])
       redirect_to actions_path
     else
       render :edit

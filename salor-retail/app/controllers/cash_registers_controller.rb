@@ -39,7 +39,7 @@ class CashRegistersController < ApplicationController
   def update
     @cash_register = @current_vendor.cash_registers.visible.find_by_id(params[:id])
     
-    if @cash_register.update_attributes(params[:current_register])
+    if @cash_register.update_attributes(params[:cash_register])
       redirect_to cash_registers_path
     else
       render :edit

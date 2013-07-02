@@ -159,8 +159,7 @@ class Order < ActiveRecord::Base
       self.customer = i.customer
       self.tag = self.customer.full_name
       self.save
-      # this is not to be added as an order item, so we return
-      return i
+      return nil
     end
     
     if i.class == Item and i.item_type.behavior == 'gift_card' and i.sku == "G000000000000"
@@ -312,19 +311,26 @@ class Order < ActiveRecord::Base
     self.activate_giftcard_items
     self.update_giftcard_remaining_amounts
     self.create_payment_methods(params)
-    
+    self.create_drawer_transaction    
+    self.save
+  end
+  
+  def create_drawer_transaction
+    drawer = self.user.get_drawer
+    add_amount = self.cash - self.change
     dt = DrawerTransaction.new
     dt.vendor = self.vendor
     dt.company = self.company
     dt.user = self.user
     dt.order = self
     dt.complete_order = true
-    dt.amount = self.cash - self.change
+    dt.amount = add_amount
     dt.drawer_amount = self.user.get_drawer.amount
-    dt.drawer = self.user.get_drawer
+    dt.drawer = drawer
     dt.save
     
-    self.save
+    drawer.amount += add_amount
+    drawer.save
   end
   
   def update_item_quantities
@@ -347,8 +353,6 @@ class Order < ActiveRecord::Base
       end
     end
   end
-  
-
   
   def create_payment_methods(params)
     self.payment_methods.delete_all
@@ -1071,7 +1075,7 @@ class Order < ActiveRecord::Base
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs
-      attrs[:loyalty_card] = self.customer.loyalty_card.json_attrs
+      attrs[:loyalty_card] = self.customer.loyalty_cards.visible.last.json_attrs if self.customer.loyalty_cards.visible.last
     end
     attrs.to_json
   end

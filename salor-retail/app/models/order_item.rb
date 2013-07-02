@@ -153,10 +153,15 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price
     self.modify_price_for_buyback
+    self.modify_price_for_actions
     self.modify_price_for_parts
     self.modify_price_for_giftcards
     self.modify_price_for_gs1
     self.save
+  end
+  
+  def modify_price_for_actions
+    Action.run(self, :add_to_order)
   end
   
   def modify_price_for_gs1
@@ -334,28 +339,10 @@ class OrderItem < ActiveRecord::Base
         :must_change_price => self.item.must_change_price,
         :weight_metric => self.item.weight_metric,
         :tax => self.tax,
-        :action_applies => self.item.actions.visible.any?
+        :action_applied => self.item.actions.visible.any?
       }
     end
     return obj.to_json
-  end
-  
-
-  
-
-  
-  def debug
-    if self.behavior == 'gift_card'
-      puts "GIFT CARD"
-      puts "---------"
-      puts "self.price              = #{ self.price.inspect }"
-      puts "self.total              = #{ self.total.inspect }"
-      puts "self.activated          = #{ self.activated.inspect }"
-      puts "self.amount_remaining   = #{ self.amount_remaining.inspect }"
-      puts "self.item.base_price         = #{ self.item.base_price.inspect }"
-      puts "self.item.activated          = #{ self.item.activated.inspect }"
-      puts "self.item.amount_remaining   = #{ self.item.amount_remaining.inspect }"
-    end
   end
 
 end

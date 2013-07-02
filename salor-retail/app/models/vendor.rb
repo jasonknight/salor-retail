@@ -64,9 +64,14 @@ class Vendor < ActiveRecord::Base
     types = []
     pmx = I18n.t("system.payment_external_types").split(',')
     pmi = I18n.t("system.payment_internal_types").split(',')
+    i = 0
+    pmi.each do |p|
+      types << [pmx[i], p] if p != 'Change'
+      i  = i + 1
+    end
     tms = self.tender_methods.visible
     tms.each do |tm|
-      types << [tm.name,tm.internal_type]
+      types << [tm.name, tm.internal_type]
     end
     return types
   end

@@ -1,30 +1,35 @@
-<% if @order_item then %>
-  <% @order_item.reload if @order_item.behavior == 'coupon' or @order_item.behavior == 'gift_card'  %>
-   order_item_json = <%= raw @order_item.to_json %>;
-   updateOrderItems([order_item_json]);
-   updateOrder(<%= raw @order.to_json %>);
-   updateCustomerView(order_item_json,<%= @order.id %>);
-   if (order_item_json.price == 0 ) {
-     playSound('medium_warning');
-   } else {
-     playSound('drop2');
-   }
-    if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-      Salor.stopDrawerObserver(Register.cash_drawer_path);
-    }
-   <%
-     if @order_item.behavior == 'coupon' then
-     oi = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
-         %>
-            updateOrderItems([<%= raw oi.to_json %>]);
-         <%
-     end
-   %>
-<% else %>
-  $('.notice-container').html('');
-  $('.notice-container').html('<%= t("system.errors.unspecified_error") %>');
-<% end %>
-focusInput($('#keyboard_input'));
 Order = <%= raw @order.to_json %>;
-$(".complete-order-total").html($('#pos_order_total').html());
+updateOrder(Order);
+
+<% if @order_item %>
+order_item_json = <%= raw @order_item.to_json %>;
+updateOrderItems([order_item_json]);
+<% end %>
+
+                  
+<%
+  if @order_item and @order_item.behavior == 'coupon' then
+  oi = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
+      %>
+        updateOrderItems([<%= raw oi.to_json %>]);
+      <%
+  end
+%>
+
+focusInput($('#keyboard_input'));
+
+
+//$(".complete-order-total").html($('#pos_order_total').html());
+
 display_change();
+updateCustomerView(order_item_json,<%= @order.id %>);
+                         
+if (order_item_json.price == 0 ) {
+  playSound('medium_warning');
+} else {
+  playSound('drop2');
+}
+                         
+if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
+  Salor.stopDrawerObserver(Register.cash_drawer_path);
+}

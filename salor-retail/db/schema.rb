@@ -668,6 +668,7 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
     t.boolean  "weigh_compulsory"
     t.boolean  "no_inc"
     t.string   "refund_payment_method"
+    t.boolean  "action_applied"
     t.boolean  "hidden"
     t.float    "rebate_amount",         :default => 0.0
     t.integer  "vendor_id"

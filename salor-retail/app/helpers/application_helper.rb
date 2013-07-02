@@ -281,10 +281,6 @@ module ApplicationHelper
   def generate_calendar_date_format
     format = t("date.formats.default")
   end
-
-  def get_clock_content
-    return "#{@current_user.username if @current_user}<br />#{ @current_register.name if @current_register }"
-  end
   
   def num2name(num)
     num = num.to_s.gsub('0.','').gsub(',','').gsub('.','')

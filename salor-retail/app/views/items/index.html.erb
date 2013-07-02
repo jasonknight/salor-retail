@@ -13,17 +13,10 @@
         <div class="tool-icon" onmousedown="window.location = '/items/update_real_quantity'">
           <%= link_to salor_icon(:counter,{:class => 'pointer'},24),"/items/update_real_quantity" %><br /><span class='icon-caption'><%= I18n.t("menu.update_real_quantity") %></span>
         </div>
-        <% if AppConfig.reorder_csvs  %>
-          <div class="tool-icon" >
-            <%= salor_icon(:reorder,{:class => 'pointer',:onmousedown => "$('#reorder_types').show();"},24)  %><br /><span class='icon-caption'><%= I18n.t("menu.reorder") %></span>
-          </div>
-        <% end %>
+      
         <div class="tool-icon">
           
           <a href='/items/selection'><%= salor_icon(:thermal_printer,{},24) %></a><br /><span class='icon-caption'><%= I18n.t("menu.print") %></span>
-        </div>
-        <div class="tool-icon">
-          <a href='/items/upload'><%= salor_icon(:up,{},24) %></a><br /><span class='icon-caption'><%= I18n.t("menu.upload") %></span>
         </div>
         
         <div class="tool-icon">
@@ -40,31 +33,6 @@
     </td>
   </tr>
 </table>
-<% if AppConfig.reorder_csvs  %>
-<div id="reorder_types" class="hidden reorder-types">
-  <table width="90%" align="center">
-    <% AppConfig.reorder_types.split(",").each do |type| 
-      parts = type.split(":")
-    %>
-      <tr>
-        <td class="reorder_rec" class="button-submit">
-          <a href="/items/reorder_recommendation?type=<%= parts[0] %>"> <%= parts[1] %></a>
-        </td>
-      </tr>
-    <% end %>
-    <tr>
-      <td><hr /></td>
-    </tr>
-    <tr>
-      <td>
-        <div class="button-row" align="right" width="100%">
-            <div class="button-cancel" onclick="$('#reorder_types').hide();"><%= I18n.t("helpers.submit.cancel") %></div>
-        </div>
-      </td>
-    </tr>
-  </table>
-</div>
-<% end %>
 
 <%= render :partial => "items_list" %>
 

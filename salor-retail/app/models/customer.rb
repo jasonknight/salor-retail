@@ -57,17 +57,20 @@ class Customer < ActiveRecord::Base
 #     }.to_json
 #   end
 #   
-#   def json_attrs
-#     a = {
-#       :name => self.full_name,
-#       :first_name => self.first_name,
-#       :last_name => self.last_name,
-#       :company_name => self.company_name,
-#       :sku => self.loyalty_card.sku,
-#       :points => self.loyalty_card.points,
-#       :id => self.id
-#     }
-#   end
+  def json_attrs
+    lc = self.loyalty_cards.visible.last
+    sku = lc.sku if lc
+    points = lc.points if lc
+    a = {
+      :name => self.full_name,
+      :first_name => self.first_name,
+      :last_name => self.last_name,
+      :company_name => self.company_name,
+      :sku => sku,
+      :points => points,
+      :id => self.id
+    }
+  end
   
 #   def set_loyalty_card=(params)
 #     sku = params['sku'].gsub(" ", "")

@@ -104,7 +104,7 @@ class Item < ActiveRecord::Base
   end
 
   def run_actions
-    if self.actions.any? then
+    if self.actions.visible.any? then
       Action.run(self, :on_save)
     end
   end

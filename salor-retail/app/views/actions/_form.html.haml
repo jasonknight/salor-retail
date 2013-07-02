@@ -1,0 +1,25 @@
+= form_for(@action, as: :act) do |f| 
+  - if @action.errors.any? 
+    #error_explanation
+      %h2= I18n.t("activerecord.errors.template.header.other", :count => @action.errors.count,:model => t("activerecord.models.action.one"))
+      - @action.errors.full_messages.each do |msg|
+        %p msg
+
+  %h2= @action.model.name if @action.model
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :whento
+    = f.select :whento, Action.when_list
+  .field
+    = f.label :behavior
+    = f.select :behavior, Action.behavior_list
+  .field
+    = f.label :afield
+    = f.select :afield, Action.afield_list
+  .field
+    = f.label :value
+    = f.text_field :value
+  .field
+    = f.submit

@@ -499,7 +499,7 @@ $(function () {
           <tr>
           <td colspan="6"> <h3> <%= I18n.t("activerecord.models.action.other") %></h3> <hr />  </td>
          </tr>
-        <% @item.actions.each do |action|  %>
+        <% @item.actions.visible.each do |action|  %>
           <tr >
             <td width="40%"> <%= link_to action.name, edit_action_path(action) %> </td>
             <td>

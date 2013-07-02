@@ -29,7 +29,7 @@
     <li>
       <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
         <div id='header_drawer_amount'></div>
-        <%= salor_icon(:cash_drop,{},20) %><br /><div style="margin-top:12px;"><span class='icon-caption'><%= I18n.t("menu.cash_drop") %></span></div>
+        <%= salor_icon(:cash_drop, {}, 20) %><br /><div style="margin-top:12px;"><span class='icon-caption'><%= @current_user.get_drawer.user.username %></span></div>
       </div>
     </li>
   <% end %>
@@ -54,7 +54,7 @@
   </li>
   <li >
     <div id="clockbox" class="no-touchy">
-      <%= get_clock_content %>
+      <%= @current_register.name if @current_register %>
     </div>
   </li>
 </ul>

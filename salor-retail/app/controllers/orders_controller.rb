@@ -9,23 +9,7 @@
 class OrdersController < ApplicationController
 
    respond_to :html, :xml, :json, :csv
-   
-   def undo_drawer_transaction
-      @order = @current_vendor.orders.find_by_id(params[:oid].to_s)
-      @dt = DrawerTransaction.find_by_id(params[:id].to_s)
-      @drawer = @dt.drawer
-      if @dt.order_id == @order.id then
-        if @dt.drop then
-          @drawer.update_attribute :amount, @drawer.amount - @dt.amount
-        else
-          @drawer.update_attribute :amount, @drawer.amount + @dt.amount
-        end
-        @dt.delete
-        History.record("DTDeletedBy:#{@current_user.id}:#{@current_user.username}",@order,1,"orders_controller#undo_drawer_transaction");
-        $Notice = "DT Deleted";
-      end
-      redirect_to "/orders/#{@order.id}" and return
-   end
+   after_filter :customerscreen_push_notification, :only => [:add_item_ajax, :delete_order_item]
 
    
   def new_from_proforma
@@ -59,7 +43,6 @@ class OrdersController < ApplicationController
        noi.order_id = @current.id
        noi.save
     end
-
     redirect_to "/orders/new?order_id=#{@current.id}"
   end
   
@@ -77,8 +60,6 @@ class OrdersController < ApplicationController
     else
       @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(25)
     end
-    
-    
     respond_with(@orders)
   end
 
@@ -113,12 +94,6 @@ class OrdersController < ApplicationController
       @current_user.current_order_id = @current_order.id
       @current_user.save
     end
-
-    # push notification to refresh the customer screen
-    t = SalorRetail.tailor
-    if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @current_order.id }/customer_display"
-    end
  
     @button_categories = Category.where(:button_category => true).order(:position)
     
@@ -136,15 +111,7 @@ class OrdersController < ApplicationController
 
   def add_item_ajax
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    
     @order_item = @order.add_order_item(params)
-    
-    # --- push notification to refresh the customer screen
-    t = SalorRetail.tailor
-    if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
-    end
-    # ---
   end
 
 
@@ -152,13 +119,6 @@ class OrdersController < ApplicationController
     oi = @current_vendor.order_items.find_by_id(params[:id])
     @order = oi.order
     oi.hide(@current_user)
-    
-    # --- push notification to refresh the customer screen
-    t = SalorRetail.tailor
-    if t and @order
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
-    end
-    # ---
   end
 
   def print_receipt
@@ -199,7 +159,6 @@ class OrdersController < ApplicationController
     end
   end
 
-  # due to a report of a client, just rendering the template is not enough for putting "copy/duplicate" on the receipt. so, let salor-bin confirm if bytes were actually sent to a file.
   def print_confirmed
     o = Order.find_by_id params[:order_id]
     
@@ -210,23 +169,11 @@ class OrdersController < ApplicationController
 
   def show_payment_ajax
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    #@order.calculate_totals(false)
-    #@order.save!
   end
   
   def last_five_orders
     @text = render_to_string('shared/_last_five_orders',:layout => false)
     render :text => @text
-  end
-  def bancomat
-    if params[:msg] then
-        nm = JSON.parse(params[:msg]) 
-        @p = PaylifeStructs.new(:sa => nm['sa'],:ind => nm['ind'],:struct => CGI::unescape(nm['msg']), :json => params[:msg])
-        if not @p.save then
-          render :text => "alert('Saving Struct Failed!!');" and return
-        end
-    end
-    render :nothing => true
   end
   
   def complete_order_ajax
@@ -259,14 +206,8 @@ class OrdersController < ApplicationController
     end
     
     
+    # ???
     params[:print].nil? ? print = 'true' : print = params[:print].to_s
-      
-    # --- push notification to refresh the customer screen
-    t = SalorRetail.tailor
-    if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display?display_change=1"
-    end
-    # ---
     
     @old_order = @order
     
@@ -568,82 +509,89 @@ class OrdersController < ApplicationController
   end
 
   private
- 
   
-  def currency(number,options={})
-    options.symbolize_keys!
-    defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-    currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :default => {})
-    defaults[:negative_format] = "-" + options[:format] if options[:format]
-    options   = defaults.merge!(options)
-    unit      = I18n.t("number.currency.format.unit")
-    format    = I18n.t("number.currency.format.format")
-    # puts  "Format is: " + format
-    if number.to_f < 0
-      format = options.delete(:negative_format)
-      number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
+  def customerscreen_push_notification
+    t = SalorRetail.tailor
+    if t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
     end
-    value = number_with_precision(number)
-    # puts  "value is " + value
-    format.gsub(/%n/, value).gsub(/%u/, unit)
   end
-  def number_with_precision(number, options = {})
-    options.symbolize_keys!
-
-    number = begin
-      Float(number)
-    rescue ArgumentError, TypeError
-      if options[:raise]
-        raise InvalidNumberError, number
-      else
-        return number
-      end
-    end
-
-    defaults           = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-    precision_defaults = I18n.translate(:'number.precision.format', :locale => options[:locale], :default => {})
-    defaults           = defaults.merge(precision_defaults)
-
-    options = options.reverse_merge(defaults)  # Allow the user to unset default values: Eg.: :significant => false
-    precision = 2
-    significant = options.delete :significant
-    strip_insignificant_zeros = options.delete :strip_insignificant_zeros
-
-    if significant and precision > 0
-      if number == 0
-        digits, rounded_number = 1, 0
-      else
-        digits = (Math.log10(number.abs) + 1).floor
-        rounded_number = (BigDecimal.new(number.to_s) / BigDecimal.new((10 ** (digits - precision)).to_f.to_s)).round.to_f * 10 ** (digits - precision)
-        digits = (Math.log10(rounded_number.abs) + 1).floor # After rounding, the number of digits may have changed
-      end
-      precision = precision - digits
-      precision = precision > 0 ? precision : 0  #don't let it be negative
-    else
-      rounded_number = BigDecimal.new(number.to_s).round(precision).to_f
-    end
-    formatted_number = number_with_delimiter("%01.#{precision}f" % rounded_number, options)
-    return formatted_number
-  end
-  def number_with_delimiter(number, options = {})
-    options.symbolize_keys!
-
-    begin
-      Float(number)
-    rescue ArgumentError, TypeError
-      if options[:raise]
-        raise InvalidNumberError, number
-      else
-        return number
-      end
-    end
-
-    defaults = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-    options = options.reverse_merge(defaults)
-
-    parts = number.to_s.split('.')
-    parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{options[:delimiter]}")
-    return parts.join(options[:separator])
-  end
-  # {END}
+ 
+#   
+#   def currency(number,options={})
+#     options.symbolize_keys!
+#     defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
+#     currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :default => {})
+#     defaults[:negative_format] = "-" + options[:format] if options[:format]
+#     options   = defaults.merge!(options)
+#     unit      = I18n.t("number.currency.format.unit")
+#     format    = I18n.t("number.currency.format.format")
+#     puts  "Format is: " + format
+#     if number.to_f < 0
+#       format = options.delete(:negative_format)
+#       number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
+#     end
+#     value = number_with_precision(number)
+#     puts  "value is " + value
+#     format.gsub(/%n/, value).gsub(/%u/, unit)
+#   end
+#   def number_with_precision(number, options = {})
+#     options.symbolize_keys!
+# 
+#     number = begin
+#       Float(number)
+#     rescue ArgumentError, TypeError
+#       if options[:raise]
+#         raise InvalidNumberError, number
+#       else
+#         return number
+#       end
+#     end
+# 
+#     defaults           = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
+#     precision_defaults = I18n.translate(:'number.precision.format', :locale => options[:locale], :default => {})
+#     defaults           = defaults.merge(precision_defaults)
+# 
+#     options = options.reverse_merge(defaults)  # Allow the user to unset default values: Eg.: :significant => false
+#     precision = 2
+#     significant = options.delete :significant
+#     strip_insignificant_zeros = options.delete :strip_insignificant_zeros
+# 
+#     if significant and precision > 0
+#       if number == 0
+#         digits, rounded_number = 1, 0
+#       else
+#         digits = (Math.log10(number.abs) + 1).floor
+#         rounded_number = (BigDecimal.new(number.to_s) / BigDecimal.new((10 ** (digits - precision)).to_f.to_s)).round.to_f * 10 ** (digits - precision)
+#         digits = (Math.log10(rounded_number.abs) + 1).floor # After rounding, the number of digits may have changed
+#       end
+#       precision = precision - digits
+#       precision = precision > 0 ? precision : 0  #don't let it be negative
+#     else
+#       rounded_number = BigDecimal.new(number.to_s).round(precision).to_f
+#     end
+#     formatted_number = number_with_delimiter("%01.#{precision}f" % rounded_number, options)
+#     return formatted_number
+#   end
+#   def number_with_delimiter(number, options = {})
+#     options.symbolize_keys!
+# 
+#     begin
+#       Float(number)
+#     rescue ArgumentError, TypeError
+#       if options[:raise]
+#         raise InvalidNumberError, number
+#       else
+#         return number
+#       end
+#     end
+# 
+#     defaults = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
+#     options = options.reverse_merge(defaults)
+# 
+#     parts = number.to_s.split('.')
+#     parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{options[:delimiter]}")
+#     return parts.join(options[:separator])
+#   end
+#   {END}
 end
