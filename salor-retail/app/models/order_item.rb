@@ -142,7 +142,7 @@ class OrderItem < ActiveRecord::Base
     self.category = item.category
     self.location = item.location
     self.activated = item.activated
-    self.no_inc = true if item.is_gs1
+    self.no_inc = item.is_gs1
     self.amount_remaining = item.amount_remaining
     self.weigh_compulsory = item.weigh_compulsory
     self.quantity = self.weigh_compulsory ? 0 : 1
@@ -161,9 +161,18 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price_for_gs1
     if self.item.is_gs1
-      m = self.vendor.gs1_regexp.match(self.sku)
-      return nil if not m
-      self.price = "#{m[2]}.#{m[3]}".to_f
+      m = self.vendor.gs1_regexp.match(self.sku)     
+      return unless m and m[2]
+      value = m[2]
+      m = self.item.gs1_regexp.match(value)
+      return unless m and m[2]
+      value = "#{m[1]}.#{m[2]}".to_f
+      if self.item.price_by_qty
+        self.quantity = value
+        self.price = self.item.base_price * self.quantity
+      else
+        self.price = value
+      end
     end
   end
   

@@ -6,43 +6,21 @@ $(document).ready(function(){
   })
 });
 
-function price_by_qty_change() {
-  if ($('.price-by-qty').is(':checked')) {
-    $('.decimal-points').val(3);
-  } else {
-    $('.decimal-points').val(2);
-  }
-}
 $(function () {
-    try {
-      price_by_qty_change();
-    } catch (err) {
-      txt="There was an error on this page item_required.\n\n";
-      txt+="Error description: " + err.description + "\n\n";
-      txt+="Click OK to continue.\n\n";
-      alert(txt);
-    }
-    try {
-      $('#item_item_type_id').change(function () {
-          if ($(this).val() == 3) {
-            $('#coupon').show();
-          } else {
-            $('#coupon').hide();
-          }
-          if ($(this).val() == 2) {
-            $('#gcardamount').show();
-          } else {
-            $('#gcardamount').hide();
-          }
-      });
-      if ($('#item_item_type_id').val() == 3) {$('#coupon').show();}
-      if ($('#item_item_type_id').val() == 2) {$('#gcardamount').show();}
-    } catch (err) {
-          txt="There was an error on this page item_required_2.\n\n";
-          txt+="Error description: " + err.description + "\n\n";
-          txt+="Click OK to continue.\n\n";
-          alert(txt);
-    }
+    $('#item_item_type_id').change(function () {
+        if ($(this).val() == 3) {
+          $('#coupon').show();
+        } else {
+          $('#coupon').hide();
+        }
+        if ($(this).val() == 2) {
+          $('#gcardamount').show();
+        } else {
+          $('#gcardamount').hide();
+        }
+    });
+    if ($('#item_item_type_id').val() == 3) {$('#coupon').show();}
+    if ($('#item_item_type_id').val() == 2) {$('#gcardamount').show();}
 });
 </script>
 
@@ -417,7 +395,7 @@ $(function () {
   
   <tr>
     <td>  <%= f.label I18n.t("activerecord.attributes.price_by_qty") %> </td>
-    <td> <%= f.check_box :price_by_qty, :onchange => "price_by_qty_change();", :class => "price-by-qty delimit-number" %> </td>
+    <td> <%= f.check_box :price_by_qty %> </td>
   </tr>
 
   <tr>
@@ -428,6 +406,11 @@ $(function () {
   <tr>
     <td> <%= f.label "GS1" %>  </td>
     <td> <%= f.check_box :is_gs1 %> </td>
+  </tr>
+  
+  <tr>
+    <td> <%= f.label :gs1_format %>  </td>
+    <td> <%= f.text_field :gs1_format %> </td>
   </tr>
   
   <tr>

@@ -507,6 +507,7 @@ ActiveRecord::Schema.define(:version => 20130702064025) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.string   "gs1_format",            :default => "2,3"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
@@ -1085,7 +1086,7 @@ ActiveRecord::Schema.define(:version => 20130702064025) do
     t.boolean  "csv_loyalty_cards"
     t.text     "invoice_blurb"
     t.text     "invoice_blurb_footer"
-    t.string   "gs1_format",                      :default => "2|5|2|3"
+    t.string   "gs1_format",                      :default => "2,5,5"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

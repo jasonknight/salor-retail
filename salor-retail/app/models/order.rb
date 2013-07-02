@@ -164,8 +164,8 @@ class Order < ActiveRecord::Base
     end
     
     if i.class == Item and i.item_type.behavior == 'gift_card' and i.sku == "G000000000000"
-      # note that we work with a new item from now on
-      i = create_dynamic_gift_card_item
+      new_i = create_dynamic_gift_card_item
+      i = new_i
     end
     
     # finally create the order item

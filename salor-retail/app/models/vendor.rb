@@ -56,17 +56,8 @@ class Vendor < ActiveRecord::Base
   serialize :unused_quote_numbers
   
   def gs1_regexp
-    parts = self.gs1_format.split("|")
-    return Regexp.new "\\d{#{ parts[0] }}(\\d{#{ parts[1] }})(\\d{#{ parts[2] }})(\\d{#{ parts[3] }})"
-  end
-
-  def salor_configuration_attributes=(hash)
-    if self.salor_configuration.nil? then
-      self.salor_configuration = SalorConfiguration.new hash
-      self.salor_configuration.save
-      return
-    end
-    self.salor_configuration.update_attributes(hash)
+    parts = self.gs1_format.split(",")
+    return Regexp.new "\\d{#{ parts[0] }}(\\d{#{ parts[1] }})(\\d{#{ parts[2] }})"
   end
   
   def payment_methods_types_list
@@ -74,11 +65,6 @@ class Vendor < ActiveRecord::Base
     pmx = I18n.t("system.payment_external_types").split(',')
     pmi = I18n.t("system.payment_internal_types").split(',')
     tms = self.tender_methods.visible
-    i = 0
-    pmi.each do |p|
-      types << [pmx[i],p]
-      i  = i + 1
-    end
     tms.each do |tm|
       types << [tm.name,tm.internal_type]
     end
@@ -104,20 +90,6 @@ class Vendor < ActiveRecord::Base
   def get_current_discounts
     self.discounts.where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
   end
-  
-  def set_vendor_printers=(printers)
-    self.connection.execute("delete from vendor_printers where vendor_id = '#{self.id}'")
-    ps = []
-    printers.each do |printer|
-      p = VendorPrinter.new(printer)
-      p.vendor_id = self.id
-      p.save
-      ps << p.id
-    end
-    self.vendor_printer_ids = ps
-  end
-  
-
 
   def receipt_logo_header=(data)
     if data.nil?
@@ -171,6 +143,7 @@ class Vendor < ActiveRecord::Base
     end
     return nr
   end
+  
   def self.reset_for_tests
     t = Time.now - 24.hours
     Drawer.update_all :amount => 0
@@ -185,6 +158,7 @@ class Vendor < ActiveRecord::Base
     SalorConfiguration.update_all :calculate_tax => false
     CashRegister.update_all :require_password => false
   end
+  
   def self.debug_setup
     i = 110
     text = ""
@@ -195,6 +169,7 @@ class Vendor < ActiveRecord::Base
     end
     puts text
   end
+  
   def self.debug_user_info
     text = ""
     User.all.each do |e|
@@ -202,6 +177,7 @@ class Vendor < ActiveRecord::Base
     end
     puts text
   end
+  
   def self.debug_order_info(fname,limit=1000)
     File.open(fname,"w+") do |f|
       Order.order("created_at desc").limit(limit).each do |order|

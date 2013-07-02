@@ -46,16 +46,18 @@ class Item < ActiveRecord::Base
   
   
   
+  
   def self.csv_headers
     return [:class,:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
   end
-  def get_item_type
-    if not self.item_type then
-      self.update_attribute :item_type_id, ItemType.first.id
-    end
-    self.reload
-    self.item_type
+  
+  def gs1_regexp
+    parts = self.gs1_format.split(",")
+    return Regexp.new "(\\d{#{ parts[0] }})(\\d{#{ parts[1] }})"
   end
+  
+
+  
   def to_csv(headers=nil)
     headers = Item.csv_headers if headers.nil?
     values = []

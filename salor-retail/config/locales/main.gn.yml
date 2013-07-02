@@ -10,7 +10,7 @@ gn:
       afield: Feld
       always_open_drawer: Always Open Drawer
       amount: Betrag
-      amount_remaining: Restmenge
+      amount_remaining: Betrag
       amount_type: Art
       applies_to: bezieht sich auf
       auto_drop: Auto-Buchung Tagesbeginn
@@ -39,7 +39,7 @@ gn:
       country: Bundesland
       coupon_applies: Gutschein anwendbar
       coupon_total: Coupon
-      coupon_type: Gutschein-Art
+      coupon_type: Coupon-Art
       created_at: Created
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
@@ -124,7 +124,7 @@ gn:
       pole_display: Verkaufsanzeige
       postalcode: PLZ
       price: Preis
-      price_by_qty: Preisberechnung nach Menge
+      price_by_qty: Preisberechnung nach Gewicht
       purchase_price: Kaufpreis
       quantity: Menge
       quantity_sold: Menge verkauft
