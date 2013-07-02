@@ -1,0 +1,14 @@
+= raw content_box_top(I18n.t("menu.wholesaler_update"))
+.clear
+- @uploaders.each do |u|
+  %h2= u.shipper.name
+  %table
+    %tr
+      %td updated items
+      %td= u.updated_items
+    %tr
+      %td created items
+      %td= u.created_items
+    %tr
+      %td create categories
+      %td= u.created_categories

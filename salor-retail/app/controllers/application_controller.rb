@@ -24,18 +24,7 @@ class ApplicationController < ActionController::Base
     #rescue_from Exception, :with => :render_error
   end
   
-  def get_url(url, user=nil, pass=nil)
-    uri = URI.parse(url)
-    
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    if user and pass then
-      request.basic_auth(user,pass)
-    end
-    
-    response = http.request(request)
-    return response
-  end
+
   def is_mac?
      RUBY_PLATFORM.downcase.include?("darwin")
   end

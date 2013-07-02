@@ -42,7 +42,10 @@ class Item < ActiveRecord::Base
       {:text => I18n.t('views.forms.fixed_amount_off'), :value => 2},
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
-  REORDER_TYPES = ['default_export','tobacco_land']
+  
+  SHIPPER_EXPORT_FORMATS = ['default_export','tobacco_land']
+  
+  SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
   
   
   
@@ -99,46 +102,7 @@ class Item < ActiveRecord::Base
       return ActiveSupport::JSON.decode(text)
     end
   end
-#   def item_type_name=(name)
-#     it = ItemType.find_by_behavior(name)
-#     if it then
-#       self.item_type_id = it.id
-#     end
-#   end
-  def category_name
-    return self.category.name if self.category
-  end
-  def category_name=(str)
-    c = Category.scopied.find_by_name(str)
-    if c then
-      self.category = c
-    end
-  end
-  def location_name
-    return self.location.name if self.location
-    return "NoLocation"
-  end
-  def self.repair_items
-    Item.where('child_id IS NOT NULL and child_id != 0').each do |item|
-      if item.parent or item.child then
-        if item.child then
-          if item.parent and item.child.id == item.parent.id then
-            puts "#{item.sku} parent.id == child.id"
-            item.parent.update_attribute :child_id, 0
-          end
-          if item.child_sku == item.sku then
-            puts "#{item.sku} == child_sku"
-            item.update_attribute :child_id, 0
-          end
-        end
-        if item.parent_sku == item.sku then
-          puts "#{item.sku} == parent_sku"
-          item.parent.update_attribute :child_id,0
-        end
-      end # end if item.parent or item.child
-    end
-  end
-  #
+
   def run_actions
     if self.actions.any? then
       Action.run(self, :on_save)
@@ -235,26 +199,6 @@ class Item < ActiveRecord::Base
     action.save
     return action
   end
-
-
-#   def price
-#     conds = "(item_sku = '#{self.sku}' and applies_to = 'Item') OR (location_id = '#{self.location_id}' and applies_to = 'Location') OR (category_id = '#{self.category_id}' and applies_to = 'Category') OR (applies_to = 'Vendor' and amount_type = 'percent')"
-#     price = self.base_price
-#     discounted = false
-#     damount = 0
-#     Discount.scopied.where(conds).each do |discount|
-#       if discount.amount_type == 'percent' then
-#         d = discount.amount / 100
-#         damount = (self.base_price * d)
-#         price -= damount
-#       elsif discount.amount_type == 'fixed' then
-#         damount = discount.amount
-#         price -= damount
-#       end
-#       discounted = true
-#     end
-#     return [price,discounted,damount]
-#   end
 
   def base_price=(p)
     p = self.string_to_float(p)
@@ -380,6 +324,7 @@ class Item < ActiveRecord::Base
     end
     return Item.send(type.to_sym,items)
   end
+  
   def self.tobacco_land(items)
     lines = []
     items.each do |item|
@@ -388,6 +333,7 @@ class Item < ActiveRecord::Base
     end
     return lines.join("\x0D\x0A")
   end
+  
   def self.default_export(items)
     lines = []
     items.each do |item|

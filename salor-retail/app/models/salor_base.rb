@@ -63,7 +63,18 @@ module SalorBase
       return SalorBase.string_to_float(string)
    end
    
-
+  def self.get_url(url, user=nil, pass=nil)
+    uri = URI.parse(url)
+    
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Get.new(uri.request_uri)
+    if user and pass then
+      request.basic_auth(user,pass)
+    end
+    response = http.request(request)
+    return response
+  end
+  
    
    def get_html_id
      return [self.class.to_s,self.id.to_s,rand(9999)].join('_').to_s

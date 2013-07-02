@@ -137,9 +137,6 @@ SalorRetail::Application.routes.draw do
   match "items/download" => "items#download"
   match "items/info" => "items#info"
   match "items/item_json" => "items#item_json"
-  match "items/wholesaler_update" => "items#wholesaler_update"
-  match "items/database_distiller" => "items#database_distiller"
-  match "items/distill_database" => "items#distill_database"
   match "items/create_ajax" => "items#create_ajax"
   match "items/render_label" => "items#render_label"
   
@@ -149,6 +146,8 @@ SalorRetail::Application.routes.draw do
   match "shipments/move_all_to_items" => "shipments#move_all_to_items"
   match "shipments/new_shipments" => "shipments#new_shipments"
   match "shipments/move_shipment_item" => "shipments#move_shipment_item"
+  
+  match "shippers/update_wholesaler" => "shippers#update_wholesaler"
   
   
   match "actions/create" => "actions#create"
@@ -181,7 +180,9 @@ SalorRetail::Application.routes.draw do
   resources :broken_items
   resources :shipment_types
   resources :discounts
-  resources :shippers
+  resources :shippers do
+    post :upload
+  end
   resources :shipments
   resources :configurations
   resources :customers

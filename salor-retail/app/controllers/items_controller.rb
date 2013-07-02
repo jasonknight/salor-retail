@@ -250,69 +250,35 @@ class ItemsController < ApplicationController
 
   def upload
     if params[:file]
+      @uploader = FileUpload.new("salorretail", @current_vendor, params[:file].read)
+      @uploader.crunch
+    end
+  end
+# 
+#   def upload_danczek_tobaccoland_plattner
+#     if params[:file]
 #       lines = params[:file].read.split("\n")
-      # This works like x,y,z = list(array) in PHP, i.e. multiple assignment from an array. Just FYI
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.dist(params[:file].read,true)
-      redirect_to(:action => 'upload')
-    end
-  end
-
-  def upload_danczek_tobaccoland_plattner
-    if params[:file]
-      lines = params[:file].read.split("\n")
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type1("tobaccoland", lines)
-      redirect_to(:action => 'index')
-    end
-  end
-
-  def upload_house_of_smoke
-    if params[:file]
-      lines = params[:file].read.split("\n")
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type2("dios", lines)
-      redirect_to(:action => 'index')
-    end
-  end
-
-  def upload_optimalsoft
-    if params[:file]
-      lines = params[:file].read.split("\n")
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type3("Optimalsoft", lines)
-      redirect_to(:action => 'index')
-    end
-  end
+#       i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type1("tobaccoland", lines)
+#       redirect_to(:action => 'index')
+#     end
+#   end
+# 
+#   def upload_house_of_smoke
+#     if params[:file]
+#       lines = params[:file].read.split("\n")
+#       i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type2("dios", lines)
+#       redirect_to(:action => 'index')
+#     end
+#   end
+# 
+#   def upload_optimalsoft
+#     if params[:file]
+#       lines = params[:file].read.split("\n")
+#       i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type3("Optimalsoft", lines)
+#       redirect_to(:action => 'index')
+#     end
+#   end
   
-  def wholesaler_update
-    
-    uploader = FileUpload.new
-    @report = { :updated_items => 0, :created_items => 0, :created_categories => 0, :created_tax_profiles => 0 }
-    $Conf.csv_imports.split("\n").each do |line|
-      parts = line.chomp.split(',')
-      next if parts[0].nil?
-      
-      if parts[0].include? 'http://' or parts[0].include? 'https://' then
-        file = get_url(parts[0],parts[3],parts[4])
-      else
-        file = get_url($Conf.csv_imports_url + "/" + parts[0],parts[3],parts[4])
-      end
-      
-      if parts[1].include? "dist*" then
-        ret = uploader.send('dist'.to_sym, parts[2], file.body,true) # i.e. dist* means an internal source
-      elsif parts[1] == 'dist' then
-        ret = uploader.send(parts[1].to_sym, parts[2], file.body,false) # just dist means that it is the new salor format, but not trusted
-      else
-        ret = uploader.send(parts[1].to_sym, parts[2], file.body.split("\n")) # i.e. we dynamically call the function to process
-      end
-      # this .csv file, this is set in the vendor.salor_configuration as filename.csv,type1|type2 ...
-      ret.each do |k,v|
-        @report[k] += v
-      end
-    end
-    respond_to do |format|
-      format.html 
-      format.js { render :content_type => 'text/javascript',:layout => false}
-    end
-  end
-
   def download
     params[:page] ||= 1
     params[:order_by] ||= "created_at"

@@ -1,12 +1,10 @@
-= raw content_box_top(t("views.upload_items"))
+= raw content_box_top(t "menu.shippers")
 
-%img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
-
-= form_tag '/items/upload', :multipart => true do |form|
+= form_tag shipper_upload_path(@shipper), :multipart => true do |form|
   %table{:width => "70%", :align => :center}
     %tr
       %td{:colspan => 3}
-        %h2 Format: Salor
+        %h2== Format: #{ @shipper.import_format }
     %tr
       %td
         = label_tag 'CSV'

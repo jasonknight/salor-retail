@@ -20,11 +20,4 @@ class TaxProfile < ActiveRecord::Base
   def set_sku
     self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
   end
-
-  
-  def value=(v)
-    v = v.gsub(',','.').to_f
-    write_attribute(:value,v)
-    self.connection.execute("update items set tax_profile_amount = '#{v}' where tax_profile_id = '#{self.id}'")
-  end
 end

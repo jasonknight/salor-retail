@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702064025) do
+ActiveRecord::Schema.define(:version => 20130702090453) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -894,6 +894,8 @@ ActiveRecord::Schema.define(:version => 20130702064025) do
     t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
+    t.string   "import_format"
+    t.string   "csv_url"
   end
 
   add_index "shippers", ["user_id"], :name => "index_shippers_on_user_id"

@@ -7,25 +7,42 @@
 
 
 class FileUpload
-  # {START}
-  def type1(shipper_name, file_lines) #danczek_tobaccoland_plattner_moosmayr
-#     return { :updated_items => 1, :created_items => 1, :created_categories => 1, :created_tax_profiles => 1 }
-    shipper = Shipper.scopied.visible.find_by_name(shipper_name)
-    if shipper.nil?
-      shipper = Shipper.create(:name => shipper_name, :vendor_id => $Vendor.id)
-    end
-    shipper_id = shipper ? shipper.id : nil
-    i, updated_items, created_items, created_categories, created_tax_profiles,messages = [0,0,0,0,0,[]]
-    if file_lines.first.include? '#' then
-     delim = '#'
-    elsif file_lines.first.include? ';'
-     delim = ';'
+  
+  attr_accessor :i, :shipper, :updated_items, :created_items, :created_categories
+  
+  def initialize(shipper, data)
+    @format = shipper.import_format
+    @lines = data.split("\n")
+    @shipper = shipper
+    @vendor = @shipper.vendor
+    @company = @shipper.company
+    @item_type = @vendor.item_types.visible.where(:behavior => "normal").first
+    
+    @i = 0
+    @updated_items = 0
+    @created_items = 0
+    @created_categories = 0
+    @created_tax_profiles = 0
+  end
+  
+  def crunch
+    self.send @format
+  end
+
+  def type1
+    # danczek, tobaccoland, plattner, moosmayr
+  
+    if @lines.first.include? '#' then
+      delim = '#'
+    elsif @lines.first.include? ';'
+      delim = ';'
     else
-     raise "Could not detect delimiter in type 1 file: " + file_lines.first
+      raise "Could not detect delimiter in type 1 file: " + @lines.first
     end
-    file_lines.each do |row|
-      i += 1
-      next if i == 1 # skip headers
+    puts 'type1'
+    @lines[0..10].each do |row|
+      @i += 1
+      next if @i == 1 # skip headers
       columns = row.split(delim)
 
       shipper_sku = columns[0].strip
@@ -56,51 +73,78 @@ class FileUpload
       packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
 
       if columns[36]
-        tax_profile = TaxProfile.scopied.find_by_value(columns[36].to_f / 100)
+        tax_profile = @vendor.tax_profiles.visible.find_by_value(columns[36].to_f / 100)
       elsif columns[15] == columns[16]
         # since some wholesalers don't offer the tax field, guess
-        tax_profile = TaxProfile.scopied.find_by_value(0)
+        tax_profile = @vendor.tax_profiles.visible.find_by_value(0)
       else
-        tax_profile = TaxProfile.scopied.find_by_value(20)
+        tax_profile = @vendor.tax_profiles.visible.find_by_value(20)
       end
       tax_profile_id = tax_profile.id
 
-      category = Category.find_by_name(columns[6].strip)
+      category = @vendor.categories.visible.find_by_name(columns[6].strip)
       catname = columns[6].strip
       if category.nil?
-        category = Category.new :name => catname
+        category = @vendor.categories.visible.new :name => catname
         category.save
-        created_categories += 1
+        @created_categories += 1
       end
       category_id = category.id
+      
+
 
       # carton
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
+      attributes = {
+        :shipper_sku => shipper_sku,
+        :name => name + " Karton",
+        :packaging_unit => packaging_unit_carton,
+        :base_price => base_price_carton,
+        :purchase_price => purchase_price_carton,
+        :tax_profile_id => tax_profile_id,
+        :category_id => category_id,
+        :shipper_id => @shipper.id,
+        :vendor_id => @vendor.id,
+        :company_id => @company.id,
+        :item_type_id => @item_type.id
+      }
       sku_carton = columns[8].strip
-      carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
-      carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
+      carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
+      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
         attributes.merge! :sku => sku_carton unless sku_carton.empty?
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
-        updated_items += 1
+        @updated_items += 1
       else
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         Action.run(carton_item,:on_import)
         carton_item.save
+        
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
-        created_items += 1
+        @created_items += 1
       end
       
       # pack
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
+      attributes = {
+        :shipper_sku => shipper_sku,
+        :name => name + " Packung",
+        :packaging_unit => packaging_unit_pack,
+        :base_price => base_price_pack,
+        :purchase_price => purchase_price_pack,
+        :tax_profile_id => tax_profile_id,
+        :category_id => category_id,
+        :shipper_id => @shipper.id,
+        :vendor_id => @vendor.id,
+        :company_id => @company.id,
+        :item_type_id => @item_type.id
+      }
       sku_pack = columns[9].strip
-      pack_item = Item.where( :name => name + " Packung", :hidden => false).first
-      pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
+      pack_item = @vendor.items.visible.where( :name => name + " Packung").first
+      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
         attributes.merge! :sku => sku_pack unless sku_pack.empty?
@@ -109,7 +153,7 @@ class FileUpload
         carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
-        updated_items += 1
+        @updated_items += 1
       else
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
@@ -120,14 +164,26 @@ class FileUpload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}"
-        created_items += 1
+        @created_items += 1
       end
       
       # piece
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
+      attributes = {
+        :shipper_sku => shipper_sku,
+        :name => name + " Stk.",
+        :packaging_unit => 1,
+        :base_price => base_price_piece,
+        :purchase_price => purchase_price_piece,
+        :tax_profile_id => tax_profile_id,
+        :category_id => category_id,
+        :shipper_id => @shipper.id,
+        :vendor_id => @vendor.id,
+        :company_id => @company.id,
+        :item_type_id => @item_type.id
+      }
       sku_piece = columns[19].strip if columns[19]
-      piece_item = Item.where( :name => name + " Stk.", :hidden => false).first
-      piece_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
+      piece_item = @vendor.items.visible.where( :name => name + " Stk.").first
+      piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
         attributes.merge! :sku => sku_piece unless sku_piece.empty?
@@ -136,7 +192,7 @@ class FileUpload
         pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
-        updated_items += 1
+        @updated_items += 1
       else
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.empty?
         attributes.merge! :sku => sku_piece
@@ -147,32 +203,25 @@ class FileUpload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}"
-        created_items += 1
+        @created_items += 1
       end
     end
-    return { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles }
   end
 
-  #
-  def type2(shipper_name, file_lines) #house of smoke, dios
+  def type2
+    # house of smoke, dios
     
-    shipper = Shipper.find_by_name(shipper_name)
-    if shipper.nil?
-      shipper = Shipper.create(:name => shipper_name, :vendor_id => $Vendor.id)
-    end
-    shipper_id = shipper ? shipper.id : nil
-    
-    i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
-    if file_lines[0].include?('#') or file_lines[1].include?('#') then
+    if @lines[0].include?('#') or @lines[1].include?('#') then
      delim = '#'
-    elsif file_lines[0].include?(';') or file_lines[1].include?(';')
+    elsif @lines[0].include?(';') or @lines[1].include?(';')
      delim = ';'
     else
       raise "Could not detect delimiter in House Of Smoke or Dios"
     end
-    file_lines.each do |row|
-      i += 1
-      next if i == 1 # skip headers
+    
+    @lines.each do |row|
+      @i += 1
+      next if @i == 1 # skip headers
       next if row.strip.empty? # dios has an empty first line
       columns = row.chomp.split(delim)
 
@@ -207,36 +256,47 @@ class FileUpload
       packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
 
       if columns[36]
-        tax_profile = TaxProfile.scopied.find_by_value(columns[36].to_f / 100)
+        tax_profile = @vendor.tax_profiles.visible.find_by_value(columns[36].to_f / 100)
       elsif columns[15] == columns[16]
         # since some wholesalers don't offer the tax field, guess
-        tax_profile = TaxProfile.scopied.find_by_value(0)
+        tax_profile = @vendor.tax_profiles.visible.find_by_value(0)
       else
-        tax_profile = TaxProfile.scopied.find_by_value(20)
+        tax_profile = @vendor.tax_profiles.visible.find_by_value(20)
       end
       tax_profile_id = tax_profile.id
 
-      category = Category.find_by_name(columns[6].strip)
+      category = @vendor.categories.visible.find_by_name(columns[6].strip)
       catname = columns[6].strip
       if category.nil?
-        category = Category.new :name => catname
+        category = @vendor.categories.visible.new :name => catname
         category.save
-        created_categories += 1
+        @shippercreated_categories += 1
       end
       category_id = category.id
 
       # carton
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Karton", :packaging_unit => packaging_unit_carton, :base_price => base_price_carton, :purchase_price => purchase_price_carton, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
+      attributes = {
+        :shipper_sku => shipper_sku,
+        :name => name + " Karton",
+        :packaging_unit => packaging_unit_carton,
+        :base_price => base_price_carton,
+        :purchase_price => purchase_price_carton,
+        :tax_profile_id => tax_profile_id,
+        :category_id => category_id,
+        :shipper_id => @shipper.id,
+        :vendor_id => @vendor.id,
+        :company_id => @company.id
+      }
       sku_carton = columns[8].strip
-      carton_item = Item.where( :name => name + " Karton", :hidden => false ).first
-      carton_item = Item.where( :sku => sku_carton, :hidden => false ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
+      carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
+      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
       if carton_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating carton item #{carton_item.name} #{carton_item.sku}"
         attributes.merge! :sku => sku_carton unless sku_carton.empty?
         carton_item.update_attributes attributes
         Action.run(carton_item,:on_import)
         carton_item.save
-        updated_items += 1
+        @updated_items += 1
       else
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
@@ -244,14 +304,25 @@ class FileUpload
         Action.run(carton_item,:on_import)
         carton_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}"
-        created_items += 1
+        @created_items += 1
       end
 
       # pack
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Packung", :packaging_unit => packaging_unit_pack, :base_price => base_price_pack, :purchase_price => purchase_price_pack, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
+      attributes = {
+        :shipper_sku => shipper_sku,
+        :name => name + " Packung",
+        :packaging_unit => packaging_unit_pack,
+        :base_price => base_price_pack,
+        :purchase_price => purchase_price_pack,
+        :tax_profile_id => tax_profile_id,
+        :category_id => category_id,
+        :shipper_id => @shipper.id,
+        :vendor_id => @vendor.id,
+        :company_id => @company.id
+      }
       sku_pack = columns[9].strip
-      pack_item = Item.where( :name => name + " Packung", :hidden => false ).first
-      pack_item = Item.where( :sku => sku_pack, :hidden => false ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
+      pack_item = @vendor.items.visible.where( :name => name + " Packung" ).first
+      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
       if pack_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
         attributes.merge! :sku => sku_pack unless sku_pack.empty?
@@ -260,7 +331,7 @@ class FileUpload
         carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
-        updated_items += 1
+        @updated_items += 1
       else
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
@@ -271,14 +342,25 @@ class FileUpload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating pack item #{pack_item.name} #{pack_item.sku}"
-        created_items += 1
+        @created_items += 1
       end
 
       # piece
-      attributes = { :shipper_sku => shipper_sku, :name => name + " Stk.", :packaging_unit => 1, :base_price => base_price_piece, :purchase_price => purchase_price_piece, :tax_profile_id => tax_profile_id, :category_id => category_id, :shipper_id => shipper_id }
+      attributes = {
+        :shipper_sku => shipper_sku,
+        :name => name + " Stk.",
+        :packaging_unit => 1,
+        :base_price => base_price_piece,
+        :purchase_price => purchase_price_piece,
+        :tax_profile_id => tax_profile_id,
+        :category_id => category_id,
+        :shipper_id => @shipper.id,
+        :vendor_id => @vendor.id,
+        :company_id => @company.id
+      }
       sku_piece = columns[19].strip if columns[19]
-      piece_item = Item.where( :name => name + " Stk.", :hidden => false ).first
-      carton_item = Item.where( :sku => sku_piece, :hidden => false ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
+      piece_item = @vendor.items.visible.where( :name => name + " Stk." ).first
+      carton_item = @vendor.items.visible.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
       if piece_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
         attributes.merge! :sku => sku_piece unless sku_piece.empty?
@@ -287,7 +369,7 @@ class FileUpload
         pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
-        updated_items += 1
+        @updated_items += 1
       else
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.nil? or sku_piece.empty?
         attributes.merge! :sku => sku_piece
@@ -298,17 +380,16 @@ class FileUpload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating piece item #{piece_item.name} #{piece_item.sku}"
-        created_items += 1
+        @created_items += 1
       end
     end
-    return { :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles }
   end
 
-  #
-  def type3(file_lines) #Optimalsoft Items
-    i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
-    file_lines.each do |row|
-      i += 1
+  def optimalsoft
+    # Optimalsoft Items
+
+    @lines.each do |row|
+      @i += 1
       columns = row.chomp.split('","')
 
       match = /([a-zA-Z\s\W]*)(\d*)(\w*)/.match columns[1].strip
@@ -326,10 +407,6 @@ class FileUpload
       sales_metric = 'STK'
 
       match = /([a-zA-Z\s\W]*)(\d*)(\w*)/.match columns[10].strip
-      # unless match[1].empty?
-      #   description = name
-      #   name = match[1]
-      # end
       name = name + ' ' + match[1]
       weight = match[2] if weight.nil? or weight.empty?
       weight_metric ||= case match[3].upcase
@@ -345,7 +422,7 @@ class FileUpload
       sales_metric = 'STK'
 
       tax = SalorBase.string_to_float(columns[4])
-      tax_profile = TaxProfile.scopied.find_by_value tax
+      tax_profile = @vendor.tax_profiles.visible.find_by_value tax
       tax_profile = TaxProfile.create(:name => "#{tax} %", :value => tax) unless tax_profile
       tax_profile_id = tax_profile.id
 
@@ -359,24 +436,21 @@ class FileUpload
         item.update_attributes attributes
         Action.run(item,:on_import)
         item.save
-        updated_items += 1
+        @updated_items += 1
       else
         item = Item.new attributes
         Action.run(item,:on_import)
         item.save
-        created_items += 1
+        @created_items += 1
       end
 
     end
   end
 
-  #
-  def type4(file_lines) #Optimalsoft Customers
-    i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
-    file_lines.each do |row|
+  def optimalsoft_customers
+    @lines.each do |row|
       columns = row.chomp.split('","')
-      #next if columns[2].gsub('"','').empty? and columns[1].empty?
-      i += 1
+      @i += 1
       sku = columns[0].gsub '"',''
       card = LoyaltyCard.find_by_sku(sku)
       if card
@@ -391,40 +465,38 @@ class FileUpload
     end
   end
 
-  #
-  def salor(file_lines)
-    i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
-    if file_lines.first.include? '#' then
+  def salorretail
+    if @lines.first.include? '#' then
      delim = '#'
-    elsif file_lines.first.include? ';'
+    elsif @lines.first.include? ';'
      delim = ';'
     else
       raise "Could not detect delimiter in salor"
     end
-    file_lines.each do |row|
-      i += 1
+    @lines.each do |row|
+      @i += 1
       next if i == 1 # skip headers
       columns = row.chomp.split(delim)
 
       tax_value = columns[3].gsub(',','.').to_f
-      tax_profile = TaxProfile.scopied.find_by_value(tax_value)
+      tax_profile = @vendor.tax_profiles.visible.find_by_value(tax_value)
       if tax_profile.nil?
         tax_profile = TaxProfile.create :name => tax_value, :value => tax_value
-        created_tax_profiles += 1
+        @created_tax_profiles += 1
       end
       tax_profile_id = tax_profile.id
       
       if columns[8]
-        category = Category.scopied.find_by_name(columns[8].strip)
+        category = @vendor.categories.visible.scopied.find_by_name(columns[8].strip)
         catname = columns[8].strip
       else
         category = nil
         catname = '-'
       end
       if category.nil?
-        category = Category.new :name => catname
+        category = @vendor.categories.visible.new :name => catname
         category.save
-        created_categories += 1
+        @created_categories += 1
       end
       category_id = category.id
 
@@ -478,13 +550,14 @@ class FileUpload
         item.make_valid
         item.update_attributes attributes
         item.save
-        created_items += 1
+        @created_items += 1
       end
     end
   end
-  def dist(file,trusted)
-    i, updated_items, created_items, created_categories, created_tax_profiles = [0,0,0,0,0]
-    csv = Kcsv.new(file,{:header => true,:separator => "\t"})
+  
+  # TODO there should only be 1 salorretail upload algorithm
+  def self.salor(file,trusted)
+    csv = Kcsv.new(@lines,{:header => true,:separator => "\t"})
     csv.to_a.each do |rec|
       begin
         kls = Kernel.const_get(rec[:class])
@@ -493,7 +566,7 @@ class FileUpload
           begin
           tp = TaxProfile.find_or_create_by_value(rec[:tax_profile_amount])
           created_tax_profiles += 1 if tp.new_record?
-          cat = Category.find_by_name(rec[:category_name])
+          cat = @vendor.categories.visible.find_by_name(rec[:category_name])
           rec.delete(:category_name)
           if rec[:location_name] then
             loc = Location.find_or_create_by_name(rec[:location_name]) if trusted
@@ -519,8 +592,8 @@ class FileUpload
         elsif kls == Button then
           item = Button.find_or_create_by_sku(rec)
           item.attributes = rec
-        elsif kls == Category then
-          item = Category.find_or_create_by_sku(rec[:sku])
+        elsif kls == @vendor.categories.visible then
+          item = @vendor.categories.visible.find_or_create_by_sku(rec[:sku])
           item.attributes = rec
           created_categories += 1 if item.new_record?
         elsif kls == LoyaltyCard and trusted then

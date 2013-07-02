@@ -166,6 +166,12 @@ function complete_order_show() {
   $('body').triggerHandler({type: "CompleteOrderShow"});
 }
 
+function wholesaler_update() {
+  var answer = confirm('Are you sure?')
+  if (!answer) { return; }
+  window.location = '/shippers/update_wholesaler';
+}
+
 function show_denominations() {
     var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
     var doc = 99; // radius
