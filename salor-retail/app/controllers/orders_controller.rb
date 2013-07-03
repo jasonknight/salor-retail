@@ -258,30 +258,9 @@ class OrdersController < ApplicationController
   end
   
   def split_order_item
-    @oi = OrderItem.find_by_id(params[:id].to_s)
-    restore_paid = false
-    if @oi then
-      @order = @oi.order
-      History.record("Splitting items on order",@order,5)
-      noi = @oi.dup
-      if @order.paid == 1 then
-        @order.paid = 0
-        @oi.order.paid = 0
-        noi.order.paid = 0
-        restore_paid = true
-      end
-      @oi.quantity = @oi.quantity - 1
-      @oi.save!
-      noi.update_attribute :quantity, 1
-      noi.save!
-
-      if restore_paid then
-        History.record("Restored paid on Order",@order,1)
-        @order.paid = 1
-        @order.save
-      end
-    end
-    redirect_to "/orders/#{@oi.order.id}"
+    @oi = @current_vendor.order_items.visible.find_by_id(params[:id])
+    @oi.split
+    redirect_to request.referer
   end
   
   def refund_item

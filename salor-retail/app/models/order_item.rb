@@ -87,15 +87,9 @@ class OrderItem < ActiveRecord::Base
     return nil if self.refunded
     
     refund_payment_method = self.vendor.payment_methods.visible.find_by_id(pmid)
-    
-    self.refunded = true
-    self.refunded_by = user.id
-    self.refunded_at = Time.now
-    self.refund_payment_method = pmid
-    self.save
-    
     if refund_payment_method.cash == true
       drawer = user.get_drawer
+      
       dt = DrawerTransaction.new
       dt.vendor = user.vendor
       dt.company = user.company
@@ -104,14 +98,37 @@ class OrderItem < ActiveRecord::Base
       dt.tag = 'OrderItemRefund'
       dt.notes = I18n.t("views.notice.order_refund_dt", :id => self.id)
       dt.order = self.order
-      dt.order_item = self
+      dt.order_item_id = self.id
       dt.drawer = drawer
+      dt.drawer_amount = drawer.amount
       dt.amount = - self.subtotal
       dt.save
-      
       drawer.amount -= self.subtotal
       drawer.save
     end
+    
+    self.refunded = true
+    self.refunded_by = user.id
+    self.refunded_at = Time.now
+    self.refund_payment_method = pmid.to_i
+    self.calculate_totals
+    
+    order = self.order
+    order.calculate_totals
+  end
+  
+  def split
+    order = self.order
+    order.paid = nil
+    order.save
+    noi = self.dup
+    self.quantity -= 1
+    self.calculate_totals
+    noi.quantity = 1
+    noi.calculate_totals
+    order.calculate_totals
+    order.paid = true
+    order.save
   end
 
 
@@ -217,7 +234,11 @@ class OrderItem < ActiveRecord::Base
 
   
   def calculate_totals
-    t = (self.price * self.quantity).round(2)    
+    if self.refunded
+      t = 0
+    else
+      t = (self.price * self.quantity).round(2)
+    end
     self.total = t.round(2)
     self.subtotal = self.total
     self.apply_coupon
@@ -232,7 +253,7 @@ class OrderItem < ActiveRecord::Base
   def apply_coupon
     if self.behavior == 'coupon'
       item = self.item
-      return if item.activated
+      return if item.activated # TODO: Wrong
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
       if coitem
         ctype = self.item.coupon_type

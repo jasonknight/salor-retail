@@ -14,12 +14,18 @@ function onCashDrawerClose() {
   complete_order_hide();
 }
 
+function stop_drawer_observer() {
+  if ( isSalorBin() && Register.cash_drawer_path != "") {
+    Salor.stopDrawerObserver(Register.cash_drawer_path);
+  }
+}
+
 
 // always stops the drawer observer, then opens the drawer immediately and detects usage of salor-bin
 function quick_open_drawer() {
+  stop_drawer_observer()
   if ( Register.cash_drawer_path != '') {
     if (isSalorBin()) {
-      Salor.stopDrawerObserver(Register.cash_drawer_path);
       if ( Register.salor_printer == true ) {
         Salor.newOpenCashDrawer(Register.cash_drawer_path);
       } else {
@@ -59,7 +65,7 @@ function print_url(printer_path, url, params, confirmation_url, callback) {
   if (params.indexOf('download=true') != -1) {
     window.location = url + param_string;
   } else if (isSalorBin() && Register.salor_printer == true) {
-    Salor.stopDrawerObserver(Register.cash_drawer_path);
+    stop_drawer_observer()
     Salor.printURL(printer_path, Conf.url + url + param_string, c_url);
     if (typeof callback == "function") {
       callback.call();

@@ -16,13 +16,9 @@ updateOrderItems([order_item_json]);
   end
 %>
 
-focusInput($('#keyboard_input'));
-
-
-//$(".complete-order-total").html($('#pos_order_total').html());
-
-display_change();
-updateCustomerView(order_item_json,<%= @order.id %>);
+focusInput($('#main_sku_field'));
+display_change('add_item_ajax');
+updateCustomerDisplay(<%= @order.id %>, {}, false);
                          
 if (order_item_json.price == 0 ) {
   playSound('medium_warning');
@@ -30,6 +26,4 @@ if (order_item_json.price == 0 ) {
   playSound('drop2');
 }
                          
-if (Register.cash_drawer_path != "" && typeof(Salor) != 'undefined' ) {
-  Salor.stopDrawerObserver(Register.cash_drawer_path);
-}
+stop_drawer_observer();

@@ -173,6 +173,7 @@ class Order < ActiveRecord::Base
     oi.order = self
     oi.set_attrs_from_item(i)
     oi.sku = params[:sku]
+    oi.no_inc = true if oi.sku.include?('.') or oi.sku.include?(',')
     oi.no_inc ||= params[:no_inc]
     oi.modify_price
     oi.calculate_totals
