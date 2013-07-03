@@ -57,19 +57,17 @@ class ItemsController < ApplicationController
     end
   end
   
-#   def create_ajax
-#     @item = Item.new
-#     @item
-#     @item.tax_profile_id = params[:item][:tax_profile_id]
-#     @item.attributes = params[:item]
-#     respond_to do |format|
-#       if @current_user.owns_vendor?(@item.vendor_id) and @item.save
-#         format.json  { render :json => @item }
-#       else
-#         format.json  { render :json => @item.errors, :status => :unprocessable_entity }
-#       end
-#     end
-#   end
+  # from shipment form
+  def create_ajax
+    @item = Item.new
+    @item.vendor = @current_vendor
+    @item.company = @current_company
+    @item.item_type = @current_vendor.item_types.find_by_behavior("normal")
+    @item.tax_profile_id = params[:item][:tax_profile_id]
+    @item.attributes = params[:item]
+    @item.save
+    render :nothing => true
+  end
 
   def update
     @item = @current_vendor.items.visible.find_by_id(params[:id])
