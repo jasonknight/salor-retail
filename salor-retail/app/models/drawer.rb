@@ -8,7 +8,7 @@
 class Drawer < ActiveRecord::Base
   include SalorBase
 
-  belongs_to :user
+  has_one :user
   belongs_to :vendor
   
   has_many :orders

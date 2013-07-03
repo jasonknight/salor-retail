@@ -28,4 +28,7 @@
 //= require salor_bin
 //= require style
 //= require shared
+//= require complete-order-payment
+//= require complete-order-change
+//= require complete-order
 //= require jquery.modcoder.excolor

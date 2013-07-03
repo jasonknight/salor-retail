@@ -206,8 +206,7 @@ class OrdersController < ApplicationController
     end
     
     
-    # ???
-    params[:print].nil? ? print = 'true' : print = params[:print].to_s
+    # params[:print].nil? ? print = 'true' : print = params[:print].to_s
     
     @old_order = @order
     
@@ -299,12 +298,12 @@ class OrdersController < ApplicationController
     redirect_to request.referer
   end
   
-  def refund_order
-    @order = Order.scopied.find_by_id(params[:id].to_s)
-    @order.toggle_refund(true, params[:pm])
-    @order.save
-    redirect_to order_path(@order)
-  end
+#   def refund_order
+#     @order = Order.scopied.find_by_id(params[:id].to_s)
+#     @order.toggle_refund(true, params[:pm])
+#     @order.save
+#     redirect_to order_path(@order)
+#   end
   
   def customer_display
     @order = Order.find_by_id(params[:id].to_s)
@@ -317,50 +316,44 @@ class OrdersController < ApplicationController
     render :layout => 'customer_display'
   end
 
-  def report
-    f, t = assign_from_to(params)
-    @from = f
-    @to = t
-    from2 = @from.beginning_of_day
-    to2 = @to.beginning_of_day + 1.day
-    @orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
-    @orders.reverse!
-    @taxes = TaxProfile.scopied.where( :hidden => 0)
-  end
+#   def report
+#     f, t = assign_from_to(params)
+#     @from = f
+#     @to = t
+#     from2 = @from.beginning_of_day
+#     to2 = @to.beginning_of_day + 1.day
+#     @orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
+#     @orders.reverse!
+#     @taxes = TaxProfile.scopied.where( :hidden => 0)
+#   end
 
-  def report_range
-    #@from, @to = assign_from_to(params)
-    #from2 = @from.beginning_of_day
-    #to2 = @to.beginning_of_day + 1.day
-    #@orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
-    #@orders.reverse!
-    #@taxes = TaxProfile.scopied.where( :hidden => 0)
-    f, t = assign_from_to(params)
-    @from = f
-    @to = t
-    @from = @from.beginning_of_day
-    @to = @to.end_of_day
-    @vendor = GlobalData.vendor
-    @report = UserUserMethods.get_end_of_day_report(@from,@to,nil)
-  end
+#   def report_range
+#     f, t = assign_from_to(params)
+#     @from = f
+#     @to = t
+#     @from = @from.beginning_of_day
+#     @to = @to.end_of_day
+#     @vendor = GlobalData.vendor
+#     @report = UserUserMethods.get_end_of_day_report(@from,@to,nil)
+#   end
 
   def report_day
     @from, @to = assign_from_to(params)
-    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @from = @from ? @from.beginning_of_day : Time.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
     @users = @current_vendor.users.visible
     @user = @current_vendor.users.visible.find_by_id(params[:user_id])
     @report = @current_vendor.get_end_of_day_report(@from, @to, @user)
   end
 
-  def report_day_range
-    f, t = assign_from_to(params)
-    @from = f
-    @to = t
-    from2 = @from.beginning_of_day
-    to2 = @to.beginning_of_day + 1.day
-    @taxes = TaxProfile.scopied.where( :hidden => 0)
-  end
+#   def report_day_range
+#     f, t = assign_from_to(params)
+#     @from = f
+#     @to = t
+#     from2 = @from.beginning_of_day
+#     to2 = @to.beginning_of_day + 1.day
+#     @taxes = TaxProfile.scopied.where( :hidden => 0)
+#   end
   
   def receipts
     @from, @to = assign_from_to(params)
@@ -413,57 +406,57 @@ class OrdersController < ApplicationController
     render "orders/invoices/#{view}/page"
   end
   
-  def order_reports
-    f, t = assign_from_to(params)
-    @from = f
-    @to = t
-    params[:limit] ||= 15
-    @limit = params[:limit].to_i - 1
-    
-    
-    @orders = Order.scopied.where({:paid => 1, :created_at => @from..@to})
-    
-    @reports = {
-        :items => {},
-        :categories => {},
-        :locations => {}
-    }
-    @orders.each do |o|
-      o.order_items.visible.each do |oi|
-        next if oi.item.nil?
-        key = oi.item.name + " (#{oi.price})"
-        cat_key = oi.get_category_name
-        loc_key = oi.get_location_name
-        
-        @reports[:items][key] ||= {:sku => '', :quantity_sold => 0.0, :cash_made => 0.0 }
-        @reports[:items][key][:quantity_sold] += oi.quantity
-        @reports[:items][key][:cash_made] += oi.total
-        @reports[:items][key][:sku] = oi.sku
-        
-        @reports[:categories][cat_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-        
-        @reports[:categories][cat_key][:quantity_sold] += oi.quantity
-        @reports[:categories][cat_key][:cash_made] += oi.total
-        
-        @reports[:locations][loc_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-        
-        @reports[:locations][loc_key][:quantity_sold] += oi.quantity
-        @reports[:locations][loc_key][:cash_made] += oi.total
-      end
-    end
-    
-    
-    
-    @categories_by_cash_made = @reports[:categories].sort_by { |k,v| v[:cash_made] }
-    @categories_by_quantity_sold = @reports[:categories].sort_by { |k,v| v[:quantity_sold] }
-    @locations_by_cash_made = @reports[:locations].sort_by { |k,v| v[:cash_made] }
-    @locations_by_quantity_sold = @reports[:locations].sort_by { |k,v| v[:quantity_sold] }
-    @items = @reports[:items].sort_by { |k,v| v[:quantity_sold] }
-    
-    view = SalorRetail::Application::CONFIGURATION[:reports][:style]
-    view ||= 'default'
-    render "orders/reports/#{view}/page"
-  end
+#   def order_reports
+#     f, t = assign_from_to(params)
+#     @from = f
+#     @to = t
+#     params[:limit] ||= 15
+#     @limit = params[:limit].to_i - 1
+#     
+#     
+#     @orders = Order.scopied.where({:paid => 1, :created_at => @from..@to})
+#     
+#     @reports = {
+#         :items => {},
+#         :categories => {},
+#         :locations => {}
+#     }
+#     @orders.each do |o|
+#       o.order_items.visible.each do |oi|
+#         next if oi.item.nil?
+#         key = oi.item.name + " (#{oi.price})"
+#         cat_key = oi.get_category_name
+#         loc_key = oi.get_location_name
+#         
+#         @reports[:items][key] ||= {:sku => '', :quantity_sold => 0.0, :cash_made => 0.0 }
+#         @reports[:items][key][:quantity_sold] += oi.quantity
+#         @reports[:items][key][:cash_made] += oi.total
+#         @reports[:items][key][:sku] = oi.sku
+#         
+#         @reports[:categories][cat_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
+#         
+#         @reports[:categories][cat_key][:quantity_sold] += oi.quantity
+#         @reports[:categories][cat_key][:cash_made] += oi.total
+#         
+#         @reports[:locations][loc_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
+#         
+#         @reports[:locations][loc_key][:quantity_sold] += oi.quantity
+#         @reports[:locations][loc_key][:cash_made] += oi.total
+#       end
+#     end
+#     
+#     
+#     
+#     @categories_by_cash_made = @reports[:categories].sort_by { |k,v| v[:cash_made] }
+#     @categories_by_quantity_sold = @reports[:categories].sort_by { |k,v| v[:quantity_sold] }
+#     @locations_by_cash_made = @reports[:locations].sort_by { |k,v| v[:cash_made] }
+#     @locations_by_quantity_sold = @reports[:locations].sort_by { |k,v| v[:quantity_sold] }
+#     @items = @reports[:items].sort_by { |k,v| v[:quantity_sold] }
+#     
+#     view = SalorRetail::Application::CONFIGURATION[:reports][:style]
+#     view ||= 'default'
+#     render "orders/reports/#{view}/page"
+#   end
 
   
   def clear

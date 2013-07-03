@@ -6,8 +6,7 @@
           <td align="right" colspan="2">
             <%= salor_number_to_currency(order.total) %>
             <br />
-            <% changepm = order.payment_methods.where(:internal_type => 'Change').first %>
-            <%= salor_number_to_currency(changepm.amount) if changepm %>
+            <%= salor_number_to_currency(order.change) %>
             <br />
             <%= order.user.username[0..7] %>
           </td>

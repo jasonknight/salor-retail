@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
   include SalorBase
 
   has_many :order_items
-  has_many :payment_methods
+  has_many :payment_method_items
   has_many :paylife_structs
   has_many :histories, :as => :model
   has_many :drawer_transactions
@@ -24,29 +24,32 @@ class Order < ActiveRecord::Base
   belongs_to :current_register_daily
   belongs_to :drawer
   belongs_to :tax_profile
-
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
   belongs_to :sale_type
-  
   has_and_belongs_to_many :discounts
-  scope :last_seven_days, lambda { where(:created_at => 7.days.ago.utc...Time.now.utc) }
+  
+  #scope :last_seven_days, lambda { where(:created_at => 7.days.ago.utc...Time.now.utc) }
   scope :unpaid, lambda { 
     t = self.table_name
-    where(" ( ( `#{t}`.paid IS NULL OR `#{t}`.paid = 0) AND ( `#{t}`.total > 0.0 AND `#{t}`.total IS NOT NULL )  OR  ( `#{t}`.paid = 1 AND `#{t}`.unpaid_invoice IS TRUE) )").where(:is_quote => false) 
+    where(" ( `#{t}`.paid IS NULL AND ( `#{t}`.total > 0.0 AND `#{t}`.total IS NOT NULL )  OR  ( `#{t}`.paid = 1 AND `#{t}`.unpaid_invoice IS TRUE) )").where(:is_quote => nil) 
   }
+  
   scope :normal_orders, lambda {
-      where(:is_quote => false, :is_proforma => false)
+      where(:is_quote => nil, :is_proforma => nil)
   }
+  
   scope :normal_completed, lambda {
-      normal_orders.where(:paid => 1)
+      normal_orders.where(:paid => true)
   }
+  
   scope :quotes, lambda {
-    where(:is_quote => true, :paid => 1)
+    where(:is_quote => true, :paid => true)
   }
   
   # These two associations are here for eager loading to speed things up
   has_many :coupons, :class_name => "OrderItem", :conditions => "behavior = 'coupon' and hidden != 1" 
+  
   has_many :gift_cards, :class_name => "OrderItem", :conditions => "behavior = 'gift_card' and hidden != 1"
 
   I18n.locale = AppConfig.locale
@@ -55,9 +58,9 @@ class Order < ActiveRecord::Base
     [I18n.t('views.forms.fixed_amount_off'),'fixed']
   ]
   
-#   def as_csv
-#     return attributes
-#   end
+  def as_csv
+    return attributes
+  end
   
   def amount_paid
     self.payment_methods.sum(:amount)
@@ -67,8 +70,6 @@ class Order < ActiveRecord::Base
     self.order_items.visible.where(:refunded => nil).count
   end
 
-
-  
   def loyalty_card
     if self.customer
       return self.customer.loyalty_card
@@ -185,7 +186,7 @@ class Order < ActiveRecord::Base
   
   def create_dynamic_gift_card_item
     zero_tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
-    raise "NoTaxProfileFound" if zero_tax_profile.nil?
+    raise "NoZeroTaxProfileFound" if zero_tax_profile.nil?
     timecode = Time.now.strftime('%y%m%d%H%M%S')
     i = Item.new
     i.sku = "G#{timecode}"
@@ -266,7 +267,7 @@ class Order < ActiveRecord::Base
   
 
   def calculate_totals
-    # total contain only subtotal sum of normal items
+    # total contains only subtotal sum of normal items. this is needed for the gift card price calculation.
     self.total = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal).round(2)
     
     # subtotal contains everything
@@ -303,14 +304,12 @@ class Order < ActiveRecord::Base
       self.nr = self.vendor.get_unique_model_number('order')
     end
     
-    
-    
     self.save
     
     self.update_item_quantities
     self.activate_giftcard_items
     self.update_giftcard_remaining_amounts
-    self.create_payment_methods(params)
+    self.create_payment_method_items(params)
     self.create_drawer_transaction    
     self.save
   end
@@ -322,11 +321,12 @@ class Order < ActiveRecord::Base
     dt.vendor = self.vendor
     dt.company = self.company
     dt.user = self.user
+    dt.cash_register = self.cash_register
     dt.order = self
     dt.complete_order = true
     dt.amount = add_amount
-    dt.drawer_amount = self.user.get_drawer.amount
     dt.drawer = drawer
+    dt.drawer_amount = drawer.amount
     dt.save
     
     drawer.amount += add_amount
@@ -354,51 +354,56 @@ class Order < ActiveRecord::Base
     end
   end
   
-  def create_payment_methods(params)
-    self.payment_methods.delete_all
-    self.vendor.payment_methods_types_list.each do |pmt|
-      pt = pmt[1]
-      if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0
+  def create_payment_method_items(params)
+    debugger
+#     self.vendor.payment_methods_types_list.each do |pmt|
+#       pt = pmt[1]
+#       if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0
+#         
+#         if pt == 'Unpaid'
+#           self.unpaid_invoice = true
+#         end
+#         
+#         if pt == 'Quote'
+#           self.is_quote = true
+#         end
         
-        if pt == 'Unpaid'
-          self.unpaid_invoice = true
-        end
+        pm = self.vendor.payment_methods.visible.find_by_id(pmt[0])
         
-        if pt == 'Quote'
-          self.is_quote = true
-        end
+        pmi = PaymentMethodItem.new
+        pmi.payment_method = pm
+        pmi.vendor = self.vendor
+        pmi.company = self.company
+        pmi.user = self.user
+        pmi.drawer = self.drawer
+        pmi.cash_register = self.cash_register
+        pmi.amount = SalorBase.string_to_float(params[pt.to_sym]).round(2)
+        pmi.save
         
-        pm = PaymentMethod.new
-        pm.vendor = self.vendor
-        pm.company = self.company
-        pm.internal_type = pt
-        pm.user = self.user
-        pm.amount = SalorBase.string_to_float(params[pt.to_sym]).round(2)
-        pm.save
-        self.payment_methods << pm
-      end
-    end
-    
-    self.save
-    
-    payment_cash = self.payment_methods.visible.where(:internal_type => 'InCash').sum(:amount).round(2)
-    payment_total = self.payment_methods.visible.sum(:amount).round(2)
-    payment_noncash = (payment_total - payment_cash).round(2)
-    change = (payment_total - self.subtotal).round(2)
-                                  
-    pm = PaymentMethod.new
-    pm.vendor = self.vendor
-    pm.company = self.company
-    pm.internal_type = 'Change'
-    pm.amount = change
-    pm.user = self.user
-    pm.save
-    
-    self.payment_methods << pm
-    self.cash = payment_cash
-    self.noncash = payment_noncash
-    self.change = change
-    self.save
+        
+        self.payment_method_items << pmi
+#     end
+#     
+#     self.save
+#     
+#     payment_cash = self.payment_methods.visible.where(:internal_type => 'InCash').sum(:amount).round(2)
+#     payment_total = self.payment_methods.visible.sum(:amount).round(2)
+#     payment_noncash = (payment_total - payment_cash).round(2)
+#     change = (payment_total - self.subtotal).round(2)
+#                                   
+#     pm = PaymentMethod.new
+#     pm.vendor = self.vendor
+#     pm.company = self.company
+#     pm.internal_type = 'Change'
+#     pm.amount = change
+#     pm.user = self.user
+#     pm.save
+#     
+#     self.payment_methods << pm
+#     self.cash = payment_cash
+#     self.noncash = payment_noncash
+#     self.change = change
+#     self.save
   end
 
   

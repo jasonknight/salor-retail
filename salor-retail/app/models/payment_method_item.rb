@@ -5,10 +5,15 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
-class TenderMethod < ActiveRecord::Base
-  include SalorScope
-  include SalorBase
-
+class PaymentMethodItem < ActiveRecord::Base
+  belongs_to :order
   belongs_to :vendor
   belongs_to :company
+  belongs_to :payment_method
+  belongs_to :user
+  belongs_to :drawer
+  belongs_to :cash_register
+  
+  include SalorBase
+  include SalorScope
 end

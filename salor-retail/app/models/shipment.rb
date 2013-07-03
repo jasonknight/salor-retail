@@ -19,7 +19,7 @@ class Shipment < ActiveRecord::Base
   belongs_to :user
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
-  validates_presence_of :name
+
   TYPES = [
     {
       :value => 'new',

@@ -19,7 +19,6 @@ class Vendor < ActiveRecord::Base
   has_many :drawers
   has_many :sale_types
   has_many :countries
-  has_many :tender_methods
   has_many :transaction_tags
   has_many :order_items
   has_many :actions
@@ -35,7 +34,6 @@ class Vendor < ActiveRecord::Base
   has_many :current_registers
   has_many :customers
   has_many :broken_items
-  has_many :paylife_structs
   has_many :shipments_received, :as => :receiver
   has_many :returns_sent, :as => :shipper
   has_many :shipments
@@ -50,6 +48,7 @@ class Vendor < ActiveRecord::Base
   has_many :invoice_notes
   has_many :item_stocks
   has_many :receipts
+  has_many :payment_methods
   
 
   serialize :unused_order_numbers
@@ -62,32 +61,16 @@ class Vendor < ActiveRecord::Base
   
   def payment_methods_types_list
     types = []
-    pmx = I18n.t("system.payment_external_types").split(',')
-    pmi = I18n.t("system.payment_internal_types").split(',')
-    i = 0
-    pmi.each do |p|
-      types << [pmx[i], p] if p != 'Change'
-      i  = i + 1
-    end
-    tms = self.tender_methods.visible
-    tms.each do |tm|
-      types << [tm.name, tm.internal_type]
+    self.payment_methods.visible.where(:change => nil).each do |p|
+      types << [p.name, p.id]
     end
     return types
   end
   
   def payment_methods_as_objects
     types = []
-    pmx = I18n.t("system.payment_external_types").split(',')
-    pmi = I18n.t("system.payment_internal_types").split(',')
-    tms = self.tender_methods.visible
-    i = 0
-    pmi.each do |p|
-      types << {:name => pmx[i],:internal_type => p} if p != 'Change'
-      i  = i + 1
-    end
-    tms.each do |tm|
-      types << {:name => tm.name,:internal_type => tm.internal_type}
+    self.payment_methods.visible.where(:change => nil).each do |p|
+      types << {:name => p.name, :id => p.id, :cash => p.cash}
     end
     return types
   end

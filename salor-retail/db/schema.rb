@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702090453) do
+ActiveRecord::Schema.define(:version => 20130703080904) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -303,7 +303,6 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
     t.datetime "hidden_at"
     t.integer  "vendor_id"
     t.integer  "company_id"
-    t.integer  "user_id"
   end
 
   create_table "histories", :force => true do |t|
@@ -679,6 +678,7 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
     t.float    "discount"
     t.float    "subtotal"
     t.boolean  "calculate_part_price"
+    t.integer  "drawer_id"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -743,10 +743,9 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
   add_index "orders", ["vendor_id"], :name => "index_orders_on_vendor_id"
 
-  create_table "payment_methods", :force => true do |t|
-    t.string   "name"
+  create_table "payment_method_items", :force => true do |t|
     t.string   "internal_type"
-    t.float    "amount",        :default => 0.0
+    t.float    "amount",            :default => 0.0
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -756,9 +755,29 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.integer  "drawer_id"
+    t.integer  "payment_method_id"
+    t.boolean  "cash"
+    t.boolean  "change"
+    t.integer  "cash_register_id"
   end
 
-  add_index "payment_methods", ["order_id"], :name => "index_payment_methods_on_order_id"
+  add_index "payment_method_items", ["order_id"], :name => "index_payment_methods_on_order_id"
+
+  create_table "payment_methods", :force => true do |t|
+    t.string   "name"
+    t.string   "internal_type"
+    t.integer  "vendor_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
+    t.boolean  "cash"
+    t.boolean  "change"
+  end
 
   create_table "receipts", :force => true do |t|
     t.string   "ip"
@@ -773,6 +792,7 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.integer  "drawer_id"
   end
 
   create_table "roles", :force => true do |t|
@@ -934,19 +954,6 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
   add_index "tax_profiles", ["hidden"], :name => "index_tax_profiles_on_hidden"
   add_index "tax_profiles", ["user_id"], :name => "index_tax_profiles_on_user_id"
 
-  create_table "tender_methods", :force => true do |t|
-    t.string   "name"
-    t.string   "internal_type"
-    t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "hidden"
-    t.integer  "hidden_by"
-    t.datetime "hidden_at"
-    t.integer  "company_id"
-    t.integer  "user_id"
-  end
-
   create_table "transaction_tags", :force => true do |t|
     t.string   "name"
     t.integer  "vendor_id"
@@ -1013,27 +1020,8 @@ ActiveRecord::Schema.define(:version => 20130702090453) do
     t.integer  "company_id"
     t.datetime "hidden_at"
     t.integer  "hidden_by"
+    t.integer  "drawer_id"
   end
-
-  create_table "vendor_printers", :force => true do |t|
-    t.string   "name"
-    t.string   "path"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "vendor_id"
-    t.integer  "cash_register_id"
-    t.string   "printer_type"
-    t.integer  "copies",           :default => 1
-    t.integer  "codepage"
-    t.boolean  "hidden"
-    t.integer  "hidden_by"
-    t.datetime "hidden_at"
-    t.integer  "company_id"
-    t.integer  "user_id"
-  end
-
-  add_index "vendor_printers", ["cash_register_id"], :name => "index_vendor_printers_on_cash_register_id"
-  add_index "vendor_printers", ["vendor_id"], :name => "index_vendor_printers_on_vendor_id"
 
   create_table "vendors", :force => true do |t|
     t.string   "name"

@@ -158,16 +158,7 @@ function addPosItem(item) {
 }
 
 
-function getByCardAmount() {
-  var val = 0;
-  $(".payment-method").each(function () {
-    var id = $(this).attr("id").replace("type","amount");
-    if ($(this).val() == "ByCard") {
-        val = $('#' + id).val();
-    }
-  });
-  return val;
-}
+
 
 
 function add_item(sku, additional_params) {
@@ -849,3 +840,17 @@ function highlight(elem) {
 }
 
 
+function weigh_last_item() {
+  var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
+  if (Register.scale != "") {
+    var weight = Salor.toperScale(Register.scale);
+  } else {
+    var weight = 0;
+  }
+  var string = '/vendors/edit_field_on_child?id=' +
+          itemid +'&klass=OrderItem' +
+          '&field=quantity'+
+          '&value=' + weight;
+          get(string, filename);
+  if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
+}

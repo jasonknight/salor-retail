@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   belongs_to :company
   
   
-  has_one :drawer
+  belongs_to :drawer
 
   has_many :orders
   has_many :order_items

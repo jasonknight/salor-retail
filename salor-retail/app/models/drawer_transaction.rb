@@ -14,7 +14,7 @@ class DrawerTransaction < ActiveRecord::Base
   belongs_to :drawer
   belongs_to :user
   belongs_to :order
-  belongs_to :order_id
+  belongs_to :cash_register
   
   def amount=(p)
     write_attribute(:amount,self.string_to_float(p))
