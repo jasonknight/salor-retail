@@ -176,7 +176,7 @@ class OrdersController < ApplicationController
     render :text => @text
   end
   
-  def complete_order_ajax
+  def complete
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     
     SalorBase.log_action("OrdersController","complete_order_ajax order initialized")

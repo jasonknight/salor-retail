@@ -1,0 +1,44 @@
+<table align="center" width="90%">
+  <tr>
+    <td>
+      <%= form_for(@payment_method) do |f| %>
+      <% if @payment_method.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@payment_method.errors.count, "error") %> prohibited this payment_method from being saved:</h2>
+
+          <ul>
+          <% @payment_method.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label I18n.t("activerecord.attributes.name")%><br />
+        <%= f.text_field :name %>
+      </div>
+      <div class="field">
+        <%= f.label :cash %><br />
+        <%= f.check_box :cash %>
+      </div>
+      <div class="field">
+        <%= f.label :change %><br />
+        <%= f.check_box :change %>
+      </div>
+      <div class="field">
+        <%= f.label :unpaid %><br />
+        <%= f.check_box :unpaid %>
+      </div>
+      <div class="field">
+        <%= f.label :quote %><br />
+        <%= f.check_box :quote %>
+      </div>
+      <div class="actions">
+        <%= f.submit %>
+      </div>
+    <% end %>
+
+    </td>
+  </tr>
+</table>

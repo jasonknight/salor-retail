@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130703080904) do
+ActiveRecord::Schema.define(:version => 20130703135132) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -724,7 +724,7 @@ ActiveRecord::Schema.define(:version => 20130703080904) do
     t.integer  "nr"
     t.boolean  "is_proforma"
     t.integer  "hidden_by"
-    t.boolean  "unpaid_invoice"
+    t.boolean  "is_unpaid"
     t.integer  "qnr"
     t.boolean  "is_quote"
     t.datetime "hidden_at"
@@ -760,6 +760,8 @@ ActiveRecord::Schema.define(:version => 20130703080904) do
     t.boolean  "cash"
     t.boolean  "change"
     t.integer  "cash_register_id"
+    t.boolean  "unpaid"
+    t.boolean  "quote"
   end
 
   add_index "payment_method_items", ["order_id"], :name => "index_payment_methods_on_order_id"
@@ -777,6 +779,8 @@ ActiveRecord::Schema.define(:version => 20130703080904) do
     t.integer  "user_id"
     t.boolean  "cash"
     t.boolean  "change"
+    t.boolean  "unpaid"
+    t.boolean  "quote"
   end
 
   create_table "receipts", :force => true do |t|

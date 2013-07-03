@@ -13,7 +13,7 @@ function toFloat(str, returnString) {
     return str;
   }
   if (str.match(/\d+\.\d+\,\d+/)) {
-   console.log('matched');
+   echo('matched');
     str = str.replace('.','');
   }
   var ac = [0,1,2,3,4,5,6,7,8,9,'.',',','-'];
@@ -58,7 +58,7 @@ function roundNumber(num, dec) {
 
 function toDelimited(number) {
   if (typeof number == 'undefined') {
-    console.log("warning in toDelimited");
+    echo("warning in toDelimited");
     return "";
   }
   
@@ -82,7 +82,7 @@ function toDelimited(number) {
 
 function toCurrency(number) {
   if (typeof number == 'undefined') {
-    console.log("warning in toCurrency");
+    echo("warning in toCurrency");
     return "";
   }
   
@@ -110,7 +110,7 @@ function toCurrency(number) {
 
 function toPercent(number) {
   if (typeof number == 'undefined') {
-    console.log("warning in toPercent");
+    echo("warning in toPercent");
     return "";
   }
   var match, property, integerPart, fractionalPart;

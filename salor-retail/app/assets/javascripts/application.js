@@ -14,10 +14,8 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require sprintf
-//= require generic
+//= require genericjs
 //= require math
-//= require camera
-//= require cutecredit
 //= require debug
 //= require documentready
 //= require focus

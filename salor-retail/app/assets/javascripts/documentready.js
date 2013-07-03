@@ -3,115 +3,24 @@ var calledFrom = 'TopOfAppJS';
 var filename = "_application_js.html.erb";
 
 $(function () {
-  try {
-    positionSearchInput();
-    $('.click-help').click(function (event) {
-      var url = $(this).attr('url');
-      var offset = {'top': event.pageY, 'left': event.pageX, 'position': 'absolute'};
-      $('.help').css(offset);
-      get(url, 'document_ready.js help.css');
-    });
-  } catch (err) {
-    txt="There was an error on this page documentready.js.\n\n";
-    txt+="Error description: " + err + "\n\n";
-    txt+="Click OK to continue.\n\n";
-    alert(txt);
-  }
-
-  if ( !useMimo() && isSalor()) {
+  if ( !useMimo() && isSalorBin()) {
     Salor.poleDancer(Register.pole_display, '     S A L O R      Next Generation POS' );
   }
-
-  if ( useMimo() ) {
-    Salor.mimoImage('/opt/salor/support/salor-retail-customerscreen-advertising.bmp');
+  
+  if (isSalorBin()) {
+    Salor.stopDrawerObserver();
   }
 
   jQuery.expr[':'].focus = function( elem ) {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
 
-  $(".action-button").each(function () {
-    make_action_button($(this));
-  });
-
-  $('#order_items_table tr:even').addClass('even');
-  $('.stripe-me tr:even').addClass('even');
-  $('tr.no-stripe').removeClass('even');
-  $('.stripe-me2:even').addClass('even');
-  $('div.stripe-me > div.table-row:even').addClass('even');
-  $('#generic_search_input').val('');
-
-
-
-  $(document).keypress(function(event){                 
-    var keyCode = (event.which) ? event.which : event.keyCode;
-    if (keypressMap[keyCode]) {
-      var func = keypressMap[keyCode];
-      func(event);
-      var cf = $('.salor-focused');
-      if (cf.hasClass('inplaceeditinput') && cf.val() != '') {
-        $('#inplaceeditsave').trigger('click');
-        handled = true;
-      } else if (cf.hasClass('shipment-items-input') && cf.hasClass('attr-input-sku')) {
-        cf.trigger('blur');
-        handled = true;
-      } else if (cf.attr('id') == 'search_keywords') {
-        search('documentready');
-        event.preventDefault();
-        return false;
-      }
-      if ($('#keyboard_input').val()) {
-        if (handleKeyboardEnter) {
-          //keypad_callbacks['Enter'].call(this);
-          add_item($('#keyboard_input').val(),'');
-          handled = true;
-        } else {
-          event.preventDefault();
-          return false;
-        }
-      } else {
-        //we aren't on the pos screen, so we should have some generic behaviors
-        if (params.controller == "shippers") {
-          handled = true;
-        }
-        focusInput($('#keyboard_input'));
-      }
-      if ($('#generic_search_input').length != 0 && $('#generic_search_input').val() != '') {
-        generic_search();
-        handled = true;
-        return false;
-      }
-      if (isEditItem()) {
-        handled = true;
-        return false;
-      }
-      if (isEditItemLocation()) {
-        update_location_submit();
-        handled = true;
-        return false;
-      }
-      if (isEditItemRealQuantity()) {
-        update_real_quantity_submit();
-        handled = true;
-        return false;
-      }
-      if (isShipmentsEdit()) {
-        shipments_edit_handler(event.target);
-        handled = true;
-        return false;
-      }
-//       if (isDiscountsEdit() || isCustomersEdit()) {
-//         handled = true;
-//         return false;
-//       }
-      if (handled == true) {
-        event.preventDefault();
-        return false;
-      } else {
-        return true;
-      }
-    }
-  });
+//   $('#order_items_table tr:even').addClass('even');
+//   $('.stripe-me tr:even').addClass('even');
+//   $('tr.no-stripe').removeClass('even');
+//   $('.stripe-me2:even').addClass('even');
+//   $('div.stripe-me > div.table-row:even').addClass('even');
+//   $('#generic_search_input').val('');
 
   focusInput($('#generic_search_input'));
 
@@ -145,6 +54,7 @@ $(function () {
       make_in_place_edit($(this));                  
     });
     $('table.pretty-table > tbody > tr:even').addClass("even");
+    
     if (workstation) {
       $('select').each(function () {
        if ($(this).val() == '') {

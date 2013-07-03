@@ -10,6 +10,7 @@ var i18n_value_not_set = '<%= t("system.errors.value_not_set") %>';
 var i18n_menu_ok = '<%= t("menu.ok") %>';
 var i18n_menu_done = '<%= t("menu.done") %>';
 var i18n_menu_cancel = '<%= t("menu.cancel") %>';
+var i18n_menu_close = '<%= t("menu.close") %>';
 var i18n_transaction_tag_one = '<%= I18n.t("activerecord.models.transaction_tag.one") %>';
 var i18n_money_given = '<%= t('views.given') %>';
 var i18n_money_change = '<%= t('views.change') %>';
@@ -93,8 +94,7 @@ var Categories = <%= raw @current_vendor.categories.visible.to_json %>;
 var PaymentMethods = <%= raw @current_vendor.payment_methods_types_list.to_json %>;
 var PaymentMethodObjects = <%= raw @current_vendor.payment_methods_as_objects.to_json %>;
 var TaxProfiles = <%= raw @current_vendor.tax_profiles.visible.to_json %>;
-var payment_internal_types = [<%= raw @current_vendor.payment_methods_types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
-var payment_external_types = [<%= raw @current_vendor.payment_methods_types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
+
 
 window.params = {
   action: "<%= params[:action] %>",

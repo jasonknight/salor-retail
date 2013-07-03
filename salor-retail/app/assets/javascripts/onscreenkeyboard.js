@@ -18,7 +18,7 @@ function make_keyboardable(elem) {
           layout       : i18nlocale,
           customLayout : null,
           accepted    : function () {
-            add_item($("#keyboard_input").val(),'');
+            add_item($("main_sku_field").val(),'');
           },
           visible: function(){ $('.ui-keyboard-preview').select(); }
         });
@@ -172,16 +172,16 @@ function handleKeyboardInput(event) {
       event.preventDefault();
       return false;
     }
-    if ($('#keyboard_input').val()) {
+    if ($('#main_sku_field').val()) {
       //keypad_callbacks['Enter'].call(this);
-      add_item($('#keyboard_input').val(),'');
+      add_item($('#main_sku_field').val(),'');
       handled = true;
     } else {
       //we aren't on the pos screen, so we should have some generic behaviors
       if (params.controller == "shippers") {
         handled = true;
       }
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     }
     if ($('#generic_search_input').length != 0 && $('#generic_search_input').val() != '') {
       generic_search();

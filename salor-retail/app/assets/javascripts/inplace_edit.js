@@ -118,7 +118,7 @@ function in_place_edit_go(id) {
   }
 
   $('#inplaceedit-div').remove();
-  if ($('#keyboard_input').length != 0) {
+  if ($('#main_sku_field').length != 0) {
     focuseKeyboardInput = true;
   }
 }

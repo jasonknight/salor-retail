@@ -2,21 +2,10 @@ var IS_APPLE_DEVICE = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
 var IS_IPAD = navigator.userAgent.match(/iPad/i) != null;
 var IS_IPOD = navigator.userAgent.match(/iPod/i) != null;
 var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
-
-
-var automatic_printing = false;
-var debugmessages = [];
-var _CTRL_DOWN = false;
 var _key_codes = {tab: 9,shift: 16, ctrl: 17, alt: 18, f2: 113};
 var _keys_down = {tab: false,shift: false, ctrl: false, alt: false, f2: false};
-
-var oldPaymentMethod = "";
-var allow_payment_amount = true;
-var orderCompleteDisplayed = false;
-
 var _called = 0;
-var complete_total = 0;
-var sendingOrder = false;
+
 
 // documentready
 $(function(){
@@ -42,20 +31,7 @@ $(function(){
       }
     }
   });
-  
-  $(".payment-method").live("change", function(){
-    validatePaymentMethod($(this));
-  });
-  
-  $(".currency").click(addCashAmount);
-  
-  $("#cancel_complete_order_button").click(complete_order_hide);
 });
-
-
-
-
-
 
 function wholesaler_update() {
   var answer = confirm('Are you sure?')
@@ -63,13 +39,6 @@ function wholesaler_update() {
   //TODO: needs a progress spinner and a real dialog in the dom since salor-bin can't display alerts
   window.location = '/shippers/update_wholesaler';
 }
-
-
-
-
-
-
-
 
 
 function initInput(type) {
@@ -91,47 +60,12 @@ function displayAdvertising() {
   
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function number_to_currency(num) {
-  return i18nlocale + num;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  *  Allows us to latch onto events in the UI for adding menu items, i.e. in this case, customers, but later more.
  */
 function emit(msg,packet) {
   $('body').triggerHandler({type: msg, packet:packet});
 }
-
-
 
 function connect(unique_name,msg,fun) {
   var pcd = _get('plugin_callbacks_done');
@@ -143,6 +77,7 @@ function connect(unique_name,msg,fun) {
   }
   _set('plugin_callbacks_done',pcd)
 }
+
 function _get(name,context) {
   if (context) {
     // if you pass in a 3rd argument, which should be an html element, then that is set as teh context.
@@ -175,23 +110,6 @@ function scroll_for(distance, speed) {
   do_scroll(distance, speed);
 }
 
-function  in_array_of_hashes(array,key,value) {
-  for (var i in array) {
-    if (array[i][key]) {
-      try {
-        if (array[i][key] == value) {
-          return true;
-        } else if (array[i][key].indexOf(value) != -1){
-          return true;
-        }
-      } catch (e) {
-        return false;
-      }
-    }
-  }
-  return false;
-}
-
 function do_scroll(diff, speed) {
   window.scrollBy(0,diff/speed);
   newdiff = (speed-1)*diff/speed;
@@ -199,20 +117,13 @@ function do_scroll(diff, speed) {
   if(Math.abs(diff) < 5) { clearTimeout(scrollAnimation); }
 }
 
-function debug(message) {
-  if ( debugmessages.length > 7 ) { debugmessages.shift(); }
-  debugmessages.push(message);
-  $('#messages').html(debugmessages.join('<br />'));
+function toggle_all_option_checkboxes(source) {
+  if ($(source).attr('checked') == 'checked') {
+    $('input.category_checkbox:checkbox').attr('checked',true);
+  } else {
+    $('input.category_checkbox:checkbox').attr('checked',false);
+  }
 }
-
-
-// function toggle_all_option_checkboxes(source) {
-//   if ($(source).attr('checked') == 'checked') {
-//     $('input.category_checkbox:checkbox').attr('checked',true);
-//   } else {
-//     $('input.category_checkbox:checkbox').attr('checked',false);
-//   }
-// }
 
 function date_as_ymd(date) {
   return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();

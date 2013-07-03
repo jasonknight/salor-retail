@@ -53,6 +53,7 @@ SalorRetail::Application.routes.draw do
   match "categories/items_json" => "categories#items_json"
   
   
+  match "orders/complete" => "orders#complete"
   match "orders/receipts" => "orders#receipts"
   match "orders/undo_drawer_transaction" => "orders#undo_drawer_transaction"
   match "orders/add_item_ajax" => "orders#add_item_ajax"
@@ -77,7 +78,6 @@ SalorRetail::Application.routes.draw do
   match "orders/swap" => "orders#swap"
   match "orders/prev_order" => "orders#prev_order"
   match "orders/show_payment_ajax" => "orders#show_payment_ajax"
-  match "orders/complete_order_ajax" => "orders#complete_order_ajax"
   match "orders/new_order" => "orders#new_order"
   match "orders/activate_gift_card" => "orders#activate_gift_card"
   match "orders/update_order_items" => "orders#update_order_items"
@@ -173,7 +173,7 @@ SalorRetail::Application.routes.draw do
   match 'nodes/receive' => 'nodes#receive'
 
   resources :invoice_blurbs
-  resources :tender_methods
+  resources :payment_methods
   resources :reports
   resources :transaction_tags
   resources :buttons

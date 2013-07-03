@@ -1,3 +1,19 @@
+function display_change(called_from) {
+  var paymentTotal = get_payment_total();
+  var change = paymentTotal - Order.total;
+  change = Round(change,2);
+  console.log("change is " + change);
+  if (change < 0 && Order.total > 0) {
+    change = 0;
+    allow_complete_order(false);
+  } else {
+    allow_complete_order(true);
+  }
+  $('#complete_order_change').html(toCurrency(change));
+  ajax_log({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:Order.total, change:change, called_from:called_from});
+  return change;
+}
+
 function show_denominations() {
     var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
     var doc = 99; // radius
@@ -57,61 +73,3 @@ function recommend(num) {
   $('#recommendation').html(parts.join(' '));
 }
 
-function display_change(called_from) {
-  echo("Displaying change calculation for Order #" + Order.id + " displayed total is " + $('#pos_order_total').html()); 
-  if (sendingOrder) {
-    echo("sendingOrder is true");
-    return;
-  }
-  var paymentTotal = get_payment_total();
-  echo("paymentTotal is " + paymentTotal);
-  if (paymentTotal < 0) {
-    paymentTotal = paymentTotal * -1;
-  }
-  var ototal = Order.total;
-  if (ototal < 0) {
-    ototal = ototal * -1;
-  }
-  var change = paymentTotal - ototal;
-  change = Round(change,2);
-  echo("Calculated change thus far is " + change);
-  if (change < 0.0 && Order.total > 0) {
-    //recommend(0);
-    $('#complete_order_change').html(toCurrency(0));
-    allow_complete_order(false);
-  } else {
-    if (Order.total < 0) {
-      change = Order.total * -1;
-    } 
-    //recommend(change);
-    $('#complete_order_change').html(toCurrency(change));
-    echo('calling allow complete_order from display_change');
-    allow_complete_order();
-  }
-  if(change > 0) { displayChangeToCustomer(); }
-  ajax_log({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:ototal, change:change, called_from:called_from});
-  return change;
-}
-
-
-// this is only for text based pole displays
-function displayChangeToCustomer() {
-    if ( !useMimo() && isSalor() ) {
-      given = parseFloat(get_payment_total());
-      given = sprintf(" %s %6.2f", i18nunit, given);
-      change = parseFloat($('#complete_order_change').html().replace(',','.').substring(1));
-      change = sprintf(" %s %6.2f", i18nunit, change);
-      blurb_line1 = (i18n_money_given + '       ').substring(0,9);
-      blurb_line2 = (i18n_money_change + '       ').substring(0,9);
-      Salor.poleDancer(Register.pole_display, blurb_line1 + given + blurb_line2 + change );
-    }
-}
-
-function checkAndDisplayChange(from) {
-  if ( ! from ) {
-    from = 'checkAndDisplayChange:from not set';
-  }
-  if ($('.payment-amount').is(":visible")) {
-     display_change(from);
-  }
-}

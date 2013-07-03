@@ -12,9 +12,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:show_tax_profiles) %>
-        <div class="widget master" onmousedown="window.location = '<%= tax_profiles_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= tax_profiles_path %>';">
           <div align="center">
-            <a href="<%= tax_profiles_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= tax_profiles_path %>">
               <%= salor_icon(:tax_profile,{},64) %>
               <br />
               <%= t("menu.tax_profiles") %>
@@ -23,9 +23,9 @@
           </div>
         <% end %>
         <% if @current_user.can(:index_categories) %>
-        <div class="widget master" onmousedown="window.location = '<%= categories_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= categories_path %>';">
           <div align="center">
-            <a href="<%= categories_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= categories_path %>">
               <%= salor_icon(:category,{},64) %>
               <br />
               <%= t("menu.categories") %>
@@ -34,9 +34,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_locations) %>
-        <div class="widget master" onmousedown="window.location = '<%= locations_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= locations_path %>';">
           <div align="center">
-            <a href="<%= locations_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= locations_path %>">
               <%= salor_icon(:locations,{},64) %>
               <br />
               <%= t("menu.locations") %>
@@ -45,9 +45,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_locations) %>
-        <div class="widget master" onmousedown="window.location = '<%= stock_locations_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= stock_locations_path %>';">
           <div align="center">
-            <a href="<%= stock_locations_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= stock_locations_path %>">
               <%= salor_icon(:stock_locations,{},64) %>
               <br />
               <%= t("menu.stock_locations") %>
@@ -56,18 +56,18 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_items) %>
-        <div class="widget master" onmousedown="window.location = '<%= items_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= items_path %>';">
           <div align="center">
-            <a href="<%= items_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= items_path %>">
               <%= salor_icon(:item,{},64) %>
               <br />
               <%= t("menu.items") %>
             </a>
           </div>
         </div>
-        <div class="widget master" onmousedown="window.location = '<%= broken_items_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= broken_items_path %>';">
           <div align="center">
-            <a href="<%= broken_items_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= broken_items_path %>">
               <%= salor_icon(:broken,{},64) %>
               <br />
               <%= t("menu.broken_items") %>
@@ -76,9 +76,9 @@
         </div>
         <% end %>
       <% if @current_user.can(:index_cash_registers) %>
-        <div class="widget master" onmousedown="window.location = '<%= cash_registers_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= cash_registers_path %>';">
           <div align="center">
-            <a href="<%= cash_registers_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= cash_registers_path %>">
               <%= salor_icon(:cash_register,{},64) %>
               <br />
               <%= t("menu.cash_registers") %>
@@ -87,9 +87,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_discounts) %>
-        <div class="widget master" onmousedown="window.location = '<%= discounts_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= discounts_path %>';">
           <div align="center">
-            <a href="<%= discounts_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= discounts_path %>">
               <%= salor_icon(:discount,{},64) %><br />
               <%= t("menu.discounts") %>
             </a>
@@ -128,9 +128,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_orders) %>
-        <div class="widget master" onmousedown="window.location = '<%= orders_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= orders_path %>';">
           <div align="center">
-            <a href="<%= orders_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= orders_path %>">
               <%= salor_icon(:order,{},64)  %><br />
               <%= t("menu.orders") %>
             </a>
@@ -160,9 +160,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_transaction_tags) %>
-        <div class="widget master" onmousedown="window.location = '<%= transaction_tags_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= transaction_tags_path %>';">
           <div align="center">
-            <a href="<%= transaction_tags_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= transaction_tags_path %>">
               <%= salor_icon(:tags,{},64) %>
               <br />
               <%= t("menu.transaction_tags") %>
@@ -171,9 +171,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:show_actions) %>
-        <div class="widget master" onmousedown="window.location = '<%= actions_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= actions_path %>';">
           <div align="center">
-            <a href="<%= actions_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= actions_path %>">
               <%= salor_icon(:action,{},64) %>
               <br />
               <%= t("menu.actions") %>
@@ -181,21 +181,21 @@
           </div>
         </div>
         <% end %>
-        <% if @current_user.can(:show_tender_methods) %>
-        <div class="widget master" onmousedown="window.location = '<%= tender_methods_path(:vendor_id => @vendor.id) %>';">
+        <% if @current_user.can(:show_payment_methods) %>
+        <div class="widget master" onmousedown="window.location = '<%= payment_methods_path %>';">
           <div align="center">
-            <a href="<%= tender_methods_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= payment_methods_path %>">
               <%= salor_icon(:payment,{},64) %>
               <br />
-              <%= t("menu.tender_methods") %>
+              <%= t("menu.payment_methods") %>
             </a>
           </div>
         </div>
         <% end %>
         <% if @current_user.can(:show_countries) %>
-        <div class="widget master" onmousedown="window.location = '<%= countries_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= countries_path %>';">
           <div align="center">
-            <a href="<%= countries_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= countries_path %>">
               <%= salor_icon(:globe,{},64) %>
               <br />
               <%= t('activerecord.models.country.other') %>
@@ -204,9 +204,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:show_sale_types) %>
-        <div class="widget master" onmousedown="window.location = '<%= sale_types_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= sale_types_path %>';">
           <div align="center">
-            <a href="<%= sale_types_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= sale_types_path %>">
               <%= salor_icon(:sale_type,{},64) %>
               <br />
               <%= t('activerecord.models.sale_type.other') %>
@@ -215,9 +215,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:show_invoice_notes) %>
-        <div class="widget master" onmousedown="window.location = '<%= invoice_notes_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= invoice_notes_path %>';">
           <div align="center">
-            <a href="<%= invoice_notes_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= invoice_notes_path %>">
               <%= salor_icon(:invoice_note,{},64) %>
               <br />
               <%= t('activerecord.models.invoice_note.other') %>
@@ -226,9 +226,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:show_buttons) %>
-        <div class="widget master" onmousedown="window.location = '<%= buttons_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= buttons_path %>';">
           <div align="center">
-            <a href="<%= buttons_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= buttons_path %>">
               <%= salor_icon(:button,{},64) %>
               <br />
               <%= t("menu.buttons") %>
@@ -237,9 +237,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:show_invoice_blurbs) %>
-        <div class="widget master" onmousedown="window.location = '<%= invoice_blurbs_path(:vendor_id => @vendor.id) %>';">
+        <div class="widget master" onmousedown="window.location = '<%= invoice_blurbs_path %>';">
           <div align="center">
-            <a href="<%= invoice_blurbs_path(:vendor_id => @vendor.id) %>">
+            <a href="<%= invoice_blurbs_path %>">
               <%= salor_icon(:invoice_blurb,{},64) %>
               <br />
               <%= t("menu.invoice_blurbs") %>

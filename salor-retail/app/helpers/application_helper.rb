@@ -158,7 +158,7 @@ module ApplicationHelper
       :update_real_quantity => 'okay',
       :action => 'gears',
       :payment => 'payment_method',
-      :tender_method => 'payment_method',
+      :payment_method => 'payment_method',
       :locations => 'location',
       :camera => "camera",
       :button => 'button',

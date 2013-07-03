@@ -271,7 +271,7 @@ gn:
       tax_profile:
         one: Steuerklasse
         other: Steuerklassen
-      tender_method:
+      payment_method:
         one: Zahlungsmethode
         other: Zahlungsmethoden
       transaction_tag:
@@ -430,6 +430,7 @@ gn:
     current_order: Aktueller Verkauf
     customer: Kunde
     customers: Kunden
+    close: Schließen
     database_distiller: Datenbank-Reiniger
     delete: Löschen
     delete_confirm: Sind Sie sicher?

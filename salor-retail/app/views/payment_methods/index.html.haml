@@ -1,0 +1,2 @@
+= raw content_box_top(t "menu.tender_methods")
+= render :partial => 'shared/list_view', :locals => {  :klass => PaymentMethod, :width => '60%', :collection => @payment_methods, :columns => [:name]}

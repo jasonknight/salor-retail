@@ -271,7 +271,7 @@ en-US:
       tax_profile:
         one: Tax Profile
         other: Tax Profiles
-      tender_method:
+      payment_method:
         one: Payment Method
         other: Payment Methods
       transaction_tag:
@@ -409,6 +409,7 @@ en-US:
       upload: upload
   label: label
   menu:
+    close: Close
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
@@ -452,7 +453,7 @@ en-US:
     edit_shipment_type: Editshipment type
     edit_shipper: Edit Shipper %{name}
     edit_tax_profile: Edittax profile
-    edit_tender_method: Edit Payment Method
+    edit_payment_method: Edit Payment Method
     edit_vendor: EditStore
     employees: employees
     end_day: end day
@@ -488,7 +489,7 @@ en-US:
     new_shipper: New shipper
     new_stock_location: New stock location
     new_tax_profile: New tax profile
-    new_tender_method: New Payment Method
+    new_payment_method: New Payment Method
     new_transaction_tag: New Transaction Tag
     new_vendor: New Store
     ok: OK
@@ -518,7 +519,7 @@ en-US:
     stock_locations: stock locations
     support: support
     tax_profiles: tax profiles
-    tender_methods: Payment Methods
+    payment_methods: Payment Methods
     transaction_tags: transaction tags
     update_gift_card: update gift card
     update_location: update location
@@ -774,8 +775,6 @@ en-US:
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
-    payment_external_types: Cash,Debit,Gift Card,Other,Change,To Be Paid,Quote
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change,Unpaid,Quote
     rebate_types:
       fixed: $
       percent: ! '%'

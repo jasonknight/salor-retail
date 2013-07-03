@@ -3,6 +3,7 @@ function updateDrawer(obj) {
   $('.eod-drawer-total').html(toCurrency(obj.amount));
   $('#header_drawer_amount').html(toCurrency(obj.amount));
 }
+
 function positionSearchInput() {
   var elem = $("#generic_search");
   if (elem.length == 0) {
@@ -107,10 +108,14 @@ function showClockin() {
   },55);
 }
 
-function ajax_log(data) {
-  $.ajax({
-    url:'/orders/log',
-    type:'post',
-    data:data
-  });
+
+
+function showButtonCategoryContainer(id) {
+  $('.button-category-container').hide();
+  $('#' + id).show();
+}
+
+function showButtonCategoryContainer(id) {
+  $('.button-category-container').hide();
+  $('#' + id).show();
 }

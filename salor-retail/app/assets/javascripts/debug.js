@@ -1,19 +1,15 @@
-function dbg(obj) {
-  var str = '';
-  alert(obj.width);
-  for (var prop in obj) {
-    str = str + " " + prop + ":" +obj[prop];
+function echo(str) {
+  if ( isSalorBin() && typeof Salor.echo != 'undefined' ) {
+    Salor.echo(str);
+  } else if (typeof console != 'undefined') {
+    console.log(str);
   }
-  alert(str);
 }
 
-function clog() {
-  try {
-    if (typeof Salor != 'undefined') {
-        // i.e. Salor object is only defined when we are inside of salor gui...
-    } else {
-      console.log(arguments);
-    }
-  } catch(e){
-  }
+function ajax_log(data) {
+  $.ajax({
+    url:'/orders/log',
+    type:'post',
+    data: data
+  });
 }

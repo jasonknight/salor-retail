@@ -354,56 +354,50 @@ class Order < ActiveRecord::Base
     end
   end
   
-  def create_payment_method_items(params)
-    debugger
-#     self.vendor.payment_methods_types_list.each do |pmt|
-#       pt = pmt[1]
-#       if params[pt.to_sym] and not params[pt.to_sym].blank? and not SalorBase.string_to_float(params[pt.to_sym]) == 0
-#         
-#         if pt == 'Unpaid'
-#           self.unpaid_invoice = true
-#         end
-#         
-#         if pt == 'Quote'
-#           self.is_quote = true
-#         end
-        
-        pm = self.vendor.payment_methods.visible.find_by_id(pmt[0])
-        
-        pmi = PaymentMethodItem.new
-        pmi.payment_method = pm
-        pmi.vendor = self.vendor
-        pmi.company = self.company
-        pmi.user = self.user
-        pmi.drawer = self.drawer
-        pmi.cash_register = self.cash_register
-        pmi.amount = SalorBase.string_to_float(params[pt.to_sym]).round(2)
-        pmi.save
-        
-        
-        self.payment_method_items << pmi
-#     end
-#     
-#     self.save
-#     
-#     payment_cash = self.payment_methods.visible.where(:internal_type => 'InCash').sum(:amount).round(2)
-#     payment_total = self.payment_methods.visible.sum(:amount).round(2)
-#     payment_noncash = (payment_total - payment_cash).round(2)
-#     change = (payment_total - self.subtotal).round(2)
-#                                   
-#     pm = PaymentMethod.new
-#     pm.vendor = self.vendor
-#     pm.company = self.company
-#     pm.internal_type = 'Change'
-#     pm.amount = change
-#     pm.user = self.user
-#     pm.save
-#     
-#     self.payment_methods << pm
-#     self.cash = payment_cash
-#     self.noncash = payment_noncash
-#     self.change = change
-#     self.save
+  def create_payment_method_items(params)    
+    params[:payment_method_items].each do |k,v|
+      pm = self.vendor.payment_methods.visible.find_by_id(v[:id])
+      
+      pmi = PaymentMethodItem.new
+      pmi.payment_method = pm
+      pmi.vendor = self.vendor
+      pmi.company = self.company
+      pmi.user = self.user
+      pmi.drawer = self.drawer
+      pmi.cash_register = self.cash_register
+      pmi.amount = SalorBase.string_to_float(v[:amount]).round(2)
+      pmi.cash = pm.cash
+      pmi.quote = pm.quote
+      pmi.unpaid = pm.unpaid
+      pmi.save
+      
+      self.payment_method_items << pmi
+      self.is_quote = true if pm.quote == true
+      self.is_unpaid = true if pm.unpaid == true
+    end
+    
+    self.save
+    
+    payment_cash = self.payment_method_items.visible.where(:cash => true).sum(:amount).round(2)
+    payment_total = self.payment_method_items.visible.sum(:amount).round(2)
+    payment_noncash = (payment_total - payment_cash).round(2)
+    change = (payment_total - self.subtotal).round(2)
+                                  
+    pmi = PaymentMethodItem.new
+    pmi.vendor = self.vendor
+    pmi.company = self.company
+    pmi.user = self.user
+    pmi.drawer = self.drawer
+    pmi.cash_register = self.cash_register
+    pmi.amount = change
+    pmi.change = true
+    pmi.save
+    
+    self.payment_method_items << pmi
+    self.cash = payment_cash
+    self.noncash = payment_noncash
+    self.change = change
+    self.save
   end
 
   

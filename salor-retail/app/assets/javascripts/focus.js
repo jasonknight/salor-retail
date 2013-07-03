@@ -1,6 +1,6 @@
 function checkFocusInput() {
   if (focuseKeyboardInput) {
-    focusInput($('#keyboard_input'));
+    focusInput($('#main_sku_field'));
     focuseKeyboardInput = false;
   }
 }

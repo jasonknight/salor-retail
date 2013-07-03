@@ -109,7 +109,7 @@ function addPosItem(item) {
           '&field=quantity'+
           '&value=' + v;
           get(string, filename);
-          focusInput($('#keyboard_input'));
+          focusInput($('#main_sku_field'));
         });
           up.html("<div><img src=\"/images/icons/up.svg\" height='32' />");
           up.addClass('pointer quantity-button');
@@ -125,7 +125,7 @@ function addPosItem(item) {
           '&field=quantity'+
           '&value=' + v;
           get(string, filename);
-          focusInput($('#keyboard_input'));
+          focusInput($('#main_sku_field'));
         });
           d.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
           d.addClass('pointer quantity-button');
@@ -162,16 +162,15 @@ function addPosItem(item) {
 
 
 function add_item(sku, additional_params) {
-  if (sku.match(/^31\d{8}.{1,2}$/)) {
-    var oid = Order.id;
-    var cid = Meta['cash_register_id'];
-    var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
-    window.location = "/users/login?" + p.join("&");
-    return;
-  }
-  var user_line = "&user_id=" + User.id + "&user_type=" + User.type;
-  get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + user_line + additional_params, filename);
-  $('#keyboard_input').val('');
+//   if (sku.match(/^31\d{8}.{1,2}$/)) {
+//     var oid = Order.id;
+//     var cid = Meta['cash_register_id'];
+//     var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
+//     window.location = "/users/login?" + p.join("&");
+//     return;
+//   }
+  get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
+  $('#main_sku_field').val('');
 }
 
 function void_item(id) {
@@ -244,7 +243,7 @@ function makeItemMenu(item) {
             get('/orders/delete_order_item?id=' + item.id, filename);
             menu.remove();
             //setScrollerState();
-            focusInput($('#keyboard_input'));
+            focusInput($('#main_sku_field'));
         });
         menu.append(dicon);
         
@@ -257,9 +256,9 @@ function makeItemMenu(item) {
                           '&value=undefined';
                           get(string, filename);
                           menu.remove();
-                          focusInput($('#keyboard_input'));
+                          focusInput($('#main_sku_field'));
         }).mouseup(function () {
-          focusInput($('#keyboard_input'));
+          focusInput($('#main_sku_field'));
         });
         menu.append(buyback);
         if (!Register.scale == '') {
@@ -271,9 +270,9 @@ function makeItemMenu(item) {
                             '&value=' + Register.scale;
                             get(string, filename);
               menu.remove();
-              focusInput($('#keyboard_input'));
+              focusInput($('#main_sku_field'));
           }).mouseup(function () {
-            focusInput($('#keyboard_input'));
+            focusInput($('#main_sku_field'));
           });
 
           menu.append(wicon);
@@ -282,9 +281,9 @@ function makeItemMenu(item) {
         var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
         btn.mousedown(function () {
             menu.remove();
-            focusInput($('#keyboard_input'));
+            focusInput($('#main_sku_field'));
         }).mouseup(function () {
-          focusInput($('#keyboard_input'));
+          focusInput($('#main_sku_field'));
         });
         menu.append(btn);
     });
@@ -294,20 +293,7 @@ function makeItemMenu(item) {
   }
 }
 
-function updateCustomerView(item,order_id) {
-  if (typeof(Salor) != 'undefined') {
-    if( useMimo() ) {
-      Salor.mimoRefresh(Conf.url+"/orders/"+order_id+"/customer_display",800,480);
-    } else {
-      if (item == false) {
-        showOrderTotalOnPoleDisplay(); 
-      } else {
-        output = format_pole(item['name'],item['price'],item['quantity'],item['weight_metric'],item['subtotal']); 
-        Salor.poleDancer(Register.pole_display, output );
-      }
-    }
-  }
-}
+
 
 window.showOrderOptions = function () {
   var dialog = shared.draw.dialog(i18n.menu.configuration + ' ID ' + Order.id,"order_options");
@@ -543,7 +529,7 @@ function detailedOrderItemMenu(event) {
     title.remove();
     config.remove();
     $('#order_item_' + item.id).remove();
-    focusInput($('#keyboard_input'));
+    focusInput($('#main_sku_field'));
   });
   title.append(dicon);
   
@@ -555,9 +541,9 @@ function detailedOrderItemMenu(event) {
     '&field=toggle_buyback'+
     '&value=undefined';
     $.get(string);
-    focusInput($('#keyboard_input'));
+    focusInput($('#main_sku_field'));
   }).mouseup(function () {
-    focusInput($('#keyboard_input'));
+    focusInput($('#main_sku_field'));
   });
   title.append(buyback);
   
@@ -569,9 +555,9 @@ function detailedOrderItemMenu(event) {
       '&field=quantity'+
       '&value=' + Register.scale;
       $.get(string);
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     }).mouseup(function () {
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     });
     title.append(wicon);
   } // end  if (!Register.scale == '') {
@@ -580,9 +566,9 @@ function detailedOrderItemMenu(event) {
     btn.click(function () {
       title.remove();
       config.remove();
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     }).mouseup(function () {
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     });
     title.append(btn);
     
@@ -605,7 +591,7 @@ function detailedOrderItemMenu(event) {
     var item_type_select = shared.element('select',{id: 'oi_item_type_select'},'',config_table_cols_left[0]);
     item_type_select.on('change',function () {
       editItemAndOrderItem(item,'item_type_id',$(this).val());
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     });
     $.each(ItemTypes,function (i,item_type) {
       shared.element('option',{value: item_type.id},item_type.name,item_type_select);
@@ -617,7 +603,7 @@ function detailedOrderItemMenu(event) {
     var tax_profile_select = shared.element('select',{id: 'oi_tax_profile_select'},'',config_table_cols_center[0]);
     tax_profile_select.on('change',function () {
       editItemAndOrderItem(item,'tax_profile_id',$(this).val());
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     });
     $.each(TaxProfiles,function (i,tax_profile) {
       shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
@@ -630,7 +616,7 @@ function detailedOrderItemMenu(event) {
     var category_select = shared.element('select',{id: 'oi_category_select'},'',config_table_cols_right[0]);
     category_select.on('change',function () {
       editItemAndOrderItem(item,'category_id',$(this).val());
-      focusInput($('#keyboard_input'));
+      focusInput($('#main_sku_field'));
     });
     $.each(Categories,function (i,category) {
       shared.element('option',{value: category.id},category.name,category_select);
@@ -707,14 +693,7 @@ function getOrderItemId(item) {
   return id;
 }
 
-function format_pole(name,price,quantity,weight_metric,total) {
-  if (weight_metric == null) { weight_metric = '' };
-  pole_name     = (name.substring(0,14) + '                ').substring(0,14);
-  pole_price    = sprintf("%6.2f",price);
-  pole_quantity = (quantity + ' ' + weight_metric + '                            ').substring(0,10);
-  pole_total    = i18n.number.currency.format.friendly_unit + sprintf(" %6.2f",total);
-  return pole_name + pole_price + pole_quantity + pole_total;
-}
+
 
 function updatePosItem(item) {
   
