@@ -296,14 +296,7 @@ class Order < ActiveRecord::Base
     h.save
 
     self.paid = true
-    self.paid_at = Time.now
-    
-    if self.is_quote then
-      self.qnr = self.vendor.get_unique_model_number('quote')
-    else
-      self.nr = self.vendor.get_unique_model_number('order')
-    end
-    
+    self.paid_at = Time.now    
     self.save
     
     self.update_item_quantities
@@ -311,7 +304,15 @@ class Order < ActiveRecord::Base
     self.update_giftcard_remaining_amounts
     self.create_payment_method_items(params)
     self.create_drawer_transaction    
+    
+    
+    if self.is_quote
+      self.qnr = self.vendor.get_unique_model_number('quote')
+    else
+      self.nr = self.vendor.get_unique_model_number('order')
+    end
     self.save
+    
   end
   
   def create_drawer_transaction
@@ -382,6 +383,7 @@ class Order < ActiveRecord::Base
     payment_total = self.payment_method_items.visible.sum(:amount).round(2)
     payment_noncash = (payment_total - payment_cash).round(2)
     change = (payment_total - self.subtotal).round(2)
+    change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
                                   
     pmi = PaymentMethodItem.new
     pmi.vendor = self.vendor
@@ -391,6 +393,7 @@ class Order < ActiveRecord::Base
     pmi.cash_register = self.cash_register
     pmi.amount = change
     pmi.change = true
+    pmi.payment_method = change_payment_method
     pmi.save
     
     self.payment_method_items << pmi
@@ -1052,6 +1055,11 @@ class Order < ActiveRecord::Base
 #       @current_user = @order.user
 #     end
 #   end
+  
+  def self.last2
+    id = Order.last.id
+    return Order.find_by_id id-1   
+  end
   
   def to_json
     self.total = 0 if self.total.nil?

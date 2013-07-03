@@ -83,16 +83,19 @@ class OrderItem < ActiveRecord::Base
   end
   
 
-  def refund(refund_payment_method, user)
+  def refund(pmid, user)
     return nil if self.refunded
+    
+    refund_payment_method = self.vendor.payment_methods.visible.find_by_id(pmid)
     
     self.refunded = true
     self.refunded_by = user.id
     self.refunded_at = Time.now
-    self.refund_payment_method = refund_payment_method
+    self.refund_payment_method = pmid
     self.save
     
-    if refund_payment_method == 'InCash'
+    if refund_payment_method.cash == true
+      drawer = user.get_drawer
       dt = DrawerTransaction.new
       dt.vendor = user.vendor
       dt.company = user.company
@@ -102,9 +105,12 @@ class OrderItem < ActiveRecord::Base
       dt.notes = I18n.t("views.notice.order_refund_dt", :id => self.id)
       dt.order = self.order
       dt.order_item = self
-      dt.drawer = user.get_drawer
+      dt.drawer = drawer
       dt.amount = - self.subtotal
       dt.save
+      
+      drawer.amount -= self.subtotal
+      drawer.save
     end
   end
 

@@ -1,45 +1,38 @@
 <%= raw content_box_top(t("views.order_heading", :store => @order.vendor.name, :id => @order.nr)) %>
      
-      <table id="order_items_table" width="80%" align=center class="ui-corner-all ui-widget ui-content stripe-me">
-        <tr>
-          <th><%= t("activerecord.attributes.name") %></th>
-          <th><%= I18n.t("activerecord.attributes.sku") %></th>
-          <th><%= t("activerecord.attributes.quantity") %></th>
-          <th><%= t("activerecord.attributes.rebate") %></th>
-          <th><%= t("activerecord.attributes.base_price") %></th>
-          <th>&nbsp;</th>
-        </tr>
-        <%= render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
-        <tr>
-          <td colspan=5 align="right"><%=  I18n.t("activerecord.attributes.total")%>:</td>
-          <td align="right"><%= @order.gross%></td>
-        </tr>
-        <% @order.payment_methods.each do |pm| %>
-          <tr>
-            <td colspan="5" align="right"><%= pm.name %></td>
-            <td align="right"><%= number_to_currency pm.amount %></td>
-          </tr>
-        <% end %>
-        <tr>
-          <td colspan=5 align="right">GDA:</td>
-          <td align="right"><%= @order.get_drawer_add%></td>
-        </tr>
-        <tr class="no-stripe">
-            <td align=center colspan=6>
-              <select id='refund_payment_method'>
-              <%= options_for_select @current_vendor.payment_methods_types_list %>
-              </select>
-            </td>
-        </tr>
-        
-      </table>
-<%
-  if @order.refunded then
-    reverse = "/images/icons/#{icon(:refund,32)}"
-  else
-    reverse = "/images/icons/#{icon(:refunded,32)}"
-  end
-%>
+<table id="order_items_table" width="80%" align=center class="ui-corner-all ui-widget ui-content stripe-me">
+  <tr>
+    <th><%= t("activerecord.attributes.name") %></th>
+    <th><%= I18n.t("activerecord.attributes.sku") %></th>
+    <th><%= t("activerecord.attributes.quantity") %></th>
+    <th><%= t("activerecord.attributes.rebate") %></th>
+    <th><%= t("activerecord.attributes.base_price") %></th>
+    <th>&nbsp;</th>
+  </tr>
+  
+  <%= render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
+  
+  <tr>
+    <td colspan=5 align="right"><%=  I18n.t("activerecord.attributes.total")%>:</td>
+    <td align="right"><%= @order.total %></td>
+  </tr>
+  <% @order.payment_method_items.visible.each do |pmi| %>
+    <tr>
+      <td colspan="5" align="right"><%= pmi.payment_method.name %></td>
+      <td align="right"><%= number_to_currency pmi.amount %></td>
+    </tr>
+  <% end %>
+  <tr class="no-stripe">
+      <td align=center colspan=6>
+        <select id='refund_payment_method'>
+        <%= options_from_collection_for_select @current_vendor.payment_methods, :id, :name %>
+        </select>
+      </td>
+  </tr>
+  
+</table>
+
+
 <table align="center">
   <tr>
     <td>
@@ -51,17 +44,8 @@
   </tr>
 </table>
 
-<script>
-var payment_internal_types = [<%= raw @current_vendor.payment_methods_types_list.map {|pm| "'#{pm[1]}'"}.join(',') %>];
-var payment_external_types = [<%= raw @current_vendor.payment_methods_types_list.map {|pm| "'#{pm[0]}'"}.join(',') %>];
-</script>
-<style>
-  table.overflowing-table td {
-    width: 20%;
-    vertical-align: top;
-    font-size: 12px;
-  }
-</style>
+
+
 <table width="80%" align="center" class="ui-corner-all ui-widget ui-content stripe-me overflowing-table">
   <tr class="no-stripe">
     <td colspan=6 ><h2>Drawer Transactions: </h2><br /><hr /></td>
@@ -69,7 +53,7 @@ var payment_external_types = [<%= raw @current_vendor.payment_methods_types_list
   <% @order.drawer_transactions.order("id desc").each do |dt| %>
     <tr >
         <td><%= number_to_currency(dt.amount) %> (<%= dt.drawer_amount %>)</td>
-        <td><%= dt.drop ? 'Drop' : 'Payout' %> <%= l dt.created_at, :format => "%H:%I:%S" %></td>
+        <td><%= l dt.created_at, :format => "%H:%I:%S" %></td>
         <td><%= dt.user ? dt.user.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
         <td><%= dt.tag %></td>
         <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>
@@ -82,7 +66,7 @@ var payment_external_types = [<%= raw @current_vendor.payment_methods_types_list
   <% DrawerTransaction.where(["created_at between ? and ?",@order.created_at - 20.minutes,@order.created_at + 20.minutes]).order("id desc").each do |dt| %>
     <tr >
         <td><%= number_to_currency(dt.amount) %> (<%= dt.drawer_amount %>)</td>
-        <td><%= dt.drop ? 'Drop' : 'Payout' %> <%= l dt.created_at, :format => "%H:%I:%S" %></td>
+        <td><%= l dt.created_at, :format => "%H:%I:%S" %></td>
         <td><%= dt.user ? dt.user.username : 'Unknown' %>[<%= dt.drawer_id %>]</td>
         <td><%= dt.tag %></td>
         <td <%= dt.order != nil and dt.order_id == @order.id ? raw('style="background-color: red;"') : ''%>><small>Nr: <%= dt.order.nr rescue '' %> ID: <%= dt.order.id rescue ''%></small></td>

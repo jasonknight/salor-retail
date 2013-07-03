@@ -69,8 +69,8 @@ class Vendor < ActiveRecord::Base
   
   def payment_methods_as_objects
     types = {}
-    self.payment_methods.visible.where(:change => nil).each do |p|
-      types[p.id] = {:name => p.name, :id => p.id, :cash => p.cash}
+    self.payment_methods.visible.where('`change` IS NULL OR `change` = FALSE').each do |p|
+      types[p.id] = { :name => p.name, :id => p.id, :cash => p.cash }
     end
     return types
   end

@@ -50,17 +50,16 @@ class OrdersController < ApplicationController
     params[:type] ||= 'normal'
     case params[:type]
     when 'normal'
-      @orders = @current_vendor.orders.order("nr desc").where(:paid => 1).page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("nr desc").where(:paid => true).page(params[:page]).per(@current_vendor.pagination)
     when 'proforma'
-      @orders = @current_vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(@current_vendor.pagination)
     when 'unpaid'
-      @orders = @current_vendor.orders.order("nr desc").unpaid.page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("nr desc").unpaid.page(params[:page]).per(@current_vendor.pagination)
     when 'quote'
-      @orders = @current_vendor.orders.order("qnr desc").quotes.page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("qnr desc").quotes.page(params[:page]).per(@current_vendor.pagination)
     else
-      @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(25)
+      @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(@current_vendor.pagination)
     end
-    respond_with(@orders)
   end
 
 
@@ -287,14 +286,7 @@ class OrdersController < ApplicationController
   
   def refund_item
     @oi = @current_vendor.order_items.visible.find_by_id(params[:id])
-    x = @oi.toggle_refund(true, params[:pm], @current_user)
-    if x == -1 then
-      flash[:notice] = I18n.t("system.errors.not_enough_in_drawer")
-    end
-    if x == false then
-      flash[:notice] = I18n.t("system.errors.unspecified_error")
-    end
-    @oi.save
+    @oi.refund(params[:pm], @current_user)
     redirect_to request.referer
   end
   

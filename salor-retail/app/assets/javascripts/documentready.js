@@ -15,12 +15,12 @@ $(function () {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
 
-//   $('#order_items_table tr:even').addClass('even');
-//   $('.stripe-me tr:even').addClass('even');
-//   $('tr.no-stripe').removeClass('even');
-//   $('.stripe-me2:even').addClass('even');
-//   $('div.stripe-me > div.table-row:even').addClass('even');
-//   $('#generic_search_input').val('');
+  $('#order_items_table tr:even').addClass('even');
+  $('.stripe-me tr:even').addClass('even');
+  $('tr.no-stripe').removeClass('even');
+  $('.stripe-me2:even').addClass('even');
+  $('div.stripe-me > div.table-row:even').addClass('even');
+  $('#generic_search_input').val('');
 
   focusInput($('#generic_search_input'));
 
