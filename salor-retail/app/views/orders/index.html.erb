@@ -69,7 +69,7 @@
     </td>
     <td width='10%'> <%= order.tag %></td>
     <td><%= l(order.created_at,:format => :salor) %></td>
-    <td><%= salor_number_to_currency order.total %> <% if order.total == 0.0 %> <small>(<%= salor_number_to_currency order.total %>)</small><% end %></td>
+    <td><%= salor_number_to_currency order.total %> </td>
     <td width='10%' align='center'><%= link_to salor_icon(:print,{},32), "orders/#{ order.id }/print" %></td>
     <td width='10%' align='center'><%= link_to salor_icon(:show,{},32), order %></td>
     <td width='10%' align='center'><%=link_to(salor_icon(:cash_register,{},32), edit_order_path(order)) unless order.paid %></td>

@@ -292,7 +292,7 @@ function addItem(values,nofocus) {
   var found = false;
   if (values) {
     var vs = values;
-    var vals = {id: vs.id,sku: vs.sku, quantity: vs.quantity, stock_location_ids: vs.stock_location_ids,name: vs.name}
+    var vals = {id: vs.id,sku: vs.sku, quantity: vs.quantity, stock_location_ids: vs.stock_location_ids,name: vs.name, purchase_price:vs.purchase_price}
   } else {
     vals = values;
   }
@@ -314,6 +314,7 @@ function addItem(values,nofocus) {
     } else {
       var inp = shipment_item_input(name,{});
       if (vals[name]) {
+        
         inp.val(vals[name]);
       }
       if (ints_list.indexOf(name) != -1) {
@@ -427,6 +428,7 @@ $(function () {
     var values = {};
     <% items.each do |item|  %>
       values = <%= raw item.to_json %>;
+      console.log(values);
       values.stock_location_ids = [<%= item.stock_location_ids.join(',') %>];
       addItem(values,true);
     <% end %>
@@ -443,11 +445,5 @@ $(function () {
     </td>
   </tr>
 </table>
-<div>
-<!--<div class='shipment_item_attr_header shipment_item_attr_header_sku'><%= ShipmentItem.human_attribute_name :sku %></div>
-<div class='shipment_item_attr_header shipment_item_attr_header_name'><%= ShipmentItem.human_attribute_name :name %></div>
-<div class='shipment_item_attr_header shipment_item_attr_header_quantity'><%= ShipmentItem.human_attribute_name :quantity %></div>
-<div class='shipment_item_attr_header shipment_item_attr_header_stock_location_id'><%= ShipmentItem.human_attribute_name :stock_location_id %></div>
-<div class='shipment_item_attr_header shipment_item_attr_header_stock_location_id'><%= ShipmentItem.human_attribute_name :purchase_price %></div>-->
-</div>
+
 <table id="shipment_items" class="shipment-items"></table>
