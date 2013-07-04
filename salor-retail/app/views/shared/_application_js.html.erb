@@ -70,13 +70,6 @@ var i18n_pieces = [<%= I18n.t('number.currency.format.pieces').split(',').find_a
     itps = itps.join(' ')
     inplace_shipmentstatuses = "<select id='inplaceedit' >#{itps}</select>"
 
-    rebate_types = Order::REBATE_TYPES
-    itps = []
-    rebate_types.each do |itp|
-      itps << "<option value='#{itp[1]}'>#{itp[0]}</option>"
-    end
-    itps = itps.join(' ')
-    inplace_rebatetypes = "<select id='inplaceedit' >#{itps}</select>"
   end
 %>
 
@@ -86,7 +79,6 @@ var inplace_cats = "<%= escape_javascript raw inplace_stores %>";
 var inplace_locations = "<%= escape_javascript raw inplace_locations %>";
 var inplace_itemtypes = "<%= escape_javascript raw inplace_itemtypes %>";
 var inplace_shipmentstatuses = "<%= escape_javascript raw inplace_shipmentstatuses %>";
-var inplace_rebatetypes = "<%= escape_javascript raw inplace_rebatetypes %>";
 var SaleTypes = <%= raw @current_vendor.sale_types.visible.to_json %>;
 var Countries = <%= raw @current_vendor.countries.visible.to_json %>;
 var ItemTypes = <%= raw @current_vendor.item_types.visible.to_json %>;

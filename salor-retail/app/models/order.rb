@@ -141,12 +141,6 @@ class Order < ActiveRecord::Base
   has_many :coupons, :class_name => "OrderItem", :conditions => "behavior = 'coupon' and hidden != 1" 
   
   has_many :gift_cards, :class_name => "OrderItem", :conditions => "behavior = 'gift_card' and hidden != 1"
-
-  I18n.locale = AppConfig.locale
-  REBATE_TYPES = [
-    [I18n.t('views.forms.percent_off'),'percent'],
-    [I18n.t('views.forms.fixed_amount_off'),'fixed']
-  ]
   
   def as_csv
     return attributes
@@ -164,13 +158,6 @@ class Order < ActiveRecord::Base
     if self.customer
       return self.customer.loyalty_card
     end
-  end
-  
-  def rebate_type_display
-    REBATE_TYPES.each do |rt|
-      return rt[0] if rt[1] == self.rebate_type
-    end
-    return self.rebate_type
   end
   
   def toggle_buy_order=(x)
@@ -542,6 +529,14 @@ class Order < ActiveRecord::Base
     return ret
   end
   
+  def subtotal_for_customerdisplay
+    if self.vendor.net_prices
+      return self.subtotal + self.tax_amount
+    else
+      return self.subtotal
+    end
+  end
+  
   
   def report
     sum_taxes = Hash.new
@@ -567,7 +562,7 @@ class Order < ActiveRecord::Base
       taxletter = oi.tax_profile.letter
       
 
-      # NORMAL ITEMS
+      # --- NORMAL ITEMS ---
       if oi.behavior == 'normal'
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
@@ -632,13 +627,17 @@ class Order < ActiveRecord::Base
     end
 
 
+    # --- payment methods ---
     paymentmethods = Hash.new
     self.payment_method_items.visible.each do |pmi|
       next if pmi.amount.zero?
-      paymentmethods[pmi.payment_method.name] = pmi.amount
+      blurb = pmi.payment_method.name
+      blurb = I18n.t('printr.eod_report.refund') + blurb if pmi.refund
+      paymentmethods[blurb] = pmi.amount
     end
 
     
+    # --- taxes ---
     list_of_taxes = ''
     used_tax_amounts = self.order_items.visible.select("DISTINCT tax")
     used_tax_amounts.each do |r|
@@ -656,16 +655,39 @@ class Order < ActiveRecord::Base
       list_of_taxes += tax_format % [tax_profile.letter, tax_in_percent, net, tax, gro]
     end
     
-    if self.vendor.net_prices
-      subtotal = self.subtotal + self.tax_amount
-    else
-      subtotal = self.subtotal
-    end
+    # --- invoice blurbs ---
+    locale = I18n.locale
+    invoice_blurb_header = self.vendor.invoice_blurbs.visible.where(:lang => locale, :is_header => true).first
+    invoice_blurb_footer = self.vendor.invoice_blurbs.visible.where(:lang => locale).where('is_header IS NOT TRUE').first
+    invoice_blurb_header_receipt = invoice_blurb_header.body_receipt if invoice_blurb_header
+    invoice_blurb_header_invoice = invoice_blurb_header.body if invoice_blurb_header
+    invoice_blurb_footer_receipt = invoice_blurb_footer.body_receipt if invoice_blurb_footer
+    invoice_blurb_footer_invoice = invoice_blurb_footer.body if invoice_blurb_footer
+    invoice_blurb_header_receipt ||= ''
+    invoice_blurb_header_invoice ||= ''
+    invoice_blurb_footer_receipt ||= ''
+    invoice_blurb_footer_invoice ||= ''
+    
+    
+    
+    # --- invoice notes ---
+    invoice_note = self.vendor.invoice_notes.visible.where(
+      :origin_country_id => self.origin_country_id, 
+      :destination_country_id => self.destination_country_id, 
+      :sale_type_id => self.sale_type_id
+    ).first
+    invoice_note_header = invoice_note.note_header if invoice_note
+    invoice_note_footer = invoice_note.note_footer if invoice_note
+    invoice_note_header ||= ''
+    invoice_note_footer ||= ''
+
+    # --- invoice comment ---
+    invoice_comment = self.invoice_comment
       
    
-
+    # --- customer data ---
     if self.customer
-      customer = Hash.new
+      customer = {}
       customer[:company_name] = self.customer.company_name
       customer[:first_name] = self.customer.first_name
       customer[:last_name] = self.customer.last_name
@@ -678,19 +700,31 @@ class Order < ActiveRecord::Base
       customer[:current_loyalty_points] = self.loyalty_card.points
     end
 
+    
+    # --- output as a hash to be used for outputs ---
     report = Hash.new
     report[:list_of_items] = list_of_items
     report[:list_of_items_raw] = list_of_items_raw
     report[:list_of_taxes] = list_of_taxes
     report[:list_of_taxes_raw] = list_of_taxes_raw
-    report[:subtotal] = self.subtotal
-    report[:rebate] = self.rebate
-    report[:rebate_amount] = self.rebate_amount
-    report[:subsubtotal] = self.subtotal
+    report[:subtotal] = self.subtotal_for_customerdisplay
     report[:paymentmethods] = paymentmethods
     report[:customer] = customer
     report[:unit] = I18n.t('number.currency.format.friendly_unit')
-
+    report[:invoice_blurbs] = {
+      :receipt => {
+                    :header => invoice_blurb_header_receipt,
+                    :footer => invoice_blurb_footer_receipt
+                  },
+      :invoice => {
+                    :header => invoice_blurb_header_invoice,
+                    :footer => invoice_blurb_footer_invoice
+                  }
+    }
+    report[:invoice_note] = {
+      :header => invoice_note_header,
+      :footer => invoice_note_footer
+    }
     return report
   end
   
@@ -714,40 +748,24 @@ class Order < ActiveRecord::Base
   def escpos_receipt
     report = self.report
     
-    vendor = self.vendor
-    
     friendly_unit = report[:unit]
 
     vendorname =
     "\e@"     +  # Initialize Printer
     "\e!\x38" +  # doube tall, double wide, bold
     vendor.name + "\n"
-
-    locale = I18n.locale
-    if locale
-      tmp = vendor.invoice_blurbs.where(:lang => locale, :is_header => true)
-      if tmp.first then
-        receipt_blurb_header = tmp.first.body_receipt
-      end
-      tmp = vendor.invoice_blurbs.where(:lang => locale).where('is_header IS NOT TRUE')
-      if tmp.first then
-        receipt_blurb_footer = tmp.first.body_receipt
-      end
-    end
-    receipt_blurb_header ||= vendor.receipt_blurb
-    receipt_blurb_footer ||= vendor.receipt_blurb_footer
     
     receiptblurb_header = ''
     receiptblurb_header +=
     "\e!\x01" +  # Font B
     "\ea\x01" +  # center
-    "\n" + receipt_blurb_header.to_s + "\n"
+    "\n" + report[:invoice_blurbs][:receipt][:header] + "\n"
     
     receiptblurb_footer = ''
     receiptblurb_footer = 
     "\ea\x01" +  # align center
     "\e!\x00" + # font A
-    "\n" + receipt_blurb_footer.to_s + "\n"
+    "\n" + report[:invoice_blurbs][:receipt][:footer] + "\n"
     
     header = ''
     header +=
@@ -762,66 +780,47 @@ class Order < ActiveRecord::Base
     list_of_items = report[:list_of_items]
     list_of_items += "\xc4" * 42 + "\n"
     
-    lc_points_discount = ''
-    unless report[:lc_points_discount].blank?
-      lc_points_discount += "  %19.19s        %4u %8.2f\n" % [I18n.t('printr.order_receipt.lc_points_substracted'), report[:lc_points], report[:lc_points_discount]]
-      lc_points_discount += "\xc4" * 42 + "\n"
-    end
+    subtotal = ''
+    subtotal_format = "%29.29s %s %8.2f\n"
+    subtotal_values = [
+      I18n.t('printr.order_receipt.subsubtotal'),
+      report[:unit],
+      report[:subtotal]
+    ]
+    subtotal +=  subtotal_format % subtotal_values
     
-    discount_subtotal = ''
-    unless report[:discount_subtotal].blank?
-      discount_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal1'), report[:unit], report[:subtotal1]]
-      discount_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.discount_subtotal'), report[:unit], report[:discount_subtotal]]
-      discount_subtotal += "\xc4" * 42 + "\n"
-    end
-    
-    item_rebate_subtotal = ''
-    unless report[:rebate_subtotal].blank?
-      item_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal2'), report[:unit], report[:subtotal2]]
-      item_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.rebate_subtotal'), report[:unit], report[:rebate_subtotal]]
-      item_rebate_subtotal += "\xc4" * 42 + "\n"
-    end
-    
-    coupon_subtotal = ''
-    unless report[:coupon_subtotal].blank?
-      coupon_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal3'), report[:unit], report[:subtotal3]]
-      coupon_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.coupon_subtotal'), report[:unit], report[:coupon_subtotal]]
-      coupon_subtotal += "\xc4" * 42 + "\n"
-    end
-    
-    order_rebate_subtotal = ''
-    if report[:percent_rebate_amount]
-      order_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal4'), report[:unit], report[:subtotal4]]
-      order_rebate_subtotal += "%25.25s %2i%% %s %8.2f\n" % [I18n.t('printr.order_receipt.rebate_percent'), report[:percent_rebate], report[:unit], report[:percent_rebate_amount]]
-      order_rebate_subtotal += "\xc4" * 42 + "\n"
-    elsif report[:fixed_rebate_amount]
-      order_rebate_subtotal += "%29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subtotal4'), report[:unit], report[:subtotal4]]
-      order_rebate_subtotal += "%29.29s %s %8.2f\n" % [I18n.t('printr.order_receipt.rebate_fixed'), report[:unit], report[:fixed_rebate_amount]]
-      order_rebate_subtotal += "\xc4" * 42 + "\n"
-    end
-    
-    subsubtotal = ''
-    subsubtotal += "%29.29s %s %8.2f\n" % [I18n.t('printr.order_receipt.subsubtotal'), report[:unit], report[:subsubtotal]]
-    
-    paymentmethods = "\n"
-    if report[:refund_subtotal].blank?
-      paymentmethods += report[:paymentmethods].to_a.collect do |pm|
-        "%29.29s %s %8.2f\n" % [pm[0], report[:unit], pm[1]]
-      end.join
-    else
-      paymentmethods += "%29.29s %s %8.2f\n" % [I18n.t('printr.order_receipt.refunded'), report[:unit], report[:refund_subtotal]]
-    end
+    paymentmethods = ''
+    paymentmethods += report[:paymentmethods].to_a.collect do |pm|
+      "%29.29s %s %8.2f\n" % [pm[0], report[:unit], pm[1]]
+    end.join
 
     tax_format = "\n\n" +
     "\ea\x01" +  # align center
     "\e!\x01" # Font A
-    tax_header = "         %5.5s     %4.4s  %6.6s\n" % [I18n.t('printr.order_receipt.net'), I18n.t('printr.order_receipt.tax'),
- I18n.t('printr.order_receipt.gross')]
+    
+    tax_header_format = "         %5.5s     %4.4s  %6.6s\n"
+    tax_header_values = [
+      I18n.t('printr.order_receipt.net'),
+      I18n.t('printr.order_receipt.tax'),
+      I18n.t('printr.order_receipt.gross')
+    ]
+    tax_header = tax_header_format % tax_header_values
+    
     list_of_taxes = report[:list_of_taxes]
  
     customer = ''
     if report[:customer]
-       customer += "%s\n%s %s\n%s\n%s %s\n%s" % [report[:customer][:company_name], report[:customer][:first_name], report[:customer][:last_name], report[:customer][:street1], report[:customer][:postalcode], report[:customer][:city], report[:customer][:tax_number]]
+      customer_format = "%s\n%s %s\n%s\n%s %s\n%s"
+      customer_values = [
+        report[:customer][:company_name],
+        report[:customer][:first_name],
+        report[:customer][:last_name],
+        report[:customer][:street1],
+        report[:customer][:postalcode],
+        report[:customer][:city],
+        report[:customer][:tax_number]
+      ]
+      customer += customer_format % customer_values
     end
 
     duplicate = self.was_printed ? " *** DUPLICATE/COPY/REPRINT *** " : ''
@@ -848,12 +847,7 @@ class Order < ActiveRecord::Base
         receiptblurb_header +
         header +
         list_of_items +
-        lc_points_discount +
-        discount_subtotal +
-        item_rebate_subtotal +
-        coupon_subtotal +
-        order_rebate_subtotal +
-        subsubtotal +
+        subtotal +
         paymentmethods +
         tax_format +
         tax_header +
@@ -863,9 +857,10 @@ class Order < ActiveRecord::Base
         duplicate +
         "\n" +
         footerlogo +
-        "\n\n\n\n\n\n" + 
-        "\x1D\x56\x00" +
-        "\x1D\x61\x01"
+        "\n\n\n\n\n\n" + # space
+        "\x1D\x56\x00" + # cut paper
+        "\x1D\x61\x01"   # printer feedback
+    
     return { :text => output_text, :raw_insertations => raw_insertations }
   end
   
@@ -983,7 +978,6 @@ class Order < ActiveRecord::Base
     self.total = 0 if self.total.nil?
     attrs = {
       :total => self.subtotal.to_f.round(2),
-      :rebate_type => self.rebate_type_display,
       :rebate => self.rebate.to_f.round(2),
       :lc_points => self.lc_points,
       :id => self.id,

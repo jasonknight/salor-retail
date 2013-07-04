@@ -2,7 +2,7 @@
   
   .clear
   
-  .company_data.floatright= raw Kramdown::Document.new(@invoice_blurb_header).to_html
+  .company_data.floatright= raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:header]).to_html
   
   .customer_data.floatleft
     - if @report[:customer]

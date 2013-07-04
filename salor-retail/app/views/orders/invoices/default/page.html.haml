@@ -18,7 +18,7 @@
   = link_to salor_icon(:label, {}, 32, t('orders.print.labels')), "/items/selection?order_id=#{ @order.id }"
   - if @order.is_proforma
     = link_to salor_icon(:order,{},32,I18n.t("menu.new_order")),"/orders/new_from_proforma?order_id=#{@order.id}"
-  - if @order.unpaid_invoice or @order.paid == 0
+  - if @order.is_unpaid or @order.paid.nil?
     = link_to salor_icon(:merge,{},32,I18n.t("menu.merge_into_current_order")),"/orders/merge_into_current_order?id=#{@order.id}"
   %br
   %span
@@ -81,48 +81,41 @@
         - if @order.is_proforma then
           %td.total= number_to_currency @order.amount_paid
         - else
-          - if $Conf and $Conf.calculate_tax
-            %td.total= number_to_currency @order.total
-          - else
-            %td.total= number_to_currency @report[:subsubtotal]
+          %td.total= number_to_currency @report[:subtotal]
 
     %br
     %br
-    - if @report[:refund_subtotal].zero?
-      %table.striped-table2.small
-        - if @order.unpaid_invoice then
-          - @order.payment_methods.each do |pm|
-            %tr
-              %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
-              %td.total= number_to_currency pm.amount
-        - else
-          - @report[:paymentmethods].to_a.each do |pm|
-            %tr
-              %td= pm[0]
-              %td.total= number_to_currency pm[1]
-
-    - else
-      %p== #{ t('printr.order_receipt.refunded') }: #{ @report[:refund_subtotal] }
-
-    - unless @order.tax_free
-      %br
-      %br
-      %table.striped-table2.small
-        %tr
-          %th
-          %th
-          %th.right= t('printr.order_receipt.net')
-          %th.right= t('printr.order_receipt.tax')
-          %th.right= t('printr.order_receipt.gross')
-        - @report[:list_of_taxes_raw].each do |tax|
-          - tax = format_tax(tax)
+    %table.striped-table2.small
+      - if @order.is_unpaid then
+        - @order.payment_method_items.each do |pm|
           %tr
-            - tax.each do |k,v|
-              %td.total= v
+            %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
+            %td.total= number_to_currency pm.amount
+      - else
+        - @report[:paymentmethods].to_a.each do |pm|
+          %tr
+            %td= pm[0]
+            %td.total= number_to_currency pm[1]
+
+
+    %br
+    %br
+    %table.striped-table2.small
+      %tr
+        %th
+        %th
+        %th.right= t('printr.order_receipt.net')
+        %th.right= t('printr.order_receipt.tax')
+        %th.right= t('printr.order_receipt.gross')
+      - @report[:list_of_taxes_raw].each do |tax|
+        - tax = format_tax(tax)
+        %tr
+          - tax.each do |k,v|
+            %td.total= v
             
     %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
 
-  %div.invoice_blurb_footer= raw Kramdown::Document.new(@invoice_blurb_footer).to_html
+  %div.invoice_blurb_footer= raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:footer]).to_html
   
   .center
     /logo here

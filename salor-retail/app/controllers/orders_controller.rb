@@ -347,33 +347,8 @@ class OrdersController < ApplicationController
   
   def print
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
-    # @order.run_new_sanitization # Mikey: moved this into the model. doesn't make much sense to me to fix the order here when it simply should show the print page.
-    @report = @order.get_report
-    @invoice_note = @current_vendor.invoice_notes.visible.where(
-      :origin_country_id => @order.origin_country_id, 
-      :destination_country_id => @order.destination_country_id, 
-      :sale_type_id => @order.sale_type_id
-    ).first
-    
-    locale = params[:locale]
-    locale ||= I18n.locale
-    if locale
-      tmp = InvoiceBlurb.where(:lang =>locale, :vendor_id => @current_user.vendor_id, :is_header => true)
-      if tmp.first then
-        @invoice_blurb_header = tmp.first.body
-      end
-      tmp = InvoiceBlurb.where(:lang => locale, :vendor_id => @current_user.vendor_id).where('is_header IS NOT TRUE')
-      if tmp.first then
-        @invoice_blurb_footer = tmp.first.body
-      end
-    end
-    
-    @invoice_blurb_header ||= @current_vendor.invoice_blurb
-    @invoice_blurb_footer ||= @current_vendor.invoice_blurb_footer
-    
-    
-    view = SalorRetail::Application::CONFIGURATION[:invoice_style]
-    view ||= 'default'
+    @report = @order.report
+    view = 'default'
     render "orders/invoices/#{view}/page"
   end
   
