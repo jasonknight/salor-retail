@@ -210,7 +210,7 @@ class OrderItem < ActiveRecord::Base
       value = "#{m[1]}.#{m[2]}".to_f
       if self.item.price_by_qty
         self.quantity = value
-        self.price = self.item.base_price * self.quantity
+        #self.price = self.item.base_price * self.quantity # this is the case anyway
       else
         self.price = value
       end
@@ -241,10 +241,6 @@ class OrderItem < ActiveRecord::Base
       self.price = self.item.parts.visible.collect{ |p| p.base_price * p.part_quantity }.sum
     end
   end
-  
-  
-  
-
   
   def calculate_totals
     if self.refunded
@@ -277,7 +273,6 @@ class OrderItem < ActiveRecord::Base
           # fixed amount
           coitem.coupon_amount = self.amount_remaining
         elsif ctype == 3
-          puts 'xx'
           # buy x get y free
           x = 2
           y = 1

@@ -194,7 +194,6 @@ class Vendor < ActiveRecord::Base
   end
   
   def get_end_of_day_report(from=nil, to=nil, drawer=nil)
-    
     from ||= Time.now.beginning_of_day
     to ||= Time.now.end_of_day
     drawer ||= self.users.visible.collect{|u| u.get_drawer.id }
@@ -336,10 +335,7 @@ class Vendor < ActiveRecord::Base
       
       refunds[pm.name] = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => true).sum(:amount).round(2)
     end
-    
 
-    
-    
     calculated_drawer_amount = self.drawer_transactions.where(:created_at => from.beginning_of_day..to.end_of_day, :drawer_id => drawer).sum(:amount).round(2)
     
     report = Hash.new

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130704104937) do
+ActiveRecord::Schema.define(:version => 20130704131258) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -707,12 +707,11 @@ ActiveRecord::Schema.define(:version => 20130704104937) do
     t.integer  "cash_register_id"
     t.integer  "customer_id"
     t.float    "rebate"
-    t.string   "rebate_type"
     t.integer  "lc_points"
     t.float    "cash"
     t.string   "tag"
     t.boolean  "buy_order"
-    t.float    "lc_discount_amount"
+    t.float    "lc_amount"
     t.boolean  "was_printed"
     t.float    "change"
     t.string   "sku"
