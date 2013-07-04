@@ -1,7 +1,10 @@
 class TransformPaymentMethods < ActiveRecord::Migration
   def up
+    
     v = Order.last.vendor
     v ||= Vendor.visible.first
+    
+    PaymentMethod.reset_column_information
     
     # cash
     pm = PaymentMethod.new

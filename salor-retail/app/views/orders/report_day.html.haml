@@ -4,7 +4,6 @@
 - categories = @report['categories']
 - taxes = @report['taxes']
 - paymentmethods = @report['paymentmethods']
-- regular_payment_methods = @report['regular_payment_methods']
 - refunds  =  @report['refunds']
 - revenue =   @report['revenue']
 - transactions   = @report['transactions']
@@ -77,7 +76,7 @@
           %th.table-center= t '.tax'
         - taxes[i[0]].to_a.each do |t|
           %tr
-            %td.left= t[0]
+            %td.left= number_to_percentage t[0]
             %td.table-center= number_to_currency t[1][:gro]
             %td.table-center= number_to_currency t[1][:net]
             %td.table-center= number_to_currency t[1][:gro] - t[1][:net]
@@ -87,7 +86,6 @@
           %th.left= t '.sums_by_payment_methods'
           %th.table-center
         - paymentmethods[i[0]].to_a.each do |p|
-          - next unless regular_payment_methods.include?(p[0].to_s)
           %tr
             %td.left= t p[0]
             %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "table-center"}= number_to_currency p[1]
@@ -105,37 +103,20 @@
     %br
     %br
     %br
-    %h3= t '.noncash-refunds'
+    %h3= t '.refunds'
     %table.striped-table2
       %tr
         %th.left= t '.type'
         %th.table-center= t '.gross'
-      - paymentmethods[:refund].to_a.each do |p|
-        - next if regular_payment_methods.include?(p[0].to_s)
+      - refunds.each do |k,v|
         %tr
-          %td.left= t p[0]
-          %td.table-center= number_to_currency p[1]
+          %td.left= k
+          %td.table-center= number_to_currency v
 
-    %p#noncash_refunds_sum_gross== #{ t '.sum_gross' }: #{ number_to_currency refunds[:noncash][:gro] }
-    %p#noncash_refunds_sum_net== #{ t '.sum_net' }: #{ number_to_currency refunds[:noncash][:net] }
+    %p#noncash_refunds_sum_gross= #== #{ t '.sum_gross' }: #{ number_to_currency refunds[:noncash][:gro] }
+    %p#noncash_refunds_sum_net=# == #{ t '.sum_net' }: #{ number_to_currency refunds[:noncash][:net] }
 
 
-
-    %h3= t '.cash-refunds'
-    %table.striped-table2
-      %tr
-        %th.left= t '.type'
-        %th.left= t '.id'
-        %th.table-center= t '.gross'
-      - transactions.to_a.each do |d|
-        - next unless d[1][:is_refund]
-        %tr
-          %td.left= t ('.' + d[1][:tag])
-          %td.left= d[1][:notes]
-          %td.right= number_to_currency( -d[1][:amount])
-
-    %p== #{ t '.sum_gross' }: #{ number_to_currency refunds[:cash][:gro] }
-    %p== #{ t '.sum_net' }: #{ number_to_currency refunds[:cash][:net] }
 
 
     %h3= t '.revenue'
@@ -153,16 +134,15 @@
           %th.left= t '.time'
           %th.right= t '.drop'
           %th.right= t '.payout'
-        - transactions.to_a.each do |d|
-          - next if d[1][:is_refund]
+        - transactions.each do |d|
           %tr
-            %td.left= t ('.' + d[1][:tag])
-            %td.left= d[1][:notes]
-            %td.left= l d[1][:time], :format => :just_time
-            %td.right= number_to_currency d[1][:amount] if d[1][:drop]
-            %td.right= number_to_currency d[1][:amount] unless d[1][:drop]
+            %td.left= t ('.' + d[:tag])
+            %td.left= d[:notes]
+            %td.left= l d[:time], :format => :just_time
+            %td.right= number_to_currency d[:amount] if d[:amount] > 0
+            %td.right= number_to_currency d[:amount] if d[:amount] < 0
 
-      %p== #{ t '.sum_transactions' }: #{ number_to_currency transactions_sum[:total] }
+      %p== #{ t '.sum_transactions' }: #{ number_to_currency transactions_sum }
 
 
       %h3= t '.cash_drawer'

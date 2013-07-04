@@ -3,7 +3,8 @@ class AddCalculatorFieldsToOrderItems < ActiveRecord::Migration
     add_column :order_items, :discount, :float
     add_column :order_items, :subtotal, :float
     
-    rename_column :order_items, :tax_profile_amount, :tax_amount
+    rename_column :order_items, :tax, :tax_amount
+    rename_column :order_items, :tax_profile_amount, :tax
     
     remove_column :order_items, :refunded_by_type
     remove_column :order_items, :total_is_locked

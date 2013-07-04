@@ -18,6 +18,7 @@ class OrderItem < ActiveRecord::Base
   belongs_to :location
   belongs_to :item_type
   belongs_to :category
+  belongs_to :drawer
   has_and_belongs_to_many :discounts
   has_many :coupons, :class_name => 'OrderItem', :foreign_key => :coupon_id
   belongs_to :order_item,:foreign_key => :coupon_id
@@ -86,15 +87,27 @@ class OrderItem < ActiveRecord::Base
   def refund(pmid, user)
     return nil if self.refunded
     
+    drawer = user.get_drawer
     refund_payment_method = self.vendor.payment_methods.visible.find_by_id(pmid)
+    
+    pmi = PaymentMethodItem.new
+    pmi.vendor = self.vendor
+    pmi.company = self.company
+    pmi.order = self.order
+    pmi.user = user
+    pmi.drawer = drawer
+    pmi.amount = - self.subtotal
+    pmi.payment_method_id = refund_payment_method
+    pmi.cash = refund_payment_method.cash
+    pmi.refund = true
+    pmi.save
+    
     if refund_payment_method.cash == true
-      drawer = user.get_drawer
-      
       dt = DrawerTransaction.new
       dt.vendor = user.vendor
       dt.company = user.company
       dt.user = user
-      dt.is_refund = true
+      dt.refund = true
       dt.tag = 'OrderItemRefund'
       dt.notes = I18n.t("views.notice.order_refund_dt", :id => self.id)
       dt.order = self.order
@@ -110,7 +123,7 @@ class OrderItem < ActiveRecord::Base
     self.refunded = true
     self.refunded_by = user.id
     self.refunded_at = Time.now
-    self.refund_payment_method = pmid.to_i
+    self.refund_payment_method_item_id = pmid.to_i
     self.calculate_totals
     
     order = self.order
@@ -249,12 +262,12 @@ class OrderItem < ActiveRecord::Base
   end
   
   # coupons have to be added after the matching product
-  # coupons do not have a price by themselves, they just reduce the quantity of the matching oi
+  # coupons do not have a price by themselves, they just reduce the quantity of the matching OrderItem
   def apply_coupon
     if self.behavior == 'coupon'
       item = self.item
-      return if item.activated # TODO: Wrong
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
+      return unless coitem.coupon_amount.nil?
       if coitem
         ctype = self.item.coupon_type
         if ctype == 1
@@ -274,8 +287,6 @@ class OrderItem < ActiveRecord::Base
         end
         coitem.subtotal -= coitem.coupon_amount
         coitem.save
-        item.activated = true
-        item.save
       end
     end
   end
@@ -309,7 +320,7 @@ class OrderItem < ActiveRecord::Base
 
   
   def calculate_tax
-    if self.vendor.calculate_tax == true
+    if self.vendor.net_prices
       t = self.subtotal * self.tax / 100.0
     else
       t = self.subtotal / ( 1 + self.tax / 100.0 )
@@ -331,11 +342,8 @@ class OrderItem < ActiveRecord::Base
     self.hidden_at = Time.now
     self.save
     if self.behavior == 'coupon'
-      item = self.item
-      item.activated = nil
-      item.save
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
-      coitem.coupon_amount = 0.0
+      coitem.coupon_amount = nil
       coitem.calculate_totals
     end
     self.order.calculate_totals

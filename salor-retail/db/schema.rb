@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130703135132) do
+ActiveRecord::Schema.define(:version => 20130704104937) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -278,9 +278,10 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "notes"
-    t.boolean  "is_refund"
+    t.boolean  "refund"
     t.string   "tag"
     t.float    "drawer_amount"
+    t.integer  "cash_register_id"
     t.integer  "order_id"
     t.integer  "order_item_id"
     t.integer  "vendor_id"
@@ -642,34 +643,34 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
     t.integer  "order_id"
     t.integer  "item_id"
     t.float    "quantity"
-    t.float    "price",                 :default => 0.0
+    t.float    "price"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "tax_profile_id"
     t.integer  "item_type_id"
     t.boolean  "activated"
-    t.float    "total",                 :default => 0.0
-    t.float    "tax",                   :default => 0.0
-    t.float    "coupon_amount",         :default => 0.0
+    t.float    "total"
+    t.float    "tax_amount"
+    t.float    "coupon_amount"
     t.string   "behavior"
-    t.float    "tax_amount",            :default => 0.0
+    t.float    "tax"
     t.integer  "category_id"
     t.integer  "location_id"
-    t.float    "amount_remaining",      :default => 0.0
+    t.float    "amount_remaining"
     t.boolean  "refunded"
     t.datetime "refunded_at"
     t.integer  "refunded_by"
-    t.float    "discount_amount",       :default => 0.0
-    t.float    "rebate",                :default => 0.0
-    t.integer  "coupon_id",             :default => 0
+    t.float    "discount_amount"
+    t.float    "rebate"
+    t.integer  "coupon_id"
     t.boolean  "is_buyback"
     t.string   "sku"
     t.boolean  "weigh_compulsory"
     t.boolean  "no_inc"
-    t.string   "refund_payment_method"
+    t.string   "refund_payment_method_item_id"
     t.boolean  "action_applied"
     t.boolean  "hidden"
-    t.float    "rebate_amount",         :default => 0.0
+    t.float    "rebate_amount"
     t.integer  "vendor_id"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
@@ -705,13 +706,13 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
     t.boolean  "hidden"
     t.integer  "cash_register_id"
     t.integer  "customer_id"
-    t.float    "rebate",                 :default => 0.0
-    t.string   "rebate_type",            :default => "percent"
+    t.float    "rebate"
+    t.string   "rebate_type"
     t.integer  "lc_points"
-    t.float    "cash",                   :default => 0.0
+    t.float    "cash"
     t.string   "tag"
     t.boolean  "buy_order"
-    t.float    "lc_discount_amount",     :default => 0.0
+    t.float    "lc_discount_amount"
     t.boolean  "was_printed"
     t.float    "change"
     t.string   "sku"
@@ -745,7 +746,7 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
 
   create_table "payment_method_items", :force => true do |t|
     t.string   "internal_type"
-    t.float    "amount",            :default => 0.0
+    t.float    "amount"
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -762,6 +763,7 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
     t.integer  "cash_register_id"
     t.boolean  "unpaid"
     t.boolean  "quote"
+    t.boolean  "refund"
   end
 
   add_index "payment_method_items", ["order_id"], :name => "index_payment_methods_on_order_id"
@@ -772,11 +774,8 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
     t.integer  "vendor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "hidden"
+    t.integer  "hidden",        :default => 0
     t.integer  "hidden_by"
-    t.datetime "hidden_at"
-    t.integer  "company_id"
-    t.integer  "user_id"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"
@@ -949,7 +948,7 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
     t.boolean  "hidden"
     t.string   "sku"
     t.integer  "vendor_id"
-    t.string   "letter",     :default => "A"
+    t.string   "letter"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
@@ -1082,6 +1081,7 @@ ActiveRecord::Schema.define(:version => 20130703135132) do
     t.text     "invoice_blurb"
     t.text     "invoice_blurb_footer"
     t.string   "gs1_format",                      :default => "2,5,5"
+    t.string   "country",                         :default => "cc"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

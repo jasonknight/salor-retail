@@ -314,7 +314,7 @@ class OrdersController < ApplicationController
     @to = @to ? @to.end_of_day : @from.end_of_day
     @users = @current_vendor.users.visible
     @user = @current_vendor.users.visible.find_by_id(params[:user_id])
-    @report = @current_vendor.get_end_of_day_report(@from, @to, @user)
+    @report = @current_vendor.get_end_of_day_report(@from, @to, @user.get_drawer)
   end
 
 #   def report_day_range
