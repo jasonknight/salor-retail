@@ -1,3 +1,9 @@
+salor-retail (4.0.1.94) unstable; urgency=low
+
+  * no validation for shipment since causes  purchase price to be nil
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 04 Jul 2013 06:50:50 +0200
+
 salor-retail (4.0.1.93) unstable; urgency=low
 
   * missing purchase price on shipments
