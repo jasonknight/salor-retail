@@ -53,7 +53,40 @@ class Item < ActiveRecord::Base
   def self.csv_headers
     return [:class,:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
   end
-  
+
+
+  # Important for CSV editing because people don't know how to work with IDS
+  def tax_profile_amount
+    return self.tax_profile.value
+  end
+  def tax_profile_amount=(amnt)
+    tp = self.vendor.tax_profiles.find_by_value(SalorBase.to_float(amnt))
+    if tp then
+      self.tax_profile = tp
+    end
+  end
+  def category_name
+    return self.category.name if self.category
+  end
+  def category_name=(n)
+    self.category = self.vendor.categories.find_by_name(n)
+  end
+  def location_name
+    return self.location.name if self.location
+  end
+  def location_name=(n)
+    self.location = self.vendor.locations.find_by_name(n)
+  end
+  def tax_profile_name
+    return self.tax_profile.name if self.tax_profile
+  end
+  def tax_profile_name=(n)
+    self.tax_profile = self.vendor.tax_profiles.find_by_name(n)
+  end
+  # End of code you shouldn't remove
+
+
+
   def gs1_regexp
     parts = self.gs1_format.split(",")
     return Regexp.new "(\\d{#{ parts[0] }})(\\d{#{ parts[1] }})"
@@ -68,11 +101,6 @@ class Item < ActiveRecord::Base
       values << '"' + self.send(h).to_s + '"'
     end
     return values.join("\t")
-  end
-  def tax_profile_name
-    n = 'NoTaxProfile'
-    return self.tax_profile.name if self.tax_profile
-    return n
   end
   
   def get_translated_name(locale=:en)

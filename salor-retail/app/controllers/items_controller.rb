@@ -153,15 +153,15 @@ class ItemsController < ApplicationController
     @customers = []
     @orders = []
     if params[:klass] == 'Item' then
-      @items = @current_vendor.items.page(params[:page]).per($Conf.pagination)
+      @items = @current_vendor.items.page(params[:page]).per(@current_vendor.pagination)
     elsif params[:klass] == 'Order'
       if params[:keywords].empty? then
-        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per($Conf.pagination)
+        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per(@current_vendor.pagination)
       else
-        @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per($Conf.pagination)
+        @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
       end
     else
-      @customers = Customer.scopied.page(params[:page]).per($Conf.pagination)
+      @customers = Customer.scopied.page(params[:page]).per(@current_vendor.pagination)
     end
   end
   
@@ -284,9 +284,9 @@ class ItemsController < ApplicationController
     if params[:order_by] then
       key = params[:order_by]
       session[key] ||= 'ASC'
-      @items = @current_vendor.items.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("#{key} #{session[key]}")
+      @items = @current_vendor.items.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order("#{key} #{session[key]}")
     else
-      @items = @current_vendor.items.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("id desc")
+      @items = @current_vendor.items.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order("id desc")
     end
     data = render_to_string :layout => false
     send_data(data,:filename => 'items.csv', :type => 'text/csv')
