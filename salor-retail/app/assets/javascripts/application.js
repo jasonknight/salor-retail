@@ -29,4 +29,5 @@
 //= require complete-order-payment
 //= require complete-order-change
 //= require complete-order
+//= require cash-drop
 //= require jquery.modcoder.excolor

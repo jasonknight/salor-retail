@@ -53,7 +53,7 @@ en-US:
       dollar_per_lp: dollar per loyalty point
       drop: drop
       email: email
-      employee:
+      user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
       end_amount: end amount
@@ -220,7 +220,7 @@ en-US:
       drawer_transaction:
         one: Drawer Transaction
         other: Drawer Transactions
-      employee:
+      user:
         one: Employee
         other: Employees
       invoice_note:
@@ -325,7 +325,7 @@ en-US:
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
     edit_shipper: Editshipper %{name}
-    employees: employees
+    users: users
     expiring_soon: expiring soon
     export: export
     item_selection: item selection
@@ -367,7 +367,7 @@ en-US:
       requesting_connection_status: Requesting connection status ...
       title: Remote Service
       user: User
-    user_employee_index:
+    user_user_index:
       backup_database: Backup Database
       backup_logfile: Backup Logfile
   items:
@@ -443,7 +443,7 @@ en-US:
     edit_category: Editcategory
     edit_customer: Editcustomer
     edit_discount: Editdiscount
-    edit_employee: Editemployee
+    edit_user: Edituser
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: Edit Inovice Note
     edit_item: Edititem
@@ -455,7 +455,7 @@ en-US:
     edit_tax_profile: Edittax profile
     edit_payment_method: Edit Payment Method
     edit_vendor: EditStore
-    employees: employees
+    users: users
     end_day: end day
     general_configuration: general configuration
     home: home
@@ -477,7 +477,7 @@ en-US:
     new_country: New Country
     new_customer: New customer
     new_discount: New discount
-    new_employee: New employee
+    new_user: New user
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: New Invoice Note
     new_item: New item
