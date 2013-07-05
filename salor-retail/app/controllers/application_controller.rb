@@ -76,6 +76,12 @@ class ApplicationController < ActionController::Base
 
   private
   
+  def update_devicenodes
+    if @current_register
+      @current_register.set_device_paths_from_device_names(CashRegister.get_devicenodes)
+    end
+  end
+  
   def customerscreen_push_notification
     t = SalorRetail.tailor
     if t

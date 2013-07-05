@@ -125,7 +125,7 @@ function complete_order_process(print) {
     },
     complete: function(data, status) {
       ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
-      if (print == 'true') { 
+      if (print == true) { 
         print_order(Order.id, function() {
           // observe after print has finished
           if (drawer_opened == true) observe_drawer();

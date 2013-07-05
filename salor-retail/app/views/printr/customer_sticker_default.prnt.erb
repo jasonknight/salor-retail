@@ -5,6 +5,6 @@ CS2
 <% @customers.each do |i| %>
 T0,0,3,1,1,0,0,N,N,F,'<%= i.first_name[0..9] %>'
 T0,30,5,1,1,0,0,N,N,F,'<%= i.last_name[0..6] %>'
-B120,85,1,1,2,40,0,1,'<%= i.loyalty_card.sku %>'
+B120,85,1,1,2,40,0,1,'<%= i.loyalty_card.sku if i.loyalty_card %>'
 P
 <% end %>

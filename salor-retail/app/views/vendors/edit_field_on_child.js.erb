@@ -1,6 +1,4 @@
-<% if @inst.class == Order then %>
-  updateOrder(<%= raw @inst.to_json %>);
-  Order = <%= raw @inst.to_json %>;
+
 <% elsif @inst.class == OrderItem %>
   <% if not @inst.order.nil? and not @inst.nil? then %>
     updateOrderItems([<%= raw @inst.to_json %>]);
@@ -16,7 +14,9 @@
         items << oi.to_json
       end
     %>
-   <% if @inst.item.behavior == 'gift_card' and @inst.item.activated == false %>
+               <% debugger %>
+   <% if @inst.item.behavior == 'gift_card' and @inst.item.activated.nil? %>
+               console.log("XXX");
      print_url(Register.sticker_printer, '/items/labels', '&id=<%= @inst.item.id %>&type=sticker&style=default')
    <% end %>
     updateOrderItems([<%= raw items.join(',') %>]);

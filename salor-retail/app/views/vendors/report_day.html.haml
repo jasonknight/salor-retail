@@ -14,7 +14,7 @@
 
 = raw content_box_top(t("menu.reports"))
 
-= form_tag orders_report_day_path, :class => 'no-print', :id => 'date_range', :method => :get do
+= form_tag "/vendors/report_day", :class => 'no-print', :id => 'date_range', :method => :get do
   %div.tools
     %table{:align => :center}
       %tr
@@ -35,7 +35,7 @@
       %tr
         %td{:colspan => 2, :align => :center}
           = salor_icon(:print, {:onclick => 'Salor.printPage();'}, 32, t('.a4'))
-          = salor_icon(:print, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_end_of_day_receipt',decodeURIComponent($('#date_range').serialize()));" }, 32, t('.thermal'))
+          = salor_icon(:print, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_day_report',decodeURIComponent($('#date_range').serialize()));" }, 32, t('.thermal'))
     %br
     %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 

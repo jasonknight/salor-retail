@@ -21,63 +21,63 @@ class CashRegister < ActiveRecord::Base
   validates_presence_of :name
   
   def open_cash_drawer
-    printerconfig = {
-      :id => 0,
-      :name => self.name,
-      :path => self.thermal_printer,
-      :copies => 1,
-      :codepage => 0,
-      :baudrate => 9600
-    }
-    print_engine = Escper::Printer.new('local', printerconfig)
+    vp = Escper::VendorPrinter.new({})
+    vp.id = 0
+    vp.name = self.name
+    vp.path = self.thermal_printer
+    vp.copies = 1
+    vp.codepage = 0
+    vp.baudrate = 9600
+    
+    print_engine = Escper::Printer.new('local', vp)
     print_engine.open
     text = "\x1B\x70\x00\x30\x01 "
     print_engine.print(0, text)
     print_engine.close
   end
   
-  def end_of_day_report
-    table = {}
-    cats_tags = Category.cats_report(@current_user.get_drawer.id)
-    @orders = Order.by_vendor.by_user.where(:refunded => false,:drawer_id => @current_user.get_drawer.id,:paid => true,:created_at => Time.now.beginning_of_day..Time.now)
-    paymentmethod_sums = Hash.new
-    cashtotal = 0.0
-    @orders.each do |o|
-      cashtotal += o.get_drawer_add
-      o.payment_methods.each do |pm|
-        paymentmethod_sums[pm.name] ||= 0 if not pm.internal_type == 'InCash'
-        paymentmethod_sums[pm.name] += pm.amount if not pm.internal_type == 'InCash'
-        if pm.amount < 0 then
-          #cash_total += pm.amount if pm.internal_type != 'InCash'
-        end
-      end
-    end
-    paymentmethod_sums[I18n.t("InCash")] = cashtotal
-    cats_tags.merge!(paymentmethod_sums)
-    return cats_tags
-  end
+#   def end_of_day_report
+#     table = {}
+#     cats_tags = Category.cats_report(@current_user.get_drawer.id)
+#     @orders = Order.by_vendor.by_user.where(:refunded => false,:drawer_id => @current_user.get_drawer.id,:paid => true,:created_at => Time.now.beginning_of_day..Time.now)
+#     paymentmethod_sums = Hash.new
+#     cashtotal = 0.0
+#     @orders.each do |o|
+#       cashtotal += o.get_drawer_add
+#       o.payment_methods.each do |pm|
+#         paymentmethod_sums[pm.name] ||= 0 if not pm.internal_type == 'InCash'
+#         paymentmethod_sums[pm.name] += pm.amount if not pm.internal_type == 'InCash'
+#         if pm.amount < 0 then
+#           #cash_total += pm.amount if pm.internal_type != 'InCash'
+#         end
+#       end
+#     end
+#     paymentmethod_sums[I18n.t("InCash")] = cashtotal
+#     cats_tags.merge!(paymentmethod_sums)
+#     return cats_tags
+#   end
   
-  def self.update_all_devicenodes
-    # Update device paths of all Rails-printing CashRegisters AND the currently selected CashRegister, independent of being Rails or client side printing.
-    devices_for_select = CashRegister.get_devicenodes
-    #"[[TM T20,"/dev..."]"]"
-    if @current_register then
-      @current_register.set_device_paths_from_device_names(devices_for_select)
-    end
-    #$Vendor.current_registers.visible.each do |cr|
-    #  next if cr.salor_printer == true and not cr == @current_register
-    #  cr.set_device_paths_from_device_names(devices_for_select)
-    #  if cr == @current_register
-    #    cr.reload
-    #    @current_register = cr
-    #  end
-    #end
-  end
+#   def self.update_all_devicenodes
+#     # Update device paths of all Rails-printing CashRegisters AND the currently selected CashRegister, independent of being Rails or client side printing.
+#     devices_for_select = CashRegister.get_devicenodes
+#     #"[[TM T20,"/dev..."]"]"
+#     if @current_register then
+#       @current_register.set_device_paths_from_device_names(devices_for_select)
+#     end
+#     #$Vendor.current_registers.visible.each do |cr|
+#     #  next if cr.salor_printer == true and not cr == @current_register
+#     #  cr.set_device_paths_from_device_names(devices_for_select)
+#     #  if cr == @current_register
+#     #    cr.reload
+#     #    @current_register = cr
+#     #  end
+#     #end
+#   end
   
   def self.get_devicenodes
     #return [["TM-T20","/dev/myusb/lp0"],["TM-T21","/dev/myusb/lp1"],["Super Pole","/dev/myusb/pole"],["Cash Drawer","/dev/myusb/cdrawer"]]
     nodes_usb1 = Dir['/dev/usb/lp*']
-    nodes_serial = Dir['/dev/usb/ttyUSB*']
+    nodes_serial = Dir['/dev/ttyUSB*']
     nodes_test = Dir['/tmp/salor-test*']
     all_nodes = nodes_usb1 + nodes_serial +  nodes_test
     devices_for_select = []

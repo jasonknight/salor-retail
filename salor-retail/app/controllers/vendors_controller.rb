@@ -114,6 +114,7 @@ class VendorsController < ApplicationController
     @to = @to ? @to.end_of_day : @from.end_of_day
     @users = @current_vendor.users.visible
     @user = @current_vendor.users.visible.find_by_id(params[:user_id])
+    @user ||= @current_user
     @report = @current_vendor.get_end_of_day_report(@from, @to, @user.get_drawer)
   end
 
@@ -124,7 +125,7 @@ class VendorsController < ApplicationController
     @to = @to ? @to.end_of_day : @from.end_of_day
     @user = @current_vendor.users.visible.find_by_id(params[:user_id])
     
-    if @register.salor_printer
+    if @curren_register.salor_printer
       text = @current_vendor.escpos_eod_receipt(@from, @to, @user.get_drawer)
       render :text => Escper::Asciifier.new.process(text)
       return
@@ -151,29 +152,29 @@ class VendorsController < ApplicationController
   
   def edit_field_on_child
     klass = params[:klass].constantize
-    inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
+    @inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
       
-    if inst.class == Order
-      @order = inst
-    elsif inst.class == OrderItem
-      @order = inst.order
+    if @inst.class == Order
+      @order = @inst
+    elsif @inst.class == OrderItem
+      @order = @inst.order
     end
 
     #value = SalorBase.string_to_float(params[:value])
     value = params[:value]
-    if inst.respond_to?("#{ params[:field] }=".to_sym)
-      inst.send("#{ params[:field] }=", value)
-      inst.save
+    if @inst.respond_to?("#{ params[:field] }=".to_sym)
+      @inst.send("#{ params[:field] }=", value)
+      @inst.save
     else
       raise "VendorsController#edit_field_on_child: #{ klass } does not respond well to setter method #{ params[:field] }!"
     end
     
-    if inst.class == OrderItem
-      inst.calculate_totals
+    if @inst.class == OrderItem
+      @inst.calculate_totals
       @order.calculate_totals
       render 'orders/update_pos_display'
     elsif inst.class == Order
-      inst.calculate_totals
+      @inst.calculate_totals
       render 'orders/update_pos_display'
     else
       render :nothing => true

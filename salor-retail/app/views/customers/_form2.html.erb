@@ -129,9 +129,9 @@
               <%= image_tag path %>
             <% end %>
             <br />     
-            <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/customers/labels', '&id=#{ @customer.id }&type=lc_sticker')"},32)%> 
+            <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/customers/labels', '&id=#{ @customer.id }&type=sticker&style=default')"},32)%> 
             &nbsp;&nbsp;&nbsp;
-            <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=lc_label')"},32) %> 
+            <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=label&style=default')"},32) %> 
           </div>
         <% end %>
       <% end %>

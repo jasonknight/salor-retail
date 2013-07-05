@@ -364,15 +364,16 @@ class Vendor < ActiveRecord::Base
   
   def print_eod_report(from=nil, to=nil, drawer=nil, cash_register)
     text = self.escpos_eod_report(from, to, drawer)
-    printerconfig = {
-      :id => 0,
-      :name => cash_register.name,
-      :path => cash_register.thermal_printer,
-      :copie => 1,
-      :codepage => 0,
-      :baudrate => 9600
-    }
-    print_engine = Escper::Printer.new('local', printerconfig)
+    
+    vp = Escper::VendorPrinter.new({})
+    vp.id = 0
+    vp.name = cash_register.name
+    vp.path = cash_register.thermal_printer
+    vp.copie = 1
+    vp.codepage = 0
+    vp.baudrate = 9600
+
+    print_engine = Escper::Printer.new('local', vp)
     print_engine.open
     print_engine.print(0, text)
     print_engine.close
@@ -594,5 +595,63 @@ class Vendor < ActiveRecord::Base
     
     return output
 
+  end
+  
+  
+  # params[:type] = 'sticker|label'
+  # params[:style] = '{{ any string }}'
+  def print_labels(model, params, cash_register)
+    params[:style] ||= 'default'
+
+    if model == 'item'
+      if params[:id]
+        @items = self.items.visible.where(:id => params[:id])
+      elsif params[:skus]
+        # text has been entered on the items#selection scren
+        match = /(ORDER)(.*)/.match(params[:skus].split(",").first)
+        if match and match[1] == 'ORDER'
+          # print labels from all OrderItems of that Order
+          order_id = match[2].to_i
+          @order_items = self.orders.find_by_id(order_id).order_items.visible
+          @items = []
+        else
+          # print only the entered SKUs
+          @order_items = []
+          skus = params[:skus].split(",")
+          @items = self.items.visible.where(:sku => skus)
+        end
+      end
+    elsif model == 'customer'
+      @customers = self.customers.visible.where(:id => params[:id])
+    end
+    
+    @currency = I18n.t('number.currency.format.friendly_unit')
+    template = File.read("#{Rails.root}/app/views/printr/#{ model }_#{params[:type]}_#{params[:style]}.prnt.erb")
+    erb = ERB.new(template, 0, '>')
+    text = erb.result(binding)
+      
+    if params[:download] == 'true'
+      return Escper::Asciifier.new.process(text)
+    elsif cash_register.salor_printer
+      return Escper::Asciifier.new.process(text)
+    else
+      if params[:type] == 'sticker'
+        printer_path = cash_register.sticker_printer
+      else
+        printer_path = cash_register.thermal_printer
+      end
+      vp = Escper::VendorPrinter.new({})
+      vp.id = 0
+      vp.name = cash_register.name
+      vp.path = printer_path
+      vp.copies = 1
+      vp.codepage = 0
+      vp.baudrate = 9600
+      
+      print_engine = Escper::Printer.new('local', vp)
+      print_engine.open
+      print_engine.print(0, text)
+      print_engine.close
+    end
   end
 end

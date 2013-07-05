@@ -169,6 +169,7 @@ function add_item(sku, additional_params) {
 //     window.location = "/users/login?" + p.join("&");
 //     return;
 //   }
+  if (sku == "") return
   get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
   $('#main_sku_field').val('');
 }

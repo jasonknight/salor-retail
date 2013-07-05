@@ -10,6 +10,7 @@ class OrdersController < ApplicationController
 
    respond_to :html, :xml, :json, :csv
    after_filter :customerscreen_push_notification, :only => [:add_item_ajax, :delete_order_item]
+   before_filter :update_devicenodes, :only => [:new, :new_order]
 
    
   def new_from_proforma
@@ -95,8 +96,6 @@ class OrdersController < ApplicationController
     end
  
     @button_categories = Category.where(:button_category => true).order(:position)
-    
-    CashRegister.update_all_devicenodes
     @current_register.reload
   end
 
@@ -121,22 +120,9 @@ class OrdersController < ApplicationController
   end
 
   def print_receipt
-    @user = User.find_by_id(params[:user_id])
-    @register = CashRegister.find_by_id(params[:current_register_id])
-    if @register then
-      @vendor = @register.vendor 
-    end
-    
-    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
-
-    @order = Order.find_by_id(params[:order_id])
-    if not @order then
-      render :text => "No Order Found" and return
-    end
-    
-    if @register.salor_printer
-      @report = @order.get_report
-      contents = @order.escpos_receipt(@report)
+    @order = @current_vendor.orders.visible.find_by_id(params[:order_id])    
+    if @current_register.salor_printer
+      contents = @order.escpos_receipt
       output = Escper::Printer.merge_texts(contents[:text], contents[:raw_insertations])
       if params[:download] then
         send_data(output, {:filename => 'salor.bill'})
@@ -144,18 +130,19 @@ class OrdersController < ApplicationController
         render :text => output and return
       end
     else
-      if is_mac? then
-        @report = @order.get_report
-        contents = @order.escpos_receipt(@report)
-        output = Escper::Printer.merge_texts(contents[:text], contents[:raw_insertations])
-        File.open("/tmp/" + @register.thermal_printer,'wb') { |f| f.write output }
-        `lp -d #{@register.thermal_printer} /tmp/#{@register.thermal_printer}`
-        render :nothing => true and return
-      else
-        @order.print
-      end
+      @order.print(@current_register)
       render :nothing => true and return
     end
+      
+    r = Receipt.new
+    r.vendor = @current_vendor
+    r.company = @current_company
+    r.order = @order
+    r.user = @current_user
+    r.drawer = @current_drawer
+    r.content = contents[:text]
+    r.ip = request.ip
+    r.save
   end
 
   def print_confirmed
@@ -282,7 +269,7 @@ class OrdersController < ApplicationController
     @current_user = @order.get_user
     @vendor = Vendor.find(@order.vendor_id)
     @order_items = @order.order_items.visible.order('id ASC')
-    @report = @order.get_report
+    @report = @order.report
     render :layout => 'customer_display'
   end
 

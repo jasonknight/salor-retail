@@ -21,16 +21,16 @@ class DrawerTransaction < ActiveRecord::Base
   end
 
   def print
-    printerconfig = {
-      :id => 0,
-      :name => self.cash_register.name,
-      :path => self.cash_register.thermal_printer,
-      :copies => 1,
-      :codepage => 0,
-      :baudrate => 9600
-    }
+    vp = Escper::VendorPrinter.new({})
+    vp.id = 0
+    vp.name = self.cash_register.name
+    vp.path = self.cash_register.thermal_printer
+    vp.copies = 1
+    vp.codepage = 0
+    vp.baudrate = 9600
+    
     text = self.escpos
-    print_engine = Escper::Printer.new('local', printerconfig)
+    print_engine = Escper::Printer.new('local', vp)
     print_engine.open
     print_engine.print(0, text)
     print_engine.close

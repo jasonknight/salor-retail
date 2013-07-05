@@ -8,10 +8,10 @@
 
 class ItemsController < ApplicationController
   before_filter :check_role, :except => [:info, :search]
+  before_filter :update_devicenodes, :only => [:index]
   
 
   def index
-    CashRegister.update_all_devicenodes
     orderby = "id DESC"
     orderby ||= params[:order_by]
     @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
@@ -169,53 +169,13 @@ class ItemsController < ApplicationController
   end
 
   def labels
-    if params[:id]
-      @items = @current_vendor.items.existing.where(:id => params[:id])
-    elsif params[:skus]
-      # text has been entered on the items#selection scren
-      match = /(ORDER)(.*)/.match(params[:skus].split(",").first)
-      if match and match[1] == 'ORDER'
-        # print labels from all OrderItems of that Order
-        order_id = match[2].to_i
-        @order_items = @current_vendor.orders.find_by_id(order_id).order_items.visible
-        @items = []
-      else
-        # print only the entered SKUs
-        @order_items = []
-        skus = params[:skus].split(",")
-        @items = @current_vendor.items.visible.where(:sku => skus)
-      end
-    end
-    
-    @currency = I18n.t('number.currency.format.friendly_unit')
-    template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}_#{params[:style]}.prnt.erb")
-    erb = ERB.new(template, 0, '>')
-    text = erb.result(binding)
-      
+    output = @current_vendor.print_labels('item', params, @current_register)
     if params[:download] == 'true'
-      send_data Escper::Asciifier.new.process(text), :filename => '1.salor' and return
+      send_data output, :filename => '1.salor'
     elsif @current_register.salor_printer
-      render :text => Escper::Asciifier.new.process(text) and return
-    else
-      if params[:type] == 'sticker'
-        printer_path = @current_register.sticker_printer
-      else
-        printer_path = @current_register.thermal_printer
-      end
-      printerconfig = {
-        :id => 0,
-        :name => @current_register.name,
-        :path => printer_path,
-        :copied => 1,
-        :codepage => 0,
-        :baudrate => 9600
-      }
-      print_engine = Escper::Printer.new('local', printerconfig)
-      print_engine.open
-      print_engine.print(0, text)
-      print_engine.close
-      render :nothing => true and return
+      render :text => output
     end
+    render :nothing => true
   end
 
   def database_distiller

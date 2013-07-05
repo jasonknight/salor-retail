@@ -864,15 +864,32 @@ class Order < ActiveRecord::Base
     return { :text => output_text, :raw_insertations => raw_insertations }
   end
   
-  def print
-    vendor_printer = VendorPrinter.new :path => @current_register.thermal_printer
-    print_engine = Escper::Printer.new('local', vendor_printer)
-    print_engine.open
+  def print(cash_register)
+    contents = self.escpos_receipt
     
-    contents = self.escpos_receipt(self.get_report)
-    bytes_written, content_written = print_engine.print(0, contents[:text], contents[:raw_insertations])
-    print_engine.close
-    Receipt.create(:user_id => self.user_id, :current_register_id => self.current_register_id, :content => contents[:text], :order_id => self.id)
+    if nil # is_mac?
+      output = Escper::Printer.merge_texts(contents[:text], contents[:raw_insertations])
+      File.open("/tmp/" + cash_register.thermal_printer,'wb') { |f|
+                                                                f.write output
+                                                              }
+      `lp -d #{cash_register.thermal_printer} /tmp/#{cash_register.thermal_printer}`
+
+    else
+      vp = Escper::VendorPrinter.new({})
+      vp.id = 0
+      vp.name = cash_register.name
+      vp.path = cash_register.thermal_printer
+      vp.copies = 1
+      vp.codepage = 0
+      vp.baudrate = 9600
+      
+      print_engine = Escper::Printer.new('local', vp)
+      print_engine.open
+      print_engine.print(0, contents[:text], contents[:raw_insertations])
+      print_engine.close
+    end
+    
+    return contents[:text]
   end
   
 #   def sanity_check

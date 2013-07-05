@@ -58,7 +58,6 @@ class Item < ActiveRecord::Base
     parts = self.gs1_format.split(",")
     return Regexp.new "(\\d{#{ parts[0] }})(\\d{#{ parts[1] }})"
   end
-  
 
   
   def to_csv(headers=nil)

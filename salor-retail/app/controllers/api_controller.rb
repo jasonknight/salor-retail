@@ -271,7 +271,7 @@ class ApiController < ApplicationController
   def auth
     has_right_params(@cmd) # This is where input validation is taking place
     # User.apitoken can be gotten from editing the User and saving the edit. 
-    user = User.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(,:roles).first
+    user = User.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(:roles).first
     if not user then
       return nil
     end

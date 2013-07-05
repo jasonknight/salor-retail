@@ -8,6 +8,7 @@
 class CustomersController < ApplicationController
 
   before_filter :check_role
+  before_filter :update_devicenodes, :only => [:index]
   
   def download
     @customers = @current_vendor.customers.visible
@@ -16,7 +17,6 @@ class CustomersController < ApplicationController
   end
   
   def index
-    CashRegister.update_all_devicenodes
     @customers = @current_company.customers.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
   end
 
@@ -67,43 +67,14 @@ class CustomersController < ApplicationController
     @customer.hide(@current_user)
     redirect_to customers_path
   end
-
+  
   def labels
-    if params[:user_type] == 'User'
-      @user = User.find_by_id(params[:user_id])
-    else
-      @user = User.find_by_id(params[:user_id])
+    output = @current_vendor.print_labels('customer', params, @current_register)
+    if params[:download] == 'true'
+      send_data output, :filename => '1.salor'
+    elsif @current_register.salor_printer
+      render :text => output
     end
-    @register = CashRegister.find_by_id(params[:current_register_id])
-    @vendor = @register.vendor if @register
-    #`espeak -s 50 -v en "#{ params[:current_register_id] }"`
-    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
-
-    @customers = Customer.find_all_by_id(params[:id])
-    
-    template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}.prnt.erb")
-    erb = ERB.new(template, 0, '>')
-    text = erb.result(binding)
-    if @register.salor_printer
-      render :text => Escper::Asciifier.new.process(text)
-    else
-      printer_path = params[:type] == 'lc_sticker' ? @register.sticker_printer : @register.thermal_printer
-      vendor_printer = VendorPrinter.new :path => printer_path
-      print_engine = Escper::Printer.new('local', vendor_printer)
-      print_engine.open
-      print_engine.print(0, text)
-      print_engine.close
-      render :nothing => true
-    end
-  end
-
-  def upload_optimalsoft
-    if params[:file]
-      lines = params[:file].read.split("\n")
-      i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type4(lines)
-      redirect_to(:action => 'index')
-    else
-      redirect_to :controller => 'items', :action => 'upload'
-    end
+    render :nothing => true
   end
 end
