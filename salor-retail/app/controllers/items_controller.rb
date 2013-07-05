@@ -117,8 +117,6 @@ class ItemsController < ApplicationController
     redirect_to items_update_real_quantity_path, :notice => t('views.notice.move_real_quantities_success')
   end
 
-  # DELETE /items/1
-  # DELETE /items/1.xml
   def destroy
     @item = Item.find_by_id(params[:id])
     if @current_user.owns_this?(@item) then
@@ -129,11 +127,6 @@ class ItemsController < ApplicationController
         @item.destroy
       end
     end
-
-    respond_to do |format|
-      format.html { redirect_to(items_url) }
-      format.xml  { head :ok }
-    end
   end
   
   def info
@@ -143,8 +136,7 @@ class ItemsController < ApplicationController
       @item = Item.find(params[:id]) if Item.exists? params[:id]
     end
   end
-  #
-  #
+
   def search
     if not @current_user.owns_vendor? @current_user.vendor_id then
       @current_user.vendor_id = salor_user.get_default_vendor.id
@@ -176,31 +168,25 @@ class ItemsController < ApplicationController
     end
   end
 
-  # due to salor-bin this can't rely on session
   def labels
-    if params[:user_type] == 'User'
-      @user = User.find_by_id(params[:user_id])
-    else
-      @user = User.find_by_id(params[:user_id])
-    end
-    @register = CashRegister.find_by_id(params[:current_register_id])
-    @vendor = @register.vendor if @register
-    #`espeak -s 50 -v en "#{ params[:current_register_id] }"`
-    render :text => "No User#{@user}, or Register#{@register}, or Vendor#{@vendor}" and return if @register.nil? or @vendor.nil? or @user.nil?
-
     if params[:id]
-      @items = Item.find_all_by_id(params[:id])
+      @items = @current_vendor.items.existing.where(:id => params[:id])
     elsif params[:skus]
+      # text has been entered on the items#selection scren
       match = /(ORDER)(.*)/.match(params[:skus].split(",").first)
-      if match[1] == 'ORDER'
+      if match and match[1] == 'ORDER'
+        # print labels from all OrderItems of that Order
         order_id = match[2].to_i
-        @order_items = Order.find_by_id(order_id).order_items.visible
+        @order_items = @current_vendor.orders.find_by_id(order_id).order_items.visible
         @items = []
       else
+        # print only the entered SKUs
         @order_items = []
-        @items = Item.where(:sku => params[:skus].split(","))
+        skus = params[:skus].split(",")
+        @items = @current_vendor.items.visible.where(:sku => skus)
       end
     end
+    
     @currency = I18n.t('number.currency.format.friendly_unit')
     template = File.read("#{Rails.root}/app/views/printr/#{params[:type]}_#{params[:style]}.prnt.erb")
     erb = ERB.new(template, 0, '>')
@@ -208,12 +194,23 @@ class ItemsController < ApplicationController
       
     if params[:download] == 'true'
       send_data Escper::Asciifier.new.process(text), :filename => '1.salor' and return
-    elsif @register.salor_printer
+    elsif @current_register.salor_printer
       render :text => Escper::Asciifier.new.process(text) and return
     else
-      printer_path = params[:type] == 'sticker' ? @register.sticker_printer : @register.thermal_printer
-      vendor_printer = VendorPrinter.new :path => printer_path
-      print_engine = Escper::Printer.new('local', vendor_printer)
+      if params[:type] == 'sticker'
+        printer_path = @current_register.sticker_printer
+      else
+        printer_path = @current_register.thermal_printer
+      end
+      printerconfig = {
+        :id => 0,
+        :name => @current_register.name,
+        :path => printer_path,
+        :copied => 1,
+        :codepage => 0,
+        :baudrate => 9600
+      }
+      print_engine = Escper::Printer.new('local', printerconfig)
       print_engine.open
       print_engine.print(0, text)
       print_engine.close

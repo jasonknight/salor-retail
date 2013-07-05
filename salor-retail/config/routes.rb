@@ -24,11 +24,12 @@ SalorRetail::Application.routes.draw do
   match "vendors/new_drawer_transaction" => "vendors#new_drawer_transaction"
   match "vendors/labels"
   match "vendors/spy" => "vendors#spy"
-  match "vendors/render_end_of_day_receipt" => 'vendors#render_end_of_day_receipt'
+  match "vendors/render_report_day" => 'vendors#render_report_day'
   match "vendors/render_open_cashdrawer" => 'vendors#render_open_cashdrawer'
   match "vendors/render_drawer_transaction_receipt" => 'vendors#render_drawer_transaction_receipt'
   match 'vendors/:id/logo' => 'vendors#logo'
   match 'vendors/:id/logo_invoice' => 'vendors#logo_invoice'
+  match "vendors/report_day" => "vendors#report_day"
   
   
   match "home/index" => "home#index"
@@ -87,10 +88,6 @@ SalorRetail::Application.routes.draw do
   match "orders/split_order_item" => "orders#split_order_item"
   match "orders/print_receipt" => "orders#print_receipt"
   match "orders/void" => "orders#void"
-  match "orders/report" => "orders#report"
-  match "orders/report_range" => "orders#report_range"
-  match "orders/report_day" => "orders#report_day"
-  match "orders/report_day_range" => "orders#report_day_range"
   match "orders/:id/print" => "orders#print"
   match "orders/print" => "orders#print"
   match "orders/log" => "orders#log"

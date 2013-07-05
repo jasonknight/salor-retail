@@ -562,7 +562,7 @@ gn:
       from: von
       gross: brutto
       net: netto
-      noncash-refunds: Nichtbargeld-Stornierungen
+      refunds: Stornierungen
       payments: Zahlungen
       payout: Auszahlung
       payouts: Auszahlungen

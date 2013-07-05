@@ -7,14 +7,12 @@
 class Receipt < ActiveRecord::Base
   belongs_to :user
   belongs_to :vendor
+  belongs_to :company
   belongs_to :order
-  before_save :set_vendor_id
+  belongs_to :cash_register
+  belongs_to :drawer
+
   
-  def set_vendor_id
-    if $Vendor then
-      self.vendor_id = $Vendor.id
-    end
-  end
   def to_html
     i = 0
     html = ''

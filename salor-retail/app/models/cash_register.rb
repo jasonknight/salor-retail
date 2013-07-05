@@ -21,8 +21,15 @@ class CashRegister < ActiveRecord::Base
   validates_presence_of :name
   
   def open_cash_drawer
-    vendor_printer = VendorPrinter.new :path => self.thermal_printer
-    print_engine = Escper::Printer.new('local', vendor_printer)
+    printerconfig = {
+      :id => 0,
+      :name => self.name,
+      :path => self.thermal_printer,
+      :copies => 1,
+      :codepage => 0,
+      :baudrate => 9600
+    }
+    print_engine = Escper::Printer.new('local', printerconfig)
     print_engine.open
     text = "\x1B\x70\x00\x30\x01 "
     print_engine.print(0, text)

@@ -361,4 +361,238 @@ class Vendor < ActiveRecord::Base
     end
     return report
   end
+  
+  def print_eod_report(from=nil, to=nil, drawer=nil, cash_register)
+    text = self.escpos_eod_report(from, to, drawer)
+    printerconfig = {
+      :id => 0,
+      :name => cash_register.name,
+      :path => cash_register.thermal_printer,
+      :copie => 1,
+      :codepage => 0,
+      :baudrate => 9600
+    }
+    print_engine = Escper::Printer.new('local', printerconfig)
+    print_engine.open
+    print_engine.print(0, text)
+    print_engine.close
+    
+    return text
+  end
+  
+  def escpos_eod_report(from=nil, to=nil, drawer=nil)
+    report = get_end_of_day_report(from, to, drawer)
+
+    categories = report['categories']
+    taxes = report['taxes']
+    paymentmethods = report['paymentmethods']
+    refunds  =  report['refunds']
+    revenue =   report['revenue']
+    transactions   = report['transactions']
+    transactions_sum   = report['transactions_sum']
+    calculated_drawer_amount =   report['calculated_drawer_amount']
+    orders_count = report['orders_count']
+    categories_sum = report['categories_sum']
+    date_from = report[:date_from]
+    date_to = report[:date_to]
+    unit = report[:unit]
+    drawer_amount = report[:drawer_amount]
+    username = report[:username]
+    
+    line_format = "%24.24s  %7.2f %7.2f\n"
+    line_format2 = "%28.28s %s %8.2f\n"
+    line_format3 = "%-25s %7s %7s\n"
+    transactions_format = " %5.5s  %9.9s %9.9s  %s %8.2f\n"
+
+    vendorname =
+    "\e@"     +  # Initialize Printer
+    "\e!\x38" +  # doube tall, double wide, bold
+    self.name + "\n"
+
+    
+    header = ''
+    header +=
+    "\ea\x00" +  # align left
+    "\e!\x01" +  # Font B
+    "#{ date_from } -> #{ date_to }" +
+    "\n" +
+    username +
+    "\n==========================================\n\n"
+
+
+    
+    groups = {}
+    [[:pos,'.sales'], [:neg,'.payments']].each do |i|
+      type = i[0]
+      groups[type] = ""
+      
+      group_header =
+          "\e!\x18" +
+          I18n.t("printr.eod_report#{ i[1] }") +
+          "\e!\x00" +
+          "\n"
+      
+      category_header =
+          line_format3 % [
+            I18n.t('orders.report_day.sums_by_category'),
+            I18n.t('orders.report_day.net'),
+            I18n.t('orders.report_day.gross')
+          ]
+      
+      category_lines = "\n"
+      categories[i[0]].to_a.each do |c|
+        category_lines +=
+            line_format % [
+              c[0].empty? ? t('printr.eod_report.no_category') : c[0],
+              c[1][:net],
+              c[1][:gro]
+            ]
+      end
+      
+      taxes_header = I18n.t('orders.report_day.sums_by_tax_profile')
+      taxes_lines = "\n"
+      taxes[i[0]].to_a.each do |t|
+        taxes_lines +=
+            line_format % [
+              t[0],
+              t[1][:net],
+              t[1][:gro]
+            ]
+      end
+
+      payments_header = I18n.t('orders.report_day.sums_by_payment_methods')
+      payments_lines = "\n"
+      paymentmethods[i[0]].to_a.each do |p|
+        payments_lines +=
+            line_format2 % [
+              p[0],
+              report[:unit],
+              p[1]
+            ]
+      end
+      
+      subtotal = "\n"
+      subtotal +=
+          line_format2 % [
+            I18n.t('printr.eod_report.payment_method_total'),
+            report[:unit],
+            categories_sum[i[0]][:gro]
+          ]
+      
+      groups[type] +=
+          group_header +
+          category_header +
+          category_lines +
+          "\n" +
+          taxes_header +
+          taxes_lines +
+          "\n" +
+          payments_header +
+          payments_lines +
+          subtotal
+    end
+
+  
+    refund_header = "\n"
+    refund_lines = "\n"
+    if refunds.any?
+      refund_header +=
+          "\e!\x18" +
+          I18n.t('printr.eod_report.refunds') +
+          "\e!\x00"
+    
+    
+      refunds.each do |k,v|
+        refund_lines +=
+            line_format2 % [
+              k,
+              report[:unit],
+              v
+            ]
+      end
+    end
+    
+    revenue_header = "\n"
+    revenue_header +=
+        "\e!\x18" +
+        I18n.t('printr.eod_report.revenue') + 
+        "\e!\x00"
+    
+    revenue_lines = "\n"
+    revenue_lines +=
+        line_format2 % [
+          I18n.t('printr.eod_report.revenue_total'),
+          report[:unit],
+          revenue[:gro]
+        ]
+    
+    
+    transactions_header = "\n"
+    if from == to.beginning_of_day
+      transactions_header +=
+          "\e!\x18" + 
+          I18n.t('activerecord.models.drawer_transaction.other') +
+          "\e!\x00" +
+          "\n--------------"
+    end
+    
+    transactions_lines = "\n"
+    if from == to.beginning_of_day
+      transactions.to_a.each do |d|
+        transactions_lines +=
+            transactions_format % [
+              I18n.l(d[:time], :format => :just_time),
+              d[:tag],
+              d[:notes],
+              report[:unit],
+              d[:amount]
+            ]
+      end
+    end
+    
+    transactions_footer = "\n"
+    transactions_footer +=
+        line_format2 % [
+          I18n.t('printr.eod_report.transaction_total'),
+          report[:unit],
+          transactions_sum
+        ]
+    
+    calculated_drawer_amount_line = "\n\n"
+    calculated_drawer_amount_line +=
+        line_format2 % [
+          I18n.t("printr.eod_report.calculated_drawer_amount"),
+          report[:unit],
+          calculated_drawer_amount
+        ]
+    
+    unless calculated_drawer_amount.round(2).zero?
+      calculated_drawer_amount +=
+          "\n******************************************\n" +
+          I18n.t('printr.eod_report.warning_drawer_amount_not_zero') +
+          "\n******************************************\n"
+    end
+
+
+    bigspace = "\n\n\n\n\n\n"
+    cut = "\x1D\x56\x00"
+    
+    output = ""
+    output +=
+        vendorname +
+        header +
+        groups[:pos] +
+        groups[:neg] +
+        refund_header +
+        refund_lines +
+        transactions_header +
+        transactions_lines +
+        transactions_footer +
+        calculated_drawer_amount_line +
+        bigspace +
+        cut
+    
+    return output
+
+  end
 end

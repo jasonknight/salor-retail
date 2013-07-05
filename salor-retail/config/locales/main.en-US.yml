@@ -630,7 +630,7 @@ en-US:
       cash-refunds: Cash-Refunds
       cash_refunds_total: TOTAL
       no_category: No Category
-      noncash-refunds: Noncash-Refunds
+      refunds: Refunds
       orders_total: Orders total
       payment_method_total: TOTAL
       payments: Payments

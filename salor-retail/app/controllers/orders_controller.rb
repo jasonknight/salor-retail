@@ -281,7 +281,6 @@ class OrdersController < ApplicationController
     @current_user = @order.get_user
     @current_user = @order.get_user
     @vendor = Vendor.find(@order.vendor_id)
-    $Conf = @vendor.salor_configuration
     @order_items = @order.order_items.visible.order('id ASC')
     @report = @order.get_report
     render :layout => 'customer_display'
@@ -307,15 +306,6 @@ class OrdersController < ApplicationController
 #     @vendor = GlobalData.vendor
 #     @report = UserUserMethods.get_end_of_day_report(@from,@to,nil)
 #   end
-
-  def report_day
-    @from, @to = assign_from_to(params)
-    @from = @from ? @from.beginning_of_day : Time.now.beginning_of_day
-    @to = @to ? @to.end_of_day : @from.end_of_day
-    @users = @current_vendor.users.visible
-    @user = @current_vendor.users.visible.find_by_id(params[:user_id])
-    @report = @current_vendor.get_end_of_day_report(@from, @to, @user.get_drawer)
-  end
 
 #   def report_day_range
 #     f, t = assign_from_to(params)
@@ -448,13 +438,6 @@ class OrdersController < ApplicationController
   end
 
   private
-  
-  def customerscreen_push_notification
-    t = SalorRetail.tailor
-    if t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
-    end
-  end
  
 #   
 #   def currency(number,options={})

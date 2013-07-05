@@ -87,7 +87,7 @@
           %th.table-center
         - paymentmethods[i[0]].to_a.each do |p|
           %tr
-            %td.left= t p[0]
+            %td.left= p[0]
             %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "table-center"}= number_to_currency p[1]
 
       %p{:id => "#{i[0]}_sum_gross"}== #{ t '.sum_gross' }: #{ number_to_currency categories_sum[i[0]][:gro] }
@@ -112,9 +112,6 @@
         %tr
           %td.left= k
           %td.table-center= number_to_currency v
-
-    %p#noncash_refunds_sum_gross= #== #{ t '.sum_gross' }: #{ number_to_currency refunds[:noncash][:gro] }
-    %p#noncash_refunds_sum_net=# == #{ t '.sum_net' }: #{ number_to_currency refunds[:noncash][:net] }
 
 
 
@@ -152,7 +149,7 @@
 
       %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
 
-      - if calculated_drawer_amount.round(2) != 0
+      - unless calculated_drawer_amount.round(2).zero?
         %p
           %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
 

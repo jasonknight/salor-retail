@@ -5,6 +5,8 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class VendorsController < ApplicationController
+  
+  after_filter :customerscreen_push_notification, :only => [:edit_field_on_child]
 
   def csv
     @vendor = Vendor.find_by_token(params[:token])
@@ -67,6 +69,7 @@ class VendorsController < ApplicationController
     @dt.amount = SalorBase.string_to_float(params[:transaction][:amount])
     @dt.tag = params[:transaction][:tag]
     @dt.notes = params[:transaction][:notes]
+    @dt.cash_register = @current_register
     if params[:transaction][:trans_type] == "payout"
       @dt.amount *= -1
     end
@@ -86,62 +89,58 @@ class VendorsController < ApplicationController
   end
 
   def render_drawer_transaction_receipt
-    if params[:user_type] == 'User'
-      @user = User.find_by_id(params[:user_id])
+    @dt = @current_vendor.drawer_transactions.visible.find_by_id(params[:id])
+    if @current_register.salor_printer
+      text = @dt.escpos
+      render :text => Escper::Asciifier.new.process(text)
     else
-      @user = User.find_by_id(params[:user_id])
-    end
-    @register = CashRegister.find_by_id(params[:current_register_id])
-    @vendor = @register.vendor if @register
-    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
-
-    @dt = DrawerTransaction.find_by_id(params[:id])
-    GlobalData.vendor = @dt.user.get.vendor
-    @current_user = @dt.user
-    if not @dt then
-      render :text => "Could not find drawer_transaction" and return
-    end
-    
-    if @register.salor_printer
-      render :text => Escper::Asciifier.new.process(@dt.escpos)
-    else
-      @dt.print
+      text = @dt.print
       render :nothing => true
     end
+    r = Receipt.new
+    r.vendor = @current_vendor
+    r.company = @current_company
+    r.cash_register = @current_register
+    r.user = @current_user
+    r.drawer = @current_user.get_drawer
+    r.content = text
+    r.ip = request.ip
+    r.save
+  end
+  
+  def report_day
+    @from, @to = assign_from_to(params)
+    @from = @from ? @from.beginning_of_day : Time.now.beginning_of_day
+    @to = @to ? @to.end_of_day : @from.end_of_day
+    @users = @current_vendor.users.visible
+    @user = @current_vendor.users.visible.find_by_id(params[:user_id])
+    @report = @current_vendor.get_end_of_day_report(@from, @to, @user.get_drawer)
   end
 
 
-  def render_end_of_day_receipt
-    if params[:user_type] == 'User'
-      @user = User.find_by_id(params[:user_id])
-    else
-      @user = User.find_by_id(params[:user_id])
-    end
-    @register = CashRegister.find_by_id(params[:current_register_id])
-    @vendor = @register.vendor if @register
-    #`espeak -s 50 -v en "#{ params[:current_register_id] }"`
-    render :nothing => true and return if @register.nil? or @vendor.nil? or @user.nil?
-
+  def render_report_day
     @from, @to = assign_from_to(params)
-    @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
+    @from = @from ? @from.beginning_of_day : Time.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
-
-    @report = UserUserMethods.get_end_of_day_report(@from.beginning_of_day,@to.end_of_day,@user)
-
-    template = File.read("#{Rails.root}/app/views/printr/end_of_day.prnt.erb")
-    erb = ERB.new(template, 0, '>')
-    text = erb.result(binding)
-    Receipt.create(:ip => request.ip, :user_id => @user.id, :current_register_id => @register.id, :content => text)
+    @user = @current_vendor.users.visible.find_by_id(params[:user_id])
+    
     if @register.salor_printer
+      text = @current_vendor.escpos_eod_receipt(@from, @to, @user.get_drawer)
       render :text => Escper::Asciifier.new.process(text)
+      return
     else
-      vendor_printer = VendorPrinter.new :path => @register.thermal_printer
-      print_engine = Escper::Printer.new('local', vendor_printer)
-      print_engine.open
-      print_engine.print(0, text)
-      print_engine.close
-      render :nothing => true
+      text = @current_vendor.print_eod_report(@from, @to, @user.get_drawer)
     end
+    
+    r = Receipt.new
+    r.vendor = @current_vendor
+    r.company = @current_company
+    r.cash_register = @current_register
+    r.user = @current_user
+    r.drawer = @current_user.get_drawer
+    r.content = text
+    r.ip = request.ip
+    r.save
   end
 
   def end_day
@@ -159,13 +158,6 @@ class VendorsController < ApplicationController
     elsif inst.class == OrderItem
       @order = inst.order
     end
-        
-    # --- push notification to refresh the customer screen
-    t = SalorRetail.tailor
-    if @order and t
-      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @order.cash_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
-    end
-    # ---
 
     #value = SalorBase.string_to_float(params[:value])
     value = params[:value]

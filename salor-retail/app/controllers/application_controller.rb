@@ -76,6 +76,13 @@ class ApplicationController < ActionController::Base
 
   private
   
+  def customerscreen_push_notification
+    t = SalorRetail.tailor
+    if t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|#{ request.protocol }#{ request.host }:#{ request.port }/orders/#{ @order.id }/customer_display"
+    end
+  end
+  
   def allowed_klasses
     ['SalorConfiguration','UserLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem']
   end
@@ -169,10 +176,7 @@ class ApplicationController < ActionController::Base
     return false
   end
   
-  # TODO: Remove method check_license since no longer used
-  def check_license()
-    return true
-  end
+
   
   def assign_from_to(p)
     begin

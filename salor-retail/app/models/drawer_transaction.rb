@@ -21,15 +21,30 @@ class DrawerTransaction < ActiveRecord::Base
   end
 
   def print
-    if @current_register.id
-      vendor_printer = VendorPrinter.new :path => @current_register.thermal_printer
-      text = self.escpos
-      print_engine = Escper::Printer.new('local', vendor_printer)
-      print_engine.open
-      print_engine.print(0, text)
-      print_engine.close
-      Receipt.create(:user_id => @User.id, :current_register_id => @current_register.id, :content => text)
-    end
+    printerconfig = {
+      :id => 0,
+      :name => self.cash_register.name,
+      :path => self.cash_register.thermal_printer,
+      :copies => 1,
+      :codepage => 0,
+      :baudrate => 9600
+    }
+    text = self.escpos
+    print_engine = Escper::Printer.new('local', printerconfig)
+    print_engine.open
+    print_engine.print(0, text)
+    print_engine.close
+    
+    r = Receipt.new
+    r.vendor = self.vendor
+    r.company = self.company
+    r.user = self.user
+    r.drawer = self.drawer
+    r.cash_register = self.cash_register
+    r.content = text
+    r.save
+    
+    return text
   end
   
   def escpos
@@ -45,20 +60,18 @@ class DrawerTransaction < ActiveRecord::Base
     I18n.l(self.created_at, :format => :long) +
     "\n\n" +
     "\e!\x38" +
-    @current_user.username +
+    self.user.username +
     "\n\n" +
-    self.tag +
+    self.tag.to_s +
     "\n\n" +
-    self.notes +
+    self.notes.to_s +
     "\n\n" +
     "\e!\x38" +
     SalorBase.to_currency(self.amount) +
     "\n\n" +
-    I18n.t(self.drop ? 'printr.word.drop' : 'printr.word.payout') +
+    I18n.t(self.amount > 0 ? 'printr.word.drop' : 'printr.word.payout') +
     "\n\n\n\n\n\n\n" +
     "\x1D\x56\x00" # cut
-    
-    #GlobalData.vendor.receipt_logo_footer 
   end
   
   def self.check_range(from_to)
