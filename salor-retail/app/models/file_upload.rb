@@ -12,6 +12,7 @@ class FileUpload
   
   def initialize(shipper, data)
     @format = shipper.import_format
+    @data = data
     @lines = data.split("\n")
     @shipper = shipper
     @vendor = @shipper.vendor
