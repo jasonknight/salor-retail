@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
     CashRegister.update_all_devicenodes
     orderby = "id DESC"
     orderby ||= params[:order_by]
-    @items = @current_vendor.items.visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
   end
 
   def show
