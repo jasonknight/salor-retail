@@ -32,7 +32,7 @@
 
     - (category_items.size ).times do |cid|
       - next if category_items[cid].nil? or not category_items[cid].any?
-      - cat = Category.scopied.find_by_id(cid)
+      - cat = @current_vendor.categories.find_by_id(cid)
       %h4= cat ? cat.name : t('.no_category')
       %table{ :class => 'striped-table2 has-total' }
         %tr

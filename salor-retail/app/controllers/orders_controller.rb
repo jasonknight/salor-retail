@@ -391,7 +391,7 @@ class OrdersController < ApplicationController
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     
     if @order then
-      History.record("Destroying #{@order.order_items.visible} items",@order,1)
+      History.record("Destroying #{@order.order_items.visible.count} items",@order,1)
       
       @order.order_items.visible.each do |oi|
         oi.hidden = 1
@@ -404,7 +404,7 @@ class OrdersController < ApplicationController
       @order.subtotal = 0
       @order.total = 0
       @order.tax = 0
-
+      @order.save
     else
       History.record("cannot clear order because already paid", @order, 1)
     end

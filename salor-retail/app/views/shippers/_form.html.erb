@@ -11,11 +11,9 @@
     </div>
   <% end %>
   
-    <div class="actions">
-    <%= f.submit :id => "submit" %>
-  </div>
+    
   
-<table width="540px">
+<table width="540px" align="center">
   <tr>
     <td width="270px" style="padding-bottom:10px;">
       <div class="field">
@@ -69,6 +67,13 @@
       <div class="field">
         <%= f.label :csv_url %><br />
         <%= f.text_field :csv_url, :rows => 4, :style => "width:470px;" %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="actions">
+        <%= f.submit :id => "submit" %>
       </div>
     </td>
   </tr>

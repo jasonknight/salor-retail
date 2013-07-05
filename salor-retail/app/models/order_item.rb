@@ -25,7 +25,9 @@ class OrderItem < ActiveRecord::Base
   has_many :histories, :as => :user
   has_one :drawer_transaction
   
-  
+  def is_normal?
+    return (self.is_buyback != true and self.behavior == 'normal')
+  end
   def get_tax_profile_letter
     return self.tax_profile.letter
   end
@@ -165,34 +167,44 @@ class OrderItem < ActiveRecord::Base
 
   
   def set_attrs_from_item(item)
-    return nil if self.order.paid
-    self.vendor = item.vendor
-    self.company = item.company
-    self.item = item
-    self.price = item.base_price
-    self.tax_profile = item.tax_profile
-    self.tax = item.tax_profile.value # cache for faster processing
-    self.item_type = item.item_type
-    self.behavior = item.item_type.behavior # cache for faster processing
-    self.is_buyback = item.default_buyback
-    self.category = item.category
-    self.location = item.location
-    self.activated = item.activated
-    self.no_inc = item.is_gs1
+    self.vendor       = item.vendor
+    self.company      = item.company
+    self.item         = item
+    self.sku          = item.sku
+    self.price        = item.base_price
+    self.tax_profile  = item.tax_profile
+    self.tax          = item.tax_profile.value # cache for faster processing
+    self.item_type    = item.item_type
+    self.behavior     = item.item_type.behavior # cache for faster processing
+    self.is_buyback   = item.default_buyback
+    self.category     = item.category
+    self.location     = item.location
+    self.activated    = item.activated
+    self.no_inc       = item.is_gs1
     self.amount_remaining = item.amount_remaining
     self.weigh_compulsory = item.weigh_compulsory
-    self.quantity = self.weigh_compulsory ? 0 : 1
+    self.quantity     = self.weigh_compulsory ? 0 : 1
     self.calculate_part_price = item.calculate_part_price # cache for faster processing
-    self.user = self.order.user
+    self.user         = self.order.user
   end
   
   
   def modify_price
-    self.modify_price_for_buyback
-    self.modify_price_for_actions
+    log_action "Modifyin price"
+    if self.behavior == 'coupon' then
+      self.apply_coupon
+    end
+    if self.is_buyback
+      log_action "modify_price_for_buyback"
+      self.modify_price_for_buyback 
+    end
     self.modify_price_for_parts
-    self.modify_price_for_giftcards
+    if self.behavior == 'gift_card'
+      log_action "modify_price_for_giftcards"
+      self.modify_price_for_giftcards 
+    end
     self.modify_price_for_gs1
+    self.modify_price_for_actions
     self.save
   end
   
@@ -243,6 +255,11 @@ class OrderItem < ActiveRecord::Base
   end
   
   def calculate_totals
+    if self.behavior == "coupon" then
+      self.apply_coupon
+      self.save
+      return
+    end
     if self.refunded
       t = 0
     else
@@ -250,7 +267,6 @@ class OrderItem < ActiveRecord::Base
     end
     self.total = t.round(2)
     self.subtotal = self.total
-    self.apply_coupon
     self.apply_discount
     self.apply_rebate
     self.calculate_tax
@@ -263,37 +279,48 @@ class OrderItem < ActiveRecord::Base
     if self.behavior == 'coupon'
       item = self.item
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
-      return unless coitem.coupon_amount.nil?
+      if not coitem.coupon_amount.nil? then
+        log_action "This item is a coupon, but the coupon_amount has already been set"
+        return
+      end
       if coitem
         ctype = self.item.coupon_type
         if ctype == 1
           # percent rebate
-          coitem.coupon_amount = (coitem.subtotal * item.amount_remaining / 100.0).round(2)
+          log_action "Percent rebate coupon"
+          coitem.coupon_amount = (coitem.subtotal * self.price / 100.0).round(2)
         elsif ctype == 2
           # fixed amount
-          coitem.coupon_amount = self.amount_remaining
+          log_action "Fixed amount coupon"
+          coitem.coupon_amount = self.price
         elsif ctype == 3
           # buy x get y free
+          log_action "B1G1"
           x = 2
           y = 1
           if coitem.quantity >= x
             coitem.coupon_amount = coitem.subtotal / coitem.quantity * y
           end
         end
+        log_action "Subtotal is: #{coitem.subtotal} and coupon_amount is #{coitem.coupon_amount}"
         coitem.subtotal -= coitem.coupon_amount
         coitem.save
+      else
+        log_action "coitem was not found"
       end
     end
   end
   
   def apply_rebate
     if self.rebate
+      log_action "Applying rebate"
       self.rebate_amount = (self.subtotal * self.rebate / 100.0).round(2)
       self.subtotal -= self.rebate_amount
     end
   end
   
   def apply_discount
+    log_action "Applying discount"
     # Vendor
     discount = self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Vendor").first
     
@@ -316,8 +343,10 @@ class OrderItem < ActiveRecord::Base
   
   def calculate_tax
     if self.vendor.net_prices
+      log_action "Net Prices in effect"
       t = self.subtotal * self.tax / 100.0
     else
+      log_action "Reverse calculat taxes"
       t = self.subtotal / ( 1 + self.tax / 100.0 )
     end
     self.tax_amount = t.round(2)
@@ -327,7 +356,9 @@ class OrderItem < ActiveRecord::Base
   def quantity=(q)
     q = self.string_to_float(q)
     return if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
+
     write_attribute :quantity, q
+    modify_price_for_actions
   end
   
   

@@ -12,11 +12,6 @@ function updateOrderItems(items) {
   }
 }
 
-
-
-
-
-
 function addPosItem(item) {
   var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
   var base_id = getOrderItemId(item);

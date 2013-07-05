@@ -81,9 +81,9 @@ class ItemsController < ApplicationController
   
   
   def update_real_quantity
-    add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
+    
     if request.post? then
-      @item = Item.scopied.find_by_sku(params[:sku])
+      @item = @current_vendor.items.find_by_sku(params[:sku])
       @item.update_attribute(:real_quantity, params[:quantity])
       @item.update_attribute(:real_quantity_updated, true)
     end
@@ -145,15 +145,15 @@ class ItemsController < ApplicationController
     @customers = []
     @orders = []
     if params[:klass] == 'Item' then
-      @items = Item.scopied.page(params[:page]).per($Conf.pagination)
+      @items = @current_vendor.items.page(params[:page]).per(@current_vendor.pagination)
     elsif params[:klass] == 'Order'
       if params[:keywords].empty? then
-        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per($Conf.pagination)
+        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per(@current_vendor.pagination)
       else
-        @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per($Conf.pagination)
+        @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
       end
     else
-      @customers = Customer.scopied.page(params[:page]).per($Conf.pagination)
+      @customers = Customer.scopied.page(params[:page]).per(@current_vendor.pagination)
     end
   end
   
@@ -236,24 +236,16 @@ class ItemsController < ApplicationController
   
   def download
     params[:page] ||= 1
-    params[:order_by] ||= "created_at"
-    params[:order_by] = "created_at" if not params[:order_by] or params[:order_by].blank?
-    if params[:order_by] then
-      key = params[:order_by]
-      session[key] ||= 'ASC'
-      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("#{key} #{session[key]}")
-    else
-      @items = Item.scopied.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per($Conf.pagination).order("id desc")
-    end
+    params[:order_by] = "id DESC" if not params[:order_by] or params[:order_by].blank?
+    orderby ||= params[:order_by]
+    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
     data = render_to_string :layout => false
     send_data(data,:filename => 'items.csv', :type => 'text/csv')
   end
 
   def inventory_report
-    add_breadcrumb I18n.t("menu.update_real_quantity"), items_update_real_quantity_path
-    add_breadcrumb I18n.t("menu.inventory_report"), items_inventory_report_path
-    @items = Item.scopied.where(:real_quantity_updated => true)
-    @categories = Category.scopied
+    @items = @current_vendor.items.where(:real_quantity_updated => true)
+    @categories = @current_vendor.categories
   end
   
   def selection
@@ -266,7 +258,7 @@ class ItemsController < ApplicationController
   end
   
   def report
-    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.base_price,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords.page(params[:page]).per(100)
+    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.base_price,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords(params[:keywords]).page(params[:page]).per(100)
     @view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     @view ||= 'default'
     render "items/reports/#{@view}/page"

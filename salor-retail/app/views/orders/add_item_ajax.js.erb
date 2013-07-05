@@ -3,15 +3,26 @@ updateOrder(Order);
 
 <% if @order_item %>
 order_item_json = <%= raw @order_item.to_json %>;
-updateOrderItems([order_item_json]);
+try {
+  updateOrderItems([order_item_json]);
+} catch (err) {
+  alert("Failed to update items properly, please reload");
+  console.log(err);
+}
+
 <% end %>
 
                   
 <%
   if @order_item and @order_item.behavior == 'coupon' then
-  oi = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
+    oi = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
       %>
-        updateOrderItems([<%= raw oi.to_json %>]);
+try {
+  updateOrderItems([<%= raw oi.to_json %>]);
+} catch (err) {
+  alert("Failed to update applied item.");
+  console.log(err);
+}
       <%
   end
 %>
