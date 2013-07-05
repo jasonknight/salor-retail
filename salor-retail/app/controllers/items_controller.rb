@@ -307,7 +307,7 @@ class ItemsController < ApplicationController
   end
   
   def report
-    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.base_price,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords.page(params[:page]).per(100)
+    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.base_price,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords(params[:keywords]).page(params[:page]).per(100)
     @view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     @view ||= 'default'
     render "items/reports/#{@view}/page"
