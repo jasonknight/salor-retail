@@ -15,6 +15,9 @@
       %td= f.label :name
       %td= f.text_field :name
     %tr
+      %td= f.label :Category
+      %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
+    %tr
       %td= f.label :whento
       %td= f.select :whento, Action.when_list
     %tr

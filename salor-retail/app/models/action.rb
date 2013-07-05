@@ -20,6 +20,18 @@ class Action < ActiveRecord::Base
     [:add_to_order, :always, :on_save, :on_import, :on_export]
   end
 
+  def category_id
+    if self.model.class == Category then
+      return self.model.id
+    else
+      return nil
+    end
+  end
+
+  def category_id=(id)
+    self.model = self.vendor.categories.find_by_id(id)
+  end
+
   def sku
     if self.model and self.model.class == Item
       return self.model.sku
@@ -64,6 +76,7 @@ class Action < ActiveRecord::Base
       
       if action.behavior.to_sym == :discount_after_threshold then
         SalorBase.log_action Action,"Discount after threshold"
+        item.action_applied = true
         if act == :add_to_order and action.model.class == Category
           SalorBase.log_action Action,"Is a category discount"
           items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id)

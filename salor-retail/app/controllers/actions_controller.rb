@@ -18,6 +18,7 @@ class ActionsController < ApplicationController
 
   def new
     @action = Action.new
+    @action.vendor = @current_vendor
   end
 
   def edit
@@ -25,9 +26,10 @@ class ActionsController < ApplicationController
   end
 
   def create
-    @action = Action.new(params[:act])
+    @action = Action.new
     @action.vendor = @current_vendor
     @action.company = @current_company
+    @action.update_attributes(params[:act])
     if @action.save
       redirect_to actions_path
     else
