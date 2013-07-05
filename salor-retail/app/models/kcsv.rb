@@ -10,6 +10,7 @@ class Kcsv
 #     raise file.class.inspect
     @file = file.rewind.read.split("\n") if file.class == File or file.class == ActionDispatch::Http::UploadedFile
     @file = file.split("\n") if file.class == String
+    @file ||= file 
     options[:separator] ||= ";"
     @options = options
     @separator = options[:separator]
