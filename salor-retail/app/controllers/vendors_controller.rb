@@ -64,7 +64,7 @@ class VendorsController < ApplicationController
     @dt.company = @current_company
     @dt.drawer_amount = @drawer.amount
     @dt.user = user
-    @dt.amount = params[:transaction][:amount]
+    @dt.amount = SalorBase.string_to_float(params[:transaction][:amount])
     @dt.tag = params[:transaction][:tag]
     @dt.notes = params[:transaction][:notes]
     if params[:transaction][:trans_type] == "payout"

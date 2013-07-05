@@ -77,6 +77,6 @@ class DrawerTransaction < ActiveRecord::Base
             messages << "#{dts[i].id} not ok: #{dts[i].drawer_amount.round(2)} #{(dts[i-1].drawer_amount + dts[i-1].amount * factor).round(2)}"
         end
     end
-    puts messages.inspect
+    log_action messages.inspect
   end
 end
