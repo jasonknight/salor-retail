@@ -6,6 +6,7 @@
     - title = "menu.orders"
   - else
     - title = 'activerecord.models.order.unpaid_order'
+    
 - title = 'receipts.proforma_invoice' if @order.is_proforma
 = raw content_box_top(t(title))
 
@@ -22,7 +23,6 @@
     = link_to salor_icon(:merge,{},32,I18n.t("menu.merge_into_current_order")),"/orders/merge_into_current_order?id=#{@order.id}"
   %br
   %span
-    =@order.paid
     %select{ :id=>"locale_select", :onchange=>"window.location = '?locale=' + $('#locale_select').val();"}
       - supported_languages.each do |l|
         %option{ :value=>"#{l[:locale]}" }= l[:name]

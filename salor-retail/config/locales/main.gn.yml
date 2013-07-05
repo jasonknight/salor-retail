@@ -53,7 +53,7 @@ gn:
       dollar_per_lp: Euro pro Punkt
       drop: Einzahlen
       email: E-Mail
-      employee:
+      user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Kassenlade von
       end_amount: Schlussbetrag
@@ -220,7 +220,7 @@ gn:
       drawer_transaction:
         one: Buchung
         other: Buchungen
-      employee:
+      user:
         one: Angestellter
         other: Angestellte
       invoice_note:
@@ -325,7 +325,7 @@ gn:
     discount_for: Rabatt für %{store}
     discounts_for: Rabatte für %{store}
     edit_shipper: Lieferant %{name} bearbeiten
-    employees: Angestellte
+    users: Angestellte
     expiring_soon: läuft bald ab
     export: Exports
     item_selection: Etiketten-Druckauswahl
@@ -367,7 +367,7 @@ gn:
       requesting_connection_status: Verbindungsstatus wird angefragt...
       title: Fernwartung
       user: Benutzername
-    user_employee_index:
+    user_user_index:
       backup_database: Datenbank herunterladen
       backup_logfile: Logdatei herunterladen
   items:
@@ -444,7 +444,7 @@ gn:
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten
     edit_discount: Preisnachlass bearbeiten
-    edit_employee: Angestellter bearbeiten
+    edit_user: Angestellter bearbeiten
     edit_invoice_blurb: Rechnungstext bearbeiten
     edit_invoice_note: Rechnungsnotiz bearbeiten
     edit_item: Artikel bearbeiten
@@ -456,7 +456,7 @@ gn:
     edit_tax_profile: Steuerklasse bearbeiten
     edit_tender_method: Zahlungsmethode bearbeiten
     edit_vendor: Filiale bearbeiten
-    employees: Angestellte
+    users: Angestellte
     end_day: Tag beenden
     general_configuration: Allgemein
     home: Filialen
@@ -478,7 +478,7 @@ gn:
     new_country: Neues Land
     new_customer: Neuer Kunde
     new_discount: Neuer Preisnachlass
-    new_employee: Neuer Angestellter
+    new_user: Neuer Angestellter
     new_invoice_blurb: Neuer Rechnungstext
     new_invoice_note: Neuer Rechnungstext
     new_item: Neuer Artikel

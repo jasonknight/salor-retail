@@ -56,44 +56,24 @@ class VendorsController < ApplicationController
 
 
   def new_drawer_transaction
-      @drawer_transaction = DrawerTransaction.new(params[:transaction])
-      @drawer_transaction.drawer_amount = @current_user.get_drawer.amount
-      if @drawer_transaction.amount > @current_user.get_drawer.amount and @drawer_transaction.payout == true then
-        @drawer_transaction.amount = @current_user.get_drawer.amount
-      end
-      if @drawer_transaction.amount < 0 then
-         @drawer_transaction.amount *= -1
-         @drawer_transaction.drop = false
-         @drawer_transaction.payout = true
-      end
-      if params[:user_id] then
-        if params[:user_id] == 'self' then
-          @drawer_transaction.drawer_id = @current_user.get_drawer.id
-          @drawer_transaction.user = @current_user
-        else
-          emp = User.scopied.find_by_id(params[:user_id])
-          @drawer_transaction.drawer_id = emp.get_drawer.id
-          @drawer_transaction.user = emp
-        end
-      else
-        @drawer_transaction.drawer_id = @current_user.get_drawer.id
-      end
-      if @drawer_transaction.save then
-        # @drawer_transaction.print if not @current_register.salor_printer == true
-        if @drawer_transaction.drop then
-          @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount + @drawer_transaction.amount)
-        elsif @drawer_transaction.payout then
-          if @drawer_transaction.amount > @drawer_transaction.user.get_drawer.amount then
-          else
-            @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount - @drawer_transaction.amount)
-          end
-        else
-        end
-        # Do this here - sweeping a different model!
-      else
-        raise "Failed to save..."
-      end
-    @current_user.get_drawer.reload
+    user = @current_vendor.users.visible.find_by_id(params[:user_id])
+    @drawer = user.get_drawer
+    
+    @dt = DrawerTransaction.new
+    @dt.vendor = @current_vendor
+    @dt.company = @current_company
+    @dt.drawer_amount = @drawer.amount
+    @dt.user = user
+    @dt.amount = params[:transaction][:amount]
+    @dt.tag = params[:transaction][:tag]
+    @dt.notes = params[:transaction][:notes]
+    if params[:transaction][:trans_type] == "payout"
+      @dt.amount *= -1
+    end
+    ret = @dt.save
+    raise "Failed to save drawer transaction" unless ret == true
+    @drawer.amount += @dt.amount
+    @drawer.save
   end
 
   def open_cash_drawer
