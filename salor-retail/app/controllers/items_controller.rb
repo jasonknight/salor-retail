@@ -279,15 +279,9 @@ class ItemsController < ApplicationController
   
   def download
     params[:page] ||= 1
-    params[:order_by] ||= "created_at"
-    params[:order_by] = "created_at" if not params[:order_by] or params[:order_by].blank?
-    if params[:order_by] then
-      key = params[:order_by]
-      session[key] ||= 'ASC'
-      @items = @current_vendor.items.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order("#{key} #{session[key]}")
-    else
-      @items = @current_vendor.items.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order("id desc")
-    end
+    params[:order_by] = "id DESC" if not params[:order_by] or params[:order_by].blank?
+    orderby ||= params[:order_by]
+    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
     data = render_to_string :layout => false
     send_data(data,:filename => 'items.csv', :type => 'text/csv')
   end

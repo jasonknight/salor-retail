@@ -9,7 +9,7 @@ class ShippersController < ApplicationController
   before_filter :check_role
 
   def index
-    @shippers = @current_vendor.shippers.visible.order("name asc").page(params[:page]).per(@current_vendor.pagination)
+    @shippers = @current_vendor.shippers.visible.order("name asc").by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
   end
 
   def show
@@ -56,7 +56,7 @@ class ShippersController < ApplicationController
 
   
   def upload
-    @shipper = @current_vendor.shippers.visible.find_by_id(params[:id])
+    @shipper = @current_vendor.shippers.visible.find_by_id(params[:shipper_id])
     if params[:file]
       @uploader = @shipper.import_csv(params[:file].read)
     end
