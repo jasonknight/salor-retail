@@ -9,31 +9,12 @@
       - item.each do |k,v|
         - next if k == :type or k == :letter
         %span{ :class => k }= v
-  - if not @report[:lc_points_discount].zero?
-    %div.highlighted
-      %span.name= t('printr.order_receipt.lc_points_substracted')
-      %span.price
-      %span.quantity= Integer(@report[:lc_points])
-      %span.total= number_to_currency @report[:lc_points_discount]
-
-  - if @report[:percent_rebate_amount]
-    %div.highlighted
-      %span.name= t('printr.order_receipt.rebate_percent')
-      %span.price
-      %span.quantity= number_to_percentage @report[:percent_rebate], :precision => 1
-      %span.total= number_to_currency @report[:percent_rebate_amount]
-  - elsif @report[:fixed_rebate_amount]
-    %div.highlighted
-      %span.name= t('printr.order_receipt.rebate_fixed')
-      %span.price
-      %span.quantity
-      %span.total= number_to_currency @report[:fixed_rebate_amount]
 
 
-  %div#subsubtotal= number_to_currency @order.gross
+  %div#subsubtotal= number_to_currency @order.subtotal_for_customerdisplay
 
   - if params[:display_change] == '1'
-    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @order.change_given }
+    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @order.change }
 
   - if @report[:customer]
     .customerdetails

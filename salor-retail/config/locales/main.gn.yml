@@ -551,36 +551,6 @@ gn:
       sum: Summe
       sum_total: Gesamtsumme
       title: Verkaufsbericht
-    report_day:
-      None: Unbenannt
-      OrderItemRefund: Einzelstornierung
-      OrderRefund: Gesamtstornierung
-      cash-refunds: Bargeld-Stornierungen
-      cash_drawer: Kassenlade
-      count_orders: Anzahl Verkäufe
-      drop: Einzahlung
-      from: von
-      gross: brutto
-      net: netto
-      refunds: Stornierungen
-      payments: Zahlungen
-      payout: Auszahlung
-      payouts: Auszahlungen
-      revenue: Umsatz
-      sales: Verkäufe
-      sum: Summe
-      sum_gross: Summe brutto
-      sum_net: Summe netto
-      sum_transactions: Summe Buchungen
-      sums_by_category: nach Kategorie
-      sums_by_payment_methods: nach Zahlungsmethoden
-      sums_by_tax_profile: nach Steuern
-      time: Zeit
-      title: Tagesbericht
-      to: bis
-      transaction_tag: Journal
-      transaction_total: Gesamtbewegung
-      transactions: Buchungen
     report_day_range:
       display: Anzeigen
       end_date: Bis
@@ -796,6 +766,36 @@ gn:
       logo: Logo
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
+    report_day:
+      None: Unbenannt
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      cash-refunds: Bargeld-Stornierungen
+      cash_drawer: Kassenlade
+      count_orders: Anzahl Verkäufe
+      drop: Einzahlung
+      from: von
+      gross: brutto
+      net: netto
+      refunds: Stornierungen
+      payments: Zahlungen
+      payout: Auszahlung
+      payouts: Auszahlungen
+      revenue: Umsatz
+      sales: Verkäufe
+      sum: Summe
+      sum_gross: Summe brutto
+      sum_net: Summe netto
+      sum_transactions: Summe Buchungen
+      sums_by_category: nach Kategorie
+      sums_by_payment_methods: nach Zahlungsmethoden
+      sums_by_tax_profile: nach Steuern
+      time: Zeit
+      title: Tagesbericht
+      to: bis
+      transaction_tag: Journal
+      transaction_total: Gesamtbewegung
+      transactions: Buchungen
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

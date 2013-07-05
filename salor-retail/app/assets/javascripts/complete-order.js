@@ -63,15 +63,7 @@ function set_invoice_button() {
 }
 
 function complete_order_hide() {
-  if (typeof Salor != 'undefined') {
-    if (Register.cash_drawer_path != "" ) {
-      Salor.stopDrawerObserver();
-    }
-    if ( useMimo() ) {
-    } else {
-      Salor.poleDancer(Register.pole_display, Register.customer_screen_blurb);
-    }
-  }
+  stop_drawer_observer();
   $("#payment_methods").html("");
   $(".payment-amount").attr("disabled", true);
   $('#complete_order').hide();
@@ -114,6 +106,7 @@ function complete_order_send(print) {
 // this function handles all the magic regarding printing, drawer opening, drawer observing, pole display update and mimo screen update. detects usage of salor-bin too.
 function complete_order_process(print) {
   var drawer_opened = conditionally_open_drawer();
+  var order_id = Order.id;
   $.ajax({
     url: "/orders/complete",
     type: 'post',
@@ -126,7 +119,7 @@ function complete_order_process(print) {
     complete: function(data, status) {
       ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
       if (print == true) { 
-        print_order(Order.id, function() {
+        print_order(order_id, function() {
           // observe after print has finished
           if (drawer_opened == true) observe_drawer();
         });
@@ -135,7 +128,7 @@ function complete_order_process(print) {
         if (drawer_opened == true) observe_drawer();
       }
       sendingOrder = false;
-      updateCustomerDisplay(Order.id, false, true);
+      updateCustomerDisplay(order_id, false, true);
     }
   });
 }

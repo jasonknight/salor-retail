@@ -159,7 +159,7 @@ class Order < ActiveRecord::Base
 
   def loyalty_card
     if self.customer
-      return self.customer.loyalty_card
+      return self.customer.loyalty_cards.visible.first
     end
   end
   
@@ -371,6 +371,8 @@ class Order < ActiveRecord::Base
     
     # subtotal contains everything
     self.subtotal = self.order_items.visible.sum(:subtotal).round(2)
+    
+    self.tax_amount = self.order_items.visible.sum(:tax_amount).round(2)
     
     # subtotal will include order rebates
     self.save

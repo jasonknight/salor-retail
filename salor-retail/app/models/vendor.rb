@@ -369,7 +369,7 @@ class Vendor < ActiveRecord::Base
     vp.id = 0
     vp.name = cash_register.name
     vp.path = cash_register.thermal_printer
-    vp.copie = 1
+    vp.copies = 1
     vp.codepage = 0
     vp.baudrate = 9600
 
@@ -435,9 +435,9 @@ class Vendor < ActiveRecord::Base
       
       category_header =
           line_format3 % [
-            I18n.t('orders.report_day.sums_by_category'),
-            I18n.t('orders.report_day.net'),
-            I18n.t('orders.report_day.gross')
+            I18n.t('vendors.report_day.sums_by_category'),
+            I18n.t('vendors.report_day.net'),
+            I18n.t('vendors.report_day.gross')
           ]
       
       category_lines = "\n"
@@ -450,7 +450,7 @@ class Vendor < ActiveRecord::Base
             ]
       end
       
-      taxes_header = I18n.t('orders.report_day.sums_by_tax_profile')
+      taxes_header = I18n.t('vendors.report_day.sums_by_tax_profile')
       taxes_lines = "\n"
       taxes[i[0]].to_a.each do |t|
         taxes_lines +=
@@ -461,7 +461,7 @@ class Vendor < ActiveRecord::Base
             ]
       end
 
-      payments_header = I18n.t('orders.report_day.sums_by_payment_methods')
+      payments_header = I18n.t('vendors.report_day.sums_by_payment_methods')
       payments_lines = "\n"
       paymentmethods[i[0]].to_a.each do |p|
         payments_lines +=

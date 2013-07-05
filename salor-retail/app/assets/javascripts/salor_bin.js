@@ -15,8 +15,8 @@ function onCashDrawerClose() {
 }
 
 function stop_drawer_observer() {
-  if ( isSalorBin() && Register.cash_drawer_path != "") {
-    Salor.stopDrawerObserver(Register.cash_drawer_path);
+  if ( isSalorBin() && Register.thermal_printer != "") {
+    Salor.stopDrawerObserver(Register.thermal_printer);
   }
 }
 
@@ -24,10 +24,10 @@ function stop_drawer_observer() {
 // always stops the drawer observer, then opens the drawer immediately and detects usage of salor-bin
 function quick_open_drawer() {
   stop_drawer_observer()
-  if ( Register.cash_drawer_path != '') {
+  if ( Register.thermal_printer != '') {
     if (isSalorBin()) {
       if ( Register.salor_printer == true ) {
-        Salor.newOpenCashDrawer(Register.cash_drawer_path);
+        Salor.newOpenCashDrawer(Register.thermal_printer);
       } else {
         $.get('/vendors/open_cash_drawer');
       }
@@ -60,13 +60,13 @@ function print_order(id, callback) {
 }
 
 function print_url(printer_path, url, params, confirmation_url, callback) {
-  c_url = typeof(confirmation_url) !== 'undefined' ? Conf.url + confirmation_url : '';
+  c_url = typeof(confirmation_url) !== 'undefined' ? Register.ip + confirmation_url : '';
   param_string = '?user_id=' + User.id + '&user_type=' + User.type + '&cash_register_id=' + Register.id + params;
   if (params.indexOf('download=true') != -1) {
     window.location = url + param_string;
   } else if (isSalorBin() && Register.salor_printer == true) {
     stop_drawer_observer()
-    Salor.printURL(printer_path, Conf.url + url + param_string, c_url);
+    Salor.printURL(printer_path, Register.ip + url + param_string, c_url);
     if (typeof callback == "function") {
       callback.call();
     }
@@ -87,7 +87,7 @@ function updateCustomerDisplay(order_id, item, show_change) {
   if ( useMimo() ) {
     var show_change_param = ""
     if (show_change) show_change_param = "?display_change=1";
-    Salor.mimoRefresh(Conf.url + "/orders/" + order_id + "/customer_display" + show_change_param, 800, 480);
+    Salor.mimoRefresh(Register.ip + "/orders/" + order_id + "/customer_display" + show_change_param, 800, 480);
     
   }
   
@@ -122,7 +122,7 @@ function format_pole(name, price, quantity, weight_metric, total) {
 function observe_drawer() {
   if (isSalorBin()) {
     setTimeout(function() {
-      Salor.startDrawerObserver(Register.cash_drawer_path);
+      Salor.startDrawerObserver(Register.thermal_printer);
     },
     1000);
   }

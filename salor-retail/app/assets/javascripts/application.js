@@ -29,5 +29,5 @@
 //= require complete-order-payment
 //= require complete-order-change
 //= require complete-order
-//= require cash-drop
+//= require drawer-transaction
 //= require jquery.modcoder.excolor

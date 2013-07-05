@@ -550,36 +550,6 @@ en-US:
       sum: sum
       sum_total: sum total
       title: Sums
-    report_day:
-      None: Not specified
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      cash-refunds: Cash-Refunds
-      cash_drawer: Cash drawer
-      count_orders: Count of orders
-      drop: drop
-      from: From
-      gross: gross
-      net: net
-      noncash-refunds: Noncash-Refunds
-      payments: Payments
-      payout: payout
-      payouts: payouts
-      revenue: Revenue
-      sales: Sales
-      sum: sum
-      sum_gross: Sum gross
-      sum_net: Sum net
-      sum_transactions: Sum transactions
-      sums_by_category: sums by category
-      sums_by_payment_methods: sums by payment methods
-      sums_by_tax_profile: sums by tax profile
-      time: time
-      title: day report
-      to: To
-      transaction_tag: transaction tag
-      transaction_total: transaction total
-      transactions: transactions
     report_day_range:
       display: display
       end_date: end date
@@ -786,6 +756,36 @@ en-US:
       logo: logo
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'

@@ -96,10 +96,10 @@ module SalorBase
     options   = defaults.merge!(options)
     unit      = I18n.t("number.currency.format.friendly_unit")
     format    = I18n.t("number.currency.format.format")
-    if number.to_f < 0
-      format = options.delete(:negative_format)
-      number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
-    end
+#     if number.to_f < 0
+#       format = options.delete(:negative_format)
+#       number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
+#     end
     value = self.number_with_precision(number)
     format.gsub(/%n/, value).gsub(/%u/, unit)
   end
@@ -112,10 +112,10 @@ module SalorBase
     options   = defaults.merge!(options)
     unit      = I18n.t("number.currency.format.unit")
     format    = I18n.t("number.currency.format.format")
-    if number.to_f < 0
-      format = options.delete(:negative_format)
-      number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
-    end
+#     if number.to_f < 0
+#       format = options.delete(:negative_format)
+#       number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
+#     end
     value = self.number_with_precision(number)
     format.gsub(/%n/, value).gsub(/%u/, unit)
   end

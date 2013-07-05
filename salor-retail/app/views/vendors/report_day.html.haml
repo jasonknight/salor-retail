@@ -35,7 +35,7 @@
       %tr
         %td{:colspan => 2, :align => :center}
           = salor_icon(:print, {:onclick => 'Salor.printPage();'}, 32, t('.a4'))
-          = salor_icon(:print, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_day_report',decodeURIComponent($('#date_range').serialize()));" }, 32, t('.thermal'))
+          = salor_icon(:print, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_report_day',decodeURIComponent($('#date_range').serialize()));" }, 32, t('.thermal'))
     %br
     %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 

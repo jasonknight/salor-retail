@@ -3,7 +3,7 @@
 <%= "\e!\x18" %><%= i.first_name %> <%= i.last_name %>
 
 
-<%= "\x1B\x61\x00" %><%= "\x1D\x6B\x04#{ i.loyalty_card.sku.upcase if i.loyalty_card }\x00" %>
+<%= "\x1B\x61\x00" %><%= "\x1D\x6B\x04#{ i.loyalty_cards.visible.first.sku.upcase if i.loyalty_cards.visible.any? }\x00" %>
 
 
 

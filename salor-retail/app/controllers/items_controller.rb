@@ -174,6 +174,7 @@ class ItemsController < ApplicationController
       send_data output, :filename => '1.salor'
     elsif @current_register.salor_printer
       render :text => output
+      return
     end
     render :nothing => true
   end

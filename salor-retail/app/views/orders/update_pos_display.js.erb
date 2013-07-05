@@ -18,6 +18,5 @@ $('.pos-table-left-column-items').html('');
 <% end -%>
 
 <% if @inst and @inst.item.behavior == 'gift_card' and @inst.item.activated.nil? %>
-               console.log("XXX");
      print_url(Register.sticker_printer, '/items/labels', '&id=<%= @inst.item.id %>&type=sticker&style=default')
 <% end %>
