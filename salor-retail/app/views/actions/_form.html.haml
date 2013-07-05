@@ -1,25 +1,37 @@
-= form_for(@action, as: :act) do |f| 
-  - if @action.errors.any? 
-    #error_explanation
-      %h2= I18n.t("activerecord.errors.template.header.other", :count => @action.errors.count,:model => t("activerecord.models.action.one"))
-      - @action.errors.full_messages.each do |msg|
-        %p msg
+= form_for(@action, as: :act) do |f|
+  %table{ :width => "80%", :align => "center"} 
+    - if @action.errors.any? 
+      %tr
+        %td{:colspan => 2}
+          #error_explanation
+            %h2= I18n.t("activerecord.errors.template.header.other", :count => @action.errors.count,:model => t("activerecord.models.action.one"))
+            - @action.errors.full_messages.each do |msg|
+              %p msg
+    %tr
+      %td{:colspan => 2}
+        %h2= @action.model.name if @action.model
+        %hr
+    %tr
+      %td= f.label :name
+      %td= f.text_field :name
+    %tr
+      %td= f.label :whento
+      %td= f.select :whento, Action.when_list
+    %tr
+      %td= f.label :behavior
+      %td= f.select :behavior, Action.behavior_list
+    %tr
+      %td= f.label :afield
+      %td= f.select :afield, Action.afield_list
+    %tr
+      %td= f.label :value
+      %td= f.text_field :value
 
-  %h2= @action.model.name if @action.model
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :whento
-    = f.select :whento, Action.when_list
-  .field
-    = f.label :behavior
-    = f.select :behavior, Action.behavior_list
-  .field
-    = f.label :afield
-    = f.select :afield, Action.afield_list
-  .field
-    = f.label :value
-    = f.text_field :value
-  .field
-    = f.submit
+    %tr
+      %td= f.label :field2
+      %td= f.select :field2, Action.afield_list
+    %tr
+      %td= f.label :value2
+      %td= f.text_field :value2
+    %tr
+      %td{ :colspan => 2 }= f.submit

@@ -11,12 +11,15 @@
 #
 # Gift Cards
 # ----------
-# A gift card is a self-issued currency which you can sell and buy to and from your customers. It has to be sold with a tax of 0% since it is not known in advance which goods will be bought by it when the customer returns. In many countries, there are different tax percentages for different kinds of items. When a customer pays with a gift card, it is added to the Order as an OrderItem. Its price becomes the negative order total at the point of time it is scanned, but not more than the remaining amount on the gift card. Therefore, the gift card reduces the order total. In the most extreme case, the order total is reduced to 0. However, the prices and taxes of the remaining OrderItems are NOT affected by this and will keep their normal value. This means that the store owner still has to pay the correct taxes for the remaining OrderItems even when the order total is zero. Gift cards have to be added as the LAST OrderItem of an order.
+# A gift card is a self-issued currency which you can sell and buy to and from your customers. 
+
+# It has to be sold with a tax of 0% since it is not known in advance which goods will be bought by it when the customer returns. In many countries, there are different tax percentages for different kinds of items. When a customer pays with a gift card, it is added to the Order as an OrderItem. Its price becomes the negative order total at the point of time it is scanned, but not more than the remaining amount on the gift card. Therefore, the gift card reduces the order total. In the most extreme case, the order total is reduced to 0. However, the prices and taxes of the remaining OrderItems are NOT affected by this and will keep their normal value. This means that the store owner still has to pay the correct taxes for the remaining OrderItems even when the order total is zero. Gift cards have to be added as the LAST OrderItem of an order.
 #
 #
 # Coupons
 # ----------
-# Coupons are never sold. A single coupon with a single SKU can be published en masse in a newspaper. While a coupon turns into an OrderItem when scanned, unlike gift cards, it does not have a price by itself (the price is always zero), but it DOES modify the price and taxes of the matching OrderItem. Coupons come in three flavors: 1) percent rebate for the matching Item, 2) fixed amount off a matching Item, 3) buy X get Y for free, also for a matching Item. As has been said, in all 3 cases, each coupon will have the price of 0 but will reduce the price (and taxes) of exactly one other OrderItem. Coupons have to be added to an Order AFTER the matching Item. If the Coupon is added before, no action will take place.
+# Coupons are never sold. A single coupon with a single SKU can be published en masse in a newspaper. While a coupon turns into an OrderItem when scanned, unlike gift cards, it does not have a price by itself  (the price is always zero), but it DOES modify the price and taxes of the matching OrderItem.  Coupons come in three flavors: 1) percent rebate for the matching Item, 2) fixed amount off a matching Item, 3) buy X get Y for free, also for a matching Item. As has been said, in all 3 cases, each coupon will have the price of 0 but will reduce the price (and taxes) of exactly one other OrderItem. Coupons have to be added to an Order AFTER the matching Item. 
+# If the Coupon is added before, no action will take place.
 #
 #
 # OrderItem level rebates
@@ -218,22 +221,33 @@ class Order < ActiveRecord::Base
 
 
   def add_order_item(params={})
-    return if self.paid
+    return nil if params[:sku].blank?
+    if self.paid then
+      log_action "Order is paid already, cannot edit"
+    end
     # get existing regular item
     item = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
-    if item
-      if not (item.activated or item.is_buyback)
+    if item then
+      if item.is_normal?
+        log_action "Item is normal, and present, just increment"
         # simply increment and return
-        item.quantity += 1
+        item.quantity += 1        
+        item.calculate_totals
         item.save
+        self.calculate_totals
         return item
+      else
+        log_action "Item is not normal but is #{item.behavior}"
       end
+    else
+      log_action "Item not found on order"
     end
     
     # at this point, we know that the added order item is not yet in the order. so we add a new one
     i = self.get_item_by_sku(params[:sku])
-    
+    log_action "Item is: #{i.inspect}"
     if i.class == LoyaltyCard then
+      log_action "Item is a loyalty card"
       self.customer = i.customer
       self.tag = self.customer.full_name
       self.save
@@ -241,6 +255,7 @@ class Order < ActiveRecord::Base
     end
     
     if i.class == Item and i.item_type.behavior == 'gift_card' and i.sku == "G000000000000"
+      log_action "Dynamic Giftcard SKU detected"
       new_i = create_dynamic_gift_card_item
       i = new_i
     end
@@ -249,14 +264,16 @@ class Order < ActiveRecord::Base
     oi = OrderItem.new
     oi.order = self
     oi.set_attrs_from_item(i)
-    oi.sku = params[:sku]
-    oi.no_inc = true if oi.sku.include?('.') or oi.sku.include?(',')
+    if params[:sku].include?('.') or params[:sku].include?(',')
+      log_action "Setting no_inc"
+      oi.no_inc = true 
+    end
     oi.no_inc ||= params[:no_inc]
+    log_action "no_inc is: #{oi.no_inc.inspect}"
     oi.modify_price
     oi.calculate_totals
     self.order_items << oi
     self.calculate_totals
-    
     return oi
   end
 
@@ -264,7 +281,11 @@ class Order < ActiveRecord::Base
   
   def create_dynamic_gift_card_item
     zero_tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
-    raise "NoZeroTaxProfileFound" if zero_tax_profile.nil?
+
+    if zero_tax_profile.nil?
+      log_action "No Zero TaxProfile has been found"
+      raise "NoZeroTaxProfileFound" 
+    end
     timecode = Time.now.strftime('%y%m%d%H%M%S')
     i = Item.new
     i.sku = "G#{timecode}"

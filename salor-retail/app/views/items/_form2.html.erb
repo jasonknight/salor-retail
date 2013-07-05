@@ -499,24 +499,24 @@ $(function () {
           <tr>
           <td colspan="6"> <h3> <%= I18n.t("activerecord.models.action.other") %></h3> <hr />  </td>
          </tr>
-        <% @item.actions.visible.each do |action|  %>
+        <% @item.actions.visible.each do |action| %> 
           <tr >
             <td width="40%"> <%= link_to action.name, edit_action_path(action) %> </td>
             <td>
-              <%=I18n.t("when_list.#{Action.when_list.find {|w| action.whento.to_sym == w}}") %>
+              <%=I18n.t("when_list.#{Action.when_list.find {|w| action.whento.to_sym == w}}") if not action.whento.nil? %>
             </td>
             <td>
-              <%= I18n.t("behavior_list.#{Action.behavior_list.find {|b| b == action.behavior.to_sym }}")  %>
+              <%= I18n.t("behavior_list.#{Action.behavior_list.find {|b| b == action.behavior.to_sym }}") if not action.behavior.nil?  %>
             </td>
             <td>
               <%= action.value %>
             </td>
             <td>
-              <%= salor_number_to_currency(Action.simulate(@item, action).base_price) %>
+              <%= salor_number_to_currency(Action.simulate(@item, action).base_price) if false == true %>
             </td>
             <td>
               <div>
-              <%= link_to image_tag('/images/icons/' + icon(:delete,16)), action,:confirm => 'Are you sure?', :method => :delete %>
+              <%= link_to salor_icon(:delete,{},16), action,:confirm => 'Are you sure?', :method => :delete %>
             </div>
             </td>
           </tr>

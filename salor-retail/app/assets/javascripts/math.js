@@ -69,7 +69,9 @@ function toDelimited(number) {
     separator: i18nseparator,
     delimiter : i18ndelimiter
   };
-
+  if (typeof number == 'undefined' || number == null) {
+    number = 0.0;
+  }
   match = number.toString().match(/([\+\-]?[0-9]*)(.[0-9]+)?/);
 
   if (!match) return;
@@ -95,8 +97,8 @@ function toCurrency(number) {
   if (!typeof number == 'number') {
     number = toFloat(number);
   }
-  if (typeof number == 'undefined') {
-    number = 0;
+  if (typeof number == 'undefined' || number == null) {
+    number = 0.0;
   }
   match = number.toString().match(/([\+\-]?[0-9]*)(.[0-9]+)?/);
 
@@ -104,7 +106,6 @@ function toCurrency(number) {
 
   integerPart = match[1].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1" + settings.delimiter);
   fractionalPart = match[2] ? (match[2].toString() + "000000000000").substr(1, settings.precision) : "000000000000".substr(1, settings.precision);
-
   return settings.unit + integerPart + ( settings.precision > 0 ? settings.separator + fractionalPart : "");
 }
 
@@ -119,7 +120,9 @@ function toPercent(number) {
     separator: i18nseparator,
     delimiter : i18ndelimiter
   };
-
+  if (typeof number == 'undefined' || number == null) {
+    number = 0.0;
+  }
   match = number.toString().match(/([\+\-]?[0-9]*)(.[0-9]+)?/);
 
   if (!match) return;
