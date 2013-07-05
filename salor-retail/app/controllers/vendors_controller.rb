@@ -56,15 +56,14 @@ class VendorsController < ApplicationController
 
 
   def new_drawer_transaction
+      if params[:transaction][:trans_type] == "payout" then
+        params[:transaction][:amount] = SalorBase.string_to_float(params[:transaction][:amount]) * -1
+      end
+      params[:transaction].delete(:trans_type)
       @drawer_transaction = DrawerTransaction.new(params[:transaction])
       @drawer_transaction.drawer_amount = @current_user.get_drawer.amount
       if @drawer_transaction.amount > @current_user.get_drawer.amount and @drawer_transaction.payout == true then
         @drawer_transaction.amount = @current_user.get_drawer.amount
-      end
-      if @drawer_transaction.amount < 0 then
-         @drawer_transaction.amount *= -1
-         @drawer_transaction.drop = false
-         @drawer_transaction.payout = true
       end
       if params[:user_id] then
         if params[:user_id] == 'self' then
@@ -80,15 +79,10 @@ class VendorsController < ApplicationController
       end
       if @drawer_transaction.save then
         # @drawer_transaction.print if not @current_register.salor_printer == true
-        if @drawer_transaction.drop then
-          @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount + @drawer_transaction.amount)
-        elsif @drawer_transaction.payout then
-          if @drawer_transaction.amount > @drawer_transaction.user.get_drawer.amount then
-          else
-            @drawer_transaction.user.get_drawer.update_attribute(:amount,@drawer_transaction.user.get_drawer.amount - @drawer_transaction.amount)
-          end
-        else
-        end
+        new_amount = @drawer_transaction.user.get_drawer.amount + @drawer_transaction.amount
+        log_action " #{@drawer_transaction.user.get_drawer.amount} + #{@drawer_transaction.amount} "
+        @drawer_transaction.user.get_drawer.update_attribute(:amount,new_amount)
+        log_action "DrawerTransaction drawer update complete."
         # Do this here - sweeping a different model!
       else
         raise "Failed to save..."
