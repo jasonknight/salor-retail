@@ -153,12 +153,10 @@ class Shipment < ActiveRecord::Base
     end
     self.shipment_items.each do |item|
       if item.in_stock then
-        add_salor_error(I18n.t("system.errors.shipment_item_already_in_stock", :sku => item.sku))
-        puts "Item already in stock"
+        log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => item.sku)
         next
       end
-      i = Item.new.from_shipment_item(item)
-      i.make_valid     
+      i = Item.new.from_shipment_item(item)    
       if i.save then
         item.update_attribute(:in_stock,true)
       else
@@ -166,7 +164,7 @@ class Shipment < ActiveRecord::Base
         i.errors.full_messages.each do |error|
           msg << error
         end
-        add_salor_error(I18n.t("system.errors.shipment_item_move_failed", :sku => item.sku, :error => msg.join('<br />')))
+        log_action I18n.t("system.errors.shipment_item_move_failed", :sku => item.sku, :error => msg.join('<br />'))
       end
     end
   end
@@ -180,12 +178,11 @@ class Shipment < ActiveRecord::Base
 
     i = self.shipment_items.find(id)
     if i.in_stock then
-      add_salor_error(I18n.t("system.errors.shipment_item_already_in_stock", :sku => i.sku))
+      log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => i.sku)
       return
     end
     if i then
       item = Item.new.from_shipment_item(i)
-      item.make_valid
 #       if item.nil? then
 #         return
 #       end

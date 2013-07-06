@@ -195,4 +195,8 @@ module SalorBase
     end
     return values.join(sep)
   end
+  def get_salor_errors()
+    log_action "get_salor_errors was called in this request, but it deprecated."
+    return []
+  end
 end
