@@ -15,6 +15,13 @@ class DrawerTransaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :order
   belongs_to :cash_register
+  before_create :set_nr
+
+  def set_nr
+    i = self.vendor.largest_drawer_transaction_number + 1
+    self.nr = i
+    self.vendor.update_attribute :largest_drawer_transaction_number, i
+  end
   
   def amount=(p)
     write_attribute(:amount,self.string_to_float(p))

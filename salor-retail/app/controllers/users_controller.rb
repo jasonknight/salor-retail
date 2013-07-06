@@ -59,7 +59,7 @@ class UsersController < ApplicationController
     else
       raise "Ids Don't Match" + login.user.id.to_s + " ---- " + @current_user.role_cache
     end
-    redirect_to users_path(@user)
+    redirect_to "/users/#{@user.id}"
   end
 
   

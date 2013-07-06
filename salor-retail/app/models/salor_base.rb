@@ -22,7 +22,12 @@ module SalorBase
       arg
     end
   end
-  
+  def hide(by)
+    self.hidden = true
+    self.hidden_at = Time.now
+    self.hidden_by = by
+    self.save
+  end
   def log_action(txt)
     SalorBase.log_action(self.class.to_s,txt)
   end
@@ -187,5 +192,9 @@ module SalorBase
       values << self.send(col.name.to_sym)  
     end
     return values.join(sep)
+  end
+  def get_salor_errors()
+    log_action "get_salor_errors was called in this request, but it deprecated."
+    return []
   end
 end

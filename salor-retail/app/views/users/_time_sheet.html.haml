@@ -7,7 +7,7 @@
     %td= I18n.t("activerecord.attributes.employee.hourly_rate")
     %td{:align=>'right'}= "Amount Due"
     %td
-  - @user.user_logins.where(:login => (@from - 1.day)..(@to + 1.day)).each do |login|
+  - @user.user_logins.visible.where(:login => (@from - 1.day)..(@to + 1.day)).each do |login|
     %tr{:model_id => login.id}
       %td= text_field_tag("login", login.login.strftime("%Y-%m-%d %H:%M:%S"), :class=> 'employee_login_time', :model_id => login.id )
       - if login.logout
