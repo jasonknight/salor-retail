@@ -49,6 +49,7 @@ class Vendor < ActiveRecord::Base
   has_many :invoice_notes
   has_many :item_stocks
   has_many :receipts
+  has_many :user_logins
   
 
   serialize :unused_order_numbers

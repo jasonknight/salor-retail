@@ -22,7 +22,12 @@ module SalorBase
       arg
     end
   end
-  
+  def hide(by)
+    self.hidden = true
+    self.hidden_at = Time.now
+    self.hidden_by = by
+    self.save
+  end
   def log_action(txt)
     SalorBase.log_action(self.class.to_s,txt)
   end
