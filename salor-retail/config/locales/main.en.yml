@@ -53,9 +53,6 @@ en:
       dollar_per_lp: dollar per loyalty point
       drop: drop
       email: email
-      user:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Uses drawer of
       end_amount: end amount
       end_date: end date
       eod_show: show at end of day
@@ -177,6 +174,9 @@ en:
       track_expiry: Track Expiry
       type: type
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: username
       uses_drawer_id: Uses Drawer of
       value: value
@@ -220,9 +220,6 @@ en:
       drawer_transaction:
         one: Drawer Transaction
         other: Drawer Transactions
-      user:
-        one: Employee
-        other: Employees
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,12 +268,12 @@ en:
       tax_profile:
         one: Tax Profile
         other: Tax Profiles
-      payment_method:
-        one: Payment Method
-        other: Payment Methods
       transaction_tag:
         one: Tag
         other: Tags
+      user:
+        one: Employee
+        other: Employees
       vendor:
         one: Store
         other: Stores
@@ -325,7 +322,6 @@ en:
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
     edit_shipper: Editshipper %{name}
-    users: users
     expiring_soon: expiring soon
     export: export
     item_selection: item selection
@@ -340,6 +336,7 @@ en:
     time_sheet: Employee Time Sheet
     update_location: update location
     update_real_quantity: update real quantity
+    users: users
   helpers:
     select:
       prompt: Please select
@@ -409,7 +406,6 @@ en:
       upload: upload
   label: label
   menu:
-    close: Close
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
@@ -425,6 +421,7 @@ en:
     cash_registers: cash registers
     categories: categories
     clear_order: Clear
+    close: Close
     configuration: Config.
     contact: contact
     current_order: ! 'current order: #%{id}'
@@ -443,19 +440,18 @@ en:
     edit_category: Editcategory
     edit_customer: Editcustomer
     edit_discount: Editdiscount
-    edit_user: Edituser
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: Edit Inovice Note
     edit_item: Edititem
     edit_location: Editlocation
+    edit_payment_method: Edit Payment Method
     edit_sale_type: Edit Sale type
     edit_shipment: Editshipment
     edit_shipment_type: Editshipment type
     edit_shipper: Edit Shipper %{name}
     edit_tax_profile: Edittax profile
-    edit_payment_method: Edit Payment Method
+    edit_user: Edituser
     edit_vendor: EditStore
-    users: users
     end_day: end day
     general_configuration: general configuration
     home: home
@@ -477,25 +473,26 @@ en:
     new_country: New Country
     new_customer: New customer
     new_discount: New discount
-    new_user: New user
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: New Invoice Note
     new_item: New item
     new_location: New location
     new_order: New
+    new_payment_method: New Payment Method
     new_sale_type: New Sale Type
     new_shipment: New shipment
     new_shipment_type: New shipment type
     new_shipper: New shipper
     new_stock_location: New stock location
     new_tax_profile: New tax profile
-    new_payment_method: New Payment Method
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: New Store
     ok: OK
     order: order
     orders: orders
     overview: overview
+    payment_methods: Payment Methods
     points: points
     pos: POS
     print: print
@@ -519,13 +516,13 @@ en:
     stock_locations: stock locations
     support: support
     tax_profiles: tax profiles
-    payment_methods: Payment Methods
     transaction_tags: transaction tags
     update_gift_card: update gift card
     update_location: update location
     update_real_quantity: update real quantity
     upload: upload
     usb_device: Usb Stick
+    users: users
     vendors: Stores
     void: void
     wholesaler_update: wholesaler update
@@ -600,11 +597,11 @@ en:
       cash-refunds: Cash-Refunds
       cash_refunds_total: TOTAL
       no_category: No Category
-      refunds: Refunds
       orders_total: Orders total
       payment_method_total: TOTAL
       payments: Payments
       refund: Refund
+      refunds: Refunds
       revenue: Revenue
       revenue_total: TOTAL
       sales: Sales
