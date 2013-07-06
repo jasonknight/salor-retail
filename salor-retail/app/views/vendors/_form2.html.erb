@@ -1,4 +1,4 @@
-<%= form_for @vendor, :html => { :enctype => "multipart/form-data" } do |f| %>
+<%= form_for nest_image(@vendor), :html => { :multipart => true } do |f| %>
 
 
 
@@ -24,7 +24,13 @@
         <% end %>  
     </td>
   </tr>
-
+  
+  <div class='form_image'>
+    <%= f.label :logo %>
+    <img src="#{ @vendor.image('logo') }" />
+    <%= f.label :invoice_logo %>
+    <img src="#{ @vendor.image('invoice_logo') }" />
+  </div>
   
   <tr>
     <td valign="top" class="attr">
@@ -78,6 +84,18 @@
     </td>
   </tr>
   
+  <%= f.fields_for :images do |image_form| %>
+    <tr>
+      <td valign="top" class="attr">
+        <%= f.label image_form.object.image_type.to_s %>
+      </td>
+      <td valign="top" class="value">
+        <%= image_form.file_field :file_data %>
+        <%= image_form.hidden_field :image_type %>
+      </td>
+    </tr>
+  <% end %>
+  
   <tr>
     <td valign="top" colspan="2">
       <hr />
@@ -100,15 +118,6 @@
     </td>
     <td valign="top" class="value">
       <%= f.text_field :pagination, :class => "keyboardable-int" %>
-    </td>
-  </tr>
-  
-  <tr>
-    <td valign="top" class="attr">
-      <%= f.label t("activerecord.attributes.url") %>
-    </td>
-    <td valign="top" class="value">
-       <%= f.text_field :url, :class => "keyboardable" %>
     </td>
   </tr>
   

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130706055330) do
+ActiveRecord::Schema.define(:version => 20130706100007) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -321,6 +321,20 @@ ActiveRecord::Schema.define(:version => 20130706055330) do
     t.integer  "vendor_id"
     t.integer  "company_id"
     t.integer  "user_id"
+  end
+
+  create_table "images", :force => true do |t|
+    t.string   "name"
+    t.string   "imageable_type"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "imageable_id"
+    t.integer  "company_id"
+    t.integer  "vendor_id"
+    t.string   "image_type"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
   end
 
   create_table "inventory_report_items", :force => true do |t|
@@ -956,10 +970,8 @@ ActiveRecord::Schema.define(:version => 20130706055330) do
   create_table "transaction_tags", :force => true do |t|
     t.string   "name"
     t.integer  "vendor_id"
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
-    t.binary   "logo_image"
-    t.string   "logo_image_content_type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
@@ -1026,15 +1038,11 @@ ActiveRecord::Schema.define(:version => 20130706055330) do
     t.string   "name"
     t.integer  "user_id"
     t.text     "description"
-    t.datetime "created_at",                                                                 :null => false
-    t.datetime "updated_at",                                                                 :null => false
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
     t.boolean  "hidden"
     t.binary   "receipt_logo_header"
     t.binary   "receipt_logo_footer"
-    t.string   "logo_image_content_type"
-    t.binary   "logo_image"
-    t.binary   "logo_invoice_image"
-    t.binary   "logo_invoice_image_content_type"
     t.boolean  "multi_currency"
     t.string   "sku"
     t.string   "token"
@@ -1064,7 +1072,6 @@ ActiveRecord::Schema.define(:version => 20130706055330) do
     t.text     "csv_imports"
     t.string   "csv_imports_url"
     t.boolean  "items_view_list"
-    t.string   "url",                               :default => "http://default.sr.localhost"
     t.boolean  "salor_printer"
     t.text     "receipt_blurb_footer"
     t.boolean  "calculate_tax"

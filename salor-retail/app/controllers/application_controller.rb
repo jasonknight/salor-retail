@@ -70,13 +70,6 @@ class ApplicationController < ActionController::Base
     not workstation?
   end
 
-
-
-  def user_cache_name
-    return @current_user.username if salor_signed_in?
-    return 'loggedout'
-  end
-
   private
   
   def set_locale

@@ -8,7 +8,7 @@
 class Vendor < ActiveRecord::Base
 
   include SalorScope
-
+  include ImageMethods
   
   belongs_to :company
   
@@ -24,6 +24,7 @@ class Vendor < ActiveRecord::Base
   has_many :order_items
   has_many :actions
   has_many :buttons
+  has_many :images, :as => :imageable
   
   has_many :cash_registers
   has_one  :salor_configuration
@@ -55,8 +56,15 @@ class Vendor < ActiveRecord::Base
   serialize :unused_order_numbers
   serialize :unused_quote_numbers
   
+  accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
+  
   def region
     SalorRetail::Application::COUNTRIES_REGIONS[self.country]
+  end
+  
+  def logo_image
+    return self.image('logo') if Image.where(:imageable_type => 'Vendor', :imageable_id => self.id, :image_type => 'logo').any?
+    "/assets/blank.png"
   end
   
   def gs1_regexp
