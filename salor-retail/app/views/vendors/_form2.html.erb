@@ -1,36 +1,26 @@
 <%= form_for nest_image(@vendor), :html => { :multipart => true } do |f| %>
 
+  <% if @vendor.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @vendor.errors.count,:model => t("activerecord.models.vendor.one"))%></h2>
+
+      <ul>
+      <% @vendor.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>  
 
 
-<%= f.hidden_field :vendor_id %>
-
-<table width="90%" align="center">
+<table width="90%" align="center" class="clear">
   <tr>
     <td valign="top" colspan="2" align="right">
-      <div class="actions">
-          <%= f.submit I18n.t('helpers.submit.save'), :id => 'save_button' %>
+      <div class="actions clear">
+        <%= f.submit I18n.t('helpers.submit.save'), :id => 'save_button' %>
       </div>
-      
-        <% if @vendor.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @vendor.errors.count,:model => t("activerecord.models.vendor.one"))%></h2>
-
-            <ul>
-            <% @vendor.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-            </ul>
-          </div>
-        <% end %>  
     </td>
   </tr>
-  
-  <div class='form_image'>
-    <%= f.label :logo %>
-    <img src="#{ @vendor.image('logo') }" />
-    <%= f.label :invoice_logo %>
-    <img src="#{ @vendor.image('invoice_logo') }" />
-  </div>
   
   <tr>
     <td valign="top" class="attr">
@@ -84,31 +74,10 @@
     </td>
   </tr>
   
-  <%= f.fields_for :images do |image_form| %>
-    <tr>
-      <td valign="top" class="attr">
-        <%= f.label image_form.object.image_type.to_s %>
-      </td>
-      <td valign="top" class="value">
-        <%= image_form.file_field :file_data %>
-        <%= image_form.hidden_field :image_type %>
-      </td>
-    </tr>
-  <% end %>
-  
   <tr>
     <td valign="top" colspan="2">
       <hr />
       <h2> <%= t("menu.configuration") %> </h2>
-    </td>
-  </tr>
-  
-  <tr>
-    <td valign="top" class="attr">
-      <%= f.label t("activerecord.attributes.calculate_tax") %>
-    </td>
-    <td valign="top" class="value">
-      <%= f.check_box :calculate_tax, :id => "set_calculate_tax" %> <br /> <br />
     </td>
   </tr>
   
@@ -128,23 +97,28 @@
     </td>
   </tr>
   
-  <tr>
-    <td valign="top" class="attr">
-      <label for="vendor_logo"><%= Vendor.human_attribute_name(:logo) %></label>
-    </td>
-    <td valign="top" class="value">
-      <input id="vendor_logo" name="vendor[logo]" type="file">
-    </td>
-  </tr>
-  
-  <tr>
-    <td valign="top" class="attr">
-      <%= f.label :logo_invoice %>
-    </td>
-    <td valign="top" class="value">
-      <input id="vendor_logo_invoice" name="vendor[logo_invoice]" type="file">
-    </td>
-  </tr>
+  <%= f.fields_for :images do |image_form| %>
+    <tr>
+      <td valign="top" class="attr">
+        <%= f.label image_form.object.image_type.to_s %>
+      </td>
+      <td valign="top" class="value">
+        <%= image_form.file_field :file_data %>
+        <%= image_form.hidden_field :image_type %>
+      </td>
+      <td>
+        <div class='form_image clear'>
+          <%= f.label :logo %>
+          <br />
+          <img src="<%= @vendor.image('logo') %>" />
+          <br />
+          <%= f.label :invoice_logo %>
+          <br />
+          <img src="<%= @vendor.image('invoice_logo') %>" />
+        </div>
+      </td>
+    </tr>
+  <% end %>
   
   <tr>
     <td valign="top" class="attr">

@@ -31,4 +31,3 @@
 <div class="pagination" align="center">
   <%= paginate @broken_items if @broken_items %>
 </div>
-<%= raw content_box_bottom %>

@@ -50,7 +50,7 @@ class VendorsController < ApplicationController
   def update
     @vendor = @current_company.vendors.visible.find_by_id(params[:id])
     if @vendor.update_attributes(params[:vendor])
-      redirect_to vendors_path
+      redirect_to vendor_path(@vendor)
     else
       render :edit
     end
