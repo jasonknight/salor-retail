@@ -1,3 +1,5 @@
+# coding: UTF-8
+
 # Copyright (c) 2012 Red (E) Tools Ltd.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -38,10 +40,35 @@ else
 end
 
 tax_percentages = [20, 10, 0]
+tax_profile_letters = ['A', 'B', 'C']
+tax_profile_defaults = [nil, true, nil]
+
 role_names = [:manager, :head_cashier, :cashier, :stockboy]
-payment_method_names = ['Cash', 'Card', 'Other','Change']
+
+invoice_blurb_languages = ['en', 'gn']
+invoice_blurb_texts = {}
+invoice_blurb_texts['en'] = [ 'header line', 'footer line' ]
+invoice_blurb_texts['gn'] = [ 'Kofpzeile', 'Fußzeile' ]
+invoice_blurb_invoiceaddon = {}
+invoice_blurb_invoiceaddon['en'] = ' with Kramdown **formatted** text'
+invoice_blurb_invoiceaddon['gn'] = ' mit Kramdown **formatiertem** text'
+
+payment_method_names = ['Cash', 'Card','Unpaid','Quote','Change']
+payment_methods_cash = [true, nil, nil, nil, nil]
+payment_methods_change = [nil, nil, nil, nil, true]
+payment_methods_quote = [nil, nil, nil, true, nil]
+payment_methods_unpaid = [nil, nil, true, nil, nil]
+
+country_names = ['USA', 'Europe']
+
 item_type_behaviors = ['normal', 'gift_card', 'coupon']
 item_type_names = ['Normal Item', 'Gift Card', 'Coupon']
+
+shipment_types_names = ['planning', 'ordered', 'delayed', 'delivered', 'processed']
+
+transaction_tag_names = ['safe','bank','taxi','cleaning','other']
+
+sale_type_names = ['online service', 'hardware', 'mixed']
 
 cash_register_names = ['Local', 'Remote']
 cash_register_salor_printer = [nil, true]
@@ -74,6 +101,17 @@ company_count.times do |c|
       r = it.save
       item_type_objects << it
       puts "ItemType #{ c } #{ v } created" if r == true
+    end
+    
+    payment_method_objects = []
+    payment_method_names.size.times do |i|
+      pm = PaymentMethod.new
+      pm.vendor = vendor
+      pm.company = company
+      pm.name = "#{payment_method_names[i]}#{ c }#{ v }"
+      pm.cash = payment_methods_cash[i]
+      pm.quote = payment_methods_quote[i]
+      pm.unpaid = payment_methods_unpaid[i]
     end
     
     cash_register_objects = []
@@ -121,6 +159,8 @@ company_count.times do |c|
       tp.vendor = vendor
       tp.name = "#{ tax_percentages[i] }%"
       tp.value = tax_percentages[i]
+      tp.default = tax_profile_defaults[i]
+      tp.letter = tax_profile_letters[i]
       res = tp.save
       tax_profile_objects << tp
       puts "TaxProfile #{ tp.name } created" if res == true
@@ -136,20 +176,22 @@ company_count.times do |c|
       category_objects << cat
       puts "Category #{ cat.name } created" if res == true
     end
-    3.upto(5) do |i|
+    
+    button_category_objects = []
+    3.times do |i|
       cat = Category.new
       cat.company = company
       cat.vendor = vendor
-      cat.name = "ButtonCategory#{ c }#{ v }#{ i }"
+      cat.name = "Category#{ c }#{ v }#{ i }"
       cat.button_category = true
       res = cat.save
-      category_objects << cat
+      button_category_objects << cat
       puts "ButtonCategory #{ cat.name } created" if res == true
     end
     
     item_objects = []
     category_objects.size.times do |i|
-      3.times do |j|
+      10.times do |j|
         item = Item.new
         item.company = company
         item.vendor = vendor
@@ -163,7 +205,189 @@ company_count.times do |c|
         puts "Item #{ item.sku } created" if res == true
       end
     end
+    
+    location_objects = []
+    3.times do |i|
+      l = Location.new
+      l.vendor = vendor
+      l.company = company
+      l.name = "Location#{ c }#{ v }#{ i }"
+      res = l.save
+      location_objects << l
+      puts "#{ l.name } created" if res == true
+    end
+    
+    stock_location_objects = []
+    3.times do |i|
+      l = StockLocation.new
+      l.vendor = vendor
+      l.company = company
+      l.name = "StockLocation#{ c }#{ v }#{ i }"
+      res = l.save
+      stock_location_objects << l
+      puts "#{ l.name } created" if res == true
+    end
+    
+    broken_item_objects = []
+    3.times do |i|
+      b = BrokenItem.new
+      b.vendor = vendor
+      b.company = company
+      b.name = "BrokenItem#{ c }#{ v }#{ i }"
+      b.sku = "BI#{ c }#{ v }#{ i }"
+      res = b.save
+      broken_item_objects << b
+      puts "#{ l.name } created" if res == true
+    end
+    
+    discount_objects = []
+    d = Discount.new
+    d.vendor = vendor
+    d.company = company
+    d.name = "Discount#{ c }#{ v }"
+    d.start_date = 1.week.ago
+    d.end_date = Time.now + 1.week
+    d.applies_to = "Item"
+    d.item_sku = item_objects[2].sku
+    d.amount = 10
+    d.amount_type = 'percent'
+    res = d.save
+    discount_objects << d
+    puts "#{ d.name } created" if res == true
+    
+    
+    shipment_type_objects = []
+    shipment_types_names.size.times do |i|
+      st = ShipmentType.new
+      st.vendor = vendor
+      st.company = company
+      st.name = "#{ shipment_types_names[i] }#{ c }#{ v }"
+      res = st.save
+      shipment_type_objects << st
+      puts "#{ st.name } created" if res == true
+    end
+    
+    shipper_objects = []
+    3.times do |i|
+      s = Shipper.new
+      s.vendor = vendor
+      s.company = company
+      s.name = "Shipper#{ c }#{ v }#{ i }"
+      res = s.save
+      shipper_objects << s
+      puts "#{ s.name } created" if res == true
+    end
+    
+    customer_objects = []
+    3.times do |i|
+      cu = Customer.new
+      cu.vendor = vendor
+      cu.company = company
+      cu.first_name = "Bob"
+      cu.last_name = "Doe#{ c }#{ v }#{ i }"
+
+      
+      lc = LoyaltyCard.new
+      lc.vendor = vendor
+      lc.company = company
+      lc.sku = "LC#{ c }#{ v }#{ i }"
+      lc.save
+      
+      cu.loyalty_cards << lc
+      res = cu.save
+      customer_objects << cu
+      
+      puts "#{ cu.first_name } #{ cu.last_name } created" if res == true
+    end
+    
+    transaction_tag_objects = []
+    transaction_tag_names.size.times do |i|
+      tt = TransactionTag.new
+      tt.vendor = vendor
+      tt.company = company
+      tt.name = "#{ transaction_tag_names[i] }#{ c }#{ v }"
+      res = tt.save
+      transaction_tag_objects << tt
+      puts "#{ tt.name } created" if res == true
+    end
+    
+    country_objects = []
+    country_names.size.times do |i|
+      co = Country.new
+      co.vendor = vendor
+      co.company = company
+      co.name = "#{ country_names[i] }#{ c }#{ v }"
+      res = co.save
+      country_objects << co
+      puts "#{ co.name } created" if res == true
+    end
+    
+    sale_type_objects = []
+    sale_type_names.size.times do |i|
+      st = SaleType.new
+      st.vendor = vendor
+      st.company = company
+      st.name = "#{ sale_type_names[i] }#{ c }#{ v }"
+      res = st.save
+      sale_type_objects << st
+     
+    end
+    
+    button_objects = []
+    button_category_objects.size.times do |i|
+      3.times do |j|
+        item_index = 3 * i + j
+        b = Button.new
+        b.vendor = vendor
+        b.company = company
+        b.sku = item_objects[item_index].sku
+        b.category = button_category_objects[i]
+        b.name = item_objects[item_index].name
+        b.save
+      end
+    end
+    
+    invoice_blurb_objects = []
+    invoice_blurb_languages.size.times do |i|
+      2.times do |j|
+        ib = InvoiceBlurb.new
+        ib.vendor = vendor
+        ib.company = company
+        ib.lang = invoice_blurb_languages[i]
+        ib.body = invoice_blurb_texts[invoice_blurb_languages[i]][j]
+        ib.body_receipt = invoice_blurb_texts[invoice_blurb_languages[i]][j] + invoice_blurb_invoiceaddon[invoice_blurb_languages[i]]
+        ib.is_header = j.zero?
+        res = ib.save
+        invoice_blurb_objects << ib
+        puts "InvoiceBlurb #{ ib.body } created" if res == true
+      end
+    end
+    
+    invoice_note_objects = []
+    country_objects.size.times do |i|
+      country_objects.size.times do |j|
+        sale_type_objects.size.times do |k|
+          ivn = InvoiceNote.new
+          ivn.vendor = vendor
+          ivn.company = company
+          ivn.note_header = "Header note for sales from #{ country_objects[i].name } to #{ country_objects[j].name } of SaleType #{ sale_type_objects[k].name }. Kramdown **formatted**."
+          ivn.note_footer = "Footer note for sales from #{ country_objects[i].name } to #{ country_objects[j].name } of SaleType #{ sale_type_objects[k].name }. Kramdown **formatted**."
+          ivn.origin_country = country_objects[i]
+          ivn.destination_country = country_objects[j]
+          ivn.sale_type = sale_type_objects[k]
+          ivn.name = "sales from #{ country_objects[i].name } to #{ country_objects[j].name } of SaleType #{ sale_type_objects[k].name }"
+          res = ivn.save
+          invoice_note_objects << ivn
+          puts "InvoiceNote #{ ivn.name } created" if res == true
+        end
+      end
+    end
+    
+    
+    
   end
+    
+    
 end
     
     

@@ -10,9 +10,9 @@
           %div.button-category-container{ :id => "button-category-container-#{ cat.id }" }
             - if params[:controller] == 'buttons'
               %script== makeSortable('button-category-container-#{ cat.id }')
-            - cat.buttons.where(:hidden => 0).each do |b|
+            - cat.buttons.visible.each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
-              - item = Item.find_by_sku(b.sku)
+              - item = @current_vendor.items.visible.find_by_sku(b.sku)
               - next unless item
               - additional_params = (item.must_change_price or item.default_buyback) ? '&no_inc=true' : ''
               - if params[:controller] == 'orders'

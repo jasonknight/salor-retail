@@ -7,6 +7,7 @@
 class UsersController < ApplicationController
   
   skip_before_filter :loadup, :only => :login
+  skip_before_filter :get_cash_register, :only => :login
   
   def clockin
     if params[:password] then

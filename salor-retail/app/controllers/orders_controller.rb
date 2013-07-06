@@ -69,10 +69,7 @@ class OrdersController < ApplicationController
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
   end
 
-  def new
-    # need a cash register
-    redirect_to cash_registers_path and return unless @current_register
-    
+  def new    
     # get an order from params
     if params[:order_id].to_i != 0 then
       @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
