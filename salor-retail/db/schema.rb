@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130704131258) do
+ActiveRecord::Schema.define(:version => 20130706055330) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -290,6 +290,7 @@ ActiveRecord::Schema.define(:version => 20130704131258) do
     t.integer  "company_id"
     t.integer  "user_id"
     t.boolean  "complete_order"
+    t.integer  "nr"
   end
 
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
@@ -1044,13 +1045,13 @@ ActiveRecord::Schema.define(:version => 20130704131258) do
     t.string   "sku"
     t.string   "token"
     t.string   "email"
-    t.boolean  "use_order_numbers",               :default => true
-    t.string   "unused_order_numbers",            :default => "--- []\n"
-    t.integer  "largest_order_number",            :default => 0
+    t.boolean  "use_order_numbers",                 :default => true
+    t.string   "unused_order_numbers",              :default => "--- []\n"
+    t.integer  "largest_order_number",              :default => 0
     t.integer  "hidden_by"
-    t.boolean  "use_quote_numbers",               :default => true
-    t.string   "unused_quote_numbers",            :default => "--- []\n"
-    t.integer  "largest_quote_number",            :default => 0
+    t.boolean  "use_quote_numbers",                 :default => true
+    t.string   "unused_quote_numbers",              :default => "--- []\n"
+    t.integer  "largest_quote_number",              :default => 0
     t.string   "time_zone"
     t.string   "hash_id"
     t.datetime "hidden_at"
@@ -1061,7 +1062,7 @@ ActiveRecord::Schema.define(:version => 20130704131258) do
     t.text     "address"
     t.string   "telephone"
     t.text     "receipt_blurb"
-    t.integer  "pagination",                      :default => 10
+    t.integer  "pagination",                        :default => 10
     t.string   "stylesheets"
     t.string   "cash_drawer"
     t.boolean  "open_cash_drawer"
@@ -1069,7 +1070,7 @@ ActiveRecord::Schema.define(:version => 20130704131258) do
     t.text     "csv_imports"
     t.string   "csv_imports_url"
     t.boolean  "items_view_list"
-    t.string   "url",                             :default => "http://default.sr.localhost"
+    t.string   "url",                               :default => "http://default.sr.localhost"
     t.boolean  "salor_printer"
     t.text     "receipt_blurb_footer"
     t.boolean  "calculate_tax"
@@ -1081,8 +1082,9 @@ ActiveRecord::Schema.define(:version => 20130704131258) do
     t.boolean  "csv_loyalty_cards"
     t.text     "invoice_blurb"
     t.text     "invoice_blurb_footer"
-    t.string   "gs1_format",                      :default => "2,5,5"
-    t.string   "country",                         :default => "cc"
+    t.string   "gs1_format",                        :default => "2,5,5"
+    t.string   "country",                           :default => "cc"
+    t.integer  "largest_drawer_transaction_number"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"
