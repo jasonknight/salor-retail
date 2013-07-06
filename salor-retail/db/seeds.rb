@@ -1,195 +1,181 @@
-if User.any? or Item.any? or Order.any?
-  puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
-  Process.exit 0
-end
+# Copyright (c) 2012 Red (E) Tools Ltd.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Consider this file also a tutorial on how the system works
-I18n.locale = 'en-US'
-ItemType.delete_all
-ItemType.new({:name => "Normal Item", :behavior => "normal"}).save!
-ItemType.new({:name => "Gift Card", :behavior => "gift_card"}).save!
-ItemType.new({:name => "Coupon", :behavior => "coupon"}).save!
+# if User.any?
+#   puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
+#   Process.exit 0
+# end
 
-# Adding in default roles
-Role.delete_all
-[ :manager, :head_cashier, :cashier, :stockboy,:edit_others_orders].each do |r|
-  role = Role.new(:name => r.to_s)
-  role.save
-end
-[ :orders,
-  :items,
-  :categories, 
-  :locations,
-  :stock_locations,
-  :shippers,
-  :shipments,
-  :shipment_types,
-  :vendors, 
-  :employees, 
-  :discounts,
-  :tax_profiles,
-  :customers,
-  :transaction_tags, 
-  :buttons, 
-  :stock_locations,
-  :actions,
-  :shipment_items, 
-  :cash_registers,
-  :tender_methods].each do |r|
-  [:index,:edit,:destroy,:create,:update,:show].each do |a|
-    role = Role.new(:name => a.to_s + '_' + r.to_s)
-    role.save
+
+ActiveRecord::Base.connection.tables.each do |t|      
+  begin
+    model = t.classify.constantize
+    model.reset_column_information
+  rescue
+    next
   end
-  role = Role.new(:name => 'any_' + r.to_s)
-  role.save
+  puts "Purging table #{ model }"
+  model.delete_all
 end
 
-current_lang = 1
-current_user = 0
-User.delete_all
-Employee.delete_all
-CashRegister.delete_all
-Drawer.delete_all
-Vendor.delete_all
-def create_account(current_lang,lang)
-  current_user = 0
-  @user = User.new(
-      {
-      :username => 'admin' + "-#{lang}",
-      :password => "#{current_lang}#{current_user}47988",
-      :language => lang,
-      :email => "admin#{current_lang}#{current_user}@salor.com",
-      }
-    )
-    if not @user.save then
-      puts @user.errors.inspect
-    end
-    current_user += 1
-    @vendor = @user.add_vendor("TestVendor #{lang}")
-    
-    @begin_day_tag = TransactionTag.new(:name => "beginning_of_day_#{lang}", :vendor_id => @vendor.id)
-    @begin_day_tag.save
-    @end_day_tag = TransactionTag.new(:name => "end_of_day_#{lang}", :vendor_id => @vendor.id)
-    #Add in some cash registers
-    
-    registers = []
+company_count = 0
 
-    2.times do |i|
-      r = CashRegister.new(
-      {
-	:name => "Register ##{i+1}",
-	:vendor_id => @vendor.id
-      }  
-      )
-      r.save()
-      registers << r
-    end
-    @manager = Employee.new(
-      {
-	:username => 'manager' + "-#{lang}",
-	:password => "#{current_lang}#{current_user}0",
-	:language => lang,
-	:email => "manager#{current_lang}#{current_user}@salor.com",
-	:first_name => "Mangy",
-	:last_name => "McManager",
-	:user_id => @user.id,
-	:vendor_id => @vendor.id,
-	:role_ids => [Role.find_by_name(:manager).id],
-      }
-    )
-    @manager.save()
-    puts "Created Manager with password  #{current_lang}#{current_user}0"
-    current_user += 1
-    Drawer.create :amount => 0, :owner_id => @manager.id, :owner_type => 'Employee'
-    
-    @head_cashier = Employee.new(
-      {
-	:username => 'head_cashier' + "-#{lang}",
-	:password => "#{current_lang}#{current_user}0",
-	:language => lang,
-	:email => "head_cashier#{current_lang}#{current_user}@salor.com",
-	:first_name => "Hedy",
-	:last_name => "McCashy",
-	:user_id => @user.id,
-	:vendor_id => @vendor.id,
-	:role_ids => [Role.find_by_name(:head_cashier).id],
-      }
-    )
-    @head_cashier.save()
-    current_user += 1
-    Drawer.create :amount => 0, :owner_id => @head_cashier.id, :owner_type => 'Employee'
-    
-    @cashier = Employee.new(
-			    {
-			      :username => 'cashier' + "-#{lang}",
-			      :password => "#{current_lang}#{current_user}0",
-			      :language => lang,
-			      :email => "cashier#{current_lang}#{current_user}@salor.com",
-			      :first_name => "Cashier",
-			      :last_name => "McCashy",
-			      :user_id => @user.id,
-			      :vendor_id => @vendor.id,
-			      :role_ids => [Role.find_by_name(:cashier).id],
-			      }
-			    )
-    @cashier.save()
-    current_user += 1
-    Drawer.create :amount => 0, :owner_id => @cashier.id, :owner_type => 'Employee'
-    
-    @stockboy = Employee.new(
-			      {
-			      :username => 'stockclerk' + "-#{lang}",
-			      :password => "#{current_lang}#{current_user}0",
-			      :language => lang,
-			      :email => "stockboy#{current_lang}#{current_user}@salor.com",
-			      :first_name => "Stockborough",
-			      :last_name => "Stockington the III, Jr., Esq.",
-			      :user_id => @user.id,
-			      :vendor_id => @vendor.id,
-			      :role_ids => [Role.find_by_name(:stockboy).id],
-			      }
-			    )
-    @stockboy.save()
-    Drawer.create :amount => 0, :owner_id => @stockboy.id, :owner_type => 'Employee'
-    @tp = TaxProfile.create(:name => "Default #{lang}",:sku => "DEFAUTLTaxProfile", :value => 7, :vendor => @vendor)
-    2.times do |i|
-      # Create 5 categories
-      Category.create({
-	:name => "Category #{lang} ##{i+1}",
-	:vendor => @vendor
-      })
-      Location.create({
-	:name => "Location #{lang} ##{i+1}",
-	:vendor => @vendor
-      })
-      StockLocation.create({
-	:name => "StockLocation #{lang} ##{i+1}",
-	:vendor => @vendor
-      })
-      ShipmentType.create({
-	:name => "ShipmentType #{lang} ##{i+1}",
-	:vendor => @vendor
-      })
-    end
-    2.times do |i|
-      Shipper.create({
-	:name => "Shipper #{lang} ##{i+1}",
-	:vendor => @vendor
-      })
-    end
-end
-if ENV['SEED_MODE'] == 'full' then
-  ['en-US','en-GB','fr','es','de','el','ru','cn','pl','tr'].each do |lang| 
-    #add in testing accounts 
-    create_account(current_lang,lang)
-    current_lang += 1
-  end #end each lang
+if ENV['SEED_MODE'] == 'full'
+  puts "SEED_MODE is 'full'"
+  countries = ['us','at','fr','es','pl','hu','ru','it','tr','cn','el','hk','tw']
+  languages = ['en','gn','fr','es','pl','hu','ru','it','tr','cn','el','hk','tw']
+  company_count = 2
 else
-  create_account(0,'en-US')
+  puts "SEED_MODE is 'minimal'"
+  countries = ['us', 'at']
+  languages = ['en', 'gn']
+  company_count = 1
 end
-Employee.all.each do |e|
-  e.set_role_cache
-  e.save
+
+tax_percentages = [20, 10, 0]
+role_names = [:manager, :head_cashier, :cashier, :stockboy]
+payment_method_names = ['Cash', 'Card', 'Other','Change']
+item_type_behaviors = ['normal', 'gift_card', 'coupon']
+item_type_names = ['Normal Item', 'Gift Card', 'Coupon']
+
+cash_register_names = ['Local', 'Remote']
+cash_register_salor_printer = [nil, true]
+
+
+company_count.times do |c|
+  company = Company.new
+  company.name = "Company#{ c }"
+  company.identifier = c
+  r = company.save
+  puts "\n\n =========\nCOMPANY #{ c } created\n\n" if r == true
+  
+  countries.size.times do |v|
+    vendor = Vendor.new
+    vendor.name = "Vendor#{ c }#{ v }"
+    vendor.country = countries[v]
+    vendor.company = company
+    vendor.hash_id = "vendor#{c}#{v}"
+    r = vendor.save
+    puts "\n---------\nVENDOR #{ c } #{ v } created\n" if r == true
+    
+    
+    item_type_objects = []
+    item_type_behaviors.size.times do |i|
+      it = ItemType.new
+      it.company = company
+      it.vendor = vendor
+      it.name = "#{ item_type_names[i] }#{ c } #{ v }"
+      it.behavior = item_type_behaviors[i]
+      r = it.save
+      item_type_objects << it
+      puts "ItemType #{ c } #{ v } created" if r == true
+    end
+    
+    cash_register_objects = []
+    cash_register_names.size.times do |i|
+      cr = CashRegister.new
+      cr.name = "#{ cash_register_names[i] }#{ c } #{ v }"
+      cr.vendor = vendor
+      cr.company = company
+      cr.salor_printer = cash_register_salor_printer[i]
+      r = cr.save
+      cash_register_objects << cr
+      puts "CashRegister #{ cr.name } created" if r == true
+    end
+    
+    role_objects = []
+    role_names.size.times do |i|
+      r = Role.new
+      r.company = company
+      r.vendor = vendor
+      r.name = "#{ role_names[i] }#{ c }#{ v }"
+      res = r.save
+      role_objects << r
+      puts "Role #{ r.name } created" if res == true
+    end
+    
+    user_objects = []
+    role_objects.size.times do |i|
+      u = User.new
+      u.company = company
+      u.vendor = vendor
+      u.roles = [role_objects[i]]
+      u.password = "#{ c }#{ v }#{ i }"
+      u.username = "#{ role_names[i] }#{ c }#{ v }"
+      u.language = languages[c]
+      res = u.save
+      user_objects << u
+      puts "User #{ u.username } with password #{ c }#{ v }#{ i } created. Drawer is #{ u.drawer_id }" if res == true
+      u.save # needs to be called since drawer_id was not persistent after the last save
+    end
+    
+    tax_profile_objects = []
+    tax_percentages.size.times do |i|
+      tp = TaxProfile.new
+      tp.company = company
+      tp.vendor = vendor
+      tp.name = "#{ tax_percentages[i] }%"
+      tp.value = tax_percentages[i]
+      res = tp.save
+      tax_profile_objects << tp
+      puts "TaxProfile #{ tp.name } created" if res == true
+    end
+    
+    category_objects = []
+    3.times do |i|
+      cat = Category.new
+      cat.company = company
+      cat.vendor = vendor
+      cat.name = "Category#{ c }#{ v }#{ i }"
+      res = cat.save
+      category_objects << cat
+      puts "Category #{ cat.name } created" if res == true
+    end
+    3.upto(5) do |i|
+      cat = Category.new
+      cat.company = company
+      cat.vendor = vendor
+      cat.name = "ButtonCategory#{ c }#{ v }#{ i }"
+      cat.button_category = true
+      res = cat.save
+      category_objects << cat
+      puts "ButtonCategory #{ cat.name } created" if res == true
+    end
+    
+    item_objects = []
+    category_objects.size.times do |i|
+      3.times do |j|
+        item = Item.new
+        item.company = company
+        item.vendor = vendor
+        item.tax_profile = tax_profile_objects[j]
+        item.category = category_objects[i]
+        item.sku = "SKU#{ c }#{ v }#{ i }#{ j }"
+        item.name = "Item#{ c }#{ v }#{ i }#{ j }"
+        item.item_type = item_type_objects[0]
+        res = item.save
+        item_objects << item
+        puts "Item #{ item.sku } created" if res == true
+      end
+    end
+  end
 end
+    
+    
+    
+    
+      
+      
+    
+    
+
+    
+    
+    
 
 

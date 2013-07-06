@@ -10,6 +10,7 @@ class ItemType < ActiveRecord::Base
 
   
   belongs_to :vendor
+  belongs_to :company
   
   has_many :items
   has_many :order_items

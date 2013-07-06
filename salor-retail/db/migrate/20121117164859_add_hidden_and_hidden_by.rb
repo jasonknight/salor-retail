@@ -1,6 +1,6 @@
 class AddHiddenAndHiddenBy < ActiveRecord::Migration
   def up
-    [ Order,OrderItem,SaleType,TenderMethod,Item,Shipper,Shipment,DrawerTransaction,Action, BrokenItem,Category,Country,Customer,Discount,
+    [ Order,OrderItem,SaleType,Item,Shipper,Shipment,DrawerTransaction,Action, BrokenItem,Category,Country,Customer,Discount,
      Location,ShipmentType,StockLocation,TaxProfile,TransactionTag,Vendor].each do |model|
       model.reset_column_information
       #m = model.send(:new)

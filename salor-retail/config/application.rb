@@ -60,6 +60,12 @@ module SalorRetail
     else
       CONFIGURATION = YAML::load(File.open(File.join(Rails.root, 'config', 'config.yml'), 'r').read)
     end
+    
+    LANGUAGES = { 'en' => 'English', 'gn' => 'Deutsch', 'tr' => 'Türkçe', 'fr' => 'Français', 'es' => 'Español', 'pl' => 'Polski', 'hu' => 'Magyar', 'el' => 'Greek', 'ru' => 'Русский', 'it' => 'Italiana', 'cn' => 'Chinese'}
+    COUNTRIES = { 'cc' => :default, 'de' => 'Deutschland', 'at' => 'Österreich', 'ch' => 'Schweiz', 'tr' => 'Türkiye', 'fr' => 'France', 'es' => 'España', 'pl' => 'Polska', 'hu' => 'Magyarország', 'el' => 'Ελλάδα', 'ru' => 'Россия', :it => 'Italia', 'cn' => '中国'}
+    COUNTRIES_REGIONS = { 'cc' => 'en-us', 'de' => 'gn-de', 'at' => 'gn-de', 'ch' => 'gn-ch', 'tr' => 'tr-tr', 'fr' => 'fr-fr', 'es' => 'es-es', 'pl' => 'pl-pl', 'hu' => 'hu-hu', 'el' => 'el-el', 'ru' => 'ru-ru', 'it' => 'it-it', 'cn' => 'cn-cn', 'us' => 'en-us', 'gb' => 'en-gb'}
+    COUNTRIES_INVOICES = { 'cc' => 'cc', 'de' => 'cc', 'at' => 'cc', 'ch' => 'cc', 'tr' => 'cc', 'fr' => 'cc', 'es' => 'cc', 'pl' => 'pl', 'hu' => 'cc', 'el' => 'cc', 'ru' => 'cc', 'it' => 'cc', 'cn' => 'cc', 'us' => 'cc', 'gb' => 'cc' }
+    
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

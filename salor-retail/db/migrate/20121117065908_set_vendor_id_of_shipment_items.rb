@@ -1,6 +1,7 @@
 class SetVendorIdOfShipmentItems < ActiveRecord::Migration
   def up
-    ShipmentItem.update_all :vendor_id => Vendor.first.id
+    vendor = Vendor.first
+    ShipmentItem.update_all :vendor_id => vendor.id if vendor
   end
 
   def down

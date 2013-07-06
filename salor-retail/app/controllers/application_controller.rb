@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
   
   before_filter :loadup
   before_filter :set_tailor
+  before_filter :set_locale
   
   layout :layout_by_response
 
@@ -75,6 +76,27 @@ class ApplicationController < ActionController::Base
   end
 
   private
+  
+  def set_locale
+    if params[:l] and I18n.available_locales.include? params[:l].to_sym
+      I18n.locale = @locale = session[:locale] = params[:l]
+    elsif session[:locale]
+      I18n.locale = @locale = session[:locale]
+    elsif @current_user
+      I18n.locale = @locale = session[:locale] = @current_user.language
+    else
+      unless request.env['HTTP_ACCEPT_LANGUAGE'].nil?
+        browser_language = request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+        browser_language = 'gn' if browser_language == 'de'
+      end
+      if browser_language.nil? or browser_language.empty? or not I18n.available_locales.include?(browser_language.to_sym)
+        I18n.locale = @locale = session[:locale] = 'en'
+      else
+        I18n.locale = @locale = session[:locale] = browser_language
+      end
+    end
+    @region = @current_vendor.region if @current_vendor
+  end
   
   def update_devicenodes
     if @current_register

@@ -626,12 +626,12 @@ class Order < ActiveRecord::Base
         discount_name = I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += integer_format % [taxletter, discount_name, discount_price, oi.quantity, discount_total]
-          list_of_items_raw << to_list_of_items_raw([taxletter, discount_name, discount_price, oi.quantity, discount_total, 'integer'])
+          list_of_items += integer_format % [taxletter, discount_name, discount_price, oi.quantity, oi.discount_amount]
+          list_of_items_raw << to_list_of_items_raw([taxletter, discount_name, discount_price, oi.quantity, oi.discount_amount, 'integer'])
         else
           # float quantity
-          list_of_items += float_format % [taxletter, discount_name, discount_price, oi.quantity, discount_total]
-          list_of_items_raw << to_list_of_items_raw([taxletter, discount_name, discount_price, oi.quantity, discount_total, 'float'])
+          list_of_items += float_format % [taxletter, discount_name, discount_price, oi.quantity, oi.discount_amount]
+          list_of_items_raw << to_list_of_items_raw([taxletter, discount_name, discount_price, oi.quantity, oi.discount_amount, 'float'])
         end
       end
 
@@ -639,12 +639,12 @@ class Order < ActiveRecord::Base
       if oi.rebate
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += integer_format % [taxletter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
-          list_of_items_raw << to_list_of_items_raw([taxletter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'integer'])
+          list_of_items += integer_format % [taxletter, I18n.t('printr.order_receipt.rebate'), oi.rebate, oi.quantity, oi.rebate_amount]
+          list_of_items_raw << to_list_of_items_raw([taxletter, I18n.t('printr.order_receipt.rebate'), oi.rebate, oi.quantity, oi.rebate_amount, 'integer'])
         else
           # float quantity
-          list_of_items += float_format % [taxletter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total]
-          list_of_items_raw << to_list_of_items_raw([taxletter, I18n.t('printr.order_receipt.rebate'), rebate_price, oi.quantity, rebate_total, 'float'])
+          list_of_items += float_format % [taxletter, I18n.t('printr.order_receipt.rebate'), oi.rebate, oi.quantity, oi.rebate_amount]
+          list_of_items_raw << to_list_of_items_raw([taxletter, I18n.t('printr.order_receipt.rebate'), oi.rebate, oi.quantity, oi.rebate_amount, 'float'])
         end
       end
     end

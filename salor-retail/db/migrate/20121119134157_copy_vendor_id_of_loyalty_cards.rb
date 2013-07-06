@@ -1,6 +1,7 @@
 class CopyVendorIdOfLoyaltyCards < ActiveRecord::Migration
   def up
-    LoyaltyCard.update_all :vendor_id => Vendor.first.id
+    vendor = Vendor.first
+    LoyaltyCard.update_all :vendor_id => vendor.id if vendor
   end
 
   def down
