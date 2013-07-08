@@ -34,7 +34,7 @@
   <img src='/images/salor-logo-reports.png'>
 
 
-                <%= form_for(User.new, :url => '/users/login') do |f| %>
+                <%= form_tag @submit_path do %>
                   <br />
                   <br />
                   <%= password_field_tag :code, "", :class => "keyboardable big-input"%></p>

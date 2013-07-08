@@ -118,7 +118,7 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
-    @current_user = User.find_by_id(session[:user_id])
+    @current_user = User.find_by_id_hash(session[:user_id_hash])
     redirect_to new_session_path and return if @current_user.nil?
     @current_company = @current_user.company
     @current_vendor = @current_company.vendors.find_by_id(session[:vendor_id])

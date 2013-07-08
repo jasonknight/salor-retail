@@ -37,6 +37,8 @@
       
       = yield
       
+      = form_tag session_path, :id => 'logoutform', :method => 'delete'
+      
       %span.version= SalorRetail::Application::VERSION
 
     #simple_input_dialog{:title => "Salor Dialog", :class => "salor-dialog hidden"}

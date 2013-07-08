@@ -58,10 +58,8 @@ class Vendor < ActiveRecord::Base
   
   validates_presence_of :name
   validates_presence_of :identifier
-  validates_presence_of :hash_id
-  
-  validates_uniqueness_of :hash_id, :scope => :hidden
   validates_uniqueness_of :identifier, :scope => :hidden
+  after_create :set_hash_id
   
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
   
@@ -673,5 +671,17 @@ class Vendor < ActiveRecord::Base
       print_engine.print(0, text)
       print_engine.close
     end
+  end
+  
+  def set_hash_id
+    self.hash_id = "#{ self.identifier }#{ generate_random_string[0..20] }"
+    self.save
+  end
+  
+  private
+  
+  def generate_random_string
+    collection = [('a'..'z'),('A'..'Z'),('0'..'9')].map{|i| i.to_a}.flatten
+    (0...128).map{ collection[rand(collection.length)] }.join
   end
 end

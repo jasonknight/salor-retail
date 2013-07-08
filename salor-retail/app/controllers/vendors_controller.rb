@@ -144,12 +144,6 @@ class VendorsController < ApplicationController
     r.ip = request.ip
     r.save
   end
-
-  def end_day
-    @current_user.end_day
-    session[:user_id] = session[:vendor_id] = session[:company_id] = nil
-    redirect_to new_session_path
-  end
   
   def edit_field_on_child
     klass = params[:klass].constantize

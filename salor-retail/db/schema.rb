@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708150950) do
+ActiveRecord::Schema.define(:version => 20130708200539) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -1032,6 +1032,7 @@ ActiveRecord::Schema.define(:version => 20130708150950) do
     t.datetime "hidden_at"
     t.integer  "hidden_by"
     t.integer  "drawer_id"
+    t.string   "id_hash"
   end
 
   create_table "vendors", :force => true do |t|
@@ -1087,6 +1088,15 @@ ActiveRecord::Schema.define(:version => 20130708150950) do
     t.integer  "largest_drawer_transaction_number"
     t.boolean  "enable_technician_emails"
     t.string   "technician_email"
+    t.string   "identifier"
+    t.string   "full_subdomain"
+    t.string   "full_url"
+    t.string   "virtualhost_filter"
+    t.integer  "auth_https_mode"
+    t.boolean  "https"
+    t.boolean  "auth"
+    t.string   "domain"
+    t.string   "subdomain"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

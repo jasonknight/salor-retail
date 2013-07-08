@@ -6,63 +6,6 @@
 # See license.txt for the license applying to all files within this software.
 class UsersController < ApplicationController
   
-  skip_before_filter :loadup, :only => :login
-  skip_before_filter :get_cash_register, :only => :login
-  
-  def clockin
-    if params[:password] then
-      u = User.login(params[:password])
-      if not u then
-        render :text => "NO" and return
-      else
-        login = UserLogin.where(:user_id => u.id).last
-        if login and login.logout.nil? then
-          render :text => "ALREADY" and return
-        end
-        u.start_day
-        render :json => {:username => u.username, :id => u.id} and return
-      end
-    end
-  end
-  
-  def clockout
-    if params[:password] then
-      u = User.login(params[:password])
-      if not u then
-        render :text => "NO" and return
-      else
-        u.end_day
-        render :json => {:username => u.username, :id => u.id} and return
-      end
-    end
-  end
-
-  
-  def login
-    user = User.login(params[:code]) 
-    if user then
-      session[:user_id] = user.id
-      session[:vendor_id] = user.vendor_id
-      session[:company_id] = user.company_id
-      user.start_day
-      redirect_to new_order_path
-    else
-      redirect_to home_index_path
-    end
-  end
-  
-  def destroy_login
-    @user = @current_vendor.users.find_by_id(params[:id])
-    login = @current_vendor.user_logins.find_by_id(params[:login])
-    if login.user_id == @user.id and @current_user.role_cache.include? 'manager' then
-      login.hide(@current_user)
-    else
-      raise "Ids Don't Match" + login.user.id.to_s + " ---- " + @current_user.role_cache
-    end
-    redirect_to "/users/#{@user.id}"
-  end
-
-  
   def index
     @users = @current_vendor.users.visible.order("created_at DESC").page(params[:page]).per(@current_vendor.pagination)
   end
@@ -107,5 +50,44 @@ class UsersController < ApplicationController
     @user = @current_vendor.users.visible.find_by_id(params[:id])
     @user.hide(@current_user)
     redirect_to users_path
+  end
+  
+  def destroy_login
+    @user = @current_vendor.users.find_by_id(params[:id])
+    login = @current_vendor.user_logins.find_by_id(params[:login])
+    if login.user_id == @user.id and @current_user.role_cache.include? 'manager' then
+      login.hide(@current_user.id)
+    else
+      raise "Ids Don't Match" + login.user.id.to_s + " ---- " + @current_user.role_cache
+    end
+    redirect_to "/users/#{@user.id}"
+  end
+  
+  def clockin
+    if params[:password] then
+      u = @current_company.login(params[:password])
+      if not u then
+        render :text => "NO" and return
+      else
+        login = @current_company.user_logins.where(:user_id => u.id).last
+        if login and login.logout.nil? then
+          render :text => "ALREADY" and return
+        end
+        u.start_day
+        render :json => {:username => u.username, :id => u.id} and return
+      end
+    end
+  end
+  
+  def clockout
+    if params[:password] then
+      u = @current_company.login(params[:password])
+      if not u then
+        render :text => "NO" and return
+      else
+        u.end_day
+        render :json => {:username => u.username, :id => u.id} and return
+      end
+    end
   end
 end

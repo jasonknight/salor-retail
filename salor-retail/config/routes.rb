@@ -193,7 +193,7 @@ SalorRetail::Application.routes.draw do
   if defined?(SrSaas) == 'constant'
     mount SrSaas::Engine => "/saas"
     match '/signin' => 'sr_saas/sessions#new'
-    match '*path' => 'sessions#new'
+    match '*path' => 'sr_saas/sessions#new'
     root :to => 'orders#new'
   else
     match '*path' => 'sessions#new'

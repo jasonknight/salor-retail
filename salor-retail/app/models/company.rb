@@ -3,4 +3,11 @@ class Company < ActiveRecord::Base
   
   has_many :vendors
   has_many :customers
+  has_many :users
+  
+  def login(code)
+    encrypted_password = Digest::SHA2.hexdigest("#{ code }")
+    user = self.users.visible.where( :encrypted_password => encrypted_password ).first
+    return user
+  end
 end

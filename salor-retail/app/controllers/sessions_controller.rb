@@ -6,12 +6,11 @@
 # See license.txt for the license applying to all files within this software.
 class SessionsController < ApplicationController
   
-  skip_before_filter :loadup, :except => [:destroy, :test_mail]
+  skip_before_filter :loadup, :only => [:new, :create]
+  skip_before_filter :get_cash_register, :only => [:new, :create]
   
   def new
     redirect_to sr_saas.new_session_path and return if defined?(SrSaas) == 'constant'
-    company = Company.visible.first
-    vendor = company.vendors.visible.first
     @submit_path = session_path
   end
 
@@ -19,13 +18,12 @@ class SessionsController < ApplicationController
     # Simple local login
     company = Company.visible.first
     
-    if company
-      user = company.users.visible.where(:password => params[:password]).first
-    end
+    user = company.login(params[:code])
+
     if user
       vendor = user.vendor
-      session[:user_id] = user.id
-      session[:company_id] = user.company_id
+      session[:user_id_hash] = user.id_hash
+      session[:company_id] = company.id
       session[:vendor_id] = vendor.id
       session[:locale] = I18n.locale = user.language
       
@@ -34,24 +32,25 @@ class SessionsController < ApplicationController
       user.current_sign_in_ip = request.ip
       user.save
       
-      if vendor and vendor.enable_technician_emails and vendor.technician_email and company.mode == 'demo' and SalorRetail::Application::SR_DEBIAN_SITEID != 'none'
+      if vendor.enable_technician_emails and vendor.technician_email and company.mode == 'demo' and SalorRetail::Application::SR_DEBIAN_SITEID != 'none'
         UserMailer.technician_message(vendor, "Login to #{ company.name }", '', request).deliver
       end
-      redirect_to new_order_path and return
+      redirect_to '/' and return
     else
       redirect_to '/' and return
     end
   end
-
+  
   def destroy
     if @current_user
+      @current_user.end_day
       @current_user.last_sign_in_at = @current_user.current_sign_in_at
       @current_user.last_sign_in_ip = @current_user.current_sign_in_ip
       @current_user.current_sign_in_at = nil
       @current_user.current_sign_in_ip = nil
       redirect_to '/'
     end
-    @current_user = @current_customer = session[:user_id] = nil
+    @current_user = session[:user_id_hash] = session[:vendor_id] = session[:company_id] = nil
   end
 
   def test_exception

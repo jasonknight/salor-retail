@@ -31,12 +31,8 @@ class User < ActiveRecord::Base
   before_update :set_role_cache, :update_hourly_rate
   before_save :set_role_cache, :update_hourly_rate
   after_commit :set_drawer
+  after_create :set_id_hash
   
-  
-  def self.login(pass)
-    user = self.find_by_encrypted_password(Digest::SHA2.hexdigest(pass))
-    return user
-  end
   
   def password=(string)
     string = string.strip
@@ -270,6 +266,18 @@ class User < ActiveRecord::Base
       d.save
       write_attribute :drawer_id, d.id
     end
+  end
+  
+  def set_id_hash
+    self.id_hash = generate_random_string[0..20]
+    self.save
+  end
+  
+  private
+  
+  def generate_random_string
+    collection = [('a'..'z'),('A'..'Z'),('0'..'9')].map{|i| i.to_a}.flatten
+    (0...128).map{ collection[rand(collection.length)] }.join
   end
 
 end

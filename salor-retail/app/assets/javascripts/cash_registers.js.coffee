@@ -22,8 +22,6 @@ window.displayCalculatorTotal = ->
   $('.eod-calculator-difference').html(toCurrency(diff));
   $('.eod-calculator-total').html(toCurrency(calculator_total));
 
-window.logout = ->
-  window.location = '/vendors/end_day'
 
 
 

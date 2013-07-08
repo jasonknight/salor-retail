@@ -113,3 +113,7 @@ function showButtonCategoryContainer(id) {
   $('.button-category-container').hide();
   $('#' + id).show();
 }
+
+function logout() {
+  $('#logoutform').submit();
+}
