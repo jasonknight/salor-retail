@@ -7,7 +7,16 @@
 class UsersController < ApplicationController
   
   skip_before_filter :loadup, :only => :login
-  
+  def verify
+    if params[:password] then
+      emp = User.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
   def clockin
     if params[:password] then
       u = User.login(params[:password])
