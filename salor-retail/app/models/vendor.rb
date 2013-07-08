@@ -56,6 +56,13 @@ class Vendor < ActiveRecord::Base
   serialize :unused_order_numbers
   serialize :unused_quote_numbers
   
+  validates_presence_of :name
+  validates_presence_of :identifier
+  validates_presence_of :hash_id
+  
+  validates_uniqueness_of :hash_id, :scope => :hidden
+  validates_uniqueness_of :identifier, :scope => :hidden
+  
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
   
   def region

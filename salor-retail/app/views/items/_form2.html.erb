@@ -149,19 +149,15 @@ $(function () {
         <tr>
           <td>
               <%
-                  b = Barcode.new
-                  path = b.create(@item.sku)
+                  b = Barcode.new(@item)
+                  barcodepath = b.create
                 %>
                 <div style="background-color: white;">
-                  <%= link_to b.get_barcode(@item.sku) do %>
-                    <%= image_tag path %>
-                  <% end %>
+                  <img src="<%= barcodepath %>.png" />
                 </div>
           </td>
           <td valign="middle" align="center"> 
                 <div class="new-item-field">
-                <!--<%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@item.sku).gsub('.png','.eps') %> 
-                &nbsp;&nbsp;&nbsp;-->
                 <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
       &nbsp;&nbsp;&nbsp;
                 <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 

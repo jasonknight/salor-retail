@@ -85,7 +85,7 @@ class VendorsController < ApplicationController
   end
   
   def render_open_cashdrawer
-    render :text => "\x1D\x61\x01" + "\x1B\x70\x00\x30\x01 "
+    render :text => @current_register.open_cash_drawer_code
   end
 
   def render_drawer_transaction_receipt
@@ -183,7 +183,7 @@ class VendorsController < ApplicationController
   end
 
   def history
-    @histories = History.order("created_at desc").page(params[:page]).per($Conf.pagination)
+    @histories = @current_vendor.histories.order("created_at desc").page(params[:page]).per(@current_vendor.pagination)
   end
   
   def export
@@ -204,20 +204,8 @@ class VendorsController < ApplicationController
   def labels
     render :layout => false    
   end
-
-  def logo
-    @vendor = Vendor.find(params[:id])
-    send_data @vendor.logo_image, :type => @vendor.logo_image_content_type, :filename => 'abc', :disposition => 'inline'
-  end
-  
-  def logo_invoice
-    @vendor = Vendor.find(params[:id])
-    send_data @vendor.logo_invoice_image, :type => @vendor.logo_invoice_image_content_type, :filename => 'abc', :disposition => 'inline'
-  end
-
   
   def display_logo
-    @vendor = Vendor.find(params[:id])
     render :layout => 'customer_display'
   end
   
@@ -230,9 +218,7 @@ class VendorsController < ApplicationController
     database = dbconfig[mode]['database']
     `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
 
-
     send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
-
   end
 
 

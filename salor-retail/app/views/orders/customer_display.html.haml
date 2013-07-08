@@ -1,7 +1,5 @@
 .customer-display
-  .logo
-    - if @vendor.logo_image
-      %img{ :src => "/vendors/#{ @vendor.id }/logo" }
+  .logo= image_tag @current_vendor.image('invoice_logo')
 
   - @report[:list_of_items_raw].reverse[0..4].each do |item|
     %div{ :class => "#{ item[:price] < 0 ? 'highlighted' : '' }" }
@@ -11,10 +9,10 @@
         %span{ :class => k }= v
 
 
-  %div#subsubtotal= number_to_currency @order.subtotal_for_customerdisplay
+  %div#subsubtotal= number_to_currency @report[:subtotal]
 
   - if params[:display_change] == '1'
-    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @order.change }
+    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @report[:change] }
 
   - if @report[:customer]
     .customerdetails

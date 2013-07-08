@@ -731,6 +731,7 @@ class Order < ActiveRecord::Base
     report[:list_of_taxes] = list_of_taxes
     report[:list_of_taxes_raw] = list_of_taxes_raw
     report[:subtotal] = self.subtotal_for_customerdisplay
+    report[:change] = self.change
     report[:paymentmethods] = paymentmethods
     report[:customer] = customer
     report[:unit] = I18n.t('number.currency.format.friendly_unit')

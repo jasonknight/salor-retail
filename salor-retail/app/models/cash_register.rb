@@ -31,9 +31,13 @@ class CashRegister < ActiveRecord::Base
     
     print_engine = Escper::Printer.new('local', vp)
     print_engine.open
-    text = "\x1B\x70\x00\x30\x01 "
+    text = self.open_cash_drawer_code
     print_engine.print(0, text)
     print_engine.close
+  end
+  
+  def open_cash_drawer_code
+    "\x1B\x70\x00\x55\x55"
   end
   
 #   def end_of_day_report

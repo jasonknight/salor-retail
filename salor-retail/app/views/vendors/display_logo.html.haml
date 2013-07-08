@@ -1,5 +1,4 @@
-- if @vendor.logo_image
-  .customer-logo= image_tag "/vendors/#{ @vendor.id }/logo", :width => '61%'
+customer-logo= image_tag @current_vendor.image('invoice_logo'), :width => '61%'
 = image_tag '/images/salor-logo-customer-screen.png', :id => 'salorlogo'
 
 :css

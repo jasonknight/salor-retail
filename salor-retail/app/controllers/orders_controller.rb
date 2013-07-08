@@ -11,7 +11,6 @@ class OrdersController < ApplicationController
    respond_to :html, :xml, :json, :csv
    after_filter :customerscreen_push_notification, :only => [:add_item_ajax, :delete_order_item]
    before_filter :update_devicenodes, :only => [:new, :new_order]
-   skip_before_filter :loadup, :only => :customer_display
 
    
   def new_from_proforma
@@ -262,9 +261,7 @@ class OrdersController < ApplicationController
 #   end
   
   def customer_display
-    @order = Order.find_by_id(params[:id].to_s)
-    @user = @order.user
-    @vendor = @order.vendor
+    @order = @current_vendor.orders.visible.find_by_id(params[:id])
     @order_items = @order.order_items.visible.order('id ASC')
     @report = @order.report
     render :layout => 'customer_display'

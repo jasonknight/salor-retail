@@ -122,13 +122,12 @@
         <% if not lc.sku.blank?  %>
           <div class="new-item-field">
             <%
-              b = Barcode.new
-              path = b.create(lc.sku)
+              b = Barcode.new(lc)
+              barcodepath = b.create
             %>
-            <%= link_to b.get_barcode(lc.sku) do %>
-              <%= image_tag path %>
-            <% end %>
-            <br />     
+            <div style="display: inline-block; background-color: white;">
+              <img src="<%= barcodepath %>.png" />
+            </div>
             <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/customers/labels', '&id=#{ @customer.id }&type=sticker&style=default')"},32)%> 
             &nbsp;&nbsp;&nbsp;
             <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=label&style=default')"},32) %> 

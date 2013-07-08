@@ -19,7 +19,8 @@ set -e
 
 . /usr/share/debconf/confmodule
 
-app_root=/usr/share/salor-retail/source
+installation_root=/usr/share/salor-retail
+app_root=${installation_root}/source
 
 echo ""
 echo "POSTINST called with $@"
@@ -44,6 +45,7 @@ for lInstance in $gOldInstances; do
   if which ucf >/dev/null 2>&1; then
     ucf --purge /etc/salor-retail/$lInstance/database.yml
     ucf --purge /etc/salor-retail/$lInstance/config.yml
+    ucf --purge /etc/salor-hospitality/$lInstance/codepages.yml
   fi
   
   rm -rf /etc/salor-retail/$lInstance
@@ -96,8 +98,7 @@ for lInstance in $gInstances; do
       mkdir -p $rails_etc
       mkdir -p $rails_log
       mkdir -p $rails_cache
-      mkdir -p $rails_var/public/uploads
-      mkdir -p $rails_var/public/barcodes
+      mkdir -p $rails_var
       mkdir -p $rails_tmp
       
       use_dbconfig=false
@@ -136,8 +137,8 @@ for lInstance in $gInstances; do
 
       echo "  postinst: creating symlinks"
       ln -sfn $app_root /usr/share/salor-retail/${lInstance}
-      ln -sfn $rails_var/public/uploads $app_root/public/uploads/${lInstance}
-      ln -sfn $rails_var/public/barcodes $app_root/public/barcodes/${lInstance}
+      rm -f $app_root/public/uploads/${lInstance} # remove symlink, then create a new one
+      ln -sfn $rails_var/public/uploads/${lInstance} $app_root/public/uploads/${lInstance}
       rm -rf $app_root/tmp # remove real directory in case it was created by Rails
       ln -sfn /var/tmp/salor-retail $app_root/tmp
  
@@ -158,6 +159,11 @@ for lInstance in $gInstances; do
         ucf --debconf-ok $app_root/config/config.yml $rails_etc/config.yml
         chmod 660 $rails_etc/config.yml
       fi
+      if [ -e $app_root/config/codepages.yml ]; then
+        echo "  postinst: Installing codepages.yml as config file ..."
+        ucf --debconf-ok $app_root/config/codepages.yml $rails_etc/codepages.yml
+        chmod 660 $rails_etc/codepages.yml
+      fi
       
       echo "  postinst: Installing Gemfile as configuration file ..."
       gemfile_source=$app_root/Gemfile.production
@@ -176,9 +182,9 @@ for lInstance in $gInstances; do
         echo "  postinst: this instance has a configured database."
         cd $app_root        
         echo "  postinst: migrating the database. this may take a while."
-        rake1.9.1 db:migrate RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" BUNDLE_GEMFILE="${gemfile_target}" #> /dev/null
+        rake1.9.1 --trace db:migrate RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" BUNDLE_GEMFILE="${gemfile_target}" #> /dev/null
         echo "  postinst: running db:seed ..."
-        rake1.9.1 db:seed SEED_MODE=minimal RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" BUNDLE_GEMFILE="${gemfile_target}" #> /dev/null
+        rake1.9.1 --trace db:seed SEED_MODE=minimal RAILS_ENV=production SR_DEBIAN_SITEID="${lInstance}" BUNDLE_GEMFILE="${gemfile_target}" #> /dev/null
       else
         echo "  postinst: $rails_etc/database.yml does not exist. Instance \"${lInstance}\" database must be configured manually."
       fi
@@ -218,17 +224,27 @@ done
 db_get salor-retail/user || true
 app_user=$RET
 echo "  postinst: changing ownership for user $app_user"
-chown -R $app_user:$app_user $app_root
+chown -R $app_user:$app_user $installation_root
 chown -R $app_user:$app_user /etc/salor-retail
-chown -R $app_user:$app_user /var/log/salor-retail
 chown -R $app_user:$app_user /var/cache/salor-retail
 chown -R $app_user:$app_user /var/lib/salor-retail
 chown -R $app_user:$app_user /var/tmp/salor-retail
+chown -R $app_user:$app_user /var/log/salor-retail
+
+echo "  postinst: changing permissions for user $app_user"
+chmod -R 700 $installation_root
+chmod -R 700 /etc/salor-retail
+chmod -R 700 /var/cache/salor-retail
+chmod -R 700 /var/lib/salor-retail
+chmod -R 700 /var/tmp/salor-retail
+chmod -R 755 /var/log/salor-retail
+
 
 echo "  postinst: changing permissions for user $app_user"
 chmod 770 /etc/salor-retail
   
 echo "  postinst: restarting Apache ..."
+a2enmod actions
 service apache2 restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
 echo "  postinst: restarting udev ..."
 service udev restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
