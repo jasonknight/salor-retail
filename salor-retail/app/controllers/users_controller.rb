@@ -90,4 +90,15 @@ class UsersController < ApplicationController
       end
     end
   end
+  
+  def verify
+    if params[:password] then
+      emp = @current_company.login(params[:password])
+      if not emp then
+        render :text => "NO" and return
+      else
+        render :json => {:username => emp.username, :id => emp.id} and return
+      end
+    end
+  end
 end

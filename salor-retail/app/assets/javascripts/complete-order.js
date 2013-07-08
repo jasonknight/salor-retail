@@ -253,20 +253,23 @@ function show_password_dialog(print) {
         $('#dialog_input').removeClass("ui-state-error");
         updateTips("");
         bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
-        if (bValid) {            
-          $.post({
-            url: "/users/verify",
-            data: { password: $('#dialog_input').val() },
-            complete: function (data, status) {
-              if (data == "NO") {
-                ajax_log({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
-                updateTips("Wrong Password");
-              } else {
-                complete_order_process(print);
-              }
-            } // end complete
-          }) // end post
-          $("#simple_input_dialog").dialog( "close" );
+        if (bValid) {
+          updateTips("Verifying user...");            
+          $.post(
+              "/users/verify",
+              { password: $('#dialog_input').val() }, 
+              function (data, status) {
+                if (data == "NO") {
+                  ajax_log({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
+                  updateTips("Wrong Password");
+                } else {
+                  updateTips("Correct, sending...");
+                  complete_order_process(print);
+                  $("#simple_input_dialog").dialog( "close" );
+                }
+              } // end complete
+          ); // end post
+          
         } // end if bValid
       } // end Complete
     } // end Buttons
