@@ -11,10 +11,8 @@ class User < ActiveRecord::Base
   include SalorScope
   include SalorBase
 
-  
   belongs_to :vendor
   belongs_to :company
-  
   
   belongs_to :drawer
 
@@ -34,10 +32,6 @@ class User < ActiveRecord::Base
   before_save :set_role_cache, :update_hourly_rate
   after_commit :set_drawer
   
-  def find_for_authentication(conditions={})
-    conditions[:hidden] = false
-    find(:first, :conditions => conditions)
-  end 
   
   def self.login(pass)
     user = self.find_by_encrypted_password(Digest::SHA2.hexdigest(pass))

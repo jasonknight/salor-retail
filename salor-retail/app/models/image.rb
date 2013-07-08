@@ -81,7 +81,7 @@ class Image < ActiveRecord::Base
   def plot_path(size)
     hash_id = "unknown"
     hash_id = self.vendor.hash_id if self.vendor and not self.vendor.hash_id.blank?
-    path = File.join(DIRECTORY, hash_id.gsub('#', ''), "images", "s#{sub_dir}", "#{self.id}","#{size}","#{self.name}")
+    path = File.join(DIRECTORY, hash_id, "images", "s#{sub_dir}", "#{self.id}","#{size}","#{self.name}")
     return path
   end
 

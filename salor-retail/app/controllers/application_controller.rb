@@ -119,7 +119,7 @@ class ApplicationController < ActionController::Base
   
   def loadup
     @current_user = User.find_by_id(session[:user_id])
-    redirect_to home_index_path and return if @current_user.nil?
+    redirect_to new_session_path and return if @current_user.nil?
     @current_company = @current_user.company
     @current_vendor = @current_company.vendors.find_by_id(session[:vendor_id])
     Time.zone = @current_vendor.time_zone if @current_vendor

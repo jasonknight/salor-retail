@@ -31,28 +31,10 @@ SalorRetail::Application.routes.draw do
   match 'vendors/:id/logo_invoice' => 'vendors#logo_invoice'
   match "vendors/report_day" => "vendors#report_day"
   
-  
-  match "home/index" => "home#index"
-  match "home/exception_test" => "home#exception_test"
-  match "home/set_user_theme_ajax" => "home#set_user_theme_ajax"
-  match "home/user_employee_index" => "home#user_employee_index"
-  match "home/set_language" => "home#set_language"
-  match "home/documentation" => "home#documentation"
-  match "home/backup_database" => "home#backup_database"
-  match "home/errors_display" => "home#errors_display"
-  match "home/backup_logfile" => "home#backup_logfile"
-  match "home/remote_service" => 'home#remote_service'
-  match "home/update_connection_status" => "home#update_connection_status"
-  match "home/connect_remote_service" => "home#connect_remote_service"
-  match 'home/edit_owner' => 'home#edit_owner'
-  match 'home/update_owner' => 'home#update_owner'
-  
   match "buttons/position" => "buttons#position"
-  
   
   match "categories/categories_json" => "categories#categories_json"
   match "categories/items_json" => "categories#items_json"
-  
   
   match "orders/complete" => "orders#complete"
   match "orders/receipts" => "orders#receipts"
@@ -201,7 +183,20 @@ SalorRetail::Application.routes.draw do
   resources :countries
   resources :invoice_notes
   resources :sale_types
+  
+  resource :session do
+    get :test_exception
+    post :email
+    get :test_email
+  end
 
-
-  root :to => "orders#new"
+  if defined?(SrSaas) == 'constant'
+    mount SrSaas::Engine => "/saas"
+    match '/signin' => 'sr_saas/sessions#new'
+    match '*path' => 'sessions#new'
+    root :to => 'orders#new'
+  else
+    match '*path' => 'sessions#new'
+    root :to => 'orders#new'
+  end
 end

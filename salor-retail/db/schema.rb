@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130706100007) do
+ActiveRecord::Schema.define(:version => 20130708150950) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -1074,7 +1074,6 @@ ActiveRecord::Schema.define(:version => 20130706100007) do
     t.boolean  "items_view_list"
     t.boolean  "salor_printer"
     t.text     "receipt_blurb_footer"
-    t.boolean  "calculate_tax"
     t.boolean  "license_accepted"
     t.boolean  "csv_categories"
     t.boolean  "csv_buttons"
@@ -1086,6 +1085,8 @@ ActiveRecord::Schema.define(:version => 20130706100007) do
     t.string   "gs1_format",                        :default => "2,5,5"
     t.string   "country",                           :default => "cc"
     t.integer  "largest_drawer_transaction_number"
+    t.boolean  "enable_technician_emails"
+    t.string   "technician_email"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

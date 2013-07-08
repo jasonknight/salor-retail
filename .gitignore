@@ -2,7 +2,6 @@
 *.swo
 #.*
 #*#
-
 *.#
 *.sql
 *.css
@@ -14,7 +13,6 @@
 salor-retail/tmp/sass-cache
 salor-retail/tests/.cache
 salor-retail/tests/.IchabodCookieJar
-
 salor-retail/tmp/pids
 salor-retail/tmp/cache
 salor-retail/tmp/capybara
@@ -33,7 +31,6 @@ salor-retail/tmp
 sha1-signatures.txt
 *.tar.bz2
 Gemfile
-Gemfile.lock
 debian/salor-retail
 debian/files
 *.debhelper
@@ -42,3 +39,4 @@ salor-retail/config/database.yml
 salor-retail/public/barcodes/*.eps
 salor-retail/public/barcodes/*.png
 salor-retail/log/
+ichabod
