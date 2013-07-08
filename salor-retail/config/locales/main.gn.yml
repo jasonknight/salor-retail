@@ -53,9 +53,6 @@ gn:
       dollar_per_lp: Euro pro Punkt
       drop: Einzahlen
       email: E-Mail
-      user:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Kassenlade von
       end_amount: Schlussbetrag
       end_date: Ende
       eod_show: Zeige bei Tagesabschluss
@@ -177,6 +174,9 @@ gn:
       track_expiry: Ablaufdatum beobachten
       type: Typ
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Kassenlade von
       username: Benutzername
       uses_drawer_id: Uses Drawer of
       value: Betrag
@@ -220,9 +220,6 @@ gn:
       drawer_transaction:
         one: Buchung
         other: Buchungen
-      user:
-        one: Angestellter
-        other: Angestellte
       invoice_note:
         one: Rechnungstext
         other: Rechnungstexte
@@ -271,12 +268,12 @@ gn:
       tax_profile:
         one: Steuerklasse
         other: Steuerklassen
-      payment_method:
-        one: Zahlungsmethode
-        other: Zahlungsmethoden
       transaction_tag:
         one: Tag
         other: Tags
+      user:
+        one: Angestellter
+        other: Angestellte
       vendor:
         one: Filiale
         other: Filialen
@@ -325,7 +322,6 @@ gn:
     discount_for: Rabatt für %{store}
     discounts_for: Rabatte für %{store}
     edit_shipper: Lieferant %{name} bearbeiten
-    users: Angestellte
     expiring_soon: läuft bald ab
     export: Exports
     item_selection: Etiketten-Druckauswahl
@@ -340,6 +336,7 @@ gn:
     time_sheet: Employee Time Sheet
     update_location: Lagerort aktualisieren
     update_real_quantity: Tatsächliche Menge aktualisieren
+    users: Angestellte
   helpers:
     select:
       prompt: Bitte auswählen
@@ -425,12 +422,12 @@ gn:
     cash_registers: Kassen
     categories: Kategorien
     clear_order: Löschen
+    close: Schließen
     configuration: Details
     contact: Kontakt
     current_order: Aktueller Verkauf
     customer: Kunde
     customers: Kunden
-    close: Schließen
     database_distiller: Datenbank-Reiniger
     delete: Löschen
     delete_confirm: Sind Sie sicher?
@@ -444,7 +441,6 @@ gn:
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten
     edit_discount: Preisnachlass bearbeiten
-    edit_user: Angestellter bearbeiten
     edit_invoice_blurb: Rechnungstext bearbeiten
     edit_invoice_note: Rechnungsnotiz bearbeiten
     edit_item: Artikel bearbeiten
@@ -454,9 +450,8 @@ gn:
     edit_shipment_type: Lieferstatus bearbeiten
     edit_shipper: Lieferant %{name} bearbeiten
     edit_tax_profile: Steuerklasse bearbeiten
-    edit_tender_method: Zahlungsmethode bearbeiten
+    edit_user: Angestellter bearbeiten
     edit_vendor: Filiale bearbeiten
-    users: Angestellte
     end_day: Tag beenden
     general_configuration: Allgemein
     home: Filialen
@@ -478,7 +473,6 @@ gn:
     new_country: Neues Land
     new_customer: Neuer Kunde
     new_discount: Neuer Preisnachlass
-    new_user: Neuer Angestellter
     new_invoice_blurb: Neuer Rechnungstext
     new_invoice_note: Neuer Rechnungstext
     new_item: Neuer Artikel
@@ -490,8 +484,8 @@ gn:
     new_shipper: Neuer Lieferant
     new_stock_location: Neues Lager
     new_tax_profile: Neue Steuerklasse
-    new_tender_method: neue Zahlungsmethode
     new_transaction_tag: New Transaction Tag
+    new_user: Neuer Angestellter
     new_vendor: Neue Filiale
     ok: OK
     order: Verkauf
@@ -520,16 +514,19 @@ gn:
     stock_locations: Lager
     support: Unterstützung
     tax_profiles: Steuerklassen
-    tender_methods: Zahlungsmethode
     transaction_tags: Buchungen
     update_gift_card: Gutschein aktualisieren
     update_location: Orte
     update_real_quantity: Inventur
     upload: Hinaufladen
     usb_device: Usb Stick
+    users: Angestellte
     vendors: Filialen
     void: Storno
     wholesaler_update: Artikelupdate Großhändler
+    edit_payment_method: Edit Payment Method
+    new_payment_method: New Payment Method
+    payment_methods: Payment Methods
   notifications:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
@@ -601,7 +598,6 @@ gn:
       cash-refunds: Bargeld-Stornierungen
       cash_refunds_total: GESAMT
       no_category: Unbenannt
-      noncash-refunds: Nichtbargeld-Stornierungen
       orders_total: Verkäufe gesamt
       payment_method_total: GESAMT
       payments: Auszahlungen
@@ -615,6 +611,7 @@ gn:
         nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe
         auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine
         entsprechende Buchung vor und laden Sie diese Seite neu.
+      refunds: Refunds
     formats:
       advert: ! 'The Innovative Point of Sale
 
@@ -752,9 +749,6 @@ gn:
     not_you: Nicht Sie?
     owner_mode: ADMIN MODUS
     owner_success: Administrator wurde erfolgreich aktualisiert.
-    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere,Retourgeld,zukünftige
-      Bezahlung,Angebote
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change,Unpaid,Quote
     rebate_types:
       fixed: EUR
       percent: ! '%'
@@ -777,7 +771,6 @@ gn:
       from: von
       gross: brutto
       net: netto
-      refunds: Stornierungen
       payments: Zahlungen
       payout: Auszahlung
       payouts: Auszahlungen
@@ -796,6 +789,7 @@ gn:
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
+      noncash-refunds: Noncash-Refunds
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

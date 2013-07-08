@@ -1,7 +1,7 @@
 class FixVendorIdsOnReceipts < ActiveRecord::Migration
   def up
-    vid = Vendor.first.id
-    Receipt.connection.execute("update receipts set vendor_id = #{vid}")
+    vendor = Vendor.first
+    Receipt.connection.execute("update receipts set vendor_id = #{vendor.id}") if vendor
   end
 
   def down

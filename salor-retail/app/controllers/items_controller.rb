@@ -118,15 +118,9 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    @item = Item.find_by_id(params[:id])
-    if @current_user.owns_this?(@item) then
-      if @item.order_items.any? then
-        @item.update_attribute(:hidden,1)
-        @item.update_attribute(:sku, rand(999).to_s + 'OLD:' + @item.sku)
-      else
-        @item.destroy
-      end
-    end
+    @item = @current_vendor.items.visible.find_by_id(params[:id])
+    @item.hide(@current_user)
+    redirect_to items_path
   end
   
   def info

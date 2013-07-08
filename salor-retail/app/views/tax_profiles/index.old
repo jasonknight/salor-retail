@@ -18,4 +18,3 @@
       </div>
     </div>
 </div>
-<%= raw content_box_bottom %>

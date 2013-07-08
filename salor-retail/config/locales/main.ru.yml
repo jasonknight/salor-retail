@@ -53,9 +53,6 @@ ru:
       dollar_per_lp: рублей за единицу бонуса
       drop: внесение
       email: email
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Пользуется кассой как
       end_amount: конечное количество
       end_date: конечная дата
       eod_show: показывать в конце дня
@@ -192,6 +189,9 @@ ru:
       when: когда
       whento: When
       width: ширина
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
     models:
       action:
         one: Действие
@@ -220,9 +220,6 @@ ru:
       drawer_transaction:
         one: Кассовая транзакция
         other: Кассовые транзакции
-      employee:
-        one: Работник
-        other: Работники
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,15 +268,15 @@ ru:
       tax_profile:
         one: Налоговый профиль
         other: Налоговые профили
-      tender_method:
-        one: Метод оплаты
-        other: Методы оплаты
       transaction_tag:
         one: Метка
         other: Метки
       vendor:
         one: Магазин
         other: Магазины
+      user:
+        one: Employee
+        other: Employees
   api:
     user_does_not_exist: пользователь не существует
   are_you_sure: Are you sure you want to do this?
@@ -325,7 +322,6 @@ ru:
     discount_for: скидка для %{store}
     discounts_for: скидки для %{store}
     edit_shipper: редактировать поставщика %{name}
-    employees: работники
     expiring_soon: скоро заканчивается срок годности
     export: экспорт
     item_selection: выбор товара
@@ -340,6 +336,7 @@ ru:
     time_sheet: Employee Time Sheet
     update_location: обновить отдел
     update_real_quantity: обновить реальное количество
+    users: users
   helpers:
     select:
       prompt: выберете пожалуйста
@@ -367,9 +364,9 @@ ru:
       requesting_connection_status: Запрос статуса соединения ...
       title: Удаленное обслуживание
       user: Пользователь
-    user_employee_index:
-      backup_database: Резервировать базу данных
-      backup_logfile: Резервировать лог-файл
+    user_user_index:
+      backup_database: Backup Database
+      backup_logfile: Backup Logfile
   items:
     database_distiller:
       are_you_sure: Все неиспользуемые товары будут удалены. Это действие нельзя будет
@@ -442,7 +439,6 @@ ru:
     edit_category: редактировать категорию
     edit_customer: редактировать покупателя
     edit_discount: редактировать скидку
-    edit_employee: редактировать работника
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: редактировать товар
@@ -452,9 +448,7 @@ ru:
     edit_shipment_type: редактировать тип поставки
     edit_shipper: редактировать поставщика %{name}
     edit_tax_profile: редактировать налоговый профиль
-    edit_tender_method: редактировать метод оплаты
     edit_vendor: редактировать магазин
-    employees: работники
     end_day: конец дня
     general_configuration: основные настройки
     home: домой
@@ -476,7 +470,6 @@ ru:
     new_country: XXX new country
     new_customer: новый покупатель
     new_discount: новая скидка
-    new_employee: новый работник
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: XXX New Invoice Note
     new_item: новый товар
@@ -488,7 +481,6 @@ ru:
     new_shipper: новый поставщик
     new_stock_location: новое расположение склада
     new_tax_profile: новый налоговый профиль
-    new_tender_method: новый метод оплаты
     new_transaction_tag: New Transaction Tag
     new_vendor: новый магазин
     ok: OK
@@ -518,7 +510,6 @@ ru:
     stock_locations: расположения складов
     support: поддержка
     tax_profiles: налоговые профили
-    tender_methods: методы оплаты
     transaction_tags: метки транзакций
     update_gift_card: обновить подарочную карту
     update_location: обновить отдел
@@ -528,6 +519,13 @@ ru:
     vendors: магазины
     void: пусто
     wholesaler_update: обновление оптового поставщика
+    close: Close
+    edit_payment_method: Edit Payment Method
+    edit_user: Edituser
+    new_payment_method: New Payment Method
+    new_user: New user
+    payment_methods: Payment Methods
+    users: users
   notifications:
     shipments_item_could_not_be_saved: товар поставки не может быть сохранен
     shipments_move_all_items: все товары были успешно перемещёны
@@ -549,36 +547,6 @@ ru:
       sum: сумма
       sum_total: итого
       title: Суммы
-    report_day:
-      None: Не указан
-      OrderItemRefund: Возврат товара
-      OrderRefund: Возврат заказа
-      cash-refunds: Возвраты наличными
-      cash_drawer: Касса
-      count_orders: Количество заказов
-      drop: внесение
-      from: От
-      gross: гросс
-      net: чистыми
-      noncash-refunds: Безналичные возвраты
-      payments: Платежи
-      payout: выплата
-      payouts: выплаты
-      revenue: Выручка
-      sales: Продажи
-      sum: сумма
-      sum_gross: Сумма гросс
-      sum_net: Сумма чистыми
-      sum_transactions: Сумма транзакций
-      sums_by_category: суммы по категориям
-      sums_by_payment_methods: суммы по способам оплаты
-      sums_by_tax_profile: суммы по налоговым профилям
-      time: время
-      title: отчет за день
-      to: Кому
-      transaction_tag: метка транзакции
-      transaction_total: итого за транзакцию
-      transactions: транзакции
     report_day_range:
       display: показать
       end_date: конечная дата
@@ -629,7 +597,6 @@ ru:
       cash-refunds: Возвраты наличными
       cash_refunds_total: ИТОГО
       no_category: No Category
-      noncash-refunds: Безналичные возвраты
       orders_total: Всего заказов
       payment_method_total: ИТОГО
       payments: Платежи
@@ -643,6 +610,7 @@ ru:
         Рекомендуется заканчивать и начинать каждый день с нулевым балансом для упрощения
         бухгалтерских расчетов. Сделайте выплату наличных в соответствии с балансом
         и напечатайте отчет снова.
+      refunds: Refunds
     formats:
       advert: Инновационная точка продаж www.salorpos.com
       cancel: Отмена                  РУБ %8.2f
@@ -776,8 +744,6 @@ ru:
     not_you: не вы?
     owner_mode: РЕЖИМ ВЛАДЕЛЬЦА
     owner_success: Свойства владельца были успешно обновлены
-    payment_external_types: наличные,карта,подарочная карта,другое
-    payment_internal_types: Наличными,Банковской Картой,Подарочной картой,Другой кредит
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -789,6 +755,36 @@ ru:
       logo: логотип
       receipt_logo_footer: низ логотипа квитанции
       receipt_logo_header: верх логотипа квитанции
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: дополнительное поле
     cash_register_heading: ! '%{name} для %{store}'

@@ -16,7 +16,10 @@ class ApplicationController < ActionController::Base
   #protect_from_forgery
   
   before_filter :loadup
+  before_filter :get_cash_register
   before_filter :set_tailor
+  before_filter :set_locale
+  skip_before_filter :get_cash_register, :only => [:index]
   
   layout :layout_by_response
 
@@ -67,14 +70,28 @@ class ApplicationController < ActionController::Base
     not workstation?
   end
 
-
-
-  def user_cache_name
-    return @current_user.username if salor_signed_in?
-    return 'loggedout'
-  end
-
   private
+  
+  def set_locale
+    if params[:l] and I18n.available_locales.include? params[:l].to_sym
+      I18n.locale = @locale = session[:locale] = params[:l]
+    elsif session[:locale]
+      I18n.locale = @locale = session[:locale]
+    elsif @current_user
+      I18n.locale = @locale = session[:locale] = @current_user.language
+    else
+      unless request.env['HTTP_ACCEPT_LANGUAGE'].nil?
+        browser_language = request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+        browser_language = 'gn' if browser_language == 'de'
+      end
+      if browser_language.nil? or browser_language.empty? or not I18n.available_locales.include?(browser_language.to_sym)
+        I18n.locale = @locale = session[:locale] = 'en'
+      else
+        I18n.locale = @locale = session[:locale] = browser_language
+      end
+    end
+    @region = @current_vendor.region if @current_vendor
+  end
   
   def update_devicenodes
     if @current_register
@@ -106,9 +123,13 @@ class ApplicationController < ActionController::Base
     @current_company = @current_user.company
     @current_vendor = @current_company.vendors.find_by_id(session[:vendor_id])
     Time.zone = @current_vendor.time_zone if @current_vendor
-    @current_register = CashRegister.find_by_id(session[:cash_register_id])
     I18n.locale = @current_user.language
     return @current_user
+  end
+  
+  def get_cash_register
+    @current_register = CashRegister.find_by_id(session[:cash_register_id])
+    redirect_to cash_registers_path and return unless @current_register
   end
   
   def set_tailor

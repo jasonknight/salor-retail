@@ -6,9 +6,11 @@
 # See license.txt for the license applying to all files within this software.
 
 class Role < ActiveRecord::Base
-	include SalorScope
-
+  include SalorScope
   include SalorBase
+  
+  belongs_to :vendor
+  belongs_to :company
   has_and_belongs_to_many :users
   # This is a role black list, if it isn't here
   # it means they can do it. Only put roles here

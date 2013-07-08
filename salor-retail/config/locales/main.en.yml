@@ -1,6 +1,6 @@
 ---
-en-GB:
-  ByCard: By Card
+en:
+  ByCard: By Debit
   ByGiftCard: By Gift Card
   InCash: In Cash
   activerecord:
@@ -15,7 +15,7 @@ en-GB:
       applies_to: applies to
       auto_drop: Automatically Begin Day
       bank_machine_path: ATM
-      base_price: base price
+      base_price: List Price
       behavior: behavior
       body: body
       buyback_price: buyback price
@@ -53,9 +53,6 @@ en-GB:
       dollar_per_lp: dollar per loyalty point
       drop: drop
       email: email
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Uses drawer of
       end_amount: end amount
       end_date: end date
       eod_show: show at end of day
@@ -177,6 +174,9 @@ en-GB:
       track_expiry: Track Expiry
       type: type
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: username
       uses_drawer_id: Uses Drawer of
       value: value
@@ -220,9 +220,6 @@ en-GB:
       drawer_transaction:
         one: Drawer Transaction
         other: Drawer Transactions
-      employee:
-        one: Employee
-        other: Employees
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,12 +268,12 @@ en-GB:
       tax_profile:
         one: Tax Profile
         other: Tax Profiles
-      tender_method:
-        one: Tender Method
-        other: Tender Methods
       transaction_tag:
         one: Tag
         other: Tags
+      user:
+        one: Employee
+        other: Employees
       vendor:
         one: Store
         other: Stores
@@ -324,12 +321,11 @@ en-GB:
     database_distiller: Database distiller
     discount_for: rebate for %{store}
     discounts_for: rebates for %{store}
-    edit_shipper: edit shipper %{name}
-    employees: employees
+    edit_shipper: Editshipper %{name}
     expiring_soon: expiring soon
     export: export
     item_selection: item selection
-    new_discount_for: new discount for %{store}
+    new_discount_for: New discount for %{store}
     notes: notes
     order_validation: Order Validation
     paylife: Paylife(Artema Hybrid)
@@ -340,21 +336,22 @@ en-GB:
     time_sheet: Employee Time Sheet
     update_location: update location
     update_real_quantity: update real quantity
+    users: users
   helpers:
     select:
-      prompt: please select
+      prompt: Please select
     submit:
-      cancel: cancel
-      clear: clear
-      complete_sale: complete sale
+      cancel: Cancel
+      clear: Clear
+      complete_sale: Complete Sale
       create: create
       edit: Edit
       get_item: get item
       ok: OK
-      print: print
+      print: Print
       save: Save
-      submit: submit
-      update: update
+      submit: Submit
+      update: Update
   home:
     remote_service:
       connect_ssh: Remote service
@@ -367,7 +364,7 @@ en-GB:
       requesting_connection_status: Requesting connection status ...
       title: Remote Service
       user: User
-    user_employee_index:
+    user_user_index:
       backup_database: Backup Database
       backup_logfile: Backup Logfile
   items:
@@ -424,37 +421,37 @@ en-GB:
     cash_registers: cash registers
     categories: categories
     clear_order: Clear
+    close: Close
     configuration: Config.
     contact: contact
     current_order: ! 'current order: #%{id}'
-    customer: customer
-    customers: customers
+    customer: Customer
+    customers: Customers
     database_distiller: Database Distiller
     delete: delete
     delete_confirm: Are you sure?
     destroy: destroy
     discounts: discounts
     documentation: Documentation
-    done: done
-    download: download
-    edit: edit
-    edit_cash_register: edit cash register
-    edit_category: edit category
-    edit_customer: edit customer
-    edit_discount: edit discount
-    edit_employee: edit employee
+    done: Done
+    download: Download
+    edit: Edit
+    edit_cash_register: Editcash register
+    edit_category: Editcategory
+    edit_customer: Editcustomer
+    edit_discount: Editdiscount
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: Edit Inovice Note
-    edit_item: edit item
-    edit_location: edit location
+    edit_item: Edititem
+    edit_location: Editlocation
+    edit_payment_method: Edit Payment Method
     edit_sale_type: Edit Sale type
-    edit_shipment: edit shipment
-    edit_shipment_type: edit shipment type
-    edit_shipper: edit shipper %{name}
-    edit_tax_profile: edit tax profile
-    edit_tender_method: edit tender method
-    edit_vendor: edit Store
-    employees: employees
+    edit_shipment: Editshipment
+    edit_shipment_type: Editshipment type
+    edit_shipper: Edit Shipper %{name}
+    edit_tax_profile: Edittax profile
+    edit_user: Edituser
+    edit_vendor: EditStore
     end_day: end day
     general_configuration: general configuration
     home: home
@@ -468,33 +465,34 @@ en-GB:
     loyalty_cards: loyalty cards
     merge_into_current_order: Merge into current order
     move_shipment_item: move shipment item
-    new_action: new New Action
+    new_action: New Action
     new_broken_item: New Broken Item
     new_button: New Button
-    new_cash_register: new cash register
-    new_category: new category
+    new_cash_register: New cash register
+    new_category: New category
     new_country: New Country
-    new_customer: new customer
-    new_discount: new discount
-    new_employee: new employee
+    new_customer: New customer
+    new_discount: New discount
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: New Invoice Note
-    new_item: new item
-    new_location: new location
+    new_item: New item
+    new_location: New location
     new_order: New
+    new_payment_method: New Payment Method
     new_sale_type: New Sale Type
-    new_shipment: new shipment
-    new_shipment_type: new shipment type
-    new_shipper: new shipper
-    new_stock_location: new stock location
-    new_tax_profile: new tax profile
-    new_tender_method: new tender method
+    new_shipment: New shipment
+    new_shipment_type: New shipment type
+    new_shipper: New shipper
+    new_stock_location: New stock location
+    new_tax_profile: New tax profile
     new_transaction_tag: New Transaction Tag
-    new_vendor: new Store
+    new_user: New user
+    new_vendor: New Store
     ok: OK
     order: order
     orders: orders
     overview: overview
+    payment_methods: Payment Methods
     points: points
     pos: POS
     print: print
@@ -518,13 +516,13 @@ en-GB:
     stock_locations: stock locations
     support: support
     tax_profiles: tax profiles
-    tender_methods: tender methods
     transaction_tags: transaction tags
     update_gift_card: update gift card
     update_location: update location
     update_real_quantity: update real quantity
     upload: upload
     usb_device: Usb Stick
+    users: users
     vendors: Stores
     void: void
     wholesaler_update: wholesaler update
@@ -549,36 +547,6 @@ en-GB:
       sum: sum
       sum_total: sum total
       title: Sums
-    report_day:
-      None: Not specified
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      cash-refunds: Cash-Refunds
-      cash_drawer: Cash drawer
-      count_orders: Count of orders
-      drop: drop
-      from: From
-      gross: gross
-      net: net
-      noncash-refunds: Noncash-Refunds
-      payments: Payments
-      payout: payout
-      payouts: payouts
-      revenue: Revenue
-      sales: Sales
-      sum: sum
-      sum_gross: Sum gross
-      sum_net: Sum net
-      sum_transactions: Sum transactions
-      sums_by_category: sums by category
-      sums_by_payment_methods: sums by payment methods
-      sums_by_tax_profile: sums by tax profile
-      time: time
-      title: day report
-      to: To
-      transaction_tag: transaction tag
-      transaction_total: transaction total
-      transactions: transactions
     report_day_range:
       display: display
       end_date: end date
@@ -629,11 +597,11 @@ en-GB:
       cash-refunds: Cash-Refunds
       cash_refunds_total: TOTAL
       no_category: No Category
-      noncash-refunds: Noncash-Refunds
       orders_total: Orders total
       payment_method_total: TOTAL
       payments: Payments
       refund: Refund
+      refunds: Refunds
       revenue: Revenue
       revenue_total: TOTAL
       sales: Sales
@@ -659,7 +627,7 @@ en-GB:
       thanks: Thank you for shopping with us!
       total: TOTAL                         EUR %8.2f
     order_receipt:
-      change: Change money
+      change: Change
       coupon_subtotal: Coupon Subtotal
       current_loyalty_points: Your loyalty points
       discount: Discount
@@ -710,7 +678,7 @@ en-GB:
   sticker: sticker
   support: Support
   system:
-    add_payment_method: add payment method
+    add_payment_method: Add Method
     complete_sale: Complete
     errors:
       action_code_error: Code could not be executed because %{error}
@@ -769,13 +737,11 @@ en-GB:
       value_not_set: NotSet
     inventory_updated: inventory updated
     logged_in_as: logged in as
-    login: login
-    logout: logout
+    login: Clockin
+    logout: Clockout
     not_you: not you?
     owner_mode: OWNER MODE
     owner_success: Owner properties were successfully updated
-    payment_external_types: cash,card,gift card,other,change
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -787,17 +753,47 @@ en-GB:
       logo: logo
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: cash registers
     category_heading: category %{name} for %{store}
-    change: change
+    change: Change
     create_new_item: Create New Article
     customers: customers
     download_may_last_long: This download may last long. Continue?
     dummy_item: dummy item
-    edit_item_heading: edit item heading
+    edit_item_heading: Edititem heading
     email: email
     errors:
       no_access_right: You do not have the right to access this resource. This error
@@ -823,7 +819,7 @@ en-GB:
           canceled: canceled
           complete: complete
           in_stock: in stock
-          new: new
+          new: New
           returned: returned
           shipped: shipped
     gift_card: gift card
@@ -846,7 +842,7 @@ en-GB:
       model_create: ! '%{model} was created successfully'
       model_edit: ! '%{model} was edited successfully'
       move_real_quantities_success: Item quantities were successfully updated
-      new_order: new order created
+      new_order: New order created
       order_refund_dt: ! '#%{id}'
       please_backup: Please backup your system regularly!
       save_before: Save before leaving?

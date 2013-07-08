@@ -21,6 +21,5 @@
 <div class="pagination" align="center">
   <%= paginate @categories if @categories %>
 </div>
-<%= raw content_box_bottom %>
 
 

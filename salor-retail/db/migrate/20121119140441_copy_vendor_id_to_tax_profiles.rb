@@ -1,6 +1,7 @@
 class CopyVendorIdToTaxProfiles < ActiveRecord::Migration
   def up
-    TaxProfile.update_all :vendor_id => Vendor.first.id
+    vendor = Vendor.first
+    TaxProfile.update_all :vendor_id => vendor.id if vendor
   end
 
   def down

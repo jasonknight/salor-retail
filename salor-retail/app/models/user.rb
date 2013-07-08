@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   
   before_update :set_role_cache, :update_hourly_rate
   before_save :set_role_cache, :update_hourly_rate
-
+  after_commit :set_drawer
   
   def find_for_authentication(conditions={})
     conditions[:hidden] = false
@@ -265,6 +265,17 @@ class User < ActiveRecord::Base
       rs << r.name
     end
     self.role_cache = rs.join(',')
+  end
+  
+  def set_drawer
+    unless self.drawer
+      ActiveRecord::Base.logger.info "User doesn't have a Drawer yet. Creating one"
+      d = Drawer.new
+      d.vendor = self.vendor
+      d.company = self.company
+      d.save
+      write_attribute :drawer_id, d.id
+    end
   end
 
 end

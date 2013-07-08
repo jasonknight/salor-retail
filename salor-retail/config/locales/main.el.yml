@@ -53,9 +53,6 @@ el:
       dollar_per_lp: ευρώ ανά πόντους επιβράβευσης
       drop: προσθήκη μετρητών
       email: ηλεκτρονική διεύθυνση
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Χρήση συρταριού του/της
       end_amount: τελικό ποσό
       end_date: ημερομηνία λήξης
       eod_show: προβολή τέλους μέρας
@@ -192,6 +189,9 @@ el:
       when: πότε
       whento: When
       width: πλάτος
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
     models:
       action:
         one: Πράξη
@@ -220,9 +220,6 @@ el:
       drawer_transaction:
         one: Συναλλαγή Συρταριού
         other: Συναλλαγές Συρταριού
-      employee:
-        one: Υπάλληλος
-        other: Υπάλληλοι
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,15 +268,15 @@ el:
       tax_profile:
         one: Φορολογικό Προφίλ
         other: Φορολογικά Προφίλ
-      tender_method:
-        one: Μέθοδος Πληρωμής
-        other: Μέθοδοι Πληρωμής
       transaction_tag:
         one: Ετικέτα
         other: Ετικέτες
       vendor:
         one: Κατάστημα
         other: Καταστήματα
+      user:
+        one: Employee
+        other: Employees
   api:
     user_does_not_exist: ο χρήστης δεν υπάρχει
   are_you_sure: Are you sure you want to do this?
@@ -326,7 +323,6 @@ el:
     discount_for: έκπτωση για %{store}
     discounts_for: εκπτώσεις για %{store}
     edit_shipper: επεξεργασία αποστολέα %{name}
-    employees: υπάλληλοι
     expiring_soon: λήγει σύντομα
     export: εξαγωγή
     item_selection: επιλογή αντικειμένου
@@ -341,6 +337,7 @@ el:
     time_sheet: Employee Time Sheet
     update_location: ενημέρωση τοποθεσίας
     update_real_quantity: ενημέρωση πραγματικής ποσότητας
+    users: users
   helpers:
     select:
       prompt: παρακαλώ επιλέξτε
@@ -369,9 +366,9 @@ el:
       requesting_connection_status: Αίτημα Κατάστασης Σύνδεσης...
       title: Εξ’ Αποστάσεως Τεχνική Υποστήριξη
       user: Χρήστης
-    user_employee_index:
-      backup_database: Αντίγραφο Βάσης Δεδομένων
-      backup_logfile: Αντίγραφο Αρχείου Καταγραφής
+    user_user_index:
+      backup_database: Backup Database
+      backup_logfile: Backup Logfile
   items:
     database_distiller:
       are_you_sure: Όλα τα αχρησιμοποίητα αντικείμενα θα διαγραφούν. Αυτό δεν είναι
@@ -445,7 +442,6 @@ el:
     edit_category: επεξεργασία κατηγορίας
     edit_customer: επεξεργασία πελάτη
     edit_discount: επεξεργασία έκπτωσης
-    edit_employee: επεξεργασία υπαλλήλου
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: επεξεργασία αντικειμένου
@@ -455,9 +451,7 @@ el:
     edit_shipment_type: επεξεργασία τύπου αποστολής
     edit_shipper: επεξεργασία αποστολέα %{name}
     edit_tax_profile: επεξεργασία φορολογικού προφίλ
-    edit_tender_method: επεξεργασία μεθόδου πληρωμής
     edit_vendor: επεξεργασία προμηθευτή
-    employees: υπάλληλοι
     end_day: τέλος μέρας
     general_configuration: γενικές ρυθμίσεις
     home: κύριο μενού
@@ -479,7 +473,6 @@ el:
     new_country: XXX new country
     new_customer: νέος πελάτης
     new_discount: νέα έκπτωση
-    new_employee: νέος υπάλληλος
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: XXX New Invoice Note
     new_item: νέο αντικείμενο
@@ -491,7 +484,6 @@ el:
     new_shipper: νέος αποστολέας
     new_stock_location: νέα τοποθεσία αποθέματος
     new_tax_profile: νέο φορολογικό προφίλ
-    new_tender_method: νέα μέθοδος πληρωμής
     new_transaction_tag: New Transaction Tag
     new_vendor: νέος προμηθευτής
     ok: OK
@@ -521,7 +513,6 @@ el:
     stock_locations: τοποθεσίες αποθέματος
     support: υποστήριξη
     tax_profiles: φορολογικά προφίλ
-    tender_methods: μέθοδοι πληρωμής
     transaction_tags: ετικέτες συναλλαγής
     update_gift_card: ενημέρωση δωροκάρτας
     update_location: ενημέρωση τοποθεσίας
@@ -531,6 +522,13 @@ el:
     vendors: προμηθευτές
     void: άκυρο
     wholesaler_update: ενημέρωση χονδρέμπορου
+    close: Close
+    edit_payment_method: Edit Payment Method
+    edit_user: Edituser
+    new_payment_method: New Payment Method
+    new_user: New user
+    payment_methods: Payment Methods
+    users: users
   notifications:
     shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
     shipments_move_all_items: όλα τα αντικείμενα μεταφέρθηκαν επιτυχώς
@@ -552,36 +550,6 @@ el:
       sum: σύνολο
       sum_total: συνολικό ποσό
       title: Σύνολα
-    report_day:
-      None: Ακαθόριστο
-      OrderItemRefund: Επιστροφή Αντικειμένου
-      OrderRefund: Επιστροφή Παραγγελίας
-      cash-refunds: Επιστροφή Μετρητών
-      cash_drawer: Συρτάρι Μετρητών
-      count_orders: Μέτρηση Παραγγελιών
-      drop: προσθήκη μετρητών
-      from: Από
-      gross: χονδρικό
-      net: καθαρό
-      noncash-refunds: Επιστροφή μη-μετρητών
-      payments: Πληρωμές
-      payout: αποπληρωμή
-      payouts: αποπληρωμές
-      revenue: Έσοδα
-      sales: Πωλήσεις
-      sum: σύνολο
-      sum_gross: Χονδρικό Σύνολο
-      sum_net: Καθαρό Σύνολο
-      sum_transactions: Σύνολο Συναλλαγών
-      sums_by_category: σύνολα ανά κατηγορία
-      sums_by_payment_methods: σύνολα ανά μεθόδους πληρωμής
-      sums_by_tax_profile: σύνολα ανά φορολογικό προφίλ
-      time: ώρα
-      title: αναφορά μέρας
-      to: Προς
-      transaction_tag: ετικέτα συναλλαγών
-      transaction_total: ολικό συναλλαγών
-      transactions: συναλλαγές
     report_day_range:
       display: ανάρτηση
       end_date: ημερομηνία λήξης
@@ -632,7 +600,6 @@ el:
       cash-refunds: Επιστροφή μετρητών
       cash_refunds_total: ΟΛΙΚΟ
       no_category: No Category
-      noncash-refunds: Επιστροφή μη-μετρητών
       orders_total: Ολικό παραγγελιών
       payment_method_total: ΟΛΙΚΟ
       payments: Πληρωμές
@@ -646,6 +613,7 @@ el:
         είναι μηδέν. Σας συνιστούμε να τελειώνετε και να ξεκινάτε τη μέρα σας με ποσό
         συρταριού μηδέν για να διευκολύνετε τα λογιστικά. Κάντε αποπληρωμή μετρητών
         αναλόγως και εκτυπώστε ξανά αυτή την αναφορά.
+      refunds: Refunds
     formats:
       advert: ! 'Το καινοτόμο Σημείο Πώλησης
 
@@ -789,8 +757,6 @@ el:
     not_you: δεν είστε εσείς;
     owner_mode: ΛΕΙΤΟΥΡΓΙΑ ΙΔΙΟΚΤΗΤΗ
     owner_success: Οι ιδιότητες του ιδιοκτήτη ενημερώθηκαν επιτυχώς
-    payment_external_types: μετρητά,κάρτα,δωροκάρτα,άλλο
-    payment_internal_types: ΜεΜετρητά,ΜεΚάρτα,ΜεΔωροκάρτα,ΆλλεςΠιστώσεις
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -802,6 +768,36 @@ el:
       logo: λογότυπο
       receipt_logo_footer: λογότυπο απόδειξης υποσέλιδο
       receipt_logo_header: λογότυπο απόδειξης κεφαλίδα
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: προηγμένο πεδίο
     cash_register_heading: ! '%{name} για %{store}'

@@ -81,16 +81,9 @@ module SalorBase
   end
   
    
-   def get_html_id
-     return [self.class.to_s,self.id.to_s,rand(9999)].join('_').to_s
-   end
-   
-   def self.rebate_types
-     return [
-     [I18n.t("system.rebates.percent"),'Percent'],
-     [I18n.t("system.rebates.fixed"),'Fixed']
-     ]
-   end
+  def get_html_id
+    return [self.class.to_s,self.id.to_s,rand(9999)].join('_').to_s
+  end
 
   
   def self.to_currency(number,options={})

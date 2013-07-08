@@ -53,9 +53,6 @@ it:
       dollar_per_lp: euro per punti fedeltà
       drop: versamento
       email: email
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: usa cassa id
       end_amount: importo finale
       end_date: fine data
       eod_show: mostra a fine giornata
@@ -192,6 +189,9 @@ it:
       when: quando
       whento: When
       width: larghezza
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
     models:
       action:
         one: Azione
@@ -220,9 +220,6 @@ it:
       drawer_transaction:
         one: Transazione Cassa
         other: Transazioni Cassa
-      employee:
-        one: Impiegato
-        other: Impiegati
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,15 +268,15 @@ it:
       tax_profile:
         one: Profilo Tassa
         other: Profili Tassa
-      tender_method:
-        one: Metodo Offerta
-        other: MEtodi Offerta
       transaction_tag:
         one: Etichetta
         other: Etichette
       vendor:
         one: Negozio
         other: NEgozi
+      user:
+        one: Employee
+        other: Employees
   api:
     user_does_not_exist: utente non esistente
   are_you_sure: Are you sure you want to do this?
@@ -325,7 +322,6 @@ it:
     discount_for: sconto per %{store}
     discounts_for: sconti per %{store}
     edit_shipper: edita spedizioniere %{name}
-    employees: impiegati
     expiring_soon: prossimo a scadere
     export: esporta
     item_selection: selezione articolo
@@ -340,6 +336,7 @@ it:
     time_sheet: Employee Time Sheet
     update_location: aggiorna posizione
     update_real_quantity: aggiorna quantità reale
+    users: users
   helpers:
     select:
       prompt: prego selezionare
@@ -367,9 +364,9 @@ it:
       requesting_connection_status: Richiesta stato connessione ...
       title: Servizio Remoto
       user: Utente
-    user_employee_index:
+    user_user_index:
       backup_database: Backup Database
-      backup_logfile: Backup file di Log
+      backup_logfile: Backup Logfile
   items:
     database_distiller:
       are_you_sure: Tutti gli articoli non utilizzati verranno cancellati. Non si
@@ -442,7 +439,6 @@ it:
     edit_category: edita categoria
     edit_customer: edita cliente
     edit_discount: edita sconto
-    edit_employee: edita impiegato
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: Edit Inovice Note
     edit_item: edita articolo
@@ -452,9 +448,7 @@ it:
     edit_shipment_type: edita tipo spedizione
     edit_shipper: edita spedizioniere %{name}
     edit_tax_profile: edita profilo iva
-    edit_tender_method: edita metodo di pagamento
     edit_vendor: edita venditore
-    employees: impiegati
     end_day: fine giornata
     general_configuration: configurazione generale
     home: principale
@@ -476,7 +470,6 @@ it:
     new_country: New Country
     new_customer: nuovo cliente
     new_discount: nuovo sconto
-    new_employee: nuovo impiegato
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: New Invoice Note
     new_item: nuovo articolo
@@ -488,7 +481,6 @@ it:
     new_shipper: nuovo spedizioniere
     new_stock_location: nuova locazione stock
     new_tax_profile: nuovo profilo iva
-    new_tender_method: nuovo metodo di pagamento
     new_transaction_tag: New Transaction Tag
     new_vendor: nuovo venditore
     ok: OK
@@ -518,7 +510,6 @@ it:
     stock_locations: locazioni stock
     support: supporto
     tax_profiles: profili iva
-    tender_methods: metodi sensibili
     transaction_tags: etichette transazione
     update_gift_card: aggiorna carta omaggio
     update_location: aggiorna locazione
@@ -528,6 +519,13 @@ it:
     vendors: venditori
     void: vuoto
     wholesaler_update: aggiorna grossista
+    close: Close
+    edit_payment_method: Edit Payment Method
+    edit_user: Edituser
+    new_payment_method: New Payment Method
+    new_user: New user
+    payment_methods: Payment Methods
+    users: users
   notifications:
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
     shipments_move_all_items: tutti gli articoli sono stati spostati con successo
@@ -549,36 +547,6 @@ it:
       sum: somma
       sum_total: somma totale
       title: Somme
-    report_day:
-      None: Non specificato
-      OrderItemRefund: Articolo Rimborsato
-      OrderRefund: Ordine Rimborsato
-      cash-refunds: Rimborsi-Cassa
-      cash_drawer: Cassa
-      count_orders: Conteggio degli ordini
-      drop: versamento
-      from: Da
-      gross: lordo
-      net: netto
-      noncash-refunds: Rimborsi-Fuori-Cassa
-      payments: Pagamenti
-      payout: prelievo
-      payouts: prelievi
-      revenue: Entrata
-      sales: Vendite
-      sum: somma
-      sum_gross: Somma lordo
-      sum_net: Somma netto
-      sum_transactions: Somma transazioni
-      sums_by_category: Somme per categoria
-      sums_by_payment_methods: Somme per metodi di pagamento
-      sums_by_tax_profile: Somme per profilo Iva
-      time: ora
-      title: rapporto giornata
-      to: A
-      transaction_tag: etichetta transazione
-      transaction_total: totale transazione
-      transactions: transazioni
     report_day_range:
       display: mostra
       end_date: fine data
@@ -629,7 +597,6 @@ it:
       cash-refunds: Rimborso-Cassa
       cash_refunds_total: TOTALE
       no_category: No Category
-      noncash-refunds: Rimborso non contante
       orders_total: Ordini totale
       payment_method_total: TOTALE
       payments: Pagamenti
@@ -643,6 +610,7 @@ it:
         zero. Si avvisa di chiudere e di ripartire ogni giorno con un importo di cassa
         uguale a zero per semplificare la contabilità. Esegui una liquidazione cassa
         e stampa di nuovo questo rapporto.
+      refunds: Refunds
     formats:
       advert: Il Punto di Vendita Innovativo www.salorpos.com
       cancel: Cancella                  EUR %8.2f
@@ -776,8 +744,6 @@ it:
     not_you: non sei tu?
     owner_mode: MODO PROPRIETARIO
     owner_success: Diritti proprietario aggiornati con successo
-    payment_external_types: contante,carta,carta regalo,altro
-    payment_internal_types: InCassa,PerCarta,PerCartaRegalo,AltroCredito
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -789,6 +755,36 @@ it:
       logo: logo
       receipt_logo_footer: ricevuta logo piè di pagina
       receipt_logo_header: ricevuta logo testata
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: campo avanzato
     cash_register_heading: ! '%{name} for %{store}'

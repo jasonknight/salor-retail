@@ -51,17 +51,12 @@ module ApplicationHelper
   def salor_number_to_currency(amnt)
     return number_to_currency(amnt, :unit => I18n.t("number.currency.format.unit"))
   end
+  
   def salor_number_with_delimiter(num)
     return number_with_delimiter(num)
   end
   
-  def salor_signed_in?
-    if session[:user_id] and session[:user_type] then
-      return true
-    else
-      return false
-    end
-  end
+
   
   def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []}, hideuser = false)
     clses = ['box-title','shadow']
@@ -88,9 +83,7 @@ module ApplicationHelper
     ]
   end
   
-  def content_box_bottom
-    ''
-  end
+
   def get_icons_map
     icons = {
       :location => 'location',
@@ -205,20 +198,6 @@ module ApplicationHelper
       return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }</div>")
     end
   end
-  def get_day(i)
-    days = [
-
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun'
-    ]
-    logger.info("### Recv: #{i} returning #{days[i - 1]}")
-    return days[i-1]
-  end
 
   def edit_me(field,model,initvalue='',withstring='',id=nil,update_pos_display='false')
     field = field.to_s
@@ -232,30 +211,13 @@ module ApplicationHelper
     c = "editme #{model.class.to_s.downcase}-#{field}"
     return raw("<span model_id='#{model.id}' id='#{id}' class='#{c}' field='#{field}' klass='#{model.class.to_s}' data_type='#{model.send(field).class}' withstring='#{withstring}' update_pos_display='#{update_pos_display}'>#{initvalue}</span>")
   end
-
-  def action_button(url,html,options={})
-    opts = []
-    options.each do |k,v|
-      opts << "#{k}='#{v}'"
-    end
-    return raw "<span class=\"action-button\" url='#{url}' #{opts.join(' ')}>#{html}</span>"
-  end
+  
   def searchable_models
     [
       [I18n.t("activerecord.models.item.one"),'Item'],
       [I18n.t("activerecord.models.customer.one"),'Customer'],
       [I18n.t("activerecord.models.order.one"),'Order']
     ]
-  end
-  def get_help(key=nil,size=16,prms=nil)
-    if prms.nil? then
-      prms = params
-    end
-    k = prms[:controller]
-    if not key.nil? then
-      k = k + '_' + key
-    end
-    return salor_icon(:help, {:url => "/vendors/help?key=#{k}", :class => 'click-help', :style => "cursor:pointer;"},size)
   end
 
 
@@ -285,6 +247,7 @@ module ApplicationHelper
   def num2name(num)
     num = num.to_s.gsub('0.','').gsub(',','').gsub('.','')
   end
+  
   def leftpad(str,chars,pad=' ')
     return str if str.length >= chars
     len = str.length
@@ -294,11 +257,19 @@ module ApplicationHelper
     end until len >= chars
     return str
   end
-  def true_false_select
-    return [
-    ["False",false],
-    ["True",true]
-    ]
+
+  
+  def nest_image(object)
+    object.tap do |o|
+      if o.images.empty? then
+        o.images.build
+        o.images.first.image_type = 'logo' if o.class.name == 'Vendor' and o.images.first.image_type.nil?
+      end
+      if o.class.name == 'Vendor' and o.images.count < 2 then
+        o.images.first.image_type = 'logo' if o.images.first.image_type.nil?
+        o.images.build
+        o.images.first.image_type == 'logo' ? o.images.last.image_type = 'invoice_logo' : o.images.last.image_type = 'logo'
+      end
+    end
   end
-  # {END}
 end

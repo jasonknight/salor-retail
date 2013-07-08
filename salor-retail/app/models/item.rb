@@ -403,6 +403,17 @@ class Item < ActiveRecord::Base
     end
   end
   
+  def hide(by)
+    self.hidden = true
+    self.hidden_by = by
+    self.hidden_at = Time.now
+    self.save
+    
+    # TODO: needs to be tested
+    b = self.vendor.buttons.visible.where(:sku => self.sku)
+    b.update_all :hidden => true, :hidden_by => by, :hidden_at => Time.now
+  end
+  
   def to_record
     attrs = self.attributes.clone
     attrs[:category] = self.category.name if self.category

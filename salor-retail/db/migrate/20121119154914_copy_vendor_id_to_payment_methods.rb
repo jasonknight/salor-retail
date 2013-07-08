@@ -1,6 +1,7 @@
 class CopyVendorIdToPaymentMethods < ActiveRecord::Migration
   def up
-    PaymentMethod.update_all :vendor_id => Vendor.first.id
+    vendor = Vendor.first
+    PaymentMethod.update_all :vendor_id => vendor.id if vendor
   end
 
   def down
