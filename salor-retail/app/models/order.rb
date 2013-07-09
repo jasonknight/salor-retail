@@ -679,9 +679,8 @@ class Order < ActiveRecord::Base
     end
     
     # --- invoice blurbs ---
-    locale = I18n.locale
-    invoice_blurb_header = self.vendor.invoice_blurbs.visible.where(:lang => locale, :is_header => true).first
-    invoice_blurb_footer = self.vendor.invoice_blurbs.visible.where(:lang => locale).where('is_header IS NOT TRUE').first
+    invoice_blurb_header = self.vendor.invoice_blurbs.visible.where(:lang => I18n.locale, :is_header => true).last
+    invoice_blurb_footer = self.vendor.invoice_blurbs.visible.where(:lang => I18n.locale).where('is_header IS NOT TRUE').last
     invoice_blurb_header_receipt = invoice_blurb_header.body_receipt if invoice_blurb_header
     invoice_blurb_header_invoice = invoice_blurb_header.body if invoice_blurb_header
     invoice_blurb_footer_receipt = invoice_blurb_footer.body_receipt if invoice_blurb_footer
@@ -734,7 +733,7 @@ class Order < ActiveRecord::Base
     report[:change] = self.change
     report[:paymentmethods] = paymentmethods
     report[:customer] = customer
-    report[:unit] = I18n.t('number.currency.format.friendly_unit')
+    report[:unit] = I18n.t('number.currency.format.friendly_unit', :locale => self.vendor.region)
     report[:invoice_blurbs] = {
       :receipt => {
                     :header => invoice_blurb_header_receipt,

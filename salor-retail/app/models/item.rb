@@ -314,61 +314,61 @@ class Item < ActiveRecord::Base
   
   
   # Reorder recommendation csvs
-  
-  def self.recommend_reorder(type)
-    shippers = Shipper.where(:vendor_id => @current_user.vendor_id).visible.find_all_by_reorder_type(type)
-    shippers << nil if type == 'default_export'
-    items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
-    if not items.any? then
-      return nil 
-    end
-    unless type == 'default_export'
-      # Now we need to create a shipment
-      shipment = Shipment.new({
-          :name => I18n.t("activerecord.models.shipment.default_name") + " - " + I18n.l(Time.now,:format => :salor),
-          :price => items.sum(:purchase_price),
-          :receiver_id => $Vendor.id,
-          :receiver_type => 'Vendor',
-          :shipper_id => shippers.first.id,
-          :shipment_type => ShipmentType.scopied.first,
-          :shipper_type => 'Shipper'
-      })
-      shipment.save
-      items.each do |item|
-        si = ShipmentItem.new({
-            :name => item.name,
-            :base_price => item.base_price,
-            :category_id => item.category_id,
-            :location_id => item.location_id,
-            :item_type_id => item.item_type_id,
-            :shipment_id => shipment.id,
-            :sku => item.sku,
-            :quantity => item.min_quantity - item.quantity,
-            :vendor_id => $Vendor.id
-        })
-        si.save
-      end
-    end
-    return Item.send(type.to_sym,items)
-  end
-  
-  def self.tobacco_land(items)
-    lines = []
-    items.each do |item|
-      sku = item.shipper_sku.blank? ? item.sku[0..3] : item.shipper_sku[0..3]
-      lines << "%s %04d" % [sku,(item.min_quantity - item.quantity).to_i] 
-    end
-    return lines.join("\x0D\x0A")
-  end
-  
-  def self.default_export(items)
-    lines = []
-    items.each do |item|
-      shippername = item.shipper ? item.shipper.name : ''
-      lines << "%s\t%s\t%s\t%d\t%f" % [shippername,item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
-    end
-    return lines.join("\n")
-  end
+  # TODO: The following 3 methods should go into Shipper
+#   def self.recommend_reorder(type)
+#     shippers = Shipper.where(:vendor_id => @current_user.vendor_id).visible.find_all_by_reorder_type(type)
+#     shippers << nil if type == 'default_export'
+#     items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
+#     if not items.any? then
+#       return nil 
+#     end
+#     unless type == 'default_export'
+#       # Now we need to create a shipment
+#       shipment = Shipment.new({
+#           :name => I18n.t("activerecord.models.shipment.default_name") + " - " + Time.now,
+#           :price => items.sum(:purchase_price),
+#           :receiver_id => $Vendor.id,
+#           :receiver_type => 'Vendor',
+#           :shipper_id => shippers.first.id,
+#           :shipment_type => ShipmentType.scopied.first,
+#           :shipper_type => 'Shipper'
+#       })
+#       shipment.save
+#       items.each do |item|
+#         si = ShipmentItem.new({
+#             :name => item.name,
+#             :base_price => item.base_price,
+#             :category_id => item.category_id,
+#             :location_id => item.location_id,
+#             :item_type_id => item.item_type_id,
+#             :shipment_id => shipment.id,
+#             :sku => item.sku,
+#             :quantity => item.min_quantity - item.quantity,
+#             :vendor_id => $Vendor.id
+#         })
+#         si.save
+#       end
+#     end
+#     return Item.send(type.to_sym,items)
+#   end
+#   
+#   def self.tobacco_land(items)
+#     lines = []
+#     items.each do |item|
+#       sku = item.shipper_sku.blank? ? item.sku[0..3] : item.shipper_sku[0..3]
+#       lines << "%s %04d" % [sku,(item.min_quantity - item.quantity).to_i] 
+#     end
+#     return lines.join("\x0D\x0A")
+#   end
+#   
+#   def self.default_export(items)
+#     lines = []
+#     items.each do |item|
+#       shippername = item.shipper ? item.shipper.name : ''
+#       lines << "%s\t%s\t%s\t%d\t%f" % [shippername,item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
+#     end
+#     return lines.join("\n")
+#   end
 
   def quantity=(q)
     if self.parent or self.child

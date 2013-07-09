@@ -74,7 +74,7 @@ class DrawerTransaction < ActiveRecord::Base
     self.notes.to_s +
     "\n\n" +
     "\e!\x38" +
-    SalorBase.to_currency(self.amount) +
+    self.amount +
     "\n\n" +
     I18n.t(self.amount > 0 ? 'printr.word.drop' : 'printr.word.payout') +
     "\n\n\n\n\n\n\n" +

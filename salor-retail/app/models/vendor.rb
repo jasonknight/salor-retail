@@ -11,6 +11,7 @@ class Vendor < ActiveRecord::Base
   include ImageMethods
   
   belongs_to :company
+  has_and_belongs_to_many :users
   
   has_many :item_types
   has_many :loyalty_cards
@@ -32,7 +33,6 @@ class Vendor < ActiveRecord::Base
   has_many :categories
   has_many :items
   has_many :locations
-  has_many :users
   has_many :current_registers
   has_many :customers
   has_many :broken_items
@@ -369,7 +369,7 @@ class Vendor < ActiveRecord::Base
     report['categories_sum'] = categories_sum
     report[:date_from] = I18n.l(from, :format => :just_day)
     report[:date_to] = I18n.l(to, :format => :just_day)
-    report[:unit] = I18n.t('number.currency.format.friendly_unit')
+    report[:unit] = I18n.t('number.currency.format.friendly_unit', :locale => self.region)
     if drawer.class == Drawer
       report[:drawer_amount] = drawer.amount
       report[:username] = "#{ drawer.user.first_name } #{ drawer.user.last_name } (#{ drawer.user.username })"
@@ -643,7 +643,7 @@ class Vendor < ActiveRecord::Base
       @customers = self.customers.visible.where(:id => params[:id])
     end
     
-    @currency = I18n.t('number.currency.format.friendly_unit')
+    @currency = I18n.t('number.currency.format.friendly_unit', :locale => self.region)
     template = File.read("#{Rails.root}/app/views/printr/#{ model }_#{params[:type]}_#{params[:style]}.prnt.erb")
     erb = ERB.new(template, 0, '>')
     text = erb.result(binding)

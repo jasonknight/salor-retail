@@ -10,8 +10,11 @@ class SessionsController < ApplicationController
   skip_before_filter :get_cash_register, :only => [:new, :create]
   
   def new
-    redirect_to sr_saas.new_session_path and return if defined?(SrSaas) == 'constant'
+    @current_user = session[:user_id_hash] = session[:vendor_id] = session[:company_id] = nil
     @submit_path = session_path
+    @company = Company.visible.first
+    @vendor = @company.vendors.visible.first
+    redirect_to sr_saas.new_session_path and return if defined?(SrSaas) == 'constant'
   end
 
   def create
@@ -21,7 +24,7 @@ class SessionsController < ApplicationController
     user = company.login(params[:code])
 
     if user
-      vendor = user.vendor
+      vendor = user.vendors.visible.first
       session[:user_id_hash] = user.id_hash
       session[:company_id] = company.id
       session[:vendor_id] = vendor.id

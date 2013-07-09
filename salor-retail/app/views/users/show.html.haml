@@ -9,10 +9,10 @@
   %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
   %br
   = form_tag "/employees/#{@user.id}", :method => :get do
-    = label 'from', t('orders.report_day.from')
+    = label 'from', t('vendors.report_day.from')
     = select_date(@from, :prefix => 'from')
     %br
-    = label 'to', t('orders.report_day.to')
+    = label 'to', t('vendors.report_day.to')
     = select_date(@to, :prefix => 'to')
     %br
     %select{:id => "limit_select", :name => "limit"}

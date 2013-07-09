@@ -4,7 +4,7 @@
     %td= "Login"
     %td= "Logout"
     %td= "Hours"
-    %td= I18n.t("activerecord.attributes.employee.hourly_rate")
+    %td= I18n.t("activerecord.attributes.user.hourly_rate")
     %td{:align=>'right'}= "Amount Due"
     %td
   - @user.user_logins.visible.where(:login => (@from - 1.day)..(@to + 1.day)).each do |login|

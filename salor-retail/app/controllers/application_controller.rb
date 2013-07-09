@@ -120,15 +120,21 @@ class ApplicationController < ActionController::Base
   def loadup
     @current_user = User.find_by_id_hash(session[:user_id_hash])
     redirect_to new_session_path and return if @current_user.nil?
-    @current_company = @current_user.company
-    @current_vendor = @current_company.vendors.find_by_id(session[:vendor_id])
+    
+    if defined?(SrSaas) == 'constant'
+      # this is necessary due to call to the login method in UsersController#clock{in|out}
+      @current_company = SrSaas::Company.visible.find_by_id(@current_user.company_id)
+    else
+      @current_company = @current_user.company
+    end
+    @current_vendor = @current_user.vendors.visible.find_by_id(session[:vendor_id])
     Time.zone = @current_vendor.time_zone if @current_vendor
     I18n.locale = @current_user.language
     return @current_user
   end
   
   def get_cash_register
-    @current_register = CashRegister.find_by_id(session[:cash_register_id])
+    @current_register = @current_vendor.cash_registers.visible.find_by_id(session[:cash_register_id])
     redirect_to cash_registers_path and return unless @current_register
   end
   

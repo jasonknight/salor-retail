@@ -1,7 +1,7 @@
 class CopyUrlToCashRegisters < ActiveRecord::Migration
   def up
     
-    v = Order.last.vendor if Order
+    v = Order.last.vendor if Order.last
     v ||= Vendor.first
     
     if v

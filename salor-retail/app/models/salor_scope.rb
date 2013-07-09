@@ -14,7 +14,9 @@ module SalorScope
 
 
     if klass.column_names.include? 'hidden'
-      klass.scope(:visible, lambda { klass.where("`#{klass.table_name}`.`hidden` = FALSE OR `#{klass.table_name}`.`hidden` IS NULL") })
+      klass.scope(:visible, lambda {
+                                    klass.where("`#{klass.table_name}`.`hidden` = FALSE OR `#{klass.table_name}`.`hidden` IS NULL")
+                                   })
     end
   
     

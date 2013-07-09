@@ -8,6 +8,7 @@ class VendorsController < ApplicationController
   
   after_filter :customerscreen_push_notification, :only => [:edit_field_on_child]
 
+  # TODO: This needs to be scoped for SAAS
   def csv
     @vendor = Vendor.find_by_token(params[:token])
     if @vendor then
@@ -21,11 +22,12 @@ class VendorsController < ApplicationController
   end
   
   def index
-    @vendors = @current_company.vendors(params[:page])
+    @vendors = @current_user.vendors.visible
   end
 
   def show
-    @vendor = @current_company.vendors.visible.find_by_id(params[:id])
+    @vendor = @current_user.vendors.visible.find_by_id(params[:id])
+    session[:vendor_id] = @vendor.id
   end
 
   def new
@@ -33,12 +35,14 @@ class VendorsController < ApplicationController
   end
 
   def edit
-    @vendor = @current_company.vendors.visible.find_by_id(params[:id])
+    @vendor = @current_user.vendors.visible.find_by_id(params[:id])
+    session[:vendor_id] = @vendor.id
   end
 
   def create
     @vendor = Vendor.new(params[:vendor])
     @vendor.company = @current_company
+    @vendor.users = [@current_user]
     if @vendor.save
       redirect_to vendors_path
     else
@@ -48,7 +52,7 @@ class VendorsController < ApplicationController
 
 
   def update
-    @vendor = @current_company.vendors.visible.find_by_id(params[:id])
+    @vendor = @current_user.vendors.visible.find_by_id(params[:id])
     if @vendor.update_attributes(params[:vendor])
       redirect_to vendor_path(@vendor)
     else
