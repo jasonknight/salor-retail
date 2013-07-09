@@ -16,7 +16,7 @@
     = stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
 
     = javascript_include_tag 'application'
-    = javascript_include_tag "locales/main.#{I18n.locale}.js",'underscore'
+    = javascript_include_tag "/jslocales/main.#{I18n.locale}.js",'underscore'
     - if @current_user
       = render :partial => "shared/application_js"
     - if mobile?
