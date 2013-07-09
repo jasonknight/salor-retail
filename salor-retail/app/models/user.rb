@@ -271,6 +271,13 @@ class User < ActiveRecord::Base
     self.save
   end
   
+  def to_json
+    {
+      :username => self.username,
+      :role_cache => self.role_cache
+    }.to_json
+  end
+  
   private
   
   def generate_random_string
