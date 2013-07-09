@@ -36,6 +36,7 @@ module ApplicationHelper
   end
   
   def supported_languages
+    # TODO: Use SalorRetail::Application::LANGUAGES instead
     [
       {:name => "Deutsch", :locale => 'gn'},
       {:name => "English", :locale => 'en'},

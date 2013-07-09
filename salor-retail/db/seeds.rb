@@ -8,12 +8,14 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 # if User.any?
 #   puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
 #   Process.exit 0
 # end
 
 
+# WARNING: Uncommenting the following will destroy all data!
 ActiveRecord::Base.connection.tables.each do |t|      
   begin
     model = t.classify.constantize
@@ -27,17 +29,17 @@ end
 
 company_count = 0
 
-if ENV['SEED_MODE'] == 'full'
+# if ENV['SEED_MODE'] == 'full'
   puts "SEED_MODE is 'full'"
-  countries = ['us','at','fr','es','pl','hu','ru','it','tr','cn','el','hk','tw']
-  languages = ['en','gn','fr','es','pl','hu','ru','it','tr','cn','el','hk','tw']
-  company_count = 2
-else
-  puts "SEED_MODE is 'minimal'"
-  countries = ['us', 'at']
-  languages = ['en', 'gn']
+  countries = ['us','at','fr','es','el','ru','it','cn']
+  languages = ['en','gn','fr','es','el','ru','it','cn']
   company_count = 1
-end
+# else
+#   puts "SEED_MODE is 'minimal'"
+#   countries = ['us']
+#   languages = ['en']
+#   company_count = 1
+# end
 
 tax_percentages = [20, 10, 0]
 tax_profile_letters = ['A', 'B', 'C']
@@ -155,7 +157,7 @@ company_count.times do |c|
       u.roles = [role_objects[i]]
       u.password = "#{ c }#{ v }#{ i }"
       u.username = "#{ role_names[i] }#{ c }#{ v }"
-      u.language = languages[c]
+      u.language = languages[v]
       res = u.save
       user_objects << u
       puts "User #{ u.username } with password #{ c }#{ v }#{ i } created. Drawer is #{ u.drawer_id }" if res == true

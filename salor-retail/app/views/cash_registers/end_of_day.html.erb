@@ -40,7 +40,7 @@
 
 
 <div class="button-row" align="center">
-      <div id="eod-calculator-total"><%= t '.counted' %>: <span class='eod-calculator-total'><%= SalorBase.number_to_currency(0, :locale => @region) %></span></div>
-      <div id="eod-calculator-difference"><%= t '.difference' %>: <span class='eod-calculator-difference'><%= SalorBase.number_to_currency(0, :locale => @region) %></span></div>
+      <div id="eod-calculator-total"><%= t '.counted' %>: <span class='eod-calculator-total'><%= number_to_currency(0, :locale => @region) %></span></div>
+      <div id="eod-calculator-difference"><%= t '.difference' %>: <span class='eod-calculator-difference'><%= number_to_currency(0, :locale => @region) %></span></div>
 </div>
 
