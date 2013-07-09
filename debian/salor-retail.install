@@ -6,6 +6,7 @@ salor-retail/script          /usr/share/salor-retail/source
 salor-retail/public/*.*      /usr/share/salor-retail/source/public
 salor-retail/public/fonts    /usr/share/salor-retail/source/public
 salor-retail/public/images   /usr/share/salor-retail/source/public
+salor-retail/public/jslocales   /usr/share/salor-retail/source/public
 
 salor-retail/vendor/assets   /usr/share/salor-retail/source/vendor
 

@@ -98,7 +98,7 @@ for lInstance in $gInstances; do
       mkdir -p $rails_etc
       mkdir -p $rails_log
       mkdir -p $rails_cache
-      mkdir -p $rails_var
+      mkdir -p $rails_var/public/uploads/$lInstance
       mkdir -p $rails_tmp
       
       use_dbconfig=false

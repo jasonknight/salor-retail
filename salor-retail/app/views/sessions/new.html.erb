@@ -27,7 +27,7 @@
       <img src='/images/salor-logo-reports.png'>
       <% if @company %>
         <h2><%= @company.name %></h2>
-      <% else %>
+      <% elsif @vendor %>
         <h2><%= @vendor.name %></h2>
       <% end %>
       <%= form_tag @submit_path do %>

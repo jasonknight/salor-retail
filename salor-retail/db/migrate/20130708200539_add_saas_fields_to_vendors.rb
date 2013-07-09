@@ -9,9 +9,11 @@ class AddSaasFieldsToVendors < ActiveRecord::Migration
     add_column :vendors, :auth, :boolean
     add_column :vendors, :domain, :string
     add_column :vendors, :subdomain, :string
-  end
-  Vendor.all.each do |v|
-    v.identifier = v.name.gsub(' ', '') unless v.identifier
-    v.set_hash_id
+    
+    Vendor.reset_column_information
+    Vendor.all.each do |v|
+      v.identifier = v.name.gsub(' ', '') unless v.identifier
+      v.set_hash_id
+    end
   end
 end

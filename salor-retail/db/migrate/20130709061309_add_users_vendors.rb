@@ -4,8 +4,11 @@ class AddUsersVendors < ActiveRecord::Migration
       t.integer "user_id"
       t.integer "vendor_id"
     end
-  end
-  User.all.each do |u|
-    u.vendors = Vendor.all
+    
+    User.reset_column_information
+    Vendor.reset_column_information
+    User.all.each do |u|
+      u.vendors = Vendor.all
+    end
   end
 end
