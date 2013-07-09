@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
   
   before_update :set_role_cache, :update_hourly_rate
   before_save :set_role_cache, :update_hourly_rate
-  after_commit :set_drawer
   after_create :set_id_hash
   
   
@@ -262,7 +261,8 @@ class User < ActiveRecord::Base
       d = Drawer.new
       d.company = self.company
       d.save
-      write_attribute :drawer_id, d.id
+      self.drawer = d
+      self.save
     end
   end
   

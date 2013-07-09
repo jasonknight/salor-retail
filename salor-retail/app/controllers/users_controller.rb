@@ -31,6 +31,7 @@ class UsersController < ApplicationController
     @user.vendor = @current_vendor
     @user.company = @current_company
     if @user.save
+      @user.set_drawer
       redirect_to users_path
     else
       render :new

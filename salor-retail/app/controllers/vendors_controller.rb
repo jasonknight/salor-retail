@@ -69,6 +69,7 @@ class VendorsController < ApplicationController
     @dt.vendor = @current_vendor
     @dt.company = @current_company
     @dt.drawer_amount = @drawer.amount
+    @dt.drawer = @drawer
     @dt.user = user
     @dt.amount = SalorBase.string_to_float(params[:transaction][:amount])
     @dt.tag = params[:transaction][:tag]
