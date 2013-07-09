@@ -63,7 +63,7 @@
           %th.table-center= t '.tax'
         - categories[i[0]].to_a.each do |c|
           %tr
-            %td.left= c[0].empty? ? t('printr.eod_report.no_category') : c[0]
+            %td.left= c[0].blank? ? t('printr.eod_report.no_category') : c[0]
             %td.table-center= number_to_currency c[1][:gro]
             %td.table-center= number_to_currency c[1][:net]
             %td.table-center= number_to_currency c[1][:gro] - c[1][:net]

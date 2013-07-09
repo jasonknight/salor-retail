@@ -252,7 +252,7 @@ class Vendor < ActiveRecord::Base
     used_categories = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer).select("DISTINCT category_id")
     used_categories.each do |r|
       cat = self.categories.find_by_id(r.category_id)
-      label = cat.name
+      label = cat.name if cat
       
       pos_subtotal = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("subtotal > 0").sum(:subtotal).round(2)
       pos_tax = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("subtotal > 0").sum(:tax_amount).round(2)
