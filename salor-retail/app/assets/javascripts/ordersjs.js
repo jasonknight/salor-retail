@@ -1,3 +1,5 @@
+var highlightAttrs = ['sku','price','total'];
+
 function updateOrderItems(items) {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
@@ -791,7 +793,6 @@ function updateOrder(order) {
     $(button).addClass('pos-configuration');
     $('#pos_order_total').removeClass("pos-highlight");
   }
-  if (order.customer) { showCustomer(order.customer,order.loyalty_card); }
   $('#pos_order_total').html(toCurrency(order.total));
   $('.complete-order-total').html(toCurrency(order.total));
   $('.order-rebate_type').html(order.rebate_type);
@@ -804,42 +805,6 @@ function updateOrder(order) {
     order.lc_points = 0;
   }
   $('.order-points').html(order.lc_points);
-}
-
-function showCustomer(obj,lc) {
-  return;
-  var e = $('.pos-customer');
-  e.html('');
-  var name = $('<div><span class="customer_name"></span></div>');
-  name.html(obj.first_name + ' ' + obj.last_name);
-  var row = $('<div></div>');
-  row.append(name);
-  row.append('<span class=""><%= I18n.t("activerecord.attributes.points") %></span>');
-  if (!lc.points > 0) {
-    lc.points = 0;
-  }
-  var col = $('<span id="pos-loyalty-card-points" class="loyalty-points">'+lc.points+'</span>');
-  col.attr('model_id',lc.id);
-  col.attr('klass','LoyaltyCard');
-  col.attr('field','points');
-  col.addClass('editme');
-  make_in_place_edit(col);
-  row.append(col);
-  row.append('<span class=""><%= I18n.t("activerecord.attributes.lc_points") %></span>');
-  var col = $('<span id="pos-order-points" class="order-points">0</span>');
-  col.attr('model_id',Order.id);
-  col.attr('klass','Order');
-  col.attr('field','lc_points');
-  col.addClass('editme');
-  make_in_place_edit(col);
-  row.append(col);
-  e.html(row);
-  if (!e.hasClass('shown')) {
-    e.hide();
-  }
-  if (!$('.pos-customer').hasClass('shown')) {
-    showHideCustomerOrRebate();
-  }
 }
 
 function highlight(elem) {
@@ -872,3 +837,8 @@ function refund_item(id) {
     quick_open_drawer()
   }
 }
+
+function clearOrder() {
+  $.get('/orders/clear?order_id=' + Order.id);
+}
+
