@@ -128,6 +128,11 @@ class ApplicationController < ActionController::Base
       @current_company = @current_user.company
     end
     @current_vendor = @current_user.vendors.visible.find_by_id(session[:vendor_id])
+    if not @current_vendor then
+      # Why did we fail? I don't know
+      SalorBase.log_action "ApplicationController", "@current_vendor was not set in loadup function"
+      @current_vendor = @current_user.vendors.first
+    end
     Time.zone = @current_vendor.time_zone if @current_vendor
     I18n.locale = @current_user.language
     return @current_user
