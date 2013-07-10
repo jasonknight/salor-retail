@@ -1,0 +1,161 @@
+---
+hr:
+  any_actions: Bilo koje radnje
+  any_buttons: Bilo koji gumbi
+  any_cash_registers: Bilo koje blagajne
+  any_categories: Bilo koje kategorije
+  any_customers: Bilo koji kupci
+  any_discounts: Bilo koji popusti
+  any_employees: Bilo koji zaposlenici
+  any_histories: Bilo koje povijesti
+  any_items: Bilo koji artikli
+  any_locations: Bilo koje lokacije
+  any_orders: Bilo koje narudžbe
+  any_reports: Bilo koja izvješća
+  any_shipment_items: Bilo koji artikli za dostavu
+  any_shipment_types: Bilo koje vrste dostave
+  any_shipments: Bilo koje dostave
+  any_shippers: Bilo koji dostavljač
+  any_stock_locations: Bilo koje lokacije skladišta
+  any_tax_profiles: Bilo koji porezni profili
+  any_tender_methods: Bilo koji načini plaćanja
+  any_transaction_tags: Bilo koji tagovi transakcije
+  any_vendors: Bilo koji prodavač
+  assistant: Pomoćni menadžer
+  cashier: Blagajnik
+  change_prices: Promijeni cijene
+  clear_orders: Očisti narudžbe
+  create_actions: Kreiraj radnje
+  create_buttons: Kreiraj gumbe
+  create_cash_registers: Kreiraj blagajne
+  create_categories: Kreiraj kategorije
+  create_customers: Kreiraj kupce
+  create_discounts: Kreiraj popuste
+  create_employees: Kreiraj zaposlenike
+  create_histories: Kreiraj povijesti
+  create_items: Kreiraj artikle
+  create_locations: Kreiraj lokacije
+  create_orders: Kreiraj narudžbe
+  create_reports: Kreiraj izvješća
+  create_shipment_items: Kreiraj artikle za dostavu
+  create_shipment_types: Kreiraj vrste dostave
+  create_shipments: Kreiraj dostave
+  create_shippers: Kreiraj dostavljače
+  create_stock_locations: Kreiraj lokacije skladišta
+  create_tax_profiles: Kreiraj porezne profile
+  create_tender_methods: Kreiraj načine plaćanja
+  create_transaction_tags: Kreiraj tagove transakcije
+  create_vendors: Kreiraj prodavače
+  destroy_actions: Uništi radnje
+  destroy_buttons: Uništi gumbe
+  destroy_cash_registers: Uništi blagajne
+  destroy_categories: Uništi kategorije
+  destroy_customers: Uništi kupce
+  destroy_discounts: Uništi popuste
+  destroy_employees: Uništi zaposlenike
+  destroy_histories: Uništi povijesti
+  destroy_items: Uništi artikle
+  destroy_locations: Uništi lokacije
+  destroy_order_items: Uništi naručene artikle
+  destroy_orders: Uništi narudžbe
+  destroy_reports: Uništi izvješća
+  destroy_shipment_items: Uništi artikle za dostavu
+  destroy_shipment_types: Uništi vrste dostave
+  destroy_shipments: Uništi dostave
+  destroy_shippers: Uništi dostavljače
+  destroy_stock_locations: Uništi lokacije skladišta
+  destroy_tax_profiles: Uništi porezne profile
+  destroy_tender_methods: Uništi načine plaćanja
+  destroy_transaction_tags: Uništi tagove transakcije
+  destroy_vendors: Uništi prodavače
+  edit_actions: Uredi radnje
+  edit_buttons: Uredi gumbe
+  edit_cash_registers: Uredi blagajne
+  edit_categories: Uredi kategorije
+  edit_customers: Uredi kupce
+  edit_discounts: Uredi popuste
+  edit_employees: Uredi zaposlenike
+  edit_histories: Uredi povijesti
+  edit_items: Uredi artikle
+  edit_locations: Uredi lokacije
+  edit_orders: Uredi narudžbe
+  edit_others_orders: Uredi druge narudžbe
+  edit_reports: Uredi izvješća
+  edit_shipment_items: Uredi artikle za dostavu
+  edit_shipment_types: Uredi vrste dostave
+  edit_shipments: Uredi dostave
+  edit_shippers: Uredi dostavljače
+  edit_stock_locations: Uredi lokacije skladišta
+  edit_tax_profiles: Uredi porezne profile
+  edit_tender_methods: Uredi načine plaćanja
+  edit_transaction_tags: Uredi tagove transakcija
+  edit_vendors: Uredi prodavače
+  employee: Zaposlenik
+  head_cashier: Glavni blagajnik
+  index_actions: Indeksiraj radnje
+  index_buttons: Indeksiraj gumbe
+  index_cash_registers: Indeksiraj blagajne
+  index_categories: Indeksiraj kategorije
+  index_customers: Indeksiraj kupce
+  index_discounts: Indeksiraj popuste
+  index_employees: Indeksiraj zaposlenike
+  index_histories: Indeksiraj povijesti
+  index_items: Indeksiraj artikle
+  index_locations: Indeksiraj lokacije
+  index_orders: Indeksiraj narudžbe
+  index_reports: Indeksiraj izvješća
+  index_shipment_items: Indeksiraj artikle za dostavu
+  index_shipment_types: Indeksiraj vrste dostave
+  index_shipments: Indeksiraj dostave
+  index_shippers: Indeksiraj dostavljače
+  index_stock_locations: Indeksiraj lokacije skladišta
+  index_tax_profiles: Indeksiraj porezne profile
+  index_tender_methods: Indeksiraj načine plaćanja
+  index_transaction_tags: Indeksiraj tagove transakcije
+  index_vendors: Indeksiraj prodavače
+  manager: Menadžer
+  remove_order_items: Makni naručene artikle
+  see_header: Vidi zaglavlje
+  show_actions: Pokaži radnje
+  show_buttons: Pokaži gube
+  show_cash_registers: Pokaži blagajne
+  show_categories: Pokaži kategorije
+  show_customers: Pokaži kupce
+  show_discounts: Pokaži popuste
+  show_employees: Pokaži zaposlenike
+  show_histories: Pokaži povijesti
+  show_items: Pokaži artikle
+  show_locations: Pokaži lokacije
+  show_orders: Pokaži narudžbe
+  show_reports: Pokaži izvješća
+  show_shipment_items: Pokaži artikle za dostavu
+  show_shipment_types: Pokaži vrste dostave
+  show_shipments: Pokaži dostave
+  show_shippers: Pokaži dostavljače
+  show_stock_locations: Pokaži lokacije skladišta
+  show_tax_profiles: Pokaži porezne profile
+  show_tender_methods: Pokaži načine plaćanja
+  show_transaction_tags: Pokaži tagove transakcije
+  show_vendors: Pokaži prodavače
+  stockboy: Skladištar
+  update_actions: Ažuriraj radnje
+  update_buttons: Ažuriraj gumbe
+  update_cash_registers: Ažuriraj blagajne
+  update_categories: Ažuriraj kategorije
+  update_customers: Ažuriraj kupce
+  update_discounts: Ažuriraj popuste
+  update_employees: Ažuriraj zaposlenike
+  update_histories: Ažuriraj povijesti
+  update_items: Ažuriraj artikle
+  update_locations: Ažuriraj lokacije
+  update_orders: Ažuriraj narudžbe
+  update_reports: Ažuriraj izvješća
+  update_shipment_items: Ažuriraj artikle za dostavu
+  update_shipment_types: Ažuriraj vrste dostave
+  update_shipments: Ažuriraj dostave
+  update_shippers: Ažuriraj dostavljače
+  update_stock_locations: Ažuriraj lokacije skladišta
+  update_tax_profiles: Ažuriraj porezne profile
+  update_tender_methods: Ažuriraj načine plaćanja
+  update_transaction_tags: Ažuriraj tagove transakcije
+  update_vendors: Ažuriraj prodavače

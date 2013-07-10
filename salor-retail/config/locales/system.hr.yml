@@ -1,0 +1,155 @@
+---
+hr:
+  activerecord:
+    errors:
+      messages:
+        accepted: mora biti prihvaćeno
+        blank: ne smije biti praznina
+        confirmation: ne odgovara
+        empty: ne smije biti prazno
+        equal_to: mora biti jednako %{count}
+        even: mora biti izjednačeno
+        exclusion: ne bi trebao biti na popisu
+        greater_than: mora biti veće od %{count}
+        greater_than_or_equal_to: mora biti veće od ili jednako %{count}
+        inclusion: nije na popisu
+        invalid: je neispravan
+        less_than: mora biti manje od %{count}
+        less_than_or_equal_to: mora biti manje od ili jednako %{count}
+        not_a_number: nije broj
+        odd: mora biti neparan
+        taken: već je zauzeto
+        too_long: predugačko je (maksimalno %{count} znakova)
+        too_short: prekratko je (minimalno %{count} znakova)
+        wrong_length: krive je duljine (trebalo bi biti %{count} znakova)
+      template:
+        body: ! 'Molim Vas provjerite sljedeće unose:'
+        header:
+          one: ! '%{count} pogreška je spriječila obrazac ''%{model}'' od spremanja.'
+          other: ! '%{count} pogrešaka su spriječile obrazac ''%{model}'' od spremanja.'
+  date:
+    abbr_day_names:
+    - Ned
+    - Pon
+    - Uto
+    - Sri
+    - Čet
+    - Pet
+    - Sub
+    abbr_month_names:
+    - 
+    - Sij
+    - Velj
+    - Ožu
+    - Tra
+    - Svi
+    - Lip
+    - Srp
+    - Kol
+    - Ruj
+    - Lis
+    - Stu
+    - Pro
+    day_names:
+    - Nedjelja
+    - Ponedjeljak
+    - Utorak
+    - Srijeda
+    - Četvrtak
+    - Petak
+    - Subota
+    formats:
+      default: ! '%d-%m-%Y'
+      long: ! '%d. %B  %Y'
+      short: ! '%d. %b'
+    month_names:
+    - 
+    - Siječanj
+    - Veljača
+    - Ožujak
+    - Travanj
+    - Svibanj
+    - Lipanj
+    - Srpanj
+    - Kolovoz
+    - Rujan
+    - Listopad
+    - Studeni
+    - Prosinac
+    order:
+    - :dan
+    - :mjesec
+    - :godina
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: otprilike 1 sat
+        other: otprilike %{count} sati
+      about_x_months:
+        one: otprilike 1 mjesec
+        other: otprilike %{count} mjeseci
+      about_x_years:
+        one: otprilike 1 godina
+        other: otprilike %{count} godina
+      almost_x_years:
+        one: skoro 1 godina
+        other: skoro %{count} godina
+      half_a_minute: pola minute
+      less_than_x_minutes:
+        one: manje od minute
+        other: manje od %{count} minuta
+      less_than_x_seconds:
+        one: manje od 1 sekunde
+        other: manje od %{count} sekundi
+      over_x_years:
+        one: preko 1 godine
+        other: preko %{count} godina
+      x_days:
+        one: 1 dan
+        other: ! '%{count} dana'
+      x_minutes:
+        one: 1 minuta
+        other: ! '%{count} minuta'
+      x_months:
+        one: 1 mjesec
+        other: ! '%{count} mjeseci'
+      x_seconds:
+        one: 1 sekunda
+        other: ! '%{count} sekundi'
+    prompts:
+      day: Dan
+      hour: Sat
+      minute: Minuta
+      month: Mjesec
+      second: Sekunde
+      year: Godina
+  helpers:
+    select:
+      prompt: Molim Vas odaberite
+    submit:
+      create: Kreiraj %{model}
+      submit: Spremi %{model}
+      update: Ažuriraj %{model}
+  support:
+    array:
+      words_connector:
+        last_word_connector: ! ', i '
+        two_words_connector: ! ' i '
+  time:
+    am: ''
+    formats:
+      date_iso: ! '%d-%m-%Y'
+      date_normal: ! '%d. %B %Y'
+      date_short: ! '%d. %b %y'
+      datetime_iso: ! '%d-%m-%Y %H:%M:%S'
+      datetime_iso2: ! '%d%m%YT%H%M%S'
+      default: ! '%a, %d. %b. %Y, %H:%M:%S %z'
+      iso: ! '%d-%m-%Y %H:%M:%S'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      long: ! '%d. %B %Y %H:%M:%S'
+      month_and_day: ! '%d. %B'
+      salor: ! '%a, %b %d %H:%M'
+      short: ! '%d. %b. %y  %y %H:%M'
+      time_short: ! '%H:%M'
+    pm: ''
