@@ -5,7 +5,6 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
-      color: color
       active: active
       address: address
       afield: field
@@ -31,6 +30,7 @@ en:
       child_sku: Child SKU
       city: city
       code: code
+      color: color
       company_name: company name
       contact_address: contact address
       contact_email: contact email

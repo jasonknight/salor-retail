@@ -174,6 +174,9 @@ it:
       track_expiry: Track Expiry – Scadenza Traccia ?
       type: tipo
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: nome utente
       uses_drawer_id: Usa Cassa di
       value: valore
@@ -189,9 +192,7 @@ it:
       when: quando
       whento: When
       width: larghezza
-      user:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Uses drawer of
+      color: color
     models:
       action:
         one: Azione
@@ -271,12 +272,12 @@ it:
       transaction_tag:
         one: Etichetta
         other: Etichette
-      vendor:
-        one: Negozio
-        other: NEgozi
       user:
         one: Employee
         other: Employees
+      vendor:
+        one: Negozio
+        other: NEgozi
   api:
     user_does_not_exist: utente non esistente
   are_you_sure: Are you sure you want to do this?
@@ -421,6 +422,7 @@ it:
     cash_registers: registratori di cassa
     categories: categorie
     clear_order: Cancella
+    close: Close
     configuration: Configura
     contact: contatto
     current_order: ! 'ordine corrente: #%{id}'
@@ -443,11 +445,13 @@ it:
     edit_invoice_note: Edit Inovice Note
     edit_item: edita articolo
     edit_location: edita locazione
+    edit_payment_method: Edit Payment Method
     edit_sale_type: Edit Sale type
     edit_shipment: edita spedizione
     edit_shipment_type: edita tipo spedizione
     edit_shipper: edita spedizioniere %{name}
     edit_tax_profile: edita profilo iva
+    edit_user: Edituser
     edit_vendor: edita venditore
     end_day: fine giornata
     general_configuration: configurazione generale
@@ -475,6 +479,7 @@ it:
     new_item: nuovo articolo
     new_location: nuova locazione
     new_order: Nuovo
+    new_payment_method: New Payment Method
     new_sale_type: New Sale Type
     new_shipment: nuova spedizione
     new_shipment_type: nuovo tipo spedizione
@@ -482,11 +487,13 @@ it:
     new_stock_location: nuova locazione stock
     new_tax_profile: nuovo profilo iva
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: nuovo venditore
     ok: OK
     order: ordine
     orders: ordini
     overview: vista d'insieme
+    payment_methods: Payment Methods
     points: punti
     pos: POS
     print: stampa
@@ -516,16 +523,10 @@ it:
     update_real_quantity: aggiorna quantità reale
     upload: carica
     usb_device: Chiave USB
+    users: users
     vendors: venditori
     void: vuoto
     wholesaler_update: aggiorna grossista
-    close: Close
-    edit_payment_method: Edit Payment Method
-    edit_user: Edituser
-    new_payment_method: New Payment Method
-    new_user: New user
-    payment_methods: Payment Methods
-    users: users
   notifications:
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
     shipments_move_all_items: tutti gli articoli sono stati spostati con successo
@@ -601,6 +602,7 @@ it:
       payment_method_total: TOTALE
       payments: Pagamenti
       refund: Rimborso
+      refunds: Refunds
       revenue: Entrata
       revenue_total: TOTALE
       sales: Vendite
@@ -610,7 +612,6 @@ it:
         zero. Si avvisa di chiudere e di ripartire ogni giorno con un importo di cassa
         uguale a zero per semplificare la contabilità. Esegui una liquidazione cassa
         e stampa di nuovo questo rapporto.
-      refunds: Refunds
     formats:
       advert: Il Punto di Vendita Innovativo www.salorpos.com
       cancel: Cancella                  EUR %8.2f

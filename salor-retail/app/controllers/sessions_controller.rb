@@ -51,9 +51,12 @@ class SessionsController < ApplicationController
       @current_user.last_sign_in_ip = @current_user.current_sign_in_ip
       @current_user.current_sign_in_at = nil
       @current_user.current_sign_in_ip = nil
-      redirect_to '/'
+      @current_user = nil
+      [:user_id_hash, :vendor_id, :company_id, :locale].each do |k|
+        session[k] = nil
+      end
     end
-    @current_user = session[:user_id_hash] = session[:vendor_id] = session[:company_id] = nil
+    redirect_to '/'
   end
 
   def test_exception

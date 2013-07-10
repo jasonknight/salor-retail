@@ -174,6 +174,9 @@ cn:
       track_expiry: 跟踪屆滿
       type: 類型
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: 用戶名
       uses_drawer_id: 使用的抽屜
       value: 價值
@@ -189,9 +192,7 @@ cn:
       when: 何時
       whento: When
       width: 寬度
-      user:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Uses drawer of
+      color: color
     models:
       action:
         one: 行動
@@ -271,12 +272,12 @@ cn:
       transaction_tag:
         one: 標籤
         other: 標籤
-      vendor:
-        one: 商店
-        other: 商店
       user:
         one: Employee
         other: Employees
+      vendor:
+        one: 商店
+        other: 商店
   api:
     user_does_not_exist: 用戶不存在
   are_you_sure: Are you sure you want to do this?
@@ -414,6 +415,7 @@ cn:
     cash_registers: 收款台
     categories: 類別
     clear_order: 清洗
+    close: Close
     configuration: 組態
     contact: contact 聯絡
     current_order: ! '當前的訂單: #%{id}'
@@ -436,11 +438,13 @@ cn:
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: 編輯產品
     edit_location: 編輯位置
+    edit_payment_method: Edit Payment Method
     edit_sale_type: XXX Edit Sale Type
     edit_shipment: 編輯裝船
     edit_shipment_type: 編輯裝船類型
     edit_shipper: 編輯發貨人 %{name}
     edit_tax_profile: 編輯稅務個人資料
+    edit_user: Edituser
     edit_vendor: 編輯供應商
     end_day: end day 結束日
     general_configuration: 一般組態
@@ -468,6 +472,7 @@ cn:
     new_item: 新產品
     new_location: 新位置
     new_order: 新
+    new_payment_method: New Payment Method
     new_sale_type: XXX new sale type
     new_shipment: 新裝船
     new_shipment_type: 新裝船類型
@@ -475,11 +480,13 @@ cn:
     new_stock_location: 新貨物位置
     new_tax_profile: 新稅務個人資料
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: 新供應商
     ok: OK
     order: 訂購
     orders: 訂購
     overview: 概貌
+    payment_methods: Payment Methods
     points: 點
     pos: POS
     print: 打印
@@ -509,16 +516,10 @@ cn:
     update_real_quantity: 更新實際數量
     upload: 上載
     usb_device: USB記憶棒
+    users: users
     vendors: 供應商
     void: 廢止
     wholesaler_update: 批發商更新
-    close: Close
-    edit_payment_method: Edit Payment Method
-    edit_user: Edituser
-    new_payment_method: New Payment Method
-    new_user: New user
-    payment_methods: Payment Methods
-    users: users
   notifications:
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
@@ -594,13 +595,13 @@ cn:
       payment_method_total: 總計
       payments: 付款
       refund: 退款
+      refunds: Refunds
       revenue: 收入
       revenue_total: 總計
       sales: 銷售
       system_drawer_amount: 系統抽屜金額
       transaction_total: 總計
       warning_drawer_amount_not_zero: 警告！你的抽屜金額不為零。建議你來完成，並開始與零的抽屜數量，以紓緩會     計工作的每一天。相應地作出現金支付，並再次打印此報告。
-      refunds: Refunds
     formats:
       advert: ! '銷售創新點
 

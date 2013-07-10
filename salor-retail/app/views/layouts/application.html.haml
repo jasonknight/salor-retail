@@ -1,5 +1,5 @@
 !!!
-
+- @region ||= 'en-us'
 %html
   %head
     %title SalorRetail
@@ -7,7 +7,6 @@
       %link{ :rel => "apple-touch-icon", :href => "apple-touch-icon-57x57.png"}
       %link{ :rel => "apple-touch-icon", :sizes => "72x72", :href => "apple-touch-icon-72x72.png"}
       %link{ :rel => "apple-touch-icon", :sizes => "114x114", :href => "apple-touch-icon-114x114.png"}
-
     = stylesheet_link_tag 'print', :media => 'print'
     = stylesheet_link_tag 'ui-min.css'
     = stylesheet_link_tag 'generic'
@@ -15,8 +14,12 @@
 
     = javascript_include_tag 'application'
     = javascript_include_tag "/jslocales/main.#{I18n.locale}.js",'underscore'
+    = javascript_include_tag "/jslocales/region.#{@region}.js",'underscore'
+    = render :partial => "shared/non_secret_application_js"
     - if @current_user
       = render :partial => "shared/application_js"
+
+
 
   %body#body
     .background

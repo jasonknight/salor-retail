@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   
   before_update :set_role_cache, :update_hourly_rate
   before_save :set_role_cache, :update_hourly_rate
-  after_create :set_id_hash
+  before_create :set_id_hash
   
   
   def password=(string)
@@ -268,7 +268,6 @@ class User < ActiveRecord::Base
   
   def set_id_hash
     self.id_hash = generate_random_string[0..20]
-    self.save
   end
   
   def to_json

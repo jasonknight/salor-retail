@@ -73,13 +73,18 @@ class ApplicationController < ActionController::Base
   private
   
   def set_locale
+
     if params[:l] and I18n.available_locales.include? params[:l].to_sym
+      log_action "params[:l] is set to #{params[:l]}"
       I18n.locale = @locale = session[:locale] = params[:l]
     elsif session[:locale]
+      log_action "session[:locale] is set to #{session[:locale]}"
       I18n.locale = @locale = session[:locale]
     elsif @current_user
+      log_action "Users Locale is: #{@current_user.language}"
       I18n.locale = @locale = session[:locale] = @current_user.language
     else
+      log_action "No locale is set, trying to detect from browser"
       unless request.env['HTTP_ACCEPT_LANGUAGE'].nil?
         browser_language = request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
         browser_language = 'gn' if browser_language == 'de'
@@ -90,6 +95,7 @@ class ApplicationController < ActionController::Base
         I18n.locale = @locale = session[:locale] = browser_language
       end
     end
+    log_action "Locale is now set to: #{I18n.locale}"
     @region = @current_vendor.region if @current_vendor
   end
   
@@ -119,7 +125,11 @@ class ApplicationController < ActionController::Base
   
   def loadup
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
-    redirect_to new_session_path and return if @current_user.nil?
+    if @current_user.nil? or session[:user_id_hash].blank?
+      redirect_to new_session_path and return 
+    else
+      log_action "session[:user_id_hash] is #{session[:user_id_hash]}"
+    end
     
     if defined?(SrSaas) == 'constant'
       # this is necessary due to call to the login method in UsersController#clock{in|out}
