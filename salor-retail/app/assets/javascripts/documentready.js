@@ -1,10 +1,11 @@
 var focuseKeyboardInput = false;
 var calledFrom = 'TopOfAppJS';
 var filename = "_application_js.html.erb";
+var ready_ran = false;
 
 $(function () {
-  if ( !useMimo() && isSalorBin()) {
-    Salor.poleDancer(Register.pole_display, '     S A L O R      Next Generation POS' );
+  if (ready_ran == true) {
+    return
   }
   
   if (isSalorBin()) {
@@ -15,6 +16,7 @@ $(function () {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
 
+  // TODO: This should go into stylesheets
   $('#order_items_table tr:even').addClass('even');
   $('.stripe-me tr:even').addClass('even');
   $('tr.no-stripe').removeClass('even');
@@ -24,54 +26,44 @@ $(function () {
   $('.list-view tr:even').addClass('even')
   $('.list-view tr:last').removeClass('even')
   $('tr.no-stripe').removeClass('even');
-
-  focusInput($('#generic_search_input'));
+  $('table.pretty-table > tbody > tr:even').addClass("even");
 
   // FOR FANCY CHECKBOXES:
   $('input:checkbox:not([safari])').checkbox();
   $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
   $('input:radio').checkbox();
+  
 
-  var ready_ran = false;
-  if (ready_ran == false) {
-    $('.toggle').each(function () {
-        make_toggle($(this));
-    });
-    $('.dt-tag-button').each(function () { make_dt_button($(this));});
-    $(".header-list").children("li").each(function () {
-        var div = $(this).children('div');
-        if (!div.hasClass('no-touchy')) {
-          var link = div.children("a");
-          if (link.hasClass('speedlink-done')) {
-              return;
-          }
-          
-          $(this).mousedown(function () {
-              window.location = link.attr('href');
-          });
-          
-          link.addClass('speedlink-done');
-        }
-    });
-    $('.editme').each(function () {
-      make_in_place_edit($(this));                  
-    });
-    $('table.pretty-table > tbody > tr:even').addClass("even");
-    
-    if (workstation) {
-      $('select').each(function () {
-       if ($(this).val() == '') {
-        make_select_widget(i18n.views.single_words.choose,$(this));
-       } else if ($(this).find("option:selected").html()) {
-        make_select_widget($(this).find("option:selected").html(),$(this));
-       } else {
-        make_select_widget($(this).find("option:first").html(),$(this));
-       }
-     }); 
-   }
+  $('.toggle').each(function () {
+      make_toggle($(this));
+  });
+  
+  $('.dt-tag-button').each(function () { make_dt_button($(this));});
+  
 
-  } /* end if (!ready_ran) */
-  ready_ran = true;
+  // inplace edit
+  $('.editme').each(function () {
+    make_in_place_edit($(this));                  
+  });
+  
+  
+  // make select widget
+  if (workstation) {
+    $('select').each(function () {
+      if ($(this).val() == '') {
+      make_select_widget(i18n.views.single_words.choose,$(this));
+      } else if ($(this).find("option:selected").html()) {
+      make_select_widget($(this).find("option:selected").html(),$(this));
+      } else {
+      make_select_widget($(this).find("option:first").html(),$(this));
+      }
+    }); 
+  } 
 
+  // focus stuff
+  focusInput($('#generic_search_input'));
   setInterval('checkFocusInput()',200);
+  
+  // don't run this twice, a known jQuery bug
+  ready_ran = true;
 });
