@@ -100,7 +100,6 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   border: none
 
 @mixin zoomable 
-  -moz-transform: scale($base_zoom)
   -webkit-transform: scale($base_zoom)
 
 @mixin pointer 
@@ -111,67 +110,49 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   margin-right: auto
 
 @mixin rounded_corners_all 
-  -moz-border-radius: $large_border_radius
   -webkit-border-radius: $large_border_radius
 .rounded-corners-all
   @include rounded_corners_all
   
 @mixin rounded_corners_all_small 
-  -moz-border-radius: $small_border_radius
   -webkit-border-radius: $small_border_radius
 
 @mixin rounded_corners_top 
-  -webkit-border-top-left-radius: $large_border_radius
-  -webkit-border-top-right-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
-  -moz-border-radius-topright: $large_border_radius
+  border-top-left-radius: $large_border_radius
+  border-top-right-radius: $large_border_radius
 
 @mixin rounded_corners_bottom 
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 @mixin rounded_corners_top_left 
-  -webkit-border-top-left-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
+  border-top-left-radius: $large_border_radius
 
 @mixin rounded_corners_bottom_left 
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
 
 @mixin rounded_corners_top_right 
-  -webkit-border-top-right-radius: $large_border_radius
-  -moz-border-radius-topright: $large_border_radius
+  border-top-right-radius: $large_border_radius
 
 @mixin rounded_corners_bottom_right 
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 @mixin rounded_corners_bottom 
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 @mixin rounded_corners_mismatch 
-  -webkit-border-top-left-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-top-left-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 
 @mixin rounded_corners_left 
-  -webkit-border-top-left-radius: $large_border_radius
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
+  border-top-left-radius: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
 
 @mixin rounded_corners_right 
-  -webkit-border-top-right-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-topright: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-top-right-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 .rounded-corners-right
   @include rounded_corners_right
 
@@ -205,9 +186,7 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   padding: 12px 10px 12px
   color: #fff
   text-decoration: none
-  -moz-border-radius: $large_border_radius 
   -webkit-border-radius: $large_border_radius
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
   border-bottom: 1px solid rgba(0,0,0,0.25)
@@ -216,7 +195,6 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 @mixin raised_element
   background: #222 url(/images/alert-overlay.png) repeat-x
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
   border-bottom: 1px solid rgba(0,0,0,0.25)
@@ -337,7 +315,6 @@ table.indent
 
 .upsidedown 
   -webkit-transform: rotate(180deg)
-  -moz-transform: rotate(180deg)
   -o-transform: rotate(180deg)
   -ms-transform: rotate(180deg)
   transform: rotate(180deg)
@@ -425,7 +402,6 @@ div.table-cell.btn
   /* css3 */
   /* Using longhand to avoid inconsistencies between Safari 4 and Chrome 4 */
   -webkit-border-radius: 25px
-  -moz-border-radius: 25px
 
 .obtuse:before 
   content: ""
@@ -447,7 +423,6 @@ div.table-cell.btn
   display: none
 
 .shadow 
-  -moz-box-shadow: -2px 2px 1px $background
   -webkit-box-shadow: -2px 2px 1px $background
   box-shadow: -2px 2px 1px $background
 
@@ -1592,7 +1567,6 @@ span.order-lc_points,.order-points,.loyalty-points
   opacity: .95
   color: #121111
   text-align: center
-  -moz-border-radius: 5px
   -webkit-border-radius: 5px
 
 .search 
@@ -2044,7 +2018,6 @@ select:focus
   position: absolute
   top: 0
   left: 0
-  -moz-opacity: 0.5
   opacity: .50
   filter: alpha(opacity=50)
   background-color: $background
