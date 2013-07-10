@@ -58,7 +58,7 @@ $text_size_massive: 150%
 
 $base_zoom: 1
 
-$header_height: 70px
+$header_height: 57px
 $header_width: $base_width
 $header_li_pad: 2px
 
@@ -158,11 +158,11 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 @mixin dialog 
   border: 1px solid $border_color
-  background-color: rgba(36, 50, 57, 0.9)
-  box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.5)
+  background-color: rgba(36, 50, 57, 0.92)
+  box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.3)
   color: $foreground
-  padding: 10px
-  padding-top: 1em
+  padding: 30px
+  z-index: 150
 
 
 @mixin left_right_pad 
@@ -221,6 +221,7 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 @mixin attention_button 
   @include awesome_button
+  padding: 10px
   background-color: $text_color_attention
   color: $background
   @include no_select
@@ -247,6 +248,10 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 .salor-dialog 
   @include dialog
+  
+/* generic */
+a
+  :text-decoration none
 
 /* Non Specific */
 
@@ -432,7 +437,7 @@ div.table-cell.btn
   @include rounded_corners_all_small
   @include pointer
   text-align: center
-  padding: 3px
+  padding: 0px 15px
 
 div.main_sku
   text-align: center
@@ -593,16 +598,14 @@ body
   font-family: Ubuntu-R
   letter-spacing: 1.5px
 
-.icon-caption 
-  font-size: $text_size_tiny
-  text-transform: uppercase
+div.salor-icon
+  span.icon-caption 
+    font-size: $text_size_tiny
+    text-transform: uppercase
+    position: relative
+    bottom: 11px
 
-.header .icon-caption 
-  position: relative
-  bottom: -5px
 
-.header a
-  text-decoration: none
 
 div.tool-icon 
   display: inline-block
@@ -621,7 +624,6 @@ a
 
 span.link, a 
   color: $foreground
-  text-decoration: underline
   
 
 
@@ -635,8 +637,12 @@ div.header
   padding: 5px 0px -3px 0px
   margin-bottom: 3px
   position: relative
-  width: 90%
+  width: 100%
   z-index: 100
+  div.salor-icon
+  span.icon-caption 
+    position: relative
+    bottom: 7px
 
 div.header > ul 
   list-style: none
@@ -721,6 +727,7 @@ div.generic-search
   position: absolute
   top: 0px
   right: 0px
+  width: 160px
 
 div.generic-search-button 
   background: url(/images/icons/okay.svg) no-repeat
@@ -734,7 +741,7 @@ div.generic-search-button
   display: inline-block
   
 input#generic_search_input 
-  width: 20%
+  width: 65%
   
 span.version 
   position: fixed
@@ -757,33 +764,6 @@ span.salorbinversion
 div.main
   margin: 20px 0px 250px 0px
 
-
-div.content-box > div.title-container 
-  @include center
-  position: relative
-  width: 91%
-  text-align: center
-  font-size: $text_size_massive
-
-
-
-div.content-box > div.title-container > div.title-box
-  @include raised_element
-  height: 29px
-  padding: 7px
-  float: left
-  width: 80%
-  background-color: $light_background
-  text-transform: uppercase
-
-div.content-box > div.title-container > div.title-box-admin 
-  background-color: #CC5757
-  float: left
-  font-weight: bold
-  height: 24px
-  margin-top: 5px
-  padding-top: 3px
-  width: 84%
 
 div.button-row-admin 
   background-color: $background
@@ -813,6 +793,25 @@ div.button-row-admin > div.button-admin
   margin-left: 5px
   margin-top: -3px
   padding: 3px 10px 0
+  
+
+div.content-box
+  div.title-container
+    :margin 15px auto
+    position: relative
+    width: 91%
+    text-align: center
+    font-size: $text_size_massive
+    height: 40px
+    
+  div.content-container-home-user_user_index 
+    margin: auto
+    width: 80%
+
+
+.content-box-home-user_user_index 
+  padding-top: 60px
+
 
 div.content-box > div.title-container > div.back-button,
 div.content-box > div.title-container > div.back-button-admin,
@@ -886,6 +885,26 @@ div.content-box * div.title-menu
 div.content-box > div.content-container 
   padding-left: 50px
   clear: both
+
+
+
+div.content-box > div.title-container > div.title-box
+  @include raised_element
+  height: 29px
+  padding: 7px
+  float: left
+  width: 80%
+  background-color: $light_background
+  text-transform: uppercase
+
+div.content-box > div.title-container > div.title-box-admin 
+  background-color: #CC5757
+  float: left
+  font-weight: bold
+  height: 24px
+  margin-top: 5px
+  padding-top: 3px
+  width: 84%
 
 
 /* The ul.list */
@@ -1044,19 +1063,18 @@ nav.pagination span.disabled
 /* Keypad CSS */
 $key_width: 2em
 $key_width_wide: 4em
-input.keyboard-input 
+
+input#main_sku_field
   @include rounded_corners_all
-  //@include rounded_corners_all
   text-align: center
   border: 1px solid $border_color
   width: 30%
   background-size: 100%
-  height: 1.5em
+  height: 38px
   background-color: white
   color: black
   font-weight: bold
-  font-size: 150%
-  margin: 0px 0px 6px 0px
+  font-size: 220%
 
 div.keys div.key,
 input.ui-keyboard-button 
@@ -1195,7 +1213,7 @@ div#eod-calculator-total, div#eod-calculator-difference
   font-weight: bold
   font-size: 200%
   padding: 5px
-  width: 40%
+  width: 30%
   margin: 5px
   background-color: $green
   @include rounded_corners_all
@@ -1223,8 +1241,10 @@ div.pos-button
   text-align: center
   text-transform: uppercase
   vertical-align: middle
-  padding: 3px 0px
-  margin: 0px 2px
+  padding: 1px 10px
+  margin: 0px 5px
+  height: 43px
+  width: 7%
 
 div.square-button 
   padding: 3px
@@ -1284,6 +1304,9 @@ div.pos-menu div.pos-configuration
 div.pos-item-attr
   @include raised_element
   background-color: $light_background
+  width: 6%
+  
+  
 .table-column
   background-color: $light_background
   padding-left: 5px
@@ -1301,6 +1324,8 @@ div.pos-item-name
   padding-left: 10px
   overflow-x: hidden
   text-align: right
+  width: 20%
+
 .pos-item-total
   width: 11%
 
@@ -1510,9 +1535,10 @@ div.recommendations-container
 div.pos-menu
   @include raised_element
   z-index: 99
-  position: absolute
-  width: 100px
-  right: 0px
+  position: relative
+  margin: 15px 0px 15px 0px
+  padding: 10px 10px
+  text-align: center
   div 
     display: inline-block
 
@@ -1757,14 +1783,6 @@ div.scrollable-button-row
 
 
 
-
-div.content-box > div.content-container-home-user_user_index 
-  margin: auto
-  width: 80%
-
-
-.content-box-home-user_user_index 
-  padding-top: 60px
 
 
 div.salor-presentation table 
@@ -2799,9 +2817,7 @@ div.role-check
   :width 25%
 
 div#header_drawer_amount
-  :position absolute
-  :top -3px
-  :padding 32px 0px 0px 0px
+  :margin -8px 0px 0px 4px
   :font-weight bold
   :font-size 90%
   :width 65px
@@ -3019,11 +3035,12 @@ div.options-row div.option-input,
 div.options-row .option-button
   display: inline-block
   textarea-width: 95%
+  
 .option-button
   @include bright_button
   margin-left: 10px
-  padding-top: 8px
-  padding-bottom: 8px
+  padding: 5px 15px
+  
 #pos_customer_div
   margin-top: -35px
   background-color: $background

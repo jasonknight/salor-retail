@@ -79,6 +79,7 @@ module ApplicationHelper
       <div class="title-container">
           #{bbt} <div class="title-box #{clses.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
       </div>
+    </div>
     ]
   end
   
@@ -86,9 +87,11 @@ module ApplicationHelper
   def get_icons_map
     icons = {
       :location => 'location',
+      :search => 'search',
       :category => 'category',
       :vendor => 'home',
       :edit => 'edit',
+      :delete => 'delete',
       :delete => 'delete',
       :add => 'add',
       :item => 'item',
@@ -114,6 +117,7 @@ module ApplicationHelper
       :shipment => 'shipment',
       :shipper => 'shipper',
       :shipment_type => 'status',
+      :wrench => 'wrench',
       :stock_locations => 'stock_locations',
       :stock_location => 'stock_locations',
       :locked => 'lock',
@@ -150,6 +154,7 @@ module ApplicationHelper
       :wand => 'wand',
       :update_real_quantity => 'okay',
       :okay => 'okay',
+      :okay_orange => 'okay-orange',
       :action => 'gears',
       :payment => 'payment_method',
       :payment_method => 'payment_method',

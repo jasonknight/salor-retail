@@ -5,9 +5,6 @@
       <div align="center" class="first">
         <a href="<%= vendors_path %>">
           <img src="/images/salor-icon.png" />
-          <br />
-          <%= @current_vendor.name if @current_vendor %>
-          <br />
           <%= @current_register.name if @current_register %>
         </a>
       </div>
@@ -32,8 +29,9 @@
     <% if @current_user and @current_register and @current_user.can(:cashier) %>
       <li>
         <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
+          <%= salor_icon(:cash_drop, {}, 20, @current_user.get_drawer.user.username ) %>
+          <br />
           <div id='header_drawer_amount'></div>
-          <%= salor_icon(:cash_drop, {}, 20) %><br /><div style="margin-top:12px;"><span class='icon-caption'><%= @current_user.get_drawer.user.username %></span></div>
         </div>
       </li>
     <% end %>

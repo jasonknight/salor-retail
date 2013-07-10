@@ -596,7 +596,7 @@ window.shared = {
     dialog: function (title,id,clear) {
       var dialog = shared.element('div',{id: id},'',$('body'));
       dialog.addClass('salor-dialog');
-      dialog.css({width: retail.container.width() * 0.50, height: retail.container.height() * 0.30,'z-index':11});
+      dialog.css({width: retail.container.width() * 0.50, height: retail.container.height() * 0.40, 'z-index':150});
       if (_get('existed',dialog)) {
         dialog.html('');
         _set('existed',false,dialog);

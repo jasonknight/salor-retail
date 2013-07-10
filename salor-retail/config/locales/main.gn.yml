@@ -408,6 +408,8 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    open_drawer: Lade
+    weigh: wiegen
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf

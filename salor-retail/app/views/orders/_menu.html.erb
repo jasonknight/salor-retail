@@ -1,14 +1,10 @@
-
-
-
-
 <div class="pos-menu">
 
   <div id="new_order_button" onclick="window.location = '/orders/new_order'" class="input pos-button new-order">
-    <%= raw salor_icon(:settings, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.new_order")) %>
+    <%= raw salor_icon(:delete, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.new_order")) %>
   </div>
-  <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button pos-configuration">
-    <%= raw salor_icon(:settings, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.configuration")) %>
+  <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button">
+    <%= raw salor_icon(:wrench, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.configuration")) %>
   </div> 
   <div id="show_customers" onclick="$('.last-five-orders').show();" class="input pos-button">
     <%= raw salor_icon(:pin, {:class => "no-select",:style => "cursor:pointer;"},32, t("activerecord.models.customer.other")) %>
@@ -17,26 +13,18 @@
     <%= raw salor_icon(:button, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.buttons")) %>
   </div>
   <div id="show_search" onclick="showSearch();" class="input pos-button">
-    <span><%= t("menu.search")%></span>
+    <%= raw salor_icon(:search, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.search")) %>
   </div>
   <div class="pos-button" align="center" onmousedown="weigh_last_item();">
-    <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32) %>
+    <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32, t("menu.weigh")) %>
   </div>
   <div class="pos-button" onmousedown="quick_open_drawer();">
-    <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32) %>
+    <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("menu.open_drawer")) %>
   </div>
   <div id="print_receipt_button" onclick="get('/orders/show_payment_ajax?order_id=' + Order.id);" class="input pos-button print-receipt">
-    <%= salor_icon(:okay, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("system.complete_sale")) %>
+    <%= salor_icon(:okay_orange, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("system.complete_sale")) %>
   </div>
-</div>
-
-
-
-
-<div class='center'>
-
   
   <div class="pos-order-total" id="pos_order_total"></div>
   <input type="text" class="keyboard-input keyboardable" id="main_sku_field" name="keyboard_input" value="" style="background: white;color:black;"/>
 </div>
-
