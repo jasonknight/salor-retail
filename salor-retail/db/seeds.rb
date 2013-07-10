@@ -162,7 +162,7 @@ company_count.times do |c|
       user_objects << u
       puts "User #{ u.username } with password #{ c }#{ v }#{ i } created. Drawer is #{ u.drawer_id }" if res == true
       raise "ERROR: #{ u.errors.messages }" if res == false
-      u.save # needs to be called since drawer_id was not persistent after the last save. seems only to be in the seed script.
+      u.set_drawer
     end
     
     tax_profile_objects = []

@@ -58,7 +58,7 @@ class Vendor < ActiveRecord::Base
   
   validates_presence_of :name
   validates_presence_of :identifier
-  validates_uniqueness_of :identifier, :scope => :hidden
+  validates_uniqueness_of :identifier, :scope => :company_id
   after_create :set_hash_id
   
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
@@ -676,6 +676,19 @@ class Vendor < ActiveRecord::Base
   def set_hash_id
     self.hash_id = "#{ self.identifier }#{ generate_random_string[0..20] }"
     self.save
+  end
+  
+  def json_tax_profiles
+    hash = {}
+    self.tax_profiles.visible.each do |tp|
+      hash[tp.id] = {
+        :id => tp.id,
+        :color => tp.color,
+        :name => tp.name,
+        :value => tp.value
+      }
+    end
+    return hash.to_json
   end
   
   private

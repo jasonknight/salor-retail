@@ -85,7 +85,7 @@ var ItemTypes = <%= raw @current_vendor.item_types.visible.to_json %>;
 var Categories = <%= raw @current_vendor.categories.visible.to_json %>;
 var PaymentMethods = <%= raw @current_vendor.payment_methods_types_list.to_json %>;
 var PaymentMethodObjects = <%= raw @current_vendor.payment_methods_as_objects.to_json %>;
-var TaxProfiles = <%= raw @current_vendor.tax_profiles.visible.to_json %>;
+var TaxProfiles = <%= raw @current_vendor.json_tax_profiles %>;
 
 
 window.params = {

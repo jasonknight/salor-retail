@@ -1,7 +1,5 @@
 !!!
 
-- add_param(:type => params[:type]) if params[:type] and not params[:type].blank?
-
 %html
   %head
     %title SalorRetail
@@ -19,13 +17,6 @@
     = javascript_include_tag "/jslocales/main.#{I18n.locale}.js",'underscore'
     - if @current_user
       = render :partial => "shared/application_js"
-    - if mobile?
-      = javascript_include_tag 'mobile'
-    - else
-      = javascript_include_tag 'workstation'
-      = javascript_include_tag 'jquery.checkbox'
-
-    = javascript_include_tag params[:controller]
 
   %body#body
     .background
@@ -37,7 +28,8 @@
       
       = yield
       
-      = form_tag session_path, :id => 'logoutform', :method => 'delete'
+      = form_tag session_path, :id => 'logoutform', :method => 'delete' do
+        %span
       
       %span.version= SalorRetail::Application::VERSION
 

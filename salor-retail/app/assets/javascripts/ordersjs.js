@@ -1,3 +1,5 @@
+var highlightAttrs = ['sku','price','total'];
+
 function updateOrderItems(items) {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
@@ -15,12 +17,12 @@ function updateOrderItems(items) {
 function addPosItem(item) {
   var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
   var base_id = getOrderItemId(item);
-  var attrs;
+   _set('item',item,row);
   
   if (Register.hide_discounts == true) {
-    attrs = ['name','quantity','price','subtotal'];
+    var attrs = ['name','quantity','price','subtotal'];
   } else {
-    attrs = ['name','quantity','price','coupon_amount','rebate','subtotal','tax'];
+    var attrs = ['name','quantity','price','coupon_amount','rebate','subtotal','tax'];
   }
   
   row.addClass(base_id);
@@ -28,21 +30,17 @@ function addPosItem(item) {
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
   
   $('.pos-table-left-column-items').prepend(row);
-  _set('item',item,row);
 
-
-  
   for (var i = 0; i < attrs.length; i++) {
     var attr = attrs[i];
     var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
-
     
     if (attr == 'price' || attr == 'coupon_amount' || attr == 'subtotal' || attr == 'rebate' || attr == 'tax') {
+      // add color when action applies
       if (item["action_applied"] == true && attr != 'subtotal' && attr != 'tax') {
         col.addClass("pos-action-applied");
       }
-      
-      // those need special formatting
+      // determine number format
       if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || attr == 'rebate' || attr == 'tax' ) {
         col.html(toPercent(item[attr]));
       } else {
@@ -53,21 +51,23 @@ function addPosItem(item) {
       col.html(item[attr]);
     }
     
+    // make tax field colorful
+    if ( attr == 'tax') {
+      var color = TaxProfiles[item['tax_profile_id']].color;
+      if (color != null && color != "" ) {
+        col.css('background-color', color);
+      } else {
+        col.css('background-color', 'transparent');
+      }
+    };
+    
     col.addClass('table-column pos-item-attr');
     col.addClass(base_id + '-' + attr + ' pos-item-' + attr);
     
     if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied');
     };
     
-    if ( attr == 'tax') {
-      if (item['tax'] == 0) {
-        col.css('backgroundColor', '#9a809e');
-      } else if ( item['tax'] == 10 ) {
-        col.css('backgroundColor', '#7a607e');
-      } else if (item['tax'] == 20 ) {
-        col.css('backgroundColor', '#7D5285');
-      };
-    };
+
     
     if (attr != 'sku' && attr != 'coupon_amount') {
       if (attr == 'name') {
@@ -384,19 +384,39 @@ window.showOrderOptions = function () {
   config_table.find('td').each(function () {
     $(this).attr('valign','top');
   });
-  // TaxFree
-  var callbacks = {change: function () {
-      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_tax_free&value=x","ordersjs.js",function () {});
-    }
-  };
+  
+  
+  // TaxProfiles
   var options = {
-    name: 'tax_free',
-    title: i18n.activerecord.attributes.tax_free,
-    value: Order.tax_free,
-    append_to: config_table_cols_left[0]
+    name: 'tax_profiles',
+    title: i18n.activerecord.models.tax_profile.one,
+    append_to: dialog,
+    selections: [
+      {
+        name: 'tax_profile',
+        title: i18n.activerecord.models.tax_profile.one,
+        options: (function () {
+          var stys = {};
+          for (var t in TaxProfiles) {
+            var tax_profile = TaxProfiles[t];
+            stys[tax_profile.id] = tax_profile.name;
+          }
+          return stys;
+        })(),
+        change: function () {
+          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=tax_profile_id&value=' + $(this).val();
+          get(string, 'showOrderOptions->tax_profile', function () {
+            //
+          });
+        },
+        attributes: {name: i18n.activerecord.models.tax_profile.one},
+        value: Order.tax_profile_id,
+      }
+    ]
   };
-  var tax_free_check = shared.draw.check_option(options,callbacks);
-  // end TaxFree
+  var taxprofiles = shared.draw.select_option(options);
+  taxprofiles.find('select').each(function () {make_select_widget($(this).attr('name'),$(this));});
+  // end TaxProfiles
   
   // Proforma
   var options = {
@@ -423,7 +443,7 @@ window.showOrderOptions = function () {
   }
   };
   var buy_order_check = shared.draw.check_option(options,callbacks);
-  // end Proforma
+  // end Buy Order
   
   // salestype and countries
   var options = {
@@ -502,6 +522,8 @@ window.showOrderOptions = function () {
   shared.helpers.center(dialog);
   dialog.show();
 }
+
+
 function detailedOrderItemMenu(event) {
   $('.item-menu-div').remove();
   var target = $(event.currentTarget).parent();
@@ -692,38 +714,53 @@ function getOrderItemId(item) {
 
 
 function updatePosItem(item) {
-  
+  var row = $('#order_item_' + item.id)
   var base_id = getOrderItemId(item);
-  _set('item',item,$('#order_item_' + item.id));
-  //item['price'] = item['price'] - item['discount_amount'];
-  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
+  _set('item',item,row);
+  
   if (Register.hide_discounts) {
     var attrs = ['name','quantity','price','subtotal', 'tax'];
   } else {
     var attrs = ['name','quantity','price','coupon_amount','rebate','subtotal','tax'];
   }
+  
+  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
+  
   for (var i = 0; i < attrs.length; i++) {
-    var key = attrs[i];
-    var id = '.' + base_id + '-' + key;
-    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && key == 'coupon_amount') { $(id).addClass('discount_applied'); };
-    if (key == 'price' || key == 'coupon_amount' || key == 'subtotal' || key == 'rebate' || key == 'tax') {
-      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || key == 'rebate') {
-        $(id).html(toPercent(item[key]));
+    var attr = attrs[i];
+    var col = $('.' + base_id + '-' + attr);
+    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
+    
+    if (attr == 'price' || attr == 'coupon_amount' || attr == 'subtotal' || attr == 'rebate' || attr == 'tax') {
+      // add color when action applies
+      if (item["action_applied"] == true && attr != 'subtotal' && attr != 'tax') {
+        col.addClass("pos-action-applied");
+      }
+      // determine number format
+      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || attr == 'rebate' || attr == 'tax' ) {
+        col.html(toPercent(item[attr]));
       } else {
-        $(id).html(toCurrency(item[key]));
+        col.html(toCurrency(item[attr]));
       }
+      
     } else {
-      if (key == 'sku') {
-        //item[key] = item[key].substr(0,8);
-        item[key] = item[key];
-      }
-      $(id).html(item[key]);
+      col.html(item[attr]);
     }
     
-    if (item['is_buyback'] & highlightAttrs.indexOf(key) != -1) {
-      highlight($(id));
+    // make tax field colorful
+    if ( attr == 'tax') {
+      var color = TaxProfiles[item['tax_profile_id']].color;
+      if (color != null && color != "" ) {
+        col.css('background-color', color);
+      } else {
+        col.css('background-color', 'transparent');
+      }
+    };
+    
+    if (item['is_buyback'] & highlightAttrs.indexOf(attr) != -1) {
+      highlight(col);
     } else {
-      $(id).removeClass("pos-highlight");
+      col.removeClass("pos-highlight");
     }
   }
   
@@ -732,14 +769,13 @@ function updatePosItem(item) {
     var id = '.' + base_id + '-price';
     var price = toFloat($(id).html());
     if (price == 0) {
-      $(id).trigger('click');
+      col.trigger('click');
       setTimeout( function () {
         if (IS_APPLE_DEVICE) {
           $('.ui-keyboard-preview').val("");
         }
         $(".ui-keyboard-preview").select();
       },100);
-        
     }
   }
 }
@@ -757,7 +793,6 @@ function updateOrder(order) {
     $(button).addClass('pos-configuration');
     $('#pos_order_total').removeClass("pos-highlight");
   }
-  if (order.customer) { showCustomer(order.customer,order.loyalty_card); }
   $('#pos_order_total').html(toCurrency(order.total));
   $('.complete-order-total').html(toCurrency(order.total));
   $('.order-rebate_type').html(order.rebate_type);
@@ -770,42 +805,6 @@ function updateOrder(order) {
     order.lc_points = 0;
   }
   $('.order-points').html(order.lc_points);
-}
-
-function showCustomer(obj,lc) {
-  return;
-  var e = $('.pos-customer');
-  e.html('');
-  var name = $('<div><span class="customer_name"></span></div>');
-  name.html(obj.first_name + ' ' + obj.last_name);
-  var row = $('<div></div>');
-  row.append(name);
-  row.append('<span class=""><%= I18n.t("activerecord.attributes.points") %></span>');
-  if (!lc.points > 0) {
-    lc.points = 0;
-  }
-  var col = $('<span id="pos-loyalty-card-points" class="loyalty-points">'+lc.points+'</span>');
-  col.attr('model_id',lc.id);
-  col.attr('klass','LoyaltyCard');
-  col.attr('field','points');
-  col.addClass('editme');
-  make_in_place_edit(col);
-  row.append(col);
-  row.append('<span class=""><%= I18n.t("activerecord.attributes.lc_points") %></span>');
-  var col = $('<span id="pos-order-points" class="order-points">0</span>');
-  col.attr('model_id',Order.id);
-  col.attr('klass','Order');
-  col.attr('field','lc_points');
-  col.addClass('editme');
-  make_in_place_edit(col);
-  row.append(col);
-  e.html(row);
-  if (!e.hasClass('shown')) {
-    e.hide();
-  }
-  if (!$('.pos-customer').hasClass('shown')) {
-    showHideCustomerOrRebate();
-  }
 }
 
 function highlight(elem) {
@@ -829,3 +828,17 @@ function weigh_last_item() {
           get(string, filename);
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
 }
+
+function refund_item(id) {
+  refund_payment_method = $('#refund_payment_method').val();
+  window.location = '/orders/refund_item?id=' + id + '&pm=' + refund_payment_method;
+  if (refund_payment_method == 'InCash') {
+    // TODO: needs cash detection
+    quick_open_drawer()
+  }
+}
+
+function clearOrder() {
+  $.get('/orders/clear?order_id=' + Order.id);
+}
+

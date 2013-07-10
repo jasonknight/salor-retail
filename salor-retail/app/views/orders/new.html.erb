@@ -1,5 +1,5 @@
 <script type="text/javascript">
-  $(document).ready(function () {
+  $(function () {
     Order = <%= raw @current_order.to_json %>;
     updateOrder(Order);
     <%
@@ -10,79 +10,12 @@
     %>
     
     var order_items = [<%= raw items.join(',') %>];
-    updateOrderItems(order_items);
-
-    $("#main_sku_field").attr("disabled", false);
-    focusInput($("#main_sku_field"));
-    $("#main_sku_field").keyup(function(e) {
-      if (e.keyCode == 13) {
-        add_item($("#main_sku_field").val(), '');
-      }
-    })
-    
+    updateOrderItems(order_items);    
   });
-  
-  
-  
-  var isBuyOrder = false;
-  var highlightAttrs = ['sku','price','total'];
-  var updating_pos_display = false;
-
-  setInterval(function () {
-      if (
-        !$('#cash_drop').is(":visible") && 
-        !$('#complete_order').is(":visible") && 
-        !$('#inplaceedit-div').is(":visible") && 
-        !$('#search').is(":visible") &&
-        !$('.void-order').is(":visible") &&
-        !$('.ui-keyboard').is(":visible") && 
-        !$('.salor-dialog').is(":visible")) {
-      focusInput($("#main_sku_field"));
-    } 
-  }, 2000);
 </script>
 
 <%= render :partial => "menu", :locals => {:order => @current_order} %>
-<%= render :partial => "buttons/popup", :layout => false %>
-
-<div class='clear'></div>
-
-<div class="pos-customer shown"></div>
-
-<div id="order_rebate_options" class='rebate'>
-  <%= edit_me(:rebate,@current_order,@current_order.rebate,'','pos_order_rebate','true') %>
-  <%= edit_me(:tag,@current_order,@current_order.tag,'','pos_order_tag','true') %>
-</div>
-
-<div class='clear'></div>
-
-
-<% if not @current_register.scale.blank? then  %>
-  <div class="uniscalebutton" align="center" onmousedown="weigh_last_item();">
-    <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32) %>
-  </div>
-<% else %>
-  <div class="uniscalebutton" align="center" onmousedown="">
-  </div>
-<% end %>
-
-<div class="pos-drawer-button" onmousedown="quick_open_drawer();">
-  <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32) %>
-</div>
-
-<div class='center'>
-<% if @current_user.can(:change_prices) %>
-  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @current_order.id %>" klass="Order" field="total"></div>
-<% else %>
-  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @current_order.id %>" klass="Order" field="total"></div>
-<% end -%>
-</div>
-
-<div class='clear'></div>
-
-<div class='main_sku'>
-  <input type="text" class="keyboard-input keyboardable" id="main_sku_field" name="keyboard_input" value="" style="background: white;color:black;"/>
-</div>
+<%= render :partial => "buttons/popup", :layout => false %> 
 
 <div class='clear'></div>
 

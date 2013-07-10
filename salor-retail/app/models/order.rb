@@ -171,31 +171,28 @@ class Order < ActiveRecord::Base
     self.calculate_totals
   end
 
-  def toggle_tax_free=(x)
-    if self.tax_profile
-      self.tax_profile = nil
-      self.tax = nil
-      self.order_items.visible.each do |oi|
+  def toggle_is_proforma=(x)
+    self.update_attribute(:is_proforma, !self.is_proforma)
+  end
+  
+  def tax_profile_id=(id)
+    if id.blank?
+      # reset all order items to Item default
+      self.order_items.each do |oi|
         oi.tax_profile = oi.item.tax_profile
-        oi.tax = oi.tax_profile.value
+        oi.tax = oi.item.tax_profile.value
         oi.calculate_totals
       end
+      write_attribute :tax_profile_id, nil
     else
-      zero_tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
-      raise "A TaxProfile with 0% is missing" unless zero_tax_profile
-      self.tax_profile = zero_tax_profile
-      self.tax = zero_tax_profile.value
-      self.order_items.visible.each do |oi|
-        oi.tax_profile = zero_tax_profile
-        oi.tax = zero_tax_profile.value
+      tax_profile = self.vendor.tax_profiles.visible.find_by_id(id)
+      self.order_items.each do |oi|
+        oi.tax_profile = tax_profile
+        oi.tax = tax_profile.value
         oi.calculate_totals
       end
     end
     self.calculate_totals
-  end
-
-  def toggle_is_proforma=(x)
-    self.update_attribute(:is_proforma, !self.is_proforma)
   end
 
   
@@ -445,7 +442,7 @@ class Order < ActiveRecord::Base
         if not i.ignore_qty and i.behavior == 'normal' and not self.is_proforma
           if oi.is_buyback
             i.quantity += oi.quantity
-            i.quantity_buyback += self.quantity
+            i.quantity_buyback += oi.quantity
           else
             i.quantity -= oi.quantity
             i.quantity_sold += oi.quantity
@@ -1022,7 +1019,7 @@ class Order < ActiveRecord::Base
       :lc_points => self.lc_points,
       :id => self.id,
       :buy_order => self.buy_order,
-      :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag,
+      :tag => self.tag,
       :sale_type_id => self.sale_type_id,
       :destination_country_id => self.destination_country_id,
       :origin_country_id => self.origin_country_id,

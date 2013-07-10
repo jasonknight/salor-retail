@@ -15,7 +15,7 @@ class LoyaltyCard < ActiveRecord::Base
   
   has_many :orders, :through => :customer
   
-  validates_uniqueness_of :sku
+  validates_uniqueness_of :sku, :scope => :company_id
   validates_presence_of :sku
 
   

@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 class CashRegistersController < ApplicationController
   before_filter :update_devicenodes, :only => :edit
-  skip_before_filter :get_cash_register, :only => [:index, :show, :new, :create]
+  skip_before_filter :get_cash_register, :only => [:index, :show, :new, :create, :edit]
 
   def index
     @registers = @current_vendor.cash_registers.visible.page(params[:page]).order("created_at DESC")

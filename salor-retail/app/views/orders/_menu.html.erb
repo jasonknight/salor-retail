@@ -1,53 +1,42 @@
-<script type="text/javascript">
-function showHideCustomerOrRebate() {
-  if ($('.pos-customer').hasClass('shown')) {
-    $('.pos-customer').removeClass('shown');
-    $('.pos-customer').hide();
-    $('.rebate').addClass('shown');
-    $('.rebate').show();
-  } else {
-    $('.rebate').removeClass('shown');
-    $('.rebate').hide();
-    $('.pos-customer').addClass('shown');
-    $('.pos-customer').show();
-  }
-}
-function clearOrder() {
-  $.get('/orders/clear?order_id=' + Order.id);
-}
 
-function clickBuyOrderButton(id) {
-  get('/vendors/toggle?ajax=true&klass=Order&field=toggle_buy_order&model_id=' + id, 'pos/menu');
-  //focusInput($('.void-order-input'));
-}
-</script>
+
+
+
 <div class="pos-menu">
-        <div id="new_order_button" onclick="window.location = '/orders/new_order'" class="input pos-button new-order">
-          <%= t("menu.new_order")%>
-        </div>
-        <div id="clear_button" onclick="clearOrder();" class="input pos-button pos-configuration" style="width: 3%;background-color: red;">
-        C
-        </div>
-        <!--<div id="buy_order_button" class="input pos-button pos-configuration" onclick="clickBuyOrderButton(Order.id);">
-        <%= t("menu.buy_order")%>
-        </div>-->
-        <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button pos-configuration">
-          <%= t("menu.configuration")%>
-        </div> 
-        <div id="show_customers" onclick="$('.last-five-orders').show();" class="input pos-button">
-          <%= t("activerecord.models.customer.other")%>
-        </div>
-        <div id="show_butons" onclick="$('#buttons').show();" class="input pos-button">
-          <%= t("menu.buttons")%>
-        </div>
-        <div id="show_search" onclick="showSearch();" class="input pos-button">
-          <%= t("menu.search")%>
-        </div>
-        <div id="print_receipt_button" onclick="get('/orders/show_payment_ajax?order_id=' + Order.id);" class="input pos-button print-receipt">
-          <%= t("system.complete_sale")[0...5] %>
-        </div>
-        <!--<div id="print_receipt_button" onclick="showCompleteOrderPopup();" class="input pos-button print-receipt">
-          <%= t("system.complete_sale")[0...5] %>
-        </div>-->
 
+  <div id="new_order_button" onclick="window.location = '/orders/new_order'" class="input pos-button new-order">
+    <%= raw salor_icon(:settings, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.new_order")) %>
+  </div>
+  <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button pos-configuration">
+    <%= raw salor_icon(:settings, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.configuration")) %>
+  </div> 
+  <div id="show_customers" onclick="$('.last-five-orders').show();" class="input pos-button">
+    <%= raw salor_icon(:pin, {:class => "no-select",:style => "cursor:pointer;"},32, t("activerecord.models.customer.other")) %>
+  </div>
+  <div id="show_butons" onclick="$('#buttons').show();" class="input pos-button">
+    <%= raw salor_icon(:button, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.buttons")) %>
+  </div>
+  <div id="show_search" onclick="showSearch();" class="input pos-button">
+    <span><%= t("menu.search")%></span>
+  </div>
+  <div class="pos-button" align="center" onmousedown="weigh_last_item();">
+    <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32) %>
+  </div>
+  <div class="pos-button" onmousedown="quick_open_drawer();">
+    <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32) %>
+  </div>
+  <div id="print_receipt_button" onclick="get('/orders/show_payment_ajax?order_id=' + Order.id);" class="input pos-button print-receipt">
+    <%= salor_icon(:okay, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("system.complete_sale")) %>
+  </div>
 </div>
+
+
+
+
+<div class='center'>
+
+  
+  <div class="pos-order-total" id="pos_order_total"></div>
+  <input type="text" class="keyboard-input keyboardable" id="main_sku_field" name="keyboard_input" value="" style="background: white;color:black;"/>
+</div>
+

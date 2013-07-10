@@ -26,8 +26,11 @@
 //= require salor_bin
 //= require style
 //= require shared
+//= require ordersjs
 //= require complete-order-payment
 //= require complete-order-change
 //= require complete-order
 //= require drawer-transaction
 //= require jquery.modcoder.excolor
+//= require jquery.keyboard
+//= require jquery.checkbox

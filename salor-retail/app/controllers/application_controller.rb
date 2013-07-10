@@ -124,7 +124,7 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
-    @current_user = User.find_by_id_hash(session[:user_id_hash])
+    @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
     redirect_to new_session_path and return if @current_user.nil?
     
     if defined?(SrSaas) == 'constant'

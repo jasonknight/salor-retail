@@ -132,22 +132,24 @@ class ItemsController < ApplicationController
   end
 
   def search
-    if not @current_user.owns_vendor? @current_user.vendor_id then
-      @current_user.vendor_id = salor_user.get_default_vendor.id
-    end
     @items = []
     @customers = []
     @orders = []
     if params[:klass] == 'Item' then
-      @items = @current_vendor.items.page(params[:page]).per(@current_vendor.pagination)
+      if params[:keywords].empty? then
+        @items = @current_vendor.items.visible.page(params[:page]).per(@current_vendor.pagination)
+      else
+        # TODO: Add price range search
+        @items = @current_vendor.items.visible.where("sku LIKE '%#{params[:keywords]}%' or name LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
+      end
     elsif params[:klass] == 'Order'
       if params[:keywords].empty? then
-        @orders = Order.by_vendor.by_user.order("id DESC").page(params[:page]).per(@current_vendor.pagination)
+        @orders = @current_vendor.orders.order("nr DESC").page(params[:page]).per(@current_vendor.pagination)
       else
-        @orders = Order.by_vendor.by_user.where("id = '#{params[:keywords]}' or nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
+        @orders = @current_vendor.orders.where("nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
       end
     else
-      @customers = Customer.scopied.page(params[:page]).per(@current_vendor.pagination)
+      @customers = @current_company.customers.visible.page(params[:page]).per(@current_vendor.pagination)
     end
   end
   
