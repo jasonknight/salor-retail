@@ -31,13 +31,9 @@ function complete_order_show() {
     complete_order_hide();
   });
 
-  if (isBuyOrder) {
-    $("#add_payment_method_button").hide();
-    $("#payment_methods").hide();
-  } else {
-    $("#add_payment_method_button").show();
-    $("#payment_methods").show();
-  }
+  $("#add_payment_method_button").show();
+  $("#payment_methods").show();
+  
   $("#payment_methods").html("");
   add_payment_method();
   $("#payment_amount_0").val( Order.total );
