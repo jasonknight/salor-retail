@@ -442,7 +442,7 @@ class Order < ActiveRecord::Base
         if not i.ignore_qty and i.behavior == 'normal' and not self.is_proforma
           if oi.is_buyback
             i.quantity += oi.quantity
-            i.quantity_buyback += self.quantity
+            i.quantity_buyback += oi.quantity
           else
             i.quantity -= oi.quantity
             i.quantity_sold += oi.quantity
