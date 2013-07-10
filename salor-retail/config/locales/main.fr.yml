@@ -174,6 +174,9 @@ fr:
       track_expiry: Date limite de suivi
       type: type
       url: Lien
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: Nom d'utilisateur
       uses_drawer_id: XXX Uses Drawer of
       value: Valeur
@@ -189,9 +192,7 @@ fr:
       when: Quand
       whento: When
       width: Largeur
-      user:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Uses drawer of
+      color: color
     models:
       action:
         one: Action
@@ -271,12 +272,12 @@ fr:
       transaction_tag:
         one: Etiquette
         other: Etiquettes
-      vendor:
-        one: Magazin
-        other: Magazins
       user:
         one: Employee
         other: Employees
+      vendor:
+        one: Magazin
+        other: Magazins
   api:
     user_does_not_exist: L'utilisateur n'existe pas
   are_you_sure: Are you sure you want to do this?
@@ -423,6 +424,7 @@ fr:
     cash_registers: Caisses
     categories: Catégories
     clear_order: Effacer
+    close: Close
     configuration: Config.
     contact: Contact
     current_order: ! 'Commande en cours : #%{id}'
@@ -445,11 +447,13 @@ fr:
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: Editer article
     edit_location: Editer emplacement
+    edit_payment_method: Edit Payment Method
     edit_sale_type: XXX Edit Sale Type
     edit_shipment: Editer livraison
     edit_shipment_type: Editer type de livraison
     edit_shipper: Editer livreur %{nom}
     edit_tax_profile: Editer taxe
+    edit_user: Edituser
     edit_vendor: Editer vendeur
     end_day: Fin journée
     general_configuration: Configuration générale
@@ -477,6 +481,7 @@ fr:
     new_item: Nouvel article
     new_location: Nouvel emplacement
     new_order: Nouveau
+    new_payment_method: New Payment Method
     new_sale_type: XXX new sale type
     new_shipment: Nouvelle livraison
     new_shipment_type: Nouveau type de livraison
@@ -484,11 +489,13 @@ fr:
     new_stock_location: Nouvel emplacement de stock
     new_tax_profile: Nouvelle taxe
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: Nouveau vendeur
     ok: OK
     order: Commande
     orders: Commandes
     overview: Vue d'ensemble
+    payment_methods: Payment Methods
     points: Points
     pos: PDV
     print: Imprimer
@@ -518,16 +525,10 @@ fr:
     update_real_quantity: Mettre à jour quantité réelle
     upload: Mettre en ligne
     usb_device: clé USB
+    users: users
     vendors: Vendeurs
     void: Détruire
     wholesaler_update: Mettre à jour distributeur
-    close: Close
-    edit_payment_method: Edit Payment Method
-    edit_user: Edituser
-    new_payment_method: New Payment Method
-    new_user: New user
-    payment_methods: Payment Methods
-    users: users
   notifications:
     shipments_item_could_not_be_saved: Article livraisons n'a pas pu être enregistré.
     shipments_move_all_items: Tous les articles ont été déplacés avec succès.
@@ -603,6 +604,7 @@ fr:
       payment_method_total: TOTAL
       payments: Paiements
       refund: Remboursement
+      refunds: Refunds
       revenue: Profit
       revenue_total: TOTAL
       sales: Ventes
@@ -612,7 +614,6 @@ fr:
         pas de zéro. Nous vous conseillons de finir et commencer chaque journée avec
         votre caisse à zero afin de faciliter votre comptabilité. Effectuez le retrait
         de caisse correspondant et imprimez ce rapport de nouveau.
-      refunds: Refunds
     formats:
       advert: ! 'Le point de vente innovateur
 

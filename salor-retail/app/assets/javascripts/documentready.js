@@ -48,7 +48,7 @@ $(function () {
   
   
   // make select widget
-  if (workstation) {
+  if (typeof workstation != 'undefined') {
     $('select').each(function () {
       if ($(this).val() == '') {
       make_select_widget(i18n.views.single_words.choose,$(this));

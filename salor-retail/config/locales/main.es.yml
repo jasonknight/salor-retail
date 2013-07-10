@@ -174,6 +174,9 @@ es:
       track_expiry: Monitorear fecha de vencimiento
       type: Tipo
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: Nombre de usuario
       uses_drawer_id: Utiliza la caja de
       value: Valor
@@ -189,9 +192,7 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
-      user:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Uses drawer of
+      color: color
     models:
       action:
         one: Acción
@@ -271,12 +272,12 @@ es:
       transaction_tag:
         one: Etiqueta
         other: Etiquetas
-      vendor:
-        one: Tienda
-        other: Tiendas
       user:
         one: Employee
         other: Employees
+      vendor:
+        one: Tienda
+        other: Tiendas
   api:
     user_does_not_exist: Este usuario no existe
   are_you_sure: Are you sure you want to do this?
@@ -422,6 +423,7 @@ es:
     cash_registers: Cajas
     categories: Categorías
     clear_order: Borrar
+    close: Close
     configuration: Config.
     contact: Contacto
     current_order: ! 'pedido actual: #%{id}'
@@ -444,11 +446,13 @@ es:
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: Editar artículo
     edit_location: Editar ubicación
+    edit_payment_method: Edit Payment Method
     edit_sale_type: XXX Edit Sale Type
     edit_shipment: Editar envío
     edit_shipment_type: Editar tipo de envío
     edit_shipper: Editar transportador %{name}
     edit_tax_profile: Editar tipo de IVA
+    edit_user: Edituser
     edit_vendor: Editar tienda
     end_day: Finalizar el día
     general_configuration: Configuración general
@@ -476,6 +480,7 @@ es:
     new_item: Nuevo artículo
     new_location: Nueva ubicación
     new_order: Nuevo
+    new_payment_method: New Payment Method
     new_sale_type: XXX new sale type
     new_shipment: Nuevo envío
     new_shipment_type: Nuevo tipo de envío
@@ -483,11 +488,13 @@ es:
     new_stock_location: Nueva ubicación de stock
     new_tax_profile: Nuevo tipo de IVA
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: Nueva tienda
     ok: OK
     order: Pedido
     orders: Pedidos
     overview: Vista general
+    payment_methods: Payment Methods
     points: Puntos
     pos: PDV
     print: Imprimir
@@ -517,16 +524,10 @@ es:
     update_real_quantity: Actualizar cantidad real
     upload: Subir a la red
     usb_device: Llave USB
+    users: users
     vendors: Tiendas
     void: Anular
     wholesaler_update: Actualización del disteibuidor
-    close: Close
-    edit_payment_method: Edit Payment Method
-    edit_user: Edituser
-    new_payment_method: New Payment Method
-    new_user: New user
-    payment_methods: Payment Methods
-    users: users
   notifications:
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
@@ -602,6 +603,7 @@ es:
       payment_method_total: TOTAL
       payments: Pagos
       refund: Reintegro
+      refunds: Refunds
       revenue: Ganancias
       revenue_total: TOTAL
       sales: Centas
@@ -611,7 +613,6 @@ es:
         aconsejamos terminar y empazar cada día con la caja vacía a fin de facilitar
         su contabilidad. Realice la extracción de efectivo correspondiente e imprima
         nuevamente este informe.
-      refunds: Refunds
     formats:
       advert: ! 'El punto de venta innovador
 

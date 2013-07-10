@@ -5,7 +5,6 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
-      color: Farbe
       active: aktiv
       address: Adresse
       afield: Feld
@@ -31,6 +30,7 @@ gn:
       child_sku: Kind-SKU
       city: Stadt
       code: Code
+      color: Farbe
       company_name: Firmenname
       contact_address: Kontaktadresse
       contact_email: Kontakt E-Mail
@@ -446,6 +446,7 @@ gn:
     edit_invoice_note: Rechnungsnotiz bearbeiten
     edit_item: Artikel bearbeiten
     edit_location: Ort bearbeiten
+    edit_payment_method: Edit Payment Method
     edit_sale_type: Verkaufs-Art bearbeiten
     edit_shipment: Lieferung bearbeiten
     edit_shipment_type: Lieferstatus bearbeiten
@@ -479,6 +480,7 @@ gn:
     new_item: Neuer Artikel
     new_location: Neuer Ort
     new_order: Neu
+    new_payment_method: New Payment Method
     new_sale_type: Neue Verkaufs-Art
     new_shipment: Neue Lieferung
     new_shipment_type: Neuer Lieferstatus
@@ -492,6 +494,7 @@ gn:
     order: Verkauf
     orders: Verkäufe
     overview: Überblick
+    payment_methods: Payment Methods
     points: Treuepunkte
     pos: POS
     print: Etiketten
@@ -525,9 +528,6 @@ gn:
     vendors: Filialen
     void: Storno
     wholesaler_update: Artikelupdate Großhändler
-    edit_payment_method: Edit Payment Method
-    new_payment_method: New Payment Method
-    payment_methods: Payment Methods
   notifications:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
@@ -603,6 +603,7 @@ gn:
       payment_method_total: GESAMT
       payments: Auszahlungen
       refund: Stornierung
+      refunds: Refunds
       revenue: Umsatz
       revenue_total: GESAMT
       sales: Verkäufe
@@ -612,7 +613,6 @@ gn:
         nicht Null. Wir legen Ihnen nahe, am Ende eines jeden Tages die gesamte Kassen-Summe
         auszubuchen, um die Buchhaltungsarbeit zu erleichtern. Bitte nehmen Sie eine
         entsprechende Buchung vor und laden Sie diese Seite neu.
-      refunds: Refunds
     formats:
       advert: ! 'The Innovative Point of Sale
 
@@ -772,6 +772,7 @@ gn:
       from: von
       gross: brutto
       net: netto
+      noncash-refunds: Noncash-Refunds
       payments: Zahlungen
       payout: Auszahlung
       payouts: Auszahlungen
@@ -790,7 +791,6 @@ gn:
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
-      noncash-refunds: Noncash-Refunds
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

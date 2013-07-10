@@ -172,6 +172,19 @@ def write_javascript_i18n
       f.write(js_namespace + final.to_json)
     end
   end
+
+  js_namespace = 'Region = '
+  Dir[File.join(yaml_root, 'region.*.yml')].sort.each do |locale| 
+    locale_yml = YAML::load(IO.read(locale))
+    File.open(File.join(js_root, File.basename(locale, '.*') + '.js'), 'w') do |f| 
+      tmp = locale_yml[File.basename(locale, '.*').split('.')[1]]
+      final = {}
+      tmp.each do |k,v|
+        final[k] = v if not [:time,:date].include? k.to_sym
+      end
+      f.write(js_namespace + final.to_json)
+    end
+  end
 end
 
 namespace :translations do
