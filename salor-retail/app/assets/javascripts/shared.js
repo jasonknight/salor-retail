@@ -33,22 +33,15 @@ $(function(){
   });
 });
 
+function generic_search(caller) {
+  window.location = '?keywords=' + $('#generic_search_input').val();
+}
+
 function wholesaler_update() {
   var answer = confirm('Are you sure?')
   if (!answer) { return; }
   //TODO: needs a progress spinner and a real dialog in the dom since salor-bin can't display alerts
   window.location = '/shippers/update_wholesaler';
-}
-
-
-function initInput(type) {
-  var input = $("#complete_in_" + type);
-  if (isBuyOrder) {
-    $(input).attr('disabled', true);
-  } else {
-    if ($(input).val() == "0") $(input).val('');
-    $(input).attr('disabled', false);
- }
 }
 
 function blurInput(type) {
@@ -955,4 +948,4 @@ window.shared = {
       }
     }
   },
-} // end shared
+}
