@@ -110,12 +110,12 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   margin-right: auto
 
 @mixin rounded_corners_all 
-  -webkit-border-radius: $large_border_radius
+  border-radius: $large_border_radius
 .rounded-corners-all
   @include rounded_corners_all
   
 @mixin rounded_corners_all_small 
-  -webkit-border-radius: $small_border_radius
+  border-radius: $small_border_radius
 
 @mixin rounded_corners_top 
   border-top-left-radius: $large_border_radius
@@ -183,11 +183,10 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 @mixin awesome_button
   background: #222 url(/images/alert-overlay.png) repeat-x
   display: inline-block 
-  padding: 12px 10px 12px
   color: #fff
   text-decoration: none
-  -webkit-border-radius: $large_border_radius
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  border-radius: $large_border_radius
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
   border-bottom: 1px solid rgba(0,0,0,0.25)
   position: relative
@@ -195,7 +194,7 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 @mixin raised_element
   background: #222 url(/images/alert-overlay.png) repeat-x
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  box-shadow: 0px 5px 10px rgba(0,0,0,1)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
   border-bottom: 1px solid rgba(0,0,0,0.25)
   cursor: pointer
@@ -401,7 +400,7 @@ div.table-cell.btn
   background: $obtuse
   /* css3 */
   /* Using longhand to avoid inconsistencies between Safari 4 and Chrome 4 */
-  -webkit-border-radius: 25px
+  border-radius: 25px
 
 .obtuse:before 
   content: ""
@@ -423,7 +422,7 @@ div.table-cell.btn
   display: none
 
 .shadow 
-  -webkit-box-shadow: -2px 2px 1px $background
+  box-shadow: -2px 2px 1px $background
   box-shadow: -2px 2px 1px $background
 
 .kbd-show 
@@ -623,11 +622,6 @@ a
 span.link, a 
   color: $foreground
   text-decoration: underline
-  \:hover 
-  text-decoration: underline
-  
-  \:active 
-  text-decoration: underline
   
 
 
@@ -639,7 +633,10 @@ div.header
   @include rounded_corners_bottom
   height: $header_height
   padding: 5px 0px -3px 0px
-  margin-bottom: 17px
+  margin-bottom: 3px
+  position: relative
+  width: 90%
+  z-index: 100
 
 div.header > ul 
   list-style: none
@@ -647,13 +644,14 @@ div.header > ul
   @include no_select
 
 div.header > ul > li 
-  float: left
   margin-right: $header_li_pad
   @include no_select
+  width: 65px
+  display: inline-block
+  vertical-align: top
 
 div.header > ul > li > div 
   padding-top: 5px
-  width: 65px
   height: $header_height - 2
   cursor: pointer
   :active 
@@ -666,7 +664,7 @@ div.header > ul > li > div
 div.header > ul > li > div.active 
   padding-top: 5px
   width: 65px
-  height: $header_height - 2
+  height: $header_height - 4
   cursor: pointer
   background-color: $background
   @include rounded_corners_top
@@ -675,12 +673,13 @@ div.header > ul > li > div.active
 div.header > ul > li > div.first 
   background-color: $background
   @include rounded_corners_top
-  height: $header_height - 2
+  height: $header_height - 4
   @include no_select
+  font-size: 60%
 
 div.header > ul > li > div.first > a > img 
-  margin-left: 2px
-  margin-top: -1px
+  margin-left: 4px
+  margin-top: -7px
 
 div.header > ul > li > div > a > img 
   border: none
@@ -711,16 +710,6 @@ a.reload-window
   text-transform: uppercase
   @include left_right_pad_wide
   @include pointer
-  
-
-div.header #clockbox 
-  width: 65px
-  height: 41px
-  padding-top: 8px
-  text-align: center
-  font-size: $text_size_tiny
-  text-shadow: 1px 1px 1px #666666
-  position: absolute
 
 div.header #clockbox span 
   font-weight: bold
@@ -729,7 +718,9 @@ div.header #clockbox span
 div.generic-search 
   display: inline-block
   padding: 10px 0px
-  float: right
+  position: absolute
+  top: 0px
+  right: 0px
 
 div.generic-search-button 
   background: url(/images/icons/okay.svg) no-repeat
@@ -741,8 +732,10 @@ div.generic-search-button
   z-index: 101
   cursor: pointer
   display: inline-block
+  
 input#generic_search_input 
-  width: 200px
+  width: 20%
+  
 span.version 
   position: fixed
   left: 0px
@@ -763,11 +756,6 @@ span.salorbinversion
 
 div.main
   margin: 20px 0px 250px 0px
-
-div.background
-  background-color: $background
-  width: 100%
-  min-height: 1000px
 
 
 div.content-box > div.title-container 
@@ -1232,9 +1220,11 @@ div.pos-button
   @include pointer
   background-color: $foreground
   color: $background
-  width: 10%
   text-align: center
   text-transform: uppercase
+  vertical-align: middle
+  padding: 3px 0px
+  margin: 0px 2px
 
 div.square-button 
   padding: 3px
@@ -1243,15 +1233,16 @@ div.square-button
   color: $background
   margin-right: 7px
 
-div.pos-menu div.new-order 
+div.pos-menu div.new-order
   @include rounded_corners_left
   background-color: $blue
+  float: left
   color: white
-  width: 10%
 
 div.pos-menu div.print-receipt 
   @include rounded_corners_right
   @include bright_button
+  float: right
   color: white
   padding-right: 5px
   width: 15%
@@ -1475,7 +1466,8 @@ span.complete_order_label
 span.complete_order_highlight 
   color: $text_color_highlight
 
-.complete-order,.reorder-types 
+.complete-order,
+.reorder-types 
   @include rounded_corners_all
   width: 450px
   font-size: 1.5em
@@ -1484,6 +1476,7 @@ span.complete_order_highlight
   left: 20%
   @include dialog
   padding: 10px 10px 50px 10px
+  z-index: 102
 
 .reorder-types 
   @include rounded_corners_all
@@ -1514,11 +1507,14 @@ div.recommendations-container
   padding-bottom: 5px
   border-bottom: 2px solid $middleground2
 
-.pos-menu 
-  text-align: center
-
-.pos-menu div 
-  display: inline-block
+div.pos-menu
+  @include raised_element
+  z-index: 99
+  position: absolute
+  width: 100px
+  right: 0px
+  div 
+    display: inline-block
 
 span.order-rebate_type,
 span.order-rebate,
@@ -1547,6 +1543,8 @@ span.order-lc_points,.order-points,.loyalty-points
   overflow-y: scroll
   @include rounded_corners_all
   border: 1px solid $middleground
+  img
+    :width 30px
 
 
 #results_table th 
@@ -1567,7 +1565,7 @@ span.order-lc_points,.order-points,.loyalty-points
   opacity: .95
   color: #121111
   text-align: center
-  -webkit-border-radius: 5px
+  border-radius: 5px
 
 .search 
   width: 90%
@@ -1578,7 +1576,6 @@ span.order-lc_points,.order-points,.loyalty-points
   padding: 10px
   padding-top: 1em
   background-color: $light_background
-  opacity: .95
   text-align: center
   @include dialog
 
@@ -2341,11 +2338,6 @@ div.discount_applied
   margin: 0
   padding: 2px 4px
   position: relative
- 
-
-header > p 
-  //text-align: center
-  //margin: auto
 
 
 header.report 
@@ -2378,12 +2370,13 @@ section.report
 
 
 .pos-drawer-button 
-  float: left
+  position: absolute
   background-color: $light_background
 
 
 .uniscalebutton 
-  float : right
+  position: absolute
+  right: 0px
   background-color: $light_background
 
 
@@ -2502,6 +2495,7 @@ div.last-five-orders
   @include dialog
   @include rounded_corners_all
   position: absolute
+  z-index: 103
   left: 5%
   width: 90%
   top: 100px
@@ -3003,7 +2997,7 @@ div.options-row div.option-name
   cursor: pointer
   padding: 5px
   min-width: 100px
-  -webkit-border-radius: 4px
+  border-radius: 4px
 div.options-row div.option-input input,
 div.options-row div.option-input textarea,
   display: inline-block
@@ -3016,7 +3010,7 @@ div.options-row div.option-input textarea,
   font-weight: bolder
   text-align: center
   border: 3px solid #773973
-  -webkit-border-radius: 6px
+  border-radius: 6px
   border-left: none
   border-top: none
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.2, #80477d), color-stop(0.9, #773973))
@@ -3118,3 +3112,7 @@ input.payment-method-input
   @include stylish_input_no_bg
   @include dark_input
   width: 200px
+  
+  
+form#logoutform
+  :display none

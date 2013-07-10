@@ -28,7 +28,8 @@
       
       = yield
       
-      = form_tag session_path, :id => 'logoutform', :method => 'delete'
+      = form_tag session_path, :id => 'logoutform', :method => 'delete' do
+        %span
       
       %span.version= SalorRetail::Application::VERSION
 
