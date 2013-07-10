@@ -5,6 +5,7 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      color: Farbe
       active: aktiv
       address: Adresse
       afield: Feld

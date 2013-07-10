@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130709080142) do
+ActiveRecord::Schema.define(:version => 20130710063317) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -962,6 +962,7 @@ ActiveRecord::Schema.define(:version => 20130709080142) do
     t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
+    t.string   "color"
   end
 
   add_index "tax_profiles", ["hidden"], :name => "index_tax_profiles_on_hidden"

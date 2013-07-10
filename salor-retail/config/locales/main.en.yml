@@ -5,6 +5,7 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      color: color
       active: active
       address: address
       afield: field

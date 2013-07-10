@@ -1,6 +1,3 @@
-$ ->
-  $("#button_color").modcoder_excolor()
-
 window.makeSortable = (id) ->
   $('#' + id).sortable
     dropOnEmpty: false

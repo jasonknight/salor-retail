@@ -173,7 +173,7 @@ class VendorsController < ApplicationController
       @inst.calculate_totals
       @order.calculate_totals
       render 'orders/update_pos_display'
-    elsif inst.class == Order
+    elsif @inst.class == Order
       @inst.calculate_totals
       render 'orders/update_pos_display'
     else

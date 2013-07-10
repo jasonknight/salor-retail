@@ -1,3 +1,9 @@
+<script>
+  $(function() {
+    $("#tax_profile_color").modcoder_excolor();
+  })
+</script>
+
 <table align="center" width="100%">
   <tr>
     <td valign="top" align="center">
@@ -29,6 +35,10 @@
         <div class="field">
           <%= f.label t("activerecord.attributes.default") %><br />
           <%= f.check_box :default %>
+        </div>
+        <div class="field">
+          <%= f.label t("activerecord.attributes.color") %><br />
+          <%= f.text_field :color %>
         </div>
         <div class="actions">
           <%= f.submit %>

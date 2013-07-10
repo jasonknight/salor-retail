@@ -85,6 +85,14 @@ class OrderItem < ActiveRecord::Base
                         )
   end
   
+  def tax=(value)
+    tax_profile = self.vendor.tax_profiles.find_by_value(value)
+    ActiveRecord::Base.logger.info "TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tax_profile
+    self.tax_profile = tax_profile
+    self.save
+    write_attribute :tax, tax_profile.value
+  end
+  
 
   def refund(pmid, user)
     return nil if self.refunded
@@ -400,6 +408,7 @@ class OrderItem < ActiveRecord::Base
         :must_change_price => self.item.must_change_price,
         :weight_metric => self.item.weight_metric,
         :tax => self.tax,
+        :tax_profile_id => self.tax_profile_id,
         :action_applied => self.item.actions.visible.any?
       }
     end
