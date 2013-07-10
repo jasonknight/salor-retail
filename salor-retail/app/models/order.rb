@@ -176,13 +176,22 @@ class Order < ActiveRecord::Base
   end
   
   def tax_profile_id=(id)
-    tax_profile = self.vendor.tax_profiles.visible.find_by_id(id)
-    self.order_items.each do |oi|
-      oi.tax_profile = tax_profile
-      oi.tax = tax_profile.value
-      oi.calculate_totals
+    if id.blank?
+      # reset all order items to Item default
+      self.order_items.each do |oi|
+        oi.tax_profile = oi.item.tax_profile
+        oi.tax = oi.item.tax_profile.value
+        oi.calculate_totals
+      end
+      write_attribute :tax_profile_id, nil
+    else
+      tax_profile = self.vendor.tax_profiles.visible.find_by_id(id)
+      self.order_items.each do |oi|
+        oi.tax_profile = tax_profile
+        oi.tax = tax_profile.value
+        oi.calculate_totals
+      end
     end
-    self.tax_profile = tax_profile
     self.calculate_totals
   end
 
@@ -1010,7 +1019,7 @@ class Order < ActiveRecord::Base
       :lc_points => self.lc_points,
       :id => self.id,
       :buy_order => self.buy_order,
-      :tag => self.tag.nil? ? I18n.t("system.errors.value_not_set") : self.tag,
+      :tag => self.tag,
       :sale_type_id => self.sale_type_id,
       :destination_country_id => self.destination_country_id,
       :origin_country_id => self.origin_country_id,
