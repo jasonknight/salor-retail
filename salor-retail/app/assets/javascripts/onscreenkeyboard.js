@@ -114,7 +114,7 @@ function make_keyboardable(elem) {
   
   var new_offset = elem.offset();
   new_offset.top += 2;
-  kbd.css({position: 'absolute', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
+  kbd.css({position: 'relative', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
   
   if (elem.attr('id') == 'main_sku_field') {
     elem.keyboard({
@@ -131,7 +131,7 @@ function make_keyboardable(elem) {
     elem.keyboard({
       openOn   : '',
       stayOpen : true,
-      layout       : int,
+      layout       : 'int',
       customLayout : null,
       visible: function(){ $('.ui-keyboard-preview').select(); }
     });
@@ -148,14 +148,14 @@ function make_keyboardable(elem) {
   elem.addClass("keyboardable-done");
   if (elem.hasClass('left-kbd')) {
     kbd.addClass('kbd-show-left pointer');
-    $('body').append(kbd);
+    kbd.insertAfter(elem);
     new_offset.left = new_offset.left - (kbd.outerWidth() + 10);
-    kbd.offset(new_offset);
+    //kbd.offset(new_offset);
   } else if (elem.hasClass('wide-left-kbd')) {
     kbd.addClass('kbd-show-left pointer');
-    $('body').append(kbd);
+    kbd.insertAfter(elem);
     new_offset.left = new_offset.left - (kbd.outerWidth() + 36);
-    kbd.offset(new_offset);
+    //kbd.offset(new_offset);
   } else {
     kbd.addClass('kbd-show pointer');
     kbd.insertAfter(elem);
@@ -164,7 +164,7 @@ function make_keyboardable(elem) {
       
     }
     new_offset.left += elem.outerWidth();
-    kbd.offset(new_offset);
+    //kbd.offset(new_offset);
   }
 
   return elem;
@@ -210,7 +210,7 @@ function make_keyboardable_with_options(elem,opts) {
   elem.keyboard(options);
   kbd.insertAfter(elem);
   new_offset.left += elem.outerWidth() + 10;
-  kbd.offset(new_offset);
+  //kbd.offset(new_offset);
   return elem;
 }
 
