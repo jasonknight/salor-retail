@@ -863,3 +863,12 @@ function weigh_last_item() {
           get(string, filename);
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
 }
+
+function refund_item(id) {
+  refund_payment_method = $('#refund_payment_method').val();
+  window.location = '/orders/refund_item?id=' + id + '&pm=' + refund_payment_method;
+  if (refund_payment_method == 'InCash') {
+    // TODO: needs cash detection
+    quick_open_drawer()
+  }
+}
