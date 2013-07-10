@@ -61,10 +61,10 @@ module SalorRetail
       CONFIGURATION = YAML::load(File.open(File.join(Rails.root, 'config', 'config.yml'), 'r').read)
     end
     
-    LANGUAGES = { 'en' => 'English', 'gn' => 'Deutsch', 'tr' => 'Türkçe', 'fr' => 'Français', 'es' => 'Español', 'pl' => 'Polski', 'hu' => 'Magyar', 'el' => 'Greek', 'ru' => 'Русский', 'it' => 'Italiana', 'cn' => 'Chinese'}
-    COUNTRIES = { 'cc' => :default, 'de' => 'Deutschland', 'at' => 'Österreich', 'ch' => 'Schweiz', 'tr' => 'Türkiye', 'fr' => 'France', 'es' => 'España', 'pl' => 'Polska', 'hu' => 'Magyarország', 'el' => 'Ελλάδα', 'ru' => 'Россия', :it => 'Italia', 'cn' => '中国'}
-    COUNTRIES_REGIONS = { 'cc' => 'en-us', 'de' => 'gn-de', 'at' => 'gn-de', 'ch' => 'gn-ch', 'tr' => 'tr-tr', 'fr' => 'fr-fr', 'es' => 'es-es', 'pl' => 'pl-pl', 'hu' => 'hu-hu', 'el' => 'el-el', 'ru' => 'ru-ru', 'it' => 'it-it', 'cn' => 'cn-cn', 'us' => 'en-us', 'gb' => 'en-gb'}
-    COUNTRIES_INVOICES = { 'cc' => 'cc', 'de' => 'cc', 'at' => 'cc', 'ch' => 'cc', 'tr' => 'cc', 'fr' => 'cc', 'es' => 'cc', 'pl' => 'pl', 'hu' => 'cc', 'el' => 'cc', 'ru' => 'cc', 'it' => 'cc', 'cn' => 'cc', 'us' => 'cc', 'gb' => 'cc' }
+    LANGUAGES = { 'en' => 'English', 'gn' => 'Deutsch', 'fr' => 'Français', 'es' => 'Español', 'el' => 'Greek', 'ru' => 'Русский', 'it' => 'Italiana', 'cn' => 'Chinese'}
+    COUNTRIES = { 'cc' => :default, 'us' => 'USA', 'gb' => 'England', 'ca' => 'Canada', 'de' => 'Deutschland', 'at' => 'Österreich', 'fr' => 'France', 'es' => 'España', 'el' => 'Ελλάδα', 'ru' => 'Россия', :it => 'Italia', 'cn' => '中国'}
+    COUNTRIES_REGIONS = { 'cc' => 'en-us', 'us' => 'en-us', 'gb' => 'en-gb', 'ca' => 'en-ca', 'de' => 'gn-de', 'at' => 'gn-de', 'fr' => 'fr-fr', 'es' => 'es-es', 'el' => 'el-el', 'ru' => 'ru-ru', 'it' => 'it-it', 'cn' => 'cn-cn'}
+    COUNTRIES_INVOICES = { 'cc' => 'cc', 'us' => 'cc', 'gb' => 'cc', 'ca' => 'ca', 'de' => 'cc', 'at' => 'cc', 'fr' => 'cc', 'es' => 'cc', 'el' => 'cc', 'ru' => 'cc', 'it' => 'cc', 'cn' => 'cc' }
     
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -86,7 +86,7 @@ module SalorRetail
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     #config.i18n.load_path += Dir[Rails.root.join('roles', '*.{rb,yml}').to_s]
-    config.i18n.default_locale = 'en-US'
+    config.i18n.default_locale = 'en'
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"

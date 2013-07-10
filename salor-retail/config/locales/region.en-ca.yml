@@ -1,15 +1,15 @@
 ---
-es:
+en-ca:
   number:
     currency:
       format:
         delimiter: ! ','
         format: ! '%u %n'
-        friendly_unit: EUR
+        friendly_unit: CAD
         pieces: 0.01,0.05,0.10,0.25,0.50,1,5,10,20,50,100
         precision: 2
         separator: .
-        unit: €
+        unit: $
         significant: false
         strip_insignificant_zeros: false
     format:

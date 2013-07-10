@@ -153,14 +153,6 @@ class Role < ActiveRecord::Base
       :index_broken_items,
       :show_tax_profiles
     ],
-    :user => [
-      :anything,
-      :edit_tender_methods,
-      :edit_items,
-      :show_orders,
-      :index_customers,
-      :report_day_orders
-    ],
     :assistant => [
       :anything
     ]

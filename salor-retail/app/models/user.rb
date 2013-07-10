@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   include SalorScope
   include SalorBase
 
-  belongs_to :vendor
+  has_and_belongs_to_many :vendors
   belongs_to :company
   
   belongs_to :drawer
@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
   
   before_update :set_role_cache, :update_hourly_rate
   before_save :set_role_cache, :update_hourly_rate
-  after_commit :set_drawer
   after_create :set_id_hash
   
   
@@ -87,7 +86,7 @@ class User < ActiveRecord::Base
   end
   
   def full_name
-    return self.first_name + " " + self.last_name
+    return self.first_name.to_s + " " + self.last_name.to_s
   end
   
   def get_drawer
@@ -176,7 +175,6 @@ class User < ActiveRecord::Base
     login = self.user_logins.last
     return if login and login.logout.nil?
     login = UserLogin.new
-    login.vendor = self.vendor
     login.company = self.company
     login.user = self
     login.hourly_rate = self.hourly_rate
@@ -261,16 +259,23 @@ class User < ActiveRecord::Base
     unless self.drawer
       ActiveRecord::Base.logger.info "User doesn't have a Drawer yet. Creating one"
       d = Drawer.new
-      d.vendor = self.vendor
       d.company = self.company
       d.save
-      write_attribute :drawer_id, d.id
+      self.drawer = d
+      self.save
     end
   end
   
   def set_id_hash
     self.id_hash = generate_random_string[0..20]
     self.save
+  end
+  
+  def to_json
+    {
+      :username => self.username,
+      :role_cache => self.role_cache
+    }.to_json
   end
   
   private

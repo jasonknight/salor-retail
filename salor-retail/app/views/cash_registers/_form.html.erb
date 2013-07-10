@@ -75,7 +75,7 @@
             </div>
             <br />
             <div class="field">
-              <%= f.label VendorPrinter.human_attribute_name 'sticker_printer' %><br />
+              <%= f.label 'sticker printer' %><br />
               <% if @cash_register.salor_printer != true %>
                 <%= f.collection_select :sticker_printer_name, @devices_for_select,:first, :first, {:include_blank => true} %>
               <% else %>

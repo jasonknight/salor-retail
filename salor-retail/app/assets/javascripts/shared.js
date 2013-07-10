@@ -511,8 +511,8 @@ window.shared = {
     to_currency: function (number,separator,unit) {
       var match, property, integerPart, fractionalPart;
       var settings = {         precision: 2,
-      unit: i18n.currency_unit,
-      separator: i18n.decimal_separator,
+      unit: i18nunit,
+      separator: i18ndelimiter,
       delimiter :'',
       precision: 2
       };

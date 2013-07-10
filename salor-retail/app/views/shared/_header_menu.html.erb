@@ -25,7 +25,7 @@
     </div>
   </li>
   <% end %>
-  <% if @current_user and @current_user.can(:cashier) %>
+  <% if @current_user and @current_register and @current_user.can(:cashier) %>
     <li>
       <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
         <div id='header_drawer_amount'></div>
@@ -54,6 +54,8 @@
   </li>
   <li >
     <div id="clockbox" class="no-touchy">
+      <%= @current_vendor.name if @current_vendor %>
+      <br />
       <%= @current_register.name if @current_register %>
     </div>
   </li>

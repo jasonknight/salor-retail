@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708200539) do
+ActiveRecord::Schema.define(:version => 20130709080142) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -1041,6 +1041,11 @@ ActiveRecord::Schema.define(:version => 20130708200539) do
     t.string   "id_hash"
   end
 
+  create_table "users_vendors", :id => false, :force => true do |t|
+    t.integer "user_id"
+    t.integer "vendor_id"
+  end
+
   create_table "vendors", :force => true do |t|
     t.string   "name"
     t.integer  "user_id"
@@ -1091,7 +1096,7 @@ ActiveRecord::Schema.define(:version => 20130708200539) do
     t.text     "invoice_blurb_footer"
     t.string   "gs1_format",                        :default => "2,5,5"
     t.string   "country",                           :default => "cc"
-    t.integer  "largest_drawer_transaction_number"
+    t.integer  "largest_drawer_transaction_number", :default => 0
     t.boolean  "enable_technician_emails"
     t.string   "technician_email"
     t.string   "identifier"

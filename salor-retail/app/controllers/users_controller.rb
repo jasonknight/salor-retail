@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @user.language = 'en-US'
+    @user.language = 'en'
   end
 
   def edit
@@ -31,6 +31,7 @@ class UsersController < ApplicationController
     @user.vendor = @current_vendor
     @user.company = @current_company
     if @user.save
+      @user.set_drawer
       redirect_to users_path
     else
       render :new
@@ -53,14 +54,14 @@ class UsersController < ApplicationController
   end
   
   def destroy_login
-    @user = @current_vendor.users.find_by_id(params[:id])
-    login = @current_vendor.user_logins.find_by_id(params[:login])
+    @user = @current_company.users.find_by_id(params[:id])
+    login = @current_company.user_logins.find_by_id(params[:login])
     if login.user_id == @user.id and @current_user.role_cache.include? 'manager' then
       login.hide(@current_user.id)
     else
-      raise "Ids Don't Match" + login.user.id.to_s + " ---- " + @current_user.role_cache
+      raise "No permission or Ids Don't Match " + login.user.id.to_s + " ---- " + @current_user.role_cache
     end
-    redirect_to "/users/#{@user.id}"
+    redirect_to user_path(@user)
   end
   
   def clockin

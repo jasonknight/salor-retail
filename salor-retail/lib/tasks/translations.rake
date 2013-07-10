@@ -8,6 +8,7 @@
 
 require 'yaml'
 require 'active_support'
+require 'json'
 
 $unused = 0
 $source = ''
@@ -154,6 +155,25 @@ def write_translation(translation, translationlang, transfile)
   File.open(transfile,'w'){ |f| f.write output_translation.to_yaml }
 end
 
+def write_javascript_i18n
+  YAML::ENGINE.yamler = 'syck'
+  yaml_root = File.join(Rails.root, 'config', 'locales')
+  js_root = File.join(Rails.root, 'public', 'jslocales')
+  js_namespace = 'i18n = '
+  
+  Dir[File.join(yaml_root, 'main.*.yml')].sort.each do |locale| 
+    locale_yml = YAML::load(IO.read(locale))
+    File.open(File.join(js_root, File.basename(locale, '.*') + '.js'), 'w') do |f| 
+      tmp = locale_yml[File.basename(locale, '.*').split('.')[1]]
+      final = {}
+      tmp.each do |k,v|
+        final[k] = v if not [:time,:date].include? k.to_sym
+      end
+      f.write(js_namespace + final.to_json)
+    end
+  end
+end
+
 namespace :translations do
   # usage: rake translations:compare_locales['main.gn.yml','main.pl.yml']
   desc "Compare locales" 
@@ -278,5 +298,10 @@ namespace :translations do
         write_translation(translation, translationlang, transfile)
       end
     end
+    write_javascript_i18n
+  end
+  
+  task :write_i18n_js do 
+    write_javascript_i18n
   end
 end

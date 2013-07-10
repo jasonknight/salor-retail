@@ -36,11 +36,10 @@ module ApplicationHelper
   end
   
   def supported_languages
+    # TODO: Use SalorRetail::Application::LANGUAGES instead
     [
       {:name => "Deutsch", :locale => 'gn'},
-      {:name => "US English", :locale => 'en-US'},
-      {:name => "GB English", :locale => 'en-GB'},
-      {:name => "CA English", :locale => 'en-CA'},
+      {:name => "English", :locale => 'en'},
       {:name => "ελληνική", :locale => 'el'},
       {:name => "Français", :locale => 'fr'},
       {:name => "Espagnole", :locale => 'es'},
@@ -49,11 +48,11 @@ module ApplicationHelper
   end
   
   def salor_number_to_currency(amnt)
-    return number_to_currency(amnt, :unit => I18n.t("number.currency.format.unit"))
+    return number_to_currency(amnt, :locale => @region)
   end
   
   def salor_number_with_delimiter(num)
-    return number_with_delimiter(num)
+    return number_with_delimiter(num, :locale => @region)
   end
   
 

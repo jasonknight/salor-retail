@@ -8,42 +8,44 @@
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# if User.any?
-#   puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
-#   Process.exit 0
-# end
 
-
-ActiveRecord::Base.connection.tables.each do |t|      
-  begin
-    model = t.classify.constantize
-    model.reset_column_information
-  rescue
-    next
-  end
-  puts "Purging table #{ model }"
-  model.delete_all
+if User.any?
+  puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
+  Process.exit 0
 end
+
+
+# WARNING: Uncommenting the following will destroy all data!
+# ActiveRecord::Base.connection.tables.each do |t|      
+#   begin
+#     model = t.classify.constantize
+#     model.reset_column_information
+#   rescue
+#     next
+#   end
+#   puts "Purging table #{ model }"
+#   model.delete_all
+# end
 
 company_count = 0
 
-if ENV['SEED_MODE'] == 'full'
+# if ENV['SEED_MODE'] == 'full'
   puts "SEED_MODE is 'full'"
-  countries = ['us','at','fr','es','pl','hu','ru','it','tr','cn','el','hk','tw']
-  languages = ['en','gn','fr','es','pl','hu','ru','it','tr','cn','el','hk','tw']
-  company_count = 2
-else
-  puts "SEED_MODE is 'minimal'"
-  countries = ['us', 'at']
-  languages = ['en', 'gn']
+  countries = ['us','at','fr','es','el','ru','it','cn']
+  languages = ['en','gn','fr','es','el','ru','it','cn']
   company_count = 1
-end
+# else
+#   puts "SEED_MODE is 'minimal'"
+#   countries = ['us']
+#   languages = ['en']
+#   company_count = 1
+# end
 
 tax_percentages = [20, 10, 0]
 tax_profile_letters = ['A', 'B', 'C']
 tax_profile_defaults = [nil, true, nil]
 
-role_names = [:manager, :head_cashier, :cashier, :stockboy]
+role_names = [:manager, :head_cashier, :cashier, :stockboy, :assistant]
 
 invoice_blurb_languages = ['en', 'gn']
 invoice_blurb_texts = {}
@@ -78,6 +80,7 @@ company_count.times do |c|
   company = Company.new
   company.name = "Company#{ c }"
   company.identifier = c
+  company.full_subdomain = '' # for development testing SrSaas on localhost:3000
   r = company.save
   puts "\n\n =========\nCOMPANY #{ c } created\n\n" if r == true
   
@@ -89,6 +92,7 @@ company_count.times do |c|
     vendor.identifier = "vendor#{c}#{v}"
     r = vendor.save
     puts "\n---------\nVENDOR #{ c } #{ v } created\n" if r == true
+    raise "ERROR: #{ vendor.errors.messages }" if r == false
     
     
     item_type_objects = []
@@ -96,11 +100,12 @@ company_count.times do |c|
       it = ItemType.new
       it.company = company
       it.vendor = vendor
-      it.name = "#{ item_type_names[i] }#{ c } #{ v }"
+      it.name = "#{ item_type_names[i] }#{ c }#{ v }"
       it.behavior = item_type_behaviors[i]
       r = it.save
       item_type_objects << it
       puts "ItemType #{ c } #{ v } created" if r == true
+      raise "ERROR: #{ it.errors.messages }" if r == false
     end
     
     payment_method_objects = []
@@ -110,20 +115,26 @@ company_count.times do |c|
       pm.company = company
       pm.name = "#{payment_method_names[i]}#{ c }#{ v }"
       pm.cash = payment_methods_cash[i]
+      pm.change = payment_methods_change[i]
       pm.quote = payment_methods_quote[i]
       pm.unpaid = payment_methods_unpaid[i]
+      res = pm.save
+      payment_method_objects << pm
+      puts "PaymentMethod #{ c } #{ v } created" if res == true
+      raise "ERROR: #{ pm.errors.messages }" if res == false
     end
     
     cash_register_objects = []
     cash_register_names.size.times do |i|
       cr = CashRegister.new
-      cr.name = "#{ cash_register_names[i] }#{ c } #{ v }"
+      cr.name = "#{ cash_register_names[i] }#{ c }#{ v }"
       cr.vendor = vendor
       cr.company = company
       cr.salor_printer = cash_register_salor_printer[i]
       r = cr.save
       cash_register_objects << cr
       puts "CashRegister #{ cr.name } created" if r == true
+      raise "ERROR: #{ cr.errors.messages }" if r == false
     end
     
     role_objects = []
@@ -131,25 +142,27 @@ company_count.times do |c|
       r = Role.new
       r.company = company
       r.vendor = vendor
-      r.name = "#{ role_names[i] }#{ c }#{ v }"
+      r.name = "#{ role_names[i] }"
       res = r.save
       role_objects << r
       puts "Role #{ r.name } created" if res == true
+      raise "ERROR: #{ r.errors.messages }" if res == false
     end
     
     user_objects = []
     role_objects.size.times do |i|
       u = User.new
       u.company = company
-      u.vendor = vendor
+      u.vendors << vendor
       u.roles = [role_objects[i]]
       u.password = "#{ c }#{ v }#{ i }"
       u.username = "#{ role_names[i] }#{ c }#{ v }"
-      u.language = languages[c]
+      u.language = languages[v]
       res = u.save
       user_objects << u
       puts "User #{ u.username } with password #{ c }#{ v }#{ i } created. Drawer is #{ u.drawer_id }" if res == true
-      u.save # needs to be called since drawer_id was not persistent after the last save
+      raise "ERROR: #{ u.errors.messages }" if res == false
+      u.save # needs to be called since drawer_id was not persistent after the last save. seems only to be in the seed script.
     end
     
     tax_profile_objects = []
@@ -164,6 +177,7 @@ company_count.times do |c|
       res = tp.save
       tax_profile_objects << tp
       puts "TaxProfile #{ tp.name } created" if res == true
+      raise "ERROR: #{ tp.errors.messages }" if res == false
     end
     
     category_objects = []
@@ -175,6 +189,7 @@ company_count.times do |c|
       res = cat.save
       category_objects << cat
       puts "Category #{ cat.name } created" if res == true
+      raise "ERROR: #{ cat.errors.messages }" if res == false
     end
     
     button_category_objects = []
@@ -187,6 +202,7 @@ company_count.times do |c|
       res = cat.save
       button_category_objects << cat
       puts "ButtonCategory #{ cat.name } created" if res == true
+      raise "ERROR: #{ cat.errors.messages }" if res == false
     end
     
     item_objects = []
@@ -203,6 +219,7 @@ company_count.times do |c|
         res = item.save
         item_objects << item
         puts "Item #{ item.sku } created" if res == true
+        raise "ERROR: #{ item.errors.messages }" if res == false
       end
     end
     
@@ -215,6 +232,7 @@ company_count.times do |c|
       res = l.save
       location_objects << l
       puts "#{ l.name } created" if res == true
+      raise "ERROR: #{ l.errors.messages }" if res == false
     end
     
     stock_location_objects = []
@@ -226,6 +244,7 @@ company_count.times do |c|
       res = l.save
       stock_location_objects << l
       puts "#{ l.name } created" if res == true
+      raise "ERROR: #{ l.errors.messages }" if res == false
     end
     
     broken_item_objects = []
@@ -235,9 +254,11 @@ company_count.times do |c|
       b.company = company
       b.name = "BrokenItem#{ c }#{ v }#{ i }"
       b.sku = "BI#{ c }#{ v }#{ i }"
+      b.quantity = i
       res = b.save
       broken_item_objects << b
-      puts "#{ l.name } created" if res == true
+      puts "#{ b.name } created" if res == true
+      raise "ERROR: #{ b.errors.messages }" if res == false
     end
     
     discount_objects = []
@@ -254,6 +275,7 @@ company_count.times do |c|
     res = d.save
     discount_objects << d
     puts "#{ d.name } created" if res == true
+    raise "ERROR: #{ d.errors.messages }" if res == false
     
     
     shipment_type_objects = []
@@ -265,6 +287,7 @@ company_count.times do |c|
       res = st.save
       shipment_type_objects << st
       puts "#{ st.name } created" if res == true
+      raise "ERROR: #{ st.errors.messages }" if res == false
     end
     
     shipper_objects = []
@@ -276,6 +299,7 @@ company_count.times do |c|
       res = s.save
       shipper_objects << s
       puts "#{ s.name } created" if res == true
+      raise "ERROR: #{ s.errors.messages }" if res == false
     end
     
     customer_objects = []
@@ -291,13 +315,16 @@ company_count.times do |c|
       lc.vendor = vendor
       lc.company = company
       lc.sku = "LC#{ c }#{ v }#{ i }"
-      lc.save
+      res = lc.save
+      puts "#{ lc.sku } created" if res == true
+      raise "ERROR: #{ lc.errors.messages }" if res == false
       
       cu.loyalty_cards << lc
       res = cu.save
       customer_objects << cu
       
       puts "#{ cu.first_name } #{ cu.last_name } created" if res == true
+      raise "ERROR: #{ cu.errors.messages }" if res == false
     end
     
     transaction_tag_objects = []
@@ -309,6 +336,7 @@ company_count.times do |c|
       res = tt.save
       transaction_tag_objects << tt
       puts "#{ tt.name } created" if res == true
+      raise "ERROR: #{ tt.errors.messages }" if res == false
     end
     
     country_objects = []
@@ -320,6 +348,7 @@ company_count.times do |c|
       res = co.save
       country_objects << co
       puts "#{ co.name } created" if res == true
+      raise "ERROR: #{ co.errors.messages }" if res == false
     end
     
     sale_type_objects = []
@@ -330,7 +359,8 @@ company_count.times do |c|
       st.name = "#{ sale_type_names[i] }#{ c }#{ v }"
       res = st.save
       sale_type_objects << st
-     
+      puts "#{ st.name } created" if res == true
+      raise "ERROR: #{ st.errors.messages }" if res == false
     end
     
     button_objects = []
@@ -344,6 +374,9 @@ company_count.times do |c|
         b.category = button_category_objects[i]
         b.name = item_objects[item_index].name
         b.save
+        button_objects << b
+        puts "#{ b.name } created" if res == true
+        raise "ERROR: #{ b.errors.messages }" if res == false
       end
     end
     
@@ -354,12 +387,13 @@ company_count.times do |c|
         ib.vendor = vendor
         ib.company = company
         ib.lang = invoice_blurb_languages[i]
-        ib.body = invoice_blurb_texts[invoice_blurb_languages[i]][j]
-        ib.body_receipt = invoice_blurb_texts[invoice_blurb_languages[i]][j] + invoice_blurb_invoiceaddon[invoice_blurb_languages[i]]
+        ib.body = invoice_blurb_texts[invoice_blurb_languages[i]][j] + invoice_blurb_invoiceaddon[invoice_blurb_languages[i]]
+        ib.body_receipt = invoice_blurb_texts[invoice_blurb_languages[i]][j]
         ib.is_header = j.zero?
         res = ib.save
         invoice_blurb_objects << ib
         puts "InvoiceBlurb #{ ib.body } created" if res == true
+        raise "ERROR: #{ ib.errors.messages }" if res == false
       end
     end
     
@@ -379,6 +413,7 @@ company_count.times do |c|
           res = ivn.save
           invoice_note_objects << ivn
           puts "InvoiceNote #{ ivn.name } created" if res == true
+          raise "ERROR: #{ ivn.errors.messages }" if res == false
         end
       end
     end

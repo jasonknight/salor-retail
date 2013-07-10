@@ -3,18 +3,18 @@
 var workstation = <%= workstation? %>;
 var mobile = <%= not workstation? %>;
 var i18nlocale = '<%= I18n.locale %>';
-var i18nunit = '<%= I18n.t("number.currency.format.unit") %>';
-var i18nseparator = '<%= I18n.t("number.currency.format.separator") %>';
-var i18ndelimiter = '<%= I18n.t("number.currency.format.delimiter") %>';
-var i18n_value_not_set = '<%= t("system.errors.value_not_set") %>';
-var i18n_menu_ok = '<%= t("menu.ok") %>';
-var i18n_menu_done = '<%= t("menu.done") %>';
-var i18n_menu_cancel = '<%= t("menu.cancel") %>';
-var i18n_menu_close = '<%= t("menu.close") %>';
-var i18n_transaction_tag_one = '<%= I18n.t("activerecord.models.transaction_tag.one") %>';
-var i18n_money_given = '<%= t('views.given') %>';
-var i18n_money_change = '<%= t('views.change') %>';
-var i18n_pieces = [<%= I18n.t('number.currency.format.pieces').split(',').find_all { |piece| piece.to_f > 2.0}.join(',') %>];
+var i18nunit = '<%= escape_javascript I18n.t("number.currency.format.unit", :locale => @region) %>';
+var i18nseparator = '<%= escape_javascript I18n.t("number.currency.format.separator", :locale => @region) %>';
+var i18ndelimiter = '<%= escape_javascript I18n.t("number.currency.format.delimiter", :locale => @region) %>';
+var i18n_value_not_set = '<%= escape_javascript t("system.errors.value_not_set") %>';
+var i18n_menu_ok = '<%= escape_javascript t("menu.ok") %>';
+var i18n_menu_done = '<%= escape_javascript t("menu.done") %>';
+var i18n_menu_cancel = '<%= escape_javascript t("menu.cancel") %>';
+var i18n_menu_close = '<%= escape_javascript t("menu.close") %>';
+var i18n_transaction_tag_one = '<%= escape_javascript I18n.t("activerecord.models.transaction_tag.one") %>';
+var i18n_money_given = '<%= escape_javascript t('views.given') %>';
+var i18n_money_change = '<%= escape_javascript t('views.change') %>';
+var i18n_pieces = [<%= I18n.t('number.currency.format.pieces', :locale => @region).split(',').find_all { |piece| piece.to_f > 2.0}.join(',') %>];
 
 <%
   if @current_user
@@ -94,15 +94,8 @@ window.params = {
   user: { name: "<%= @current_user.username if @current_user %>" }
 };
 
-<% if $Conf  %>
-  window.Conf = <%= raw $Conf.attributes.to_json %>;
-  <% else  %>
-  window.Conf = {};
-<% end %>
-
 <% if @current_user then %>
-  window.User = <%= raw @current_user.attributes.to_json %>;
-  window.User.type = '<%= @current_user.class.to_s %>';
+  window.User = <%= raw @current_user.to_json %>;
   window.Drawer = <%= raw @current_user.get_drawer.attributes.to_json %>;
 <% else %>
   window.User = {};  
@@ -113,12 +106,6 @@ window.params = {
   window.Register = <%= raw @current_register.attributes.to_json %>;
 <% else %>
   window.Register = {};
-<% end %>
-
-<% if @current_vendor then %>
-  window.Vendor = <%= raw @current_vendor.attributes.to_json %>;
-<% else %>
-  window.Vendor = {};
 <% end %>
 
 _.templateSettings = {

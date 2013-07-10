@@ -22,12 +22,14 @@ module SalorBase
       arg
     end
   end
+  
   def hide(by)
     self.hidden = true
     self.hidden_at = Time.now
     self.hidden_by = by
     self.save
   end
+  
   def log_action(txt)
     SalorBase.log_action(self.class.to_s,txt)
   end
@@ -38,30 +40,30 @@ module SalorBase
   
   def self.string_to_float(str)
     return str if str.class == Float or str.class == Fixnum
-      string = "#{str}"
-      #puts string
-      string.gsub!(/[^-\d.,]/,'')
-      #puts string
-      if string =~ /^.*[\.,]\d{1}$/
-        string = string + "0"
-      end
-     # puts string
-      unless string =~ /^.*[\.,]\d{2,3}$/
-        string = string + "00"
-      end
-      #puts string
-      return string if string.class == Float or string.class == Fixnum or string == 0
-      if string =~ /^.*[\.,]\d{3}$/ then
-         string.gsub!(/[\.,]/,'')
-         string = string.to_f / 1000
-         #puts string
-      else
+    string = "#{str}"
+    #puts string
+    string.gsub!(/[^-\d.,]/,'')
+    #puts string
+    if string =~ /^.*[\.,]\d{1}$/
+      string = string + "0"
+    end
+    # puts string
+    unless string =~ /^.*[\.,]\d{2,3}$/
+      string = string + "00"
+    end
+    #puts string
+    return string if string.class == Float or string.class == Fixnum or string == 0
+    if string =~ /^.*[\.,]\d{3}$/ then
         string.gsub!(/[\.,]/,'')
-        string = string.to_f / 100
+        string = string.to_f / 1000
         #puts string
-      end
+    else
+      string.gsub!(/[\.,]/,'')
+      string = string.to_f / 100
       #puts string
-      return string
+    end
+    #puts string
+    return string
    end
    
    def string_to_float(string)
@@ -84,23 +86,6 @@ module SalorBase
   def get_html_id
     return [self.class.to_s,self.id.to_s,rand(9999)].join('_').to_s
   end
-
-  
-  def self.to_currency(number,options={})
-    options.symbolize_keys!
-    defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-    currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :default => {})
-    defaults[:negative_format] = "-" + options[:format] if options[:format]
-    options   = defaults.merge!(options)
-    unit      = I18n.t("number.currency.format.friendly_unit")
-    format    = I18n.t("number.currency.format.format")
-#     if number.to_f < 0
-#       format = options.delete(:negative_format)
-#       number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
-#     end
-    value = self.number_with_precision(number)
-    format.gsub(/%n/, value).gsub(/%u/, unit)
-  end
   
   def self.number_to_currency(number,options={})
     options.symbolize_keys!
@@ -110,10 +95,6 @@ module SalorBase
     options   = defaults.merge!(options)
     unit      = I18n.t("number.currency.format.unit")
     format    = I18n.t("number.currency.format.format")
-#     if number.to_f < 0
-#       format = options.delete(:negative_format)
-#       number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
-#     end
     value = self.number_with_precision(number)
     format.gsub(/%n/, value).gsub(/%u/, unit)
   end

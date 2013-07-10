@@ -4,6 +4,7 @@ class Company < ActiveRecord::Base
   has_many :vendors
   has_many :customers
   has_many :users
+  has_many :user_logins
   
   def login(code)
     encrypted_password = Digest::SHA2.hexdigest("#{ code }")
