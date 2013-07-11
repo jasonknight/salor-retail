@@ -65,9 +65,9 @@ function toDelimited(number) {
   var match, property, integerPart, fractionalPart;
   var settings = {
     precision: 2,
-    unit: i18nunit,
-    separator: i18nseparator,
-    delimiter : i18ndelimiter
+    unit: Region.number.currency.format.unit,
+    separator: Region.number.currency.format.separator,
+    delimiter : Region.number.currency.format.delimiter
   };
   if (typeof number == 'undefined' || number == null) {
     number = 0.0;
@@ -90,9 +90,9 @@ function toCurrency(number) {
   
   var match, property, integerPart, fractionalPart;
   var settings = {         precision: 2,
-    unit: i18nunit,
-    separator: i18nseparator,
-    delimiter : i18ndelimiter
+    unit: Region.number.currency.format.unit,
+    separator: Region.number.currency.format.separator,
+    delimiter : Region.number.currency.format.delimiter
   };
   if (!typeof number == 'number') {
     number = toFloat(number);
@@ -117,8 +117,8 @@ function toPercent(number) {
   var match, property, integerPart, fractionalPart;
   var settings = {         precision: 0,
     unit: "%",
-    separator: i18nseparator,
-    delimiter : i18ndelimiter
+    separator: Region.number.currency.format.separator,
+    delimiter : Region.number.currency.format.delimiter
   };
   if (typeof number == 'undefined' || number == null) {
     number = 0.0;

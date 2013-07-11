@@ -27,9 +27,9 @@ function confirm_link(link,message) {
 
 function cancel_confirm(cancel_func,confirm_func) {
   var row = $('<div id="cancel_confirm_buttons" class="button-row" align="right"></div>');
-  var can = $('<div id="cancel" class="button-cancel">' + i18n_menu_cancel + '</div>');
+  var can = $('<div id="cancel" class="button-cancel">' + i18n.menu.cancel + '</div>');
   can.mousedown(cancel_func);
-  var comp = $('<div id="confirm" class="button-confirm">' + i18n_menu_ok + '</div>');
+  var comp = $('<div id="confirm" class="button-confirm">' + i18n.menu.ok + '</div>');
   comp.mousedown(confirm_func);
   var sp = $('<div class="spacer-rmargin">&nbsp;</div>');
   var spw = $('<div class="spacer-rmargin">&nbsp;&nbsp;&nbsp;</div>');

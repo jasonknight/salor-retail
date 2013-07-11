@@ -95,11 +95,11 @@ function updateCustomerDisplay(order_id, item, show_change) {
     if (item == false) {
       // after complete order
       given = parseFloat(get_payment_total());
-      given = sprintf(" %s %6.2f", i18nunit, given);
+      given = sprintf(" %s %6.2f", Region.number.currency.format.unit, given);
       change = parseFloat($('#complete_order_change').html().replace(',','.').substring(1));
-      change = sprintf(" %s %6.2f", i18nunit, change);
-      blurb_line1 = (i18n_money_given + '       ').substring(0,9);
-      blurb_line2 = (i18n_money_change + '       ').substring(0,9);
+      change = sprintf(" %s %6.2f", Region.number.currency.format.unit, change);
+      blurb_line1 = (i18n.views.given + '       ').substring(0,9);
+      blurb_line2 = (i18n.views.change + '       ').substring(0,9);
       Salor.poleDancer(Register.pole_display, blurb_line1 + given + blurb_line2 + change );
     } else {
       // after item add

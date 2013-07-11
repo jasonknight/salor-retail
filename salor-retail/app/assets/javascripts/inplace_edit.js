@@ -133,7 +133,7 @@ function in_place_edit(id,x,y) {
   var value = $('#' + id).html();
 
   if (value == '' || value == null) {
-    value = i18n_value_not_set;
+    value = i18n.system.errors.value_not_set;
   }
 
   if (field_types[type]) {
@@ -145,8 +145,8 @@ function in_place_edit(id,x,y) {
     fields_callbacks[type].call(this,field);
   }
 
-  var savelink = '<a id="inplaceeditsave" class="button-confirm">' + i18n_menu_ok + '</a>';
-  var cancellink = '<a id="inplaceeditcancel" class="button-cancel">' + i18n_menu_cancel + '</a>';
+  var savelink = '<a id="inplaceeditsave" class="button-confirm">' + i18n.menu.ok + '</a>';
+  var cancellink = '<a id="inplaceeditcancel" class="button-cancel">' + i18n.menu.cancel + '</a>';
   var linktable = "<table class='inp-menu' align='right'><tr><td>"+cancellink+"</td><td>"+savelink+"</td></tr></table>";
 
   if (id == 'pos_order_total') {
