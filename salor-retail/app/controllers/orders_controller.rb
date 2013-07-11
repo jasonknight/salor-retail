@@ -188,8 +188,11 @@ class OrdersController < ApplicationController
       render :js => " window.location = '/orders/#{@order.id}/print'; " and return
     end
     
+    if params[:print] and @current_register.salor_printer != true and not @current_register.thermal_printer.blank?
+      @order.print(@current_register)
+    end
     
-    # params[:print].nil? ? print = 'true' : print = params[:print].to_s
+    customerscreen_push_notification
     
     @old_order = @order
     
@@ -201,6 +204,8 @@ class OrdersController < ApplicationController
     @order.save
     @current_user.current_order_id = @order.id
     @current_user.save
+    
+    
   end
   
   def new_order

@@ -6,8 +6,8 @@
   <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button">
     <%= raw salor_icon(:wrench, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.configuration")) %>
   </div> 
-  <div id="show_customers" onclick="$('.last-five-orders').show();" class="input pos-button">
-    <%= raw salor_icon(:pin, {:class => "no-select",:style => "cursor:pointer;"},32, t("activerecord.models.customer.other")) %>
+  <div id="show_customers" onclick="$('#last_orders').show();" class="input pos-button">
+    <%= raw salor_icon(:pin, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.last_orders")) %>
   </div>
   <div id="show_butons" onclick="$('#buttons').show();" class="input pos-button">
     <%= raw salor_icon(:button, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.buttons")) %>

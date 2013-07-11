@@ -1151,17 +1151,22 @@ td.keyboard-input
   font-size: $text_size_massive
   background-color: $green
   @include rounded_corners_all
-  padding: 5px
+  padding: 5px 50px
+  float: right
+  width: 120px
+  text-align: right
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8)
 
 #complete_order_change 
   text-transform: uppercase
-  text-align: right
   font-size: $text_size_massive
   background-color: $text_color_highlight
   color: $background
   @include rounded_corners_all
-  padding: 5px
-  margin: 5px 15px 0px 0px
+  padding: 5px 50px
+  float: right
+  width: 120px
+  text-align: right
 
 
 
@@ -2509,7 +2514,8 @@ div.button-category-container
 div.button-category-containers div:first-child
   display: inline-block
 
-div.last-five-orders 
+div#last_orders
+  :display none
   @include dialog
   @include rounded_corners_all
   position: absolute
@@ -2517,35 +2523,35 @@ div.last-five-orders
   left: 5%
   width: 90%
   top: 100px
-  div.last-five-order 
+  div.recent-order 
     @include widget
     @include no_select
     @include rounded_corners_all
-    float: left
-    margin: 20px
+    display: inline-block
+    margin: 10px
     width: 150px
+    height: 100px
     padding: 5px
     text-align: center
-  span.id 
-    font-size: $text_size_big
-  span.total
-    font-size: $text_size_big
-    font-weight: bold
-  div.selected 
-    border: 4px solid red
+    vertical-align: bottom
+    cursor: pointer
+    span.recent-order-number
+      :float left
+      :font-size 160%
+      :font-weight bold
+      :font-style italic
+      :display inline-block
+      :color white
+    p
+      :margin 2px 0px
+    p.recent_price
+      :font-weight bold
+      :font-size 120%
+    div.salor-icon
+      :margin 0px 7px
+
   
 
-div.last-completed-orders 
-  position: fixed
-  width: 100%
-  bottom: 5px
-  text-align: center
-  div.completed-entry 
-    background-color: #170c16
-    display: inline-block
-    padding: 5px
-    margin-right: 5px
-    border: 1px solid $border_color
   
   
 
@@ -2794,11 +2800,13 @@ div.delete
 
 .jquery-checkbox-checked .jquery-checkbox-disabled img
   :background-position 0px -125px
-div.select-widget-button,div.select-widget-entry
+  
+div.select-widget-button,
+div.select-widget-entry
   @include bright_button 
   @include pointer
   @include rounded_corners_all
-  :padding 10px
+  :padding 10px 30px
   :margin 5px
   :display inline-block
 div.select-widget-display
@@ -2823,7 +2831,7 @@ div#header_drawer_amount
   :width 65px
   :text-align center
   :text-shadow white 0px 0px 5px
-  :color black
+  :color #FFFF55
 
 div.shipment_item_attr_header
   :display inline-block
@@ -3099,8 +3107,11 @@ div.pagination
   
 div.black-text,td.black-text, a.black-text, div.black-text a
   color: black
+  
 #add_payment_method_button
   font-size: 95%
+  padding: 10px
+  
 .ui-dialog .ui-widget-header 
   border: 1px solid #0b3e6f
   background: $green url(/images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat

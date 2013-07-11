@@ -184,7 +184,7 @@ function make_keyboardable_with_options(elem,opts) {
   kbd.addClass('kbd-show pointer');
   var new_offset = elem.offset();
   new_offset.top += 2;
-  kbd.css({position: 'absolute', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
+  kbd.css({position: 'relative', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
   var options = {
         openOn   : '',
         stayOpen : true,

@@ -11,7 +11,7 @@
 
   %div#subsubtotal= number_to_currency @report[:subtotal]
 
-  - if params[:display_change] == '1'
+  - if @report[:change]
     %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @report[:change] }
 
   - if @report[:customer]
@@ -24,9 +24,9 @@
       %br
       %span== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
-- if params[:display_change] == '1'
+- if @report[:change]
   :javascript
     setTimeout(function() {
-      window.location = window.location.origin + "/vendors/#{ @vendor.id }/display_logo";
+      window.location = window.location.origin + "/vendors/#{ @current_vendor.id }/display_logo";
     },
     5000);

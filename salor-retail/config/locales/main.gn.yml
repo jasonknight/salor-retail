@@ -408,6 +408,9 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    last_completed: Kürzlich abgeschlossen
+    last_uncompleted: Kürzlich offen
+    last_orders: Kürzlich
     open_drawer: Lade
     weigh: wiegen
     actions: Aktionen

@@ -27,19 +27,7 @@ function add_payment_method() {
     focusInput(amount);
     amount.select();
   });
-  make_keyboardable_with_options(amount, {
-    visible: function () {
-      var cls = $(sel).val() + '-amount';
-      $(".ui-keyboard-preview").removeClass('payment-amount');
-      if (IS_APPLE_DEVICE) {
-        $(".ui-keyboard-preview").val("");
-      }
-      $("." + cls).select();
-    },
-    accepted: function() {
-      display_change('keyboard ' + sel.val());
-    }
-  });
+
   amount.val(rest_value);
   // ---
   
@@ -55,6 +43,21 @@ function add_payment_method() {
   display_change('function add_payment_method');
   
   make_select_widget($(sel).find("option:selected"), $(sel));
+  
+
+  make_keyboardable_with_options(amount, {
+    visible: function () {
+      var cls = $(sel).val() + '-amount';
+      $(".ui-keyboard-preview").removeClass('payment-amount');
+      if (IS_APPLE_DEVICE) {
+        $(".ui-keyboard-preview").val("");
+      }
+      $('.text-input').select();
+    },
+    accepted: function() {
+      display_change('keyboard ' + sel.val());
+    }
+  });
   
   setTimeout(function () {
     focusInput(amount);

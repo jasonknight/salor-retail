@@ -407,6 +407,9 @@ en:
       upload: upload
   label: label
   menu:
+    last_completed: Last completed
+    last_uncompleted: Last uncompleted
+    last_orders: last orders
     open_drawer: drawer
     weigh: weigh
     actions: actions
