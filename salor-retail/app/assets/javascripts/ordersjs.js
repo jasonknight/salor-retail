@@ -813,22 +813,6 @@ function highlight(elem) {
   }
 }
 
-
-function weigh_last_item() {
-  var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
-  if (Register.scale != "") {
-    var weight = Salor.toperScale(Register.scale);
-  } else {
-    var weight = 0;
-  }
-  var string = '/vendors/edit_field_on_child?id=' +
-          itemid +'&klass=OrderItem' +
-          '&field=quantity'+
-          '&value=' + weight;
-          get(string, filename);
-  if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
-}
-
 function refund_item(id) {
   refund_payment_method = $('#refund_payment_method').val();
   window.location = '/orders/refund_item?id=' + id + '&pm=' + refund_payment_method;

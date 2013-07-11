@@ -1,5 +1,5 @@
 !!!
-- @region ||= 'en-us'
+
 %html
   %head
     %title SalorRetail
@@ -13,8 +13,9 @@
     = stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
 
     = javascript_include_tag 'application'
-    = javascript_include_tag "/jslocales/main.#{I18n.locale}.js",'underscore'
-    = javascript_include_tag "/jslocales/region.#{@region}.js",'underscore'
+    = javascript_include_tag "/jslocales/main.#{I18n.locale}.js"
+    - if @current_vendor
+      = javascript_include_tag "/jslocales/region.#{@current_vendor.region}.js"
     = render :partial => "shared/non_secret_application_js"
     - if @current_user
       = render :partial => "shared/application_js"

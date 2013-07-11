@@ -127,3 +127,23 @@ function observe_drawer() {
     1000);
   }
 }
+
+function weigh_last_item() {
+  if ( ! isSalorBin() )
+    return
+    
+  var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
+  if (Register.scale != "") {
+    var weight = Salor.weigh(Register.scale, 0);
+  } else {
+    var weight = 0;
+  }
+  var string = '/vendors/edit_field_on_child?id=' +
+          itemid +'&klass=OrderItem' +
+          '&field=quantity'+
+          '&value=' + weight;
+  get(string, '');
+  if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) {
+    Salor.playSound('medium_warning');
+  }
+}
