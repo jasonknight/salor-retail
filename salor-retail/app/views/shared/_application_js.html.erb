@@ -2,6 +2,7 @@
 
 var workstation = <%= workstation? %>;
 var mobile = <%= not workstation? %>;
+var i18nlocale = '<%= I18n.locale %>';
 
 <%
   if @current_user

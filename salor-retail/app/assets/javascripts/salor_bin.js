@@ -138,10 +138,12 @@ function weigh_last_item() {
   } else {
     var weight = 0;
   }
+  var weight_float = parseFloat(weight);
+  
   var string = '/vendors/edit_field_on_child?id=' +
           itemid +'&klass=OrderItem' +
           '&field=quantity'+
-          '&value=' + weight;
+          '&value=' + weight_float;
   get(string, '');
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) {
     Salor.playSound('medium_warning');

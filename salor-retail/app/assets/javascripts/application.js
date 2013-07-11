@@ -34,3 +34,4 @@
 //= require jquery.modcoder.excolor
 //= require jquery.keyboard
 //= require jquery.checkbox
+//= require underscore
