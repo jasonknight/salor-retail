@@ -19,7 +19,7 @@
   
   <tr>
     <td> <%= f.label :lang %> </td>
-    <td> <%= f.select :lang, supported_languages.collect {|v| [v[:name],v[:locale]]} %> </td>
+    <td> <%= f.select :lang, SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse } %> </td>
   </tr>
   <tr>
     <td> <%= f.label :body %> </td>

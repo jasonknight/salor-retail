@@ -45,7 +45,7 @@
             <td valign="top">
               <div class="freefield">
                   <%= t "views.language" %><br />
-                  <%= f.select :language,supported_languages.collect {|l| [l[:name],l[:locale]]} %>
+                  <%= f.select :language, SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse } %>
               </div>
       
               <div class="freefield"><%= f.label t("activerecord.attributes.password") %><br />

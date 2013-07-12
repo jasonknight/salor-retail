@@ -85,11 +85,7 @@ $(function () {
   
   <tr>
     <td> 
-      <select id="locale_select" onchange="itemsAddNameTranslation($(this).val());">
-        <% supported_languages.each do |l| %>
-          <option value="<%= l[:locale] %>" <%= I18n.locale.to_s == l[:locale] ? 'selected="selected"' : ''%>><%= l[:name] %></option>
-        <% end %>
-      </select>
+      <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "itemsAddNameTranslation($(this).val());" %>
     </td>
     <td> 
     <script type="text/javascript">

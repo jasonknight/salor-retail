@@ -23,9 +23,7 @@
     = link_to salor_icon(:merge,{},32,I18n.t("menu.merge_into_current_order")),"/orders/merge_into_current_order?id=#{@order.id}"
   %br
   %span
-    %select{ :id=>"locale_select", :onchange=>"window.location = '?locale=' + $('#locale_select').val();"}
-      - supported_languages.each do |l|
-        %option{ :value=>"#{l[:locale]}" }= l[:name]
+    = select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "window.location = '?l=' + $(this).val();"
     
 .clear
 - item_pagination_count_one = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_one]

@@ -35,18 +35,6 @@ module ApplicationHelper
     return s.join("&")
   end
   
-  def supported_languages
-    # TODO: Use SalorRetail::Application::LANGUAGES instead
-    [
-      {:name => "Deutsch", :locale => 'gn'},
-      {:name => "English", :locale => 'en'},
-      {:name => "ελληνική", :locale => 'el'},
-      {:name => "Français", :locale => 'fr'},
-      {:name => "Espagnole", :locale => 'es'},
-      {:name => "中文", :locale => 'cn'}
-    ]
-  end
-  
   def salor_number_to_currency(amnt)
     return number_to_currency(amnt, :locale => @region)
   end
@@ -54,8 +42,6 @@ module ApplicationHelper
   def salor_number_with_delimiter(num)
     return number_with_delimiter(num, :locale => @region)
   end
-  
-
   
   def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []}, hideuser = false)
     clses = ['box-title','shadow']

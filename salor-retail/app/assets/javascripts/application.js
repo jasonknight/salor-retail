@@ -16,6 +16,7 @@
 //= require sprintf
 //= require genericjs
 //= require math
+//= require items
 //= require debug
 //= require documentready
 //= require focus
