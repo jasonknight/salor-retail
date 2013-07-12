@@ -194,7 +194,22 @@ class Order < ActiveRecord::Base
     end
     self.calculate_totals
   end
-
+  
+  def gross
+    if self.vendor.net_prices == true
+      return self.subtotal.to_f + self.tax_amount.to_f
+    else
+      return self.subtotal.to_f
+    end
+  end
+  
+  def net
+    if self.vendor_net_prices == true
+      return self.subtotal.to_f
+    else
+      return self.subtotal.to_f - self.tax_amount.to_f
+    end
+  end
   
 #   def skus=(list)
 #     list.each do |s|
@@ -416,6 +431,7 @@ class Order < ActiveRecord::Base
   def create_drawer_transaction
     drawer = self.user.get_drawer
     add_amount = self.cash - self.change
+    
     dt = DrawerTransaction.new
     dt.vendor = self.vendor
     dt.company = self.company
@@ -480,7 +496,7 @@ class Order < ActiveRecord::Base
     payment_cash = self.payment_method_items.visible.where(:cash => true).sum(:amount).round(2)
     payment_total = self.payment_method_items.visible.sum(:amount).round(2)
     payment_noncash = (payment_total - payment_cash).round(2)
-    change = (payment_total - self.subtotal).round(2)
+    change = (payment_total - self.gross).round(2)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
                                   
     pmi = PaymentMethodItem.new
@@ -547,14 +563,6 @@ class Order < ActiveRecord::Base
       i += 1
     end
     return ret
-  end
-  
-  def subtotal_for_customerdisplay
-    if self.vendor.net_prices
-      return self.subtotal + self.tax_amount
-    else
-      return self.subtotal
-    end
   end
   
   
@@ -726,7 +734,7 @@ class Order < ActiveRecord::Base
     report[:list_of_items_raw] = list_of_items_raw
     report[:list_of_taxes] = list_of_taxes
     report[:list_of_taxes_raw] = list_of_taxes_raw
-    report[:subtotal] = self.subtotal_for_customerdisplay
+    report[:subtotal] = self.gross
     report[:change] = self.change
     report[:paymentmethods] = paymentmethods
     report[:customer] = customer
@@ -1014,7 +1022,7 @@ class Order < ActiveRecord::Base
   def to_json
     self.total = 0 if self.total.nil?
     attrs = {
-      :total => self.subtotal.to_f.round(2),
+      :total => self.gross.to_f.round(2),
       :rebate => self.rebate.to_f.round(2),
       :lc_points => self.lc_points,
       :id => self.id,

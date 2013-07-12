@@ -24,6 +24,7 @@ class Vendor < ActiveRecord::Base
   has_many :transaction_tags
   has_many :order_items
   has_many :actions
+  has_many :roles
   has_many :buttons
   has_many :images, :as => :imageable
   

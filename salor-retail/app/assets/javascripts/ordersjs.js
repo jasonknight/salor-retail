@@ -200,19 +200,6 @@ function update_pos_display() {
   //get('/orders/update_pos_display?ajax=true', filename);
 }
 
-//function refund_item(id) {
-//  get('/vendors/edit_field_on_child?' +
-//    'field=toggle_refund' +
-//    '&klass=OrderItem' +
-//    '&value=true' +
-//    '&model_id=' + id,
-//  filename,
-//  function () {
-//    window.location.reload();
-//  }
-//);
-//}
-
 /* FROM views/orders/new.html.erb */
 function makeItemMenu(item) {
   try {
@@ -814,10 +801,9 @@ function highlight(elem) {
 }
 
 function refund_item(id) {
-  refund_payment_method = $('#refund_payment_method').val();
-  window.location = '/orders/refund_item?id=' + id + '&pm=' + refund_payment_method;
-  if (refund_payment_method == 'InCash') {
-    // TODO: needs cash detection
+  refund_payment_method_id = $('#refund_payment_method').val();
+  window.location = '/orders/refund_item?id=' + id + '&pm=' + refund_payment_method_id;
+  if (PaymentMethodObjects[refund_payment_method_id].cash == true) {
     quick_open_drawer()
   }
 }

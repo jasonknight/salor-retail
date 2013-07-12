@@ -106,15 +106,15 @@ class OrderItem < ActiveRecord::Base
     pmi.order = self.order
     pmi.user = user
     pmi.drawer = drawer
-    pmi.amount = - self.subtotal
-    pmi.payment_method_id = refund_payment_method
+    pmi.amount = - self.gross
+    pmi.payment_method = refund_payment_method
     pmi.cash = refund_payment_method.cash
     pmi.refund = true
     pmi.save
     
     if refund_payment_method.cash == true
       dt = DrawerTransaction.new
-      dt.vendor = user.vendor
+      dt.vendor = refund_payment_method.vendor
       dt.company = user.company
       dt.user = user
       dt.refund = true
@@ -124,9 +124,10 @@ class OrderItem < ActiveRecord::Base
       dt.order_item_id = self.id
       dt.drawer = drawer
       dt.drawer_amount = drawer.amount
-      dt.amount = - self.subtotal
+      dt.amount = - self.gross
       dt.save
-      drawer.amount -= self.subtotal
+      
+      drawer.amount -= self.gross
       drawer.save
     end
     
@@ -171,7 +172,22 @@ class OrderItem < ActiveRecord::Base
     end
     write_attribute :price, p
   end
-      
+  
+  def gross
+    if self.vendor.net_prices == true
+      return self.subtotal.to_f + self.tax_amount.to_f
+    else
+      return self.subtotal.to_f
+    end
+  end
+  
+  def net
+    if self.vendor.net_prices == true
+      return self.subtotal.to_f
+    else
+      return self.subtotal.to_f - self.tax_amount.to_f
+    end
+  end
 
   
   def set_attrs_from_item(item)

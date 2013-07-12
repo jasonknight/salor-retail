@@ -407,6 +407,8 @@ en:
       upload: upload
   label: label
   menu:
+    refund_payment_method: refund payment method
+    regular_printer: regular printer
     last_completed: Last completed
     last_uncompleted: Last uncompleted
     last_orders: last orders

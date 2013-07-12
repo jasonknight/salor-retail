@@ -12,4 +12,13 @@ class PaymentMethod < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :company
   has_many :payment_method_items
+  
+  before_save :set_to_nil
+  
+  def set_to_nil
+    self.cash = nil if self.cash == false
+    self.quote = nil if self.quote == false
+    self.unpaid = nil if self.unpaid == false
+    self.change = nil if self.change == false
+  end
 end
