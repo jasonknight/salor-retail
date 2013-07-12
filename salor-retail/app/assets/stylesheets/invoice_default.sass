@@ -1,11 +1,12 @@
 div.paper-invoice
   background-color: white
-  min-height: 600px
+  height: 1060px
   color: black
   width: 750px
   margin: 50px auto
-  padding: 40px 30px
+  padding: 40px 30px 50px 30px
   position: relative
+  font-size: 90%
   
   div.header-page-one
     :height 300px
@@ -23,6 +24,7 @@ div.paper-invoice
     
   div.company_data
     text-align: right
+    width: 50%
     
   div.customer_data
     :position absolute
@@ -31,11 +33,13 @@ div.paper-invoice
     :width 300px
     :height 120px
     :padding 10px
+    :font-size 120%
     
   div.invoice_blurb_footer
     :font-size 80%
+    :width 100%
     :position absolute
-    :bottom 0px
+    :bottom 40px
     
   textarea
     :width 100%
