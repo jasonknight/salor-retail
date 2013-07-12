@@ -346,7 +346,7 @@ class Order < ActiveRecord::Base
     item = self.vendor.items.visible.where(:is_gs1 => true).find_by_sku(m[1]) if m
     return item if item # a GS1 barcode was entered
 
-    lcard = self.vendor.loyalty_cards.visible.find_by_sku(sku)
+    lcard = self.company.loyalty_cards.visible.find_by_sku(sku)
     return lcard if lcard # a loyalty card was entered
     
     # if nothing existing has been found, create a new item
@@ -429,8 +429,10 @@ class Order < ActiveRecord::Base
   end
   
   def create_drawer_transaction
+    add_amount = (self.cash - self.change).round(2)
+    return if add_amount.zero?
+    
     drawer = self.user.get_drawer
-    add_amount = self.cash - self.change
     
     dt = DrawerTransaction.new
     dt.vendor = self.vendor

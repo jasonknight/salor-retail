@@ -4,9 +4,11 @@ div.paper-invoice
   color: black
   width: 750px
   margin: 50px auto
-  padding: 90px 30px
+  padding: 40px 30px
+  position: relative
   
   div.header-page-one
+    :height 300px
 
   div.header-page-other
     display: none
@@ -23,10 +25,17 @@ div.paper-invoice
     text-align: right
     
   div.customer_data
-    :padding 20px 0px 15px 15px
+    :position absolute
+    :top 140px
+    :left 60px
+    :width 300px
+    :height 120px
+    :padding 10px
     
   div.invoice_blurb_footer
     :font-size 80%
+    :position absolute
+    :bottom 0px
     
   textarea
     :width 100%
@@ -80,7 +89,8 @@ div.paper-invoice
       font-weight: bold
       
   table.striped-table2.small
-    width: 30%
+    width: 40%
+    
 table.item-report-entry tr:first-child
   background-color: #D0D0D0
   padding: 10px

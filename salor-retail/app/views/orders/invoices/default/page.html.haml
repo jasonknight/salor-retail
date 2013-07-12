@@ -47,8 +47,6 @@
     %h3= I18n.l(@order.created_at, :format => :just_day)
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
-    
-    %p= "Tax Nr.  " + @report[:customer][:tax_number] if @report[:customer]
   
   - item_count = @report[:list_of_items_raw].size
   
@@ -85,6 +83,7 @@
 
     %br
     %br
+    %br
     %table.striped-table2.small
       - if @order.is_unpaid then
         - @order.payment_method_items.each do |pm|
@@ -116,6 +115,8 @@
     %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
 
   %div.invoice_blurb_footer= raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:footer]).to_html
+  
+  %p= @report[:customer][:tax_number] if @report[:customer]
   
   .center
     /logo here

@@ -86,7 +86,7 @@ class OrderItem < ActiveRecord::Base
   end
   
   def tax=(value)
-    tax_profile = self.vendor.tax_profiles.find_by_value(value)
+    tax_profile = self.vendor.tax_profiles.visible.find_by_value(value)
     ActiveRecord::Base.logger.info "TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tax_profile
     self.tax_profile = tax_profile
     self.save
@@ -196,8 +196,8 @@ class OrderItem < ActiveRecord::Base
     self.item         = item
     self.sku          = item.sku
     self.price        = item.base_price
-    self.tax_profile  = item.tax_profile
     self.tax          = item.tax_profile.value # cache for faster processing
+    #self.tax_profile  = item.tax_profile
     self.item_type    = item.item_type
     self.behavior     = item.item_type.behavior # cache for faster processing
     self.is_buyback   = item.default_buyback
@@ -367,10 +367,10 @@ class OrderItem < ActiveRecord::Base
   
   def calculate_tax
     if self.vendor.net_prices
-      log_action "Net Prices in effect"
+      #log_action "Net Prices in effect"
       t = self.subtotal * self.tax / 100.0
     else
-      log_action "Reverse calculat taxes"
+      #log_action "Reverse calculat taxes"
       t = self.subtotal / ( 1 + self.tax / 100.0 )
     end
     self.tax_amount = t.round(2)

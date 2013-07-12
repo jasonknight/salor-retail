@@ -1,23 +1,34 @@
 div.paper-invoice
-    
-  img.vendorlogo
-    width: 20em
+  position: relative
+  height: 340mm
+  
+  div.header-page-one
+    :height 120mm
 
   img.salorlogo
     margin: 5em
     width: 5em
     
   img.vendorlogo
-    :margin-top 2em
+    max-height: 35mm
+    max-width: 40mm
+    
     
   div.company_data
     text-align: right
     
   div.customer_data
-    :padding 5em 0em 4em 3em
+    :position absolute
+    :top 52mm
+    :left 19mm
+    :width 101mm
+    :height 46mm
+    :font-size 5mm
     
   div.invoice_blurb_footer
     :font-size 80%
+    :position absolute
+    :bottom 0mm
     
   textarea
     width: 100%
@@ -29,8 +40,6 @@ div.paper-invoice
     background-color: transparent
     border: none
     display: inline
-    
-  div.header-page-one
 
   div.header-page-other
     page-break-before: always
@@ -69,7 +78,8 @@ div.paper-invoice
       font-weight: bold
       
   table.striped-table2.small
-    width: 50%
+    width: 35%
+
 table.item-report-entry tr:first-child
   background-color: #D0D0D0
   padding: 10px

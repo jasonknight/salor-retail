@@ -2,7 +2,6 @@
 
 var workstation = <%= workstation? %>;
 var mobile = <%= not workstation? %>;
-var i18nlocale = '<%= I18n.locale %>';
 var i18n_pieces = [<%= I18n.t('number.currency.format.pieces', :locale => @region).split(',').find_all { |piece| piece.to_f > 2.0}.join(',') %>];
 
 <%

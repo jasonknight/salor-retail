@@ -3,7 +3,7 @@
   .clear
 
   .company_data.floatright
-    = image_tag @current_vendor.image('invoice_logo')
+    = image_tag @current_vendor.image('invoice_logo'), :class => 'vendorlogo'
     = raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:header]).to_html
   
   .customer_data.floatleft

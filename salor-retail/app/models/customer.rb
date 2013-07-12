@@ -15,6 +15,7 @@ class Customer < ActiveRecord::Base
   belongs_to :company  
   has_many :orders
   has_many :notes, :as => :notable, :order => "id desc"
+  after_save :set_loyalty_card_relations
   
   
   accepts_nested_attributes_for :notes, :reject_if => lambda {|a| a[:body].blank? }, :allow_destroy => true
@@ -109,6 +110,10 @@ class Customer < ActiveRecord::Base
     self.hidden_by = by
     self.hidden_at = Time.now
     self.save
+  end
+  
+  def set_loyalty_card_relations
+    self.loyalty_cards.update_all :vendor_id => self.vendor, :company_id => self.company
   end
   
 end
