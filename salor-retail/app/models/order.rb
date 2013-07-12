@@ -737,6 +737,7 @@ class Order < ActiveRecord::Base
       customer[:tax_number] = self.customer.tax_number
       customer[:city] = self.customer.city
       customer[:country] = self.customer.country
+      customer[:state] = self.customer.state
       customer[:current_loyalty_points] = self.loyalty_card.points
     end
 

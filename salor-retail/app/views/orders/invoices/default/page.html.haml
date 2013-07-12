@@ -49,7 +49,7 @@
       %h2== #{ I18n.t("receipts.offer") } #{ @order.nr }
     %h3= I18n.l(@order.created_at, :format => :just_day)
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
-    %p= raw(Kramdown::Document.new(@invoice_note.note_header).to_html) if @invoice_note
+    %p= raw(Kramdown::Document.new(@report[:invoice_note][:header]).to_html) if @report[:invoice_note][:header]
     
   - if params[:delivery_note]
     = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => 0, :item_end => item_pagination_count_one - 1 }
