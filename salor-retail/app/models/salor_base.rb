@@ -35,7 +35,7 @@ module SalorBase
   end
   
   def self.log_action(from="unk",txt)
-    ActiveRecord::Base.logger.info "[#{from}] #{txt}"
+    ActiveRecord::Base.logger.info "\n##[#{from}] #{txt}\n"
   end
   
   def self.string_to_float(str)

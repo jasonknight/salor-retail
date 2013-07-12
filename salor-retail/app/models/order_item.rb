@@ -349,7 +349,8 @@ class OrderItem < ActiveRecord::Base
   def apply_rebate
     if self.rebate
       log_action "Applying rebate"
-      self.rebate_amount = (self.subtotal * self.rebate / 100.0)
+      self.rebate_amount = (self.subtotal.to_f * (self.rebate / 100.0))
+      log_action "rebate_amount is #{self.rebate_amount.to_f} #{self.rebate_amount_cents}"
       self.subtotal -= self.rebate_amount
     end
   end
@@ -402,7 +403,7 @@ class OrderItem < ActiveRecord::Base
     self.hidden_by = by
     self.hidden_at = Time.now
     if not self.save then
-      puts self.errors.inspect
+      puts self.errors.full_messages.to_sentence
       raise "Could Not Hide Item"
     end
 
