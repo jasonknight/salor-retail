@@ -18,7 +18,7 @@ module OrdersHelper
       item[:quantity] = number_with_precision item[:quantity], :precision => 3
     elsif item[:type] == 'percent'
       item[:total] = number_to_currency item[:total]
-      item[:price] = number_to_percentage item[:price], :precision => 1
+      item[:price] = number_to_percentage item[:price]
       item[:quantity] = Integer(item[:quantity])
     end
     return item

@@ -565,6 +565,16 @@ class Order < ActiveRecord::Base
     return ret
   end
   
+  def to_list_of_taxes_raw(array)
+    ret = {}
+    i = 0
+    [:letter, :value, :net, :tax, :gross].each do |k|
+      ret[k] = array[i]
+      i += 1
+    end
+    return ret
+  end
+  
   
   def report
     sum_taxes = Hash.new
@@ -681,6 +691,7 @@ class Order < ActiveRecord::Base
         gro = subtotal
       end
       list_of_taxes += tax_format % [tax_profile.letter, tax_in_percent, net, tax, gro]
+      list_of_taxes_raw << to_list_of_taxes_raw([tax_profile.letter, tax_profile.value, net, tax, gro])
     end
     
     # --- invoice blurbs ---
