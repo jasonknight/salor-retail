@@ -1,25 +1,26 @@
 = raw content_box_top(I18n.t("headings.item_selection"))
 
-%table{ :align => "center", :width => "400px"}
+%table{ :align => "center"}
   %tr
     %td{ :colspan => 2 }
       %p= text_area_tag 'skus', @skus, :class => 'labels-snag-me keyboardable', :style => 'width:245px;height:245px;'
   %tr
-    %td
+    %td{ :style => "text-align: center" }
       = I18n.t("views.eticket")
       %br
       %input{ :id => 'label', :type => "radio", :name => "type", :value => "label", :checked => true}
       %br
       = select_tag 'label_style', options_for_select(['default'])
-    %td
+    %td{ :style => "text-align: center" }
       = I18n.t("views.sticky_ticket")
       %br
       %input{ :id => 'sticker', :type => "radio", :name => "type", :value => "sticker"}
       %br
       = select_tag 'sticker_style', options_for_select(['default', 'type1'])
-
-  %button{ :onclick => "print(false);" }= t '.print'
-  %button{ :onclick => "print(true);" }= t '.download'
+  %tr
+    %td{ :colspan => 2, :style => "text-align: center" }
+      .cool-button-left{ :onclick => "print(false);" }= t '.print'
+      .cool-button-left{ :onclick => "print(true);" }= t '.download'
 
 :javascript
   window.setTimeout("set_focus()", 1000);
