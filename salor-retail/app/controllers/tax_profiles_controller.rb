@@ -13,6 +13,7 @@ class TaxProfilesController < ApplicationController
 
   def show
     @tax_profile = @current_vendor.tax_profiles.find_by_id(params[:id])
+    redirect_to edit_tax_profile_path(@tax_profile)
   end
 
   def new

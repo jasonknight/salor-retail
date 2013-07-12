@@ -19,7 +19,6 @@ class ApplicationController < ActionController::Base
   before_filter :get_cash_register
   before_filter :set_tailor
   before_filter :set_locale
-  skip_before_filter :get_cash_register, :only => [:index]
   
   layout :layout_by_response
 
