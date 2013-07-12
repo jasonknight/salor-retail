@@ -56,70 +56,78 @@
     = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => 0, :item_end => item_pagination_count_one - 1 }
   - else
     = render :partial => 'orders/invoices/default/item_list_invoice', :locals => { :item_start => 0, :item_end => item_pagination_count_one - 1 }
+
     
-  - item_pagination_count_other = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_other]
-  - ((item_count - item_pagination_count_one - 1) / item_pagination_count_other + 1).times do |i|
-    - item_start = item_pagination_count_one + i * item_pagination_count_other
-    - item_end = item_start + item_pagination_count_other - 1
-    - item_end = item_count - 1 if item_count <= (item_pagination_count_one + (i+1) * item_pagination_count_other)
-    = render('orders/invoices/default/header_page_other')
+    
+    
+- item_pagination_count_other = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_other]
+- numpages = ((item_count - item_pagination_count_one - 1) / item_pagination_count_other + 1)
+- numpages.times do |i|
+  - item_start = item_pagination_count_one + i * item_pagination_count_other
+  - item_end = item_start + item_pagination_count_other - 1
+  - item_end = item_count - 1 if item_count <= (item_pagination_count_one + (i+1) * item_pagination_count_other)
+  
+  .paper-invoice
+    = render :partial => 'orders/invoices/default/header_page_other'
     - if params[:delivery_note]
       = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => item_start, :item_end => item_end }
     - else
       = render :partial => 'orders/invoices/default/item_list_invoice', :locals => { :item_start => item_start, :item_end => item_end }
 
-  - unless params[:delivery_note]
-    %table.striped-table2.has-total
-      - if @order.is_proforma
-        %tr
-          %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal').upcase
-          %td= number_to_currency @order.total
-      %tr
-        %td{ :colspan => 4 }= t('activerecord.attributes.total').upcase
-        - if @order.is_proforma then
-          %td.total= number_to_currency @order.amount_paid
-        - else
-          %td.total= number_to_currency @report[:subtotal]
-
-    %br
-    %br
-    %br
-    %table.striped-table2.small
-      - if @order.is_unpaid then
-        - @order.payment_method_items.each do |pm|
+    - if i == numpages - 1
+      / we are on the last page
+      - unless params[:delivery_note]
+        %table.striped-table2.has-total
+          - if @order.is_proforma
+            %tr
+              %td{ :colspan => 4 }= t('printr.order_receipt.subsubtotal').upcase
+              %td= number_to_currency @order.total
           %tr
-            %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
-            %td.total= number_to_currency pm.amount
-      - else
-        - @report[:paymentmethods].to_a.each do |pm|
+            %td{ :colspan => 4 }= t('activerecord.attributes.total').upcase
+            - if @order.is_proforma then
+              %td.total= number_to_currency @order.amount_paid
+            - else
+              %td.total= number_to_currency @report[:subtotal]
+
+        %br
+        %br
+        %br
+        %table.striped-table2.small
+          - if @order.is_unpaid then
+            - @order.payment_method_items.each do |pm|
+              %tr
+                %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
+                %td.total= number_to_currency pm.amount
+          - else
+            - @report[:paymentmethods].to_a.each do |pm|
+              %tr
+                %td= pm[0]
+                %td.total= number_to_currency pm[1]
+
+
+        %br
+        %br
+        %table.striped-table2.small
           %tr
-            %td= pm[0]
-            %td.total= number_to_currency pm[1]
+            %th
+            %th
+            %th.right= t('printr.order_receipt.net')
+            %th.right= t('printr.order_receipt.tax')
+            %th.right= t('printr.order_receipt.gross')
+          - @report[:list_of_taxes_raw].each do |tax|
+            - tax = format_tax(tax)
+            %tr
+              - tax.each do |k,v|
+                %td.total= v
+                
+        %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
 
-
-    %br
-    %br
-    %table.striped-table2.small
-      %tr
-        %th
-        %th
-        %th.right= t('printr.order_receipt.net')
-        %th.right= t('printr.order_receipt.tax')
-        %th.right= t('printr.order_receipt.gross')
-      - @report[:list_of_taxes_raw].each do |tax|
-        - tax = format_tax(tax)
-        %tr
-          - tax.each do |k,v|
-            %td.total= v
-            
-    %p= raw(Kramdown::Document.new(@invoice_note.note_footer).to_html) if @invoice_note
-
-  %div.invoice_blurb_footer= raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:footer]).to_html
-  
-  %p= @report[:customer][:tax_number] if @report[:customer]
-  
-  .center
-    /logo here
+      %div.invoice_blurb_footer= raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:footer]).to_html
+      
+      %p= @report[:customer][:tax_number] if @report[:customer]
+      
+      .center
+        /logo here
     
 :javascript
   $('#invoice_comment').on('change', function() {
