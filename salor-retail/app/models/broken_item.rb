@@ -12,6 +12,8 @@ class BrokenItem < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :company
   belongs_to :shipper
+
+  monetize :price_cents, :allow_nil => true
   
   after_create :decrement_item_quantity
   validates_presence_of :sku

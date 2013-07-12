@@ -12,6 +12,8 @@ class ShipmentItem < ActiveRecord::Base
   belongs_to :category
   belongs_to :location
   belongs_to :item_type
+  monetize :price_cents
+  monetize :purchase_price_cents
   has_and_belongs_to_many :stock_locations
   def set_stock_location_ids=(ids) 
     if ids.class == String then

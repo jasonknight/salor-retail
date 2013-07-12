@@ -121,11 +121,23 @@ class Order < ActiveRecord::Base
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
   belongs_to :sale_type
   has_and_belongs_to_many :discounts
+
+
+  monetize :total_cents, :allow_nil => true
+  monetize :subtotal_cents, :allow_nil => true
+  monetize :tax_amount_cents, :allow_nil => true
+  monetize :cash_cents, :allow_nil => true
+  monetize :lc_amount_cents, :allow_nil => true
+  monetize :change_cents, :allow_nil => true
+  monetize :payment_total_cents, :allow_nil => true
+  monetize :noncash_cents, :allow_nil => true
+  monetize :rebate_amount_cents, :allow_nil => true
+
   
   #scope :last_seven_days, lambda { where(:created_at => 7.days.ago.utc...Time.now.utc) }
   scope :unpaid, lambda { 
     t = self.table_name
-    where(" ( `#{t}`.paid IS NULL AND ( `#{t}`.total > 0.0 AND `#{t}`.total IS NOT NULL )  OR  ( `#{t}`.paid = 1 AND `#{t}`.unpaid_invoice IS TRUE) )").where(:is_quote => nil) 
+    where(" ( `#{t}`.paid IS NULL AND ( `#{t}`.total_cents > 0 AND `#{t}`.total IS NOT NULL )  OR  ( `#{t}`.paid = 1 AND `#{t}`.unpaid_invoice IS TRUE) )").where(:is_quote => nil) 
   }
   
   scope :normal_orders, lambda {
@@ -318,8 +330,8 @@ class Order < ActiveRecord::Base
     gcs = self.order_items.visible.where(:behavior => 'gift_card', :activated => true)
     gcs.each do |gc|
       i = gc.item
-      i.amount_remaining += gc.price
-      i.amount_remaining = i.amount_remaining.round(2)
+      i.gift_card_amount += gc.price
+      i.gift_card_amount = i.gift_card_amount
       i.save
     end
   end
@@ -379,12 +391,12 @@ class Order < ActiveRecord::Base
 
   def calculate_totals
     # total contains only subtotal sum of normal items. this is needed for the gift card price calculation.
-    self.total = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal).round(2)
+    self.total_cents = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal_cents)
     
     # subtotal contains everything
-    self.subtotal = self.order_items.visible.sum(:subtotal).round(2)
+    self.subtotal_cents = self.order_items.visible.sum(:subtotal_cents)
     
-    self.tax_amount = self.order_items.visible.sum(:tax_amount).round(2)
+    self.tax_amount_cents = self.order_items.visible.sum(:tax_amount_cents)
     
     # subtotal will include order rebates
     self.save
@@ -495,8 +507,8 @@ class Order < ActiveRecord::Base
     
     self.save
     
-    payment_cash = self.payment_method_items.visible.where(:cash => true).sum(:amount).round(2)
-    payment_total = self.payment_method_items.visible.sum(:amount).round(2)
+    payment_cash = self.payment_method_items.visible.where(:cash => true).sum(:amount_cents)
+    payment_total = self.payment_method_items.visible.sum(:amount_cents)
     payment_noncash = (payment_total - payment_cash).round(2)
     change = (payment_total - self.gross).round(2)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
@@ -779,7 +791,7 @@ class Order < ActiveRecord::Base
 #     end
 #     self.order_items.each do |oi|
 #       txt += "\n\tOrderItem[#{oi.id}]"
-#       [:quantity,:price,:total,:amount_remaining,:activated].each do |f|
+#       [:quantity,:price,:total,:gift_card_amount,:activated].each do |f|
 #         txt += " #{f}=#{oi.send(f)}"
 #       end
 #     end
@@ -960,7 +972,7 @@ class Order < ActiveRecord::Base
     tests = []
     
     if self.paid
-      tests[1] = self.payment_methods.sum(:amount).round(2) == self.total.round(2)
+      tests[1] = self.payment_methods.sum(:amount_cents) == self.total_cents
     end
     
     0.upto(tests.size-1).each do |i|
@@ -1036,8 +1048,8 @@ class Order < ActiveRecord::Base
   def to_json
     self.total = 0 if self.total.nil?
     attrs = {
-      :total => self.gross.to_f.round(2),
-      :rebate => self.rebate.to_f.round(2),
+      :total => self.gross,
+      :rebate => self.rebate,
       :lc_points => self.lc_points,
       :id => self.id,
       :buy_order => self.buy_order,

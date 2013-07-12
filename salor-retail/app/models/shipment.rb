@@ -17,6 +17,9 @@ class Shipment < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :company
   belongs_to :user
+
+  monetize :price_cents
+
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
 

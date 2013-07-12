@@ -13,4 +13,6 @@ class Drawer < ActiveRecord::Base
   
   has_many :orders
   has_many :drawer_transactions
+
+  monetize :amount_cents, :allow_nil => true
 end

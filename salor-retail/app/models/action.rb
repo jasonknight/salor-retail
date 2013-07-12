@@ -82,7 +82,7 @@ class Action < ActiveRecord::Base
           items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id)
           total_quantity = items_in_cat.sum(:quantity)
           items_in_cat.update_all :rebate => 0
-          item_price = items_in_cat.minimum(:price)
+          item_price = items_in_cat.minimum(:price_cents)
           num_discountables = (total_quantity / action.value2).floor
         elsif action.behavior.to_sym == :discount_after_threshold and act == :add_to_order
           SalorBase.log_action Action,"Is regular discount_after_threshold"
@@ -92,10 +92,10 @@ class Action < ActiveRecord::Base
         item.rebate = 0 # Important
         if num_discountables >= 1 then
           SalorBase.log_action Action,"discount #{num_discountables} and item_price is #{item_price}"
-          total_2_discount = num_discountables * item_price
+          total_2_discount = Money.new(item_price * num_discountables, item.price_currency)
           
           percentage = total_2_discount / (item.price * item.quantity)
-          item.rebate = percentage * 100
+          item.rebate = (percentage * 100).to_i
           SalorBase.log_action Action,"rebate is #{item.rebate}"
           item.save
         else

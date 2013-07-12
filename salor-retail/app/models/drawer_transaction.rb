@@ -15,6 +15,10 @@ class DrawerTransaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :order
   belongs_to :cash_register
+
+  monetize :amount_cents, :allow_nil => true
+  monetize :drawer_amount_cents, :allow_nil => true
+
   before_create :set_nr
 
   def set_nr

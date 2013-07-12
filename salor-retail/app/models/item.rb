@@ -26,6 +26,12 @@ class Item < ActiveRecord::Base
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
   belongs_to :child, :class_name => 'Item'
 
+  monetize :price_cents, :allow_nil => true
+  monetize :gift_card_amount_cents, :allow_nil => true
+  monetize :purchase_price_cents, :allow_nil => true
+  monetize :buy_price_cents, :allow_nil => true
+  monetize :manufacturer_price_cents, :allow_nil => true
+
   
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
   
@@ -48,10 +54,14 @@ class Item < ActiveRecord::Base
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
   
   
-  
-  
+  def buyback_price
+    return self.buy_price
+  end
+  def buyback_price=(p)
+    self.buy_price = self.to_float(p)
+  end
   def self.csv_headers
-    return [:class,:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
+    return [:class,:name,:sku,:price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
   end
 
 
@@ -210,8 +220,8 @@ class Item < ActiveRecord::Base
   def self.search(keywords)
     if keywords =~ /([\w]+) (\d{1,2}[\.\,]\d{1,2})/ then
       parts = keywords.match(/([\w]+) (\d{1,2}[\.\,]\d{1,2})/)
-      price = SalorBase.string_to_float(parts[2])
-      return Item.scopied.where("name LIKE '%#{parts[1]}%' and base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}")
+      price = SalorBase.string_to_float(parts[2]) * 100
+      return Item.scopied.where("name LIKE '%#{parts[1]}%' and price_cents > #{(price - 500).to_i} and price_cents < #{(price + 500).to_i}")
     else
       return Item.scopied.where("name LIKE '%#{parts[1]}%'")
     end
@@ -229,16 +239,26 @@ class Item < ActiveRecord::Base
 
   def base_price=(p)
     p = self.string_to_float(p)
-    write_attribute(:base_price,p.to_f)
+    self.price = p
+  end
+  def base_price
+    return self.price
   end
   
   def purchase_price=(p)
-    p = self.string_to_float(p)
+    if p.class == String then
+      p = self.string_to_float(p)
+      self.purchase_price = p
+      return
+    end
     write_attribute(:purchase_price,p)
   end
   
   def amount_remaining=(p)
-    write_attribute(:amount_remaining,self.string_to_float(p))
+    self.gift_card_amount = p
+  end
+  def amount_remaining
+    return self.gift_card_amount
   end
   
 

@@ -24,6 +24,17 @@ class OrderItem < ActiveRecord::Base
   belongs_to :order_item,:foreign_key => :coupon_id
   has_many :histories, :as => :user
   has_one :drawer_transaction
+
+
+  monetize :total_cents, :allow_nil => true
+  monetize :subtotal_cents, :allow_nil => true
+  monetize :price_cents, :allow_nil => true
+  monetize :tax_amount_cents, :allow_nil => true
+  monetize :coupon_amount_cents, :allow_nil => true
+  monetize :gift_card_amount_cents, :allow_nil => true
+  monetize :discount_amount_cents, :allow_nil => true
+  monetize :rebate_amount_cents, :allow_nil => true
+
   
   def is_normal?
     return (self.is_buyback != true and self.behavior == 'normal')
@@ -163,7 +174,7 @@ class OrderItem < ActiveRecord::Base
       i = self.item
       if i.activated.nil?
         i.base_price = p
-        i.amount_remaining = p
+        i.gift_card_amount = p
         i.save
       end
     end
@@ -205,7 +216,7 @@ class OrderItem < ActiveRecord::Base
     self.location     = item.location
     self.activated    = item.activated
     self.no_inc       = item.is_gs1
-    self.amount_remaining = item.amount_remaining
+    self.gift_card_amount = item.gift_card_amount
     self.weigh_compulsory = item.weigh_compulsory
     self.quantity     = self.weigh_compulsory ? 0 : 1
     self.calculate_part_price = item.calculate_part_price # cache for faster processing
@@ -263,12 +274,12 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price_for_giftcards
     if self.behavior == 'gift_card' and self.item.activated
-      if self.item.amount_remaining > self.order.total.to_f
+      if self.item.gift_card_amount > self.order.total.to_f
         self.price = - self.order.total.to_f
       else
-        self.price = - self.amount_remaining
+        self.price = - self.gift_card_amount
       end
-      self.price = self.price.round(2)
+      self.price = self.price
     end
   end
   
@@ -287,9 +298,9 @@ class OrderItem < ActiveRecord::Base
     if self.refunded
       t = 0
     else
-      t = (self.price * self.quantity).round(2)
+      t = (self.price * self.quantity)
     end
-    self.total = t.round(2)
+    self.total = t
     self.subtotal = self.total
     self.apply_discount
     self.apply_rebate
@@ -312,7 +323,7 @@ class OrderItem < ActiveRecord::Base
         if ctype == 1
           # percent rebate
           log_action "Percent rebate coupon"
-          coitem.coupon_amount = (coitem.subtotal * self.price / 100.0).round(2)
+          coitem.coupon_amount = (coitem.subtotal * self.price / 100.0)
         elsif ctype == 2
           # fixed amount
           log_action "Fixed amount coupon"
@@ -338,7 +349,7 @@ class OrderItem < ActiveRecord::Base
   def apply_rebate
     if self.rebate
       log_action "Applying rebate"
-      self.rebate_amount = (self.subtotal * self.rebate / 100.0).round(2)
+      self.rebate_amount = (self.subtotal * self.rebate / 100.0)
       self.subtotal -= self.rebate_amount
     end
   end
@@ -359,7 +370,7 @@ class OrderItem < ActiveRecord::Base
     
     if discount
       self.discount = discount.amount
-      self.discount_amount = (self.subtotal * discount.amount / 100.0).round(2)
+      self.discount_amount = (self.subtotal * discount.amount / 100.0)
       self.subtotal -= self.discount_amount
     end
   end
@@ -373,7 +384,7 @@ class OrderItem < ActiveRecord::Base
       #log_action "Reverse calculat taxes"
       t = self.subtotal / ( 1 + self.tax / 100.0 )
     end
-    self.tax_amount = t.round(2)
+    self.tax_amount = t
   end
   
   
@@ -390,7 +401,11 @@ class OrderItem < ActiveRecord::Base
     self.hidden = true
     self.hidden_by = by
     self.hidden_at = Time.now
-    self.save
+    if not self.save then
+      puts self.errors.inspect
+      raise "Could Not Hide Item"
+    end
+
     if self.behavior == 'coupon'
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
       coitem.coupon_amount = nil
@@ -409,15 +424,15 @@ class OrderItem < ActiveRecord::Base
         :sku => self.item.sku,
         :item_id => self.item_id,
         :activated => self.item.activated,
-        :amount_remaining => self.item.amount_remaining,
+        :gift_card_amount => self.item.gift_card_amount.to_f,
         :coupon_type => self.item.coupon_type,
         :quantity => self.quantity,
-        :price => self.price.round(2),
-        :coupon_amount => - self.coupon_amount.to_f.round(2),
-        :subtotal => self.subtotal.round(2),
+        :price => self.price.to_f,
+        :coupon_amount => - (self.coupon_amount ? self.coupon_amount : 0),
+        :subtotal => self.subtotal.to_f,
         :id => self.id,
         :behavior => self.behavior,
-        :discount_amount => - self.discount_amount.to_f.round(2),
+        :discount_amount => - (self.discount_amount ? self.discount_amount : 0).to_f,
         :rebate => self.rebate.nil? ? 0 : self.rebate,
         :is_buyback => self.is_buyback,
         :weigh_compulsory => self.item.weigh_compulsory,
