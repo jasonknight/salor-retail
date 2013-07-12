@@ -185,6 +185,18 @@ class VendorsController < ApplicationController
     @histories = @current_vendor.histories.order("created_at desc").page(params[:page]).per(@current_vendor.pagination)
   end
   
+  def statistics
+    f, t = assign_from_to(params)
+    params[:limit] ||= 15
+    @limit = params[:limit].to_i - 1
+    
+    @reports = @current_vendor.get_statistics(f, t)
+    
+    view = SalorRetail::Application::CONFIGURATION[:reports][:style]
+    view ||= 'default'
+    render "/vendors/reports/#{view}/page"
+  end
+  
   def export
     if params[:file] then
       manager = CsvManager.new(params[:file],"\t")

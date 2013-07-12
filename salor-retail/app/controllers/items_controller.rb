@@ -168,11 +168,11 @@ class ItemsController < ApplicationController
     output = @current_vendor.print_labels('item', params, @current_register)
     if params[:download] == 'true'
       send_data output, :filename => '1.salor'
+      return
     elsif @current_register.salor_printer
       render :text => output
       return
     end
-    render :nothing => true
   end
 
   def database_distiller

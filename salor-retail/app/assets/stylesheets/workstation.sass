@@ -836,7 +836,7 @@ div.content-box > div.title-container > div.reload-button-admin,
 div.content-box > div.title-container > div.right-blank 
   width: 6%
   height: 32px
-  float: left
+  float: right
   margin-left: 5px
   vertical-align: middle
   text-align: center
@@ -893,7 +893,7 @@ div.content-box > div.title-container > div.title-box
   @include raised_element
   height: 29px
   padding: 7px
-  float: left
+  display: inline-block
   width: 80%
   background-color: $light_background
   text-transform: uppercase
@@ -1827,8 +1827,9 @@ div.pagination
 
 table.tools
   clear: both
-  width: 90%
   align: center
+  @include raised_element
+  margin: 5px auto 10px auto
 
 div.tools 
   clear: both

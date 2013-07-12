@@ -408,6 +408,7 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    print-dialog: Druckdialog
     refund_payment_method: Storno-Rückzahlugsmethode
     regular_printer: Normaler Drucker
     last_completed: Kürzlich abgeschlossen

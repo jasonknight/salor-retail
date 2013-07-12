@@ -407,6 +407,7 @@ en:
       upload: upload
   label: label
   menu:
+    print-dialog: print dialog
     refund_payment_method: refund payment method
     regular_printer: regular printer
     last_completed: Last completed

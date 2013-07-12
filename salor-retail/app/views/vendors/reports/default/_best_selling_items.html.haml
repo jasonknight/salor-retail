@@ -5,7 +5,7 @@
     %th{ :style => 'width: 10%' }= t("activerecord.attributes.sku")
     %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
   - i = 0
-  - @items.reverse.each do |item|
+  - @reports[:items].reverse.each do |item|
     - break if i > @limit
     - i += 1
     %tr

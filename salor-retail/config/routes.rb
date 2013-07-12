@@ -30,6 +30,7 @@ SalorRetail::Application.routes.draw do
   match 'vendors/:id/logo' => 'vendors#logo'
   match 'vendors/:id/logo_invoice' => 'vendors#logo_invoice'
   match "vendors/report_day" => "vendors#report_day"
+  match "vendors/statistics" => "vendors#statistics"
   
   match "buttons/position" => "buttons#position"
   

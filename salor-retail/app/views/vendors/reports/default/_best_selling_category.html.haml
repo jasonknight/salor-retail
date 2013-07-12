@@ -5,7 +5,7 @@
     %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
     %th{ :style => 'width: 5%' }= t("activerecord.attributes.cash_made")
   - i = 0
-  - @categories_by_quantity_sold.reverse.each do |item|
+  - @reports[:categories_by_quantity_sold].reverse.each do |item|
     - break if i > @limit
     - i += 1
     %tr
@@ -20,7 +20,7 @@
     %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
     %th{ :style => 'width: 5%' }= t("activerecord.attributes.cash_made")
   - i = 0
-  - @categories_by_cash_made.reverse.each do |item|
+  - @reports[:categories_by_cash_made].reverse.each do |item|
     - break if i > @limit
     - i += 1
     %tr

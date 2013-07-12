@@ -149,3 +149,11 @@ function weigh_last_item() {
     Salor.playSound('medium_warning');
   }
 }
+
+function print_dialog() {
+  if (isSalorBin()) {
+    Salor.printPage();
+  } else {
+    print();
+  }
+}

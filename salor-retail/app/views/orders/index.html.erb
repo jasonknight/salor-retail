@@ -18,11 +18,13 @@
     <td align="center">
       <div class='tools'>
         <div class="tool-icon">
-          <a href='/orders/report_day'><%= salor_icon(:report,{},32) %></a><br /><span class='icon-caption'><%= t("menu.report_day") %></span>
+          <a href='/vendors/report_day'><%= salor_icon(:report,{},32) %></a><br /><span class='icon-caption'><%= t("menu.report_day") %></span>
         </div>
+        <!--
         <div class="tool-icon">
-          <a href='/orders/order_reports'><%= salor_icon(:statistics,{},32) %></a><br /><span class='icon-caption'><%= t("menu.statistics") %></span>
+          <a href='/vendors/statistics'><%= salor_icon(:statistics,{},32) %></a><br /><span class='icon-caption'><%= t("menu.statistics") %></span>
         </div>
+        -->
         <div class="tool-icon">
           <a href='/orders?type=normal'><%= salor_icon(:order,{},32) %></a><br /><span class='icon-caption'><%= t("activerecord.models.order.other") %></span>
         </div>
@@ -35,10 +37,12 @@
         <div class="tool-icon">
           <a href='/orders?type=quote'><%= salor_icon(:quote,{},32) %></a><br /><span class='icon-caption'><%= t("activerecord.models.order.quotes") %></span>
         </div>
+        <!--
         <div class="tool-icon" >
           <%= link_to salor_icon(:save_download,{},32),"/orders?type=#{params[:type]}&page=#{params[:page]}&format=csv" %>
           <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
         </div>
+        -->
         <div class="tool-icon" >
           <%= link_to salor_icon(:thermal_printer,{},32),"/orders/receipts" %>
           <br /><span class='icon-caption'><%= I18n.t("menu.receipts") %></span>

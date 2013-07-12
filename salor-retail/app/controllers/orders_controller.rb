@@ -55,9 +55,9 @@ class OrdersController < ApplicationController
     when 'proforma'
       @orders = @current_vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(@current_vendor.pagination)
     when 'unpaid'
-      @orders = @current_vendor.orders.order("nr desc").unpaid.page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.order("nr desc").where(:is_unpaid => true).page(params[:page]).per(@current_vendor.pagination)
     when 'quote'
-      @orders = @current_vendor.orders.order("qnr desc").quotes.page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.order("qnr desc").where(:is_quote => true).page(params[:page]).per(@current_vendor.pagination)
     else
       @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(@current_vendor.pagination)
     end
@@ -305,20 +305,10 @@ class OrdersController < ApplicationController
   def receipts
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
-    @to = @to ? @to.end_of_day : @from.end_of_day
-    @receipts = @current_vendor.receipts.where(["created_at between ? and ?", @from, @to])
-    if params[:print] == "true" and params[:current_register_id] then
-      @current_register = @current_vendor.current_registers.find_by_id(params[:current_register_id].to_s)
-      vendor_printer = VendorPrinter.new :path => @current_register.thermal_printer
-      print_engine = Escper::Printer.new('local', vendor_printer)
-      print_engine.open
-      
-      @receipts.each do |r|
-        contents = r.content
-        bytes_written, content_written = print_engine.print(0, contents)
-      end
-      print_engine.close
-    end
+    @to = @to ? @to.end_of_day : Time.now.end_of_day
+    cash_register_id = params[:cash_register_id]
+    cash_register_id ||= @current_register.id
+    @receipts = @current_vendor.receipts.where(:created_at => @from..@to, :cash_register_id => cash_register_id)
   end
   
   def print
@@ -327,58 +317,6 @@ class OrdersController < ApplicationController
     view = 'default'
     render "orders/invoices/#{view}/page"
   end
-  
-#   def order_reports
-#     f, t = assign_from_to(params)
-#     @from = f
-#     @to = t
-#     params[:limit] ||= 15
-#     @limit = params[:limit].to_i - 1
-#     
-#     
-#     @orders = Order.scopied.where({:paid => 1, :created_at => @from..@to})
-#     
-#     @reports = {
-#         :items => {},
-#         :categories => {},
-#         :locations => {}
-#     }
-#     @orders.each do |o|
-#       o.order_items.visible.each do |oi|
-#         next if oi.item.nil?
-#         key = oi.item.name + " (#{oi.price})"
-#         cat_key = oi.get_category_name
-#         loc_key = oi.get_location_name
-#         
-#         @reports[:items][key] ||= {:sku => '', :quantity_sold => 0.0, :cash_made => 0.0 }
-#         @reports[:items][key][:quantity_sold] += oi.quantity
-#         @reports[:items][key][:cash_made] += oi.total
-#         @reports[:items][key][:sku] = oi.sku
-#         
-#         @reports[:categories][cat_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-#         
-#         @reports[:categories][cat_key][:quantity_sold] += oi.quantity
-#         @reports[:categories][cat_key][:cash_made] += oi.total
-#         
-#         @reports[:locations][loc_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-#         
-#         @reports[:locations][loc_key][:quantity_sold] += oi.quantity
-#         @reports[:locations][loc_key][:cash_made] += oi.total
-#       end
-#     end
-#     
-#     
-#     
-#     @categories_by_cash_made = @reports[:categories].sort_by { |k,v| v[:cash_made] }
-#     @categories_by_quantity_sold = @reports[:categories].sort_by { |k,v| v[:quantity_sold] }
-#     @locations_by_cash_made = @reports[:locations].sort_by { |k,v| v[:cash_made] }
-#     @locations_by_quantity_sold = @reports[:locations].sort_by { |k,v| v[:quantity_sold] }
-#     @items = @reports[:items].sort_by { |k,v| v[:quantity_sold] }
-#     
-#     view = SalorRetail::Application::CONFIGURATION[:reports][:style]
-#     view ||= 'default'
-#     render "orders/reports/#{view}/page"
-#   end
 
   
   def clear

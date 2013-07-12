@@ -381,6 +381,49 @@ class Vendor < ActiveRecord::Base
     return report
   end
   
+  def get_statistics(from, to)
+    orders = self.orders.visible.where(:paid => true, :created_at => from..to)
+
+    reports = {
+        :items => {},
+        :categories => {},
+        :locations => {}
+    }
+    
+    # TODO: Replace this loop by self.mymodel.where().sum(:blah) SQL queries for high speed. removed the UI icon in the meantime
+#     orders.each do |o|
+#       o.order_items.visible.each do |oi|
+#         next if oi.item.nil?
+#         key = oi.item.name + " (#{oi.price})"
+#         cat_key = oi.get_category_name
+#         loc_key = oi.get_location_name
+#         
+#         reports[:items][key] ||= {:sku => '', :quantity_sold => 0.0, :cash_made => 0.0 }
+#         reports[:items][key][:quantity_sold] += oi.quantity
+#         reports[:items][key][:cash_made] += oi.total
+#         reports[:items][key][:sku] = oi.sku
+#         
+#         reports[:categories][cat_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
+#         
+#         reports[:categories][cat_key][:quantity_sold] += oi.quantity
+#         reports[:categories][cat_key][:cash_made] += oi.total
+#         
+#         reports[:locations][loc_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
+#         
+#         reports[:locations][loc_key][:quantity_sold] += oi.quantity
+#         reports[:locations][loc_key][:cash_made] += oi.total
+#       end
+#     end
+# 
+#     reports[:categories_by_cash_made] = reports[:categories].sort_by { |k,v| v[:cash_made] }
+#     reports[:categories_by_quantity_sold] = reports[:categories].sort_by { |k,v| v[:quantity_sold] }
+#     reports[:locations_by_cash_made] = reports[:locations].sort_by { |k,v| v[:cash_made] }
+#     reports[:locations_by_quantity_sold] = reports[:locations].sort_by { |k,v| v[:quantity_sold] }
+#     reports[:items].sort_by { |k,v| v[:quantity_sold] }
+    
+    return reports
+  end
+  
   def print_eod_report(from=nil, to=nil, drawer=nil, cash_register)
     text = self.escpos_eod_report(from, to, drawer)
     
