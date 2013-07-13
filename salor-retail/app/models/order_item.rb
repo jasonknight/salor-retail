@@ -209,7 +209,7 @@ class OrderItem < ActiveRecord::Base
     self.company      = item.company
     self.item         = item
     self.sku          = item.sku
-    self.price        = item.base_price
+    self.price        = item.price
     self.tax          = item.tax_profile.value # cache for faster processing
     #self.tax_profile  = item.tax_profile
     self.item_type    = item.item_type
@@ -226,8 +226,10 @@ class OrderItem < ActiveRecord::Base
     self.user         = self.order.user
   end
   
-  
+  # This method is only called on add to order
+  # otherwise calculate_totals is called
   def modify_price
+
     log_action "Modifying price"
     self.modify_price_for_gs1
     self.modify_price_for_actions
@@ -247,6 +249,7 @@ class OrderItem < ActiveRecord::Base
   end
   
   def modify_price_for_actions
+    log_action "modify_price_for_actions"
     Action.run(self, :add_to_order)
   end
   
@@ -302,11 +305,12 @@ class OrderItem < ActiveRecord::Base
     else
       t = (self.price * self.quantity)
     end
-    self.total = t
-    self.subtotal = self.total
+    
+    self.subtotal = t
     self.apply_discount
     self.apply_rebate
     self.calculate_tax
+    self.total = self.subtotal + self.tax_amount
     self.save
   end
   
@@ -399,9 +403,6 @@ class OrderItem < ActiveRecord::Base
     end
 
     write_attribute :quantity, q
-    
-    # we don't support actions or quantities, since the user is responsible for the correct quantity. actions only should modify the price. this also can be done depending on the quantity. also, the call here caused actions to be applied twice. it should be called only once, from Order.add_order_item
-    # modify_price_for_actions
   end
   
   

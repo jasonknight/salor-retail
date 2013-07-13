@@ -412,7 +412,7 @@ en:
     regular_printer: regular printer
     last_completed: Last completed
     last_uncompleted: Last uncompleted
-    last_orders: last orders
+    last_orders: Orders
     open_drawer: drawer
     weigh: weigh
     actions: actions

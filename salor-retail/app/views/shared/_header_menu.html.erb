@@ -5,7 +5,8 @@
       <div align="center" class="first">
         <a href="<%= vendors_path %>">
           <img src="/images/salor-icon.png" />
-          <%= @current_register.name if @current_register %>
+          <span class="icon-caption"><%= @current_register.name if @current_register %></span>
+          
         </a>
       </div>
     </li>
