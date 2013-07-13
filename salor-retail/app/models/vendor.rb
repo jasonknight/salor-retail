@@ -222,13 +222,9 @@ class Vendor < ActiveRecord::Base
     
     # revenue
     revenue = {}
-    if self.net_prices
-      revenue[:gro] = (orders.sum(:total) + orders.sum(:tax_amount)).round(2)
-      revenue[:net] = orders.sum(:total).round(2)
-    else
-      revenue[:gro] = orders.sum(:total).round(2)
-      revenue[:net] = (orders.sum(:total) - orders.sum(:tax_amount)).round(2)
-    end
+    revenue[:gro] = Money.new(orders.sum(:total_cents))
+    revenue[:net] = revenue[:gro] - Money.new(orders.sum(:tax_amount_cents))
+
     
     # DrawerTransactions
     transactions = []
@@ -243,9 +239,9 @@ class Vendor < ActiveRecord::Base
       ).where(:complete_order => nil, :refund => nil)
     end
     drawer_transactions.each do |dt|
-      transactions << {:tag => dt.tag, :notes => dt.notes, :amount => dt.amount.round(2), :time => dt.created_at}
+      transactions << {:tag => dt.tag, :notes => dt.notes, :amount => dt.amount, :time => dt.created_at}
     end
-    transactions_sum = drawer_transactions.sum(:amount).round(2)
+    transactions_sum = Money.new(drawer_transactions.sum(:amount_cents))
 
     # Categories
     categories = {:pos => {}, :neg => {}}
@@ -255,35 +251,25 @@ class Vendor < ActiveRecord::Base
       cat = self.categories.find_by_id(r.category_id)
       label = cat.name if cat
       
-      pos_subtotal = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("subtotal > 0").sum(:subtotal).round(2)
-      pos_tax = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("subtotal > 0").sum(:tax_amount).round(2)
-      neg_subtotal = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("subtotal < 0").sum(:subtotal).round(2)
-      neg_tax = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("subtotal < 0").sum(:tax_amount).round(2)
+      pos_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:total_cents))
+      pos_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:tax_amount_cents))
+      neg_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:subtotal_cents))
+      neg_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:tax_amount_cents))
       
-      unless pos_subtotal.zero?
+      unless pos_total.zero?
         categories[:pos][label] = {}
         categories[:pos][label][:tax] = pos_tax
-        if self.net_prices
-          categories[:pos][label][:gro] = pos_subtotal + pos_tax
-          categories[:pos][label][:net] = pos_subtotal
-        else
-          categories[:pos][label][:gro] = pos_subtotal
-          categories[:pos][label][:net] = pos_subtotal - pos_tax
-        end
+        categories[:pos][label][:gro] = pos_total
+        categories[:pos][label][:net] = pos_total - pos_tax
         categories_sum[:pos][:net] += categories[:pos][label][:net]
         categories_sum[:pos][:gro] += categories[:pos][label][:gro]
       end
       
-      unless neg_subtotal.zero?
+      unless neg_total.zero?
         categories[:neg][label] = {}
         categories[:neg][label][:tax] = neg_tax
-        if self.net_prices
-          categories[:neg][label][:gro] = neg_subtotal + neg_tax
-          categories[:neg][label][:net] = neg_subtotal
-        else
-          categories[:neg][label][:gro] = neg_subtotal
-          categories[:neg][label][:net] = neg_subtotal - neg_tax
-        end
+        categories[:neg][label][:gro] = neg_total
+        categories[:neg][label][:net] = neg_total - neg_tax
         categories_sum[:neg][:net] += categories[:neg][label][:net]
         categories_sum[:neg][:gro] += categories[:neg][label][:gro]
       end
@@ -299,25 +285,17 @@ class Vendor < ActiveRecord::Base
       taxes[:pos][r.tax] = {}
       taxes[:neg][r.tax] = {}
       
-      pos_subtotal = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("subtotal > 0").sum(:subtotal).round(2)
-      pos_tax = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("subtotal > 0").sum(:tax_amount).round(2)
-      neg_subtotal = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("subtotal < 0").sum(:subtotal).round(2)
-      neg_tax = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("subtotal < 0").sum(:tax_amount).round(2)
+      pos_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:total_cents))
+      pos_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:tax_amount_cents))
+      neg_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:total_cents))
+      neg_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:tax_amount_cents))
       
       taxes[:pos][r.tax][:tax] = pos_tax
       taxes[:neg][r.tax][:tax] = neg_tax
-      if self.net_prices
-        taxes[:pos][r.tax][:gro] = pos_subtotal + pos_tax
-        taxes[:neg][r.tax][:gro] = neg_subtotal + neg_tax
-        taxes[:pos][r.tax][:net] = pos_subtotal
-        taxes[:neg][r.tax][:net] = neg_subtotal
-
-      else
-        taxes[:pos][r.tax][:gro] = pos_subtotal
-        taxes[:neg][r.tax][:gro] = neg_subtotal
-        taxes[:pos][r.tax][:net] = pos_subtotal - pos_tax
-        taxes[:neg][r.tax][:net] = neg_subtotal - neg_tax
-      end
+      taxes[:pos][r.tax][:gro] = pos_total
+      taxes[:neg][r.tax][:gro] = neg_total
+      taxes[:pos][r.tax][:net] = pos_total - pos_tax
+      taxes[:neg][r.tax][:net] = neg_total - neg_tax
     end
     
     # PaymentMethods
@@ -332,17 +310,17 @@ class Vendor < ActiveRecord::Base
         # cash needs special treatment, since actual cash amount = cash given - change given
         change_pm = self.payment_methods.visible.find_by_change(true)
         
-        cash_positive = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount > 0").sum(:amount).round(2)
-        change_positive = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => change_pm, :refund => nil).sum(:amount).round(2)
+        cash_positive = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents > 0").sum(:amount_cents))
+        change_positive = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => change_pm, :refund => nil).sum(:amount_cents))
         
-        cash_negative = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount < 0").sum(:amount).round(2)
+        cash_negative = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents < 0").sum(:amount_cents))
         
         paymentmethods[:pos][pm.name] = cash_positive + change_positive
         paymentmethods[:neg][pm.name] = cash_negative
         
       else
-        paymentmethods[:pos][pm.name] = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount > 0").sum(:amount).round(2)
-        paymentmethods[:neg][pm.name] = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount < 0").sum(:amount).round(2)
+        paymentmethods[:pos][pm.name] = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents > 0").sum(:amount_cents))
+        paymentmethods[:neg][pm.name] = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents < 0").sum(:amount_cents))
       end
     end
     
@@ -352,10 +330,10 @@ class Vendor < ActiveRecord::Base
     used_refund_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
       
-      refunds[pm.name] = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => true).sum(:amount).round(2)
+      refunds[pm.name] = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => true).sum(:amount_cents))
     end
 
-    calculated_drawer_amount = self.drawer_transactions.where(:created_at => from.beginning_of_day..to.end_of_day, :drawer_id => drawer).sum(:amount).round(2)
+    calculated_drawer_amount = Money.new(self.drawer_transactions.where(:created_at => from.beginning_of_day..to.end_of_day, :drawer_id => drawer).sum(:amount_cents))
     
     report = Hash.new
     report['categories'] = categories
