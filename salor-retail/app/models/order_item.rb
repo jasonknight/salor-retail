@@ -232,7 +232,6 @@ class OrderItem < ActiveRecord::Base
 
     log_action "Modifying price"
     self.modify_price_for_gs1
-    self.modify_price_for_actions
     if self.is_buyback
       log_action "modify_price_for_buyback"
       self.modify_price_for_buyback 
@@ -245,6 +244,7 @@ class OrderItem < ActiveRecord::Base
       log_action "modify_price_for_giftcards"
       self.modify_price_for_giftcards 
     end
+    self.modify_price_for_actions
     self.save
   end
   
@@ -295,11 +295,6 @@ class OrderItem < ActiveRecord::Base
   end
   
   def calculate_totals
-    if self.behavior == "coupon" then
-      self.apply_coupon
-      self.save
-      return
-    end
     if self.refunded
       t = 0
     else
@@ -309,13 +304,18 @@ class OrderItem < ActiveRecord::Base
     self.subtotal = t
     self.apply_discount
     self.apply_rebate
+    if self.behavior == "coupon" then
+      self.apply_coupon
+      #self.save
+      #return
+    end
     self.calculate_tax
     self.total = self.subtotal + self.tax_amount
     self.save
   end
   
   # coupons have to be added after the matching product
-  # coupons do not have a price by themselves, they just reduce the quantity of the matching OrderItem
+  # coupons do not have a price by themselves, they just reduce the price of the matchin OrderItem
   def apply_coupon
     if self.behavior == 'coupon'
       item = self.item
@@ -345,6 +345,7 @@ class OrderItem < ActiveRecord::Base
         end
         log_action "Subtotal is: #{coitem.subtotal} and coupon_amount is #{coitem.coupon_amount}"
         coitem.subtotal -= coitem.coupon_amount
+        coitem.calculate_tax
         coitem.save
       else
         log_action "coitem was not found"
@@ -385,10 +386,8 @@ class OrderItem < ActiveRecord::Base
   
   def calculate_tax
     if self.vendor.net_prices
-      #log_action "Net Prices in effect"
       t = self.subtotal * self.tax / 100.0
     else
-      #log_action "Reverse calculat taxes"
       t = self.subtotal / ( 1 + self.tax / 100.0 )
     end
     self.tax_amount = t
