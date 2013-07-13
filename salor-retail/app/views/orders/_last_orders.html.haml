@@ -5,8 +5,7 @@
     %h2= t 'menu.last_uncompleted'
     - @current_vendor.orders.where(:paid => nil).where(:user_id => @current_user.id).order("id desc").limit(5).each do |o|
       .recent-order{ :onmousedown => "window.location='/orders/#{ o.id }/edit';", :style => "background-color: #{ o.cash_register.color };" }
-        %span.recent-order-number= o.user.username[0..7]
-        = salor_icon(:order, {}, 40 )
+        %p.recent-order-number= o.user.username[0..7]
         %p.recent_price= number_to_currency o.total
         %p.recent_tag= o.tag if o.tag
         
@@ -16,10 +15,9 @@
     %h2= t 'menu.last_completed'
     - @current_vendor.orders.visible.where(:paid => true).order("created_at DESC").limit(5).each do |o|
       .recent-order{ :style => "background-color: #{ o.cash_register.color };" }
-        %span.recent-order-number== ##{ o.nr } #{ o.user.username[0..7] }
-        .clear
+        %p.recent-order-number== ##{ o.nr } #{ o.user.username[0..7] }
         %p.recent_price== #{ number_to_currency(o.total) } ➠ #{ number_to_currency(o.change) }
-        
-        = salor_icon(:thermal_printer, { :onmousedown => "print_order('#{o.id}');"}, 32)
-        = salor_icon(:edit, { :onmousedown => "window.location='/orders/#{ o.id }'" }, 32)
-        = salor_icon(:a4print, { :onmousedown => "window.location='/orders/#{ o.id }/print'"}, 32)
+        %div.dark-background
+          = salor_icon(:thermal_printer, { :onmousedown => "print_order('#{o.id}');"}, 32)
+          = salor_icon(:edit, { :onmousedown => "window.location='/orders/#{ o.id }'" }, 32)
+          = salor_icon(:a4print, { :onmousedown => "window.location='/orders/#{ o.id }/print'"}, 32)

@@ -394,13 +394,21 @@ class Order < ActiveRecord::Base
     log_action "Calculating Totals"
     
     # self.total contains only subtotal sum of normal items. this is needed for the gift card price calculation.
-    self.total_cents = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal_cents)
+    _oi_total = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal_cents)
+    _oi_tax =  self.order_items.visible.sum(:tax_amount_cents)
+    log_action "Subtotal is: #{_oi_total} and tax is #{_oi_tax}"
    
     # subtotal contains everything
-    self.subtotal_cents = self.order_items.visible.sum(:subtotal_cents)
+    self.subtotal_cents = _oi_total
     
-    self.tax_amount_cents = self.order_items.visible.sum(:tax_amount_cents)
+    self.tax_amount_cents = _oi_tax
     
+    if self.vendor.net_prices then
+      self.total_cents = _oi_total + _oi_tax
+    else
+      self.total_cents = _oi_total
+    end
+
     if not self.save then
       puts self.errors.full_messages.to_sentence
       raise "Order Could Not Be Saved"

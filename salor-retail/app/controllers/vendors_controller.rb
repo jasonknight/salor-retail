@@ -171,6 +171,11 @@ class VendorsController < ApplicationController
     end
     
     if @inst.class == OrderItem
+      #README If someone edits the quantity or price of an item, Actions need to be informed of this.
+      if [:price, :quantity].include? params[:field].to_sym then
+        @inst.modify_price_for_actions
+        @inst.save
+      end
       @inst.calculate_totals
       @order.calculate_totals
       render 'orders/update_pos_display'

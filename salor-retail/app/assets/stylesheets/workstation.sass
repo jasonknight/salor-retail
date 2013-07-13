@@ -1251,6 +1251,8 @@ div.pos-button
   margin: 0px 5px
   height: 43px
   width: 7%
+  span.icon-caption
+    bottom: 8px
 
 div.square-button 
   padding: 3px
@@ -1545,6 +1547,7 @@ div.pos-menu
   margin: 15px 0px 15px 0px
   padding: 10px 10px
   text-align: center
+  background-color: $background
   div 
     display: inline-block
 
@@ -2243,6 +2246,12 @@ div#additional
 div.discount_applied 
   background-color: $middleground
 
+div.dark-background
+  background-color: $background
+  @include raised_element
+  @include rounded_corners_all
+  margin-top: 10px
+  padding: 5px
 
 /*E-Help classes*/
 .EHmarker
@@ -2537,18 +2546,16 @@ div#last_orders
     text-align: center
     vertical-align: bottom
     cursor: pointer
-    span.recent-order-number
-      :float left
-      :font-size 160%
+    p.recent-order-number
+      :font-size 120%
       :font-weight bold
       :font-style italic
-      :display inline-block
       :color white
     p
       :margin 2px 0px
     p.recent_price
       :font-weight bold
-      :font-size 120%
+      :font-size 110%
     div.salor-icon
       :margin 0px 7px
 
