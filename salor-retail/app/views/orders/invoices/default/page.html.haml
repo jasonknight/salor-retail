@@ -33,7 +33,7 @@
 - additional_page_count = 1 + (item_count - item_pagination_count_one - 1) / item_pagination_count_other
 
 .paper-invoice
-  = render 'orders/invoices/default/header_page_one'
+  = render :partial => 'orders/invoices/default/header_page_one'
   
   - if params[:delivery_note]
     %h2== #{ I18n.t("receipts.delivery_note") } #{ @order.nr }

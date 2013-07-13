@@ -1,0 +1,53 @@
+/ we are on the last page
+- unless params[:delivery_note]
+  %table.striped-table2.has-total
+    - if @order.is_proforma
+      %tr
+        %td{ :colspan => 4 }= t('printr.order_receipt.total').upcase
+        %td= humanized_money_with_symbol @order.total
+    %tr
+      %td{ :colspan => 4 }= t('activerecord.attributes.total').upcase
+      - if @order.is_proforma then
+        %td.total= humanized_money_with_symbol @order.amount_paid
+      - else
+        %td.total= humanized_money_with_symbol @report[:total]
+
+  %br
+  %br
+  %br
+  %table.striped-table2.small
+    - if @order.is_unpaid then
+      - @order.payment_method_items.each do |pm|
+        %tr
+          %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
+          %td.total= humanized_money_with_symbol pm.amount
+    - else
+      - @report[:paymentmethods].to_a.each do |pm|
+        %tr
+          %td= pm[0]
+          %td.total= humanized_money_with_symbol pm[1]
+
+
+  %br
+  %br
+  %table.striped-table2.small
+    %tr
+      %th
+      %th
+      %th.right= t('printr.order_receipt.net')
+      %th.right= t('printr.order_receipt.tax')
+      %th.right= t('printr.order_receipt.gross')
+    - @report[:list_of_taxes_raw].each do |tax|
+      - tax = format_tax(tax)
+      %tr
+        - tax.each do |k,v|
+          %td.total= v
+          
+  %p= raw(Kramdown::Document.new(@report[:invoice_note][:footer]).to_html) if @report[:invoice_note][:footer]
+
+%div.invoice_blurb_footer= raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:footer]).to_html
+
+%p= @report[:customer][:tax_number] if @report[:customer]
+
+.center
+  /logo here
