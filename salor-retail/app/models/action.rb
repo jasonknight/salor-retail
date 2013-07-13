@@ -29,6 +29,7 @@ class Action < ActiveRecord::Base
   end
 
   def category_id=(id)
+    return if id.blank?
     self.model = self.vendor.categories.find_by_id(id)
   end
 
@@ -44,7 +45,7 @@ class Action < ActiveRecord::Base
   end
   
   def self.afield_list
-    [:price, :quantity,:tax_profile_id, :packaging_unit]
+    [:price_cents, :quantity, :tax_profile_id, :packaging_unit]
   end
 
 
@@ -66,7 +67,7 @@ class Action < ActiveRecord::Base
   end
   
   def self.apply_action(action, item, act)
-    SalorBase.log_action Action,"Beginning to apply actions"
+    SalorBase.log_action Action, "Action.apply_action"
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
       eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add
       eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract

@@ -216,7 +216,7 @@ $(function () {
   
   <tr>
     <td> <%= f.label I18n.t("activerecord.models.item_type.one") %> </td>
-    <td>  <%= f.collection_select :item_type_id,ItemType.all,:id,:name %> </td>
+    <td>  <%= f.collection_select :item_type_id, @current_vendor.item_types.visible, :id, :name %> </td>
   </tr>
   
   <tr>

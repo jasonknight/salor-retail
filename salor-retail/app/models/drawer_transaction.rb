@@ -26,10 +26,6 @@ class DrawerTransaction < ActiveRecord::Base
     self.nr = i
     self.vendor.update_attribute :largest_drawer_transaction_number, i
   end
-  
-  def amount=(p)
-    write_attribute(:amount,self.string_to_float(p))
-  end
 
   def print
     vp = Escper::VendorPrinter.new({})

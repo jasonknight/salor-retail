@@ -37,7 +37,7 @@ function addPosItem(item) {
     
     if (attr == 'price' || attr == 'coupon_amount' || attr == 'subtotal' || attr == 'rebate' || attr == 'tax') {
       // add color when action applies
-      if (item["action_applied"] == true && attr != 'subtotal' && attr != 'tax') {
+      if (item["action_applied"] == true && attr == 'price') {
         col.addClass("pos-action-applied");
       }
       // determine number format
@@ -64,7 +64,7 @@ function addPosItem(item) {
     col.addClass('table-column pos-item-attr');
     col.addClass(base_id + '-' + attr + ' pos-item-' + attr);
     
-    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied');
+    if ( (item['discount_amount'] != 0 || item['coupon_amount'] != 0) && attr == 'coupon_amount') { col.addClass('discount_applied');
     };
     
 
@@ -716,11 +716,11 @@ function updatePosItem(item) {
   for (var i = 0; i < attrs.length; i++) {
     var attr = attrs[i];
     var col = $('.' + base_id + '-' + attr);
-    if ( (item['discount_amount'] < 0 || item['coupon_amount'] < 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
+    if ( (item['discount_amount'] != 0 || item['coupon_amount'] != 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
     
     if (attr == 'price' || attr == 'coupon_amount' || attr == 'subtotal' || attr == 'rebate' || attr == 'tax') {
       // add color when action applies
-      if (item["action_applied"] == true && attr != 'subtotal' && attr != 'tax') {
+      if (item["action_applied"] == true && attr == 'price') {
         col.addClass("pos-action-applied");
       }
       // determine number format

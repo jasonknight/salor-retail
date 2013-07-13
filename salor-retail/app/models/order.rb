@@ -209,17 +209,17 @@ class Order < ActiveRecord::Base
   
   def gross
     if self.vendor.net_prices == true
-      return self.subtotal.to_f + self.tax_amount.to_f
+      return self.subtotal + self.tax_amount
     else
-      return self.subtotal.to_f
+      return self.subtotal
     end
   end
   
   def net
     if self.vendor_net_prices == true
-      return self.subtotal.to_f
+      return self.subtotal
     else
-      return self.subtotal.to_f - self.tax_amount.to_f
+      return self.subtotal - self.tax_amount
     end
   end
   
@@ -249,6 +249,7 @@ class Order < ActiveRecord::Base
     if self.paid then
       log_action "Order is paid already, cannot edit"
     end
+    
     # get existing regular item
     item = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
     if item then
@@ -392,17 +393,14 @@ class Order < ActiveRecord::Base
   def calculate_totals
     log_action "Calculating Totals"
     
+    # self.total contains only subtotal sum of normal items. this is needed for the gift card price calculation.
+    self.total_cents = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal_cents)
+   
     # subtotal contains everything
-    _oi_subtotal_cents = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal_cents)
-    _oi_rebate_amount_cents = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:rebate_amount_cents)
-    log_action "subtotal_cents is #{_oi_subtotal_cents} rebate_cents is #{_oi_rebate_amount_cents}"
-    self.subtotal_cents =  _oi_subtotal_cents - _oi_rebate_amount_cents
+    self.subtotal_cents = self.order_items.visible.sum(:subtotal_cents)
     
     self.tax_amount_cents = self.order_items.visible.sum(:tax_amount_cents)
-    # total contains only subtotal sum of normal items. this is needed for the gift card price calculation.
-    self.total_cents = self.subtotal_cents + self.tax_amount_cents
-    log_action "Total Cents is #{self.total_cents}"
-    # subtotal will include order rebates
+    
     if not self.save then
       puts self.errors.full_messages.to_sentence
       raise "Order Could Not Be Saved"
@@ -448,7 +446,7 @@ class Order < ActiveRecord::Base
   end
   
   def create_drawer_transaction
-    add_amount = (self.cash - self.change).round(2)
+    add_amount = (self.cash - self.change)
     return if add_amount.zero?
     
     drawer = self.user.get_drawer
@@ -501,7 +499,7 @@ class Order < ActiveRecord::Base
       pmi.user = self.user
       pmi.drawer = self.drawer
       pmi.cash_register = self.cash_register
-      pmi.amount = SalorBase.string_to_float(v[:amount]).round(2)
+      pmi.amount = Money.new(SalorBase.string_to_float(v[:amount]) * 100.0)
       pmi.cash = pm.cash
       pmi.quote = pm.quote
       pmi.unpaid = pm.unpaid
@@ -514,12 +512,12 @@ class Order < ActiveRecord::Base
     
     self.save
     
-    payment_cash = self.payment_method_items.visible.where(:cash => true).sum(:amount_cents)
-    payment_total = self.payment_method_items.visible.sum(:amount_cents)
-    payment_noncash = (payment_total - payment_cash).round(2)
-    change = (payment_total - self.gross).round(2)
+    payment_cash = Money.new(self.payment_method_items.visible.where(:cash => true).sum(:amount_cents))
+    payment_total = Money.new(self.payment_method_items.visible.sum(:amount_cents))
+    payment_noncash = (payment_total - payment_cash)
+    change = (payment_total - self.gross)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
-                                  
+
     pmi = PaymentMethodItem.new
     pmi.vendor = self.vendor
     pmi.company = self.company
@@ -658,7 +656,7 @@ class Order < ActiveRecord::Base
       end
 
       # DISCOUNTS
-      if oi.discount_amount
+      unless oi.discount_amount.zero?
         discount_name = I18n.t('printr.order_receipt.discount') + ' ' + oi.discounts.first.name
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
@@ -702,17 +700,17 @@ class Order < ActiveRecord::Base
     used_tax_amounts.each do |r|
       tax_in_percent = r.tax # this is the tax in percent, stored on OrderItem
       tax_profile = self.vendor.tax_profiles.find_by_value(tax_in_percent)
-      tax = self.order_items.visible.where(:tax => tax_in_percent).sum(:tax_amount)
-      subtotal = self.order_items.visible.where(:tax => tax_in_percent).sum(:subtotal)
+      tax_amount = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:tax_amount_cents))
+      subtotal = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:subtotal_cents))
       if self.vendor.net_prices
         net = subtotal
-        gro = subtotal + tax
+        gro = subtotal + tax_amount
       else
-        net = subtotal - tax
+        net = subtotal - tax_amount
         gro = subtotal
       end
-      list_of_taxes += tax_format % [tax_profile.letter, tax_in_percent, net, tax, gro]
-      list_of_taxes_raw << to_list_of_taxes_raw([tax_profile.letter, tax_profile.value, net, tax, gro])
+      list_of_taxes += tax_format % [tax_profile.letter, tax_in_percent, net, tax_amount, gro]
+      list_of_taxes_raw << to_list_of_taxes_raw([tax_profile.letter, tax_profile.value, net, tax_amount, gro])
     end
     
     # --- invoice blurbs ---
@@ -1055,8 +1053,8 @@ class Order < ActiveRecord::Base
   def to_json
     self.total = 0 if self.total.nil?
     attrs = {
-      :total => self.gross,
-      :rebate => self.rebate,
+      :total => self.gross.to_f,
+      :rebate => self.rebate.to_f,
       :lc_points => self.lc_points,
       :id => self.id,
       :buy_order => self.buy_order,

@@ -15,4 +15,8 @@ class Drawer < ActiveRecord::Base
   has_many :drawer_transactions
 
   monetize :amount_cents, :allow_nil => true
+  
+  def to_json
+    { :amount => self.amount.to_f }.to_json
+  end
 end
