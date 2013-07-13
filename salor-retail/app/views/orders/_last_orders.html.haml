@@ -19,7 +19,7 @@
         %span.recent-order-number== ##{ o.nr } #{ o.user.username[0..7] }
         .clear
         %p.recent_price== #{ number_to_currency(o.total) } ➠ #{ number_to_currency(o.change) }
-        
-        = salor_icon(:thermal_printer, { :onmousedown => "print_order('#{o.id}');"}, 32)
-        = salor_icon(:edit, { :onmousedown => "window.location='/orders/#{ o.id }'" }, 32)
-        = salor_icon(:a4print, { :onmousedown => "window.location='/orders/#{ o.id }/print'"}, 32)
+        %div.dark-background
+          = salor_icon(:thermal_printer, { :onmousedown => "print_order('#{o.id}');"}, 32)
+          = salor_icon(:edit, { :onmousedown => "window.location='/orders/#{ o.id }'" }, 32)
+          = salor_icon(:a4print, { :onmousedown => "window.location='/orders/#{ o.id }/print'"}, 32)
