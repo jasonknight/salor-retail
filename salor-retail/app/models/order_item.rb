@@ -167,13 +167,16 @@ class OrderItem < ActiveRecord::Base
   end
 
 
-  
   def price=(p)
-    p = self.string_to_float(p)
+    if p.class == String
+      p = Money.new(self.string_to_float(p) * 100)
+    elsif p.class == Float
+      p = Money.new(p * 100)
+    end
     if self.behavior == 'gift_card'
       i = self.item
       if i.activated.nil?
-        i.base_price = p
+        i.price = p
         i.gift_card_amount = p
         i.save
       end
@@ -181,7 +184,7 @@ class OrderItem < ActiveRecord::Base
     if self.is_buyback
       p = - p.abs
     end
-    write_attribute :price, p
+    write_attribute :price_cents, p.fractional
   end
   
   def gross
@@ -225,21 +228,21 @@ class OrderItem < ActiveRecord::Base
   
   
   def modify_price
-    log_action "Modifyin price"
-    if self.behavior == 'coupon' then
-      self.apply_coupon
-    end
+    log_action "Modifying price"
+    self.modify_price_for_gs1
+    self.modify_price_for_actions
     if self.is_buyback
       log_action "modify_price_for_buyback"
       self.modify_price_for_buyback 
     end
     self.modify_price_for_parts
+    if self.behavior == 'coupon' then
+      self.apply_coupon
+    end
     if self.behavior == 'gift_card'
       log_action "modify_price_for_giftcards"
       self.modify_price_for_giftcards 
     end
-    self.modify_price_for_gs1
-    self.modify_price_for_actions
     self.save
   end
   
@@ -274,12 +277,11 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price_for_giftcards
     if self.behavior == 'gift_card' and self.item.activated
-      if self.item.gift_card_amount > self.order.total.to_f
-        self.price = - self.order.total.to_f
+      if self.item.gift_card_amount > self.order.gross
+        self.price = - self.order.gross
       else
         self.price = - self.gift_card_amount
       end
-      self.price = self.price
     end
   end
   
@@ -314,16 +316,16 @@ class OrderItem < ActiveRecord::Base
     if self.behavior == 'coupon'
       item = self.item
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
-      if not coitem.coupon_amount.nil? then
-        log_action "This item is a coupon, but the coupon_amount has already been set"
-        return
-      end
       if coitem
+        unless coitem.coupon_amount.zero? then
+          log_action "This item is a coupon, but the coupon_amount has already been set"
+          return
+        end
         ctype = self.item.coupon_type
         if ctype == 1
           # percent rebate
           log_action "Percent rebate coupon"
-          coitem.coupon_amount = (coitem.subtotal * self.price / 100.0)
+          coitem.coupon_amount = coitem.subtotal * (self.price.to_f / 100)
         elsif ctype == 2
           # fixed amount
           log_action "Fixed amount coupon"
@@ -391,10 +393,15 @@ class OrderItem < ActiveRecord::Base
   
   def quantity=(q)
     q = self.string_to_float(q)
-    return if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
+    if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
+      log_action "Cannot have more than 1 coupon or gift card"
+      return
+    end
 
     write_attribute :quantity, q
-    modify_price_for_actions
+    
+    # we don't support actions or quantities, since the user is responsible for the correct quantity. actions only should modify the price. this also can be done depending on the quantity. also, the call here caused actions to be applied twice. it should be called only once, from Order.add_order_item
+    # modify_price_for_actions
   end
   
   
@@ -403,13 +410,16 @@ class OrderItem < ActiveRecord::Base
     self.hidden_by = by
     self.hidden_at = Time.now
     if not self.save then
-      puts self.errors.full_messages.to_sentence
+      log_action self.errors.full_messages.to_sentence
       raise "Could Not Hide Item"
     end
 
     if self.behavior == 'coupon'
+      item = self.item
+      raise "could not find Item for OrderItem #{ self.id }" if item.nil?
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
-      coitem.coupon_amount = nil
+      raise "could not find orderitem #{ item.coupon_applies.inspect }" if coitem.nil?
+      coitem.coupon_amount = Money.new(0)
       coitem.calculate_totals
     end
     self.order.calculate_totals
@@ -429,11 +439,11 @@ class OrderItem < ActiveRecord::Base
         :coupon_type => self.item.coupon_type,
         :quantity => self.quantity,
         :price => self.price.to_f,
-        :coupon_amount => - (self.coupon_amount ? self.coupon_amount : 0),
+        :coupon_amount => self.coupon_amount_cents.blank? ? 0 : - self.coupon_amount.to_f,
         :subtotal => self.subtotal.to_f,
         :id => self.id,
         :behavior => self.behavior,
-        :discount_amount => - (self.discount_amount ? self.discount_amount : 0).to_f,
+        :discount_amount => self.discount_amount.blank? ? 0 : - self.discount_amount.to_f,
         :rebate => self.rebate.nil? ? 0 : self.rebate,
         :is_buyback => self.is_buyback,
         :weigh_compulsory => self.item.weigh_compulsory,

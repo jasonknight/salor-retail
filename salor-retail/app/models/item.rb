@@ -54,55 +54,73 @@ class Item < ActiveRecord::Base
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
   
   
+  # ----- old name aliases getters
+  
   def buyback_price
     return self.buy_price
   end
+  
+  def base_price
+    return self.price
+  end
+  
+  def amount_remaining
+    return self.gift_card_amount
+  end
+  # ------ end old name aliases getters
+  
+  
+  # ----- old name aliases setters
   def buyback_price=(p)
-    self.buy_price = self.to_float(p)
+    self.buy_price_cents = self.string_to_float(p) * 100.0
   end
-  def self.csv_headers
-    return [:class,:name,:sku,:price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
+  
+  def base_price=(p)
+    p = self.string_to_float(p) * 100.0
+    self.price_cents = p
   end
+  
+  def amount_remaining=(p)
+    p = self.string_to_float(p) * 100.0
+    self.gift_card_amount_cents = p
+  end
+  # ------ end old name aliases setters
+  
+  
+  
+  
+  
 
 
-  # Important for CSV editing because people don't know how to work with IDS
+
+  # ----- convenience methods for CSV
   def tax_profile_amount
     return self.tax_profile.value
   end
-  def tax_profile_amount=(amnt)
-    tp = self.vendor.tax_profiles.find_by_value(SalorBase.to_float(amnt))
-    if tp then
-      self.tax_profile = tp
-    end
-  end
+  
   def category_name
     return self.category.name if self.category
   end
-  def category_name=(n)
-    self.category = self.vendor.categories.find_by_name(n)
-  end
+  
   def location_name
     return self.location.name if self.location
   end
+  
   def location_name=(n)
-    self.location = self.vendor.locations.find_by_name(n)
+    self.location = self.vendor.locations.visible.find_by_name(n)
   end
+  
   def tax_profile_name
     return self.tax_profile.name if self.tax_profile
   end
-  def tax_profile_name=(n)
-    self.tax_profile = self.vendor.tax_profiles.find_by_name(n)
-  end
-  # End of code you shouldn't remove
-
-
-
-  def gs1_regexp
-    parts = self.gs1_format.split(",")
-    return Regexp.new "(\\d{#{ parts[0] }})(\\d{#{ parts[1] }})"
-  end
-
   
+  def tax_profile_name=(n)
+    self.tax_profile = self.vendor.tax_profiles.visible.find_by_name(n)
+  end
+  # ----- convenience methods for CSV
+  
+  
+  # ----- CSV methods
   def to_csv(headers=nil)
     headers = Item.csv_headers if headers.nil?
     values = []
@@ -112,6 +130,16 @@ class Item < ActiveRecord::Base
     return values.join("\t")
   end
   
+    def self.csv_headers
+    return [:class,:name,:sku,:price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
+  end
+  # ----- end CSV methods
+
+  def gs1_regexp
+    parts = self.gs1_format.split(",")
+    return Regexp.new "(\\d{#{ parts[0] }})(\\d{#{ parts[1] }})"
+  end
+
   def get_translated_name(locale=:en)
     locale = locale.to_s
     trans = read_attribute(:name_translations)
@@ -128,9 +156,11 @@ class Item < ActiveRecord::Base
       end
     end
   end
+  
   def name_translations=(hash)
     write_attribute(:name_translations,hash.to_json)
   end
+  
   def name_translations
     text = read_attribute(:name_translations)
     if text.nil? or text.empty? then
@@ -236,15 +266,8 @@ class Item < ActiveRecord::Base
     action.save
     return action
   end
-
-  def base_price=(p)
-    p = self.string_to_float(p)
-    self.price = p
-  end
-  def base_price
-    return self.price
-  end
   
+  # ----- setters for advanced float parsing
   def purchase_price=(p)
     if p.class == String then
       p = self.string_to_float(p)
@@ -253,39 +276,50 @@ class Item < ActiveRecord::Base
     end
     write_attribute(:purchase_price,p)
   end
-  
-  def amount_remaining=(p)
-    self.gift_card_amount = p
-  end
-  def amount_remaining
-    return self.gift_card_amount
-  end
-  
 
   def height=(p)
     p = self.string_to_float(p)
     write_attribute(:height,p)
   end
+  
   def width=(p)
     p = self.string_to_float(p)
     write_attribute(:width,p)
   end
+  
   def weight=(p)
     p = self.string_to_float(p)
     write_attribute(:weight,p)
   end
+  
   def length=(p)
     p = self.string_to_float(p)
     write_attribute(:length,p)
   end
+  
   def min_quantity=(p)
     p = self.string_to_float(p)
     write_attribute(:min_quantity,p)
   end
+  
   def packaging_unit=(p)
     p = self.string_to_float(p)
     write_attribute(:packaging_unit,p)
   end
+  
+  def tax_profile_amount=(amnt)
+    tp = self.vendor.tax_profiles.visible.find_by_value(SalorBase.to_float(amnt))
+    if tp then
+      self.tax_profile = tp
+    end
+  end
+  # ----- end setters for advanced float parsing
+  
+  # ----- string setters for relations
+  def category_name=(n)
+    self.category = self.vendor.categories.visible.find_by_name(n)
+  end
+  # ----- end string setters for relations
   
   
   def assign_parts(hash={})
@@ -302,11 +336,6 @@ class Item < ActiveRecord::Base
     end
     self.save
   end
-  
-
-
-  
-
   
   def from_shipment_item(si)
     i = Item.find_by_sku(si.sku)

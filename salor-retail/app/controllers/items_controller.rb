@@ -173,6 +173,7 @@ class ItemsController < ApplicationController
       render :text => output
       return
     end
+    render :nothing => true
   end
 
   def database_distiller

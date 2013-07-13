@@ -114,7 +114,7 @@ function make_keyboardable(elem) {
   
   var new_offset = elem.offset();
   new_offset.top += 2;
-  kbd.css({position: 'relative', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
+  kbd.css({position: 'relative', margin: elem.css('margin')});
   
   if (elem.attr('id') == 'main_sku_field') {
     elem.keyboard({
@@ -184,7 +184,7 @@ function make_keyboardable_with_options(elem,opts) {
   kbd.addClass('kbd-show pointer');
   var new_offset = elem.offset();
   new_offset.top += 2;
-  kbd.css({position: 'relative', height: elem.outerHeight() - (elem.outerHeight() * 0.25), margin: elem.css('margin')});
+  kbd.css({position: 'relative', margin: elem.css('margin')});
   var options = {
         openOn   : '',
         stayOpen : true,

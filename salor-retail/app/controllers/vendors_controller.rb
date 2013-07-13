@@ -71,7 +71,7 @@ class VendorsController < ApplicationController
     @dt.drawer_amount = @drawer.amount
     @dt.drawer = @drawer
     @dt.user = user
-    @dt.amount = SalorBase.string_to_float(params[:transaction][:amount])
+    @dt.amount = Money.new(SalorBase.string_to_float(params[:transaction][:amount]) * 100 )
     @dt.tag = params[:transaction][:tag]
     @dt.notes = params[:transaction][:notes]
     @dt.cash_register = @current_register
@@ -163,6 +163,7 @@ class VendorsController < ApplicationController
     #value = SalorBase.string_to_float(params[:value])
     value = params[:value]
     if @inst.respond_to?("#{ params[:field] }=".to_sym)
+      #debugger
       @inst.send("#{ params[:field] }=", value)
       @inst.save
     else

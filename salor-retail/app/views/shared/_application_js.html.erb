@@ -84,7 +84,7 @@ window.params = {
 
 <% if @current_user then %>
   window.User = <%= raw @current_user.to_json %>;
-  window.Drawer = <%= raw @current_user.get_drawer.attributes.to_json %>;
+  window.Drawer = <%= raw @current_user.get_drawer.to_json %>;
 <% else %>
   window.User = {};  
   window.Drawer = {};

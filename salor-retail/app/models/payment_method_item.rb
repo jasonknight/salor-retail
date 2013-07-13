@@ -14,6 +14,8 @@ class PaymentMethodItem < ActiveRecord::Base
   belongs_to :drawer
   belongs_to :cash_register
   
+  monetize :amount_cents, :allow_nil => true
+  
   include SalorBase
   include SalorScope
 end
