@@ -172,9 +172,11 @@ class VendorsController < ApplicationController
     
     if @inst.class == OrderItem
       #README If someone edits the quantity or price of an item, Actions need to be informed of this.
-      if [:price, :quantity].include? params[:field].to_sym then
-        @inst.modify_price_for_actions
-        @inst.save
+      case params[:field]
+      when 'price'
+        Action.run(@inst, :change_price)
+      when 'quantity'
+        Action.run(@inst, :change_quantity)
       end
       @inst.calculate_totals
       @order.calculate_totals

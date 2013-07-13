@@ -51,9 +51,9 @@
 # GROSS VERSUS NET VERSUS TAX
 # ===========================
 #
-# Countries differ in the treatment of prices. For example, in the USA and Canada, prices of products are considered net, even though the customer owes and is shown on the customer display the gross amount. We will refer to this system as the "net price system".
+# Countries differ in the treatment of prices. For example, in the USA and Canada, prices of products are considered net, even though the customer owes and is shown on the customer display the gross amount. We will refer to this system as the "USA tax system".
 #
-# In other countries, like Europe, prices of products are considered gross, and the customer owes and is shown on the customer display also the gross amount. We will refer to this system as the "gross price system".
+# In other countries, like Europe, prices of products are considered gross, and the customer owes and is shown on the customer display also the gross amount. We will refer to this system as the "Europe tax system".
 #
 #
 #
@@ -71,26 +71,22 @@
 #
 #  quantity: self-explanatory
 #
-#  total: is always price times quantity
+#  total: includes taxes
 #
-#  subtotal: is equal to total before one of the following is applied: coupons, discounts, rebates. If those are to be applied, the calculation of subtotal is as follows: subtotal -= coupon_amount, after that subtotal -= discount_amount, and at last subtotal -= rebate_amount.
+#  coupon_amount: ...
 #
-#  coupon_amount: this is subtotal 1) reduced by the coupon percentage, or 2) reduced by the coupon fixed amount, or 3) reduced by the total multiplied by X divided by Y, where X and Y are "buy X get Y for free".
+#  discount_amount: ...
 #
-#  discount_amount: this is subtotal reduced by the discount percentage
-#
-#  rebate_amount: this is subtotal reduced by the rebate percentage (as explained before this is for OrderItem-level-rebates as well as Order-level-rebates
+#  rebate_amount: ...
 #
 #  tax: this is equal to the percentage of the belonging TaxProfile at the time of scanning the Item
 #
-#  tax_amount: this is equal to 1) subtotal * tax / 100 for "net price system" or 2) subtotal / ( 1 + tax / 100 ) for "gross price system"
+#  tax_amount: ...
 #
 #
 # Order
 # ----------
-#  total: sum of the subtotal of all belonging OrderItems EXCEPT activated gift cards. When an activated gift card is added to an order, the price of the gift card will equal this field.
-#
-#  subtotal: sum of the subtotal fields of ALL belonging OrderItems
+#  total: includes taxes
 #
 #  tax_amount: sum of the tax_amount fields of ALL belonging OrderItems
 
@@ -124,7 +120,6 @@ class Order < ActiveRecord::Base
 
 
   monetize :total_cents, :allow_nil => true
-  monetize :subtotal_cents, :allow_nil => true
   monetize :tax_amount_cents, :allow_nil => true
   monetize :cash_cents, :allow_nil => true
   monetize :lc_amount_cents, :allow_nil => true
@@ -207,20 +202,8 @@ class Order < ActiveRecord::Base
     self.calculate_totals
   end
   
-  def gross
-    if self.vendor.net_prices == true
-      return self.subtotal + self.tax_amount
-    else
-      return self.subtotal
-    end
-  end
-  
   def net
-    if self.vendor_net_prices == true
-      return self.subtotal
-    else
-      return self.subtotal - self.tax_amount
-    end
+    return self.total - self.tax_amount
   end
   
 #   def skus=(list)
@@ -393,21 +376,13 @@ class Order < ActiveRecord::Base
   def calculate_totals
     log_action "Calculating Totals"
     
-    # self.total contains only subtotal sum of normal items. this is needed for the gift card price calculation.
-    _oi_total = self.order_items.visible.where("NOT ( behavior = 'gift_card' AND activated = 1 )").sum(:subtotal_cents)
-    _oi_tax =  self.order_items.visible.sum(:tax_amount_cents)
-    log_action "Subtotal is: #{_oi_total} and tax is #{_oi_tax}"
+    _oi_total = self.order_items.visible.sum(:total_cents)
+    _oi_tax_amount = self.order_items.visible.sum(:tax_amount_cents)
+    
+    log_action "Total is: #{_oi_total} and tax is #{_oi_tax_amount}"
    
-    # subtotal contains everything
-    self.subtotal_cents = _oi_total
-    
-    self.tax_amount_cents = _oi_tax
-    
-    if self.vendor.net_prices then
-      self.total_cents = _oi_total + _oi_tax
-    else
-      self.total_cents = _oi_total
-    end
+    self.tax_amount_cents = _oi_tax_amount
+    self.total_cents = _oi_total
 
     if not self.save then
       puts self.errors.full_messages.to_sentence
@@ -523,7 +498,7 @@ class Order < ActiveRecord::Base
     payment_cash = Money.new(self.payment_method_items.visible.where(:cash => true).sum(:amount_cents))
     payment_total = Money.new(self.payment_method_items.visible.sum(:amount_cents))
     payment_noncash = (payment_total - payment_cash)
-    change = (payment_total - self.gross)
+    change = (payment_total - self.total)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
 
     pmi = PaymentMethodItem.new
@@ -595,7 +570,7 @@ class Order < ActiveRecord::Base
   def to_list_of_taxes_raw(array)
     ret = {}
     i = 0
-    [:letter, :value, :net, :tax, :gross].each do |k|
+    [:letter, :value, :net, :tax, :total].each do |k|
       ret[k] = array[i]
       i += 1
     end
@@ -608,11 +583,7 @@ class Order < ActiveRecord::Base
 
     self.vendor.tax_profiles.visible.each { |t| sum_taxes[t.id] = {:total => 0, :letter => t.letter, :value => 0} }
     
-    subtotal1 = 0
-    discount_subtotal = 0
-    rebate_subtotal = 0
-    refund_subtotal = 0
-    coupon_subtotal = 0
+    total = 0
     list_of_items = ''
     list_of_items_raw = []
     list_of_taxes_raw = []
@@ -709,14 +680,9 @@ class Order < ActiveRecord::Base
       tax_in_percent = r.tax # this is the tax in percent, stored on OrderItem
       tax_profile = self.vendor.tax_profiles.find_by_value(tax_in_percent)
       tax_amount = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:tax_amount_cents))
-      subtotal = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:subtotal_cents))
-      if self.vendor.net_prices
-        net = subtotal
-        gro = subtotal + tax_amount
-      else
-        net = subtotal - tax_amount
-        gro = subtotal
-      end
+      total = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:total_cents))
+      net = self.net
+      gro = self.total
       list_of_taxes += tax_format % [tax_profile.letter, tax_in_percent, net, tax_amount, gro]
       list_of_taxes_raw << to_list_of_taxes_raw([tax_profile.letter, tax_profile.value, net, tax_amount, gro])
     end
@@ -773,7 +739,7 @@ class Order < ActiveRecord::Base
     report[:list_of_items_raw] = list_of_items_raw
     report[:list_of_taxes] = list_of_taxes
     report[:list_of_taxes_raw] = list_of_taxes_raw
-    report[:subtotal] = self.gross
+    report[:total] = self.total
     report[:change] = self.change
     report[:paymentmethods] = paymentmethods
     report[:customer] = customer
@@ -847,14 +813,14 @@ class Order < ActiveRecord::Base
     list_of_items = report[:list_of_items]
     list_of_items += "\xc4" * 42 + "\n"
     
-    subtotal = ''
-    subtotal_format = "%29.29s %s %8.2f\n"
-    subtotal_values = [
-      I18n.t('printr.order_receipt.subsubtotal'),
+    total = ''
+    total_format = "%29.29s %s %8.2f\n"
+    total_values = [
+      I18n.t('printr.order_receipt.total'),
       report[:unit],
-      report[:subtotal]
+      report[:total]
     ]
-    subtotal +=  subtotal_format % subtotal_values
+    total +=  total_format % total_values
     
     paymentmethods = ''
     paymentmethods += report[:paymentmethods].to_a.collect do |pm|
@@ -914,7 +880,7 @@ class Order < ActiveRecord::Base
         receiptblurb_header +
         header +
         list_of_items +
-        subtotal +
+        total +
         paymentmethods +
         tax_format +
         tax_header +
@@ -1061,7 +1027,7 @@ class Order < ActiveRecord::Base
   def to_json
     self.total = 0 if self.total.nil?
     attrs = {
-      :total => self.gross.to_f,
+      :total => self.total.to_f,
       :rebate => self.rebate.to_f,
       :lc_points => self.lc_points,
       :id => self.id,

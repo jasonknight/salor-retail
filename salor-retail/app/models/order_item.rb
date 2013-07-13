@@ -27,7 +27,6 @@ class OrderItem < ActiveRecord::Base
 
 
   monetize :total_cents, :allow_nil => true
-  monetize :subtotal_cents, :allow_nil => true
   monetize :price_cents, :allow_nil => true
   monetize :tax_amount_cents, :allow_nil => true
   monetize :coupon_amount_cents, :allow_nil => true
@@ -117,7 +116,7 @@ class OrderItem < ActiveRecord::Base
     pmi.order = self.order
     pmi.user = user
     pmi.drawer = drawer
-    pmi.amount = - self.gross
+    pmi.amount = - self.total
     pmi.payment_method = refund_payment_method
     pmi.cash = refund_payment_method.cash
     pmi.refund = true
@@ -135,10 +134,10 @@ class OrderItem < ActiveRecord::Base
       dt.order_item_id = self.id
       dt.drawer = drawer
       dt.drawer_amount = drawer.amount
-      dt.amount = - self.gross
+      dt.amount = - self.total
       dt.save
       
-      drawer.amount -= self.gross
+      drawer.amount -= self.total
       drawer.save
     end
     
@@ -187,20 +186,13 @@ class OrderItem < ActiveRecord::Base
     write_attribute :price_cents, p.fractional
   end
   
+  # this method is just for documentation purposes: that total always includes tax. it is the physical money that has to be collected from the customer.
   def gross
-    if self.vendor.net_prices == true
-      return self.subtotal.to_f + self.tax_amount.to_f
-    else
-      return self.subtotal.to_f
-    end
+    return self.total
   end
   
   def net
-    if self.vendor.net_prices == true
-      return self.subtotal.to_f
-    else
-      return self.subtotal.to_f - self.tax_amount.to_f
-    end
+    return self.total - self.tax_amount
   end
 
   
@@ -280,8 +272,8 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price_for_giftcards
     if self.behavior == 'gift_card' and self.item.activated
-      if self.item.gift_card_amount > self.order.gross
-        self.price = - self.order.gross
+      if self.item.gift_card_amount > self.order.total
+        self.price = - self.order.total
       else
         self.price = - self.gift_card_amount
       end
@@ -295,41 +287,54 @@ class OrderItem < ActiveRecord::Base
   end
   
   def calculate_totals
-    if self.refunded
-      t = 0
+    if self.refunded or self.behavior == 'coupon'
+      # coupons do have a total of 0, because they are not sold. they act on a matching OrderItem instead.
+      self.total = 0
     else
-      t = (self.price * self.quantity)
+      # at this point, total is net for the USA tax system and gross for the Europe tax system.
+      self.total = self.price * self.quantity
     end
-    
-    self.subtotal = t
+
+    # Now, the total can be subject to price reductions. the following apply_ methods handle this and modify self.total
     self.apply_discount
     self.apply_rebate
-    if self.behavior == "coupon" then
-      self.apply_coupon
-      #self.save
-      #return
-    end
+    self.apply_coupon
+    
+    # this method calculates taxes and transforms "total" to always include tax
     self.calculate_tax
-    self.total = self.subtotal + self.tax_amount
     self.save
   end
   
+  # this method calculates taxes and transforms "total" to always include tax
+  def calculate_tax
+    if self.vendor.net_prices
+      # this is for the US tax system
+      self.tax_amount = self.total * self.tax / 100.0
+      self.total += tax_amount
+    else
+      # this is for the Europe tax system. Note that self.total already includes taxes, so we don't have to modify it here.
+      self.tax_amount = self.total / ( 1 + self.tax / 100.0 )
+    end
+  end
+  
   # coupons have to be added after the matching product
-  # coupons do not have a price by themselves, they just reduce the price of the matchin OrderItem
+  # coupons do not have a price by themselves, they just reduce the total of the matching OrderItem. Note that this method does not act on self, but to the matching OrderItem.
   def apply_coupon
     if self.behavior == 'coupon'
       item = self.item
+      
+      # coitem is the OrderItem to which the coupon acts upon
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
       if coitem
         unless coitem.coupon_amount.zero? then
-          log_action "This item is a coupon, but the coupon_amount has already been set"
+          log_action "This item is a coupon, but a coupon_amount has already been set"
           return
         end
         ctype = self.item.coupon_type
         if ctype == 1
           # percent rebate
           log_action "Percent rebate coupon"
-          coitem.coupon_amount = coitem.subtotal * (self.price.to_f / 100)
+          coitem.coupon_amount = coitem.total * (self.price.to_f / 100)
         elsif ctype == 2
           # fixed amount
           log_action "Fixed amount coupon"
@@ -340,13 +345,14 @@ class OrderItem < ActiveRecord::Base
           x = 2
           y = 1
           if coitem.quantity >= x
-            coitem.coupon_amount = coitem.subtotal / coitem.quantity * y
+            coitem.coupon_amount = coitem.total / coitem.quantity * y
           end
         end
-        log_action "Subtotal is: #{coitem.subtotal} and coupon_amount is #{coitem.coupon_amount}"
-        coitem.subtotal -= coitem.coupon_amount
+        log_action "Ttotal is: #{coitem.total} and coupon_amount is #{coitem.coupon_amount}"
+        coitem.total -= coitem.coupon_amount
         coitem.calculate_tax
         coitem.save
+        
       else
         log_action "coitem was not found"
       end
@@ -356,9 +362,9 @@ class OrderItem < ActiveRecord::Base
   def apply_rebate
     if self.rebate
       log_action "Applying rebate"
-      self.rebate_amount = (self.subtotal.to_f * (self.rebate / 100.0))
+      self.rebate_amount = (self.total.to_f * (self.rebate / 100.0))
       log_action "rebate_amount is #{self.rebate_amount.to_f} #{self.rebate_amount_cents}"
-      self.subtotal -= self.rebate_amount
+      self.total -= self.rebate_amount
     end
   end
   
@@ -378,21 +384,13 @@ class OrderItem < ActiveRecord::Base
     
     if discount
       self.discount = discount.amount
-      self.discount_amount = (self.subtotal * discount.amount / 100.0)
-      self.subtotal -= self.discount_amount
+      self.discount_amount = (self.total * discount.amount / 100.0)
+      self.total -= self.discount_amount
       self.discounts << discount
     end
   end
 
-  
-  def calculate_tax
-    if self.vendor.net_prices
-      t = self.subtotal * self.tax / 100.0
-    else
-      t = self.subtotal / ( 1 + self.tax / 100.0 )
-    end
-    self.tax_amount = t
-  end
+
   
   
   def quantity=(q)
@@ -441,7 +439,7 @@ class OrderItem < ActiveRecord::Base
         :quantity => self.quantity,
         :price => self.price.to_f,
         :coupon_amount => self.coupon_amount_cents.blank? ? 0 : - self.coupon_amount.to_f,
-        :subtotal => self.subtotal.to_f,
+        :total => self.total.to_f,
         :id => self.id,
         :behavior => self.behavior,
         :discount_amount => self.discount_amount.blank? ? 0 : - self.discount_amount.to_f,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130713071733) do
+ActiveRecord::Schema.define(:version => 20130713152304) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -705,8 +705,6 @@ ActiveRecord::Schema.define(:version => 20130713071733) do
     t.string   "discount_amount_currency",      :default => "USD"
     t.integer  "rebate_amount_cents",           :default => 0
     t.string   "rebate_amount_currency",        :default => "USD"
-    t.integer  "subtotal_cents",                :default => 0
-    t.string   "subtotal_currency",             :default => "USD"
     t.integer  "total_cents",                   :default => 0
     t.string   "total_currency",                :default => "USD"
   end
@@ -757,8 +755,6 @@ ActiveRecord::Schema.define(:version => 20130713071733) do
     t.integer  "tax_profile_id"
     t.integer  "total_cents",            :default => 0
     t.string   "total_currency",         :default => "USD"
-    t.integer  "subtotal_cents",         :default => 0
-    t.string   "subtotal_currency",      :default => "USD"
     t.integer  "tax_amount_cents",       :default => 0
     t.string   "tax_amount_currency",    :default => "USD"
     t.integer  "cash_cents",             :default => 0

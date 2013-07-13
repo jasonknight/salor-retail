@@ -17,7 +17,7 @@ class Action < ActiveRecord::Base
   belongs_to :model, :polymorphic => true
   
   def self.when_list
-    [:add_to_order, :always, :on_save, :on_import, :on_export]
+    [:add_to_order, :change_quantity, :change_price, :always, :on_save, :on_import, :on_export]
   end
 
   def category_id
