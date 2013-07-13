@@ -376,6 +376,7 @@ class OrderItem < ActiveRecord::Base
       self.discount = discount.amount
       self.discount_amount = (self.subtotal * discount.amount / 100.0)
       self.subtotal -= self.discount_amount
+      self.discounts << discount
     end
   end
 
