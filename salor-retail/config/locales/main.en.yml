@@ -278,6 +278,9 @@ en:
       vendor:
         one: Store
         other: Stores
+      cash_register:
+        one: Cash Register
+        other: Cash Registers
   api:
     user_does_not_exist: user does not exist
   are_you_sure: Are you sure you want to do this?
@@ -651,7 +654,7 @@ en:
       rebate_subtotal: Rebate Subtotal
       refund: Total refunds
       refunded: REFUNDED
-      subsubtotal: TOTAL
+      total: TOTAL
       subtotal1: Subtotal
       subtotal2: Subtotal
       subtotal3: Subtotal

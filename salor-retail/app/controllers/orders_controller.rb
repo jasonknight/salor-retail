@@ -107,6 +107,7 @@ class OrdersController < ApplicationController
   def add_item_ajax
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     @order_item = @order.add_order_item(params)
+    render :update_pos_display
   end
 
 
@@ -114,6 +115,7 @@ class OrdersController < ApplicationController
     oi = @current_vendor.order_items.find_by_id(params[:id])
     @order = oi.order
     oi.hide(@current_user)
+    render :update_pos_display
   end
 
   def print_receipt
@@ -162,7 +164,7 @@ class OrdersController < ApplicationController
   def complete
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     
-    SalorBase.log_action("OrdersController","complete_order_ajax order initialized")
+    SalorBase.log_action("OrdersController","complete initialized")
     History.record("initialized order for complete",@order,5)
 
     if params[:user_id] and params[:user_id] != @current_user.id then
@@ -188,7 +190,7 @@ class OrdersController < ApplicationController
       render :js => " window.location = '/orders/#{@order.id}/print'; " and return
     end
     
-    if params[:print] and @current_register.salor_printer != true and not @current_register.thermal_printer.blank?
+    if params[:print] == "true" and @current_register.salor_printer != true and not @current_register.thermal_printer.blank?
       @order.print(@current_register)
     end
     

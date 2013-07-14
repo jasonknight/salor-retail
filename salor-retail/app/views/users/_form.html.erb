@@ -7,7 +7,7 @@
         </div>
         <% if @user.errors.any? %>
           <div id="error_explanation">
-            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @user.errors.count,:model => t("activerecord.models.employee.one"))%></h2>
+            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @user.errors.count,:model => t("activerecord.models.user.one"))%></h2>
       
             <ul>
             <% @user.errors.full_messages.each do |msg| %>
@@ -32,13 +32,13 @@
       
 
               
-              <div class="freefield"><%= f.label t("activerecord.attributes.employee.hourly_rate") %><br />
+              <div class="freefield"><%= f.label t("activerecord.attributes.user.hourly_rate") %><br />
               <%= f.text_field :hourly_rate, :class => "keyboardable"%></div>
               
               <div class="freefield"><%= f.label t("activerecord.attributes.email") %><br />
               <%= f.email_field :email, :class => 'keyboardable' %></div>
               <div class="freefield"><%= f.label User.human_attribute_name :uses_drawer_id %><br />
-              <%= f.collection_select :uses_drawer_id, @current_vendor.users.visible.where("username != '#{@user.username}'"), :id, :username, :include_blank => true %>
+              <%= f.collection_select :uses_drawer_id, @current_vendor.users.visible.where("username != '#{@user.username}'"), :drawer_id, :username, :include_blank => true %>
               
               </div>
             </td>
@@ -110,7 +110,7 @@
             <br />
               <% for role in Role.order('name asc').all  %>
                 <div class="role-check" name="<%= role.name.titleize%>">
-                  <%= check_box_tag "employee[role_ids][]", role.id, @user.role_ids.include?(role.id)  %>
+                  <%= check_box_tag "user[role_ids][]", role.id, @user.role_ids.include?(role.id)  %>
                   <%= I18n.t(role.name) %>
                 </div>
               <% end %>

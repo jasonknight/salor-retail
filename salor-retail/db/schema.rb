@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130713071733) do
+ActiveRecord::Schema.define(:version => 20130714075914) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -684,7 +684,7 @@ ActiveRecord::Schema.define(:version => 20130713071733) do
     t.string   "sku"
     t.boolean  "weigh_compulsory"
     t.boolean  "no_inc"
-    t.string   "refund_payment_method_item_id"
+    t.string   "refund_payment_method_internal_type"
     t.boolean  "action_applied"
     t.boolean  "hidden"
     t.integer  "vendor_id"
@@ -695,22 +695,21 @@ ActiveRecord::Schema.define(:version => 20130713071733) do
     t.float    "discount"
     t.boolean  "calculate_part_price"
     t.integer  "drawer_id"
-    t.integer  "price_cents",                   :default => 0
-    t.string   "price_currency",                :default => "USD"
-    t.integer  "gift_card_amount_cents",        :default => 0
-    t.string   "gift_card_amount_currency",     :default => "USD"
-    t.integer  "tax_amount_cents",              :default => 0
-    t.string   "tax_amount_currency",           :default => "USD"
-    t.integer  "coupon_amount_cents",           :default => 0
-    t.string   "coupon_amount_currency",        :default => "USD"
-    t.integer  "discount_amount_cents",         :default => 0
-    t.string   "discount_amount_currency",      :default => "USD"
-    t.integer  "rebate_amount_cents",           :default => 0
-    t.string   "rebate_amount_currency",        :default => "USD"
-    t.integer  "subtotal_cents",                :default => 0
-    t.string   "subtotal_currency",             :default => "USD"
-    t.integer  "total_cents",                   :default => 0
-    t.string   "total_currency",                :default => "USD"
+    t.integer  "price_cents",                         :default => 0
+    t.string   "price_currency",                      :default => "USD"
+    t.integer  "gift_card_amount_cents",              :default => 0
+    t.string   "gift_card_amount_currency",           :default => "USD"
+    t.integer  "tax_amount_cents",                    :default => 0
+    t.string   "tax_amount_currency",                 :default => "USD"
+    t.integer  "coupon_amount_cents",                 :default => 0
+    t.string   "coupon_amount_currency",              :default => "USD"
+    t.integer  "discount_amount_cents",               :default => 0
+    t.string   "discount_amount_currency",            :default => "USD"
+    t.integer  "rebate_amount_cents",                 :default => 0
+    t.string   "rebate_amount_currency",              :default => "USD"
+    t.integer  "total_cents",                         :default => 0
+    t.string   "total_currency",                      :default => "USD"
+    t.integer  "refund_payment_method_item_id"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -759,8 +758,6 @@ ActiveRecord::Schema.define(:version => 20130713071733) do
     t.integer  "tax_profile_id"
     t.integer  "total_cents",            :default => 0
     t.string   "total_currency",         :default => "USD"
-    t.integer  "subtotal_cents",         :default => 0
-    t.string   "subtotal_currency",      :default => "USD"
     t.integer  "tax_amount_cents",       :default => 0
     t.string   "tax_amount_currency",    :default => "USD"
     t.integer  "cash_cents",             :default => 0
@@ -814,11 +811,11 @@ ActiveRecord::Schema.define(:version => 20130713071733) do
     t.integer  "vendor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "hidden"
-    t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.integer  "hidden",        :default => 0
+    t.integer  "hidden_by"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"

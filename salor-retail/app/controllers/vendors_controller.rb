@@ -153,12 +153,6 @@ class VendorsController < ApplicationController
   def edit_field_on_child
     klass = params[:klass].constantize
     @inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
-      
-    if @inst.class == Order
-      @order = @inst
-    elsif @inst.class == OrderItem
-      @order = @inst.order
-    end
 
     #value = SalorBase.string_to_float(params[:value])
     value = params[:value]
@@ -172,15 +166,22 @@ class VendorsController < ApplicationController
     
     if @inst.class == OrderItem
       #README If someone edits the quantity or price of an item, Actions need to be informed of this.
-      if [:price, :quantity].include? params[:field].to_sym then
-        @inst.modify_price_for_actions
-        @inst.save
+      case params[:field]
+      when 'price'
+        Action.run(@inst, :change_price)
+      when 'quantity'
+        Action.run(@inst, :change_quantity)
       end
       @inst.calculate_totals
-      @order.calculate_totals
+      @inst.order.calculate_totals
+      
+      @order_item = @inst # we need that for the view
+      @order = @inst.order
       render 'orders/update_pos_display'
     elsif @inst.class == Order
       @inst.calculate_totals
+      
+      @order = @inst # we need that for the view
       render 'orders/update_pos_display'
     else
       render :nothing => true

@@ -278,6 +278,9 @@ gn:
       vendor:
         one: Filiale
         other: Filialen
+      cash_register:
+        one: Kasse
+        other: Kassen
   api:
     user_does_not_exist: Dieser Benutzer existiert nicht oder darf die API nicht benutzen.
   are_you_sure: Sind Sie sicher?
@@ -653,7 +656,7 @@ gn:
       rebate_subtotal: Summe Rabatte
       refund: Rabatte auf gesamten Einkauf
       refunded: STORNIERUNG
-      subsubtotal: GESAMTSUMME
+      total: SUMME
       subtotal1: Zwischensumme
       subtotal2: Zwischensumme
       subtotal3: Zwischensumme

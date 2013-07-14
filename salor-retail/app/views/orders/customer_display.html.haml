@@ -2,17 +2,18 @@
   .logo= image_tag @current_vendor.image('invoice_logo')
 
   - @report[:list_of_items_raw].reverse[0..4].each do |item|
-    %div{ :class => "#{ item[:price] < 0 ? 'highlighted' : '' }" }
+    - highlight = item[:price].blank? or item[:price] < 0
+    %div{ :class => "#{ highlight  ? 'highlighted' : '' }" }
       - item = format_item(item)
       - item.each do |k,v|
         - next if k == :type or k == :letter
         %span{ :class => k }= v
 
 
-  %div#subsubtotal= number_to_currency @report[:subtotal]
+  %div#subsubtotal= humanized_money_with_symbol @report[:subtotal]
 
   - if @report[:change]
-    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @report[:change] }
+    %div#change== #{ t('printr.order_receipt.change') }: #{ humanized_money_with_symbol @report[:change] }
 
   - if @report[:customer]
     .customerdetails

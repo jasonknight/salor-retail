@@ -64,9 +64,9 @@
         - categories[i[0]].to_a.each do |c|
           %tr
             %td.left= c[0].blank? ? t('printr.eod_report.no_category') : c[0]
-            %td.table-center= number_to_currency c[1][:gro]
-            %td.table-center= number_to_currency c[1][:net]
-            %td.table-center= number_to_currency c[1][:gro] - c[1][:net]
+            %td.table-center= humanized_money_with_symbol c[1][:gro]
+            %td.table-center= humanized_money_with_symbol c[1][:net]
+            %td.table-center= humanized_money_with_symbol c[1][:gro] - c[1][:net]
 
       %table.striped-table2
         %tr
@@ -77,9 +77,9 @@
         - taxes[i[0]].to_a.each do |t|
           %tr
             %td.left= number_to_percentage t[0]
-            %td.table-center= number_to_currency t[1][:gro]
-            %td.table-center= number_to_currency t[1][:net]
-            %td.table-center= number_to_currency t[1][:gro] - t[1][:net]
+            %td.table-center= humanized_money_with_symbol t[1][:gro]
+            %td.table-center= humanized_money_with_symbol t[1][:net]
+            %td.table-center= humanized_money_with_symbol t[1][:gro] - t[1][:net]
 
       %table.striped-table2
         %tr
@@ -88,10 +88,10 @@
         - paymentmethods[i[0]].to_a.each do |p|
           %tr
             %td.left= p[0]
-            %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "table-center"}= number_to_currency p[1]
+            %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "table-center"}= humanized_money_with_symbol p[1]
 
-      %p{:id => "#{i[0]}_sum_gross"}== #{ t '.sum_gross' }: #{ number_to_currency categories_sum[i[0]][:gro] }
-      %p{:id => "#{i[0]}_sum_net"}== #{ t '.sum_net' }: #{ number_to_currency categories_sum[i[0]][:net] }
+      %p{:id => "#{i[0]}_sum_gross"}== #{ t '.sum_gross' }: #{ humanized_money_with_symbol categories_sum[i[0]][:gro] }
+      %p{:id => "#{i[0]}_sum_net"}== #{ t '.sum_net' }: #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
 
 
 
@@ -111,14 +111,14 @@
       - refunds.each do |k,v|
         %tr
           %td.left= k
-          %td.table-center= number_to_currency v
+          %td.table-center= humanized_money_with_symbol v
 
 
 
 
     %h3= t '.revenue'
-    %p== #{ t '.gross' }: #{ number_to_currency revenue[:gro] }
-    %p== #{ t '.net' }: #{ number_to_currency revenue[:net] }
+    %p== #{ t '.gross' }: #{ humanized_money_with_symbol revenue[:gro] }
+    %p== #{ t '.net' }: #{ humanized_money_with_symbol revenue[:net] }
 
 
     - if @from == @to.beginning_of_day
@@ -136,20 +136,20 @@
             %td.left= t ('.' + d[:tag])
             %td.left= d[:notes]
             %td.left= l d[:time], :format => :just_time
-            %td.right= number_to_currency d[:amount] if d[:amount] > 0
-            %td.right= number_to_currency d[:amount] if d[:amount] < 0
+            %td.right= humanized_money_with_symbol d[:amount] if d[:amount] > 0
+            %td.right= humanized_money_with_symbol d[:amount] if d[:amount] < 0
 
-      %p== #{ t '.sum_transactions' }: #{ number_to_currency transactions_sum }
+      %p== #{ t '.sum_transactions' }: #{ humanized_money_with_symbol transactions_sum }
 
 
       %h3= t '.cash_drawer'
 
       - if @from.beginning_of_day == Time.now.beginning_of_day and @user
-        %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ number_to_currency @user.get_drawer.amount }
+        %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ humanized_money_with_symbol @user.get_drawer.amount }
 
-      %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ number_to_currency calculated_drawer_amount }
+      %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ humanized_money_with_symbol calculated_drawer_amount }
 
-      - unless calculated_drawer_amount.round(2).zero?
+      - unless calculated_drawer_amount.zero?
         %p
           %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
 

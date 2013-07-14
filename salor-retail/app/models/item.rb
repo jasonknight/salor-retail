@@ -5,6 +5,9 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
+# TODO:
+# * validate that gift card items always have a tax class of 0%. this is needed so that the taxes are correct when using gift cards. also, it would not make order total 0 in those cases where gift_card_amount is greater than order total.
+
 class Item < ActiveRecord::Base
 
   include SalorScope

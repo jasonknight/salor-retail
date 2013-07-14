@@ -20,9 +20,9 @@ function addPosItem(item) {
    _set('item',item,row);
   
   if (Register.hide_discounts == true) {
-    var attrs = ['name','quantity','price','subtotal'];
+    var attrs = ['name','quantity','price','total'];
   } else {
-    var attrs = ['name','quantity','price','coupon_amount','rebate','subtotal','tax'];
+    var attrs = ['name','quantity','price','coupon_amount','rebate','total','tax'];
   }
   
   row.addClass(base_id);
@@ -35,7 +35,7 @@ function addPosItem(item) {
     var attr = attrs[i];
     var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
     
-    if (attr == 'price' || attr == 'coupon_amount' || attr == 'subtotal' || attr == 'rebate' || attr == 'tax') {
+    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax') {
       // add color when action applies
       if (item["action_applied"] == true && attr == 'price') {
         col.addClass("pos-action-applied");
@@ -706,9 +706,9 @@ function updatePosItem(item) {
   _set('item',item,row);
   
   if (Register.hide_discounts) {
-    var attrs = ['name','quantity','price','subtotal', 'tax'];
+    var attrs = ['name','quantity','price','total', 'tax'];
   } else {
-    var attrs = ['name','quantity','price','coupon_amount','rebate','subtotal','tax'];
+    var attrs = ['name','quantity','price','coupon_amount','rebate','total','tax'];
   }
   
   item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
@@ -718,7 +718,7 @@ function updatePosItem(item) {
     var col = $('.' + base_id + '-' + attr);
     if ( (item['discount_amount'] != 0 || item['coupon_amount'] != 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
     
-    if (attr == 'price' || attr == 'coupon_amount' || attr == 'subtotal' || attr == 'rebate' || attr == 'tax') {
+    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax') {
       // add color when action applies
       if (item["action_applied"] == true && attr == 'price') {
         col.addClass("pos-action-applied");

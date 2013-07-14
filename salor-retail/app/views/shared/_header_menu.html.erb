@@ -23,7 +23,7 @@
     <% if @current_user and @current_user.can(:index_items) %>
     <li>
       <div align="center" id="btn-items-index" class="">
-        <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path(:vendor_id => @current_user.vendor_id) %>
+        <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path %>
       </div>
     </li>
     <% end %>
@@ -32,7 +32,9 @@
         <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
           <%= salor_icon(:cash_drop, {}, 20, @current_user.get_drawer.user.username ) %>
           <br />
-          <div id='header_drawer_amount'></div>
+          <div id='header_drawer_amount'>
+            <%= humanized_money_with_symbol @current_user.get_drawer.amount %>
+          </div>
         </div>
       </li>
     <% end %>
@@ -46,7 +48,7 @@
     <% if @current_user and @current_user.can(:index_customers) %>
     <li>
       <div align="center" id="btn-customers-new" class="">
-        <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path(:vendor_id => @current_user.vendor_id) %><br />
+        <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path %><br />
       </div>
     </li>
     <% end %>
