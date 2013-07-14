@@ -5,7 +5,7 @@ order_items.reverse.each do |oi|
 <tr id="order_item-<%= oi.id %>" 
     class="order-item <%= 'discount-applied' if oi.discount_amount %>" 
     gcard="<%= oi.item_type.behavior == 'gift_card' ? 'true' : 'false' %>"
-    amnt="<%= oi.amount_remaining %>"
+    amnt="<%= oi.gift_card_amount %>"
     activated="<%= oi.item.activated ? 'true' : 'false' %>">
     <% opts = "update_pos_display='true' model_id='#{oi.item.id}' klass='Item' field='name' data_type='String' id='in_place_edit_item_name_#{oi.item.id}'"  %>
     <%
