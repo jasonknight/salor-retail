@@ -314,8 +314,7 @@ class Order < ActiveRecord::Base
     gcs = self.order_items.visible.where(:behavior => 'gift_card', :activated => true)
     gcs.each do |gc|
       i = gc.item
-      i.gift_card_amount += gc.price
-      i.gift_card_amount = i.gift_card_amount
+      i.gift_card_amount += gc.price # gc.price is always negative, so this is actually a subtraction
       i.save
     end
   end
@@ -324,9 +323,10 @@ class Order < ActiveRecord::Base
   def activate_giftcard_items
     gcs = self.order_items.visible.where(:behavior => 'gift_card', :activated => nil)
     gcs.each do |gc|
-      i = gc.item
-      i.activated = true
-      i.save
+      item = gc.item
+      item.activated = true
+      item.gift_card_amount = item.price
+      item.save
     end
   end
   
@@ -801,7 +801,7 @@ class Order < ActiveRecord::Base
     paymentmethods = ''
     report[:paymentmethods].each do |k,v|
       paymentmethods += "%29.29s %s %8.2f\n" % [v[:name], report[:unit], v[:amount]]
-    end.join
+    end
 
     tax_format = "\n\n" +
     "\ea\x01" +  # align center

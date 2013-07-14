@@ -168,10 +168,14 @@ class OrderItem < ActiveRecord::Base
 
   def price=(p)
     if p.class == String
+      # a string is sent from Vendor.edit_field_on_child
       p = Money.new(self.string_to_float(p) * 100)
     elsif p.class == Float
+      # not sure which parts of the code send a Float, but we leave it here for now
       p = Money.new(p * 100)
     end
+    
+    # this is needed for dynamically created gift cards on the POS screen.
     if self.behavior == 'gift_card'
       i = self.item
       if i.activated.nil?
@@ -180,6 +184,8 @@ class OrderItem < ActiveRecord::Base
         i.save
       end
     end
+    
+    # make price negative when it is a buyback OrderItem
     if self.is_buyback
       p = - p.abs
     end
