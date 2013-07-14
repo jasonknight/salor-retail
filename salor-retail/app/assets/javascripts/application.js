@@ -16,6 +16,8 @@
 //= require sprintf
 //= require genericjs
 //= require math
+//= require categories
+//= require buttons
 //= require items
 //= require debug
 //= require documentready
@@ -28,6 +30,9 @@
 //= require style
 //= require shared
 //= require ordersjs
+//= require ordersjs
+//= require cash_registers
+//= require search
 //= require complete-order-payment
 //= require complete-order-change
 //= require complete-order

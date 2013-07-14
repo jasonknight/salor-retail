@@ -1,7 +1,3 @@
-$(document).ready(function(){
-  $('#header_drawer_amount').html(toCurrency(Drawer.amount));
-});
-
 function show_cash_drop() {
   $('#cash_drop').show();
   $("#transaction_type").val('');
@@ -50,8 +46,8 @@ function cash_drop_save() {
 
 
 
-function updateDrawer(amount) {
-  $('.pos-cash-register-amount').html(toCurrency(amount));
-  $('.eod-drawer-total').html(toCurrency(amount));
-  $('#header_drawer_amount').html(toCurrency(amount));
+function updateDrawer(string) {
+  $('.pos-cash-register-amount').html(string);
+  $('.eod-drawer-total').html(string);
+  $('#header_drawer_amount').html(string);
 }

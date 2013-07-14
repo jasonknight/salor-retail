@@ -1,52 +1,9 @@
-<script type="text/javascript">
-var search_last_query = '';
-var current_page = 1;
-function showSearch() {
-  $('#search').show();
-  $('#search').css({'z-index':'1010'});
-  $('#search_keywords').val("");
-  focusInput($('#search_keywords'));
-  var inp = $('<input type="text" id="search_keywords" name="keywords" class="keyboardable" value="" />');
-  $('.search-div-input-constrainer').html(inp);
-  make_keyboardable(inp);
-  $('#search').height($(window).height() * 0.75);
-  $('#search').width($(window).width() * 0.75);
-  $('.search-results').height($('#search').height() - 136);
-  setTimeout(function () {
-    inp.focus();
-  },120);
-  shared.helpers.center($('#search'));
-}
-function hideSearch() {
-  $('#search').hide();
-  $('#search_results').html('');
-  setTimeout(function () {
-    focusInput($('#keyboard_input'));
-  },120);
-}
-
-function search(caller) {
-  console.log('search', caller);
-  search_last_query = '/items/search?keywords=' + $('#search_keywords').val() + '&klass=' + $('#search_models').val() + '&page=' + current_page;
-  get(search_last_query, '_search.html.erb');
-}
-
-function search_get_next_page() {
-  current_page = current_page + 1;
-  search('search_get_next_page');
-}
-function search_get_prev_page() {
-  current_page = current_page - 1;
-  search('search_get_prev_page');
-}
-
-</script>
 <div id="search" class="search hidden">
 <table align="center" width="100%">
   <tr>
     <td valign="top" width="50%">
       <div class="search-div-input-constrainer">
-        
+        <!-- search.js will dynamically add input field here -->
       </div>
     </td>
     <td valign="top">
@@ -57,15 +14,13 @@ function search_get_prev_page() {
       </select>
     </td>
     <td valign="top">
-      <div class="button-up" onmousedown="search()"><%= t("views.forms.search") %></div>
-      <!--
-      <button class="input" onmousedown="search()"> <%= t("views.forms.search") %></button>
-      -->
+      <div class="button-up" onmousedown="search()">
+        <%= t("views.forms.search") %>
+      </div>
     </td>
   </tr>
 </table>
   <div id="search_results" class="search-results">
-
   </div>
   <br />
   <div id="" align="right" class="button-row">

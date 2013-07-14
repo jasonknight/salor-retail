@@ -33,9 +33,7 @@ $(function(){
   });
 });
 
-function generic_search(caller) {
-  window.location = '?keywords=' + $('#generic_search_input').val();
-}
+
 
 function wholesaler_update() {
   var answer = confirm('Are you sure?')
