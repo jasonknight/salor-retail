@@ -22,10 +22,10 @@
           %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
           %td.total= humanized_money_with_symbol pm.amount
     - else
-      - @report[:paymentmethods].to_a.each do |pm|
+      - @report[:paymentmethods].each do |k,v|
         %tr
-          %td= pm[0]
-          %td.total= humanized_money_with_symbol pm[1]
+          %td= v[:name]
+          %td.total= humanized_money_with_symbol v[:amount]
 
 
   %br

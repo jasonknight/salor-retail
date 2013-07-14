@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
   
   def get_drawer
     if self.uses_drawer_id then
-      return self.vendor.drawers.find_by_id(self.uses_drawer_id)
+      return self.company.drawers.find_by_id(self.uses_drawer_id)
       return d if d
     end
     return self.drawer

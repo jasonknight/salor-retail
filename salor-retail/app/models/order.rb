@@ -624,7 +624,7 @@ class Order < ActiveRecord::Base
       end
 
       # DISCOUNTS
-      unless oi.discount_amount.zero?
+      if oi.discount_amount and not oi.discount_amount.zero? # TODO: get rid of nil values in DB
         discount = oi.discounts.first
         discount_blurb = I18n.t('printr.order_receipt.discount') + ' ' + oi.discount.to_s + ' %'
         list_of_items += "  %-19.19s         %3u\n" % [discount_blurb, oi.quantity] #TODO
@@ -640,13 +640,13 @@ class Order < ActiveRecord::Base
     end
 
 
-    # --- payment methods ---
+    # --- payment method items ---
     paymentmethods = Hash.new
     self.payment_method_items.visible.each do |pmi|
       next if pmi.amount.zero?
       blurb = pmi.payment_method.name
-      blurb = I18n.t('printr.eod_report.refund') + blurb if pmi.refund
-      paymentmethods[blurb] = pmi.amount
+      blurb = I18n.t('printr.eod_report.refund') + ' ' + blurb if pmi.refund
+      paymentmethods[pmi.id] = { :name => blurb, :amount => pmi.amount }
     end
 
     
@@ -799,8 +799,8 @@ class Order < ActiveRecord::Base
     total +=  total_format % total_values
     
     paymentmethods = ''
-    paymentmethods += report[:paymentmethods].to_a.collect do |pm|
-      "%29.29s %s %8.2f\n" % [pm[0], report[:unit], pm[1]]
+    report[:paymentmethods].each do |k,v|
+      paymentmethods += "%29.29s %s %8.2f\n" % [v[:name], report[:unit], v[:amount]]
     end.join
 
     tax_format = "\n\n" +

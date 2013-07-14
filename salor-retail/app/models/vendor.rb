@@ -29,7 +29,6 @@ class Vendor < ActiveRecord::Base
   has_many :images, :as => :imageable
   
   has_many :cash_registers
-  has_one  :salor_configuration
   has_many :orders
   has_many :categories
   has_many :items
@@ -44,7 +43,7 @@ class Vendor < ActiveRecord::Base
   has_many :shippers
   has_many :discounts
   has_many :stock_locations
-  has_many :shipment_items, :through => :shipments
+  has_many :shipment_items
   has_many :tax_profiles
   has_many :shipment_types
   has_many :invoice_blurbs
@@ -245,7 +244,7 @@ class Vendor < ActiveRecord::Base
 
     # Categories
     categories = {:pos => {}, :neg => {}}
-    categories_sum = {:pos => {:gro => 0.0, :net => 0.0}, :neg => {:gro => 0.0, :net => 0.0}}
+    categories_sum = {:pos => {:gro => Money.new(0), :net => Money.new(0)}, :neg => {:gro => Money.new(0), :net => Money.new(0)}}
     used_categories = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer).select("DISTINCT category_id")
     used_categories.each do |r|
       cat = self.categories.find_by_id(r.category_id)
@@ -253,7 +252,7 @@ class Vendor < ActiveRecord::Base
       
       pos_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:total_cents))
       pos_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:tax_amount_cents))
-      neg_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:subtotal_cents))
+      neg_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:total_cents))
       neg_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:tax_amount_cents))
       
       unless pos_total.zero?
