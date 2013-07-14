@@ -27,7 +27,7 @@ class MigrateRefunds2 < ActiveRecord::Migration
       pmi.amount_cents = dt.amount_cents
       pmi.internal_type = "InCashRefund"
       res = pmi.save
-      raise "could not save pmi: #{ pmi.errors.messages }"
+      #raise "could not save pmi: #{ pmi.errors.messages }"
       pmi.created_at = order.created_at
       pmi.save
       

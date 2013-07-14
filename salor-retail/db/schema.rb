@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130714075914) do
+ActiveRecord::Schema.define(:version => 20130714182351) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -711,6 +711,7 @@ ActiveRecord::Schema.define(:version => 20130714075914) do
     t.integer  "total_cents",                         :default => 0
     t.string   "total_currency",                      :default => "USD"
     t.integer  "refund_payment_method_item_id"
+    t.datetime "completed_at"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -773,6 +774,7 @@ ActiveRecord::Schema.define(:version => 20130714075914) do
     t.string   "noncash_currency",       :default => "USD"
     t.integer  "rebate_amount_cents",    :default => 0
     t.string   "rebate_amount_currency", :default => "USD"
+    t.datetime "completed_at"
   end
 
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"

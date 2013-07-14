@@ -216,7 +216,7 @@ class Vendor < ActiveRecord::Base
     to ||= Time.now.end_of_day
     drawer ||= self.users.visible.collect{|u| u.get_drawer.id }
     
-    orders = self.orders.visible.where(:paid => true, :created_at => from..to, :drawer_id => drawer)
+    orders = self.orders.visible.where(:paid => true, :completed_at => from..to, :drawer_id => drawer)
     orders_count = orders.count
     
     # revenue
@@ -245,15 +245,15 @@ class Vendor < ActiveRecord::Base
     # Categories
     categories = {:pos => {}, :neg => {}}
     categories_sum = {:pos => {:gro => Money.new(0), :net => Money.new(0)}, :neg => {:gro => Money.new(0), :net => Money.new(0)}}
-    used_categories = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer).select("DISTINCT category_id")
+    used_categories = self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer).select("DISTINCT category_id")
     used_categories.each do |r|
       cat = self.categories.find_by_id(r.category_id)
       label = cat.name if cat
       
-      pos_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:total_cents))
-      pos_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:tax_amount_cents))
-      neg_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:total_cents))
-      neg_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:tax_amount_cents))
+      pos_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:total_cents))
+      pos_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:tax_amount_cents))
+      neg_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:total_cents))
+      neg_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:tax_amount_cents))
       
       unless pos_total.zero?
         categories[:pos][label] = {}
@@ -279,15 +279,15 @@ class Vendor < ActiveRecord::Base
     
     # Taxes
     taxes = {:pos => {}, :neg => {}}
-    used_tax_amounts = self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer).select("DISTINCT tax")
+    used_tax_amounts = self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer).select("DISTINCT tax")
     used_tax_amounts.each do |r|
       taxes[:pos][r.tax] = {}
       taxes[:neg][r.tax] = {}
       
-      pos_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:total_cents))
-      pos_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:tax_amount_cents))
-      neg_total = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:total_cents))
-      neg_tax = Money.new(self.order_items.visible.where(:created_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:tax_amount_cents))
+      pos_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:total_cents))
+      pos_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:tax_amount_cents))
+      neg_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:total_cents))
+      neg_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:tax_amount_cents))
       
       taxes[:pos][r.tax][:tax] = pos_tax
       taxes[:neg][r.tax][:tax] = neg_tax
@@ -359,7 +359,7 @@ class Vendor < ActiveRecord::Base
   end
   
   def get_statistics(from, to)
-    orders = self.orders.visible.where(:paid => true, :created_at => from..to)
+    orders = self.orders.visible.where(:paid => true, :completed_at => from..to)
 
     reports = {
         :items => {},
@@ -439,10 +439,10 @@ class Vendor < ActiveRecord::Base
     drawer_amount = report[:drawer_amount]
     username = report[:username]
     
-    line_format = "%24.24s  %7.2f %7.2f\n"
-    line_format2 = "%28.28s %s %8.2f\n"
-    line_format3 = "%-25s %7s %7s\n"
-    transactions_format = " %5.5s  %9.9s %9.9s  %s %8.2f\n"
+    line_format  = "%19.19s %10.2f %10.2f\n"
+    line_format2 = "%19.19s %3.3s %17.2f\n"
+    line_format3 = "%-19s %10s %10s\n"
+    transactions_format = "%-14s %8.8s %4.4s %s %8.2f\n"
 
     vendorname =
     "\e@"     +  # Initialize Printer
@@ -483,7 +483,7 @@ class Vendor < ActiveRecord::Base
       categories[i[0]].to_a.each do |c|
         category_lines +=
             line_format % [
-              c[0].empty? ? t('printr.eod_report.no_category') : c[0],
+              c[0].blank? ? I18n.t('printr.eod_report.no_category') : c[0],
               c[1][:net],
               c[1][:gro]
             ]
@@ -506,13 +506,13 @@ class Vendor < ActiveRecord::Base
         payments_lines +=
             line_format2 % [
               p[0],
-              report[:unit],
+              '',
               p[1]
             ]
       end
       
-      subtotal = "\n"
-      subtotal +=
+      total = "\n"
+      total +=
           line_format2 % [
             I18n.t('printr.eod_report.payment_method_total'),
             report[:unit],
@@ -529,7 +529,7 @@ class Vendor < ActiveRecord::Base
           "\n" +
           payments_header +
           payments_lines +
-          subtotal
+          total
     end
 
   
@@ -568,26 +568,22 @@ class Vendor < ActiveRecord::Base
     
     
     transactions_header = "\n"
-    if from == to.beginning_of_day
-      transactions_header +=
-          "\e!\x18" + 
-          I18n.t('activerecord.models.drawer_transaction.other') +
-          "\e!\x00" +
-          "\n--------------"
-    end
+    transactions_header +=
+        "\e!\x18" + 
+        I18n.t('activerecord.models.drawer_transaction.other') +
+        "\e!\x00" +
+        "\n--------------"
     
     transactions_lines = "\n"
-    if from == to.beginning_of_day
-      transactions.to_a.each do |d|
-        transactions_lines +=
-            transactions_format % [
-              I18n.l(d[:time], :format => :just_time),
-              d[:tag],
-              d[:notes],
-              report[:unit],
-              d[:amount]
-            ]
-      end
+    transactions.to_a.each do |d|
+      transactions_lines +=
+          transactions_format % [
+            d[:time].strftime('%d. %b %H:%M'),
+            d[:tag],
+            d[:notes],
+            report[:unit],
+            d[:amount]
+          ]
     end
     
     transactions_footer = "\n"
@@ -606,7 +602,7 @@ class Vendor < ActiveRecord::Base
           calculated_drawer_amount
         ]
     
-    unless calculated_drawer_amount.round(2).zero?
+    unless calculated_drawer_amount.zero?
       calculated_drawer_amount +=
           "\n******************************************\n" +
           I18n.t('printr.eod_report.warning_drawer_amount_not_zero') +

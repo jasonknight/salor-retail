@@ -409,14 +409,16 @@ class Order < ActiveRecord::Base
     h.save
 
     self.paid = true
-    self.paid_at = Time.now    
+    self.paid_at = Time.now # TODO: Don't set this for unpaid orders
+    self.completed_at = Time.now
     self.save
     
     self.update_item_quantities
     self.activate_giftcard_items
     self.update_giftcard_remaining_amounts
     self.create_payment_method_items(params)
-    self.create_drawer_transaction    
+    self.create_drawer_transaction
+    self.update_timestamps
     
     
     if self.is_quote
@@ -426,6 +428,10 @@ class Order < ActiveRecord::Base
     end
     self.save
     
+  end
+  
+  def update_timestamps
+    self.order_items.update_all :completed_at => self.completed_at
   end
   
   def create_drawer_transaction
