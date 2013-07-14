@@ -107,6 +107,7 @@ class OrdersController < ApplicationController
   def add_item_ajax
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     @order_item = @order.add_order_item(params)
+    render :update_pos_display
   end
 
 
@@ -114,6 +115,7 @@ class OrdersController < ApplicationController
     oi = @current_vendor.order_items.find_by_id(params[:id])
     @order = oi.order
     oi.hide(@current_user)
+    render :update_pos_display
   end
 
   def print_receipt
