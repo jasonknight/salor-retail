@@ -5,15 +5,14 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
-      actions:
-        js_code: Javascript Code
+      js_code: Javascript Code
       attributes: attributes
       active: active
       address: address
       afield: field
       always_open_drawer: Always Open Drawer
       amount: amount
-      amount_remaining: amount remaining
+      gift_card_amount: Gift Card Amount
       amount_type: amount type
       applies_to: applies to
       auto_drop: Automatically Begin Day

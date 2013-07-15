@@ -17,10 +17,10 @@
       %td= f.label :name
       %td= f.text_field :name
     %tr
-      %td= f.label :Category
+      %td= f.label :category_id
       %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
     %tr
-      %td= f.label :Vendor
+      %td= f.label :vendor_id
       %td= f.select :vendor_model, options_for_select(@current_company.vendors.visible.collect{ |v| [v.name,"Vendor:#{v.id}"] }), :include_blank => true 
     %tr
       %td= f.label :whento

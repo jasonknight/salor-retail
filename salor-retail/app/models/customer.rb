@@ -21,7 +21,20 @@ class Customer < ActiveRecord::Base
   accepts_nested_attributes_for :notes, :reject_if => lambda {|a| a[:body].blank? }, :allow_destroy => true
   accepts_nested_attributes_for :loyalty_cards, :reject_if => proc { |attrs| attrs['sku'].blank? }
   
-  
+  #README
+  # 1. The rails way would lead to many duplications
+  # 2. The rails way would require us to reorganize all the translation files
+  # 3. The rails way in this case is admittedly limited, by their own docs, and they suggest you implement your own
+  # 4. Therefore, don't remove this code.
+  def self.human_attribute_name(attrib)
+    begin
+      trans = I18n.t("activerecord.attributes.#{attrib.downcase}", :raise => true) 
+      return trans
+    rescue
+      SalorBase.log_action self.class, "trans error raised for activerecord.attributes.#{attrib} with locale: #{I18n.locale}"
+      return super
+    end
+  end
   def self.csv_headers
     return [:company_name,:first_name, :last_name,:email,:telephone, :cellphone,:tax_number,:street1,:street2,:city, :postalcode, :state,:country, :loyalty_card_sku]
   end

@@ -7,6 +7,7 @@
 
 module SalorBase
   
+  
   def self.symbolize_keys arg
     case arg
     when Array
