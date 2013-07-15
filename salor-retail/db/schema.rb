@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130715090325) do
+ActiveRecord::Schema.define(:version => 20130715114946) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20130715090325) do
     t.integer  "company_id"
     t.string   "model_type"
     t.integer  "model_id"
+    t.text     "js_code"
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"

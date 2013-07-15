@@ -15,9 +15,53 @@ class Action < ActiveRecord::Base
   belongs_to :company
   belongs_to :user
   belongs_to :model, :polymorphic => true
-  
+  def vendor_model
+    if self.model.class == Vendor then
+      return "Vendor:" + self.model.id
+    else
+      return ""
+    end
+  end
+  def vendor_model=(v)
+    if v.include? "Vendor:" then
+      t,id = v.split(":")
+      self.model_type = t
+      self.model_id = id
+    end
+  end
   def self.when_list
-    [:add_to_order, :change_quantity, :change_price, :always, :on_save, :on_import, :on_export]
+    return [
+      :add_to_order, 
+      :change_quantity, 
+      :change_price, 
+      :always, 
+      :on_save, 
+      :on_import, 
+      :on_export,
+      :on_sku_not_found
+    ]
+  end
+
+  def self.behavior_list
+    return [
+      :add, 
+      :subtract, 
+      :multiply, 
+      :divide, 
+      :assign, 
+      :discount_after_threshold,
+      :execute
+    ]
+  end
+  
+  def self.afield_list
+    return [
+      :price_cents, 
+      :quantity, 
+      :tax_profile_id, 
+      :packaging_unit,
+      :attributes
+    ]
   end
 
   def category_id
@@ -40,20 +84,13 @@ class Action < ActiveRecord::Base
     return self.model.class.to_s
   end
   
-  def self.behavior_list
-    [:add, :subtract, :multiply, :divide, :assign, :discount_after_threshold]
-  end
-  
-  def self.afield_list
-    [:price_cents, :quantity, :tax_profile_id, :packaging_unit]
-  end
-
-
   def self.run(item, act)
-    return if item.class != OrderItem
-    base_item = item.item
-    base_item = item.item
-  
+    if item.class == OrderItem then
+      base_item = item.item
+    else
+      base_item = item
+    end
+ 
     base_item.actions.visible.each do |action|
       item = Action.apply_action(action, item, act)
     end

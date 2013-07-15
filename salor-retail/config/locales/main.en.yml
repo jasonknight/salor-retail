@@ -5,6 +5,9 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      actions:
+        js_code: Javascript Code
+      attributes: attributes
       active: active
       address: address
       afield: field
@@ -29,7 +32,6 @@ en:
       cellphone: cell phone
       child_sku: Child SKU
       city: city
-      code: code
       color: color
       company_name: company name
       contact_address: contact address
@@ -291,6 +293,7 @@ en:
     divide: divide
     multiply: multiply
     subtract: subtract
+    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Cash Drawer
@@ -922,3 +925,4 @@ en:
     on_export: on export
     on_import: on import
     on_save: on save
+    on_sku_not_found: on sku not found
