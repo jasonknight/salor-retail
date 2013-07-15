@@ -10,7 +10,10 @@
       </ul>
     </div>
   <% end %>
-<table width="540px">
+  
+    
+  
+<table width="540px" align="center">
   <tr>
     <td width="270px" style="padding-bottom:10px;">
       <div class="field">
@@ -46,12 +49,6 @@
         <%= f.text_field :contact_email, :class => "keyboardable"%>
       </div>
     </td>
-    <td width="270px" style="padding-bottom:10px;">
-      &nbsp;
-      <%= f.hidden_field :user_id, :value => salor_user.get_owner.id if salor_user.is_employee? %>
-      <%= f.hidden_field :vendor_id, :value => $Vendor.id %>
-      <%= f.hidden_field salor_user.is_employee? ? :employee_id : :user_id, :value => salor_user.id%>
-    </td>
   </tr>
   <tr>
     <td colspan="2" width="540px">
@@ -61,13 +58,26 @@
       </div>
       <div class="field">
         <%= f.label t("activerecord.attributes.reorder_type") %><br />
-        <%= f.select :reorder_type, Item::REORDER_TYPES %>
+        <%= f.select :reorder_type, Item::SHIPPER_EXPORT_FORMATS %>
+      </div>
+      <div class="field">
+        <%= f.label :import_format %><br />
+        <%= f.select :import_format, Item::SHIPPER_IMPORT_FORMATS %>
+      </div>
+      <div class="field">
+        <%= f.label :csv_url %><br />
+        <%= f.text_field :csv_url, :rows => 4, :style => "width:470px;" %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div class="actions">
+        <%= f.submit :id => "submit" %>
       </div>
     </td>
   </tr>
 </table>
 <br />
-  <div class="actions">
-    <%= f.submit :id => "submit" %>
-  </div>
+
 <% end %>

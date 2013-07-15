@@ -10,14 +10,14 @@
           %div.button-category-container{ :id => "button-category-container-#{ cat.id }" }
             - if params[:controller] == 'buttons'
               %script== makeSortable('button-category-container-#{ cat.id }')
-            - cat.buttons.where(:hidden => 0).each do |b|
+            - cat.buttons.visible.each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
-              - item = Item.find_by_sku(b.sku)
+              - item = @current_vendor.items.visible.find_by_sku(b.sku)
               - next unless item
               - additional_params = (item.must_change_price or item.default_buyback) ? '&no_inc=true' : ''
               - if params[:controller] == 'orders'
-                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }'); $('#buttons').hide();" if $Register.hide_buttons == true
-                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }');" if $Register.hide_buttons == false
+                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }'); $('#buttons').hide();" if @current_register.hide_buttons == true
+                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }');" if @current_register.hide_buttons == false
               %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }
                 = b.name
                 - if params[:controller] == 'buttons'

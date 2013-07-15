@@ -1,0 +1,161 @@
+---
+en:
+  :any_actions: Any Actions
+  :any_buttons: Any Buttons
+  :any_cash_registers: Any Cash Registers
+  :any_categories: Any Categories
+  :any_customers: Any Customers
+  :any_discounts: Any Discounts
+  :any_employees: Any Employees
+  :any_histories: Any Histories
+  :any_items: Any Items
+  :any_locations: Any Locations
+  :any_orders: Any Orders
+  :any_reports: Any Reports
+  :any_shipment_items: Any Shipment Items
+  :any_shipment_types: Any Shipment Types
+  :any_shipments: Any Shipments
+  :any_shippers: Any Shippers
+  :any_stock_locations: Any Stock Locations
+  :any_tax_profiles: Any Tax Profiles
+  :any_tender_methods: Any Payment Methods
+  :any_transaction_tags: Any Transaction Tags
+  :any_vendors: Any Vendors
+  :assistant: Assistant Manager
+  :cashier: Cashier
+  :change_prices: Change Prices
+  :clear_orders: Clear Orders
+  :create_actions: Create Actions
+  :create_buttons: Create Buttons
+  :create_cash_registers: Create Cash Registers
+  :create_categories: Create Categories
+  :create_customers: Create Customers
+  :create_discounts: Create Discounts
+  :create_employees: Create Employees
+  :create_histories: Create Histories
+  :create_items: Create Items
+  :create_locations: Create Locations
+  :create_orders: Create Orders
+  :create_reports: Create Reports
+  :create_shipment_items: Create Shipment Items
+  :create_shipment_types: Create Shipment Types
+  :create_shipments: Create Shipments
+  :create_shippers: Create Shippers
+  :create_stock_locations: Create Stock Locations
+  :create_tax_profiles: Create Tax Profiles
+  :create_tender_methods: Create Payment Methods
+  :create_transaction_tags: Create Transaction Tags
+  :create_vendors: Create Vendors
+  :destroy_actions: Destroy Actions
+  :destroy_buttons: Destroy Buttons
+  :destroy_cash_registers: Destroy Cash Registers
+  :destroy_categories: Destroy Categories
+  :destroy_customers: Destroy Customers
+  :destroy_discounts: Destroy Discounts
+  :destroy_employees: Destroy Employees
+  :destroy_histories: Destroy Histories
+  :destroy_items: Destroy Items
+  :destroy_locations: Destroy Locations
+  :destroy_order_items: Destroy Order Items
+  :destroy_orders: Destroy Orders
+  :destroy_reports: Destroy Reports
+  :destroy_shipment_items: Destroy Shipment Items
+  :destroy_shipment_types: Destroy Shipment Types
+  :destroy_shipments: Destroy Shipments
+  :destroy_shippers: Destroy Shippers
+  :destroy_stock_locations: Destroy Stock Locations
+  :destroy_tax_profiles: Destroy Tax Profiles
+  :destroy_tender_methods: Destroy Payment Methods
+  :destroy_transaction_tags: Destroy Transaction Tags
+  :destroy_vendors: Destroy Vendors
+  :edit_actions: Edit Actions
+  :edit_buttons: Edit Buttons
+  :edit_cash_registers: Edit Cash Registers
+  :edit_categories: Edit Categories
+  :edit_customers: Edit Customers
+  :edit_discounts: Edit Discounts
+  :edit_employees: Edit Employees
+  :edit_histories: Edit Histories
+  :edit_items: Edit Items
+  :edit_locations: Edit Locations
+  :edit_orders: Edit Orders
+  :edit_others_orders: Edit Others Orders
+  :edit_reports: Edit Reports
+  :edit_shipment_items: Edit Shipment Items
+  :edit_shipment_types: Edit Shipment Types
+  :edit_shipments: Edit Shipments
+  :edit_shippers: Edit Shippers
+  :edit_stock_locations: Edit Stock Locations
+  :edit_tax_profiles: Edit Tax Profiles
+  :edit_tender_methods: Edit Payment Methods
+  :edit_transaction_tags: Edit Transaction Tags
+  :edit_vendors: Edit Vendors
+  :employee: Employee
+  :head_cashier: Head Cashier
+  :index_actions: Index Actions
+  :index_buttons: Index Buttons
+  :index_cash_registers: Index Cash Registers
+  :index_categories: Index Categories
+  :index_customers: Index Customers
+  :index_discounts: Index Discounts
+  :index_employees: Index Employees
+  :index_histories: Index Histories
+  :index_items: Index Items
+  :index_locations: Index Locations
+  :index_orders: Index Orders
+  :index_reports: Index Reports
+  :index_shipment_items: Index Shipment Items
+  :index_shipment_types: Index Shipment Types
+  :index_shipments: Index Shipments
+  :index_shippers: Index Shippers
+  :index_stock_locations: Index Stock Locations
+  :index_tax_profiles: Index Tax Profiles
+  :index_tender_methods: Index Payment Methods
+  :index_transaction_tags: Index Transaction Tags
+  :index_vendors: Index Vendors
+  :manager: Manager
+  :remove_order_items: Remove Order Items
+  :see_header: See Header
+  :show_actions: Show Actions
+  :show_buttons: Show Buttons
+  :show_cash_registers: Show Cash Registers
+  :show_categories: Show Categories
+  :show_customers: Show Customers
+  :show_discounts: Show Discounts
+  :show_employees: Show Employees
+  :show_histories: Show Histories
+  :show_items: Show Items
+  :show_locations: Show Locations
+  :show_orders: Show Orders
+  :show_reports: Show Reports
+  :show_shipment_items: Show Shipment Items
+  :show_shipment_types: Show Shipment Types
+  :show_shipments: Show Shipments
+  :show_shippers: Show Shippers
+  :show_stock_locations: Show Stock Locations
+  :show_tax_profiles: Show Tax Profiles
+  :show_tender_methods: Show Payment Methods
+  :show_transaction_tags: Show Transaction Tags
+  :show_vendors: Show Vendors
+  :stockboy: Stockclerk
+  :update_actions: Update Actions
+  :update_buttons: Update Buttons
+  :update_cash_registers: Update Cash Registers
+  :update_categories: Update Categories
+  :update_customers: Update Customers
+  :update_discounts: Update Discounts
+  :update_employees: Update Employees
+  :update_histories: Update Histories
+  :update_items: Update Items
+  :update_locations: Update Locations
+  :update_orders: Update Orders
+  :update_reports: Update Reports
+  :update_shipment_items: Update Shipment Items
+  :update_shipment_types: Update Shipment Types
+  :update_shipments: Update Shipments
+  :update_shippers: Update Shippers
+  :update_stock_locations: Update Stock Locations
+  :update_tax_profiles: Update Tax Profiles
+  :update_tender_methods: Update Payment Methods
+  :update_transaction_tags: Update Transaction Tags
+  :update_vendors: Update Vendors

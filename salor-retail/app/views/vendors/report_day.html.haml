@@ -1,0 +1,155 @@
+= stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'invoice_default_print', :media => 'print'
+
+- categories = @report['categories']
+- taxes = @report['taxes']
+- paymentmethods = @report['paymentmethods']
+- refunds  =  @report['refunds']
+- revenue =   @report['revenue']
+- transactions   = @report['transactions']
+- transactions_sum   = @report['transactions_sum']
+- calculated_drawer_amount =   @report['calculated_drawer_amount']
+- orders_count = @report['orders_count']
+- categories_sum = @report['categories_sum']
+
+= raw content_box_top(t("menu.reports"))
+
+= form_tag "/vendors/report_day", :class => 'no-print', :id => 'date_range', :method => :get do
+  %div.tools
+    %table{:align => :center}
+      %tr
+        %td{:align => :left, :width => "20%"}
+          = label 'from', t('.from')
+        %td{:align => :right}
+          = select_date(@from, :prefix => 'from', :order => [:day,:month,:year])
+      %tr
+        %td{:align => :left}
+          = label 'to', t('.to')
+        %td{:align => :right}
+          = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
+      %tr
+        %td{:align => :left}
+          %select{:id => 'user_select', :name => 'user_id' }= options_from_collection_for_select(@users, 'id', 'username', params[:user_id])
+        %td{ :align => :right}
+          = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
+      %tr
+        %td{:colspan => 2, :align => :center}
+          = salor_icon(:a4print, {:onclick => 'print_dialog()'}, 40, t('menu.print_dialog'))
+          = salor_icon(:thermal_printer, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_report_day',decodeURIComponent($('#date_range').serialize()));" }, 40, t('.thermal'))
+    %br
+    %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
+
+.paper-invoice.invoice_print
+  .header-page-one
+    
+  %div.clear
+
+  %div
+    %h2== #{ t '.title' } #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @current_vendor.name }<br />#{ @user.name_with_username if @user }
+
+    %p== #{ t '.count_orders' }: #{ orders_count }
+
+
+
+    - [[:pos,'.sales'], [:neg,'.payments']].each do |i|
+
+      %h3= t i[1]
+
+      %table.striped-table2
+        %tr
+          %th.left= t '.sums_by_category'
+          %th.table-center= t '.gross'
+          %th.table-center= t '.net'
+          %th.table-center= t '.tax'
+        - categories[i[0]].to_a.each do |c|
+          %tr
+            %td.left= c[0].blank? ? t('printr.eod_report.no_category') : c[0]
+            %td.table-center= humanized_money_with_symbol c[1][:gro]
+            %td.table-center= humanized_money_with_symbol c[1][:net]
+            %td.table-center= humanized_money_with_symbol c[1][:gro] - c[1][:net]
+
+      %table.striped-table2
+        %tr
+          %th.left= t '.sums_by_tax_profile'
+          %th.table-center= t '.gross'
+          %th.table-center= t '.net'
+          %th.table-center= t '.tax'
+        - taxes[i[0]].to_a.each do |t|
+          %tr
+            %td.left= number_to_percentage t[0]
+            %td.table-center= humanized_money_with_symbol t[1][:gro]
+            %td.table-center= humanized_money_with_symbol t[1][:net]
+            %td.table-center= humanized_money_with_symbol t[1][:gro] - t[1][:net]
+
+      %table.striped-table2
+        %tr
+          %th.left= t '.sums_by_payment_methods'
+          %th.table-center
+        - paymentmethods[i[0]].to_a.each do |p|
+          %tr
+            %td.left= p[0]
+            %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "table-center"}= humanized_money_with_symbol p[1]
+
+      %p{:id => "#{i[0]}_sum_gross"}== #{ t '.sum_gross' }: #{ humanized_money_with_symbol categories_sum[i[0]][:gro] }
+      %p{:id => "#{i[0]}_sum_net"}== #{ t '.sum_net' }: #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
+
+
+
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    %br
+    %h3= t '.refunds'
+    %table.striped-table2
+      %tr
+        %th.left= t '.type'
+        %th.table-center= t '.gross'
+      - refunds.each do |k,v|
+        %tr
+          %td.left= k
+          %td.table-center= humanized_money_with_symbol v
+
+
+
+
+    %h3= t '.revenue'
+    %p== #{ t '.gross' }: #{ humanized_money_with_symbol revenue[:gro] }
+    %p== #{ t '.net' }: #{ humanized_money_with_symbol revenue[:net] }
+
+
+
+    %h3= t '.transactions'
+    %table.striped-table2
+      %tr
+        %th.left= t '.transaction_tag'
+        %th.left= t '.notes'
+        %th.left= t '.time'
+        %th.right= t '.drop'
+        %th.right= t '.payout'
+      - transactions.each do |d|
+        %tr
+          %td.left= t ('.' + d[:tag])
+          %td.left= d[:notes]
+          %td.left= l d[:time], :format => :just_time
+          %td.right= humanized_money_with_symbol d[:amount] if d[:amount] > 0
+          %td.right= humanized_money_with_symbol d[:amount] if d[:amount] < 0
+    %p== #{ t '.sum_transactions' }: #{ humanized_money_with_symbol transactions_sum }
+
+    
+    
+    - if @from == @to.beginning_of_day # one day
+      %h3= t '.cash_drawer'
+
+      - if @from.beginning_of_day == Time.now.beginning_of_day and @user # today and user
+        %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ humanized_money_with_symbol @user.get_drawer.amount }
+
+      %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ humanized_money_with_symbol calculated_drawer_amount }
+
+      - unless calculated_drawer_amount.zero?
+        %p
+          %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
+

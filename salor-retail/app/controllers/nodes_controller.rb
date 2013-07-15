@@ -11,8 +11,6 @@ class NodesController < ApplicationController
   include SalorBase
   # GET /nodes
   # GET /nodes.xml
-  before_filter :authify, :except => [:receive]
-  before_filter :initialize_instance_variables, :except => [:receive]
   def send_msg
     req = Net::HTTP::Post.new('/nodes/receive', initheader = {'Content-Type' =>'application/json'})
     node = Cue.find_by_id(params[:id])

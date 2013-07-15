@@ -1,19 +1,20 @@
 <script type="text/javascript">
+
   $(document).ready(function () {
-//       $('#general').show();
-//       $('.link').click(function () {
-//           $('.active').removeClass('active');
-//           $(this).addClass('active');
-//           $('.form-container').hide();
-//           $($(this).attr('href')).show();
-//       });
       $(':input',document.new_shipment).bind("change", function() {  window.onbeforeunload = onNavigateAway;});
   });
+  
   function onNavigateAway() {
     return "<%= I18n.t("views.notice.save_before") %>";
   }
+  
 </script>
+
+
+
 <div align="center">
+
+
 <%= form_for(@shipment) do |f| %>
   <% if @shipment.errors.any? %>
     <div id="error_explanation">
@@ -26,6 +27,8 @@
       </ul>
     </div>
   <% end %>
+  
+  
 <table width="95%" align="center">
   <tr>
     <td colspan="6" align="right"> <div class="actions"><%= f.submit(t('helpers.submit.save'), :id => "submit") %></div> </td>
@@ -46,38 +49,42 @@
     <td> <%= f.label t("activerecord.attributes.paid") %> </td>
     <td> <%= f.check_box :paid %> </td>
   </tr>
+  
   <tr>
     <td colspan="3"> <%= f.label t("activerecord.attributes.status") %> </td>
-    <td colspan="3"> <%= f.select :shipment_type_id, @shipment_types.collect {|t| [t[:name],t[:id]]}, :include_blank => true %> </td>
+    <td colspan="3"> <%= f.collection_select :shipment_type_id, @shipment_types, :id, :name, :include_blank => true %> </td>
   </tr>
+  
   <tr>
     <td colspan="3"> <%= f.label t("activerecord.attributes.the_receiver") %> </td>
-    <td colspan="3"> <%= f.select :the_receiver, Shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]} %> </td>
+    <td colspan="3"> <%= f.select :the_receiver, @shipment.receiver_shipper_list.collect{|t| [t[:name],t[:value]]} %> </td>
   </tr>
+  
   <tr>
     <td colspan="3"> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
-    <td colspan="3"> <%= f.select :the_shipper, Shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]} %> </td>
+    <td colspan="3"> <%= f.select :the_shipper, @shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]}.unshift(['', '']) %> </td>
   </tr>
+  
   <tr>
     <td colspan="6">
     </td>
   </tr>
+  
   <tr>
     <td valign="top" colspan="6">  
       <h2><%= t("menu.items") %></h2>
       <hr />
     </td>
   </tr>
+  
   <tr>
     <td colspan="6">
-      <%= salor_render :partial => "shared/shipment_item_form", :locals => {:f => f,:model => 'shipment', :items => @shipment.shipment_items} %>
+      <%= render :partial => "shipment_item_form", :locals => {:f => f,:model => 'shipment', :items => @shipment.shipment_items} %>
     </td>
   </tr>
   <tr>
     <td colspan="6" align="right"> <div class="actions"><%= f.submit t 'helpers.submit.save' %></div> </td>
   </tr>
 </table>
-<%= f.hidden_field(:user_id, :value => salor_user.id) if not salor_user.is_employee? %>
-<%= f.hidden_field(:employee_id, :value => salor_user.id) if salor_user.is_employee? %>
 
 <% end %>

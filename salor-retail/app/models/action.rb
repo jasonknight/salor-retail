@@ -4,146 +4,107 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
-# {VOCABULARY} actions_done roles_completed owner_info on_import_new on_import_old
-# {VOCABULARY} added multiplied subtracted deferred code_completed action_report
+
 class Action < ActiveRecord::Base
-  # {START}
+
   include SalorScope
   include SalorBase
-  include SalorModel
+
   belongs_to :role
   belongs_to :vendor
-  belongs_to :owner, :polymorphic => true
-  def value=(v)
-    v = v.gsub(',','.') if v.class == String
-    write_attribute(:value,v)
-  end
+  belongs_to :company
+  belongs_to :user
+  belongs_to :model, :polymorphic => true
+  
   def self.when_list
-    [:add_to_order,:always,:on_save,:on_import,:on_export]
+    [:add_to_order, :change_quantity, :change_price, :always, :on_save, :on_import, :on_export]
   end
-  def code=(text)
-    if code.match(/User|Employee|Vendor|Order|OrderItem|DrawerTransaction/) then
-      self.errors[:base] << I18n.t("system.errors.cannot_use_in_code")
-    end
-    write_attribute(:code,text)
-  end
-  def self.behavior_list
-    [:add,:subtract,:multiply, :divide, :assign,:discount_after_threshold]
-  end
-  def self.afield_list
-    [:base_price, :quantity,:tax_profile_id, :packaging_unit]
-  end
-  def sku=(s)
-    if not s.blank? then
-      item = Item.find_by_sku(s)
-      if item then
-        self.owner_id = item.id
-        self.owner_type = 'Item'
-      else
-        self.errors[:base] << I18n.t("system.errors.no_such_item")
-      end
+
+  def category_id
+    if self.model.class == Category then
+      return self.model.id
+    else
+      return nil
     end
   end
+
   def category_id=(id)
-    c = Category.find_by_id(id.to_s)
-    if c then
-      self.owner_id = c.id
-      self.owner_type = "Category"
-    end
+    return if id.blank?
+    self.model = self.vendor.categories.find_by_id(id)
   end
+
   def sku
-    owner = self.owner
-    if owner and owner.respond_to? :sku then
-      return owner.sku
-    else
-      return ''
+    if self.model and self.model.class == Item
+      return self.model.sku
     end
+    return self.model.class.to_s
   end
-  def self.apply_action(action,item,act)
-    # puts "Considering action: #{action.behavior} #{action.whento}"
+  
+  def self.behavior_list
+    [:add, :subtract, :multiply, :divide, :assign, :discount_after_threshold]
+  end
+  
+  def self.afield_list
+    [:price_cents, :quantity, :tax_profile_id, :packaging_unit]
+  end
+
+
+  def self.run(item, act)
+    return if item.class != OrderItem
+    base_item = item.item
+    base_item = item.item
+  
+    base_item.actions.visible.each do |action|
+      item = Action.apply_action(action, item, act)
+    end
+
+    if base_item.category and base_item.category.actions.visible.any? then
+      base_item.category.actions.visible.each do |action|
+        item = Action.apply_action(action, item, act)
+      end
+    end
+    return item
+  end
+  
+  def self.apply_action(action, item, act)
+    SalorBase.log_action Action, "Action.apply_action"
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
-      # puts "Running action: #{action.behavior} #{action.whento}"
-      if action.value > 0 then
-        begin
-          eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add and not item.action_applied
-          eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract and not item.action_applied
-          eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply  and not item.action_applied
-          eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide and not item.action_applied
-          eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign and not item.action_applied
-          if action.behavior.to_sym == :discount_after_threshold and act == :add_to_order and item.class == OrderItem then
+      eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add
+      eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract
+      eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply
+      eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide
+      eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign
+      
+      if action.behavior.to_sym == :discount_after_threshold then
+        SalorBase.log_action Action,"Discount after threshold"
+        item.action_applied = true
+        if act == :add_to_order and action.model.class == Category
+          SalorBase.log_action Action,"Is a category discount"
+          items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id)
+          total_quantity = items_in_cat.sum(:quantity)
+          items_in_cat.update_all :rebate => 0
+          item_price = items_in_cat.minimum(:price_cents)
+          num_discountables = (total_quantity / action.value2).floor
+        elsif action.behavior.to_sym == :discount_after_threshold and act == :add_to_order
+          SalorBase.log_action Action,"Is regular discount_after_threshold"
+          item_price = item.price
+          num_discountables = (item.quantity / action.value2).floor
+        end
+        item.rebate = 0 # Important
+        if num_discountables >= 1 then
+          SalorBase.log_action Action,"discount #{num_discountables} and item_price is #{item_price}"
+          total_2_discount = Money.new(item_price * num_discountables, item.currency)
           
-            # now we need to know the quantity... but that quantity depends on how many
-            # items on the order belong to a category...sometimes
-            quantity = item.quantity
-            item_price = item.price
-            if item.class == OrderItem and item.order then
-              # we are already in an order.
-              # Now we need to know if this action is a category applying action
-              if action.owner and action.owner.class == Category then
-                items_in_cat = item.order.order_items.visible.where(:category_id => action.owner.id)
-                total_quantity = items_in_cat.sum(:quantity)
-                items_in_cat.update_all :rebate => 0
-                quantity = total_quantity
-                item_price = items_in_cat.minimum(:price)
-              end
-            end
-            if (quantity / action.value2).floor >= 1 then
-              num_of_discountables = (quantity / action.value2).floor
-              total_2_discount = num_of_discountables * item_price
-              item.rebate = 0
-              percentage = total_2_discount / item.calculate_total
-              item.rebate = percentage * 100
-            else
-              item.rebate = 0
-            end
-            #puts "### item.#{action.afield} -= (item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor.to_i"
-            # eval("item.#{action.afield} =  ((item.item.base_price * item.quantity) - ((item.item.base_price * action.value) * (item.#{action.field2} / action.value2).floor))")
-            item.save
-          end
-          if item.class == OrderItem then
-            item.update_attribute :action_applied, true
-          end
-        rescue
-          # puts "Error: #{$!}"
-          GlobalErrors.append("system.errors.action_error",action,{:error => $!})
+          percentage = total_2_discount.to_f / (item.price * item.quantity).to_f
+          item.rebate = (percentage * 100).to_i
+          SalorBase.log_action Action,"rebate is #{item.rebate}"
+          item.save
+        else
+          SalorBase.log_action Action,"num_discountables is not sufficient"
         end
-      else
-        # puts "ActionValue is #{action.value}"
+        item.save # Important
       end
     end
     return item
   end
-  def self.run(item,act)
-    if item.class == OrderItem then
-      base_item = item.item
-    else
-      base_item = item
-    end
-      base_item.actions.each do |action|
-        item = Action.apply_action(action,item,act)
-      end
-      # puts "At the end of actions, #{item.price}"
-      if base_item.category and base_item.category.actions.any? then
-        base_item.category.actions.each do |action|
-          #raise "Applying Action"
-          item = Action.apply_action(action,item,act)
-        end
-      end
-    return item
-  end
-  def self.simulate(item,action)
-     if action.value > 0 then
-        begin
-          item[action.afield.to_sym] += action.value if action.behavior.to_sym == :add 
-          item[action.afield.to_sym] -= action.value if action.behavior.to_sym == :subtract
-          item[action.afield.to_sym] *= action.value if action.behavior.to_sym == :multiply
-          item[action.afield.to_sym] /= action.value if action.behavior.to_sym == :divide
-          item[action.afield.to_sym] = action.value if action.behavior.to_sym == :assign
-        rescue
-          GlobalErrors.append("system.errors.action_error",action,{:error => $!})
-        end
-      end
-      return item
-  end
-  # {END}
 end

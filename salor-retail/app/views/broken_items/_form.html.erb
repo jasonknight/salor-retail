@@ -1,13 +1,14 @@
 <table align="center" width="100%">
   <tr>
     <td valign="top" align="center">
-<%= form_for(@broken_item) do |f| %>
-  <% if @broken_item.errors.any? %>
+    
+<%= form_for(@item) do |f| %>
+  <% if @item.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@broken_item.errors.count, "error") %> prohibited this broken_item from being saved:</h2>
+      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this broken_item from being saved:</h2>
 
       <ul>
-      <% @broken_item.errors.full_messages.each do |msg| %>
+      <% @item.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
@@ -33,7 +34,7 @@
      <td>
         <div class="field">
           <%= f.label t("activerecord.attributes.the_shipper") %><br />
-          <%= f.select :shipper_id, Shipper.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',0]) %>
+          <%= f.collection_select :shipper_id, @item.vendor.shippers.visible, :id, :name, :include_blank => true %>
         </div>
         <div class="field">
           <%= f.label t("activerecord.attributes.is_shipment_item") %><br />
@@ -52,9 +53,7 @@
      </td>
    </tr>
  </table>
-    <%= f.hidden_field :vendor_id, :value => GlobalData.salor_user.meta.vendor_id %>
-    <%= f.hidden_field :owner_id, :value => GlobalData.salor_user.id %>
-    <%= f.hidden_field :owner_type, :value => GlobalData.salor_user.class.to_s %>
+   
   <div class="field">
     <%= f.label :note %><br />
     <%= f.text_area :note, :class => "keyboardable", :cols => 40, :rows => 5 %>

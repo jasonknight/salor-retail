@@ -1,0 +1,29 @@
+%h2=I18n.t("headings.best_selling_category") + " - " + t("activerecord.attributes.quantity_sold")
+%table.striped-table2
+  %tr
+    %th{ :style => 'width: 30%' }= t("activerecord.attributes.name")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.cash_made")
+  - i = 0
+  - @reports[:categories_by_quantity_sold].reverse.each do |item|
+    - break if i > @limit
+    - i += 1
+    %tr
+      %td= item[0]
+      %td{ :align=>"center"}= item[1][:quantity_sold]
+      %td{ :align=>"center"}= number_to_currency item[1][:cash_made]
+      
+%h2=I18n.t("headings.best_selling_category") + " - " + t("activerecord.attributes.cash_made")
+%table.striped-table2
+  %tr
+    %th{ :style => 'width: 30%' }= t("activerecord.attributes.name")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.quantity_sold")
+    %th{ :style => 'width: 5%' }= t("activerecord.attributes.cash_made")
+  - i = 0
+  - @reports[:categories_by_cash_made].reverse.each do |item|
+    - break if i > @limit
+    - i += 1
+    %tr
+      %td= item[0]
+      %td{ :align=>"center"}= item[1][:quantity_sold]
+      %td{ :align=>"center"}= number_to_currency item[1][:cash_made]

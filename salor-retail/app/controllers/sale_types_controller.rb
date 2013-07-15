@@ -1,7 +1,7 @@
 class SaleTypesController < ApplicationController
   
   def index
-    @sale_types = SaleType.scopied.page(params[:page]).per(25)
+    @sale_types = @current_vendor.sale_types.visible.page(params[:page]).per(@current_vendor.pagination)
   end
   
   def new
@@ -10,7 +10,8 @@ class SaleTypesController < ApplicationController
   
   def create
     @sale_type = SaleType.new(params[:sale_type])
-    @sale_type.set_model_owner
+    @sale_type.vendor = @current_vendor
+    @sale_type.company = @current_company
     if @sale_type.save
       redirect_to sale_types_path
     else
@@ -19,7 +20,7 @@ class SaleTypesController < ApplicationController
   end
   
   def update
-    @sale_type = SaleType.find_by_id(params[:id])
+    @sale_type = @current_vendor.sale_types.visible.find_by_id(params[:id])
     if @sale_type.update_attributes(params[:sale_type])
       redirect_to sale_types_path
     else
@@ -27,23 +28,19 @@ class SaleTypesController < ApplicationController
     end
   end
   
+  def show
+    @sale_type = @current_vendor.sale_types.visible.find_by_id(params[:id])
+    redirect_to edit_sale_type_path(@sale_type)
+  end
+  
   def edit
-    @sale_type = SaleType.find_by_id(params[:id])
-    redirect_to sale_types_path and return unless @sale_type
+    @sale_type = @current_vendor.sale_types.visible.find_by_id(params[:id])
     render :new
   end
   
   def destroy
-    @sale_type = SaleType.find_by_id(params[:id])
-    redirect_to roles_path and return unless @sale_type
-    @sale_type.update_attribute :hidden, true
+    @sale_type = @current_vendor.sale_types.visible.find_by_id(params[:id])
+    @sale_type.hide(@current_user)
     redirect_to sale_types_path
-  end
-  before_filter :initialize_instance_variables,:authify,:crumble
-  private
-  def crumble
-    @vendor = $User.get_vendor($User.meta.vendor_id)
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("activerecord.models.sale_type.other"),'invoice_notes_path(:vendor_id => params[:vendor_id])'
   end
 end

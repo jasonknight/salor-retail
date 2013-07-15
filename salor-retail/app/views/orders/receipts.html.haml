@@ -9,22 +9,22 @@
       %table{:align => :center}
         %tr
           %td{:align => :left, :width => "20%"}
-            = label 'from', t('orders.report_day.from')
+            = label 'from', t('vendors.report_day.from')
           %td{:align => :right}
             = select_date(@from, :prefix => 'from', :order => [:day,:month,:year])
         %tr
           %td{:align => :left}
-            = label 'to', t('orders.report_day.to')
+            = label 'to', t('vendors.report_day.to')
           %td{:align => :right}
             = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
         %tr
           %td{:align => :left}
-            %select{:id => 'cash_register_select', :name => 'cash_register_id' }= options_from_collection_for_select($Vendor.cash_registers.visible, 'id', 'name', params[:cash_register_id])
+            %select{:id => 'cash_register_select', :name => 'cash_register_id' }= options_from_collection_for_select(@current_vendor.cash_registers.visible, 'id', 'name', params[:cash_register_id])
           %td{ :align => :right}
             = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
         %tr
           %td{:colspan => 2, :align => :center}
-            = salor_icon(:print, {:onclick => "$('#should_print').val('true');$('#date_range').submit();" }, 32, t('.thermal'))
+            /= salor_icon(:print, {:onclick => "$('#should_print').val('true');$('#date_range').submit();" }, 32, t('.thermal'))
       %br
       %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 .clear

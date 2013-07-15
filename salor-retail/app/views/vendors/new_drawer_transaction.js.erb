@@ -1,4 +1,3 @@
-print_url(Register.thermal_printer,'/vendors/render_drawer_transaction_receipt', '&id=<%= @drawer_transaction.id %>');
-updateDrawer({amount:'<%= $User.get_drawer.amount %>'});
-window.Drawer = <%= raw $User.get_drawer.attributes.to_json %>;
-<%= render :partial => "shared/js/global_errors_js" %>
+print_url(Register.thermal_printer, '/vendors/render_drawer_transaction_receipt', '&id=<%= @dt.id %>');
+updateDrawer('<%= humanized_money_with_symbol @current_user.get_drawer.amount %>');
+window.Drawer = <%= raw @current_user.get_drawer.to_json %>;

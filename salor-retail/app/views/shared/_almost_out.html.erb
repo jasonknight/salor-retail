@@ -19,7 +19,7 @@
                     </th>
                   </tr>
                 </thead>
-                <% salor_user.almost_out.each do |item| %>
+                <% @current_user.almost_out.each do |item| %>
                     <tr>
                       <td valign="top">
                         <%=  edit_me(:name,item,item.name,'',item.get_html_id + '_almost_out') %>
@@ -40,5 +40,4 @@
                   <% end %>
               </table>
               <%= 
-                raw content_box_bottom # end raw content_box_top(I18n.t("headings.almost_out")
               %>

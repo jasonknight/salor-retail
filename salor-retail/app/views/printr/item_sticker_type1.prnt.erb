@@ -1,0 +1,28 @@
+SW480
+SS0
+CS2
+SM20,20
+CUTn
+<% if @items.any? %>
+<% @items.each do |i| %>
+T0,0,3,1,1,0,0,N,N,F,'<%= i.get_translated_name(I18n.locale)[0..22] %>'
+T0,30,3,1,1,0,0,N,N,F,'<%= i.description[0..22] %>'
+T0,60,3,1,1,0,0,N,N,F,'<%= i.customs_code %>'
+T0,90,3,1,1,0,0,N,N,F,'<%= i.origin_country %>'
+T0,120,3,1,1,0,0,N,N,F,'<%= SalorBase.number_with_precision i.base_price, :precision => 2 %>'
+B120,200,1,2,4,40,0,1,'<%= i.sku %>'
+P
+<% end %>
+<% end %>
+<% if @order_items.any? %>
+<% @order_items.each do |oi| %>
+T0,0,3,1,1,0,0,N,N,F,'<%= oi.item.get_translated_name(I18n.locale).to_s[0..22] %>'
+T0,30,3,1,1,0,0,N,N,F,'<%= oi.item.description.to_s[0..22] %>'
+T0,60,3,1,1,0,0,N,N,F,'<%= oi.item.customs_code.to_s %>'
+T0,90,3,1,1,0,0,N,N,F,'<%= oi.item.origin_country.to_s %>'
+T0,150,3,1,1,0,0,N,N,F,'<%= oi.quantity %>'
+B120,200,1,2,4,40,0,1,'<%= oi.sku %>'
+P
+<% end %>
+<% end %>
+CUTy

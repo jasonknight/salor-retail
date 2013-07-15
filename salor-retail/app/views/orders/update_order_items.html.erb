@@ -1,4 +1,4 @@
-<%= salor_render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items} %>
+<%= render :partial => "shared/order_line_items", :locals => {:order_items => @order.order_items} %>
 <script type="text/javascript">
   $(document).ready(function () {
 		$('.editme').click (function (event) {

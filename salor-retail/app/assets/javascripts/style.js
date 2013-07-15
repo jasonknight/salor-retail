@@ -195,7 +195,7 @@ function make_dt_button(btn) {
     $(this).addClass("highlight");
     if ($(this).attr('value') == 'None'){
       $('#dt_tag').val($(this).attr('value'));
-      $('.dt-tag-target').html(i18n_transaction_tag_one);
+      $('.dt-tag-target').html(i18n.activerecord.models.transaction_tag.one);
     } else {
       $('#dt_tag').val($(this).attr('value'));
       $('.dt-tag-target').html($(this).html());

@@ -10,7 +10,7 @@ gn:
       afield: Feld
       always_open_drawer: Always Open Drawer
       amount: Betrag
-      amount_remaining: Restmenge
+      amount_remaining: Betrag
       amount_type: Art
       applies_to: bezieht sich auf
       auto_drop: Auto-Buchung Tagesbeginn
@@ -30,6 +30,7 @@ gn:
       child_sku: Kind-SKU
       city: Stadt
       code: Code
+      color: Farbe
       company_name: Firmenname
       contact_address: Kontaktadresse
       contact_email: Kontakt E-Mail
@@ -39,7 +40,7 @@ gn:
       country: Bundesland
       coupon_applies: Gutschein anwendbar
       coupon_total: Coupon
-      coupon_type: Gutschein-Art
+      coupon_type: Coupon-Art
       created_at: Created
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
@@ -53,9 +54,6 @@ gn:
       dollar_per_lp: Euro pro Punkt
       drop: Einzahlen
       email: E-Mail
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Kassenlade von
       end_amount: Schlussbetrag
       end_date: Ende
       eod_show: Zeige bei Tagesabschluss
@@ -124,7 +122,7 @@ gn:
       pole_display: Verkaufsanzeige
       postalcode: PLZ
       price: Preis
-      price_by_qty: Preisberechnung nach Menge
+      price_by_qty: Preisberechnung nach Gewicht
       purchase_price: Kaufpreis
       quantity: Menge
       quantity_sold: Menge verkauft
@@ -177,6 +175,9 @@ gn:
       track_expiry: Ablaufdatum beobachten
       type: Typ
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Kassenlade von
       username: Benutzername
       uses_drawer_id: Uses Drawer of
       value: Betrag
@@ -220,9 +221,6 @@ gn:
       drawer_transaction:
         one: Buchung
         other: Buchungen
-      employee:
-        one: Angestellter
-        other: Angestellte
       invoice_note:
         one: Rechnungstext
         other: Rechnungstexte
@@ -271,15 +269,18 @@ gn:
       tax_profile:
         one: Steuerklasse
         other: Steuerklassen
-      tender_method:
-        one: Zahlungsmethode
-        other: Zahlungsmethoden
       transaction_tag:
         one: Tag
         other: Tags
+      user:
+        one: Angestellter
+        other: Angestellte
       vendor:
         one: Filiale
         other: Filialen
+      cash_register:
+        one: Kasse
+        other: Kassen
   api:
     user_does_not_exist: Dieser Benutzer existiert nicht oder darf die API nicht benutzen.
   are_you_sure: Sind Sie sicher?
@@ -325,7 +326,6 @@ gn:
     discount_for: Rabatt für %{store}
     discounts_for: Rabatte für %{store}
     edit_shipper: Lieferant %{name} bearbeiten
-    employees: Angestellte
     expiring_soon: läuft bald ab
     export: Exports
     item_selection: Etiketten-Druckauswahl
@@ -340,6 +340,7 @@ gn:
     time_sheet: Employee Time Sheet
     update_location: Lagerort aktualisieren
     update_real_quantity: Tatsächliche Menge aktualisieren
+    users: Angestellte
   helpers:
     select:
       prompt: Bitte auswählen
@@ -367,7 +368,7 @@ gn:
       requesting_connection_status: Verbindungsstatus wird angefragt...
       title: Fernwartung
       user: Benutzername
-    user_employee_index:
+    user_user_index:
       backup_database: Datenbank herunterladen
       backup_logfile: Logdatei herunterladen
   items:
@@ -410,6 +411,14 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    print-dialog: Druckdialog
+    refund_payment_method: Storno-Rückzahlugsmethode
+    regular_printer: Normaler Drucker
+    last_completed: Kürzlich abgeschlossen
+    last_uncompleted: Kürzlich offen
+    last_orders: Kürzlich
+    open_drawer: Lade
+    weigh: wiegen
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf
@@ -425,6 +434,7 @@ gn:
     cash_registers: Kassen
     categories: Kategorien
     clear_order: Löschen
+    close: Schließen
     configuration: Details
     contact: Kontakt
     current_order: Aktueller Verkauf
@@ -443,19 +453,18 @@ gn:
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten
     edit_discount: Preisnachlass bearbeiten
-    edit_employee: Angestellter bearbeiten
     edit_invoice_blurb: Rechnungstext bearbeiten
     edit_invoice_note: Rechnungsnotiz bearbeiten
     edit_item: Artikel bearbeiten
     edit_location: Ort bearbeiten
+    edit_payment_method: Edit Payment Method
     edit_sale_type: Verkaufs-Art bearbeiten
     edit_shipment: Lieferung bearbeiten
     edit_shipment_type: Lieferstatus bearbeiten
     edit_shipper: Lieferant %{name} bearbeiten
     edit_tax_profile: Steuerklasse bearbeiten
-    edit_tender_method: Zahlungsmethode bearbeiten
+    edit_user: Angestellter bearbeiten
     edit_vendor: Filiale bearbeiten
-    employees: Angestellte
     end_day: Tag beenden
     general_configuration: Allgemein
     home: Filialen
@@ -477,25 +486,26 @@ gn:
     new_country: Neues Land
     new_customer: Neuer Kunde
     new_discount: Neuer Preisnachlass
-    new_employee: Neuer Angestellter
     new_invoice_blurb: Neuer Rechnungstext
     new_invoice_note: Neuer Rechnungstext
     new_item: Neuer Artikel
     new_location: Neuer Ort
     new_order: Neu
+    new_payment_method: New Payment Method
     new_sale_type: Neue Verkaufs-Art
     new_shipment: Neue Lieferung
     new_shipment_type: Neuer Lieferstatus
     new_shipper: Neuer Lieferant
     new_stock_location: Neues Lager
     new_tax_profile: Neue Steuerklasse
-    new_tender_method: neue Zahlungsmethode
     new_transaction_tag: New Transaction Tag
+    new_user: Neuer Angestellter
     new_vendor: Neue Filiale
     ok: OK
     order: Verkauf
     orders: Verkäufe
     overview: Überblick
+    payment_methods: Payment Methods
     points: Treuepunkte
     pos: POS
     print: Etiketten
@@ -519,13 +529,13 @@ gn:
     stock_locations: Lager
     support: Unterstützung
     tax_profiles: Steuerklassen
-    tender_methods: Zahlungsmethode
     transaction_tags: Buchungen
     update_gift_card: Gutschein aktualisieren
     update_location: Orte
     update_real_quantity: Inventur
     upload: Hinaufladen
     usb_device: Usb Stick
+    users: Angestellte
     vendors: Filialen
     void: Storno
     wholesaler_update: Artikelupdate Großhändler
@@ -550,36 +560,6 @@ gn:
       sum: Summe
       sum_total: Gesamtsumme
       title: Verkaufsbericht
-    report_day:
-      None: Unbenannt
-      OrderItemRefund: Einzelstornierung
-      OrderRefund: Gesamtstornierung
-      cash-refunds: Bargeld-Stornierungen
-      cash_drawer: Kassenlade
-      count_orders: Anzahl Verkäufe
-      drop: Einzahlung
-      from: von
-      gross: brutto
-      net: netto
-      noncash-refunds: Nichtbargeld-Stornierungen
-      payments: Zahlungen
-      payout: Auszahlung
-      payouts: Auszahlungen
-      revenue: Umsatz
-      sales: Verkäufe
-      sum: Summe
-      sum_gross: Summe brutto
-      sum_net: Summe netto
-      sum_transactions: Summe Buchungen
-      sums_by_category: nach Kategorie
-      sums_by_payment_methods: nach Zahlungsmethoden
-      sums_by_tax_profile: nach Steuern
-      time: Zeit
-      title: Tagesbericht
-      to: bis
-      transaction_tag: Journal
-      transaction_total: Gesamtbewegung
-      transactions: Buchungen
     report_day_range:
       display: Anzeigen
       end_date: Bis
@@ -630,11 +610,11 @@ gn:
       cash-refunds: Bargeld-Stornierungen
       cash_refunds_total: GESAMT
       no_category: Unbenannt
-      noncash-refunds: Nichtbargeld-Stornierungen
       orders_total: Verkäufe gesamt
       payment_method_total: GESAMT
       payments: Auszahlungen
       refund: Stornierung
+      refunds: Refunds
       revenue: Umsatz
       revenue_total: GESAMT
       sales: Verkäufe
@@ -676,7 +656,7 @@ gn:
       rebate_subtotal: Summe Rabatte
       refund: Rabatte auf gesamten Einkauf
       refunded: STORNIERUNG
-      subsubtotal: GESAMTSUMME
+      total: SUMME
       subtotal1: Zwischensumme
       subtotal2: Zwischensumme
       subtotal3: Zwischensumme
@@ -781,9 +761,6 @@ gn:
     not_you: Nicht Sie?
     owner_mode: ADMIN MODUS
     owner_success: Administrator wurde erfolgreich aktualisiert.
-    payment_external_types: Bargeld,Mit Karte,Gutschein,Andere,Retourgeld,zukünftige
-      Bezahlung,Angebote
-    payment_internal_types: InCash,ByCard,ByGiftCard,OtherCredit,Change,Unpaid,Quote
     rebate_types:
       fixed: EUR
       percent: ! '%'
@@ -795,6 +772,36 @@ gn:
       logo: Logo
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
+    report_day:
+      None: Unbenannt
+      OrderItemRefund: Einzelstornierung
+      OrderRefund: Gesamtstornierung
+      cash-refunds: Bargeld-Stornierungen
+      cash_drawer: Kassenlade
+      count_orders: Anzahl Verkäufe
+      drop: Einzahlung
+      from: von
+      gross: brutto
+      net: netto
+      noncash-refunds: Noncash-Refunds
+      payments: Zahlungen
+      payout: Auszahlung
+      payouts: Auszahlungen
+      revenue: Umsatz
+      sales: Verkäufe
+      sum: Summe
+      sum_gross: Summe brutto
+      sum_net: Summe netto
+      sum_transactions: Summe Buchungen
+      sums_by_category: nach Kategorie
+      sums_by_payment_methods: nach Zahlungsmethoden
+      sums_by_tax_profile: nach Steuern
+      time: Zeit
+      title: Tagesbericht
+      to: bis
+      transaction_tag: Journal
+      transaction_total: Gesamtbewegung
+      transactions: Buchungen
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

@@ -1,49 +1,45 @@
 !!!
 
-- add_param(:type => params[:type]) if params[:type] and not params[:type].blank?
-
 %html
   %head
     %title SalorRetail
     - if mobile?
-      %meta{ 'name' => "viewport", :content => "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" }
-      %meta{ 'name' => "apple-mobile-web-app-capable", :content => "yes" }
       %link{ :rel => "apple-touch-icon", :href => "apple-touch-icon-57x57.png"}
       %link{ :rel => "apple-touch-icon", :sizes => "72x72", :href => "apple-touch-icon-72x72.png"}
       %link{ :rel => "apple-touch-icon", :sizes => "114x114", :href => "apple-touch-icon-114x114.png"}
-
     = stylesheet_link_tag 'print', :media => 'print'
     = stylesheet_link_tag 'ui-min.css'
     = stylesheet_link_tag 'generic'
     = stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
 
     = javascript_include_tag 'application'
-    = javascript_include_tag "locales/main.#{I18n.locale}.js",'underscore'
-    = salor_render :partial => "shared/application_js"
-    - if mobile?
-      = javascript_include_tag 'mobile'
-    - else
-      = javascript_include_tag 'workstation'
-      = javascript_include_tag 'jquery.checkbox'
+    = javascript_include_tag "/jslocales/main.#{I18n.locale}.js"
+    - if @current_vendor
+      = javascript_include_tag "/jslocales/region.#{@current_vendor.region}.js"
+    - if @current_user
+      = render :partial => "shared/application_js"
 
-    = javascript_include_tag params[:controller]
-    = csrf_meta_tag
+
 
   %body#body
     .background
-      = render :partial => "shared/header_menu" if $User and $User.can(:see_header) 
+      = render :partial => "shared/header_menu" if @current_user and @current_user.can(:see_header) 
       = render :partial => "shared/notice"
       .errors.hidden
       .help.hidden
-      = salor_render :partial => "shared/cash_drop" if $User
+      = render :partial => "shared/cash_drop" if @current_user
       
       = yield
-      .close-window{ :onclick => "if (typeof Salor != 'undefined') { Salor.shutdown();} else { self.close();}" } X
+      
+      = form_tag session_path, :id => 'logoutform', :method => 'delete' do
+        %span
       
       %span.version= SalorRetail::Application::VERSION
-        
-      %a.reload-window{ :href => '/orders/new' } R
+
     #simple_input_dialog{:title => "Salor Dialog", :class => "salor-dialog hidden"}
       %label{ :for => "input", :class => "input_label" }None
       %input{ :type=>"password", :name=>"input", :id=> "dialog_input", :class=>"text ui-widget-content ui-corner-all"}
       %p.validateTips
+      
+:javascript
+  var i18nlocale = "#{ I18n.locale }";

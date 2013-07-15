@@ -1,0 +1,17 @@
+%h2=link_to @user.full_name + " (#{@user.username})", "/employees/#{@user.id}/edit", :style => "color:black;"
+%table.striped-table2
+  %tr
+    %td= l @from, :format => :long
+    %td{:align=>'right'}= l @to, :format => :long
+  %tr
+    %td= I18n.t('activerecord.models.drawer.one')
+    %td{:align=>"right"}= number_to_currency(@user.get_drawer.amount)
+  %tr
+    %td= I18n.t('activerecord.models.order.other')
+    %td{:align=>"right"}= @user.orders.where(:created_at => @from..@to, :paid => 1).count
+  %tr
+    %td= I18n.t('activerecord.attributes.cash_made')
+    %td{:align=>"right"}= number_to_currency @user.orders.where(:created_at => @from..@to, :paid => 1).sum(:total)
+  %tr
+    %td= I18n.t('activerecord.attributes.rebate')
+    %td{:align=>"right"}= number_to_currency @user.order_items.where(:created_at => @from..@to).collect {|oi|  oi.order.paid == 1 ? oi.rebate_amount : 0 }.sum

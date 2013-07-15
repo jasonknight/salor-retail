@@ -1,0 +1,30 @@
+<div id="complete_order" class="complete-order hidden">
+
+    <p>
+      <span class='complete_order_label'><%= I18n.t("views.total") %></span>
+      <span id="complete_order_total" class="complete-order-total"><%= @current_order.total %></span>
+    </p>
+    <div class="actions" width="300" style="padding-bottom:3px">
+      <input type="submit" id="add_payment_method_button" value="<%= I18n.t("system.add_payment_method") %>" onclick="add_payment_method()"/>
+    </div>
+    <div id="payment_methods">
+      </div>
+    <div id="complete_order_plugin_panel" class="plugin-panel">
+    </div>
+
+
+    <p>
+      <span class='complete_order_label'><%= I18n.t("views.change") %></span>
+      <span id="complete_order_change" class="complete-order-change"></span>
+    </p>
+
+      <div id="recommendation" class="complete-order-change recommendations-container" align="center">
+      </div>
+      <div class="clear">&nbsp;</div>
+      <div class="button-row" align="right" width="100%">
+          <div id="cancel_complete_order_button" class="button-cancel" onclick="complete_order_hide()" ><%= I18n.t("menu.close") %></div>
+          <div class="spacer">&nbsp;</div>
+          <div id="confirm_complete_order_noprint_button" class="button-print"><%= I18n.t("helpers.submit.complete_sale") %></div>
+          <div id="confirm_complete_order_button" class="button-confirm"><%= I18n.t("helpers.submit.print") %></div>
+      </div>
+</div>

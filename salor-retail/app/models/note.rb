@@ -7,6 +7,6 @@
 
 class Note < ActiveRecord::Base
 	include SalorScope
-  include SalorModel
+
   belongs_to :notable, :polymorphic => true
 end

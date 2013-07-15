@@ -7,19 +7,23 @@
 
 class Shipment < ActiveRecord::Base
 	include SalorScope
-  include SalorError
   include SalorBase
-  include SalorModel
+
   belongs_to :shipper, :polymorphic => true
   belongs_to :receiver, :polymorphic => true
   belongs_to :shipment_type
   has_many :notes, :as => :notable, :order => "id desc"
   has_many :shipment_items
   belongs_to :vendor
+  belongs_to :company
   belongs_to :user
+
+  monetize :price_cents
+
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
-  before_create :set_model_owner
+
+  
   TYPES = [
     {
       :value => 'new',
@@ -46,32 +50,33 @@ class Shipment < ActiveRecord::Base
       :display => I18n.t("views.forms.shipment.types.in_stock")
     }
   ]
-  def self.receiver_shipper_list()
+  def receiver_shipper_list()
     ret = []
-    Shipper.scopied.order(:name).each do |shipper|
+    self.vendor.shippers.visible.order(:name).each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
     end
-    $User.get_vendors(nil).each do |vendor|
+    self.company.vendors.visible.all.each do |vendor|
       ret << {:name => vendor.name, :value => 'Vendor:' + vendor.id.to_s}
     end
     return ret
   end
+  
   def the_receiver=(val)
     parts = val.split(':')
-    self.update_attribute :receiver_type,parts[0]
-    self.update_attribute :receiver_id,parts[1].to_i
+    self.receiver_type = parts[0]
+    self.receiver_id = parts[1].to_i
+    #self.save
   end
   
   def the_receiver
     return "#{self.receiver_type}:#{self.receiver_id}"
   end
-  def price=(p)
-    write_attribute(:price,self.string_to_float(p))
-  end
+  
   def the_shipper=(val)
     parts = val.split(':')
-    self.update_attribute :shipper_type,parts[0]
-    self.update_attribute :shipper_id, parts[1]
+    self.shipper_type = parts[0]
+    self.shipper_id = parts[1].to_i
+    #self.save
   end
   
   def the_shipper
@@ -91,9 +96,10 @@ class Shipment < ActiveRecord::Base
     end
     self.note_ids = ids
   end
+  
   def set_items=(items_list)
     ids = []
-    vid = GlobalData.salor_user.meta.vendor_id
+    vid = self.vendor_id
     items_list.each do |li|
       ih = li[1]
       nih = {}
@@ -137,7 +143,7 @@ class Shipment < ActiveRecord::Base
       end
     end
     self.shipment_item_ids = ids 
-    self.save
+    #self.save
   end
 
   def move_all_to_items
@@ -147,12 +153,10 @@ class Shipment < ActiveRecord::Base
     end
     self.shipment_items.each do |item|
       if item.in_stock then
-        add_salor_error(I18n.t("system.errors.shipment_item_already_in_stock", :sku => item.sku))
-        puts "Item already in stock"
+        log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => item.sku)
         next
       end
-      i = Item.new.from_shipment_item(item)
-      i.make_valid     
+      i = Item.new.from_shipment_item(item)    
       if i.save then
         item.update_attribute(:in_stock,true)
       else
@@ -160,7 +164,7 @@ class Shipment < ActiveRecord::Base
         i.errors.full_messages.each do |error|
           msg << error
         end
-        add_salor_error(I18n.t("system.errors.shipment_item_move_failed", :sku => item.sku, :error => msg.join('<br />')))
+        log_action I18n.t("system.errors.shipment_item_move_failed", :sku => item.sku, :error => msg.join('<br />'))
       end
     end
   end
@@ -174,14 +178,12 @@ class Shipment < ActiveRecord::Base
 
     i = self.shipment_items.find(id)
     if i.in_stock then
-      add_salor_error(I18n.t("system.errors.shipment_item_already_in_stock", :sku => i.sku))
+      log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => i.sku)
       return
     end
     if i then
       item = Item.new.from_shipment_item(i)
-      item.make_valid
 #       if item.nil? then
-#         GlobalErrors.append_fatal("system.errors.shipment_item_move_failed",:sku => i.sku, :error => I18n.t("system.errors.shipment_item_nil"))
 #         return
 #       end
       if item.save then

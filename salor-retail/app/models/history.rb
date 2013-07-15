@@ -6,15 +6,15 @@
 # See license.txt for the license applying to all files within this software.
 class History < ActiveRecord::Base
   # {START}
-  belongs_to :owner, :polymorphic => true
+  belongs_to :user
   belongs_to :model, :polymorphic => true
   include SalorBase
-  include SalorModel
+
   include SalorScope
   before_create :set_fields
   def set_fields
-    if self.owner_id.nil? then
-      self.owner = $User
+    if self.user_id.nil? then
+      self.user = @current_user
     end
     self.url = $Request.url if $Request and not self.url
     self.params = $Params.to_json if $Params

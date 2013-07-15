@@ -6,47 +6,25 @@ $(document).ready(function(){
   })
 });
 
-function price_by_qty_change() {
-  if ($('.price-by-qty').is(':checked')) {
-    $('.decimal-points').val(3);
-  } else {
-    $('.decimal-points').val(2);
-  }
-}
 $(function () {
-    try {
-      price_by_qty_change();
-    } catch (err) {
-      txt="There was an error on this page item_required.\n\n";
-      txt+="Error description: " + err.description + "\n\n";
-      txt+="Click OK to continue.\n\n";
-      alert(txt);
-    }
-    try {
-      $('#item_item_type_id').change(function () {
-          if ($(this).val() == 3) {
-            $('#coupon').show();
-          } else {
-            $('#coupon').hide();
-          }
-          if ($(this).val() == 2) {
-            $('#gcardamount').show();
-          } else {
-            $('#gcardamount').hide();
-          }
-      });
-      if ($('#item_item_type_id').val() == 3) {$('#coupon').show();}
-      if ($('#item_item_type_id').val() == 2) {$('#gcardamount').show();}
-    } catch (err) {
-          txt="There was an error on this page item_required_2.\n\n";
-          txt+="Error description: " + err.description + "\n\n";
-          txt+="Click OK to continue.\n\n";
-          alert(txt);
-    }
+    $('#item_item_type_id').change(function () {
+        if ($(this).val() == 3) {
+          $('#coupon').show();
+        } else {
+          $('#coupon').hide();
+        }
+        if ($(this).val() == 2) {
+          $('#gcardamount').show();
+        } else {
+          $('#gcardamount').hide();
+        }
+    });
+    if ($('#item_item_type_id').val() == 3) {$('#coupon').show();}
+    if ($('#item_item_type_id').val() == 2) {$('#gcardamount').show();}
 });
 </script>
 
-<table style="80%" align="center"  height="70px">
+<table class="tools">
   <tr>
     <td >
         <div class="tool-icon" style="width: 100px;">
@@ -54,12 +32,14 @@ $(function () {
           <span class="icon-caption"> <%= I18n.t("menu.new_broken_item") %></span>
         </div>
     </td>
-    <td>
-      <div class="tool-icon" style="width: 100px;">
-        <%= link_to salor_icon(:action, {},32), new_action_path(:item => { :sku => @item.sku, :name => @item.name + " Action ##{@item.actions.length + 1}", :weight => @item.actions.length + 1}) %><br />
-        <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
-      </div>
-    </td>
+    <% unless @item.new_record? %>
+      <td>
+        <div class="tool-icon" style="width: 100px;">
+          <%= link_to salor_icon(:action, {},32), item_new_action_path(@item) %><br />
+          <span class="icon-caption"><%= I18n.t("menu.new_action") %></span>
+        </div>
+      </td>
+    <% end %>
     <td>
         <div class="tool-icon" style="width: 100px;">
         <% if @item.category then
@@ -105,11 +85,7 @@ $(function () {
   
   <tr>
     <td> 
-      <select id="locale_select" onchange="itemsAddNameTranslation($(this).val());">
-        <% supported_languages.each do |l| %>
-          <option value="<%= l[:locale] %>" <%= I18n.locale.to_s == l[:locale] ? 'selected="selected"' : ''%>><%= l[:name] %></option>
-        <% end %>
-      </select>
+      <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "itemsAddNameTranslation($(this).val());" %>
     </td>
     <td> 
     <script type="text/javascript">
@@ -152,18 +128,13 @@ $(function () {
   </tr>
   
   <tr>
-    <td> <%= f.label I18n.t("activerecord.models.vendor.one") %> </td>
-    <td> <%= f.collection_select :vendor_id,GlobalData.vendors,:id,:name %> </td>
-  </tr>
-  
-  <tr>
     <td> <%= f.label I18n.t("activerecord.models.category.one") %> </td>
-    <td> <%= f.collection_select :category_id, Category.scopied.all,:id,:name %> </td>
+    <td> <%= f.collection_select :category_id, @item.vendor.categories.visible, :id, :name, :include_blank => true %> </td>
   </tr>
   
   <tr>
     <td> <%= f.label I18n.t("activerecord.models.location.one") %> </td>
-    <td> <%= f.collection_select :location_id, Location.scopied.all,:id,:name %> </td>
+    <td> <%= f.collection_select :location_id, @item.vendor.locations.visible, :id, :name %> </td>
   </tr>
   
   <% if not @item.sku.blank?  %>
@@ -174,19 +145,15 @@ $(function () {
         <tr>
           <td>
               <%
-                  b = Barcode.new
-                  path = b.create(@item.sku)
+                  b = Barcode.new(@item)
+                  barcodepath = b.create
                 %>
                 <div style="background-color: white;">
-                  <%= link_to b.get_barcode(@item.sku) do %>
-                    <%= image_tag path %>
-                  <% end %>
+                  <img src="<%= barcodepath %>.png" />
                 </div>
           </td>
           <td valign="middle" align="center"> 
                 <div class="new-item-field">
-                <!--<%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@item.sku).gsub('.png','.eps') %> 
-                &nbsp;&nbsp;&nbsp;-->
                 <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
       &nbsp;&nbsp;&nbsp;
                 <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
@@ -249,12 +216,12 @@ $(function () {
   
   <tr>
     <td> <%= f.label I18n.t("activerecord.models.item_type.one") %> </td>
-    <td>  <%= f.collection_select :item_type_id,ItemType.all,:id,:name %> </td>
+    <td>  <%= f.collection_select :item_type_id, @current_vendor.item_types.visible, :id, :name %> </td>
   </tr>
   
   <tr>
     <td>  <%= f.label I18n.t("activerecord.models.tax_profile.one") %> </td>
-    <td> <%= f.collection_select :tax_profile_id,TaxProfile.scopied.all,:id,:name %> </td>
+    <td> <%= f.collection_select :tax_profile_id, @item.vendor.tax_profiles.visible, :id, :name %> </td>
   </tr>
   
   <tr>
@@ -306,7 +273,7 @@ $(function () {
   
   <tr>
     <td> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
-    <td> <%= f.select :shipper_id, Shipper.scopied.collect {|t| [t.name,t.id]}.unshift(['NA','']) %> </td>
+    <td> <%= f.select :shipper_id, @item.vendor.shippers.visible.collect {|t| [t.name,t.id]}.unshift(['NA','']) %> </td>
   </tr>
   
   <tr>
@@ -397,8 +364,8 @@ $(function () {
   </tr>
   
   <tr>
-    <td> <%= f.label t("activerecord.attributes.amount_remaining") %> </td>
-    <td> <%= f.text_field :amount_remaining, :class => 'keyboardable' %> </td>
+    <td> <%= f.label t("activerecord.attributes.gift_card_amount") %> </td>
+    <td> <%= f.text_field :gift_card_amount, :class => 'keyboardable' %> </td>
   </tr>
   
   <tr>
@@ -420,13 +387,9 @@ $(function () {
   
   <tr>
     <td>  <%= f.label I18n.t("activerecord.attributes.price_by_qty") %> </td>
-    <td> <%= f.check_box :price_by_qty, :onchange => "price_by_qty_change();", :class => "price-by-qty delimit-number" %> </td>
+    <td> <%= f.check_box :price_by_qty %> </td>
   </tr>
-  
-  <tr>
-    <td> <%= f.label I18n.t("activerecord.attributes.decimal_points") %> </td>
-    <td> <%= f.text_field :decimal_points, :class => "keyboardable-int decimal-points" %> </td>
-  </tr>
+
   <tr>
     <td> <%= f.label I18n.t("activerecord.attributes.must_change_price") %> </td>
     <td> <%= f.check_box :must_change_price %> </td>
@@ -435,6 +398,11 @@ $(function () {
   <tr>
     <td> <%= f.label "GS1" %>  </td>
     <td> <%= f.check_box :is_gs1 %> </td>
+  </tr>
+  
+  <tr>
+    <td> <%= f.label :gs1_format %>  </td>
+    <td> <%= f.text_field :gs1_format %> </td>
   </tr>
   
   <tr>
@@ -464,11 +432,11 @@ $(function () {
         var elem = $("<div class='part'></div>");
         var inp_id = 'inp-'+Math.floor(Math.random() * 1000);
         elem.append($('<%= label_tag I18n.t("activerecord.attributes.sku") %><br />'));
-        var inp = shared.element('input',{id: inp_id,type: "text", name: "item[part_skus][][sku]", class: "text-input keyboardable part-input"},'',elem);
+        var inp = shared.element('input',{id: inp_id,type: "text", name: "part_skus[][sku]", class: "text-input keyboardable part-input"},'',elem);
         elem.append('<br />');
         var qinp_id = 'qinp-'+Math.floor(Math.random() * 1000);
         elem.append($('<%= label_tag I18n.t("activerecord.attributes.part_quantity") %> <br />'));
-        var inp = shared.element('input',{id: qinp_id,type: "text", name: "item[part_skus][][part_quantity]", class: "text-input keyboardable part-input"},'',elem);
+        var inp = shared.element('input',{id: qinp_id,type: "text", name: "part_skus[][part_quantity]", class: "text-input keyboardable part-input"},'',elem);
         elem.append('<br />');
         var del = $('<div align="center" style="padding-top: 10px;"><%= image_tag "/images/icons/" + icon(:delete,16) %></div>');
         del.click(function () {
@@ -486,9 +454,9 @@ $(function () {
           <% @item.parts.each do |part|  %>
             <div id="part-<%= part.id %>" class="part">
               <%= label_tag I18n.t("activerecord.attributes.sku") %> <br />
-              <%= text_field_tag "item[part_skus][][sku]", part.sku, :class => 'keyboardable' %><br />
+              <%= text_field_tag "part_skus[][sku]", part.sku, :class => 'keyboardable' %><br />
               <%= label_tag I18n.t("activerecord.attributes.part_quantity") %> <br />
-              <%= text_field_tag "item[part_skus][][part_quantity]", part.part_quantity, :class => 'keyboardable-int delimit-number' %><br />
+              <%= text_field_tag "part_skus[][part_quantity]", part.part_quantity, :class => 'keyboardable-int delimit-number' %><br />
               <div id="" class="" align="right" style="padding-top: 10px;">
                 <%= image_tag("/images/icons/" + icon(:delete,16), :onclick => "$('#part-#{part.id}').remove();") %>
               </div>
@@ -500,7 +468,9 @@ $(function () {
    </tr>
    
   <tr>
-    <td colspan="2"> <%= render :partial => "multi_shipper_form", :locals => {:item => @item, :form => f}%> </td>
+    <td colspan="2">
+      <%= render :partial => "multi_shipper_form", :locals => { :item => @item, :form => f }%>
+    </td>
   </tr>
   
   <tr>
@@ -521,30 +491,30 @@ $(function () {
           <tr>
           <td colspan="6"> <h3> <%= I18n.t("activerecord.models.action.other") %></h3> <hr />  </td>
          </tr>
-        <% @item.actions.each do |action|  %>
+        <% @item.actions.visible.each do |action| %> 
           <tr >
             <td width="40%"> <%= link_to action.name, edit_action_path(action) %> </td>
             <td>
-              <%=I18n.t("when_list.#{Action.when_list.find {|w| action.whento.to_sym == w}}") %>
+              <%=I18n.t("when_list.#{Action.when_list.find {|w| action.whento.to_sym == w}}") if not action.whento.nil? %>
             </td>
             <td>
-              <%= I18n.t("behavior_list.#{Action.behavior_list.find {|b| b == action.behavior.to_sym }}")  %>
+              <%= I18n.t("behavior_list.#{Action.behavior_list.find {|b| b == action.behavior.to_sym }}") if not action.behavior.nil?  %>
             </td>
             <td>
               <%= action.value %>
             </td>
             <td>
-              <%= salor_number_to_currency(Action.simulate(@item, action).base_price) %>
+              <%= salor_number_to_currency(Action.simulate(@item, action).base_price) if false == true %>
             </td>
             <td>
               <div>
-              <%= link_to image_tag('/images/icons/' + icon(:delete,16)), action,:confirm => 'Are you sure?', :method => :delete %>
+              <%= link_to salor_icon(:delete,{},16), action,:confirm => 'Are you sure?', :method => :delete %>
             </div>
             </td>
           </tr>
         <% end %>
        <% end %>
-       <% discounts = OrderItem.get_discounts.find_all {|disc| 
+       <% discounts = @item.vendor.get_current_discounts.find_all {|disc| 
           (disc.applies_to == 'Item' and disc.item_sku == @item.sku) or 
           (disc.applies_to == 'Category' and disc.category_id == @item.category_id) or
           (disc.applies_to == 'Location' and disc.location_id == @item.location_id)
@@ -569,7 +539,7 @@ $(function () {
             </tr>
           <% end %>
        <% end %>
-       <% coupons = Item.scopied.where(["coupon_applies = ?",@item.sku]) %>
+       <% coupons = @item.vendor.items.visible.where(["coupon_applies = ?",@item.sku]) %>
        <% if coupons.any? then  %>
         
        <% end %>

@@ -1,6 +1,11 @@
-window.Drawer ||= {}
 calculator_total = 0
-dt = Drawer.amount
+
+$ ->
+  for elem in $('.eod-calculator-input')
+    if not $(elem).hasClass('calculator-done')
+      $(elem).on 'keyup', -> 
+        displayCalculatorTotal()
+      $(elem).addClass('calculator-done')
 
 
 window.displayCalculatorTotal = ->
@@ -22,11 +27,6 @@ window.displayCalculatorTotal = ->
   $('.eod-calculator-difference').html(toCurrency(diff));
   $('.eod-calculator-total').html(toCurrency(calculator_total));
 
-window.logout = ->
-  window.location = '/vendors/end_day'
-
-
-
 window.eodPayout = ->
   $.ajax
     type: 'POST'
@@ -43,10 +43,5 @@ window.eodPayout = ->
       #window.location = '/vendors/end_day';
     error: (data,status,err) ->
       alert(err)
- $ ->
-   for elem in $('.eod-calculator-input')
-     if not $(elem).hasClass('calculator-done')
-       $(elem).on 'keyup', -> 
-         displayCalculatorTotal()
-       $(elem).addClass('calculator-done')
+
          

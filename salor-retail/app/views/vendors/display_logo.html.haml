@@ -1,18 +1,4 @@
-- if @vendor.logo_image
-  .customer-logo= image_tag "/vendors/#{ @vendor.id }/logo", :width => '61%'
+.vendorlogo{ :style => "background-image: url('#{ @current_vendor.image('logo') }');"}
+
 = image_tag '/images/salor-logo-customer-screen.png', :id => 'salorlogo'
-
-:css
-  #salorlogo {
-    position: fixed;
-    margin: 5px;
-    bottom: 0px;
-    left: 0px;
-    width: 125px
-  }
-
-  div.customer-logo {
-    text-align: center;
-    padding: 150px 0 10px 0;
-  }
   

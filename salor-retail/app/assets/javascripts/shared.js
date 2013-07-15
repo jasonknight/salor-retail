@@ -1,14 +1,13 @@
-/*
-# BillGastro -- The innovative Point Of Sales Software for your Restaurant
-# Copyright (C) 2012-2013  Red (E) Tools LTD
-# 
-# See license.txt for the license applying to all files within this software.
-*/
-var automatic_printing = false;
-var debugmessages = [];
-var _CTRL_DOWN = false;
+var IS_APPLE_DEVICE = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
+var IS_IPAD = navigator.userAgent.match(/iPad/i) != null;
+var IS_IPOD = navigator.userAgent.match(/iPod/i) != null;
+var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
 var _key_codes = {tab: 9,shift: 16, ctrl: 17, alt: 18, f2: 113};
 var _keys_down = {tab: false,shift: false, ctrl: false, alt: false, f2: false};
+var _called = 0;
+
+
+// documentready
 $(function(){
   jQuery.ajaxSetup({
       'beforeSend': function(xhr) {
@@ -17,11 +16,6 @@ $(function(){
       }
   })
 
-  if (typeof(automatic_printing_timeout) == 'undefined') {
-    automatic_printing_timeout = window.setInterval(function() {
-      if ( automatic_printing == true ) { window.location.href = '/items.bill'; }
-    }, 10000);
-  }
   $(window).keydown(function(e){
     for (var key in _key_codes) {
       if (e.keyCode == _key_codes[key]) {
@@ -29,6 +23,7 @@ $(function(){
       }
     }
   });
+  
   $(window).keyup(function(e){
     for (var key in _key_codes) {
       if (e.keyCode == _key_codes[key]) {
@@ -36,7 +31,26 @@ $(function(){
       }
     }
   });
-})
+});
+
+
+
+function wholesaler_update() {
+  var answer = confirm('Are you sure?')
+  if (!answer) { return; }
+  //TODO: needs a progress spinner and a real dialog in the dom since salor-bin can't display alerts
+  window.location = '/shippers/update_wholesaler';
+}
+
+function blurInput(type) {
+  var input = $("#complete_in_" + type);
+  if ($(input).val() == "") $(input).val("0");
+}
+
+function displayAdvertising() {
+  
+}
+
 /*
  *  Allows us to latch onto events in the UI for adding menu items, i.e. in this case, customers, but later more.
  */
@@ -54,6 +68,7 @@ function connect(unique_name,msg,fun) {
   }
   _set('plugin_callbacks_done',pcd)
 }
+
 function _get(name,context) {
   if (context) {
     // if you pass in a 3rd argument, which should be an html element, then that is set as teh context.
@@ -86,36 +101,12 @@ function scroll_for(distance, speed) {
   do_scroll(distance, speed);
 }
 
-function  in_array_of_hashes(array,key,value) {
-  for (var i in array) {
-    if (array[i][key]) {
-      try {
-        if (array[i][key] == value) {
-          return true;
-        } else if (array[i][key].indexOf(value) != -1){
-          return true;
-        }
-      } catch (e) {
-        return false;
-      }
-    }
-  }
-  return false;
-}
-
 function do_scroll(diff, speed) {
   window.scrollBy(0,diff/speed);
   newdiff = (speed-1)*diff/speed;
   scrollAnimation = setTimeout(function(){ do_scroll(newdiff, speed) }, 20);
   if(Math.abs(diff) < 5) { clearTimeout(scrollAnimation); }
 }
-
-function debug(message) {
-  if ( debugmessages.length > 7 ) { debugmessages.shift(); }
-  debugmessages.push(message);
-  $('#messages').html(debugmessages.join('<br />'));
-}
-
 
 function toggle_all_option_checkboxes(source) {
   if ($(source).attr('checked') == 'checked') {
@@ -511,8 +502,8 @@ window.shared = {
     to_currency: function (number,separator,unit) {
       var match, property, integerPart, fractionalPart;
       var settings = {         precision: 2,
-      unit: i18n.currency_unit,
-      separator: i18n.decimal_separator,
+      unit: Region.number.currency.format.unit,
+      separator: Region.number.currency.format.delimiter,
       delimiter :'',
       precision: 2
       };
@@ -603,7 +594,7 @@ window.shared = {
     dialog: function (title,id,clear) {
       var dialog = shared.element('div',{id: id},'',$('body'));
       dialog.addClass('salor-dialog');
-      dialog.css({width: retail.container.width() * 0.50, height: retail.container.height() * 0.30,'z-index':11});
+      dialog.css({width: retail.container.width() * 0.50, height: retail.container.height() * 0.40, 'z-index':150});
       if (_get('existed',dialog)) {
         dialog.html('');
         _set('existed',false,dialog);
@@ -955,4 +946,4 @@ window.shared = {
       }
     }
   },
-} // end shared
+}

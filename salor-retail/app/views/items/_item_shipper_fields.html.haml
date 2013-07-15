@@ -6,7 +6,7 @@
     %tr
       %td= f.label :shipper_id
       %td
-        = f.select :shipper_id, Shipper.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',''])
+        = f.select :shipper_id, @item.vendor.shippers.visible.collect {|t| [t.name,t.id]}.unshift(['NA',''])
         
     %tr
       %td= f.label I18n.t("activerecord.attributes.purchase_price")

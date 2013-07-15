@@ -3,14 +3,14 @@
     %tr
       %td= f.label :stock_location_id
       %td
-        = f.select :stock_location_id, StockLocation.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',''])
+        = f.select :stock_location_id, @item.vendor.stock_locations.visible.collect {|t| [t.name,t.id]}.unshift(['NA',''])
     %tr
       %td=f.label t('activerecord.models.stock_location.one') + " " +  I18n.t("activerecord.attributes.quantity")
       %td=f.text_field :stock_location_quantity, :class => "keyboardable-int delimit-number"
     %tr
       %td= f.label :location_id
       %td
-        = f.select :location_id, Location.scopied.collect {|t| [t.name,t.id]}.unshift(['NA',''])
+        = f.select :location_id, @item.vendor.locations.visible.collect {|t| [t.name,t.id]}.unshift(['NA',''])
         
     %tr
       %td=f.label t('activerecord.models.location.one') + " " +  I18n.t("activerecord.attributes.quantity")

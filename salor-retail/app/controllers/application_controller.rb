@@ -6,33 +6,27 @@
 # See license.txt for the license applying to all files within this software.
 require "net/http"
 require "uri"
+
 class ApplicationController < ActionController::Base
-  # {START}
   include SalorBase
+  
   helper :all
   helper_method :workstation?, :mobile?
-  protect_from_forgery
-  before_filter :loadup, :except => [:add_item_ajax, :login, :render_error]
-  before_filter :pre_load, :except => [:render_error]
-  before_filter :setup_global_data, :except => [:login, :render_error]
+  
+  #protect_from_forgery
+  
+  before_filter :loadup
+  before_filter :get_cash_register
+  before_filter :set_tailor
+  before_filter :set_locale
+  
   layout :layout_by_response
-  helper_method [:user_cache_name]
 
   unless SalorRetail::Application.config.consider_all_requests_local
-    rescue_from Exception, :with => :render_error
-  end 
-  def get_url(url, user=nil, pass=nil)
-    uri = URI.parse(url)
-    
-    http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    if user and pass then
-      request.basic_auth(user,pass)
-    end
-    
-    response = http.request(request)
-    return response
+    #rescue_from Exception, :with => :render_error
   end
+  
+
   def is_mac?
      RUBY_PLATFORM.downcase.include?("darwin")
   end
@@ -44,8 +38,8 @@ class ApplicationController < ActionController::Base
   def is_linux?
      RUBY_PLATFORM.downcase.include?("linux")
   end   
-  def pre_load
-  end
+
+  
   def render_csv(filename = nil,text = nil)
     filename ||= params[:action]
     filename += '.csv'
@@ -75,90 +69,50 @@ class ApplicationController < ActionController::Base
     not workstation?
   end
 
-  def salor_signed_in?
-    if session[:user_id] and session[:user_type] and (Employee.exists? session[:user_id] or User.exists? session[:user_id]) then
-      return true
-    else
-      return false
-    end
-  end
-
-  def admin_signed_in?
-    if session[:user_id] and session[:user_type] == "User" then
-      return true
-    else
-      return false
-    end
-  end
-
-  def current_user
-    return User.find session[:user_id] if session[:user_type] == "User"
-  end
-
-  def salor_user
-    #logger.info "XXX session[:user_id] is #{ session[:user_id] }"
-    #logger.info "XXX session[:user_type] is #{ session[:user_type] }"
-    $User = nil
-    if session[:user_id] then
-      if session[:user_type] == "User" then
-        user= User.find_by_id(session[:user_id].to_i)
-      else
-        user= Employee.find_by_id(session[:user_id])
-        $Vendor = user.vendor if user #Because Global State is maintained across requests.
-        Time.zone = $Vendor.time_zone if $Vendor and not $Vendor.time_zone.nil?
-        $User = user
-      end
-      return user
-    end
-    return nil
-  end
-
-  def user_cache_name
-    return salor_user.username if salor_signed_in?
-    return 'loggedout'
-  end
-
   private
-  def allowed_klasses
-    ['SalorConfiguration','EmployeeLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem']
-  end
-  def initialize_instance_variables
-    if params[:vendor_id] and not params[:vendor_id].blank? then
-      salor_user.meta.update_attribute(:vendor_id,params[:vendor_id])
-    end
-    if salor_user and salor_user.meta.vendor_id.nil? then
-      salor_user.meta.update_attribute(:vendor_id,salor_user.get_default_vendor.id)
-    end
-    if params[:cash_register_id] then
-      salor_user.meta.update_attribute(:cash_register_id,params[:cash_register_id])
-    end
-    if salor_user then
-      @tax_profiles = salor_user.get_tax_profiles
-      if salor_user.meta.cash_register_id then
-        @cash_register = CashRegister.find_by_id(salor_user.meta.cash_register_id)
+  
+  def set_locale
+
+    if params[:l] and I18n.available_locales.include? params[:l].to_sym
+      log_action "params[:l] is set to #{params[:l]}"
+      I18n.locale = @locale = session[:locale] = params[:l]
+    elsif session[:locale]
+      log_action "session[:locale] is set to #{session[:locale]}"
+      I18n.locale = @locale = session[:locale]
+    elsif @current_user
+      log_action "Users Locale is: #{@current_user.language}"
+      I18n.locale = @locale = session[:locale] = @current_user.language
+    else
+      log_action "No locale is set, trying to detect from browser"
+      unless request.env['HTTP_ACCEPT_LANGUAGE'].nil?
+        browser_language = request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first
+        browser_language = 'gn' if browser_language == 'de'
+      end
+      if browser_language.nil? or browser_language.empty? or not I18n.available_locales.include?(browser_language.to_sym)
+        I18n.locale = @locale = session[:locale] = 'en'
       else
-        @cash_register = CashRegister.new(:name => 'Unk')
-      end
-      $Register = @cash_register
-      GlobalData.cash_register = @cash_register
-      if Vendor.exists?(salor_user.meta.vendor_id) then
-          @vendor = Vendor.find(salor_user.meta.vendor_id)
-      else 
-          @vendor = Vendor.new
-          @vendor.name = I18n.t("views.errors.unknown_vendor")
+        I18n.locale = @locale = session[:locale] = browser_language
       end
     end
-    GlobalData.vendor = @vendor
-    $Vendor = @vendor
-    @current_vendor = @vendor
-    @current_employee = $User	
-    GlobalData.conf = @vendor.salor_configuration if @vendor
-    if @vendor then 
-      $Conf = @vendor.salor_configuration
+    log_action "Locale is now set to: #{I18n.locale}"
+    @region = @current_vendor.region if @current_vendor
+  end
+  
+  def update_devicenodes
+    if @current_register
+      @current_register.set_device_paths_from_device_names(CashRegister.get_devicenodes)
     end
-    if !$Conf then
-      $Conf = Vendor.first.salor_configuration
+  end
+  
+  def customerscreen_push_notification
+    t = SalorRetail.tailor
+    if t
+      t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|/orders/#{ @order.id }/customer_display"
     end
+  end
+  
+  def allowed_klasses
+    ['SalorConfiguration','UserLogin','LoyaltyCard','Item','ShipmentItem','Vendor','Category','Location','Shipment','Order','OrderItem']
   end
 
   def layout_by_response
@@ -169,31 +123,63 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
-    $Notice = ""
-    SalorBase.log_action("ApplicationController.loadup","--- New Request -- \n" + params.inspect)
-    GlobalData.refresh # Because classes are cached across requests
-    Job.run # Cron jobs for the application
-    GlobalData.base_locale = AppConfig.base_locale
-    I18n.locale = AppConfig.locale
+    @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
+    if @current_user.nil? or session[:user_id_hash].blank?
+      redirect_to new_session_path and return 
+    else
+      log_action "session[:user_id_hash] is #{session[:user_id_hash]}"
+    end
     
-    if params[:license_accepted].to_s == "true" then
-      Vendor.first.salor_configuration.update_attribute :license_accepted, true
+    if defined?(SrSaas) == 'constant'
+      # this is necessary due to call to the login method in UsersController#clock{in|out}
+      @current_company = SrSaas::Company.visible.find_by_id(@current_user.company_id)
+    else
+      @current_company = @current_user.company
     end
-    if salor_signed_in? and salor_user then
-      I18n.locale = salor_user.language
-      #raise I18n.locale.to_s + salor_user.inspect
-	@owner = salor_user.get_owner
-	if salor_user.meta.nil? then
-          salor_user.meta = Meta.new
-          salor_user.meta.save
-        end
-    else 
-      @owner = User.new
+    @current_vendor = @current_user.vendors.visible.find_by_id(session[:vendor_id])
+    Time.zone = @current_vendor.time_zone if @current_vendor
+    I18n.locale = @current_user.language
+    return @current_user
+  end
+  
+  def get_cash_register
+    @current_register = @current_vendor.cash_registers.visible.find_by_id(session[:cash_register_id])
+    redirect_to cash_registers_path and return unless @current_register
+  end
+  
+  def set_tailor
+    return unless @current_vendor and SalorRetail::Application::CONFIGURATION[:tailor] and SalorRetail::Application::CONFIGURATION[:tailor] == true
+  
+    t = SalorRetail.tailor
+    if t
+      #logger.info "[TAILOR] Checking if socket #{ t.inspect } is healthy"
+      begin
+        t.puts "PING|#{ @current_vendor.hash_id }|#{ Process.pid }"
+      rescue Errno::EPIPE
+        logger.info "[TAILOR] Error: Broken pipe for #{ t.inspect } #{ t }"
+        SalorRetail.old_tailors << t
+        t = nil
+      rescue Errno::ECONNRESET
+        logger.info "[TAILOR] Error: Connection reset by peer for #{ t.inspect } #{ t }"
+        SalorRetail.old_tailors << t
+        t = nil
+      rescue Exception => e
+        logger.info "[TAILOR] Other Error: #{ e.inspect } for #{ t.inspect } #{ t }"
+        SalorRetail.old_tailors << t
+        t = nil
+      end
     end
-    I18n.locale = params[:locale] if params[:locale]
-    add_breadcrumb I18n.t("menu.home"),'home_user_employee_index_path'
-    @page_title = "Salor"
-    @page_title_options = {}
+    
+    if t.nil?
+      begin
+        t = TCPSocket.new 'localhost', 2001
+        logger.info "[TAILOR] Info: New TCPSocket #{ t.inspect } #{ t } created"
+      rescue Errno::ECONNREFUSED
+        t = nil
+        logger.info "[TAILOR] Warning: Connection refused. No tailor.rb server running?"
+      end
+      SalorRetail.tailor = t
+    end
   end
 
   protected
@@ -210,108 +196,29 @@ class ApplicationController < ActionController::Base
     end
     render :template => '/errors/error', :layout => 'customer_display'
   end
-
-  def authify
-    if not salor_signed_in? then
-      # puts  "Not Signed in..";
-      redirect_to '/home/index' and return
-    end
-    return true
-  end
-  def add_breadcrumb(name, url = '')
-    begin
-    @breadcrumbs ||= []
-      url = eval(url) if url =~ /_path|_url|@/
-      @breadcrumbs << [name, url]
-    rescue
-
-    end
-  end
- 
-  def self.add_breadcrumb(name, url, options = {})
-    before_filter options do |controller|
-      controller.send(:add_breadcrumb, name, url)
-    end
-  end
-  def initialize_order
-    if params[:order_id] then
-      o = Order.scopied.where("id = #{params[:order_id]} and (paid IS NULL or paid = 0)").first
-      # puts  "!!!!!!!! Found order from params!"
-      $User.get_meta.update_attribute :order_id, o.id
-      return o if o
-    end
-    if not $User.get_meta.order_id or not Order.exists? $User.get_meta.order_id then
-      order = $User.get_new_order
-      $User.meta.update_attribute(:order_id,order.id)
-    else
-      order = $User.get_order($User.meta.order_id)
-    end
-    return order
-  end
-  #
-  def setup_global_data
-    vars = {}
-    var_names = [:vendor_id,:order_id,:cash_register_id]
-    var_names.each do |var|
-      if session[var].nil? then
-        vars[var.to_s] = params[var]
-      else
-        vars[var.to_s] = session[var]
-      end
-    end
-    
-    GlobalData.session = vars
-    GlobalData.request = request
-    $Request = request
-    $Params = params
-    vars = {}
-    var_names = [:no_inc,:sku,:controller,:action,:page,:vendor_id,:keywords]
-    var_names.each do |var|
-      vars[var.to_s] = params[var] 
-    end
-    
-    GlobalData.params = vars
-    if salor_user
-      GlobalData.salor_user = salor_user
-      GlobalData.cash_register = @cash_register
-      GlobalData.user_id = salor_user.get_owner.id
-      # $User is setup is salor_user
-      if $User and $User.role_cache.blank? then
-        $User.set_role_cache
-        $User.update_attribute :role_cache, $User.role_cache
-      end
-      if $User and [:create,:update,:destroy].include? params[:action].to_sym then
-        [:cache_drop, :application_js, :header_menu,:vendors_show].each do |c|
-          expire_fragment(SalorBase.get_cache_name_for_user(c))
-        end
-      end
-      $Meta = $User.get_meta
-    end
-  end
+  
   def check_role
     if not role_check(params) then 
       redirect_to(role_check_failed) and return
     end  
   end
+  
   def role_check_failed
-    return salor_user.get_root.merge({:notice => I18n.t("system.errors.no_role")})
+      return @current_user.get_root.merge({:notice => I18n.t("system.errors.no_role")})
   end
   
   def role_check(p)
-    return $User.can(p[:action] + '_' + p[:controller])
+    return @current_user.can(p[:action] + '_' + p[:controller])
   end
   
   def not_my_vendor?(model)
-    if $User.vendor_id != model.vendor_id then
+    if @current_user.vendor_id != model.vendor_id then
       return true
     end
     return false
   end
   
-  # TODO: Remove method check_license since no longer used
-  def check_license()
-    return true
-  end
+
   
   def assign_from_to(p)
     begin

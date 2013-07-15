@@ -1,182 +1,25 @@
-<script type="text/javascript">
-function show_cash_drop() {
-  $('#cash_drop').show();
-  $("#transaction_type").val('');
-  focusInput($("#cash_drop_amount"));
-}
-function hide_cash_drop() {
-  $('#cash_drop').hide();
-  $('.cash-drop-amount').removeClass('error-input');
-  $('.cash-drop-amount').val('');
-  focusInput($('#keyboard_input'));
-}
-function cash_drop_save() {
-  if ($('.cash-drop-amount').val() == '') {
-    $('.cash-drop-amount').addClass('error-input');
-    $('.trans-button').removeClass('button-highlight');
-    alert("NoAmountSet");
-    focusInput($('.cash-drop-amount'));
-    return;
-  }
-  if ( ($("#transaction_type").val() == 'payout') && ( Drawer.amount - parseFloat($('.cash-drop-amount').val()) ) < 0) {
-    $(".cash-drop-amount").addClass('error-input');
-    alert("NotEnough");
-    return;
-  }
-  $('.cash-drop-amount').removeClass('error-input');
-  if($("#transaction_type").val() == '') {
-    $("#transButtonRow").addClass('error-input');
-    alert("NoTypeSet");
-    return;
-  }
-  $("transButtonRow").removeClass('error-input');
-  $.ajax({
-      type: 'POST',
-      url: '/vendors/new_drawer_transaction',
-      data: $('#cash_drop_form').serialize(),
-      dataType: 'script',
-      success: function (data) {
-        $('textarea#cash-drop-notes-id').val('');
-        $('.dt-tag-button').removeClass("highlight");
-        $('input#dt_tag').val('None');
-        $('div.dt-tag-target').html(' Tag ');
-        hide_cash_drop();
-      },
-      error: function (data,status,err) {
-        alert(err);
-      }
-  });
-  focusInput($('#keyboard_input'));
-}
-$(document).ready(function(){
-  $('#header_drawer_amount').html(toCurrency(Drawer.amount));
-});
-/*var filename = "_cash_drop.html.erb";
-
-$(document).ready(function(){
-  $(".trans-button").click(selectTransButton);
-  $(".cash-drop-amount").keyup(checkDropAmount);
-  $('#header_drawer_amount').html(toCurrency(Drawer.amount));
-});
-
-function selectTransButton() {
-  if ($(this).hasClass('trans-button')) {
-    $(".trans-button").removeClass("button-highlight");
-    $(this).addClass("button-highlight");
-    $("#transaction_type").val($(this).attr('name'));
-    cash_drop_save();
-  }
-}
-
-function checkDropAmount() {
-  //$(this).val(toFloat($(this).val(), true));
-  //checkContinueActive();
-}
-
-function checkContinueActive() {
-  var button = $("#continue_button");
-  if ($("#transaction_type").val() != '' && $(".cash-drop-amount").val() != '') {
-    $(button).removeClass('button-inactive');
-  } else {
-    $(button).addClass('button-inactive');
-  }
-}
-
-function show_cash_drop() {
-  $('#cash_drop').show();
-  $("#transaction_type").val('');
-  $("#transButtonRow").removeClass('error-input');
-  $(".trans-button").removeClass('button-highlight');
-  //$('#cash_drop_form input[type=radio]').attr('checked',false);
-  focusInput($('.cash-drop-amount'));
-  setTimeout( function () {
-    make_keyboardable($('.cash-drop-amount'));
-    make_keyboardable($('#cash-drop-notes-id'));
-    $('.cash-drop-amount').html(toCurrency(Drawer.amount));
-    $('.cash-drop-amount').select();
-  },150);
-
-  setOnEnterKey(function(){
-    cash_drop_save();
-  });
-
-  setOnEscKey(function(){
-    hide_cash_drop();
-  });
-}
-
-function hide_cash_drop() {
-  $('#cash_drop').hide();
-  $('.cash-drop-amount').removeClass('error-input');
-  $('.cash-drop-amount').val('');
-  focusInput($('#keyboard_input'));
-  unsetOnEnterKey();
-  unsetOnEscKey();
-  $('#coincalculator').hide();
-}
-
-function cash_drop_save() {
-  if ($('.cash-drop-amount').val() == '') {
-    $('.cash-drop-amount').addClass('error-input');
-    $('.trans-button').removeClass('button-highlight');
-    focusInput($('.cash-drop-amount'));
-    return;
-  }
-  if ( ($("#transaction_type").val() == 'payout') && ( Drawer.amount - parseFloat($('.cash-drop-amount').val()) ) < 0) {
-    $(".cash-drop-amount").addClass('error-input');
-    return;
-  }
-  $('.cash-drop-amount').removeClass('error-input');
-  if($("#transaction_type").val() == '') {
-    $("#transButtonRow").addClass('error-input');
-    return;
-  }
-  $("transButtonRow").removeClass('error-input');
-  $.ajax({
-      type: 'POST',
-      url: '/vendors/new_drawer_transaction',
-      data: $('#cash_drop_form').serialize(),
-      dataType: 'script',
-      success: function (data) {
-        $('textarea#cash-drop-notes-id').val('');
-        $('.dt-tag-button').removeClass("highlight");
-        $('input#dt_tag').val('None');
-        $('div.dt-tag-target').html(' Tag ');
-        hide_cash_drop();
-      },
-      error: function (data,status,err) {
-        alert(err);
-      }
-  });
-  focusInput($('#keyboard_input'));
-}
-
-function show_coin_calculator() {
-  $('#coincalculator').slideToggle();
-}*/
-</script>
-
 <div id="cash_drop" class="cash-drop hidden">
-<%= salor_render :partial => "shared/dt_tags" %>
+
+<%= render :partial => "shared/dt_tags" %>
+
 <div class="cash-drop-error"></div>
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>
   <span class='cash_drop_label'><%= I18n.t("menu.cash_register") %>:</span>
-  <span class="pos-cash-register-amount"><%= salor_number_to_currency($User.get_drawer.amount) if $User %></span>
+  <span class="pos-cash-register-amount"><%= salor_number_to_currency(@current_user.get_drawer.amount) if @current_user %></span>
 
-  <% if $User and $User.can(:manager)  %>
+  <% if @current_user and @current_user.can(:manager)  %>
       <p>
-        <span class='cash_drop_label'><%= I18n.t("activerecord.models.employee.one") %></span>
-        <select name="employee_id" id="employee_id">
-          <option value="self" selected><%= $User.username %></option>
-          <% Employee.scopied.each do |emp|  %>
+        <span class='cash_drop_label'><%= I18n.t("activerecord.models.user.one") %></span>
+        <select name="user_id" id="user_id">
+          <% @current_vendor.users.visible.each do |emp|  %>
             <option value="<%= emp.id %>"><%= emp.username %></option>
           <% end %>
         </select>
       </p>
   <% else %>
      <p>
-        <span class='cash_drop_label'><%= I18n.t("activerecord.models.employee.one") %></span>
+        <span class='cash_drop_label'><%= I18n.t("activerecord.models.user.one") %></span>
         <input type="password" name="password" id="cash_drop_password" class="keyboardable text-input"/>
         </p>
   <% end %>
@@ -184,7 +27,7 @@ function show_coin_calculator() {
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
         <%
           # prefil amount if cash_drawer is empty
-          if $User and $User.drawer and DrawerTransaction.last and $User.get_drawer.amount == 0 then
+          if @current_user and @current_user.drawer and DrawerTransaction.last and @current_user.get_drawer.amount == 0 then
             amount = DrawerTransaction.last.amount
           else
             amount = 0
@@ -197,7 +40,7 @@ function show_coin_calculator() {
         <textarea name="transaction[notes]" id="cash-drop-notes-id" class="input" rows="3" size=1></textarea>
       </p>
 
-            <% if TransactionTag.scopied.any? then %>
+            <% if @current_vendor.transaction_tags.visible.any? then %>
             <div align="center">
              <input type="hidden" id="dt_tag" name="transaction[tag]" value="None">
             <div class="generic-button dt-tag-target" onmousedown="$('.dt-tags').show();">

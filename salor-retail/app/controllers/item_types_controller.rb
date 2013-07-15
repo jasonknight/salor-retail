@@ -7,9 +7,7 @@
 class ItemTypesController < ApplicationController
   # GET /item_types
   # GET /item_types.xml
-  before_filter :authify
   before_filter :crumble
-  cache_sweeper :item_type_sweeper, :only => [:create, :update, :destroy]
 
   def index
     @item_types = ItemType.all

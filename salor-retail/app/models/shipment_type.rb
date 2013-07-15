@@ -8,7 +8,10 @@
 class ShipmentType < ActiveRecord::Base
   include SalorBase
   include SalorScope
-  include SalorModel
+
   has_many :shipments
   belongs_to :vendor
+  belongs_to :company
+  
+  validates_presence_of :name
 end

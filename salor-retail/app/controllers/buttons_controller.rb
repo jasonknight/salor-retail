@@ -5,71 +5,59 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class ButtonsController < ApplicationController
-  before_filter :authify
-  before_filter :initialize_instance_variables
-  before_filter :check_role, :except => [:crumble]
-  before_filter :crumble
-  
+  before_filter :check_role
+  before_filter :get_button_categories
+
   def index
-    @button_categories = Category.where(:button_category => true).order(:position)
   end
-  #
+
   def show
-    @button = Button.scopied.find(params[:id])
+    @button = @current_vendor.buttons.visible.find_by_id(params[:id])
+    redirect_to button_path(@button)
   end
 
   def new
     @button = Button.new(params[:item])
-    @button_categories = Category.where(:button_category => true).order(:position)
   end
 
   def edit
-    @button = Button.scopied.find_by_id(params[:id])
-    @button_categories = Category.where(:button_category => true).order(:position)
+    @button = @current_vendor.buttons.visible.find_by_id(params[:id])
   end
 
   def create
     @button = Button.new(params[:button])
-    @button.set_model_owner
-    respond_to do |format|
-      if @button.save
-        format.html { redirect_to(buttons_url, :notice => 'Button was successfully created.') }
-        format.xml  { render :xml => @button, :status => :created, :location => @button }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @button.errors, :status => :unprocessable_entity }
-      end
+    @button.vendor = @current_vendor
+    @button.company = @current_company
+    if @button.save
+      redirect_to buttons_path
+    else
+      render :new
     end
   end
 
   def update
-    @button = Button.scopied.find_by_id(params[:id])
-
-    @button.update_attributes params[:button]
-    redirect_to buttons_path
+    @button = @current_vendor.buttons.visible.find_by_id(params[:id])
+    if @button.update_attributes params[:button]
+      redirect_to buttons_path
+    else
+      render :edit
+    end
   end
 
   def destroy
-    @button = Button.scopied.find_by_id(params[:id])
-  @button.kill if @button
-
-    respond_to do |format|
-      format.html { redirect_to(buttons_url) }
-      format.xml  { head :ok }
-    end
+    @button = @current_vendor.buttons.visible.find_by_id(params[:id])
+    @button.hide(@current_user)
   end
-  #
+
   def position
-    @buttons = Button.scopied.where("id IN (#{params[:button].join(',')})")
-    Button.sort(@buttons,params[:button])
+    @buttons = @current_vendor.buttons.visible.where("id IN (#{params[:button].join(',')})")
+    Button.sort(@buttons, params[:button])
     render :nothing => true
   end
-
-  private 
-
-  def crumble
-    @vendor = salor_user.get_vendor(salor_user.meta.vendor_id)
-    add_breadcrumb @vendor.name,'vendor_path(@vendor)'
-    add_breadcrumb I18n.t("menu.buttons"),'buttons_path(:vendor_id => params[:vendor_id])'
+  
+  private
+  
+  def get_button_categories
+    @button_categories = @current_vendor.categories.visible.where(:button_category => true).order(:position)
   end
 end

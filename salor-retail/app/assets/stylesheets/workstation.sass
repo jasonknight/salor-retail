@@ -58,7 +58,7 @@ $text_size_massive: 150%
 
 $base_zoom: 1
 
-$header_height: 70px
+$header_height: 57px
 $header_width: $base_width
 $header_li_pad: 2px
 
@@ -85,6 +85,7 @@ $key_input_width: 9em
 
 $images: "/images"
 
+
 h1, h2, h3, label, div.breadcrumb-container, div.list 
   text-transform: uppercase
 .warning,div.warning,td * input.warning,button.warning
@@ -99,7 +100,6 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   border: none
 
 @mixin zoomable 
-  -moz-transform: scale($base_zoom)
   -webkit-transform: scale($base_zoom)
 
 @mixin pointer 
@@ -110,76 +110,59 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   margin-right: auto
 
 @mixin rounded_corners_all 
-  -moz-border-radius: $large_border_radius
-  -webkit-border-radius: $large_border_radius
+  border-radius: $large_border_radius
 .rounded-corners-all
   @include rounded_corners_all
   
 @mixin rounded_corners_all_small 
-  -moz-border-radius: $small_border_radius
-  -webkit-border-radius: $small_border_radius
+  border-radius: $small_border_radius
 
 @mixin rounded_corners_top 
-  -webkit-border-top-left-radius: $large_border_radius
-  -webkit-border-top-right-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
-  -moz-border-radius-topright: $large_border_radius
+  border-top-left-radius: $large_border_radius
+  border-top-right-radius: $large_border_radius
 
 @mixin rounded_corners_bottom 
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 @mixin rounded_corners_top_left 
-  -webkit-border-top-left-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
+  border-top-left-radius: $large_border_radius
 
 @mixin rounded_corners_bottom_left 
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
 
 @mixin rounded_corners_top_right 
-  -webkit-border-top-right-radius: $large_border_radius
-  -moz-border-radius-topright: $large_border_radius
+  border-top-right-radius: $large_border_radius
 
 @mixin rounded_corners_bottom_right 
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 @mixin rounded_corners_bottom 
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 @mixin rounded_corners_mismatch 
-  -webkit-border-top-left-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-top-left-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 
 
 @mixin rounded_corners_left 
-  -webkit-border-top-left-radius: $large_border_radius
-  -webkit-border-bottom-left-radius: $large_border_radius
-  -moz-border-radius-topleft: $large_border_radius
-  -moz-border-radius-bottomleft: $large_border_radius
+  border-top-left-radius: $large_border_radius
+  border-bottom-left-radius: $large_border_radius
 
 @mixin rounded_corners_right 
-  -webkit-border-top-right-radius: $large_border_radius
-  -webkit-border-bottom-right-radius: $large_border_radius
-  -moz-border-radius-topright: $large_border_radius
-  -moz-border-radius-bottomright: $large_border_radius
+  border-top-right-radius: $large_border_radius
+  border-bottom-right-radius: $large_border_radius
 .rounded-corners-right
   @include rounded_corners_right
 
 @mixin dialog 
   border: 1px solid $border_color
-  background-color: $middleground2
+  background-color: rgba(36, 50, 57, 0.92)
+  box-shadow: 2px 2px 10px rgba(255, 255, 255, 0.3)
   color: $foreground
-  padding: 10px
-  padding-top: 1em
+  padding: 30px
+  z-index: 150
 
 
 @mixin left_right_pad 
@@ -200,13 +183,10 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 @mixin awesome_button
   background: #222 url(/images/alert-overlay.png) repeat-x
   display: inline-block 
-  padding: 12px 10px 12px
   color: #fff
   text-decoration: none
-  -moz-border-radius: $large_border_radius 
-  -webkit-border-radius: $large_border_radius
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  border-radius: $large_border_radius
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
   border-bottom: 1px solid rgba(0,0,0,0.25)
   position: relative
@@ -214,8 +194,7 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 @mixin raised_element
   background: #222 url(/images/alert-overlay.png) repeat-x
-  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
-  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5)
+  box-shadow: 0px 5px 10px rgba(0,0,0,1)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
   border-bottom: 1px solid rgba(0,0,0,0.25)
   cursor: pointer
@@ -242,6 +221,7 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 @mixin attention_button 
   @include awesome_button
+  padding: 10px
   background-color: $text_color_attention
   color: $background
   @include no_select
@@ -268,8 +248,22 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
 
 .salor-dialog 
   @include dialog
+  
+/* generic */
+a
+  :text-decoration none
 
 /* Non Specific */
+
+div.clear
+  :clear both
+
+div.form_image
+  :position absolute
+  :right 0px
+  :top 200px
+  :background-color #0e1d25
+  
 .align-left 
   text-align: left
 
@@ -325,7 +319,6 @@ table.indent
 
 .upsidedown 
   -webkit-transform: rotate(180deg)
-  -moz-transform: rotate(180deg)
   -o-transform: rotate(180deg)
   -ms-transform: rotate(180deg)
   transform: rotate(180deg)
@@ -412,8 +405,7 @@ div.table-cell.btn
   background: $obtuse
   /* css3 */
   /* Using longhand to avoid inconsistencies between Safari 4 and Chrome 4 */
-  -webkit-border-radius: 25px
-  -moz-border-radius: 25px
+  border-radius: 25px
 
 .obtuse:before 
   content: ""
@@ -435,8 +427,7 @@ div.table-cell.btn
   display: none
 
 .shadow 
-  -moz-box-shadow: -2px 2px 1px $background
-  -webkit-box-shadow: -2px 2px 1px $background
+  box-shadow: -2px 2px 1px $background
   box-shadow: -2px 2px 1px $background
 
 .kbd-show 
@@ -446,7 +437,8 @@ div.table-cell.btn
   @include rounded_corners_all_small
   @include pointer
   text-align: center
-  padding: 3px
+  padding: 0px 15px
+  vertical-align: bottom
 
 div.main_sku
   text-align: center
@@ -607,19 +599,17 @@ body
   font-family: Ubuntu-R
   letter-spacing: 1.5px
 
-.icon-caption 
-  font-size: $text_size_tiny
-  text-transform: uppercase
+div.salor-icon
+  span.icon-caption 
+    font-size: $text_size_tiny
+    text-transform: uppercase
+    position: relative
+    bottom: 11px
 
-.header .icon-caption 
-  position: relative
-  bottom: -5px
 
-.header a
-  text-decoration: none
 
 div.tool-icon 
-  float: left
+  display: inline-block
   margin-right: 10px
   text-align: center
   span 
@@ -635,12 +625,6 @@ a
 
 span.link, a 
   color: $foreground
-  text-decoration: underline
-  \:hover 
-  text-decoration: underline
-  
-  \:active 
-  text-decoration: underline
   
 
 
@@ -652,7 +636,14 @@ div.header
   @include rounded_corners_bottom
   height: $header_height
   padding: 5px 0px -3px 0px
-  margin-bottom: 17px
+  margin-bottom: 3px
+  position: relative
+  width: 100%
+  z-index: 100
+  div.salor-icon
+  span.icon-caption 
+    position: relative
+    bottom: 7px
 
 div.header > ul 
   list-style: none
@@ -660,13 +651,14 @@ div.header > ul
   @include no_select
 
 div.header > ul > li 
-  float: left
   margin-right: $header_li_pad
   @include no_select
+  width: 65px
+  display: inline-block
+  vertical-align: top
 
 div.header > ul > li > div 
   padding-top: 5px
-  width: 65px
   height: $header_height - 2
   cursor: pointer
   :active 
@@ -679,7 +671,7 @@ div.header > ul > li > div
 div.header > ul > li > div.active 
   padding-top: 5px
   width: 65px
-  height: $header_height - 2
+  height: $header_height - 4
   cursor: pointer
   background-color: $background
   @include rounded_corners_top
@@ -688,12 +680,13 @@ div.header > ul > li > div.active
 div.header > ul > li > div.first 
   background-color: $background
   @include rounded_corners_top
-  height: $header_height - 2
+  height: $header_height - 4
   @include no_select
+  font-size: 60%
 
 div.header > ul > li > div.first > a > img 
-  margin-left: 2px
-  margin-top: -1px
+  margin-left: 4px
+  margin-top: -7px
 
 div.header > ul > li > div > a > img 
   border: none
@@ -724,29 +717,18 @@ a.reload-window
   text-transform: uppercase
   @include left_right_pad_wide
   @include pointer
-  
-
-div.header #clockbox 
-  width: 65px
-  height: 41px
-  padding-top: 8px
-  text-align: center
-  font-size: $text_size_tiny
-  text-shadow: 1px 1px 1px #666666
-  position: absolute
 
 div.header #clockbox span 
   font-weight: bold
   font-size: $text_size_big
 
-div.header #clockbox:hover 
-  background: $middleground
-  cursor: default
-
 div.generic-search 
   display: inline-block
   padding: 10px 0px
-  float: right
+  position: absolute
+  top: 0px
+  right: 0px
+  width: 160px
 
 div.generic-search-button 
   background: url(/images/icons/okay.svg) no-repeat
@@ -758,8 +740,10 @@ div.generic-search-button
   z-index: 101
   cursor: pointer
   display: inline-block
+  
 input#generic_search_input 
-  width: 200px
+  width: 65%
+  
 span.version 
   position: fixed
   left: 0px
@@ -781,38 +765,6 @@ span.salorbinversion
 div.main
   margin: 20px 0px 250px 0px
 
-div.background
-  background-color: $background
-  width: 100%
-  min-height: 1000px
-
-
-div.content-box > div.title-container 
-  @include center
-  position: relative
-  width: 91%
-  text-align: center
-  font-size: $text_size_massive
-
-
-
-div.content-box > div.title-container > div.title-box
-  @include raised_element
-  height: 29px
-  padding: 7px
-  float: left
-  width: 80%
-  background-color: $light_background
-  text-transform: uppercase
-
-div.content-box > div.title-container > div.title-box-admin 
-  background-color: #CC5757
-  float: left
-  font-weight: bold
-  height: 24px
-  margin-top: 5px
-  padding-top: 3px
-  width: 84%
 
 div.button-row-admin 
   background-color: $background
@@ -842,6 +794,25 @@ div.button-row-admin > div.button-admin
   margin-left: 5px
   margin-top: -3px
   padding: 3px 10px 0
+  
+
+div.content-box
+  div.title-container
+    :margin 15px auto
+    position: relative
+    width: 91%
+    text-align: center
+    font-size: $text_size_massive
+    height: 40px
+    
+  div.content-container-home-user_user_index 
+    margin: auto
+    width: 80%
+
+
+.content-box-home-user_user_index 
+  padding-top: 60px
+
 
 div.content-box > div.title-container > div.back-button,
 div.content-box > div.title-container > div.back-button-admin,
@@ -865,7 +836,7 @@ div.content-box > div.title-container > div.reload-button-admin,
 div.content-box > div.title-container > div.right-blank 
   width: 6%
   height: 32px
-  float: left
+  float: right
   margin-left: 5px
   vertical-align: middle
   text-align: center
@@ -915,6 +886,26 @@ div.content-box * div.title-menu
 div.content-box > div.content-container 
   padding-left: 50px
   clear: both
+
+
+
+div.content-box > div.title-container > div.title-box
+  @include raised_element
+  height: 29px
+  padding: 7px
+  display: inline-block
+  width: 80%
+  background-color: $light_background
+  text-transform: uppercase
+
+div.content-box > div.title-container > div.title-box-admin 
+  background-color: #CC5757
+  float: left
+  font-weight: bold
+  height: 24px
+  margin-top: 5px
+  padding-top: 3px
+  width: 84%
 
 
 /* The ul.list */
@@ -1073,19 +1064,18 @@ nav.pagination span.disabled
 /* Keypad CSS */
 $key_width: 2em
 $key_width_wide: 4em
-input.keyboard-input 
+
+input#main_sku_field
   @include rounded_corners_all
-  //@include rounded_corners_all
   text-align: center
   border: 1px solid $border_color
   width: 30%
   background-size: 100%
-  height: 1.5em
+  height: 38px
   background-color: white
   color: black
   font-weight: bold
-  font-size: 150%
-  margin: 0px 0px 6px 0px
+  font-size: 220%
 
 div.keys div.key,
 input.ui-keyboard-button 
@@ -1162,17 +1152,22 @@ td.keyboard-input
   font-size: $text_size_massive
   background-color: $green
   @include rounded_corners_all
-  padding: 5px
+  padding: 5px 50px
+  float: right
+  width: 120px
+  text-align: right
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8)
 
 #complete_order_change 
   text-transform: uppercase
-  text-align: right
   font-size: $text_size_massive
   background-color: $text_color_highlight
   color: $background
   @include rounded_corners_all
-  padding: 5px
-  margin: 5px 15px 0px 0px
+  padding: 5px 50px
+  float: right
+  width: 120px
+  text-align: right
 
 
 
@@ -1224,7 +1219,7 @@ div#eod-calculator-total, div#eod-calculator-difference
   font-weight: bold
   font-size: 200%
   padding: 5px
-  width: 40%
+  width: 30%
   margin: 5px
   background-color: $green
   @include rounded_corners_all
@@ -1249,9 +1244,15 @@ div.pos-button
   @include pointer
   background-color: $foreground
   color: $background
-  width: 10%
   text-align: center
   text-transform: uppercase
+  vertical-align: middle
+  padding: 1px 10px
+  margin: 0px 5px
+  height: 43px
+  width: 7%
+  span.icon-caption
+    bottom: 8px
 
 div.square-button 
   padding: 3px
@@ -1260,15 +1261,16 @@ div.square-button
   color: $background
   margin-right: 7px
 
-div.pos-menu div.new-order 
+div.pos-menu div.new-order
   @include rounded_corners_left
   background-color: $blue
+  float: left
   color: white
-  width: 10%
 
 div.pos-menu div.print-receipt 
   @include rounded_corners_right
   @include bright_button
+  float: right
   color: white
   padding-right: 5px
   width: 15%
@@ -1310,6 +1312,9 @@ div.pos-menu div.pos-configuration
 div.pos-item-attr
   @include raised_element
   background-color: $light_background
+  width: 6%
+  
+  
 .table-column
   background-color: $light_background
   padding-left: 5px
@@ -1327,6 +1332,8 @@ div.pos-item-name
   padding-left: 10px
   overflow-x: hidden
   text-align: right
+  width: 20%
+
 .pos-item-total
   width: 11%
 
@@ -1418,7 +1425,7 @@ div.pos-item-name
 
 div.cash-drop, div#coincalculator
   padding: 10px
-  z-index: 10
+  z-index: 100
 
 .error-input 
   border: 1px solid red
@@ -1492,7 +1499,8 @@ span.complete_order_label
 span.complete_order_highlight 
   color: $text_color_highlight
 
-.complete-order,.reorder-types 
+.complete-order,
+.reorder-types 
   @include rounded_corners_all
   width: 450px
   font-size: 1.5em
@@ -1501,6 +1509,7 @@ span.complete_order_highlight
   left: 20%
   @include dialog
   padding: 10px 10px 50px 10px
+  z-index: 102
 
 .reorder-types 
   @include rounded_corners_all
@@ -1531,11 +1540,16 @@ div.recommendations-container
   padding-bottom: 5px
   border-bottom: 2px solid $middleground2
 
-.pos-menu 
+div.pos-menu
+  @include raised_element
+  z-index: 99
+  position: relative
+  margin: 15px 0px 15px 0px
+  padding: 10px 10px
   text-align: center
-
-.pos-menu div 
-  display: inline-block
+  background-color: $background
+  div 
+    display: inline-block
 
 span.order-rebate_type,
 span.order-rebate,
@@ -1564,6 +1578,8 @@ span.order-lc_points,.order-points,.loyalty-points
   overflow-y: scroll
   @include rounded_corners_all
   border: 1px solid $middleground
+  img
+    :width 30px
 
 
 #results_table th 
@@ -1584,8 +1600,7 @@ span.order-lc_points,.order-points,.loyalty-points
   opacity: .95
   color: #121111
   text-align: center
-  -moz-border-radius: 5px
-  -webkit-border-radius: 5px
+  border-radius: 5px
 
 .search 
   width: 90%
@@ -1596,7 +1611,6 @@ span.order-lc_points,.order-points,.loyalty-points
   padding: 10px
   padding-top: 1em
   background-color: $light_background
-  opacity: .95
   text-align: center
   @include dialog
 
@@ -1779,14 +1793,6 @@ div.scrollable-button-row
 
 
 
-div.content-box > div.content-container-home-user_employee_index 
-  margin: auto
-  width: 80%
-
-
-.content-box-home-user_employee_index 
-  padding-top: 60px
-
 
 div.salor-presentation table 
   background-color: $middleground4
@@ -1822,8 +1828,16 @@ a#inplaceeditsave
 div.pagination 
   clear: both
 
+table.tools
+  clear: both
+  align: center
+  @include raised_element
+  margin: 5px auto 10px auto
+  @include rounded_corners_all
+  background-color: $background
 
 div.tools 
+  clear: both
   margin: 10px 5px
 
 
@@ -2031,7 +2045,6 @@ select:focus
   position: absolute
   top: 0
   left: 0
-  -moz-opacity: 0.5
   opacity: .50
   filter: alpha(opacity=50)
   background-color: $background
@@ -2235,6 +2248,12 @@ div#additional
 div.discount_applied 
   background-color: $middleground
 
+div.dark-background
+  background-color: $background
+  @include raised_element
+  @include rounded_corners_all
+  margin-top: 10px
+  padding: 5px
 
 /*E-Help classes*/
 .EHmarker
@@ -2355,11 +2374,6 @@ div.discount_applied
   margin: 0
   padding: 2px 4px
   position: relative
- 
-
-header > p 
-  //text-align: center
-  //margin: auto
 
 
 header.report 
@@ -2392,12 +2406,13 @@ section.report
 
 
 .pos-drawer-button 
-  float: left
+  position: absolute
   background-color: $light_background
 
 
 .uniscalebutton 
-  float : right
+  position: absolute
+  right: 0px
   background-color: $light_background
 
 
@@ -2512,50 +2527,50 @@ div.button-category-container
 div.button-category-containers div:first-child
   display: inline-block
 
-div.last-five-orders 
+div#last_orders
+  :display none
   @include dialog
   @include rounded_corners_all
   position: absolute
+  z-index: 103
   left: 5%
   width: 90%
   top: 100px
-  div.last-five-order 
+  div.recent-order 
     @include widget
     @include no_select
     @include rounded_corners_all
-    float: left
-    margin: 20px
+    display: inline-block
+    margin: 10px
     width: 150px
+    height: 100px
     padding: 5px
     text-align: center
-  span.id 
-    font-size: $text_size_big
-  span.total
-    font-size: $text_size_big
-    font-weight: bold
-  div.selected 
-    border: 4px solid red
+    vertical-align: bottom
+    cursor: pointer
+    p.recent-order-number
+      :font-size 120%
+      :font-weight bold
+      :font-style italic
+      :color white
+    p
+      :margin 2px 0px
+    p.recent_price
+      :font-weight bold
+      :font-size 110%
+    div.salor-icon
+      :margin 0px 7px
+
   
 
-div.last-completed-orders 
-  position: fixed
-  width: 100%
-  bottom: 5px
-  text-align: center
-  div.completed-entry 
-    background-color: #170c16
-    display: inline-block
-    padding: 5px
-    margin-right: 5px
-    border: 1px solid $border_color
   
   
 
 div.dt-tags 
   position: absolute
-  left: 10%
+  left: -10%
   top: 10px
-  width: 80%
+  width: 600px
   z-index: 100
   @include dialog
   @include no_select
@@ -2796,11 +2811,13 @@ div.delete
 
 .jquery-checkbox-checked .jquery-checkbox-disabled img
   :background-position 0px -125px
-div.select-widget-button,div.select-widget-entry
+  
+div.select-widget-button,
+div.select-widget-entry
   @include bright_button 
   @include pointer
   @include rounded_corners_all
-  :padding 10px
+  :padding 10px 30px
   :margin 5px
   :display inline-block
 div.select-widget-display
@@ -2808,6 +2825,7 @@ div.select-widget-display
   :background-color $middleground2
   :padding 10px
   :z-index 1025
+  :box-shadow 0px 0px 10px white
 div.plugin-panel div
   :display inline-block
   :margin 5px
@@ -2818,15 +2836,13 @@ div.role-check
   :width 25%
 
 div#header_drawer_amount
-  :position absolute
-  :top -3px
-  :padding 32px 0px 0px 0px
+  :margin -8px 0px 0px 4px
   :font-weight bold
   :font-size 90%
   :width 65px
   :text-align center
   :text-shadow white 0px 0px 5px
-  :color black
+  :color #FFFF55
 
 div.shipment_item_attr_header
   :display inline-block
@@ -3016,7 +3032,7 @@ div.options-row div.option-name
   cursor: pointer
   padding: 5px
   min-width: 100px
-  -webkit-border-radius: 4px
+  border-radius: 4px
 div.options-row div.option-input input,
 div.options-row div.option-input textarea,
   display: inline-block
@@ -3029,7 +3045,7 @@ div.options-row div.option-input textarea,
   font-weight: bolder
   text-align: center
   border: 3px solid #773973
-  -webkit-border-radius: 6px
+  border-radius: 6px
   border-left: none
   border-top: none
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.2, #80477d), color-stop(0.9, #773973))
@@ -3038,11 +3054,12 @@ div.options-row div.option-input,
 div.options-row .option-button
   display: inline-block
   textarea-width: 95%
+  
 .option-button
   @include bright_button
   margin-left: 10px
-  padding-top: 8px
-  padding-bottom: 8px
+  padding: 5px 15px
+  
 #pos_customer_div
   margin-top: -35px
   background-color: $background
@@ -3086,6 +3103,7 @@ a.new-model-button
   @include bright_button
 
 div#error_explanation
+  :clear both
   :color red
   :text-align left
 
@@ -3100,8 +3118,11 @@ div.pagination
   
 div.black-text,td.black-text, a.black-text, div.black-text a
   color: black
+  
 #add_payment_method_button
   font-size: 95%
+  padding: 10px
+  
 .ui-dialog .ui-widget-header 
   border: 1px solid #0b3e6f
   background: $green url(/images/ui-bg_diagonals-thick_15_0b3e6f_40x40.png) 50% 50% repeat
@@ -3130,3 +3151,7 @@ input.payment-method-input
   @include stylish_input_no_bg
   @include dark_input
   width: 200px
+  
+  
+form#logoutform
+  :display none

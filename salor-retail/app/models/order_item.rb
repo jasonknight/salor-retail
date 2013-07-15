@@ -6,788 +6,431 @@
 # See license.txt for the license applying to all files within this software.
 
 class OrderItem < ActiveRecord::Base
-  # {START}
   include SalorScope
   include SalorBase
-  include SalorError
-  include SalorModel
+  
+  belongs_to :vendor
+  belongs_to :company
   belongs_to :order
-  belongs_to :employee
+  belongs_to :user
   belongs_to :item
   belongs_to :tax_profile
+  belongs_to :location
   belongs_to :item_type
   belongs_to :category
+  belongs_to :drawer
   has_and_belongs_to_many :discounts
-  attr_accessor :is_valid
   has_many :coupons, :class_name => 'OrderItem', :foreign_key => :coupon_id
   belongs_to :order_item,:foreign_key => :coupon_id
-  has_many :histories, :as => :owner
+  has_many :histories, :as => :user
+  has_one :drawer_transaction # set for refunds only
+  has_one :payment_method_item # set for refunds only
 
-  scope :sorted_by_modified, order('updated_at ASC')
-  def tax_profile_id=(id)
-    tp = TaxProfile.find_by_id(id)
-    if tp then
-      write_attribute(:tax_profile_id,id)
-      write_attribute(:tax_profile_amount,tp.value)
-    end
-  end
-  def item_type_id=(id)
-    write_attribute(:behavior,ItemType.find(id).behavior)
-    write_attribute(:item_type_id,id)
+
+  monetize :total_cents, :allow_nil => true
+  monetize :price_cents, :allow_nil => true
+  monetize :tax_amount_cents, :allow_nil => true
+  monetize :coupon_amount_cents, :allow_nil => true
+  monetize :gift_card_amount_cents, :allow_nil => true
+  monetize :discount_amount_cents, :allow_nil => true
+  monetize :rebate_amount_cents, :allow_nil => true
+
+  
+  def is_normal?
+    return (self.is_buyback != true and self.behavior == 'normal')
   end
   def get_tax_profile_letter
-    if self.item.tax_profile then
-      return self.item.tax_profile.letter
+    return self.tax_profile.letter
+  end
+  
+  def get_translated_name(locale)
+    return self.item.get_translated_name(locale)
+  end
+  
+  def get_category_name
+    if self.category
+      return self.category.name
+    else
+      return ""
+    end
+  end
+  
+  def get_location_name
+    if self.item.location then
+      return self.item.location.name
     else
       return ''
     end
   end
-  def get_translated_name(locale)
-    if self.item then
-      return self.item.get_translated_name(locale)
-    else
-      return 'NoItem'
-    end
-  end
-  def get_category_name
-    if self.category and self.category.name then
-      return self.category.name
-    else
-      return "NoCategory"
-    end
-  end
-  def get_location_name
-    if self.item and self.item.location then
-      return self.item.location.name
-    else
-      return 'NoLocation'
-    end
-  end
-  # To speed things up, we cache the discounts
-  def self.reload_discounts
-  end
-  def OrderItem.get_discounts
-    Discount.scopied.select("name,amount,item_sku,id,location_id,category_id,applies_to,amount_type").where(["start_date <= ? and end_date >= ?",Time.now,Time.now])
-  end
-  def toggle_buyback(x)
-    #puts "Order.buy_order #{self.order.buy_order}"
-    if self.is_buyback then
-      self.update_attribute(:is_buyback,false)
-      self.price = discover_price(self.item)
-      calculate_total
-    else
-      if self.quantity > 1 then
-        oi = self.clone
-        oi.quantity = 1
-        oi.order = self.order 
-        oi.is_buyback = true if not self.order.buy_order == true
-        oi.item = self.item
-        oi.price = oi.discover_price(oi.item)
-        oi.save
-        self.quantity -= 1
-        self.save
-        return
-      end
-      self.update_attribute(:is_buyback,true) if not self.order.buy_order == true
-      self.price = discover_price(self.item)
-      calculate_total
-    end
-  end
-  def create_refund_transaction(amount,type,opts)
-    dt = DrawerTransaction.new(opts)
-    dt[type] = true
-    dt.amount = amount
-    dt.drawer_id = $User.get_drawer.id
-    dt.drawer_amount = $User.get_drawer.amount
-    dt.order_id = self.order.id
-    dt.order_item_id = self.id
-    if dt.save then
-      if type == :payout then
-        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount - dt.amount)
-      elsif type == :drop then
-        $User.get_drawer.update_attribute(:amount,$User.get_drawer.amount + dt.amount)
-      end
-    else
-      raise dt.errors.full_messages.inspect
-    end
-  end
-  #
-  def create_refund_payment_method(amount,refund_payment_method)
-    PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
-                         :name => (refund_payment_method + 'Refund'), 
-                         :amount => - amount, 
-                         :order_id => self.order.id
-        ) # end of PaymentMethod.create
+  
+  def toggle_buyback=(x)
+    self.is_buyback = ! self.is_buyback
+    self.modify_price_for_buyback
+    self.calculate_totals
   end
   
-  #
-  def toggle_refund(x, refund_payment_method)
-    # -1 = Not Enough in Drawer
-    # false is general failure
-    # true is everything went according to plan  
-    t = (self.calculate_total)
-    if self.order and self.order.rebate > 0
-      if self.order.rebate_type == "percent" then
-        t -= t * ( self.order.rebate / 100.0 )
-      end
-      if self.order.rebate_type == "fixed" then
-        # Distribute the fixed rebate equally on all OrderItems of the Order. Ugly, but this needs to be done so that the report generation is correct.
-        t -= self.order.rebate / self.order.order_items.visible.count
-      end
-    end
-    if self.order and self.order.lc_discount_amount > 0
-      t -= self.order.lc_discount_amount / self.order.order_items.visible.count
-    end
-    if self.order.vendor.salor_configuration.calculate_tax == true
-      # net price
-      t += self.tax
+  def tax=(value)
+    tax_profile = self.vendor.tax_profiles.visible.find_by_value(value)
+    ActiveRecord::Base.logger.info "TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tax_profile
+    self.tax_profile = tax_profile
+    self.save
+    write_attribute :tax, tax_profile.value
+  end
+  
+
+  def refund(pmid, user)
+    return nil if self.refunded
+    
+    drawer = user.get_drawer
+    refund_payment_method = self.vendor.payment_methods.visible.find_by_id(pmid)
+    
+    pmi = PaymentMethodItem.new
+    pmi.vendor = self.vendor
+    pmi.company = self.company
+    pmi.currency = self.vendor.currency
+    pmi.order = self.order
+    pmi.user = user
+    pmi.drawer = drawer
+    pmi.amount = - self.total
+    pmi.payment_method = refund_payment_method
+    pmi.order_item_id = self.id
+    pmi.cash = refund_payment_method.cash
+    pmi.refund = true
+    pmi.save
+    
+    if refund_payment_method.cash == true
+      dt = DrawerTransaction.new
+      dt.vendor = self.vendor
+      dt.company = self.company
+      dt.currency = self.vendor.currency
+      dt.user = user
+      dt.refund = true
+      dt.tag = 'OrderItemRefund'
+      dt.notes = I18n.t("views.notice.order_refund_dt", :id => self.id)
+      dt.order = self.order
+      dt.order_item_id = self.id
+      dt.drawer = drawer
+      dt.drawer_amount = drawer.amount
+      dt.amount = - self.total
+      dt.save
+      
+      drawer.amount -= self.total
+      drawer.save
     end
     
-    if (($User.get_drawer.amount - t) < 0 and refund_payment_method == 'InCash') then
-      # do not fail. let the user do what he wants.
-      #GlobalErrors.append_fatal("system.errors.not_enough_in_drawer",self)
-      #return -1
-    end
-
-    q = self.quantity
-    if self.refunded then
-      return false
-      # this is depreciated and should never happen right now since it's blocked by the orders#show view
-    else
-      self.update_attribute(:refunded,true)
-      self.update_attribute(:refunded_by, $User.id)
-      self.update_attribute(:refunded_by_type, $User.class.to_s)
-      self.update_attribute(:refund_payment_method, refund_payment_method)
-      update_location_category_item(t * -1, q * -1)
-      self.order.update_attribute(:total, self.order.total - t)
-      if refund_payment_method == 'InCash'
-        if t < 0
-          create_refund_transaction(-t,:drop, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
-        else
-          create_refund_transaction(t,:payout, {:tag => 'OrderItemRefund', :is_refund => true, :notes => I18n.t("views.notice.order_refund_dt",:id => self.id)}) if not x.nil?
-        end
-      else
-        create_refund_payment_method(t,refund_payment_method) if not x.nil?
-      end
-
-      # $User.get_meta.vendor.open_cash_drawer unless $Register.salor_printer or self.order.refunded # open cash drawer only if not called from the Order.toggle_refund function # this is handled now by an onclick event in shared/_order_line_items_.html.erb
-     return true
-    end
-    return false
+    self.refunded = true
+    self.refunded_by = user.id
+    self.refunded_at = Time.now
+    self.calculate_totals
+    
+    order = self.order
+    order.calculate_totals
   end
-  def update_location_category_item(t,q)
-    self.item.update_attribute(:quantity_sold, self.item.quantity_sold + q)
-    self.item.update_attribute(:quantity, self.item.quantity + (-1 * q))
-    loc = self.item.location
-    cat = self.item.category
-    if loc then
-      loc.update_attribute(:quantity_sold,loc.quantity_sold + q)
-      loc.update_attribute(:cash_made, loc.cash_made + t) 
-    end
-    if cat then
-      cat.update_attribute(:quantity_sold, cat.cash_made + q)
-      cat.update_attribute(:cash_made, cat.cash_made + t)
-    end
-  end
-  def toggle_lock=(x)
-    toggle_lock(x)
+  
+  def split
+    order = self.order
+    order.paid = nil
+    order.save
+    noi = self.dup
+    self.quantity -= 1
+    self.calculate_totals
+    noi.quantity = 1
+    noi.calculate_totals
+    order.calculate_totals
+    order.paid = true
+    order.save
   end
 
-  def toggle_lock(type)
-    return # we no longer support locking
-    if type == 'total' then
-      self.update_attribute(:total_is_locked,!self.total_is_locked)
-    elsif type == 'tax' then
-      self.update_attribute(:tax_is_locked,!self.tax_is_locked)
-    end
-  end
+
   def price=(p)
-    if self.order and self.order.paid == 1 then
-      return
-    end
-    p = self.string_to_float(p)
-    if (self.item.base_price == 0.0 or self.item.base_price == nil) and (self.item.must_change_price == false or self.item.behavior == 'gift_card') then
-      self.item.update_attribute :base_price,p
-      if self.item.behavior == 'gift_card' then
-        self.item.update_attribute :amount_remaining, p
-      end
-    end
-    if self.is_buyback == true and p > 0 then
-      p = p * -1
-    end
-    if self.discounts.any? then
-      damount = 0
-      pstart = p * self.quantity
-      self.discounts.each do |discount|
-        if discount.amount_type == 'percent' then
-          d = discount.amount / 100
-          damount += (pstart * d)
-        elsif discount.amount_type == 'fixed' then
-          damount += discount.amount
-        end
-      end
-      write_attribute(:discount_amount, damount)
-      #self.calculate_total
-    end
-    write_attribute(:price,self.string_to_float(p)) #string_to_float SalorBase
-  end
-  # Proxy methods so that actions work
-  def base_price=(p)
-    self.price = p
-  end
-  def base_price
-    self.price
-  end
-  def total=(p)
-    if self.order and self.order.paid == 1 then
-      return
-    end
-    p = self.string_to_float(p)
-    if self.is_buyback == true and p > 0 then
-      p = p * -1
-    end
-    write_attribute(:total,p) 
-  end
-  def tax=(p)
-    if self.order and self.order.paid == 1 then
-      return
-    end
-    write_attribute(:tax,self.string_to_float(p)) 
-  end
-  def quantity=(q)
-    if self.order and self.order.paid == 1 then
-      return
-    end
-    if q.nil? or q.blank? then
-      q = 0
-    end
-    q = q.to_s.gsub(',','.')
-    q = q.to_f.round(3)
-    q = 0 if q < 0
-    if self.discounts.any? then
-      damount = 0
-      pstart = self.price * q
-      self.discounts.each do |discount|
-        if discount.amount_type == 'percent' then
-          d = discount.amount / 100
-          damount += (pstart * d)
-        elsif discount.amount_type == 'fixed' then
-          damount += discount.amount
-        end
-      end
-      write_attribute(:discount_amount, damount)
-      #self.calculate_total
-    end
-    write_attribute(:quantity,q)
-  end
-  
-	def set_item(item,qty=1)
-    item.make_valid
-    if self.order and self.order.paid == 1 then
-      return false
-    end
-	  #item.make_valid # MF: this should be done only when saving an item, I guess it's a slowdown on each barcode scan
-
-    # GIFT CARD
-		if item.item_type.behavior == 'gift_card' then
-		  if item.activated and item.amount_remaining <= 0 then
-		    GlobalErrors.append('system.errors.gift_card_empty',self)
-		    self.is_valid = nil
-		    return false
-		  end
-		end
-		
-    # Copying Item attributes over to OrderItem attributes
-		self.is_valid = true
-		self.tax_profile_id = item.tax_profile_id
-		self.item_type_id = item.item_type_id
-		self.item_id = item.id
-		self.weigh_compulsory = item.weigh_compulsory
-		if item.default_buyback then
-		  self.is_buyback = true # MF: can be written into one line
-		end
-		if self.weigh_compulsory then
-		  self.quantity = 0
-		else
-		  self.quantity = qty # usually 1 as default
-		end
-		self.category_id = item.category_id
-		self.location_id = item.location_id
-		self.behavior = item.item_type.behavior
-		self.tax_profile_amount = item.tax_profile.value if item.tax_profile
-		self.amount_remaining = item.amount_remaining
-		self.sku = item.sku
-		self.activated = item.activated
-		#if self.quantity > item.quantity or self.quantity == 0 then
-		#  GlobalErrors.append('system.errors.insufficient_quantity_on_item',self,{:sku => item.sku})
-		#end
-
-    # GS1
-		if item.is_gs1 then
-		  p = get_gs1_price($Params[:sku], self.item)
-		  if p.nil? then
-		    GlobalErrors.append_fatal("system.errors.gs1_item_not_found",self,{:sku => $Params[:sku]})
-		  end
-		  if not self.item.price_by_qty then
-		    self.price = p
-		  else
-		    self.quantity = p
-		    self.price = self.item.base_price
-		  end
-		end
-
-		if item.activated and item.amount_remaining >= 1 then
-      # GIFT CARD
-      self.price = item.amount_remaining
-    else
-      # NORMAL
-      self.price = discover_price(item)
-      #oi = Action.run(self,:add_to_order)
-      oi = self
-      oi.calculate_total
-      #oi.total =  #oi.price * oi.quantity
-      oi.calculate_tax(true)
-      oi.save!
-      return oi
-    end
-		self.save!
-		return self
-	end
-
-	#
-  def calculate_total(order_subtotal=0)
-    # i.e. we should not be able to alter the total of an order item once the order is marked as paid.
-    if self.order and self.order.paid == 1 then
-      return self.total
-    end
-
-    # COUPONS
-    if self.behavior == 'coupon' then
-      self.update_attribute :total,self.price
-      return self.price
-    end
-
-    # BUY ORDER, BUYBACK ITEM
-    if self.order and self.order.buy_order or self.is_buyback then
-      ttl = self.price * self.quantity
-      if not ttl == self.total then
-        self.update_attribute(:total,ttl)
-      end
-      return ttl
-    end
-
-    # GIFT CARDS
-    if self.behavior == 'gift_card' then
-      if self.item.activated then
-        #puts "Item is an activated gift_card"
-        if self.amount_remaining <= 0 then
-          #puts "Amount remaining is 0"
-          return 0
-        end
-        if self.price == 0 then
-          self.price = self.amount_remaining
-        end
-        if self.price < 0 then
-          self.price *= -1 # we do this so we can better set the price later
-          # it will be reconverted to negative later on
-        end
-        if self.price > self.amount_remaining then
-          self.price = self.amount_remaining
-        end
-        #puts "Price: #{self.price} Subtotal: #{order_subtotal}"
-        if self.price > order_subtotal then
-          self.price = order_subtotal
-        end
-        if self.price > 0 then
-          p = self.price * -1
-        else
-          p = self.price
-        end
-        self.update_attribute(:price, self.price) #if self.order and self.order.paid == 1 #MF MOD
-        self.update_attribute(:total,self.price)  #if self.order and self.order.paid == 1
-        return p
-      end
-    end
-#     puts "&&& in calculat_total"
-    ttl = 0
-    self.quantity = 0 if self.quantity.nil?
-    if self.item.parts.any? and self.item.calculate_part_price then
-      # PARTS
-      self.item.parts.each do |part|
-        ttl += part.base_price * part.part_quantity
-      end
-        ttl = ttl * self.quantity
-    else
-      begin
-        ttl = self.price * self.quantity
-      rescue
-        puts $!.inspect + " " + self.quantity.inspect + " " + self.price.inspect 
-      end
-#       puts "OrderItem: #{self.price} * #{self.quantity} == #{ttl}"
+    if p.class == String
+      # a string is sent from Vendor.edit_field_on_child
+      p = Money.new(self.string_to_float(p) * 100.0, self.currency)
+    elsif p.class == Float
+      # not sure which parts of the code send a Float, but we leave it here for now
+      p = Money.new(p * 100.0, self.currency)
     end
     
-    # REFUNDS
-    if self.refunded and ttl > 0 then
-      ttl = ttl * -1
-    end
-
-#     puts "ttl at this point is: #{ttl}"
-
-    # i.e. sometimes the order hasn't been saved yet..
-
-    # COUPONS
-    if self.order and self.order.coupon_for(self.item.sku) then
-      cttl = 0
-      self.order.coupon_for(self.item.sku).each do |c|
-        cttl += c.coupon_total(ttl,self)
+    # this is needed for dynamically created gift cards on the POS screen.
+    if self.behavior == 'gift_card'
+      i = self.item
+      if i.activated.nil?
+        i.price = p
+        i.gift_card_amount = p
+        i.save
       end
-#       puts "OrderItem cttl: #{cttl} and ttl #{ttl}"
-      ttl -= cttl
     end
-    if self.rebate then
-      ttl -= (ttl * (self.rebate / 100.0))
-#       puts "self.rebate: #{ttl}"
+    
+    # make price negative when it is a buyback OrderItem
+    if self.is_buyback
+      p = - p.abs
     end
-    if self.order and self.order.rebate then
-      ttl -= (ttl * (self.order.rebate / 100.0))
-      #       puts "self.rebate: #{ttl}"
-    end
-
-#     puts "ttl at this point is: #{ttl}"
-
-    # DISCOUNTS
-    if self.discount_amount > 0 then
-#       puts "Subtracting discount amount"
-      ttl -= self.discount_amount # MF MOD
-    end
-
-    if not self.total == ttl and not self.total_is_locked then
-      self.total = ttl.round(2)
-#       puts "In update, ttl is #{ttl} and self.total is #{self.total}"
-      self.update_attribute(:total,ttl) # MF MOD
-    end
-#     puts "Returning total of: #{self.total}"
-    return self.total
+    write_attribute :price_cents, p.fractional
   end
   
-  def calculate_total_with_rebate(rebate = nil)
-    # This calculates OrderItem total for ITEM rebate
-    if rebate.nil? then
-      rebate = self.rebate
-    else
-      self.rebate = rebate
-    end
-    rebate = 0 if rebate.nil?
-    self.total = ((self.price * self.quantity) - (self.price * self.quantity * (rebate / 100.0))).round(2)
-    return self.total
-  end
-
-  def calculate_rebate_amount
-    self.rebate_amount = (self.price * self.quantity * (self.rebate / 100.0)).round(2)
-  end
-
-  def calculate_oi_order_rebate
-    # This calculates ORDER rebate for % only for a given OrderItem
-	  amnt = 0.0
-	  self.total = 0 if self.total.nil?
-    if self.order.rebate_type == 'percent' then
-      amnt = self.total * (self.order.rebate / 100.0)
-    end
-    return amnt    
-  end
-  #
+  # this method is just for documentation purposes: that total always includes tax. it is the physical money that has to be collected from the customer.
   def gross
     return self.total
   end
-  #
-  def calculate_tax(no_update = false)
-    return 0 if self.tax_free == true or (self.order and self.order.tax_free == true)
-    return 0 if self.refunded
-    if self.activated and self.behavior == 'gift_card' then
-      self.update_attribute(:tax,0) if self.tax != 0
-      return 0
-    end
-    if self.behavior == 'coupon' then
-      self.update_attribute(:tax,0) if self.tax != 0
-      return 0 
-    end
-    self.tax = 0 if self.tax.nil?
-    return self.tax if self.tax_is_locked
-    return 0 if not self.tax_profile_amount
-    p = self.total
-    if $Conf and not $Conf.calculate_tax then
-      net_price = (p *(100 / (100 + (100 * (self.tax_profile_amount/100))))).round(2);
-      t = (p - net_price).round(2)
-    else
-      t = p * (self.tax_profile_amount/100.00)
-    end
-    if not t == self.tax and not self.tax_is_locked then #i.e. we get the total from above 
-      # in order to not charge for buy 1 get one frees
-      self.tax = t
-      self.update_attribute(:tax,t) unless no_update == true
-    end
-    if self.tax.nil? then
-      self.tax = t
-    end
-    return self.tax
+  
+  def net
+    return self.total - self.tax_amount
   end
-  #
-  def coupon_total(ttl,oi)
-    # #puts "Coupon Total called ttl=#{ttl} type=#{self.item.coupon_type}"
-    amnt = 0
-    return 0 if ttl <= 0
-    if self.quantity > oi.quantity then
-      self.update_attribute(:quantity,oi.quantity)
-      self.quantity = oi.quantity
-    end
 
-    if self.item.coupon_type == 1 then #percent off self type
-      q = self.quantity
-      amnt = (oi.price * quantity) * (self.price / 100)
-    elsif self.item.coupon_type == 2 then #fixed amount off
-      # #puts "Coupon is fixed"
-      if self.price > ttl then
-        #add_salor_error("system.errors.self_fixed_amount_greater_than_total",:sku => self.item.sku, :item => self.item.coupon_applies)
-        amnt = ttl * self.quantity
-        # #puts "Setting to ttl " + ttl.to_s
+  
+  def set_attrs_from_item(item)
+    self.vendor       = item.vendor
+    self.company      = item.company
+    self.currency     = item.currency # all Items must be validated to have the same currency as the parent Vendor. The system does not support adding Items of different currencies into one order.
+    self.item         = item
+    self.sku          = item.sku
+    self.price        = item.price
+    self.tax          = item.tax_profile.value # cache for faster processing
+    #self.tax_profile  = item.tax_profile
+    self.item_type    = item.item_type
+    self.behavior     = item.item_type.behavior # cache for faster processing
+    self.is_buyback   = item.default_buyback
+    self.category     = item.category
+    self.location     = item.location
+    self.activated    = item.activated
+    self.no_inc       = item.is_gs1
+    self.gift_card_amount = item.gift_card_amount
+    self.weigh_compulsory = item.weigh_compulsory
+    self.quantity     = self.weigh_compulsory ? 0 : 1
+    self.calculate_part_price = item.calculate_part_price # cache for faster processing
+    self.user         = self.order.user
+  end
+  
+  # This method is only called on add to order
+  # otherwise calculate_totals is called
+  def modify_price
+    log_action "Modifying price"
+    self.modify_price_for_actions
+    self.modify_price_for_gs1
+    if self.is_buyback
+      log_action "modify_price_for_buyback"
+      self.modify_price_for_buyback 
+    end
+    self.modify_price_for_parts
+    if self.behavior == 'gift_card'
+      log_action "modify_price_for_giftcards"
+      self.modify_price_for_giftcards 
+    end
+    self.save
+  end
+  
+  def modify_price_for_actions
+    log_action "modify_price_for_actions"
+    Action.run(self, :add_to_order)
+  end
+  
+  def modify_price_for_gs1
+    if self.item.is_gs1
+      m = self.vendor.gs1_regexp.match(self.sku)     
+      return unless m and m[2]
+      value = m[2]
+      m = self.item.gs1_regexp.match(value)
+      return unless m and m[2]
+      value = "#{m[1]}.#{m[2]}".to_f
+      if self.item.price_by_qty
+        self.quantity = value
+        #self.price = self.item.base_price * self.quantity # this is the case anyway
       else
-        amnt = self.item.base_price * self.quantity
-        # #puts "Setting to self.total " + self.item.base_price.to_s
+        self.price = value
       end
-      self.update_attribute(:total,amnt)
-      # #puts "Fixed amnt = " + amnt.to_s
-    elsif self.item.coupon_type == 3 then #buy 1 get 1 free
-      if oi.quantity > 1 then
-        if self.quantity > 1 then
-          # this takes place when you have more than one b1g1 coupon and mored
-          # than one target item.l
-          q = self.quantity
-          q = (oi.quantity / 2).to_i
-          amnt = (oi.price * q)
-        else
-          amnt = (oi.price * self.quantity)
-        end
+    end
+  end
+  
+  def modify_price_for_buyback
+    if self.is_buyback
+      self.price = - self.item.buyback_price
+    else
+      self.price = self.item.base_price
+    end
+  end
+  
+  def modify_price_for_giftcards
+    if self.behavior == 'gift_card' and self.item.activated
+      if self.item.gift_card_amount > self.order.total
+        self.price = - self.order.total
       else
-        add_salor_error("system.errors.coupon_not_enough_items")
-      end
-      self.update_attribute(:total,amnt)
-    else
-      # #puts "couldn't figure out coupon type"
-    end
-    oi.update_attribute(:coupon_amount,amnt)
-    oi.update_attribute(:coupon_applied, true)
-    # #puts "## Updating Attribute to #{amnt}"
-    if amnt > 0 then
-      oi.coupons << self
-      oi.save
-    end
-    return amnt
-  end
-
-  #
-  def split
-  end
-
-  #
-  def discover_price(item)
-    puts "&&& In Discover price"
-    if self.order and self.order.buy_order or self.is_buyback then
-      return item.buyback_price if self.order.buy_order
-      return (item.buyback_price * -1)
-    end
-    if not item.behavior == 'normal' then
-      if item.behavior == 'gift_card' and item.activated then
-        return item.amount_remaining
-      elsif item.behavior == 'coupon' then
-        return item.base_price
+        self.price = - self.gift_card_amount
       end
     end
-    damount = 0
-    if item.is_gs1 then
-      p = self.price
-    elsif item.parts.any? and item.calculate_part_price
-      p = 0
-      item.parts.each do |part|
-        p += part.base_price * part.part_quantity
+  end
+  
+  def modify_price_for_parts
+    if self.calculate_part_price
+      self.price = self.item.parts.visible.collect{ |p| p.base_price * p.part_quantity }.sum
+    end
+  end
+  
+  def calculate_totals
+    if self.refunded or self.behavior == 'coupon'
+      # coupons do have a total of 0, because they are not sold. they act on a matching OrderItem instead.
+      self.total = 0
+    else
+      # at this point, total is net for the USA tax system and gross for the Europe tax system.
+      self.total = self.price * self.quantity
+    end
+
+    # Now, the total can be subject to price reductions. the following apply_ methods handle this and modify self.total
+    self.apply_discount
+    self.apply_rebate
+    self.apply_coupon
+    
+    # this method calculates taxes and transforms "total" to always include tax
+    self.calculate_tax
+    self.save
+  end
+  
+  # this method calculates taxes and transforms "total" to always include tax
+  def calculate_tax
+    if self.vendor.net_prices
+      # this is for the US tax system
+      self.tax_amount = self.total * self.tax / 100.0
+      self.total += tax_amount
+    else
+      # this is for the Europe tax system. Note that self.total already includes taxes, so we don't have to modify it here.
+      self.tax_amount = self.total * ( 1 - 1 / ( 1 + self.tax / 100.0))
+    end
+  end
+  
+  # coupons have to be added after the matching product
+  # coupons do not have a price by themselves, they just reduce the total of the matching OrderItem. Note that this method does not act on self, but to the matching OrderItem.
+  def apply_coupon
+    return unless self.behavior == 'coupon'
+    
+    item = self.item
+    
+    # coitem is the OrderItem to which the coupon acts upon
+    coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
+    log_action "coitem was not found" and return if coitem.nil?
+
+    unless coitem.coupon_amount.zero? then
+      log_action "This item is a coupon, but a coupon_amount has already been set"
+      return
+    end
+    
+    ctype = self.item.coupon_type
+    if ctype == 1
+      # percent rebate
+      log_action "Percent rebate coupon"
+      coitem.coupon_amount = coitem.total * (self.price.to_f / 100)
+    elsif ctype == 2
+      # fixed amount
+      log_action "Fixed amount coupon"
+      coitem.coupon_amount = self.price
+    elsif ctype == 3
+      # buy x get y free
+      log_action "B1G1"
+      x = 2
+      y = 1
+      if coitem.quantity >= x
+        coitem.coupon_amount_cents = y * coitem.total_cents / coitem.quantity
       end
-    else
-      p = item.base_price
     end
-    pstart = p
-    if not self.is_buyback and not OrderItem.get_discounts.nil? then
-      #raise OrderItem.get_discounts.inspect + self.category_id.to_s
-      OrderItem.get_discounts.each do |discount|
-#         puts "Evaling discount: " + discount.inspect
-        if not (discount.item_sku == item.sku and discount.applies_to == 'Item') and
-            not (discount.location_id == item.location_id and discount.applies_to == 'Location') and
-            not (discount.category_id == item.category_id and discount.applies_to == 'Category') and
-            not (discount.applies_to == 'Vendor' and discount.amount_type == 'percent') then
-             puts "&&& this discount doesn't match"
-             puts "&&& category_id is #{discount.category_id} and category_id is #{item.category_id}"
-          next
-        end
-#         puts "Applying discount"
-        if discount.amount_type == 'percent' then
-          d = discount.amount / 100
-          damount += (pstart * d)
-          self.discounts << discount
-#           puts "discount is percent"
-        elsif discount.amount_type == 'fixed' then
-          damount += discount.amount
-          self.discounts << discount
-        else
-#           puts "no amount_type"
-        end
-      end # Discount.scopied.where(conds)
-    else
-      puts "Not Applying Discounts at all..."
+    log_action "Total is: #{coitem.total} and coupon_amount is #{coitem.coupon_amount}"
+    coitem.total -= coitem.coupon_amount
+    coitem.calculate_tax
+    coitem.save
+  end
+  
+  def apply_rebate
+    if self.rebate
+      log_action "Applying rebate"
+      self.rebate_amount = (self.total.to_f * (self.rebate / 100.0))
+      log_action "rebate_amount is #{self.rebate_amount.to_f} #{self.rebate_amount_cents}"
+      self.total -= self.rebate_amount
     end
-    #p -= damount
-    self.update_attribute(:discount_applied,true) if self.discounts.any?
-    self.update_attribute(:discount_amount,damount) if self.discounts.any?
-    p = p.round(2)
-    puts "&&& price for item is: #{p}"
-    return p
+  end
+  
+  def apply_discount
+    log_action "Applying discount"
+    # Vendor
+    discount = self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Vendor").first
+    
+    # Category
+    discount ||= self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Category", :category_id => self.category ).first
+    
+    # Location
+    discount ||= self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Location", :location_id => self.location ).first
+    
+    # Item
+    discount ||= self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Item", :item_sku => self.sku ).first
+    
+    if discount
+      self.discount = discount.amount
+      self.discount_amount = (self.total * discount.amount / 100.0)
+      self.total -= self.discount_amount
+      self.discounts << discount
+    end
   end
 
-  #
+
+  
+  
+  def quantity=(q)
+    q = self.string_to_float(q)
+    if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
+      log_action "Cannot have more than 1 coupon or gift card"
+      return
+    end
+
+    write_attribute :quantity, q
+  end
+  
+  
+  def hide(by)
+    self.hidden = true
+    self.hidden_by = by
+    self.hidden_at = Time.now
+    if not self.save then
+      log_action self.errors.full_messages.to_sentence
+      raise "Could Not Hide Item"
+    end
+
+    if self.behavior == 'coupon'
+      item = self.item
+      raise "could not find Item for OrderItem #{ self.id }" if item.nil?
+      coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
+      raise "could not find orderitem #{ item.coupon_applies.inspect }" if coitem.nil?
+      coitem.coupon_amount = Money.new(0, self.currency)
+      coitem.calculate_totals
+    end
+    self.order.calculate_totals
+  end
+  
+  
+  
   def to_json
     obj = {}
-    if self.order and self.order.buy_order and self.is_buyback then
-      self.update_attribute :is_buyback, false
-    end
     if self.item then
       obj = {
         :name => self.get_translated_name(I18n.locale)[0..20],
         :sku => self.item.sku,
         :item_id => self.item_id,
         :activated => self.item.activated,
-        :amount_remaining => self.item.amount_remaining,
+        :gift_card_amount => self.item.gift_card_amount.to_f,
         :coupon_type => self.item.coupon_type,
         :quantity => self.quantity,
-        :price => self.price.round(2),
-        :coupon_amount => -1 * self.coupon_amount.round(2),
-        :total => self.total.round(2),
+        :price => self.price.to_f,
+        :coupon_amount => self.coupon_amount_cents.blank? ? 0 : - self.coupon_amount.to_f,
+        :total => self.total.to_f,
         :id => self.id,
         :behavior => self.behavior,
-        :discount_amount => self.discount_amount.round(2) * -1,
-        :locked => self.total_is_locked,
+        :discount_amount => self.discount_amount.blank? ? 0 : - self.discount_amount.to_f,
         :rebate => self.rebate.nil? ? 0 : self.rebate,
         :is_buyback => self.is_buyback,
         :weigh_compulsory => self.item.weigh_compulsory,
         :must_change_price => self.item.must_change_price,
         :weight_metric => self.item.weight_metric,
-        :tax_profile_amount => self.tax_profile_amount,
-        :action_applied => self.action_applied
+        :tax => self.tax,
+        :tax_profile_id => self.tax_profile_id,
+        :action_applied => self.item.actions.visible.any?
       }
-    end
-    if self.behavior == 'gift_card' and self.activated then
-      obj[:price] = obj[:price] * -1
     end
     return obj.to_json
   end
-  
-  def set_sold
-    the_item = self.item
-    # #puts "My quantity is: #{self.quantity} and my #{self.behavior}"
-    #
-    # begin update the quantities of the item
-    if the_item.ignore_qty == false and self.behavior == 'normal' and self.order.is_proforma == false then
-      if self.order and self.order.buy_order then
-        the_item.update_attribute(:quantity, the_item.quantity + self.quantity)
-        the_item.update_attribute(:quantity_buyback, the_item.quantity_buyback + self.quantity)
-      else
-        the_item.update_attribute(:quantity, the_item.quantity - self.quantity)
-        the_item.update_attribute(:quantity_sold, the_item.quantity_sold + self.quantity)
-      end
-    end
-    # end update the quantities of the item
-    #
-    # begin Check Parts and update quantities
-    	  if the_item.parts.any? then
-        the_item.parts.each do |part|
-          next if part.ignore_qty == true # i.e. we just ignore the qty
-          part.quantity ||= 0
-          next if self.order.is_proforma == true
-          if self.order and self.order.buy_order then
-            part.update_attribute(:quantity, part.quantity + part.part_quantity)
-          else
-            part.update_attribute(:quantity, part.quantity - part.part_quantity)
-            
-            # update statistics based on parts
-            the_item = part
-            if the_item.category then
-              the_item.category.update_attribute(:quantity_sold, the_item.category.quantity_sold + the_item.part_quantity)
-            end
-            if the_item.location then
-              the_item.location.update_attribute(:quantity_sold,the_item.location.quantity_sold + the_item.part_quantity)
-            end
-            
-          end
-        end
-      end
-    # end Check Parts and update quantities
-  end
-  def update_quantity_sold
-    log_action("Updating quantity sold")
-    if self.order.is_proforma == true
-      log_action "Returning because order is_proforma"
-      return
-    end
-    the_item = self.item
-    log_action "the_item id is #{the_item.id}"
-    if the_item.category then
-      log_action "Updating category #{the_item.category.id}"
-      the_item.category.update_attribute(:quantity_sold, the_item.category.quantity_sold + self.quantity)
-      log_action "Updating category #{the_item.category.id} complete"
-    end
-    if the_item.location then
-      log_action "Updating location #{the_item.location.id}"
-      the_item.location.update_attribute(:quantity_sold,the_item.location.quantity_sold + self.quantity)
-      log_action "Updating location #{the_item.location.id} complete"
-    end
-    if the_item.item_stocks.any? then
-      log_action "Updating item_stocks"
-      stock = the_item.item_stocks.first
-      stock.update_attribute :location_quantity, stock.location_quantity - self.quantity
-      log_action "ItemStocks updated"
-    end
-  end
-  def update_cash_made
-    log_action "Updating cash_made"
-    if self.order.is_proforma == true
-      log_action "Returning from cash_made because order is_proforma"
-      return
-    end
-    the_item = self.item
-    log_action "the_item id is #{the_item.id}"
-    if the_item.category then
-      the_item.category.cash_made ||= 0.0
-      log_action "Updating category #{the_item.category.id}"
-      the_item.category.update_attribute(:cash_made, the_item.category.cash_made + self.total)
-      log_action "Updating category #{the_item.category.id} complete"
-    end
-    if the_item.location then
-      the_item.location ||= 0.0
-      log_action "Updating location #{the_item.location.id}"
-      the_item.location.update_attribute(:cash_made, the_item.location.cash_made + self.total)
-      log_action "Updating location #{the_item.location.id} complete"
-    end
-  end
-  def recover_item
-    i = Item.find_by_sku(self.sku)
-    if i then
-      self.item = i
-      self.save
-      return
-    else
-      i = Item.get_by_code(self.sku)
-      i.item_type_id = self.item_type_id
-      i.base_price = self.price
-      i.save
-      self.item = i
-      self.save
-    end
-  end
-  # {END}
+
 end

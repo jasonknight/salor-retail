@@ -6,10 +6,12 @@
 # See license.txt for the license applying to all files within this software.
 
 class Role < ActiveRecord::Base
-	include SalorScope
-  include SalorModel
+  include SalorScope
   include SalorBase
-  has_and_belongs_to_many :employees
+  
+  belongs_to :vendor
+  belongs_to :company
+  has_and_belongs_to_many :users
   # This is a role black list, if it isn't here
   # it means they can do it. Only put roles here
   # that the user cannot do, this should be over-
@@ -17,9 +19,9 @@ class Role < ActiveRecord::Base
   CANNOTDO = {
     :stockboy => [
       :any_orders,
-      :any_employees,
+      :any_users,
       :any_discounts,
-      :any_cash_registers,
+      :any_current_registers,
       :any_tax_profiles,
       :any_customers,
       :any_actions,
@@ -52,7 +54,7 @@ class Role < ActiveRecord::Base
       :show_tender_methods,
       :show_actions,
       :index_transaction_tags,
-      :index_employees,
+      :index_users,
       :create_discounts,
       :update_discounts,
       :edit_discounts,
@@ -72,11 +74,11 @@ class Role < ActiveRecord::Base
       :any_locations,
       :any_discounts,
       :any_shipment_items,
-      :any_employees,
+      :any_users,
       :create_transaction_tags,
       :create_tender_methods,
       :edit_tender_methods,
-      :edit_cash_registers,
+      :edit_current_registers,
       :destroy_items,
       :any_tax_profiles,
       :new_items,
@@ -85,7 +87,7 @@ class Role < ActiveRecord::Base
       :create_vendors,
       :update_vendors,
       :destroy_vendors,
-      :destroy_cash_registers,
+      :destroy_current_registers,
       :edit_stock_locations,
       :edit_transaction_tags,
       :stockboy,
@@ -99,7 +101,7 @@ class Role < ActiveRecord::Base
       :destroy_orders, # except their own orders
       :any_shippers,
       :any_shipments,
-      :any_employees,
+      :any_users,
       :any_categories,
       :any_buttons,
       :any_actions,
@@ -115,11 +117,11 @@ class Role < ActiveRecord::Base
       :create_vendors,
       :update_vendors,
       :destroy_vendors,
-      :new_cash_registers,
-      :edit_cash_registers,
-      :update_cash_registers,
-      :create_cash_registers,
-      :destroy_cash_registers,
+      :new_current_registers,
+      :edit_current_registers,
+      :update_current_registers,
+      :create_current_registers,
+      :destroy_current_registers,
       :head_cashier,
       :edit_stock_locations,
       :edit_transaction_tags,
@@ -140,7 +142,7 @@ class Role < ActiveRecord::Base
       :show_tender_methods,
       :show_actions,
       :index_transaction_tags,
-      :index_employees,
+      :index_users,
       :index_shippers,
       :index_shipments,
       :create_discounts,
@@ -150,14 +152,6 @@ class Role < ActiveRecord::Base
       :index_discounts,
       :index_broken_items,
       :show_tax_profiles
-    ],
-    :employee => [
-      :anything,
-      :edit_tender_methods,
-      :edit_items,
-      :show_orders,
-      :index_customers,
-      :report_day_orders
     ],
     :assistant => [
       :anything

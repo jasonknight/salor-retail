@@ -2,9 +2,8 @@
 <table align="center" width="100%" align="center">
   <tr>
     <td valign="top">
-          <% @items = @category.items.scopied.page(params[:page]).per($Conf.pagination)  %>
-          <%= render :partial => 'shared/list_view', :locals => {  :klass => Item, :width => '60%',:collection => @items, :columns => [:name]} %>
+      <% @items = @category.items.visible.page(params[:page]).per(@current_vendor.pagination)  %>
+      <%= render :partial => 'shared/list_view', :locals => {  :klass => Item, :width => '60%',:collection => @items, :columns => [:name]} %>
     </td>
   </tr>
 </table>
-<%= raw content_box_bottom %>

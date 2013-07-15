@@ -19,14 +19,15 @@ $(function () {
 <%= raw content_box_top(I18n.t("headings.update_location")) %>
 <form id="update_location_form">
 <input type="hidden" name="format" class="hidden-input" value="js" />
-  <table align="center" width="100%">
+  <br />
+  <table align="center" width="60%">
     <tr>
       <td valign="top">
         <%= I18n.t("activerecord.models.location.one") %>
       </td>
       <td valign="top">
         <select name="location_id" id="location_id">
-          <% GlobalData.locations.each do |location| %>
+          <% @current_vendor.locations.visible.each do |location| %>
             <option value="<%= location.id %>"><%= location.name %></option>
           <% end %>
         </select>
@@ -37,9 +38,9 @@ $(function () {
         <%= I18n.t("activerecord.attributes.sku") %>
       </td>
       <td valign="top">
+        <hr />
         <input type="text" id="sku" name="sku" class="text-input" value="" />
       </td>
     </tr>
   </table>
 </form>
-<%= raw content_box_bottom %>

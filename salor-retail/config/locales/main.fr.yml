@@ -53,9 +53,6 @@ fr:
       dollar_per_lp: dollar par point fidélité
       drop: versement caisse
       email: email
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Utilise la caisse de
       end_amount: montant fin
       end_date: date fin
       eod_show: Afficher à la fin de la journée
@@ -177,6 +174,9 @@ fr:
       track_expiry: Date limite de suivi
       type: type
       url: Lien
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: Nom d'utilisateur
       uses_drawer_id: XXX Uses Drawer of
       value: Valeur
@@ -192,6 +192,7 @@ fr:
       when: Quand
       whento: When
       width: Largeur
+      color: color
     models:
       action:
         one: Action
@@ -220,9 +221,6 @@ fr:
       drawer_transaction:
         one: Transaction de caisse
         other: Transactions de caisse
-      employee:
-        one: Employé
-        other: Employés
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,12 +269,12 @@ fr:
       tax_profile:
         one: Type de taxe
         other: Type de taxes
-      tender_method:
-        one: Méthode d'offre
-        other: Méthodes d'offre
       transaction_tag:
         one: Etiquette
         other: Etiquettes
+      user:
+        one: Employee
+        other: Employees
       vendor:
         one: Magazin
         other: Magazins
@@ -326,7 +324,6 @@ fr:
     discount_for: Remise de %{magasin}
     discounts_for: Remises de %{magasin}
     edit_shipper: Editer livreur %{nom}
-    employees: Employés
     expiring_soon: Périme bientôt
     export: Exporter
     item_selection: Sélection d'articles
@@ -341,6 +338,7 @@ fr:
     time_sheet: Employee Time Sheet
     update_location: mettre à jour emplacement
     update_real_quantity: mettre à jour quantité réelle
+    users: users
   helpers:
     select:
       prompt: Choisissez
@@ -369,9 +367,9 @@ fr:
       requesting_connection_status: Demande de l'etat de connexion en cours...
       title: Service à distance XXX Remove Service
       user: Utilisateur
-    user_employee_index:
-      backup_database: Créer une copie de sauvergarde de la BDD
-      backup_logfile: Créer une copie de sauvergarde du journal
+    user_user_index:
+      backup_database: Backup Database
+      backup_logfile: Backup Logfile
   items:
     database_distiller:
       are_you_sure: Tout article non utilisé sera effacé. Ceci est irréversible. Êtes-vous
@@ -426,6 +424,7 @@ fr:
     cash_registers: Caisses
     categories: Catégories
     clear_order: Effacer
+    close: Close
     configuration: Config.
     contact: Contact
     current_order: ! 'Commande en cours : #%{id}'
@@ -444,19 +443,18 @@ fr:
     edit_category: Editer catégorie
     edit_customer: Editer client
     edit_discount: Editer remise
-    edit_employee: éEditer employé
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: Editer article
     edit_location: Editer emplacement
+    edit_payment_method: Edit Payment Method
     edit_sale_type: XXX Edit Sale Type
     edit_shipment: Editer livraison
     edit_shipment_type: Editer type de livraison
     edit_shipper: Editer livreur %{nom}
     edit_tax_profile: Editer taxe
-    edit_tender_method: Editer méthode d'offre
+    edit_user: Edituser
     edit_vendor: Editer vendeur
-    employees: Employés
     end_day: Fin journée
     general_configuration: Configuration générale
     home: Accueil
@@ -478,25 +476,26 @@ fr:
     new_country: XXX new country
     new_customer: Nouveau client
     new_discount: Nouvelle remise
-    new_employee: Nouvel employé
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: XXX New Invoice Note
     new_item: Nouvel article
     new_location: Nouvel emplacement
     new_order: Nouveau
+    new_payment_method: New Payment Method
     new_sale_type: XXX new sale type
     new_shipment: Nouvelle livraison
     new_shipment_type: Nouveau type de livraison
     new_shipper: Nouveau livreur
     new_stock_location: Nouvel emplacement de stock
     new_tax_profile: Nouvelle taxe
-    new_tender_method: Nouvelle méthode d'offre
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: Nouveau vendeur
     ok: OK
     order: Commande
     orders: Commandes
     overview: Vue d'ensemble
+    payment_methods: Payment Methods
     points: Points
     pos: PDV
     print: Imprimer
@@ -520,13 +519,13 @@ fr:
     stock_locations: Emplacements de stock
     support: Support
     tax_profiles: Taxes
-    tender_methods: Méthodes d'offre
     transaction_tags: Etiquettes de transaction
     update_gift_card: Mettre à jour carte cadeau
     update_location: Mettre à jour emplacement
     update_real_quantity: Mettre à jour quantité réelle
     upload: Mettre en ligne
     usb_device: clé USB
+    users: users
     vendors: Vendeurs
     void: Détruire
     wholesaler_update: Mettre à jour distributeur
@@ -551,36 +550,6 @@ fr:
       sum: Somme
       sum_total: Somme totale
       title: Additions
-    report_day:
-      None: Non spécifié
-      OrderItemRefund: Remboursement article
-      OrderRefund: Remboursement commande
-      cash-refunds: Remoursements en espèces
-      cash_drawer: Caisse
-      count_orders: Quantité de commandes
-      drop: Versement caisse
-      from: De
-      gross: TTC
-      net: HT
-      noncash-refunds: Remboursements autre qu'en espèces
-      payments: Paiements
-      payout: Retrait caisse
-      payouts: Retraits caisse
-      revenue: Profit
-      sales: Ventes
-      sum: Somme
-      sum_gross: Total TTC
-      sum_net: Total HT
-      sum_transactions: Total transactions
-      sums_by_category: Sommes par catégorie
-      sums_by_payment_methods: Sommes par moyens de paiement
-      sums_by_tax_profile: Sommes par type de taxe
-      time: Heure
-      title: Rapport journée
-      to: à
-      transaction_tag: Etiquette transaction
-      transaction_total: Total de la transaction
-      transactions: Transactions
     report_day_range:
       display: Afficher
       end_date: Date fin
@@ -631,11 +600,11 @@ fr:
       cash-refunds: Remboursements en espèces
       cash_refunds_total: TOTAL
       no_category: No Category
-      noncash-refunds: Remboursements autre qu'en espèces
       orders_total: Total vendu
       payment_method_total: TOTAL
       payments: Paiements
       refund: Remboursement
+      refunds: Refunds
       revenue: Profit
       revenue_total: TOTAL
       sales: Ventes
@@ -786,8 +755,6 @@ fr:
     not_you: Ce n'est pas vous ?
     owner_mode: MODE PROPRIÉTAIRE
     owner_success: Les propriétés du propriétaire ont été mise à jour avec succès
-    payment_external_types: espèces,carte bleue,carte cadeau,autre
-    payment_internal_types: EnEspèces,ParCarte,ParCarteCadeau,AutreCrédit
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -799,6 +766,36 @@ fr:
       logo: Logo
       receipt_logo_footer: Logo au pied du reçu
       receipt_logo_header: Logo en-tête du reçu
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: Champ avancé
     cash_register_heading: ! '%{name} pour %{store}'

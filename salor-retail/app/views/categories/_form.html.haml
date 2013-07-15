@@ -9,18 +9,9 @@
   %table{:width => '90%', :align=> 'center'}
     %tr
       %td
-        = f.hidden_field :vendor_id, :value => salor_user.meta.vendor_id
         .field
           = f.label :name
           = f.text_field :name, :class => 'keyboardable'
-        /
-          .field
-            = f.label :eod_show
-            = f.check_box :eod_show
-        /
-          .field
-            = f.label :tag
-            = f.collection_select :tag, @tags, :name, :name
       %td
         .field
           = f.label :color

@@ -8,7 +8,8 @@
 class StockLocation < ActiveRecord::Base
   include SalorBase
   include SalorScope
-  include SalorModel
+
   has_and_belongs_to_many :shipment_items
   belongs_to :vendor
+  belongs_to :company
 end

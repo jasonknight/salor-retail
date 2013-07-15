@@ -1,12 +1,11 @@
 class ItemStock < ActiveRecord::Base
-  include SalorModel
+
   include SalorBase
   belongs_to :item
   belongs_to :stock_location
   belongs_to :location
   belongs_to :vendor
   attr_accessible :quantity, :location_quantity, :stock_location_quantity, :location_id, :stock_location_id
-  before_create :set_model_owner
   def location_quantity=(amnt)
     log_action("ItemStock.location_quantity #{amnt}")
     amnt = amnt.to_f

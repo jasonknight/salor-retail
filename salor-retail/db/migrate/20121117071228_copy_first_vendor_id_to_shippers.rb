@@ -1,6 +1,7 @@
 class CopyFirstVendorIdToShippers < ActiveRecord::Migration
   def up
-    Shipper.update_all :vendor_id => Vendor.first.id
+    vendor = Vendor.first
+    Shipper.update_all :vendor_id => vendor.id if vendor
   end
 
   def down

@@ -1,7 +1,10 @@
 class Country < ActiveRecord::Base
   include SalorScope
   include SalorBase
-  include SalorModel
+  
+  belongs_to :vendor
+  belongs_to :company
+
   def as_json(x)
     return {:id=> self.id,:name => self.name, :vendor_id => self.vendor_id}
   end

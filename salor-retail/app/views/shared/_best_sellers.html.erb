@@ -16,7 +16,7 @@
             </th>
           </tr>
         </thead>
-          <% salor_user.best_sellers.each do |item| %>
+          <% @current_user.best_sellers.each do |item| %>
             <tr>
               <td valign="top">
                 <%=  edit_me(:name,item,item.name,'',item.get_html_id) %>
@@ -33,4 +33,3 @@
             </tr>
           <% end %>
         </table>
-      <%= raw content_box_bottom %>

@@ -1,0 +1,54 @@
+<script type="text/javascript">
+  function doSubmit() {
+    console.log("Clicked");
+    $('#new_user').submit();
+  }
+  try {
+  $(function () {
+      // $('.user-sign-in-form-container').show();
+      // $('#user').find(".keyboardable:first").focus();
+      // $('.link').mousedown(function () {
+      //     $('.active').removeClass('active');
+      //     $(this).addClass('active');
+      //     $('.sign-in-form-container').hide();
+      //     $($(this).attr('href')).show();
+          
+      // }).mouseup(function () {
+      //   $($(this).attr('href')).find(".keyboardable:first").focus();
+      // });
+      $(window).keypress(function(event){
+        if (event.keyCode == 13) {
+          doSubmit();
+        }
+      });
+      $('#code').focus();
+      $('#login_button').click(doSubmit);
+  });
+} catch (err) {
+  console.log(err);
+}
+  
+</script>
+
+<div align="center">
+  <div class="sign-in-forms">
+    <div class="tab-container">
+      <br />
+      <img src='/images/salor-logo-reports.png'>
+      <% if @company %>
+        <h2><%= @company.name %></h2>
+      <% elsif @vendor %>
+        <h2><%= @vendor.name %></h2>
+      <% end %>
+      <%= form_tag @submit_path, :id => "new_user" do %>
+        <%= password_field_tag :code, "", :class => "keyboardable big-input"%></p>
+        <br />
+        <div class="button-row" align="center">
+          <div class="spacer">&nbsp;</div>
+          <div class="button-confirm"  id="login_button"><%= I18n.t("system.login") %></div>
+        </div>
+        <br />
+      <% end %>  
+    </div>
+  </div>
+</div>

@@ -1,147 +1,26 @@
-<script type="text/javascript" src="/assets/complete_order.js"></script>
 <script type="text/javascript">
-Order = <%= raw @order.to_json %>;
-var filename = "new.html.erb";
-var isBuyOrder = false;
-var highlightAttrs = ['sku','price','total'];
-var updating_pos_display = false;
-
-// Here is the function to validate the totals shown on the screen
-// it is here as an extra check to ensure that the total shown is
-// as correct as possible. This does not mean that it is actually
-// correct. But this is as sure as we can be.
-// First it totals the items shown on the screen and checks with
-// the order total. If it is correct, then it leaves it alone
-// if not, it notifies the user and encourages a refresh of the 
-// page.
-function validate_order_totals() {
-  var item_total = 0.0;
-  $('.pos-item-total').each(function () {
-    var total = toFloat($(this).html()); 
-    if ($(this).hasClass('pos-highlight') && total > 0){
-      item_total = item_total - total;
-      $(this).html(toCurrency(total * -1));
-    } else {
-      item_total = item_total + total;
-    }
-   }); 
-  if (!toCurrency(item_total) == $('.pos-order-total').html()) {
-    notify_user(i18n.headings.order_validation, 
-                i18n.system.errors.order_totals_validation_failed, function () {
-                  window.location = "/orders/new";
-                });
-  }
-}
-
-setInterval(function () {
-    if (
-      !$('#cash_drop').is(":visible") && 
-      !$('#complete_order').is(":visible") && 
-      !$('#inplaceedit-div').is(":visible") && 
-      !$('#search').is(":visible") &&
-      !$('.void-order').is(":visible") &&
-      !$('.ui-keyboard').is(":visible") && 
-      !$('.salor-dialog').is(":visible")) {
-    focusInput($("#keyboard_input"));
-  } 
-},2000);
-
-
-$(document).ready(function () {
-    //scrollable_div($('.pos-table-left-column-items'));
-    var order = <%= raw @order.to_json %>;
-    updateOrder(order);
+  $(function () {
+    Order = <%= raw @current_order.to_json %>;
+    updateOrder(Order);
     <%
       items = []
-      @order.order_items.visible.each do |oi|
+      @current_order.order_items.visible.each do |oi|
         items << oi.to_json
       end
     %>
+    
     var order_items = [<%= raw items.join(',') %>];
-    updateOrderItems(order_items);
-    setInterval('validate_order_totals();',1000);
-    //var divPos = $(".pos-scrolling-div").position().top;
-    //var docHeight = $(window).height();
-    //$(".pos-scrolling-div").css("height", docHeight - divPos - 50);
-    //setScrollerState();
-    //$('#buy_order_button').mousedown(function () {
-    //   var estring = "field=toggle_buy_order&klass=Order&value=true";
-    //   get("/vendors/edit_field_on_child?" + estring, "<%= __FILE__ +':'+ __LINE__.to_s %>");                                 
-    //});
-});
-
-$(function () {
-  // make sure we can enter items
-  $("#keyboard_input").attr("disabled", false);
-  focusInput($('#keyboard_input'));
-});
+    updateOrderItems(order_items);    
+  });
 </script>
 
-<%= salor_render :partial => "menu", :locals => {:order => @order} %>
-<%= render :partial => "buttons/popup", :layout => false %>
-
-<div class='clear'></div>
-
-<div class="pos-customer shown"></div>
-
-<div id="order_rebate_options" class='rebate'>
-  <%= edit_me(:rebate,@order,@order.rebate,'','pos_order_rebate','true') %>
-  <%= edit_me(:rebate_type,@order,@order.rebate_type_display,'','pos_order_rebate_type',true) %>
-  <%= edit_me(:tag,@order,@order.tag,'','pos_order_tag','true') %>
-</div>
-
-<div class='clear'></div>
-  <script type="text/javascript">
-    function weigh_last_item() {
-    try {
-      var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
-      <% if not @cash_register.scale.blank? then  %>
-        var weight = Salor.toperScale('<%= @cash_register.scale %>');
-      <% else %>
-        var weight = 0;
-      <% end %>
-      var string = '/vendors/edit_field_on_child?id=' +
-              itemid +'&klass=OrderItem' +
-              '&field=quantity'+
-              '&value=' + weight;
-              get(string, filename);
-      if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) { Salor.playSound('medium_warning'); }
-
-     } catch (err) {
-      //don't complain
-     }
-    }
-  </script>
-<% if not @cash_register.scale.blank? then  %>
-  
-  <div class="uniscalebutton" align="center" onmousedown="weigh_last_item();">
-    <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32) %>
-  </div>
-<% else %>
-  <div class="uniscalebutton" align="center" onmousedown="">
-  </div>
-<% end %>
-
-  <div class="pos-drawer-button" onmousedown="quick_open_drawer();">
-    <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32) %>
-  </div>
-<div class='center'>
-<% if $User.can(:change_prices) %>
-  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
-<% else %>
-  <div class="pos-order-total" data_type="float" id="pos_order_total" model_id="<%= @order.id %>" klass="Order" field="total"></div>
-<% end -%>
-</div>
-<div class='clear'></div>
-<div class='main_sku'>
-  <input type="text" class="keyboard-input keyboardable" id="keyboard_input" name="keyboard_input" value="" style="background: white;color:black;"/>
-</div>
+<%= render :partial => "menu", :locals => {:order => @current_order} %>
+<%= render :partial => "buttons/popup", :layout => false %> 
 
 <div class='clear'></div>
 
 <div id="pos-table-left-column-items" class="pos-table-left-column-items"></div>
 
-<%= salor_render :partial => "shared/last_completed_orders" %>
-<%= salor_render :partial => "shared/search" %>
-<%= salor_render :partial => "shared/complete_order" %>
-<%= salor_render :partial => "last_five_orders" %>
+<%= render :partial => "shared/search" %>
+<%= render :partial => "complete_order" %>
+<%= render :partial => "last_orders" %>

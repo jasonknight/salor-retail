@@ -7,7 +7,8 @@
 
 class HistoryObserver < ActiveRecord::Observer
   include SalorBase
-  observe :order_item, :item, :order, :employee, :customer, :loyalty_card
+  observe :order_item, :item, :order, :user, :customer, :loyalty_card
+  
   def after_update(object)
     if object.class == Order then
       #order rules go here
@@ -40,9 +41,10 @@ class HistoryObserver < ActiveRecord::Observer
       end
     end 
   end
+  
   def before_destroy(object)
     sen = 2
-    if [:order,:order_item,:employee].include? "#{object.class}".to_sym then
+    if [:order,:order_item,:user].include? "#{object.class}".to_sym then
       sen = 1
     end
     History.record("destroy_#{object.class.to_s}",object,sen)

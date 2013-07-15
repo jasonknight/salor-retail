@@ -10,7 +10,7 @@
                 %li= msg 
     %tr
       %td=t(".state")
-      %td=f.text_field(:name, :class => "keyboardable") + " " + f.hidden_field(:user_id, :value => GlobalData.salor_user.get_owner.id)
+      %td=f.text_field :name
          
     %tr
       %td{:colspan=>2}

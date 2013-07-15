@@ -6,61 +6,19 @@
 # See license.txt for the license applying to all files within this software.
 
 class PaymentMethod < ActiveRecord::Base
-  belongs_to :order
-  before_save :process
-  include SalorModel
+  include SalorScope
   include SalorBase
-  def self.types_list
-    types = []
-    pmx = I18n.t("system.payment_external_types").split(',')
-    pmi = I18n.t("system.payment_internal_types").split(',')
-    tms = TenderMethod.scopied.all
-     i = 0
-    pmi.each do |p|
-      types << [pmx[i],p]
-      i  = i + 1
-    end
-    tms.each do |tm|
-      types << [tm.name,tm.internal_type]
-    end
-    return types
-  end
-  def self.as_objects
-    types = []
-    pmx = I18n.t("system.payment_external_types").split(',')
-    pmi = I18n.t("system.payment_internal_types").split(',')
-    tms = TenderMethod.scopied.all
-    i = 0
-    pmi.each do |p|
-      types << {:name => pmx[i],:internal_type => p} if p != 'Change'
-      i  = i + 1
-    end
-    tms.each do |tm|
-      types << {:name => tm.name,:internal_type => tm.internal_type}
-    end
-    return types
-  end
-  def self.total(type)
-    ttl = 0.0
-    Orders.scopied.each do |o| 
-      o.payment_methods.each do |pm|
-        if pm.internal_type.to_sym == type.to_sym then
-          ttl += pm.amount
-        end
-      end
-    end
-    return ttl
-  end
-  def process
-    pmx = I18n.t("system.payment_external_types").split(',')
-    pmi = I18n.t("system.payment_internal_types").split(',')
-    i = 0
-    pmi.each do |p|
-      if p == self.internal_type then
-        self.name = pmx[i]
-      end
-      i = i + 1
-    end
-    self.vendor_id = $Vendor.id
+
+  belongs_to :vendor
+  belongs_to :company
+  has_many :payment_method_items
+  
+  before_save :set_to_nil
+  
+  def set_to_nil
+    self.cash = nil if self.cash == false
+    self.quote = nil if self.quote == false
+    self.unpaid = nil if self.unpaid == false
+    self.change = nil if self.change == false
   end
 end

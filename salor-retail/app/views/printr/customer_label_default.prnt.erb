@@ -1,0 +1,13 @@
+<%= "\x1B\x40" %><%= "\x1D\x68\x25" %><%= "\x1D\x48\x01" %><%= "\x1D\x77\x02" %><% @customers.each do |i| %>
+
+<%= "\e!\x18" %><%= i.first_name %> <%= i.last_name %>
+
+
+<%= "\x1B\x61\x00" %><%= "\x1D\x6B\x04#{ i.loyalty_cards.visible.first.sku.upcase if i.loyalty_cards.visible.any? }\x00" %>
+
+
+
+
+
+<%= "\x1D\x56\x00" %><% end if @customers %>
+

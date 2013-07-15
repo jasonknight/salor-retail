@@ -1,0 +1,41 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  identifier: MyString
+  mode: MyString
+  subdomain: MyString
+  hidden: false
+  hidden_by: 1
+  hidden_at: 2013-06-29 11:48:25
+  active: false
+  email: MyString
+  auth_user: MyString
+  full_subdomain: MyString
+  full_url: MyString
+  virtualhost_filter: MyString
+  auth_https_mode: 1
+  https: false
+  auth: false
+  domain: MyString
+  removal_pending: false
+
+two:
+  name: MyString
+  identifier: MyString
+  mode: MyString
+  subdomain: MyString
+  hidden: false
+  hidden_by: 1
+  hidden_at: 2013-06-29 11:48:25
+  active: false
+  email: MyString
+  auth_user: MyString
+  full_subdomain: MyString
+  full_url: MyString
+  virtualhost_filter: MyString
+  auth_https_mode: 1
+  https: false
+  auth: false
+  domain: MyString
+  removal_pending: false

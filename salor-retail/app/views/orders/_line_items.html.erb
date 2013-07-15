@@ -1,66 +1,62 @@
-<% order_items.reverse.each do |oi|%>
-      <%
-        if oi.item.nil? then
-          oi.recover_item
-        end
-        price = oi.price
-        total = oi.gross
-        if (oi.item.get_item_type.behavior == 'gift_card' and oi.item.activated) or oi.is_buyback then
-          price = price * -1 unless price < 0
-          total = total * -1 unless total < 0
-        end
-        next if oi.item.get_item_type.behavior == 'coupon'
-      %>
-        <tr id="order_item-<%= oi.id %>" 
-            class="order-item <%= 'discount-applied' if oi.discount_applied %>" 
-            gcard="<%= oi.item.get_item_type.behavior == 'gift_card' ? 'true' : 'false' %>"
-            amnt="<%= oi.item.amount_remaining %>"
-            activated="<%= oi.item.activated ? 'true' : 'false' %>">
-            <% opts = "update_pos_display='true' model_id='#{oi.item.id}' klass='Item' field='name' data_type='String' id='in_place_edit_item_name_#{oi.item.id}'"  %>
-            <%
-              if oi.refunded then
-                reverse = salor_icon(:refund,{},32)
-              else
-                reverse = salor_icon(:refunded,{},32)
-              end
-            %>
-            <td class='order_table_item_name'><span class="editme item-name" <%= opts %>><%= oi.item.name %> (<%= oi.id %>) [<%= oi.action_applied == true ? 'A' : '' %>]</span></td>
-            <td>
-              <%= oi.item.sku %>
-              
-            </td>
+<%
+order_items.reverse.each do |oi|
+%>
 
-            
-            <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='quantity' data_type='Float' id='in_place_edit_quantity_#{oi.id}'"  %>
-            <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
-            <td align="right"><%= number_to_percentage(oi.rebate) %></td>
-            <td align="right"><%= number_to_currency(oi.price) %></td>
-             <td>
-              <% if $User.can(:edit_orders) and not curl("orders#new") and not curl("orders#update_order_items") %>
-                  <% topts = {:rev => reverse, :refresh => 'true',:class => "order-item-refund-small toggle pointer refund-#{oi.id}", :field => 'toggle_refund', :value => 'nil', :klass => 'OrderItem', :model_id => oi.id } %>
-                <%= oi.refunded ? salor_icon(:refunded,{},32) : salor_icon(:refund,{:onclick => "refund_item(#{ oi.id });",:style => "cursor:pointer"},32) %>
-                <% end %>
-                <%
-                  if params[:action] == 'show' then
-                    refresh = true
-                  else
-                    refresh = false
-                  end
-                %>
-                <% if oi.quantity > 1 then  %>
-                  <%= salor_icon(:split,{:onclick => "window.location = '/orders/split_order_item?id=#{oi.id}&order_id=#{oi.order.id}';",:style => "cursor:pointer"},32) %>
-                <% end %>
-            </td>
-            
-        </tr>
-        
+<tr id="order_item-<%= oi.id %>" 
+    class="order-item <%= 'discount-applied' if oi.discount_amount %>" 
+    gcard="<%= oi.item_type.behavior == 'gift_card' ? 'true' : 'false' %>"
+    amnt="<%= oi.gift_card_amount %>"
+    activated="<%= oi.item.activated ? 'true' : 'false' %>">
+    <% opts = "update_pos_display='true' model_id='#{oi.item.id}' klass='Item' field='name' data_type='String' id='in_place_edit_item_name_#{oi.item.id}'"  %>
+    <%
+      if oi.refunded then
+        reverse = salor_icon(:refund,{},32)
+      else
+        reverse = salor_icon(:refunded,{},32)
+      end
+    %>
+    
+    <td class='order_table_item_name'><span class="editme item-name" <%= opts %>><%= oi.item.name %> (ID #<%= oi.id %>) <%= oi.action_applied == true ? 'A' : '' %></span></td>
+    <td>
+      <%= oi.item.sku %>
+    </td>
+
+    
+    <% opts = "update_pos_display='true' model_id='#{oi.id}' klass='OrderItem' field='quantity' data_type='Float' id='in_place_edit_quantity_#{oi.id}'"  %>
+    <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
+    <td align="right"><%= number_to_percentage(oi.rebate) %></td>
+    <td align="right">
+      <%= number_to_currency(oi.net) %>
+    </td>
+    <td align="right">
+      <%= number_to_currency(oi.gross) %>
+    </td>
+    <td>
+      <% if @current_user.can(:edit_orders) %>
+        <% topts = {:rev => reverse, :refresh => 'true',:class => "order-item-refund-small toggle pointer refund-#{oi.id}", :field => 'toggle_refund', :value => 'nil', :klass => 'OrderItem', :model_id => oi.id } %>
+        <%= oi.refunded ? salor_icon(:refunded, {}, 32) : salor_icon(:refund, {:onclick => "refund_item(#{ oi.id });", :style => "cursor:pointer"}, 32, t('printr.eod_report.refund')) %>
       <% end %>
-      <% if @order.coupons.any? then  %>
-        <tr>
-          <td valign="top" colspan="6" align="center">
-            <%= I18n.t("views.single_words.coupons") %>
-          </td>
-        </tr>
-        <%= salor_render :partial => "shared/order_coupons", :locals => {:coupons => @order.coupons} %>
+      <%
+        if params[:action] == 'show' then
+          refresh = true
+        else
+          refresh = false
+        end
+      %>
+      <% if oi.quantity > 1 then  %>
+        <%= salor_icon(:split, {:onclick => "window.location = '/orders/split_order_item?id=#{oi.id}&order_id=#{oi.order.id}';",:style => "cursor:pointer"}, 32, t('menu.split')) %>
       <% end %>
+    </td>  
+  </tr>
+<% end %>
+
+
+<% if @order.coupons.any? then  %>
+  <tr>
+    <td valign="top" colspan="6" align="center">
+      <%= I18n.t("views.single_words.coupons") %>
+    </td>
+  </tr>
+  <%= render :partial => "shared/order_coupons", :locals => {:coupons => @order.coupons} %>
+<% end %>
 

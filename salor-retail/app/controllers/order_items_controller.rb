@@ -5,8 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 class OrderItemsController < ApplicationController
-   before_filter :authify
-   before_filter :initialize_instance_variables
   # GET /order_items
   # GET /order_items.xml
   def index

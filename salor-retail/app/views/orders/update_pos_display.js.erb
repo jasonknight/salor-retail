@@ -1,15 +1,53 @@
-/* Update POS Display <%= $Notice.inspect %>*/
+// ---------- update order -------------
 Order = <%= raw @order.to_json %>;
-updateOrder(<%= raw @order.to_json %>);
-    <%
-      items = []
-      @order.order_items.visible.reload.each do |oi|
-        items << oi.to_json
-      end
-    %>
-<% if items.any? then %>
-  updateOrderItems( [<%= raw items.join(",") %>]);
-  <% else %>
-    $('.pos-table-left-column-items').html('');
-<% end -%>
-<%= render :partial => "shared/js/global_errors_js" %>
+updateOrder(Order);
+
+
+// ----------- update order items ----------
+<% if @order_item and @order_item.hidden.nil? %>
+order_item_json = <%= raw @order_item.to_json %>;
+updateOrderItems([order_item_json]);
+try {
+  
+} catch (err) {
+  alert("Failed to update items properly, please reload");
+  echo(err);
+}
+
+<% end %>
+
+// ------------ coupon stuff -------------       
+<%
+  if @order_item and @order_item.behavior == 'coupon' then
+    oi = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
+%>
+updateOrderItems([<%= raw oi.to_json %>]);
+try {
+  
+} catch (err) {
+  echo("Failed to update applied item.");
+  echo(err);
+}
+<% end %>
+
+// ---------------- gift card stuff ---------------
+<% if @order_item and @order_item.behavior == 'gift_card' and @order_item.activated.nil? %>
+
+  print_url(Register.sticker_printer, '/items/labels', '&id=<%= @order_item.item_id %>&type=sticker&style=default')
+<% end %>
+
+
+// ---------- other stuff ----------
+focusInput($('#main_sku_field'));
+display_change('update_pos_display');
+updateCustomerDisplay(<%= @order.id %>, {}, false);
+Drawer = <%= raw @current_user.get_drawer.to_json %>;
+                         
+if (order_item_json.price == 0 ) {
+  playSound('medium_warning');
+} else {
+  playSound('drop2');
+}
+         
+// we run this regularly to reduce the chance that the drawer observer is blocking the printer
+stop_drawer_observer();

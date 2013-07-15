@@ -1,10 +1,10 @@
 .header-page-one
-  - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_invoice_image
-    %img.vendorlogo.floatright{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
   
   .clear
-  
-  .company_data.floatright= raw Kramdown::Document.new(@invoice_blurb_header).to_html
+
+  .company_data.floatright
+    = image_tag @current_vendor.image('invoice_logo'), :class => 'vendorlogo'
+    = raw Kramdown::Document.new(@report[:invoice_blurbs][:invoice][:header]).to_html
   
   .customer_data.floatleft
     - if @report[:customer]
@@ -17,7 +17,7 @@
       = @report[:customer][:street2]
       %br
       == #{ @report[:customer][:postalcode]} #{ @report[:customer][:city] } #{ @report[:customer][:country] }
-      /%br
-      /== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
+      %br
+      = @report[:customer][:state]
       
   .clear

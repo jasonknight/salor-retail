@@ -6,51 +6,52 @@
 # See license.txt for the license applying to all files within this software.
 
 class DrawerTransaction < ActiveRecord::Base
-  # {START}
   include SalorBase
   include SalorScope
-  include SalorModel
+
+  belongs_to :vendor
+  belongs_to :company
   belongs_to :drawer
-  validate :validify
-  belongs_to :cash_register
-  belongs_to :owner, :polymorphic => true
+  belongs_to :user
   belongs_to :order
-  
-  def trans_type=(x)
-    if x == 'drop' then
-      self.drop = true
-    else
-      self.payout = true
-    end
-  end
-  
-  def validify
-    self.vendor_id = $Vendor.id
-    if self.amount.to_f <= 0 then
-      self.amount *= -1.0
-    end
-    if not self.drop and not self.payout then
-      GlobalErrors.append_fatal("system.errors.must_specify_drop_or_payout")
-      errors.add(:drop,I18n.t("system.errors.must_specify_drop_or_payout"))
-    end
-    if self.cash_register_id.nil? then
-      self.set_model_owner
-    end
-  end
-  def amount=(p)
-    write_attribute(:amount,self.string_to_float(p))
+  belongs_to :cash_register
+
+  monetize :amount_cents, :allow_nil => true
+  monetize :drawer_amount_cents, :allow_nil => true
+
+  before_create :set_nr
+
+  def set_nr
+    i = self.vendor.largest_drawer_transaction_number + 1
+    self.nr = i
+    self.vendor.update_attribute :largest_drawer_transaction_number, i
   end
 
   def print
-    if $Register.id
-      vendor_printer = VendorPrinter.new :path => $Register.thermal_printer
-      text = self.escpos
-      print_engine = Escper::Printer.new('local', vendor_printer)
-      print_engine.open
-      print_engine.print(0, text)
-      print_engine.close
-      Receipt.create(:employee_id => @User.id, :cash_register_id => $Register.id, :content => text)
-    end
+    vp = Escper::VendorPrinter.new({})
+    vp.id = 0
+    vp.name = self.cash_register.name
+    vp.path = self.cash_register.thermal_printer
+    vp.copies = 1
+    vp.codepage = 0
+    vp.baudrate = 9600
+    
+    text = self.escpos
+    print_engine = Escper::Printer.new('local', vp)
+    print_engine.open
+    print_engine.print(0, text)
+    print_engine.close
+    
+    r = Receipt.new
+    r.vendor = self.vendor
+    r.company = self.company
+    r.user = self.user
+    r.drawer = self.drawer
+    r.cash_register = self.cash_register
+    r.content = text
+    r.save
+    
+    return text
   end
   
   def escpos
@@ -66,20 +67,18 @@ class DrawerTransaction < ActiveRecord::Base
     I18n.l(self.created_at, :format => :long) +
     "\n\n" +
     "\e!\x38" +
-    $User.username +
+    self.user.username +
     "\n\n" +
-    self.tag +
+    self.tag.to_s +
     "\n\n" +
-    self.notes +
+    self.notes.to_s +
     "\n\n" +
     "\e!\x38" +
-    SalorBase.to_currency(self.amount) +
+    self.amount.to_s +
     "\n\n" +
-    I18n.t(self.drop ? 'printr.word.drop' : 'printr.word.payout') +
+    I18n.t(self.amount > 0 ? 'printr.word.drop' : 'printr.word.payout') +
     "\n\n\n\n\n\n\n" +
     "\x1D\x56\x00" # cut
-    
-    #GlobalData.vendor.receipt_logo_footer 
   end
   
   def self.check_range(from_to)
@@ -98,7 +97,6 @@ class DrawerTransaction < ActiveRecord::Base
             messages << "#{dts[i].id} not ok: #{dts[i].drawer_amount.round(2)} #{(dts[i-1].drawer_amount + dts[i-1].amount * factor).round(2)}"
         end
     end
-    puts messages.inspect
+    log_action messages.inspect
   end
-  # {END}
 end

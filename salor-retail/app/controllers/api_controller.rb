@@ -10,12 +10,12 @@ class ApiController < ApplicationController
   # This should allow you to create an arbitrary object.
   def create
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     cls = Kernel.const_get(@cmd[:data][:class_name])
     if cls == Order then
-      model = GlobalData.salor_user.get_new_order
+      model = @current_user.get_new_order
       model.attributes = @cmd[:data][:attributes]
       model.save
       model.reload
@@ -23,11 +23,10 @@ class ApiController < ApplicationController
     else
       model = cls.new(@cmd[:data][:attributes])
     end
-    model.set_model_owner(@user)
     respond_to do |format|
-      if not GlobalErrors.any_fatal? and @user and model.save then
+      if not nil and @user and model.save then
         if model.class == Order then
-          model.update_self_and_save
+
         end
         format.json { render :text => success(model) }
       else
@@ -37,13 +36,12 @@ class ApiController < ApplicationController
   end
   def update
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
       cls = Kernel.const_get(@cmd[:data][:class_name])
       model = cls.scopied.find_by_id(@cmd[:data][:id])
       if not model
-        GlobalErrors.append_fatal("api.object_does_not_exist")
       end
       respond_to do |format|
         if @user and model and model.update_attributes(@cmd[:data][:attributes]) then
@@ -55,7 +53,7 @@ class ApiController < ApplicationController
   end
   def destroy
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
       cls = Kernel.const_get(@cmd[:data][:class_name])
@@ -71,7 +69,7 @@ class ApiController < ApplicationController
   end
   def authenticate
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     respond_to do |format|
@@ -84,7 +82,7 @@ class ApiController < ApplicationController
   end
   def time
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     respond_to do |format|
@@ -97,7 +95,7 @@ class ApiController < ApplicationController
   end
   def search
    @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -117,7 +115,7 @@ class ApiController < ApplicationController
   end
   def order
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -133,7 +131,7 @@ class ApiController < ApplicationController
   end
   def order_items
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -149,7 +147,7 @@ class ApiController < ApplicationController
   end
   def registers
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
@@ -165,11 +163,11 @@ class ApiController < ApplicationController
   end
   def vendors
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @vendors = GlobalData.salor_user.get_vendors(params[:page])
+      @vendors = @current_user.vendors(params[:page])
     end
     respond_to do |format|
       if @vendors then
@@ -181,11 +179,11 @@ class ApiController < ApplicationController
   end
   def locations
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @locations = GlobalData.salor_user.get_locations(params[:page])
+      @locations = @current_user.get_locations(params[:page])
     end
     respond_to do |format|
       if @locations then
@@ -197,11 +195,11 @@ class ApiController < ApplicationController
   end
   def categories
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @categories = GlobalData.salor_user.get_categories(params[:page])
+      @categories = @current_user.get_categories(params[:page])
     end
     respond_to do |format|
       if @categories then
@@ -213,11 +211,11 @@ class ApiController < ApplicationController
   end
   def items
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @items = GlobalData.salor_user.get_items
+      @items = @current_user.get_items
     end
     respond_to do |format|
       if @items then
@@ -229,11 +227,11 @@ class ApiController < ApplicationController
   end
   def customers
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @customers = GlobalData.salor_user.get_customers(params[:page])
+      @customers = @current_user.get_customers(params[:page])
     end
     respond_to do |format|
       if @customers then
@@ -245,11 +243,11 @@ class ApiController < ApplicationController
   end
   def discounts
     @user = auth
-    if not @user or GlobalErrors.any_fatal?
+    if not @user or nil
       render :text => failure(I18n.t("api.wrong_params")) and return
     end
     if @user then
-      @discounts = GlobalData.salor_user.get_discounts(params[:page])
+      @discounts = @current_user.get_discounts(params[:page])
     end
     respond_to do |format|
       if @discounts then
@@ -263,7 +261,7 @@ class ApiController < ApplicationController
   # You should only be able to access these objects
   def allowed_classes
     [
-     :employee,:cash_register,:category,
+     :user,:current_register,:category,
      :location,:order,:order_item,:discount,
      :customer, :table,:settlement, :quantity,
      :option, :order_items_printoption, :order_items_option,
@@ -272,20 +270,18 @@ class ApiController < ApplicationController
   end
   def auth
     has_right_params(@cmd) # This is where input validation is taking place
-    # Employee.apitoken can be gotten from editing the Employee and saving the edit. 
-    user = Employee.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(:meta,:roles).first
+    # User.apitoken can be gotten from editing the User and saving the edit. 
+    user = User.select('id,username,vendor_id,user_id').where(['apitoken = ?',@cmd[:token]]).includes(:roles).first
     if not user then
-      GlobalErrors.append_fatal("api.user_does_not_exist")
       return nil
     end
-    GlobalData.salor_user = user
-    if GlobalData.salor_user.meta.nil? then
-      GlobalData.salor_user.meta = Meta.new
-      GlobalData.salor_user.meta.save
+    @current_user = user
+    if @current_user.nil? then
+      @current_user.save
     end
-    if GlobalData.salor_user.get_drawer.nil? then
-      GlobalData.salor_user.get_drawer = Drawer.new
-      GlobalData.salor_user.get_drawer.save
+    if @current_user.get_drawer.nil? then
+      @current_user.get_drawer = Drawer.new
+      @current_user.get_drawer.save
     end
     vars = {}
     var_names = [:sku,:controller,:action,:page,:vendor_id,:keywords]
@@ -296,10 +292,10 @@ class ApiController < ApplicationController
     GlobalData.params = vars
     
     if @cmd[:vendor_id] then
-      GlobalData.salor_user.meta.vendor_id = @cmd[:vendor_id]
+      @current_user.vendor_id = @cmd[:vendor_id]
     end
-    if @cmd[:cash_register_id] then
-      GlobalData.salor_user.meta.cash_register_id = @cmd[:cash_register_id]
+    if @cmd[:current_register_id] then
+      @current_register = @cmd[:current_register_id]
     end
     return user
   end
@@ -308,7 +304,7 @@ class ApiController < ApplicationController
       :success => true,
       :data => data,
       :count => cnt,
-      :user => GlobalData.salor_user
+      :user => @current_user
     }.to_json
   end
   def failure(data)
@@ -317,7 +313,6 @@ class ApiController < ApplicationController
       errors << error[1]
     end
     errors << data
-    GlobalErrors.flush
     {
       :success => false,
       :data => errors,
@@ -346,17 +341,13 @@ class ApiController < ApplicationController
     end
     required[:every].each do |k,v|
       if not cmd[k] then
-        GlobalErrors.append_fatal("api.field_missing",nil,{:name => "#{k}"})
       end
       if cmd[k] and not cmd[k].class == v then
-        GlobalErrors.append_fatal("api.field_missing",nil,{:name => "#{k}"})
       end
     end
     if [:create,:update,:destroy,:search].include? action then
       if cmd[:data][:class_name] and not allowed_classes.include? cmd[:data][:class_name].downcase.to_sym then
-        GlobalErrors.append_fatal("api.object_doesnt_exist",nil,{:name => cmd[:data][:class_name]})
       elsif not cmd[:data][:class_name]
-        GlobalErrors.append_fatal("api.field_missing",nil,{:name => 'data.class_name'})
       end
     end
     # puts  GlobalErrors.all.inspect

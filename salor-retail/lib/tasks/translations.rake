@@ -158,29 +158,33 @@ end
 def write_javascript_i18n
   YAML::ENGINE.yamler = 'syck'
   yaml_root = File.join(Rails.root, 'config', 'locales')
-  js_root = File.join(Rails.root, 'app','assets','javascripts', 'locales')
+  js_root = File.join(Rails.root, 'public', 'jslocales')
   js_namespace = 'i18n = '
   
-  Dir[File.join(yaml_root, 'main.*.yml')].sort.each { |locale| 
+  Dir[File.join(yaml_root, 'main.*.yml')].sort.each do |locale| 
     locale_yml = YAML::load(IO.read(locale))
-    region_locale = File.join(yaml_root,"region.#{File.basename(locale, '.*').split('.')[1]}.yml")
-    region_yml = YAML::load(IO.read(region_locale))
-    puts 'Filename: ' + locale
-    File.open(
-      File.join(js_root, File.basename(locale, '.*') + '.js'), 'w') {|f| 
-        tmp = locale_yml[File.basename(locale, '.*').split('.')[1]]
-        final = {}
-        tmp.each do |k,v|
-          final[k] = v if not [:time,:date].include? k.to_sym
-        end
-                                                                    puts File.basename(locale, '.*').split('.').inspect
-        tmp = region_yml[File.basename(locale, '.*').split('.')[1]]
-        tmp.each do |k,v|
-          final[k] = v if not [:time,:date].include? k.to_sym
-        end if tmp
+    File.open(File.join(js_root, File.basename(locale, '.*') + '.js'), 'w') do |f| 
+      tmp = locale_yml[File.basename(locale, '.*').split('.')[1]]
+      final = {}
+      tmp.each do |k,v|
+        final[k] = v if not [:time,:date].include? k.to_sym
+      end
       f.write(js_namespace + final.to_json)
-    }
-  }
+    end
+  end
+
+  js_namespace = 'Region = '
+  Dir[File.join(yaml_root, 'region.*.yml')].sort.each do |locale| 
+    locale_yml = YAML::load(IO.read(locale))
+    File.open(File.join(js_root, File.basename(locale, '.*') + '.js'), 'w') do |f| 
+      tmp = locale_yml[File.basename(locale, '.*').split('.')[1]]
+      final = {}
+      tmp.each do |k,v|
+        final[k] = v if not [:time,:date].include? k.to_sym
+      end
+      f.write(js_namespace + final.to_json)
+    end
+  end
 end
 
 namespace :translations do
@@ -286,32 +290,30 @@ namespace :translations do
   # usage: rake translations:update
   task :update do
     base_path = File.join(Rails.root,'config','locales')
-    base_name = "yyy.XXX.yml" # i.e. the pattern name of the files
-    langs = ['en-US','en-GB','en-CA','gn','cn','el','es','fr','it','ru']
-    
+    base_name = "main.XXX.yml" # i.e. the pattern name of the files
+    langs = ['en','gn','fr','es','ru','it','cn','el']
+    default_file = File.join(base_path,base_name.gsub('XXX',langs[0])) #i.e. the first file is the default file
     langs.each do |lang|
-      ['main','region','system','roles'].each do |ftype|
-        default_file = File.join( base_path,base_name.gsub('XXX',langs[0]).gsub('yyy',ftype) ) #i.e. the first file is the default file
-        current_file = File.join( base_path,base_name.gsub('XXX',lang).gsub('yyy',ftype) )
-        if not File.exists? current_file then
-          puts "Translation file doesn't exist, copying it... #{default_file} => #{current_file}"
-          `cp #{default_file} #{current_file}`
-        else
-          t = base_name.gsub('XXX',lang).gsub('yyy',ftype)
-          s = base_name.gsub('XXX',langs[0]).gsub('yyy',ftype)
-          source, sourcelang, sourcefile, translation, translationlang, transfile = open_translation(s,t)
-          puts "  Ordering translation for #{ lang }"
-          translation = convert_hash_to_ordered_hash_and_sort(translation, true)
-          if sourcelang != translationlang
-            puts "\n\nEqualizing #{sourcelang} => #{translationlang}"
-            translation = equalize(source,translation)
-          end
-          write_translation(translation, translationlang, transfile)
+      current_file = File.join(base_path,base_name.gsub('XXX',lang))
+      if not File.exists? current_file then
+        puts "Translation file doesn't exist, copying it..."
+        `cp #{default_file} #{current_file}`
+      else
+        t = base_name.gsub('XXX',lang)
+        s = base_name.gsub('XXX',langs[0])
+        source, sourcelang, sourcefile, translation, translationlang, transfile = open_translation(s,t)
+        puts "  Ordering translation for #{ lang }"
+        translation = convert_hash_to_ordered_hash_and_sort(translation, true)
+        if sourcelang != translationlang
+          puts "\n\nEqualizing #{sourcelang} => #{translationlang}"
+          translation = equalize(source,translation)
+        end
+        write_translation(translation, translationlang, transfile)
       end
-      end # each file type
     end
     write_javascript_i18n
   end
+  
   task :write_i18n_js do 
     write_javascript_i18n
   end

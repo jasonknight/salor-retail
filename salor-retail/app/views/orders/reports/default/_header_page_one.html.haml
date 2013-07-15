@@ -1,9 +1,0 @@
-.header-page-one
-  - if Vendor.find_by_id($User.vendor_id).logo_image
-    %img.vendorlogo.floatright{ :src => "/vendors/#{ $User.vendor_id }/logo_invoice" }
-  
-  .clear
-  
-  .company_data.floatright= raw Kramdown::Document.new(@vendor.salor_configuration.invoice_blurb).to_html
-      
-  .clear

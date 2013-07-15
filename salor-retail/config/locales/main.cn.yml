@@ -53,9 +53,6 @@ cn:
       dollar_per_lp: 美元每忠誠點
       drop: 下拉
       email: 電子郵件
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: 使用的抽屜
       end_amount: 最後金額
       end_date: 結束日期
       eod_show: 顯示在天結束
@@ -177,6 +174,9 @@ cn:
       track_expiry: 跟踪屆滿
       type: 類型
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: 用戶名
       uses_drawer_id: 使用的抽屜
       value: 價值
@@ -192,6 +192,7 @@ cn:
       when: 何時
       whento: When
       width: 寬度
+      color: color
     models:
       action:
         one: 行動
@@ -220,9 +221,6 @@ cn:
       drawer_transaction:
         one: 抽屜交易
         other: 抽屜交易
-      employee:
-        one: 僱員
-        other: 僱員
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,12 +269,12 @@ cn:
       tax_profile:
         one: 稅務個人資料
         other: 稅務個人資料
-      tender_method:
-        one: 貨幣方法
-        other: 貨幣方法
       transaction_tag:
         one: 標籤
         other: 標籤
+      user:
+        one: Employee
+        other: Employees
       vendor:
         one: 商店
         other: 商店
@@ -323,7 +321,6 @@ cn:
     discount_for: ! '%{store} 的回贈'
     discounts_for: ! '%{store} 的回贈'
     edit_shipper: 編輯托運人 %{name}
-    employees: 僱員
     expiring_soon: 即將到期
     export: 出口
     item_selection: 產品選擇
@@ -338,6 +335,7 @@ cn:
     time_sheet: Employee Time Sheet
     update_location: 更新位置
     update_real_quantity: 更新實際數量
+    users: users
   helpers:
     select:
       prompt: 請選擇
@@ -365,9 +363,9 @@ cn:
       requesting_connection_status: 請求的連接狀態 ...
       title: 遠程服務
       user: 用戶
-    user_employee_index:
-      backup_database: 備份數據庫
-      backup_logfile: 備份日誌文件
+    user_user_index:
+      backup_database: Backup Database
+      backup_logfile: Backup Logfile
   items:
     database_distiller:
       are_you_sure: 所有未使用的項目將被刪除. 這不能撤消. 你確定你要繼續嗎?
@@ -417,6 +415,7 @@ cn:
     cash_registers: 收款台
     categories: 類別
     clear_order: 清洗
+    close: Close
     configuration: 組態
     contact: contact 聯絡
     current_order: ! '當前的訂單: #%{id}'
@@ -435,19 +434,18 @@ cn:
     edit_category: 編輯類別
     edit_customer: 編輯顧客
     edit_discount: 編輯折扣
-    edit_employee: 編輯僱員
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: 編輯產品
     edit_location: 編輯位置
+    edit_payment_method: Edit Payment Method
     edit_sale_type: XXX Edit Sale Type
     edit_shipment: 編輯裝船
     edit_shipment_type: 編輯裝船類型
     edit_shipper: 編輯發貨人 %{name}
     edit_tax_profile: 編輯稅務個人資料
-    edit_tender_method: edit 編輯貨幣方法
+    edit_user: Edituser
     edit_vendor: 編輯供應商
-    employees: 僱員
     end_day: end day 結束日
     general_configuration: 一般組態
     home: 主頁
@@ -469,25 +467,26 @@ cn:
     new_country: XXX new country
     new_customer: 新顧客
     new_discount: 新折扣
-    new_employee: 新僱員
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: XXX New Invoice Note
     new_item: 新產品
     new_location: 新位置
     new_order: 新
+    new_payment_method: New Payment Method
     new_sale_type: XXX new sale type
     new_shipment: 新裝船
     new_shipment_type: 新裝船類型
     new_shipper: 新發貨人
     new_stock_location: 新貨物位置
     new_tax_profile: 新稅務個人資料
-    new_tender_method: new 新貨幣方法
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: 新供應商
     ok: OK
     order: 訂購
     orders: 訂購
     overview: 概貌
+    payment_methods: Payment Methods
     points: 點
     pos: POS
     print: 打印
@@ -511,13 +510,13 @@ cn:
     stock_locations: 貨物位置
     support: 支持
     tax_profiles: 稅務個人資料
-    tender_methods: 貨幣方法
     transaction_tags: 交易標籤
     update_gift_card: 更新禮品卡
     update_location: 更新位置
     update_real_quantity: 更新實際數量
     upload: 上載
     usb_device: USB記憶棒
+    users: users
     vendors: 供應商
     void: 廢止
     wholesaler_update: 批發商更新
@@ -542,36 +541,6 @@ cn:
       sum: 總和
       sum_total: 總和總計
       title: 總和
-    report_day:
-      None: 未指定
-      OrderItemRefund: 產品退款
-      OrderRefund: 訂購退款
-      cash-refunds: 現金退款
-      cash_drawer: 錢抽屜
-      count_orders: 所有訂購列表
-      drop: 下拉
-      from: 從
-      gross: 合計
-      net: 淨
-      noncash-refunds: 非現金的退款
-      payments: 付款
-      payout: 派息
-      payouts: 派息
-      revenue: 收入
-      sales: 銷售
-      sum: 總和
-      sum_gross: 總和合計
-      sum_net: 總和淨
-      sum_transactions: 總和交易
-      sums_by_category: 總和由類別
-      sums_by_payment_methods: 總和由付款方式
-      sums_by_tax_profile: 總和由稅務個人資料
-      time: 時候
-      title: 天報告
-      to: 至
-      transaction_tag: 交易標籤
-      transaction_total: 交易總計
-      transactions: 交易
     report_day_range:
       display: 顯示
       end_date: 結束日期
@@ -622,11 +591,11 @@ cn:
       cash-refunds: 現金的退款
       cash_refunds_total: 總計
       no_category: No Category
-      noncash-refunds: 非現金的退款
       orders_total: 訂購總計
       payment_method_total: 總計
       payments: 付款
       refund: 退款
+      refunds: Refunds
       revenue: 收入
       revenue_total: 總計
       sales: 銷售
@@ -754,8 +723,6 @@ cn:
     not_you: 不是你嗎?
     owner_mode: 雇主模式
     owner_success: 雇主屬性已順利更新
-    payment_external_types: 現金, 卡, 禮品卡, 其它
-    payment_internal_types: 現金, 卡, 禮品卡, 其它信用卡
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -767,6 +734,36 @@ cn:
       logo: 標誌
       receipt_logo_footer: 收據標誌頁腳
       receipt_logo_header: 收據標誌頭
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: 先進的現場
     cash_register_heading: ! '%{name} 為 %{store}'

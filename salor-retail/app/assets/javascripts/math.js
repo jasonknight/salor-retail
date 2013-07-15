@@ -13,7 +13,7 @@ function toFloat(str, returnString) {
     return str;
   }
   if (str.match(/\d+\.\d+\,\d+/)) {
-   console.log('matched');
+   echo('matched');
     str = str.replace('.','');
   }
   var ac = [0,1,2,3,4,5,6,7,8,9,'.',',','-'];
@@ -57,14 +57,21 @@ function roundNumber(num, dec) {
 }
 
 function toDelimited(number) {
+  if (typeof number == 'undefined') {
+    echo("warning in toDelimited");
+    return "";
+  }
+  
   var match, property, integerPart, fractionalPart;
   var settings = {
     precision: 2,
-    unit: i18nunit,
-    separator: i18nseparator,
-    delimiter : i18ndelimiter
+    unit: Region.number.currency.format.unit,
+    separator: Region.number.currency.format.separator,
+    delimiter : Region.number.currency.format.delimiter
   };
-
+  if (typeof number == 'undefined' || number == null) {
+    number = 0.0;
+  }
   match = number.toString().match(/([\+\-]?[0-9]*)(.[0-9]+)?/);
 
   if (!match) return;
@@ -76,18 +83,22 @@ function toDelimited(number) {
 }
 
 function toCurrency(number) {
+  if (typeof number == 'undefined') {
+    echo("warning in toCurrency");
+    return "";
+  }
   
   var match, property, integerPart, fractionalPart;
   var settings = {         precision: 2,
-    unit: i18nunit,
-    separator: i18nseparator,
-    delimiter : i18ndelimiter
+    unit: Region.number.currency.format.unit,
+    separator: Region.number.currency.format.separator,
+    delimiter : Region.number.currency.format.delimiter
   };
   if (!typeof number == 'number') {
     number = toFloat(number);
   }
-  if (typeof number == 'undefined') {
-    number = 0;
+  if (typeof number == 'undefined' || number == null) {
+    number = 0.0;
   }
   match = number.toString().match(/([\+\-]?[0-9]*)(.[0-9]+)?/);
 
@@ -95,18 +106,23 @@ function toCurrency(number) {
 
   integerPart = match[1].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1" + settings.delimiter);
   fractionalPart = match[2] ? (match[2].toString() + "000000000000").substr(1, settings.precision) : "000000000000".substr(1, settings.precision);
-
   return settings.unit + integerPart + ( settings.precision > 0 ? settings.separator + fractionalPart : "");
 }
 
 function toPercent(number) {
+  if (typeof number == 'undefined') {
+    echo("warning in toPercent");
+    return "";
+  }
   var match, property, integerPart, fractionalPart;
   var settings = {         precision: 0,
     unit: "%",
-    separator: i18nseparator,
-    delimiter : i18ndelimiter
+    separator: Region.number.currency.format.separator,
+    delimiter : Region.number.currency.format.delimiter
   };
-
+  if (typeof number == 'undefined' || number == null) {
+    number = 0.0;
+  }
   match = number.toString().match(/([\+\-]?[0-9]*)(.[0-9]+)?/);
 
   if (!match) return;

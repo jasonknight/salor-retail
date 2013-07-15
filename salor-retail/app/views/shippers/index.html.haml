@@ -1,3 +1,8 @@
-=raw content_box_top(t "menu.shippers")
-- width ||= "90%"
+= raw content_box_top(t "menu.shippers")
+
+.tools
+  .tool-icon
+    %span= salor_icon(:shipper, {:style => "cursor:pointer;", :onmousedown => "wholesaler_update();"}, 24, I18n.t("menu.wholesaler_update"))
+    
+        
 = render :partial => 'shared/list_view', :locals => { :klass => Shipper,  :width => '60%',:collection => @shippers, :columns => [:name]}

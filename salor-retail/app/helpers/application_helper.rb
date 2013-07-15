@@ -6,13 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 module ApplicationHelper
  
-  # TODO: salor_render should be depreciated in favor of plain Rails render, since it does nothing
-  def salor_render(h)
-    #t = "<!-- begin-partial #{h[:partial]}-->\n"
-    t = raw(render(h))
-    #t += "\n<!-- end-partial  #{h[:partial]}-->\n"
-    return raw(t)
-  end
+
   def link_to_add_fields(name, f, association,jsfunc)
     new_object = f.object.class.reflect_on_association(association).klass.new
     fields = f.fields_for(association, new_object, :child_index => "new_#{association}") do |builder|
@@ -41,70 +35,28 @@ module ApplicationHelper
     return s.join("&")
   end
   
-  def supported_languages
-    [
-      {:name => "Deutsch", :locale => 'gn'},
-      {:name => "US English", :locale => 'en-US'},
-      {:name => "GB English", :locale => 'en-GB'},
-      {:name => "CA English", :locale => 'en-CA'},
-      {:name => "ελληνική", :locale => 'el'},
-      {:name => "Français", :locale => 'fr'},
-      {:name => "Espagnole", :locale => 'es'},
-      {:name => "中文", :locale => 'cn'}
-    ]
-  end
-  
   def salor_number_to_currency(amnt)
-    return number_to_currency(amnt, :unit => I18n.t("number.currency.format.unit"))
+    return number_to_currency(amnt, :locale => @region)
   end
+  
   def salor_number_with_delimiter(num)
-    return number_with_delimiter(num)
+    return number_with_delimiter(num, :locale => @region)
   end
   
-  def salor_signed_in?
-    if session[:user_id] and session[:user_type] then
-      return true
-    else
-      return false
-    end
-  end
-  
-  def salor_user
-    if session[:user_id] then
-      if session[:user_type] == "User" then
-        return User.find_by_id(session[:user_id])
-      else
-        $User = Employee.find_by_id(session[:user_id])
-        return $User
-      end
-    end
-  end
-  
-  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :breadcrumb => true, :classes => []}, hideowner = false)
+  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []}, hideuser = false)
     clses = ['box-title','shadow']
     bbt = '<div class="left-blank"></div>'
     rbtn = '<div class="right-blank"></div>'
-    crumbs = ''
     options[:classes] ||= []
     adminclass = ''
     adminbox = ''
-    if salor_signed_in? and salor_user.class == User and not hideowner then
-      adminclass = '-admin'
-      adminbox = '
-        <div class="title-box-admin #{clses.join(" ")}">
-          &#8226; ' + t("system.owner_mode") + ' &#8226;
-#           <div class="button-row-admin">
-            <div class="button-admin" onclick="javascript:window.location.href=\'/home/edit_owner\';">' + t(:"menu.configuration") + '</div>
-          </div>
-        </div>'
-    end
+
     if options[:small] then
       classes = ['small-title','shadow']
     else
       unless options[:menu] == false
         bbt = '<div onclick="history.go(-1);" class="back-button' + adminclass + '"> &lt; </div>'
         rbtn = '<div onclick="window.location.reload();" class="reload-button' + adminclass + '"> &#x267A; </div>'
-        crumbs = breadcrumbs
       end
     end
 
@@ -112,22 +64,20 @@ module ApplicationHelper
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
       <div class="title-container">
           #{bbt} <div class="title-box #{clses.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
-          <div class="breadcrumb-container">
-            #{crumbs}
-          </div>
       </div>
+    </div>
     ]
   end
   
-  def content_box_bottom
-    ''
-  end
+
   def get_icons_map
     icons = {
       :location => 'location',
+      :search => 'search',
       :category => 'category',
       :vendor => 'home',
       :edit => 'edit',
+      :delete => 'delete',
       :delete => 'delete',
       :add => 'add',
       :item => 'item',
@@ -140,17 +90,20 @@ module ApplicationHelper
       :next => 'right',
       :tax_profile => 'percent',
       :statistics => 'chart',
-      :employee => 'employee',
+      :user => 'user',
+      :pin => 'pin',
       :reload => 'reload',
       :logout => 'key',
       :login => 'key',
       :settings => 'gear',
       :home => 'vendor',
+      :current_register => 'till',
       :cash_register => 'till',
       :customer => 'customer',
       :shipment => 'shipment',
       :shipper => 'shipper',
       :shipment_type => 'status',
+      :wrench => 'wrench',
       :stock_locations => 'stock_locations',
       :stock_location => 'stock_locations',
       :locked => 'lock',
@@ -186,9 +139,11 @@ module ApplicationHelper
       :counter => 'counter',
       :wand => 'wand',
       :update_real_quantity => 'okay',
+      :okay => 'okay',
+      :okay_orange => 'okay-orange',
       :action => 'gears',
       :payment => 'payment_method',
-      :tender_method => 'payment_method',
+      :payment_method => 'payment_method',
       :locations => 'location',
       :camera => "camera",
       :button => 'button',
@@ -217,10 +172,12 @@ module ApplicationHelper
     }
     return icons
   end
+  
   def icon(name, size = '64')
     icons = get_icons_map
     return icons[name] + '.svg'
   end
+  
   def salor_icon(name, options = {}, size = '64', caption=nil,caption_class='')
     if caption then
       o = []
@@ -233,35 +190,7 @@ module ApplicationHelper
       return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }</div>")
     end
   end
-  def get_day(i)
-    days = [
 
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun'
-    ]
-    logger.info("### Recv: #{i} returning #{days[i - 1]}")
-    return days[i-1]
-  end
-  def breadcrumbs
-    path = []
-    if not @breadcrumbs.nil? then
-      if @breadcrumbs.length == 1 then
-        return
-      end
-      if params[:action].to_s == 'edit' or params[:action].to_s == 'create' then
-        #@breadcrumbs << [I18n.t("menu.new_#{params[:controller].to_s.singularize}"),eval("new_#{params[:controller].to_s.singularize}_path")]
-      end
-      @breadcrumbs.each do |l|
-        path << link_to(l[0],l[1])
-      end
-      return path.join(' / ')
-    end
-  end
   def edit_me(field,model,initvalue='',withstring='',id=nil,update_pos_display='false')
     field = field.to_s
     if initvalue.blank? then
@@ -274,14 +203,7 @@ module ApplicationHelper
     c = "editme #{model.class.to_s.downcase}-#{field}"
     return raw("<span model_id='#{model.id}' id='#{id}' class='#{c}' field='#{field}' klass='#{model.class.to_s}' data_type='#{model.send(field).class}' withstring='#{withstring}' update_pos_display='#{update_pos_display}'>#{initvalue}</span>")
   end
-
-  def action_button(url,html,options={})
-    opts = []
-    options.each do |k,v|
-      opts << "#{k}='#{v}'"
-    end
-    return raw "<span class=\"action-button\" url='#{url}' #{opts.join(' ')}>#{html}</span>"
-  end
+  
   def searchable_models
     [
       [I18n.t("activerecord.models.item.one"),'Item'],
@@ -289,24 +211,7 @@ module ApplicationHelper
       [I18n.t("activerecord.models.order.one"),'Order']
     ]
   end
-  def get_help(key=nil,size=16,prms=nil)
-    if prms.nil? then
-      prms = params
-    end
-    k = prms[:controller]
-    if not key.nil? then
-      k = k + '_' + key
-    end
-    return salor_icon(:help, {:url => "/vendors/help?key=#{k}", :class => 'click-help', :style => "cursor:pointer;"},size)
-  end
-  def curl(url)
-    c = "#{GlobalData.params[:controller]}##{GlobalData.params[:action]}"
-    if c == url then
-      return true
-    else
-      return false
-    end
-  end
+
 
   def generate_default_calendar_options
     options = []
@@ -330,16 +235,11 @@ module ApplicationHelper
   def generate_calendar_date_format
     format = t("date.formats.default")
   end
-
-  def get_clock_content
-    ret = ''
-    reg = CashRegister.find_by_id($User.meta.cash_register_id) if $User
-    ret << "#{$User.username if $User}<br />#{ reg.name if reg }"
-    return ret.html_safe
-  end
+  
   def num2name(num)
     num = num.to_s.gsub('0.','').gsub(',','').gsub('.','')
   end
+  
   def leftpad(str,chars,pad=' ')
     return str if str.length >= chars
     len = str.length
@@ -349,11 +249,19 @@ module ApplicationHelper
     end until len >= chars
     return str
   end
-  def true_false_select
-    return [
-    ["False",false],
-    ["True",true]
-    ]
+
+  
+  def nest_image(object)
+    object.tap do |o|
+      if o.images.empty? then
+        o.images.build
+        o.images.first.image_type = 'logo' if o.class.name == 'Vendor' and o.images.first.image_type.nil?
+      end
+      if o.class.name == 'Vendor' and o.images.count < 2 then
+        o.images.first.image_type = 'logo' if o.images.first.image_type.nil?
+        o.images.build
+        o.images.first.image_type == 'logo' ? o.images.last.image_type = 'invoice_logo' : o.images.last.image_type = 'logo'
+      end
+    end
   end
-  # {END}
 end

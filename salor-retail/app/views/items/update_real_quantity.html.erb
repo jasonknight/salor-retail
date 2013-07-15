@@ -12,6 +12,16 @@ $(document).ready(function () {
   });
   try {
     $('#sku').val('');
+    $('#sku').on('keyup',function (event) {
+      if (event.which == 13) {
+          fetchItem();
+      }
+    });
+    $('#quantity').on('keyup',function (event) {
+      if (event.which == 13) {
+        update_real_quantity_submit();
+      }
+    });
     focusInput($('#sku'));
   } catch (err) {
         txt="There was an error on this page update_real_quantity.\n\n";
@@ -32,9 +42,7 @@ function setState(state) {
       // fetch
       $(confButton).html('<%= I18n.t("helpers.submit.get_item") %>').removeClass('button-inactive');
       setOnEnterKey(function(event){
-        if (enteredSku != $("#sku").val()) {
-          fetchItem();
-        }
+        
       });
       $(confButton).click(function() {
         fetchItem();
@@ -144,7 +152,7 @@ function updateItemQuantities() {
 
 <form id="update_real_quantity_form" submit="handleSubmit()">
 <input type="hidden" name="format" class="hidden-input" value="js" />
-  <table align="center" width="100%">
+  <table align="center" width="400px">
     <tr>
       <td valign="top" width="60">
         <%= I18n.t("activerecord.attributes.sku") %>
@@ -161,14 +169,18 @@ function updateItemQuantities() {
         <input id="quantity" type="text" name="quantity" class="text-input" value="" />
       </td>
     </tr>
+    <tr>
+      <td colspan="2">
+        <div id="msg" class="errors2">&nbsp;</div>
+        <div class="clear">&nbsp;</div>
+        <div class="button-row" align="l" width="100%">
+            <div id="quantity_reset_button" class="button-cancel"><%= I18n.t("helpers.submit.clear") %></div>
+            <div class="spacer">&nbsp;</div>
+            <div id="quantity_confirm_button" class="button-confirm"><%= I18n.t("helpers.submit.get_item") %></div>
+        </div>
+      </td>
+    </tr>
   </table>
 </form>
-<div id="msg" class="errors2">&nbsp;</div>
-<div class="clear">&nbsp;</div>
-<div class="button-row" align="l" width="100%">
-    <div id="quantity_reset_button" class="button-cancel"><%= I18n.t("helpers.submit.clear") %></div>
-    <div class="spacer">&nbsp;</div>
-    <div id="quantity_confirm_button" class="button-confirm"><%= I18n.t("helpers.submit.get_item") %></div>
-</div>
 
-<%= raw content_box_bottom %>
+

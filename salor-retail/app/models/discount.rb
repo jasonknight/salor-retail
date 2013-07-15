@@ -7,13 +7,17 @@
 
 class Discount < ActiveRecord::Base
   include SalorBase
-	include SalorScope
-  include SalorModel
+  include SalorScope
+  #include ActionView::Helpers::NumberHelper
+
   belongs_to :vendor
   belongs_to :location
+  belongs_to :company
   belongs_to :category
   has_and_belongs_to_many :order_items
   has_and_belongs_to_many :orders
+  
+  validates_presence_of :name
   
   APPLIES = [
     [I18n.t("activerecord.models.vendor.one"),"Vendor"],
@@ -79,4 +83,12 @@ class Discount < ActiveRecord::Base
     return item
   end
   
+#   def name_for_receipt
+#     if self.amount_type == 'percent'
+#       amount = number_to_percentage(self.amount, :locale => self.vendor.region)
+#     else
+#       amount = number_to_currency(self.amount, :locale => self.vendor.region)
+#     end
+#     I18n.t('printr.order_receipt.discount') + ' ' + self.name + ' ' + amount
+#   end
 end

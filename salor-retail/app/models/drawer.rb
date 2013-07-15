@@ -7,11 +7,16 @@
 
 class Drawer < ActiveRecord::Base
   include SalorBase
-  include SalorModel
-  belongs_to :owner, :polymorphic => true
-  has_many :drawer_transactions
-  def add(num)
-    self.update_attribute :amount, self.amount + num
-  end
 
+  has_one :user
+  belongs_to :company
+  
+  has_many :orders
+  has_many :drawer_transactions
+
+  monetize :amount_cents, :allow_nil => true
+  
+  def to_json
+    { :amount => self.amount.to_f }.to_json
+  end
 end

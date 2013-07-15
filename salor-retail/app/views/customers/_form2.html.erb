@@ -1,4 +1,4 @@
-<!-- Begin Form -->
+
 <%= form_for(@customer) do |f| %>
 <table width="90%" align="center">
   <tr>
@@ -92,8 +92,7 @@
   <tr>
     <td> <label for="customer_country"><%= t("activerecord.attributes.country") %></label> </td>
     <td> 
-      <input class="keyboardable" id="customer_country" name="customer[country]" value="<%= @customer.country %>" size="30" type="text" /> 
-      <input id="customer_vendor_id" name="customer[vendor_id]" type="hidden" value="<%= $User.vendor_id.to_s %>" />
+      <input class="keyboardable" id="customer_country" name="customer[country]" value="<%= @customer.country %>" size="30" type="text" />
     </td>
   </tr>
   
@@ -105,37 +104,40 @@
     </td>
   </tr>
   
-  <tr>
-    <td> <label for="loyalty_card_points"><%= t("menu.points") %></label> </td>
-    <td> <input class="keyboardable-int" id="loyalty_card_points" name="customer[set_loyalty_card][points]" value="<%= @customer.loyalty_card.points %>" size="30" type="text" /> </td>
-  </tr>
-           
-  <tr>
-    <td> <label for="loyalty_card_sku">SKU</label> </td>
-    <td> <input class="keyboardable-int" id="loyalty_card_sku" name="customer[set_loyalty_card][sku]" value="<%= @customer.loyalty_card.sku %>" size="30" type="text" /> </td>
-  </tr>
+  <%= f.fields_for :loyalty_cards, @customer.loyalty_cards.first do |lf| %>
+    <tr>
+      <td><%= lf.label :points %></td>
+      <td><%= lf.text_field :points %></td>
+    </tr>
+    <tr>
+      <td><%= lf.label :sku %></td>
+      <td><%= lf.text_field :sku %></td>
+    </tr>
+    
+  <% end %>
+  
   <tr>
     <td colspan="2">  
-      <% if not @customer.loyalty_card.sku.blank?  %>
-        <div class="new-item-field">
-          <%
-            b = Barcode.new
-            path = b.create(@customer.loyalty_card.sku)
-          %>
-          <%= link_to b.get_barcode(@customer.loyalty_card.sku) do %>
-            <%= image_tag path %>
-          <% end %>
-          <br />
-            <!-- <%= link_to image_tag("/images/icons/EPS-icon.png", :width => "48"), b.get_barcode(@customer.loyalty_card.sku).gsub('.png','.eps') %> 
-            &nbsp;&nbsp;&nbsp; -->          
-                <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/customers/labels', '&id=#{ @customer.id }&type=lc_sticker')"},32)%> 
-                &nbsp;&nbsp;&nbsp;
-                <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=lc_label')"},32) %> 
-        </div>
+      <% @customer.loyalty_cards.each do |lc| %>
+        <% if not lc.sku.blank?  %>
+          <div class="new-item-field">
+            <%
+              b = Barcode.new(lc)
+              barcodepath = b.create
+            %>
+            <div style="display: inline-block; background-color: white;">
+              <img src="<%= barcodepath %>.png" />
+            </div>
+            <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/customers/labels', '&id=#{ @customer.id }&type=sticker&style=default')"},32)%> 
+            &nbsp;&nbsp;&nbsp;
+            <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=label&style=default')"},32) %> 
+          </div>
         <% end %>
+      <% end %>
     </td>
   </tr>
-    <tr id="notes_row">
+  
+  <tr id="notes_row">
     <td colspan="2">  
       <hr />
       <h2><%= t("views.notes") %></h2> <br />

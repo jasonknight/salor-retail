@@ -1,0 +1,14 @@
+= raw content_box_top(t "menu.shippers")
+
+= form_tag shipper_upload_path(@shipper), :multipart => true do |form|
+  %table{:width => "70%", :align => :center}
+    %tr
+      %td{:colspan => 3}
+        %h2== Format: #{ @shipper.import_format }
+    %tr
+      %td
+        = label_tag 'CSV'
+      %td
+        = file_field_tag :file, :size => 15
+      %td
+        %input{ :type => 'submit', :onclick => '$("#progress").show()', :value => t('menu.upload')}

@@ -29,4 +29,3 @@
 <div class="pagination" align="center">
   <%= paginate @actions if @actions %>
 </div>
-<%= raw content_box_bottom %>

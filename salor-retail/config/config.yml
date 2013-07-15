@@ -6,8 +6,8 @@ signup: true
 :invoice_style: default
 :reports:
   :style: default
-:invoice_pagination_page_one: 200
-:invoice_pagination_page_other: 20
+:invoice_pagination_page_one: 30
+:invoice_pagination_page_other: 6
 app_name: "Salor"
 technician_code: U9479880090210
 stylesheets: 'darker'
@@ -72,6 +72,6 @@ mail:
   port: 110
   user_name: None
   password: None
-  
+:tailor: false
   
   

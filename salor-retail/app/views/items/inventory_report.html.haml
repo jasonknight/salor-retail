@@ -25,8 +25,6 @@
 
 .paper-invoice.invoice_print
   %div
-    - if Vendor.find_by_id(GlobalData.salor_user.meta.vendor_id).logo_image
-      %img.right{ :src => "/vendors/#{ GlobalData.salor_user.meta.vendor_id }/logo_invoice" }
   %div.clear
   %div
     %h2= t '.title'
@@ -34,7 +32,7 @@
 
     - (category_items.size ).times do |cid|
       - next if category_items[cid].nil? or not category_items[cid].any?
-      - cat = Category.scopied.find_by_id(cid)
+      - cat = @current_vendor.categories.find_by_id(cid)
       %h4= cat ? cat.name : t('.no_category')
       %table{ :class => 'striped-table2 has-total' }
         %tr

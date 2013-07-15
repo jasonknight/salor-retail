@@ -53,9 +53,6 @@ es:
       dollar_per_lp: dólar por punto de fidelización
       drop: Depósito
       email: E-mail
-      employee:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Utiliza la caja de
       end_amount: Monto final
       end_date: Fecha final
       eod_show: Mostrar al final del día
@@ -177,6 +174,9 @@ es:
       track_expiry: Monitorear fecha de vencimiento
       type: Tipo
       url: URL
+      user:
+        hourly_rate: Hourly Rate
+        uses_drawer_id: Uses drawer of
       username: Nombre de usuario
       uses_drawer_id: Utiliza la caja de
       value: Valor
@@ -192,6 +192,7 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
+      color: color
     models:
       action:
         one: Acción
@@ -220,9 +221,6 @@ es:
       drawer_transaction:
         one: Transacción de caja
         other: Transacciones de caja
-      employee:
-        one: Empleado
-        other: Empleados
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -271,12 +269,12 @@ es:
       tax_profile:
         one: Tipo de IVA
         other: Tipos de IVA
-      tender_method:
-        one: Forma de pago
-        other: Formas de pago
       transaction_tag:
         one: Etiqueta
         other: Etiquetas
+      user:
+        one: Employee
+        other: Employees
       vendor:
         one: Tienda
         other: Tiendas
@@ -326,7 +324,6 @@ es:
     discount_for: Rebaja de %{store}
     discounts_for: Rebajas de %{store}
     edit_shipper: Editar transportador %{name}
-    employees: Empleados
     expiring_soon: Se vence pronto
     export: Exportar
     item_selection: Selección de artículos
@@ -341,6 +338,7 @@ es:
     time_sheet: Employee Time Sheet
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
+    users: users
   helpers:
     select:
       prompt: Por favor seleccione
@@ -368,9 +366,9 @@ es:
       requesting_connection_status: Solicitando el estado de la conexión...
       title: Quitar el servicio
       user: Usuario
-    user_employee_index:
-      backup_database: Copia de seguridad de la base de datos
-      backup_logfile: Copia de seguridad del archivo de registro
+    user_user_index:
+      backup_database: Backup Database
+      backup_logfile: Backup Logfile
   items:
     database_distiller:
       are_you_sure: Todos los artículos no utilizados serán borrados. Esto es irreversible.
@@ -425,6 +423,7 @@ es:
     cash_registers: Cajas
     categories: Categorías
     clear_order: Borrar
+    close: Close
     configuration: Config.
     contact: Contacto
     current_order: ! 'pedido actual: #%{id}'
@@ -443,19 +442,18 @@ es:
     edit_category: Editar categoría
     edit_customer: Editar cliente
     edit_discount: Editar descuento
-    edit_employee: Editar empleado
     edit_invoice_blurb: Edit Invoice Blurb
     edit_invoice_note: XXX Edit Invoice Note
     edit_item: Editar artículo
     edit_location: Editar ubicación
+    edit_payment_method: Edit Payment Method
     edit_sale_type: XXX Edit Sale Type
     edit_shipment: Editar envío
     edit_shipment_type: Editar tipo de envío
     edit_shipper: Editar transportador %{name}
     edit_tax_profile: Editar tipo de IVA
-    edit_tender_method: Editar método de pago
+    edit_user: Edituser
     edit_vendor: Editar tienda
-    employees: Empleados
     end_day: Finalizar el día
     general_configuration: Configuración general
     home: Inicio
@@ -477,25 +475,26 @@ es:
     new_country: XXX new country
     new_customer: Nuevo cliente
     new_discount: Nuevo descuento
-    new_employee: Nuevo empleado
     new_invoice_blurb: New Invoice Blurb
     new_invoice_note: XXX New Invoice Note
     new_item: Nuevo artículo
     new_location: Nueva ubicación
     new_order: Nuevo
+    new_payment_method: New Payment Method
     new_sale_type: XXX new sale type
     new_shipment: Nuevo envío
     new_shipment_type: Nuevo tipo de envío
     new_shipper: Nuevo transportador
     new_stock_location: Nueva ubicación de stock
     new_tax_profile: Nuevo tipo de IVA
-    new_tender_method: Nuevo método de pago
     new_transaction_tag: New Transaction Tag
+    new_user: New user
     new_vendor: Nueva tienda
     ok: OK
     order: Pedido
     orders: Pedidos
     overview: Vista general
+    payment_methods: Payment Methods
     points: Puntos
     pos: PDV
     print: Imprimir
@@ -519,13 +518,13 @@ es:
     stock_locations: Ubicaciones del stock
     support: Soporte
     tax_profiles: Tipos de IVA
-    tender_methods: Métodos de pago
     transaction_tags: Etiquetas de transacción
     update_gift_card: Actualizar la tarjeta de regalo
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
     upload: Subir a la red
     usb_device: Llave USB
+    users: users
     vendors: Tiendas
     void: Anular
     wholesaler_update: Actualización del disteibuidor
@@ -550,36 +549,6 @@ es:
       sum: Suma
       sum_total: Suma total
       title: Totales
-    report_day:
-      None: No especificado
-      OrderItemRefund: Reintegro de artículo
-      OrderRefund: Reintegro de pedido
-      cash-refunds: Reintegro en efectivo
-      cash_drawer: Caja
-      count_orders: Cuenta de pedidos
-      drop: Depósito
-      from: De
-      gross: Bruto
-      net: Neto
-      noncash-refunds: Reintegro no en efectivo
-      payments: Pagos
-      payout: Extracción
-      payouts: Extracciones
-      revenue: Ganancias
-      sales: Ventas
-      sum: Suma
-      sum_gross: Suma bruta
-      sum_net: Suma neta
-      sum_transactions: Suma de transacciones
-      sums_by_category: Sumas por categoría
-      sums_by_payment_methods: Sumas por métodos de pago
-      sums_by_tax_profile: Sumas por tipo de IVA
-      time: Hora
-      title: Informe del día
-      to: A
-      transaction_tag: Etiqueta de transacción
-      transaction_total: Total de la transacción total
-      transactions: Transacciones
     report_day_range:
       display: Mostrar
       end_date: Fecha final
@@ -630,11 +599,11 @@ es:
       cash-refunds: Reintegros en efectivo
       cash_refunds_total: TOTAL
       no_category: No Category
-      noncash-refunds: Reintegros no en efectivo
       orders_total: Total de pedidos
       payment_method_total: TOTAL
       payments: Pagos
       refund: Reintegro
+      refunds: Refunds
       revenue: Ganancias
       revenue_total: TOTAL
       sales: Centas
@@ -785,8 +754,6 @@ es:
     not_you: ¿No es usted?
     owner_mode: MODALIDAD DUEÑO
     owner_success: Las propiedades del dueño han sido actualizadas con éxito.
-    payment_external_types: efectivo,tarjeta de crédito,tarjeta de regalo,otro
-    payment_internal_types: EnEfectivo,ConTarjetaDeCrédito,ConTarjetaDeRegalo,OtroCliente
     rebate_types:
       fixed: $
       percent: ! '%'
@@ -798,6 +765,36 @@ es:
       logo: logo
       receipt_logo_footer: Pie del recibo con logo
       receipt_logo_header: Encabezamiento del recibo con logo
+    report_day:
+      None: Not specified
+      OrderItemRefund: Item Refund
+      OrderRefund: Order Refund
+      cash-refunds: Cash-Refunds
+      cash_drawer: Cash drawer
+      count_orders: Count of orders
+      drop: drop
+      from: From
+      gross: gross
+      net: net
+      noncash-refunds: Noncash-Refunds
+      payments: Payments
+      payout: payout
+      payouts: payouts
+      revenue: Revenue
+      sales: Sales
+      sum: sum
+      sum_gross: Sum gross
+      sum_net: Sum net
+      sum_transactions: Sum transactions
+      sums_by_category: sums by category
+      sums_by_payment_methods: sums by payment methods
+      sums_by_tax_profile: sums by tax profile
+      time: time
+      title: day report
+      to: To
+      transaction_tag: transaction tag
+      transaction_total: transaction total
+      transactions: transactions
   views:
     advanced_field: Campo avanzado
     cash_register_heading: ! '%{name} para %{store}'

@@ -7,7 +7,7 @@
 
 class Ability
   def initialize(user)
-    can :manage, :all if user.is_owner?
+    can :manage, :all if user.is_user?
     can :read, :all
   end
 end

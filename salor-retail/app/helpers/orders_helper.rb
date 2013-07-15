@@ -9,16 +9,16 @@ module OrdersHelper
   def format_item(item)
     item[:name] = item[:name][0..28]
     if item[:type] == 'integer'
-      item[:price] = number_to_currency item[:price]
-      item[:total] = number_to_currency item[:total]
+      item[:price] = humanized_money_with_symbol item[:price]
+      item[:total] = humanized_money_with_symbol item[:total]
       item[:quantity] = Integer(item[:quantity])
     elsif item[:type] == 'float'
-      item[:price] = number_to_currency item[:price]
-      item[:total] = number_to_currency item[:total]
+      item[:price] = humanized_money_with_symbol item[:price]
+      item[:total] = humanized_money_with_symbol item[:total]
       item[:quantity] = number_with_precision item[:quantity], :precision => 3
     elsif item[:type] == 'percent'
-      item[:total] = number_to_currency item[:total]
-      item[:price] = number_to_percentage item[:price], :precision => 1
+      item[:total] = humanized_money_with_symbol item[:total]
+      item[:price] = number_to_percentage item[:price]
       item[:quantity] = Integer(item[:quantity])
     end
     return item
@@ -26,9 +26,9 @@ module OrdersHelper
 
   def format_tax(tax)
     tax[:value] = number_to_percentage tax[:value]
-    tax[:net] = number_to_currency tax[:net]
-    tax[:tax] = number_to_currency tax[:tax]
-    tax[:gross] = number_to_currency tax[:gross]
+    tax[:net] = humanized_money_with_symbol tax[:net]
+    tax[:tax] = humanized_money_with_symbol tax[:tax]
+    tax[:gross] = humanized_money_with_symbol tax[:gross]
     return tax
   end
 end

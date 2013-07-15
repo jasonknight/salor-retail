@@ -5,67 +5,125 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
-# {VOCABULARY} item_price item_category item_location_id tax_profile_info info foreign_key_constraint logging_time coupon_amount_paid paying_agent reimburseable unknown_item
-# {VOCABULARY} location_reversed info_on_category real_category_name part_ident part_qty2 quantity_of_sale gift_card_remainder coupon_b1g1 gift_card_owner
+# TODO:
+# * validate that gift card items always have a tax class of 0%. this is needed so that the taxes are correct when using gift cards. also, it would not make order total 0 in those cases where gift_card_amount is greater than order total.
+
 class Item < ActiveRecord::Base
-  # {START}
+
   include SalorScope
-  include SalorError
   include SalorBase
-  include SalorModel
+
   belongs_to :category
   belongs_to :vendor
+  belongs_to :company
   belongs_to :location
   belongs_to :tax_profile
   belongs_to :item_type
   belongs_to :item
   belongs_to :shipper
-  has_many :actions, :as => :owner, :order => "weight asc"
+  has_many :order_items
+  has_many :item_shippers
+  has_many :item_stocks
+  has_many :actions, :as => :model, :order => "weight asc"
   has_many :parts, :class_name => 'Item', :foreign_key => :part_id
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
   belongs_to :child, :class_name => 'Item'
-  has_many :order_items
+
+  monetize :price_cents, :allow_nil => true
+  monetize :gift_card_amount_cents, :allow_nil => true
+  monetize :purchase_price_cents, :allow_nil => true
+  monetize :buy_price_cents, :allow_nil => true
+  monetize :manufacturer_price_cents, :allow_nil => true
+
   
-  has_many :item_shippers
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
   
-  has_many :item_stocks
   accepts_nested_attributes_for :item_stocks, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }, :allow_destroy => true
 
+  validates_presence_of :sku, :item_type, :vendor_id, :company_id
+  validates_uniqueness_of :sku, :scope => :vendor_id
 
-  validates_presence_of :sku
-  validate :validify
-
-
-  #scope :by_vendor, lambda {|vid| where(:vendor_id => vid)}
-  #scope :visible, lambda { where("hidden = 0") }
-  #scope :by_keywords, lambda {|keywords| where("name LIKE '%#{keywords}%' OR sku LIKE '#{keywords}%'")}
-
-  after_create :set_amount_remaining
-  
   before_save :run_actions
+  before_save :cache_behavior
+  
   COUPON_TYPES = [
       {:text => I18n.t('views.forms.percent_off'), :value => 1},
       {:text => I18n.t('views.forms.fixed_amount_off'), :value => 2},
       {:text => I18n.t('views.forms.buy_one_get_one'), :value => 3}
   ]
-  REORDER_TYPES = ['default_export','tobacco_land']
-  def coupon_type=(t)
-    write_attribute(:coupon_type,1) if t == 'percent'
-    write_attribute(:coupon_type,2) if t == 'fixed'
-    write_attribute(:coupon_type,3) if t == 'b1g1'
-    write_attribute(:coupon_type,t) if t.class == Fixnum
+  
+  SHIPPER_EXPORT_FORMATS = ['default_export','tobacco_land']
+  
+  SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
+  
+  
+  # ----- old name aliases getters
+  
+  def buyback_price
+    return self.buy_price
   end
-  def self.csv_headers
-    return [:class,:name,:sku,:base_price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
+  
+  def base_price
+    return self.price
   end
-  def get_item_type
-    if not self.item_type then
-      self.update_attribute :item_type_id, ItemType.first.id
-    end
-    self.reload
-    self.item_type
+  
+  def amount_remaining
+    return self.gift_card_amount
   end
+  # ------ end old name aliases getters
+  
+  
+  # ----- old name aliases setters
+  def buyback_price=(p)
+    self.buy_price_cents = self.string_to_float(p) * 100.0
+  end
+  
+  def base_price=(p)
+    p = self.string_to_float(p) * 100.0
+    self.price_cents = p
+  end
+  
+  def amount_remaining=(p)
+    p = self.string_to_float(p) * 100.0
+    self.gift_card_amount_cents = p
+  end
+  # ------ end old name aliases setters
+  
+  
+  
+  
+  
+
+
+
+  # ----- convenience methods for CSV
+  def tax_profile_amount
+    return self.tax_profile.value
+  end
+  
+  def category_name
+    return self.category.name if self.category
+  end
+  
+  def location_name
+    return self.location.name if self.location
+  end
+  
+  def location_name=(n)
+    self.location = self.vendor.locations.visible.find_by_name(n)
+  end
+  
+  def tax_profile_name
+    return self.tax_profile.name if self.tax_profile
+  end
+  
+  def tax_profile_name=(n)
+    self.tax_profile = self.vendor.tax_profiles.visible.find_by_name(n)
+  end
+  # ----- convenience methods for CSV
+  
+  
+  # ----- CSV methods
   def to_csv(headers=nil)
     headers = Item.csv_headers if headers.nil?
     values = []
@@ -74,21 +132,23 @@ class Item < ActiveRecord::Base
     end
     return values.join("\t")
   end
-  def tax_profile_name
-    n = 'NoTaxProfile'
-    return self.tax_profile.name if self.tax_profile
-    return n
+  
+    def self.csv_headers
+    return [:class,:name,:sku,:price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
   end
-  def behavior=(b)
-    self.item_type = ItemType.find_by_behavior(b)
-    write_attribute :behavior,b
+  # ----- end CSV methods
+
+  def gs1_regexp
+    parts = self.gs1_format.split(",")
+    return Regexp.new "(\\d{#{ parts[0] }})(\\d{#{ parts[1] }})"
   end
+
   def get_translated_name(locale=:en)
     locale = locale.to_s
     trans = read_attribute(:name_translations)
     if self.behavior == 'gift_card'
       return I18n.t('activerecord.models.item_type.gift_card', :locale => locale)
-    elsif trans.empty? or trans.nil?
+    elsif trans.nil? or trans.empty?
       return read_attribute(:name)
     else
       hash = ActiveSupport::JSON.decode(trans)
@@ -99,80 +159,51 @@ class Item < ActiveRecord::Base
       end
     end
   end
+  
   def name_translations=(hash)
     write_attribute(:name_translations,hash.to_json)
   end
+  
   def name_translations
     text = read_attribute(:name_translations)
-    if text.empty? or text.nil? then
+    if text.nil? or text.empty? then
       return {}
     else
       return ActiveSupport::JSON.decode(text)
     end
   end
-  def item_type_name=(name)
-    it = ItemType.find_by_behavior(name)
-    if it then
-      self.item_type_id = it.id
-    end
-  end
-  def category_name
-    return self.category.name if self.category
-  end
-  def category_name=(str)
-    c = Category.scopied.find_by_name(str)
-    if c then
-      self.category = c
-    end
-  end
-  def location_name
-    return self.location.name if self.location
-    return "NoLocation"
-  end
-  def self.repair_items
-    Item.where('child_id IS NOT NULL and child_id != 0').each do |item|
-      if item.parent or item.child then
-        if item.child then
-          if item.parent and item.child.id == item.parent.id then
-            puts "#{item.sku} parent.id == child.id"
-            item.parent.update_attribute :child_id, 0
-          end
-          if item.child_sku == item.sku then
-            puts "#{item.sku} == child_sku"
-            item.update_attribute :child_id, 0
-          end
-        end
-        if item.parent_sku == item.sku then
-          puts "#{item.sku} == parent_sku"
-          item.parent.update_attribute :child_id,0
-        end
-      end # end if item.parent or item.child
-    end
-  end
-  #
+
   def run_actions
-    if self.actions.any? then
+    if self.actions.visible.any? then
       Action.run(self, :on_save)
     end
   end
+  
+  def cache_behavior
+    write_attribute :behavior, self.vendor.item_types.visible.find_by_id(self.item_type_id).behavior
+  end
+  
   def parent_sku
     if self.parent then
       return self.parent.sku
     end
     ""
   end
+  
   def child_sku
     if self.child then
       return self.child.sku
     end
     ""
   end
-  def parent
-    Item.visible.find_by_child_id(self.id) unless self.new_record?
-  end
-  def child
-    Item.visible.find_by_id(self.child_id)
-  end
+  
+#   def parent
+#     Item.visible.find_by_child_id(self.id) unless self.new_record?
+#   end
+#   def child
+#     Item.visible.find_by_id(self.child_id)
+#   end
+  
   def parent_sku=(string)
     if string.empty? then
       self.parent = nil
@@ -196,6 +227,7 @@ class Item < ActiveRecord::Base
       errors.add(:parent_sku, I18n.t('system.errors.parent_sku_must_exist'))
     end
   end
+  
   def child_sku=(string)
     if string.empty? then
       self.child = nil
@@ -203,251 +235,109 @@ class Item < ActiveRecord::Base
     end
     if self.sku == string then
       errors.add(:child_sku,I18n.t("system.errors.child_sku"))
-        GlobalErrors.append_fatal("system.errors.child_sku")
       return
     end
     c = self.vendor.items.visible.find_by_sku(string)
     if c then
       if self.parent and self.parent.id == c.id then
         errors.add(:child_sku, I18n.t("system.errors.child_sku"))
-        GlobalErrors.append_fatal("system.errors.child_sku")
         self.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
       else
         self.update_attribute(:child_id,c.id)
       end
     else
       errors.add(:child_sku, I18n.t('system.errors.child_sku_must_exist'))
-      GlobalErrors.append_fatal("system.errors.child_sku_must_exist")
     end
   end
+  
   def self.search(keywords)
     if keywords =~ /([\w]+) (\d{1,2}[\.\,]\d{1,2})/ then
       parts = keywords.match(/([\w]+) (\d{1,2}[\.\,]\d{1,2})/)
-      price = SalorBase.string_to_float(parts[2])
-      return Item.scopied.where("name LIKE '%#{parts[1]}%' and base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}")
+      price = SalorBase.string_to_float(parts[2]) * 100
+      return Item.scopied.where("name LIKE '%#{parts[1]}%' and price_cents > #{(price - 500).to_i} and price_cents < #{(price + 500).to_i}")
     else
       return Item.scopied.where("name LIKE '%#{parts[1]}%'")
     end
   end
-  def self.get_by_code(code)
-    # Let's see if they entered a price
-    pm = code.match(/(\d{1,9}[\.\,]\d{1,2})/)
-    if pm and pm[1] then
-      i = Item.scopied.where("sku LIKE 'DMY%' and base_price = #{SalorBase.string_to_float(code)}") 
-      if i.empty? then
-        i = Item.scopied.find_or_create_by_sku("DMY" + $User.id.to_s + Time.now.strftime("%y%m%d") + rand(999).to_s)
-        i.base_price = code
-        i.make_valid
-        i.save
-        return i
-      end 
-      if i.respond_to? :first and i.first
-        i = i.first
-      end
-      return i
-    end # end if pm
-
-    item = Item.scopied.find_by_sku(code)
-    return item if item
-    #We didn't find it, so let's see if we can parse the code.
-    m = code.match(/\d{2}(\d{5})(\d{5})/)
-    item = Item.scopied.find_by_sku(m[1]) if m
-    if item then
-      if not item.is_gs1 == true then
-        item.update_attribute(:is_gs1, true)
-      end
-      return item
-    end
-    lcard = LoyaltyCard.find_by_sku(code)
-    return lcard if lcard
-    #oops, still haven't found it, let's creat a dummy item
-    i = Item.scopied.find_or_create_by_sku(code)
-    i.vendor_id = $Vendor.id
-    i.make_valid
-    return i
+  
+  def create_action
+    action = Action.new
+    action.vendor = self.vendor
+    action.company = self.company
+    action.model = self
+    action.name = Time.now.strftime("%Y%m%d%H%M%S")
+    action.save
+    return action
   end
-
-  def price
-    conds = "(item_sku = '#{self.sku}' and applies_to = 'Item') OR (location_id = '#{self.location_id}' and applies_to = 'Location') OR (category_id = '#{self.category_id}' and applies_to = 'Category') OR (applies_to = 'Vendor' and amount_type = 'percent')"
-    price = self.base_price
-    discounted = false
-    damount = 0
-    Discount.scopied.where(conds).each do |discount|
-      if discount.amount_type == 'percent' then
-        d = discount.amount / 100
-        damount = (self.base_price * d)
-        price -= damount
-      elsif discount.amount_type == 'fixed' then
-        damount = discount.amount
-        price -= damount
-      end
-      discounted = true
-    end
-    return [price,discounted,damount]
-  end
-
-  def base_price=(p)
-    p = self.string_to_float(p)
-    write_attribute(:base_price,p.to_f)
-  end
+  
+  # ----- setters for advanced float parsing
   def purchase_price=(p)
-    p = self.string_to_float(p)
+    if p.class == String then
+      p = self.string_to_float(p)
+      self.purchase_price = p
+      return
+    end
     write_attribute(:purchase_price,p)
   end
-  def amount_remaining=(p)
-    write_attribute(:amount_remaining,self.string_to_float(p))
-  end
-  def tax_profile_id=(id)
-    tp = TaxProfile.find_by_id(id)
-    if tp then
-      write_attribute(:tax_profile_amount,tp.value)
-      write_attribute(:tax_profile_id,id)
-    end
-  end
-  def item_type_id=(id)
-    write_attribute(:behavior,ItemType.find(id).behavior)
-    write_attribute(:item_type_id,id)
-  end
+
   def height=(p)
     p = self.string_to_float(p)
     write_attribute(:height,p)
   end
+  
   def width=(p)
     p = self.string_to_float(p)
     write_attribute(:width,p)
   end
+  
   def weight=(p)
     p = self.string_to_float(p)
     write_attribute(:weight,p)
   end
+  
   def length=(p)
     p = self.string_to_float(p)
     write_attribute(:length,p)
   end
+  
   def min_quantity=(p)
     p = self.string_to_float(p)
     write_attribute(:min_quantity,p)
   end
+  
   def packaging_unit=(p)
     p = self.string_to_float(p)
     write_attribute(:packaging_unit,p)
   end
-  def part_skus=(items)
-    ids = []
-    vid = $User.meta.vendor_id
-    items.each do |item|
-      i = Item.find_by_sku(item[:sku])
+  
+  def tax_profile_amount=(amnt)
+    tp = self.vendor.tax_profiles.visible.find_by_value(SalorBase.to_float(amnt))
+    if tp then
+      self.tax_profile = tp
+    end
+  end
+  # ----- end setters for advanced float parsing
+  
+  # ----- string setters for relations
+  def category_name=(n)
+    self.category = self.vendor.categories.visible.find_by_name(n)
+  end
+  # ----- end string setters for relations
+  
+  
+  def assign_parts(hash={})
+    self.parts = []
+    hash ||= {}
+    hash.each do |h|
+      i = self.vendor.items.visible.find_by_sku(h[:sku])
       if i then
-        i.vendor_id = vid
-        i.is_part = 1
-        i.part_quantity = self.string_to_float(item[:part_quantity])
+        i.is_part = true
+        i.part_quantity = self.string_to_float(h[:part_quantity])
         i.save
-        if i then
-          ids << i.id
-        end
-      else
-        errors.add :sku, I18n.t("system.errors.failed_to_save_parts")
-        return
+        self.parts << i
       end
     end
-    begin
-      self.part_ids = ids if ids.any?
-    rescue
-      errors.add(:sku,I18n.t("system.errors.failed_to_save_parts"));
-#       GlobalErrors.append_fatal(I18n.t("system.errors.failed_to_save_parts"),self)
-#       GlobalErrors.append_fatal($!.message,self)
-    end
-  end
-  def batches
-    []
-  end
-  def batch_skus=(batches)
-    ids = []
-    batches.each do |batch|
-      batch[:expires_on] = Date.parse(batch[:expires_on])
-      b = Batch.find_or_create_by_sku(batch[:sku])
-      b.set_model_owner
-      b.add_item(self)
-      b.update_attributes(batch)
-      b.save
-    end
-  end
-
-  def gift_card?
-    self.item_type.behavior == 'gift_card'
-  end
-  def coupon?
-    self.item_type.behavior == 'coupon'
-  end
-  def make_valid
-    self.sku = self.sku.upcase
-    invld = false
-    if self.vendor_id.nil? then
-      self.vendor_id = $Vendor.id
-      invld = true
-    end
-    if self.name.blank? then
-      self.name = I18n.t("views.dummy_item")
-      invld = true
-    end
-    if self.quantity.nil? then
-      self.quantity = 0
-      invld = true
-    end
-    if self.quantity_sold.nil? then
-      self.quantity_sold = 0
-      invld = true
-    end
-    if self.base_price.nil? then
-      self.base_price = 0
-      invld = true
-    end
-    if not self.item_type_id then
-      # puts "Setting Default ItemType"
-      self.item_type_id = ItemType.find_by_behavior('normal').id
-      invld = true
-    end
-    if self.behavior.blank? then
-      raise self.item_type.inspect
-      self.behavior = self.item_type.behavior
-    end
-    if not self.tax_profile then
-      # puts "Setting Default TaxProfile"
-      tp = TaxProfile.scopied.where(:default => true).first
-      if tp then
-        self.tax_profile_id = tp.id
-      else
-        self.tax_profile_id = GlobalData.tax_profiles.first.id
-      end
-      invld = true
-    end
-    if invld then
-      save(:validate => false)
-    end
-  end
-  def validify
-    @item = Item.all_seeing.find_by_sku(self.sku)
-    if not @item.nil? and not self.id == @item.id then
-      errors.add(:sku, I18n.t('system.errors.sku_must_be_unique',:sku => self.sku))
-      GlobalErrors.append_fatal('system.errors.sku_must_be_unique',self,{:sku => self.sku});
-      return
-    end
-    make_valid
-    if self.item_type.behavior == 'coupon' then
-      unless Item.find_by_sku(self.coupon_applies) then
-        errors.add(:coupon_applies,I18n.t('views.item_must_exist'))
-        GlobalErrors.append_fatal('views.item_must_exist');
-      end
-    end
-    if self.parent_sku == self.sku then
-        errors.add(:coupon_applies,I18n.t('system.errors.parent_sku'))
-    end
-    if self.child_sku == self.sku then
-        errors.add(:coupon_applies,I18n.t('system.errors.child_sku'))
-    end 
-  end
-  def set_amount_remaining
-    self.update_attribute(:amount_remaining,self.base_price)
+    self.save
   end
   
   def from_shipment_item(si)
@@ -470,94 +360,112 @@ class Item < ActiveRecord::Base
       return i
     else
       # puts "No item found..."
-      GlobalErrors.append_fatal("system.errors.item_not_found")
     end
     return nil
   end
   
   
   # Reorder recommendation csvs
-  
-  def self.recommend_reorder(type)
-    shippers = Shipper.where(:vendor_id => $User.vendor_id).visible.find_all_by_reorder_type(type)
-    shippers << nil if type == 'default_export'
-    items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
-    if not items.any? then
-      return nil 
-    end
-    unless type == 'default_export'
-      # Now we need to create a shipment
-      shipment = Shipment.new({
-          :name => I18n.t("activerecord.models.shipment.default_name") + " - " + I18n.l(Time.now,:format => :salor),
-          :price => items.sum(:purchase_price),
-          :receiver_id => $Vendor.id,
-          :receiver_type => 'Vendor',
-          :shipper_id => shippers.first.id,
-          :shipment_type => ShipmentType.scopied.first,
-          :shipper_type => 'Shipper'
-      })
-      shipment.save
-      items.each do |item|
-        si = ShipmentItem.new({
-            :name => item.name,
-            :base_price => item.base_price,
-            :category_id => item.category_id,
-            :location_id => item.location_id,
-            :item_type_id => item.item_type_id,
-            :shipment_id => shipment.id,
-            :sku => item.sku,
-            :quantity => item.min_quantity - item.quantity,
-            :vendor_id => $Vendor.id
-        })
-        si.save
-      end
-    end
-    return Item.send(type.to_sym,items)
-  end
-  def self.tobacco_land(items)
-    lines = []
-    items.each do |item|
-      sku = item.shipper_sku.blank? ? item.sku[0..3] : item.shipper_sku[0..3]
-      lines << "%s %04d" % [sku,(item.min_quantity - item.quantity).to_i] 
-    end
-    return lines.join("\x0D\x0A")
-  end
-  def self.default_export(items)
-    lines = []
-    items.each do |item|
-      shippername = item.shipper ? item.shipper.name : ''
-      lines << "%s\t%s\t%s\t%d\t%f" % [shippername,item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
-    end
-    return lines.join("\n")
-  end
+  # TODO: The following 3 methods should go into Shipper
+#   def self.recommend_reorder(type)
+#     shippers = Shipper.where(:vendor_id => @current_user.vendor_id).visible.find_all_by_reorder_type(type)
+#     shippers << nil if type == 'default_export'
+#     items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
+#     if not items.any? then
+#       return nil 
+#     end
+#     unless type == 'default_export'
+#       # Now we need to create a shipment
+#       shipment = Shipment.new({
+#           :name => I18n.t("activerecord.models.shipment.default_name") + " - " + Time.now,
+#           :price => items.sum(:purchase_price),
+#           :receiver_id => $Vendor.id,
+#           :receiver_type => 'Vendor',
+#           :shipper_id => shippers.first.id,
+#           :shipment_type => ShipmentType.scopied.first,
+#           :shipper_type => 'Shipper'
+#       })
+#       shipment.save
+#       items.each do |item|
+#         si = ShipmentItem.new({
+#             :name => item.name,
+#             :base_price => item.base_price,
+#             :category_id => item.category_id,
+#             :location_id => item.location_id,
+#             :item_type_id => item.item_type_id,
+#             :shipment_id => shipment.id,
+#             :sku => item.sku,
+#             :quantity => item.min_quantity - item.quantity,
+#             :vendor_id => $Vendor.id
+#         })
+#         si.save
+#       end
+#     end
+#     return Item.send(type.to_sym,items)
+#   end
+#   
+#   def self.tobacco_land(items)
+#     lines = []
+#     items.each do |item|
+#       sku = item.shipper_sku.blank? ? item.sku[0..3] : item.shipper_sku[0..3]
+#       lines << "%s %04d" % [sku,(item.min_quantity - item.quantity).to_i] 
+#     end
+#     return lines.join("\x0D\x0A")
+#   end
+#   
+#   def self.default_export(items)
+#     lines = []
+#     items.each do |item|
+#       shippername = item.shipper ? item.shipper.name : ''
+#       lines << "%s\t%s\t%s\t%d\t%f" % [shippername,item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
+#     end
+#     return lines.join("\n")
+#   end
 
   def quantity=(q)
-    q = 0 if q.nil? or q.blank?
-    q = q.to_s.gsub(',','.')
-    q = q.to_f.round(3)
-    difference = q - self.quantity
-    write_attribute(:quantity, q) and return unless difference < 0 and q == q.round and self.quantity == self.quantity.round
-    # continue only for integer quantities and decrementation
-    difference.to_i.abs.times do
-      i = self.quantity - 1
-      if i == -1
-        if self.parent.class == Item
-          #puts "Updating parent #{self.parent.name} qty";
-          before = self.parent.quantity
-          #puts "Before #{before}"
-          self.parent.update_attribute :quantity, before - 1 # recursion
-          after = self.parent.quantity
-          #puts "After #{after}"
-          parent_reducable = before != after
-          write_attribute(:quantity, self.parent.packaging_unit - 1) if parent_reducable
+    if self.parent or self.child
+      q = 0 if q.nil? or q.blank?
+      q = q.to_s.gsub(',','.')
+      q = q.to_f.round(3)
+      difference = q - self.quantity
+      write_attribute(:quantity, q) and return unless difference < 0 and q == q.round and self.quantity == self.quantity.round
+      # continue only for integer quantities and decrementation
+      difference.to_i.abs.times do
+        i = self.quantity - 1
+        if i == -1
+          if self.parent.class == Item
+            #puts "Updating parent #{self.parent.name} qty";
+            before = self.parent.quantity
+            #puts "Before #{before}"
+            self.parent.update_attribute :quantity, before - 1 # recursion
+            after = self.parent.quantity
+            #puts "After #{after}"
+            parent_reducable = before != after
+            write_attribute(:quantity, self.parent.packaging_unit - 1) if parent_reducable
+          else
+            b = write_attribute :quantity, 0
+          end
         else
-          b = write_attribute :quantity, 0
+          c = write_attribute :quantity, i
         end
-      else
-        c = write_attribute :quantity, i
       end
+    else
+      puts "WRITING #{ q }"
+      write_attribute :quantity, q
     end
   end
+  
+  def hide(by)
+    self.hidden = true
+    self.hidden_by = by
+    self.hidden_at = Time.now
+    self.save
+    
+    # TODO: needs to be tested
+    b = self.vendor.buttons.visible.where(:sku => self.sku)
+    b.update_all :hidden => true, :hidden_by => by, :hidden_at => Time.now
+  end
+  
   def to_record
     attrs = self.attributes.clone
     attrs[:category] = self.category.name if self.category
@@ -574,5 +482,7 @@ class Item < ActiveRecord::Base
     end
     attrs
   end
-  # {END}
+  
+
+
 end

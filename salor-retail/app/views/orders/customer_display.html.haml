@@ -1,39 +1,19 @@
 .customer-display
-  .logo
-    - if @vendor.logo_image
-      %img{ :src => "/vendors/#{ @vendor.id }/logo" }
+  .logo= image_tag @current_vendor.image('invoice_logo')
 
   - @report[:list_of_items_raw].reverse[0..4].each do |item|
-    %div{ :class => "#{ item[:price] < 0 ? 'highlighted' : '' }" }
+    - highlight = item[:price].blank? or item[:price] < 0
+    %div{ :class => "#{ highlight  ? 'highlighted' : '' }" }
       - item = format_item(item)
       - item.each do |k,v|
         - next if k == :type or k == :letter
         %span{ :class => k }= v
-  - if not @report[:lc_points_discount].zero?
-    %div.highlighted
-      %span.name= t('printr.order_receipt.lc_points_substracted')
-      %span.price
-      %span.quantity= Integer(@report[:lc_points])
-      %span.total= number_to_currency @report[:lc_points_discount]
-
-  - if @report[:percent_rebate_amount]
-    %div.highlighted
-      %span.name= t('printr.order_receipt.rebate_percent')
-      %span.price
-      %span.quantity= number_to_percentage @report[:percent_rebate], :precision => 1
-      %span.total= number_to_currency @report[:percent_rebate_amount]
-  - elsif @report[:fixed_rebate_amount]
-    %div.highlighted
-      %span.name= t('printr.order_receipt.rebate_fixed')
-      %span.price
-      %span.quantity
-      %span.total= number_to_currency @report[:fixed_rebate_amount]
 
 
-  %div#subsubtotal= number_to_currency @order.gross
+  %div#subsubtotal= humanized_money_with_symbol @report[:subtotal]
 
-  - if params[:display_change] == '1'
-    %div#change== #{ t('printr.order_receipt.change') }: #{ number_to_currency @order.change_given }
+  - if @report[:change]
+    %div#change== #{ t('printr.order_receipt.change') }: #{ humanized_money_with_symbol @report[:change] }
 
   - if @report[:customer]
     .customerdetails
@@ -45,5 +25,9 @@
       %br
       %span== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
-
-
+- if @report[:change]
+  :javascript
+    setTimeout(function() {
+      window.location = window.location.origin + "/vendors/#{ @current_vendor.id }/display_logo";
+    },
+    5000);
