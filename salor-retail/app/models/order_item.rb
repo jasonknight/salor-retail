@@ -23,7 +23,8 @@ class OrderItem < ActiveRecord::Base
   has_many :coupons, :class_name => 'OrderItem', :foreign_key => :coupon_id
   belongs_to :order_item,:foreign_key => :coupon_id
   has_many :histories, :as => :user
-  has_one :drawer_transaction
+  has_one :drawer_transaction # set for refunds only
+  has_one :payment_method_item # set for refunds only
 
 
   monetize :total_cents, :allow_nil => true
@@ -68,33 +69,6 @@ class OrderItem < ActiveRecord::Base
     self.calculate_totals
   end
   
-  def create_refund_transaction(amount, type, user, opts)
-    dt = DrawerTransaction.new(opts)
-    dt[type] = true
-    dt.amount = amount
-    dt.drawer_id = user.get_drawer.id
-    dt.drawer_amount = user.get_drawer.amount
-    dt.order_id = self.order.id
-    dt.order_item_id = self.id
-    if dt.save then
-      if type == :payout then
-        user.get_drawer.update_attribute(:amount, user.get_drawer.amount - dt.amount)
-      elsif type == :drop then
-        @current_user.get_drawer.update_attribute(:amount, user.get_drawer.amount + dt.amount)
-      end
-    else
-      raise dt.errors.full_messages.inspect
-    end
-  end
-  
-  def create_refund_payment_method(amount,refund_payment_method)
-    PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
-                         :name => (refund_payment_method + 'Refund'), 
-                         :amount => - amount, 
-                         :order_id => self.order.id
-                        )
-  end
-  
   def tax=(value)
     tax_profile = self.vendor.tax_profiles.visible.find_by_value(value)
     ActiveRecord::Base.logger.info "TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tax_profile
@@ -113,19 +87,22 @@ class OrderItem < ActiveRecord::Base
     pmi = PaymentMethodItem.new
     pmi.vendor = self.vendor
     pmi.company = self.company
+    pmi.currency = self.vendor.currency
     pmi.order = self.order
     pmi.user = user
     pmi.drawer = drawer
     pmi.amount = - self.total
     pmi.payment_method = refund_payment_method
+    pmi.order_item_id = self.id
     pmi.cash = refund_payment_method.cash
     pmi.refund = true
     pmi.save
     
     if refund_payment_method.cash == true
       dt = DrawerTransaction.new
-      dt.vendor = refund_payment_method.vendor
-      dt.company = user.company
+      dt.vendor = self.vendor
+      dt.company = self.company
+      dt.currency = self.vendor.currency
       dt.user = user
       dt.refund = true
       dt.tag = 'OrderItemRefund'
@@ -144,7 +121,6 @@ class OrderItem < ActiveRecord::Base
     self.refunded = true
     self.refunded_by = user.id
     self.refunded_at = Time.now
-    self.refund_payment_method_item_id = pmid.to_i
     self.calculate_totals
     
     order = self.order
@@ -169,10 +145,10 @@ class OrderItem < ActiveRecord::Base
   def price=(p)
     if p.class == String
       # a string is sent from Vendor.edit_field_on_child
-      p = Money.new(self.string_to_float(p) * 100)
+      p = Money.new(self.string_to_float(p) * 100.0, self.currency)
     elsif p.class == Float
       # not sure which parts of the code send a Float, but we leave it here for now
-      p = Money.new(p * 100)
+      p = Money.new(p * 100.0, self.currency)
     end
     
     # this is needed for dynamically created gift cards on the POS screen.
@@ -205,6 +181,7 @@ class OrderItem < ActiveRecord::Base
   def set_attrs_from_item(item)
     self.vendor       = item.vendor
     self.company      = item.company
+    self.currency     = item.currency # all Items must be validated to have the same currency as the parent Vendor. The system does not support adding Items of different currencies into one order.
     self.item         = item
     self.sku          = item.sku
     self.price        = item.price
@@ -227,22 +204,18 @@ class OrderItem < ActiveRecord::Base
   # This method is only called on add to order
   # otherwise calculate_totals is called
   def modify_price
-
     log_action "Modifying price"
+    self.modify_price_for_actions
     self.modify_price_for_gs1
     if self.is_buyback
       log_action "modify_price_for_buyback"
       self.modify_price_for_buyback 
     end
     self.modify_price_for_parts
-    if self.behavior == 'coupon' then
-      self.apply_coupon
-    end
     if self.behavior == 'gift_card'
       log_action "modify_price_for_giftcards"
       self.modify_price_for_giftcards 
     end
-    self.modify_price_for_actions
     self.save
   end
   
@@ -319,50 +292,48 @@ class OrderItem < ActiveRecord::Base
       self.total += tax_amount
     else
       # this is for the Europe tax system. Note that self.total already includes taxes, so we don't have to modify it here.
-      self.tax_amount = self.total / ( 1 + self.tax / 100.0 )
+      self.tax_amount = self.total * ( 1 - 1 / ( 1 + self.tax / 100.0))
     end
   end
   
   # coupons have to be added after the matching product
   # coupons do not have a price by themselves, they just reduce the total of the matching OrderItem. Note that this method does not act on self, but to the matching OrderItem.
   def apply_coupon
-    if self.behavior == 'coupon'
-      item = self.item
-      
-      # coitem is the OrderItem to which the coupon acts upon
-      coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
-      if coitem
-        unless coitem.coupon_amount.zero? then
-          log_action "This item is a coupon, but a coupon_amount has already been set"
-          return
-        end
-        ctype = self.item.coupon_type
-        if ctype == 1
-          # percent rebate
-          log_action "Percent rebate coupon"
-          coitem.coupon_amount = coitem.total * (self.price.to_f / 100)
-        elsif ctype == 2
-          # fixed amount
-          log_action "Fixed amount coupon"
-          coitem.coupon_amount = self.price
-        elsif ctype == 3
-          # buy x get y free
-          log_action "B1G1"
-          x = 2
-          y = 1
-          if coitem.quantity >= x
-            coitem.coupon_amount = coitem.total / coitem.quantity * y
-          end
-        end
-        log_action "Ttotal is: #{coitem.total} and coupon_amount is #{coitem.coupon_amount}"
-        coitem.total -= coitem.coupon_amount
-        coitem.calculate_tax
-        coitem.save
-        
-      else
-        log_action "coitem was not found"
+    return unless self.behavior == 'coupon'
+    
+    item = self.item
+    
+    # coitem is the OrderItem to which the coupon acts upon
+    coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
+    log_action "coitem was not found" and return if coitem.nil?
+
+    unless coitem.coupon_amount.zero? then
+      log_action "This item is a coupon, but a coupon_amount has already been set"
+      return
+    end
+    
+    ctype = self.item.coupon_type
+    if ctype == 1
+      # percent rebate
+      log_action "Percent rebate coupon"
+      coitem.coupon_amount = coitem.total * (self.price.to_f / 100)
+    elsif ctype == 2
+      # fixed amount
+      log_action "Fixed amount coupon"
+      coitem.coupon_amount = self.price
+    elsif ctype == 3
+      # buy x get y free
+      log_action "B1G1"
+      x = 2
+      y = 1
+      if coitem.quantity >= x
+        coitem.coupon_amount_cents = y * coitem.total_cents / coitem.quantity
       end
     end
+    log_action "Total is: #{coitem.total} and coupon_amount is #{coitem.coupon_amount}"
+    coitem.total -= coitem.coupon_amount
+    coitem.calculate_tax
+    coitem.save
   end
   
   def apply_rebate
@@ -424,7 +395,7 @@ class OrderItem < ActiveRecord::Base
       raise "could not find Item for OrderItem #{ self.id }" if item.nil?
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
       raise "could not find orderitem #{ item.coupon_applies.inspect }" if coitem.nil?
-      coitem.coupon_amount = Money.new(0)
+      coitem.coupon_amount = Money.new(0, self.currency)
       coitem.calculate_totals
     end
     self.order.calculate_totals

@@ -16,6 +16,7 @@ class BrokenItem < ActiveRecord::Base
   monetize :price_cents, :allow_nil => true
   
   after_create :decrement_item_quantity
+  
   validates_presence_of :sku
   validates_presence_of :quantity
   

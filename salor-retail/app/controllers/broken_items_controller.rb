@@ -31,6 +31,7 @@ class BrokenItemsController < ApplicationController
     @item = BrokenItem.new(params[:broken_item])
     @item.vendor = @current_vendor
     @item.company = @current_company
+    @item.currency = @current_vendor.currency
     if @item.save
       redirect_to broken_items_path
     else

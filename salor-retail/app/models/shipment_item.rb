@@ -7,6 +7,7 @@
 
 class ShipmentItem < ActiveRecord::Base
 	include SalorScope
+  include SalorBase
 
   belongs_to :shipment
   belongs_to :category
@@ -15,6 +16,8 @@ class ShipmentItem < ActiveRecord::Base
   monetize :price_cents
   monetize :purchase_price_cents
   has_and_belongs_to_many :stock_locations
+  
+  
   def set_stock_location_ids=(ids) 
     if ids.class == String then
       ids = [ids.to_i]

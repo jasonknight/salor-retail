@@ -84,6 +84,7 @@ class OrdersController < ApplicationController
       @current_order = Order.new
       @current_order.vendor = @current_vendor
       @current_order.company = @current_company
+      @current_order.currency = @current_vendor.currency
       @current_order.user = @current_user
       @current_order.cash_register = @current_register
       @current_order.drawer = @current_user.get_drawer
@@ -112,9 +113,9 @@ class OrdersController < ApplicationController
 
 
   def delete_order_item
-    oi = @current_vendor.order_items.find_by_id(params[:id])
-    @order = oi.order
-    oi.hide(@current_user)
+    @order_item = @current_vendor.order_items.find_by_id(params[:id])
+    @order = @order_item.order
+    @order_item.hide(@current_user)
     render :update_pos_display
   end
 
@@ -201,6 +202,7 @@ class OrdersController < ApplicationController
     @order = Order.new
     @order.vendor = @current_vendor
     @order.company = @current_company
+    @order.currency = @current_vendor.currency
     @order.user = @current_user
     @order.cash_register = @current_register
     @order.save
@@ -214,6 +216,7 @@ class OrdersController < ApplicationController
     o = Order.new
     o.vendor = @current_vendor
     o.company = @current_company
+    o.currency = @current_vendor.currency
     o.user = @current_user
     o.drawer = @current_user.get_drawer
     o.cash_register = @current_register

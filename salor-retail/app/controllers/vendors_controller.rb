@@ -71,7 +71,7 @@ class VendorsController < ApplicationController
     @dt.drawer_amount = @drawer.amount
     @dt.drawer = @drawer
     @dt.user = user
-    @dt.amount = Money.new(SalorBase.string_to_float(params[:transaction][:amount]) * 100 )
+    @dt.amount = Money.new(SalorBase.string_to_float(params[:transaction][:amount]) * 100, @current_vendor.currency)
     @dt.tag = params[:transaction][:tag]
     @dt.notes = params[:transaction][:notes]
     @dt.cash_register = @current_register
