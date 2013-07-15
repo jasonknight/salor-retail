@@ -97,7 +97,11 @@ class Action < ActiveRecord::Base
     if self.model and self.model.class == Item
       return self.model.sku
     end
-    return self.model.class.to_s
+    return ""
+  end
+
+  def sku=(s)
+    self.model = Item.find_by_sku(s)
   end
   
   def self.run(item, act)
@@ -106,15 +110,15 @@ class Action < ActiveRecord::Base
     else
       base_item = item
     end
-    Action.where(:model_type => 'Vendor', :model_id => base_item.vendor_id).each do |action|
+    Action.where(:model_type => 'Vendor', :model_id => base_item.vendor_id).where(["whento = ? or whento = 'always'",act]).each do |action|
       item = Action.apply_action(action, item, act)
     end
-    base_item.actions.visible.each do |action|
+    base_item.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
       item = Action.apply_action(action, item, act)
     end
 
-    if base_item.category and base_item.category.actions.visible.any? then
-      base_item.category.actions.visible.each do |action|
+    if base_item.category then
+      base_item.category.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
         item = Action.apply_action(action, item, act)
       end
     end
@@ -126,10 +130,15 @@ class Action < ActiveRecord::Base
     return item if action.whento.nil?
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
       if action.behavior.to_sym == :execute then
-        api = JsApi.new(action.name,item.vendor.company, item.vendor, User.find_by_id($USERID))
+        the_user = User.find_by_id($USERID)
+        if not the_user.company == item.vendor.company then
+          return item
+        end
+        secret = Digest::SHA2.hexdigest(the_user.encrypted_password)[0..8]
+        api = JsApi.new(action.name,item.vendor.company, item.vendor, the_user, secret)
         api.set_object(item)
         api.evaluate_script(action.js_code)
-        item = api.get_object()
+        item = api.get_object(secret)
         return item;
       end
       #SalorBase.log_action Action, "item.#{action.afield} += action.value" + " #{item.send(action.afield).inspect}"
@@ -138,6 +147,7 @@ class Action < ActiveRecord::Base
       else
         the_value = action.value
       end
+
       #SalorBase.log_action Action, "item.#{action.afield} += action.value" + " #{item.send(action.afield).inspect} + #{the_value.inspect}"
       eval("item.#{action.afield} += the_value") if action.behavior.to_sym == :add
       eval("item.#{action.afield} -= the_value") if action.behavior.to_sym == :subtract

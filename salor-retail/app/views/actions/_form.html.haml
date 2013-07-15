@@ -17,6 +17,9 @@
       %td= f.label :name
       %td= f.text_field :name
     %tr
+      %td= f.label :sku
+      %td= f.text_field :sku
+    %tr
       %td= f.label :category_id
       %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
     %tr

@@ -1,7 +1,7 @@
 class JsApi
   attr_reader :plugin_name, :company, :vendor, :user, :meta
 
-  def initialize(pname,company,vendor,user)
+  def initialize(pname,company,vendor,user,secret)
     set_plugin_name(pname)
     set_company(company.attributes)
     set_user(user.attributes)
@@ -9,20 +9,55 @@ class JsApi
     @private_vendor       = vendor
     @private_company      = company
     @evaluated = false
+    @secret = secret # to prevent api users from accessing some functions
   end
 
   def set_object(o)
-    @object = o
+    @object = o if not @object
   end
 
-  def get_object()
-    return @object
+  def get_object(secr=nil)
+    if secr == @secret then
+      return @object
+    else
+      return nil
+    end
   end
 
   def get_meta(key)
     return @private_user.user_meta.find_or_create_by_key(key).value
   end
   
+  # Api for manipulating objects
+
+  def update_attributes(src_attrs)
+    attrs = {}
+    if src_attrs.kind_of? V8::Object then
+      src_attrs.each do |k,v|
+        attrs[k] = v
+      end
+    end
+    if @object then
+      attrs = attrs.delete_if {|k,v| k.to_s.include? 'password' }
+      begin
+        if @object.kind_of? ActiveRecord::Base then
+          if @object.update_attributes(attrs) then
+            return true
+          else
+            return false
+          end
+        elsif @object.kind_of? Hash then
+          attrs.each {|k,v| @object[k] = v}
+        end
+        return true
+      rescue
+        return false
+      end
+    else
+      return nil
+    end
+  end
+
   def set_meta(key, value)
     if value.class == String then
       meta = @private_user.user_meta.find_or_create_by_key(key)
@@ -39,14 +74,18 @@ class JsApi
   def evaluate_script(text)
     return if @evaluated
     @evaluated = true
-    cxt = V8::Context.new()
-    cxt['api'] = self
+    @cxt = V8::Context.new()
+    @cxt['api'] = self
     begin
-      result = cxt.eval(text)
+      result = @cxt.eval(text)
     rescue => e
       log_action "V8::Error" + e.to_s
     end
     return result
+  end
+
+  def call_function(name, args = {})
+    return @cxt.eval("#{name}(#{args.to_json})")
   end
 
   private

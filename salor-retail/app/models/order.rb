@@ -140,7 +140,7 @@ class Order < ActiveRecord::Base
   def add_order_item(params={})
     return nil if params[:sku].blank?
     if self.completed_at then
-      log_action "Order is completed already, cannot add items to it"
+      log_action "Order is completed already, cannot add items to it #{self.completed_at}"
     end
     
     # get existing regular item
@@ -149,7 +149,8 @@ class Order < ActiveRecord::Base
       if item.is_normal?
         log_action "Item is normal, and present, just increment"
         # simply increment and return
-        item.quantity += 1        
+        item.quantity += 1 
+        item..modify_price_for_actions       
         item.calculate_totals
         item.save
         self.calculate_totals
