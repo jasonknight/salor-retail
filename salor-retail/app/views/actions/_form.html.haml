@@ -21,7 +21,7 @@
       %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
     %tr
       %td= f.label :vendor_id
-      %td= f.select :vendor_model, options_for_select(@current_company.vendors.visible.collect{ |v| [v.name,"Vendor:#{v.id}"] }), :include_blank => true 
+      %td= f.select :vendor_model, options_for_select(@current_company.vendors.visible.collect{ |v| [v.name,"Vendor:#{v.id}"] },@action.vendor_model), :include_blank => true 
     %tr
       %td= f.label :whento
       %td= f.select :whento, Action.when_list

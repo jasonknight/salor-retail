@@ -123,12 +123,12 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
+    $USERID = nil
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
     if @current_user.nil? or session[:user_id_hash].blank?
       redirect_to new_session_path and return 
-    else
-      log_action "session[:user_id_hash] is #{session[:user_id_hash]}"
     end
+    $USERID = @current_user.id
     
     if defined?(SrSaas) == 'constant'
       # this is necessary due to call to the login method in UsersController#clock{in|out}

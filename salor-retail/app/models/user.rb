@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   has_many :order_items
   has_many :receipts
   has_many :current_register_dailies
+  has_many :user_meta
   has_and_belongs_to_many :roles
   
   has_many :drawer_transactions

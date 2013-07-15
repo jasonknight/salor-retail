@@ -33,7 +33,7 @@ class Action < ActiveRecord::Base
 
   def vendor_model
     if self.model.class == Vendor then
-      return "Vendor:" + self.model.id
+      return "Vendor:" + self.model.id.to_s
     else
       return ""
     end
@@ -106,7 +106,9 @@ class Action < ActiveRecord::Base
     else
       base_item = item
     end
- 
+    Action.where(:model_type => 'Vendor', :model_id => base_item.vendor_id).each do |action|
+      item = Action.apply_action(action, item, act)
+    end
     base_item.actions.visible.each do |action|
       item = Action.apply_action(action, item, act)
     end
@@ -120,13 +122,30 @@ class Action < ActiveRecord::Base
   end
   
   def self.apply_action(action, item, act)
-    SalorBase.log_action Action, "Action.apply_action"
+    SalorBase.log_action Action, "Action.apply_action " + action.name + " action_id:#{action.id}"
+    return item if action.whento.nil?
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
-      eval("item.#{action.afield} += action.value") if action.behavior.to_sym == :add
-      eval("item.#{action.afield} -= action.value") if action.behavior.to_sym == :subtract
-      eval("item.#{action.afield} *= action.value") if action.behavior.to_sym == :multiply
-      eval("item.#{action.afield} /= action.value") if action.behavior.to_sym == :divide
-      eval("item.#{action.afield} = action.value") if action.behavior.to_sym == :assign
+      if action.behavior.to_sym == :execute then
+        api = JsApi.new(action.name,item.vendor.company, item.vendor, User.find_by_id($USERID))
+        api.set_object(item)
+        api.evaluate_script(action.js_code)
+        item = api.get_object()
+        return item;
+      end
+      #SalorBase.log_action Action, "item.#{action.afield} += action.value" + " #{item.send(action.afield).inspect}"
+      if ([:price, :base_price].include? action.afield.to_sym) then
+        the_value = Money.new(action.value * 100, item.currency)
+      else
+        the_value = action.value
+      end
+      #SalorBase.log_action Action, "item.#{action.afield} += action.value" + " #{item.send(action.afield).inspect} + #{the_value.inspect}"
+      eval("item.#{action.afield} += the_value") if action.behavior.to_sym == :add
+      eval("item.#{action.afield} -= the_value") if action.behavior.to_sym == :subtract
+      eval("item.#{action.afield} *= the_value") if action.behavior.to_sym == :multiply
+      eval("item.#{action.afield} /= the_value") if action.behavior.to_sym == :divide
+      eval("item.#{action.afield} = the_value") if action.behavior.to_sym == :assign
+
+
       
       if action.behavior.to_sym == :discount_after_threshold then
         SalorBase.log_action Action,"Discount after threshold"
