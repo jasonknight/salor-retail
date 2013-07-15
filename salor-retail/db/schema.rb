@@ -811,11 +811,11 @@ ActiveRecord::Schema.define(:version => 20130714075914) do
     t.integer  "vendor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
-    t.integer  "hidden",        :default => 0
-    t.integer  "hidden_by"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"

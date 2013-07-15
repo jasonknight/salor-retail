@@ -19,7 +19,7 @@
     - if @order.is_unpaid then
       - @order.payment_method_items.each do |pm|
         %tr
-          %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.name
+          %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.payment_method.name
           %td.total= humanized_money_with_symbol pm.amount
     - else
       - @report[:paymentmethods].each do |k,v|
