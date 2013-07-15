@@ -190,7 +190,7 @@ class Item < ActiveRecord::Base
 
   def run_actions
     if self.actions.visible.any? then
-      Action.run(self, :on_save)
+      Action.run(self.vendor,self, :on_save)
     end
   end
   

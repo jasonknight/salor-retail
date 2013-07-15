@@ -10,8 +10,13 @@ class JsApi
     @private_company      = company
     @evaluated = false
     @secret = secret # to prevent api users from accessing some functions
+    @writeable = true
   end
 
+  def set_writeable(secr=nil,bool)
+    return if not secr == @secret
+    @writeable = bool
+  end
   def set_object(o)
     @object = o if not @object
   end
@@ -31,6 +36,7 @@ class JsApi
   # Api for manipulating objects
 
   def update_attributes(src_attrs)
+    return false if @writeable == false
     attrs = {}
     if src_attrs.kind_of? V8::Object then
       src_attrs.each do |k,v|
@@ -38,7 +44,7 @@ class JsApi
       end
     end
     if @object then
-      attrs = attrs.delete_if {|k,v| k.to_s.include? 'password' }
+      attrs = attrs.delete_if {|k,v| [:password,:id,:sku].include? k.to_sym }
       begin
         if @object.kind_of? ActiveRecord::Base then
           if @object.update_attributes(attrs) then

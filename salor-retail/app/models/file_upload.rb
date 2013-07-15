@@ -115,14 +115,14 @@ class FileUpload
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
         attributes.merge! :sku => sku_carton unless sku_carton.empty?
         carton_item.update_attributes attributes
-        Action.run(carton_item,:on_import)
+        Action.run(@vendor,carton_item,:on_import)
         carton_item.save
         @updated_items += 1
       else
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
-        Action.run(carton_item,:on_import)
+        Action.run(@vendor,carton_item,:on_import)
         carton_item.save
         
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
@@ -150,7 +150,7 @@ class FileUpload
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
         attributes.merge! :sku => sku_pack unless sku_pack.empty?
         pack_item.attributes = attributes
-        Action.run(pack_item,:on_import)
+        Action.run(@vendor,pack_item,:on_import)
         carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
@@ -159,7 +159,7 @@ class FileUpload
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
-        Action.run(pack_item,:on_import)
+        Action.run(@vendor,pack_item,:on_import)
         pack_item.save
         carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
@@ -189,7 +189,7 @@ class FileUpload
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
         attributes.merge! :sku => sku_piece unless sku_piece.empty?
         piece_item.attributes = attributes
-        Action.run(piece_item,:on_import)
+        Action.run(@vendor,piece_item,:on_import)
         pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
@@ -198,7 +198,7 @@ class FileUpload
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
-        Action.run(piece_item,:on_import)
+        Action.run(@vendor,piece_item,:on_import)
         piece_item.save
         pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
@@ -295,14 +295,14 @@ class FileUpload
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating carton item #{carton_item.name} #{carton_item.sku}"
         attributes.merge! :sku => sku_carton unless sku_carton.empty?
         carton_item.update_attributes attributes
-        Action.run(carton_item,:on_import)
+        Action.run(@vendor,carton_item,:on_import)
         carton_item.save
         @updated_items += 1
       else
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
-        Action.run(carton_item,:on_import)
+        Action.run(@vendor,carton_item,:on_import)
         carton_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}"
         @created_items += 1
@@ -328,7 +328,7 @@ class FileUpload
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
         attributes.merge! :sku => sku_pack unless sku_pack.empty?
         pack_item.update_attributes attributes
-        Action.run(pack_item,:on_import)
+        Action.run(@vendor,pack_item,:on_import)
         carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
@@ -337,7 +337,7 @@ class FileUpload
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
-        Action.run(pack_item,:on_import)
+        Action.run(@vendor,pack_item,:on_import)
         pack_item.save
         carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
@@ -366,7 +366,7 @@ class FileUpload
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
         attributes.merge! :sku => sku_piece unless sku_piece.empty?
         piece_item.update_attributes attributes
-        Action.run(piece_item,:on_import)
+        Action.run(@vendor,piece_item,:on_import)
         pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
@@ -375,7 +375,7 @@ class FileUpload
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.nil? or sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
-        Action.run(piece_item,:on_import)
+        Action.run(@vendor,piece_item,:on_import)
         piece_item.save
         pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
@@ -435,12 +435,12 @@ class FileUpload
       item = Item.find_by_sku(sku)
       if item
         item.update_attributes attributes
-        Action.run(item,:on_import)
+        Action.run(@vendor,item,:on_import)
         item.save
         @updated_items += 1
       else
         item = Item.new attributes
-        Action.run(item,:on_import)
+        Action.run(@vendor,item,:on_import)
         item.save
         @created_items += 1
       end

@@ -104,42 +104,62 @@ class Action < ActiveRecord::Base
     self.model = Item.find_by_sku(s)
   end
   
-  def self.run(item, act)
+  def self.run(the_vendor, item, act)
     if item.class == OrderItem then
       base_item = item.item
     else
       base_item = item
     end
-    Action.where(:model_type => 'Vendor', :model_id => base_item.vendor_id).where(["whento = ? or whento = 'always'",act]).each do |action|
-      item = Action.apply_action(action, item, act)
-    end
-    base_item.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
-      item = Action.apply_action(action, item, act)
-    end
-
-    if base_item.category then
-      base_item.category.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
+    
+    if base_item.class != Vendor and base_item.kind_of? ActiveRecord::Base then
+      Action.where(:model_type => 'Vendor', :model_id => the_vendor).where(["whento = ? or whento = 'always'",act]).each do |action|
         item = Action.apply_action(action, item, act)
+      end
+      base_item.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
+        item = Action.apply_action(action, item, act)
+      end
+
+      if base_item.category then
+        base_item.category.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
+          item = Action.apply_action(action, item, act)
+        end
+      end
+    else
+      Action.where(:model_type => 'Vendor', :model_id => the_vendor.id).where(["whento = ? or whento = 'always'",act]).each do |action|
+        item = action.execute_script(item)
       end
     end
     return item
   end
-  
+  def execute_script(item)
+    return item if self.js_code.nil?
+    the_user = User.find_by_id($USERID)
+    if item.kind_of? ActiveRecord::Base and item.class != Vendor then
+      the_vendor = item.vendor
+    elsif item.class == Vendor
+      the_vendor = item
+    else
+      return item
+    end
+    if not the_user.company == the_vendor.company then
+      return item
+    end
+    # have to do this to prevent access to the object from inside JS
+    # but we want to be able to access it from other parts of the code
+    secret = Digest::SHA2.hexdigest(the_user.encrypted_password)[0..8]
+    api = JsApi.new(self.name,the_vendor.company, the_vendor, the_user, secret)
+    api.set_object(item) # this is object that the script will operate on
+    api.set_writeable(secret,false) if item.class == Vendor 
+    api.evaluate_script(self.js_code)
+    item = api.get_object(secret) # and then we get it back out
+    return item
+  end
   def self.apply_action(action, item, act)
     SalorBase.log_action Action, "Action.apply_action " + action.name + " action_id:#{action.id}"
     return item if action.whento.nil?
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
       if action.behavior.to_sym == :execute then
-        the_user = User.find_by_id($USERID)
-        if not the_user.company == item.vendor.company then
-          return item
-        end
-        secret = Digest::SHA2.hexdigest(the_user.encrypted_password)[0..8]
-        api = JsApi.new(action.name,item.vendor.company, item.vendor, the_user, secret)
-        api.set_object(item)
-        api.evaluate_script(action.js_code)
-        item = api.get_object(secret)
-        return item;
+        return action.execute_script(item);
       end
       #SalorBase.log_action Action, "item.#{action.afield} += action.value" + " #{item.send(action.afield).inspect}"
       if ([:price, :base_price].include? action.afield.to_sym) then

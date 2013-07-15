@@ -36,6 +36,11 @@ module SalorBase
   end
   
   def self.log_action(from="unk",txt)
+    if Rails.env == "development" then
+      File.open("#{Rails.root}/log/development-history.log",'a') do |f|
+        f.puts "\n##[#{from}] #{txt}\n"
+      end
+    end
     ActiveRecord::Base.logger.info "\n##[#{from}] #{txt}\n"
   end
   

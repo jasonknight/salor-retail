@@ -235,7 +235,7 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price_for_actions
     log_action "modify_price_for_actions"
-    Action.run(self, :add_to_order)
+    Action.run(self.vendor, self, :add_to_order)
   end
   
   def modify_price_for_gs1
