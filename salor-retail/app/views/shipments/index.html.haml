@@ -28,7 +28,7 @@
       %td= link_to s.name, shipment_path(s)
       %td= sname
       %td= rname
-      %td= salor_number_to_currency(s.price)
+      %td= humanized_money_with_symbol(s.price)
       %td= s.paid
       %td= s.shipment_type.name if s.shipment_type
       %td{:align=>:center}= link_to salor_icon(:edit,{},32,t(:edit)), edit_shipment_path(s)

@@ -93,7 +93,7 @@ class Action < ActiveRecord::Base
         item.rebate = 0 # Important
         if num_discountables >= 1 then
           SalorBase.log_action Action,"discount #{num_discountables} and item_price is #{item_price}"
-          total_2_discount = Money.new(item_price * num_discountables, item.price_currency)
+          total_2_discount = Money.new(item_price * num_discountables, item.currency)
           
           percentage = total_2_discount.to_f / (item.price * item.quantity).to_f
           item.rebate = (percentage * 100).to_i

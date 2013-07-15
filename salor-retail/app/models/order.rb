@@ -5,95 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
-# THE PRICE REDUCTION SYSTEM
-# ==========================
-#
-#
-# Gift Cards
-# ----------
-# A gift card is a self-issued currency which you can sell and buy to and from your customers. 
-
-# It has to be sold with a tax of 0% since it is not known in advance which goods will be bought by it when the customer returns. In many countries, there are different tax percentages for different kinds of items. When a customer pays with a gift card, it is added to the Order as an OrderItem. Its price becomes the negative order total at the point of time it is scanned, but not more than the remaining amount on the gift card. Therefore, the gift card reduces the order total. In the most extreme case, the order total is reduced to 0. However, the prices and taxes of the remaining OrderItems are NOT affected by this and will keep their normal value. This means that the store owner still has to pay the correct taxes for the remaining OrderItems even when the order total is zero. Gift cards have to be added as the LAST OrderItem of an order.
-#
-#
-# Coupons
-# ----------
-# Coupons are never sold. A single coupon with a single SKU can be published en masse in a newspaper. While a coupon turns into an OrderItem when scanned, unlike gift cards, it does not have a price by itself  (the price is always zero), but it DOES modify the price and taxes of the matching OrderItem.  Coupons come in three flavors: 1) percent rebate for the matching Item, 2) fixed amount off a matching Item, 3) buy X get Y for free, also for a matching Item. As has been said, in all 3 cases, each coupon will have the price of 0 but will reduce the price (and taxes) of exactly one other OrderItem. Coupons have to be added to an Order AFTER the matching Item. 
-# If the Coupon is added before, no action will take place.
-#
-#
-# OrderItem level rebates
-# ----------
-# A store owner can decide to give a percent rebate to a single OrderItem. This rebate will modify the price and taxes of the OrderItem in question.
-#
-#
-# Order level rebates
-# ----------
-# A store owner can decide to give a percent rebate to all OrderItems of an Order (e.g. when there are many OrderItems). Since in many countries different product types have different tax percentages, this rebate is not applied directly to the Order total, but simply applied to every single OrderItem, as has been explained under "OrderItem level rebates". For this reason, tax calculation will be correct.
-#
-#
-# Discounts
-# ----------
-# A discount is identical to "OrderItem level rebates" except that it is applied automatically, according to a time span, Item category, Item SKU, Item location, or all Items.
-#
-#
-# Actions
-# ----------
-# A so-called Action can modify the price of an OrderItem in complex ways, relative to the price of the corresponding Item, and at the time the OrderItem is added to an order. Many stores use a Item database that is imported from external sources (e.g. wholesaler databases in CSV format). For various reasons, an imported Item price can be wrong (e.g. because the wholesaler lists a wrong price). However, it does not make sense to change the Item price manually, since a wholesaler update would overwrite the correction with the wrong price again. In this case, an Action has to be created for the 'wrong' Item price that always corrects it when the Item is sold. An action can add, subtract, multiply or divide a price by a specified factor. Actions also allow to 'program' more complex rules, like: "Reduce the price of an OrderItem when at least 6 Items of the same Category are added to an Order, by the cheapest OrderItem of those 6 scanned items." As already said, Actions modify the price and taxes of the OrderItem and the taxes will be correct.
-#
-#
-# LoyaltyCard Points
-# ----------
-# This feature and the possibility to grant rebates based on a certain number of loyalty points has been removed.
-#
-#
-#
-# GROSS VERSUS NET VERSUS TAX
-# ===========================
-#
-# Countries differ in the treatment of prices. For example, in the USA and Canada, prices of products are considered net, even though the customer owes and is shown on the customer display the gross amount. We will refer to this system as the "USA tax system".
-#
-# In other countries, like Europe, prices of products are considered gross, and the customer owes and is shown on the customer display also the gross amount. We will refer to this system as the "Europe tax system".
-#
-#
-#
-# EXPLANATION OF THE MODEL ATTRIBUTES
-# ===================================
-#
-# Item
-# ----------
-#   base_price: The regular price of the product. For "net price system" this is the net amount. For "gross price system" this is the gross amount.
-#
-#
-# OrderItem
-# ----------
-#  price: Identical to base_price of the belonging Item. This price will be modified by the following conditions: 1) will be inverted if OrderItem is set to buyback, 2) will by reduced by a percentage when an Action applies, 3) will be set to the price specified by an GS1 barcode when the flag "price_by_qty" of the belonging Item is not set, 4) in case of a gift card it will become the current order total, 5) in case the belonging Item has set the flag "calculate_part_price" the price will become the sum of all parts of that item.
-#
-#  quantity: self-explanatory
-#
-#  total: includes taxes
-#
-#  coupon_amount: ...
-#
-#  discount_amount: ...
-#
-#  rebate_amount: ...
-#
-#  tax: this is equal to the percentage of the belonging TaxProfile at the time of scanning the Item
-#
-#  tax_amount: ...
-#
-#
-# Order
-# ----------
-#  total: includes taxes
-#
-#  tax_amount: sum of the tax_amount fields of ALL belonging OrderItems
-
-
-
-
-
 class Order < ActiveRecord::Base
 
   include SalorScope
@@ -229,8 +140,8 @@ class Order < ActiveRecord::Base
 
   def add_order_item(params={})
     return nil if params[:sku].blank?
-    if self.paid then
-      log_action "Order is paid already, cannot edit"
+    if self.completed_at then
+      log_action "Order is completed already, cannot add items to it"
     end
     
     # get existing regular item
@@ -299,6 +210,7 @@ class Order < ActiveRecord::Base
     i.sku = "G#{timecode}"
     i.vendor = self.vendor
     i.company = self.company
+    i.currency = self.vendor.currency
     i.tax_profile = zero_tax_profile
     i.name = "Auto Giftcard #{timecode}"
     i.must_change_price = true
@@ -352,6 +264,7 @@ class Order < ActiveRecord::Base
     i.tax_profile = self.vendor.tax_profiles.where(:default => true).first
     i.vendor = self.vendor
     i.company = self.company
+    i.currency = self.vendor.currency
     
     pm = sku.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1]
@@ -443,6 +356,7 @@ class Order < ActiveRecord::Base
     dt = DrawerTransaction.new
     dt.vendor = self.vendor
     dt.company = self.company
+    dt.currency = self.vendor.currency
     dt.user = self.user
     dt.cash_register = self.cash_register
     dt.order = self
@@ -488,7 +402,7 @@ class Order < ActiveRecord::Base
       pmi.user = self.user
       pmi.drawer = self.drawer
       pmi.cash_register = self.cash_register
-      pmi.amount = Money.new(SalorBase.string_to_float(v[:amount]) * 100.0)
+      pmi.amount = Money.new(SalorBase.string_to_float(v[:amount]) * 100.0, self.currency)
       pmi.cash = pm.cash
       pmi.quote = pm.quote
       pmi.unpaid = pm.unpaid
@@ -501,8 +415,8 @@ class Order < ActiveRecord::Base
     
     self.save
     
-    payment_cash = Money.new(self.payment_method_items.visible.where(:cash => true).sum(:amount_cents))
-    payment_total = Money.new(self.payment_method_items.visible.sum(:amount_cents))
+    payment_cash = Money.new(self.payment_method_items.visible.where(:cash => true).sum(:amount_cents), self.currency)
+    payment_total = Money.new(self.payment_method_items.visible.sum(:amount_cents), self.currency)
     payment_noncash = (payment_total - payment_cash)
     change = (payment_total - self.total)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
@@ -662,8 +576,8 @@ class Order < ActiveRecord::Base
     used_tax_amounts.each do |r|
       tax_in_percent = r.tax # this is the tax in percent, stored on OrderItem
       tax_profile = self.vendor.tax_profiles.find_by_value(tax_in_percent)
-      tax_amount = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:tax_amount_cents))
-      total = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:total_cents))
+      tax_amount = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:tax_amount_cents), self.currency)
+      total = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:total_cents), self.currency)
       next if tax_amount.zero?
       list_of_taxes += tax_format % [tax_profile.letter, tax_in_percent, total - tax_amount, tax_amount, total]
       list_of_taxes_raw << to_list_of_taxes_raw([tax_profile.letter, tax_profile.value, total - tax_amount, tax_amount, total])
@@ -1001,6 +915,7 @@ class Order < ActiveRecord::Base
 #     end
 #   end
   
+  # for better debugging in the console
   def self.last2
     id = Order.last.id
     return Order.find_by_id id-1   

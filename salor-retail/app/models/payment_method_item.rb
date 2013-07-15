@@ -6,6 +6,8 @@
 # See license.txt for the license applying to all files within this software.
 
 class PaymentMethodItem < ActiveRecord::Base
+  include SalorBase
+  include SalorScope
   belongs_to :order
   belongs_to :vendor
   belongs_to :company
@@ -15,7 +17,4 @@ class PaymentMethodItem < ActiveRecord::Base
   belongs_to :cash_register
   
   monetize :amount_cents, :allow_nil => true
-  
-  include SalorBase
-  include SalorScope
 end

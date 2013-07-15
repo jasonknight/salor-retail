@@ -35,8 +35,11 @@ class ShipmentsController < ApplicationController
     @shipment = Shipment.new(params[:shipment])
     @shipment.vendor = @current_vendor
     @shipment.company = @current_company
+    @shipment.currency = @current_vendor.currency
     if @shipment.save
-      @shipment.shipment_items.update_all :vendor_id => @shipment.vendor_id, :company_id => @shipment.company_id
+      @shipment.shipment_items.update_all :vendor_id => @shipment.vendor_id,
+          :company_id => @shipment.company_id,
+          :currency => @current_vendor.currency
       redirect_to shipments_path
     else
       @shipment_types = @current_vendor.shipment_types.visible.order(:name)

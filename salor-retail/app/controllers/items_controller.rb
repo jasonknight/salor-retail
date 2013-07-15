@@ -49,6 +49,7 @@ class ItemsController < ApplicationController
     @item = Item.new(params[:item])
     @item.vendor = @current_vendor
     @item.company = @current_company
+    @item.currency = @current_vendor.currency
     if @item.save
       @item.assign_parts(params[:part_skus])
       redirect_to items_path
@@ -62,6 +63,7 @@ class ItemsController < ApplicationController
     @item = Item.new
     @item.vendor = @current_vendor
     @item.company = @current_company
+    @item.currency = @current_vendor.currency
     @item.item_type = @current_vendor.item_types.find_by_behavior("normal")
     @item.tax_profile_id = params[:item][:tax_profile_id]
     @item.attributes = params[:item]

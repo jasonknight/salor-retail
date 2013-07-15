@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130714182351) do
+ActiveRecord::Schema.define(:version => 20130714194028) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.integer  "company_id"
     t.integer  "user_id"
     t.integer  "price_cents",      :default => 0
-    t.string   "price_currency",   :default => "USD"
+    t.string   "currency"
   end
 
   create_table "buttons", :force => true do |t|
@@ -291,10 +291,9 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.integer  "user_id"
     t.boolean  "complete_order"
     t.integer  "nr"
-    t.integer  "amount_cents",           :default => 0
-    t.string   "amount_currency",        :default => "USD"
-    t.integer  "drawer_amount_cents",    :default => 0
-    t.string   "drawer_amount_currency", :default => "USD"
+    t.integer  "amount_cents",        :default => 0
+    t.integer  "drawer_amount_cents", :default => 0
+    t.string   "currency"
   end
 
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
@@ -307,8 +306,8 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.datetime "hidden_at"
     t.integer  "vendor_id"
     t.integer  "company_id"
-    t.integer  "amount_cents",    :default => 0
-    t.string   "amount_currency", :default => "USD"
+    t.integer  "amount_cents", :default => 0
+    t.string   "currency"
   end
 
   create_table "histories", :force => true do |t|
@@ -479,37 +478,37 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.integer  "void"
     t.integer  "coupon_type"
     t.string   "coupon_applies"
-    t.float    "quantity",                    :default => 0.0
-    t.float    "quantity_sold",               :default => 0.0
+    t.float    "quantity",                 :default => 0.0
+    t.float    "quantity_sold",            :default => 0.0
     t.boolean  "hidden"
     t.integer  "part_id"
     t.boolean  "calculate_part_price"
-    t.float    "height",                      :default => 0.0
-    t.float    "weight",                      :default => 0.0
+    t.float    "height",                   :default => 0.0
+    t.float    "weight",                   :default => 0.0
     t.string   "height_metric"
-    t.string   "weight_metric",               :default => "g"
-    t.float    "length",                      :default => 0.0
-    t.float    "width",                       :default => 0.0
+    t.string   "weight_metric",            :default => "g"
+    t.float    "length",                   :default => 0.0
+    t.float    "width",                    :default => 0.0
     t.string   "length_metric"
     t.string   "width_metric"
     t.boolean  "is_part"
     t.boolean  "is_gs1"
     t.boolean  "price_by_qty"
-    t.float    "part_quantity",               :default => 0.0
+    t.float    "part_quantity",            :default => 0.0
     t.string   "behavior"
     t.string   "sales_metric"
     t.date     "expires_on"
-    t.integer  "quantity_buyback",            :default => 0
+    t.integer  "quantity_buyback",         :default => 0
     t.boolean  "default_buyback"
-    t.float    "real_quantity",               :default => 0.0
+    t.float    "real_quantity",            :default => 0.0
     t.boolean  "weigh_compulsory"
-    t.float    "min_quantity",                :default => 0.0
-    t.boolean  "active",                      :default => true
+    t.float    "min_quantity",             :default => 0.0
+    t.boolean  "active",                   :default => true
     t.integer  "shipper_id"
     t.string   "shipper_sku"
-    t.float    "packaging_unit",              :default => 1.0
+    t.float    "packaging_unit",           :default => 1.0
     t.boolean  "ignore_qty"
-    t.integer  "child_id",                    :default => 0
+    t.integer  "child_id",                 :default => 0
     t.boolean  "must_change_price"
     t.boolean  "hidden_by_distiller"
     t.boolean  "track_expiry"
@@ -521,17 +520,13 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
-    t.string   "gs1_format",                  :default => "2,3"
-    t.integer  "price_cents",                 :default => 0
-    t.string   "price_currency",              :default => "USD"
-    t.integer  "gift_card_amount_cents",      :default => 0
-    t.string   "gift_card_amount_currency",   :default => "USD"
-    t.integer  "purchase_price_cents",        :default => 0
-    t.string   "purchase_price_currency",     :default => "USD"
-    t.integer  "buy_price_cents",             :default => 0
-    t.string   "buy_price_currency",          :default => "USD"
-    t.integer  "manufacturer_price_cents",    :default => 0
-    t.string   "manufacturer_price_currency", :default => "USD"
+    t.string   "gs1_format",               :default => "2,3"
+    t.integer  "price_cents",              :default => 0
+    t.integer  "gift_card_amount_cents",   :default => 0
+    t.integer  "purchase_price_cents",     :default => 0
+    t.integer  "buy_price_cents",          :default => 0
+    t.integer  "manufacturer_price_cents", :default => 0
+    t.string   "currency"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
@@ -697,21 +692,15 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.boolean  "calculate_part_price"
     t.integer  "drawer_id"
     t.integer  "price_cents",                         :default => 0
-    t.string   "price_currency",                      :default => "USD"
     t.integer  "gift_card_amount_cents",              :default => 0
-    t.string   "gift_card_amount_currency",           :default => "USD"
     t.integer  "tax_amount_cents",                    :default => 0
-    t.string   "tax_amount_currency",                 :default => "USD"
     t.integer  "coupon_amount_cents",                 :default => 0
-    t.string   "coupon_amount_currency",              :default => "USD"
     t.integer  "discount_amount_cents",               :default => 0
-    t.string   "discount_amount_currency",            :default => "USD"
     t.integer  "rebate_amount_cents",                 :default => 0
-    t.string   "rebate_amount_currency",              :default => "USD"
     t.integer  "total_cents",                         :default => 0
-    t.string   "total_currency",                      :default => "USD"
     t.integer  "refund_payment_method_item_id"
     t.datetime "completed_at"
+    t.string   "currency"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -759,22 +748,15 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.float    "tax"
     t.integer  "tax_profile_id"
     t.integer  "total_cents",            :default => 0
-    t.string   "total_currency",         :default => "USD"
     t.integer  "tax_amount_cents",       :default => 0
-    t.string   "tax_amount_currency",    :default => "USD"
     t.integer  "cash_cents",             :default => 0
-    t.string   "cash_currency",          :default => "USD"
     t.integer  "lc_amount_cents",        :default => 0
-    t.string   "lc_amount_currency",     :default => "USD"
     t.integer  "change_cents",           :default => 0
-    t.string   "change_currency",        :default => "USD"
     t.integer  "payment_total_cents",    :default => 0
-    t.string   "payment_total_currency", :default => "USD"
     t.integer  "noncash_cents",          :default => 0
-    t.string   "noncash_currency",       :default => "USD"
     t.integer  "rebate_amount_cents",    :default => 0
-    t.string   "rebate_amount_currency", :default => "USD"
     t.datetime "completed_at"
+    t.string   "currency"
   end
 
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"
@@ -803,7 +785,7 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.boolean  "quote"
     t.boolean  "refund"
     t.integer  "amount_cents",      :default => 0
-    t.string   "amount_currency",   :default => "USD"
+    t.string   "currency"
   end
 
   add_index "payment_method_items", ["order_id"], :name => "index_payment_methods_on_order_id"
@@ -884,10 +866,9 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
-    t.integer  "price_cents",             :default => 0
-    t.string   "price_currency",          :default => "USD"
-    t.integer  "purchase_price_cents",    :default => 0
-    t.string   "purchase_price_currency", :default => "USD"
+    t.integer  "price_cents",          :default => 0
+    t.integer  "purchase_price_cents", :default => 0
+    t.string   "currency"
   end
 
   add_index "shipment_items", ["category_id"], :name => "index_shipment_items_on_category_id"
@@ -936,7 +917,7 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "price_cents",      :default => 0
-    t.string   "price_currency",   :default => "USD"
+    t.string   "currency"
   end
 
   add_index "shipments", ["receiver_id"], :name => "index_shipments_on_receiver_id"
@@ -1136,6 +1117,7 @@ ActiveRecord::Schema.define(:version => 20130714182351) do
     t.boolean  "auth"
     t.string   "domain"
     t.string   "subdomain"
+    t.string   "currency"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

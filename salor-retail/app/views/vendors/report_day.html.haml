@@ -121,30 +121,30 @@
     %p== #{ t '.net' }: #{ humanized_money_with_symbol revenue[:net] }
 
 
-    - if @from == @to.beginning_of_day
-      %h3= t '.transactions'
 
-      %table.striped-table2
+    %h3= t '.transactions'
+    %table.striped-table2
+      %tr
+        %th.left= t '.transaction_tag'
+        %th.left= t '.notes'
+        %th.left= t '.time'
+        %th.right= t '.drop'
+        %th.right= t '.payout'
+      - transactions.each do |d|
         %tr
-          %th.left= t '.transaction_tag'
-          %th.left
-          %th.left= t '.time'
-          %th.right= t '.drop'
-          %th.right= t '.payout'
-        - transactions.each do |d|
-          %tr
-            %td.left= t ('.' + d[:tag])
-            %td.left= d[:notes]
-            %td.left= l d[:time], :format => :just_time
-            %td.right= humanized_money_with_symbol d[:amount] if d[:amount] > 0
-            %td.right= humanized_money_with_symbol d[:amount] if d[:amount] < 0
+          %td.left= t ('.' + d[:tag])
+          %td.left= d[:notes]
+          %td.left= l d[:time], :format => :just_time
+          %td.right= humanized_money_with_symbol d[:amount] if d[:amount] > 0
+          %td.right= humanized_money_with_symbol d[:amount] if d[:amount] < 0
+    %p== #{ t '.sum_transactions' }: #{ humanized_money_with_symbol transactions_sum }
 
-      %p== #{ t '.sum_transactions' }: #{ humanized_money_with_symbol transactions_sum }
-
-
+    
+    
+    - if @from == @to.beginning_of_day # one day
       %h3= t '.cash_drawer'
 
-      - if @from.beginning_of_day == Time.now.beginning_of_day and @user
+      - if @from.beginning_of_day == Time.now.beginning_of_day and @user # today and user
         %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ humanized_money_with_symbol @user.get_drawer.amount }
 
       %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ humanized_money_with_symbol calculated_drawer_amount }

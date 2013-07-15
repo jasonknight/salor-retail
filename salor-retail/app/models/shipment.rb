@@ -64,22 +64,18 @@ class Shipment < ActiveRecord::Base
     parts = val.split(':')
     self.receiver_type = parts[0]
     self.receiver_id = parts[1].to_i
-    self.save
+    #self.save
   end
   
   def the_receiver
     return "#{self.receiver_type}:#{self.receiver_id}"
   end
   
-  def price=(p)
-    write_attribute(:price,self.string_to_float(p))
-  end
-  
   def the_shipper=(val)
     parts = val.split(':')
     self.shipper_type = parts[0]
     self.shipper_id = parts[1].to_i
-    self.save
+    #self.save
   end
   
   def the_shipper
@@ -146,7 +142,7 @@ class Shipment < ActiveRecord::Base
       end
     end
     self.shipment_item_ids = ids 
-    self.save
+    #self.save
   end
 
   def move_all_to_items

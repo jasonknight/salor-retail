@@ -482,4 +482,7 @@ class Item < ActiveRecord::Base
     end
     attrs
   end
+  
+
+
 end

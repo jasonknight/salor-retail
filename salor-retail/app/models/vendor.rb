@@ -60,11 +60,17 @@ class Vendor < ActiveRecord::Base
   validates_presence_of :identifier
   validates_uniqueness_of :identifier, :scope => :company_id
   after_create :set_hash_id
+  after_save :set_currency
   
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
   
   def region
     SalorRetail::Application::COUNTRIES_REGIONS[self.country]
+  end
+  
+  def set_currency
+    currencystring = I18n.t('number.currency.format.friendly_unit', :locale => self.region)
+    write_attribute :currency, currencystring
   end
   
   def logo_image
@@ -216,13 +222,19 @@ class Vendor < ActiveRecord::Base
     to ||= Time.now.end_of_day
     drawer ||= self.users.visible.collect{|u| u.get_drawer.id }
     
-    orders = self.orders.visible.where(:paid => true, :completed_at => from..to, :drawer_id => drawer)
+    orders = self.orders.visible.where(
+      :paid => true,
+      :completed_at => from..to,
+      :drawer_id => drawer
+    )
     orders_count = orders.count
     
     # revenue
     revenue = {}
-    revenue[:gro] = Money.new(orders.sum(:total_cents))
-    revenue[:net] = revenue[:gro] - Money.new(orders.sum(:tax_amount_cents))
+    gro_cents = orders.sum(:total_cents)
+    revenue[:gro] = Money.new(gro_cents, self.currency)
+    tax_cents = orders.sum(:tax_amount_cents)
+    revenue[:net] = revenue[:gro] - Money.new(tax_cents, self.currency)
 
     
     # DrawerTransactions
@@ -230,30 +242,74 @@ class Vendor < ActiveRecord::Base
     if drawer
       drawer_transactions = self.drawer_transactions.visible.where(
         :drawer_id => drawer,
-        :created_at => from.beginning_of_day..to.end_of_day
-      ).where(:complete_order => nil, :refund => nil)
+        :created_at => from.beginning_of_day..to.end_of_day,
+        :complete_order => nil,
+        :refund => nil
+      )
     else
       drawer_transactions = self.drawer_transactions.where(
-        :created_at => from.beginning_of_day..to.end_of_day
-      ).where(:complete_order => nil, :refund => nil)
+        :created_at => from.beginning_of_day..to.end_of_day,
+        :complete_order => nil,
+        :refund => nil
+      )
     end
     drawer_transactions.each do |dt|
-      transactions << {:tag => dt.tag, :notes => dt.notes, :amount => dt.amount, :time => dt.created_at}
+      transactions << {
+        :tag => dt.tag,
+        :notes => dt.notes,
+        :amount => dt.amount,
+        :time => dt.created_at
+      }
     end
-    transactions_sum = Money.new(drawer_transactions.sum(:amount_cents))
+    transactions_sum = Money.new(drawer_transactions.sum(:amount_cents), self.currency)
 
     # Categories
-    categories = {:pos => {}, :neg => {}}
-    categories_sum = {:pos => {:gro => Money.new(0), :net => Money.new(0)}, :neg => {:gro => Money.new(0), :net => Money.new(0)}}
+    categories = {
+      :pos => {},
+      :neg => {}
+    }
+    categories_sum = {
+      :pos => {
+               :gro => Money.new(0, self.currency),
+               :net => Money.new(0, self.currency)
+              },
+      :neg => {
+               :gro => Money.new(0, self.currency),
+               :net => Money.new(0, self.currency)
+              }
+    }
     used_categories = self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer).select("DISTINCT category_id")
     used_categories.each do |r|
       cat = self.categories.find_by_id(r.category_id)
       label = cat.name if cat
       
-      pos_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:total_cents))
-      pos_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents > 0").sum(:tax_amount_cents))
-      neg_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:total_cents))
-      neg_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :category_id => r.category_id).where("total_cents < 0").sum(:tax_amount_cents))
+      pos_total_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :category_id => r.category_id
+      ).where("total_cents > 0").sum(:total_cents)
+      pos_total = Money.new(pos_total_cents, self.currency)
+      
+      pos_tax_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :category_id => r.category_id
+      ).where("total_cents > 0").sum(:tax_amount_cents)
+      pos_tax = Money.new(pos_tax_cents, self.currency)
+      
+      neg_total_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :category_id => r.category_id
+      ).where("total_cents < 0").sum(:total_cents)
+      neg_total = Money.new(neg_total_cents, self.currency)
+      
+      neg_tax_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :category_id => r.category_id
+      ).where("total_cents < 0").sum(:tax_amount_cents)
+      neg_tax = Money.new(neg_tax_cents, self.currency)
       
       unless pos_total.zero?
         categories[:pos][label] = {}
@@ -278,16 +334,45 @@ class Vendor < ActiveRecord::Base
       
     
     # Taxes
-    taxes = {:pos => {}, :neg => {}}
-    used_tax_amounts = self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer).select("DISTINCT tax")
+    taxes = {
+      :pos => {},
+      :neg => {}
+    }
+    used_tax_amounts = self.order_items.visible.where(
+      :completed_at => from..to,
+      :drawer_id => drawer
+    ).select("DISTINCT tax")
     used_tax_amounts.each do |r|
       taxes[:pos][r.tax] = {}
       taxes[:neg][r.tax] = {}
       
-      pos_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:total_cents))
-      pos_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents > 0").sum(:tax_amount_cents))
-      neg_total = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:total_cents))
-      neg_tax = Money.new(self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer, :tax => r.tax).where("total_cents < 0").sum(:tax_amount_cents))
+      pos_total_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :tax => r.tax
+      ).where("total_cents > 0").sum(:total_cents)
+      pos_total = Money.new(pos_total_cents, self.currency)
+      
+      pos_tax_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :tax => r.tax
+      ).where("total_cents > 0").sum(:tax_amount_cents)
+      pos_tax = Money.new(pos_tax_cents, self.currency)
+      
+      neg_total_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :tax => r.tax
+      ).where("total_cents < 0").sum(:total_cents)
+      neg_total = Money.new(neg_total_cents, self.currency)
+      
+      neg_tax_cents = self.order_items.visible.where(
+        :completed_at => from..to,
+        :drawer_id => drawer,
+        :tax => r.tax
+      ).where("total_cents < 0").sum(:tax_amount_cents)
+      neg_tax = Money.new(neg_tax_cents, self.currency)
       
       taxes[:pos][r.tax][:tax] = pos_tax
       taxes[:neg][r.tax][:tax] = neg_tax
@@ -298,8 +383,15 @@ class Vendor < ActiveRecord::Base
     end
     
     # PaymentMethods
-    paymentmethods = {:pos => {}, :neg => {}}
-    used_payment_methods = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :refund => nil).select("DISTINCT payment_method_id")
+    paymentmethods = {
+      :pos => {},
+      :neg => {}
+    }
+    used_payment_methods = self.payment_method_items.visible.where(
+      :created_at => from..to,
+      :drawer_id => drawer,
+      :refund => nil
+    ).select("DISTINCT payment_method_id")
     used_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
       raise "#{ r.inspect }" if pm.nil?
@@ -309,30 +401,75 @@ class Vendor < ActiveRecord::Base
         # cash needs special treatment, since actual cash amount = cash given - change given
         change_pm = self.payment_methods.visible.find_by_change(true)
         
-        cash_positive = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents > 0").sum(:amount_cents))
-        change_positive = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => change_pm, :refund => nil).sum(:amount_cents))
+        cash_positive_cents = self.payment_method_items.visible.where(
+          :created_at => from..to,
+          :drawer_id => drawer,
+          :payment_method_id => pm,
+          :refund => nil
+        ).where("amount_cents > 0").sum(:amount_cents)
+        cash_positive = Money.new(cash_positive_cents, self.currency)
         
-        cash_negative = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents < 0").sum(:amount_cents))
+        change_positive_cents = self.payment_method_items.visible.where(
+          :created_at => from..to,
+          :drawer_id => drawer,
+          :payment_method_id => change_pm,
+          :refund => nil
+        ).sum(:amount_cents)
+        change_positive = Money.new(change_positive_cents, self.currency)
+        
+        cash_negative_cents = self.payment_method_items.visible.where(
+          :created_at => from..to,
+          :drawer_id => drawer,
+          :payment_method_id => pm,
+          :refund => nil
+        ).where("amount_cents < 0").sum(:amount_cents)
+        cash_negative = Money.new(cash_negative_cents, self.currency)
         
         paymentmethods[:pos][pm.name] = cash_positive + change_positive
         paymentmethods[:neg][pm.name] = cash_negative
         
       else
-        paymentmethods[:pos][pm.name] = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents > 0").sum(:amount_cents))
-        paymentmethods[:neg][pm.name] = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => nil).where("amount_cents < 0").sum(:amount_cents))
+        pmi_pos_cents = self.payment_method_items.visible.where(
+          :created_at => from..to,
+          :drawer_id => drawer,
+          :payment_method_id => pm,
+          :refund => nil
+        ).where("amount_cents > 0").sum(:amount_cents)
+        paymentmethods[:pos][pm.name] = Money.new(pm_pos_cents, self.currency)
+        
+        pmi_neg_cents = self.payment_method_items.visible.where(
+          :created_at => from..to,
+          :drawer_id => drawer,
+          :payment_method_id => pm,
+          :refund => nil
+        ).where("amount_cents < 0").sum(:amount_cents)
+        paymentmethods[:neg][pm.name] = Money.new(pmi_neg_cents, self.currency)
       end
     end
     
     # Refunds
     refunds = {}
-    used_refund_payment_methods = self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :refund => true).select("DISTINCT payment_method_id")
+    used_refund_payment_methods = self.payment_method_items.visible.where(
+      :created_at => from..to,
+      :drawer_id => drawer,
+      :refund => true
+    ).select("DISTINCT payment_method_id")
     used_refund_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
       
-      refunds[pm.name] = Money.new(self.payment_method_items.visible.where(:created_at => from..to, :drawer_id => drawer, :payment_method_id => pm, :refund => true).sum(:amount_cents))
+      refund_cents = self.payment_method_items.visible.where(
+        :created_at => from..to,
+        :drawer_id => drawer,
+        :payment_method_id => pm,
+        :refund => true).sum(:amount_cents)
+      refunds[pm.name] = Money.new(refund_cents, self.currency)
     end
 
-    calculated_drawer_amount = Money.new(self.drawer_transactions.where(:created_at => from.beginning_of_day..to.end_of_day, :drawer_id => drawer).sum(:amount_cents))
+    calc_drawer_cents = self.drawer_transactions.where(
+      :created_at => from.beginning_of_day..to.end_of_day,
+      :drawer_id => drawer
+    ).sum(:amount_cents)
+    calculated_drawer_amount = Money.new(calc_drawer_cents, self.currency)
     
     report = Hash.new
     report['categories'] = categories

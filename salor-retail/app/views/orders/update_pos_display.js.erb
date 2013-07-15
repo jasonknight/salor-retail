@@ -4,7 +4,7 @@ updateOrder(Order);
 
 
 // ----------- update order items ----------
-<% if @order_item %>
+<% if @order_item and @order_item.hidden.nil? %>
 order_item_json = <%= raw @order_item.to_json %>;
 updateOrderItems([order_item_json]);
 try {
