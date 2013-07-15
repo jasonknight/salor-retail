@@ -23,7 +23,8 @@ class OrderItem < ActiveRecord::Base
   has_many :coupons, :class_name => 'OrderItem', :foreign_key => :coupon_id
   belongs_to :order_item,:foreign_key => :coupon_id
   has_many :histories, :as => :user
-  has_one :drawer_transaction
+  has_one :drawer_transaction # set for refunds only
+  has_one :payment_method_item # set for refunds only
 
 
   monetize :total_cents, :allow_nil => true
@@ -68,33 +69,6 @@ class OrderItem < ActiveRecord::Base
     self.calculate_totals
   end
   
-  def create_refund_transaction(amount, type, user, opts)
-    dt = DrawerTransaction.new(opts)
-    dt[type] = true
-    dt.amount = amount
-    dt.drawer_id = user.get_drawer.id
-    dt.drawer_amount = user.get_drawer.amount
-    dt.order_id = self.order.id
-    dt.order_item_id = self.id
-    if dt.save then
-      if type == :payout then
-        user.get_drawer.update_attribute(:amount, user.get_drawer.amount - dt.amount)
-      elsif type == :drop then
-        @current_user.get_drawer.update_attribute(:amount, user.get_drawer.amount + dt.amount)
-      end
-    else
-      raise dt.errors.full_messages.inspect
-    end
-  end
-  
-  def create_refund_payment_method(amount,refund_payment_method)
-    PaymentMethod.create(:internal_type => (refund_payment_method + 'Refund'), 
-                         :name => (refund_payment_method + 'Refund'), 
-                         :amount => - amount, 
-                         :order_id => self.order.id
-                        )
-  end
-  
   def tax=(value)
     tax_profile = self.vendor.tax_profiles.visible.find_by_value(value)
     ActiveRecord::Base.logger.info "TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tax_profile
@@ -119,6 +93,7 @@ class OrderItem < ActiveRecord::Base
     pmi.drawer = drawer
     pmi.amount = - self.total
     pmi.payment_method = refund_payment_method
+    pmi.order_item_id = self.id
     pmi.cash = refund_payment_method.cash
     pmi.refund = true
     pmi.save
@@ -146,7 +121,6 @@ class OrderItem < ActiveRecord::Base
     self.refunded = true
     self.refunded_by = user.id
     self.refunded_at = Time.now
-    self.refund_payment_method_item_id = pmid.to_i
     self.calculate_totals
     
     order = self.order

@@ -27,7 +27,6 @@ class Order < ActiveRecord::Base
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
   belongs_to :sale_type
-  has_and_belongs_to_many :discounts
 
 
   monetize :total_cents, :allow_nil => true
