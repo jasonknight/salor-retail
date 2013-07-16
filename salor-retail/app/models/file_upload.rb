@@ -51,12 +51,12 @@ class FileUpload
       name = columns[1].strip
       name.encode('UTF-8', :invalid => :replace, :undef => :replace)
 
-      packaging_unit_pack = columns[12].gsub(',','.').to_f
-      packaging_unit_carton = columns[11].gsub(',','.').to_f
-      packaging_unit_container = columns[13].gsub(',','.').to_f
+      packaging_unit_pack = columns[12].to_i
+      packaging_unit_carton = columns[11].to_i
+      packaging_unit_container = columns[13].to_i
 
-      base_price = columns[14].gsub(',','.').to_f / 100
-      purchase_price = columns[15].gsub(',','.').to_f / 100
+      base_price = columns[14].to_i
+      purchase_price = columns[15].to_i
 
       #piece price calculation
       base_price_piece = base_price / packaging_unit_container
@@ -74,20 +74,26 @@ class FileUpload
       packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
 
       if columns[36]
-        tax_profile = @vendor.tax_profiles.visible.find_by_value(columns[36].to_f / 100)
+        tax_profile = @vendor.tax_profiles.visible.find_by_value(columns[36].to_f / 100.0)
       elsif columns[15] == columns[16]
-        # since some wholesalers don't offer the tax field, guess
+        # since some wholesalers don't offer the tax field, guess depending on the prices
         tax_profile = @vendor.tax_profiles.visible.find_by_value(0)
       else
-        tax_profile = @vendor.tax_profiles.visible.find_by_value(20)
+        # default
+        tax_profile = @vendor.tax_profiles.visible.find_by_default(true)
+        raise "At least on TaxProfile has to have the default flag enabled" unless tax_profile
       end
       tax_profile_id = tax_profile.id
 
       category = @vendor.categories.visible.find_by_name(columns[6].strip)
       catname = columns[6].strip
       if category.nil?
-        category = @vendor.categories.visible.new :name => catname
-        category.save
+        category = Category.new
+        category.vendor = @vendor
+        category.company = @company
+        category.name = catname
+        result = category.save
+        raise "A category could not be saved: #{ category.errors.messages}" unless result == true
         @created_categories += 1
       end
       category_id = category.id
@@ -99,8 +105,8 @@ class FileUpload
         :shipper_sku => shipper_sku,
         :name => name + " Karton",
         :packaging_unit => packaging_unit_carton,
-        :base_price => base_price_carton,
-        :purchase_price => purchase_price_carton,
+        :price_cents => base_price_carton,
+        :purchase_price_cents => purchase_price_carton,
         :tax_profile_id => tax_profile_id,
         :category_id => category_id,
         :shipper_id => @shipper.id,
@@ -110,19 +116,19 @@ class FileUpload
       }
       sku_carton = columns[8].strip
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
-      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
+      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find by sku in case name has changed
       if carton_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
-        attributes.merge! :sku => sku_carton unless sku_carton.empty?
+        attributes.merge! :sku => sku_carton unless sku_carton.empty? # SKUs can update!
         carton_item.update_attributes attributes
-        Action.run(carton_item,:on_import)
+        #Action.run(carton_item,:on_import)
         carton_item.save
         @updated_items += 1
       else
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
-        Action.run(carton_item,:on_import)
+        #Action.run(carton_item,:on_import)
         carton_item.save
         
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
@@ -134,8 +140,8 @@ class FileUpload
         :shipper_sku => shipper_sku,
         :name => name + " Packung",
         :packaging_unit => packaging_unit_pack,
-        :base_price => base_price_pack,
-        :purchase_price => purchase_price_pack,
+        :price_cents => base_price_pack,
+        :purchase_price_cents => purchase_price_pack,
         :tax_profile_id => tax_profile_id,
         :category_id => category_id,
         :shipper_id => @shipper.id,
@@ -145,13 +151,13 @@ class FileUpload
       }
       sku_pack = columns[9].strip
       pack_item = @vendor.items.visible.where( :name => name + " Packung").first
-      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
+      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find by sku in case name has changed
       if pack_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
-        attributes.merge! :sku => sku_pack unless sku_pack.empty?
+        attributes.merge! :sku => sku_pack unless sku_pack.empty? # SKUs can update!
         pack_item.attributes = attributes
-        Action.run(pack_item,:on_import)
-        carton_item.reload
+        #Action.run(pack_item,:on_import)
+        #carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
         @updated_items += 1
@@ -159,9 +165,9 @@ class FileUpload
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
-        Action.run(pack_item,:on_import)
+        #Action.run(pack_item,:on_import)
         pack_item.save
-        carton_item.reload
+        #carton_item.reload
         carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
         pack_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}"
@@ -173,8 +179,8 @@ class FileUpload
         :shipper_sku => shipper_sku,
         :name => name + " Stk.",
         :packaging_unit => 1,
-        :base_price => base_price_piece,
-        :purchase_price => purchase_price_piece,
+        :price_cents => base_price_piece,
+        :purchase_price_cents => purchase_price_piece,
         :tax_profile_id => tax_profile_id,
         :category_id => category_id,
         :shipper_id => @shipper.id,
@@ -184,13 +190,13 @@ class FileUpload
       }
       sku_piece = columns[19].strip if columns[19]
       piece_item = @vendor.items.visible.where( :name => name + " Stk.").first
-      piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
+      piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find by sku in case name has changed
       if piece_item
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
         attributes.merge! :sku => sku_piece unless sku_piece.empty?
         piece_item.attributes = attributes
-        Action.run(piece_item,:on_import)
-        pack_item.reload
+        #Action.run(piece_item,:on_import)
+        #pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
         @updated_items += 1
@@ -198,9 +204,9 @@ class FileUpload
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.empty?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
-        Action.run(piece_item,:on_import)
+        #Action.run(piece_item,:on_import)
         piece_item.save
-        pack_item.reload
+        #pack_item.reload
         pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
         piece_item.save
         ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}"

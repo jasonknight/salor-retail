@@ -31,7 +31,7 @@ try {
 <% end %>
 
 // ---------------- gift card stuff ---------------
-<% if @order_item and @order_item.behavior == 'gift_card' and @order_item.activated.nil? %>
+<% if @order_item and @order_item.behavior == 'gift_card' and @order_item.activated.nil? and @order_item.price_cents > 0 %>
 
   print_url(Register.sticker_printer, '/items/labels', '&id=<%= @order_item.item_id %>&type=sticker&style=default')
 <% end %>

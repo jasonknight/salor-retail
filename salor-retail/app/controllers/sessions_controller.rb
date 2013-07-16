@@ -10,7 +10,6 @@ class SessionsController < ApplicationController
   skip_before_filter :get_cash_register, :only => [:new, :create]
   
   def new
-    @current_user = session[:user_id_hash] = session[:vendor_id] = session[:company_id] = nil
     @submit_path = session_path
     @company = Company.visible.first
     @vendor = @company.vendors.visible.first
@@ -20,7 +19,6 @@ class SessionsController < ApplicationController
   def create
     # Simple local login
     company = Company.visible.first
-    
     user = company.login(params[:code])
 
     if user

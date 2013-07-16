@@ -46,10 +46,11 @@ class ItemsController < ApplicationController
 
 
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new
     @item.vendor = @current_vendor
     @item.company = @current_company
     @item.currency = @current_vendor.currency
+    @item.attributes = params[:item]
     if @item.save
       @item.assign_parts(params[:part_skus])
       redirect_to items_path

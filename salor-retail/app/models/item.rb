@@ -216,7 +216,7 @@ class Item < ActiveRecord::Base
 
     p = self.vendor.items.visible.find_by_sku(string)
     if p then
-      if self.child.id == p.id then
+      if self.child and self.child.id == p.id then
         errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
         p.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
       else
@@ -248,6 +248,17 @@ class Item < ActiveRecord::Base
     else
       errors.add(:child_sku, I18n.t('system.errors.child_sku_must_exist'))
     end
+  end
+  
+  def self.get_parents(item, array=[])
+    if item.parent
+      Item.get_parents(item.parent, array)
+      array << {:n => item.name, :q => item.quantity, :p => item.packaging_unit }
+      
+    else
+      array << {:n => item.name, :q => item.quantity, :p => item.packaging_unit }
+    end
+    return array.join("\n")
   end
   
   def self.search(keywords)
@@ -422,37 +433,48 @@ class Item < ActiveRecord::Base
 #     return lines.join("\n")
 #   end
 
-  def quantity=(q)
-    if self.parent or self.child
-      q = 0 if q.nil? or q.blank?
-      q = q.to_s.gsub(',','.')
-      q = q.to_f.round(3)
-      difference = q - self.quantity
-      write_attribute(:quantity, q) and return unless difference < 0 and q == q.round and self.quantity == self.quantity.round
-      # continue only for integer quantities and decrementation
-      difference.to_i.abs.times do
-        i = self.quantity - 1
-        if i == -1
-          if self.parent.class == Item
-            #puts "Updating parent #{self.parent.name} qty";
-            before = self.parent.quantity
-            #puts "Before #{before}"
-            self.parent.update_attribute :quantity, before - 1 # recursion
-            after = self.parent.quantity
-            #puts "After #{after}"
-            parent_reducable = before != after
-            write_attribute(:quantity, self.parent.packaging_unit - 1) if parent_reducable
-          else
-            b = write_attribute :quantity, 0
-          end
-        else
-          c = write_attribute :quantity, i
-        end
-      end
-    else
-      puts "WRITING #{ q }"
-      write_attribute :quantity, q
+  def set_quantity(q)
+    q = 0 if q.blank?
+    q = q.to_s.gsub(',','.')
+    q = q.to_f.round(3)
+    parent = self.parent
+    
+    if parent.nil? or
+        q != q.round or
+        self.quantity != self.quantity.round or
+        ( parent and q >= 0 )
+      # no parent item can be used up to 'stock up' the quantity of self, so we simply write q and return.
+      # also, only integer quantities make sense for the recursive parent/child algorithm below. so, if the quantities are not integer, we simply write q and return.
+      # if q is greater than 0, then we also can write q directly, since no recursion is needed for that.
+      q = 0 if q < 0
+      log_action "Writing quantity #{ q.to_f } directly because there is no parent or the quantities are not integer or no recursion needed."
+      self.quantity = q
+      self.save
+      puts "Debugging output conventional"
+      puts Item.get_parents(self)
+      return
     end
+    
+    quantity_needed_from_parent = - q + self.quantity
+    puts "quantity_needed_from_parent (#{ -q } + #{ self.quantity }) = #{ quantity_needed_from_parent }"
+
+    packaging_units_needed = (quantity_needed_from_parent / parent.packaging_unit).ceil
+    puts "packaging_units_needed #{ packaging_units_needed }"
+    
+    if packaging_units_needed > parent.quantity
+      packaging_units_needed = parent.quantity
+    end
+    
+    puts "updating self #{ self.sku }.quantity #{ packaging_units_needed * parent.packaging_unit - quantity_needed_from_parent }"
+    self.quantity = packaging_units_needed * parent.packaging_unit - quantity_needed_from_parent
+    self.quantity = 0 if self.quantity  < 0
+    self.save
+    
+    puts "setting parent #{ parent.sku } quantity #{parent.quantity -  packaging_units_needed }"
+    parent.set_quantity( parent.quantity -  packaging_units_needed)
+    
+    puts "Debugging output recursion"
+    puts Item.get_parents(self)
   end
   
   def hide(by)

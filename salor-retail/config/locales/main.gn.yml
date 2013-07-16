@@ -15,7 +15,7 @@ gn:
       applies_to: bezieht sich auf
       auto_drop: Auto-Buchung Tagesbeginn
       bank_machine_path: Bankomat
-      base_price: Preis/Betrag/Prozent
+      base_price: Betrag
       behavior: Verhalten
       body: Körper
       buyback_price: Pfandbetrag
@@ -109,7 +109,7 @@ gn:
         tax_free: Steuerfrei
       owner_id: Owner
       owner_type: Owner Type
-      packaging_unit: Verpackungseinheit
+      packaging_unit: Verpackung
       pagination: Artikel pro Seite
       paid: Bezahlt
       parent_sku: Eltern-SKU

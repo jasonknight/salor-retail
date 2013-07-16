@@ -76,7 +76,7 @@ class DrawerTransaction < ActiveRecord::Base
     "\e!\x38" +
     self.amount.to_s +
     "\n\n" +
-    I18n.t(self.amount > 0 ? 'printr.word.drop' : 'printr.word.payout') +
+    I18n.t(self.amount_cents > 0 ? 'printr.word.drop' : 'printr.word.payout') +
     "\n\n\n\n\n\n\n" +
     "\x1D\x56\x00" # cut
   end

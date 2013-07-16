@@ -57,10 +57,10 @@ class Vendor < ActiveRecord::Base
   serialize :unused_quote_numbers
   
   validates_presence_of :name
-  validates_presence_of :identifier
+  validates_presence_of :currency
   validates_uniqueness_of :identifier, :scope => :company_id
   after_create :set_hash_id
-  after_save :set_currency
+  before_save :set_currency
   
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
   
@@ -70,7 +70,7 @@ class Vendor < ActiveRecord::Base
   
   def set_currency
     currencystring = I18n.t('number.currency.format.friendly_unit', :locale => self.region)
-    write_attribute :currency, currencystring
+    self.currency = currencystring
   end
   
   def logo_image
