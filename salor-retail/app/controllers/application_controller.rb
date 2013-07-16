@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   #protect_from_forgery
   
   before_filter :loadup
+  after_filter  :loaddown
   before_filter :get_cash_register
   before_filter :set_tailor
   before_filter :set_locale
@@ -124,12 +125,13 @@ class ApplicationController < ActionController::Base
   
   def loadup
     $USERID = nil
+    $PARAMS = nil
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
     if @current_user.nil? or session[:user_id_hash].blank?
       redirect_to new_session_path and return 
     end
     $USERID = @current_user.id
-    
+    $PARAMS = params
     if defined?(SrSaas) == 'constant'
       # this is necessary due to call to the login method in UsersController#clock{in|out}
       @current_company = SrSaas::Company.visible.find_by_id(@current_user.company_id)
@@ -142,6 +144,13 @@ class ApplicationController < ActionController::Base
     return @current_user
   end
   
+  def loaddown
+    # just to make sure we clear out these globals
+    $USERID = nil
+    $PARAMS = nil
+    log_action "End of request \n\n\n\n\n\n"
+  end
+
   def get_cash_register
     @current_register = @current_vendor.cash_registers.visible.find_by_id(session[:cash_register_id])
     redirect_to cash_registers_path and return unless @current_register

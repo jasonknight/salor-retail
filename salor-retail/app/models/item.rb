@@ -161,18 +161,20 @@ class Item < ActiveRecord::Base
   def get_translated_name(locale=:en)
     locale = locale.to_s
     trans = read_attribute(:name_translations)
+    val = ''
     if self.behavior == 'gift_card'
-      return I18n.t('activerecord.models.item_type.gift_card', :locale => locale)
+      val = I18n.t('activerecord.models.item_type.gift_card', :locale => locale)
     elsif trans.nil? or trans.empty?
-      return read_attribute(:name)
+      val = read_attribute(:name)
     else
       hash = ActiveSupport::JSON.decode(trans)
       if hash[locale] then
-        return hash[locale]
+        val = hash[locale]
       else
-        return read_attribute :name
+        val = read_attribute :name
       end
     end
+    return val
   end
   
   def name_translations=(hash)

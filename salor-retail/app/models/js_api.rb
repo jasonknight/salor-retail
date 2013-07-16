@@ -1,7 +1,7 @@
 class JsApi
-  attr_reader :plugin_name, :company, :vendor, :user, :meta
+  attr_reader :plugin_name, :company, :vendor, :user, :meta, :params, :action
 
-  def initialize(pname,company,vendor,user,secret)
+  def initialize(pname,action,company,vendor,user,secret)
     set_plugin_name(pname)
     set_company(company.attributes)
     set_user(user.attributes)
@@ -11,12 +11,19 @@ class JsApi
     @evaluated = false
     @secret = secret # to prevent api users from accessing some functions
     @writeable = true
+    @params = $PARAMS.delete_if {|k,v| [:password].include?(k.to_sym) }
+    @action = action
+  end
+
+  def set_params(p)
+    @params = p
   end
 
   def set_writeable(secr=nil,bool)
     return if not secr == @secret
     @writeable = bool
   end
+
   def set_object(o)
     @object = o if not @object
   end
@@ -32,17 +39,22 @@ class JsApi
   def get_meta(key)
     return @private_user.user_meta.find_or_create_by_key(key).value
   end
-  
+
+  def set_meta(key, value)
+    if value.class == String then
+      meta = @private_user.user_meta.find_or_create_by_key(key)
+      return meta.update_attribute :value, value
+    else
+      log_action "Cannot set non-string value. JSON encode it if you need to save something complex."
+      return false
+    end
+  end
+
   # Api for manipulating objects
 
   def update_attributes(src_attrs)
     return false if @writeable == false
-    attrs = {}
-    if src_attrs.kind_of? V8::Object then
-      src_attrs.each do |k,v|
-        attrs[k] = v
-      end
-    end
+    attrs = v8_object_to_hash(src_attrs)
     if @object then
       attrs = attrs.delete_if {|k,v| [:password,:id,:sku].include? k.to_sym }
       begin
@@ -63,16 +75,30 @@ class JsApi
       return nil
     end
   end
-
-  def set_meta(key, value)
-    if value.class == String then
-      meta = @private_user.user_meta.find_or_create_by_key(key)
-      meta.update_attribute :value, value
+  
+  def append(text)
+    if @object.class == String then
+      @object += text
+      return true
     else
-      log_action "Cannot set non-string value. JSON encode it if you need to save something complex."
+      return false
     end
   end
-  
+
+  def get(url,headers,user=nil,pass=nil)
+    headers = v8_object_to_hash(headers)
+    resp = SalorBase.get_url(url,headers,user,pass)
+    return resp.body
+  end
+  def post( url, headers, data, user=nil, pass=nil )
+    headers = v8_object_to_hash(headers)
+    log_action "data is : " + data.class.to_s + " #{data.kind_of?(V8::Object)}"
+    data = v8_object_to_hash(data) if data.kind_of? V8::Object and not data.class == String
+    log_action "Trying to get response"
+    resp = SalorBase.post_url(url, headers, data, user, pass)
+    log_action "Response is: " + resp.inspect
+    return resp.body
+  end
   def log_action(msg)
     SalorBase.log_action "Plugin: #{@plugin_name}", msg
   end
@@ -116,6 +142,18 @@ class JsApi
     @vendor = vendor_attribs if not @vendor
   end
 
-  
-
+  def v8_object_to_hash(src_attrs)
+    attrs = {}
+    log_action "Trying to convert to hash"
+    if src_attrs.kind_of? V8::Object then
+      src_attrs.each do |k,v|
+        if v.kind_of? V8::Object then
+          attrs[k] = v8_object_to_hash(v)
+        else
+          attrs[k] = v
+        end
+      end
+    end
+    return attrs
+  end
 end

@@ -76,13 +76,37 @@ module SalorBase
       return SalorBase.string_to_float(string)
    end
    
-  def self.get_url(url, user=nil, pass=nil)
+  def self.get_url(url, headers={}, user=nil, pass=nil)
     uri = URI.parse(url)
-    
+    headers ||= {}
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     if user and pass then
       request.basic_auth(user,pass)
+    end
+    headers.each do |k,v|
+      request[k] = v
+    end
+    response = http.request(request)
+    return response
+  end
+
+  def self.post_url(url, headers, data, user=nil, pass=nil)
+    uri = URI.parse(url)
+    headers ||= {}
+    raise "NoDataPassed" if data.nil?
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    if user and pass then
+      request.basic_auth(user,pass)
+    end
+    if data.class == Hash then
+      request.set_form_data(data)
+    elsif data.class == String then
+      request.body = data
+    end
+    headers.each do |k,v|
+      request[k] = v
     end
     response = http.request(request)
     return response
