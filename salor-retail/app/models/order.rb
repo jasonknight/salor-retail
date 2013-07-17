@@ -380,7 +380,7 @@ class Order < ActiveRecord::Base
             i.quantity += oi.quantity
             i.quantity_buyback += oi.quantity
           else
-            i.quantity -= oi.quantity
+            i.set_quantity_recursively(i.quantity - oi.quantity)
             i.quantity_sold += oi.quantity
           end
         end

@@ -250,17 +250,6 @@ class Item < ActiveRecord::Base
     end
   end
   
-  def self.get_parents(item, array=[])
-    if item.parent
-      Item.get_parents(item.parent, array)
-      array << {:n => item.name, :q => item.quantity, :p => item.packaging_unit }
-      
-    else
-      array << {:n => item.name, :q => item.quantity, :p => item.packaging_unit }
-    end
-    return array.join("\n")
-  end
-  
   def self.search(keywords)
     if keywords =~ /([\w]+) (\d{1,2}[\.\,]\d{1,2})/ then
       parts = keywords.match(/([\w]+) (\d{1,2}[\.\,]\d{1,2})/)
