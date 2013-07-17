@@ -240,7 +240,11 @@ class Vendor < ActiveRecord::Base
       :completed_at => from..to,
       :drawer_id => drawer
     )
-    orders_count = orders.count
+    count_orders = orders.count
+    count_order_items = self.order_items.visible.where(
+      :completed_at => from..to,
+      :drawer_id => drawer
+    ).count
     
     # revenue
     revenue = {}
@@ -448,7 +452,7 @@ class Vendor < ActiveRecord::Base
           :payment_method_id => pm,
           :refund => nil
         ).where("amount_cents > 0").sum(:amount_cents)
-        paymentmethods[:pos][pm.name] = Money.new(pm_pos_cents, self.currency)
+        paymentmethods[:pos][pm.name] = Money.new(pmi_pos_cents, self.currency)
         
         pmi_neg_cents = self.payment_method_items.visible.where(
           :created_at => from..to,
@@ -493,7 +497,8 @@ class Vendor < ActiveRecord::Base
     report['transactions'] = transactions
     report['transactions_sum'] = transactions_sum
     report['calculated_drawer_amount'] = calculated_drawer_amount
-    report['orders_count'] = orders_count
+    report['count_orders'] = count_orders
+    report['count_order_items'] = count_order_items
     report['categories_sum'] = categories_sum
     report[:date_from] = I18n.l(from, :format => :just_day)
     report[:date_to] = I18n.l(to, :format => :just_day)
@@ -581,7 +586,8 @@ class Vendor < ActiveRecord::Base
     transactions   = report['transactions']
     transactions_sum   = report['transactions_sum']
     calculated_drawer_amount =   report['calculated_drawer_amount']
-    orders_count = report['orders_count']
+    count_orders = report['count_orders']
+    count_order_items = report['count_order_items']
     categories_sum = report['categories_sum']
     date_from = report[:date_from]
     date_to = report[:date_to]
@@ -608,6 +614,13 @@ class Vendor < ActiveRecord::Base
     "\n" +
     username +
     "\n==========================================\n\n"
+    
+    
+    generalstatistics = ''
+    generalstatistics +=
+        "#{ I18n.l(DateTime.now) }\n\n" +
+        "#{ I18n.t '.count_orders' }: #{ count_orders }\n" +
+        "#{ I18n.t '.count_order_items' }: #{ count_order_items }\n\n"
 
 
     
@@ -753,12 +766,11 @@ class Vendor < ActiveRecord::Base
         ]
     
     unless calculated_drawer_amount.zero?
-      calculated_drawer_amount +=
+      calculated_drawer_amount_line +=
           "\n******************************************\n" +
           I18n.t('printr.eod_report.warning_drawer_amount_not_zero') +
           "\n******************************************\n"
     end
-
 
     bigspace = "\n\n\n\n\n\n"
     cut = "\x1D\x56\x00"
@@ -767,6 +779,7 @@ class Vendor < ActiveRecord::Base
     output +=
         vendorname +
         header +
+        generalstatistics +
         groups[:pos] +
         groups[:neg] +
         refund_header +
@@ -790,7 +803,7 @@ class Vendor < ActiveRecord::Base
 
     if model == 'item'
       if params[:id]
-        @items = self.items.visible.where(:id => params[:id])
+        @items = self.items.visible.find_by_id(params[:id])
       elsif params[:skus]
         # text has been entered on the items#selection scren
         match = /(ORDER)(.*)/.match(params[:skus].split(",").first)

@@ -775,6 +775,7 @@ en:
       cash-refunds: Cash-Refunds
       cash_drawer: Cash drawer
       count_orders: Count of orders
+      count_order_items: Count of sold items
       drop: drop
       from: From
       gross: gross

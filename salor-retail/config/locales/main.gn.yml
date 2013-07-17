@@ -578,7 +578,7 @@ gn:
       OrderRefund: Gesamtstornierung
       cash-refunds: Bargeld-Stornierungen
       cash_drawer: Kassenlade
-      count_orders: Anzahl Verkäufe
+      count_orders: Anzahl Verkäufe      
       drop: Einzahlung
       from: von
       gross: brutto
@@ -780,11 +780,12 @@ gn:
       cash-refunds: Bargeld-Stornierungen
       cash_drawer: Kassenlade
       count_orders: Anzahl Verkäufe
+      count_order_items: Anzahl Verkaufsartikel
       drop: Einzahlung
       from: von
       gross: brutto
       net: netto
-      noncash-refunds: Noncash-Refunds
+      refunds: Stornierungen
       payments: Zahlungen
       payout: Auszahlung
       payouts: Auszahlungen

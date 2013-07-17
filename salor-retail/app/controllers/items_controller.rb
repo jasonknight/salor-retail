@@ -167,18 +167,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def labels
-    output = @current_vendor.print_labels('item', params, @current_register)
-    if params[:download] == 'true'
-      send_data output, :filename => '1.salor'
-      return
-    elsif @current_register.salor_printer
-      render :text => output
-      return
-    end
-    render :nothing => true
-  end
-
   def database_distiller
     @all_items = Item.where(:hidden => 0).count
     @used_item_ids = OrderItem.connection.execute('select item_id from order_items').to_a.flatten.uniq
@@ -256,6 +244,18 @@ class ItemsController < ApplicationController
     else
       @skus = nil
     end
+  end
+  
+  def labels
+    output = @current_vendor.print_labels('item', params, @current_register)
+    if params[:download] == 'true'
+      send_data output, :filename => '1.salor'
+      return
+    elsif @current_register.salor_printer
+      render :text => output
+      return
+    end
+    render :nothing => true
   end
   
   def report

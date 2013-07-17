@@ -26,13 +26,13 @@
   
   <tr>
     <td colspan=6 align="right"><%=  I18n.t("activerecord.attributes.total")%>:</td>
-    <td align="right"><%= number_to_currency @order.gross %></td>
+    <td align="right"><%= humanized_money_with_symbol @order.total %></td>
   </tr>
   
   <% @order.payment_method_items.visible.each do |pmi| %>
     <tr class="no-stripe">
       <td colspan="6" align="right"><%= pmi.payment_method.name %></td>
-      <td align="right"><%= number_to_currency pmi.amount %></td>
+      <td align="right"><%= humanized_money_with_symbol pmi.amount %></td>
     </tr>
   <% end %>
   

@@ -2,7 +2,7 @@
 = stylesheet_link_tag 'invoice_default_print', :media => 'print'
 = javascript_include_tag 'invoices.js'
 - case @order.paid
-  - when 1
+  - when true
     - title = "menu.orders"
   - else
     - title = 'activerecord.models.order.unpaid_order'

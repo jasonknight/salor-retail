@@ -117,10 +117,14 @@ class VendorsController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : Time.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
-    @users = @current_vendor.users.visible
-    @user = @current_vendor.users.visible.find_by_id(params[:user_id])
-    @user ||= @current_user
-    @report = @current_vendor.get_end_of_day_report(@from, @to, @user.get_drawer)
+    @users = @current_vendor.users.visible.where(:uses_drawer_id => nil)
+    if params[:user_id].blank?
+      drawer = nil
+    else
+      @user = @current_vendor.users.visible.find_by_id(params[:user_id])
+      drawer = @user.get_drawer
+    end
+    @report = @current_vendor.get_end_of_day_report(@from, @to, drawer)
   end
 
 
