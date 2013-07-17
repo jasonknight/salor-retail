@@ -619,8 +619,8 @@ class Vendor < ActiveRecord::Base
     generalstatistics = ''
     generalstatistics +=
         "#{ I18n.l(DateTime.now) }\n\n" +
-        "#{ I18n.t '.count_orders' }: #{ count_orders }\n" +
-        "#{ I18n.t '.count_order_items' }: #{ count_order_items }\n\n"
+        "#{ I18n.t 'vendors.report_day.count_orders' }: #{ count_orders }\n" +
+        "#{ I18n.t 'vendors.report_day.count_order_items' }: #{ count_order_items }\n\n"
 
 
     
@@ -701,7 +701,7 @@ class Vendor < ActiveRecord::Base
     if refunds.any?
       refund_header +=
           "\e!\x18" +
-          I18n.t('printr.eod_report.refunds') +
+          I18n.t('vendors.report_day.refunds') +
           "\e!\x00"
     
     
@@ -803,7 +803,7 @@ class Vendor < ActiveRecord::Base
 
     if model == 'item'
       if params[:id]
-        @items = self.items.visible.find_by_id(params[:id])
+        @items = self.items.visible.where(:id => params[:id])
       elsif params[:skus]
         # text has been entered on the items#selection scren
         match = /(ORDER)(.*)/.match(params[:skus].split(",").first)

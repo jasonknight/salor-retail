@@ -133,13 +133,18 @@ class VendorsController < ApplicationController
     @from = @from ? @from.beginning_of_day : Time.now.beginning_of_day
     @to = @to ? @to.end_of_day : @from.end_of_day
     @user = @current_vendor.users.visible.find_by_id(params[:user_id])
-    
+    if params[:user_id].blank?
+      drawer = nil
+    else
+      @user = @current_vendor.users.visible.find_by_id(params[:user_id])
+      drawer = @user.get_drawer
+    end
     if @current_register.salor_printer
-      text = @current_vendor.escpos_eod_receipt(@from, @to, @user.get_drawer)
+      text = @current_vendor.print_eod_report(@from, @to, drawer, @current_register)
       render :text => Escper::Asciifier.new.process(text)
       return
     else
-      text = @current_vendor.print_eod_report(@from, @to, @user.get_drawer, @current_register)
+      text = @current_vendor.print_eod_report(@from, @to, drawer, @current_register)
       render :nothing => true
     end
     
