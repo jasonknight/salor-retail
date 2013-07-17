@@ -11,7 +11,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130716112659) do
+=======
+ActiveRecord::Schema.define(:version => 20130715125322) do
+>>>>>>> d7153f9267ef0c5c27b22c07c05d8676e7172874
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -33,6 +37,7 @@ ActiveRecord::Schema.define(:version => 20130716112659) do
     t.integer  "company_id"
     t.string   "model_type"
     t.integer  "model_id"
+    t.text     "js_code"
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"
@@ -1040,6 +1045,16 @@ ActiveRecord::Schema.define(:version => 20130716112659) do
   end
 
   add_index "user_logins", ["user_id"], :name => "index_employee_logins_on_employee_id"
+
+  create_table "user_meta", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "key"
+    t.text     "value"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "user_meta", ["user_id"], :name => "index_user_meta_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false

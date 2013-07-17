@@ -6,12 +6,14 @@ en:
   activerecord:
     attributes:
       gift_card_amount: Gift Card remaining amount
+      js_code: Javascript Code
+      attributes: attributes
       active: active
       address: address
       afield: field
       always_open_drawer: Always Open Drawer
       amount: amount
-      amount_remaining: amount remaining
+      gift_card_amount: Gift Card Amount
       amount_type: amount type
       applies_to: applies to
       auto_drop: Automatically Begin Day
@@ -30,7 +32,6 @@ en:
       cellphone: cell phone
       child_sku: Child SKU
       city: city
-      code: code
       color: color
       company_name: company name
       contact_address: contact address
@@ -292,6 +293,7 @@ en:
     divide: divide
     multiply: multiply
     subtract: subtract
+    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Cash Drawer
@@ -923,3 +925,4 @@ en:
     on_export: on export
     on_import: on import
     on_save: on save
+    on_sku_not_found: on sku not found

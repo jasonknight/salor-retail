@@ -139,7 +139,7 @@ class Order < ActiveRecord::Base
   def add_order_item(params={})
     return nil if params[:sku].blank?
     if self.completed_at then
-      log_action "Order is completed already, cannot add items to it"
+      log_action "Order is completed already, cannot add items to it #{self.completed_at}"
     end
     
     # get existing regular item
@@ -148,7 +148,8 @@ class Order < ActiveRecord::Base
       if item.is_normal?
         log_action "Item is normal, and present, just increment"
         # simply increment and return
-        item.quantity += 1        
+        item.quantity += 1 
+        item.modify_price_for_actions       
         item.calculate_totals
         item.save
         self.calculate_totals
@@ -263,18 +264,19 @@ class Order < ActiveRecord::Base
     i.vendor = self.vendor
     i.company = self.company
     i.currency = self.vendor.currency
-    
+    i.name = sku
     pm = sku.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1]
       # a price in the format xx,xx was entered
       i.sku = "DMY" + Time.now.strftime("%y%m%d") + rand(999).to_s
-      i.base_price = sku
+      i.price = sku
     else
       # dummy item
+      # we didn't find the item, let's see if a plugin wants to handle it
       i.sku = sku
-      i.base_price = 0
+      i.price = 0
+      i = Action.run(i.vendor, i, :on_sku_not_found) 
     end
-    i.name = i.sku
     i.save
     return i
   end

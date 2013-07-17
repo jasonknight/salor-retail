@@ -12,11 +12,19 @@
         %h2= @action.model.name if @action.model
         %hr
     %tr
+      %td{ :colspan => 2, :align => :right }= f.submit
+    %tr
       %td= f.label :name
       %td= f.text_field :name
     %tr
-      %td= f.label :Category
+      %td= f.label :sku
+      %td= f.text_field :sku
+    %tr
+      %td= f.label :category_id
       %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
+    %tr
+      %td= f.label :vendor_id
+      %td= f.select :vendor_model, options_for_select(@current_company.vendors.visible.collect{ |v| [v.name,"Vendor:#{v.id}"] },@action.vendor_model), :include_blank => true 
     %tr
       %td= f.label :whento
       %td= f.select :whento, Action.when_list
@@ -36,5 +44,9 @@
     %tr
       %td= f.label :value2
       %td= f.text_field :value2
+
     %tr
-      %td{ :colspan => 2 }= f.submit
+      %td= f.label :js_code
+      %td= f.text_area :js_code, :cols => 80, :rows => 12
+    %tr
+      %td{ :colspan => 2, :align => :right }= f.submit

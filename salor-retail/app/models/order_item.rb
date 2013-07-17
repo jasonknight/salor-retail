@@ -68,6 +68,20 @@ class OrderItem < ActiveRecord::Base
     self.modify_price_for_buyback
     self.calculate_totals
   end
+
+  def base_price
+    return self.price
+  end
+  def base_price=(p)
+    if p.class == String
+      # a string is sent from Vendor.edit_field_on_child
+      p = Money.new(self.string_to_float(p) * 100.0, self.currency)
+    elsif p.class == Float
+      # not sure which parts of the code send a Float, but we leave it here for now
+      p = Money.new(p * 100.0, self.currency)
+    end
+    self.price = p
+  end
   
   def tax=(value)
     tax_profile = self.vendor.tax_profiles.visible.find_by_value(value)
@@ -221,7 +235,7 @@ class OrderItem < ActiveRecord::Base
   
   def modify_price_for_actions
     log_action "modify_price_for_actions"
-    Action.run(self, :add_to_order)
+    Action.run(self.vendor, self, :add_to_order)
   end
   
   def modify_price_for_gs1
