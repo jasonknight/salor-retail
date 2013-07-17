@@ -5,6 +5,7 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      gift_card_amount: Gutschein Restbetrag
       active: aktiv
       address: Adresse
       afield: Feld

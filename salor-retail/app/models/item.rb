@@ -432,49 +432,45 @@ class Item < ActiveRecord::Base
 #     end
 #     return lines.join("\n")
 #   end
+  
+  # includes quantity of all parents
+  def recursive_quantity(depth=0)
+    depth += 1
+    raise "Cap of 5 reached." if depth > 5
+    if self.parent
+      return self.quantity + self.parent.packaging_unit * self.parent.recursive_quantity(depth)
+    else
+      return self.quantity
+    end
+  end
 
-  def set_quantity(q)
+  def set_quantity_recursively(q, depth=0)
+    depth += 1
+    raise "Cap of 5 reached." if depth > 5
+    
     q = 0 if q.blank?
     q = q.to_s.gsub(',','.')
     q = q.to_f.round(3)
     parent = self.parent
     
-    if parent.nil? or
-        q != q.round or
-        self.quantity != self.quantity.round or
-        ( parent and q >= 0 )
-      # no parent item can be used up to 'stock up' the quantity of self, so we simply write q and return.
-      # also, only integer quantities make sense for the recursive parent/child algorithm below. so, if the quantities are not integer, we simply write q and return.
-      # if q is greater than 0, then we also can write q directly, since no recursion is needed for that.
-      q = 0 if q < 0
-      log_action "Writing quantity #{ q.to_f } directly because there is no parent or the quantities are not integer or no recursion needed."
+    if (q >= 0 or # no recursion needed for this
+        q != q.round or  # no recursion for non-integers
+        self.quantity != self.quantity.round or # no recursion for non-integers
+        (self.parent.nil? and q < 0) # stop recurion when top parent goes into minus
+       )
+      log_action "Writing quantity #{ q.to_f } directly."
       self.quantity = q
       self.save
-      puts "Debugging output conventional"
-      puts Item.get_parents(self)
       return
     end
-    
-    quantity_needed_from_parent = - q + self.quantity
-    puts "quantity_needed_from_parent (#{ -q } + #{ self.quantity }) = #{ quantity_needed_from_parent }"
 
-    packaging_units_needed = (quantity_needed_from_parent / parent.packaging_unit).ceil
-    puts "packaging_units_needed #{ packaging_units_needed }"
-    
-    if packaging_units_needed > parent.quantity
-      packaging_units_needed = parent.quantity
-    end
-    
-    puts "updating self #{ self.sku }.quantity #{ packaging_units_needed * parent.packaging_unit - quantity_needed_from_parent }"
-    self.quantity = packaging_units_needed * parent.packaging_unit - quantity_needed_from_parent
-    self.quantity = 0 if self.quantity  < 0
+    parent_units_needed = ( -q / parent.packaging_unit ).ceil
+    self.quantity = parent_units_needed * parent.packaging_unit + q
     self.save
     
-    puts "setting parent #{ parent.sku } quantity #{parent.quantity -  packaging_units_needed }"
-    parent.set_quantity( parent.quantity -  packaging_units_needed)
-    
-    puts "Debugging output recursion"
-    puts Item.get_parents(self)
+    # now we need to reduce the quantity of the parent. this starts the recursion
+    new_parent_quantity = parent.quantity - parent_units_needed
+    parent.set_quantity_recursively(new_parent_quantity, depth)
   end
   
   def hide(by)

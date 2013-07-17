@@ -5,6 +5,7 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      gift_card_amount: Gift Card remaining amount
       active: active
       address: address
       afield: field

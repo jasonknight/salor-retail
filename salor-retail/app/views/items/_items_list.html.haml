@@ -1,0 +1,23 @@
+%table.items_index
+  %tr
+    - [:name,:base_price,:sku,:quantity,:packaging_unit, '',''].each do |key|
+      - if key.blank?
+        %th
+      - else
+        %th.pointer{ :onclick => "window.location = '?order_by=#{ key }&page=#{ params[:page] }';", :class => "#{ 'left' if key==:name }"}= I18n.t("activerecord.attributes.#{ key }")
+        
+  - @items.each do |item|
+    - if item.parent
+      - depth = 0
+      - i = item
+      %tr
+      %tr
+      - until i.nil?
+        - depth += 1
+        - break if depth > 5
+        %tr.recursive= render :partial => 'item_row', :locals => { :item => i, :depth => depth }
+        - i = i.parent
+      %tr
+      %tr
+    - else
+      %tr.even= render :partial => 'item_row', :locals => { :item => item, :depth => 0 }
