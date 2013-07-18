@@ -52,6 +52,9 @@ GEM
       serialport
     execjs (1.4.0)
       multi_json (~> 1.0)
+    google_currency (2.2.0)
+      money (~> 5.1.0)
+      multi_json (>= 1.0.0)
     haml (4.0.0)
       tilt
     hike (1.2.3)
@@ -155,6 +158,7 @@ DEPENDENCIES
   coffee-rails
   debugger
   escper (= 1.2.1)
+  google_currency
   haml (= 4.0.0)
   i18n-js
   jquery-rails (= 2.0.2)

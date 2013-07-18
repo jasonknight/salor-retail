@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
 
    
   def new_from_proforma
-    @proforma = Order.scopied.find_by_id(params[:order_id].to_s)
+    @proforma = @current_vendor.orders.visible.find_by_id(params[:order_id])
     @order = @proforma.dup
     @order.save
     @order.reload

@@ -498,7 +498,7 @@ class Order < ActiveRecord::Base
   end
   
   
-  def report
+  def report      
     sum_taxes = Hash.new
 
     self.vendor.tax_profiles.visible.each do |t|
