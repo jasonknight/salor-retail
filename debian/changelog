@@ -1,3 +1,9 @@
+salor-retail (4.0.2.3) unstable; urgency=low
+
+  * more exchange stuff
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 20:11:02 +0200
+
 salor-retail (4.0.2.2) unstable; urgency=low
 
   * build
