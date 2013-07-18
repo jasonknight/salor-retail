@@ -140,7 +140,7 @@ class VendorsController < ApplicationController
       drawer = @user.get_drawer
     end
     if @current_register.salor_printer
-      text = @current_vendor.print_eod_report(@from, @to, drawer, @current_register)
+      text = @current_vendor.escpos_eod_report(@from, @to, drawer)
       render :text => Escper::Asciifier.new.process(text)
       return
     else
