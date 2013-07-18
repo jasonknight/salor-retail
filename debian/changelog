@@ -1,3 +1,10 @@
+salor-retail (4.0.2.2) unstable; urgency=low
+
+  * build
+  * added google-currency
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 17:04:26 +0200
+
 salor-retail (4.0.2.1) unstable; urgency=low
 
   * currency switch for invoices
