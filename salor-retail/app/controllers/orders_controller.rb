@@ -318,7 +318,10 @@ class OrdersController < ApplicationController
   
   def print
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
-    @report = @order.report
+    @report = @order.report(params[:locale_select])
+    # exchange to currency
+    @ec = params[:currency]
+    @ec ||= @current_vendor.currency
     view = 'default'
     render "orders/invoices/#{view}/page"
   end

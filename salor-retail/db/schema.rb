@@ -11,11 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(:version => 20130716112659) do
-=======
-ActiveRecord::Schema.define(:version => 20130715125322) do
->>>>>>> d7153f9267ef0c5c27b22c07c05d8676e7172874
 
   create_table "actions", :force => true do |t|
     t.string   "name"

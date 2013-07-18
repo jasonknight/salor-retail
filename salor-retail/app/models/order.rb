@@ -498,7 +498,9 @@ class Order < ActiveRecord::Base
   end
   
   
-  def report      
+  def report(locale=nil)
+    locale ||= I18n.locale
+    
     sum_taxes = Hash.new
 
     self.vendor.tax_profiles.visible.each do |t|
@@ -520,7 +522,7 @@ class Order < ActiveRecord::Base
     tax_format = "   %s: %2i%% %7.2f %7.2f %8.2f\n"
 
     self.order_items.visible.each do |oi|
-      name = oi.item.get_translated_name(I18n.locale)
+      name = oi.item.get_translated_name(locale)
       taxletter = oi.tax_profile.letter
       
 
@@ -672,8 +674,8 @@ class Order < ActiveRecord::Base
     end
     
     # --- invoice blurbs ---
-    invoice_blurb_header = self.vendor.invoice_blurbs.visible.where(:lang => I18n.locale, :is_header => true).last
-    invoice_blurb_footer = self.vendor.invoice_blurbs.visible.where(:lang => I18n.locale).where('is_header IS NOT TRUE').last
+    invoice_blurb_header = self.vendor.invoice_blurbs.visible.where(:lang => locale, :is_header => true).last
+    invoice_blurb_footer = self.vendor.invoice_blurbs.visible.where(:lang => locale).where('is_header IS NOT TRUE').last
     invoice_blurb_header_receipt = invoice_blurb_header.body_receipt if invoice_blurb_header
     invoice_blurb_header_invoice = invoice_blurb_header.body if invoice_blurb_header
     invoice_blurb_footer_receipt = invoice_blurb_footer.body_receipt if invoice_blurb_footer

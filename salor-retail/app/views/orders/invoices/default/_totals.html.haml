@@ -8,9 +8,9 @@
     %tr
       %td{ :colspan => 4 }= t('activerecord.attributes.total').upcase
       - if @order.is_proforma then
-        %td.total= humanized_money_with_symbol @order.amount_paid
+        %td.total= humanized_money_with_symbol @order.amount_paid.exchange_to(@ec)
       - else
-        %td.total= humanized_money_with_symbol @report[:total]
+        %td.total= humanized_money_with_symbol @report[:total].exchange_to(@ec)
 
   %br
   %br
@@ -20,12 +20,12 @@
       - @order.payment_method_items.each do |pm|
         %tr
           %td{:class => 'editable-payment-method pointer', :model_id => pm.id, :amount => pm.amount}= pm.payment_method.name
-          %td.total= humanized_money_with_symbol pm.amount
+          %td.total= humanized_money_with_symbol pm.amount.exchange_to(@ec)
     - else
       - @report[:paymentmethods].each do |k,v|
         %tr
           %td= v[:name]
-          %td.total= humanized_money_with_symbol v[:amount]
+          %td.total= humanized_money_with_symbol v[:amount].exchange_to(@ec)
 
 
   %br
