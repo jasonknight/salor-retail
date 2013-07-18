@@ -884,6 +884,7 @@ class Order < ActiveRecord::Base
   end
   
   def print(cash_register)
+    return if self.company.mode != 'local'
     contents = self.escpos_receipt
     
     if nil # is_mac?

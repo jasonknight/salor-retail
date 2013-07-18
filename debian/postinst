@@ -45,7 +45,7 @@ for lInstance in $gOldInstances; do
   if which ucf >/dev/null 2>&1; then
     ucf --purge /etc/salor-retail/$lInstance/database.yml
     ucf --purge /etc/salor-retail/$lInstance/config.yml
-    ucf --purge /etc/salor-hospitality/$lInstance/codepages.yml
+    ucf --purge /etc/salor-retail/$lInstance/codepages.yml
   fi
   
   rm -rf /etc/salor-retail/$lInstance

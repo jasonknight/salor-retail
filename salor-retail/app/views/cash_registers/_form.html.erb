@@ -43,10 +43,13 @@
                   <%= f.label t("activerecord.attributes.no_print") %><br />
                   <%= f.check_box :no_print %>
                 </div>
-                <div class="field">
-                  <%= f.label t("activerecord.attributes.salor_printer") %><br />
-                  <%= f.check_box :salor_printer %>
-                </div>
+                
+                <% if @current_company.mode  == 'local' %>
+                  <div class="field">
+                    <%= f.label t("activerecord.attributes.salor_printer") %><br />
+                    <%= f.check_box :salor_printer %>
+                  </div>
+                <% end %>
 <!--                <div class="field">
                   <%= f.label t("activerecord.attributes.cash_drawer") %><br />
                   <%= f.select :cash_drawer_name, @devices_for_select, :include_blank => true %>
@@ -67,7 +70,7 @@
         <td>
             <div class="field">
               <%= f.label t("activerecord.attributes.thermal_printer") %><br />
-              <% if @cash_register.salor_printer != true %>
+              <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
                 <%= f.collection_select :thermal_printer_name, @devices_for_select,:first, :first, {:include_blank => true} %>
               <% else %>
                 <%= f.text_field :thermal_printer %>
@@ -76,7 +79,7 @@
             <br />
             <div class="field">
               <%= f.label 'sticker printer' %><br />
-              <% if @cash_register.salor_printer != true %>
+              <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
                 <%= f.collection_select :sticker_printer_name, @devices_for_select,:first, :first, {:include_blank => true} %>
               <% else %>
                 <%= f.text_field :sticker_printer %>
@@ -85,7 +88,7 @@
             <br />
             <div class="field">
               <%= f.label t("activerecord.attributes.pole_display") %><br />
-              <% if @cash_register.salor_printer != true %>
+              <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
                 <%= f.collection_select :pole_display_name, @devices_for_select,:first, :first, :include_blank => true %>
               <% else %>
                 <%= f.text_field :pole_display %>

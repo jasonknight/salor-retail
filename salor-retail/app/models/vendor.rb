@@ -557,6 +557,7 @@ class Vendor < ActiveRecord::Base
   end
   
   def print_eod_report(from=nil, to=nil, drawer=nil, cash_register)
+    return if self.company.mode != 'local'
     text = self.escpos_eod_report(from, to, drawer)
     
     vp = Escper::VendorPrinter.new({})
@@ -832,7 +833,7 @@ class Vendor < ActiveRecord::Base
       return Escper::Asciifier.new.process(text)
     elsif cash_register.salor_printer
       return Escper::Asciifier.new.process(text)
-    else
+    elsif self.company.mode == 'local'
       if params[:type] == 'sticker'
         printer_path = cash_register.sticker_printer
       else

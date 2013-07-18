@@ -28,6 +28,7 @@ class DrawerTransaction < ActiveRecord::Base
   end
 
   def print
+    return if self.company.mode != 'local'
     vp = Escper::VendorPrinter.new({})
     vp.id = 0
     vp.name = self.cash_register.name
