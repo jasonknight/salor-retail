@@ -1,3 +1,223 @@
+salor-retail (4.0.2.0) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * added tailor and cleaned up a bit
+  * tailor for customer screen works
+  * test commit
+  * chlog
+  * first batch
+  * atomize
+  * more
+  * vedors screen items working
+  * more
+  * more
+  * completion of order succeeds
+  * migrations
+  * migrations
+  * migrations
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * calculation refactoring taking of order works again
+  * more
+  * more
+  * more
+  * up to shipments works
+  * order refunds work again
+  * users work again
+  * all controllers and views work
+  * more
+  * removed global errors
+  * toggling, rebates, discounts, buybacks, gift cards all work
+  * more
+  * coupons working
+  * gs1 working
+  * gs1 working with price_by_qty
+  * wholesaler update
+  * customer skus work
+  * transform payment methods, rearranged js
+  * js refactoring, new payment method system
+  * refunds work
+  * refunds work
+  * more
+  * ajax item creation from shipments form works
+  * day report works and matches with existing customer data
+  * order escpos works
+  * orders/print works
+
+  [ Jason Knight ]
+  * Fixing nill errors for dynamic priced items
+  * Fixing drawer transactions for cash drop/payout
+  * Fixing search on items index
+
+  [ Michael Franzl ]
+  * dt
+  * various printing back to working
+
+  [ Jason Knight ]
+  * Actions working
+  * Fixed update_real_quantity and inventory report from that screen
+  * New inventory report also now working
+  * Eticket selection box needs formatting
+  * Fixing csv downloading
+  * Fixing shipper form
+  * Working on uploading
+
+  [ Michael Franzl ]
+  * various printing works
+
+  [ Jason Knight ]
+  * File upload for salor format working
+
+  [ Michael Franzl ]
+  * all printing and tailor customerscreen works
+
+  [ Jason Knight ]
+  * Continuous order numbering for DrawerTransactions
+
+  [ Michael Franzl ]
+  * seed script
+  * updated translations
+
+  [ Jason Knight ]
+  * Shipments working again
+  * Clock in/Clock out working-ish
+
+  [ Michael Franzl ]
+  * seed script done
+  * images
+  * logo image upload works, added to invoice
+  * images, seeds, various
+  * more
+
+  [ Jason Knight ]
+  * changes to user
+
+  [ Michael Franzl ]
+  * ready for saas
+  * set hash ids
+  * various
+  * moved js translations into public for better greps of js code
+  * dont expose encrypted user password to JS space
+  * i18n and seeds
+  * fixes
+  * more fixes
+  * fixes
+  * assign tax profiles to order, and add color to TaxProfile
+  * more
+  * more
+  * keyboard stuff
+
+  [ Jason Knight ]
+  * Migrated
+
+  [ Michael Franzl ]
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * undid hack in loadup since security leak
+
+  [ Jason Knight ]
+  * xxx
+  * Fixing set_id_hash calls
+  * Fixing regions
+
+  [ Michael Franzl ]
+  * new styling 99% done
+
+  [ majarasic ]
+  * translation to croatian
+
+  [ Michael Franzl ]
+  * api change for weighing
+  * replace slow loop with sql query
+  * more
+  * more
+  * more
+  * migrated JS translations
+  * mostly styling and customer screen
+  * refunds, Orders#show
+  * fixex tax list on invoice
+  * fixed layout on items#selection
+  * various
+  * invoice customer data fit into windows envelopes
+  * screen invoice more like printout
+  * pagination for invoices work properly
+  * pagination for invoices work properly fix
+  * invoice notes were missing
+  * replaced supported_languages helper with SR configuration constant
+  * various
+
+  [ Jason Knight ]
+  * Working, tentatively
+  * Working better, but calculation is still wrong
+
+  [ Michael Franzl ]
+  * more money work
+
+  [ Jason Knight ]
+  * Last completed orders styling
+  * xxx
+
+  [ Michael Franzl ]
+  * fixed coupon taxes
+
+  [ Jason Knight ]
+  * Reversing total/subtotal
+
+  [ Michael Franzl ]
+  * more
+  * calculations working with removed subtotal
+  * tested invoice and receipt for coupons, discounts, rebates
+  * fixed customer screen for Money
+  * coverted day report to Money
+  * more migrations  for existing clients
+  * giftcard fixes
+  * ajax cleanup
+  * trigger enter for various search fields
+
+  [ Jason Knight ]
+  * xxx
+
+  [ Michael Franzl ]
+  * fix timestamps and thermal day report
+  * set currency by default vendor currency
+  * added indexes
+
+  [ Jason Knight ]
+  * xxx
+
+  [ Michael Franzl ]
+  * code layout
+
+  [ Jason Knight ]
+  * Adding scripting to actions
+  * Added workaround for translations
+  * Actions + js execution working
+  * More JS API Stuff
+  * More testing for js actions
+  * WooCommerce Plugin Example Action Working
+
+  [ Michael Franzl ]
+  * better and faster arent/child recursion function
+  * better recursion, items#index recursion enabled
+  * recursive quantity setting works with POS sales
+  * pagination for day report
+  * day report printing thermal
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 16:04:13 +0200
+
 salor-retail (4.0.1.94) unstable; urgency=low
 
   * no validation for shipment since causes  purchase price to be nil
