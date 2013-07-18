@@ -1,4 +1,4 @@
-salor-retail (4.0.2.0) unstable; urgency=low
+salor-retail (4.0.2) unstable; urgency=low
 
   [ Michael Franzl ]
   * added tailor and cleaned up a bit
@@ -215,8 +215,9 @@ salor-retail (4.0.2.0) unstable; urgency=low
   * recursive quantity setting works with POS sales
   * pagination for day report
   * day report printing thermal
+  * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 16:04:13 +0200
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 16:06:21 +0200
 
 salor-retail (4.0.1.94) unstable; urgency=low
 
