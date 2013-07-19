@@ -26,6 +26,7 @@ class Order < ActiveRecord::Base
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
   belongs_to :sale_type
+  has_one :proforma_order, :class_name => Order, :foreign_key => :proforma_order_id
 
 
   monetize :total_cents, :allow_nil => true
@@ -314,7 +315,7 @@ class Order < ActiveRecord::Base
     return i
   end
 
-  def make_final_order
+  def make_from_proforma_order
     final = self.dup
     final.completed_at = nil
     final.is_proforma = nil
@@ -323,6 +324,7 @@ class Order < ActiveRecord::Base
     final.created_at = DateTime.now
     final.tax_profile = nil
     final.tax = nil
+    final.proforma_order = self
     final.save
     
     self.order_items.visible.each do |oi|
@@ -341,6 +343,8 @@ class Order < ActiveRecord::Base
     end
     
     item = self.get_item_by_sku("DMYACONTO")
+    aconto_item_type = self.vendor.item_types.visible.find_by_behavior('aconto')
+    item.item_type = aconto_item_type
     item.name = I18n.t("receipts.a_conto")
     item.tax_profile = zero_tax_profile
     item.save
@@ -396,6 +400,7 @@ class Order < ActiveRecord::Base
     self.paid = true
     self.paid_at = Time.now # TODO: Don't set this for unpaid orders
     self.completed_at = Time.now
+    self.drawer = self.user.get_drawer
     self.save
     
     self.update_item_quantities
@@ -404,6 +409,7 @@ class Order < ActiveRecord::Base
     self.create_payment_method_items(params)
     self.create_drawer_transaction
     self.update_timestamps
+    self.order_items.update_all :drawer_id => self.drawer.id
     
     
     if self.is_quote
@@ -506,6 +512,7 @@ class Order < ActiveRecord::Base
       pmi.payment_method = change_payment_method
       pmi.save
       self.payment_method_items << pmi
+    else
       change = 0
     end
     
@@ -675,6 +682,27 @@ class Order < ActiveRecord::Base
                                                   ])
       end
 
+      
+      # ACONTO
+      if oi.behavior == 'aconto'
+        aconto_blurb = "#{ name } (#{ I18n.t('orders.print.invoice') } ##{ self.proforma_order.nr }, #{ I18n.l(self.proforma_order.completed_at, :format => :just_day) })"
+        list_of_items += integer_format % [
+          taxletter,
+          aconto_blurb,
+          oi.price,
+          oi.quantity,
+          oi.total
+        ]
+        list_of_items_raw << to_list_of_items_raw([
+                                                    taxletter,
+                                                    aconto_blurb,
+                                                    oi.price,
+                                                    oi.quantity,
+                                                    oi.total,
+                                                    'integer'
+                                                  ])
+      end
+      
       # DISCOUNTS
       if oi.discount_amount and not oi.discount_amount.zero? # TODO: get rid of nil values in DB
         discount = oi.discounts.first

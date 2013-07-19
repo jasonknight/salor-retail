@@ -31,8 +31,9 @@ company_count = 0
 
 # if ENV['SEED_MODE'] == 'full'
   puts "SEED_MODE is 'full'"
-  countries = ['us','at','fr','es','el','ru','it','cn']
-  languages = ['en','gn','fr','es','el','ru','it','cn']
+  countries = ['us','at','fr','es','el','ru','it','cn', 'hr', 'ca', 'nl']
+  languages = ['en','gn','fr','es','el','ru','it','cn', 'hr', 'en', 'nl']
+  currencies = ['USD', 'EUR', 'EUR', 'EUR', 'EUR', 'RUB', 'EUR', 'CNY', 'EUR', 'CAD', 'NLG']
   company_count = 1
 # else
 #   puts "SEED_MODE is 'minimal'"
@@ -41,6 +42,7 @@ company_count = 0
 #   company_count = 1
 # end
 
+# we create 3 different tax amounts because that is usual in some countries and we need it to test
 tax_percentages = [20, 10, 0]
 tax_profile_letters = ['A', 'B', 'C']
 tax_profile_defaults = [nil, true, nil]
@@ -63,8 +65,8 @@ payment_methods_unpaid = [nil, nil, true, nil, nil]
 
 country_names = ['USA', 'Europe']
 
-item_type_behaviors = ['normal', 'gift_card', 'coupon']
-item_type_names = ['Normal Item', 'Gift Card', 'Coupon']
+item_type_behaviors = ['normal', 'gift_card', 'coupon', 'aconto']
+item_type_names = ['Normal Item', 'Gift Card', 'Coupon', 'a conto']
 
 shipment_types_names = ['planning', 'ordered', 'delayed', 'delivered', 'processed']
 
@@ -88,6 +90,7 @@ company_count.times do |c|
     vendor = Vendor.new
     vendor.name = "Vendor#{ c }#{ v }"
     vendor.country = countries[v]
+    vendor.currency = currencies[v]
     vendor.company = company
     vendor.identifier = "vendor#{c}#{v}"
     r = vendor.save
@@ -160,7 +163,7 @@ company_count.times do |c|
       u.language = languages[v]
       res = u.save
       user_objects << u
-      puts "User #{ u.username } with password #{ c }#{ v }#{ i } created. Drawer is #{ u.drawer_id }" if res == true
+      puts "User #{ u.username } with password #{ c }#{ v }#{ i } created." if res == true
       raise "ERROR: #{ u.errors.messages }" if res == false
       u.set_drawer
     end
@@ -208,14 +211,17 @@ company_count.times do |c|
     item_objects = []
     category_objects.size.times do |i|
       10.times do |j|
+        k = j % 3
         item = Item.new
         item.company = company
         item.vendor = vendor
-        item.tax_profile = tax_profile_objects[j]
+        item.tax_profile = tax_profile_objects[k]
         item.category = category_objects[i]
         item.sku = "SKU#{ c }#{ v }#{ i }#{ j }"
         item.name = "Item#{ c }#{ v }#{ i }#{ j }"
+        item.price_cents = 100 * (10 * i + j)
         item.item_type = item_type_objects[0]
+        item.currency = currencies[v]
         res = item.save
         item_objects << item
         puts "Item #{ item.sku } created" if res == true
@@ -255,6 +261,7 @@ company_count.times do |c|
       b.name = "BrokenItem#{ c }#{ v }#{ i }"
       b.sku = "BI#{ c }#{ v }#{ i }"
       b.quantity = i
+      b.currency = currencies[v]
       res = b.save
       broken_item_objects << b
       puts "#{ b.name } created" if res == true

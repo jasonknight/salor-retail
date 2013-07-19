@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
    
   def new_from_proforma
     @proforma = @current_vendor.orders.visible.find_by_id(params[:order_id])
-    @order = @proforma.make_final_order
+    @order = @proforma.make_from_proforma_order
     @order.user = @current_user
     @order.save
     redirect_to "/orders/new?order_id=#{@order.id}"

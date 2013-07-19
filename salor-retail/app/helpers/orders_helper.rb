@@ -7,7 +7,7 @@
 module OrdersHelper
 
   def format_item(item)
-    item[:name] = item[:name][0..28]
+    item[:name] = item[:name][0..35]
     if item[:type] == 'integer'
       item[:price] = humanized_money_with_symbol item[:price].exchange_to(@ec)
       item[:total] = humanized_money_with_symbol item[:total].exchange_to(@ec)

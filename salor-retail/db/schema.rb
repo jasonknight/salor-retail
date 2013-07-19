@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130716112659) do
+ActiveRecord::Schema.define(:version => 20130719122136) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(:version => 20130716112659) do
   create_table "companies", :force => true do |t|
     t.string   "name"
     t.string   "identifier"
-    t.string   "mode"
+    t.string   "mode",               :default => "local"
     t.string   "subdomain"
     t.boolean  "hidden"
     t.integer  "hidden_by"
@@ -158,8 +158,8 @@ ActiveRecord::Schema.define(:version => 20130716112659) do
     t.boolean  "auth"
     t.string   "domain"
     t.boolean  "removal_pending"
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
   end
 
   create_table "countries", :force => true do |t|
@@ -768,6 +768,7 @@ ActiveRecord::Schema.define(:version => 20130716112659) do
     t.integer  "rebate_amount_cents",    :default => 0
     t.datetime "completed_at"
     t.string   "currency"
+    t.integer  "proforma_order_id"
   end
 
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"

@@ -12,6 +12,7 @@
     = humanized_money_with_symbol item.price
   
 %td= item.sku
+%td= number_to_percentage item.tax_profile.value
 %td
   - if item.parent
     == #{ item.quantity.to_i } (#{ item.recursive_quantity.to_i })

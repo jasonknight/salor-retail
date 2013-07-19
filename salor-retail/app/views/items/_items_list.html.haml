@@ -1,6 +1,6 @@
 %table.items_index
   %tr
-    - [:name,:base_price,:sku,:quantity,:packaging_unit, '',''].each do |key|
+    - [:name,:base_price,:sku,:tax_profile_id,:quantity,:packaging_unit, '',''].each do |key|
       - if key.blank?
         %th
       - else

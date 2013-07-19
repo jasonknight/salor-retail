@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
   def index
     orderby = "id DESC"
     orderby ||= params[:order_by]
-    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").where(:child_id => nil).page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
   end
 
   def show

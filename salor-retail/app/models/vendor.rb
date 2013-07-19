@@ -233,7 +233,7 @@ class Vendor < ActiveRecord::Base
   def get_end_of_day_report(from=nil, to=nil, drawer=nil)
     from ||= Time.now.beginning_of_day
     to ||= Time.now.end_of_day
-    drawer ||= self.users.visible.collect{|u| u.get_drawer.id }
+    drawer ||= self.users.visible.collect{|u| u.get_drawer.id }.uniq
     
     orders = self.orders.visible.where(
       :paid => true,
@@ -298,7 +298,7 @@ class Vendor < ActiveRecord::Base
     used_categories = self.order_items.visible.where(:completed_at => from..to, :drawer_id => drawer).select("DISTINCT category_id")
     used_categories.each do |r|
       cat = self.categories.find_by_id(r.category_id)
-      label = cat.name if cat
+      label = cat ? cat.name.inspect : "-"
       
       pos_total_cents = self.order_items.visible.where(
         :completed_at => from..to,
