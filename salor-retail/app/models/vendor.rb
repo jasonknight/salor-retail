@@ -249,7 +249,7 @@ class Vendor < ActiveRecord::Base
       :order_id => oids
     ).count
 
-   
+   # README: All amounts called "negative" below are buyback only. All other negatively priced OrderItems which are not buyback are either of Type gift_card or aconto. Those will be listed separately on the day report, so that accountants can enter them more easily into their own software.
 
     # Categories.
     categories = {
@@ -267,7 +267,8 @@ class Vendor < ActiveRecord::Base
               }
     }
     used_categories = self.order_items.visible.where(
-      :order_id => oids
+      :order_id => oids,
+      :behavior => 'normal'
     ).select("DISTINCT category_id")
     used_categories.each do |r|
       cat = self.categories.find_by_id(r.category_id)
@@ -275,27 +276,31 @@ class Vendor < ActiveRecord::Base
       
       pos_total_cents = self.order_items.visible.where(
         :order_id => oids,
-        :category_id => r.category_id
+        :category_id => r.category_id,
+        :behavior => 'normal'
       ).where("total_cents > 0").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
         :order_id => oids,
-        :category_id => r.category_id
+        :category_id => r.category_id,
+        :behavior => 'normal'
       ).where("total_cents > 0").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(
         :order_id => oids,
         :category_id => r.category_id,
-        :is_buyback => true
+        :is_buyback => true,
+        :behavior => 'normal'
       ).where("total_cents < 0").sum(:total_cents)
       neg_total = Money.new(neg_total_cents, self.currency)
       
       neg_tax_cents = self.order_items.visible.where(
         :order_id => oids,
         :category_id => r.category_id,
-        :is_buyback => true
+        :is_buyback => true,
+        :behavior => 'normal'
       ).where("total_cents < 0").sum(:tax_amount_cents)
       neg_tax = Money.new(neg_tax_cents, self.currency)
       
@@ -328,6 +333,7 @@ class Vendor < ActiveRecord::Base
     }
     used_tax_amounts = self.order_items.visible.where(
       :order_id => oids,
+      :behavior => 'normal',
     ).select("DISTINCT tax")
     used_tax_amounts.each do |r|
       taxes[:pos][r.tax] = {}
@@ -335,27 +341,31 @@ class Vendor < ActiveRecord::Base
       
       pos_total_cents = self.order_items.visible.where(
         :order_id => oids,
-        :tax => r.tax
+        :tax => r.tax,
+        :behavior => 'normal'
       ).where("total_cents > 0").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
         :order_id => oids,
-        :tax => r.tax
+        :tax => r.tax,
+        :behavior => 'normal'
       ).where("total_cents > 0").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(
         :order_id => oids,
         :tax => r.tax,
-        :is_buyback => true
+        :is_buyback => true,
+        :behavior => 'normal'
       ).where("total_cents < 0").sum(:total_cents)
       neg_total = Money.new(neg_total_cents, self.currency)
       
       neg_tax_cents = self.order_items.visible.where(
         :order_id => oids,
         :tax => r.tax,
-        :is_buyback => true
+        :is_buyback => true,
+        :behavior => 'normal'
       ).where("total_cents < 0").sum(:tax_amount_cents)
       neg_tax = Money.new(neg_tax_cents, self.currency)
       
@@ -478,14 +488,16 @@ class Vendor < ActiveRecord::Base
     gro_cents = self.order_items.visible.where(
       :completed_at => from..to,
       :drawer_id => drawer,
-      :order_id => oids
-    ).where("behavior != 'aconto'").sum(:total_cents)
+      :order_id => oids,
+      :behavior => 'normal'
+    ).sum(:total_cents)
     revenue[:gro] = Money.new(gro_cents, self.currency)
     tax_cents = self.order_items.visible.where(
       :completed_at => from..to,
       :drawer_id => drawer,
-      :order_id => oids
-    ).where("behavior != 'aconto'").sum(:tax_amount_cents)
+      :order_id => oids,
+      :behavior => 'normal'
+    ).sum(:tax_amount_cents)
     revenue[:net] = revenue[:gro] - Money.new(tax_cents, self.currency)
     
     
@@ -494,6 +506,7 @@ class Vendor < ActiveRecord::Base
     drawer_transactions = self.drawer_transactions.visible.where(
       :created_at => from..to,
       :complete_order => nil,
+      :drawer_id => drawer,
       :refund => nil
     )
 
@@ -510,25 +523,37 @@ class Vendor < ActiveRecord::Base
     # Total of everything for this day based on drawer transactions. this also includes proforma payments, since proforma Orders are effective re. payment methods. this is Cash only. This must match the current Drawer.amount at all times during a working day.
     calc_drawer_cents = self.drawer_transactions.where(
       :created_at => from..to,
+      :drawer_id => drawer
     ).sum(:amount_cents)
     calculated_drawer_amount = Money.new(calc_drawer_cents, self.currency)
     
     
     # Gift Cards
-    gift_cards = self.order_items.visible.where(
+    gift_cards_redeemed = self.order_items.visible.where(
       :completed_at => from..to,
       :behavior => 'gift_card',
+      :drawer_id => drawer,
       :activated => true
     )
-    gift_card_redeem_total = - Money.new(gift_cards.sum(:total_cents), self.currency)
+    gift_card_redeem_total = - Money.new(gift_cards_redeemed.sum(:total_cents), self.currency)
+    
+    gift_cards_sold = self.order_items.visible.where(
+      :completed_at => from..to,
+      :behavior => 'gift_card',
+      :drawer_id => drawer,
+      :activated => nil
+    )
+    gift_card_sales_total = Money.new(gift_cards_sold.sum(:total_cents), self.currency)
     
     report = Hash.new
     report['categories'] = categories
     report['taxes'] = taxes
     report['paymentmethods'] = paymentmethods
     report['proforma_paymentmethods'] = proforma_paymentmethods
-    report['gift_cards'] = gift_cards
+    report['gift_cards_redeemed'] = gift_cards_redeemed
     report['gift_card_redeem_total'] = gift_card_redeem_total
+    report['gift_cards_sold'] = gift_cards_sold
+    report['gift_card_sales_total'] = gift_card_sales_total
     report['refunds'] = refunds
     report['revenue'] = revenue
     report['transactions'] = transactions

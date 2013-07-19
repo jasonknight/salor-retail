@@ -770,6 +770,7 @@ en:
       receipt_logo_header: receipt logo header
     report_day:
       gift_card_redeem_total: Giftcard redeem total
+      gift_card_sales_total: Giftcard sales total
       None: Not specified
       OrderItemRefund: Item Refund
       OrderRefund: Order Refund

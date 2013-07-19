@@ -232,6 +232,7 @@ class Order < ActiveRecord::Base
   
   
   def create_dynamic_gift_card_item
+    auto_giftcard_item = self.vendor.items.visible.find_by_sku("G000000000000")
     zero_tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
 
     if zero_tax_profile.nil?
@@ -245,6 +246,7 @@ class Order < ActiveRecord::Base
     i.company = self.company
     i.currency = self.vendor.currency
     i.tax_profile = zero_tax_profile
+    i.category = auto_giftcard_item.category
     i.name = "Auto Giftcard #{timecode}"
     i.must_change_price = true
     i.item_type = self.vendor.item_types.visible.find_by_behavior('gift_card')

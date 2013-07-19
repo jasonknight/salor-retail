@@ -607,7 +607,7 @@ gn:
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
-      calculated_drawer_amount: Kassenlade
+      calculated_drawer_amount: Kassenlade nachberechnet
       cash-refunds: Bargeld-Stornierungen
       cash_refunds_total: GESAMT
       no_category: Unbenannt
@@ -775,6 +775,7 @@ gn:
       receipt_logo_header: Rechnungslogo Kopf
     report_day:
       gift_card_redeem_total: Gutschein Einlösung
+      gift_card_sales_total: Gutschein Verkauf
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung

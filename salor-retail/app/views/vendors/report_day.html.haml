@@ -5,8 +5,10 @@
 - taxes = @report['taxes']
 - paymentmethods = @report['paymentmethods']
 - proforma_paymentmethods = @report['proforma_paymentmethods']
-- gift_cards = @report['gift_cards']
+- gift_cards_redeemed = @report['gift_cards_redeemed']
 - gift_card_redeem_total = @report['gift_card_redeem_total']
+- gift_cards_sold = @report['gift_cards_sold']
+- gift_card_sales_total = @report['gift_card_sales_total']
 - refunds  =  @report['refunds']
 - revenue =   @report['revenue']
 - transactions   = @report['transactions']
@@ -82,6 +84,12 @@
           %td.table-center= humanized_money_with_symbol t[1][:gro]
           %td.table-center= humanized_money_with_symbol t[1][:net]
           %td.table-center= humanized_money_with_symbol t[1][:gro] - t[1][:net]
+          
+    - if i[0] == :pos and gift_cards_sold.any?
+      %p
+        == #{ t ('.gift_card_sales_total') }:
+        %b= humanized_money_with_symbol gift_card_sales_total
+        = gift_cards_sold.collect{ |gc| "(#{ gc.sku }, #{ t('orders.print.invoice') } ##{ gc.order.nr })" }.join(", ")
 
     %table.striped-table2
       %tr
@@ -92,11 +100,11 @@
           %td.left= p[0]
           %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "table-center"}= humanized_money_with_symbol p[1]
           
-    - if i[0] == :pos and gift_cards.any?
+    - if i[0] == :pos and gift_cards_redeemed.any?
       %p
         == #{ t ('.gift_card_redeem_total') }:
         %b= humanized_money_with_symbol gift_card_redeem_total
-        = gift_cards.collect{ |gc| "(#{ gc.sku }, #{ t('orders.print.invoice') } ##{ gc.order.nr })" }.join(", ")
+        = gift_cards_redeemed.collect{ |gc| "(#{ gc.sku }, #{ t('orders.print.invoice') } ##{ gc.order.nr })" }.join(", ")
 
     %p{:id => "#{i[0]}_sum_gross"}
       == #{ t '.sum_gross' }:
@@ -104,7 +112,13 @@
     %p{:id => "#{i[0]}_sum_net"}
       == #{ t '.sum_net' }:
       %b== #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
+    
 
+      
+      
+      
+      
+      
 
 %div.paper-invoice
 
