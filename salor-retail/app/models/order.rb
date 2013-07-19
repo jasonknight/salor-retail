@@ -88,7 +88,30 @@ class Order < ActiveRecord::Base
   end
 
   def toggle_is_proforma=(x)
-    self.update_attribute(:is_proforma, !self.is_proforma)
+    self.is_proforma = !self.is_proforma
+    if self.is_proforma
+      zero_tax_profile = self.vendor.tax_profiles.visible.find_by_value(0)
+      if zero_tax_profile.nil?
+        raise "A proforma invoice needs a TaxProfile with value 0. You have to create one before you can proceed."
+      end
+      self.order_items.visible.each do |oi|
+        oi.tax_profile = zero_tax_profile
+        oi.tax = zero_tax_profile.value
+        oi.calculate_totals
+      end
+      self.tax_profile = zero_tax_profile
+      self.calculate_totals
+      
+    else
+      # reset all order items to Item default
+      self.order_items.each do |oi|
+        oi.tax_profile = oi.item.tax_profile
+        oi.tax = oi.item.tax_profile.value
+        oi.calculate_totals
+      end
+      self.tax_profile = nil
+      self.calculate_totals
+    end
   end
   
   def tax_profile_id=(id)
@@ -298,24 +321,37 @@ class Order < ActiveRecord::Base
     final.paid = nil
     final.paid_at = nil
     final.created_at = DateTime.now
+    final.tax_profile = nil
+    final.tax = nil
+    final.save
     
     self.order_items.visible.each do |oi|
       noi = oi.dup
       noi.order = final
+      # reset the tax profile, since all OrderItems of a proforma invoice have zero taxes. the final invoice however needs the actual taxes.
+      noi.tax_profile = noi.item.tax_profile
+      noi.tax = noi.item.tax_profile.value
       result = noi.save
       raise "Could not save OrderItem: #{ noi.errors.messages }" if result != true
     end
     
-    # This Item with code DMYACONTO is special and has to be created manually
+    zero_tax_profile = self.vendor.tax_profiles.visible.find_by_value(0)
+    if zero_tax_profile.nil?
+      raise "Need a TaxProfile with value of 0"
+    end
+    
     item = self.get_item_by_sku("DMYACONTO")
     item.name = I18n.t("receipts.a_conto")
+    item.tax_profile = zero_tax_profile
     item.save
+
 
     noi = final.add_order_item({:sku => "DMYACONTO"})
     noi.price = - self.amount_paid
-    noi.is_buyback = true
     noi.save # must be called before calulate totals!
     noi.calculate_totals
+    
+    final.calculate_totals
     
     return final
   end
@@ -697,7 +733,7 @@ class Order < ActiveRecord::Base
       tax_profile = self.vendor.tax_profiles.find_by_value(tax_in_percent)
       tax_amount = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:tax_amount_cents), self.currency)
       total = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:total_cents), self.currency)
-      next if tax_amount.zero?
+      next if total.zero?
       list_of_taxes += tax_format % [
         tax_profile.letter,
         tax_in_percent,

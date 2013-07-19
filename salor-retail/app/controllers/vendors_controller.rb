@@ -202,7 +202,7 @@ class VendorsController < ApplicationController
       @order = @inst
       @order.calculate_totals
       
-      if ['rebate', 'tax_profile_id', 'toggle_buy_order'].include?(params[:field])
+      if ['rebate', 'tax_profile_id', 'toggle_buy_order', 'toggle_is_proforma'].include?(params[:field])
         # those order attributes will be passed on to all OrderItems, so we have to update them all in the view.
         @order_items = @order.order_items.visible
       else
