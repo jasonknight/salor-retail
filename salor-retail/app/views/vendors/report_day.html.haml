@@ -4,6 +4,9 @@
 - categories = @report['categories']
 - taxes = @report['taxes']
 - paymentmethods = @report['paymentmethods']
+- proforma_paymentmethods = @report['proforma_paymentmethods']
+- gift_cards = @report['gift_cards']
+- gift_card_redeem_total = @report['gift_card_redeem_total']
 - refunds  =  @report['refunds']
 - revenue =   @report['revenue']
 - transactions   = @report['transactions']
@@ -88,12 +91,23 @@
         %tr
           %td.left= p[0]
           %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "table-center"}= humanized_money_with_symbol p[1]
+          
+    - if i[0] == :pos and gift_cards.any?
+      %p
+        == #{ t ('.gift_card_redeem_total') }:
+        %b= humanized_money_with_symbol gift_card_redeem_total
+        = gift_cards.collect{ |gc| "(#{ gc.sku }, #{ t('orders.print.invoice') } ##{ gc.order.nr })" }.join(", ")
 
-    %p{:id => "#{i[0]}_sum_gross"}== #{ t '.sum_gross' }: #{ humanized_money_with_symbol categories_sum[i[0]][:gro] }
-    %p{:id => "#{i[0]}_sum_net"}== #{ t '.sum_net' }: #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
+    %p{:id => "#{i[0]}_sum_gross"}
+      == #{ t '.sum_gross' }:
+      %b== #{ humanized_money_with_symbol categories_sum[i[0]][:gro] }
+    %p{:id => "#{i[0]}_sum_net"}
+      == #{ t '.sum_net' }:
+      %b== #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
 
 
 %div.paper-invoice
+
   %h3= t '.refunds'
   %table.striped-table2
     %tr
@@ -105,11 +119,30 @@
         %td.table-center= humanized_money_with_symbol v
 
 
-
-
+        
   %h3= t '.revenue'
   %p== #{ t '.gross' }: #{ humanized_money_with_symbol revenue[:gro] }
   %p== #{ t '.net' }: #{ humanized_money_with_symbol revenue[:net] }
+        
+        
+
+  %h3= t '.proforma_payments'
+  %table.striped-table2
+    %tr
+      %th.left= t '.sums_by_payment_methods'
+      %th.table-center
+    - proforma_paymentmethods.to_a.each do |p|
+      %tr
+        %td.left= p[0]
+        %td{:class => "table-center"}= humanized_money_with_symbol p[1]
+
+
+  
+
+  
+  
+  
+
 
 
 

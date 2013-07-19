@@ -774,6 +774,7 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
     report_day:
+      gift_card_redeem_total: Gutschein Einlösung
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
