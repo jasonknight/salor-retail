@@ -57,7 +57,11 @@ class CashRegister < ActiveRecord::Base
     "\x1B\x70\x00\x55\x55"
   end
   
-  def self.get_devicenodes
+  def get_devicenodes
+    if self.company.mode != 'local'
+      log_action "This method is allowed to run only on local installations"
+      return []
+    end
     nodes_usb1 = Dir['/dev/usb/lp*']
     nodes_serial = Dir['/dev/ttyUSB*']
     nodes_test = Dir['/tmp/salor-test*']
@@ -81,7 +85,12 @@ class CashRegister < ActiveRecord::Base
    return devices_for_select
   end
   
-  def set_device_paths_from_device_names(devices_for_select)
+  def set_device_paths_from_device_names
+    if self.company.mode != 'local'
+      log_action "This method is allowed to run only on local installations"
+      return
+    end
+    devices_for_select = self.get_devicenodes
     devices_for_select.each do |dev|
       [:cash_drawer,:thermal_printer,:sticker_printer,:scale,:pole_display].each do |a|
         # on each pass it will look like this: self.send("thermal_printer_name","TM-T20")
@@ -103,11 +112,11 @@ class CashRegister < ActiveRecord::Base
   
   def sanitize_path
     if self.company.mode != 'local'
-      self.thermal_printer = self.thermal_printer.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
-      self.cash_drawer_path, self.cash_drawer_path.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
-      self.sticker_printer, self.sticker_printer.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
-      self.a4_printer, self.a4_printer.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
-      self.pole_display, self.pole_display.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.thermal_printer = self.thermal_printer.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.cash_drawer_path = self.cash_drawer_path.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.sticker_printer = self.sticker_printer.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.a4_printer = self.a4_printer.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.pole_display = self.pole_display.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
     end
   end
   

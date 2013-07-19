@@ -157,22 +157,9 @@ function addPosItem(item) {
 
 
 function add_item(sku, additional_params) {
-//   if (sku.match(/^31\d{8}.{1,2}$/)) {
-//     var oid = Order.id;
-//     var cid = Meta['cash_register_id'];
-//     var p = ["code=" + sku, "order_id=" +oid, "cash_register_id=" + cid, "redirect="+ escape("/orders/new?cash_register_id=1&order_id=" + oid)];
-//     window.location = "/users/login?" + p.join("&");
-//     return;
-//   }
   if (sku == "") return
   get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
   $('#main_sku_field').val('');
-}
-
-function void_item(id) {
-  get('/orders/split_order_item?id=' + id, filename, function () {
-    window.location.reload();
-  });
 }
 
 function update_order_items() {
@@ -346,10 +333,7 @@ window.showOrderOptions = function () {
       var id = '#option_order_rebate_input';
       var value = $(id).val();
       var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=rebate&value=' + value;
-      get(string, 'showOrderOptions', function () {
-        update_order_items();
-        update_pos_display();
-      });
+      get(string, 'showOrderOptions');
     }
   };
   var options = {

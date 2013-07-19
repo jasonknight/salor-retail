@@ -6,7 +6,7 @@
   });
 </script>
 
-<table align="center" width="100%">
+<table align="center" width="80%">
   <tr>
     <td valign="top" align="center">
       <%= form_for(@cash_register) do |f| %>
@@ -15,115 +15,113 @@
             <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @cash_register.errors.count,:model => t("activerecord.models.cash_register.one"))%></h2>
       
             <ul>
-            <% @cash_register.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
+              <% @cash_register.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
             </ul>
           </div>
         <% end %>
         <table width="90%" align="center">
           <tr>
             <td>
+              <div class="actions">
+                <%= f.submit %>
+              </div>
+              <div class="field">
+                <%= f.label t("activerecord.attributes.name") %><br />
+                <%= f.text_field :name, :class => "keyboardable"%>
+              </div>
+              <div class="field">
+                <%= f.label :color %> 
+                <%= f.hidden_field :color %>
+              </div>
+              <div class="field">
+                <%= f.label t("activerecord.attributes.hide_discounts") %><br />
+                <%= f.check_box :hide_discounts %>
+              </div>
+              <div class="field">
+                <%= f.label t("activerecord.attributes.hide_buttons") %><br />
+                <%= f.check_box :hide_buttons %>
+              </div>
+              <div class="field">
+                <%= f.label t("activerecord.attributes.no_print") %><br />
+                <%= f.check_box :no_print %>
+              </div>
+              <% if @current_company.mode  == 'local' %>
                 <div class="field">
-        <div class="actions">
-          <%= f.submit %>
-        </div>
-                  <%= f.label t("activerecord.attributes.name") %><br />
-                  <%= f.text_field :name, :class => "keyboardable"%>
+                  <%= f.label t("activerecord.attributes.salor_printer") %><br />
+                  <%= f.check_box :salor_printer %>
                 </div>
-                <div class="field">
-                  <%= f.label t("activerecord.attributes.hide_discounts") %><br />
-                  <%= f.check_box :hide_discounts %>
-                </div>
-                <div class="field">
-                  <%= f.label t("activerecord.attributes.hide_buttons") %><br />
-                  <%= f.check_box :hide_buttons %>
-                </div>
-                <div class="field">
-                  <%= f.label t("activerecord.attributes.no_print") %><br />
-                  <%= f.check_box :no_print %>
-                </div>
-                
-                <% if @current_company.mode  == 'local' %>
-                  <div class="field">
-                    <%= f.label t("activerecord.attributes.salor_printer") %><br />
-                    <%= f.check_box :salor_printer %>
-                  </div>
-                <% end %>
-<!--                <div class="field">
-                  <%= f.label t("activerecord.attributes.cash_drawer") %><br />
-                  <%= f.select :cash_drawer_name, @devices_for_select, :include_blank => true %>
-                </div>-->
-                <div class="field">
-                  <%= f.label :color %> 
-                  <%= f.hidden_field :color %>
-                </div>
-                <div class="field">
-                  <%= f.label t("activerecord.attributes.detailed_edit") %><br />
-                  <%= f.check_box :detailed_edit %>
-                </div>
+              <% end %>
+              <div class="field">
+                <%= f.label t("activerecord.attributes.detailed_edit") %><br />
+                <%= f.check_box :detailed_edit %>
+              </div>
             <div class="field">
               <%= f.label "+/-" %><br />
               <%= f.check_box :show_plus_minus %>
             </div>
         </td>
         <td>
-            <div class="field">
-              <%= f.label t("activerecord.attributes.thermal_printer") %><br />
-              <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
-                <%= f.collection_select :thermal_printer_name, @devices_for_select,:first, :first, {:include_blank => true} %>
-              <% else %>
-                <%= f.text_field :thermal_printer %>
-              <% end %>
-            </div>
-            <br />
-            <div class="field">
-              <%= f.label 'sticker printer' %><br />
-              <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
-                <%= f.collection_select :sticker_printer_name, @devices_for_select,:first, :first, {:include_blank => true} %>
-              <% else %>
-                <%= f.text_field :sticker_printer %>
-              <% end %>
-            </div>
-            <br />
-            <div class="field">
-              <%= f.label t("activerecord.attributes.pole_display") %><br />
-              <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
-                <%= f.collection_select :pole_display_name, @devices_for_select,:first, :first, :include_blank => true %>
-              <% else %>
-                <%= f.text_field :pole_display %>
-              <% end %>
-            </div>
-            <br />
-            <div class="field">
-              <%= f.label t("activerecord.attributes.customer_screen_blurb") %><br />
-              <%= f.text_field :customer_screen_blurb, :class => "keyboardable"%>
-            </div>
-            <br />
-            <div class="field">
-              <%= f.label t("activerecord.attributes.scale") %><br />
+          <div class="field">
+            <%= f.label t("activerecord.attributes.thermal_printer") %><br />
+            <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
+              <%= f.collection_select :thermal_printer_name, @cash_register.get_devicenodes,:first, :first, {:include_blank => true} %>
+            <% else %>
+              <%= f.text_field :thermal_printer %>
+            <% end %>
+          </div>
+          <br />
+          <div class="field">
+            <%= f.label 'sticker printer' %><br />
+            <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
+              <%= f.collection_select :sticker_printer_name, @cash_register.get_devicenodes,:first, :first, {:include_blank => true} %>
+            <% else %>
+              <%= f.text_field :sticker_printer %>
+            <% end %>
+          </div>
+          <br />
+          <div class="field">
+            <%= f.label t("activerecord.attributes.scale") %><br />
+            <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
+              <%= f.collection_select :scale, @cash_register.get_devicenodes,:first, :first, :include_blank => true %>
+            <% else %>
               <%= f.text_field :scale %>
-              
-            </div>
-            <div class="field">
-              <%= f.label t("activerecord.attributes.address") %><br />
-              <%= f.text_field :ip, :class => "keyboardable"%>
-            </div>
-            <div class="field">
-              <%= f.label t("activerecord.attributes.always_open_drawer") %><br />
-              <%= f.check_box :always_open_drawer %>
-            </div>
-            <div class="field">
-              <%= f.label t("activerecord.attributes.require_password") %><br />
-              <%= f.check_box :require_password %>
-            </div>
+            <% end %>
+          </div>
+          <br />
+          <div class="field">
+            <%= f.label t("activerecord.attributes.pole_display") %><br />
+            <% if @cash_register.salor_printer != true and @current_company.mode  == 'local' %>
+              <%= f.collection_select :pole_display_name, @cash_register.get_devicenodes,:first, :first, :include_blank => true %>
+            <% else %>
+              <%= f.text_field :pole_display %>
+            <% end %>
+          </div>
+          <br />
+          <div class="field">
+            <%= f.label t("activerecord.attributes.customer_screen_blurb") %><br />
+            <%= f.text_field :customer_screen_blurb, :class => "keyboardable"%>
+          </div>
+          <!--
+          <div class="field">
+            <%= f.label t("activerecord.attributes.address") %><br />
+            <%= f.text_field :ip, :class => "keyboardable"%>
+          </div>
+          -->
+          <div class="field">
+            <%= f.label t("activerecord.attributes.always_open_drawer") %><br />
+            <%= f.check_box :always_open_drawer %>
+          </div>
+          <div class="field">
+            <%= f.label t("activerecord.attributes.require_password") %><br />
+            <%= f.check_box :require_password %>
+          </div>
            
         </td>
         </tr>
         <tr>
-          <td colspan="2">
-
-        </td>
+          <td colspan="2"></td>
         </tr>
         </table>
       <% end %>

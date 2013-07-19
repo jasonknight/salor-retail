@@ -4,7 +4,7 @@
     - if @order.is_proforma
       %tr
         %td{ :colspan => 4 }= t('printr.order_receipt.total').upcase
-        %td= humanized_money_with_symbol @order.total
+        %td.total= humanized_money_with_symbol @order.total.exchange_to(@ec)
     %tr
       %td{ :colspan => 4 }= t('activerecord.attributes.total').upcase
       - if @order.is_proforma then

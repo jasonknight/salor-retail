@@ -166,32 +166,51 @@ class VendorsController < ApplicationController
     #value = SalorBase.string_to_float(params[:value])
     value = params[:value]
     if @inst.respond_to?("#{ params[:field] }=".to_sym)
-      #debugger
+      logger.info "XXXXXXXXX Sending #{  params[:field] } = #{ value }"
       @inst.send("#{ params[:field] }=", value)
-      @inst.save
+      result = @inst.save
+      if result != true
+        raise "#{ @inst.class } could not be saved"
+      end
+      
     else
       raise "VendorsController#edit_field_on_child: #{ klass } does not respond well to setter method #{ params[:field] }!"
     end
     
     if @inst.class == OrderItem
+      @order_item = @inst
       #README If someone edits the quantity or price of an item, Actions need to be informed of this.
       case params[:field]
       when 'price'
-        Action.run(@current_vendor, @inst, :change_price)
+        Action.run(@current_vendor, @order_item, :change_price)
       when 'quantity'
-        Action.run(@current_vendor, @inst, :change_quantity)
+        Action.run(@current_vendor, @order_item, :change_quantity)
       end
-      @inst.calculate_totals
-      @inst.order.calculate_totals
+      @order_item.calculate_totals
+      @order_item.order.calculate_totals
       
-      @order_item = @inst # we need that for the view
-      @order = @inst.order
+      # set variables for the js.erb view
+      @order = @order_item.order
+      @order_items = [@order_item]
+      if @order_item.behavior == 'gift_card' and @order_item.activated.nil? and @order_item.price_cents > 0
+        # this is a dynamically generated gift card item. if this variable is set, the view has to start a print request to print a sticker.
+        @gift_card_item_id_for_print = @order_item.item_id
+      end
       render 'orders/update_pos_display'
+      
     elsif @inst.class == Order
-      @inst.calculate_totals
+      @order = @inst
+      @order.calculate_totals
       
-      @order = @inst # we need that for the view
+      if ['rebate', 'tax_profile_id', 'toggle_buy_order'].include?(params[:field])
+        # those order attributes will be passed on to all OrderItems, so we have to update them all in the view.
+        @order_items = @order.order_items.visible
+      else
+        # do not update any order_items
+        @order_items = []
+      end
       render 'orders/update_pos_display'
+      
     else
       render :nothing => true
     end

@@ -66,7 +66,7 @@ class Order < ActiveRecord::Base
   end
   
   def amount_paid
-    self.payment_methods.sum(:amount)
+    Money.new(self.payment_method_items.visible.sum(:amount_cents), self.currency)
   end
   
   def nonrefunded_item_count
@@ -107,6 +107,15 @@ class Order < ActiveRecord::Base
         oi.tax = tax_profile.value
         oi.calculate_totals
       end
+    end
+    self.calculate_totals
+  end
+  
+  def rebate=(r)
+    self.order_items.visible.each do |oi|
+      oi.rebate = r
+      oi.save # since we are not in the OrderItem model, we have to call save, otherwise oi.calculate_totals will not see the unsaved rebate. this is just how Ruby (or Rails) behaves.
+      oi.calculate_totals
     end
     self.calculate_totals
   end
@@ -172,6 +181,7 @@ class Order < ActiveRecord::Base
       return nil
     end
     
+    # This Item with code G000000000000 is special and has to be created manually
     if i.class == Item and i.item_type.behavior == 'gift_card' and i.sku == "G000000000000"
       log_action "Dynamic Giftcard SKU detected"
       new_i = create_dynamic_gift_card_item
@@ -281,8 +291,34 @@ class Order < ActiveRecord::Base
     return i
   end
 
- 
+  def make_final_order
+    final = self.dup
+    final.completed_at = nil
+    final.is_proforma = nil
+    final.paid = nil
+    final.paid_at = nil
+    final.created_at = DateTime.now
+    
+    self.order_items.visible.each do |oi|
+      noi = oi.dup
+      noi.order = final
+      result = noi.save
+      raise "Could not save OrderItem: #{ noi.errors.messages }" if result != true
+    end
+    
+    # This Item with code DMYACONTO is special and has to be created manually
+    item = self.get_item_by_sku("DMYACONTO")
+    item.name = I18n.t("receipts.a_conto")
+    item.save
 
+    noi = final.add_order_item({:sku => "DMYACONTO"})
+    noi.price = - self.amount_paid
+    noi.is_buyback = true
+    noi.save # must be called before calulate totals!
+    noi.calculate_totals
+    
+    return final
+  end
 
   
 
@@ -421,18 +457,22 @@ class Order < ActiveRecord::Base
     change = (payment_total - self.total)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
 
-    pmi = PaymentMethodItem.new
-    pmi.vendor = self.vendor
-    pmi.company = self.company
-    pmi.user = self.user
-    pmi.drawer = self.drawer
-    pmi.cash_register = self.cash_register
-    pmi.amount = change
-    pmi.change = true
-    pmi.payment_method = change_payment_method
-    pmi.save
+    unless self.is_proforma
+      # create a change payment method item
+      pmi = PaymentMethodItem.new
+      pmi.vendor = self.vendor
+      pmi.company = self.company
+      pmi.user = self.user
+      pmi.drawer = self.drawer
+      pmi.cash_register = self.cash_register
+      pmi.amount = change
+      pmi.change = true
+      pmi.payment_method = change_payment_method
+      pmi.save
+      self.payment_method_items << pmi
+      change = 0
+    end
     
-    self.payment_method_items << pmi
     self.cash = payment_cash
     self.noncash = payment_noncash
     self.change = change
@@ -1035,5 +1075,9 @@ class Order < ActiveRecord::Base
       attrs[:loyalty_card] = self.customer.loyalty_cards.visible.last.json_attrs if self.customer.loyalty_cards.visible.last
     end
     attrs.to_json
+  end
+  
+  def self.order_items_to_json(order_items=[])
+    "[#{order_items.collect { |oi| oi.to_json }.join(", ") }]"
   end
 end

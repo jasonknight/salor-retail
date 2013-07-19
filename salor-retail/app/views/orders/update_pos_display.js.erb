@@ -1,39 +1,22 @@
+// README: This view only takes a single instance of @order, and an Array @order_items. The controllers are responsible for supplying those variables to keep this view simple.
+
 // ---------- update order -------------
 Order = <%= raw @order.to_json %>;
 updateOrder(Order);
 
 
 // ----------- update order items ----------
-<% if @order_item and @order_item.hidden.nil? %>
-order_item_json = <%= raw @order_item.to_json %>;
-updateOrderItems([order_item_json]);
+updateOrderItems(<%= raw Order.order_items_to_json(@order_items) %>);
 try {
-  
+  // disabled for now becase I need to see the error trace in the console window.
 } catch (err) {
   alert("Failed to update items properly, please reload");
   echo(err);
 }
 
-<% end %>
-
-// ------------ coupon stuff -------------       
-<%
-  if @order_item and @order_item.behavior == 'coupon' then
-    oi = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
-%>
-updateOrderItems([<%= raw oi.to_json %>]);
-try {
-  
-} catch (err) {
-  echo("Failed to update applied item.");
-  echo(err);
-}
-<% end %>
-
-// ---------------- gift card stuff ---------------
-<% if @order_item and @order_item.behavior == 'gift_card' and @order_item.activated.nil? and @order_item.price_cents > 0 %>
-
-  print_url(Register.sticker_printer, '/items/labels', '&id=<%= @order_item.item_id %>&type=sticker&style=default')
+// ------- dynamic gift card autoprinting, see VendorsController#edit_field_on_child---------
+<% if @gift_card_item_id_for_print %>
+  print_url(Register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
 <% end %>
 
 

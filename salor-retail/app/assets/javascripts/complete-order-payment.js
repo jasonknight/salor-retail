@@ -21,7 +21,11 @@ function add_payment_method() {
   var rest_value = Order.total - get_payment_total();
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   amount.on("keyup",function (event) {
-    display_change("payment-amount.onKeyUp " + event.which + " " + sel.val());
+    if (event.keyCode == 13) {
+      complete_order_send(!Register.no_print);
+    } else {
+      display_change("payment-amount.onKeyUp " + event.which + " " + sel.val());
+    }
   });
   amount.on("click",function() {
     focusInput(amount);

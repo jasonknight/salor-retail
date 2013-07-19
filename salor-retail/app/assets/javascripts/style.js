@@ -1,21 +1,3 @@
-function salorGetOffset( el ) {
-  var _x = 0;
-  var _y = 0;
-  while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
-      _x += el.offsetLeft - el.scrollLeft;
-      _y += el.offsetTop - el.scrollTop;
-      el = el.offsetParent;
-  }
-  return { top: _y, left: _x };
-}
-
-function get_position(x,y) {
-	var z = x;
-	x = 1/Math.sqrt(2) * (z - y);
-	y = 1/Math.sqrt(2) * (z + y);
-	return {x: x, y: y};
-}
-
 var _currentSelectTarget = '';
 var _currentSelectButton;
 
@@ -86,45 +68,6 @@ function make_select_widget(name,elem) {
   });
 }
 
-
-
-function scrollable_div(elem) {
-  if (elem.hasClass('scrollable-done')) {
-    return;
-  }
-  var row = $('<div class="scrollable-button-row" align="right"></div>');
-  var up = $('<div class="button-up">&and;</div>');
-  var down = $('<div class="button-down" >&or;</div>');
-  var spw = $('<div class="scrollable-space-wide">&nbsp;&nbsp;</div>');
-  var sp = $('<div class="spacer-rmargin">&nbsp;</div>');
-  up.mousedown(function () {
-    var e = elem;
-    var t = e.scrollTop() - 100;
-    if (t < 0) {
-      t = 0
-    }
-    e.scrollTop(t);
-  });
-  down.mousedown(function () {
-    var e = elem;
-    var y = elem.offset().top;
-    var t = top + 30;
-    elem.css({position: 'relative', top: t + 'px'});
-  });
-  row.append(down);
-  row.append(spw);
-  row.append(sp);
-  row.append(up);
-
-  var x = elem.offset().left;
-  var y = elem.offset().top;
-  var h = elem.height();
-  var w = elem.width();
-  $('body').append(row);
-  var css = {position: 'absolute',top: (y + h +100) + 'px', left: (x + w - 100) + 'px'};
-  row.css(css);
-}
-
 function div() {
   return $('<div></div>');
 }
@@ -151,31 +94,8 @@ function tr(elements,opts) {
   return e;
 }
 
-function span_wrap(text,cls) {
-  return '<span class="' + cls + '">'+text+'</span>';
-}
-
 function div_wrap(text,cls) {
   return '<div class="' + cls + '">'+text+'</div>';
-}
-
-function make_action_button(elem) {
-  if (elem.hasClass("action-button-done")) {
-    return elem;
-  }
-  elem.mousedown(function () {
-    var elem = $(this);
-    get($(this).attr('url'), filename );
-    if ($(this).attr('update_pos_display') == 'true') {
-      update_pos_display();
-      update_order_items();
-    }
-    if ($(this).attr('refresh') == 'true') {
-      location.reload();
-    }
-  });
-  elem.addClass("action-button-done pointer");
-  return elem;
 }
 
 

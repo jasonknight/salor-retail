@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
   
   def update_devicenodes
     if @current_register
-      @current_register.set_device_paths_from_device_names(CashRegister.get_devicenodes)
+      @current_register.set_device_paths_from_device_names
     end
   end
   

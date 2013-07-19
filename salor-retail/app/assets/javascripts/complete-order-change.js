@@ -3,10 +3,13 @@ function display_change(called_from) {
   var change = paymentTotal - Order.total;
   change = Round(change,2);
   console.log("change is " + change);
-  if (change < 0 && Order.total > 0) {
+  if (change < 0 && Order.total > 0 && !Order.is_proforma) {
     change = 0;
     allow_complete_order(false);
   } else {
+    if (Order.is_proforma) {
+      change = 0;
+    }
     allow_complete_order(true);
   }
   $('#complete_order_change').html(toCurrency(change));
