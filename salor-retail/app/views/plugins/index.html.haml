@@ -1,0 +1,3 @@
+=raw content_box_top(t "menu.plugins")
+- width ||= "90%"
+= render :partial => 'shared/list_view', :locals => {  :klass => Plugin, :width => '60%',:collection => @plugins, :columns => [:name]}

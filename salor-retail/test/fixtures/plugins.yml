@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  filename: MyString
+  base_path: MyString
+  company: 
+  vendor: 
+  hidden: false
+  hidden_by: 1
+  hidden_at: 2013-07-20 07:41:10
+
+two:
+  name: MyString
+  filename: MyString
+  base_path: MyString
+  company: 
+  vendor: 
+  hidden: false
+  hidden_by: 1
+  hidden_at: 2013-07-20 07:41:10

@@ -20,6 +20,7 @@ class Company < ActiveRecord::Base
   has_many :actions
   has_many :roles
   has_many :buttons
+  has_many :plugins
   
   has_many :cash_registers
   has_many :orders

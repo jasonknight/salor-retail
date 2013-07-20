@@ -27,6 +27,7 @@ class Vendor < ActiveRecord::Base
   has_many :roles
   has_many :buttons
   has_many :images, :as => :imageable
+  has_many :plugins
   
   has_many :cash_registers
   has_many :orders

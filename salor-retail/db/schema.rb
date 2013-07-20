@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130719122136) do
+ActiveRecord::Schema.define(:version => 20130720114110) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -266,7 +266,6 @@ ActiveRecord::Schema.define(:version => 20130719122136) do
     t.text     "notes"
     t.boolean  "refund"
     t.string   "tag"
-    t.integer  "cash_register_id"
     t.integer  "order_id"
     t.integer  "order_item_id"
     t.integer  "vendor_id"
@@ -673,8 +672,8 @@ ActiveRecord::Schema.define(:version => 20130719122136) do
     t.integer  "tax_profile_id"
     t.integer  "item_type_id"
     t.boolean  "activated"
-    t.string   "behavior"
     t.float    "tax"
+    t.string   "behavior"
     t.integer  "category_id"
     t.integer  "location_id"
     t.boolean  "refunded"
@@ -822,13 +821,33 @@ ActiveRecord::Schema.define(:version => 20130719122136) do
     t.integer  "vendor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "hidden",        :default => 0
+    t.boolean  "hidden"
     t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.integer  "company_id"
+    t.integer  "user_id"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"
     t.boolean  "quote"
   end
+
+  create_table "plugins", :force => true do |t|
+    t.string   "name"
+    t.string   "filename"
+    t.string   "base_path"
+    t.integer  "company_id"
+    t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "plugins", ["company_id"], :name => "index_plugins_on_company_id"
+  add_index "plugins", ["hidden_by"], :name => "index_plugins_on_hidden_by"
+  add_index "plugins", ["vendor_id"], :name => "index_plugins_on_vendor_id"
 
   create_table "receipts", :force => true do |t|
     t.string   "ip"

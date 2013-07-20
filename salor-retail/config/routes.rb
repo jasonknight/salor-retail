@@ -131,6 +131,7 @@ SalorRetail::Application.routes.draw do
   
   
   match "actions/create" => "actions#create"
+  match "plugins/create" => "plugins#create"
 
   
     
@@ -171,6 +172,7 @@ SalorRetail::Application.routes.draw do
   resources :tax_profiles
   resources :users
   resources :actions
+  resources :plugins
   resources :order_items
   resources :orders
   resources :items do

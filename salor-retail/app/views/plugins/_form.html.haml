@@ -1,0 +1,17 @@
+= form_for(@plugin, :html => { :multipart => true}) do |f|
+  %table{ :width => "80%", :align => "center"} 
+    - if @plugin.errors.any? 
+      %tr
+        %td{:colspan => 2}
+          #error_explanation
+            %h2= I18n.t("activerecord.errors.template.header.other", :count => @plugin.errors.count,:model => t("activerecord.models.plugin.one"))
+            - @plugin.errors.full_messages.each do |msg|
+              %p msg
+    %tr
+      %td= f.label :name
+      %td= f.text_field :name
+    %tr
+      %td= f.label :filename
+      %td= f.file_field :filename
+    %tr
+      %td{ :colspan => 2, :align => :right }= f.submit

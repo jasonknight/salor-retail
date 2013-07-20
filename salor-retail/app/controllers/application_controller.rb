@@ -131,8 +131,7 @@ class ApplicationController < ActionController::Base
     if @current_user.nil? or session[:user_id_hash].blank?
       redirect_to new_session_path and return 
     end
-    $USERID = @current_user.id
-    $PARAMS = params
+
 
     if defined?(SrSaas) == 'constant'
       # this is necessary due to call to the login method in UsersController#clock{in|out}
@@ -143,6 +142,12 @@ class ApplicationController < ActionController::Base
     @current_vendor = @current_user.vendors.visible.find_by_id(session[:vendor_id])
     Time.zone = @current_vendor.time_zone if @current_vendor
     I18n.locale = @current_user.language
+
+    $USERID = @current_user.id
+    $PARAMS = params
+    $DIRS = {
+      :uploads => File.join(Rails.root,"public","uploads",SR_DEBIAN_SITEID,@current_vendor.hash_id),
+    }
     return @current_user
   end
   

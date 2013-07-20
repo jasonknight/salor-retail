@@ -181,6 +181,17 @@
           </div>
         </div>
         <% end %>
+        <% if @current_user.can(:show_plugins) %>
+        <div class="widget master" onmousedown="window.location = '<%= plugins_path %>';">
+          <div align="center">
+            <a href="<%= plugins_path %>">
+              <%= salor_icon(:action,{},64) %>
+              <br />
+              <%= t("menu.plugins") %>
+            </a>
+          </div>
+        </div>
+        <% end %>
         <% if @current_user.can(:show_payment_methods) %>
         <div class="widget master" onmousedown="window.location = '<%= payment_methods_path %>';">
           <div align="center">
