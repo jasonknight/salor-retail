@@ -21,9 +21,12 @@
   <div class="pos-button" onmousedown="quick_open_drawer();">
     <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("menu.open_drawer")) %>
   </div>
-  <div id="print_receipt_button" onclick="get('/orders/show_payment_ajax?order_id=' + Order.id);" class="input pos-button print-receipt">
+  <div id="print_receipt_button" onclick="complete_order_show();" class="input pos-button print-receipt">
     <%= salor_icon(:okay_orange, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("system.complete_sale")) %>
   </div>
+  
+  
+  
   
   <div class="pos-order-total" id="pos_order_total"></div>
   <input type="text" class="keyboard-input keyboardable" id="main_sku_field" name="keyboard_input" value="" style="background: white;color:black;"/>

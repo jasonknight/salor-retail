@@ -61,10 +61,11 @@ module SalorRetail
       CONFIGURATION = YAML::load(File.open(File.join(Rails.root, 'config', 'config.yml'), 'r').read)
     end
     
-    LANGUAGES = { 'en' => 'English', 'gn' => 'Deutsch', 'fr' => 'Français', 'es' => 'Español', 'el' => 'Greek', 'ru' => 'Русский', 'it' => 'Italiana', 'cn' => 'Chinese'}
-    COUNTRIES = { 'cc' => :default, 'us' => 'USA', 'gb' => 'England', 'ca' => 'Canada', 'de' => 'Deutschland', 'at' => 'Österreich', 'fr' => 'France', 'es' => 'España', 'el' => 'Ελλάδα', 'ru' => 'Россия', :it => 'Italia', 'cn' => '中国'}
-    COUNTRIES_REGIONS = { 'cc' => 'en-us', 'us' => 'en-us', 'gb' => 'en-gb', 'ca' => 'en-ca', 'de' => 'gn-de', 'at' => 'gn-de', 'fr' => 'fr-fr', 'es' => 'es-es', 'el' => 'el-el', 'ru' => 'ru-ru', 'it' => 'it-it', 'cn' => 'cn-cn'}
-    COUNTRIES_INVOICES = { 'cc' => 'cc', 'us' => 'cc', 'gb' => 'cc', 'ca' => 'ca', 'de' => 'cc', 'at' => 'cc', 'fr' => 'cc', 'es' => 'cc', 'el' => 'cc', 'ru' => 'cc', 'it' => 'cc', 'cn' => 'cc' }
+    LANGUAGES = { 'en' => 'English', 'gn' => 'Deutsch', 'fr' => 'Français', 'es' => 'Español', 'el' => 'Greek', 'ru' => 'Русский', 'it' => 'Italiana', 'cn' => 'Chinese', 'hr' => 'Hrvatska' }
+    COUNTRIES = { 'cc' => :default, 'us' => 'USA', 'gb' => 'England', 'ca' => 'Canada', 'de' => 'Deutschland', 'at' => 'Österreich', 'fr' => 'France', 'es' => 'España', 'el' => 'Ελλάδα', 'ru' => 'Россия', :it => 'Italia', 'cn' => '中国', 'hr' => 'Hrvatska' }
+    COUNTRIES_REGIONS = { 'cc' => 'en-us', 'us' => 'en-us', 'gb' => 'en-gb', 'ca' => 'en-ca', 'de' => 'gn-de', 'at' => 'gn-de', 'fr' => 'fr-fr', 'es' => 'es-es', 'el' => 'el-el', 'ru' => 'ru-ru', 'it' => 'it-it', 'cn' => 'cn-cn', 'hr' => 'hr-hr' }
+    COUNTRIES_INVOICES = { 'cc' => 'cc', 'us' => 'cc', 'gb' => 'cc', 'ca' => 'ca', 'de' => 'cc', 'at' => 'cc', 'fr' => 'cc', 'es' => 'cc', 'el' => 'cc', 'ru' => 'cc', 'it' => 'cc', 'cn' => 'cc', 'hr' => 'cc' }
+    CURRENCIES = ["USD", "EUR", "CHF", "CAD"]
     
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

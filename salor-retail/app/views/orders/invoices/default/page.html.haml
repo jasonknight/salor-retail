@@ -2,7 +2,7 @@
 = stylesheet_link_tag 'invoice_default_print', :media => 'print'
 = javascript_include_tag 'invoices.js'
 - case @order.paid
-  - when 1
+  - when true
     - title = "menu.orders"
   - else
     - title = 'activerecord.models.order.unpaid_order'
@@ -22,8 +22,14 @@
   - if @order.is_unpaid or @order.paid.nil?
     = link_to salor_icon(:merge,{},32,I18n.t("menu.merge_into_current_order")),"/orders/merge_into_current_order?id=#{@order.id}"
   %br
-  %span
-    = select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "window.location = '?l=' + $(this).val();"
+  = form_tag "/orders/#{@order.id}/print", :id => 'print_form' do
+    %span
+      = select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }, params[:locale_select]), :onchange => "$('#print_form').submit();"
+    %span
+      = select_tag :currency, options_for_select(SalorRetail::Application::CURRENCIES, params[:currency]), :onchange => "$('#print_form').submit();"
+      
+- locale_before = I18n.locale
+- I18n.locale = params[:locale_select]
     
 .clear
 - item_pagination_count_one = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_one]
@@ -74,7 +80,7 @@
     = render :partial => 'orders/invoices/default/totals' if i == additional_page_count - 1
      
      
-     
+- I18n.locale = locale_before
      
     
 :javascript

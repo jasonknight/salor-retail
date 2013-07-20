@@ -231,7 +231,7 @@ class Item < ActiveRecord::Base
 
     p = self.vendor.items.visible.find_by_sku(string)
     if p then
-      if self.child.id == p.id then
+      if self.child and self.child.id == p.id then
         errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
         p.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
       else
@@ -436,38 +436,45 @@ class Item < ActiveRecord::Base
 #     end
 #     return lines.join("\n")
 #   end
-
-  def quantity=(q)
-    if self.parent or self.child
-      q = 0 if q.nil? or q.blank?
-      q = q.to_s.gsub(',','.')
-      q = q.to_f.round(3)
-      difference = q - self.quantity
-      write_attribute(:quantity, q) and return unless difference < 0 and q == q.round and self.quantity == self.quantity.round
-      # continue only for integer quantities and decrementation
-      difference.to_i.abs.times do
-        i = self.quantity - 1
-        if i == -1
-          if self.parent.class == Item
-            #puts "Updating parent #{self.parent.name} qty";
-            before = self.parent.quantity
-            #puts "Before #{before}"
-            self.parent.update_attribute :quantity, before - 1 # recursion
-            after = self.parent.quantity
-            #puts "After #{after}"
-            parent_reducable = before != after
-            write_attribute(:quantity, self.parent.packaging_unit - 1) if parent_reducable
-          else
-            b = write_attribute :quantity, 0
-          end
-        else
-          c = write_attribute :quantity, i
-        end
-      end
+  
+  # includes quantity of all parents
+  def recursive_quantity(depth=0)
+    depth += 1
+    raise "Cap of 5 reached." if depth > 5
+    if self.parent
+      return self.quantity + self.parent.packaging_unit * self.parent.recursive_quantity(depth)
     else
-      puts "WRITING #{ q }"
-      write_attribute :quantity, q
+      return self.quantity
     end
+  end
+
+  def set_quantity_recursively(q, depth=0)
+    depth += 1
+    raise "Cap of 5 reached." if depth > 5
+    
+    q = 0 if q.blank?
+    q = q.to_s.gsub(',','.')
+    q = q.to_f.round(3)
+    parent = self.parent
+    
+    if (q >= 0 or # no recursion needed for this
+        q != q.round or  # no recursion for non-integers
+        self.quantity != self.quantity.round or # no recursion for non-integers
+        (self.parent.nil? and q < 0) # stop recurion when top parent goes into minus
+       )
+      log_action "Writing quantity #{ q.to_f } directly."
+      self.quantity = q
+      self.save
+      return
+    end
+
+    parent_units_needed = ( -q / parent.packaging_unit ).ceil
+    self.quantity = parent_units_needed * parent.packaging_unit + q
+    self.save
+    
+    # now we need to reduce the quantity of the parent. this starts the recursion
+    new_parent_quantity = parent.quantity - parent_units_needed
+    parent.set_quantity_recursively(new_parent_quantity, depth)
   end
   
   def hide(by)

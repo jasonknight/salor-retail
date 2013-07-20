@@ -26,10 +26,10 @@ order_items.reverse.each do |oi|
     <td align="right" class="order-item-quantity editme" <%= opts %>><%= oi.quantity %></td>
     <td align="right"><%= number_to_percentage(oi.rebate) %></td>
     <td align="right">
-      <%= number_to_currency(oi.net) %>
+      <%= humanized_money_with_symbol(oi.net) %>
     </td>
     <td align="right">
-      <%= number_to_currency(oi.gross) %>
+      <%= humanized_money_with_symbol(oi.gross) %>
     </td>
     <td>
       <% if @current_user.can(:edit_orders) %>

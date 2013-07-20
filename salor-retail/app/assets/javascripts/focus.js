@@ -1,15 +1,17 @@
 $(function() {
 
-$("#main_sku_field").attr("disabled", false);
-focusInput($("#main_sku_field"));
-$("#main_sku_field").keyup(function(e) {
-  if (e.keyCode == 13) {
-    add_item($("#main_sku_field").val(), '');
-  }
-})
+  //$("#main_sku_field").attr("disabled", false);
   
-setInterval(function() {
-  if (
+  $("#main_sku_field").focus();
+  
+  $("#main_sku_field").keyup(function(e) {
+    if (e.keyCode == 13) {
+      add_item($("#main_sku_field").val(), '');
+    }
+  })
+  
+  setInterval(function() {
+    if (
       !$('#cash_drop').is(":visible") && 
       !$('#complete_order').is(":visible") && 
       !$('#inplaceedit-div').is(":visible") && 
@@ -18,18 +20,11 @@ setInterval(function() {
       !$('.ui-keyboard').is(":visible") && 
       !$('.salor-dialog').is(":visible")
      ) {
-    focusInput($("#main_sku_field"));
+    $("#main_sku_field").focus();
     } 
   }, 2000);
   
 }); // documentready
-
-function checkFocusInput() {
-  if (focuseKeyboardInput) {
-    focusInput($('#main_sku_field'));
-    focuseKeyboardInput = false;
-  }
-}
 
 function focusInput(inp) {
   $('.salor-focused').removeClass('salor-focused');

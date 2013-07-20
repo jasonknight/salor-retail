@@ -5,34 +5,18 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
-
 class OrdersController < ApplicationController
 
-   respond_to :html, :xml, :json, :csv
-   after_filter :customerscreen_push_notification, :only => [:add_item_ajax, :delete_order_item]
-   before_filter :update_devicenodes, :only => [:new, :new_order]
+  respond_to :html, :xml, :json, :csv
+  after_filter :customerscreen_push_notification, :only => [:add_item_ajax, :delete_order_item]
+  before_filter :update_devicenodes, :only => [:new, :new_order]
 
    
   def new_from_proforma
-    @proforma = Order.scopied.find_by_id(params[:order_id].to_s)
-    @order = @proforma.dup
+    @proforma = @current_vendor.orders.visible.find_by_id(params[:order_id])
+    @order = @proforma.make_from_proforma_order
+    @order.user = @current_user
     @order.save
-    @order.reload
-    @proforma.order_items.visible.each do |oi|
-       noi = oi.dup
-       noi.order_id = @order.id
-       noi.save
-    end
-    item = Item.get_by_code("DMYACONTO")
-    item.update_attribute :name, I18n.t("receipts.a_conto")
-    item.make_valid
-    @order.update_attribute :paid, 0
-    noi = @order.add_item(item)
-    noi.price = @proforma.amount_paid * -1
-    noi.is_buyback = true
-    noi.save
-    @order.is_proforma = false
-
     redirect_to "/orders/new?order_id=#{@order.id}"
   end
   
@@ -63,7 +47,6 @@ class OrdersController < ApplicationController
     end
   end
 
-
   def show
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
   end
@@ -74,7 +57,7 @@ class OrdersController < ApplicationController
       @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     end
     
-    # get user's last order if unpaid
+    # if no params, get user's last order if unpaid
     unless @current_order
       @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(@current_user.current_order_id)
     end
@@ -108,6 +91,15 @@ class OrdersController < ApplicationController
   def add_item_ajax
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     @order_item = @order.add_order_item(params)
+    
+    @order_items = []
+    @order_items << @order_item
+    
+    if @order_item.behavior == 'coupon'
+      @matching_coupon_item = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
+      @order_items << @matching_coupon_item
+    end
+    
     render :update_pos_display
   end
 
@@ -116,6 +108,7 @@ class OrdersController < ApplicationController
     @order_item = @current_vendor.order_items.find_by_id(params[:id])
     @order = @order_item.order
     @order_item.hide(@current_user)
+    @order_items = [] # do not update any order items on POS screen
     render :update_pos_display
   end
 
@@ -151,11 +144,6 @@ class OrdersController < ApplicationController
     o.update_attribute :was_printed, true if o
     render :nothing => true
   end
-
-
-  def show_payment_ajax
-    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-  end
   
   def last_five_orders
     @text = render_to_string('shared/_last_five_orders',:layout => false)
@@ -185,14 +173,9 @@ class OrdersController < ApplicationController
     @order.user = @current_user
     @order.complete(params)
 
-
     if @order.is_proforma == true then
       History.record("Order is proforma, completing",@order,5)
       render :js => " window.location = '/orders/#{@order.id}/print'; " and return
-    end
-    
-    if params[:print] == "true" and @current_register.salor_printer != true and not @current_register.thermal_printer.blank?
-      @order.print(@current_register)
     end
     
     customerscreen_push_notification
@@ -208,8 +191,6 @@ class OrdersController < ApplicationController
     @order.save
     @current_user.current_order_id = @order.id
     @current_user.save
-    
-    
   end
   
   def new_order
@@ -226,31 +207,6 @@ class OrdersController < ApplicationController
     redirect_to new_order_path
   end
   
-  def activate_gift_card
-    @error = nil
-    @order = initialize_order
-    @order_item = @order.activate_gift_card(params[:id],params[:amount])
-    if not @order_item then
-      History.record("Failed to activate gift card",@order,5)
-      @error = true
-    else
-      History.record("Activated Gift Card #{@order_item.sku}",@order,5)
-      @item = @order_item.item
-    end
-    @order.reload
-
-  end
-  def update_order_items
-    @order = initialize_order
-  end
-  
-  def update_pos_display
-    @order = initialize_order
-    if @order.paid == 1 and not @current_user.is_technician? then
-      @order = @current_user.get_new_order
-    end
-  end
-  
   def split_order_item
     @oi = @current_vendor.order_items.visible.find_by_id(params[:id])
     @oi.split
@@ -263,49 +219,12 @@ class OrdersController < ApplicationController
     redirect_to request.referer
   end
   
-#   def refund_order
-#     @order = Order.scopied.find_by_id(params[:id].to_s)
-#     @order.toggle_refund(true, params[:pm])
-#     @order.save
-#     redirect_to order_path(@order)
-#   end
-  
   def customer_display
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
     @order_items = @order.order_items.visible.order('id ASC')
     @report = @order.report
     render :layout => 'customer_display'
   end
-
-#   def report
-#     f, t = assign_from_to(params)
-#     @from = f
-#     @to = t
-#     from2 = @from.beginning_of_day
-#     to2 = @to.beginning_of_day + 1.day
-#     @orders = Order.scopied.find(:all, :conditions => { :created_at => from2..to2, :paid => true })
-#     @orders.reverse!
-#     @taxes = TaxProfile.scopied.where( :hidden => 0)
-#   end
-
-#   def report_range
-#     f, t = assign_from_to(params)
-#     @from = f
-#     @to = t
-#     @from = @from.beginning_of_day
-#     @to = @to.end_of_day
-#     @vendor = GlobalData.vendor
-#     @report = UserUserMethods.get_end_of_day_report(@from,@to,nil)
-#   end
-
-#   def report_day_range
-#     f, t = assign_from_to(params)
-#     @from = f
-#     @to = t
-#     from2 = @from.beginning_of_day
-#     to2 = @to.beginning_of_day + 1.day
-#     @taxes = TaxProfile.scopied.where( :hidden => 0)
-#   end
   
   def receipts
     @from, @to = assign_from_to(params)
@@ -318,7 +237,10 @@ class OrdersController < ApplicationController
   
   def print
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
-    @report = @order.report
+    @report = @order.report(params[:locale_select])
+    # exchange to currency
+    @ec = params[:currency]
+    @ec ||= @current_vendor.currency
     view = 'default'
     render "orders/invoices/#{view}/page"
   end
@@ -365,84 +287,4 @@ class OrdersController < ApplicationController
     render :nothing => true
     # just to log into the production.log
   end
-
-  private
- 
-#   
-#   def currency(number,options={})
-#     options.symbolize_keys!
-#     defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-#     currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :default => {})
-#     defaults[:negative_format] = "-" + options[:format] if options[:format]
-#     options   = defaults.merge!(options)
-#     unit      = I18n.t("number.currency.format.unit")
-#     format    = I18n.t("number.currency.format.format")
-#     puts  "Format is: " + format
-#     if number.to_f < 0
-#       format = options.delete(:negative_format)
-#       number = number.respond_to?("abs") ? number.abs : number.sub(/^-/, '')
-#     end
-#     value = number_with_precision(number)
-#     puts  "value is " + value
-#     format.gsub(/%n/, value).gsub(/%u/, unit)
-#   end
-#   def number_with_precision(number, options = {})
-#     options.symbolize_keys!
-# 
-#     number = begin
-#       Float(number)
-#     rescue ArgumentError, TypeError
-#       if options[:raise]
-#         raise InvalidNumberError, number
-#       else
-#         return number
-#       end
-#     end
-# 
-#     defaults           = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-#     precision_defaults = I18n.translate(:'number.precision.format', :locale => options[:locale], :default => {})
-#     defaults           = defaults.merge(precision_defaults)
-# 
-#     options = options.reverse_merge(defaults)  # Allow the user to unset default values: Eg.: :significant => false
-#     precision = 2
-#     significant = options.delete :significant
-#     strip_insignificant_zeros = options.delete :strip_insignificant_zeros
-# 
-#     if significant and precision > 0
-#       if number == 0
-#         digits, rounded_number = 1, 0
-#       else
-#         digits = (Math.log10(number.abs) + 1).floor
-#         rounded_number = (BigDecimal.new(number.to_s) / BigDecimal.new((10 ** (digits - precision)).to_f.to_s)).round.to_f * 10 ** (digits - precision)
-#         digits = (Math.log10(rounded_number.abs) + 1).floor # After rounding, the number of digits may have changed
-#       end
-#       precision = precision - digits
-#       precision = precision > 0 ? precision : 0  #don't let it be negative
-#     else
-#       rounded_number = BigDecimal.new(number.to_s).round(precision).to_f
-#     end
-#     formatted_number = number_with_delimiter("%01.#{precision}f" % rounded_number, options)
-#     return formatted_number
-#   end
-#   def number_with_delimiter(number, options = {})
-#     options.symbolize_keys!
-# 
-#     begin
-#       Float(number)
-#     rescue ArgumentError, TypeError
-#       if options[:raise]
-#         raise InvalidNumberError, number
-#       else
-#         return number
-#       end
-#     end
-# 
-#     defaults = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-#     options = options.reverse_merge(defaults)
-# 
-#     parts = number.to_s.split('.')
-#     parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{options[:delimiter]}")
-#     return parts.join(options[:separator])
-#   end
-#   {END}
 end

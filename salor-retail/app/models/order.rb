@@ -21,12 +21,12 @@ class Order < ActiveRecord::Base
   belongs_to :customer
   belongs_to :vendor
   belongs_to :cash_register
-  belongs_to :current_register_daily
   belongs_to :drawer
   belongs_to :tax_profile
   belongs_to :origin_country, :class_name => 'Country', :foreign_key => 'origin_country_id'
   belongs_to :destination_country, :class_name => 'Country', :foreign_key => 'destination_country_id'
   belongs_to :sale_type
+  has_one :proforma_order, :class_name => Order, :foreign_key => :proforma_order_id
 
 
   monetize :total_cents, :allow_nil => true
@@ -67,7 +67,7 @@ class Order < ActiveRecord::Base
   end
   
   def amount_paid
-    self.payment_methods.sum(:amount)
+    Money.new(self.payment_method_items.visible.sum(:amount_cents), self.currency)
   end
   
   def nonrefunded_item_count
@@ -89,7 +89,30 @@ class Order < ActiveRecord::Base
   end
 
   def toggle_is_proforma=(x)
-    self.update_attribute(:is_proforma, !self.is_proforma)
+    self.is_proforma = !self.is_proforma
+    if self.is_proforma
+      zero_tax_profile = self.vendor.tax_profiles.visible.find_by_value(0)
+      if zero_tax_profile.nil?
+        raise "A proforma invoice needs a TaxProfile with value 0. You have to create one before you can proceed."
+      end
+      self.order_items.visible.each do |oi|
+        oi.tax_profile = zero_tax_profile
+        oi.tax = zero_tax_profile.value
+        oi.calculate_totals
+      end
+      self.tax_profile = zero_tax_profile
+      self.calculate_totals
+      
+    else
+      # reset all order items to Item default
+      self.order_items.each do |oi|
+        oi.tax_profile = oi.item.tax_profile
+        oi.tax = oi.item.tax_profile.value
+        oi.calculate_totals
+      end
+      self.tax_profile = nil
+      self.calculate_totals
+    end
   end
   
   def tax_profile_id=(id)
@@ -108,6 +131,15 @@ class Order < ActiveRecord::Base
         oi.tax = tax_profile.value
         oi.calculate_totals
       end
+    end
+    self.calculate_totals
+  end
+  
+  def rebate=(r)
+    self.order_items.visible.each do |oi|
+      oi.rebate = r
+      oi.save # since we are not in the OrderItem model, we have to call save, otherwise oi.calculate_totals will not see the unsaved rebate. this is just how Ruby (or Rails) behaves.
+      oi.calculate_totals
     end
     self.calculate_totals
   end
@@ -173,6 +205,7 @@ class Order < ActiveRecord::Base
       return nil
     end
     
+    # This Item with code G000000000000 is special and has to be created manually
     if i.class == Item and i.item_type.behavior == 'gift_card' and i.sku == "G000000000000"
       log_action "Dynamic Giftcard SKU detected"
       new_i = create_dynamic_gift_card_item
@@ -199,6 +232,7 @@ class Order < ActiveRecord::Base
   
   
   def create_dynamic_gift_card_item
+    auto_giftcard_item = self.vendor.items.visible.find_by_sku("G000000000000")
     zero_tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
 
     if zero_tax_profile.nil?
@@ -212,6 +246,7 @@ class Order < ActiveRecord::Base
     i.company = self.company
     i.currency = self.vendor.currency
     i.tax_profile = zero_tax_profile
+    i.category = auto_giftcard_item.category
     i.name = "Auto Giftcard #{timecode}"
     i.must_change_price = true
     i.item_type = self.vendor.item_types.visible.find_by_behavior('gift_card')
@@ -282,8 +317,50 @@ class Order < ActiveRecord::Base
     return i
   end
 
- 
+  def make_from_proforma_order
+    final = self.dup
+    final.completed_at = nil
+    final.is_proforma = nil
+    final.paid = nil
+    final.paid_at = nil
+    final.created_at = DateTime.now
+    final.tax_profile = nil
+    final.tax = nil
+    final.proforma_order = self
+    final.save
+    
+    self.order_items.visible.each do |oi|
+      noi = oi.dup
+      noi.order = final
+      # reset the tax profile, since all OrderItems of a proforma invoice have zero taxes. the final invoice however needs the actual taxes.
+      noi.tax_profile = noi.item.tax_profile
+      noi.tax = noi.item.tax_profile.value
+      result = noi.save
+      raise "Could not save OrderItem: #{ noi.errors.messages }" if result != true
+    end
+    
+    zero_tax_profile = self.vendor.tax_profiles.visible.find_by_value(0)
+    if zero_tax_profile.nil?
+      raise "Need a TaxProfile with value of 0"
+    end
+    
+    item = self.get_item_by_sku("DMYACONTO")
+    aconto_item_type = self.vendor.item_types.visible.find_by_behavior('aconto')
+    item.item_type = aconto_item_type
+    item.name = I18n.t("receipts.a_conto")
+    item.tax_profile = zero_tax_profile
+    item.save
 
+
+    noi = final.add_order_item({:sku => "DMYACONTO"})
+    noi.price = - self.amount_paid
+    noi.save # must be called before calulate totals!
+    noi.calculate_totals
+    
+    final.calculate_totals
+    
+    return final
+  end
 
   
 
@@ -325,6 +402,7 @@ class Order < ActiveRecord::Base
     self.paid = true
     self.paid_at = Time.now # TODO: Don't set this for unpaid orders
     self.completed_at = Time.now
+    self.drawer = self.user.get_drawer
     self.save
     
     self.update_item_quantities
@@ -333,6 +411,7 @@ class Order < ActiveRecord::Base
     self.create_payment_method_items(params)
     self.create_drawer_transaction
     self.update_timestamps
+    self.order_items.update_all :drawer_id => self.drawer.id
     
     
     if self.is_quote
@@ -383,7 +462,7 @@ class Order < ActiveRecord::Base
             i.quantity += oi.quantity
             i.quantity_buyback += oi.quantity
           else
-            i.quantity -= oi.quantity
+            i.set_quantity_recursively(i.quantity - oi.quantity)
             i.quantity_sold += oi.quantity
           end
         end
@@ -422,18 +501,23 @@ class Order < ActiveRecord::Base
     change = (payment_total - self.total)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
 
-    pmi = PaymentMethodItem.new
-    pmi.vendor = self.vendor
-    pmi.company = self.company
-    pmi.user = self.user
-    pmi.drawer = self.drawer
-    pmi.cash_register = self.cash_register
-    pmi.amount = change
-    pmi.change = true
-    pmi.payment_method = change_payment_method
-    pmi.save
+    unless self.is_proforma
+      # create a change payment method item
+      pmi = PaymentMethodItem.new
+      pmi.vendor = self.vendor
+      pmi.company = self.company
+      pmi.user = self.user
+      pmi.drawer = self.drawer
+      pmi.cash_register = self.cash_register
+      pmi.amount = change
+      pmi.change = true
+      pmi.payment_method = change_payment_method
+      pmi.save
+      self.payment_method_items << pmi
+    else
+      change = 0
+    end
     
-    self.payment_method_items << pmi
     self.cash = payment_cash
     self.noncash = payment_noncash
     self.change = change
@@ -499,10 +583,18 @@ class Order < ActiveRecord::Base
   end
   
   
-  def report
+  def report(locale=nil)
+    locale ||= I18n.locale
+    
     sum_taxes = Hash.new
 
-    self.vendor.tax_profiles.visible.each { |t| sum_taxes[t.id] = {:total => 0, :letter => t.letter, :value => 0} }
+    self.vendor.tax_profiles.visible.each do |t|
+      sum_taxes[t.id] = {
+        :total => 0,
+        :letter => t.letter,
+        :value => 0
+      }
+    end
     
     total = 0
     list_of_items = ''
@@ -515,7 +607,7 @@ class Order < ActiveRecord::Base
     tax_format = "   %s: %2i%% %7.2f %7.2f %8.2f\n"
 
     self.order_items.visible.each do |oi|
-      name = oi.item.get_translated_name(I18n.locale)
+      name = oi.item.get_translated_name(locale)
       taxletter = oi.tax_profile.letter
       
 
@@ -523,40 +615,129 @@ class Order < ActiveRecord::Base
       if oi.behavior == 'normal'
         if oi.quantity == Integer(oi.quantity)
           # integer quantity
-          list_of_items += integer_format % [taxletter, name, oi.price, oi.quantity, oi.total]
-          list_of_items_raw << to_list_of_items_raw([taxletter, name, oi.price, oi.quantity, oi.total, 'integer'])
+          list_of_items += integer_format % [
+            taxletter,
+            name,
+            oi.price,
+            oi.quantity,
+            oi.total
+          ]
+          list_of_items_raw << to_list_of_items_raw([
+                                                     taxletter,
+                                                     name,
+                                                     oi.price,
+                                                     oi.quantity,
+                                                     oi.total,
+                                                     'integer'
+                                                    ])
         else
           # float quantity (e.g. weighed OrderItem)
-          list_of_items += float_format % [taxletter, name, oi.price, oi.quantity, oi.total]
-          list_of_items_raw << to_list_of_items_raw([taxletter, name, oi.price, oi.quantity, oi.total, 'float'])
+          list_of_items += float_format % [
+            taxletter,
+            name,
+            oi.price,
+            oi.quantity,
+            oi.total
+          ]
+          list_of_items_raw << to_list_of_items_raw([
+                                                     taxletter,
+                                                     name,
+                                                     oi.price,
+                                                     oi.quantity,
+                                                     oi.total,
+                                                     'float'
+                                                    ])
         end
       end
 
       # GIFT CARDS
       if oi.behavior == 'gift_card'
-        list_of_items += "%s %-19.19s         %3u   %6.2f\n" % [taxletter, name, oi.quantity, oi.total]
-        list_of_items_raw << to_list_of_items_raw([taxletter, name, nil, oi.quantity, oi.total, 'integer'])
+        list_of_items += "%s %-19.19s         %3u   %6.2f\n" % [
+          taxletter,
+          name,
+          oi.quantity,
+          oi.total
+        ]
+        list_of_items_raw << to_list_of_items_raw([
+                                                   taxletter,
+                                                   name,
+                                                   nil,
+                                                   oi.quantity,
+                                                   oi.total,
+                                                   'integer'
+                                                  ])
       end
 
       # COUPONS
       if oi.behavior == 'coupon'
-        list_of_items += "  %-19.19s         %3u\n" % [oi.item.name, oi.quantity]
-        list_of_items_raw << to_list_of_items_raw([nil, oi.item.name, nil, oi.quantity, nil, 'integer'])
+        list_of_items += "  %-19.19s         %3u\n" % [
+          oi.item.name,
+          oi.quantity
+        ]
+        list_of_items_raw << to_list_of_items_raw([
+                                                   nil,
+                                                   oi.item.name,
+                                                   nil,
+                                                   oi.quantity,
+                                                   nil,
+                                                   'integer'
+                                                  ])
       end
 
+      
+      # ACONTO
+      if oi.behavior == 'aconto'
+        aconto_blurb = "#{ name } (#{ I18n.t('orders.print.invoice') } ##{ self.proforma_order.nr }, #{ I18n.l(self.proforma_order.completed_at, :format => :just_day) })"
+        list_of_items += integer_format % [
+          taxletter,
+          aconto_blurb,
+          oi.price,
+          oi.quantity,
+          oi.total
+        ]
+        list_of_items_raw << to_list_of_items_raw([
+                                                    taxletter,
+                                                    aconto_blurb,
+                                                    oi.price,
+                                                    oi.quantity,
+                                                    oi.total,
+                                                    'integer'
+                                                  ])
+      end
+      
       # DISCOUNTS
       if oi.discount_amount and not oi.discount_amount.zero? # TODO: get rid of nil values in DB
         discount = oi.discounts.first
         discount_blurb = I18n.t('printr.order_receipt.discount') + ' ' + oi.discount.to_s + ' %'
-        list_of_items += "  %-19.19s         %3u\n" % [discount_blurb, oi.quantity] #TODO
-        list_of_items_raw << to_list_of_items_raw([nil, discount_blurb, nil, oi.quantity, nil, 'integer'])
+        list_of_items += "  %-19.19s         %3u\n" % [
+          discount_blurb,
+          oi.quantity
+        ]
+        list_of_items_raw << to_list_of_items_raw([
+                                                   nil,
+                                                   discount_blurb,
+                                                   nil,
+                                                   oi.quantity,
+                                                   nil,
+                                                   'integer'
+                                                  ])
       end
 
       # REBATES
       if oi.rebate
         rebate_blurb = I18n.t('printr.order_receipt.rebate') + " " + oi.rebate.to_s + " %"
-        list_of_items += "  %-19.19s         %3u\n" % [rebate_blurb, oi.quantity]
-        list_of_items_raw << to_list_of_items_raw([nil, rebate_blurb, nil, oi.quantity, nil, 'integer'])
+        list_of_items += "  %-19.19s         %3u\n" % [
+          rebate_blurb,
+          oi.quantity
+        ]
+        list_of_items_raw << to_list_of_items_raw([
+                                                   nil,
+                                                   rebate_blurb,
+                                                   nil,
+                                                   oi.quantity,
+                                                   nil,
+                                                   'integer'
+                                                  ])
       end
     end
 
@@ -567,7 +748,10 @@ class Order < ActiveRecord::Base
       next if pmi.amount.zero?
       blurb = pmi.payment_method.name
       blurb = I18n.t('printr.eod_report.refund') + ' ' + blurb if pmi.refund
-      paymentmethods[pmi.id] = { :name => blurb, :amount => pmi.amount }
+      paymentmethods[pmi.id] = {
+        :name => blurb,
+        :amount => pmi.amount
+      }
     end
 
     
@@ -579,14 +763,25 @@ class Order < ActiveRecord::Base
       tax_profile = self.vendor.tax_profiles.find_by_value(tax_in_percent)
       tax_amount = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:tax_amount_cents), self.currency)
       total = Money.new(self.order_items.visible.where(:tax => tax_in_percent).sum(:total_cents), self.currency)
-      next if tax_amount.zero?
-      list_of_taxes += tax_format % [tax_profile.letter, tax_in_percent, total - tax_amount, tax_amount, total]
-      list_of_taxes_raw << to_list_of_taxes_raw([tax_profile.letter, tax_profile.value, total - tax_amount, tax_amount, total])
+      next if total.zero?
+      list_of_taxes += tax_format % [
+        tax_profile.letter,
+        tax_in_percent,
+        total - tax_amount,
+        tax_amount,
+        total
+      ]
+      list_of_taxes_raw << to_list_of_taxes_raw([
+                                                 tax_profile.letter,
+                                                 tax_profile.value,
+                                                 total - tax_amount,
+                                                 tax_amount, total
+                                                ])
     end
     
     # --- invoice blurbs ---
-    invoice_blurb_header = self.vendor.invoice_blurbs.visible.where(:lang => I18n.locale, :is_header => true).last
-    invoice_blurb_footer = self.vendor.invoice_blurbs.visible.where(:lang => I18n.locale).where('is_header IS NOT TRUE').last
+    invoice_blurb_header = self.vendor.invoice_blurbs.visible.where(:lang => locale, :is_header => true).last
+    invoice_blurb_footer = self.vendor.invoice_blurbs.visible.where(:lang => locale).where('is_header IS NOT TRUE').last
     invoice_blurb_header_receipt = invoice_blurb_header.body_receipt if invoice_blurb_header
     invoice_blurb_header_invoice = invoice_blurb_header.body if invoice_blurb_header
     invoice_blurb_footer_receipt = invoice_blurb_footer.body_receipt if invoice_blurb_footer
@@ -795,6 +990,7 @@ class Order < ActiveRecord::Base
   end
   
   def print(cash_register)
+    return if self.company.mode != 'local'
     contents = self.escpos_receipt
     
     if nil # is_mac?
@@ -945,5 +1141,9 @@ class Order < ActiveRecord::Base
       attrs[:loyalty_card] = self.customer.loyalty_cards.visible.last.json_attrs if self.customer.loyalty_cards.visible.last
     end
     attrs.to_json
+  end
+  
+  def self.order_items_to_json(order_items=[])
+    "[#{order_items.collect { |oi| oi.to_json }.join(", ") }]"
   end
 end

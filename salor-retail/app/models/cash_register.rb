@@ -19,6 +19,8 @@ class CashRegister < ActiveRecord::Base
   has_many :orders
   
   validates_presence_of :name
+  before_save :sanitize_path
+  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files
@@ -33,7 +35,9 @@ class CashRegister < ActiveRecord::Base
       return super
     end
   end
+  
   def open_cash_drawer
+    return if self.company.mode != 'local'
     vp = Escper::VendorPrinter.new({})
     vp.id = 0
     vp.name = self.name
@@ -42,7 +46,7 @@ class CashRegister < ActiveRecord::Base
     vp.codepage = 0
     vp.baudrate = 9600
     
-    print_engine = Escper::Printer.new('local', vp)
+    print_engine = Escper::Printer.new('', vp)
     print_engine.open
     text = self.open_cash_drawer_code
     print_engine.print(0, text)
@@ -53,46 +57,11 @@ class CashRegister < ActiveRecord::Base
     "\x1B\x70\x00\x55\x55"
   end
   
-#   def end_of_day_report
-#     table = {}
-#     cats_tags = Category.cats_report(@current_user.get_drawer.id)
-#     @orders = Order.by_vendor.by_user.where(:refunded => false,:drawer_id => @current_user.get_drawer.id,:paid => true,:created_at => Time.now.beginning_of_day..Time.now)
-#     paymentmethod_sums = Hash.new
-#     cashtotal = 0.0
-#     @orders.each do |o|
-#       cashtotal += o.get_drawer_add
-#       o.payment_methods.each do |pm|
-#         paymentmethod_sums[pm.name] ||= 0 if not pm.internal_type == 'InCash'
-#         paymentmethod_sums[pm.name] += pm.amount if not pm.internal_type == 'InCash'
-#         if pm.amount < 0 then
-#           #cash_total += pm.amount if pm.internal_type != 'InCash'
-#         end
-#       end
-#     end
-#     paymentmethod_sums[I18n.t("InCash")] = cashtotal
-#     cats_tags.merge!(paymentmethod_sums)
-#     return cats_tags
-#   end
-  
-#   def self.update_all_devicenodes
-#     # Update device paths of all Rails-printing CashRegisters AND the currently selected CashRegister, independent of being Rails or client side printing.
-#     devices_for_select = CashRegister.get_devicenodes
-#     #"[[TM T20,"/dev..."]"]"
-#     if @current_register then
-#       @current_register.set_device_paths_from_device_names(devices_for_select)
-#     end
-#     #$Vendor.current_registers.visible.each do |cr|
-#     #  next if cr.salor_printer == true and not cr == @current_register
-#     #  cr.set_device_paths_from_device_names(devices_for_select)
-#     #  if cr == @current_register
-#     #    cr.reload
-#     #    @current_register = cr
-#     #  end
-#     #end
-#   end
-  
-  def self.get_devicenodes
-    #return [["TM-T20","/dev/myusb/lp0"],["TM-T21","/dev/myusb/lp1"],["Super Pole","/dev/myusb/pole"],["Cash Drawer","/dev/myusb/cdrawer"]]
+  def get_devicenodes
+    if self.company.mode != 'local'
+      log_action "This method is allowed to run only on local installations"
+      return []
+    end
     nodes_usb1 = Dir['/dev/usb/lp*']
     nodes_serial = Dir['/dev/ttyUSB*']
     nodes_test = Dir['/tmp/salor-test*']
@@ -106,6 +75,7 @@ class CashRegister < ActiveRecord::Base
       end
       # Why not just be direct about it? You have the name, and you have the path, you can choose what you display in the select
       # Why would we even need a lookup table?
+      # Answer: Because device paths can change after reboot, which would break printing for non-techie users, and we only take the ieee1284_id name for granted (stored on the microchips of the devices) and update the path accordingly when they log in or visit the POS page (see before_filters when this is executed). The alternative is to write custom udev rules that give device nodes a specific name based on the USB port location (e.g. /dev/usb-port-top-left), instead of generic ones (e.g. /dev/usb/lp0), but that has to be done manually and specifically for each mainboard revision, which is time consuming and painful.
       if not devicename.include? '.txt' then
         match = /^.*L:(.*?)\;.*/.match(devicename)
         devicename = match ? match[1] : '?' + n
@@ -115,7 +85,12 @@ class CashRegister < ActiveRecord::Base
    return devices_for_select
   end
   
-  def set_device_paths_from_device_names(devices_for_select)
+  def set_device_paths_from_device_names
+    if self.company.mode != 'local'
+      log_action "This method is allowed to run only on local installations"
+      return
+    end
+    devices_for_select = self.get_devicenodes
     devices_for_select.each do |dev|
       [:cash_drawer,:thermal_printer,:sticker_printer,:scale,:pole_display].each do |a|
         # on each pass it will look like this: self.send("thermal_printer_name","TM-T20")
@@ -133,11 +108,25 @@ class CashRegister < ActiveRecord::Base
       end
     end
     self.save
-    #self.cash_drawer_name = self.thermal_printer_name
-    #self.cash_drawer_path = devices_name_path_lookup[self.cash_drawer_name] unless self.cash_drawer_name.nil?
-    #self.thermal_printer = devices_name_path_lookup[self.thermal_printer_name] unless self.thermal_printer_name.nil?
-    #self.sticker_printer = devices_name_path_lookup[self.sticker_printer_name] unless self.sticker_printer_name.nil?
-    #self.scale = devices_name_path_lookup[self.scale_name] unless self.scale_name.nil?
-    #self.save
   end
+  
+  def sanitize_path
+    if self.company.mode != 'local'
+      self.thermal_printer = self.thermal_printer.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.cash_drawer_path = self.cash_drawer_path.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.sticker_printer = self.sticker_printer.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.a4_printer = self.a4_printer.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+      self.pole_display = self.pole_display.to_s.gsub(/[\/'"\&\^\$\#\!;\*]/,'_').gsub(/[^\w\/\.\-@]/,'')
+    end
+  end
+  
+  def salor_printer
+    if self.company.mode == 'local'
+      return read_attribute :salor_printer
+    else
+      # remote installations always have to use the salor-bin printing method. In the view, the check box will be hidden.
+      return true
+    end
+  end
+  
 end

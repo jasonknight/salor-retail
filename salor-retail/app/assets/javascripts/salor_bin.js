@@ -59,14 +59,14 @@ function print_order(id, callback) {
    print_url(Register.thermal_printer, '/orders/print_receipt', '&order_id=' + id,'/orders/print_confirmed?order_id=' + id, callback);
 }
 
-function print_url(printer_path, url, params, confirmation_url, callback) {
-  c_url = typeof(confirmation_url) !== 'undefined' ? Register.ip + confirmation_url : '';
-  param_string = '?user_id=' + User.id + '&user_type=' + User.type + '&cash_register_id=' + Register.id + params;
-  if (params.indexOf('download=true') != -1) {
+function print_url(printer_path, url, param_string, confirmation_url, callback) {
+  c_url = typeof(confirmation_url) !== 'undefined' ? location.origin + confirmation_url : '';
+  param_string = "?printurl=1&" + param_string;
+  if (param_string.indexOf('download=true') != -1) {
     window.location = url + param_string;
   } else if (isSalorBin() && Register.salor_printer == true) {
     stop_drawer_observer()
-    Salor.printURL(printer_path, Register.ip + url + param_string, c_url);
+    Salor.printURL(printer_path, location.origin + url + param_string, c_url);
     if (typeof callback == "function") {
       callback.call();
     }
@@ -87,7 +87,7 @@ function updateCustomerDisplay(order_id, item, show_change) {
   if ( useMimo() ) {
     var show_change_param = ""
     if (show_change) show_change_param = "?display_change=1";
-    Salor.mimoRefresh(Register.ip + "/orders/" + order_id + "/customer_display" + show_change_param, 800, 480);
+    Salor.mimoRefresh(location.origin + "/orders/" + order_id + "/customer_display" + show_change_param, 800, 480);
     
   }
   

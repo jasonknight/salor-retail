@@ -2,7 +2,7 @@
   .logo= image_tag @current_vendor.image('invoice_logo')
 
   - @report[:list_of_items_raw].reverse[0..4].each do |item|
-    - highlight = item[:price].blank? or item[:price] < 0
+    - highlight = item[:price].blank? or item[:price].fractional < 0
     %div{ :class => "#{ highlight  ? 'highlighted' : '' }" }
       - item = format_item(item)
       - item.each do |k,v|
@@ -12,7 +12,7 @@
 
   %div#subsubtotal= humanized_money_with_symbol @report[:subtotal]
 
-  - if @report[:change]
+  - unless @report[:change].zero?
     %div#change== #{ t('printr.order_receipt.change') }: #{ humanized_money_with_symbol @report[:change] }
 
   - if @report[:customer]
@@ -25,7 +25,7 @@
       %br
       %span== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
-- if @report[:change]
+- unless @report[:change].zero?
   :javascript
     setTimeout(function() {
       window.location = window.location.origin + "/vendors/#{ @current_vendor.id }/display_logo";

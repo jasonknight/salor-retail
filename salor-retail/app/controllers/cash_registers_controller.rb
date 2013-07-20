@@ -19,12 +19,10 @@ class CashRegistersController < ApplicationController
 
   def new
     @cash_register = CashRegister.new
-    @devices_for_select = CashRegister.get_devicenodes
   end
 
   def edit
     @cash_register = @current_vendor.cash_registers.visible.find_by_id(params[:id])
-    @devices_for_select = CashRegister.get_devicenodes
   end
 
   def create
@@ -34,7 +32,6 @@ class CashRegistersController < ApplicationController
     if @cash_register.save
       redirect_to cash_registers_path
     else
-      @devices_for_select = CashRegister.get_devicenodes
       render :new
     end
   end
@@ -45,7 +42,6 @@ class CashRegistersController < ApplicationController
     if @cash_register.update_attributes(params[:cash_register])
       redirect_to cash_registers_path
     else
-      @devices_for_select = CashRegister.get_devicenodes
       render :edit
     end
   end

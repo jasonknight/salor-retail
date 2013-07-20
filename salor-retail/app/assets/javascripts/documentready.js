@@ -62,7 +62,6 @@ $(function () {
 
   // focus stuff
   focusInput($('#generic_search_input'));
-  setInterval('checkFocusInput()',200);
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

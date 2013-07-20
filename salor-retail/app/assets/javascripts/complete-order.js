@@ -7,40 +7,20 @@ function complete_order_show() {
   $(".complete-order-total").html($('#pos_order_total').html());
   $("#complete_order_change").html('');
   $("#recommendation").html('');
-  $('#complete_order').show();
-  
+  $('#complete_order').show();  
   set_invoice_button();
-  
-  bindInplaceEnter(false);
-  handleKeyboardEnter = false;
+
   orderCompleteDisplayed = true;
-
-  setOnEnterKey(function(event) {
-    if (event.keyCode == 13 && orderCompleteDisplayed) {
-      ajax_log({log_action:'complete_order_show:setOnEnterKey', order_id:Order.id, value:event.keyCode});
-      if (Register.no_print == true) {
-          complete_order_send(false);
-      } else {
-          complete_order_send(true);
-      }
-      event.preventDefault();
-    }
-  });
-
-  setOnEscKey(function() {
-    complete_order_hide();
-  });
 
   $("#add_payment_method_button").show();
   $("#payment_methods").show();
-  
   $("#payment_methods").html("");
   add_payment_method();
   $("#payment_amount_0").val( Order.total );
   $("#payment_amount_0").select();
   display_change('function complete_order_show');
   show_denominations();
-  $("#keyboard_input").attr("disabled", true);
+  allow_complete_order(true);
   $('body').triggerHandler({type: "CompleteOrderShow"});
 }
 
@@ -63,25 +43,14 @@ function complete_order_hide() {
   $("#payment_methods").html("");
   $(".payment-amount").attr("disabled", true);
   $('#complete_order').hide();
-  bindInplaceEnter(true);
-  handleKeyboardEnter = true;
-  orderCompleteDisplayed = false;
-  unsetOnEnterKey();
-  unsetOnEscKey();
   $('.a4-print-button').remove();
   $('.pieces-button ').remove();
-  $("#keyboard_input").attr("disabled", false);
-  if (typeof bycard_hide != 'undefined') {
-    bycard_hide();
-  }
-  focuseKeyboardInput = true;
   $('body').triggerHandler({type: "CompleteOrderHide"});
   ajax_log({log_action:'complete_order_hide', order_id:Order.id});
-  
   if ( parseInt( Order.id ) % 20 == 0) { 
+    // reload the page every 20 orders to trigger garbage collection
     window.location = '/orders/new'; 
   }
-  
 }
 
 function complete_order_send(print) {
@@ -220,8 +189,10 @@ function completeOrderUpdatePaymentMethodsUsed() {
   _set("payment_methods_used",pms_used,getCompleteOrderTemplate());
 }
 
-function allow_complete_order(isAllowed) {
-  if (isAllowed && $('#pos-table-left-column-items').children().length > 0 || Order.is_proforma) {
+function allow_complete_order(userRequest) {
+  var allowedBySystem = $('#pos-table-left-column-items').children().length > 0 || Order.is_proforma; // sine qua non condition of the system that the user cannot override.
+  
+  if (allowedBySystem && userRequest) {
     $("#confirm_complete_order_button").removeClass("button-inactive");
     $("#confirm_complete_order_button").off('click');
     $("#confirm_complete_order_button").on('click', function() {complete_order_send(true)});
@@ -229,6 +200,7 @@ function allow_complete_order(isAllowed) {
     $("#confirm_complete_order_noprint_button").off('click');
     $("#confirm_complete_order_noprint_button").on('click', function() {complete_order_send(false)});
   } else {
+    
     $("#confirm_complete_order_button").addClass("button-inactive");
     $("#confirm_complete_order_button").off('click');
     $("#confirm_complete_order_noprint_button").addClass("button-inactive")

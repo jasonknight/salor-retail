@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130715125322) do
+ActiveRecord::Schema.define(:version => 20130719122136) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -142,7 +142,7 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
   create_table "companies", :force => true do |t|
     t.string   "name"
     t.string   "identifier"
-    t.string   "mode"
+    t.string   "mode",               :default => "local"
     t.string   "subdomain"
     t.boolean  "hidden"
     t.integer  "hidden_by"
@@ -158,8 +158,8 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
     t.boolean  "auth"
     t.string   "domain"
     t.boolean  "removal_pending"
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
   end
 
   create_table "countries", :force => true do |t|
@@ -266,6 +266,7 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
     t.text     "notes"
     t.boolean  "refund"
     t.string   "tag"
+    t.integer  "cash_register_id"
     t.integer  "order_id"
     t.integer  "order_item_id"
     t.integer  "vendor_id"
@@ -533,6 +534,7 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
   add_index "items", ["hidden"], :name => "index_items_on_hidden"
   add_index "items", ["item_type_id"], :name => "index_items_on_item_type_id"
   add_index "items", ["location_id"], :name => "index_items_on_location_id"
+  add_index "items", ["name"], :name => "index_items_on_name"
   add_index "items", ["part_id"], :name => "index_items_on_part_id"
   add_index "items", ["sku"], :name => "index_items_on_sku"
   add_index "items", ["tax_profile_id"], :name => "index_items_on_tax_profile_id"
@@ -671,8 +673,8 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
     t.integer  "tax_profile_id"
     t.integer  "item_type_id"
     t.boolean  "activated"
-    t.float    "tax"
     t.string   "behavior"
+    t.float    "tax"
     t.integer  "category_id"
     t.integer  "location_id"
     t.boolean  "refunded"
@@ -766,6 +768,7 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
     t.integer  "rebate_amount_cents",    :default => 0
     t.datetime "completed_at"
     t.string   "currency"
+    t.integer  "proforma_order_id"
   end
 
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"
@@ -819,11 +822,8 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
     t.integer  "vendor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "hidden"
+    t.integer  "hidden",        :default => 0
     t.integer  "hidden_by"
-    t.datetime "hidden_at"
-    t.integer  "company_id"
-    t.integer  "user_id"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"
@@ -1145,7 +1145,7 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
     t.text     "invoice_blurb"
     t.text     "invoice_blurb_footer"
     t.string   "gs1_format",                        :default => "2,5,5"
-    t.string   "country",                           :default => "cc"
+    t.string   "country",                           :default => "us"
     t.integer  "largest_drawer_transaction_number", :default => 0
     t.boolean  "enable_technician_emails"
     t.string   "technician_email"
@@ -1158,7 +1158,7 @@ ActiveRecord::Schema.define(:version => 20130715125322) do
     t.boolean  "auth"
     t.string   "domain"
     t.string   "subdomain"
-    t.string   "currency"
+    t.string   "currency",                          :default => "USD"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

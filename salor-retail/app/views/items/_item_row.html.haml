@@ -1,0 +1,30 @@
+%td.left
+  - if depth > 0
+    = raw "&nbsp;" * 2 * depth
+    = "↳" if depth > 1
+  = link_to item.name, item_path(item)
+%td
+  - if item.behavior == 'coupon' and item.coupon_type == 1
+    = number_to_percentage item.price
+  - elsif item.behavior == 'coupon' and item.coupon_type == 3
+    /nothing
+  - else
+    = humanized_money_with_symbol item.price
+  
+%td= item.sku
+%td= number_to_percentage item.tax_profile.value
+%td
+  - if item.parent
+    == #{ item.quantity.to_i } (#{ item.recursive_quantity.to_i })
+  - elsif item.quantity == Integer(item.quantity)
+    = item.quantity.to_i
+  - else
+    = item.quantity
+    
+%td= item.packaging_unit
+%td
+  - if @current_user.can(:edit_items)
+    = link_to salor_icon(:edit,{},20), edit_item_path(item)
+%td
+  - if @current_user.can(:destroy_items)
+    = link_to(salor_icon(:delete,{},20), item, :confirm => 'Are you sure?', :method => :delete)

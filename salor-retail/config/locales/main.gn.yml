@@ -5,6 +5,7 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      gift_card_amount: Gutschein Restbetrag
       active: aktiv
       address: Adresse
       afield: Feld
@@ -15,7 +16,7 @@ gn:
       applies_to: bezieht sich auf
       auto_drop: Auto-Buchung Tagesbeginn
       bank_machine_path: Bankomat
-      base_price: Preis/Betrag/Prozent
+      base_price: Betrag
       behavior: Verhalten
       body: Körper
       buyback_price: Pfandbetrag
@@ -109,7 +110,7 @@ gn:
         tax_free: Steuerfrei
       owner_id: Owner
       owner_type: Owner Type
-      packaging_unit: Verpackungseinheit
+      packaging_unit: Verpackung
       pagination: Artikel pro Seite
       paid: Bezahlt
       parent_sku: Eltern-SKU
@@ -577,7 +578,7 @@ gn:
       OrderRefund: Gesamtstornierung
       cash-refunds: Bargeld-Stornierungen
       cash_drawer: Kassenlade
-      count_orders: Anzahl Verkäufe
+      count_orders: Anzahl Verkäufe      
       drop: Einzahlung
       from: von
       gross: brutto
@@ -606,7 +607,7 @@ gn:
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
-      calculated_drawer_amount: Kassenlade
+      calculated_drawer_amount: Kassenlade nachberechnet
       cash-refunds: Bargeld-Stornierungen
       cash_refunds_total: GESAMT
       no_category: Unbenannt
@@ -773,17 +774,20 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
     report_day:
+      gift_card_redeem_total: Gutschein Einlösung
+      gift_card_sales_total: Gutschein Verkauf
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
       cash-refunds: Bargeld-Stornierungen
       cash_drawer: Kassenlade
       count_orders: Anzahl Verkäufe
+      count_order_items: Anzahl Verkaufsartikel
       drop: Einzahlung
       from: von
       gross: brutto
       net: netto
-      noncash-refunds: Noncash-Refunds
+      refunds: Stornierungen
       payments: Zahlungen
       payout: Auszahlung
       payouts: Auszahlungen

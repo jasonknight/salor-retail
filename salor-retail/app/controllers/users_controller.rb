@@ -41,6 +41,9 @@ class UsersController < ApplicationController
   def update
     @user = @current_vendor.users.visible.find_by_id(params[:id])
     if @user.update_attributes(params[:user])
+      if @current_user == @user
+        session[:locale] = @user.language
+      end
       redirect_to users_path
     else
       render :edit

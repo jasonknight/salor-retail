@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
   
   def update_devicenodes
     if @current_register
-      @current_register.set_device_paths_from_device_names(CashRegister.get_devicenodes)
+      @current_register.set_device_paths_from_device_names
     end
   end
   
@@ -127,11 +127,13 @@ class ApplicationController < ActionController::Base
     $USERID = nil
     $PARAMS = nil
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
+
     if @current_user.nil? or session[:user_id_hash].blank?
       redirect_to new_session_path and return 
     end
     $USERID = @current_user.id
     $PARAMS = params
+
     if defined?(SrSaas) == 'constant'
       # this is necessary due to call to the login method in UsersController#clock{in|out}
       @current_company = SrSaas::Company.visible.find_by_id(@current_user.company_id)

@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
   def index
     orderby = "id DESC"
     orderby ||= params[:order_by]
-    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
   end
 
   def show
@@ -46,10 +46,11 @@ class ItemsController < ApplicationController
 
 
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new
     @item.vendor = @current_vendor
     @item.company = @current_company
     @item.currency = @current_vendor.currency
+    @item.attributes = params[:item]
     if @item.save
       @item.assign_parts(params[:part_skus])
       redirect_to items_path
@@ -166,18 +167,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def labels
-    output = @current_vendor.print_labels('item', params, @current_register)
-    if params[:download] == 'true'
-      send_data output, :filename => '1.salor'
-      return
-    elsif @current_register.salor_printer
-      render :text => output
-      return
-    end
-    render :nothing => true
-  end
-
   def database_distiller
     @all_items = Item.where(:hidden => 0).count
     @used_item_ids = OrderItem.connection.execute('select item_id from order_items').to_a.flatten.uniq
@@ -255,6 +244,18 @@ class ItemsController < ApplicationController
     else
       @skus = nil
     end
+  end
+  
+  def labels
+    output = @current_vendor.print_labels('item', params, @current_register)
+    if params[:download] == 'true'
+      send_data output, :filename => '1.salor'
+      return
+    elsif @current_register.salor_printer
+      render :text => output
+      return
+    end
+    render :nothing => true
   end
   
   def report

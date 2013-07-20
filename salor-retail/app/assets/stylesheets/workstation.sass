@@ -255,6 +255,10 @@ a
 
 /* Non Specific */
 
+th.left,
+td.left
+  :text-align left
+
 div.clear
   :clear both
 
@@ -459,6 +463,9 @@ div.main_sku
 .even 
   background-color: $light_background
   color: $foreground
+  
+tr.recursive
+  background-color: #615443
 
 .even 
   @include rounded_corners_all
@@ -916,6 +923,16 @@ div.list
   margin: auto
   font-size: $text_size_big
 
+    
+table.items_index
+  :width 90%
+  :margin auto
+  :font-size 110%
+  :text-transform uppercase
+  :text-align center
+  div.salor-icon
+    :padding 5px 30px
+    
 div.list > div 
   vertical-align: top
   display: inline-block
@@ -3155,3 +3172,11 @@ input.payment-method-input
   
 form#logoutform
   :display none
+
+div#modcoder_colorpicker
+  :position absolute
+  :z-index 200
+  
+input.modcoder_excolor_clrbox
+  :padding 2px 20px
+  
