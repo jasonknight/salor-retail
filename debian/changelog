@@ -1,3 +1,16 @@
+salor-retail (4.0.2.4) unstable; urgency=low
+
+  * fixed double printing of eod report
+  * add escper codepages and disable rails printing for anything other than local installations
+  * cleanup and proforma back to working
+  * set taxes for proforma invoices
+  * link proforma orders to regular orders, add aconto ItemType, add currency to seed
+  * cleanup
+  * day report work
+  * added gift cards and proforma to day report
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 20 Jul 2013 06:50:26 +0200
+
 salor-retail (4.0.2.3) unstable; urgency=low
 
   * more exchange stuff
