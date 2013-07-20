@@ -191,9 +191,7 @@ class Item < ActiveRecord::Base
   end
 
   def run_actions
-    if self.actions.visible.any? then
-      Action.run(self.vendor,self, :on_save)
-    end
+    Action.run(self.vendor,self, :on_item_save)
   end
   
   def cache_behavior

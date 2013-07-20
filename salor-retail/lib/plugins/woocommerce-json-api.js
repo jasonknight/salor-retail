@@ -29,11 +29,13 @@ function get_product_by_sku(sku) {
   var body = api.post(URL, {'Content-Type': 'application/json'}, JSON.stringify(params));
   var result = JSON.parse(body);
   var product = result.payload[0];
-  var attrs = {
-    price: product.price,
-    name: product.name,
+  if (product && product.name && product.price) {
+    var attrs = {
+      price: product.price,
+      name: product.name,
+    }
+    api.update_attributes(attrs);
   }
-  api.update_attributes(attrs);
 }
 
 if (api.action == 'on_sku_not_found') {
