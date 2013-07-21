@@ -8,7 +8,8 @@ class CopyConfigurationIntoVendor < ActiveRecord::Migration
     if v
       attrs.each do |a|
         val = Vendor.connection.execute("SELECT #{ a } FROM salor_configurations WHERE vendor_id=1;").to_a.flatten.first
-        v.update_attribute a, val
+        #v.update_attribute a, val
+        Vendor.connection.execute("UPDATE `vendors` set `#{a}` = '#{val}'")
       end
     end
   end

@@ -980,7 +980,7 @@ class Vendor < ActiveRecord::Base
   
   def set_hash_id
     self.hash_id = "#{ self.identifier }#{ generate_random_string[0..20] }"
-    self.save
+    Vendor.connection.execute("UPDATE vendors set hash_id = '#{self.hash_id}'")
   end
   
   def json_tax_profiles

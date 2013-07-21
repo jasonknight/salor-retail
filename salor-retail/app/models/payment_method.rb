@@ -16,9 +16,9 @@ class PaymentMethod < ActiveRecord::Base
   before_save :set_to_nil
   
   def set_to_nil
-    self.cash = nil if self.cash == false
-    self.quote = nil if self.quote == false
-    self.unpaid = nil if self.unpaid == false
-    self.change = nil if self.change == false
+    self.cash = nil if self.respond_to? :cash and self.cash == false
+    self.quote = nil if self.respond_to? :quote and self.quote == false
+    self.unpaid = nil if self.respond_to? :unpaid and self.unpaid == false
+    self.change = nil if self.respond_to? :change and self.change == false
   end
 end

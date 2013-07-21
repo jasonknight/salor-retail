@@ -14,7 +14,7 @@ class TransformPaymentMethods < ActiveRecord::Migration
       pm.company = v.company
       pm.cash = true
       pm.name = "InCash"
-      pm.save
+      pm.save( :validate => false )
       
       # change
       pm = PaymentMethod.new
@@ -22,35 +22,35 @@ class TransformPaymentMethods < ActiveRecord::Migration
       pm.company = v.company
       pm.change = true
       pm.name = "Change"
-      pm.save
+      pm.save( :validate => false )
       
       # OtherCredit
       pm = PaymentMethod.new
       pm.vendor = v
       pm.company = v.company
       pm.name = "OtherCredit"
-      pm.save
+      pm.save( :validate => false )
       
       # ByGiftCard
       pm = PaymentMethod.new
       pm.vendor = v
       pm.company = v.company
       pm.name = "ByGiftCard"
-      pm.save
+      pm.save( :validate => false )
       
       # Unpaid
       pm = PaymentMethod.new
       pm.vendor = v
       pm.company = v.company
       pm.name = "Unpaid"
-      pm.save
+      pm.save( :validate => false )
       
       # Quote
       pm = PaymentMethod.new
       pm.vendor = v
       pm.company = v.company
       pm.name = "Quote"
-      pm.save
+      pm.save( :validate => false )
     end
   end
 
