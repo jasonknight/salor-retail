@@ -1,4 +1,5 @@
 function display_change(called_from) {
+  console.log(called_from);
   var paymentTotal = get_payment_total();
   var change = paymentTotal - Order.total;
   change = Round(change,2);

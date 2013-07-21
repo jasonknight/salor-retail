@@ -24,7 +24,7 @@ function add_payment_method() {
     if (event.keyCode == 13) {
       complete_order_send(!Register.no_print);
     } else {
-      display_change("payment-amount.onKeyUp " + event.which + " " + sel.val());
+      display_change("payment-amount.onKeyUp " + event.which + " " + amount.val() + " " + amount.attr('id'));
     }
   });
   amount.on("click",function() {

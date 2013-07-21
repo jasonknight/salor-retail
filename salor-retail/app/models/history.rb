@@ -4,24 +4,25 @@
 # Copyright (C) 2012-2013  Red (E) Tools LTD
 # 
 # See license.txt for the license applying to all files within this software.
+
 class History < ActiveRecord::Base
-  # {START}
   belongs_to :user
   belongs_to :model, :polymorphic => true
   include SalorBase
-
   include SalorScope
+  
   before_create :set_fields
+  
   def set_fields
-    if self.user_id.nil? then
-      self.user = @current_user
-    end
-    self.url = $Request.url if $Request and not self.url
-    self.params = $Params.to_json if $Params
-    self.ip = $Request.ip if $Request
+    self.url = $REQUEST.url if $REQUEST and not self.url
+    self.params = $PARAMS.to_json if $PARAMS
+    self.ip = $REQUEST.ip if $REQUEST
+    self.vendor_id = $VENDORID
+    self.company_id = $COMPANYID
+    self.user_id = $USERID
   end
-  def self.record(action,object,sen=5,url=nil)
-    # sensitivity is from 5 (least sensitive) to 1 (most sensitive)
+  
+  def self.record(action, object, sen=5, url=nil)
     h = History.new
     h.url = url
     h.sensitivity = sen
@@ -32,16 +33,4 @@ class History < ActiveRecord::Base
     end
     h.save
   end
-  def self.direct(url,model,params,action_taken,changes_made)
-      h = History.new
-      h.url = url
-      h.params = params
-      h.model = model
-      h.action_taken = action_taken
-      h.changes_made = changes_made
-      if not h.save then
-        raise h.errors.messages.inspect
-      end
-  end
-  # {END}
 end
