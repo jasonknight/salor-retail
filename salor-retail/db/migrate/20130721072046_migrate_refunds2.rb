@@ -1,8 +1,6 @@
 class MigrateRefunds2 < ActiveRecord::Migration
-  def up
-    
+  def up    
     OrderItem.reset_column_information
-    
     
     # in the old refund system, a DT was created for cash refunds, and a PM for noncash refunds. However, we want PMs also for cash refunds, so we add them now based on refund DT.
     DrawerTransaction.where(:refund => true).each do |dt|

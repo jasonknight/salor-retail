@@ -505,7 +505,10 @@ class Vendor < ActiveRecord::Base
         :is_proforma => nil,
         :payment_method_id => pm,
         :refund => true).sum(:amount_cents)
-      refunds[pm.name] = Money.new(refund_cents, self.currency)
+      refunds[pm.order_id] = {
+        :name => pm.name,
+        :amount => Money.new(refund_cents, self.currency)
+      }
     end
 
     
@@ -833,9 +836,9 @@ class Vendor < ActiveRecord::Base
       refunds.each do |k,v|
         refund_lines +=
             line_format2 % [
-              k,
+              v[:name],
               report[:unit],
-              v
+              v[:amount]
             ]
       end
     end

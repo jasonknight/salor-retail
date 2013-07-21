@@ -151,7 +151,7 @@ class ApplicationController < ActionController::Base
     $PARAMS = params
     $REQUEST = request
     $DIRS = {
-      :uploads => File.join(Rails.root,"public","uploads",SR_DEBIAN_SITEID,@current_vendor.hash_id),
+      :uploads => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
     }
     return @current_user
   end
