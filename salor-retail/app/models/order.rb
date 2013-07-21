@@ -418,6 +418,7 @@ class Order < ActiveRecord::Base
     self.create_payment_method_items(params)
     self.create_drawer_transaction
     self.update_associations
+    self.report_errors_to_technician
     
     
     if self.is_quote
@@ -1043,6 +1044,15 @@ class Order < ActiveRecord::Base
     return contents[:text]
   end
     
+  def report_errors_to_technician
+    if self.vendor.enable_technician_emails == true and self.vendor.technician_email
+      errors = self.check
+      if errors.any?
+        UserMailer.technician_message(self.vendor, "Errors in Order #{ self.id }", errors.to_s).deliver
+      end
+    end
+  end
+  
   def check
     tests = []
     
@@ -1070,47 +1080,6 @@ class Order < ActiveRecord::Base
     
     return tests
   end
-  
- 
-
-  # Mikey: not sure what this does, seems like fixing unsound orders. i think it would be better to fix the core logic instead of adding more and more sanity checks on top.
-#   def run_new_sanitization
-#     unsound = false
-#     if params[:pm_id] then
-#       pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
-#       any = @order.payment_methods.find_by_internal_type('Unpaid')
-#       if any and params[:pm_name] and not ['Unpaid','Change'].include? params[:pm_name] then
-#         # it should not allow doubles of this type
-#         if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
-#           npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
-#           @order.payment_methods << npm
-#           pm = npm
-#           @order.save
-#         end
-#       end # end handling new pms by name
-#       
-#       if not pm.internal_type == 'Unpaid' then
-#         pm.update_attribute :amount, params[:pm_amount]
-#         diff = any.amount - pm.amount
-#         if diff == 0 then
-#           any.destroy
-#           @order.update_attribute :unpaid_invoice, false
-#         elsif diff < 0 then
-#           raise "Cannot pay more than is due"
-#         else
-#           any.update_attribute :amount, diff
-#         end
-#       else
-#         raise "Cannot because unsound"
-#       end
-#     end
-#     @current_user = @order.user
-#     if not @order.user then
-#       @order.user = User.where(:vendor_id => @order.vendor_id).last
-#       @order.save
-#       @current_user = @order.user
-#     end
-#   end
   
   # for better debugging in the console
   def self.last2

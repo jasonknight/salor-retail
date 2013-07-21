@@ -38,8 +38,17 @@ class ExceptionNotifier
   def call(env)
     @app.call(env)
   rescue Exception => exception
+    vendor_id = env['rack.session']['vendor_id']
+    vendor = Vendor.find_by_id(vendor_id)
+    
     options = (env['exception_notifier.options'] ||= Notifier.default_options)
     options.reverse_merge!(@options)
+    
+    if vendor
+      raise exception if vendor.enable_technician_emails == false
+      options[:exception_recipients] = vendor.technician_email if vendor.technician_email
+      options[:sender_address] = "#{vendor.name.parameterize}@#{ SalorRetail::Application::SR_DEBIAN_SITEID }"
+    end
 
     unless ignored_exception(options[:ignore_exceptions], exception)       ||
            from_crawler(options[:ignore_crawlers], env['HTTP_USER_AGENT']) ||
