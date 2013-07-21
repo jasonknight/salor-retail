@@ -1,3 +1,14 @@
+salor-retail (4.0.2.8) unstable; urgency=low
+
+  [ Jason Knight ]
+  * action api stuff
+  * Plugin beginning
+  * Working on migrations
+
+  [ Michael Franzl ]
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 17:15:22 +0200
+
 salor-retail (4.0.2.7) unstable; urgency=low
 
   * added sending of emails from javascript
