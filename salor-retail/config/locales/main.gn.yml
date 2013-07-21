@@ -806,6 +806,7 @@ gn:
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
+      tax: Steuer
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

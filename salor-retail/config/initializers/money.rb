@@ -3,6 +3,7 @@
 require 'money'
 require 'money/bank/google_currency'
 Money.default_bank = Money::Bank::GoogleCurrency.new
+#Money.rounding_mode = BigDecimal::ROUND_HALF_UP
 
 MoneyRails.configure do |config|
 

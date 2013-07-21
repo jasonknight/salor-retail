@@ -801,6 +801,7 @@ en:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+      tax: Tax
   views:
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'

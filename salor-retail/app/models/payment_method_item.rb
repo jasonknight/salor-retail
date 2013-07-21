@@ -17,4 +17,12 @@ class PaymentMethodItem < ActiveRecord::Base
   belongs_to :cash_register
   
   monetize :amount_cents, :allow_nil => true
+  
+  validates_presence_of :order_id
+  validates_presence_of :company_id
+  validates_presence_of :vendor_id
+  validates_presence_of :user_id
+  validates_presence_of :drawer_id
+  validates_presence_of :payment_method_id
+  validates_presence_of :cash_register_id
 end
