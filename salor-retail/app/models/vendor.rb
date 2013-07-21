@@ -1036,7 +1036,7 @@ class Vendor < ActiveRecord::Base
       filtered_tests << t unless blacklist.include? t[3]
     end
     
-    return tests
+    return filtered_tests
   end
   
   private

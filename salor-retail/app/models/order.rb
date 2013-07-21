@@ -771,7 +771,7 @@ class Order < ActiveRecord::Base
     # --- payment method items ---
     paymentmethods = Hash.new
     self.payment_method_items.visible.each do |pmi|
-      next if pmi.amount.zero?
+      next if pmi.amount.blank?
       blurb = pmi.payment_method.name
       blurb = I18n.t('printr.eod_report.refund') + ' ' + blurb if pmi.refund
       paymentmethods[pmi.id] = {

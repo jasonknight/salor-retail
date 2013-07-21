@@ -18,11 +18,13 @@ class UsersController < ApplicationController
   end
 
   def new
+    redirect_to '/saas/users/new' and return if defined?(SrSaas) == 'constant'
     @user = User.new
     @user.language = 'en'
   end
 
   def edit
+    redirect_to "/saas/users/#{ params[:id] }/edit" and return if defined?(SrSaas) == 'constant'
     @user = @current_vendor.users.visible.find_by_id(params[:id])
   end
 

@@ -475,12 +475,22 @@ class OrderItem < ActiveRecord::Base
     # ---
     if self.refunded != true
       price_reductions = coupon_amount_cents.to_i + discount_amount_cents.to_i + rebate_amount_cents.to_i
-      should = (self.quantity * self.price_cents) - price_reductions
-      actual = self.total_cents
-      pass = should == actual
-      msg = "total must be (price * quantity) - price reductions"
-      type = :orderItemTotalCorrect
-      tests << [pass, type, msg, should, actual] if pass == false
+      
+      if self.vendor.net_prices
+        should = (self.quantity * self.price_cents) - price_reductions + self.tax_amount
+        actual = self.total_cents
+        pass = should == actual
+        msg = "total must be (price * quantity) - price reductions + tax_amount"
+        type = :orderItemTotalCorrectNet
+        tests << [pass, type, msg, should, actual] if pass == false
+      else
+        should = (self.quantity * self.price_cents) - price_reductions
+        actual = self.total_cents
+        pass = should == actual
+        msg = "total must be (price * quantity) - price reductions"
+        type = :orderItemTotalCorrect
+        tests << [pass, type, msg, should, actual] if pass == false
+      end
     end
       
     # ---

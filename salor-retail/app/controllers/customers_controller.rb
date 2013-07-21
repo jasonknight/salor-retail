@@ -29,7 +29,7 @@ class CustomersController < ApplicationController
   def show
     @customer = @current_company.customers.visible.find_by_id(params[:id])
     @item_statistics = @customer.get_item_statistics
-    @last_orders = @customer.orders.limit(5).reverse
+    @last_orders = @customer.orders.visible.paid.limit(50).order('nr DESC')
   end
 
   def edit

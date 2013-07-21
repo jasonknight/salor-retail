@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130721122404) do
+ActiveRecord::Schema.define(:version => 20130721163522) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -266,6 +266,7 @@ ActiveRecord::Schema.define(:version => 20130721122404) do
     t.text     "notes"
     t.boolean  "refund"
     t.string   "tag"
+    t.integer  "cash_register_id"
     t.integer  "order_id"
     t.integer  "order_item_id"
     t.integer  "vendor_id"
@@ -690,8 +691,8 @@ ActiveRecord::Schema.define(:version => 20130721122404) do
     t.integer  "tax_profile_id"
     t.integer  "item_type_id"
     t.boolean  "activated"
-    t.float    "tax"
     t.string   "behavior"
+    t.float    "tax"
     t.integer  "category_id"
     t.integer  "location_id"
     t.boolean  "refunded"
@@ -713,13 +714,13 @@ ActiveRecord::Schema.define(:version => 20130721122404) do
     t.float    "discount"
     t.boolean  "calculate_part_price"
     t.integer  "drawer_id"
-    t.integer  "price_cents",            :default => 0
-    t.integer  "gift_card_amount_cents", :default => 0
-    t.integer  "tax_amount_cents",       :default => 0
-    t.integer  "coupon_amount_cents",    :default => 0
-    t.integer  "discount_amount_cents",  :default => 0
-    t.integer  "rebate_amount_cents",    :default => 0
-    t.integer  "total_cents",            :default => 0
+    t.integer  "price_cents",                   :default => 0
+    t.integer  "gift_card_amount_cents",        :default => 0
+    t.integer  "tax_amount_cents",              :default => 0
+    t.integer  "coupon_amount_cents",           :default => 0
+    t.integer  "discount_amount_cents",         :default => 0
+    t.integer  "rebate_amount_cents",           :default => 0
+    t.integer  "total_cents",                   :default => 0
     t.datetime "completed_at"
     t.string   "currency"
     t.boolean  "is_proforma"
@@ -727,6 +728,7 @@ ActiveRecord::Schema.define(:version => 20130721122404) do
     t.boolean  "is_unpaid"
     t.boolean  "paid"
     t.datetime "paid_at"
+    t.integer  "refund_payment_method_item_id"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -850,11 +852,8 @@ ActiveRecord::Schema.define(:version => 20130721122404) do
     t.integer  "vendor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "hidden"
+    t.integer  "hidden",        :default => 0
     t.integer  "hidden_by"
-    t.datetime "hidden_at"
-    t.integer  "company_id"
-    t.integer  "user_id"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"

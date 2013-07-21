@@ -18,9 +18,9 @@ class MigrateRefunds3 < ActiveRecord::Migration
           pmi.cash = true
           pmi.created_at = oi.created_at
           pmi.amount_cents = oi.total_cents
-          res = pmi.save
+          res = pmi.save(:validate => false)
           raise "could not save pmi #{ pmi.errors.messages }" unless res == true
-          puts "Adding refund change PM #{ pmi.amount_cents}"
+          puts "Adding refund change PM #{ pmi.amount_cents} to order #{ oi.order_id }"
         end
       end
     end
