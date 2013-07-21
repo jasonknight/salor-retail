@@ -183,22 +183,21 @@ class Order < ActiveRecord::Base
     end
     
     # get existing regular item
-    item = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
-    if item then
-      if item.is_normal?
+    oi = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
+    if oi then
+      if oi.is_normal?
         log_action "Item is normal, and present, just increment"
-        # simply increment and return
-        item.quantity += 1 
-        item.modify_price_for_actions       
-        item.calculate_totals
-        item.save
+        oi.quantity += 1 
+        oi.modify_price_for_actions       
+        oi.calculate_totals
+        oi.save
         self.calculate_totals
         return item
       else
-        log_action "Item is not normal but is #{item.behavior}"
+        log_action "Item is not normal but is #{oi.behavior}. Will not increment."
       end
     else
-      log_action "Item not found on order"
+      log_action "OrderItem not found on order, or existing OrderItem is set to no_inc. Will not increment."
     end
     
     # at this point, we know that the added order item is not yet in the order. so we add a new one
@@ -222,10 +221,12 @@ class Order < ActiveRecord::Base
     # finally create the order item
     oi = OrderItem.new
     oi.order = self
+    oi.drawer = self.drawer
+    oi.user = self.user
     oi.set_attrs_from_item(i)
     if params[:sku].include?('.') or params[:sku].include?(',')
-      log_action "Setting no_inc"
-      oi.no_inc = true 
+      log_action "Setting no_inc since it is a price-only item."
+      oi.no_inc = true
     end
     oi.no_inc ||= params[:no_inc]
     log_action "no_inc is: #{oi.no_inc.inspect}"
@@ -383,8 +384,7 @@ class Order < ActiveRecord::Base
     self.total_cents = _oi_total
 
     if not self.save then
-      puts self.errors.full_messages.to_sentence
-      raise "Order Could Not Be Saved"
+      raise "Order Could Not Be Saved #{ self.errors.messages }"
     end
   end
 
