@@ -99,10 +99,8 @@ class OrderItem < ActiveRecord::Base
   def tax=(value)
     tp = self.vendor.tax_profiles.visible.find_by_value(value)
     raise "A TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tp
-    self.tax_profile = tp
-    self.tax = tp.value
-    result = self.save
-    raise "Cannot save OrderItem while assigning a tax because #{ self.errors.messages }"
+    write_attribute :tax_profile_id, tp.id
+    write_attribute :tax, tp.value
   end
   
 
