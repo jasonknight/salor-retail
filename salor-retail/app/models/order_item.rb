@@ -97,11 +97,12 @@ class OrderItem < ActiveRecord::Base
   end
   
   def tax=(value)
-    tax_profile = self.vendor.tax_profiles.visible.find_by_value(value)
-    ActiveRecord::Base.logger.info "TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tax_profile
-    self.tax_profile = tax_profile
-    self.save
-    write_attribute :tax, tax_profile.value
+    tp = self.vendor.tax_profiles.visible.find_by_value(value)
+    raise "A TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tp
+    self.tax_profile = tp
+    self.tax = tp.value
+    result = self.save
+    raise "Cannot save OrderItem while assigning a tax because #{ self.errors.messages }"
   end
   
 
@@ -213,7 +214,7 @@ class OrderItem < ActiveRecord::Base
     self.sku          = item.sku
     self.price        = item.price
     self.tax          = item.tax_profile.value # cache for faster processing
-    #self.tax_profile  = item.tax_profile
+    #self.tax_profile  = item.tax_profile # this association is made in self.tax=()
     self.item_type    = item.item_type
     self.behavior     = item.item_type.behavior # cache for faster processing
     self.is_buyback   = item.default_buyback

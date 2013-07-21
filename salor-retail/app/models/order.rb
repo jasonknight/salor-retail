@@ -1047,9 +1047,9 @@ class Order < ActiveRecord::Base
   def report_errors_to_technician
     if self.vendor.enable_technician_emails == true and self.vendor.technician_email
       errors = self.check
-      if errors.any?
+      #if errors.any?
         UserMailer.technician_message(self.vendor, "Errors in Order #{ self.id }", errors.to_s).deliver
-      end
+      #end
     end
   end
   
