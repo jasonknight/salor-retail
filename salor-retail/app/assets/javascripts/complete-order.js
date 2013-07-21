@@ -1,7 +1,21 @@
 var sendingOrder = false;
 var orderCompleteDisplayed = false;
+var sendqueue = [];
+
+function enablePrintReceiptButton() {
+  if (sendqueue.length == 0 ) {
+     $('#print_receipt_button').css('background-color', '#ed8b00');
+  }
+}
+
+function disablePrintReceiptButton() {
+  $('#print_receipt_button').css('background-color', '#999999');
+}
 
 function complete_order_show() {
+  if (sendqueue.length > 0) {
+    return;
+  }
   ajax_log({log_action:'complete_order_show', order_id:Order.id});
   
   sendingOrder = false;

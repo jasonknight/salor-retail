@@ -1,9 +1,7 @@
 function display_change(called_from) {
-  console.log(called_from);
   var paymentTotal = get_payment_total();
   var change = paymentTotal - Order.total;
   change = Round(change,2);
-  console.log("change is " + change);
   if (change < 0 && Order.total > 0 && !Order.is_proforma) {
     change = 0;
     allow_complete_order(false);

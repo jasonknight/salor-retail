@@ -207,11 +207,11 @@ class OrderItem < ActiveRecord::Base
   def set_attrs_from_item(item)
     self.vendor       = item.vendor
     self.company      = item.company
-    self.currency     = item.currency # all Items must be validated to have the same currency as the parent Vendor. The system does not support adding Items of different currencies into one order.
+    self.currency     = item.currency
     self.item         = item
     self.sku          = item.sku
     self.price        = item.price
-    self.tax          = item.tax_profile.value # cache for faster processing
+    self.tax          = item.tax_profile.value
     #self.tax_profile  = item.tax_profile # this association is made in self.tax=()
     self.item_type    = item.item_type
     self.behavior     = item.item_type.behavior # cache for faster processing
