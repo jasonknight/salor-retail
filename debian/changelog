@@ -1,3 +1,10 @@
+salor-retail (4.0.2.7) unstable; urgency=low
+
+  * added sending of emails from javascript
+  * added locking of complete order button when running ajax requests
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 16:11:04 +0200
+
 salor-retail (4.0.2.6) unstable; urgency=low
 
   * removed invalid validation for OI
