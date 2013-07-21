@@ -56,11 +56,15 @@ function get(url, calledFrom, sFunc, type, eFunc) {
   if (type !== 'get' && type != 'post') type = 'get';
   if (sFunc == null) sFunc = function(){};
   if (eFunc == null) eFunc = function(){};
+  //$('#print_receipt_button').hide();
 
   $.ajax({
     url: url,
     context: document.body,
     success: sFunc,
+    complete: function () {
+      //$('#print_receipt_button').show();
+    },
     error: function(jqXHR, textStatus, errorThrown) {
       eFunc();
      // alert(textStatus + "--" + errorThrown + "\nCalled from: " + calledFrom + "\nURL: " + url);
