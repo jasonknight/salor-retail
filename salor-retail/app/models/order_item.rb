@@ -40,7 +40,6 @@ class OrderItem < ActiveRecord::Base
   validates_presence_of :company_id
   validates_presence_of :vendor_id
   validates_presence_of :user_id
-  validates_presence_of :cash_register_id
   validates_presence_of :order_id
   validates_presence_of :quantity
   validates_presence_of :tax_profile_id
