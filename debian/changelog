@@ -1,3 +1,15 @@
+salor-retail (4.0.2.6) unstable; urgency=low
+
+  * removed invalid validation for OI
+  * overcome OI validations on add item
+  * overcoming another validation
+  * build
+  * more fixes, stack level too deep error remaining
+  * stack error fixed
+  * created email model, checked histories and ajax_log, js cleanup
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 15:23:34 +0200
+
 salor-retail (4.0.2.5) unstable; urgency=low
 
   * adding checks and actually much more
