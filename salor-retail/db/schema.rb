@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130720114110) do
+ActiveRecord::Schema.define(:version => 20130720140912) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -704,6 +704,11 @@ ActiveRecord::Schema.define(:version => 20130720114110) do
     t.integer  "total_cents",            :default => 0
     t.datetime "completed_at"
     t.string   "currency"
+    t.boolean  "is_proforma"
+    t.boolean  "is_quote"
+    t.boolean  "is_unpaid"
+    t.boolean  "paid"
+    t.datetime "paid_at"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
@@ -801,6 +806,12 @@ ActiveRecord::Schema.define(:version => 20130720114110) do
     t.integer  "amount_cents",      :default => 0
     t.string   "currency"
     t.integer  "order_item_id"
+    t.boolean  "is_proforma"
+    t.boolean  "is_quote"
+    t.boolean  "is_unpaid"
+    t.boolean  "paid"
+    t.datetime "paid_at"
+    t.datetime "completed_at"
   end
 
   add_index "payment_method_items", ["cash"], :name => "index_payment_method_items_on_cash"

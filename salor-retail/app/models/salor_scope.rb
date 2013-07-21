@@ -18,6 +18,18 @@ module SalorScope
                                     klass.where("`#{klass.table_name}`.`hidden` = FALSE OR `#{klass.table_name}`.`hidden` IS NULL")
                                    })
     end
+    
+    if klass.column_names.include? 'paid'
+      klass.scope(:paid, lambda {
+                                    klass.where("`#{klass.table_name}`.`paid` IS TRUE")
+                                   })
+    end
+    
+    if klass.column_names.include? 'completed_at'
+      klass.scope(:completed, lambda {
+                                    klass.where("`#{klass.table_name}`.`completed_at` IS NOT NULL")
+                                   })
+    end
   
     
     klass.scope(:by_keywords, lambda { |words|

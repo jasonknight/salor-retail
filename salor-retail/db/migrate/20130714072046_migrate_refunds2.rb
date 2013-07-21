@@ -9,7 +9,7 @@ class MigrateRefunds2 < ActiveRecord::Migration
       order = dt.order
       
       next if order.nil?
-      puts "processing DrawerTransaction ID #{ dt.id }"
+      puts "processing DrawerTransaction ID #{ dt.id } order_id #{ order.id }"
       vendor = order.vendor
       
       pm = vendor.payment_methods.visible.where(:cash => true).first
@@ -28,7 +28,8 @@ class MigrateRefunds2 < ActiveRecord::Migration
       pmi.internal_type = "InCashRefund"
       res = pmi.save
       pmi.created_at = order.created_at
-      pmi.save
+      res = pmi.save(:validate => false)
+      raise "Could not save PMI #{ pmi.errors.messages }" unless res == true
       
       oi_id = dt.notes.to_s.gsub('#', '').to_i
       oi = OrderItem.find_by_id(oi_id)

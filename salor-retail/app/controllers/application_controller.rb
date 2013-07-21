@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   layout :layout_by_response
 
   unless SalorRetail::Application.config.consider_all_requests_local
-    #rescue_from Exception, :with => :render_error
+    rescue_from Exception, :with => :render_error
   end
   
 
@@ -201,7 +201,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def render_error(exception)
-    #log_error(exception)
+    logger.info exception.backtrace.join("\n")
+    raise exception if request.xhr?
     @exception = exception
     if SalorRetail::Application::CONFIGURATION[:exception_notification] == true
       if notifier = Rails.application.config.middleware.detect { |x| x.klass == ExceptionNotifier }

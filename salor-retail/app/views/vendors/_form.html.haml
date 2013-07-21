@@ -1,0 +1,65 @@
+= form_for nest_image(@vendor), :html => { :multipart => true } do |f|
+  - if @vendor.errors.any?
+    #error_explanation
+      %h2= I18n.t("activerecord.errors.template.header.other", :count => @vendor.errors.count,:model => t("activerecord.models.vendor.one"))
+      %ul
+        - @vendor.errors.full_messages.each do |msg|
+          %li= msg
+          
+  %table{:width => "90%", :align => "center"}
+    %tr
+      %td
+      %td.actions.clear= f.submit I18n.t('helpers.submit.save'), :id => 'save_button'
+    %tr
+      %td.attr= f.label :name
+      %td.value= f.text_field :name, :class => 'keyboardable'
+    %tr
+      %td.attr= f.label :time_zone
+      %td.value= f.time_zone_select :time_zone
+
+    %tr
+      %td.attr
+        %h2= t('menu.configuration')
+      %td.value
+        %hr
+    %tr
+      %td.attr= f.label :hash_id
+      %td.attr= f.text_field :hash_id
+    %tr
+      %td.attr= f.label :pagination
+      %td.value= f.text_field :pagination
+    %tr
+      %td.attr= f.label :technician_email
+      %td.value= f.text_field :technician_email
+    %tr
+      %td.attr= f.label :enable_technician_emails
+      %td.value= f.check_box :enable_technician_emails
+    %tr
+      %td.attr= f.label :currency
+      %td.value= f.select :currency, SalorRetail::Application::CURRENCIES, :include_blank => true
+    %tr
+      %td.attr= f.label :country
+      %td.value
+        %select{ :name => 'vendor[country]' }
+          - SalorRetail::Application::COUNTRIES.each do |key, val|
+            %option{ :value => key, :selected => f.object.country == key }= t val
+          
+    %tr
+      %td.attr
+        %h2= t('menu.logos')
+      %td.value
+        %hr
+    %tr
+      %td.attr= f.label :receipt_logo_header
+      %td.value= f.file_field :receipt_logo_header
+    %tr
+      %td.attr= f.label :receipt_logo_footer
+      %td.value= f.file_field :receipt_logo_footer
+     
+    = f.fields_for :images do |image_form|
+      %tr
+        %td.attr= f.label image_form.object.image_type.to_s
+        %td.value
+          = image_form.file_field :file_data
+          = image_form.hidden_field :image_type
+          .floatright= image_tag @vendor.image(image_form.object.image_type.to_s)

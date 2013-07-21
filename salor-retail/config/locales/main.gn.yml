@@ -38,7 +38,7 @@ gn:
       contact_fax: Kontakt Fax
       contact_person: Kontaktperson
       contact_phone: Telefon
-      country: Bundesland
+      country: Land
       coupon_applies: Gutschein anwendbar
       coupon_total: Coupon
       coupon_type: Coupon-Art
@@ -412,6 +412,7 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    logos: Logos
     print-dialog: Druckdialog
     refund_payment_method: Storno-Rückzahlugsmethode
     regular_printer: Normaler Drucker
@@ -806,6 +807,7 @@ gn:
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
+      tax: Steuer
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

@@ -61,7 +61,7 @@ $(function () {
   } 
 
   // focus stuff
-  focusInput($('#generic_search_input'));
+  //focusInput($('#generic_search_input'));
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

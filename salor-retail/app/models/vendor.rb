@@ -79,7 +79,7 @@ class Vendor < ActiveRecord::Base
     end
   end
   def region
-    SalorRetail::Application::COUNTRIES_REGIONS[self.country]
+    SalorRetail::Application::COUNTRIES_REGIONS[self.country] 
   end
   
   def set_currency
@@ -238,16 +238,17 @@ class Vendor < ActiveRecord::Base
     
     orders = self.orders.visible.where(
       :paid => true,
-      :completed_at => from..to,
+      :paid_at => from..to,
       :drawer_id => drawer,
       :is_proforma => nil,
-      :proforma_order_id => nil
     )
     count_orders = orders.count
-    oids = orders.collect { |o| o.id }
     
     count_order_items = self.order_items.visible.where(
-      :order_id => oids
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
     ).count
 
    # README: All amounts called "negative" below are buyback only. All other negatively priced OrderItems which are not buyback are either of Type gift_card or aconto. Those will be listed separately on the day report, so that accountants can enter them more easily into their own software.
@@ -268,7 +269,10 @@ class Vendor < ActiveRecord::Base
               }
     }
     used_categories = self.order_items.visible.where(
-      :order_id => oids,
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
       :behavior => 'normal'
     ).select("DISTINCT category_id")
     used_categories.each do |r|
@@ -276,21 +280,30 @@ class Vendor < ActiveRecord::Base
       label = cat ? cat.name : "-"
       
       pos_total_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :category_id => r.category_id,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :category_id => r.category_id,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :category_id => r.category_id,
         :is_buyback => true,
         :behavior => 'normal'
@@ -298,7 +311,10 @@ class Vendor < ActiveRecord::Base
       neg_total = Money.new(neg_total_cents, self.currency)
       
       neg_tax_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :category_id => r.category_id,
         :is_buyback => true,
         :behavior => 'normal'
@@ -333,7 +349,10 @@ class Vendor < ActiveRecord::Base
       :neg => {}
     }
     used_tax_amounts = self.order_items.visible.where(
-      :order_id => oids,
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
       :behavior => 'normal',
     ).select("DISTINCT tax")
     used_tax_amounts.each do |r|
@@ -341,21 +360,30 @@ class Vendor < ActiveRecord::Base
       taxes[:neg][r.tax] = {}
       
       pos_total_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :tax => r.tax,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :tax => r.tax,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :tax => r.tax,
         :is_buyback => true,
         :behavior => 'normal'
@@ -363,7 +391,10 @@ class Vendor < ActiveRecord::Base
       neg_total = Money.new(neg_total_cents, self.currency)
       
       neg_tax_cents = self.order_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :tax => r.tax,
         :is_buyback => true,
         :behavior => 'normal'
@@ -384,7 +415,10 @@ class Vendor < ActiveRecord::Base
       :neg => {}
     }
     used_payment_methods = self.payment_method_items.visible.where(
-      :order_id => oids,
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
       :refund => nil
     ).select("DISTINCT payment_method_id")
     used_payment_methods.each do |r|
@@ -397,21 +431,30 @@ class Vendor < ActiveRecord::Base
         change_pm = self.payment_methods.visible.find_by_change(true)
         
         cash_positive_cents = self.payment_method_items.visible.where(
-          :order_id => oids,
+          :paid => true,
+          :paid_at => from..to,
+          :drawer_id => drawer,
+          :is_proforma => nil,
           :payment_method_id => pm,
           :refund => nil
         ).where("amount_cents > 0").sum(:amount_cents)
         cash_positive = Money.new(cash_positive_cents, self.currency)
         
         change_positive_cents = self.payment_method_items.visible.where(
-          :order_id => oids,
+          :paid => true,
+          :paid_at => from..to,
+          :drawer_id => drawer,
+          :is_proforma => nil,
           :payment_method_id => change_pm,
           :refund => nil
         ).sum(:amount_cents)
         change_positive = Money.new(change_positive_cents, self.currency)
         
         cash_negative_cents = self.payment_method_items.visible.where(
-          :order_id => oids,
+          :paid => true,
+          :paid_at => from..to,
+          :drawer_id => drawer,
+          :is_proforma => nil,
           :payment_method_id => pm,
           :refund => nil,
         ).where("amount_cents < 0").sum(:amount_cents)
@@ -422,14 +465,20 @@ class Vendor < ActiveRecord::Base
         
       else
         pmi_pos_cents = self.payment_method_items.visible.where(
-          :order_id => oids,
+          :paid => true,
+          :paid_at => from..to,
+          :drawer_id => drawer,
+          :is_proforma => nil,
           :payment_method_id => pm,
           :refund => nil
         ).where("amount_cents > 0").sum(:amount_cents)
         paymentmethods[:pos][pm.name] = Money.new(pmi_pos_cents, self.currency)
         
         pmi_neg_cents = self.payment_method_items.visible.where(
-          :order_id => oids,
+          :paid => true,
+          :paid_at => from..to,
+          :drawer_id => drawer,
+          :is_proforma => nil,
           :payment_method_id => pm,
           :refund => nil,
         ).where("amount_cents < 0").sum(:amount_cents)
@@ -440,14 +489,20 @@ class Vendor < ActiveRecord::Base
     # Refunds. we query those according to paymentMethoditems. TODO: output order nr. on report page.
     refunds = {}
     used_refund_payment_methods = self.payment_method_items.visible.where(
-      :order_id => oids,
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
       :refund => true
     ).select("DISTINCT payment_method_id")
     used_refund_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
       
       refund_cents = self.payment_method_items.visible.where(
-        :order_id => oids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => nil,
         :payment_method_id => pm,
         :refund => true).sum(:amount_cents)
       refunds[pm.name] = Money.new(refund_cents, self.currency)
@@ -458,45 +513,47 @@ class Vendor < ActiveRecord::Base
     # for proforma Orders only payment method items are effective, not the OrderItems. reason: the report would include OrderItems of both proforma and derived Order, but in reality there were only sold once. The derived Order however will be fully effective in regards to OrderItems.
     proforma_orders = self.orders.visible.where(
       :paid => true,
-      :completed_at => from..to,
+      :paid_at => from..to,
       :drawer_id => drawer,
-      :is_proforma => true
+      :is_proforma => true,
     )
-    poids = proforma_orders.collect{ |o| o.id }
     proforma_paymentmethods = {}
     used_proforma_payment_methods = self.payment_method_items.visible.where(
-      :order_id => poids,
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => true,
       :refund => nil
     ).select("DISTINCT payment_method_id")
     used_proforma_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
       raise "#{ r.inspect }" if pm.nil?
       ppmi_cents = self.payment_method_items.visible.where(
-        :order_id => poids,
+        :paid => true,
+        :paid_at => from..to,
+        :drawer_id => drawer,
+        :is_proforma => true,
         :payment_method_id => pm,
         :refund => nil
       ).sum(:amount_cents)
       proforma_paymentmethods[pm.name] = Money.new(ppmi_cents, self.currency)
-      if pm.cash
-        # remember for later, for revenue calculation
-        ppmi_cents = ppmi_cents
-      end
     end
     
     
     # revenue is the  Total of everything for this day based on OrderItems. it is significant for accountants. reveue is synonymous with the term turnover. it does not include aconto OrderItems since those Orders are fully effective for the revenue (unlike the proforma Orders which are not effective regarding revenut, but effective regarding payment methods)
     revenue = {}
     gro_cents = self.order_items.visible.where(
-      :completed_at => from..to,
+      :paid => true,
+      :paid_at => from..to,
       :drawer_id => drawer,
-      :order_id => oids,
+      :is_proforma => nil,
       :behavior => 'normal'
     ).sum(:total_cents)
     revenue[:gro] = Money.new(gro_cents, self.currency)
     tax_cents = self.order_items.visible.where(
-      :completed_at => from..to,
+      :paid => true,
+      :paid_at => from..to,
       :drawer_id => drawer,
-      :order_id => oids,
       :behavior => 'normal'
     ).sum(:tax_amount_cents)
     revenue[:net] = revenue[:gro] - Money.new(tax_cents, self.currency)
@@ -530,21 +587,25 @@ class Vendor < ActiveRecord::Base
     
     
     # Gift Cards
-    gift_cards_redeemed = self.order_items.visible.where(
-      :completed_at => from..to,
-      :behavior => 'gift_card',
-      :drawer_id => drawer,
-      :activated => true
-    )
-    gift_card_redeem_total = - Money.new(gift_cards_redeemed.sum(:total_cents), self.currency)
-    
     gift_cards_sold = self.order_items.visible.where(
       :completed_at => from..to,
       :behavior => 'gift_card',
       :drawer_id => drawer,
+      :refunded => nil,
       :activated => nil
     )
     gift_card_sales_total = Money.new(gift_cards_sold.sum(:total_cents), self.currency)
+    
+    gift_cards_redeemed = self.order_items.visible.where(
+      :completed_at => from..to,
+      :behavior => 'gift_card',
+      :drawer_id => drawer,
+      :refunded => nil,
+      :activated => true
+    )
+    gift_card_redeem_total = - Money.new(gift_cards_redeemed.sum(:total_cents), self.currency)
+    
+
     
     report = Hash.new
     report['categories'] = categories
@@ -933,6 +994,46 @@ class Vendor < ActiveRecord::Base
       }
     end
     return hash.to_json
+  end
+  
+  # self.check_range : will run tests for today
+  # self.check_range("2013-01-10") will run tests for specified day
+  # self.check_range("2013-01-10", "2013-01-12") will run tests between specified days
+  def check_range(from=nil, to=nil, blacklist = [:orderItemTaxRoundingNet, :orderItemTaxRounding])
+    if from
+      from = Date.parse(from).beginning_of_day
+    else
+      from = Time.now.beginning_of_day
+    end
+    
+    if to
+      to = Date.parse(to).end_of_day
+    elsif from.nil?
+      to = Time.now.end_of_day
+    else
+      to = from.end_of_day
+    end
+    
+    tests = []
+    
+    drawers = self.drawers
+    drawers.each do |d|
+      result = d.check_range(from, to)
+      tests << result unless result == []
+    end
+      
+    orders = self.orders.visible.paid.where(:created_at => from..to)
+    orders.each do |o|
+      result = o.check
+      tests << result unless result == []
+    end
+    
+    filtered_tests = []
+    tests.each do |t|
+      filtered_tests << t unless blacklist.include? t[3]
+    end
+    
+    return tests
   end
   
   private

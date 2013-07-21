@@ -37,6 +37,13 @@ class Order < ActiveRecord::Base
   monetize :payment_total_cents, :allow_nil => true
   monetize :noncash_cents, :allow_nil => true
   monetize :rebate_amount_cents, :allow_nil => true
+  
+  validates_presence_of :user_id
+  validates_presence_of :drawer_id
+  validates_presence_of :company_id
+  validates_presence_of :vendor_id
+  validates_presence_of :user_id
+  validates_presence_of :cash_register_id
 
   
   #scope :last_seven_days, lambda { where(:created_at => 7.days.ago.utc...Time.now.utc) }
@@ -410,8 +417,8 @@ class Order < ActiveRecord::Base
     self.update_giftcard_remaining_amounts
     self.create_payment_method_items(params)
     self.create_drawer_transaction
-    self.update_timestamps
-    self.order_items.update_all :drawer_id => self.drawer.id
+    self.update_associations
+    self.report_errors_to_technician
     
     
     if self.is_quote
@@ -423,8 +430,16 @@ class Order < ActiveRecord::Base
     
   end
   
-  def update_timestamps
-    self.order_items.update_all :completed_at => self.completed_at
+  def update_associations
+    self.order_items.update_all({
+                                 :completed_at => self.completed_at,
+                                 :paid_at => self.paid_at,
+                                 :paid => self.paid,
+                                 :is_proforma => self.is_proforma,
+                                 :is_quote => self.is_quote,
+                                 :user_id => self.user_id,
+                                 :drawer_id => self.drawer_id
+                                 })
   end
   
   def create_drawer_transaction
@@ -439,11 +454,11 @@ class Order < ActiveRecord::Base
     dt.currency = self.vendor.currency
     dt.user = self.user
     dt.cash_register = self.cash_register
+    dt.drawer = drawer
+    dt.drawer_amount = drawer.amount
     dt.order = self
     dt.complete_order = true
     dt.amount = add_amount
-    dt.drawer = drawer
-    dt.drawer_amount = drawer.amount
     dt.save
     
     drawer.amount += add_amount
@@ -482,6 +497,12 @@ class Order < ActiveRecord::Base
       pmi.user = self.user
       pmi.drawer = self.drawer
       pmi.cash_register = self.cash_register
+      pmi.paid_at = self.paid_at
+      pmi.paid = self.paid
+      pmi.completed_at = self.completed_at
+      pmi.is_proforma = self.is_proforma
+      pmi.is_quote = self.is_quote
+      pmi.is_unpaid = self.is_unpaid
       pmi.amount = Money.new(SalorBase.string_to_float(v[:amount]) * 100.0, self.currency)
       pmi.cash = pm.cash
       pmi.quote = pm.quote
@@ -607,7 +628,12 @@ class Order < ActiveRecord::Base
     tax_format = "   %s: %2i%% %7.2f %7.2f %8.2f\n"
 
     self.order_items.visible.each do |oi|
-      name = oi.item.get_translated_name(locale)
+      if oi.item
+        name = oi.item.get_translated_name(locale)
+      else
+        # fix for orders where the item was deleted (compatibility with old system)
+        name = ''
+      end
       taxletter = oi.tax_profile.letter
       
 
@@ -1017,100 +1043,43 @@ class Order < ActiveRecord::Base
     
     return contents[:text]
   end
-  
-#   def sanity_check
-#     if self.paid then
-#       pms = self.payment_methods.collect { |pm| pm.internal_type}
-#       if pms.include? "InCash" and not pms.include? "Change" and self.change_given > 0 then
-#         puts "Order is missing Change Payment Method"
-#         PaymentMethod.create(:vendor_id => self.vendor_id, :internal_type => 'Change', :amount => - self.change_given, :order_id => self.id)
-#         self.payment_methods.reload
-#       end
-#       pms_seen = []
-#       self.payment_methods.each do |pm|
-#         if pms_seen.include? pm.internal_type then
-#           puts "Deleting pm..."
-#           pm.delete
-#         else
-#           pms_seen << pm.internal_type
-#         end
-#       end
-#       self.payment_methods.reload
-#     end
-#   end
-  
-  def check
-    messages = []
-    tests = []
     
-    if self.paid
-      tests[1] = self.payment_methods.sum(:amount_cents) == self.total_cents
-    end
-    
-    0.upto(tests.size-1).each do |i|
-      messages << "Order #{ self.id }: test#{i} failed." if tests[i] == false
-    end
-    return messages
-  end
-  
-  def self.check_range(from, to)
-    orders = Order.where(:paid => 1, :created_at => from..to)
-    
-    messages = []
-    tests = []
-    
-    orders.each do |o|
-      messages << o.check
-    
-      0.upto(tests.size-1).each do |i|
-        if tests[i] == false
-          messages << "Order #{ o.id }: test#{i} failed." 
-        else
-          messages << []
-        end
+  def report_errors_to_technician
+    if self.vendor.enable_technician_emails == true and self.vendor.technician_email
+      errors = self.check
+      if errors.any?
+        UserMailer.technician_message(self.vendor, "Errors in Order #{ self.id }", errors.to_s).deliver
       end
     end
-    return messages
   end
-
-  # Mikey: not sure what this does, seems like fixing unsound orders. i think it would be better to fix the core logic instead of adding more and more sanity checks on top.
-#   def run_new_sanitization
-#     unsound = false
-#     if params[:pm_id] then
-#       pm = @order.payment_methods.find_by_id(params[:pm_id].to_s)
-#       any = @order.payment_methods.find_by_internal_type('Unpaid')
-#       if any and params[:pm_name] and not ['Unpaid','Change'].include? params[:pm_name] then
-#         # it should not allow doubles of this type
-#         if not @order.payment_methods.find_by_internal_type(params[:pm_name]) then
-#           npm = PaymentMethod.new(:name => params[:pm_name],:internal_type => params[:pm_name], :amount => 0)
-#           @order.payment_methods << npm
-#           pm = npm
-#           @order.save
-#         end
-#       end # end handling new pms by name
-#       
-#       if not pm.internal_type == 'Unpaid' then
-#         pm.update_attribute :amount, params[:pm_amount]
-#         diff = any.amount - pm.amount
-#         if diff == 0 then
-#           any.destroy
-#           @order.update_attribute :unpaid_invoice, false
-#         elsif diff < 0 then
-#           raise "Cannot pay more than is due"
-#         else
-#           any.update_attribute :amount, diff
-#         end
-#       else
-#         raise "Cannot because unsound"
-#       end
-#     end
-#     @current_user = @order.user
-#     if not @order.user then
-#       @order.user = User.where(:vendor_id => @order.vendor_id).last
-#       @order.save
-#       @current_user = @order.user
-#     end
-#   end
+  
+  def check
+    tests = []
+    
+    self.order_items.each do |oi|
+      result = oi.check
+      tests << result unless result == []
+    end
+    tests.flatten!
+    
+    # ---
+    should = self.order_items.visible.sum(:total_cents)
+    actual = self.total_cents
+    pass = should == actual
+    msg = "total should be the sum of OrderItem totals"
+    type = :orderTotalSum
+    tests << ["Order", self.id, pass, type, msg, should, actual] if pass == false
+    
+    # ---
+    should = self.order_items.visible.sum(:tax_amount_cents)
+    actual = self.tax_amount_cents
+    pass = should == actual
+    msg = "tax_amount should be the sum of OrderItem tax_amounts"
+    type = :orderTaxSum
+    tests << ["Order", self.id, pass, type, msg, should, actual] if pass == false
+    
+    return tests
+  end
   
   # for better debugging in the console
   def self.last2

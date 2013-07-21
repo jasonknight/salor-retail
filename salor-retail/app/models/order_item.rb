@@ -34,6 +34,20 @@ class OrderItem < ActiveRecord::Base
   monetize :gift_card_amount_cents, :allow_nil => true
   monetize :discount_amount_cents, :allow_nil => true
   monetize :rebate_amount_cents, :allow_nil => true
+  
+  validates_presence_of :user_id
+  validates_presence_of :drawer_id
+  validates_presence_of :company_id
+  validates_presence_of :vendor_id
+  validates_presence_of :user_id
+  validates_presence_of :cash_register_id
+  validates_presence_of :order_id
+  validates_presence_of :quantity
+  validates_presence_of :tax_profile_id
+  validates_presence_of :item_type_id
+  validates_presence_of :behavior
+  validates_presence_of :sku
+  
 
   
   def is_normal?
@@ -445,6 +459,106 @@ class OrderItem < ActiveRecord::Base
       }
     end
     return obj.to_json
+  end
+  
+  def check
+    tests = []
+    
+    # ---
+    if self.refunded
+      should = 0
+      actual = self.total_cents
+      pass = should == actual
+      msg = "total_cents for refunded should be 0"
+      type = :orderItemTotalZeroRefunded
+      tests << [pass, type, msg, should, actual] if pass == false
+    end
+      
+    # ---
+    if self.refunded != true
+      price_reductions = coupon_amount_cents.to_i + discount_amount_cents.to_i + rebate_amount_cents.to_i
+      should = (self.quantity * self.price_cents) - price_reductions
+      actual = self.total_cents
+      pass = should == actual
+      msg = "total must be (price * quantity) - price reductions"
+      type = :orderItemTotalCorrect
+      tests << [pass, type, msg, should, actual] if pass == false
+    end
+      
+    # ---
+    if self.behavior == 'gift_card'
+      should = - self.total_cents.abs
+      actual = self.total_cents
+      pass = should == actual
+      msg = "price of activated gift card should be negative"
+      type = :orderItemGiftcardPriceNegative
+      tests << [pass, type, msg, should, actual] if pass == false
+    end
+    
+    # ---
+    if self.is_buyback == true
+      should = - self.total_cents.abs
+      actual = self.total_cents
+      pass = should == actual
+      msg = "buyback items must have a negative price"
+      type = :orderItemBuybackPriceNegative
+      tests << [pass, type, msg, should, actual] if pass == false
+    end
+    
+    # ---
+    if self.vendor.net_prices
+      should = Money.new(self.total_cents * self.tax / 100.0, self.currency)
+      actual = self.tax_amount
+      pass = (should - actual).abs <= 1 # ignore 1 cent rounding errors
+      msg = "tax must be correct"
+      type = :orderItemTaxCorrectNet
+      tests << [pass, type, msg, should, actual] if pass == false
+      
+      pass = (should - actual) != 0
+      msg = "1 cent rounding error"
+      type = :orderItemTaxRoundingNet
+      tests << [pass, type, msg, should, actual] if pass == false
+      
+    else
+      should = Money.new(self.total_cents * ( 1 - 1 / ( 1 + self.tax / 100.0)), self.currency)
+      actual = self.tax_amount
+      pass = (should - actual).abs <= 1 # ignore 1 cent rounding errors
+      msg = "tax must be correct"
+      type = :orderItemTaxCorrect
+      tests << [pass, type, msg, should, actual] if pass == false
+      
+      pass = (should - actual) != 0
+      msg = "1 cent rounding error"
+      type = :orderItemTaxRounding
+      tests << [pass, type, msg, should, actual] if pass == false
+    end
+    
+    # ---
+    if self.behavior == 'gift_card'
+      should = 1
+      actual = self.quantity
+      pass = should == actual
+      msg = "gift card should have quantity of 1"
+      type = :orderItemGiftcardQuantity
+      tests << [pass, type, msg, should, actual] if pass == false
+    end
+    
+    # ---
+    if self.behavior == 'coupon'
+      should = 1
+      actual = self.quantity
+      pass = should == actual
+      msg = "coupon should have quantity of 1"
+      type = :orderItemCouponQuantity
+      tests << [pass, type, msg, should, actual] if pass == false
+    end
+    
+    tests.each do |t|
+      t.unshift self.id
+      t.unshift "OrderItem"
+    end
+    
+    return tests
   end
 
 end
