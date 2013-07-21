@@ -187,8 +187,10 @@ class OrdersController < ApplicationController
     @order.company = @current_company
     @order.currency = @current_vendor.currency
     @order.user = @current_user
+    @order.drawer = @current_user.get_drawer
     @order.cash_register = @current_register
-    @order.save
+    result = @order.save
+    raise "Could not create a new order in OrdersController#complete because #{ @order.errors.messages }" unless result == true
     @current_user.current_order_id = @order.id
     @current_user.save
   end
