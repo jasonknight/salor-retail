@@ -124,14 +124,17 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
+    $COMPANYID = nil
+    $VENDORID = nil
     $USERID = nil
     $PARAMS = nil
+    $REQUEST = nil
+    
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
 
     if @current_user.nil? or session[:user_id_hash].blank?
       redirect_to new_session_path and return 
     end
-
 
     if defined?(SrSaas) == 'constant'
       # this is necessary due to call to the login method in UsersController#clock{in|out}
@@ -142,9 +145,11 @@ class ApplicationController < ActionController::Base
     @current_vendor = @current_user.vendors.visible.find_by_id(session[:vendor_id])
     Time.zone = @current_vendor.time_zone if @current_vendor
     I18n.locale = @current_user.language
-
+    $COMPANYID = @current_company.id
+    $VENDORID = @current_vendor.id
     $USERID = @current_user.id
     $PARAMS = params
+    $REQUEST = request
     $DIRS = {
       :uploads => File.join(Rails.root,"public","uploads",SR_DEBIAN_SITEID,@current_vendor.hash_id),
     }
@@ -153,9 +158,12 @@ class ApplicationController < ActionController::Base
   
   def loaddown
     # just to make sure we clear out these globals
+    $COMPANYID = nil
+    $VENDORID = nil
     $USERID = nil
     $PARAMS = nil
-    log_action "End of request \n\n\n\n\n\n"
+    $REQUEST = nil
+    log_action "End of request."
   end
 
   def get_cash_register

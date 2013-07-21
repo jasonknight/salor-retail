@@ -214,6 +214,7 @@ class VendorsController < ApplicationController
     else
       render :nothing => true
     end
+    History.record("edit_field_on_child", @inst)
   end
 
   def history

@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  sender: MyString
+  receipient: MyString
+  subject: MyString
+  body: MyText
+  technician: false
+  vendor_id: 1
+  company_id: 1
+  user_id: 1
+  order_id: 1
+  hidden: false
+  hidden_by: 1
+  hidden_at: 2013-07-21 14:24:04
+
+two:
+  sender: MyString
+  receipient: MyString
+  subject: MyString
+  body: MyText
+  technician: false
+  vendor_id: 1
+  company_id: 1
+  user_id: 1
+  order_id: 1
+  hidden: false
+  hidden_by: 1
+  hidden_at: 2013-07-21 14:24:04

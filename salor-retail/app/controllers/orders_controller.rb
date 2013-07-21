@@ -152,9 +152,8 @@ class OrdersController < ApplicationController
   
   def complete
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    
-    SalorBase.log_action("OrdersController","complete initialized")
-    History.record("initialized order for complete",@order,5)
+
+    History.record("Initialized order for complete", @order, 5)
 
     if params[:user_id] and params[:user_id] != @current_user.id then
       tmp_user = User.find_by_id(params[:user_id])
@@ -187,8 +186,10 @@ class OrdersController < ApplicationController
     @order.company = @current_company
     @order.currency = @current_vendor.currency
     @order.user = @current_user
+    @order.drawer = @current_user.get_drawer
     @order.cash_register = @current_register
-    @order.save
+    result = @order.save
+    raise "Could not create a new order in OrdersController#complete because #{ @order.errors.messages }" unless result == true
     @current_user.current_order_id = @order.id
     @current_user.save
   end
@@ -223,6 +224,7 @@ class OrdersController < ApplicationController
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
     @order_items = @order.order_items.visible.order('id ASC')
     @report = @order.report
+    @ec = @current_vendor.currency # @ex is exchange_to currency
     render :layout => 'customer_display'
   end
   
@@ -248,14 +250,14 @@ class OrdersController < ApplicationController
   
   def clear
     if not @current_user.can(:clear_orders) then
-      History.record(:failed_to_clear,@order,1)
+      History.record(:failed_to_clear, @order, 1)
       render 'update_pos_display' and return
     end
     
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     
     if @order then
-      History.record("Destroying #{@order.order_items.visible.count} items",@order,1)
+      History.record("Destroying #{@order.order_items.visible.count} OrderItems", @order, 1)
       
       @order.order_items.visible.each do |oi|
         oi.hidden = 1
@@ -285,6 +287,5 @@ class OrdersController < ApplicationController
     h.changes_made = params[:called_from]
     h.save
     render :nothing => true
-    # just to log into the production.log
   end
 end

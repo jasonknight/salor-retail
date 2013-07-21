@@ -40,7 +40,6 @@ class OrderItem < ActiveRecord::Base
   validates_presence_of :company_id
   validates_presence_of :vendor_id
   validates_presence_of :user_id
-  validates_presence_of :cash_register_id
   validates_presence_of :order_id
   validates_presence_of :quantity
   validates_presence_of :tax_profile_id
@@ -98,11 +97,10 @@ class OrderItem < ActiveRecord::Base
   end
   
   def tax=(value)
-    tax_profile = self.vendor.tax_profiles.visible.find_by_value(value)
-    ActiveRecord::Base.logger.info "TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tax_profile
-    self.tax_profile = tax_profile
-    self.save
-    write_attribute :tax, tax_profile.value
+    tp = self.vendor.tax_profiles.visible.find_by_value(value)
+    raise "A TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tp
+    write_attribute :tax_profile_id, tp.id
+    write_attribute :tax, tp.value
   end
   
 
@@ -209,12 +207,12 @@ class OrderItem < ActiveRecord::Base
   def set_attrs_from_item(item)
     self.vendor       = item.vendor
     self.company      = item.company
-    self.currency     = item.currency # all Items must be validated to have the same currency as the parent Vendor. The system does not support adding Items of different currencies into one order.
+    self.currency     = item.currency
     self.item         = item
     self.sku          = item.sku
     self.price        = item.price
-    self.tax          = item.tax_profile.value # cache for faster processing
-    #self.tax_profile  = item.tax_profile
+    self.tax          = item.tax_profile.value
+    #self.tax_profile  = item.tax_profile # this association is made in self.tax=()
     self.item_type    = item.item_type
     self.behavior     = item.item_type.behavior # cache for faster processing
     self.is_buyback   = item.default_buyback

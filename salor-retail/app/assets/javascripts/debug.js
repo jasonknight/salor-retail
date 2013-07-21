@@ -13,3 +13,14 @@ function ajax_log(data) {
     data: data
   });
 }
+
+function send_email(subject, message) {
+  console.log('send_email:', subject, message);
+  message += "\n\nuser login: " + User.username;
+  message += "\n\n" + navigator["userAgent"];
+  $.ajax({
+    type: 'post',
+    url:'/session/email',
+    data: {s:subject, m:message}
+  })
+}
