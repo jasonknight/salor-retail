@@ -609,7 +609,7 @@ en:
       None: Not named
       OrderItemRefund: Order Item Refund
       OrderRefund: Order Refund
-      calculated_drawer_amount: Calculated drawer amount
+      calculated_drawer_amount: Cash
       cash-refunds: Cash-Refunds
       cash_refunds_total: TOTAL
       no_category: No Category
@@ -770,6 +770,9 @@ en:
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
     report_day:
+      as_aconto_from: On account from
+      proforma_payments: Proforma Payments
+      open_contracts: Open payments from running contracts
       gift_card_redeem_total: Giftcard redeem total
       gift_card_sales_total: Giftcard sales total
       None: Not specified

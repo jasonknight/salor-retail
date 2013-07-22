@@ -775,6 +775,9 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
     report_day:
+      as_aconto_from: Als Akonto aus
+      proforma_payments: Proforma Zahlungen
+      open_contracts: Laufende Aufträge
       gift_card_redeem_total: Gutschein Einlösung
       gift_card_sales_total: Gutschein Verkauf
       None: Unbenannt

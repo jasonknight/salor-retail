@@ -5,13 +5,15 @@
 - taxes = @report['taxes']
 - paymentmethods = @report['paymentmethods']
 - paymentmethods_total = @report['paymentmethods_total']
-- proforma_paymentmethods = @report['proforma_paymentmethods']
+- proforma_pmis = @report['proforma_pmis']
+- proforma_pmis_total = @report['proforma_pmis_total']
 - gift_cards_redeemed = @report['gift_cards_redeemed']
 - gift_card_redeem_total = @report['gift_card_redeem_total']
 - gift_cards_sold = @report['gift_cards_sold']
 - gift_card_sales_total = @report['gift_card_sales_total']
 - refund_order_items  =  @report['refund_order_items']
 - aconto_order_items  =  @report['aconto_order_items']
+- aconto_total  =  @report['aconto_total']
 - revenue =   @report['revenue']
 - transactions   = @report['transactions']
 - transactions_sum   = @report['transactions_sum']
@@ -90,45 +92,7 @@
           %td.right= humanized_money_with_symbol t[1][:gro]
           %td.right= humanized_money_with_symbol t[1][:net]
           %td.right= humanized_money_with_symbol t[1][:gro] - t[1][:net]
-          
-    - if i[0] == :pos and gift_cards_sold.any?
-      %table.striped-table2
-        %tr
-          %th.left= t '.gift_card_sales_total'
-          %th
-          %th.right
-        - gift_cards_sold.each do |gc|
-          %tr
-            %td.left
-              = link_to(gc.sku, edit_item_path(gc.item))
-            %td= link_to("#{ t('orders.print.invoice') } ##{ gc.order.nr } #{ I18n.l(gc.order.paid_at, :format => :date_short) }", "/orders/#{ gc.order_id }/print")
-            %td.right= humanized_money_with_symbol gc.total
-        %tr.total
-          %td.right{:colspan => 3}= humanized_money_with_symbol gift_card_sales_total
-            
-          
-    - if i[0] == :pos and gift_cards_redeemed.any?
-      %table.striped-table2
-        %tr
-          %th.left= t '.gift_card_redeem_total'
-          %th
-          %th.right
-        - gift_cards_redeemed.each do |gc|
-          %tr
-            %td.left
-              = link_to(gc.sku, edit_item_path(gc.item))
-            %td= link_to("#{ t('orders.print.invoice') } ##{ gc.order.nr } #{ I18n.l(gc.order.paid_at, :format => :date_short) }", "/orders/#{ gc.order_id }/print")
-            %td.right= humanized_money_with_symbol gc.total
-        %tr.total
-          %td.right{:colspan => 3}= humanized_money_with_symbol gift_card_redeem_total
 
-    .right
-      %p{:id => "#{i[0]}_sum_gross"}
-        == #{ t '.sum_gross' }:
-        %b== #{ humanized_money_with_symbol categories_sum[i[0]][:gro] }
-      %p{:id => "#{i[0]}_sum_net"}
-        == #{ t '.sum_net' }:
-        %b== #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
       
       
   %hr
@@ -146,7 +110,7 @@
 %div.paper-invoice
     
   %hr
-  %h3 Paymentmethods
+  %h3= t('activerecord.models.payment_method.other')
   %table.striped-table2
     %tr
       %th.left &nbsp;
@@ -154,41 +118,74 @@
     - paymentmethods.each do |k,v|
       %tr
         %td.left= v[:name]
-        %td.right= humanized_money_with_symbol v[:amount]
-        
+        %td.right{ :style => 'width:20%' }= humanized_money_with_symbol v[:amount]
+    - aconto_order_items.each do |k,v|
+      %tr
+        %td.left
+          = t('.as_aconto_from')
+          = link_to(v[:order_blurb], "/orders/#{ v[:order_id] }/print")
+        %td.right{ :style => 'width:20%' }= humanized_money_with_symbol v[:amount]
+      
+  - if gift_cards_redeemed.any?
+    %table.striped-table2
+      %tr
+        %th.left= t '.gift_card_redeem_total'
+        %th
+        %th.right
+      - gift_cards_redeemed.each do |gc|
+        %tr
+          %td.left
+            = link_to(gc.sku, edit_item_path(gc.item))
+          %td= link_to("#{ t('orders.print.invoice') } ##{ gc.order.nr } #{ I18n.l(gc.order.paid_at, :format => :date_short) }", "/orders/#{ gc.order_id }/print")
+          %td.right{ :style => 'width:20%' }= humanized_money_with_symbol(-gc.total)
+      %tr.total
+        %td.right{:colspan => 3}= humanized_money_with_symbol gift_card_redeem_total
+          
   .right
     %p
       == #{ t '.sum' }:
-      %b== #{ humanized_money_with_symbol paymentmethods_total }
+      %b= humanized_money_with_symbol(paymentmethods_total + aconto_total + gift_card_redeem_total )
+      
+  - if gift_cards_sold.any?
+    %table.striped-table2
+      %tr
+        %th.left= t '.gift_card_sales_total'
+        %th
+        %th.right
+      - gift_cards_sold.each do |gc|
+        %tr
+          %td.left
+            = link_to(gc.sku, edit_item_path(gc.item))
+          %td= link_to("#{ t('orders.print.invoice') } ##{ gc.order.nr } #{ I18n.l(gc.order.paid_at, :format => :date_short) }", "/orders/#{ gc.order_id }/print")
+          %td.right= humanized_money_with_symbol gc.total
+      %tr.total
+        %td.right{:colspan => 3}= humanized_money_with_symbol gift_card_sales_total
       
       
       
       
   
-  - if proforma_paymentmethods.any?
+  - if proforma_pmis.any?
     %hr
     %h3= t '.proforma_payments'
     %table.striped-table2
       %tr
-        %th.left
+        %th.left &nbsp;
         %th.right
-      - proforma_paymentmethods.each do |k,v|
+      - proforma_pmis.each do |k,v|
         %tr
           %td.left= v[:name]
           %td.right= humanized_money_with_symbol v[:amount]
+    .right
+      %p
+        = t('.proforma_pmis_total')
+        %b= humanized_money_with_symbol proforma_pmis_total
+      %p
+        = t('.open_contracts')
+        %b= humanized_money_with_symbol proforma_pmis_total - aconto_total
 
           
-          
-  - if aconto_order_items.any?
-    %h3 Acontos
-    %table.striped-table2
-      %tr
-        %th.left
-        %th.right
-      - aconto_order_items.each do |k,v|
-        %tr
-          %td.left= link_to(v[:order_blurb], "/orders/#{ v[:order_id] }/print")
-          %td.right= humanized_money_with_symbol v[:amount]
+
       
       
 
@@ -199,13 +196,13 @@
     %h3= t '.refunds'
     %table.striped-table2
       %tr
-        %th.left
+        %th.left &nbsp;
         %th.left
         %td.left
       - refund_order_items.each do |k,v|
         %tr
           %td.left= v[:blurb]
-          %td.left= link_to(v[:order_blurb], "/orders#{ v[:order_id] }/print")
+          %td.left= link_to(v[:order_blurb], "/orders/#{ v[:order_id] }/print")
           %td.left= v[:pmi_blurb]
 
           
@@ -222,7 +219,7 @@
       - transactions.each do |d|
         %tr
           %td.left= t ('.' + d[:tag])
-          %td.left= d[:notes]
+          %td.left{:style => 'width:40%'}= d[:notes]
           %td.left= d[:time].strftime('%d. %b %H:%M')
           %td.right= humanized_money_with_symbol d[:amount] if d[:amount].fractional > 0
           %td.right= humanized_money_with_symbol d[:amount] if d[:amount].fractional < 0

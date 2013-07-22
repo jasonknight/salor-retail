@@ -470,29 +470,20 @@ class Vendor < ActiveRecord::Base
     
     # Aconto payments
     # for proforma Orders only payment method items are effective, not the OrderItems. reason: the report would include OrderItems of both proforma and derived Order, but in reality there were only sold once. The derived Order however will be fully effective in regards to OrderItems.
-    proforma_paymentmethods = {}
-    used_proforma_payment_methods = self.payment_method_items.visible.where(
+    proforma_pmis = {}
+    ppmis = self.payment_method_items.visible.where(
       :paid => true,
       :paid_at => from..to,
       :drawer_id => drawer,
-      :is_proforma => true,
-      :refund => nil
-    ).select("DISTINCT payment_method_id")
-    used_proforma_payment_methods.each do |r|
-      pm = self.payment_methods.find_by_id(r.payment_method_id)
-      raise "#{ r.inspect }" if pm.nil?
-      ppmi_cents = self.payment_method_items.visible.where(
-        :paid => true,
-        :paid_at => from..to,
-        :drawer_id => drawer,
-        :is_proforma => true,
-        :payment_method_id => pm
-      ).sum(:amount_cents)
-      proforma_paymentmethods[pm.id] = {
-        :name => pm.name,
-        :amount => Money.new(ppmi_cents, self.currency)
+      :is_proforma => true
+    )
+    ppmis.each do |ppmi|
+      proforma_pmis[ppmi.id] = {
+        :name => ppmi.payment_method.name,
+        :amount => ppmi.amount
       }
     end
+    proforma_pmis_total = Money.new(ppmis.sum(:amount_cents), self.currency)
     
     aconto_order_items = {}
     aois = self.order_items.visible.paid.where(
@@ -504,11 +495,11 @@ class Vendor < ActiveRecord::Base
     aois.each do |oi|
       aconto_order_items[oi.id] = {
         :order_id => oi.order_id,
-        :order_blurb => "#{ t('orders.print.invoice') } #{ oi.order.nr }",
-        :amount => oi.total
+        :order_blurb => "#{ I18n.t('orders.print.invoice') } #{ oi.order.nr }",
+        :amount => - oi.total
       }
     end
-    aconto_total_cents = aois.sum(:total_cents)
+    aconto_total = - Money.new(aois.sum(:total_cents), self.currency)
     
     
     # Refunds
@@ -524,13 +515,13 @@ class Vendor < ActiveRecord::Base
         pmi_blurb = oi.refund_payment_method_item.payment_method.name
         pmiid = oi.refund_payment_method_item_id
       else
-        pmi_blurb = "PaymentMethodItem???"
+        pmi_blurb = "Link to PaymentMethodItem lost"
         pmiid = 0
       end
       if oi.item
         blurb = oi.item.name
       else
-        blurb = "Item???"
+        blurb = "Link to Item lost"
       end
       refund_order_items[oi.id] = {
         :order_id => oi.order_id,
@@ -614,13 +605,15 @@ class Vendor < ActiveRecord::Base
     report['taxes'] = taxes
     report['paymentmethods'] = paymentmethods
     report['paymentmethods_total'] = paymentmethods_total
-    report['proforma_paymentmethods'] = proforma_paymentmethods
+    report['proforma_pmis'] = proforma_pmis
+    report['proforma_pmis_total'] = proforma_pmis_total
     report['gift_cards_redeemed'] = gift_cards_redeemed
     report['gift_card_redeem_total'] = gift_card_redeem_total
     report['gift_cards_sold'] = gift_cards_sold
     report['gift_card_sales_total'] = gift_card_sales_total
     report['refund_order_items'] = refund_order_items
     report['aconto_order_items'] = aconto_order_items
+    report['aconto_total'] = aconto_total
     report['revenue'] = revenue
     report['transactions'] = transactions
     report['transactions_sum'] = transactions_sum
