@@ -91,13 +91,17 @@ class OrdersController < ApplicationController
   def add_item_ajax
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
     @order_item = @order.add_order_item(params)
-    
     @order_items = []
-    @order_items << @order_item
     
-    if @order_item.behavior == 'coupon'
-      @matching_coupon_item = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
-      @order_items << @matching_coupon_item
+    if @order_item
+      @order_items << @order_item
+      
+      if @order_item.behavior == 'coupon'
+        @matching_coupon_item = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
+        @order_items << @matching_coupon_item
+      end
+    else
+      # if it was a scanned Loyalty card, @order_item is nil. Else clause must stay empty.
     end
     
     render :update_pos_display
