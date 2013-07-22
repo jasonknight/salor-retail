@@ -108,7 +108,11 @@ class OrdersController < ApplicationController
     @order_item = @current_vendor.order_items.find_by_id(params[:id])
     @order = @order_item.order
     @order_item.hide(@current_user)
-    @order_items = [] # do not update any order items on POS screen
+    @order_items = []
+    if @order_item.behavior == 'coupon'
+      @matching_coupon_item = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
+      @order_items << @matching_coupon_item
+    end
     render :update_pos_display
   end
 
