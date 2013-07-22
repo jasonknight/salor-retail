@@ -1,3 +1,11 @@
+salor-retail (4.0.2.10) unstable; urgency=low
+
+  * tests and day report fix
+  * test fixes and day report fixes
+  * build
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 22 Jul 2013 08:25:24 +0200
+
 salor-retail (4.0.2.9) unstable; urgency=low
 
   * migration fixes, display refunds links on day report
