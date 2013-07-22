@@ -1,5 +1,8 @@
 class TransformPaymentMethods3 < ActiveRecord::Migration
   def up
+    
+    
+    
     # assign user_id to all pmitems according to the belonging order
     Vendor.connection.execute("UPDATE payment_method_items,orders SET payment_method_items.user_id = orders.user_id WHERE orders.id = payment_method_items.order_id")
     

@@ -8,8 +8,11 @@ class MigrateRefunds3 < ActiveRecord::Migration
         puts "WARNING: A PaymentMethod with the 'cash' flag is needed for vendor #{ v.id } to perform this operation. Skipping."
         next
       end
-      v.order_items.visible.where(:refunded => true).each do |oi|
-        next if oi.order.nil?
+      v.order_items.where(:hidden => nil, :refunded => true).each do |oi|
+        if oi.order.nil?
+          puts "WARNING: OrderItem #{ oi.id } is not associated with an Order. Skipping."
+          next
+        end
         unless oi.order.payment_method_items.where(:refund => true).any?
           pmi = PaymentMethodItem.new
           pmi.vendor = oi.vendor
@@ -26,10 +29,11 @@ class MigrateRefunds3 < ActiveRecord::Migration
           pmi.paid_at = oi.order.paid_at
           pmi.completed_at = oi.order.completed_at
           res = pmi.save
-          raise "could not save pmi #{ pmi.errors.messages }" unless res == true
+          raise "could not save PMI #{ pmi.errors.messages } for OrderItem #{ oi.id }." unless res == true
           pmi.update_attribute :created_at, oi.created_at
           puts "Adding refund cash PM #{ pmi.amount_cents} to order #{ oi.order_id }"
-        end
+        else
+          puts "OrderItem #{ oi.id } already has a refund payment method item. Doing nothing."
       end
     end
     

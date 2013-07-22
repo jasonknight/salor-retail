@@ -19,10 +19,15 @@ class MigrateRefunds2 < ActiveRecord::Migration
       end
       
       vendor = order.vendor
-      puts "processing DrawerTransaction ID #{ dt.id } order_id #{ order.id }, vendor #{ vendor.id }"
+      puts "processing DrawerTransaction ID #{ dt.id } order_id #{ order.id }, vendor_id #{ vendor.id }"
       
       
       pm = vendor.payment_methods.where(:hidden => nil, :cash => true).first
+      
+      if pm.nil?
+        puts "WARNING: Vendor #{ vendor.id } does not have a cash PaymentMethod. Skipping."
+        next
+      end
       
       pmi = PaymentMethodItem.new
       pmi.vendor = order.vendor
@@ -38,12 +43,19 @@ class MigrateRefunds2 < ActiveRecord::Migration
       pmi.internal_type = "InCashRefund"
       res = pmi.save
       pmi.created_at = order.created_at
-      res = pmi.save(:validate => false)
+      res = pmi.save
       raise "Could not save PMI #{ pmi.errors.messages }" unless res == true
       
+      # make an association between PMI and OI based on the Note that the old system added.
       oi_id = dt.notes.to_s.gsub('#', '').to_i
       oi = OrderItem.find_by_id(oi_id)
-      oi.update_attribute :refund_payment_method_item_id, pmi.id
+      if oi.nil?
+        puts "WARNING: DT #{ dt.is } lists #{ dt.notes } as matching OI, but it could not be found in the DB. Cannot make association."
+      else
+        oi.refund_payment_method_item_id = pmi.id
+        res = oi.save
+        raise "Could not save OrderItem #{ oi.id } because #{ oi.errors.messages }."
+      end
 
     end
   end

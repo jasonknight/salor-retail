@@ -536,7 +536,10 @@ class OrderItem < ActiveRecord::Base
     
     # ---
     if self.vendor.net_prices
-      should = Money.new(self.total_cents * self.tax / 100.0, self.currency)
+      price_reductions = coupon_amount_cents.to_i + discount_amount_cents.to_i + rebate_amount_cents.to_i
+      subtotal = (self.quantity * self.price_cents) - price_reductions
+      
+      should = Money.new(subtotal * self.tax / 100.0, self.currency)
       actual = self.tax_amount
       pass = (should.fractional - actual.fractional).abs <= 1 # ignore 1 cent rounding errors
       msg = "tax must be correct"
