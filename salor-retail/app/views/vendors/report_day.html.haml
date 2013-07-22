@@ -150,12 +150,10 @@
   %table.striped-table2
     %tr
       %th.left= t '.type'
-      %th.left= t 'orders.print.invoice'
       %th.right= t '.gross'
     - refunds.each do |k,v|
       %tr
         %td.left= v[:name]
-        %td.left= @current_vendor.orders.find_by_nr(k)
         %td.right= humanized_money_with_symbol v[:amount]
 
 

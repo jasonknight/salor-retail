@@ -505,7 +505,7 @@ class Vendor < ActiveRecord::Base
         :is_proforma => nil,
         :payment_method_id => pm,
         :refund => true).sum(:amount_cents)
-      refunds[pm.order_id] = {
+      refunds[pm.id] = {
         :name => pm.name,
         :amount => Money.new(refund_cents, self.currency)
       }
@@ -1024,6 +1024,7 @@ class Vendor < ActiveRecord::Base
       result = d.check_range(from, to)
       tests << result unless result == []
     end
+    tests.flatten!
       
     orders = self.orders.visible.paid.where(:created_at => from..to)
     orders.each do |o|
@@ -1033,7 +1034,9 @@ class Vendor < ActiveRecord::Base
     
     filtered_tests = []
     tests.each do |t|
-      filtered_tests << t unless blacklist.include? t[3]
+      if blacklist.include?(t[3]) == false
+        filtered_tests << t
+      end
     end
     
     return filtered_tests

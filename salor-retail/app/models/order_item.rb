@@ -477,14 +477,14 @@ class OrderItem < ActiveRecord::Base
       price_reductions = coupon_amount_cents.to_i + discount_amount_cents.to_i + rebate_amount_cents.to_i
       
       if self.vendor.net_prices
-        should = (self.quantity * self.price_cents) - price_reductions + self.tax_amount
-        actual = self.total_cents
+        should = Money.new((self.quantity * self.price_cents) - price_reductions + self.tax_amount_cents, self.vendor.currency)
+        actual = self.total
         pass = should == actual
         msg = "total must be (price * quantity) - price reductions + tax_amount"
         type = :orderItemTotalCorrectNet
         tests << [pass, type, msg, should, actual] if pass == false
       else
-        should = (self.quantity * self.price_cents) - price_reductions
+        should = Money.new((self.quantity * self.price_cents) - price_reductions, self.vendor.currency)
         actual = self.total_cents
         pass = should == actual
         msg = "total must be (price * quantity) - price reductions"
