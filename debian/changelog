@@ -1,3 +1,16 @@
+salor-retail (4.0.2.11) unstable; urgency=low
+
+  * more checks
+  * migrations succeed, day report work
+  * day report in good shape
+  * seed script extended
+  * colorful salor_log output
+  * fixed POS update on coupon delete
+  * fixed customer add
+  * made sku onscreen button larger
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 22 Jul 2013 19:41:10 +0200
+
 salor-retail (4.0.2.10) unstable; urgency=low
 
   * tests and day report fix
