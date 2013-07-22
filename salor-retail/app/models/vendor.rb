@@ -1002,7 +1002,8 @@ class Vendor < ActiveRecord::Base
   # self.check_range : will run tests for today
   # self.check_range("2013-01-10") will run tests for specified day
   # self.check_range("2013-01-10", "2013-01-12") will run tests between specified days
-  def check_range(from=nil, to=nil, blacklist = [:orderItemTaxRoundingNet, :orderItemTaxRounding])
+  def check_range(from=nil, to=nil, filter=[:orderItemTaxRoundingNet, :orderItemTaxRounding])
+    
     if from
       from = Date.parse(from).beginning_of_day
     else
@@ -1024,7 +1025,6 @@ class Vendor < ActiveRecord::Base
       result = d.check_range(from, to)
       tests << result unless result == []
     end
-    tests.flatten!
       
     orders = self.orders.visible.paid.where(:created_at => from..to)
     orders.each do |o|
@@ -1032,14 +1032,18 @@ class Vendor < ActiveRecord::Base
       tests << result unless result == []
     end
     
+    tests.flatten!
+    
     filtered_tests = []
     tests.each do |t|
-      if blacklist.include?(t[3]) == false
+      if filter.include?(t[:t]) == false
         filtered_tests << t
       end
     end
     
-    return filtered_tests
+    return filtered_tests.join("\n")
+    
+    
   end
   
   private

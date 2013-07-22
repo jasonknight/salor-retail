@@ -771,12 +771,15 @@ class Order < ActiveRecord::Base
     # --- payment method items ---
     paymentmethods = Hash.new
     self.payment_method_items.visible.each do |pmi|
-      next if pmi.amount.blank?
-      blurb = pmi.payment_method.name
+      
+      # old databases are somewhat inconsistent, so we need to catch nils
+      pmi_amount = pmi.amount.blank? ? Money.new(0, self.vendor.currency) : pmi.amount
+      blurb = pmi.payment_method.nil? ? "no pm" : pmi.payment_method.name
+      
       blurb = I18n.t('printr.eod_report.refund') + ' ' + blurb if pmi.refund
       paymentmethods[pmi.id] = {
         :name => blurb,
-        :amount => pmi.amount
+        :amount => pmi_amount
       }
     end
 
@@ -1072,7 +1075,6 @@ class Order < ActiveRecord::Base
       result = oi.check
       tests << result unless result == []
     end
-    tests.flatten!
     
     # ---
     should = self.order_items.visible.sum(:total_cents)
@@ -1080,7 +1082,7 @@ class Order < ActiveRecord::Base
     pass = should == actual
     msg = "total should be the sum of OrderItem totals"
     type = :orderTotalSum
-    tests << ["Order", self.id, pass, type, msg, should, actual] if pass == false
+    tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     
     # ---
     should = self.order_items.visible.sum(:tax_amount_cents)
@@ -1088,7 +1090,18 @@ class Order < ActiveRecord::Base
     pass = should == actual
     msg = "tax_amount should be the sum of OrderItem tax_amounts"
     type = :orderTaxSum
-    tests << ["Order", self.id, pass, type, msg, should, actual] if pass == false
+    tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    
+    unless self.is_proforma == true
+      # ---
+      should = self.payment_method_items.sum(:amount_cents)
+      actual = self.total_cents
+      pass = should == actual
+      msg = "PMI sum must match total"
+      type = :orderPaymentsTotal
+      tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    end
+    
     
     return tests
   end

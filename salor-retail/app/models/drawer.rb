@@ -54,7 +54,7 @@ class Drawer < ActiveRecord::Base
       pass = should == actual
       msg = "drawer_amount_cents wrongly cumulated. difference is #{ should - actual }"
       type = :drawerTransactionWronglyCumulated
-      tests << ["DrawerTransaction", dt.id, pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"DrawerTransaction", :id=>dt.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
       if pass == false
         # reset cumulated value, otherwise all following dts will be wrong. however, we only want to see the DTs that introduced a difference

@@ -1,3 +1,9 @@
+salor-retail (4.0.2.9ubuntu1) precise; urgency=low
+
+  * tests and day report fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 22 Jul 2013 07:07:20 +0200
+
 salor-retail (4.0.2.9) unstable; urgency=low
 
   * migration fixes, display refunds links on day report

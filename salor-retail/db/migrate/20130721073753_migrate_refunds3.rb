@@ -4,6 +4,10 @@ class MigrateRefunds3 < ActiveRecord::Migration
     # README: Do not uncomment this, it is there to migrate over from the old system
     Vendor.all.each do |v|
       pm = v.payment_methods.visible.find_by_cash(true)
+      if pm.nil?
+        puts "WARNING: A PaymentMethod with the 'cash' flag is needed for vendor #{ v.id } to perform this operation. Skipping."
+        next
+      end
       v.order_items.visible.where(:refunded => true).each do |oi|
         next if oi.order.nil?
         unless oi.order.payment_method_items.where(:refund => true).any?
@@ -16,11 +20,15 @@ class MigrateRefunds3 < ActiveRecord::Migration
           pmi.drawer = oi.drawer
           pmi.refund = true
           pmi.cash = true
-          pmi.created_at = oi.created_at
+          pmi.cash_register = oi.order.cash_register
           pmi.amount_cents = oi.total_cents
-          res = pmi.save(:validate => false)
+          pmi.paid = oi.order.paid
+          pmi.paid_at = oi.order.paid_at
+          pmi.completed_at = oi.order.completed_at
+          res = pmi.save
           raise "could not save pmi #{ pmi.errors.messages }" unless res == true
-          puts "Adding refund change PM #{ pmi.amount_cents} to order #{ oi.order_id }"
+          pmi.update_attribute :created_at, oi.created_at
+          puts "Adding refund cash PM #{ pmi.amount_cents} to order #{ oi.order_id }"
         end
       end
     end

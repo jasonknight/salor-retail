@@ -469,7 +469,7 @@ class OrderItem < ActiveRecord::Base
       pass = should == actual
       msg = "total_cents for refunded should be 0"
       type = :orderItemTotalZeroRefunded
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
       
     # ---
@@ -479,28 +479,49 @@ class OrderItem < ActiveRecord::Base
       if self.vendor.net_prices
         should = Money.new((self.quantity * self.price_cents) - price_reductions + self.tax_amount_cents, self.vendor.currency)
         actual = self.total
-        pass = should == actual
+        pass = (should - actual) <= 1 # ignore 1 cent rounding errors
         msg = "total must be (price * quantity) - price reductions + tax_amount"
         type = :orderItemTotalCorrectNet
-        tests << [pass, type, msg, should, actual] if pass == false
+        tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+        
       else
         should = Money.new((self.quantity * self.price_cents) - price_reductions, self.vendor.currency)
-        actual = self.total_cents
+        actual = self.total
         pass = should == actual
         msg = "total must be (price * quantity) - price reductions"
         type = :orderItemTotalCorrect
-        tests << [pass, type, msg, should, actual] if pass == false
+        tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       end
     end
       
     # ---
-    if self.behavior == 'gift_card'
+    if self.behavior == 'gift_card' and self.activated == true
       should = - self.total_cents.abs
       actual = self.total_cents
       pass = should == actual
       msg = "price of activated gift card should be negative"
       type = :orderItemGiftcardPriceNegative
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    end
+    
+    # ---
+    if self.behavior == 'gift_card' and self.activated == nil
+      should = self.total_cents.abs
+      actual = self.total_cents
+      pass = should == actual
+      msg = "price of activated gift card should be positive"
+      type = :orderItemGiftcardPricePositive
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    end
+    
+    # ---
+    if self.behavior == 'gift_card'
+      should = 0
+      actual = self.tax_amount_cents
+      pass = should == actual
+      msg = "tax of gift card should be zero"
+      type = :orderItemGiftcardTaxZero
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
     # ---
@@ -510,35 +531,35 @@ class OrderItem < ActiveRecord::Base
       pass = should == actual
       msg = "buyback items must have a negative price"
       type = :orderItemBuybackPriceNegative
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
     # ---
     if self.vendor.net_prices
       should = Money.new(self.total_cents * self.tax / 100.0, self.currency)
       actual = self.tax_amount
-      pass = (should - actual).abs <= 1 # ignore 1 cent rounding errors
+      pass = (should.fractional - actual.fractional).abs <= 1 # ignore 1 cent rounding errors
       msg = "tax must be correct"
       type = :orderItemTaxCorrectNet
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
-      pass = (should - actual) != 0
+      pass = (should.fractional - actual.fractional) != 0
       msg = "1 cent rounding error"
       type = :orderItemTaxRoundingNet
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
     else
       should = Money.new(self.total_cents * ( 1 - 1 / ( 1 + self.tax / 100.0)), self.currency)
       actual = self.tax_amount
-      pass = (should - actual).abs <= 1 # ignore 1 cent rounding errors
+      pass = (should.fractional - actual.fractional).abs <= 1 # ignore 1 cent rounding errors
       msg = "tax must be correct"
       type = :orderItemTaxCorrect
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
-      pass = (should - actual) != 0
+      pass = (should.fractional - actual.fractional) != 0
       msg = "1 cent rounding error"
       type = :orderItemTaxRounding
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
     # ---
@@ -548,7 +569,7 @@ class OrderItem < ActiveRecord::Base
       pass = should == actual
       msg = "gift card should have quantity of 1"
       type = :orderItemGiftcardQuantity
-      tests << [pass, type, msg, should, actual] if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
     # ---
@@ -558,12 +579,7 @@ class OrderItem < ActiveRecord::Base
       pass = should == actual
       msg = "coupon should have quantity of 1"
       type = :orderItemCouponQuantity
-      tests << [pass, type, msg, should, actual] if pass == false
-    end
-    
-    tests.each do |t|
-      t.unshift self.id
-      t.unshift "OrderItem"
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
     return tests
