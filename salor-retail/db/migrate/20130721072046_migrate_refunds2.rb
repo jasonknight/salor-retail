@@ -19,10 +19,10 @@ class MigrateRefunds2 < ActiveRecord::Migration
       end
       
       vendor = order.vendor
-      puts "processing DrawerTransaction ID #{ dt.id } order_id #{ order.id }, vendor_id #{ vendor.id }"
+      puts "Creating refund PMI from refund DrawerTransaction ID #{ dt.id } order_id #{ order.id }, vendor_id #{ vendor.id }"
       
       
-      pm = vendor.payment_methods.where(:hidden => nil, :cash => true).first
+      pm = vendor.payment_methods.visible.where(:cash => true).first
       
       if pm.nil?
         puts "WARNING: Vendor #{ vendor.id } does not have a cash PaymentMethod. Skipping."
@@ -53,8 +53,11 @@ class MigrateRefunds2 < ActiveRecord::Migration
         puts "WARNING: DT #{ dt.is } lists #{ dt.notes } as matching OI, but it could not be found in the DB. Cannot make association."
       else
         oi.refund_payment_method_item_id = pmi.id
+        oi.drawer_id = oi.order.drawer_id
+        oi.drawer_id ||= oi.user.get_drawer.id
+        oi.user_id ||= oi.order.user_id
         res = oi.save
-        raise "Could not save OrderItem #{ oi.id } because #{ oi.errors.messages }."
+        raise "Could not save OrderItem #{ oi.inspect } because #{ oi.errors.messages }." unless res == true
       end
 
     end

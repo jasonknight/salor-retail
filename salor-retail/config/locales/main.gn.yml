@@ -608,7 +608,7 @@ gn:
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
-      calculated_drawer_amount: Kassenlade nachberechnet
+      calculated_drawer_amount: Bar
       cash-refunds: Bargeld-Stornierungen
       cash_refunds_total: GESAMT
       no_category: Unbenannt

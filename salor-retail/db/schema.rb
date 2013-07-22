@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130713152038) do
+ActiveRecord::Schema.define(:version => 20130722053612) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "company_id"
     t.string   "model_type"
     t.integer  "model_id"
+    t.text     "js_code"
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"
@@ -54,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "company_id"
     t.integer  "user_id"
     t.integer  "price_cents",      :default => 0
-    t.string   "price_currency",   :default => "USD"
+    t.string   "currency"
   end
 
   create_table "buttons", :force => true do |t|
@@ -75,21 +76,6 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "company_id"
     t.integer  "user_id"
   end
-
-  create_table "cash_register_dailies", :force => true do |t|
-    t.float    "start_amount"
-    t.float    "end_amount"
-    t.integer  "cash_register_id"
-    t.integer  "employee_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.datetime "logout_time"
-  end
-
-  add_index "cash_register_dailies", ["cash_register_id"], :name => "index_cash_register_dailies_on_cash_register_id"
-  add_index "cash_register_dailies", ["employee_id"], :name => "index_cash_register_dailies_on_employee_id"
-  add_index "cash_register_dailies", ["user_id"], :name => "index_cash_register_dailies_on_user_id"
 
   create_table "cash_registers", :force => true do |t|
     t.string   "name"
@@ -127,6 +113,8 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
   end
 
+  add_index "cash_registers", ["company_id"], :name => "index_cash_registers_on_company_id"
+  add_index "cash_registers", ["hidden"], :name => "index_cash_registers_on_hidden"
   add_index "cash_registers", ["vendor_id"], :name => "index_cash_registers_on_vendor_id"
 
   create_table "categories", :force => true do |t|
@@ -147,12 +135,14 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
   end
 
+  add_index "categories", ["company_id"], :name => "index_categories_on_company_id"
+  add_index "categories", ["hidden"], :name => "index_categories_on_hidden"
   add_index "categories", ["vendor_id"], :name => "index_categories_on_vendor_id"
 
   create_table "companies", :force => true do |t|
     t.string   "name"
     t.string   "identifier"
-    t.string   "mode"
+    t.string   "mode",               :default => "local"
     t.string   "subdomain"
     t.boolean  "hidden"
     t.integer  "hidden_by"
@@ -168,8 +158,8 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.boolean  "auth"
     t.string   "domain"
     t.boolean  "removal_pending"
-    t.datetime "created_at",                           :null => false
-    t.datetime "updated_at",                           :null => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
   end
 
   create_table "countries", :force => true do |t|
@@ -227,6 +217,8 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
   end
 
+  add_index "customers", ["company_id"], :name => "index_customers_on_company_id"
+  add_index "customers", ["hidden"], :name => "index_customers_on_hidden"
   add_index "customers", ["vendor_id"], :name => "index_customers_on_vendor_id"
 
   create_table "discounts", :force => true do |t|
@@ -253,7 +245,11 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
   add_index "discounts", ["amount_type"], :name => "index_discounts_on_amount_type"
   add_index "discounts", ["applies_to"], :name => "index_discounts_on_applies_to"
   add_index "discounts", ["category_id"], :name => "index_discounts_on_category_id"
+  add_index "discounts", ["company_id"], :name => "index_discounts_on_company_id"
+  add_index "discounts", ["hidden"], :name => "index_discounts_on_hidden"
+  add_index "discounts", ["item_sku"], :name => "index_discounts_on_item_sku"
   add_index "discounts", ["location_id"], :name => "index_discounts_on_location_id"
+  add_index "discounts", ["sku"], :name => "index_discounts_on_sku"
   add_index "discounts", ["vendor_id"], :name => "index_discounts_on_vendor_id"
 
   create_table "discounts_order_items", :id => false, :force => true do |t|
@@ -262,13 +258,6 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
   end
 
   add_index "discounts_order_items", ["order_item_id", "discount_id"], :name => "index_discounts_order_items_on_order_item_id_and_discount_id"
-
-  create_table "discounts_orders", :id => false, :force => true do |t|
-    t.integer "order_id"
-    t.integer "discount_id"
-  end
-
-  add_index "discounts_orders", ["order_id", "discount_id"], :name => "index_discounts_orders_on_order_id_and_discount_id"
 
   create_table "drawer_transactions", :force => true do |t|
     t.integer  "drawer_id"
@@ -288,13 +277,18 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
     t.boolean  "complete_order"
     t.integer  "nr"
-    t.integer  "amount_cents",           :default => 0
-    t.string   "amount_currency",        :default => "USD"
-    t.integer  "drawer_amount_cents",    :default => 0
-    t.string   "drawer_amount_currency", :default => "USD"
+    t.integer  "amount_cents",        :default => 0
+    t.integer  "drawer_amount_cents", :default => 0
+    t.string   "currency"
   end
 
+  add_index "drawer_transactions", ["company_id"], :name => "index_drawer_transactions_on_company_id"
+  add_index "drawer_transactions", ["complete_order"], :name => "index_drawer_transactions_on_complete_order"
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
+  add_index "drawer_transactions", ["hidden"], :name => "index_drawer_transactions_on_hidden"
+  add_index "drawer_transactions", ["refund"], :name => "index_drawer_transactions_on_refund"
+  add_index "drawer_transactions", ["user_id"], :name => "index_drawer_transactions_on_user_id"
+  add_index "drawer_transactions", ["vendor_id"], :name => "index_drawer_transactions_on_vendor_id"
 
   create_table "drawers", :force => true do |t|
     t.datetime "created_at"
@@ -304,8 +298,26 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.datetime "hidden_at"
     t.integer  "vendor_id"
     t.integer  "company_id"
-    t.integer  "amount_cents",    :default => 0
-    t.string   "amount_currency", :default => "USD"
+    t.integer  "amount_cents", :default => 0
+    t.string   "currency"
+  end
+
+  create_table "emails", :force => true do |t|
+    t.string   "sender"
+    t.string   "receipient"
+    t.string   "subject"
+    t.text     "body"
+    t.boolean  "technician"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.integer  "user_id"
+    t.integer  "model_id"
+    t.integer  "model_type"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "histories", :force => true do |t|
@@ -423,8 +435,11 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
   end
 
+  add_index "item_shippers", ["company_id"], :name => "index_item_shippers_on_company_id"
+  add_index "item_shippers", ["hidden"], :name => "index_item_shippers_on_hidden"
   add_index "item_shippers", ["item_id"], :name => "index_item_shippers_on_item_id"
   add_index "item_shippers", ["shipper_id"], :name => "index_item_shippers_on_shipper_id"
+  add_index "item_shippers", ["vendor_id"], :name => "index_item_shippers_on_vendor_id"
 
   create_table "item_stocks", :force => true do |t|
     t.integer  "item_id"
@@ -443,9 +458,12 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
   end
 
+  add_index "item_stocks", ["company_id"], :name => "index_item_stocks_on_company_id"
+  add_index "item_stocks", ["hidden"], :name => "index_item_stocks_on_hidden"
   add_index "item_stocks", ["item_id"], :name => "index_item_stocks_on_item_id"
   add_index "item_stocks", ["location_id"], :name => "index_item_stocks_on_location_id"
   add_index "item_stocks", ["stock_location_id"], :name => "index_item_stocks_on_stock_location_id"
+  add_index "item_stocks", ["vendor_id"], :name => "index_item_stocks_on_vendor_id"
 
   create_table "item_types", :force => true do |t|
     t.string   "name"
@@ -476,37 +494,37 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "void"
     t.integer  "coupon_type"
     t.string   "coupon_applies"
-    t.float    "quantity",                    :default => 0.0
-    t.float    "quantity_sold",               :default => 0.0
+    t.float    "quantity",                 :default => 0.0
+    t.float    "quantity_sold",            :default => 0.0
     t.boolean  "hidden"
     t.integer  "part_id"
     t.boolean  "calculate_part_price"
-    t.float    "height",                      :default => 0.0
-    t.float    "weight",                      :default => 0.0
+    t.float    "height",                   :default => 0.0
+    t.float    "weight",                   :default => 0.0
     t.string   "height_metric"
-    t.string   "weight_metric",               :default => "g"
-    t.float    "length",                      :default => 0.0
-    t.float    "width",                       :default => 0.0
+    t.string   "weight_metric",            :default => "g"
+    t.float    "length",                   :default => 0.0
+    t.float    "width",                    :default => 0.0
     t.string   "length_metric"
     t.string   "width_metric"
     t.boolean  "is_part"
     t.boolean  "is_gs1"
     t.boolean  "price_by_qty"
-    t.float    "part_quantity",               :default => 0.0
+    t.float    "part_quantity",            :default => 0.0
     t.string   "behavior"
     t.string   "sales_metric"
     t.date     "expires_on"
-    t.integer  "quantity_buyback",            :default => 0
+    t.integer  "quantity_buyback",         :default => 0
     t.boolean  "default_buyback"
-    t.float    "real_quantity",               :default => 0.0
+    t.float    "real_quantity",            :default => 0.0
     t.boolean  "weigh_compulsory"
-    t.float    "min_quantity",                :default => 0.0
-    t.boolean  "active",                      :default => true
+    t.float    "min_quantity",             :default => 0.0
+    t.boolean  "active",                   :default => true
     t.integer  "shipper_id"
     t.string   "shipper_sku"
-    t.float    "packaging_unit",              :default => 1.0
+    t.float    "packaging_unit",           :default => 1.0
     t.boolean  "ignore_qty"
-    t.integer  "child_id",                    :default => 0
+    t.integer  "child_id",                 :default => 0
     t.boolean  "must_change_price"
     t.boolean  "hidden_by_distiller"
     t.boolean  "track_expiry"
@@ -518,24 +536,23 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
-    t.string   "gs1_format",                  :default => "2,3"
-    t.integer  "price_cents",                 :default => 0
-    t.string   "price_currency",              :default => "USD"
-    t.integer  "gift_card_amount_cents",      :default => 0
-    t.string   "gift_card_amount_currency",   :default => "USD"
-    t.integer  "purchase_price_cents",        :default => 0
-    t.string   "purchase_price_currency",     :default => "USD"
-    t.integer  "buy_price_cents",             :default => 0
-    t.string   "buy_price_currency",          :default => "USD"
-    t.integer  "manufacturer_price_cents",    :default => 0
-    t.string   "manufacturer_price_currency", :default => "USD"
+    t.string   "gs1_format",               :default => "2,3"
+    t.integer  "price_cents",              :default => 0
+    t.integer  "gift_card_amount_cents",   :default => 0
+    t.integer  "purchase_price_cents",     :default => 0
+    t.integer  "buy_price_cents",          :default => 0
+    t.integer  "manufacturer_price_cents", :default => 0
+    t.string   "currency"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
+  add_index "items", ["company_id"], :name => "index_items_on_company_id"
   add_index "items", ["coupon_applies"], :name => "index_items_on_coupon_applies"
   add_index "items", ["coupon_type"], :name => "index_items_on_coupon_type"
+  add_index "items", ["hidden"], :name => "index_items_on_hidden"
   add_index "items", ["item_type_id"], :name => "index_items_on_item_type_id"
   add_index "items", ["location_id"], :name => "index_items_on_location_id"
+  add_index "items", ["name"], :name => "index_items_on_name"
   add_index "items", ["part_id"], :name => "index_items_on_part_id"
   add_index "items", ["sku"], :name => "index_items_on_sku"
   add_index "items", ["tax_profile_id"], :name => "index_items_on_tax_profile_id"
@@ -560,6 +577,8 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
   end
 
+  add_index "locations", ["company_id"], :name => "index_locations_on_company_id"
+  add_index "locations", ["hidden"], :name => "index_locations_on_hidden"
   add_index "locations", ["vendor_id"], :name => "index_locations_on_vendor_id"
 
   create_table "loyalty_cards", :force => true do |t|
@@ -579,8 +598,11 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.integer  "user_id"
   end
 
+  add_index "loyalty_cards", ["company_id"], :name => "index_loyalty_cards_on_company_id"
   add_index "loyalty_cards", ["customer_id"], :name => "index_loyalty_cards_on_customer_id"
+  add_index "loyalty_cards", ["hidden"], :name => "index_loyalty_cards_on_hidden"
   add_index "loyalty_cards", ["sku"], :name => "index_loyalty_cards_on_sku"
+  add_index "loyalty_cards", ["vendor_id"], :name => "index_loyalty_cards_on_vendor_id"
 
   create_table "node_messages", :force => true do |t|
     t.string   "source_sku"
@@ -682,7 +704,6 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.string   "sku"
     t.boolean  "weigh_compulsory"
     t.boolean  "no_inc"
-    t.string   "refund_payment_method_item_id"
     t.boolean  "action_applied"
     t.boolean  "hidden"
     t.integer  "vendor_id"
@@ -694,33 +715,39 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.boolean  "calculate_part_price"
     t.integer  "drawer_id"
     t.integer  "price_cents",                   :default => 0
-    t.string   "price_currency",                :default => "USD"
     t.integer  "gift_card_amount_cents",        :default => 0
-    t.string   "gift_card_amount_currency",     :default => "USD"
     t.integer  "tax_amount_cents",              :default => 0
-    t.string   "tax_amount_currency",           :default => "USD"
     t.integer  "coupon_amount_cents",           :default => 0
-    t.string   "coupon_amount_currency",        :default => "USD"
     t.integer  "discount_amount_cents",         :default => 0
-    t.string   "discount_amount_currency",      :default => "USD"
     t.integer  "rebate_amount_cents",           :default => 0
-    t.string   "rebate_amount_currency",        :default => "USD"
-    t.integer  "subtotal_cents",                :default => 0
-    t.string   "subtotal_currency",             :default => "USD"
     t.integer  "total_cents",                   :default => 0
-    t.string   "total_currency",                :default => "USD"
+    t.datetime "completed_at"
+    t.string   "currency"
+    t.boolean  "is_proforma"
+    t.boolean  "is_quote"
+    t.boolean  "is_unpaid"
+    t.boolean  "paid"
+    t.datetime "paid_at"
+    t.integer  "refund_payment_method_item_id"
   end
 
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
   add_index "order_items", ["category_id"], :name => "index_order_items_on_category_id"
+  add_index "order_items", ["company_id"], :name => "index_order_items_on_company_id"
   add_index "order_items", ["coupon_id"], :name => "index_order_items_on_coupon_id"
+  add_index "order_items", ["drawer_id"], :name => "index_order_items_on_drawer_id"
+  add_index "order_items", ["hidden"], :name => "index_order_items_on_hidden"
   add_index "order_items", ["is_buyback"], :name => "index_order_items_on_is_buyback"
   add_index "order_items", ["item_id"], :name => "index_order_items_on_item_id"
   add_index "order_items", ["item_type_id"], :name => "index_order_items_on_item_type_id"
   add_index "order_items", ["location_id"], :name => "index_order_items_on_location_id"
+  add_index "order_items", ["no_inc"], :name => "index_order_items_on_no_inc"
   add_index "order_items", ["order_id"], :name => "index_order_items_on_order_id"
+  add_index "order_items", ["refunded"], :name => "index_order_items_on_refunded"
   add_index "order_items", ["sku"], :name => "index_order_items_on_sku"
   add_index "order_items", ["tax_profile_id"], :name => "index_order_items_on_tax_profile_id"
+  add_index "order_items", ["user_id"], :name => "index_order_items_on_user_id"
+  add_index "order_items", ["vendor_id"], :name => "index_order_items_on_vendor_id"
 
   create_table "orders", :force => true do |t|
     t.datetime "created_at"
@@ -756,31 +783,29 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.float    "tax"
     t.integer  "tax_profile_id"
     t.integer  "total_cents",            :default => 0
-    t.string   "total_currency",         :default => "USD"
     t.integer  "tax_amount_cents",       :default => 0
-    t.string   "tax_amount_currency",    :default => "USD"
     t.integer  "cash_cents",             :default => 0
-    t.string   "cash_currency",          :default => "USD"
     t.integer  "lc_amount_cents",        :default => 0
-    t.string   "lc_amount_currency",     :default => "USD"
     t.integer  "change_cents",           :default => 0
-    t.string   "change_currency",        :default => "USD"
     t.integer  "payment_total_cents",    :default => 0
-    t.string   "payment_total_currency", :default => "USD"
     t.integer  "noncash_cents",          :default => 0
-    t.string   "noncash_currency",       :default => "USD"
     t.integer  "rebate_amount_cents",    :default => 0
-    t.string   "rebate_amount_currency", :default => "USD"
+    t.datetime "completed_at"
+    t.string   "currency"
+    t.integer  "proforma_order_id"
   end
 
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"
+  add_index "orders", ["company_id"], :name => "index_orders_on_company_id"
   add_index "orders", ["customer_id"], :name => "index_orders_on_customer_id"
+  add_index "orders", ["drawer_id"], :name => "index_orders_on_drawer_id"
+  add_index "orders", ["hidden"], :name => "index_orders_on_hidden"
   add_index "orders", ["location_id"], :name => "index_orders_on_location_id"
+  add_index "orders", ["paid"], :name => "index_orders_on_paid"
   add_index "orders", ["user_id"], :name => "index_orders_on_user_id"
   add_index "orders", ["vendor_id"], :name => "index_orders_on_vendor_id"
 
   create_table "payment_method_items", :force => true do |t|
-    t.string   "internal_type"
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -799,10 +824,27 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.boolean  "quote"
     t.boolean  "refund"
     t.integer  "amount_cents",      :default => 0
-    t.string   "amount_currency",   :default => "USD"
+    t.string   "currency"
+    t.integer  "order_item_id"
+    t.boolean  "is_proforma"
+    t.boolean  "is_quote"
+    t.boolean  "is_unpaid"
+    t.boolean  "paid"
+    t.datetime "paid_at"
+    t.datetime "completed_at"
   end
 
+  add_index "payment_method_items", ["cash"], :name => "index_payment_method_items_on_cash"
+  add_index "payment_method_items", ["cash_register_id"], :name => "index_payment_method_items_on_cash_register_id"
+  add_index "payment_method_items", ["change"], :name => "index_payment_method_items_on_change"
+  add_index "payment_method_items", ["company_id"], :name => "index_payment_method_items_on_company_id"
+  add_index "payment_method_items", ["drawer_id"], :name => "index_payment_method_items_on_drawer_id"
+  add_index "payment_method_items", ["hidden"], :name => "index_payment_method_items_on_hidden"
   add_index "payment_method_items", ["order_id"], :name => "index_payment_methods_on_order_id"
+  add_index "payment_method_items", ["payment_method_id"], :name => "index_payment_method_items_on_payment_method_id"
+  add_index "payment_method_items", ["refund"], :name => "index_payment_method_items_on_refund"
+  add_index "payment_method_items", ["user_id"], :name => "index_payment_method_items_on_user_id"
+  add_index "payment_method_items", ["vendor_id"], :name => "index_payment_method_items_on_vendor_id"
 
   create_table "payment_methods", :force => true do |t|
     t.string   "name"
@@ -817,6 +859,23 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.boolean  "unpaid"
     t.boolean  "quote"
   end
+
+  create_table "plugins", :force => true do |t|
+    t.string   "name"
+    t.string   "filename"
+    t.string   "base_path"
+    t.integer  "company_id"
+    t.integer  "vendor_id"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "plugins", ["company_id"], :name => "index_plugins_on_company_id"
+  add_index "plugins", ["hidden_by"], :name => "index_plugins_on_hidden_by"
+  add_index "plugins", ["vendor_id"], :name => "index_plugins_on_vendor_id"
 
   create_table "receipts", :force => true do |t|
     t.string   "ip"
@@ -880,16 +939,18 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
-    t.integer  "price_cents",             :default => 0
-    t.string   "price_currency",          :default => "USD"
-    t.integer  "purchase_price_cents",    :default => 0
-    t.string   "purchase_price_currency", :default => "USD"
+    t.integer  "price_cents",          :default => 0
+    t.integer  "purchase_price_cents", :default => 0
+    t.string   "currency"
   end
 
   add_index "shipment_items", ["category_id"], :name => "index_shipment_items_on_category_id"
+  add_index "shipment_items", ["company_id"], :name => "index_shipment_items_on_company_id"
+  add_index "shipment_items", ["hidden"], :name => "index_shipment_items_on_hidden"
   add_index "shipment_items", ["item_type_id"], :name => "index_shipment_items_on_item_type_id"
   add_index "shipment_items", ["location_id"], :name => "index_shipment_items_on_location_id"
   add_index "shipment_items", ["shipment_id"], :name => "index_shipment_items_on_shipment_id"
+  add_index "shipment_items", ["vendor_id"], :name => "index_shipment_items_on_vendor_id"
 
   create_table "shipment_items_stock_locations", :id => false, :force => true do |t|
     t.integer "shipment_item_id"
@@ -932,9 +993,11 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "price_cents",      :default => 0
-    t.string   "price_currency",   :default => "USD"
+    t.string   "currency"
   end
 
+  add_index "shipments", ["company_id"], :name => "index_shipments_on_company_id"
+  add_index "shipments", ["hidden"], :name => "index_shipments_on_hidden"
   add_index "shipments", ["receiver_id"], :name => "index_shipments_on_receiver_id"
   add_index "shipments", ["shipper_id"], :name => "index_shipments_on_shipper_id"
   add_index "shipments", ["user_id"], :name => "index_shipments_on_user_id"
@@ -1026,6 +1089,16 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
   end
 
   add_index "user_logins", ["user_id"], :name => "index_employee_logins_on_employee_id"
+
+  create_table "user_meta", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "key"
+    t.text     "value"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "user_meta", ["user_id"], :name => "index_user_meta_on_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false
@@ -1119,7 +1192,7 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.text     "invoice_blurb"
     t.text     "invoice_blurb_footer"
     t.string   "gs1_format",                        :default => "2,5,5"
-    t.string   "country",                           :default => "cc"
+    t.string   "country",                           :default => "us"
     t.integer  "largest_drawer_transaction_number", :default => 0
     t.boolean  "enable_technician_emails"
     t.string   "technician_email"
@@ -1132,6 +1205,7 @@ ActiveRecord::Schema.define(:version => 20130713152038) do
     t.boolean  "auth"
     t.string   "domain"
     t.string   "subdomain"
+    t.string   "currency",                          :default => "USD"
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

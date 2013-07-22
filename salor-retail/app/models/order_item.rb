@@ -24,7 +24,7 @@ class OrderItem < ActiveRecord::Base
   belongs_to :order_item,:foreign_key => :coupon_id
   has_many :histories, :as => :user
   has_one :drawer_transaction # set for refunds only
-  has_one :payment_method_item # set for refunds only
+  belongs_to :refund_payment_method_item, :class_name => 'PaymentMethodItem'
 
 
   monetize :total_cents, :allow_nil => true

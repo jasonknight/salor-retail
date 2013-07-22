@@ -4,12 +4,14 @@
 - categories = @report['categories']
 - taxes = @report['taxes']
 - paymentmethods = @report['paymentmethods']
+- paymentmethods_total = @report['paymentmethods_total']
 - proforma_paymentmethods = @report['proforma_paymentmethods']
 - gift_cards_redeemed = @report['gift_cards_redeemed']
 - gift_card_redeem_total = @report['gift_card_redeem_total']
 - gift_cards_sold = @report['gift_cards_sold']
 - gift_card_sales_total = @report['gift_card_sales_total']
-- refunds  =  @report['refunds']
+- refund_order_items  =  @report['refund_order_items']
+- aconto_order_items  =  @report['aconto_order_items']
 - revenue =   @report['revenue']
 - transactions   = @report['transactions']
 - transactions_sum   = @report['transactions_sum']
@@ -59,11 +61,12 @@
 
 
   - [[:pos,'.sales'], [:neg,'.payments']].each do |i|
+    %hr
     %h3= t i[1]
 
     %table.striped-table2
       %tr
-        %th.left= t '.sums_by_category'
+        %th.left{:style => 'width:50%'}= t '.sums_by_category'
         %th.right= t '.gross'
         %th.right= t '.net'
         %th.right= t '.tax'
@@ -76,11 +79,12 @@
 
     %table.striped-table2
       %tr
-        %th.left= t '.sums_by_tax_profile'
+        %th.left{:style => 'width:50%'}= t '.sums_by_tax_profile'
         %th.right= t '.gross'
         %th.right= t '.net'
         %th.right= t '.tax'
       - taxes[i[0]].to_a.each do |t|
+        - next if t[1][:gro].zero?
         %tr
           %td.left= number_to_percentage t[0]
           %td.right= humanized_money_with_symbol t[1][:gro]
@@ -102,18 +106,6 @@
         %tr.total
           %td.right{:colspan => 3}= humanized_money_with_symbol gift_card_sales_total
             
-            
-
-
-
-    %table.striped-table2
-      %tr
-        %th.left= t '.sums_by_payment_methods'
-        %th.right
-      - paymentmethods[i[0]].to_a.each do |p|
-        %tr
-          %td.left= p[0]
-          %td{:id => "#{i[0]}_#{p[0]}_sum", :class => "right"}= humanized_money_with_symbol p[1]
           
     - if i[0] == :pos and gift_cards_redeemed.any?
       %table.striped-table2
@@ -130,88 +122,132 @@
         %tr.total
           %td.right{:colspan => 3}= humanized_money_with_symbol gift_card_redeem_total
 
-    %p{:id => "#{i[0]}_sum_gross"}
-      == #{ t '.sum_gross' }:
-      %b== #{ humanized_money_with_symbol categories_sum[i[0]][:gro] }
-    %p{:id => "#{i[0]}_sum_net"}
-      == #{ t '.sum_net' }:
-      %b== #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
-    
-
+    .right
+      %p{:id => "#{i[0]}_sum_gross"}
+        == #{ t '.sum_gross' }:
+        %b== #{ humanized_money_with_symbol categories_sum[i[0]][:gro] }
+      %p{:id => "#{i[0]}_sum_net"}
+        == #{ t '.sum_net' }:
+        %b== #{ humanized_money_with_symbol categories_sum[i[0]][:net] }
       
       
-      
-      
-      
-
+  %hr
+  %h3= t '.revenue'
+  .right
+    %p
+      == #{ t '.gross' }:
+      %b== #{ humanized_money_with_symbol revenue[:gro] }
+    %p
+      == #{ t '.net' }:
+      %b== #{ humanized_money_with_symbol revenue[:net] }
+    %hr
+  
+  
 %div.paper-invoice
-
-  %h3= t '.refunds'
+    
+  %hr
+  %h3 Paymentmethods
   %table.striped-table2
     %tr
-      %th.left= t '.type'
-      %th.right= t '.gross'
-    - refunds.each do |k,v|
+      %th.left &nbsp;
+      %th.right
+    - paymentmethods.each do |k,v|
       %tr
         %td.left= v[:name]
         %td.right= humanized_money_with_symbol v[:amount]
-
-
         
-  %h3= t '.revenue'
-  %p== #{ t '.gross' }: #{ humanized_money_with_symbol revenue[:gro] }
-  %p== #{ t '.net' }: #{ humanized_money_with_symbol revenue[:net] }
-        
-        
-
-  %h3= t '.proforma_payments'
-  %table.striped-table2
-    %tr
-      %th.left= t '.sums_by_payment_methods'
-      %th.right
-    - proforma_paymentmethods.to_a.each do |p|
-      %tr
-        %td.left= p[0]
-        %td{:class => "right"}= humanized_money_with_symbol p[1]
-
-
-  
-
-  
-  
-  
-
-
-
-
-  %h3= t '.transactions'
-  %table.striped-table2
-    %tr
-      %th.left= t '.transaction_tag'
-      %th.left= t '.notes'
-      %th.left= t '.time'
-      %th.right= t '.drop'
-      %th.right= t '.payout'
-    - transactions.each do |d|
-      %tr
-        %td.left= t ('.' + d[:tag])
-        %td.left= d[:notes]
-        %td.left= d[:time].strftime('%d. %b %H:%M')
-        %td.right= humanized_money_with_symbol d[:amount] if d[:amount].fractional > 0
-        %td.right= humanized_money_with_symbol d[:amount] if d[:amount].fractional < 0
-  %p== #{ t '.sum_transactions' }: #{ humanized_money_with_symbol transactions_sum }
-
-  
-  
-  %h3= t '.cash_drawer'
-
-  - if @from.beginning_of_day == Time.now.beginning_of_day and @user # today and user
-    %p== #{ I18n.t("printr.eod_report.system_drawer_amount") }: #{ humanized_money_with_symbol @user.get_drawer.amount }
-
-  %p== #{ I18n.t("printr.eod_report.calculated_drawer_amount") }: #{ humanized_money_with_symbol calculated_drawer_amount }
-  - unless calculated_drawer_amount.zero?
+  .right
     %p
-      %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
+      == #{ t '.sum' }:
+      %b== #{ humanized_money_with_symbol paymentmethods_total }
+      
+      
+      
+      
+  
+  - if proforma_paymentmethods.any?
+    %hr
+    %h3= t '.proforma_payments'
+    %table.striped-table2
+      %tr
+        %th.left
+        %th.right
+      - proforma_paymentmethods.each do |k,v|
+        %tr
+          %td.left= v[:name]
+          %td.right= humanized_money_with_symbol v[:amount]
+
+          
+          
+  - if aconto_order_items.any?
+    %h3 Acontos
+    %table.striped-table2
+      %tr
+        %th.left
+        %th.right
+      - aconto_order_items.each do |k,v|
+        %tr
+          %td.left= link_to(v[:order_blurb], "/orders/#{ v[:order_id] }/print")
+          %td.right= humanized_money_with_symbol v[:amount]
+      
+      
+
+
+
+  - if refund_order_items.any?
+    %hr
+    %h3= t '.refunds'
+    %table.striped-table2
+      %tr
+        %th.left
+        %th.left
+        %td.left
+      - refund_order_items.each do |k,v|
+        %tr
+          %td.left= v[:blurb]
+          %td.left= link_to(v[:order_blurb], "/orders#{ v[:order_id] }/print")
+          %td.left= v[:pmi_blurb]
+
+          
+  - if transactions.any?
+    %hr
+    %h3= t '.transactions'
+    %table.striped-table2
+      %tr
+        %th.left
+        %th.left= t '.notes'
+        %th.left= t '.time'
+        %th.right= t '.drop'
+        %th.right= t '.payout'
+      - transactions.each do |d|
+        %tr
+          %td.left= t ('.' + d[:tag])
+          %td.left= d[:notes]
+          %td.left= d[:time].strftime('%d. %b %H:%M')
+          %td.right= humanized_money_with_symbol d[:amount] if d[:amount].fractional > 0
+          %td.right= humanized_money_with_symbol d[:amount] if d[:amount].fractional < 0
+    .right
+      %p
+        == #{ t '.sum' }:
+        %b== #{ humanized_money_with_symbol transactions_sum }
+
+  
+  
+  %hr
+  %h3= t '.cash_drawer'
+  .right
+    - if @from.beginning_of_day == Time.now.beginning_of_day and @user # today and user
+      %p
+        == #{ I18n.t("printr.eod_report.system_drawer_amount") }:
+        %b== #{ humanized_money_with_symbol @user.get_drawer.amount }
+
+    %p
+      == #{ I18n.t("printr.eod_report.calculated_drawer_amount") }:
+      %b== #{ humanized_money_with_symbol calculated_drawer_amount }
+      
+    - unless calculated_drawer_amount.zero?
+      %p
+        %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
 
   %hr
   %p== (#{ request.ip }) (#{ @current_user.username }) (#{ @current_register.name })

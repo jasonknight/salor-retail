@@ -14,13 +14,20 @@ class MigrateRefunds3 < ActiveRecord::Migration
           next
         end
         unless oi.order.payment_method_items.where(:refund => true).any?
+          if oi.user.nil? or oi.order.user.nil?
+            puts "WARNING: OrderItem #{ oi.id } AND its Order #{ oi.order.id } do not have a user_id or drawer_id attached. This is a bug in the old system and cannot be fixed. Skipping."
+            next
+          end
           pmi = PaymentMethodItem.new
           pmi.vendor = oi.vendor
           pmi.company = oi.company
           pmi.order = oi.order
           pmi.payment_method = pm
           pmi.user = oi.user
-          pmi.drawer = oi.drawer
+          pmi.drawer_id = oi.drawer_id
+          pmi.drawer_id ||= oi.order.drawer_id
+          pmi.drawer_id ||= oi.user.get_drawer.id
+          pmi.drawer_id ||= oi.order.user.get_drawer.id
           pmi.refund = true
           pmi.cash = true
           pmi.cash_register = oi.order.cash_register
@@ -34,6 +41,7 @@ class MigrateRefunds3 < ActiveRecord::Migration
           puts "Adding refund cash PM #{ pmi.amount_cents} to order #{ oi.order_id }"
         else
           puts "OrderItem #{ oi.id } already has a refund payment method item. Doing nothing."
+        end
       end
     end
     

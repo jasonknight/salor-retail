@@ -410,16 +410,20 @@ class Vendor < ActiveRecord::Base
     end
     
     # PaymentMethods
-    paymentmethods = {
-      :pos => {},
-      :neg => {}
-    }
+    paymentmethods = {}
+    paymentmethods_total_cents = self.payment_method_items.visible.where(
+     :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil
+    ).sum(:amount_cents)
+    paymentmethods_total = Money.new(paymentmethods_total_cents, self.currency)
+    
     used_payment_methods = self.payment_method_items.visible.where(
       :paid => true,
       :paid_at => from..to,
       :drawer_id => drawer,
-      :is_proforma => nil,
-      :refund => nil
+      :is_proforma => nil
     ).select("DISTINCT payment_method_id")
     used_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
@@ -430,96 +434,42 @@ class Vendor < ActiveRecord::Base
         # cash needs special treatment, since actual cash amount = cash given - change given
         change_pm = self.payment_methods.visible.find_by_change(true)
         
-        cash_positive_cents = self.payment_method_items.visible.where(
+        cash_cents = self.payment_method_items.visible.where(
           :paid => true,
           :paid_at => from..to,
           :drawer_id => drawer,
           :is_proforma => nil,
-          :payment_method_id => pm,
-          :refund => nil
-        ).where("amount_cents > 0").sum(:amount_cents)
-        cash_positive = Money.new(cash_positive_cents, self.currency)
-        
-        change_positive_cents = self.payment_method_items.visible.where(
-          :paid => true,
-          :paid_at => from..to,
-          :drawer_id => drawer,
-          :is_proforma => nil,
-          :payment_method_id => change_pm,
-          :refund => nil
+          :payment_method_id => pm
         ).sum(:amount_cents)
-        change_positive = Money.new(change_positive_cents, self.currency)
+        cash = Money.new(cash_cents, self.currency)
         
-        cash_negative_cents = self.payment_method_items.visible.where(
+        change_cents = self.payment_method_items.visible.where(
           :paid => true,
           :paid_at => from..to,
           :drawer_id => drawer,
           :is_proforma => nil,
-          :payment_method_id => pm,
-          :refund => nil,
-        ).where("amount_cents < 0").sum(:amount_cents)
-        cash_negative = Money.new(cash_negative_cents, self.currency)
+          :payment_method_id => change_pm
+        ).sum(:amount_cents)
+        change = Money.new(change_cents, self.currency)
         
-        paymentmethods[:pos][pm.name] = cash_positive + change_positive
-        paymentmethods[:neg][pm.name] = cash_negative
+        paymentmethods[pm.id] = {:name => pm.name, :amount => cash + change}
         
       else
-        pmi_pos_cents = self.payment_method_items.visible.where(
+        pmi_cents = self.payment_method_items.visible.where(
           :paid => true,
           :paid_at => from..to,
           :drawer_id => drawer,
           :is_proforma => nil,
-          :payment_method_id => pm,
-          :refund => nil
-        ).where("amount_cents > 0").sum(:amount_cents)
-        paymentmethods[:pos][pm.name] = Money.new(pmi_pos_cents, self.currency)
+          :payment_method_id => pm
+        ).sum(:amount_cents)
         
-        pmi_neg_cents = self.payment_method_items.visible.where(
-          :paid => true,
-          :paid_at => from..to,
-          :drawer_id => drawer,
-          :is_proforma => nil,
-          :payment_method_id => pm,
-          :refund => nil,
-        ).where("amount_cents < 0").sum(:amount_cents)
-        paymentmethods[:neg][pm.name] = Money.new(pmi_neg_cents, self.currency)
+        paymentmethods[pm.id] = {:name => pm.name, :amount => Money.new(pmi_cents, self.currency)}
       end
-    end
-    
-    # Refunds. we query those according to paymentMethoditems. TODO: output order nr. on report page.
-    refunds = {}
-    used_refund_payment_methods = self.payment_method_items.visible.where(
-      :paid => true,
-      :paid_at => from..to,
-      :drawer_id => drawer,
-      :is_proforma => nil,
-      :refund => true
-    ).select("DISTINCT payment_method_id")
-    used_refund_payment_methods.each do |r|
-      pm = self.payment_methods.find_by_id(r.payment_method_id)
-      
-      refund_cents = self.payment_method_items.visible.where(
-        :paid => true,
-        :paid_at => from..to,
-        :drawer_id => drawer,
-        :is_proforma => nil,
-        :payment_method_id => pm,
-        :refund => true).sum(:amount_cents)
-      refunds[pm.id] = {
-        :name => pm.name,
-        :amount => Money.new(refund_cents, self.currency)
-      }
     end
 
     
     # Aconto payments
     # for proforma Orders only payment method items are effective, not the OrderItems. reason: the report would include OrderItems of both proforma and derived Order, but in reality there were only sold once. The derived Order however will be fully effective in regards to OrderItems.
-    proforma_orders = self.orders.visible.where(
-      :paid => true,
-      :paid_at => from..to,
-      :drawer_id => drawer,
-      :is_proforma => true,
-    )
     proforma_paymentmethods = {}
     used_proforma_payment_methods = self.payment_method_items.visible.where(
       :paid => true,
@@ -536,10 +486,59 @@ class Vendor < ActiveRecord::Base
         :paid_at => from..to,
         :drawer_id => drawer,
         :is_proforma => true,
-        :payment_method_id => pm,
-        :refund => nil
+        :payment_method_id => pm
       ).sum(:amount_cents)
-      proforma_paymentmethods[pm.name] = Money.new(ppmi_cents, self.currency)
+      proforma_paymentmethods[pm.id] = {
+        :name => pm.name,
+        :amount => Money.new(ppmi_cents, self.currency)
+      }
+    end
+    
+    aconto_order_items = {}
+    aois = self.order_items.visible.paid.where(
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :behavior => 'aconto'
+    )
+    aois.each do |oi|
+      aconto_order_items[oi.id] = {
+        :order_id => oi.order_id,
+        :order_blurb => "#{ t('orders.print.invoice') } #{ oi.order.nr }",
+        :amount => oi.total
+      }
+    end
+    aconto_total_cents = aois.sum(:total_cents)
+    
+    
+    # Refunds
+    refund_order_items = {}
+    rois = self.order_items.visible.paid.where(
+      :paid => true,
+      :paid_at => from..to,
+      :drawer_id => drawer,
+      :refunded => true
+    )
+    rois.each do |oi|
+      if oi.refund_payment_method_item
+        pmi_blurb = oi.refund_payment_method_item.payment_method.name
+        pmiid = oi.refund_payment_method_item_id
+      else
+        pmi_blurb = "PaymentMethodItem???"
+        pmiid = 0
+      end
+      if oi.item
+        blurb = oi.item.name
+      else
+        blurb = "Item???"
+      end
+      refund_order_items[oi.id] = {
+        :order_id => oi.order_id,
+        :blurb => blurb,
+        :order_blurb => "#{ I18n.t('orders.print.invoice') } ##{ oi.order.nr }",
+        :pmi_id => pmiid,
+        :pmi_blurb => pmi_blurb
+      }
     end
     
     
@@ -614,12 +613,14 @@ class Vendor < ActiveRecord::Base
     report['categories'] = categories
     report['taxes'] = taxes
     report['paymentmethods'] = paymentmethods
+    report['paymentmethods_total'] = paymentmethods_total
     report['proforma_paymentmethods'] = proforma_paymentmethods
     report['gift_cards_redeemed'] = gift_cards_redeemed
     report['gift_card_redeem_total'] = gift_card_redeem_total
     report['gift_cards_sold'] = gift_cards_sold
     report['gift_card_sales_total'] = gift_card_sales_total
-    report['refunds'] = refunds
+    report['refund_order_items'] = refund_order_items
+    report['aconto_order_items'] = aconto_order_items
     report['revenue'] = revenue
     report['transactions'] = transactions
     report['transactions_sum'] = transactions_sum
