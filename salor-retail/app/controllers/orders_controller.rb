@@ -76,7 +76,7 @@ class OrdersController < ApplicationController
       @current_user.save
     end
  
-    @button_categories = Category.where(:button_category => true).order(:position)
+    @button_categories = @current_vendor.categories.visible.where(:button_category => true).order(:position)
     @current_register.reload
   end
 

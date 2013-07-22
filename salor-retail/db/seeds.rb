@@ -188,12 +188,23 @@ company_count.times do |c|
       cat = Category.new
       cat.company = company
       cat.vendor = vendor
-      cat.name = "Category#{ c }#{ v }#{ i }"
+      cat.name = "Category #{ c }#{ v }#{ i }"
       res = cat.save
       category_objects << cat
       puts "Category #{ cat.name } created" if res == true
       raise "ERROR: #{ cat.errors.messages }" if res == false
     end
+    
+    # create a special button category for special items
+    special_cat = Category.new
+    special_cat.company = company
+    special_cat.vendor = vendor
+    special_cat.name = "Specials"
+    special_cat.button_category = true
+    res = special_cat.save
+    category_objects << special_cat
+    puts "Special Category #{ special_cat.name } created" if res == true
+    raise "ERROR: #{ special_cat.errors.messages }" if res == false
     
     button_category_objects = []
     3.times do |i|
@@ -210,16 +221,16 @@ company_count.times do |c|
     
     item_objects = []
     category_objects.size.times do |i|
-      10.times do |j|
+      5.times do |j|
         k = j % 3
         item = Item.new
         item.company = company
         item.vendor = vendor
         item.tax_profile = tax_profile_objects[k]
         item.category = category_objects[i]
-        item.sku = "SKU#{ c }#{ v }#{ i }#{ j }"
-        item.name = "Item#{ c }#{ v }#{ i }#{ j }"
-        item.price_cents = 100 * (10 * i + j)
+        item.sku = "SKU#{ i }#{ j }"
+        item.name = "Test Item #{ i }#{ j }"
+        item.price_cents = 100 * (10 * i + j + 1)
         item.item_type = item_type_objects[0]
         item.currency = currencies[v]
         res = item.save
@@ -227,6 +238,95 @@ company_count.times do |c|
         puts "Item #{ item.sku } created" if res == true
         raise "ERROR: #{ item.errors.messages }" if res == false
       end
+    end
+    
+    
+    # special items
+    special_item_objects = []
+    
+    # for recursion test
+    recursion_item_names = ['piece', 'pack', 'carton']
+    recursion_item_names = ['PIECE', 'PACK', 'CARTON']
+    recursion_item_packaging_units = [1, 20, 10]
+    recursion_item_prices = [20, 400, 4000]
+    recursion_item_quantities = [0, 50, 20]
+    previous_item = nil
+    recursion_item_names.size.times do |i|
+      item = Item.new
+      item.company = company
+      item.vendor = vendor
+      item.tax_profile = tax_profile_objects[0]
+      item.category = special_cat
+      item.sku = recursion_item_names[i]
+      item.name = recursion_item_names[i]
+      item.packaging_unit = recursion_item_packaging_units[i]
+      item.price_cents = recursion_item_prices[i]
+      item.item_type = item_type_objects[0]
+      item.currency = currencies[v]
+      item.child = previous_item
+      item.quantity = recursion_item_quantities[i]
+      result = item.save
+      raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
+      puts "Test Recursion Item #{ c } #{ v } #{ i } created" if result == true
+      previous_item = item
+      special_item_objects << item
+    end
+    
+    # create dynamic giftcard item
+    zero_tax_profile = vendor.tax_profiles.visible.find_by_value(0)
+    gift_card_item_type = vendor.item_types.visible.find_by_behavior('gift_card')
+    item = Item.new
+    item.company = company
+    item.vendor = vendor
+    item.tax_profile = zero_tax_profile
+    item.category = special_cat
+    item.sku = "G000000000000"
+    item.name = "Dynamic Gift Card"
+    item.item_type = gift_card_item_type
+    item.currency = currencies[v]
+    result = item.save
+    raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
+    puts "Dynamic Gift Card Item #{ c } #{ v } created" if result == true
+    special_item_objects << item
+    
+    # create special DMYACONTO item
+    zero_tax_profile = vendor.tax_profiles.visible.find_by_value(0)
+    aconto_item_type = vendor.item_types.visible.find_by_behavior('aconto')
+    item = Item.new
+    item.company = company
+    item.vendor = vendor
+    item.tax_profile = zero_tax_profile
+    item.sku = "DMYACONTO"
+    item.name = "On account"
+    item.item_type = aconto_item_type
+    item.currency = currencies[v]
+    result = item.save
+    raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
+    puts "Special Item 'On Account' DMYACONTO #{ c } #{ v } created" if result == true
+    
+    # create test coupon items
+    coupon_types = [1, 2, 3] # 1=percent, 2=fixed, 3=buyonegetone
+    coupon_amounts = [1000, 50, 0]
+    coupon_descriptions = ["10%", "50c off", "b1g1"]
+    zero_tax_profile = vendor.tax_profiles.visible.find_by_value(0)
+    coupon_item_type = vendor.item_types.visible.find_by_behavior('coupon')
+    coupon_types.size.times do |i|
+      item = Item.new
+      item.company = company
+      item.vendor = vendor
+      item.tax_profile = zero_tax_profile
+      item.category = special_cat
+      item.item_type = coupon_item_type
+      item.sku = "TESTCOUPON#{i}"
+      item.name = "#{ coupon_descriptions[i] } Coupon for #{ item_objects[4].sku }"
+      item.coupon_applies = item_objects[4].sku
+      item.coupon_type = coupon_types[i]
+      item.price_cents = coupon_amounts[i]
+      item.currency = currencies[v]
+      result = item.save
+      raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
+      puts "Test Coupon Item #{ coupon_descriptions[i] } #{ c } #{ v } created" if result == true
+      special_item_objects << item
     end
     
     location_objects = []
@@ -268,11 +368,12 @@ company_count.times do |c|
       raise "ERROR: #{ b.errors.messages }" if res == false
     end
     
+    # Create test discount
     discount_objects = []
     d = Discount.new
     d.vendor = vendor
     d.company = company
-    d.name = "Discount#{ c }#{ v }"
+    d.name = "Test Discount for Item SKU #{ item_objects[2].sku }"
     d.start_date = 1.week.ago
     d.end_date = Time.now + 1.week
     d.applies_to = "Item"
@@ -380,11 +481,23 @@ company_count.times do |c|
         b.sku = item_objects[item_index].sku
         b.category = button_category_objects[i]
         b.name = item_objects[item_index].name
-        b.save
+        res = b.save
         button_objects << b
         puts "#{ b.name } created" if res == true
         raise "ERROR: #{ b.errors.messages }" if res == false
       end
+    end
+    special_item_objects.size.times.each do |i|
+      b = Button.new
+      b.vendor = vendor
+      b.company = company
+      b.sku = special_item_objects[i].sku
+      b.category = special_cat
+      b.name = special_item_objects[i].name
+      res = b.save
+      button_objects << b
+      puts "#{ b.name } created" if res == true
+      raise "ERROR: #{ b.errors.messages }" if res == false
     end
     
     invoice_blurb_objects = []

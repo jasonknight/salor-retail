@@ -58,12 +58,14 @@ class Vendor < ActiveRecord::Base
   serialize :unused_quote_numbers
   
   validates_presence_of :name
-  validates_presence_of :currency
-  validates_uniqueness_of :identifier, :scope => :company_id
-  after_create :set_hash_id
-  before_save :set_currency
+  validates_uniqueness_of :name, :scope => :hidden
+  validates_uniqueness_of :identifier, :scope => :hidden
+  validate :identifer_present_and_ascii
+  
+  before_save :set_hash_id
   
   accepts_nested_attributes_for :images, :allow_destroy => true, :reject_if => :all_blank
+  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files
@@ -78,13 +80,27 @@ class Vendor < ActiveRecord::Base
       return super
     end
   end
-  def region
-    SalorRetail::Application::COUNTRIES_REGIONS[self.country] 
+  
+  def identifer_present_and_ascii
+    if self.identifier.blank?
+      errors.add(:identifier, I18n.t('activerecord.errors.messages.empty'))
+      return
+    end
+    
+    if self.identifier.length < 4
+      errors.add(:identifier, I18n.t('activerecord.errors.messages.too_short', :count => 4))
+      return
+    end
+    
+    match = /[a-zA-Z0-9_-]*/.match(self.identifier)[0]
+    if match != self.identifier
+      errors.add(:identifier, I18n.t('activerecord.errors.messages.must_be_ascii'))
+    end
   end
   
-  def set_currency
-    currencystring = I18n.t('number.currency.format.friendly_unit', :locale => self.region)
-    self.currency = currencystring
+  
+  def region
+    SalorRetail::Application::COUNTRIES_REGIONS[self.country] 
   end
   
   def logo_image
@@ -589,6 +605,7 @@ class Vendor < ActiveRecord::Base
     )
     gift_card_sales_total = Money.new(gift_cards_sold.sum(:total_cents), self.currency)
     
+    
     gift_cards_redeemed = self.order_items.visible.where(
       :completed_at => from..to,
       :behavior => 'gift_card',
@@ -976,8 +993,13 @@ class Vendor < ActiveRecord::Base
   end
   
   def set_hash_id
+    hid = read_attribute :hash_id
+    unless hid.blank?
+      ActiveRecord::Base.logger.info "hash_id is already set."
+      return
+    end
     self.hash_id = "#{ self.identifier }#{ generate_random_string[0..20] }"
-    Vendor.connection.execute("UPDATE vendors set hash_id = '#{self.hash_id}'")
+    ActiveRecord::Base.logger.info "Set hash_id to #{ self.hash_id }."
   end
   
   def json_tax_profiles

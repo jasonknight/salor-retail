@@ -95,7 +95,6 @@ module SalorScope
     
     
     rescue
-      puts "Error in SalorScope"
     end
     
   end

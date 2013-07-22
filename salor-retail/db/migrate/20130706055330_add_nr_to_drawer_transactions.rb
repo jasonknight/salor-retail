@@ -6,6 +6,9 @@ class AddNrToDrawerTransactions < ActiveRecord::Migration
     Vendor.reset_column_information
     
     Vendor.connection.execute("UPDATE drawer_transactions SET nr=id")
+    begin
     Vendor.update_all :largest_drawer_transaction_number => DrawerTransaction.last.id
+    rescue
+    end
   end
 end
