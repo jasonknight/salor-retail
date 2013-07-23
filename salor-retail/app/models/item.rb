@@ -393,14 +393,18 @@ class Item < ActiveRecord::Base
   end
   
   def hide(by)
+    self.parent = nil
+    self.child = nil
     self.hidden = true
     self.hidden_by = by
     self.hidden_at = Time.now
     self.save
     
-    # TODO: needs to be tested
     b = self.vendor.buttons.visible.where(:sku => self.sku)
     b.update_all :hidden => true, :hidden_by => by, :hidden_at => Time.now
+    
+    #TODO: if part is deleted, remove from part container
+    
   end
   
   def to_record
