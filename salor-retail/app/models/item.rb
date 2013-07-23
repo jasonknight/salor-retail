@@ -41,7 +41,8 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :item_stocks, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }, :allow_destroy => true
 
   validates_presence_of :sku, :item_type, :vendor_id, :company_id
-  validates_uniqueness_of :sku, :scope => :vendor_id
+  #validates_uniqueness_of :sku, :scope => :vendor_id
+  validate :sku_unique_in_visible
 
   before_save :run_actions
   before_save :cache_behavior
@@ -55,6 +56,13 @@ class Item < ActiveRecord::Base
   SHIPPER_EXPORT_FORMATS = ['default_export','tobacco_land']
   
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
+  
+  def sku_unique_in_visible
+    if self.vendor.items.visible.where(:sku => self.sku).count > 1
+      errors.add(:sku, I18n.t('activerecord.errors.messages.taken'))
+      return
+    end
+  end
   
   
   #README
@@ -201,67 +209,32 @@ class Item < ActiveRecord::Base
   def parent_sku
     if self.parent then
       return self.parent.sku
+    else
+      return nil
     end
-    ""
   end
   
   def child_sku
     if self.child then
       return self.child.sku
-    end
-    ""
-  end
-  
-#   def parent
-#     Item.visible.find_by_child_id(self.id) unless self.new_record?
-#   end
-#   def child
-#     Item.visible.find_by_id(self.child_id)
-#   end
-  
-  def parent_sku=(string)
-    if string.empty? then
-      self.parent = nil
-      return
-    end
-    if string == self.sku then
-      errors.add(:child_sku,I18n.t("system.errors.parent_sku"))
-      return
-    end
-
-    p = self.vendor.items.visible.find_by_sku(string)
-    if p then
-      if self.child and self.child.id == p.id then
-        errors.add(:parent_sku, I18n.t("system.errors.parent_sku"))
-        p.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
-      else
-        self.save # this is necessary since at this point self.id is still nil
-        p.update_attribute(:child_id,self.id)
-      end
     else
-      errors.add(:parent_sku, I18n.t('system.errors.parent_sku_must_exist'))
+      return nil
     end
   end
   
   def child_sku=(string)
-    if string.empty? then
+    if string.blank? then
       self.child = nil
-      return 
-    end
-    if self.sku == string then
-      errors.add(:child_sku,I18n.t("system.errors.child_sku"))
       return
     end
-    c = self.vendor.items.visible.find_by_sku(string)
-    if c then
-      if self.parent and self.parent.id == c.id then
-        errors.add(:child_sku, I18n.t("system.errors.child_sku"))
-        self.update_attribute(:child_id,nil) # break circular relationship in case it existed before creating the item
-      else
-        self.update_attribute(:child_id,c.id)
-      end
-    else
-      errors.add(:child_sku, I18n.t('system.errors.child_sku_must_exist'))
+    if self.sku == string then
+      # this would create an infinite loop on self, we don't allow that
+      self.child = nil
+      return
+    end
+    child_item = self.vendor.items.visible.find_by_sku(string)
+    if child_item then
+      self.child_id = child_item.id
     end
   end
   
@@ -379,64 +352,6 @@ class Item < ActiveRecord::Base
     return nil
   end
   
-  
-  # Reorder recommendation csvs
-  # TODO: The following 3 methods should go into Shipper
-#   def self.recommend_reorder(type)
-#     shippers = Shipper.where(:vendor_id => @current_user.vendor_id).visible.find_all_by_reorder_type(type)
-#     shippers << nil if type == 'default_export'
-#     items = Item.scopied.visible.where("quantity < min_quantity AND (ignore_qty IS FALSE OR ignore_qty IS NULL)").where(:shipper_id => shippers)
-#     if not items.any? then
-#       return nil 
-#     end
-#     unless type == 'default_export'
-#       # Now we need to create a shipment
-#       shipment = Shipment.new({
-#           :name => I18n.t("activerecord.models.shipment.default_name") + " - " + Time.now,
-#           :price => items.sum(:purchase_price),
-#           :receiver_id => $Vendor.id,
-#           :receiver_type => 'Vendor',
-#           :shipper_id => shippers.first.id,
-#           :shipment_type => ShipmentType.scopied.first,
-#           :shipper_type => 'Shipper'
-#       })
-#       shipment.save
-#       items.each do |item|
-#         si = ShipmentItem.new({
-#             :name => item.name,
-#             :base_price => item.base_price,
-#             :category_id => item.category_id,
-#             :location_id => item.location_id,
-#             :item_type_id => item.item_type_id,
-#             :shipment_id => shipment.id,
-#             :sku => item.sku,
-#             :quantity => item.min_quantity - item.quantity,
-#             :vendor_id => $Vendor.id
-#         })
-#         si.save
-#       end
-#     end
-#     return Item.send(type.to_sym,items)
-#   end
-#   
-#   def self.tobacco_land(items)
-#     lines = []
-#     items.each do |item|
-#       sku = item.shipper_sku.blank? ? item.sku[0..3] : item.shipper_sku[0..3]
-#       lines << "%s %04d" % [sku,(item.min_quantity - item.quantity).to_i] 
-#     end
-#     return lines.join("\x0D\x0A")
-#   end
-#   
-#   def self.default_export(items)
-#     lines = []
-#     items.each do |item|
-#       shippername = item.shipper ? item.shipper.name : ''
-#       lines << "%s\t%s\t%s\t%d\t%f" % [shippername,item.name,item.sku,(item.min_quantity - item.quantity).to_i,item.purchase_price.to_f]
-#     end
-#     return lines.join("\n")
-#   end
-  
   # includes quantity of all parents
   def recursive_quantity(depth=0)
     depth += 1
@@ -505,6 +420,98 @@ class Item < ActiveRecord::Base
     attrs
   end
   
+  # Useful debug methods
+  
+  def recursive_parent_count(depth=0)
+    return depth if depth > 5
+    if self.parent
+      return self.parent.recursive_parent_count(depth + 1)
+    else
+      return depth
+    end
+  end
+  
+  def recursive_sku_chain(depth=0, chain=[])
+    depth += 1
+    return chain << "and ongoing... " if depth > 5
+    if self.parent
+      chain << self.sku
+      self.parent.recursive_sku_chain(depth, chain)
+    else
+      chain << self.sku
+    end
+  end
+  
+  def self.get_too_long_recursion_items
+    too_long_item_ids = []
+    Item.visible.where('child_id IS NULL OR child_id = 0').each do |i|
+      too_long_item_ids << i.id if i.recursive_parent_count > 4
+    end
+    return too_long_item_ids
+  end
+  
+  def self.find_self_loop_items
+    Item.visible.where("id = child_id")
+  end
+  
+  def self.clean_self_loop_items
+    self_loop_items = self.find_infinite_loop_items
+    self_loop_items.update_all :hidden => true, :hidden_by => -20, :hidden_at => Time.now
+    self_loop_item_ids = self_loop_items.collect{ |i| i.id }
+    return self_loop_item_ids
+  end
+  
+  def self.find_duplicates
+    Vendor.connection.execute("SELECT sku, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
+  end
+  
+  def self.clean_duplicates
+    duplicates = find_duplicates
+    deleted_item_ids = []
+    duplicates.each do |d|
+      duplicate_items = Item.visible.where(:sku => d[0])
+      duplicate_items.update_all :hidden => true, :hidden_by => -21, :hidden_at => Time.now
+      deleted_item_ids << duplicate_items.collect{ |i| i.id }
+    end
+    return deleted_item_ids
+  end
+  
+  def self.find_nonhidden_items_with_hidden_child
+    ids = []
+    Item.visible.where("child_id IS NOT NULL OR child_id != 0").each do |i|
+      ids << i.id if i.child and i.child.hidden == true
+    end
+    return ids
+  end
+  
+  def self.clean_nonhidden_items_with_hidden_child
+    ids = self.find_nonhidden_items_with_hidden_child
+    Item.where(:id => ids).update_all :hidden => true, :hidden_by => -22, :hidden_at => Time.now
+    return ids
+  end
+  
+  def self.find_nonhidden_items_with_hidden_parent
+    ids = []
+    Item.visible.each do |i|
+      ids << i.id if i.parent and i.parent.hidden == true
+    end
+    return ids
+  end
+  
+  def self.clean_nonhidden_items_with_hidden_parent
+    ids = self.find_nonhidden_items_with_hidden_parent
+    Item.where(:id => ids).update_all :hidden => true, :hidden_by => -23, :hidden_at => Time.now
+    return ids
+  end
+  
+  def self.cleanup
+    cleaned_up_ids = []
+    cleaned_up_ids << self.clean_duplicates
+    cleaned_up_ids << self.clean_infinite_loop_items
+    cleaned_up_ids << self.clean_nonhidden_items_with_hidden_child
+    cleaned_up_ids << self.clean_nonhidden_items_with_hidden_parent
+    return cleaned_up_ids.flatten
+  end
 
 
 end

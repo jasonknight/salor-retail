@@ -623,7 +623,7 @@ class Order < ActiveRecord::Base
     list_of_items_raw = []
     list_of_taxes_raw = []
 
-    integer_format = "%s %-19.19s %6.2f  %3u   %6.2f\n"
+    integer_format = "%s %-19.19s %6.2f  %3u %8.2f\n"
     float_format = "%s %-19.19s %6.2f  %5.3f %6.2f\n"
     percent_format = "%s %-19.19s %6.1f%% %3u   %6.2f\n"
     tax_format = "   %s: %2i%% %7.2f %7.2f %8.2f\n"

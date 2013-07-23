@@ -14,7 +14,12 @@ class ItemsController < ApplicationController
   def index
     orderby = "id DESC"
     orderby ||= params[:order_by]
-    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    unless params[:keywords].blank?
+      # search function should display recursive items
+      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    else
+      @items = @current_vendor.items.visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    end
   end
 
   def show

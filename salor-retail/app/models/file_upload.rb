@@ -7,8 +7,9 @@
 
 
 class FileUpload
+  include SalorBase
   
-  attr_accessor :i, :shipper, :updated_items, :created_items, :created_categories
+  attr_accessor :i, :shipper, :updated_items, :created_items, :created_categories, :updated_item_ids, :created_item_ids, :messages
   
   def initialize(shipper, data)
     @format = shipper.import_format
@@ -24,24 +25,32 @@ class FileUpload
     @created_items = 0
     @created_categories = 0
     @created_tax_profiles = 0
+    
+    @updated_item_ids = []
+    @created_item_ids = []
+    @messages = []
+    log_action "for #{ @shipper.name }: initialized. Line count is #{ @lines.count }"
   end
   
   def crunch
+    log_action "crunch for #{ @shipper.name }: calling self.#{ @format }"
     self.send @format
   end
 
   def type1
-    # danczek, tobaccoland, plattner, moosmayr
+    log_action "type1 for #{ @shipper.name }: called"
   
     if @lines.first.include? '#' then
+      log_action "type1 for #{ @shipper.name }: delimiter is hash"
       delim = '#'
     elsif @lines.first.include? ';'
+      log_action "type1 for #{ @shipper.name }: delimiter is semicolon"
       delim = ';'
     else
       raise "Could not detect delimiter in type 1 file: " + @lines.first
     end
-    puts 'type1'
-    @lines[0..10].each do |row|
+    
+    @lines.each do |row|
       @i += 1
       next if @i == 1 # skip headers
       columns = row.split(delim)
@@ -49,7 +58,7 @@ class FileUpload
       shipper_sku = columns[0].strip
 
       name = columns[1].strip
-      name.encode('UTF-8', :invalid => :replace, :undef => :replace)
+      name.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => "?")
 
       packaging_unit_pack = columns[12].to_i
       packaging_unit_carton = columns[11].to_i
@@ -93,7 +102,7 @@ class FileUpload
         category.company = @company
         category.name = catname
         result = category.save
-        raise "A category could not be saved: #{ category.errors.messages}" unless result == true
+        raise "A category could not be saved because #{ category.errors.messages }" unless result == true
         @created_categories += 1
       end
       category_id = category.id
@@ -116,23 +125,34 @@ class FileUpload
       }
       sku_carton = columns[8].strip
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
-      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find by sku in case name has changed
+      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if carton_item.blank? and not sku_carton.blank? # second chance to find by sku in case name has changed
       if carton_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
-        attributes.merge! :sku => sku_carton unless sku_carton.empty? # SKUs can update!
-        carton_item.update_attributes attributes
-        Action.run(@vendor,carton_item,:on_import)
-        carton_item.save
-        @updated_items += 1
+        attributes.merge! :sku => sku_carton unless sku_carton.blank?
+        carton_item.attributes = attributes
+        result = carton_item.save
+        if result == false
+          msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be saved because #{ carton_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
+          @updated_items += 1
+          @updated_item_ids << carton_item.id
+        end
       else
-        sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
+        sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.blank?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
-        Action.run(@vendor,carton_item,:on_import)
-        carton_item.save
-        
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}"
-        @created_items += 1
+        result = carton_item.save
+        if result == false
+          msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be saved because #{ carton_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}", :light_green
+          @created_items += 1
+          @created_item_ids << carton_item.id
+        end
       end
       
       # pack
@@ -151,27 +171,42 @@ class FileUpload
       }
       sku_pack = columns[9].strip
       pack_item = @vendor.items.visible.where( :name => name + " Packung").first
-      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find by sku in case name has changed
+      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if pack_item.blank? and not sku_pack.blank? # second chance to find by sku in case name has changed
       if pack_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
-        attributes.merge! :sku => sku_pack unless sku_pack.empty? # SKUs can update!
+        attributes.merge! :sku => sku_pack unless sku_pack.blank? # SKUs can update!
         pack_item.attributes = attributes
-        Action.run(@vendor,pack_item,:on_import)
-        #carton_item.reload
-        carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
-        pack_item.save
-        @updated_items += 1
+        result = pack_item.save
+        if result == false
+          msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be saved because #{ pack_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
+          @updated_items += 1
+          @updated_item_ids << pack_item.id
+        end
       else
-        sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
+        sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.blank?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
-        Action.run(@vendor,pack_item,:on_import)
-        pack_item.save
-        #carton_item.reload
-        carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
-        pack_item.save
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}"
-        @created_items += 1
+        result = pack_item.save
+        if result == false
+          msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be saved because #{ pack_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}", :light_green
+          @created_items += 1
+          @created_item_ids << pack_item.id
+        end
+      end
+      
+      carton_item.child_id = pack_item.id if pack_item
+      result = carton_item.save
+      if result == false
+        msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be assigned the child #{ pack_item.sku } because #{ carton_item.errors.messages }"
+        @messages << msg
+        log_action msg, :light_red
       end
       
       # piece
@@ -190,52 +225,69 @@ class FileUpload
       }
       sku_piece = columns[19].strip if columns[19]
       piece_item = @vendor.items.visible.where( :name => name + " Stk.").first
-      piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find by sku in case name has changed
+      piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if piece_item.blank? and not sku_piece.blank?
       if piece_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
-        attributes.merge! :sku => sku_piece unless sku_piece.empty?
+        attributes.merge! :sku => sku_piece unless sku_piece.blank?
         piece_item.attributes = attributes
-        Action.run(@vendor,piece_item,:on_import)
-        #pack_item.reload
-        pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
-        piece_item.save
-        @updated_items += 1
+        result = piece_item.save
+        if result == false
+          msg = "piece_item #{ piece_item.sku } #{ piece_item.name } could not be saved because #{ piece_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
+          @updated_items += 1
+          @updated_item_ids << piece_item.id
+        end
       else
-        sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.empty?
+        sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.blank?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
-        Action.run(@vendor,piece_item,:on_import)
-        piece_item.save
-        #pack_item.reload
-        pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
-        piece_item.save
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}"
-        @created_items += 1
+        result = piece_item.save
+        if result == false
+          msg = "piece_item #{ piece_item.sku } #{ piece_item.name } could not be saved because #{ piece_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}", :light_green
+          @created_items += 1
+          @created_item_ids << piece_item.id
+        end
       end
+
+      pack_item.child_id = piece_item.id
+      result = pack_item.save
+      if result == false
+        msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be assigned the child #{ piece_item.sku } because #{ pack_item.errors.messages }"
+        log_action msg, :light_red
+      end
+
     end
   end
 
   def type2
-    # house of smoke, dios
+    log_action "type1 for #{ @shipper.name }: called"
     
     if @lines[0].include?('#') or @lines[1].include?('#') then
-     delim = '#'
+      log_action "type1 for #{ @shipper.name }: delimiter is hash"
+      delim = '#'
     elsif @lines[0].include?(';') or @lines[1].include?(';')
-     delim = ';'
+      log_action "type1 for #{ @shipper.name }: delimiter is semicolon"
+      delim = ';'
     else
-      raise "Could not detect delimiter in House Of Smoke or Dios"
+      raise "Could not detect delimiter in type 1 file: " + @lines.first
     end
     
     @lines.each do |row|
       @i += 1
       next if @i == 1 # skip headers
-      next if row.strip.empty? # dios has an empty first line
+      next if row.strip.blank?
       columns = row.chomp.split(delim)
 
       shipper_sku = columns[0].strip
 
       name = columns[1].strip
-      name.encode('UTF-8', :invalid => :replace, :undef => :replace)
+      name.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => "?")
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f
       packaging_unit_pack = 1 if packaging_unit_pack.zero?
@@ -265,22 +317,30 @@ class FileUpload
       if columns[36]
         tax_profile = @vendor.tax_profiles.visible.find_by_value(columns[36].to_f / 100)
       elsif columns[15] == columns[16]
-        # since some wholesalers don't offer the tax field, guess
+        # since some wholesalers don't offer the tax field, guess depending on the prices
         tax_profile = @vendor.tax_profiles.visible.find_by_value(0)
       else
+        # default
         tax_profile = @vendor.tax_profiles.visible.find_by_value(20)
       end
       tax_profile_id = tax_profile.id
 
       category = @vendor.categories.visible.find_by_name(columns[6].strip)
       catname = columns[6].strip
+      catname = columns[6].strip
       if category.nil?
-        category = @vendor.categories.visible.new :name => catname
-        category.save
-        @shippercreated_categories += 1
+        category = Category.new
+        category.vendor = @vendor
+        category.company = @company
+        category.name = catname
+        result = category.save
+        raise "A category could not be saved because #{ category.errors.messages }" unless result == true
+        @created_categories += 1
       end
       category_id = category.id
 
+      
+      
       # carton
       attributes = {
         :shipper_sku => shipper_sku,
@@ -292,26 +352,40 @@ class FileUpload
         :category_id => category_id,
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
-        :company_id => @company.id
+        :company_id => @company.id,
+        :item_type_id => @item_type.id
       }
       sku_carton = columns[8].strip
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
-      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if not carton_item and not sku_carton.empty? # second chance to find something in case name has changed
+      carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if carton_item.blank? and not sku_carton.blank? # second chance to find something in case name has changed
       if carton_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating carton item #{carton_item.name} #{carton_item.sku}"
-        attributes.merge! :sku => sku_carton unless sku_carton.empty?
-        carton_item.update_attributes attributes
-        Action.run(@vendor,carton_item,:on_import)
-        carton_item.save
-        @updated_items += 1
+        attributes.merge! :sku => sku_carton unless sku_carton.blank?
+        carton_item.attributes = attributes
+        result = carton_item.save
+        if result == false
+          msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be saved because #{ carton_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 2] Updating carton item #{carton_item.name} #{carton_item.sku}"
+          @updated_items += 1
+          @updated_item_ids << carton_item.id
+        end
       else
-        sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.empty?
+        sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.blank?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new attributes
         Action.run(@vendor,carton_item,:on_import)
-        carton_item.save
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}"
-        @created_items += 1
+        result = carton_item.save
+        if result == false
+          msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be saved because #{ carton_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}", :light_green
+          @created_items += 1
+          @created_item_ids << carton_item.id
+        end
       end
 
       # pack
@@ -325,33 +399,49 @@ class FileUpload
         :category_id => category_id,
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
-        :company_id => @company.id
+        :company_id => @company.id,
+        :item_type_id => @item_type.id
       }
       sku_pack = columns[9].strip
       pack_item = @vendor.items.visible.where( :name => name + " Packung" ).first
-      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if not pack_item and not sku_pack.empty? # second chance to find something in case name has changed
+      pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if pack_item.blank? and not sku_pack.blank? # second chance to find something in case name has changed
       if pack_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
-        attributes.merge! :sku => sku_pack unless sku_pack.empty?
-        pack_item.update_attributes attributes
-        Action.run(@vendor,pack_item,:on_import)
-        carton_item.reload
-        carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
-        pack_item.save
-        @updated_items += 1
+        attributes.merge! :sku => sku_pack unless sku_pack.blank?
+        pack_item.attributes = attributes
+        result = pack_item.save
+        if result == false
+          msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be saved because #{ pack_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
+          @updated_items += 1
+          @updated_item_ids << pack_item.id
+        end
       else
-        sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.empty?
+        sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.blank?
         attributes.merge! :sku => sku_pack
         pack_item = Item.new attributes
-        Action.run(@vendor,pack_item,:on_import)
-        pack_item.save
-        carton_item.reload
-        carton_item.update_attribute(:child_id, pack_item.id) unless pack_item.id == carton_item.child_id or pack_item.sku == carton_item.sku
-        pack_item.save
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating pack item #{pack_item.name} #{pack_item.sku}"
-        @created_items += 1
+        result = pack_item.save
+        if result == false
+          msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be saved because #{ pack_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 2] Creating pack item #{pack_item.name} #{pack_item.sku}", :light_green
+          @created_items += 1
+          @created_item_ids << pack_item.id
+        end
       end
 
+      carton_item.child_id = pack_item.id if pack_item
+      result = carton_item.save
+      if result == false
+        msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be assigned the child #{ pack_item.sku } because #{ carton_item.errors.messages }"
+        @messages << msg
+        log_action msg, :light_red
+      end
+      
       # piece
       attributes = {
         :shipper_sku => shipper_sku,
@@ -363,37 +453,53 @@ class FileUpload
         :category_id => category_id,
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
-        :company_id => @company.id
+        :company_id => @company.id,
+        :item_type_id => @item_type.id
       }
       sku_piece = columns[19].strip if columns[19]
       piece_item = @vendor.items.visible.where( :name => name + " Stk." ).first
-      carton_item = @vendor.items.visible.where( :sku => sku_piece ).first if not piece_item and not sku_piece.empty? # second chance to find something in case name has changed
+      carton_item = @vendor.items.visible.where( :sku => sku_piece ).first if  piece_item.blank? and not sku_piece.blank? # second chance to find something in case name has changed
       if piece_item
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
-        attributes.merge! :sku => sku_piece unless sku_piece.empty?
-        piece_item.update_attributes attributes
-        Action.run(@vendor,piece_item,:on_import)
-        pack_item.reload
-        pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
-        piece_item.save
-        @updated_items += 1
+        attributes.merge! :sku => sku_piece unless sku_piece.blank?
+        piece_item.attributes = attributes
+        result = piece_item.save
+        if result == false
+          msg = "piece_item #{ piece_item.sku } #{ piece_item.name } could not be saved because #{ piece_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
+          @updated_items += 1
+          @updated_item_ids << piece_item.id
+        end
       else
-        sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.nil? or sku_piece.empty?
+        sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.blank?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new attributes
         Action.run(@vendor,piece_item,:on_import)
-        piece_item.save
-        pack_item.reload
-        pack_item.update_attribute(:child_id, piece_item.id) unless piece_item.id == pack_item.child_id or piece_item.sku == pack_item.sku
-        piece_item.save
-        ActiveRecord::Base.logger.info "[WHOLESALER IMPORT TYPE 2] Creating piece item #{piece_item.name} #{piece_item.sku}"
-        @created_items += 1
+        result = piece_item.save
+        if result == false
+          msg = "piece_item #{ piece_item.sku } #{ piece_item.name } could not be saved because #{ piece_item.errors.messages}"
+          @messages << msg
+          log_action msg, :light_red
+        else
+          log_action "[WHOLESALER IMPORT TYPE 2] Creating piece item #{piece_item.name} #{piece_item.sku}", :light_green
+          @created_items += 1
+          @created_item_ids << piece_item.id
+        end
       end
+      
+      pack_item.child_id = piece_item.id
+      result = pack_item.save
+      if result == false
+        msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be assigned the child #{ piece_item.sku } because #{ pack_item.errors.messages }"
+        log_action msg, :light_red
+      end
+      
     end
   end
 
-  def optimalsoft
-    # Optimalsoft Items
+  def type3
 
     @lines.each do |row|
       @i += 1
@@ -415,7 +521,7 @@ class FileUpload
 
       match = /([a-zA-Z\s\W]*)(\d*)(\w*)/.match columns[10].strip
       name = name + ' ' + match[1]
-      weight = match[2] if weight.nil? or weight.empty?
+      weight = match[2] if weight.nil? or weight.blank?
       weight_metric ||= case match[3].upcase
         when 'G' then 'GR'
         when 'GR' then 'GR'
@@ -454,7 +560,7 @@ class FileUpload
     end
   end
 
-  def optimalsoft_customers
+  def type4
     @lines.each do |row|
       columns = row.chomp.split('","')
       @i += 1
@@ -472,96 +578,6 @@ class FileUpload
     end
   end
 
-  # def salorretail
-  #   if @lines.first.include? '#' then
-  #    delim = '#'
-  #   elsif @lines.first.include? ';'
-  #    delim = ';'
-  #   else
-  #     raise "Could not detect delimiter in salor"
-  #   end
-  #   @lines.each do |row|
-  #     @i += 1
-  #     next if i == 1 # skip headers
-  #     columns = row.chomp.split(delim)
-
-  #     tax_value = columns[3].gsub(',','.').to_f
-  #     tax_profile = @vendor.tax_profiles.visible.find_by_value(tax_value)
-  #     if tax_profile.nil?
-  #       tax_profile = TaxProfile.create :name => tax_value, :value => tax_value
-  #       @created_tax_profiles += 1
-  #     end
-  #     tax_profile_id = tax_profile.id
-      
-  #     if columns[8]
-  #       category = @vendor.categories.visible.scopied.find_by_name(columns[8].strip)
-  #       catname = columns[8].strip
-  #     else
-  #       category = nil
-  #       catname = '-'
-  #     end
-  #     if category.nil?
-  #       category = @vendor.categories.visible.new :name => catname
-  #       category.save
-  #       @created_categories += 1
-  #     end
-  #     category_id = category.id
-
-  #     weight = columns[5].gsub(',','.').to_f if columns[5]
-  #     begin
-  #       columns[16] = columns[16].to_date if not columns[16].nil?
-  #     rescue
-  #       raise columns.inspect
-  #     end
-  #     if columns[16] then
-  #       track_expiry = true
-  #     else
-  #       track_expiry = false
-  #     end  
-  #     if not columns[12].nil? #i.e. is buyback?
-  #       columns[12] = (columns[12].downcase == 'true' ? true : false)
-  #     end
-  #     if not columns[20].nil? #i.e. is buyback?
-  #       columns[20] = (columns[20].downcase == 'true' ? true : false)
-  #     end
-  #     attributes = { :sku => columns[0].strip, 
-  #                   :name => columns[1].strip, 
-  #                   :base_price => columns[2], 
-  #                   :tax_profile_id => tax_profile_id, 
-  #                   :sales_metric => columns[4], 
-  #                   :weight => weight, 
-  #                   :weight_metric => columns[6], 
-  #                   :purchase_price => columns[7], 
-  #                   :category_id => category_id,
-  #                   :quantity => columns[9], 
-  #                   :shipper_sku => columns[10], 
-  #                   :buyback_price => columns[11],
-  #                   :default_buyback => columns[12],
-  #                   :behavior => columns[13],
-  #                   :coupon_applies => columns[14],
-  #                   :coupon_type => columns[15],
-  #                   :expires_on => columns[16],
-  #                   :track_expiry => track_expiry,
-  #                   :min_quantity => columns[17],
-  #                   :parent_sku => columns[18],
-  #                   :child_sku => columns[19],
-  #                   :must_change_price => columns[20],
-  #                   :packaging_unit => columns[21]}
-
-  #     item = Item.find_by_sku(columns[0])
-  #     if item
-  #       item.update_attributes attributes
-  #       updated_items += 1
-  #     else
-  #       item = Item.get_by_code(columns[0].strip)
-  #       item.make_valid
-  #       item.update_attributes attributes
-  #       item.save
-  #       @created_items += 1
-  #     end
-  #   end
-  # end
-  
   # TODO there should only be 1 salorretail upload algorithm
   # And it should be this one, so don't mess with it
   def salor(trusted=true)

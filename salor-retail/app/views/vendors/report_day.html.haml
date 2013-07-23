@@ -23,10 +23,9 @@
 = raw content_box_top(t("menu.reports"))
 
 
-
 = form_tag "/vendors/report_day", :class => 'no-print', :id => 'date_range', :method => :get do
   %div.tools
-    %table{:align => :center}
+    %table.tools
       %tr
         %td{:align => :left, :width => "20%"}
           = label 'from', t('.from')

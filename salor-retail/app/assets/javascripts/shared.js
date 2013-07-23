@@ -35,12 +35,7 @@ $(function(){
 
 
 
-function wholesaler_update() {
-  var answer = confirm('Are you sure?')
-  if (!answer) { return; }
-  //TODO: needs a progress spinner and a real dialog in the dom since salor-bin can't display alerts
-  window.location = '/shippers/update_wholesaler';
-}
+
 
 function blurInput(type) {
   var input = $("#complete_in_" + type);

@@ -9,7 +9,7 @@ class PaymentMethodsController < ApplicationController
   before_filter :check_role
 
   def index
-    @payment_methods = @current_vendor.payment_methods.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    @payment_methods = @current_vendor.payment_methods.visible.page(params[:page]).per(@current_vendor.pagination).order('name ASC')
   end
 
   def show

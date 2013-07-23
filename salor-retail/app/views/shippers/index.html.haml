@@ -2,7 +2,8 @@
 
 .tools
   .tool-icon
-    %span= salor_icon(:shipper, {:style => "cursor:pointer;", :onmousedown => "wholesaler_update();"}, 24, I18n.t("menu.wholesaler_update"))
+    %span= salor_icon(:shipper, {:style => "cursor:pointer;", :onclick => "window.location = '/shippers/update_wholesaler'; $('#progress').show();"}, 32, I18n.t("menu.wholesaler_update"))
+    %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
     
         
 = render :partial => 'shared/list_view', :locals => { :klass => Shipper,  :width => '60%',:collection => @shippers, :columns => [:name]}

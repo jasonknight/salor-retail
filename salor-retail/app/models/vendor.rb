@@ -104,8 +104,12 @@ class Vendor < ActiveRecord::Base
   end
   
   def logo_image
-    return self.image('logo') if Image.where(:imageable_type => 'Vendor', :imageable_id => self.id, :image_type => 'logo').any?
-    "/assets/blank.png"
+    return self.image('logo') if Image.where(
+      :imageable_type => 'Vendor',
+      :imageable_id => self.id,
+      :image_type => 'logo'
+    ).any?
+    return "/assets/blank.png"
   end
   
   def gs1_regexp
@@ -115,7 +119,7 @@ class Vendor < ActiveRecord::Base
   
   def payment_methods_types_list
     types = []
-    self.payment_methods.visible.where(:change => nil).each do |p|
+    self.payment_methods.visible.where(:change => nil).order("name ASC").each do |p|
       types << [p.name, p.id]
     end
     return types
@@ -123,8 +127,13 @@ class Vendor < ActiveRecord::Base
   
   def payment_methods_as_objects
     types = {}
-    self.payment_methods.visible.where('`change` IS NULL OR `change` = FALSE').each do |p|
-      types[p.id] = { :name => p.name, :id => p.id, :cash => p.cash }
+    self.payment_methods.visible.where(:change => nil).order("name ASC").each do |p|
+      ## Javascript hashes are autosorted by key integer value, but not sorted when keys are strings with a letter. We need to keep the order, so we export the keys as strings with letters.
+      types["pmid#{p.id}"] = {
+        :name => p.name,
+        :id => p.id,
+        :cash => p.cash
+      }
     end
     return types
   end
@@ -428,7 +437,7 @@ class Vendor < ActiveRecord::Base
     # PaymentMethods
     paymentmethods = {}
     paymentmethods_total_cents = self.payment_method_items.visible.where(
-     :paid => true,
+      :paid => true,
       :paid_at => from..to,
       :drawer_id => drawer,
       :is_proforma => nil

@@ -88,6 +88,7 @@ function complete_order_send(print) {
 function complete_order_process(print) {
   var drawer_opened = conditionally_open_drawer();
   var order_id = Order.id;
+  var current_payment_method_items = paymentMethodItems();
   $.ajax({
     url: "/orders/complete",
     type: 'post',
@@ -95,7 +96,7 @@ function complete_order_process(print) {
       order_id: Order.id,
       change: toFloat($('#complete_order_change').html()),
       print: print,
-      payment_method_items: paymentMethodItems()
+      payment_method_items: current_payment_method_items
     },
     complete: function(data, status) {
       ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});

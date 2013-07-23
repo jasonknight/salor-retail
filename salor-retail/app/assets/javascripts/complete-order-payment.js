@@ -79,29 +79,12 @@ function payment_method_options() {
 
 function get_payment_total() {
   var paymentTotal = 0;
-  $(".payment-amount:visible").each(
-    function () {
-      echo("Payment entry found, value is: " + $(this).val());
-      var tval = toFloat($(this).val());
-      paymentTotal += tval;
-      echo("Payment entry converts to: " + tval);
-    }
-  );
-  return paymentTotal;
-}
-
-
-
-
-function serializePayments() {
-  var returnArr = [];
-  $.each($(".payment-method"), function() {
-    var index = $(this).attr('id').split("_")[2];
-    var method = $(this).val();
-    var amount = $("#payment_amount_" + index).val();
-    returnArr.push(method + "=" + amount);
+  var current_payment_method_items = paymentMethodItems();
+  $.each(current_payment_method_items, function(k,v) {
+    var tval = toFloat(v.amount);
+    paymentTotal += tval;
   });
-  return returnArr.join("&");
+  return paymentTotal;
 }
 
 function paymentMethodItems() {
@@ -111,7 +94,7 @@ function paymentMethodItems() {
     var amount = $("#payment_amount_" + id).val();
     var val = $(this).val();
     returnObj[val] = {
-      id:val,
+      id:PaymentMethodObjects[val].id,
       name:PaymentMethodObjects[val].name,
       cash:PaymentMethodObjects[val].cash,
       amount: amount

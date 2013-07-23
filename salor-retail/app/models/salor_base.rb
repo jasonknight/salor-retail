@@ -31,17 +31,39 @@ module SalorBase
     self.save
   end
   
-  def log_action(txt)
-    SalorBase.log_action(self.class.to_s, txt)
+  def log_action(txt, color=:green)
+    SalorBase.log_action(self.class.to_s, txt, color)
   end
   
-  def self.log_action(from="",txt)
+  def self.log_action(from="", txt="", color=:green)
+  colors = {
+    :black          => "\e[0;30;49m",
+    :red            => "\e[0;31;49m",
+    :green          => "\e[0;32;49m",
+    :yellow         => "\e[0;33;49m",
+    :blue           => "\e[0;34;49m",
+    :magenta        => "\e[0;35;49m",
+    :cyan           => "\e[0;36;49m",
+    :white          => "\e[0;37;49m",
+    :default        => "\e[0;39;49m",
+    :light_black    => "\e[0;40;49m",
+    :light_red      => "\e[0;91;49m",
+    :light_green    => "\e[0;92;49m",
+    :light_yellow   => "\e[0;93;49m",
+    :light_blue     => "\e[0;94;49m",
+    :light_magenta  => "\e[0;95;49m",
+    :light_cyan     => "\e[0;96;49m",
+    :light_white    => "\e[0;97;49m"
+  }
+    fromcolor = colors[:light_yellow]
+    normalcolor = colors[:default]
+    txtcolor = colors[color]
     if Rails.env == "development" then
       File.open("#{Rails.root}/log/development-history.log",'a') do |f|
-        f.puts "\n##[#{from}] #{txt}\n"
+        f.puts "##[#{fromcolor}#{from}] #{txtcolor}#{txt}#{normalcolor}\n"
       end
     end
-    ActiveRecord::Base.logger.info "\e[0;93;49m#####[#{from}]\e[0;92;49m #{txt}\e[0;39;49m"
+    ActiveRecord::Base.logger.info "#####[#{ fromcolor}#{from}] #{txtcolor}#{txt}#{ normalcolor }"
   end
   
   def self.string_to_float(str)
@@ -82,12 +104,15 @@ module SalorBase
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     if user and pass then
+      log_action "get_url: setting basic authentication"
       request.basic_auth(user,pass)
     end
     headers.each do |k,v|
       request[k] = v
     end
+    log_action "get_url: starting request"
     response = http.request(request)
+    log_action "get_url: finished request."
     return response
   end
 

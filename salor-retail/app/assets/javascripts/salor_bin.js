@@ -41,7 +41,8 @@ function quick_open_drawer() {
 // opens the drawer only if customer has given cash or if the register configuration tells to open it always. no drawer observation is started at this point, since it would block subsequent printing.
 function conditionally_open_drawer() {
   var contains_cash_payment_method_item = false;
-  $.each(paymentMethodItems(), function(k,v) {
+  var current_payment_method_items = paymentMethodItems();
+  $.each(current_payment_method_items, function(k,v) {
     if (v.cash == true) {
       contains_cash_payment_method_item = true;
       return false;

@@ -51,18 +51,11 @@ class OrdersController < ApplicationController
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
   end
 
-  def new    
-    # get an order from params
-    if params[:order_id].to_i != 0 then
-      @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    end
-    
-    # if no params, get user's last order if unpaid
-    unless @current_order
-      @current_order = @current_vendor.orders.where(:paid => nil).find_by_id(@current_user.current_order_id)
-    end
-    
-    # create new order if all of the previous fails
+  def new
+    # get the user's current order
+    @current_order = @current_vendor.orders.visible.where(:completed_at => nil).find_by_id(@current_user.current_order_id)
+
+    # create a new order if the previous fails
     unless @current_order
       @current_order = Order.new
       @current_order.vendor = @current_vendor
@@ -72,17 +65,35 @@ class OrdersController < ApplicationController
       @current_order.cash_register = @current_register
       @current_order.drawer = @current_user.get_drawer
       @current_order.save
+      
+      # remember this for the current user
       @current_user.current_order_id = @current_order.id
       @current_user.save
     end
  
     @button_categories = @current_vendor.categories.visible.where(:button_category => true).order(:position)
-    @current_register.reload
   end
 
 
   def edit
-    @current_user.current_order_id = params[:id]
+    requested_order = @current_vendor.orders.visible.where(:completed_at => nil).find_by_id(params[:id])
+    
+    if requested_order.nil?
+      # the requested order is already completed. We cannot edit that and rediect to #new.
+      redirect_to new_order_path
+      return
+    end
+    
+    user_which_has_requested_order = @current_vendor.users.visible.find_by_current_order_id(requested_order.id)
+    
+    if user_which_has_requested_order and user_which_has_requested_order != @current_user
+      # another user is editing this order. We cannot edit that and redirect to #new.
+      redirect_to new_order_path
+      return
+    end
+    
+    # the order is available for editing
+    @current_user.current_order_id = requested_order.id
     @current_user.save
     redirect_to new_order_path
   end
@@ -158,6 +169,7 @@ class OrdersController < ApplicationController
     render :text => @text
   end
   
+  # ajax
   def complete
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
 
@@ -187,7 +199,7 @@ class OrdersController < ApplicationController
     
     customerscreen_push_notification
     
-    @old_order = @order
+    @old_order = @order # needed for a feature which allows change money calculation even after the order was completed.
     
     @order = Order.new
     @order.vendor = @current_vendor
@@ -198,6 +210,8 @@ class OrdersController < ApplicationController
     @order.cash_register = @current_register
     result = @order.save
     raise "Could not create a new order in OrdersController#complete because #{ @order.errors.messages }" unless result == true
+    
+    # save new order on user
     @current_user.current_order_id = @order.id
     @current_user.save
   end
@@ -211,6 +225,8 @@ class OrdersController < ApplicationController
     o.drawer = @current_user.get_drawer
     o.cash_register = @current_register
     o.save
+    
+    # save new order on user
     @current_user.current_order_id = o.id
     @current_user.save
     redirect_to new_order_path
