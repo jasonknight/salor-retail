@@ -58,7 +58,12 @@ class Item < ActiveRecord::Base
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
   
   def sku_unique_in_visible
-    if self.vendor.items.visible.where(:sku => self.sku).count > 1
+    if self.new_record?
+      number = 0
+    else
+      number = 1
+    end
+    if self.vendor.items.visible.where(:sku => self.sku).count > number
       errors.add(:sku, I18n.t('activerecord.errors.messages.taken'))
       return
     end
@@ -70,7 +75,7 @@ class Item < ActiveRecord::Base
   # 2. The rails way would require us to reorganize all the translation files
   # 3. The rails way in this case is admittedly limited, by their own docs, and they suggest you implement your own
   # 4. Therefore, don't remove this code.
-  def self.human_attribute_name(attrib)
+  def self.human_attribute_name(attrib, options={})
     begin
       trans = I18n.t("activerecord.attributes.#{attrib.downcase}", :raise => true) 
       return trans
@@ -254,7 +259,10 @@ class Item < ActiveRecord::Base
     action.company = self.company
     action.model = self
     action.name = Time.now.strftime("%Y%m%d%H%M%S")
-    action.save
+    result = action.save
+    if result == false
+      raise "Could not save Action because #{ action.errors.messages }"
+    end
     return action
   end
   
@@ -321,11 +329,17 @@ class Item < ActiveRecord::Base
       if i then
         i.is_part = true
         i.part_quantity = self.string_to_float(h[:part_quantity])
-        i.save
+        result = i.save
+        if result == false
+          raise "Could not save Item because #{ i.errors.messages }"
+        end
         self.parts << i
       end
     end
-    self.save
+    result = self.save
+    if result == false
+      raise "Could not save Item because #{ i.errors.messages }"
+    end
   end
   
   def from_shipment_item(si)
@@ -379,13 +393,19 @@ class Item < ActiveRecord::Base
        )
       log_action "Writing quantity #{ q.to_f } directly."
       self.quantity = q
-      self.save
+      result = self.save
+      if result == false
+        raise "Could not save Item because #{ self.errors.messages }"
+      end
       return
     end
 
     parent_units_needed = ( -q / parent.packaging_unit ).ceil
     self.quantity = parent_units_needed * parent.packaging_unit + q
-    self.save
+    result = self.save
+    if result == false
+      raise "Could not save Item because #{ self.errors.messages }"
+    end
     
     # now we need to reduce the quantity of the parent. this starts the recursion
     new_parent_quantity = parent.quantity - parent_units_needed
@@ -398,7 +418,10 @@ class Item < ActiveRecord::Base
     self.hidden = true
     self.hidden_by = by
     self.hidden_at = Time.now
-    self.save
+    result = self.save
+    if result == false
+      raise "Could not hide Item #{ self.id } because #{ self.errors.messages }"
+    end
     
     b = self.vendor.buttons.visible.where(:sku => self.sku)
     b.update_all :hidden => true, :hidden_by => by, :hidden_at => Time.now
