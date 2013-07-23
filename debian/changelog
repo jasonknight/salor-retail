@@ -9,7 +9,7 @@ salor-retail (4.0.2.11) unstable; urgency=low
   * fixed customer add
   * made sku onscreen button larger
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 22 Jul 2013 19:41:10 +0200
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 23 Jul 2013 11:34:11 +0200
 
 salor-retail (4.0.2.10) unstable; urgency=low
 
