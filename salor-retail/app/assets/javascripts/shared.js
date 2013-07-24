@@ -5,6 +5,7 @@ var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
 var _key_codes = {tab: 9,shift: 16, ctrl: 17, alt: 18, f2: 113};
 var _keys_down = {tab: false,shift: false, ctrl: false, alt: false, f2: false};
 var _called = 0;
+var messagesHash = {'notices':[], 'alerts':[], 'prompts':[]}
 
 
 // documentready
@@ -14,7 +15,10 @@ $(function(){
           //xhr.setRequestHeader("Accept", "text/javascript");
           xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
       }
-  })
+  });
+  
+  displayMessages();
+  
 
   $(window).keydown(function(e){
     for (var key in _key_codes) {
@@ -33,7 +37,45 @@ $(function(){
   });
 });
 
+function update_shipper_dialog() {
+  var contents = i18n.are_you_sure;
+  var dialog = shared.draw.dialog('','update_shipper_dialog', contents);
+  var loader = shared.draw.loading(true,null,dialog);
+  var okbutton = shared.create.dialog_button('OK', function() {
+    loader.show();
+    ajax_log({
+      action_taken:'confirmed_update_shipper_dialog'
+    });
+    window.location = '/shippers/update_wholesaler';
+  });
+  
+  dialog.append(okbutton);
+}
 
+function displayMessages() {
+  var notices = messagesHash['notices'];
+  var alerts = messagesHash['alerts'];
+  var prompts = messagesHash['prompts'];
+  if ( notices.length > 0 ) {
+    $('#notices').html('<span>' + notices.join('</span><br /><span>') + '</span>');
+  }
+  if ( alerts.length > 0 ) {
+    $('#alerts').html('<span>' + alerts.join('</span><br /><span>') + '</span>');
+  }
+  if ( prompts.length > 0 ) {
+    var dialog = shared.draw.dialog('blah','blahid', 'contents');
+    var loader = shared.draw.loading(true, dialog);
+  }
+  fadeMessages();
+}
+
+
+function fadeMessages() {
+  $('#messages').fadeIn(1000);
+  setTimeout(function(){
+    $('#messages').fadeOut(1000);
+  }, 10000);
+}
 
 
 
@@ -582,14 +624,23 @@ window.shared = {
       button.addClass('finish-button');
       button.on('mousedown',callback);
       return button;
+    },
+    dialog_button: function (caption, callback) {
+      var button = create_dom_element('div',{},caption,'');
+      button.addClass('dialog-button');
+      button.on('mousedown',callback);
+      return button;
     }
   },
   draw: {
     /* returns a happy, centered dialog that you can use to display stuff */
-    dialog: function (title,id,clear) {
+    dialog: function (title,id,text,clear) {
       var dialog = shared.element('div',{id: id},'',$('body'));
       dialog.addClass('salor-dialog');
-      dialog.css({width: retail.container.width() * 0.50, height: retail.container.height() * 0.40, 'z-index':150});
+      dialog.css({
+        width: retail.container.width() * 0.50,
+        height: retail.container.height() * 0.40, 'z-index':150
+      });
       if (_get('existed',dialog)) {
         dialog.html('');
         _set('existed',false,dialog);
@@ -597,20 +648,33 @@ window.shared = {
       var pad_div = create_dom_element('h2',{},title,dialog);
       dialog.append('<hr />');
       pad_div.addClass('header');
+      var contents = create_dom_element('div',{},text,dialog);
+      contents.addClass('contents');
       deletable(dialog,function () { $(this).parent().remove()});
       shared.helpers.center(dialog, $(window));
       return dialog;
     },
-    loading: function (predraw,align_to) { //we need to predraw this element if we can because it loads an asset
-      if (!align_to) {
-        align_to = $(window);
+    loading: function (predraw, align_to, append_to) { //we need to predraw this element if we can because it loads an asset
+      var loader = shared.element('div',{id: 'loader'},'', append_to);  
+      loader.css({
+        'background-image':'url(/assets/loader.gif)',
+        'background-repeat':'no-repeat',
+        'background-position':'center,center',
+        'background-size':'100%,100%',
+        'position':'fixed',
+        'width':'30%',
+        'height':'10%',
+        'z-index':151,
+        'display':'none'
+      });
+      if (align_to) {
+        shared.helpers.center(loader,align_to);
       }
-      //console.log('showing loader');
-      var loader = shared.element('div',{id: 'loader'},'',$('body'));    
-      loader.show();
-      shared.helpers.center(loader,align_to);
+      
+      
       _set('retail.loader_shown',true);
       _set('retail.show_loading',false);
+      return loader;
     },
     hide_loading: function () {
       //console.log('hiding loader');

@@ -196,10 +196,12 @@ h1, h2, h3, label, div.breadcrumb-container, div.list
   background: #222 url(/images/alert-overlay.png) repeat-x
   box-shadow: 0px 5px 10px rgba(0,0,0,1)
   text-shadow: 0 -1px 1px rgba(0,0,0,0.25)
-  border-bottom: 1px solid rgba(0,0,0,0.25)
+  //border-bottom: 1px solid rgba(0,0,0,0.25)
   cursor: pointer
+  
 .raised-element 
   @include raised_element
+  
 @mixin bright_button 
   @include awesome_button
   background-color: $orange
@@ -390,42 +392,25 @@ div.table-cell.btn
 .caption
   display: table-caption 
 
-.notice 
-  z-index: 1003
-  position: absolute
-  top: 55px
-  left: 31px
-  width: 35%
-
-
-.obtuse 
-  position: relative
-  z-index: 1004
-  height: auto
-  width: 70%
-  padding: 15px 30px
-  margin: 26px 0px 0px 0px
-  color: #000
-  background: $obtuse
-  /* css3 */
-  /* Using longhand to avoid inconsistencies between Safari 4 and Chrome 4 */
-  border-radius: 25px
-
-.obtuse:before 
-  content: ""
-  position: absolute
-  z-index: 1005
-  top: -25px
-  left: 25px
-  border-width: 30px 0 0 20px
-  border-style: solid
-  border-color: transparent $text_color_cool
-  /* reduce the damage in FF3.0 */
-  display: block
-  width: 0
-
-
-/* creates the smaller triangle */
+#messages
+  position: fixed
+  bottom: 0px
+  right: 0px
+  z-index: 200
+  display: inline-block
+  font-size: 200%
+  color: white
+  display: none
+  div
+    text-align: right
+    padding: 0px 0px 0px 50px
+    @include raised_element
+  span
+    padding: 5px 10px
+  #notices
+    background-color: green
+  #alerts
+    background-color: red
 
 .hidden 
   display: none
@@ -648,56 +633,55 @@ div.header
   width: 100%
   z-index: 100
   div.salor-icon
-  span.icon-caption 
-    position: relative
-    bottom: 7px
-
-div.header > ul 
-  list-style: none
-  margin: 0px 0px 0px -20px
-  @include no_select
-
-div.header > ul > li 
-  margin-right: $header_li_pad
-  @include no_select
-  width: 65px
-  display: inline-block
-  vertical-align: top
-
-div.header > ul > li > div 
-  padding-top: 5px
-  height: $header_height - 2
-  cursor: pointer
-  :active 
-    background-color: $middleground2
-    //@include rounded_corners_all
-    //@include no_select
-
-
-
-div.header > ul > li > div.active 
-  padding-top: 5px
-  width: 65px
-  height: $header_height - 4
-  cursor: pointer
-  background-color: $background
-  @include rounded_corners_top
-  @include no_select
-
-div.header > ul > li > div.first 
-  background-color: $background
-  @include rounded_corners_top
-  height: $header_height - 4
-  @include no_select
-  font-size: 60%
-
-div.header > ul > li > div.first > a > img 
-  margin-left: 4px
-  margin-top: -7px
-
-div.header > ul > li > div > a > img 
-  border: none
-  @include no_select
+    span.icon-caption 
+      position: relative
+      bottom: 7px
+  div#header_drawer_amount
+    :margin -16px 0px 0px 0px
+    :font-weight bold
+    :font-size 90%
+    :width 65px
+    :text-align center
+    :text-shadow white 0px 0px 5px
+    :color #FFFF55
+  ul 
+    list-style: none
+    display: inline-block
+    margin: 0px 0px 0px -20px
+    @include no_select
+    li
+      margin-right: $header_li_pad
+      @include no_select
+      width: 65px
+      display: inline-block
+      vertical-align: top
+      div 
+        padding-top: 5px
+        cursor: pointer
+        :active 
+          background-color: $middleground2
+      a
+        img 
+          border: none
+          @include no_select
+      div.active 
+        padding-top: 5px
+        width: 65px
+        height: $header_height - 5
+        cursor: pointer
+        background-color: $background
+        @include rounded_corners_top
+        @include no_select
+      div.first 
+        background-color: $background
+        @include rounded_corners_top
+        height: $header_height - 5
+        @include no_select
+        font-size: 60%
+        a 
+          img 
+            margin-left: 4px
+            margin-top: -7px
 
 
 div.close-window 
@@ -2855,14 +2839,7 @@ div.role-check
   :padding 3px
   :width 25%
 
-div#header_drawer_amount
-  :margin -8px 0px 0px 4px
-  :font-weight bold
-  :font-size 90%
-  :width 65px
-  :text-align center
-  :text-shadow white 0px 0px 5px
-  :color #FFFF55
+
 
 div.shipment_item_attr_header
   :display inline-block
@@ -3183,3 +3160,6 @@ div#modcoder_colorpicker
 input.modcoder_excolor_clrbox
   :padding 2px 20px
   
+div.dialog-button
+  @include awesome_button
+  padding: 10px 15px

@@ -16,10 +16,11 @@ class ApplicationController < ActionController::Base
   #protect_from_forgery
   
   before_filter :loadup
-  after_filter  :loaddown
   before_filter :get_cash_register
   before_filter :set_tailor
   before_filter :set_locale
+  
+  after_filter :loaddown
   
   layout :layout_by_response
 
@@ -108,6 +109,7 @@ class ApplicationController < ActionController::Base
   def customerscreen_push_notification
     t = SalorRetail.tailor
     if t
+      log_action "[TAILOR] Sending CUSTOMERSCREENEVENT"
       t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|/orders/#{ @order.id }/customer_display"
     end
   end
@@ -124,21 +126,22 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
-    SalorBase.log_action "--------------------------------------------\n\n\n\n\n"
+    log_action "-----------------------------------\n\n\n\n\n"
     $COMPANYID = nil
     $VENDORID = nil
     $USERID = nil
     $PARAMS = nil
     $REQUEST = nil
+    $MESSAGES = {}
+    @messages = {:notices => ['abc']}
     
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
 
-    if @current_user.nil? or session[:user_id_hash].blank?
+    if @current_user.nil?
       redirect_to new_session_path and return 
     end
 
     if defined?(SrSaas) == 'constant'
-      # this is necessary due to call to the login method in UsersController#clock{in|out}
       @current_company = SrSaas::Company.visible.find_by_id(@current_user.company_id)
     else
       @current_company = @current_user.company
@@ -151,6 +154,11 @@ class ApplicationController < ActionController::Base
     $USERID = @current_user.id
     $PARAMS = params
     $REQUEST = request
+    $MESSAGES = {
+      :notices => [],
+      :alerts => [],
+      :prompts => []
+    }
     $DIRS = {
       :uploads => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
     }
@@ -164,7 +172,14 @@ class ApplicationController < ActionController::Base
     $USERID = nil
     $PARAMS = nil
     $REQUEST = nil
+    $MESSAGES = {}
     log_action "End of request."
+  end
+  
+  def copy_messages_to_flash
+    flash[:notices] = $MESSAGES[:notices]
+    flash[:alerts] = $MESSAGES[:alerts]
+    flash[:prompts] = $MESSAGES[:prompts]
   end
 
   def get_cash_register
@@ -177,19 +192,19 @@ class ApplicationController < ActionController::Base
   
     t = SalorRetail.tailor
     if t
-      #logger.info "[TAILOR] Checking if socket #{ t.inspect } is healthy"
+      log_action "[TAILOR] Checking if socket #{ t.inspect } is healthy"
       begin
         t.puts "PING|#{ @current_vendor.hash_id }|#{ Process.pid }"
       rescue Errno::EPIPE
-        logger.info "[TAILOR] Error: Broken pipe for #{ t.inspect } #{ t }"
+        log_action "[TAILOR] Error: Broken pipe for #{ t.inspect } #{ t }"
         SalorRetail.old_tailors << t
         t = nil
       rescue Errno::ECONNRESET
-        logger.info "[TAILOR] Error: Connection reset by peer for #{ t.inspect } #{ t }"
+        log_action "[TAILOR] Error: Connection reset by peer for #{ t.inspect } #{ t }"
         SalorRetail.old_tailors << t
         t = nil
       rescue Exception => e
-        logger.info "[TAILOR] Other Error: #{ e.inspect } for #{ t.inspect } #{ t }"
+        log_action "[TAILOR] Other Error: #{ e.inspect } for #{ t.inspect } #{ t }"
         SalorRetail.old_tailors << t
         t = nil
       end
@@ -198,10 +213,10 @@ class ApplicationController < ActionController::Base
     if t.nil?
       begin
         t = TCPSocket.new 'localhost', 2001
-        logger.info "[TAILOR] Info: New TCPSocket #{ t.inspect } #{ t } created"
+        log_action "[TAILOR] Info: New TCPSocket #{ t.inspect } #{ t } created"
       rescue Errno::ECONNREFUSED
         t = nil
-        logger.info "[TAILOR] Warning: Connection refused. No tailor.rb server running?"
+        log_action "[TAILOR] Warning: Connection refused. No tailor.rb server running?"
       end
       SalorRetail.tailor = t
     end
@@ -210,7 +225,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def render_error(exception)
-    logger.info exception.backtrace.join("\n")
+    log_action exception.backtrace.join("\n")
     raise exception if request.xhr?
     @exception = exception
     if SalorRetail::Application::CONFIGURATION[:exception_notification] == true

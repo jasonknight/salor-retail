@@ -22,24 +22,18 @@
 
 
   %body#body
-    .background
-      = render :partial => "shared/header_menu" if @current_user and @current_user.can(:see_header) 
-      = render :partial => "shared/notice"
-      .errors.hidden
-      .help.hidden
-      = render :partial => "shared/cash_drop" if @current_user
-      
-      = yield
-      
-      = form_tag session_path, :id => 'logoutform', :method => 'delete' do
-        %span
-      
-      %span.version= SalorRetail::Application::VERSION
+    = render :partial => "shared/header_menu" if @current_user and @current_user.can(:see_header) 
+    .errors.hidden
+    .help.hidden
+    = render :partial => "shared/cash_drop" if @current_user
+    
+    = yield
+    
+    = form_tag session_path, :id => 'logoutform', :method => 'delete' do
+      %span
+    
+    %span.version= SalorRetail::Application::VERSION
 
-    #simple_input_dialog{:title => "Salor Dialog", :class => "salor-dialog hidden"}
-      %label{ :for => "input", :class => "input_label" }None
-      %input{ :type=>"password", :name=>"input", :id=> "dialog_input", :class=>"text ui-widget-content ui-corner-all"}
-      %p.validateTips
       
 :javascript
   var i18nlocale = "#{ I18n.locale }";

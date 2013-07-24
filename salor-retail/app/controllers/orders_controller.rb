@@ -70,6 +70,11 @@ class OrdersController < ApplicationController
       @current_user.current_order_id = @current_order.id
       @current_user.save
     end
+    
+    $MESSAGES[:notices] << "abcde"
+    $MESSAGES[:notices] << "abcde"
+    $MESSAGES[:alerts] << "abcde"
+    $MESSAGES[:prompts] << "abcde"
  
     @button_categories = @current_vendor.categories.visible.where(:button_category => true).order(:position)
   end
