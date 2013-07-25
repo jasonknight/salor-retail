@@ -175,11 +175,13 @@ module ApplicationHelper
   end
   
   def icon(name, size = '64')
+    name = name.to_sym
     icons = get_icons_map
     return icons[name] + '.svg'
   end
   
   def salor_icon(name, options = {}, size = '64', caption=nil,caption_class='')
+    name = @current_plugin_manager.apply_filter('salor_icon',name)
     if caption then
       o = []
       options.each do |k,v|
