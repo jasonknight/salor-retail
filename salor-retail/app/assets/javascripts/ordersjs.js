@@ -698,7 +698,7 @@ function detailedOrderItemMenu(event) {
 
 function editItemAndOrderItem(item,field,val,callback) {
   // This is supposed to be doubled, it edits both the orderitem and the item at the same go. Item should be first. OrderItem only after Item request has completed.
-  string = '/vendors/edit_field_on_child?id=' +
+  var string = '/vendors/edit_field_on_child?id=' +
   item.item_id +'&klass=Item' +
   '&field=' + field +
   '&value=' + val;

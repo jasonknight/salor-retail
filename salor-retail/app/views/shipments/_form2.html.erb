@@ -15,60 +15,61 @@
     <% end %>
     
     
-    <table width="95%" align="center">
+    <table width="65%" align="center">
       <tr>
-        <td colspan="6" align="right"> <div class="actions"><%= f.submit(t('helpers.submit.save'), :id => "submit") %></div> </td>
+        <td align="left">
+          <div class="button-confirm"><%= link_to(t('helpers.submit.cancel'), shipments_path) %></div>
+          <div class="button-confirm"><%= link_to(t('shipments.index.report'), shipment_path(@shipment)) %></div>
+        </td>
+        <td align="right">
+          <div class="actions"><%= f.submit(t('helpers.submit.save'), :id => "submit") %></div>
+        </td>
       </tr>
       <tr>
-        <td valign="top" colspan="6">  
+        <td valign="top">  
           <h2><%= t("menu.general_configuration") %></h2>
+        </td>
+        <td>
           <hr />
         </td>
       </tr>
       <tr>
         <td> <%= f.label t("activerecord.attributes.name") %> </td>
         <td> <%= f.text_field :name, :class => "keyboardable"%> </td>
-        
-        <td> <%= f.label t("activerecord.attributes.price") %> </td>
-        <td> <%= f.text_field :price, :class => "keyboardable-int", :size => 7 %> </td>
-        
+      </tr>
+      <tr>
         <td> <%= f.label t("activerecord.attributes.paid") %> </td>
         <td> <%= f.check_box :paid %> </td>
       </tr>
       
       <tr>
-        <td colspan="3"> <%= f.label t("activerecord.attributes.status") %> </td>
-        <td colspan="3"> <%= f.collection_select :shipment_type_id, @shipment_types, :id, :name, :include_blank => true %> </td>
+        <td> <%= f.label t("activerecord.attributes.status") %> </td>
+        <td> <%= f.collection_select :shipment_type_id, @shipment_types, :id, :name, :include_blank => true %> </td>
       </tr>
       
       <tr>
-        <td colspan="3"> <%= f.label t("activerecord.attributes.the_receiver") %> </td>
-        <td colspan="3"> <%= f.select :the_receiver, @shipment.receiver_shipper_list.collect{|t| [t[:name],t[:value]]} %> </td>
+        <td> <%= f.label t("activerecord.attributes.the_receiver") %> </td>
+        <td> <%= f.select :the_receiver, @shipment.receiver_shipper_list.collect{|t| [t[:name],t[:value]]} %> </td>
       </tr>
       
       <tr>
-        <td colspan="3"> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
-        <td colspan="3"> <%= f.select :the_shipper, @shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]}.unshift(['', '']) %> </td>
+        <td> <%= f.label t("activerecord.attributes.the_shipper") %> </td>
+        <td> <%= f.select :the_shipper, @shipment.receiver_shipper_list.collect {|t| [t[:name],t[:value]]}.unshift(['', '']) %> </td>
       </tr>
       
       <tr>
-        <td colspan="6">
-        </td>
-      </tr>
-      
-      <tr>
-        <td valign="top" colspan="6">  
+        <td valign="top">  
           <h2><%= t("menu.items") %></h2>
+        </td>
+        <td>
           <hr />
         </td>
       </tr>
-      
-      <tr>
-        <td colspan="6">
-          <%= render :partial => "shipment_item_form", :locals => {:f => f, :items => f.object.shipment_items.visible} %>
-        </td>
-      </tr>
     </table>
-
   <% end %>
+
+  <%= render :partial => "shipment_item_form" %>
+
+
+
 </div>

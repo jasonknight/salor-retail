@@ -183,7 +183,19 @@ class VendorsController < ApplicationController
       raise msg
     end
     
-    if @inst.class == OrderItem
+    if @inst.class == ShipmentItem
+      @shipment_item = @inst
+      @shipment_item.calculate_totals
+
+      if params[:field] == 'quantity' and params[:value].to_i.zero?
+        @shipment_item.hide(@current_user)
+      end
+      @shipment_items = [@shipment_item]
+      @shipment = @shipment_item.shipment
+      @shipment.calculate_totals
+      render 'shipments/update_pos_display'
+      
+    elsif @inst.class == OrderItem
       @order_item = @inst
       #README If someone edits the quantity or price of an item, Actions need to be informed of this.
       case params[:field]

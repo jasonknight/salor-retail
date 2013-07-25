@@ -267,11 +267,11 @@ class Item < ActiveRecord::Base
   # ----- setters for advanced float parsing
   def purchase_price=(p)
     if p.class == String then
-      p = self.string_to_float(p)
-      self.purchase_price = p
+      p = self.string_to_float(p) * 100
+      write_attribute(:purchase_price_cents,p)
       return
     end
-    write_attribute(:purchase_price,p)
+    write_attribute(:purchase_price_cents,p)
   end
 
   def height=(p)
