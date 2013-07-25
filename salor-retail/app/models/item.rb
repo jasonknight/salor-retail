@@ -175,9 +175,7 @@ class Item < ActiveRecord::Base
     locale = locale.to_s
     trans = read_attribute(:name_translations)
     val = ''
-    if self.behavior == 'gift_card'
-      val = I18n.t('activerecord.models.item_type.gift_card', :locale => locale)
-    elsif trans.nil? or trans.empty?
+    if trans.nil? or trans.empty?
       val = read_attribute(:name)
     else
       hash = ActiveSupport::JSON.decode(trans)

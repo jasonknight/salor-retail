@@ -5,7 +5,7 @@ var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
 var _key_codes = {tab: 9,shift: 16, ctrl: 17, alt: 18, f2: 113};
 var _keys_down = {tab: false,shift: false, ctrl: false, alt: false, f2: false};
 var _called = 0;
-var messagesHash = {'notices':[], 'alerts':[], 'prompts':[]}
+var messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
 
 
 // documentready
@@ -41,14 +41,13 @@ function update_shipper_dialog() {
   var contents = i18n.are_you_sure;
   var dialog = shared.draw.dialog('','update_shipper_dialog', contents);
   var loader = shared.draw.loading(true,null,dialog);
-  var okbutton = shared.create.dialog_button('OK', function() {
+  var okbutton = shared.create.dialog_button(i18n.menu.ok, function() {
     loader.show();
     ajax_log({
       action_taken:'confirmed_update_shipper_dialog'
     });
     window.location = '/shippers/update_wholesaler';
   });
-  
   dialog.append(okbutton);
 }
 
@@ -63,8 +62,18 @@ function displayMessages() {
     $('#alerts').html('<span>' + alerts.join('</span><br /><span>') + '</span>');
   }
   if ( prompts.length > 0 ) {
-    var dialog = shared.draw.dialog('blah','blahid', 'contents');
-    var loader = shared.draw.loading(true, dialog);
+    $.each(prompts, function(i,o) {
+      var dialog_id = 'prompt-dialog_' + i;
+      var dialog = shared.draw.dialog('', dialog_id, o);
+      var okbutton = shared.create.dialog_button('OK', function() {
+        ajax_log({
+          action_taken:'confirmed_prompt_dialog',
+          called_from: o
+        });
+        dialog.remove();
+      });
+      dialog.append(okbutton);
+    });
   }
   fadeMessages();
 }
@@ -180,7 +189,6 @@ function _push(object) {
   var payload = null;
   var callback = null;
   var error_callback = function (jqXHR,status,err) {
-    //console.log(jqXHR,status,err.get_message());
   };
   var user_options = {};
   var url;
@@ -190,7 +198,6 @@ function _push(object) {
         if (!payload) {
           payload = {currentview: 'push', model: {}}
           $.each(arguments[i], function (key,value) {
-            //console.log(key,value);
             payload[key] = value;
           });
         } else {
@@ -226,13 +233,20 @@ function _push(object) {
   $.ajax(options);
 }
 function create_dom_element (tag,attrs,content,append_to) {
-  element = $(document.createElement(tag));
+  var element = $(document.createElement(tag));
+  if ( typeof attrs.class != 'undefined' ) {
+    //class is a reserved word
+    var cls = attrs['class'];
+    delete attrs.class;
+    element.addClass(cls);
+  }
   $.each(attrs, function (k,v) {
     element.attr(k, v);
   });
   element.html(content);
-  if (append_to != '')
+  if (append_to != '') {
     $(append_to).append(element);
+  }
   return element;
 }
 
@@ -331,7 +345,6 @@ function days_between_dates(from, to) {
   return days;
 }
 function _log(arg1,arg2,arg3) {
- //console.log(arg1,arg2,arg3);
 }
 /* Adds a delete/X button to the element. Type options  are right and append. The default callback simply slides the element up.
  if you want special behavior on click, you can pass a closure.*/
@@ -377,7 +390,7 @@ function to_rgb(hex) {
 }
 window.retail = {container: $(window)};
 window.shared = {
-  element:function (tag,attrs,content,append_to) {
+  element: function (tag,attrs,content,append_to) {
     if (attrs["id"] && $('#' + attrs["id"]).length != 0) {
       var elem = $('#' + attrs["id"]);
       _set('existed',true,elem);
@@ -460,7 +473,7 @@ window.shared = {
       }
       return 0;
     });
-//     console.log(sorted);
+
     var new_sorted = [];
     if (!cap)
       cap = 10;
@@ -477,7 +490,6 @@ window.shared = {
       timer = new Date();
     if (!start) {
       start = 0;
-      //console.log("Compressing: ",string.length," chars");
     }
     for (var i = start; i < dictionary.length; i++) {
       if (dictionary[i][1] == '')
@@ -492,7 +504,6 @@ window.shared = {
         return;
       }
     }
-    //console.log("Compression took: ",((new Date()) - timer) / 1000,'s');
     callback.call({},string);
   },
   decompress: function (string,dictionary,callback,start,timer) {
@@ -515,7 +526,6 @@ window.shared = {
         return;
       }
     }
-    //console.log("decompression took: ",((new Date()) - timer) / 1000,'s');
     callback.call({},string);
   },
   math: {
@@ -523,9 +533,7 @@ window.shared = {
       s1 = parseInt(s1);
       s2 = parseInt(s2);
       needle = parseInt(needle);
-      //console.log(needle,s1,s2);
       if (needle >= s1 && needle <= s2) {
-        //console.log('returning true');
         return true;
       }
       return false;
@@ -639,7 +647,8 @@ window.shared = {
       dialog.addClass('salor-dialog');
       dialog.css({
         width: retail.container.width() * 0.50,
-        height: retail.container.height() * 0.40, 'z-index':150
+        height: retail.container.height() * 0.40,
+        'z-index':150
       });
       if (_get('existed',dialog)) {
         dialog.html('');
@@ -677,7 +686,6 @@ window.shared = {
       return loader;
     },
     hide_loading: function () {
-      //console.log('hiding loader');
       var loader = shared.element('div',{id: 'loader'},'',$('body')); 
       loader.hide();
       _set('retail.loader_shown',false);
@@ -699,13 +707,16 @@ window.shared = {
         },55);
       });
       input.addClass('option-actual-input');
-      var div3 = shared.element('div',{id: 'option_' + options.name + '_button'}, 'OK', div);
+      var div3 = shared.element('div',{id: 'option_' + options.name + '_button'}, i18n.menu.ok, div);
       div3.addClass('option-button');
       div3.on("click",callbacks.click);
       input.val(options.value);
       input.on('keyup',callbacks.keyup);
       input.focus(callbacks.focus);
       input.blur(callbacks.blur);
+      input.keypress(function(e) {
+        callbacks.keypress(e);
+      });
       return div;
     },
     check_option: function (options,callbacks) {
@@ -789,7 +800,6 @@ window.shared = {
       }
       var results = _get('results',elem);
       var offset = elem.offset();
-      //console.log("paginating",start,page_size,results.length);
       var width = (elem.width() / 10);
       if (width > 35) {
         width = 35;
@@ -934,7 +944,6 @@ window.shared = {
       var position = JSON.parse(localStorage.getItem(key));
       elem.css({position: 'absolute'});
       if (!position) {
-        //console.log('setting to offset');
         position = elem.offset();
         localStorage.setItem(key, JSON.stringify(position));
       } else {
@@ -942,7 +951,6 @@ window.shared = {
       }
       elem.draggable({
         stop: function () {
-          //console.log('saving position',key,$(this).offset());
           localStorage.setItem(key, JSON.stringify($(this).offset()));
         }
       });
@@ -961,7 +969,6 @@ window.shared = {
       this.add = function (name,callback,priority,permanent,context) {
         for (var i = 0; i < self._task_set.length; i++) {
           if (self._task_set[i].name == name) {
-            //console.log('that task is already scheduled');
             return;
           }
         }
@@ -983,7 +990,6 @@ window.shared = {
         });
       }
       this.run = function () {
-        //console.log('TaskManager Runnging');
         var time_start = new Date();
         var times = self._task_set.length;
         for (var i = 0; i < times; i++) {
@@ -997,7 +1003,6 @@ window.shared = {
         }
       }
       this.run_task = function (t) {
-        //console.log('calling',t);
         t.callback.call(t.context);
         if (t.is_permanent) {
           this._task_set.push(t);

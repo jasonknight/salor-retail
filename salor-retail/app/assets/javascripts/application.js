@@ -31,6 +31,7 @@
 //= require shared
 //= require ordersjs
 //= require ordersjs
+//= require shipments
 //= require cash_registers
 //= require search
 //= require complete-order-payment

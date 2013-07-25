@@ -84,7 +84,7 @@ function toDelimited(number) {
 
 function toCurrency(number) {
   if (typeof number == 'undefined') {
-    echo("warning in toCurrency");
+    echo("toCurrency: number is type undefined");
     return "";
   }
   

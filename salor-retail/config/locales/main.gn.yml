@@ -232,8 +232,9 @@ gn:
         coupon: Kupon
         gift_card: Gutschein
         normal: Normal
-        one: Artikel
-        other: Artikel
+        aconto: Akonto
+        one: Artikel-Typ
+        other: Artikel-Typen
       location:
         one: Verkaufsfläche
         other: Verkaufsflächen

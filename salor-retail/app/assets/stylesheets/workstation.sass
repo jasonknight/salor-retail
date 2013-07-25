@@ -351,7 +351,7 @@ div.table > div.table-row > div.table-cell
   margin: 2px 2px
   height: 35px
   text-align: center
-  padding-top: 10px
+  padding: 4px 0px 6px 0px
   vertical-align: top
 
 td.table-cell 
@@ -1298,6 +1298,9 @@ div.pos-menu div.pos-configuration
   padding: 5px
   @include cool_button
   @include rounded_corners_all
+  
+div.pos-item-price_reductions
+  font-size: 70%
 
 
 .highlight 
@@ -1308,7 +1311,7 @@ div.pos-menu div.pos-configuration
   text-transform: uppercase
   text-align: center
   white-space: wrap
-  width: 9%
+  width: 7%
   text-overflow: ellipsis
   overflow: hidden
   @include pointer
@@ -3095,9 +3098,11 @@ table.selection
   
 .clear
   clear: both
+  
 a.new-model-button
   @include awesome_button
   @include bright_button
+  padding: 10px 20px
 
 div#error_explanation
   :clear both

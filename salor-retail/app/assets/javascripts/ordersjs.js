@@ -1,4 +1,35 @@
-var highlightAttrs = ['sku','price','total'];
+var highlightAttrs = ['sku', 'price', 'total'];
+
+function add_item(sku, additional_params) {
+  if (sku == "") return
+  get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
+  $('#main_sku_field').val('');
+}
+
+function updateOrder(order) {
+  var button = $('#buy_order_button');
+  if (order.buy_order) {
+    $(button).addClass('pos-highlight');
+    $(button).removeClass('pos-configuration');
+    $('#pos_order_total').addClass("pos-highlight");
+  } else {
+    $(button).removeClass('pos-highlight');
+    $(button).addClass('pos-configuration');
+    $('#pos_order_total').removeClass("pos-highlight");
+  }
+  $('#pos_order_total').html(toCurrency(order.total));
+  $('.complete-order-total').html(toCurrency(order.total));
+  $('.order-rebate_type').html(order.rebate_type);
+  $('.order-rebate').attr('model_id',order.id);
+  $('.order-tag').attr('model_id',order.id);
+  $('.order-rebate_type').attr('model_id',order.id);
+  $('.order-rebate').html(order.rebate);
+  $('.order-tag').html(order.tag);
+  if (!order.lc_points > 0) {
+    order.lc_points = 0;
+  }
+  $('.order-points').html(order.lc_points);
+}
 
 function updateOrderItems(items) {
   for (var i = 0; i < items.length; i++) {
@@ -15,192 +46,232 @@ function updateOrderItems(items) {
 }
 
 function addPosItem(item) {
-  var row = $("<div id='order_item_"+item.id+"' model_id='"+item.id+"' item_id='"+item.item_id+"' ></div>");
-  var base_id = getOrderItemId(item);
-   _set('item',item,row);
-  
+  var row_new = drawOrderItemRow(item);
+  $('.pos-table-left-column-items').prepend(row_new);
+}
+
+function updatePosItem(item) {
+  var row_existing = $('#order_item_' + item.id)
+  row_existing.html(drawOrderItemRow(item));
+}
+
+
+function drawOrderItemRow(item) {
   if (Register.hide_discounts == true) {
-    var attrs = ['name','quantity','price','total'];
+    var attrs = ['name', 'quantity', 'price', 'total'];
   } else {
-    var attrs = ['name','quantity','price','coupon_amount','rebate','total','tax'];
+    var attrs = ['name', 'quantity', 'price', 'rebate', 'price_reductions', 'total', 'tax'];
   }
   
-  row.addClass(base_id);
-
-  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
+  var row_id = 'order_item_' + item.id;
+  var base_id = getOrderItemId(item);
+  var row = create_dom_element('div', {id:row_id, model_id:item.id, item_id:item.item_id, class:base_id }, '');
   
-  $('.pos-table-left-column-items').prepend(row);
-
+   _set('item',item,row);
+   
   for (var i = 0; i < attrs.length; i++) {
     var attr = attrs[i];
-    var col = $("<div class='table-cell' id='"+ base_id + "_" + attr + "_inp'></div>");
     
-    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax') {
-      // add color when action applies
-      if (item["action_applied"] == true && attr == 'price') {
-        col.addClass("pos-action-applied");
-      }
-      // determine number format
-      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || attr == 'rebate' || attr == 'tax' ) {
-        col.html(toPercent(item[attr]));
-      } else {
-        col.html(toCurrency(item[attr]));
-      }
-      
-    } else {
-      col.html(item[attr]);
+    var col_id = base_id + '_' + attr + '_inp';
+    var col_class1 = base_id + '-' + attr;
+    var col_class2 = 'pos-item-' + attr;
+    var col = create_dom_element('div', {class:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'OrderItem', field:attr}, '');
+    col.addClass(col_class1);
+    col.addClass(col_class2);
+    
+    // set the html of the field
+    switch(attr) {
+      case 'name':
+        col.html(item.name + '<br/>' + item.sku);
+        break;
+      case 'quantity':
+        col.html(item.quantity);
+        break;
+      case 'price':
+        switch(item.behavior) {
+          case 'normal':
+            col.html(toCurrency(item.price));
+            break;
+          case 'aconto':
+            col.html(toCurrency(item.price));
+            break;
+          case 'coupon':
+            switch(item.coupon_type) {
+              case 1:
+                col.html(toPercent(item.price));
+                break;
+              case 2:
+                col.html(toCurrency(item.price));
+                break;
+              case 3:
+                col.html('b1g1');
+                break;
+            }
+            break;
+          case 'gift_card':
+            col.html(toCurrency(item.price));
+            break;
+        }
+        break;
+      case 'rebate':
+        if (item.behavior != 'coupon' && item.behavior != 'gift_card' ) {
+          col.html(toPercent(item.rebate));
+        }
+        break;
+      case 'price_reductions':
+        if (item.behavior == 'normal' ) {
+          var contents = [];
+          contents[0] = toCurrency(item.discount_amount);
+          contents[1] = toCurrency(item.rebate_amount);
+          contents[2] = toCurrency(item.coupon_amount);
+          col.html(contents.join("<br />"));
+        }
+        break;
+      case 'total':
+        if (item.behavior != 'coupon') {
+          col.html(toCurrency(item.total));
+        }
+        break;
+      case 'tax':
+        if (item.behavior != 'coupon') {
+          col.html(toPercent(item.tax));
+        }
+        break;
     }
-    
-    // make tax field colorful
-    if ( attr == 'tax') {
-      var color = TaxProfiles[item['tax_profile_id']].color;
-      if (color != null && color != "" ) {
-        col.css('background-color', color);
-      } else {
-        col.css('background-color', 'transparent');
-      }
-    };
-    
-    col.addClass('table-column pos-item-attr');
-    col.addClass(base_id + '-' + attr + ' pos-item-' + attr);
-    
-    if ( (item['discount_amount'] != 0 || item['coupon_amount'] != 0) && attr == 'coupon_amount') { col.addClass('discount_applied');
-    };
-    
 
-    
-    if (attr != 'sku' && attr != 'coupon_amount') {
-      if (attr == 'name') {
-        col.attr('model_id',item.item_id);
-        col.attr('klass','Item');
-      } else {
-        col.attr('model_id',item.id);
-        col.attr('klass','OrderItem');
-      }
-      col.attr('field',attr);
-      if (attr == "price" || attr == "rebate" || attr == "name" || attr == "tax") {
-        if (
-              (User.role_cache.indexOf('change_prices') != -1) || 
-              (User.role_cache.indexOf("manager") != -1) ||
-              (item["must_change_price"] == true)
-           ) {
-              make_in_place_edit(col);
-              col.addClass('editme pointer no-select');
-          }
-          
-      } else if (attr == "quantity") {
+
+    // various settings of individual fields and adding of col to row
+    switch(attr) {
+      case 'name':
+        row.append(col);
+        makeItemMenu(col, item);
+        break;
+      case 'tax':
+        var color = TaxProfiles[item.tax_profile_id].color;
+        if (color != null && color != "" ) {
+          col.css('background-color', color);
+        } else {
+          col.css('background-color', 'transparent');
+        }
+        row.append(col);
+        break;
+        
+      case 'coupon_amount':
+        if (item[attr] > 0) {
+          col.addClass('discount_applied');
+        }
+        row.append(col);
+        break;
+        
+      case 'price':
+        if (item.action_applied) {
+          col.addClass("pos-action-applied");
+        }
+        row.append(col);
+        break;
+        
+      case 'quantity':
         make_in_place_edit(col);
         col.addClass('editme pointer no-select');
-      }
-    }
-    if (attr == 'quantity') {
-      if (Register.show_plus_minus == true) {
-        var up = td().removeClass('jtable-cell').addClass('table-cell');
-        
-        up.mousedown(function () {
-          var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
-          var string = '/vendors/edit_field_on_child?id=' +
-          item.id +'&klass=OrderItem' +
-          '&field=quantity'+
-          '&value=' + v;
-          get(string, filename);
-          focusInput($('#main_sku_field'));
-        });
+        if (Register.show_plus_minus) {
+          var up = td().removeClass('jtable-cell').addClass('table-cell');
           up.html("<div><img src=\"/images/icons/up.svg\" height='32' />");
           up.addClass('pointer quantity-button');
           row.append(up);
-      }
-      row.append(col);
-      if (Register.show_plus_minus == true) {
-        var d = td().removeClass('jtable-cell').addClass('table-cell');
-        d.mousedown(function () {
-          var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
-          var string = '/vendors/edit_field_on_child?id=' +
-          item.id +'&klass=OrderItem' +
-          '&field=quantity'+
-          '&value=' + v;
-          get(string, filename);
-          focusInput($('#main_sku_field'));
-        });
-          d.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
-          d.addClass('pointer quantity-button');
-          row.append(d);
-      }
-    } else {
-      row.append(col);
+          up.on('mousedown', function () {
+            var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
+            var string = '/vendors/edit_field_on_child?id=' +
+            item.id +'&klass=OrderItem' +
+            '&field=quantity'+
+            '&value=' + v;
+            get(string, filename);
+            focusInput($('#main_sku_field'));
+          });
+        }
+        row.append(col);
+        if (Register.show_plus_minus) {
+          var down = td().removeClass('jtable-cell').addClass('table-cell');
+          down.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
+          down.addClass('pointer quantity-button');
+          row.append(down);
+          down.on('mousedown', function () {
+            var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
+            var string = '/vendors/edit_field_on_child?id=' +
+            item.id +'&klass=OrderItem' +
+            '&field=quantity'+
+            '&value=' + v;
+            get(string, filename);
+            focusInput($('#main_sku_field'));
+          });
+        }
+        break;
+        
+      case 'price_reductions':
+        if (item.discount_amount > 0 || item.coupon_amount > 0 || item.rebate_amount > 0) {
+          col.addClass('discount_applied'); //highlight
+        }
+        row.append(col);
+        break;
+
+      default:
+        row.append(col);
+
     }
-    if (item['is_buyback'] && highlightAttrs.indexOf(attr) != -1) {
+    
+    // additional rules of field groups
+    if (attr == "price" || attr == "rebate" || attr == "tax") {
+      if (
+        (User.role_cache.indexOf('change_prices') != -1) ||
+        (User.role_cache.indexOf('manager') != -1) ||
+        (item.must_change_price == true)
+         ) {
+        make_in_place_edit(col);
+        col.addClass('editme pointer no-select');
+        }
+    }
+    
+  
+    if (item.is_buyback && highlightAttrs.indexOf(attr) != -1) {
       highlight(col);
     }
-  }
-  makeItemMenu(item);
-  //setScrollerState();
-  if (item["must_change_price"] == true) {
+  } // end loop through attrs
+  
+  
+ 
+  if (item.must_change_price) {
+    // this triggers an onscreen keyboard, only for zero priced items
     var id = '.' + base_id + '-price';
     var price = toFloat($(id).html());
     if (price == 0) {
       $(id).trigger('click');
-      setTimeout( function () {
+      //setTimeout( function () {
         if (IS_APPLE_DEVICE) {
           $('.ui-keyboard-preview').val("");
         }
-        $(".ui-keyboard-preview").select();
-      },100);
+        $('.ui-keyboard-preview').select();
+      //},100);
     }
   }
-  if(item['quantity']==0 && item['weigh_compulsory']) { weigh_last_item(); }
   
-}
-
-
-
-
-
-function add_item(sku, additional_params) {
-  if (sku == "") return
-  get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
-  $('#main_sku_field').val('');
-}
-
-function update_order_items() {
-  return;
-  get('/orders/update_order_items?ajax=true', filename, function (data) {
-    $('#scroll_content').html(data);
-    $('#order_items_table tr').removeClass('even')
-    $('#order_items_table tr:even').addClass('even');
-    $('.pos-lock-small').each(function () {
-      make_toggle($(this));
-    });
-  });
-}
-
-function editLastAddedItem() {
-  var itemid = $(".pos-table-left-column-items").children(":first").attr('item_id');
-  if (itemid) {
-    var string = '/items/' + itemid + '/edit'
-    window.location = string;
+  if(item.weigh_compulsory && item.quantity == 0) {
+    weigh_last_item();
   }
+  return row;
 }
 
-function update_pos_display() {
-  return;
-  //get('/orders/update_pos_display?ajax=true', filename);
-}
 
-/* FROM views/orders/new.html.erb */
-function makeItemMenu(item) {
+
+
+
+
+
+function makeItemMenu(e, item) {
   try {
-
-    var base_id = getOrderItemId(item);
-    var e = $('.' + base_id + '-name');
-    //This is because if the SKU gets too big, it messes up the screen
-    //e.html(e.html().substr(0,7));
-    e.html(e.html());
-
     e.unbind();
     e.mousedown(function (event) {
         if (Register.detailed_edit == true) {
-          detailedOrderItemMenu(event);
+          console.log("lkjlkj");
+          detailedOrderItemMenu(event, item);
           return;
         }
         $('.item-menu-div').remove();
@@ -259,7 +330,7 @@ function makeItemMenu(item) {
     });
 
   } catch (err) {
-    //console.log(err);
+    echo(err);
   }
 }
 
@@ -495,10 +566,11 @@ window.showOrderOptions = function () {
 }
 
 
-function detailedOrderItemMenu(event) {
+function detailedOrderItemMenu(event, item) {
+  console.log("H");
   $('.item-menu-div').remove();
   var target = $(event.currentTarget).parent();
-  var item = _get('item',target);
+  //var item = _get('item',target);
   var offset = $(event.currentTarget).offset();
   var title = shared.element('div',{id: 'order_item_edit_name'},'',$('body'));
   title.addClass('salor-dialog');
@@ -508,9 +580,6 @@ function detailedOrderItemMenu(event) {
   config.addClass('salor-dialog');
   config.offset({top: offset.top + $(event.currentTarget).outerHeight() + 5, left: offset.left});
   config.css({width: $('#header').width() - 260, 'border-top':'none', 'min-height': '100px'});
-  
-  var name = orderItemNameOption(config,item,event.currentTarget.textContent);
-  name.find('input').css({width: $('#header').width() * 0.50});
   
   var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" width="31px" height="32px" /></div>');
   dicon.click(function () {
@@ -549,88 +618,102 @@ function detailedOrderItemMenu(event) {
       focusInput($('#main_sku_field'));
     });
     title.append(wicon);
-  } // end  if (!Register.scale == '') {
+  }
     
-    var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
-    btn.click(function () {
-      title.remove();
-      config.remove();
-      focusInput($('#main_sku_field'));
-    }).mouseup(function () {
-      focusInput($('#main_sku_field'));
-    });
-    title.append(btn);
-    
-    var edit_item_hr = shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item + '( ' + item.sku + ' )',config);
-    edit_item_hr.click(function () {
-      window.location = '/items/' + item.item_id + '/edit';
-    });
-    edit_item_hr.addClass('pointer no-select');
-    edit_item_hr.css({'text-decoration': 'underline'});
-    
-    var config_table = shared.element('table',{id: 'order_item_edit_table', width: '90%', align:'center'},'',config);
-    var config_table_rows = [ shared.element('tr',{id: 'order_item_edit_table_row_1'},'',config_table) ];
-    
-    var config_table_cols_left = [ shared.element('td',{id: 'order_item_edit_table_lcol_1'},'',config_table_rows[0]) ];
-    var config_table_cols_center = [ shared.element('td',{id: 'order_item_edit_table_ccol_1'},'',config_table_rows[0]) ];
-    var config_table_cols_right = [ shared.element('td',{id: 'order_item_edit_table_rcol_1'},'',config_table_rows[0]) ];
-    
-    // Edit ItemType
-    shared.element('h4',{id: 'oi_item_type_h4'},i18n.activerecord.models.item_type.one,config_table_cols_left[0]);
-    var item_type_select = shared.element('select',{id: 'oi_item_type_select'},'',config_table_cols_left[0]);
-    item_type_select.on('change',function () {
-      editItemAndOrderItem(item,'item_type_id',$(this).val());
-      focusInput($('#main_sku_field'));
-    });
-    $.each(ItemTypes,function (i,item_type) {
-      shared.element('option',{value: item_type.id},item_type.name,item_type_select);
-    });
-    make_select_widget('Item Type',item_type_select);
-    
-    // Edit ItemType
-    shared.element('h4',{id: 'oi_tax_profile_h4'},i18n.activerecord.models.tax_profile.one,config_table_cols_center[0]);
-    var tax_profile_select = shared.element('select',{id: 'oi_tax_profile_select'},'',config_table_cols_center[0]);
-    tax_profile_select.on('change',function () {
-      editItemAndOrderItem(item,'tax_profile_id',$(this).val());
-      focusInput($('#main_sku_field'));
-    });
-    $.each(TaxProfiles,function (i,tax_profile) {
-      shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
-    });
-    make_select_widget('Item Type',tax_profile_select);
-    
-    
-    // Edit Category
-    shared.element('h4',{id: 'oi_category_h4'},i18n.activerecord.models.category.one,config_table_cols_right[0]);
-    var category_select = shared.element('select',{id: 'oi_category_select'},'',config_table_cols_right[0]);
-    category_select.on('change',function () {
-      editItemAndOrderItem(item,'category_id',$(this).val());
-      focusInput($('#main_sku_field'));
-    });
-    $.each(Categories,function (i,category) {
-      shared.element('option',{value: category.id},category.name,category_select);
-    });
-    make_select_widget('Item Type',category_select);
-    var print_sticker = shared.element('div',{id: 'oi_print_sticker'},i18n.helpers.submit.print,config);
-    print_sticker.mousedown(function () {
-      print_url(Register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
-    });
-    print_sticker.addClass('button-confirm');
-    shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
+  var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
+  btn.click(function () {
+    title.remove();
+    config.remove();
+    focusInput($('#main_sku_field'));
+  }).mouseup(function () {
+    focusInput($('#main_sku_field'));
+  });
+  title.append(btn);
+  
+  console.log("H");
+  orderItemNameOption(config, item);
+  
+  var edit_item_hr = shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item + '( ' + item.sku + ' )',config);
+  edit_item_hr.click(function () {
+    window.location = '/items/' + item.item_id + '/edit';
+  });
+  edit_item_hr.addClass('pointer no-select');
+  edit_item_hr.css({'text-decoration': 'underline'});
+  
+  
+  // ----------------------
+  var config_table = shared.element('table',{id: 'order_item_edit_table', width: '90%', align:'center'},'',config);
+  var config_table_rows = [ shared.element('tr',{id: 'order_item_edit_table_row_1'},'',config_table) ];
+  
+  var config_table_cols_left = [ shared.element('td',{id: 'order_item_edit_table_lcol_1'},'',config_table_rows[0]) ];
+  var config_table_cols_center = [ shared.element('td',{id: 'order_item_edit_table_ccol_1'},'',config_table_rows[0]) ];
+  var config_table_cols_right = [ shared.element('td',{id: 'order_item_edit_table_rcol_1'},'',config_table_rows[0]) ];
+  
+  // Edit ItemType
+  shared.element('h4',{id: 'oi_item_type_h4'},i18n.activerecord.models.item_type.one,config_table_cols_left[0]);
+  var item_type_select = shared.element('select',{id: 'oi_item_type_select'},'',config_table_cols_left[0]);
+  item_type_select.on('change',function () {
+    editItemAndOrderItem(item,'item_type_id',$(this).val());
+    focusInput($('#main_sku_field'));
+  });
+  $.each(ItemTypes,function (i,item_type) {
+    shared.element('option',{value: item_type.id},item_type.name,item_type_select);
+  });
+  item_type_select.val(item.item_type_id);
+  make_select_widget('ItemType',item_type_select);
+  
+  // Edit TaxProfile
+  shared.element('h4',{id: 'oi_tax_profile_h4'},i18n.activerecord.models.tax_profile.one,config_table_cols_center[0]);
+  var tax_profile_select = shared.element('select',{id: 'oi_tax_profile_select'},'',config_table_cols_center[0]);
+  tax_profile_select.on('change',function () {
+    editItemAndOrderItem(item,'tax_profile_id',$(this).val());
+    focusInput($('#main_sku_field'));
+  });
+  $.each(TaxProfiles,function (i,tax_profile) {
+    shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
+  });
+  tax_profile_select.val(item.tax_profile_id);  // select current value
+  make_select_widget('TaxProfile',tax_profile_select);
+  
+  
+  // Edit Category
+  shared.element('h4',{id: 'oi_category_h4'},i18n.activerecord.models.category.one,config_table_cols_right[0]);
+  var category_select = shared.element('select',{id: 'oi_category_select'},'',config_table_cols_right[0]);
+  category_select.on('change',function () {
+    editItemAndOrderItem(item,'category_id',$(this).val());
+    focusInput($('#main_sku_field'));
+  });
+  shared.element('option',{value: ''},'',category_select); // create empty option
+  $.each(Categories,function (i,category) {
+    var is_selected = category.id == 
+    shared.element('option',{value: category.id},category.name,category_select);
+  });
+  category_select.val(item.category_id); // select current value
+
+  make_select_widget('Category',category_select);
+  var print_sticker = shared.element('div',{id: 'oi_print_sticker'},i18n.helpers.submit.print,config);
+  print_sticker.mousedown(function () {
+    print_url(Register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
+  });
+  print_sticker.addClass('button-confirm');
+  shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
 }
+
 function editItemAndOrderItem(item,field,val,callback) {
-  var string = '/vendors/edit_field_on_child?id=' +
-  item.id +'&klass=OrderItem' +
-  '&field=' + field +
-  '&value=' + val;
-  $.get(string);
-  // This is supposed to be doubled, it edits both the orderitem and the item at the same go.
+  // This is supposed to be doubled, it edits both the orderitem and the item at the same go. Item should be first. OrderItem only after Item request has completed.
   string = '/vendors/edit_field_on_child?id=' +
   item.item_id +'&klass=Item' +
   '&field=' + field +
   '&value=' + val;
-  $.get(string,callback);
+  $.get(string,function() {
+    var string = '/vendors/edit_field_on_child?id=' +
+    item.id +'&klass=OrderItem' +
+    '&field=' + field +
+    '&value=' + val;
+    $.get(string);
+  });
 }
+
 function getBehaviorById(id) {
   var itid = 0;
   $.each(ItemTypes,function (i,item_type) {
@@ -640,142 +723,56 @@ function getBehaviorById(id) {
   });
   return itid;
 }
-function orderItemNameOption(append_to,item,initvalue) {
+
+function orderItemNameOption(append_to, item) {
+  // name edit field
   var save_edit = function () {
     var id = '#option_order_item_name_input';
     var value = $(id).val();
-    var string = '/vendors/edit_field_on_child?id='+ item.item_id +'&klass=Item&field=name&value=' + value;
-    $.get(string,  function () {
-      $("#order_item_" + item.id).find('.pos-item-name').html(value);      
-      update_pos_display();
-    });
+    editItemAndOrderItem(item, 'name', value);
   };
   var callbacks = {
     click: save_edit,
-    focus: function () {
-      var inp = $(this);
-      setTimeout(function () {
-        inp.select();
-      }, 170);
+    keypress: function(e) {
+      if (e.which == 13) {
+        save_edit();
+      }
     }
   };
   var options = {
     name: 'order_item_name',
     title: i18n.activerecord.attributes.name,
-    value: initvalue,
+    value: item.name,
     append_to: append_to
   };
-  var opt = shared.draw.option(options,callbacks);
-  opt.find('input').on('blur',save_edit);
-  return opt;
+  var opt = shared.draw.option(options, callbacks);
+  
+  // sku edit field
+  var save_edit = function () {
+    var id = '#option_order_item_sku_input';
+    var value = $(id).val();
+    editItemAndOrderItem(item, 'sku', value);
+  };
+  var callbacks = {
+    click: save_edit,
+    keypress: function(e) {
+      if (e.which == 13) {
+        save_edit();
+      }
+    }
+  };
+  var options = {
+    name: 'order_item_sku',
+    title: i18n.activerecord.attributes.sku,
+    value: item.sku,
+    append_to: append_to
+  };
+  var opt = shared.draw.option(options, callbacks);
 }
-
-/*
- *
- * From Orders/New
- *
- */
-
 
 function getOrderItemId(item) {
   var id = 'order-item-' + item.id;
   return id;
-}
-
-
-
-function updatePosItem(item) {
-  var row = $('#order_item_' + item.id)
-  var base_id = getOrderItemId(item);
-  _set('item',item,row);
-  
-  if (Register.hide_discounts) {
-    var attrs = ['name','quantity','price','total', 'tax'];
-  } else {
-    var attrs = ['name','quantity','price','coupon_amount','rebate','total','tax'];
-  }
-  
-  item['coupon_amount'] = item['coupon_amount'] + item['discount_amount'];
-  
-  for (var i = 0; i < attrs.length; i++) {
-    var attr = attrs[i];
-    var col = $('.' + base_id + '-' + attr);
-    if ( (item['discount_amount'] != 0 || item['coupon_amount'] != 0) && attr == 'coupon_amount') { col.addClass('discount_applied'); };
-    
-    if (attr == 'price' || attr == 'coupon_amount' || attr == 'total' || attr == 'rebate' || attr == 'tax') {
-      // add color when action applies
-      if (item["action_applied"] == true && attr == 'price') {
-        col.addClass("pos-action-applied");
-      }
-      // determine number format
-      if ( (item['behavior'] == 'coupon' && item['coupon_type'] == 1 ) || attr == 'rebate' || attr == 'tax' ) {
-        col.html(toPercent(item[attr]));
-      } else {
-        col.html(toCurrency(item[attr]));
-      }
-      
-    } else {
-      col.html(item[attr]);
-    }
-    
-    // make tax field colorful
-    if ( attr == 'tax') {
-      var color = TaxProfiles[item['tax_profile_id']].color;
-      if (color != null && color != "" ) {
-        col.css('background-color', color);
-      } else {
-        col.css('background-color', 'transparent');
-      }
-    };
-    
-    if (item['is_buyback'] & highlightAttrs.indexOf(attr) != -1) {
-      highlight(col);
-    } else {
-      col.removeClass("pos-highlight");
-    }
-  }
-  
-  makeItemMenu(item);
-  if (item["must_change_price"] == true) {
-    var id = '.' + base_id + '-price';
-    var price = toFloat($(id).html());
-    if (price == 0) {
-      col.trigger('click');
-      setTimeout( function () {
-        if (IS_APPLE_DEVICE) {
-          $('.ui-keyboard-preview').val("");
-        }
-        $(".ui-keyboard-preview").select();
-      },100);
-    }
-  }
-}
-
-
-
-function updateOrder(order) {
-  var button = $('#buy_order_button');
-  if (order.buy_order) {
-    $(button).addClass('pos-highlight');
-    $(button).removeClass('pos-configuration');
-    $('#pos_order_total').addClass("pos-highlight");
-  } else {
-    $(button).removeClass('pos-highlight');
-    $(button).addClass('pos-configuration');
-    $('#pos_order_total').removeClass("pos-highlight");
-  }
-  $('#pos_order_total').html(toCurrency(order.total));
-  $('.complete-order-total').html(toCurrency(order.total));
-  $('.order-rebate_type').html(order.rebate_type);
-  $('.order-rebate').attr('model_id',order.id);
-  $('.order-tag').attr('model_id',order.id);
-  $('.order-rebate_type').attr('model_id',order.id);
-  $('.order-rebate').html(order.rebate);
-  $('.order-tag').html(order.tag);
-  if (!order.lc_points > 0) {
-    order.lc_points = 0;
-  }
-  $('.order-points').html(order.lc_points);
 }
 
 function highlight(elem) {

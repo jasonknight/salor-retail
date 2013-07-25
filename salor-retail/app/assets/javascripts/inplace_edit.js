@@ -108,8 +108,8 @@ function in_place_edit_go(id) {
   get(string, '_in_place_edit.html.erb', function () {
   });
   if ($('#' + id).attr('update_pos_display') == 'true') {
-    update_order_items();
-    update_pos_display();
+    //update_order_items();
+    //update_pos_display();
   }
   if ($('#inplaceedit')[0].tagName == 'SELECT') {
     $('#' + id).html($('#inplaceedit option:selected').html());

@@ -162,19 +162,25 @@ class VendorsController < ApplicationController
   def edit_field_on_child
     klass = params[:klass].constantize
     @inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
+    
+    log_action "edit_field_on_child called. @inst.class is #{ @inst.class }"
 
     #value = SalorBase.string_to_float(params[:value])
     value = params[:value]
     if @inst.respond_to?("#{ params[:field] }=".to_sym)
-      logger.info "XXXXXXXXX Sending #{  params[:field] } = #{ value }"
+      log_action "edit_field_on_child: sending #{  params[:field] } = #{ value } to #{ @inst.class } id #{ @inst.id }"
       @inst.send("#{ params[:field] }=", value)
       result = @inst.save
       if result != true
-        raise "#{ @inst.class } could not be saved"
+        msg = "#{ @inst.class } could not be saved"
+        log_action msg
+        raise msg
       end
       
     else
-      raise "VendorsController#edit_field_on_child: #{ klass } does not respond well to setter method #{ params[:field] }!"
+      msg = "VendorsController#edit_field_on_child: #{ klass } does not respond well to setter method #{ params[:field] }!"
+      log_action msg
+      raise msg
     end
     
     if @inst.class == OrderItem
@@ -196,6 +202,7 @@ class VendorsController < ApplicationController
         # this is a dynamically generated gift card item. if this variable is set, the view has to start a print request to print a sticker.
         @gift_card_item_id_for_print = @order_item.item_id
       end
+      log_action "Rendering orders/update_pos_display"
       render 'orders/update_pos_display'
       
     elsif @inst.class == Order
@@ -212,6 +219,7 @@ class VendorsController < ApplicationController
       render 'orders/update_pos_display'
       
     else
+      log_action "Rendering nothing"
       render :nothing => true
     end
     History.record("edit_field_on_child", @inst)

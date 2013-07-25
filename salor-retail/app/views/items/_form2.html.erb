@@ -309,7 +309,7 @@ $(function () {
   
   <tr>
     <td> <%= f.label t("activerecord.attributes.coupon_type") %> </td>
-    <td> <%= f.select :coupon_type, coupon_types.collect {|ct| [ct[:text],ct[:value]]} %> </td>
+    <td> <%= f.select :coupon_type, coupon_types.collect {|ct| [ct[:text],ct[:value]]}, :include_blank => true %> </td>
   </tr>
   
   <tr>

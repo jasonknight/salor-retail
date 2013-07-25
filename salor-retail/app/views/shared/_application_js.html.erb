@@ -6,33 +6,33 @@ var i18n_pieces = [<%= I18n.t('number.currency.format.pieces', :locale => @regio
 
 <%
   if @current_user
-    shippers = @current_vendor.shippers
+    shippers = @current_vendor.shippers.visible
     ships = []
     shippers.each do |ship|
       ships << "<option value='Shipper:#{ship.id}'>#{ship.name}</option>"
     end
-    shippers = Vendor.all
+    shippers = @current_user.vendors.visible
     shippers.each do |ship|
       ships << "<option value='Vendor:#{ship.id}'>#{ship.name}</option>"
     end
     ships = ships.join(' ')
-    inplace_ships = "<select id='inplaceedit'>#{ships}</select>"
+    inplace_ships = "<select class='inplaceedit'>#{ships}</select>"
 
-    categories = Category.visible
+    categories = @current_vendor.categories.visible
     cats = []
     categories.each do |cat|
       cats << "<option value='#{cat.id}'>#{cat.name.gsub('"','\"')}</option>"
     end
     cats = cats.join(' ')
-    inplace_cats = "<select id='inplaceedit'>#{cats}</select>"
+    inplace_cats = "<select class='inplaceedit'>#{cats}</select>"
 
-    vendors = Vendor.all
+    vendors = @current_user.vendors.visible
     stores = []
     vendors.each do |store|
       stores << "<option value='#{store.id}'>#{store.name}</option>"
     end
     stores = stores.join(' ')
-    inplace_stores = "<select id='inplaceedit'>#{stores}</select>"
+    inplace_stores = "<select class='inplaceedit'>#{stores}</select>"
 
     locations = @current_vendor.locations.visible
     locs = []
@@ -40,24 +40,16 @@ var i18n_pieces = [<%= I18n.t('number.currency.format.pieces', :locale => @regio
       locs << "<option value='#{loc.id}'>#{loc.name}</option>"
     end
     locs = locs.join(' ')
-    inplace_locations = "<select id='inplaceedit' >#{locs}</select>"
+    inplace_locations = "<select class='inplaceedit' >#{locs}</select>"
 
-    item_types = ItemType.visible
+    item_types = @current_vendor.item_types.visible
     itps = []
     item_types.each do |itp|
       itps << "<option value='#{itp.id}'>#{itp.name}</option>"
     end
     itps = itps.join(' ')
-    inplace_itemtypes = "<select id='inplaceedit' >#{itps}</select>"
-
-    shipment_statuses = Shipment::TYPES
-    itps = []
-    shipment_statuses.each do |itp|
-      itps << "<option value='#{itp[:value]}'>#{itp[:display]}</option>"
-    end
-    itps = itps.join(' ')
-    inplace_shipmentstatuses = "<select id='inplaceedit' >#{itps}</select>"
-
+    inplace_itemtypes = "<select class='inplaceedit' >#{itps}</select>"
+    
   end
 %>
 
@@ -66,7 +58,6 @@ var inplace_cats = "<%= escape_javascript raw inplace_cats %>";
 var inplace_cats = "<%= escape_javascript raw inplace_stores %>";
 var inplace_locations = "<%= escape_javascript raw inplace_locations %>";
 var inplace_itemtypes = "<%= escape_javascript raw inplace_itemtypes %>";
-var inplace_shipmentstatuses = "<%= escape_javascript raw inplace_shipmentstatuses %>";
 var SaleTypes = <%= raw @current_vendor.sale_types.visible.to_json %>;
 var Countries = <%= raw @current_vendor.countries.visible.to_json %>;
 var ItemTypes = <%= raw @current_vendor.item_types.visible.to_json %>;

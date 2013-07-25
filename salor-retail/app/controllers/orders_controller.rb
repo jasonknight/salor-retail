@@ -17,7 +17,7 @@ class OrdersController < ApplicationController
     @order = @proforma.make_from_proforma_order
     @order.user = @current_user
     @order.save
-    redirect_to "/orders/new?order_id=#{@order.id}"
+    redirect_to edit_order_path(@order)
   end
   
   def merge_into_current_order
@@ -28,7 +28,7 @@ class OrdersController < ApplicationController
        noi.order_id = @current.id
        noi.save
     end
-    redirect_to "/orders/new?order_id=#{@current.id}"
+    redirect_to edit_order_path(@current)
   end
   
   def index
@@ -70,11 +70,6 @@ class OrdersController < ApplicationController
       @current_user.current_order_id = @current_order.id
       @current_user.save
     end
-    
-    $MESSAGES[:notices] << "abcde"
-    $MESSAGES[:notices] << "abcde"
-    $MESSAGES[:alerts] << "abcde"
-    $MESSAGES[:prompts] << "abcde"
  
     @button_categories = @current_vendor.categories.visible.where(:button_category => true).order(:position)
   end
@@ -119,7 +114,6 @@ class OrdersController < ApplicationController
     else
       # if it was a scanned Loyalty card, @order_item is nil. Else clause must stay empty.
     end
-    
     render :update_pos_display
   end
 

@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 
 class Shipment < ActiveRecord::Base
-	include SalorScope
+  include SalorScope
   include SalorBase
 
   belongs_to :shipper, :polymorphic => true
@@ -23,33 +23,7 @@ class Shipment < ActiveRecord::Base
   accepts_nested_attributes_for :notes
   accepts_nested_attributes_for :shipment_items
 
-  
-  TYPES = [
-    {
-      :value => 'new',
-      :display => I18n.t("views.forms.shipment.types.new")
-    },
-    {
-      :value => 'shipped',
-      :display => I18n.t("views.forms.shipment.types.shipped")
-    },
-    {
-      :value => 'complete',
-      :display => I18n.t("views.forms.shipment.types.complete")
-    },
-    {
-      :value => 'canceled',
-      :display => I18n.t("views.forms.shipment.types.canceled")
-    },
-    {
-      :value => 'returned',
-      :display => I18n.t("views.forms.shipment.types.returned")
-    },
-    {
-      :value => 'in_stock',
-      :display => I18n.t("views.forms.shipment.types.in_stock")
-    }
-  ]
+
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files
@@ -212,6 +186,22 @@ class Shipment < ActiveRecord::Base
       end
     else
       # puts "##Shipment: Couldn't find ShipmentItem"
+    end
+  end
+  
+  def shipment_items_to_json
+    json = {}
+    self.shipment_items.visible.each do |si|
+      json[si.id] = {
+        :id => si.id,
+        :name => si.name,
+        :category_id => si.category_id,
+        :location_id => si.location_id,
+        :sku => si.sku,
+        :quantity => si.quantity,
+        :price_cents => si.price_cents,
+        :purchase_price_cents => si.purchase_price_cents
+      }
     end
   end
 end

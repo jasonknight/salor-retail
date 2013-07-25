@@ -85,6 +85,7 @@ class OrderItem < ActiveRecord::Base
   def base_price
     return self.price
   end
+  
   def base_price=(p)
     if p.class == String
       # a string is sent from Vendor.edit_field_on_child
@@ -96,11 +97,32 @@ class OrderItem < ActiveRecord::Base
     self.price = p
   end
   
+  def name=(name)
+    # this does nothing. it is here for setting name on the detailed JS item configuraiton menu, because this sets name for Item and OrderItem.
+  end
+  
   def tax=(value)
     tp = self.vendor.tax_profiles.visible.find_by_value(value)
-    raise "A TaxProfile with value #{ value } has to be created before you can assign this value" and return unless tp
-    write_attribute :tax_profile_id, tp.id
-    write_attribute :tax, tp.value
+    if tp.nil?
+      msg = "A TaxProfile with value #{ value } has to be created before you can assign this value"
+      log_action msg
+      raise msg
+    else
+      write_attribute :tax_profile_id, tp.id
+      write_attribute :tax, tp.value
+    end
+  end
+  
+  def tax_profile_id=(id)
+    tp = self.vendor.tax_profiles.visible.find_by_id(id)
+    if tp.nil?
+      msg = "Could not find TaxProfile with id #{ id } for self's vendor."
+      log_action msg
+      raise msg
+    else
+      write_attribute :tax_profile_id, id
+      write_attribute :tax, tp.value
+    end
   end
   
 
@@ -338,41 +360,45 @@ class OrderItem < ActiveRecord::Base
       return
     end
     
+    log_action "Starting to apply coupons. total before is #{ coitem.total_cents }"
+    
     ctype = self.item.coupon_type
     if ctype == 1
       # percent rebate
-      log_action "Percent rebate coupon"
-      coitem.coupon_amount = coitem.total * (self.price.to_f / 100)
+      factor = self.price_cents / 100.0 / 100.0
+      coitem.coupon_amount_cents = coitem.total_cents * factor
+      log_action "Applying Percent rebate coupon: price_cents is #{ self.price_cents }, factor is #{ factor }, coupon_amount_cents is #{ coitem.coupon_amount_cents }"
     elsif ctype == 2
       # fixed amount
-      log_action "Fixed amount coupon"
-      coitem.coupon_amount = self.price
+      coitem.coupon_amount_cents = self.price_cents
+      log_action "Applying Fixed amount coupon: coupon_amount_cents is #{ coitem.coupon_amount_cents }"
     elsif ctype == 3
       # buy x get y free
-      log_action "B1G1"
+      log_action "Applying B1G1"
       x = 2
       y = 1
       if coitem.quantity >= x
         coitem.coupon_amount_cents = y * coitem.total_cents / coitem.quantity
+        log_action "Applying B1G1 coupon: coupon_amount_cents is #{ coitem.coupon_amount_cents }"
       end
     end
-    log_action "Total is: #{coitem.total} and coupon_amount is #{coitem.coupon_amount}"
-    coitem.total -= coitem.coupon_amount
+    coitem.total_cents -= coitem.coupon_amount_cents
+    log_action "OrderItem Total after coupon applied is: #{coitem.total_cents} and coupon_amount is #{coitem.coupon_amount_cents}"
+
     coitem.calculate_tax
     coitem.save
   end
   
   def apply_rebate
     if self.rebate
-      log_action "Applying rebate"
-      self.rebate_amount = (self.total.to_f * (self.rebate / 100.0))
-      log_action "rebate_amount is #{self.rebate_amount.to_f} #{self.rebate_amount_cents}"
-      self.total -= self.rebate_amount
+      log_action "Applying rebate to #{ self.id }"
+      self.rebate_amount_cents = (self.total_cents * (self.rebate / 100.0))
+      log_action "rebate_amount is #{self.rebate_amount_cents}"
+      self.total_cents -= self.rebate_amount_cents
     end
   end
   
   def apply_discount
-    log_action "Applying discount"
     # Vendor
     discount = self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Vendor").first
     
@@ -386,9 +412,10 @@ class OrderItem < ActiveRecord::Base
     discount ||= self.vendor.discounts.visible.where("start_date < '#{ Time.now }' AND end_date > '#{ Time.now }'").where(:applies_to => "Item", :item_sku => self.sku ).first
     
     if discount
+      log_action "Applying discount"
       self.discount = discount.amount
-      self.discount_amount = (self.total * discount.amount / 100.0)
-      self.total -= self.discount_amount
+      self.discount_amount_cents = (self.total_cents * discount.amount / 100.0)
+      self.total_cents -= self.discount_amount_cents
       self.discounts << discount
     end
   end
@@ -420,7 +447,7 @@ class OrderItem < ActiveRecord::Base
       item = self.item
       raise "could not find Item for OrderItem #{ self.id }" if item.nil?
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
-      raise "could not find orderitem #{ item.coupon_applies.inspect }" if coitem.nil?
+      log_action "WARNING: Could not find a visible OrderItem #{ item.coupon_applies.inspect }. It probably was deleted from the POS screen before this coupon was deleted." if coitem.nil?
       coitem.coupon_amount = Money.new(0, self.currency)
       coitem.calculate_totals
     end
@@ -434,6 +461,7 @@ class OrderItem < ActiveRecord::Base
     if self.item then
       obj = {
         :name => self.get_translated_name(I18n.locale)[0..20],
+        :category_id => self.category_id,
         :sku => self.item.sku,
         :item_id => self.item_id,
         :activated => self.item.activated,
@@ -441,12 +469,14 @@ class OrderItem < ActiveRecord::Base
         :coupon_type => self.item.coupon_type,
         :quantity => self.quantity,
         :price => self.price.to_f,
-        :coupon_amount => self.coupon_amount_cents.blank? ? 0 : - self.coupon_amount.to_f,
+        :discount_amount => self.discount_amount.to_f,
+        :rebate_amount => self.rebate_amount.to_f,
+        :coupon_amount => self.coupon_amount.to_f,
         :total => self.total.to_f,
         :id => self.id,
         :behavior => self.behavior,
-        :discount_amount => self.discount_amount.blank? ? 0 : - self.discount_amount.to_f,
-        :rebate => self.rebate.nil? ? 0 : self.rebate,
+        :item_type_id => self.item_type_id,
+        :rebate => self.rebate.to_f,
         :is_buyback => self.is_buyback,
         :weigh_compulsory => self.item.weigh_compulsory,
         :must_change_price => self.item.must_change_price,
