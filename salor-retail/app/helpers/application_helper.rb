@@ -142,6 +142,7 @@ module ApplicationHelper
       :okay => 'okay',
       :okay_orange => 'okay-orange',
       :action => 'gears',
+      :plugin => 'gears',
       :payment => 'payment_method',
       :payment_method => 'payment_method',
       :locations => 'location',
