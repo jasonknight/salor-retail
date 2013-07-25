@@ -19,9 +19,11 @@ class Shipment < ActiveRecord::Base
   belongs_to :user
 
   monetize :price_cents
+  monetize :total_cents
+  monetize :purchase_price_total_cents
 
-  accepts_nested_attributes_for :notes
-  accepts_nested_attributes_for :shipment_items
+  #accepts_nested_attributes_for :notes
+  #accepts_nested_attributes_for :shipment_items
 
 
   #README
@@ -29,7 +31,7 @@ class Shipment < ActiveRecord::Base
   # 2. The rails way would require us to reorganize all the translation files
   # 3. The rails way in this case is admittedly limited, by their own docs, and they suggest you implement your own
   # 4. Therefore, don't remove this code.
-  def self.human_attribute_name(attrib)
+  def self.human_attribute_name(attrib, options={})
     begin
       trans = I18n.t("activerecord.attributes.#{attrib.downcase}", :raise => true) 
       return trans
@@ -189,19 +191,75 @@ class Shipment < ActiveRecord::Base
     end
   end
   
-  def shipment_items_to_json
-    json = {}
-    self.shipment_items.visible.each do |si|
-      json[si.id] = {
-        :id => si.id,
-        :name => si.name,
-        :category_id => si.category_id,
-        :location_id => si.location_id,
-        :sku => si.sku,
-        :quantity => si.quantity,
-        :price_cents => si.price_cents,
-        :purchase_price_cents => si.purchase_price_cents
-      }
+  
+  def to_json
+    attrs = {
+      :id => self.id,
+      :price => self.price.to_f,
+      :receiver_id => self.receiver_id,
+      :shipper_id => self.shipper_id,
+      :shipper_type => self.shipper_type,
+      :receiver_type => self.receiver_type,
+      :total => self.total.to_f,
+      :purchase_price_total => self.purchase_price_total.to_f,
+      :name => self.name,
+      :shipment_type_id => self.shipment_type_id
+    }
+    attrs.to_json
+  end
+  
+  def self.shipment_items_to_json(shipment_items)
+    "[#{shipment_items.collect { |si| si.to_json }.join(", ") }]"
+  end
+  
+  def calculate_totals
+    self.total_cents = self.shipment_items.visible.sum(:total_cents)
+    self.purchase_price_total_cents = self.shipment_items.visible.sum(:purchase_price_total_cents)
+    self.save
+  end
+  
+  def add_shipment_item(params)
+    return nil if params[:sku].blank?
+    # get existing regular item
+    si = self.shipment_items.visible.where(:sku => params[:sku]).first
+    if si then
+      log_action "Item is normal, and present, just increment"
+      si.quantity += 1 
+      si.calculate_totals
+      si.save
+      self.calculate_totals
+      return si
+    else
+      log_action "ShipmentItem not found on Shipment. Will not increment."
     end
+    
+
+    # finally create the item
+    si = ShipmentItem.new
+    si.vendor = self.vendor
+    si.company = self.company
+    si.shipment = self
+    si.quantity = 1
+    si.sku = params[:sku]
+    si.currency = self.vendor.currency
+    
+    # try to get default data from existing Items
+    item = self.vendor.items.visible.find_by_sku(params[:sku])
+    if item
+      si.price_cents = item.price_cents
+      si.purchase_price_cents = item.purchase_price_cents
+      si.name = item.name
+      si.tax_profile = item.tax_profile
+    else
+      # defaults
+      si.price_cents = 0
+      si.purchase_price_cents = 0
+      si.name = "?"
+    end
+ 
+    si.calculate_totals
+    self.shipment_items << si
+    self.calculate_totals
+    return si
   end
 end

@@ -1,0 +1,61 @@
+= stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'invoice_default_print', :media => 'print'
+
+= raw content_box_top(@shipment.name)
+
+.tools
+  .tool-icon{ :onmousedown => 'print_dialog()' }= salor_icon(:print, {}, 32)
+  .tool-icon{ :onmousedown => "window.location = '/shipments/#{ @shipment.id }/edit'" }
+    = salor_icon(:edit, {}, 32)
+  
+
+.clear
+
+.paper-invoice  
+  %h2== #{ Shipment.model_name.human } #{ @shipment.name }
+  .right
+    %p
+      %b== #{ I18n.t("views.single_words.to") }:
+      = l @shipment.created_at, :format => :date_short
+    %p
+      %b== #{ I18n.t("activerecord.attributes.price") }:
+      = humanized_money_with_symbol @shipment.total
+    %p
+      %b== #{ I18n.t("activerecord.attributes.status") }:
+      = @shipment.shipment_type.name if @shipment.shipment_type
+    %p
+      %b== #{ I18n.t("views.single_words.from") }:
+      = @shipment.shipper.name
+    %p
+      %b== #{ I18n.t("views.single_words.to") }:
+      = @shipment.receiver.name
+  
+    
+  - if @shipment.notes.any?
+    %h2= I18n.t("headings.notes")
+    - @shipment.notes.each do |note|
+      .note{ :id =>"note-#{ note.id }" }
+        %span.note-title= note.title
+        %br
+        %p.note-body= note.body
+
+
+  %h3= I18n.t("headings.shipment_items")
+  %table.striped-table2
+    %tr
+      %th= ShipmentItem.human_attribute_name(:name)
+      %th= ShipmentItem.human_attribute_name(:sku)
+      %th= Item.human_attribute_name(:purchase_price)
+      %th= ShipmentItem.human_attribute_name(:quantity)
+      %th= t('.purchase_price_sum')
+    - @shipment.shipment_items.visible.each do |si|
+      - item = @shipment.vendor.items.visible.find_by_sku(si.sku)
+      %tr
+        %td= si.name
+        %td= si.sku
+        %td.right= humanized_money_with_symbol si.purchase_price
+        %td.center= si.quantity
+        %td.right= humanized_money_with_symbol si.purchase_price_total
+    %tr.total
+      %td{ :colspan => 4 }
+      %td.right= humanized_money_with_symbol @shipment.purchase_price_total

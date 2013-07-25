@@ -41,6 +41,12 @@ var fields_callbacks = {
   price: function (elem) {
     elem.addClass("keyboardable-int");
   },
+  purchase_price: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
+  purchase_price_total: function (elem) {
+    elem.addClass("keyboardable-int");
+  },
   quantity: function (elem) {
     elem.addClass("keyboardable-int");
   },

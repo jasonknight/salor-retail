@@ -127,6 +127,17 @@ function make_keyboardable(elem) {
       },
       visible: function(){ $('.ui-keyboard-preview').select(); }
     });
+  } else if (elem.attr('id') == 'main_shipment_sku_field') {
+    elem.keyboard({
+      openOn   : '',
+      stayOpen : true,
+      layout       : i18nlocale,
+      customLayout : null,
+      accepted: function() {
+        shipments.submitLineItem($('#main_shipment_sku_field').val());
+      },
+      visible: function(){ $('.ui-keyboard-preview').select(); }
+    });
   } else if (elem.hasClass('keyboardable-int')) {
     elem.keyboard({
       openOn   : '',

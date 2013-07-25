@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723140707) do
+ActiveRecord::Schema.define(:version => 20130725145342) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -940,9 +940,12 @@ ActiveRecord::Schema.define(:version => 20130723140707) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
-    t.integer  "price_cents",          :default => 0
-    t.integer  "purchase_price_cents", :default => 0
+    t.integer  "price_cents",                :default => 0
+    t.integer  "purchase_price_cents",       :default => 0
     t.string   "currency"
+    t.integer  "total_cents"
+    t.integer  "purchase_price_total_cents"
+    t.integer  "tax_profile_id"
   end
 
   add_index "shipment_items", ["category_id"], :name => "index_shipment_items_on_category_id"
@@ -993,8 +996,10 @@ ActiveRecord::Schema.define(:version => 20130723140707) do
     t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
-    t.integer  "price_cents",      :default => 0
+    t.integer  "price_cents",                :default => 0
     t.string   "currency"
+    t.integer  "total_cents"
+    t.integer  "purchase_price_total_cents"
   end
 
   add_index "shipments", ["company_id"], :name => "index_shipments_on_company_id"

@@ -46,7 +46,7 @@ class ShippersController < ApplicationController
     end
   end
   
-  def update_wholesaler
+  def update_all
     @shippers = @current_vendor.shippers.visible.where("csv_url IS NOT NULL AND csv_url != ''")
     @uploaders = []
     @shippers.each do |s|

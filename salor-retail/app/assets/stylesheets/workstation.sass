@@ -1066,6 +1066,7 @@ nav.pagination span.disabled
 $key_width: 2em
 $key_width_wide: 4em
 
+input#main_shipment_sku_field,
 input#main_sku_field
   @include rounded_corners_all
   text-align: center
@@ -1077,7 +1078,8 @@ input#main_sku_field
   color: black
   font-weight: bold
   font-size: 220%
-  
+
+div#main_shipment_sku_field_kbd,
 div#main_sku_field_kbd
   :padding 10px 20px
 
@@ -1327,7 +1329,9 @@ div.pos-item-attr
   padding-left: 5px
   padding-right: 5px
   font-size: 120%
-div.pos-item-total
+
+div.pos-item-total,
+div.pos-item-purchase_price_total
   background-color: $green
   font-weight: bolder
   font-size: 150%

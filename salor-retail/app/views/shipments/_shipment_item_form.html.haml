@@ -1,4 +1,14 @@
 :javascript
-  shipment_items_json = <%= raw f.object.shipment_items_to_json %>;
+  $(function() {
+    ShipmentItems = #{ raw Shipment.shipment_items_to_json(@shipment_items) };
+    Shipment = #{ raw @shipment.to_json };
+    shipments.updateLineItems();
+    shipments.updateShipment();
+  });
+
+%input#main_shipment_sku_field
+%br
+#pos_order_total.pos-order-total
+  
   
 #shipment_items_container

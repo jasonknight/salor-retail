@@ -24,10 +24,12 @@ class ShipmentsController < ApplicationController
     @shipment.receiver_id = @current_vendor.id
     @shipment.receiver_type = 'Vendor'
     @shipment_types = @current_vendor.shipment_types.visible.order(:name)
+    @shipment_items = []
   end
 
   def edit
     @shipment = @current_vendor.shipments.visible.find_by_id(params[:id])
+    @shipment_items = @shipment.shipment_items.visible
     @shipment_types = @current_vendor.shipment_types.visible.order(:name)
   end
 
@@ -36,13 +38,17 @@ class ShipmentsController < ApplicationController
     @shipment.vendor = @current_vendor
     @shipment.company = @current_company
     @shipment.currency = @current_vendor.currency
+    @shipment.total_cents = 0
+    @shipment.purchase_price_total_cents = 0
     if @shipment.save
       @shipment.shipment_items.update_all :vendor_id => @shipment.vendor_id,
           :company_id => @shipment.company_id,
           :currency => @current_vendor.currency
-      redirect_to shipments_path
+      @shipment_items = @shipment.shipment_items.visible
+      redirect_to edit_shipment_path(@shipment)
     else
       @shipment_types = @current_vendor.shipment_types.visible.order(:name)
+      @shipment_items = @shipment.shipment_items.visible
       render :new
     end
   end
@@ -51,7 +57,7 @@ class ShipmentsController < ApplicationController
     @shipment = @current_vendor.shipments.visible.find_by_id(params[:id])
     if @shipment.update_attributes(params[:shipment])
       @shipment.shipment_items.update_all :vendor_id => @shipment.vendor_id, :company_id => @shipment.company_id
-      redirect_to shipments_path
+      redirect_to edit_shipment_path(@shipment)
     else
       @shipment_types = @current_vendor.shipment_types.visible.order(:name)
       render :edit
@@ -68,7 +74,18 @@ class ShipmentsController < ApplicationController
     @shipment.move_all_to_items
     redirect_to shipment_path(@shipment)
   end
+  
+  #ajax
+  def add_item
+    @shipment = @current_vendor.shipments.visible.find_by_id(params[:shipment_id])
+    @shipment_item = @shipment.add_shipment_item(params)
+    @shipment_items = []
     
+    @shipment_items << @shipment_item
+    render :update_pos_display
+  end
+  
+  
   #ajax
   def move_shipment_item
     @shipment = @current_vendor.shipments.visible.find_by_id(params[:id])
