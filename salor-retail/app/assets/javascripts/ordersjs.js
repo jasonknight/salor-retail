@@ -144,7 +144,7 @@ function drawOrderItemRow(item) {
     switch(attr) {
       case 'name':
         row.append(col);
-        makeItemMenu(col, item);
+        makeItemMenu(col, row);
         break;
       case 'tax':
         var color = TaxProfiles[item.tax_profile_id].color;
@@ -265,13 +265,12 @@ function drawOrderItemRow(item) {
 
 
 
-function makeItemMenu(e, item) {
+function makeItemMenu(col, row) {
   try {
-    e.unbind();
-    e.mousedown(function (event) {
+    col.unbind();
+    col.mousedown(function (event) {
         if (Register.detailed_edit == true) {
-          console.log("lkjlkj");
-          detailedOrderItemMenu(event, item);
+          detailedOrderItemMenu(event);
           return;
         }
         $('.item-menu-div').remove();
@@ -566,11 +565,10 @@ window.showOrderOptions = function () {
 }
 
 
-function detailedOrderItemMenu(event, item) {
-  console.log("H");
+function detailedOrderItemMenu(event) {
   $('.item-menu-div').remove();
   var target = $(event.currentTarget).parent();
-  //var item = _get('item',target);
+  var item = _get('item',target);
   var offset = $(event.currentTarget).offset();
   var title = shared.element('div',{id: 'order_item_edit_name'},'',$('body'));
   title.addClass('salor-dialog');
@@ -630,7 +628,6 @@ function detailedOrderItemMenu(event, item) {
   });
   title.append(btn);
   
-  console.log("H");
   orderItemNameOption(config, item);
   
   var edit_item_hr = shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item + '( ' + item.sku + ' )',config);
