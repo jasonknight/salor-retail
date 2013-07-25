@@ -27,9 +27,10 @@ class PluginsController < ApplicationController
   end
 
   def create
-    @plugin = Plugin.new
+    @plugin = Plugin.new(params[:plugin])
     @plugin.vendor = @current_vendor
     @plugin.company = @current_company
+
     if @plugin.save
       redirect_to plugins_path
     else
@@ -39,7 +40,7 @@ class PluginsController < ApplicationController
 
   def update
     @plugin = @current_vendor.plugins.visible.find_by_id(params[:id])
-    if @plugin.update_attributes(params[:act])
+    if @plugin.update_attributes(params[:plugin])
       redirect_to plugins_path
     else
       render :edit

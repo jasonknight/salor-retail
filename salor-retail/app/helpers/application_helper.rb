@@ -142,6 +142,7 @@ module ApplicationHelper
       :okay => 'okay',
       :okay_orange => 'okay-orange',
       :action => 'gears',
+      :plugin => 'gears',
       :payment => 'payment_method',
       :payment_method => 'payment_method',
       :locations => 'location',
@@ -174,11 +175,14 @@ module ApplicationHelper
   end
   
   def icon(name, size = '64')
+    return :edit if name.nil?
+    name = name.to_sym
     icons = get_icons_map
     return icons[name] + '.svg'
   end
   
   def salor_icon(name, options = {}, size = '64', caption=nil,caption_class='')
+    name = @current_plugin_manager.apply_filter('salor_icon',name)
     if caption then
       o = []
       options.each do |k,v|
@@ -187,7 +191,7 @@ module ApplicationHelper
       return raw("<div class=\"salor-icon\"><img height=\"#{size}\" src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
     else
       options[:height] ||= size
-      return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }</div>")
+      return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size).to_s,options) }</div>")
     end
   end
 

@@ -232,7 +232,13 @@ class ItemsController < ApplicationController
     params[:page] ||= 1
     params[:order_by] = "id DESC" if not params[:order_by] or params[:order_by].blank?
     orderby ||= params[:order_by]
-    @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    orderby ||= params[:order_by]
+    unless params[:keywords].blank?
+      # search function should display recursive items
+      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    else
+      @items = @current_vendor.items.visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
+    end
     data = render_to_string :layout => false
     send_data(data,:filename => 'items.csv', :type => 'text/csv')
   end
