@@ -1,5 +1,6 @@
 <%= raw(content_box_top(@vendor.name, {:width => '90%'})) %>
   <div class="list">
+      <%= @current_plugin_manager.do_hook(:before_vendors_show_list) %>
       <% if @current_user.can(:edit_vendors) %>
         <div id="edit_vendor" class="widget master" onmousedown="window.location = '<%= edit_vendor_path(@vendor) %>';">
           <div align="center">
@@ -268,5 +269,5 @@
           </div>
         </div>
         <% end %>
-
+        <%= @current_plugin_manager.do_hook(:after_vendors_show_list) %>
       </div>    

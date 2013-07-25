@@ -1,8 +1,19 @@
-class PluginManager
+class PluginManager < AbstractController::Base
   include SalorBase
-  def initialize(vendor)
-    @vendor                 = vendor
-    @plugins                = Plugin.where(:vendor_id => @vendor.id)
+  include AbstractController::Rendering
+  include AbstractController::Helpers
+  include AbstractController::Translation
+  include AbstractController::AssetPaths
+  include Rails.application.routes.url_helpers
+  helper ApplicationHelper
+  self.view_paths = "app/views/"
+  
+  def initialize(current_vendor,current_company,current_user)
+    @current_company        = current_company
+    @current_vendor         = current_vendor
+    @current_user           = current_user
+    @current_plugin_manager = self
+    @plugins                = Plugin.visible.where(:vendor_id => @current_vendor.id)
     @context                = V8::Context.new
     @context['Salor']       = self
     @context['Params']      = $PARAMS
@@ -16,12 +27,13 @@ class PluginManager
     # }
     @filters                = {}
     @hooks                  = {}
-    text                    = ''
+    text                    = "(function () {\nvar __plugin__ = null;\nvar plugins = {};\n"
     @plugins.each do |plugin|
     	log_action plugin.filename.current_path
       if plugin.filename.current_path and File.exists? plugin.filename.current_path
         begin
     	   File.open(plugin.filename.current_path,'r') do |f|
+          text += "\n__plugin__ = #{plugin.attributes.to_json};\n";
           text += f.read
          end
         rescue => e
@@ -29,6 +41,7 @@ class PluginManager
         end
       end
     end
+    text += "return plugins; \n})();\n"
     begin
       @code = @context.eval(text)
     rescue => e
@@ -106,7 +119,9 @@ class PluginManager
   end
 
   def do_hook(name)
+
     return '' if not @code
+    content = ''
     if @hooks[name.to_sym] then
       @hooks[name.to_sym].each do |callback|
         begin
@@ -117,15 +132,43 @@ class PluginManager
           if not function then
             log_action "function #{callback[:function]} is not set."
           else
-            arg = function.methodcall(function,arg)
+            tmp = function.methodcall(function)
+            if tmp.nil? then
+              log_action "Must return a string from a hook"
+            else
+              content += tmp
+            end
           end
           
          rescue => e
-           log_action "When Applying Filter" + e.inspect
+           log_action "When doing hook" + e.inspect
+           log_action e.backtrace.join("\n")
         end
       end 
     end
+    return content.html_safe
 
+  end
+
+  def render_partial(name,locals)
+    vars = v8_object_to_hash(locals)
+    debug_obj(vars)
+    render( :partial => name, :locals => vars)
+  end
+
+  def v8_object_to_hash(src_attrs)
+    attrs = {}
+    log_action "Trying to convert to hash"
+    if src_attrs.kind_of? V8::Object then
+      src_attrs.each do |k,v|
+        if v.kind_of? V8::Object then
+          attrs[k.to_sym] = v8_object_to_hash(v)
+        else
+          attrs[k.to_sym] = v
+        end
+      end
+    end
+    return attrs
   end
 
 end

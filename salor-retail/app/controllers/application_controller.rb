@@ -162,7 +162,7 @@ class ApplicationController < ActionController::Base
     $DIRS = {
       :uploads => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
     }
-    @current_plugin_manager = PluginManager.new(@current_vendor)
+    @current_plugin_manager = PluginManager.new(@current_vendor,@current_company, @current_user)
     return @current_user
   end
   

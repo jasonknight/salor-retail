@@ -175,6 +175,7 @@ module ApplicationHelper
   end
   
   def icon(name, size = '64')
+    return :edit if name.nil?
     name = name.to_sym
     icons = get_icons_map
     return icons[name] + '.svg'
@@ -190,7 +191,7 @@ module ApplicationHelper
       return raw("<div class=\"salor-icon\"><img height=\"#{size}\" src=\"/images/icons/#{icon(name,size)}\" #{o.join(" ")}/><br /><span class='icon-caption #{caption_class}'>#{caption}</span></div>")
     else
       options[:height] ||= size
-      return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size),options) }</div>")
+      return raw("<div class=\"salor-icon\">#{ image_tag('/images/icons/' + icon(name,size).to_s,options) }</div>")
     end
   end
 
