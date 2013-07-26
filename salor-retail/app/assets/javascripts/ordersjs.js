@@ -230,35 +230,29 @@ function drawOrderItemRow(item) {
         }
     }
     
+    if (attr == "price" && item.must_change_price && item.price == 0 ) {
+      setTimeout(trigger_click(col), 50);
+    }
+    
   
     if (item.is_buyback && highlightAttrs.indexOf(attr) != -1) {
       highlight(col);
     }
+
   } // end loop through attrs
-  
-  
- 
-  if (item.must_change_price) {
-    // this triggers an onscreen keyboard, only for zero priced items
-    var id = '.' + base_id + '-price';
-    var price = toFloat($(id).html());
-    if (price == 0) {
-      $(id).trigger('click');
-      //setTimeout( function () {
-        if (IS_APPLE_DEVICE) {
-          $('.ui-keyboard-preview').val("");
-        }
-        $('.ui-keyboard-preview').select();
-      //},100);
-    }
-  }
-  
+
   if(item.weigh_compulsory && item.quantity == 0) {
     weigh_last_item();
   }
   return row;
 }
 
+// this is a closure needed to remember the value of col in the above loop. Without closure, the variable col would change before the timout triggers. The timeout is needed for the onscreen keyboard.
+var trigger_click = function(col) {
+  return function() {
+    col.trigger('click');
+  };
+};
 
 
 

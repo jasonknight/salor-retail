@@ -714,9 +714,11 @@ window.shared = {
       input.on('keyup',callbacks.keyup);
       input.focus(callbacks.focus);
       input.blur(callbacks.blur);
-      input.keypress(function(e) {
-        callbacks.keypress(e);
-      });
+      if ( typeof callbacks.keypress != 'undefined' ) {
+        input.keypress(function(e) {
+          callbacks.keypress(e);
+        });
+      }
       return div;
     },
     check_option: function (options,callbacks) {

@@ -131,6 +131,7 @@ function observe_drawer() {
 
 function weigh_last_item() {
   if ( ! isSalorBin() )
+    echo("Weighing is only supported with our thin client salor-bin")
     return
     
   var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');

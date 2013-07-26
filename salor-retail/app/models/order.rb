@@ -192,7 +192,7 @@ class Order < ActiveRecord::Base
         oi.calculate_totals
         oi.save
         self.calculate_totals
-        return item
+        return oi
       else
         log_action "Item is not normal but is #{oi.behavior}. Will not increment."
       end
