@@ -1,3 +1,31 @@
+salor-retail (4.0.2.12) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * build
+  * build
+  * wholesaler upload works individually and collectively
+  * unlink parent and child when hiding an item
+  * deletion fix
+  * added salor-dialog for shipper update
+  * added SKU to detailed POS menu, updates now POS, refactored POS JS, removed old shipments JS
+  * dont pass items object, take from jquery data
+
+  [ Jason Knight ]
+  * Fixed items download
+  * Adding plugins and fixing human attr name
+  * Plugins working, filters working
+  * Restructuring plugins so that multiples can exist at the same time, also allow rendering of partials
+
+  [ Michael Franzl ]
+  * shipments all new
+  * POS sales now subtract ItemStocks, even recursively with parent/child relationship
+  * advanced moving of shipmentItems to various ItemStocks
+  * tested must_weighing, must_change_price and default_buyback items
+  * fixed thermal day report for new system
+  * Gemfile adaption
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Jul 2013 18:04:05 +0200
+
 salor-retail (4.0.2.11) unstable; urgency=low
 
   * more checks
