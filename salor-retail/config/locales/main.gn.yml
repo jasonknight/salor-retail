@@ -691,7 +691,7 @@ gn:
     index:
       report: Bericht
     show:
-      purchase_price_sum: Einkaufspreis gesamt
+      purchase_price_sum: Gesamt
   sticker: Aufkleber
   support: Support
   system:

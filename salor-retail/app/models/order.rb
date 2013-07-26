@@ -474,13 +474,9 @@ class Order < ActiveRecord::Base
       items.flatten!
       items.each do |i|
         if not i.ignore_qty and i.behavior == 'normal' and not self.is_proforma
-          if oi.is_buyback
-            i.quantity += oi.quantity
-            i.quantity_buyback += oi.quantity
-          else
-            i.set_quantity_recursively(i.quantity - oi.quantity)
-            i.quantity_sold += oi.quantity
-          end
+          q = oi.quantity
+          q = -q if oi.is_buyback
+          i.set_quantity_with_recursion(i.quantity_with_stock - oi.quantity)
         end
         i.save
       end
@@ -1323,7 +1319,8 @@ class Order < ActiveRecord::Base
       :sale_type  => self.sale_type,
       :origin => self.origin_country,
       :destination => self.destination_country,
-      :is_proforma => self.is_proforma
+      :is_proforma => self.is_proforma,
+      :order_items_length => self.order_items.visible.size
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs

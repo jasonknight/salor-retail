@@ -1,15 +1,3 @@
-$(function() {
-  $('#main_shipment_sku_field').keydown(function(e) {
-    if (e.which == 13) {
-      shipments.submitLineItem($('#main_shipment_sku_field').val());
-      $('#main_shipment_sku_field').val('');
-      return false;
-    }
-    
-  });
-  make_keyboardable($('#main_shipment_sku_field'));
-});
-
 window.shipments = {
   
   getShipmentItemId: function(item) {

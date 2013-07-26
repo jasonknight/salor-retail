@@ -58,6 +58,7 @@ class ItemsController < ApplicationController
     @item.attributes = params[:item]
     if @item.save
       @item.assign_parts(params[:part_skus])
+      @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       redirect_to items_path
     else
       render :new
@@ -81,6 +82,7 @@ class ItemsController < ApplicationController
     @item = @current_vendor.items.visible.find_by_id(params[:id])
     if @item.update_attributes(params[:item])
       @item.assign_parts(params[:part_skus])
+      @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       redirect_to items_path
     else
       render :edit
