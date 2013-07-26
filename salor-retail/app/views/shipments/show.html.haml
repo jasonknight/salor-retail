@@ -25,10 +25,10 @@
       = @shipment.shipment_type.name if @shipment.shipment_type
     %p
       %b== #{ I18n.t("views.single_words.from") }:
-      = @shipment.shipper.name
+      = @shipment.shipper.name if @shipment.shipper
     %p
       %b== #{ I18n.t("views.single_words.to") }:
-      = @shipment.receiver.name
+      = @shipment.receiver.name if @shipment.receiver
   
     
   - if @shipment.notes.any?
@@ -49,8 +49,7 @@
       %th= Item.human_attribute_name(:tax_profile_id)
       %th= ShipmentItem.human_attribute_name(:quantity)
       %th= t('.purchase_price_sum')
-    - @shipment.shipment_items.visible.each do |si|
-      - item = @shipment.vendor.items.visible.find_by_sku(si.sku)
+    - @shipment.shipment_items.visible.reverse.each do |si|
       %tr
         %td= si.name
         %td= si.sku
@@ -58,7 +57,66 @@
         %td.right= si.tax_profile.name if si.tax_profile
         %td.center= si.quantity
         %td.right= humanized_money_with_symbol si.purchase_price_total
-        %td.right= item.name if item
     %tr.total
-      %td{ :colspan => 4 }
+      %td{ :colspan => 5 }
       %td.right= humanized_money_with_symbol @shipment.purchase_price_total
+      
+.paper-invoice
+  %h2= t('menu.move_shipment_item')
+  %table.striped-table2
+    %tr
+      %th= ShipmentItem.human_attribute_name(:name)
+      %th= ShipmentItem.human_attribute_name(:sku)
+      %th= ShipmentItem.human_attribute_name(:quantity)
+      %th
+      %th
+    - @shipment.shipment_items.visible.reverse.each do |si|
+      - item = @shipment.vendor.items.visible.find_by_sku(si.sku)
+      - item_stocks_stock_locations = item.item_stocks.visible.where('stock_location_id IS NOT NULL') if item
+      - item_stocks_locations = item.item_stocks.visible.where('location_id IS NOT NULL') if item
+      - item_stocks_stock_locations ||= []
+      - item_stocks_locations ||= []
+      %tr
+        %td= si.name
+        %td= si.sku
+        %td= si.quantity
+        %td
+          - if si.in_stock_quantity == si.quantity
+            = t ('views.forms.shipment.types.in_stock')
+          - elsif item.nil? and si.tax_profile.nil?
+            need tax profile
+          - else
+          
+            = text_field_tag "shipment_item_quantity_to_move_#{ si.id }", (si.quantity - si.in_stock_quantity.to_f), :class => 'shipment_item_quantity_to_move', :onclick => "$(this).select()"
+            
+            - unless item_stocks_stock_locations.blank? and item_stocks_locations.blank?
+              = select_tag "shipment_item_move_to_#{ si.id }", options_for_select(@shipment.location_stock_location_list), :class => 'shipment_item_move_to' , :include_blank => true, :onchange => "$('#shipment_item_move_button_#{ si.id }').fadeIn();"
+              
+              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :style => "display:none;", :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), $('#shipment_item_move_to_#{ si.id }').val() );" } MOVE!
+              
+            - else
+            
+              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :style => "display:none;",  :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), 'no_item' );" } MOVE!
+        %td
+          - if item
+            - if item_stocks_stock_locations.blank? and item_stocks_locations.blank?
+              %table
+                %tr
+                  %th= t 'views.locations'
+                  %th= t 'views.quantity'
+                %tr
+                  %td= item.location.name if item.location
+                  %td= item.quantity
+            - else
+              %table
+                %tr
+                  %th= t 'views.locations'
+                  %th= t 'views.quantity'
+                - item_stocks_locations.each do |is|
+                  %tr
+                    %td= is.location.name
+                    %td= is.location_quantity
+                - item_stocks_stock_locations.each do |is|
+                  %tr
+                    %td= is.stock_location.name
+                    %td= is.stock_location_quantity

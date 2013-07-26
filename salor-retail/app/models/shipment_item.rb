@@ -45,6 +45,57 @@ class ShipmentItem < ActiveRecord::Base
     self.save
   end
   
+  def move_into_stock(q, locationstring)
+    q = q.to_f
+    item = self.vendor.items.visible.find_by_sku(self.sku)
+    if item
+      log_action "move_into_stock: An Item with sku #{ self.sku } already exists. Using this to add to it."
+      locationclass = locationstring.split(':')[0].constantize
+      locationid = locationstring.split(':')[1]
+      location = locationclass.visible.where(:vendor_id => self.vendor_id, :company_id => self.company_id).find_by_id(locationid)
+      
+      existing_item_stock = location.item_stocks.visible.find_by_item_id(item.id)
+      if existing_item_stock
+        log_action "move_into_stock: Item #{ item.id } with sku #{ item.sku } already has an ItemStock #{ existing_item_stock.id }. Adding to it"
+        if locationclass == Location
+          existing_item_stock.location_quantity = existing_item_stock.location_quantity.to_f + q
+        else
+          existing_item_stock.stock_location_quantity = existing_item_stock.stock_location_quantity.to_f + q
+        end
+        existing_item_stock.save
+      else
+        # this method creates an ItemStock if not yet present. see item.rb
+        log_action "move_into_stock: Item #{ item.id } with sku #{ item.sku } doesn't have yet an ItemStock. Creating one."
+        item.set_quantity_with_stock(q, location)
+      end
+      
+    else
+      log_action "move_into_stock: No Item with sku #{ self.sku } exists yet. Creating one from ShipmentItem."
+      normal_item_type = self.vendor.item_types.visible.find_by_behavior('normal')
+      if normal_item_type.nil?
+        raise "Need an ItemType with behavior normal for this action"
+      end
+      
+      i = Item.new
+      i.vendor = self.vendor
+      i.company = self.company
+      i.sku = self.sku
+      i.tax_profile = self.tax_profile
+      i.name = self.name
+      i.item_type = normal_item_type
+      
+      result = i.save
+      if result != true
+        raise "Could not save Item because #{ i.errors.messages }"
+      end
+      i.set_quantity_with_stock(q)
+      
+    end
+    
+    self.in_stock_quantity = self.in_stock_quantity.to_f + q
+    self.save
+  end
+  
   def to_json
     json = {
       :id => self.id,

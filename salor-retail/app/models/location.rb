@@ -6,18 +6,20 @@
 # See license.txt for the license applying to all files within this software.
 
 class Location < ActiveRecord::Base
-	include SalorScope
-	include SalorBase
+  include SalorScope
+  include SalorBase
 
-	belongs_to :vendor
+  belongs_to :vendor
   belongs_to :company
+
+  has_many :items
+  has_many :shipment_items
+  has_many :discounts
+  has_many :item_stocks
   
-	has_many :items, :conditions => "items.behavior = 'normal'"
-	has_many :shipment_items
-	has_many :discounts
   before_create :set_sku
-	scope :applies, lambda {|t| where(:applies_to => t)}
-  
+  scope :applies, lambda {|t| where(:applies_to => t)}
+
   validates_presence_of :name
   #README
   # 1. The rails way would lead to many duplications
@@ -33,6 +35,7 @@ class Location < ActiveRecord::Base
       return super
     end
   end
+  
   def set_sku
     # This might cause issues down the line with a SAAS version so we need to make sure
     # that the request for a category by sku is scopied.

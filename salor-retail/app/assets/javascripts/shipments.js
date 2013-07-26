@@ -126,6 +126,17 @@ window.shipments = {
     } // end loop through fields
     
     return row;
+  },
+  
+  move_item_into_stock: function( shipment_item_id, quantity, locationstring) {
+    if (locationstring.length == 0) {
+      return;
+    }
+    var string = "/shipments/move_item_into_stock?shipment_item_id=" + shipment_item_id + "&quantity=" + quantity + "&locationstring=" + locationstring;
+    get(string, 'shipments.js', function() {
+      location.reload();
+    });
+    
   }
   
 

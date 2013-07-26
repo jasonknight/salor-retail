@@ -480,7 +480,7 @@ gn:
     locations: Verkaufsflächen
     loyalty_cards: Kundenkarten
     merge_into_current_order: Merge into current order
-    move_shipment_item: In den Verkaufsbereich verschieben
+    move_shipment_item: Lieferartikel in den Bestand aufnehmen
     new_action: Neu Aktion
     new_broken_item: Beschädigungen
     new_button: Neue Taste

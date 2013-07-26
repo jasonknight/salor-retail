@@ -57,8 +57,6 @@ function get(url, calledFrom, sFunc, type, eFunc) {
   if (sFunc == null) sFunc = function(){};
   if (eFunc == null) eFunc = function(){};
   
-  echo('get');
-  
   var datestamp = new Date().getTime();
   sendqueue.push(datestamp);
   disablePrintReceiptButton();

@@ -41,13 +41,24 @@ class Shipment < ActiveRecord::Base
     end
   end
   
-  def receiver_shipper_list()
+  def receiver_shipper_list
     ret = []
     self.vendor.shippers.visible.order(:name).each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
     end
     self.company.vendors.visible.all.each do |vendor|
       ret << {:name => vendor.name, :value => 'Vendor:' + vendor.id.to_s}
+    end
+    return ret
+  end
+  
+  def location_stock_location_list
+    ret = []
+    self.vendor.locations.visible.order(:name).each do |l|
+      ret << [l.name, 'Location:' + l.id.to_s]
+    end
+    self.vendor.stock_locations.visible.all.each do |sl|
+      ret << [sl.name, 'StockLocation:' + sl.id.to_s]
     end
     return ret
   end

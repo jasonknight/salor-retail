@@ -19,7 +19,9 @@
       <tr>
         <td align="left">
           <div class="button-confirm"><%= link_to(t('helpers.submit.cancel'), shipments_path) %></div>
+          <% unless @shipment.new_record? %>
           <div class="button-confirm"><%= link_to(t('shipments.index.report'), shipment_path(@shipment)) %></div>
+          <% end %>
         </td>
         <td align="right">
           <div class="actions"><%= f.submit(t('helpers.submit.save'), :id => "submit") %></div>
@@ -68,7 +70,9 @@
     </table>
   <% end %>
 
+  <% unless @shipment.new_record? %>
   <%= render :partial => "shipment_item_form" %>
+  <% end %>
 
 
 

@@ -267,6 +267,7 @@ function drawOrderItemRow(item) {
 
 function makeItemMenu(col, row) {
   try {
+    var item = _get('item', row);
     col.unbind();
     col.mousedown(function (event) {
         if (Register.detailed_edit == true) {
@@ -279,7 +280,7 @@ function makeItemMenu(col, row) {
         menu.css({position: 'absolute', left: event.pageX, top: event.pageY});
         var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" width="31px" height="32px" /></div>');
         dicon.mousedown(function () {
-            $('.' + base_id).remove();
+            row.remove();
             get('/orders/delete_order_item?id=' + item.id, filename);
             menu.remove();
             //setScrollerState();

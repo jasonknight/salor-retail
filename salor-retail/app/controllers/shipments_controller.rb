@@ -87,11 +87,9 @@ class ShipmentsController < ApplicationController
   
   
   #ajax
-  def move_shipment_item
-    @shipment = @current_vendor.shipments.visible.find_by_id(params[:id])
-    @shipment.move_shipment_item_to_item(params[:shipment_item_id])
-
+  def move_item_into_stock
     @shipment_item = @current_vendor.shipment_items.visible.find_by_id(params[:shipment_item_id])
-    @item = @current_vendor.items.visible.find_by_sku(@shipment_item.sku)
+    @shipment_item.move_into_stock(params[:quantity], params[:locationstring])
+    render :nothing => true
   end
 end
