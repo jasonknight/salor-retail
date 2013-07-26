@@ -11,7 +11,7 @@ gem 'jquery-rails','2.0.2'
 gem 'haml','4.0.0'
 gem 'sass'
 gem 'sass-rails'
-gem 'coffee-rails'
+gem 'coffee-rails','3.2.2'
 gem 'rmagick'
 gem 'uglifier', '1.3.0'
 gem 'nokogiri'
@@ -20,6 +20,9 @@ gem 'json'
 gem 'serialport'
 gem 'money', '5.1.1'
 gem 'money-rails', '0.8.1'
+gem 'google_currency'
+gem 'therubyracer', '0.11.4', :require => 'v8'
+gem 'carrierwave'
 
 # The following are not yet part of Debian Jessie/sid but of the Red E repository and do NOT cause a dependency to the online API of rubygems.org
 
