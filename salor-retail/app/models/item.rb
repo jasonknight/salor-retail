@@ -24,6 +24,7 @@ class Item < ActiveRecord::Base
   has_many :order_items
   has_many :item_shippers
   has_many :item_stocks
+  has_many :stock_transactions, :as => :to
   has_many :actions, :as => :model, :order => "weight asc"
   has_many :parts, :class_name => 'Item', :foreign_key => :part_id
   has_one :parent, :class_name => 'Item', :foreign_key => :child_id
@@ -494,148 +495,128 @@ class Item < ActiveRecord::Base
     cleaned_up_ids << self.clean_nonhidden_items_with_hidden_parent
     return cleaned_up_ids.flatten
   end
-
-  protected
   
-  # if quantity reduced to smaller than zero, it 'takes' stock from parents. if quantity is positive or non-integer or there is no parent, it updates quantity directly. All quantity setters are "quantity_with_stock", meaning, if StockItems are defined for the Item, it will use those instead of the simple quantity field.
-  def set_quantity_with_recursion(q, depth=0)
-    log_action "[RECURSION] [#{ self.sku }] Called with q = #{ q.to_f }", :light_blue
+  # this is the main method that should be used to set a quantity of an Item.
+  def self.transact_quantity(diff, item, model2)
+    Item.transact_quantity_with_recursion(diff, item, model2)
+  end
+
+  private
+  
+  # This method adds or subtracts "diff" from the total stock quantity of "item". If "diff" is such that the quantity of "item" would go into negative, it recursively takes stock from the parents of "item" until the demand is satisfied. If "diff" is positive or non-integer or there is no parent of "item", no recursion takes place, it set the quantity of "item" directly. "model2" is just for labeling purposes for the StockTransactions that will be created further down. "model2" can be of class Item or class Order. When an order is completed on the POS screen, "model2" will be an Order. This means that the StockTransaction will show that the stock has been moved into an Order (i.e. was sold and moved out of the store), rather than into a StockItem/Location (i.e. within the store).
+  def self.transact_quantity_with_recursion(diff, item, model2, depth=0)
+    SalorBase.log_action "[RECURSION]", " [#{ item.sku }] Called with diff = #{ diff.to_f }", :light_blue
     depth += 1
     raise "Item.set_quantity_recursively: Cap of 5 reached." if depth > 5
     
-    q = 0 if q.blank?
-    q = q.to_s.gsub(',','.')
-    q = q.to_f.round(3)
-    parent = self.parent
+    diff = 0 if diff.blank?
+    diff = diff.to_s.gsub(',','.')
+    diff = diff.to_f.round(3)
+    parent = item.parent
+    
+    quantity_total = item.quantity_with_stock
+    
+    # q is the quantity that would be there after "diff" has been added to the current quantity.
+    q = quantity_total + diff
     
     if (q >= 0 or        # no recursion needed if zero or positive
         q != q.round or  # no recursion for non-integers
-        self.quantity_with_stock != self.quantity_with_stock.round or # no recursion for non-integers
-        (parent.nil? and q < 0) # no recursion if no parent
+        quantity_total != quantity_total.round or # no recursion for non-integers
+        (parent.nil?) # no recursion if no parent
        )
-      log_action "[RECURSION] [#{ self.sku }] Writing quantity #{ q.to_f } directly.", :light_blue
-      self.set_quantity_with_stock(q)
-      result = self.save
-      if result == false
-        raise "[RECURSION] Could not save Item because #{ self.errors.messages }"
-      end
+      SalorBase.log_action "[RECURSION]", "[#{ item.sku }] No recursion. Making a stock transaction with diff=#{ diff.to_f } directly.", :light_blue
+      Item.transact_quantity_with_stock(diff, item, model2)
       return
     end
 
     parent_units_needed = ( -q / parent.packaging_unit ).ceil
-    log_action "[RECURSION] [#{ self.sku }] parent_units_needed #{ parent_units_needed }", :light_blue
-    new_quantity_with_stock = parent_units_needed * parent.packaging_unit + q
-    log_action "[RECURSION] [#{ self.sku }] setting quantity_with_stock to #{ new_quantity_with_stock }", :light_blue
-    self.set_quantity_with_stock(new_quantity_with_stock)
-    result = self.save
-    if result == false
-      raise "[RECURSION] Could not save Item because #{ self.errors.messages }"
-    end
+    SalorBase.log_action "[RECURSION]", "[#{ item.sku }] parent_units_needed=#{ parent_units_needed }", :light_blue
+    
+    quantity_from_parent = parent_units_needed * parent.packaging_unit
+    SalorBase.log_action "[RECURSION]", " [#{ item.sku }] getting quantity_from_parent=#{ quantity_from_parent }", :light_blue
+    Item.transact_quantity_with_stock(quantity_from_parent, item, parent)
+    
+    SalorBase.log_action "[RECURSION]", " [#{ item.sku }] Now that we have taken from the parent, we create a stock transaction with diff=#{ diff }, which is the quantity acutally requested", :light_blue
+    Item.transact_quantity_with_stock(diff, item, model2)
     
     # now we need to reduce the quantity of the parent. this starts the recursion
-    new_parent_quantity = parent.quantity_with_stock - parent_units_needed
-    log_action "[RECURSION] [#{ self.sku }] parent.quantity_with_stock = #{ parent.quantity_with_stock }", :light_blue
-    log_action "[RECURSION] [#{ self.sku }] parent_units_needed = #{ parent_units_needed }", :light_blue
-    log_action "[RECURSION] [#{ self.sku }] Starting recursion with new_parent_quantity #{ new_parent_quantity }", :light_blue
-    parent.set_quantity_with_recursion(new_parent_quantity, depth)
+    SalorBase.log_action "[RECURSION]", "[#{ item.sku }] Now that we have taken from the parent, reduce the quantity of the parent by #{ - parent_units_needed }. This starts recursion.", :light_blue
+    Item.transact_quantity_with_recursion(-parent_units_needed, parent, item, depth)
   end
   
-  # sets the quantity of the item if no item_stocks defined, otherwise updates quantity of item_stocks of location as passed into this method. If no location is specified, it updates the first location.
-  def set_quantity_with_stock(q, location=nil)
-    if location
-      log_action "Item.quantity=(): the user has specified which location to set."
+  
+  
+  
+  # This method creates stock transactiond of the size "diff" for "item". If "diff" is positive, the first ItemStock that is defined for "item" is used to add "diff". If "diff" is negative, this method will iterate over all defined ItemStocks of "item" and reduce every one until the reduced amount equals "diff". If "diff" is larger than the quantity available in all ItemStocks, it reduces the first ItemStock into negative, so that "diff" is satisfied. "model2" is just there for reference purposes, to label the StockTransactions that will be created further down.
+  def self.transact_quantity_with_stock(diff, item, model2)
+    item_stocks = item.item_stocks.visible.order("location_type ASC")
+    
+    if item_stocks.blank?
+      # use the simple quantity field of Item when no ItemStocks are defined.
+      StockTransaction.transact(diff, item, model2)
+      return
+    end
       
-      existing_item_stock = location.item_stocks.visible.find_by_id(self.id)
-      if existing_item_stock
-        log_action "set_quantity_with_stock(): already has an ItemStock for the specified location. setting it"
-        existing_item_stock.quantity = q
-        existing_item_stock.save
-      else
-        log_action "set_quantity_with_stock(): no such ItemStock for this Location. creating it"
-        is = ItemStock.new
-        is.vendor = self.vendor
-        is.company = self.company
-        is.location = location
-        is.quantity = q
-        is.item = self
-        is.save
+
+    if diff > 0
+      SalorBase.log_action "[Item]", "transact_quantity_with_stock=() difference is positive #{ diff }.", :magenta
+      item_stock = item_stocks.first
+      if model2.class == Item
+        model2_item_stocks = model2.item_stocks.visible
+        model2_item_stock = model2_item_stocks.first
       end
-        
-        
-    else
-      log_action "quantity=(): A location has not been passed to this method. this happens for example from the POS screen."
-      
-      item_stocks = self.item_stocks.visible
-      if item_stocks.blank?
-        log_action "quantity=(): this Item does not have any stock_locations defined. in this case, we simply set the quantity of the Item to #{ q } and return"
-        self.quantity = q
-        self.save
-        return
-      end
-      
-      log_action "quantity=(): Processing self.item_stocks"
-      
-      # For this to work, all quantities in all ItemStocks have to be considered. We need to know the current quantity total of all ItemStocks, then calculate the difference to get the value we have to add or subtract to one or several of the ItemStocks.
+      StockTransaction.transact(diff, item_stock, model2_item_stock)
+
+
+    elsif diff < 0
+      SalorBase.log_action "[Item]", "transact_quantity_with_stock=() difference is negative #{ diff }.", :magenta
       
       # this method gets the quantity total of all ItemStocks
-      quantity_total = self.quantity_with_stock
-      log_action "quantity=(): quantity_total = #{ quantity_total }"
+      quantity_total = item.quantity_with_stock
+      SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): quantity_total = #{ quantity_total }", :magenta
+      # First, we take from all ItemStocks which belong to a Location, as much as we can get (not reducing location_quantity below zero). If we still don't have enough, then we do the same for all ItemStocks which belong to a StockLocation. If we still don't have enough, we reduce the location_quantity of the first ItemStock which belongs to a Location to below zero. This maps approximately what happens in a store.
       
-      # the difference is positive when q is larger than quantity_total
-      difference = q - quantity_total
-      log_action "quantity=(): difference = #{ difference }"
+      amount_to_go = - diff
+      SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): subtraction: amount_to_go =  #{ amount_to_go }", :magenta
       
-      if difference > 0
-        # Adding the difference to the first ItemStock that belongs to a Location. This maps approximately to what would happen in a store.
-        item_stock = item_stocks.where(:location_type => 'Location').first
-        item_stock.quantity += difference
-        item_stock.save
-        log_action "quantity=(): added #{ difference } to ItemStock #{ item_stock.id }"
+      
+      item_stocks.each do |is|
+        SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): looping through all item_stocks of #{ item.class } #{ item.id }: ItemStock #{ is.id}. amount_to_go is #{ amount_to_go } ", :magenta
+        # we break this loop when we got enough
+        break if amount_to_go == 0
         
-      elsif difference < 0
-        # First, we take from all ItemStocks which belong to a Location, as much as we can get (not reducing location_quantity below zero). If we still don't have enough, then we do the same for all ItemStocks which belong to a StockLocation. If we still don't have enough, we reduce the location_quantity of the first ItemStock which belongs to a Location to below zero. This maps approximately what happens in a store.
-        
-        amount_to_go = - difference
-        log_action "quantity=(): subtraction: amount_to_go =  #{ amount_to_go }"
-        
-        
-        (item_stocks.where(:location_type => 'Location') + item_stocks.where(:location_type => 'StockLocation')).each do |is|
-          # we break this loop when we got enough
-          break if amount_to_go == 0
-          
-          if (amount_to_go < 0)
-            # just a security measure.
-            raise "This method has taken more than it should have. Rounding errors?"
-          end
-          
-          available_quantity = is.quantity
-          if available_quantity - amount_to_go > 0
-            log_action "quantity=(): this location ItemStock #{ is.id } has enough quantity to cover our demand"
-            is.quantity -= amount_to_go
-            is.save
-            amount_to_go = 0
-          else
-            log_action "quantity=(): this location ItemStock #{ is.id } does not have enough quantity to cover our demand. subtracting everything (#{ is.quantity })."
-            # this ItemStock does not have enough quantity to cover our demand. We still take what we can get, don't take more than available, and rememeber how much we have taken.
-            amount_to_go -= is.quantity
-            is.quantity = 0
-            is.save
-          end
+        if (amount_to_go < 0)
+          # just a security measure.
+          raise "This method has taken more than it should have. Rounding errors?"
         end
         
-        if amount_to_go > 0
-          # looping through all ItemStocks hasn't satisfied our demand, so we have to force the first of the  ItemStocks into negative quantity
-          item_stock = self.item_stocks.visible.first
-          item_stock.quantity = - amount_to_go
-          item_stock.save
-          log_action "looping through all ItemStocks hasn't satisfied our demand, so we have to force the first of the ItemStocks into negative quantity. setting ItemStock #{ item_stock.id } to #{ -amount_to_go }."
+        available_quantity = is.quantity
+        if available_quantity == 0
+          SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): this ItemStock #{ is.id } is zero. nothing to take from here.", :magenta
+          
+        elsif available_quantity - amount_to_go >= 0
+          SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): this ItemStock #{ is.id } has enough quantity to cover our demand. Creating StockTransaction with diff #{ -amount_to_go }", :magenta
+          StockTransaction.transact(-amount_to_go, is, model2)
+          amount_to_go = 0
+          
+        elsif available_quantity - amount_to_go < 0
+          SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): this ItemStock #{ is.id } does not have enough quantity to cover our demand. subtracting everything (#{ is.quantity }).", :magenta
+          # this ItemStock does not have enough quantity to cover our demand. We still take what we can get, don't take more than available, and rememeber how much we have taken.
+          amount_to_go -= is.quantity
+          StockTransaction.transact(-is.quantity, is, model2)
         end
-
-      else
-        log_action "quantity=(): difference is zero, nothing to do"
       end
-    
-    end # end user not specified a location
+      
+      if amount_to_go > 0
+        # looping through all ItemStocks hasn't satisfied our demand, so we have to force the first of the  ItemStocks into negative quantity
+        item_stock = item_stocks.visible.first
+        StockTransaction.transact(-amount_to_go, item_stock, model2)
+        SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): looping through all ItemStocks hasn't satisfied our demand, so we have to force the first of the ItemStocks into negative quantity. setting ItemStock #{ item_stock.id } to #{ -amount_to_go }.", :magenta
+      end
+
+    else
+      SalorBase.log_action "[Item]", "transact_quantity_with_stock=(): difference is zero, nothing to do", :magenta
+    end
     
   end
 

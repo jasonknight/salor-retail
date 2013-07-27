@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130727052142) do
+ActiveRecord::Schema.define(:version => 20130727083559) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -1053,7 +1053,7 @@ ActiveRecord::Schema.define(:version => 20130727052142) do
     t.integer  "from_id"
     t.string   "from_type"
     t.integer  "to_id"
-    t.integer  "to_type"
+    t.string   "to_type"
     t.float    "from_quantity"
     t.float    "to_quantity"
     t.float    "quantity"

@@ -495,5 +495,40 @@ $(function () {
        </table>
     </td>
   </tr>
+  
+  <tr>
+    <td>
+      <h2>Stock Transactions</h2>
+      <table border=1>
+        <tr>
+          <th>ID</th>
+          <th>to type</th>
+          <th>to id</th>
+          <th>from type</th>
+          <th>from id</th>
+          <th>to quantity</th>
+          <th>quantity </th>
+          <th>from quantity</th>
+        </tr>
+        <% @item.stock_transactions.order('created_at DESC').limit(10).each do |st| %>
+          <tr>
+            <td><%= st.id %></td>
+            <td><%= st.to_type %></td>
+            <td><%= st.to_id %></td>
+            <td><%= st.from_type %></td>
+            <td><%= st.from_id %></td>
+            <td><%= st.to_quantity %></td>
+            <td><%= st.quantity %></td>
+            <td><%= st.from_quantity %></td>
+          </tr>
+        <% end %>
+      </table>
+   </td>
+  </tr>
+  
+  
+  
 </table>
 <% end %>
+
+

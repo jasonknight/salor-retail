@@ -1,4 +1,3 @@
-- classname = f.object.location.class
 .fieldset
   %table#new_item_stock_id.fields
     %tr
@@ -11,3 +10,25 @@
       %td{:colspan => 2, :align => "right"}
         = f.hidden_field :_destroy, :class => 'destroy'
         = link_to_function I18n.t('menu.destroy'),"remove_item_stock_fields(this);"
+    %tr
+      %h4 StockTransactions
+      %table{ :border => 1 }
+        %tr
+          %th ID
+          %th from_type
+          %th from_id
+          %th from_quantity
+          %th to_type
+          %th to_id
+          %th to_quantity
+          %th quantity
+        - f.object.stock_transactions.order('created_at DESC').limit(10).each do |st|
+          %tr
+            %td= st.id
+            %td= st.from_type
+            %td= st.from_id
+            %td= st.from_quantity
+            %td= st.to_type
+            %td= st.to_id
+            %td= st.to_quantity
+            %td= st.quantity

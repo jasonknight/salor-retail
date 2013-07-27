@@ -8,14 +8,13 @@ class ItemStock < ActiveRecord::Base
   belongs_to :company
   belongs_to :location, :polymorphic => true
   
-  validates_presence_of :location_id
-  validates_presence_of :location_type
+  has_many :stock_transactions, :as => :to
   
   def locationstring
     if self.new_record?
       ""
     else
-      "#{ self.location.class.to_s }:#{ self.location.id }"
+      "#{ self.location.class.to_s }:#{ self.location.id if self.location }"
     end
   end
   
@@ -24,6 +23,10 @@ class ItemStock < ActiveRecord::Base
     self.location_type = parts[0]
     self.location_id = parts[1]
   end
+  
+  
+
+
   
 
   

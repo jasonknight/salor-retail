@@ -10,4 +10,31 @@ class StockTransaction < ActiveRecord::Base
   validates_presence_of :company_id
   
   
+  # This creates a StockTransaction and acutally does the incrementing/decrementing on the model. "model1" can be a StockItem or an Item (it must respond to a quantity setter). "model2" only serves for labelling purposes and can be of the classes Item, StockItem or Order.
+  def self.transact(diff, model1, model2)
+    SalorBase.log_action "ItemStock", "[transact()] Creating new StockTransaction. model1 is #{ model1.class.to_s } #{ model1.id }, model2 is #{ model2.class.to_s } #{ model2.id }", :cyan
+    
+    st = StockTransaction.new
+    st.company = model1.company
+    st.vendor = model1.vendor
+    st.quantity = diff
+    st.to = model1
+    st.from = model2
+    st.to_quantity = model1.quantity # this is the quantity before the modification below, for documentation purposes.
+    
+    if model2.class != Order
+      st.from_quantity = model2.quantity
+    end
+    
+    SalorBase.log_action "ItemStock", "[transact()] model1 (#{ model1.class.to_s } ID #{ model1.id }). Adding #{ diff } to it", :cyan
+    
+    model1.quantity += diff
+    result = model1.save
+    
+    if result != true
+      raise "Could not save #{ model1.class.to_s } #{ model1.id } because #{ model1.errors.messages }"
+    end
+
+    st.save
+  end
 end
