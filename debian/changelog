@@ -1,3 +1,9 @@
+salor-retail (4.0.2.14) unstable; urgency=low
+
+  * JS fix, pagination config on vendors table, translations
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 27 Jul 2013 19:32:01 +0200
+
 salor-retail (4.0.2.13) unstable; urgency=low
 
   * made ItemStocks polymorphic
