@@ -5,6 +5,13 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      invoice_logo: Invoice Logo
+      pagination_invoice_one: Pagination Invoice first page
+      pagination_invoice_one: Pagination Invoice other pages
+      technician_email: Technician email
+      enable_technician_emails: Send emails to technician
+      time_zone: Time zone
+      currency: Währung
       gift_card_amount: Gift Card remaining amount
       js_code: Javascript Code
       attributes: attributes

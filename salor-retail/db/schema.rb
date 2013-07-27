@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130727083559) do
+ActiveRecord::Schema.define(:version => 20130727172139) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -1230,6 +1230,8 @@ ActiveRecord::Schema.define(:version => 20130727083559) do
     t.string   "domain"
     t.string   "subdomain"
     t.string   "currency",                          :default => "USD"
+    t.integer  "pagination_invoice_one"
+    t.integer  "pagination_invoice_other",          :default => 30
   end
 
   add_index "vendors", ["user_id"], :name => "index_vendors_on_user_id"

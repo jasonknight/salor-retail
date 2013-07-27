@@ -5,6 +5,13 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      invoice_logo: Rechnungslogo
+      pagination_invoice_one: Artikel auf Rechung erste Seite
+      pagination_invoice_one: Artikel auf Rechung weitere Seiten
+      technician_email: Techniker E-Mail
+      enable_technician_emails: E-Mail an Techniker senden
+      time_zone: Zeitzone
+      currency: Währung
       gift_card_amount: Gutschein Restbetrag
       active: aktiv
       address: Adresse
@@ -183,7 +190,7 @@ gn:
       uses_drawer_id: Uses Drawer of
       value: Betrag
       vendor:
-        logo: Bildschirm-Logo
+        logo: Kundenbildschirm-Logo
         logo_invoice: A4 Rechnungs-Logo
         receipt_logo_footer: Beleg Logo Fuß
         receipt_logo_header: Beleg Logo Kopf
