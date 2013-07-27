@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130726122024) do
+ActiveRecord::Schema.define(:version => 20130727052142) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -443,26 +443,23 @@ ActiveRecord::Schema.define(:version => 20130726122024) do
 
   create_table "item_stocks", :force => true do |t|
     t.integer  "item_id"
-    t.integer  "stock_location_id"
-    t.float    "quantity"
+    t.float    "quantity",      :default => 0.0
     t.integer  "location_id"
-    t.datetime "created_at",              :null => false
-    t.datetime "updated_at",              :null => false
-    t.float    "stock_location_quantity"
-    t.float    "location_quantity"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.integer  "vendor_id"
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.string   "location_type"
   end
 
   add_index "item_stocks", ["company_id"], :name => "index_item_stocks_on_company_id"
   add_index "item_stocks", ["hidden"], :name => "index_item_stocks_on_hidden"
   add_index "item_stocks", ["item_id"], :name => "index_item_stocks_on_item_id"
   add_index "item_stocks", ["location_id"], :name => "index_item_stocks_on_location_id"
-  add_index "item_stocks", ["stock_location_id"], :name => "index_item_stocks_on_stock_location_id"
   add_index "item_stocks", ["vendor_id"], :name => "index_item_stocks_on_vendor_id"
 
   create_table "item_types", :force => true do |t|
@@ -1046,6 +1043,26 @@ ActiveRecord::Schema.define(:version => 20130726122024) do
   end
 
   add_index "stock_locations", ["vendor_id"], :name => "index_stock_locations_on_vendor_id"
+
+  create_table "stock_transactions", :force => true do |t|
+    t.integer  "company_id"
+    t.integer  "vendor_id"
+    t.integer  "user_id"
+    t.integer  "cash_register_id"
+    t.integer  "order_id"
+    t.integer  "from_id"
+    t.string   "from_type"
+    t.integer  "to_id"
+    t.integer  "to_type"
+    t.float    "from_quantity"
+    t.float    "to_quantity"
+    t.float    "quantity"
+    t.boolean  "hidden"
+    t.integer  "hidden_by"
+    t.datetime "hidden_at"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
 
   create_table "tax_profiles", :force => true do |t|
     t.string   "name"

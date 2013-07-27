@@ -57,11 +57,7 @@ class ShipmentItem < ActiveRecord::Base
       existing_item_stock = location.item_stocks.visible.find_by_item_id(item.id)
       if existing_item_stock
         log_action "move_into_stock: Item #{ item.id } with sku #{ item.sku } already has an ItemStock #{ existing_item_stock.id }. Adding to it"
-        if locationclass == Location
-          existing_item_stock.location_quantity = existing_item_stock.location_quantity.to_f + q
-        else
-          existing_item_stock.stock_location_quantity = existing_item_stock.stock_location_quantity.to_f + q
-        end
+        existing_item_stock.quantity += q
         existing_item_stock.save
       else
         # this method creates an ItemStock if not yet present. see item.rb

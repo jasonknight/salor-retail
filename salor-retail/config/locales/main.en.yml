@@ -692,6 +692,8 @@ en:
       report: Report
     show:
       purchase_price_sum: Purchase price sum
+      need_tax_profile: Shipment Item needs tax profile!
+      move_into_stock: Move into stock!
   sticker: sticker
   support: Support
   system:

@@ -15,7 +15,7 @@ class Location < ActiveRecord::Base
   has_many :items
   has_many :shipment_items
   has_many :discounts
-  has_many :item_stocks
+  has_many :item_stocks, :as => :location
   
   before_create :set_sku
   scope :applies, lambda {|t| where(:applies_to => t)}

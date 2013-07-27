@@ -167,6 +167,17 @@ class Vendor < ActiveRecord::Base
     write_attribute :logo_invoice_image_content_type, data.content_type.chomp
     write_attribute :logo_invoice_image, data.read
   end
+  
+  def location_stock_location_list
+    ret = []
+    self.locations.visible.order(:name).each do |l|
+      ret << [l.name, 'Location:' + l.id.to_s]
+    end
+    self.stock_locations.visible.all.each do |sl|
+      ret << [sl.name, 'StockLocation:' + sl.id.to_s]
+    end
+    return ret
+  end
 
   
   def get_unique_model_number(model_name_singular)

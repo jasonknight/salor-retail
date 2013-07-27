@@ -476,7 +476,8 @@ class Order < ActiveRecord::Base
         if not i.ignore_qty and i.behavior == 'normal' and not self.is_proforma
           q = oi.quantity
           q = -q if oi.is_buyback
-          i.set_quantity_with_recursion(i.quantity_with_stock - oi.quantity)
+          i.stock_transaction(oi.quantity, self)
+          #i.set_quantity_with_recursion(i.quantity_with_stock - oi.quantity)
         end
         i.save
       end

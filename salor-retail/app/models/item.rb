@@ -340,29 +340,6 @@ class Item < ActiveRecord::Base
     end
   end
   
-  def from_shipment_item(si)
-    i = Item.find_by_sku(si.sku)
-    if i then
-      if i.vendor == si.shipment.shipper then
-        i.quantity -= si.quantity
-      else
-        i.quantity += si.quantity
-        if si.stock_locations.any? then
-          stock = i.item_stocks.find_by_stock_location_id(si.stock_locations.first.id)
-          if stock then
-            stock.update_attribute :stock_location_quantity, stock.stock_location_quantity + si.quantity
-          end
-        end
-      end
-      if si.purchase_price then
-        i.purchase_price = si.purchase_price
-      end
-      return i
-    else
-      # puts "No item found..."
-    end
-    return nil
-  end
   
   # includes quantity of all parents
   def quantity_with_recursion(depth=0)
@@ -375,197 +352,16 @@ class Item < ActiveRecord::Base
     end
   end
 
-  # if quantity reduced to smaller than zero, it 'takes' stock from parents. if quantity is positive or non-integer or there is no parent, it updates quantity directly. All quantity setters are "quantity_with_stock", meaning, if StockItems are defined for the Item, it will use those instead of the simple quantity field.
-  def set_quantity_with_recursion(q, depth=0)
-    log_action "[RECURSION] [#{ self.sku }] Called with q = #{ q.to_f }", :light_blue
-    depth += 1
-    raise "Item.set_quantity_recursively: Cap of 5 reached." if depth > 5
-    
-    q = 0 if q.blank?
-    q = q.to_s.gsub(',','.')
-    q = q.to_f.round(3)
-    parent = self.parent
-    
-    if (q >= 0 or        # no recursion needed if zero or positive
-        q != q.round or  # no recursion for non-integers
-        self.quantity_with_stock != self.quantity_with_stock.round or # no recursion for non-integers
-        (parent.nil? and q < 0) # no recursion if no parent
-       )
-      log_action "[RECURSION] [#{ self.sku }] Writing quantity #{ q.to_f } directly.", :light_blue
-      self.set_quantity_with_stock(q)
-      result = self.save
-      if result == false
-        raise "[RECURSION] Could not save Item because #{ self.errors.messages }"
-      end
-      return
-    end
-
-    parent_units_needed = ( -q / parent.packaging_unit ).ceil
-    log_action "[RECURSION] [#{ self.sku }] parent_units_needed #{ parent_units_needed }", :light_blue
-    new_quantity_with_stock = parent_units_needed * parent.packaging_unit + q
-    log_action "[RECURSION] [#{ self.sku }] setting quantity_with_stock to #{ new_quantity_with_stock }", :light_blue
-    self.set_quantity_with_stock(new_quantity_with_stock)
-    result = self.save
-    if result == false
-      raise "[RECURSION] Could not save Item because #{ self.errors.messages }"
-    end
-    
-    # now we need to reduce the quantity of the parent. this starts the recursion
-    new_parent_quantity = parent.quantity_with_stock - parent_units_needed
-    log_action "[RECURSION] [#{ self.sku }] parent.quantity_with_stock = #{ parent.quantity_with_stock }", :light_blue
-    log_action "[RECURSION] [#{ self.sku }] parent_units_needed = #{ parent_units_needed }", :light_blue
-    log_action "[RECURSION] [#{ self.sku }] Starting recursion with new_parent_quantity #{ new_parent_quantity }", :light_blue
-    parent.set_quantity_with_recursion(new_parent_quantity, depth)
-  end
+  
   
   # returns the quantity of all ItemStocks, or if that feature is not used, only the Item quantity
   def quantity_with_stock
     item_stocks = self.item_stocks.visible
     if item_stocks.any?
-      return item_stocks.sum(:location_quantity) + item_stocks.sum(:stock_location_quantity)
+      return item_stocks.sum(:quantity)
     else
       return read_attribute :quantity
     end
-  end
-  
-  # sets the quantity of the item if no item_stocks defined, otherwise updates quantity of item_stocks of location as passed into this method. If no location is specified, it updates the first location.
-  def set_quantity_with_stock(q, location=nil)
-    if location
-      log_action "Item.quantity=(): the user has specified which location to set."
-      if location.class == Location
-        existing_item_stock = location.item_stocks.visible.find_by_id(self.id)
-        if existing_item_stock
-          log_action "set_quantity_with_stock(): already has an ItemStock for this Location. setting it"
-          existing_item_stock.location_quantity = q
-          existing_item_stock.save
-        else
-          log_action "set_quantity_with_stock(): no such ItemStock for this Location. creating it"
-          is = ItemStock.new
-          is.vendor = self.vendor
-          is.company = self.company
-          is.location = location
-          is.location_quantity = q
-          is.item = self
-          is.save
-        end
-        
-      elsif location.class == StockLocation
-        existing_item_stock = location.item_stocks.visible.find_by_id(self.id)
-        if existing_item_stock
-          log_action "set_quantity_with_stock(): already has an ItemStock for this StockLocation. setting it"
-          existing_item_stock.stock_location_quantity = q
-          existing_item_stock.save
-        else
-          log_action "set_quantity_with_stock(): no such ItemStock for this location. creating it"
-          is = ItemStock.new
-          is.vendor = self.vendor
-          is.company = self.company
-          is.stock_location = location
-          is.stock_location_quantity = q
-          is.item = self
-          is.save
-        end
-      end
-        
-        
-    else
-      log_action "quantity=(): A location has not been passed to this method. this happens for example from the POS screen."
-      
-      item_stocks = self.item_stocks.visible
-      if item_stocks.blank?
-        log_action "quantity=(): this Item does not have any stock_locations defined. in this case, we simply set the quantity of the Item to #{ q } and return"
-        self.quantity = q
-        self.save
-        return
-      end
-      
-      log_action "quantity=(): Processing self.item_stocks"
-      
-      # For this to work, all quantities in all ItemStocks have to be considered. We need to know the current quantity total of all ItemStocks, then calculate the difference to get the value we have to add or subtract to one or several of the ItemStocks.
-      
-      # this method gets the quantity total of all ItemStocks
-      quantity_total = self.quantity_with_stock
-      log_action "quantity=(): quantity_total = #{ quantity_total }"
-      
-      # the difference is positive when q is larger than quantity_total
-      difference = q - quantity_total
-      log_action "quantity=(): difference = #{ difference }"
-      
-      if difference > 0
-        # Adding the difference to the first ItemStock that belongs to a Location. This maps approximately to what would happen in a store.
-        item_stock = item_stocks.where('location_id IS NOT NULL').first
-        item_stock.location_quantity += difference
-        item_stock.save
-        log_action "quantity=(): added #{ difference } to ItemStock #{ item_stock.id }"
-        
-      elsif difference < 0
-        # First, we take from all ItemStocks which belong to a Location, as much as we can get (not reducing location_quantity below zero). If we still don't have enough, then we do the same for all ItemStocks which belong to a StockLocation. If we still don't have enough, we reduce the location_quantity of the first ItemStock which belongs to a Location to below zero. This maps approximately what happens in a store.
-        
-        amount_to_go = - difference
-        log_action "quantity=(): subtraction: amount_to_go =  #{ amount_to_go }"
-        
-        item_stocks.where('location_id IS NOT NULL').each do |is|
-          # we break this loop when we got enough
-          break if amount_to_go == 0
-          
-          if (amount_to_go < 0)
-            # just a security measure.
-            raise "This method has taken more than it should have. Rounding errors?"
-          end
-          
-          available_quantity = is.location_quantity
-          if available_quantity - amount_to_go > 0
-            log_action "quantity=(): this location ItemStock #{ is.id } has enough quantity to cover our demand"
-            is.location_quantity -= amount_to_go
-            is.save
-            amount_to_go = 0
-          else
-            log_action "quantity=(): this location ItemStock #{ is.id } does not have enough quantity to cover our demand. subtracting everything (#{ is.location_quantity })."
-            # this ItemStock does not have enough quantity to cover our demand. We still take what we can get, don't take more than available, and rememeber how much we have taken.
-            amount_to_go -= is.location_quantity
-            is.location_quantity = 0
-            is.save
-          end
-        end
-        
-        item_stocks.where('stock_location_id IS NOT NULL').each do |is|
-          # we break this loop when we got enough
-          break if amount_to_go == 0
-          
-          if (amount_to_go < 0)
-            # just a security measure.
-            raise "This method has taken more than it should have. Rounding errors?"
-          end
-          
-          available_quantity = is.stock_location_quantity
-          if available_quantity - amount_to_go > 0
-            log_action "quantity=(): this stock_location ItemStock #{ is.id } has enough quantity to cover our demand"
-            is.stock_location_quantity -= amount_to_go
-            is.save
-            amount_to_go = 0
-          else
-            log_action "quantity=(): this stock_location ItemStock #{ is.id } does not have enough quantity to cover our demand. subtracting everything (#{ is.stock_location_quantity })."
-            # this ItemStock does not have enough quantity to cover our demand. We still take what we can get, don't take more than available, and rememeber how much we have taken.
-            amount_to_go -= is.location_quantity.to_f
-            is.stock_location_quantity = 0
-            is.save
-          end
-        end
-        
-        if amount_to_go > 0
-          # looping through all ItemStocks hasn't satisfied our demand, so we have to force one of the ItemStocks into negative quantity
-          item_stock = self.item_stocks.visible.first
-          item_stock.location_quantity = - amount_to_go
-          item_stock.save
-          log_action "looping through all ItemStocks hasn't satisfied our demand, so we have to force one of the ItemStocks into negative quantity. setting ItemStock #{ item_stock.id } to #{ -amount_to_go }."
-        end
-
-      else
-        log_action "quantity=(): difference is zero, nothing to do"
-      end
-    
-    end # end user not specified a location
-    
   end
   
   def hide(by)
@@ -699,5 +495,148 @@ class Item < ActiveRecord::Base
     return cleaned_up_ids.flatten
   end
 
+  protected
+  
+  # if quantity reduced to smaller than zero, it 'takes' stock from parents. if quantity is positive or non-integer or there is no parent, it updates quantity directly. All quantity setters are "quantity_with_stock", meaning, if StockItems are defined for the Item, it will use those instead of the simple quantity field.
+  def set_quantity_with_recursion(q, depth=0)
+    log_action "[RECURSION] [#{ self.sku }] Called with q = #{ q.to_f }", :light_blue
+    depth += 1
+    raise "Item.set_quantity_recursively: Cap of 5 reached." if depth > 5
+    
+    q = 0 if q.blank?
+    q = q.to_s.gsub(',','.')
+    q = q.to_f.round(3)
+    parent = self.parent
+    
+    if (q >= 0 or        # no recursion needed if zero or positive
+        q != q.round or  # no recursion for non-integers
+        self.quantity_with_stock != self.quantity_with_stock.round or # no recursion for non-integers
+        (parent.nil? and q < 0) # no recursion if no parent
+       )
+      log_action "[RECURSION] [#{ self.sku }] Writing quantity #{ q.to_f } directly.", :light_blue
+      self.set_quantity_with_stock(q)
+      result = self.save
+      if result == false
+        raise "[RECURSION] Could not save Item because #{ self.errors.messages }"
+      end
+      return
+    end
+
+    parent_units_needed = ( -q / parent.packaging_unit ).ceil
+    log_action "[RECURSION] [#{ self.sku }] parent_units_needed #{ parent_units_needed }", :light_blue
+    new_quantity_with_stock = parent_units_needed * parent.packaging_unit + q
+    log_action "[RECURSION] [#{ self.sku }] setting quantity_with_stock to #{ new_quantity_with_stock }", :light_blue
+    self.set_quantity_with_stock(new_quantity_with_stock)
+    result = self.save
+    if result == false
+      raise "[RECURSION] Could not save Item because #{ self.errors.messages }"
+    end
+    
+    # now we need to reduce the quantity of the parent. this starts the recursion
+    new_parent_quantity = parent.quantity_with_stock - parent_units_needed
+    log_action "[RECURSION] [#{ self.sku }] parent.quantity_with_stock = #{ parent.quantity_with_stock }", :light_blue
+    log_action "[RECURSION] [#{ self.sku }] parent_units_needed = #{ parent_units_needed }", :light_blue
+    log_action "[RECURSION] [#{ self.sku }] Starting recursion with new_parent_quantity #{ new_parent_quantity }", :light_blue
+    parent.set_quantity_with_recursion(new_parent_quantity, depth)
+  end
+  
+  # sets the quantity of the item if no item_stocks defined, otherwise updates quantity of item_stocks of location as passed into this method. If no location is specified, it updates the first location.
+  def set_quantity_with_stock(q, location=nil)
+    if location
+      log_action "Item.quantity=(): the user has specified which location to set."
+      
+      existing_item_stock = location.item_stocks.visible.find_by_id(self.id)
+      if existing_item_stock
+        log_action "set_quantity_with_stock(): already has an ItemStock for the specified location. setting it"
+        existing_item_stock.quantity = q
+        existing_item_stock.save
+      else
+        log_action "set_quantity_with_stock(): no such ItemStock for this Location. creating it"
+        is = ItemStock.new
+        is.vendor = self.vendor
+        is.company = self.company
+        is.location = location
+        is.quantity = q
+        is.item = self
+        is.save
+      end
+        
+        
+    else
+      log_action "quantity=(): A location has not been passed to this method. this happens for example from the POS screen."
+      
+      item_stocks = self.item_stocks.visible
+      if item_stocks.blank?
+        log_action "quantity=(): this Item does not have any stock_locations defined. in this case, we simply set the quantity of the Item to #{ q } and return"
+        self.quantity = q
+        self.save
+        return
+      end
+      
+      log_action "quantity=(): Processing self.item_stocks"
+      
+      # For this to work, all quantities in all ItemStocks have to be considered. We need to know the current quantity total of all ItemStocks, then calculate the difference to get the value we have to add or subtract to one or several of the ItemStocks.
+      
+      # this method gets the quantity total of all ItemStocks
+      quantity_total = self.quantity_with_stock
+      log_action "quantity=(): quantity_total = #{ quantity_total }"
+      
+      # the difference is positive when q is larger than quantity_total
+      difference = q - quantity_total
+      log_action "quantity=(): difference = #{ difference }"
+      
+      if difference > 0
+        # Adding the difference to the first ItemStock that belongs to a Location. This maps approximately to what would happen in a store.
+        item_stock = item_stocks.where(:location_type => 'Location').first
+        item_stock.quantity += difference
+        item_stock.save
+        log_action "quantity=(): added #{ difference } to ItemStock #{ item_stock.id }"
+        
+      elsif difference < 0
+        # First, we take from all ItemStocks which belong to a Location, as much as we can get (not reducing location_quantity below zero). If we still don't have enough, then we do the same for all ItemStocks which belong to a StockLocation. If we still don't have enough, we reduce the location_quantity of the first ItemStock which belongs to a Location to below zero. This maps approximately what happens in a store.
+        
+        amount_to_go = - difference
+        log_action "quantity=(): subtraction: amount_to_go =  #{ amount_to_go }"
+        
+        
+        (item_stocks.where(:location_type => 'Location') + item_stocks.where(:location_type => 'StockLocation')).each do |is|
+          # we break this loop when we got enough
+          break if amount_to_go == 0
+          
+          if (amount_to_go < 0)
+            # just a security measure.
+            raise "This method has taken more than it should have. Rounding errors?"
+          end
+          
+          available_quantity = is.quantity
+          if available_quantity - amount_to_go > 0
+            log_action "quantity=(): this location ItemStock #{ is.id } has enough quantity to cover our demand"
+            is.quantity -= amount_to_go
+            is.save
+            amount_to_go = 0
+          else
+            log_action "quantity=(): this location ItemStock #{ is.id } does not have enough quantity to cover our demand. subtracting everything (#{ is.quantity })."
+            # this ItemStock does not have enough quantity to cover our demand. We still take what we can get, don't take more than available, and rememeber how much we have taken.
+            amount_to_go -= is.quantity
+            is.quantity = 0
+            is.save
+          end
+        end
+        
+        if amount_to_go > 0
+          # looping through all ItemStocks hasn't satisfied our demand, so we have to force the first of the  ItemStocks into negative quantity
+          item_stock = self.item_stocks.visible.first
+          item_stock.quantity = - amount_to_go
+          item_stock.save
+          log_action "looping through all ItemStocks hasn't satisfied our demand, so we have to force the first of the ItemStocks into negative quantity. setting ItemStock #{ item_stock.id } to #{ -amount_to_go }."
+        end
+
+      else
+        log_action "quantity=(): difference is zero, nothing to do"
+      end
+    
+    end # end user not specified a location
+    
+  end
 
 end

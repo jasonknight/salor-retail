@@ -692,6 +692,8 @@ gn:
       report: Bericht
     show:
       purchase_price_sum: Gesamt
+      need_tax_profile: Lieferartikel muss eine Steuerklasse haben
+      move_into_stock: Einlagern!
   sticker: Aufkleber
   support: Support
   system:

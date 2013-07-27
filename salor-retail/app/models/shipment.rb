@@ -52,17 +52,6 @@ class Shipment < ActiveRecord::Base
     return ret
   end
   
-  def location_stock_location_list
-    ret = []
-    self.vendor.locations.visible.order(:name).each do |l|
-      ret << [l.name, 'Location:' + l.id.to_s]
-    end
-    self.vendor.stock_locations.visible.all.each do |sl|
-      ret << [sl.name, 'StockLocation:' + sl.id.to_s]
-    end
-    return ret
-  end
-  
   def the_receiver=(val)
     parts = val.split(':')
     self.receiver_type = parts[0]

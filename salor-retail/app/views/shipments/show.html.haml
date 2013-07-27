@@ -72,10 +72,8 @@
       %th
     - @shipment.shipment_items.visible.reverse.each do |si|
       - item = @shipment.vendor.items.visible.find_by_sku(si.sku)
-      - item_stocks_stock_locations = item.item_stocks.visible.where('stock_location_id IS NOT NULL') if item
-      - item_stocks_locations = item.item_stocks.visible.where('location_id IS NOT NULL') if item
-      - item_stocks_stock_locations ||= []
-      - item_stocks_locations ||= []
+      - item_stocks = item.item_stocks.visible if item
+      - item_stocks ||= []
       %tr
         %td= si.name
         %td= si.sku
@@ -84,22 +82,22 @@
           - if si.in_stock_quantity == si.quantity
             = t ('views.forms.shipment.types.in_stock')
           - elsif item.nil? and si.tax_profile.nil?
-            need tax profile
+            = t ('.need_tax_profile')
           - else
           
             = text_field_tag "shipment_item_quantity_to_move_#{ si.id }", (si.quantity - si.in_stock_quantity.to_f), :class => 'shipment_item_quantity_to_move', :onclick => "$(this).select()"
             
-            - unless item_stocks_stock_locations.blank? and item_stocks_locations.blank?
-              = select_tag "shipment_item_move_to_#{ si.id }", options_for_select(@shipment.location_stock_location_list), :class => 'shipment_item_move_to' , :include_blank => true, :onchange => "$('#shipment_item_move_button_#{ si.id }').fadeIn();"
+            - unless item_stocks.blank?
+              = select_tag "shipment_item_move_to_#{ si.id }", options_for_select(@shipment.vendor.location_stock_location_list), :class => 'shipment_item_move_to' , :include_blank => true, :onchange => "$('#shipment_item_move_button_#{ si.id }').fadeIn();"
               
-              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :style => "display:none;", :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), $('#shipment_item_move_to_#{ si.id }').val() );" } MOVE!
+              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :style => "display:none;", :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), $('#shipment_item_move_to_#{ si.id }').val() );" }= t('.move_into_stock')
               
             - else
             
-              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :style => "display:none;",  :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), 'no_item' );" } MOVE!
+              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), 'no_item' );" }= t('.move_into_stock')
         %td
           - if item
-            - if item_stocks_stock_locations.blank? and item_stocks_locations.blank?
+            - if item_stocks.blank?
               %table
                 %tr
                   %th= t 'views.locations'
@@ -112,11 +110,7 @@
                 %tr
                   %th= t 'views.locations'
                   %th= t 'views.quantity'
-                - item_stocks_locations.each do |is|
+                - item_stocks.each do |is|
                   %tr
                     %td= is.location.name
-                    %td= is.location_quantity
-                - item_stocks_stock_locations.each do |is|
-                  %tr
-                    %td= is.stock_location.name
-                    %td= is.stock_location_quantity
+                    %td= is.quantity
