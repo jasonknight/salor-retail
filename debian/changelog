@@ -1,3 +1,10 @@
+salor-retail (4.0.2.13) unstable; urgency=low
+
+  * made ItemStocks polymorphic
+  * StockTransactions working, even with recursion
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 27 Jul 2013 14:44:05 +0200
+
 salor-retail (4.0.2.12) unstable; urgency=low
 
   [ Michael Franzl ]
