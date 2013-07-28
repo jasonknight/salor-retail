@@ -106,6 +106,7 @@ module ApplicationHelper
       :wrench => 'wrench',
       :stock_locations => 'stock_locations',
       :stock_location => 'stock_locations',
+      :item_stock => 'item',
       :locked => 'lock',
       :unlocked => 'unlock',
       :discount => "discount",
