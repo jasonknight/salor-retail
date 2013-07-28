@@ -17,7 +17,11 @@ class CustomersController < ApplicationController
   end
   
   def index
-    @customers = @current_company.customers.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    if params[:keywords].blank?
+      @customers = @current_company.customers.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    else
+      @customers = @current_company.customers.by_keywords(params[:keywords]).visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    end
   end
 
   def new
