@@ -1,3 +1,9 @@
+salor-retail (4.0.2.16) unstable; urgency=low
+
+  * fixed immediate weighing and config dialog style problem
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 28 Jul 2013 19:47:45 +0200
+
 salor-retail (4.0.2.15) unstable; urgency=low
 
   * stockTransactions for Shipments
