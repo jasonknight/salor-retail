@@ -135,8 +135,10 @@ function weigh_last_item() {
     return;
   }
     
-  var itemid = $(".pos-table-left-column-items").children(":first").attr('model_id');
-  if (Register.scale != "") {
+  var top_item = $(".pos-table-left-column-items").children()[0]
+  var itemid = $(top_item).attr('model_id');
+  console.log('itemid', itemid);
+  if (typeof Register.scale != 'undefined' && Register.scale != '') {
     var weight = Salor.weigh(Register.scale, 0);
   } else {
     var weight = 0;

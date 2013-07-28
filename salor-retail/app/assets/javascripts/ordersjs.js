@@ -242,7 +242,11 @@ function drawOrderItemRow(item) {
   } // end loop through attrs
 
   if(item.weigh_compulsory && item.quantity == 0) {
-    weigh_last_item();
+    setTimeout(function() {
+      // doesn't work without timeout
+      weigh_last_item();
+    }
+    , 100);
   }
   return row;
 }
@@ -568,7 +572,7 @@ function detailedOrderItemMenu(event) {
   var title = shared.element('div',{id: 'order_item_edit_name'},'',$('body'));
   title.addClass('salor-dialog');
   title.offset(offset);
-  title.css({padding: '3px',width: $(event.currentTarget).outerWidth() - 8, height: $(event.currentTarget).outerHeight(), 'border-bottom': 'none'});
+  title.css({padding: '3px',width: $(event.currentTarget).outerWidth() + 50, height: $(event.currentTarget).outerHeight(), 'border-bottom': 'none'});
   config = shared.element('div',{id: 'order_item_edit_config'},'',$('body'));
   config.addClass('salor-dialog');
   config.offset({top: offset.top + $(event.currentTarget).outerHeight() + 5, left: offset.left});
