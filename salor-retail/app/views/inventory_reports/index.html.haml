@@ -1,0 +1,3 @@
+= raw content_box_top(t "menu.inventory_reports")
+- width ||= "90%"
+= render :partial => 'shared/list_view', :locals => {  :klass => InventoryReport, :width => '60%',:collection => @inventory_reports, :columns => [:name]}

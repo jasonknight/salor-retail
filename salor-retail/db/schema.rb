@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130727172139) do
+ActiveRecord::Schema.define(:version => 20130728080929) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -357,15 +357,20 @@ ActiveRecord::Schema.define(:version => 20130727172139) do
     t.integer  "inventory_report_id"
     t.integer  "item_id"
     t.float    "real_quantity"
-    t.float    "item_quantity"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.float    "quantity"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.integer  "vendor_id"
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.integer  "category_id"
+    t.integer  "purchase_price_cents"
+    t.integer  "price_cents"
+    t.string   "name"
+    t.string   "sku"
   end
 
   add_index "inventory_report_items", ["inventory_report_id"], :name => "index_inventory_report_items_on_inventory_report_id"

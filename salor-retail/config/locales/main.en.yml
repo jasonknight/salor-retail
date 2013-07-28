@@ -327,6 +327,7 @@ en:
     exception_in_files: ! 'The Error occurred in the following files:'
     oops_an_error_occurred: Oops! An Error occurred
   headings:
+    inventory_report: Inventory Report
     almost_out: almost out
     bank_machine_types: supported bank machines
     best_sellers: bestsellers
@@ -393,6 +394,7 @@ en:
       unused_item_ids: Unused Items
       used_item_ids: Used Items
     index:
+      report: Report
       inventory_report: Inventur
       database_distiller_warning: Due to the generation of statistics, calling this
         function will last for about 30 seconds. Proceed anyway?
@@ -400,6 +402,7 @@ en:
         will now be created and updated. This action will take about 20 minutes. Are
         you really sure that you want to proceed?
     inventory_report:
+      no_category: No Category
       price: Selling price
       subtotal_purchase_price: Subtotal Purchase Price
       subtotal_selling_price: Subtotal Selling Price
@@ -422,6 +425,7 @@ en:
       upload: upload
   label: label
   menu:
+    enter_inventory_items: Enter
     logos: Logos
     print-dialog: print dialog
     refund_payment_method: refund payment method

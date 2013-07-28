@@ -1,4 +1,10 @@
 class InventoryReport < ActiveRecord::Base
-  attr_accessible :name,:created_at,:updated_at, :vendor_id
+  include SalorScope
+  include SalorBase
+  
+  belongs_to :vendor
+  belongs_to :company
   has_many :inventory_report_items
+  
+  
 end

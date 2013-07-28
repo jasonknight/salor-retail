@@ -17,10 +17,12 @@ class BrokenItemsController < ApplicationController
   end
 
   def new
-    @item = @current_vendor.broken_items.build
+    @item = BrokenItem.new
+    @item.vendor = @current_vendor
+    @item.company = @current_company
     @item.name = params[:name]
     @item.sku = params[:sku]
-    @item.base_price = params[:base_price]
+    @item.price = params[:base_price]
   end
 
   def edit

@@ -1848,8 +1848,10 @@ table.tools
   background-color: $background
 
 div.tools 
+  @include raised_element
   clear: both
-  margin: 10px 5px
+  margin: 0px auto
+  width: 50%
 
 
 div.tools a 
@@ -3175,3 +3177,21 @@ input.modcoder_excolor_clrbox
 div.dialog-button
   @include awesome_button
   padding: 10px 15px
+  
+div.new_inventory_box
+  @include raised_element
+  font-size: 180%
+  margin: 40px auto 0px auto
+  padding: 20px
+  width: 400px
+  table
+    div#inventory_item_name,
+    div#inventory_item_sku
+    
+    div#inventory_msg
+      :position absolute
+
+    div#inventory_msg
+      :color green
+      :font-size 500%
+      :display none

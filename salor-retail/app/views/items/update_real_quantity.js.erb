@@ -1,8 +1,0 @@
-<%
-if params[:sku] then
-  @item = Item.find_by_sku(params[:sku])
-  if @item then
-    @item.update_attribute(:real_quantity, params[:quantity])
-  end
-end
-%>

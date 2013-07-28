@@ -72,6 +72,7 @@ module ApplicationHelper
 
   def get_icons_map
     icons = {
+      :add_item => 'add_item',
       :location => 'location',
       :search => 'search',
       :category => 'category',
@@ -138,6 +139,7 @@ module ApplicationHelper
       :book_sun => 'book_sun',
       :cash_drawer => 'cash_drawer',
       :counter => 'counter',
+      :inventory_report => 'counter',
       :wand => 'wand',
       :update_real_quantity => 'okay',
       :okay => 'okay',

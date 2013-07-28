@@ -325,6 +325,7 @@ gn:
     exception_in_files: ! 'Der Fehler trat in diesen Dateien auf:'
     oops_an_error_occurred: Oops! Es ist leider ein Fehler aufgetreten
   headings:
+    inventory_report: Inventurbericht
     almost_out: Artikel, die nachbestellt werden müssen
     bank_machine_types: Typ unterstützen
     best_sellers: Bestseller
@@ -392,6 +393,7 @@ gn:
       unused_item_ids: Nicht verwendete Artikel
       used_item_ids: Bisher verwendete Artikel
     index:
+      report: Bericht
       inventory_report: Inventur
       database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung
         von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
@@ -399,10 +401,11 @@ gn:
         werden nun angelegt bzw. aktualisiert. Diese Aktion dauert etwa 20 Minuten.
         Sind Sie wirklich sicher, dass Sie fortfahren möchten?
     inventory_report:
+      no_category: Keine Kategorie
       price: Verkaufspreis
       subtotal_purchase_price: Gesamtsumme Einkaufspreis
       subtotal_selling_price: Gesamtsumme Verkaufspreis
-      title: Bericht Inventur
+      title: Inventurbericht
       total_buying_price: Summe Kaufpreis
       total_selling_price: Summe Verkaufspreis
     selection:
@@ -413,14 +416,13 @@ gn:
       query: Abfragen
       to: bis
     update_real_quantity:
-      are_you_sure: Dies übernimmt die Inventurmengen in die Datenbank und der Inventurbericht
-        wird gelöscht. Fortsetzen?
-      inventory_report: Bericht Inventur
+      inventory_report: Inventurbericht
       update_quantity: Inventurmengen übernehmen
     upload:
       upload: Importieren
   label: Regaletikett
   menu:
+    enter_inventory_items: Eingeben
     logos: Logos
     print-dialog: Druckdialog
     refund_payment_method: Storno-Rückzahlugsmethode

@@ -15,11 +15,11 @@
     %td=item.quantity
     %td
       %label=I18n.t("activerecord.attributes.base_price")
-    %td=number_to_currency(item.base_price)
+    %td= humanized_money_with_symbol item.price
   %tr
-    - b = Barcode.new
-    - path = b.create(item.sku)
-    %td{:align=>:center,:colspan=>4}=image_tag(path)
+    - b = Barcode.new(item)
+    - path = b.create
+    %td{:align=>:center,:colspan=>4}=image_tag(path + ".png")
   %tr
     %td{:colspan => 4, :class => "small-text"}="ID:#{item.id}"
     

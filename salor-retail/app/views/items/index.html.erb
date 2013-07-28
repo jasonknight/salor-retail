@@ -3,15 +3,14 @@
 <table class='tools' align="center">
   <tr>
     <td align="center">
-      <div class='tools'>
         <div class="tool-icon" align="center" onmousedown="window.location = '<%= new_item_path(:vendor_id => params[:vendor_id]) %>'">
           <%= link_to salor_icon(:add,{},24), new_item_path(:vendor_id => params[:vendor_id]) %><br /><span class='icon-caption'><%= I18n.t("menu.new_item") %></span>
         </div>
         <div class="tool-icon" onmousedown="window.location = '/items/update_location'">
           <%= link_to salor_icon(:location,{:class => 'pointer'},24),"/items/update_location" %><br /><span class='icon-caption'><%= I18n.t("menu.update_location") %></span>
         </div>
-        <div class="tool-icon" onmousedown="window.location = '/items/update_real_quantity'">
-          <%= link_to salor_icon(:counter,{:class => 'pointer'},24),"/items/update_real_quantity" %><br /><span class='icon-caption'><%= I18n.t("menu.update_real_quantity") %></span>
+        <div class="tool-icon">
+          <%= link_to salor_icon(:inventory_report,{:class => 'pointer'},24), inventory_reports_path %><br /><span class='icon-caption'><%= I18n.t("menu.update_real_quantity") %></span>
         </div>
       
         <div class="tool-icon">
@@ -20,16 +19,16 @@
         </div>
         
         <div class="tool-icon">
-          <a href='/items/report'><%= salor_icon(:report,{},24) %></a><br /><span class='icon-caption'><%= t('.inventory_report') %></span>
+          <a href='/items/report'><%= salor_icon(:report,{},24) %></a><br /><span class='icon-caption'><%= t('.report') %></span>
         </div>
         
         <div class="tool-icon" >
-            <%= link_to salor_icon(:down,{},24),"/items/download?page=#{params[:page]}&keywords=#{params[:keywords]}&order_by=#{params[:order_by]}" %>
+            <%= link_to salor_icon(:save_download,{},24),"/items/download?page=#{params[:page]}&keywords=#{params[:keywords]}&order_by=#{params[:order_by]}" %>
             
           <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
         </div>
 
-      </div>
+
     </td>
   </tr>
 </table>

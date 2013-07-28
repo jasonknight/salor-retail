@@ -27,11 +27,13 @@
 //= require keypress
 //= require onscreenkeyboard
 //= require salor_bin
+//= require inventory
 //= require style
 //= require shared
 //= require ordersjs
 //= require ordersjs
 //= require shipments
+//= require shippers
 //= require cash_registers
 //= require search
 //= require complete-order-payment

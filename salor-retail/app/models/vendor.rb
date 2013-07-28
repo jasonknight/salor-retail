@@ -13,6 +13,7 @@ class Vendor < ActiveRecord::Base
   belongs_to :company
   has_and_belongs_to_many :users
   
+  has_many :inventory_reports
   has_many :item_types
   has_many :loyalty_cards
   has_many :payment_methods
@@ -1104,6 +1105,55 @@ class Vendor < ActiveRecord::Base
     return filtered_tests.join("\n")
     
     
+  end
+  
+  def create_inventory_report
+    ir = InventoryReport.new
+    ir.vendor = self
+    ir.company = self.company
+    ir.name = "InventoryReport #{ Time.now.strftime("%Y%m%d") }"
+    result = ir.save
+    if result != true
+      raise "Could not save InventoryReport because #{ ir.errors.messages }"
+    end
+    
+    sql = %Q[
+        INSERT INTO inventory_report_items 
+        ( inventory_report_id,
+          item_id,
+          real_quantity,
+          quantity,
+          created_at,
+          updated_at,
+          vendor_id,
+          company_id,
+          price_cents,
+          purchase_price_cents,
+          category_id,
+          name,
+          sku
+         ) SELECT 
+            ir.id,
+            i.id,
+            i.real_quantity,
+            i.quantity,
+            NOW(),
+            NOW(),
+            ir.vendor_id,
+            ir.company_id,
+            i.price_cents,
+            i.purchase_price_cents,
+            i.category_id,
+            i.name,
+            i.sku FROM
+          items AS i, 
+          inventory_reports AS ir WHERE 
+            i.real_quantity_updated IS TRUE AND 
+            ir.id = #{ir.id} AND
+            i.hidden IS NULL
+    ]
+    Item.connection.execute(sql)
+    Item.connection.execute("UPDATE items SET quantity = real_quantity, real_quantity_updated = NULL WHERE real_quantity_updated IS TRUE AND vendor_id=#{ self.id} AND company_id=#{ self.company_id }")
   end
   
   private

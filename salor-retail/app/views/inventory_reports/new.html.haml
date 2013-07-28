@@ -1,0 +1,26 @@
+= raw content_box_top(I18n.t("headings.update_real_quantity"))
+
+.tools
+  .tool-icon= link_to salor_icon(:report, {}, 32, t('items.update_real_quantity.inventory_report')), '/inventory_reports/current'
+
+  .clear
+
+
+.new_inventory_box
+  %table
+    %tr
+      %td= I18n.t("activerecord.attributes.sku")
+      %td= text_field_tag 'inventory_sku'
+    %tr
+      %td
+      %td
+        #inventory_item_name &nbsp;
+        #inventory_item_sku &nbsp;
+    %tr
+      %td= I18n.t("activerecord.attributes.quantity")
+      %td= text_field_tag 'inventory_quantity'
+    %tr
+      %td
+      %td
+        #inventory_msg &nbsp;
+
