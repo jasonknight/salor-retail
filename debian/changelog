@@ -1,3 +1,13 @@
+salor-retail (4.0.2.15) unstable; urgency=low
+
+  * stockTransactions for Shipments
+  * pagination for invoices
+  * focus stuff
+  * ItemStock list for StockLocations
+  * inventory reports
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 28 Jul 2013 11:34:41 +0200
+
 salor-retail (4.0.2.14) unstable; urgency=low
 
   * JS fix, pagination config on vendors table, translations
