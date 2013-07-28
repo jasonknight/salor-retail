@@ -392,6 +392,7 @@ gn:
       unused_item_ids: Nicht verwendete Artikel
       used_item_ids: Bisher verwendete Artikel
     index:
+      inventory_report: Inventur
       database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung
         von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
       only_for_tobacco_stores: Diese Funktion ist nur für Trafiken. Tabak-Artikel

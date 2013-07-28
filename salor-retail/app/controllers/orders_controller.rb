@@ -52,6 +52,10 @@ class OrdersController < ApplicationController
   end
 
   def new
+    unless params[:keywords].blank?
+      redirect_to "/items?keywords=#{ params[:keywords] }"
+    end
+    
     # get the user's current order
     @current_order = @current_vendor.orders.visible.where(:completed_at => nil).find_by_id(@current_user.current_order_id)
 

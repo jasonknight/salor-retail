@@ -393,6 +393,7 @@ en:
       unused_item_ids: Unused Items
       used_item_ids: Used Items
     index:
+      inventory_report: Inventur
       database_distiller_warning: Due to the generation of statistics, calling this
         function will last for about 30 seconds. Proceed anyway?
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items

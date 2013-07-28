@@ -129,9 +129,13 @@ window.shipments = {
   },
   
   move_item_into_stock: function( shipment_item_id, quantity, locationstring) {
-    if (locationstring.length == 0) {
+    if (typeof locationstring == 'undefined') {
+      // see UI. this happens when there are either no ItemStocks or no Item
+      locationstring = ''
+    } else if (locationstring.length == 0) {
+      // when user left select empty
       return;
-    }
+    }    
     var string = "/shipments/move_item_into_stock?shipment_item_id=" + shipment_item_id + "&quantity=" + quantity + "&locationstring=" + locationstring;
     get(string, 'shipments.js', function() {
       location.reload();

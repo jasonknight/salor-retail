@@ -496,7 +496,7 @@ class Item < ActiveRecord::Base
     return cleaned_up_ids.flatten
   end
   
-  # this is the main method that should be used to set a quantity of an Item.
+  # This is the main method that should be used to transact a quantity of an Item. Transactions are safer and more transparent than setting the "quantity" attribute directly, so this should be used. This method also takes care of recursion of parent/child items as well as Items with many StockItem in many locations. "diff" is the amount that will be transacted for the Item "item". "model2" is just for labeling purposes of StockTransactions and can be of any class that can logially send or receive quantities (e.g. StockItem, Item, ShipmentItem, Order, etc.). If "item" does not have any StockItems defined, the simple quantity attribute will used instead for backwards-compatibility.
   def self.transact_quantity(diff, item, model2)
     Item.transact_quantity_with_recursion(diff, item, model2)
   end
