@@ -32,8 +32,8 @@
 - I18n.locale = params[:locale_select]
     
 .clear
-- item_pagination_count_one = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_one]
-- item_pagination_count_other = SalorRetail::Application::CONFIGURATION[:invoice_pagination_page_other]
+- item_pagination_count_one = @current_vendor.pagination_invoice_one
+- item_pagination_count_other = @current_vendor.pagination_invoice_other
 - item_count = @report[:list_of_items_raw].size
 - item_pagination_count_one = item_count if item_pagination_count_one > item_count
 - additional_page_count = 1 + (item_count - item_pagination_count_one - 1) / item_pagination_count_other

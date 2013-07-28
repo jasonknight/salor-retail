@@ -1230,7 +1230,7 @@ ActiveRecord::Schema.define(:version => 20130727172139) do
     t.string   "domain"
     t.string   "subdomain"
     t.string   "currency",                          :default => "USD"
-    t.integer  "pagination_invoice_one"
+    t.integer  "pagination_invoice_one",            :default => 20
     t.integer  "pagination_invoice_other",          :default => 30
   end
 
