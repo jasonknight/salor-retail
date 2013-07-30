@@ -163,6 +163,10 @@ class VendorsController < ApplicationController
     klass = params[:klass].constantize
     @inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
     
+    if @inst.nil?
+      raise "edit_field_on_child: @inst is nil. The model with ID #{ params[:id] } probably not existing."
+    end
+    
     log_action "edit_field_on_child called. @inst.class is #{ @inst.class }"
 
     #value = SalorBase.string_to_float(params[:value])

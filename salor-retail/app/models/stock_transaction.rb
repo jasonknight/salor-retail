@@ -28,7 +28,7 @@ class StockTransaction < ActiveRecord::Base
     when 'Item'
       st.from_quantity = model2.quantity
     when 'ShipmentItem'
-      st.from_quantity = model2.quantity - model2.in_stock_quantity      
+      st.from_quantity = model2.quantity.to_f - model2.in_stock_quantity.to_f
     end
     
     SalorBase.log_action "ItemStock", "[transact()] model1 (#{ model1.class.to_s } ID #{ model1.id }). Adding #{ diff } to it", :cyan

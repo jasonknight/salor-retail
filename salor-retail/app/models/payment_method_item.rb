@@ -25,4 +25,13 @@ class PaymentMethodItem < ActiveRecord::Base
   validates_presence_of :drawer_id
   validates_presence_of :payment_method_id
   validates_presence_of :cash_register_id
+  
+  def amount=(amt)
+    amt = self.string_to_float(amt) * 100.0
+    self.amount_cents = amt
+  end
+  
+  def payment_method_id=(pmid)
+    write_attribute :payment_method_id, pmid
+  end
 end
