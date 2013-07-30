@@ -142,8 +142,8 @@ class ItemsController < ApplicationController
       else
         @orders = @current_vendor.orders.where("nr = '#{params[:keywords]}' or tag LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
       end
-    else
-      @customers = @current_company.customers.visible.page(params[:page]).per(@current_vendor.pagination)
+    elsif params[:klass] == 'Customer'
+      @customers = @current_company.customers.visible.where("first_name LIKE '%#{params[:keywords]}%' OR last_name LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
     end
   end
   

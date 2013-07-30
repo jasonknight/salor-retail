@@ -3,7 +3,7 @@
   <ul class="header-list">
     <li>
       <div align="center" class="first">
-        <a href="<%= vendors_path %>">
+        <a href="<%= main_app.vendors_path %>">
           <img src="/images/salor-icon.png" />
           <span class="icon-caption"><%= @current_register.name if @current_register %></span>
           
@@ -12,7 +12,7 @@
     </li>
     <li>
       <div align="center" id="btn-vendors-index" class="">
-          <%=  link_to raw(salor_icon(:vendor,{},32,I18n.t("menu.home"))), vendor_path(@current_vendor) %>
+          <%=  link_to raw(salor_icon(:vendor,{},32,I18n.t("menu.home"))), main_app.vendor_path(@current_vendor) %>
       </div>
     </li>
     <li>
@@ -23,7 +23,7 @@
     <% if @current_user and @current_user.can(:index_items) %>
     <li>
       <div align="center" id="btn-items-index" class="">
-        <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), items_path %>
+        <%=  link_to raw(salor_icon(:item,{},32,I18n.t("activerecord.models.item.other"))), main_app.items_path %>
       </div>
     </li>
     <% end %>
@@ -48,7 +48,7 @@
     <% if @current_user and @current_user.can(:index_customers) %>
     <li>
       <div align="center" id="btn-customers-new" class="">
-        <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), customers_path %><br />
+        <%= link_to salor_icon(:customer,{},32,I18n.t("menu.customer")), main_app.customers_path %><br />
       </div>
     </li>
     <% end %>

@@ -23,6 +23,7 @@
     = link_to salor_icon(:merge,{},32,I18n.t("menu.merge_into_current_order")),"/orders/merge_into_current_order?id=#{@order.id}"
   %br
   = form_tag "/orders/#{@order.id}/print", :id => 'print_form' do
+    = hidden_field_tag 'delivery_note', params[:delivery_note]
     %span
       = select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }, params[:locale_select]), :onchange => "$('#print_form').submit();"
     %span
@@ -34,14 +35,11 @@
 .clear
 - item_pagination_count_one = @current_vendor.pagination_invoice_one
 - item_pagination_count_other = @current_vendor.pagination_invoice_other
-- item_count = @report[:list_of_items_raw].size
-- item_pagination_count_one = item_count if item_pagination_count_one > item_count
-- additional_page_count = 1 + (item_count - item_pagination_count_one - 1) / item_pagination_count_other
 
 .paper-invoice
   = render :partial => 'orders/invoices/default/header_page_one'
   
-  - if params[:delivery_note]
+  - if params[:delivery_note] == "1"
     %h2== #{ I18n.t("receipts.delivery_note") } #{ @order.nr }
     %p= text_area_tag 'delivery_note_comment', @order.delivery_note_comment
   - else
@@ -55,9 +53,15 @@
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@report[:invoice_note][:header]).to_html) if @report[:invoice_note][:header]
     
-  - if params[:delivery_note]
+  - if params[:delivery_note] == "1"
+    - item_count = @order.order_items.visible.size
+    - item_pagination_count_one = item_count if item_pagination_count_one > item_count
+    - additional_page_count = 1 + (item_count - item_pagination_count_one - 1) / item_pagination_count_other
     = render :partial => 'orders/invoices/default/item_list_delivery_note', :locals => { :item_start => 0, :item_end => item_pagination_count_one - 1 }
   - else
+    - item_count = @report[:list_of_items_raw].size
+    - item_pagination_count_one = item_count if item_pagination_count_one > item_count
+    - additional_page_count = 1 + (item_count - item_pagination_count_one - 1) / item_pagination_count_other
     = render :partial => 'orders/invoices/default/item_list_invoice', :locals => { :item_start => 0, :item_end => item_pagination_count_one - 1 }
     
   = render :partial => 'orders/invoices/default/totals' if additional_page_count.zero?
