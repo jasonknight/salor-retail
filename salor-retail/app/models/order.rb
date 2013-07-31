@@ -192,7 +192,7 @@ class Order < ActiveRecord::Base
         oi.calculate_totals
         oi.save
         self.calculate_totals
-        return item
+        return oi
       else
         log_action "Item is not normal but is #{oi.behavior}. Will not increment."
       end
@@ -474,13 +474,9 @@ class Order < ActiveRecord::Base
       items.flatten!
       items.each do |i|
         if not i.ignore_qty and i.behavior == 'normal' and not self.is_proforma
-          if oi.is_buyback
-            i.quantity += oi.quantity
-            i.quantity_buyback += oi.quantity
-          else
-            i.set_quantity_recursively(i.quantity - oi.quantity)
-            i.quantity_sold += oi.quantity
-          end
+          q = oi.quantity
+          q = -q if oi.is_buyback
+          Item.transact_quantity(-oi.quantity, i, self)
         end
         i.save
       end
@@ -495,6 +491,7 @@ class Order < ActiveRecord::Base
       pmi.payment_method = pm
       pmi.vendor = self.vendor
       pmi.company = self.company
+      pmi.order = self
       pmi.user = self.user
       pmi.drawer = self.drawer
       pmi.cash_register = self.cash_register
@@ -508,9 +505,14 @@ class Order < ActiveRecord::Base
       pmi.cash = pm.cash
       pmi.quote = pm.quote
       pmi.unpaid = pm.unpaid
-      pmi.save
+      result = pmi.save
+      if result != true
+        raise "Could not save PaymentMethodItem because #{ pmi.errors.messages }"
+      end
       
       self.payment_method_items << pmi
+      
+      # TODO this should be applied to all PMIs after it was discovered
       self.is_quote = true if pm.quote == true
       self.is_unpaid = true if pm.unpaid == true
     end
@@ -526,15 +528,25 @@ class Order < ActiveRecord::Base
     unless self.is_proforma
       # create a change payment method item
       pmi = PaymentMethodItem.new
+      pmi.payment_method = change_payment_method
       pmi.vendor = self.vendor
       pmi.company = self.company
+      pmi.order = self
       pmi.user = self.user
       pmi.drawer = self.drawer
       pmi.cash_register = self.cash_register
+      pmi.paid_at = self.paid_at
+      pmi.paid = self.paid
+      pmi.completed_at = self.completed_at
+      pmi.is_proforma = self.is_proforma
+      pmi.is_quote = self.is_quote
+      pmi.is_unpaid = self.is_unpaid
       pmi.amount = change
       pmi.change = true
-      pmi.payment_method = change_payment_method
-      pmi.save
+      result = pmi.save
+      if result != true
+        raise "Could not save change PaymentMethodItem because #{ pmi.errors.messages }"
+      end
       self.payment_method_items << pmi
     else
       change = 0
@@ -771,7 +783,7 @@ class Order < ActiveRecord::Base
 
     # --- payment method items ---
     paymentmethods = Hash.new
-    self.payment_method_items.visible.each do |pmi|
+    self.payment_method_items.visible.where('amount_cents != 0').each do |pmi|
       
       # old databases are somewhat inconsistent, so we need to catch nils
       pmi_amount = pmi.amount.blank? ? Money.new(0, self.vendor.currency) : pmi.amount
@@ -1323,7 +1335,8 @@ class Order < ActiveRecord::Base
       :sale_type  => self.sale_type,
       :origin => self.origin_country,
       :destination => self.destination_country,
-      :is_proforma => self.is_proforma
+      :is_proforma => self.is_proforma,
+      :order_items_length => self.order_items.visible.size
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs

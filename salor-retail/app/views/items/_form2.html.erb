@@ -221,7 +221,7 @@ $(function () {
   
   <tr>
     <td>  <%= f.label I18n.t("activerecord.models.tax_profile.one") %> </td>
-    <td> <%= f.collection_select :tax_profile_id, @item.vendor.tax_profiles.visible, :id, :name %> </td>
+    <td> <%= f.collection_select :tax_profile_id, @item.vendor.tax_profiles.visible, :id, :name, :include_blank => true %> </td>
   </tr>
   
   <tr>
@@ -495,5 +495,45 @@ $(function () {
        </table>
     </td>
   </tr>
+  
+  <tr>
+    <td>
+    
+    </td>
+    <td>
+      
+      <table border=1>
+        <tr>
+          <th>ID</th>
+          <th>to type</th>
+          <th>to id</th>
+          <th>from type</th>
+          <th>from id</th>
+          <th>from quantity</th>
+          <th>to quantity</th>
+          <th>quantity </th>
+          
+        </tr>
+        <% @item.stock_transactions.order('created_at DESC').limit(10).each do |st| %>
+          <tr>
+            <td><%= st.id %></td>
+            <td><%= st.to_type %></td>
+            <td><%= st.to_id %></td>
+            <td><%= st.from_type %></td>
+            <td><%= st.from_id %></td>
+            <td><%= st.from_quantity %></td>
+            <td><%= st.to_quantity %></td>
+            <td><%= st.quantity %></td>
+            
+          </tr>
+        <% end %>
+      </table>
+   </td>
+  </tr>
+  
+  
+  
 </table>
 <% end %>
+
+

@@ -24,31 +24,30 @@
 
 
 = form_tag "/vendors/report_day", :class => 'no-print', :id => 'date_range', :method => :get do
-  %div.tools
-    %table.tools
-      %tr
-        %td{:align => :left, :width => "20%"}
-          = label 'from', t('.from')
-        %td{:align => :right}
-          = select_date(@from, :prefix => 'from', :order => [:day,:month,:year])
-      %tr
-        %td{:align => :left}
-          = label 'to', t('.to')
-        %td{:align => :right}
-          = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
-      %tr
-        %td{:align => :left}
-          %select{:id => 'user_select', :name => 'user_id' }
-            %option
-            = options_from_collection_for_select(@users, 'id', 'username', params[:user_id])
-        %td{ :align => :right}
-          = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
-      %tr
-        %td{:colspan => 2, :align => :center}
-          = salor_icon(:a4print, {:onclick => 'print_dialog()'}, 40, t('menu.print_dialog'))
-          = salor_icon(:thermal_printer, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_report_day',decodeURIComponent($('#date_range').serialize()));" }, 40, t('.thermal'))
-    %br
-    %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
+  %table.tools{ :width => '50%' }
+    %tr
+      %td{:align => :left, :width => "20%"}
+        = label 'from', t('.from')
+      %td{:align => :right}
+        = select_date(@from, :prefix => 'from', :order => [:day,:month,:year])
+    %tr
+      %td{:align => :left}
+        = label 'to', t('.to')
+      %td{:align => :right}
+        = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
+    %tr
+      %td{:align => :left}
+        %select{:id => 'user_select', :name => 'user_id' }
+          %option
+          = options_from_collection_for_select(@users, 'id', 'username', params[:user_id])
+      %td{ :align => :right}
+        = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
+    %tr
+      %td{:colspan => 2, :align => :center}
+        = salor_icon(:a4print, {:onclick => 'print_dialog()'}, 40, t('menu.print_dialog'))
+        = salor_icon(:thermal_printer, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_report_day',decodeURIComponent($('#date_range').serialize()));" }, 40, t('.thermal'))
+  %br
+  %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
 
 .clear
 

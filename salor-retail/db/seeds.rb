@@ -133,6 +133,7 @@ company_count.times do |c|
       cr.name = "#{ cash_register_names[i] }#{ c }#{ v }"
       cr.vendor = vendor
       cr.company = company
+      cr.detailed_edit = true
       cr.salor_printer = cash_register_salor_printer[i]
       r = cr.save
       cash_register_objects << cr
@@ -271,6 +272,58 @@ company_count.times do |c|
       previous_item = item
       special_item_objects << item
     end
+    
+    # create an "immediate weighing" item
+    item = Item.new
+    item.company = company
+    item.vendor = vendor
+    item.tax_profile = tax_profile_objects[1]
+    item.category = special_cat
+    item.sku = "WEIGHITEM"
+    item.name = "Immediate weighing"
+    item.item_type = item_type_objects[0]
+    item.currency = currencies[v]
+    item.weigh_compulsory = true
+    item.price_cents = 100
+    result = item.save
+    raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
+    puts "Immediate Weighing Item #{ c } #{ v } created" if result == true
+    special_item_objects << item
+    
+    # create an "must change price" item
+    item = Item.new
+    item.company = company
+    item.vendor = vendor
+    item.tax_profile = tax_profile_objects[1]
+    item.category = special_cat
+    item.sku = "MUSTCHANGEPRICE"
+    item.name = "Must change price"
+    item.item_type = item_type_objects[0]
+    item.currency = currencies[v]
+    item.must_change_price = true
+    item.price_cents = 0
+    result = item.save
+    raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
+    puts "Must Change Price Item #{ c } #{ v } created" if result == true
+    special_item_objects << item
+    
+    # create an "default buyback" item
+    item = Item.new
+    item.company = company
+    item.vendor = vendor
+    item.tax_profile = tax_profile_objects[1]
+    item.category = special_cat
+    item.sku = "DEFAULTBUYBACK"
+    item.name = "Default Buyback"
+    item.item_type = item_type_objects[0]
+    item.currency = currencies[v]
+    item.default_buyback = true
+    item.buy_price_cents = 200
+    item.buy_price_cents = 100
+    result = item.save
+    raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
+    puts "Default Buyback Item #{ c } #{ v } created" if result == true
+    special_item_objects << item
     
     # create dynamic giftcard item
     zero_tax_profile = vendor.tax_profiles.visible.find_by_value(0)
@@ -487,6 +540,7 @@ company_count.times do |c|
         raise "ERROR: #{ b.errors.messages }" if res == false
       end
     end
+    
     special_item_objects.size.times.each do |i|
       b = Button.new
       b.vendor = vendor

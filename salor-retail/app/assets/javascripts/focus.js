@@ -1,28 +1,35 @@
 $(function() {
-
-  //$("#main_sku_field").attr("disabled", false);
   
-  $("#main_sku_field").focus();
+  var view = params.controller + '#' + params.action;
   
-  $("#main_sku_field").keyup(function(e) {
-    if (e.keyCode == 13) {
-      add_item($("#main_sku_field").val(), '');
-    }
-  })
-  
-  setInterval(function() {
-    if (
-      !$('#cash_drop').is(":visible") && 
-      !$('#complete_order').is(":visible") && 
-      !$('#inplaceedit-div').is(":visible") && 
-      !$('#search').is(":visible") &&
-      !$('.void-order').is(":visible") &&
-      !$('.ui-keyboard').is(":visible") && 
-      !$('.salor-dialog').is(":visible")
-     ) {
+  if (view == 'orders#new' ) {
     $("#main_sku_field").focus();
-    } 
-  }, 2000);
+    
+    $("#main_sku_field").keyup(function(e) {
+      if (e.keyCode == 13) {
+        add_item($("#main_sku_field").val(), '');
+      }
+    })
+    
+    setInterval(function() {
+      if (
+        !$('#cash_drop').is(":visible") && 
+        !$('#complete_order').is(":visible") && 
+        !$('#inplaceedit-div').is(":visible") && 
+        !$('#search').is(":visible") &&
+        !$('.void-order').is(":visible") &&
+        !$('.ui-keyboard').is(":visible") && 
+        !$('.salor-dialog').is(":visible")
+      ) {
+      $("#main_sku_field").focus();
+      } 
+    }, 2000);
+  }
+  
+  if (params.action == 'index') {
+     $("#generic_search_input").focus();
+  }
+
   
 }); // documentready
 

@@ -5,6 +5,7 @@ $ ->
     if not $(elem).hasClass('calculator-done')
       $(elem).on 'keyup', -> 
         displayCalculatorTotal()
+        ajax_log({log_action:'coin_calculator', called_from:$(this).attr('id') + "->" + $(this).val() });
       $(elem).addClass('calculator-done')
 
 

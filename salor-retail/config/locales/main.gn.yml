@@ -5,6 +5,13 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      invoice_logo: Rechnungslogo
+      pagination_invoice_one: Artikel auf Rechung erste Seite
+      pagination_invoice_one: Artikel auf Rechung weitere Seiten
+      technician_email: Techniker E-Mail
+      enable_technician_emails: E-Mail an Techniker senden
+      time_zone: Zeitzone
+      currency: Währung
       gift_card_amount: Gutschein Restbetrag
       active: aktiv
       address: Adresse
@@ -183,7 +190,7 @@ gn:
       uses_drawer_id: Uses Drawer of
       value: Betrag
       vendor:
-        logo: Bildschirm-Logo
+        logo: Kundenbildschirm-Logo
         logo_invoice: A4 Rechnungs-Logo
         receipt_logo_footer: Beleg Logo Fuß
         receipt_logo_header: Beleg Logo Kopf
@@ -318,6 +325,7 @@ gn:
     exception_in_files: ! 'Der Fehler trat in diesen Dateien auf:'
     oops_an_error_occurred: Oops! Es ist leider ein Fehler aufgetreten
   headings:
+    inventory_report: Inventurbericht
     almost_out: Artikel, die nachbestellt werden müssen
     bank_machine_types: Typ unterstützen
     best_sellers: Bestseller
@@ -385,16 +393,19 @@ gn:
       unused_item_ids: Nicht verwendete Artikel
       used_item_ids: Bisher verwendete Artikel
     index:
+      report: Bericht
+      inventory_report: Inventur
       database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung
         von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
       only_for_tobacco_stores: Diese Funktion ist nur für Trafiken. Tabak-Artikel
         werden nun angelegt bzw. aktualisiert. Diese Aktion dauert etwa 20 Minuten.
         Sind Sie wirklich sicher, dass Sie fortfahren möchten?
     inventory_report:
+      no_category: Keine Kategorie
       price: Verkaufspreis
       subtotal_purchase_price: Gesamtsumme Einkaufspreis
       subtotal_selling_price: Gesamtsumme Verkaufspreis
-      title: Bericht Inventur
+      title: Inventurbericht
       total_buying_price: Summe Kaufpreis
       total_selling_price: Summe Verkaufspreis
     selection:
@@ -405,14 +416,13 @@ gn:
       query: Abfragen
       to: bis
     update_real_quantity:
-      are_you_sure: Dies übernimmt die Inventurmengen in die Datenbank und der Inventurbericht
-        wird gelöscht. Fortsetzen?
-      inventory_report: Bericht Inventur
+      inventory_report: Inventurbericht
       update_quantity: Inventurmengen übernehmen
     upload:
       upload: Importieren
   label: Regaletikett
   menu:
+    enter_inventory_items: Eingeben
     logos: Logos
     print-dialog: Druckdialog
     refund_payment_method: Storno-Rückzahlugsmethode
@@ -480,7 +490,7 @@ gn:
     locations: Verkaufsflächen
     loyalty_cards: Kundenkarten
     merge_into_current_order: Merge into current order
-    move_shipment_item: In den Verkaufsbereich verschieben
+    move_shipment_item: Lieferartikel in den Bestand aufnehmen
     new_action: Neu Aktion
     new_broken_item: Beschädigungen
     new_button: Neue Taste
@@ -691,7 +701,9 @@ gn:
     index:
       report: Bericht
     show:
-      purchase_price_sum: Einkaufspreis gesamt
+      purchase_price_sum: Gesamt
+      need_tax_profile: Lieferartikel muss eine Steuerklasse haben
+      move_into_stock: Einlagern!
   sticker: Aufkleber
   support: Support
   system:

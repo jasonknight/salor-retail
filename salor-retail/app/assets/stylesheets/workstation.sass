@@ -637,7 +637,7 @@ div.header
       position: relative
       bottom: 7px
   div#header_drawer_amount
-    :margin -16px 0px 0px 0px
+    :margin -26px 0px 0px 0px
     :font-weight bold
     :font-size 90%
     :width 65px
@@ -1257,8 +1257,8 @@ div.pos-button
   margin: 0px 5px
   height: 43px
   width: 7%
-  span.icon-caption
-    bottom: 8px
+  div.salor-icon
+    padding: 0px
 
 div.square-button 
   padding: 3px
@@ -1848,8 +1848,10 @@ table.tools
   background-color: $background
 
 div.tools 
+  @include raised_element
   clear: both
-  margin: 10px 5px
+  margin: 0px auto
+  width: 50%
 
 
 div.tools a 
@@ -3109,9 +3111,12 @@ a.new-model-button
   padding: 10px 20px
 
 div#error_explanation
+  @include raised_element
+  :background-color #AD2121
   :clear both
-  :color red
+  :color white
   :text-align left
+  :padding 10px
 
 div.pagination
   text-align: center
@@ -3172,3 +3177,21 @@ input.modcoder_excolor_clrbox
 div.dialog-button
   @include awesome_button
   padding: 10px 15px
+  
+div.new_inventory_box
+  @include raised_element
+  font-size: 180%
+  margin: 40px auto 0px auto
+  padding: 20px
+  width: 400px
+  table
+    div#inventory_item_name,
+    div#inventory_item_sku
+    
+    div#inventory_msg
+      :position absolute
+
+    div#inventory_msg
+      :color green
+      :font-size 500%
+      :display none

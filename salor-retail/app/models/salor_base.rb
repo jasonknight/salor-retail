@@ -31,11 +31,12 @@ module SalorBase
     self.save
   end
   
-  def log_action(txt, color=:green)
-    SalorBase.log_action(self.class.to_s, txt, color)
+  def log_action(txt="",color=:green)
+    from = self.class.to_s
+    SalorBase.log_action(from, txt, color)
   end
   
-  def self.log_action(from="", txt="", color=:green)
+  def self.log_action(from="",txt="",color=:green)
   colors = {
     :black          => "\e[0;30;49m",
     :red            => "\e[0;31;49m",

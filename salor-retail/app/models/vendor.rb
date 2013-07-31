@@ -13,6 +13,7 @@ class Vendor < ActiveRecord::Base
   belongs_to :company
   has_and_belongs_to_many :users
   
+  has_many :inventory_reports
   has_many :item_types
   has_many :loyalty_cards
   has_many :payment_methods
@@ -166,6 +167,17 @@ class Vendor < ActiveRecord::Base
   def logo_invoice=(data)
     write_attribute :logo_invoice_image_content_type, data.content_type.chomp
     write_attribute :logo_invoice_image, data.read
+  end
+  
+  def location_stock_location_list
+    ret = []
+    self.locations.visible.order(:name).each do |l|
+      ret << [l.name, 'Location:' + l.id.to_s]
+    end
+    self.stock_locations.visible.all.each do |sl|
+      ret << [sl.name, 'StockLocation:' + sl.id.to_s]
+    end
+    return ret
   end
 
   
@@ -729,18 +741,24 @@ class Vendor < ActiveRecord::Base
     categories = report['categories']
     taxes = report['taxes']
     paymentmethods = report['paymentmethods']
-    refunds  =  report['refunds']
+    paymentmethods_total = report['paymentmethods_total']
+    proforma_pmis = report['proforma_pmis']
+    proforma_pmis_total = report['proforma_pmis_total']
+    gift_cards_redeemed = report['gift_cards_redeemed']
+    gift_card_redeem_total = report['gift_card_redeem_total']
+    gift_cards_sold = report['gift_cards_sold']
+    gift_card_sales_total = report['gift_card_sales_total']
+    refund_order_items  =  report['refund_order_items']
+    aconto_order_items  =  report['aconto_order_items']
+    aconto_total  =  report['aconto_total']
     revenue =   report['revenue']
     transactions   = report['transactions']
     transactions_sum   = report['transactions_sum']
     calculated_drawer_amount =   report['calculated_drawer_amount']
-    count_orders = report['count_orders']
-    count_order_items = report['count_order_items']
     categories_sum = report['categories_sum']
+    
     date_from = report[:date_from]
     date_to = report[:date_to]
-    unit = report[:unit]
-    drawer_amount = report[:drawer_amount]
     username = report[:username]
     
     line_format  = "%19.19s %10.2f %10.2f\n"
@@ -767,8 +785,8 @@ class Vendor < ActiveRecord::Base
     generalstatistics = ''
     generalstatistics +=
         "#{ I18n.l(DateTime.now) }\n\n" +
-        "#{ I18n.t 'vendors.report_day.count_orders' }: #{ count_orders }\n" +
-        "#{ I18n.t 'vendors.report_day.count_order_items' }: #{ count_order_items }\n\n"
+        "#{ I18n.t 'vendors.report_day.count_orders' }: #{ report['count_orders'] }\n" +
+        "#{ I18n.t 'vendors.report_day.count_order_items' }: #{ report['count_order_items'] }\n\n"
 
 
     
@@ -810,25 +828,6 @@ class Vendor < ActiveRecord::Base
               t[1][:gro]
             ]
       end
-
-      payments_header = I18n.t('vendors.report_day.sums_by_payment_methods')
-      payments_lines = "\n"
-      paymentmethods[i[0]].to_a.each do |p|
-        payments_lines +=
-            line_format2 % [
-              p[0],
-              '',
-              p[1]
-            ]
-      end
-      
-      total = "\n"
-      total +=
-          line_format2 % [
-            I18n.t('printr.eod_report.payment_method_total'),
-            report[:unit],
-            categories_sum[i[0]][:gro]
-          ]
       
       groups[type] +=
           group_header +
@@ -836,32 +835,9 @@ class Vendor < ActiveRecord::Base
           category_lines +
           "\n" +
           taxes_header +
-          taxes_lines +
-          "\n" +
-          payments_header +
-          payments_lines +
-          total
+          taxes_lines
     end
-
-  
-    refund_header = "\n"
-    refund_lines = "\n"
-    if refunds.any?
-      refund_header +=
-          "\e!\x18" +
-          I18n.t('vendors.report_day.refunds') +
-          "\e!\x00"
-    
-    
-      refunds.each do |k,v|
-        refund_lines +=
-            line_format2 % [
-              v[:name],
-              report[:unit],
-              v[:amount]
-            ]
-      end
-    end
+      
     
     revenue_header = "\n"
     revenue_header +=
@@ -872,11 +848,65 @@ class Vendor < ActiveRecord::Base
     revenue_lines = "\n"
     revenue_lines +=
         line_format2 % [
-          I18n.t('printr.eod_report.revenue_total'),
+          I18n.t('vendors.report_day.gross'),
           report[:unit],
           revenue[:gro]
         ]
+    revenue_lines +=
+        line_format2 % [
+          I18n.t('vendors.report_day.net'),
+          report[:unit],
+          revenue[:net]
+        ]
+
     
+    
+    payments_header = I18n.t('vendors.report_day.sums_by_payment_methods')
+    payments_lines = "\n"
+    paymentmethods.each do |k,v|
+      payments_lines +=
+        line_format2 % [
+          v[:name],
+          '',
+          v[:amount]
+        ]
+    end
+    aconto_order_items.each do |k,v|
+      payments_lines +=
+        line_format2 % [
+          I18n.t('vendors.report_day.as_aconto_from'),
+          '',
+          v[:amount]
+        ]
+    end
+    
+    if gift_cards_redeemed.any?
+      giftcards_redeemed_header = I18n.t('.gift_card_redeem_total')
+      giftcards_redeemed_lines = "\n"
+      gift_cards_redeemed.each do |gc|
+        giftcards_redeemed_lines +=
+          line_format2 % [
+            gc.sku,
+            gc.order.nr,
+            -gc.total.to_f
+          ]
+      end
+    end
+    
+    if gift_cards_sold.any?
+      giftcards_sold_header = I18n.t('.gift_card_sales_total')
+      giftcards_sold_lines = "\n"
+      gift_cards_sold.each do |gc|
+        giftcards_sold_lines +=
+          line_format2 % [
+            gc.sku,
+            gc.order.nr,
+            gc.total.to_f
+          ]
+      end
+    end
+            
+      
     
     transactions_header = "\n"
     transactions_header +=
@@ -930,8 +960,14 @@ class Vendor < ActiveRecord::Base
         generalstatistics +
         groups[:pos] +
         groups[:neg] +
-        refund_header +
-        refund_lines +
+        revenue_header +
+        revenue_lines +
+        payments_header +
+        payments_lines +
+        giftcards_redeemed_header.to_s +
+        giftcards_redeemed_lines.to_s +
+        giftcards_sold_header.to_s +
+        giftcards_sold_lines.to_s +
         transactions_header +
         transactions_lines +
         transactions_footer +
@@ -1069,6 +1105,55 @@ class Vendor < ActiveRecord::Base
     return filtered_tests.join("\n")
     
     
+  end
+  
+  def create_inventory_report
+    ir = InventoryReport.new
+    ir.vendor = self
+    ir.company = self.company
+    ir.name = "InventoryReport #{ Time.now.strftime("%Y%m%d") }"
+    result = ir.save
+    if result != true
+      raise "Could not save InventoryReport because #{ ir.errors.messages }"
+    end
+    
+    sql = %Q[
+        INSERT INTO inventory_report_items 
+        ( inventory_report_id,
+          item_id,
+          real_quantity,
+          quantity,
+          created_at,
+          updated_at,
+          vendor_id,
+          company_id,
+          price_cents,
+          purchase_price_cents,
+          category_id,
+          name,
+          sku
+         ) SELECT 
+            ir.id,
+            i.id,
+            i.real_quantity,
+            i.quantity,
+            NOW(),
+            NOW(),
+            ir.vendor_id,
+            ir.company_id,
+            i.price_cents,
+            i.purchase_price_cents,
+            i.category_id,
+            i.name,
+            i.sku FROM
+          items AS i, 
+          inventory_reports AS ir WHERE 
+            i.real_quantity_updated IS TRUE AND 
+            ir.id = #{ir.id} AND
+            i.hidden IS NULL
+    ]
+    Item.connection.execute(sql)
+    Item.connection.execute("UPDATE items SET quantity = real_quantity, real_quantity_updated = NULL WHERE real_quantity_updated IS TRUE AND vendor_id=#{ self.id} AND company_id=#{ self.company_id }")
   end
   
   private

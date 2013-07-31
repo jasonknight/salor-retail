@@ -37,19 +37,7 @@ $(function(){
   });
 });
 
-function update_shipper_dialog() {
-  var contents = i18n.are_you_sure;
-  var dialog = shared.draw.dialog('','update_shipper_dialog', contents);
-  var loader = shared.draw.loading(true,null,dialog);
-  var okbutton = shared.create.dialog_button(i18n.menu.ok, function() {
-    loader.show();
-    ajax_log({
-      action_taken:'confirmed_update_shipper_dialog'
-    });
-    window.location = '/shippers/update_wholesaler';
-  });
-  dialog.append(okbutton);
-}
+
 
 function displayMessages() {
   var notices = messagesHash['notices'];
@@ -714,9 +702,11 @@ window.shared = {
       input.on('keyup',callbacks.keyup);
       input.focus(callbacks.focus);
       input.blur(callbacks.blur);
-      input.keypress(function(e) {
-        callbacks.keypress(e);
-      });
+      if ( typeof callbacks.keypress != 'undefined' ) {
+        input.keypress(function(e) {
+          callbacks.keypress(e);
+        });
+      }
       return div;
     },
     check_option: function (options,callbacks) {

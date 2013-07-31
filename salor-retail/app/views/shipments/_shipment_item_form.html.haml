@@ -4,6 +4,16 @@
     Shipment = #{ raw @shipment.to_json };
     shipments.updateLineItems();
     shipments.updateShipment();
+
+    $('#main_shipment_sku_field').keydown(function(e) {
+      if (e.which == 13) {
+        shipments.submitLineItem($('#main_shipment_sku_field').val());
+        $('#main_shipment_sku_field').val('');
+        return false;
+      }
+    });
+  make_keyboardable($('#main_shipment_sku_field'));
+
   });
 
 %input#main_shipment_sku_field

@@ -230,35 +230,33 @@ function drawOrderItemRow(item) {
         }
     }
     
+    if (attr == "price" && item.must_change_price && item.price == 0 ) {
+      setTimeout(trigger_click(col), 50);
+    }
+    
   
     if (item.is_buyback && highlightAttrs.indexOf(attr) != -1) {
       highlight(col);
     }
+
   } // end loop through attrs
-  
-  
- 
-  if (item.must_change_price) {
-    // this triggers an onscreen keyboard, only for zero priced items
-    var id = '.' + base_id + '-price';
-    var price = toFloat($(id).html());
-    if (price == 0) {
-      $(id).trigger('click');
-      //setTimeout( function () {
-        if (IS_APPLE_DEVICE) {
-          $('.ui-keyboard-preview').val("");
-        }
-        $('.ui-keyboard-preview').select();
-      //},100);
-    }
-  }
-  
+
   if(item.weigh_compulsory && item.quantity == 0) {
-    weigh_last_item();
+    setTimeout(function() {
+      // doesn't work without timeout
+      weigh_last_item();
+    }
+    , 100);
   }
   return row;
 }
 
+// this is a closure needed to remember the value of col in the above loop. Without closure, the variable col would change before the timout triggers. The timeout is needed for the onscreen keyboard.
+var trigger_click = function(col) {
+  return function() {
+    col.trigger('click');
+  };
+};
 
 
 
@@ -267,6 +265,7 @@ function drawOrderItemRow(item) {
 
 function makeItemMenu(col, row) {
   try {
+    var item = _get('item', row);
     col.unbind();
     col.mousedown(function (event) {
         if (Register.detailed_edit == true) {
@@ -279,7 +278,7 @@ function makeItemMenu(col, row) {
         menu.css({position: 'absolute', left: event.pageX, top: event.pageY});
         var dicon = $('<div id="item_menu_delete" class="oi-menu-icon"><img src="/images/icons/delete.svg" width="31px" height="32px" /></div>');
         dicon.mousedown(function () {
-            $('.' + base_id).remove();
+            row.remove();
             get('/orders/delete_order_item?id=' + item.id, filename);
             menu.remove();
             //setScrollerState();
@@ -573,7 +572,7 @@ function detailedOrderItemMenu(event) {
   var title = shared.element('div',{id: 'order_item_edit_name'},'',$('body'));
   title.addClass('salor-dialog');
   title.offset(offset);
-  title.css({padding: '3px',width: $(event.currentTarget).outerWidth() - 8, height: $(event.currentTarget).outerHeight(), 'border-bottom': 'none'});
+  title.css({padding: '3px',width: $(event.currentTarget).outerWidth() + 50, height: $(event.currentTarget).outerHeight(), 'border-bottom': 'none'});
   config = shared.element('div',{id: 'order_item_edit_config'},'',$('body'));
   config.addClass('salor-dialog');
   config.offset({top: offset.top + $(event.currentTarget).outerHeight() + 5, left: offset.left});

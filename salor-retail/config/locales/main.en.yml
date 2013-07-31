@@ -5,6 +5,13 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      invoice_logo: Invoice Logo
+      pagination_invoice_one: Pagination Invoice first page
+      pagination_invoice_one: Pagination Invoice other pages
+      technician_email: Technician email
+      enable_technician_emails: Send emails to technician
+      time_zone: Time zone
+      currency: Währung
       gift_card_amount: Gift Card remaining amount
       js_code: Javascript Code
       attributes: attributes
@@ -320,6 +327,7 @@ en:
     exception_in_files: ! 'The Error occurred in the following files:'
     oops_an_error_occurred: Oops! An Error occurred
   headings:
+    inventory_report: Inventory Report
     almost_out: almost out
     bank_machine_types: supported bank machines
     best_sellers: bestsellers
@@ -386,12 +394,15 @@ en:
       unused_item_ids: Unused Items
       used_item_ids: Used Items
     index:
+      report: Report
+      inventory_report: Inventur
       database_distiller_warning: Due to the generation of statistics, calling this
         function will last for about 30 seconds. Proceed anyway?
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items
         will now be created and updated. This action will take about 20 minutes. Are
         you really sure that you want to proceed?
     inventory_report:
+      no_category: No Category
       price: Selling price
       subtotal_purchase_price: Subtotal Purchase Price
       subtotal_selling_price: Subtotal Selling Price
@@ -414,6 +425,7 @@ en:
       upload: upload
   label: label
   menu:
+    enter_inventory_items: Enter
     logos: Logos
     print-dialog: print dialog
     refund_payment_method: refund payment method
@@ -692,6 +704,8 @@ en:
       report: Report
     show:
       purchase_price_sum: Purchase price sum
+      need_tax_profile: Shipment Item needs tax profile!
+      move_into_stock: Move into stock!
   sticker: sticker
   support: Support
   system:

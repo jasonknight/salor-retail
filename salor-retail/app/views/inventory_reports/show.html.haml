@@ -1,0 +1,77 @@
+= stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'invoice_default_print', :media => 'print'
+
+= raw content_box_top(I18n.t("headings.inventory_report"))
+
+%div.tools
+  .tool-icon
+    = salor_icon(:add_item, {:onclick => "window.location = '/inventory_reports/new'" }, 32, t('menu.enter_inventory_items'))
+  - unless @inventory_report
+    .tool-icon
+      = salor_icon(:update_real_quantity, {:onclick=>"inventory.create_inventory_report_confirm_dialog();"}, 32, t('items.update_real_quantity.update_quantity'))
+  .tool-icon
+    = salor_icon(:print, {:onclick => 'print_dialog()' }, 32, t('menu.print-dialog'))
+
+.paper-invoice.invoice_print
+  %div
+  %div.clear
+  %div
+    %h2= t 'items.inventory_report.title'
+    %h3
+      - if @inventory_report
+        = l @inventory_report.created_at, :format => :just_day
+      - else
+        = l DateTime.now, :format => :just_day
+
+    - report_purchase_price_total = Money.new(0, @current_vendor.currency)
+    - report_price_total = Money.new(0, @current_vendor.currency)
+    - @category_ids.each do |cid|
+      - items = @items.where(:category_id => cid)
+      - next if items.blank?
+      
+      - category_purchase_price_total = Money.new(0, @current_vendor.currency)
+      - category_price_total = Money.new(0, @current_vendor.currency)
+      
+      - cat = @current_vendor.categories.visible.find_by_id(cid)
+      
+      %h4= cat ? cat.name : t('items.inventory_report.no_category')
+      %table{ :class => 'striped-table2 has-total' }
+        %tr
+          %th SKU
+          %th= t 'activerecord.attributes.name'
+          %th= t 'activerecord.attributes.quantity'
+          %th= t 'activerecord.attributes.real_quantity'
+          %th= t 'activerecord.attributes.purchase_price'
+          %th= t 'items.inventory_report.price'
+          %th= t 'items.inventory_report.total_buying_price'
+          %th= t 'items.inventory_report.total_selling_price'
+        - items.each do |i|
+          - item_purchase_price_total = i.purchase_price * i.real_quantity
+          - item_price_total = i.price * i.real_quantity
+          - category_purchase_price_total += item_purchase_price_total
+          - category_price_total += item_price_total
+          %tr
+            %td= i.sku
+            %td= i.name
+            %td.right= i.quantity
+            %td.right= i.real_quantity
+            %td.right= humanized_money_with_symbol i.purchase_price
+            %td.right= humanized_money_with_symbol i.price
+            %td.right= humanized_money_with_symbol item_purchase_price_total
+            %td.right= humanized_money_with_symbol item_price_total
+
+        %tr.total
+          %td{ :colspan => 6 }
+          %td.right.colsum= humanized_money_with_symbol category_purchase_price_total
+          %td.right.colsum= humanized_money_with_symbol category_price_total
+          
+        - report_purchase_price_total += category_purchase_price_total
+        - report_price_total += category_price_total
+
+    .right
+      %p
+        == #{ t 'items.inventory_report.subtotal_purchase_price' }:
+        %b= humanized_money_with_symbol report_purchase_price_total
+      %p
+        == #{ t 'items.inventory_report.subtotal_selling_price' }:
+        %b= humanized_money_with_symbol report_price_total

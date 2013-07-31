@@ -45,6 +45,81 @@ class ShipmentItem < ActiveRecord::Base
     self.save
   end
   
+  def move_into_stock(q, locationstring='')
+    q = q.to_f
+    
+    unless locationstring.blank?
+      # get the location model from locationstring which is in the format "Modelname:ID"
+      locationclass = locationstring.split(':')[0].constantize
+      locationid = locationstring.split(':')[1]
+      location = locationclass.visible.where(:vendor_id => self.vendor_id, :company_id => self.company_id).find_by_id(locationid)
+    end
+      
+    item = self.vendor.items.visible.find_by_sku(self.sku)
+    
+    if item
+      log_action "move_into_stock: An Item with sku #{ self.sku } already exists. Using this and adding quantity to it."
+
+      
+      if location
+        log_action "move_into_stock: A Location #{ locationstring } has been specified"
+        
+        item_stock = location.item_stocks.visible.find_by_item_id(item.id)
+        if item_stock
+          log_action "move_into_stock: An ItemStock #{ existing_item_stock.id } for location #{ location.class } ID #{ location.id } has been found. Transacting to it"
+          StockTransaction.transact(q, existing_item_stock, self)
+
+        else
+          # this method creates an ItemStock if not yet present. see item.rb
+          log_action "move_into_stock: Item #{ item.id } with sku #{ item.sku } doesn't have yet an ItemStock for the location #{ location.class } ID #{ location.id }. Creating one."
+          is = ItemStock.new
+          is.company = self.company
+          is.vendor = self.vendor
+          is.item = item
+          is.location = location
+          is.quantity = 0
+          result = is.save
+          if result != true
+            raise "Could not safe ItemStock because #{ is.errors.messages}"
+          end
+          
+          StockTransaction.transact(q, is, self)
+        end
+        
+      else
+        log_action "move_into_stock: No location has been specified. Transacting to Item instead."
+        StockTransaction.transact(q, item, self)
+      end
+        
+      
+    else
+      log_action "move_into_stock: No Item with sku #{ self.sku } exists yet. Creating one from ShipmentItem."
+      normal_item_type = self.vendor.item_types.visible.find_by_behavior('normal')
+      if normal_item_type.nil?
+        raise "Need an ItemType with behavior normal for this action"
+      end
+      
+      i = Item.new
+      i.vendor = self.vendor
+      i.company = self.company
+      i.sku = self.sku
+      i.tax_profile = self.tax_profile
+      i.name = self.name
+      i.item_type = normal_item_type
+      result = i.save
+      if result != true
+        raise "Could not save Item because #{ i.errors.messages }"
+      end
+      
+      log_action "move_into_stock: Transacting to newly created Item."
+      StockTransaction.transact(q, i, self)
+      
+    end
+    
+    self.in_stock_quantity = self.in_stock_quantity.to_f + q
+    self.save
+  end
+  
   def to_json
     json = {
       :id => self.id,

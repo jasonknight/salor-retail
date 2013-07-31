@@ -1,0 +1,29 @@
+= raw content_box_top(@location.name)
+
+- @item_stocks = @location.item_stocks.visible.page(params[:page]).per(@current_vendor.pagination)
+
+%div.pagination
+  = paginate @item_stocks
+
+%table{:class => 'list-view', :width => '60%', :align=> 'center'}
+  - if @item_stocks.length > 24 then
+    %tr{:class=> 'no-stripe'}
+      %td{:colspan => columns.length + 3}
+        
+          
+    %tr{:class=>'no-stripe'}
+      %td{:colspan => columns.length + 3}
+        %hr
+  %tr
+    %th
+    %th= I18n.t('activerecord.attributes.name').upcase
+    %th= I18n.t('activerecord.attributes.sku').upcase
+    %th= I18n.t('activerecord.attributes.quantity').upcase
+  - @item_stocks.each do |is|
+    - row_id = "item_stock_#{is.id}"
+    - to_location = "window.location = '/items/#{is.item_id}';"
+    %tr
+      %td{:width => "40px"}=salor_icon('item', {:id => row_id,:onclick => to_location},48)
+      %td.center{:width => "40px"}= is.item.name
+      %td.center{:width => "40px"}= is.item.sku
+      %td.center{:width => "40px"}= is.quantity

@@ -71,7 +71,7 @@ function complete_order_hide() {
 
 function complete_order_send(print) {
   if (sendingOrder) return;
-  if (Order.order_items.length == 0) { complete_order_hide(); return;}
+  if (Order.order_items_length == 0) { complete_order_hide(); return;}
   sendingOrder = true;
   allow_complete_order(false);
   if (Register.require_password) {

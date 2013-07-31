@@ -15,11 +15,11 @@
 %td= number_to_percentage item.tax_profile.value
 %td
   - if item.parent
-    == #{ item.quantity.to_i } (#{ item.recursive_quantity.to_i })
-  - elsif item.quantity == Integer(item.quantity)
-    = item.quantity.to_i
+    == #{ item.quantity_with_stock.to_i } (#{ item.quantity_with_recursion.to_i })
+  - elsif item.quantity_with_stock == Integer(item.quantity_with_stock)
+    = item.quantity_with_stock.to_i
   - else
-    = item.quantity
+    = item.quantity_with_stock
     
 %td= item.packaging_unit
 %td

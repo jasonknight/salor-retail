@@ -100,11 +100,8 @@ SalorRetail::Application.routes.draw do
   match "items/search" => "items#search"
   match "items/report" => "items#report"
   match "items/export_broken_items" => "items#export_broken_items"
-  match "items/update_location" => "items#update_location"
   match "items/reorder_recommendation" => "items#reorder_recommendation"
   match "items/update_location" => "items#update_location"
-  match "items/update_real_quantity" => "items#update_real_quantity"
-  match "items/update_real_quantity" => "items#update_real_quantity"
   match "items/move_real_quantity" => "items#move_real_quantity"
   match "items/labels" => "items#labels"
   match "items/selection" => "items#selection"
@@ -113,19 +110,23 @@ SalorRetail::Application.routes.draw do
   match "items/upload_house_of_smoke" => "items#upload_house_of_smoke"
   match "items/upload_danczek_tobaccoland_plattner" => "items#upload_danczek_tobaccoland_plattner"
   match "items/upload_optimalsoft" => "items#upload_optimalsoft"
-  get 'items/inventory_report'
   match "items/download" => "items#download"
   match "items/info" => "items#info"
-  match "items/item_json" => "items#item_json"
+  match "items/inventory_json" => "items#inventory_json"
   match "items/create_ajax" => "items#create_ajax"
   match "items/render_label" => "items#render_label"
+  match "items/create_inventory_report" => "items#create_inventory_report"
+  get 'items/update_real_quantity'
+  
+  match 'inventory_reports/current' => 'inventory_reports#current'
   
 
   
 
+  
   match "shipments/move_all_to_items" => "shipments#move_all_to_items"
   match "shipments/new_shipments" => "shipments#new_shipments"
-  match "shipments/move_shipment_item" => "shipments#move_shipment_item"
+  match "shipments/move_item_into_stock" => "shipments#move_item_into_stock"
   match "shipments/add_item" => "shipments#add_item"
   
   match "shippers/update_all" => "shippers#update_all"
@@ -154,6 +155,7 @@ SalorRetail::Application.routes.draw do
   
   match 'nodes/receive' => 'nodes#receive'
 
+  resources :inventory_reports
   resources :invoice_blurbs
   resources :payment_methods
   resources :reports

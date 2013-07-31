@@ -41,7 +41,7 @@ class Shipment < ActiveRecord::Base
     end
   end
   
-  def receiver_shipper_list()
+  def receiver_shipper_list
     ret = []
     self.vendor.shippers.visible.order(:name).each do |shipper|
       ret << {:name => shipper.name, :value => 'Shipper:' + shipper.id.to_s}
