@@ -1,3 +1,9 @@
+salor-retail (4.0.2.19) unstable; urgency=low
+
+  * various order fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 02 Aug 2013 20:59:37 +0200
+
 salor-retail (4.0.2.18) unstable; urgency=low
 
   * various fixes
