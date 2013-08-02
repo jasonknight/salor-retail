@@ -1,3 +1,11 @@
+salor-retail (4.0.2.18) unstable; urgency=low
+
+  * various fixes
+  * style adaptions and migration for subscription orders
+  * recurring subscriptions done
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 02 Aug 2013 14:23:31 +0200
+
 salor-retail (4.0.2.17) unstable; urgency=low
 
   * various small fixes
