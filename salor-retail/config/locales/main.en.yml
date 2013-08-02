@@ -5,6 +5,10 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      subscription_start: Subscription start
+      subscription_interval: Subscription interval
+      subscription_last: Last payment
+      subscription_next: Next payment
       nr: Number
       customer_name: Customer
       invoice_logo: Invoice Logo
@@ -564,6 +568,9 @@ en:
     shipments_move_all_items: all items were successfully moved
     shipments_move_item: item was successfully moved
   orders:
+    index:
+      recurrable_subscriptions: Recurrable subscriptions
+      create_all_recurring_orders: Create orders from recurrable subscriptions
     print:
       delivery_note: Delivery note
       invoice: Invoice

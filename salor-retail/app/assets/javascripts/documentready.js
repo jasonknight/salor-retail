@@ -24,7 +24,8 @@ $(function () {
   $('.stripe-me2:even').addClass('even');
   $('.stripe-me2:odd').addClass('odd');
   //$('div.stripe-me > div.table-row:even').addClass('even');
-  //$('.list-view tr:even').addClass('even')
+  $('.list-view tr:even').addClass('even')
+  $('.list-view tr:odd').addClass('odd')
   $('.list-view tr:last').removeClass('even')
   $('table.pretty-table > tbody > tr:even').addClass("even");
 

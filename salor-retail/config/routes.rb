@@ -75,6 +75,7 @@ SalorRetail::Application.routes.draw do
   match "orders/print" => "orders#print"
   match "orders/log" => "orders#log"
   match "orders/:id/customer_display" => 'orders#customer_display'
+  match "orders/create_all_recurring" => "orders#create_all_recurring"
   
   
   

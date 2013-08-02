@@ -36,17 +36,17 @@ class OrdersController < ApplicationController
     params[:type] ||= 'normal'
     case params[:type]
     when 'normal'
-      @orders = @current_vendor.orders.order("nr desc").where(:paid => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:paid => true).page(params[:page]).per(@current_vendor.pagination)
     when 'proforma'
-      @orders = @current_vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_proforma => true).page(params[:page]).per(@current_vendor.pagination)
     when 'unpaid'
-      @orders = @current_vendor.orders.order("nr desc").where(:is_unpaid => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_unpaid => true).page(params[:page]).per(@current_vendor.pagination)
     when 'quote'
-      @orders = @current_vendor.orders.order("qnr desc").where(:is_quote => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("qnr desc").where(:is_quote => true).page(params[:page]).per(@current_vendor.pagination)
     when 'subscription'
-      @orders = @current_vendor.orders.order("created_at DESC").where(:subscription => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("created_at DESC").where(:subscription => true).page(params[:page]).per(@current_vendor.pagination)
     else
-      @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("id desc").page(params[:page]).per(@current_vendor.pagination)
     end
   end
 
@@ -122,6 +122,16 @@ class OrdersController < ApplicationController
       # if it was a scanned Loyalty card, @order_item is nil. Else clause must stay empty.
     end
     render :update_pos_display
+  end
+  
+  def destroy
+    @order = @current_vendor.orders.find_by_id(params[:id])
+    if @order.hidden.nil? and @order.paid.nil?
+      @order.hide(@current_user.id)
+    else
+      $MESSAGES[:alerts] << "Order ID #{ @order.id } is either paid or already hidden"
+    end
+    redirect_to request.referer
   end
 
 
@@ -305,6 +315,18 @@ class OrdersController < ApplicationController
       History.record("cannot clear order because already paid", @order, 1)
     end
     render 'update_pos_display' and return
+  end
+  
+  def create_all_recurring
+    recurrable_orders = @current_vendor.recurrable_subscription_orders
+    recurrable_orders.each do |ro|
+      o = ro.create_recurring_order
+      $MESSAGES[:notices] << "Created recurring order nr. #{ o.nr }"
+    end
+    if recurrable_orders.blank?
+      $MESSAGES[:notices] << "Currently there are no recurrable orders."
+    end
+    redirect_to '/orders?type=unpaid'
   end
   
   def log

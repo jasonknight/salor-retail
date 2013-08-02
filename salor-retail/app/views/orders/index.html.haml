@@ -21,5 +21,10 @@
   .tool-icon= link_to salor_icon(:subscription_order, {}, 32, t("activerecord.models.order.subscriptions")), '/orders?type=subscription'
   .tool-icon= link_to salor_icon(:thermal_printer, {}, 32, t("menu.receipts")), '/orders/receipts'
 
-  
-= render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @orders, :columns => [:nr, :customer_name, :total, :created_at]}
+- if params[:type] == 'subscription'
+  = render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @orders, :columns => [:nr, :customer_name, :total, :subscription_start, :subscription_interval, :subscription_last, :subscription_next]}
+  %h3= t('.recurrable_subscriptions')
+  = link_to salor_icon(:subscription_order, {}, 32, t('.create_all_recurring_orders')), '/orders/create_all_recurring'
+  = render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @current_vendor.recurrable_subscription_orders, :columns => [:nr, :customer_name, :total, :subscription_start, :subscription_interval, :subscription_last, :subscription_next]}
+- else
+  = render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @orders, :columns => [:nr, :customer_name, :total, :created_at]}

@@ -5,6 +5,10 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      subscription_start: Abo start
+      subscription_interval: Abo Intervall
+      subscription_last: Letzte Zahlung
+      subscription_next: Nächste Zahlung
       nr: Nr.
       customer_name: Kunde
       invoice_logo: Rechnungslogo
@@ -561,6 +565,9 @@ gn:
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
     shipments_move_item: Artikel erfolgreich verschoben ...
   orders:
+    index:
+      recurrable_subscriptions: Wiederholbare Abos
+      create_all_recurring_orders: Alle Abos wiederholen
     print:
       delivery_note: Lieferschein
       invoice: Rechnung

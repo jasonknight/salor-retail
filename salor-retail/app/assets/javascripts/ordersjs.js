@@ -339,7 +339,7 @@ window.showOrderOptions = function () {
   
   // Customer code
   if (Order.customer) {
-    var e = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
+    var elem = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
     obj = Order.customer;
     lc = Order.loyalty_card;
     var name = $('<div><span class="customer_name"></span></div>');
@@ -365,7 +365,7 @@ window.showOrderOptions = function () {
     col.addClass('editme');
     make_in_place_edit(col);
     row.append(col);
-    e.append(row);
+    elem.append(row);
   }
   // End customer code
   
