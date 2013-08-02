@@ -416,8 +416,6 @@ class Order < ActiveRecord::Base
     h.changes_made = "Beginning complete order"
     h.save
 
-    self.paid = true
-    self.paid_at = Time.now # TODO: Don't set this for unpaid orders
     self.completed_at = Time.now
     # the user is re-assigned in OrdersController#complete
     self.drawer = self.user.get_drawer
@@ -447,12 +445,15 @@ class Order < ActiveRecord::Base
   def update_associations
     if self.payment_method_items.visible.where(:unpaid => true).any?
       self.is_unpaid = true
-      self.payment_method_items.update_all :is_unpaid => true
     end
     
     if self.payment_method_items.visible.where(:quote => true).any?
       self.is_quote = true
-      self.payment_method_items.update_all :is_quote => true
+    end
+    
+    if self.payment_method_items.visible.where(:unpaid => nil, :quote => nil).sum(:amount_cents) >= self.total_cents
+      self.paid = true
+      self.paid_at = Time.now
     end
     
     self.save
@@ -465,6 +466,15 @@ class Order < ActiveRecord::Base
       :is_quote => self.is_quote,
       :user_id => self.user_id,
       :drawer_id => self.drawer_id
+    })
+    
+    self.payment_method_items.update_all({
+      :completed_at => self.completed_at,
+      :paid_at => self.paid_at,
+      :paid => self.paid,
+      :is_unpaid => self.is_unpaid,
+      :is_quote => self.is_quote,
+      :is_proforma => self.is_proforma
     })
     
 
@@ -510,7 +520,7 @@ class Order < ActiveRecord::Base
     end
   end
   
-  def create_payment_method_items(params)    
+  def create_payment_method_items(params)
     params[:payment_method_items].each do |k,v|
       pm = self.vendor.payment_methods.visible.find_by_id(v[:id])
       
@@ -532,6 +542,7 @@ class Order < ActiveRecord::Base
       pmi.cash = pm.cash
       pmi.quote = pm.quote
       pmi.unpaid = pm.unpaid
+      pmi.currency = self.currency
       result = pmi.save
       if result != true
         raise "Could not save PaymentMethodItem because #{ pmi.errors.messages }"
@@ -1088,24 +1099,22 @@ class Order < ActiveRecord::Base
   end
     
   def report_errors_to_technician
-    if self.vendor.enable_technician_emails == true and not self.vendor.technician_email.blank?
-      errors = self.check
-      #if errors.any?
-        subject = "Errors in Order #{ self.id }"
-        body = errors.to_s
-        UserMailer.technician_message(self.vendor, subject, body).deliver
-        em = Email.new
-        em.company = self.company
-        em.vendor = self.vendor
-        em.receipient = self.vendor.technician_email
-        em.subject = subject
-        em.body = body
-        em.user = self.user
-        em.technician = true
-        em.model = self
-        em.save
-      end
-    #end
+    errors = self.check
+    if errors.any? and self.vendor.enable_technician_emails == true and not self.vendor.technician_email.blank?
+      subject = "Errors in Order #{ self.id }"
+      body = errors.to_s
+      UserMailer.technician_message(self.vendor, subject, body).deliver
+      em = Email.new
+      em.company = self.company
+      em.vendor = self.vendor
+      em.receipient = self.vendor.technician_email
+      em.subject = subject
+      em.body = body
+      em.user = self.user
+      em.technician = true
+      em.model = self
+      em.save
+    end
   end
   
   def check
@@ -1303,19 +1312,21 @@ class Order < ActiveRecord::Base
     
     # checks for paid_at timestamp
     
-    should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
-    actual = self.order_items.visible.collect{ |oi| oi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
-    pass = should == actual
-    msg = "OrderItems should have the same paid_at timestamp as the Order"
-    type = :orderOrderItemsPaidAtMatch
-    tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
-    
-    should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
-    pass = should == actual
-    msg = "PaymentMethodItems should have the same paid_at timestamp as the Order"
-    type = :orderPaymentMethodItemsPaidAtMatch
-    tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    unless self.paid_at.nil?
+      should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
+      actual = self.order_items.visible.collect{ |oi| oi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
+      pass = should == actual
+      msg = "OrderItems should have the same paid_at timestamp as the Order"
+      type = :orderOrderItemsPaidAtMatch
+      tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+      
+      should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
+      actual = self.payment_method_items.visible.collect{ |pmi| pmi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
+      pass = should == actual
+      msg = "PaymentMethodItems should have the same paid_at timestamp as the Order"
+      type = :orderPaymentMethodItemsPaidAtMatch
+      tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    end
     
     
     # checks for is_quote flag
