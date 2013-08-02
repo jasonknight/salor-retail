@@ -90,33 +90,30 @@ function make_in_place_edit(elem) {
 function inplaceEditBindEnter(doBind, id) {
   $('#inplaceedit').unbind('keypress');
   if (doBind) {
-	$('#inplaceedit').bind('keypress', function (e) {
-			var code = (e.keyCode ? e.keyCode : e.which);
-			 if(code == 13) { //Enter keycode
-				   in_place_edit_go(id);
-			 }
- 	});
+    $('#inplaceedit').bind('keypress', function (e) {
+      var code = (e.keyCode ? e.keyCode : e.which);
+      if(code == 13) {
+        in_place_edit_go(id);
+      }
+    });
  }
 }
 
 function in_place_edit_go(id) {
   var type = $('#' + id).attr('field');
-	var datatype = $('#' + id).attr('data_type');
-	var klass = $('#' + id).attr('klass');
-	var withstring = $('#' + id).attr('withstring');
-	withstring = withstring + '&ajax=true';
-	var value = $('#' + id).html();
-
-
+  var datatype = $('#' + id).attr('data_type');
+  var klass = $('#' + id).attr('klass');
+  var withstring = $('#' + id).attr('withstring');
+  withstring = withstring + '&ajax=true';
+  var value = $('#' + id).html();
   var final_value = $('#inplaceedit').val();
+  
   final_value = final_value.replace("%",'');
+  
   var string = '/vendors/edit_field_on_child?id='+ $('#' + id).attr('model_id') +'&klass='+klass+'&field='+type+'&value=' + final_value + '&' + withstring
-  get(string, '_in_place_edit.html.erb', function () {
-  });
-  if ($('#' + id).attr('update_pos_display') == 'true') {
-    //update_order_items();
-    //update_pos_display();
-  }
+  
+  get(string, 'inplace_edit.js');
+  
   if ($('#inplaceedit')[0].tagName == 'SELECT') {
     $('#' + id).html($('#inplaceedit option:selected').html());
   } else {
@@ -169,42 +166,42 @@ function in_place_edit(id,x,y) {
   div.append(linktable);
 
   if (field[0].tagName != 'SELECT') {
-          field.keyboard({
-            openOn   : 'focus',
-            stayOpen : true,
-            layout       : field.hasClass('keyboardable-int') ? 'num' : i18nlocale,
-            customLayout : null,
-            visible : function(){ 
-              if (IS_APPLE_DEVICE) {
-                $('.ui-keyboard-preview').val("");
-              } 
-              $('.ui-keyboard-preview').select();
-            },
-            accepted: function(){ in_place_edit_go(id); }
-          });
-          field.getkeyboard().reveal();
-          $('#inplaceedit-div').hide();
+    field.keyboard({
+      openOn   : 'focus',
+      stayOpen : true,
+      layout   : field.hasClass('keyboardable-int') ? 'num' : i18nlocale,
+      customLayout : null,
+      visible : function() { 
+        if (IS_APPLE_DEVICE) {
+          $('.ui-keyboard-preview').val("");
+        } 
+        $('.ui-keyboard-preview').select();
+      },
+      accepted: function() {
+        in_place_edit_go(id);
+      }
+    });
+    field.getkeyboard().reveal();
+    $('#inplaceedit-div').hide();
   }
 
   $('#inplaceedit-div').css(offset);
-  $('#inplaceeditsave').mousedown(function () {
-		  in_place_edit_go(id);
-		  focuseKeyboardInput = true;
+  $('#inplaceeditsave').mousedown(function() {
+    in_place_edit_go(id);
+    focuseKeyboardInput = true;
   });
-  $('#inplaceeditcancel').mousedown(function () {
-		  $('#inplaceedit-div').remove();
-		  focuseKeyboardInput = true;
+  $('#inplaceeditcancel').mousedown(function() {
+    $('#inplaceedit-div').remove();
+    focuseKeyboardInput = true;
   });
 
   if (type == 'datepicker') {
-	  $('#inplaceedit').datepicker();
+    $('#inplaceedit').datepicker();
   }
   if (field[0].tagName == 'SELECT') {
     make_select_widget('', $('#inplaceedit'));
   }
   inplaceEditBindEnter(true, id);
-  //div.children('.kbd-show-button').trigger('mousedown');
-  //focusInput($('#inplaceedit'));
 }
 
 

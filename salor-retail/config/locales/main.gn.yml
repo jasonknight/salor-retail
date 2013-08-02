@@ -5,6 +5,8 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      nr: Nr.
+      customer_name: Kunde
       invoice_logo: Rechnungslogo
       pagination_invoice_one: Artikel auf Rechung erste Seite
       pagination_invoice_one: Artikel auf Rechung weitere Seiten
@@ -49,7 +51,7 @@ gn:
       coupon_applies: Gutschein anwendbar
       coupon_total: Coupon
       coupon_type: Coupon-Art
-      created_at: Created
+      created_at: Angelegt am
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
       customer:
@@ -248,10 +250,11 @@ gn:
       order:
         one: Verkauf
         other: Verkäufe
-        proforma_orders: Proforma Rechnungen
+        proforma_orders: Proforma
         quote: Angebot
         quotes: Angebote
-        unpaid_orders: Unbezahlte Rechnungen
+        unpaid_orders: Unbezahlt
+        subscriptions: Abos
       order_item:
         one: Verkaufter Artikel
         other: Verkaufte Artikel
@@ -311,7 +314,7 @@ gn:
     show:
       bought_items: Verkaufte Anzahl
       last_orders: Letzte Verkäufe
-      order_id: Verkausnummer
+      order_id: Verkaufsnummer
       order_total: Summe
       sold_count: Verkaufsmenge
   delete: Löschen
@@ -422,6 +425,7 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    subscription: Abo
     enter_inventory_items: Eingeben
     logos: Logos
     print-dialog: Druckdialog
@@ -489,7 +493,7 @@ gn:
     law_reports: §131 Abs. 2, 3 BAO<br>Bericht-Download
     locations: Verkaufsflächen
     loyalty_cards: Kundenkarten
-    merge_into_current_order: Merge into current order
+    merge_into_current_order: In aktuellen Verkauf aufnehmen
     move_shipment_item: Lieferartikel in den Bestand aufnehmen
     new_action: Neu Aktion
     new_broken_item: Beschädigungen

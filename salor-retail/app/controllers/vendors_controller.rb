@@ -169,7 +169,6 @@ class VendorsController < ApplicationController
     
     log_action "edit_field_on_child called. @inst.class is #{ @inst.class }"
 
-    #value = SalorBase.string_to_float(params[:value])
     value = params[:value]
     if @inst.respond_to?("#{ params[:field] }=".to_sym)
       log_action "edit_field_on_child: sending #{  params[:field] } = #{ value } to #{ @inst.class } id #{ @inst.id }"

@@ -27,7 +27,7 @@
     .help.hidden
     = render :partial => "shared/cash_drop" if @current_user
     
-    = yield
+    .yieldbox= yield
     
     = form_tag session_path, :id => 'logoutform', :method => 'delete' do
       %span

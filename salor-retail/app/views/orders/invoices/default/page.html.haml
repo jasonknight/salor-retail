@@ -11,7 +11,7 @@
 = raw content_box_top(t(title))
 
 .tools
-  %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+  %span{ :onmousedown => 'print_dialog();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
   - if params[:delivery_note]
     = link_to salor_icon(:document, {}, 32, t('orders.print.invoice')), "/orders/#{ @order.id }/print"
   - else

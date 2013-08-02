@@ -94,6 +94,11 @@ class Order < ActiveRecord::Base
     end
     self.calculate_totals
   end
+  
+  def toggle_subscription=(x)
+    self.subscription = !self.subscription
+    self.save
+  end
 
   def toggle_is_proforma=(x)
     self.is_proforma = !self.is_proforma
@@ -1336,7 +1341,8 @@ class Order < ActiveRecord::Base
       :origin => self.origin_country,
       :destination => self.destination_country,
       :is_proforma => self.is_proforma,
-      :order_items_length => self.order_items.visible.size
+      :order_items_length => self.order_items.visible.size,
+      :subscription => self.subscription
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs
@@ -1347,5 +1353,9 @@ class Order < ActiveRecord::Base
   
   def self.order_items_to_json(order_items=[])
     "[#{order_items.collect { |oi| oi.to_json }.join(", ") }]"
+  end
+  
+  def customer_name
+    self.customer.full_name if self.customer
   end
 end

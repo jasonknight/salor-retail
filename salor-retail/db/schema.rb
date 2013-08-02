@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130728080929) do
+ActiveRecord::Schema.define(:version => 20130802045305) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -795,6 +795,11 @@ ActiveRecord::Schema.define(:version => 20130728080929) do
     t.datetime "completed_at"
     t.string   "currency"
     t.integer  "proforma_order_id"
+    t.datetime "payment_due"
+    t.boolean  "subscription"
+    t.integer  "subscription_interval"
+    t.integer  "subscription_order_id"
+    t.datetime "subscription_start"
   end
 
   add_index "orders", ["cash_register_id"], :name => "index_orders_on_cash_register_id"

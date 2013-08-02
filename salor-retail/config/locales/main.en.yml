@@ -5,6 +5,8 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      nr: Number
+      customer_name: Customer
       invoice_logo: Invoice Logo
       pagination_invoice_one: Pagination Invoice first page
       pagination_invoice_one: Pagination Invoice other pages
@@ -249,10 +251,11 @@ en:
       order:
         one: Order
         other: Orders
-        proforma_orders: Proforma Invoices
+        proforma_orders: Proforma
         quote: Quote
         quotes: Quotes
-        unpaid_orders: Unpaid Invoices
+        unpaid_orders: Unpaid
+        subscriptions: Subscriptions
       order_item:
         one: Order Item
         other: Order Items
@@ -425,6 +428,7 @@ en:
       upload: upload
   label: label
   menu:
+    subscription: Subscription
     enter_inventory_items: Enter
     logos: Logos
     print-dialog: print dialog

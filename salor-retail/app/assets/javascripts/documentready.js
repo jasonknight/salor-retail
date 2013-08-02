@@ -15,17 +15,17 @@ $(function () {
   jQuery.expr[':'].focus = function( elem ) {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
+  
+  $('#generic_search_input').val('');
 
-  // TODO: This should go into stylesheets
-  $('#order_items_table tr:even').addClass('even');
   $('.stripe-me tr:even').addClass('even');
+  $('.stripe-me tr:odd').addClass('odd');
   $('tr.no-stripe').removeClass('even');
   $('.stripe-me2:even').addClass('even');
-  $('div.stripe-me > div.table-row:even').addClass('even');
-  $('#generic_search_input').val('');
-  $('.list-view tr:even').addClass('even')
+  $('.stripe-me2:odd').addClass('odd');
+  //$('div.stripe-me > div.table-row:even').addClass('even');
+  //$('.list-view tr:even').addClass('even')
   $('.list-view tr:last').removeClass('even')
-  $('tr.no-stripe').removeClass('even');
   $('table.pretty-table > tbody > tr:even').addClass("even");
 
   // FOR FANCY CHECKBOXES:
@@ -35,10 +35,12 @@ $(function () {
   
 
   $('.toggle').each(function () {
-      make_toggle($(this));
+    make_toggle($(this));
   });
   
-  $('.dt-tag-button').each(function () { make_dt_button($(this));});
+  $('.dt-tag-button').each(function () {
+    make_dt_button($(this));
+  });
   
 
   // inplace edit

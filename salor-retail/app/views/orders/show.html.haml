@@ -1,0 +1,37 @@
+= raw content_box_top(@order.nr)
+
+.tools
+  .tool-icon= salor_icon(:thermal_printer, {:onclick => "print_order('#{@order.id }');"}, 32, t('activerecord.attributes.thermal_printer'))
+  .tool-icon= link_to salor_icon(:a4print, {}, 32, t('menu.regular_printer')), "/orders/#{@order.id}/print"
+  
+- if @order.subscription
+  = render :partial => 'details_subscription'
+  
+%table.stripe-me{ :width => '80%' }
+  %tr
+    %th= t("activerecord.attributes.name")
+    %th= I18n.t("activerecord.attributes.sku")
+    %th= t("activerecord.attributes.quantity")
+    %th= t("activerecord.attributes.rebate")
+    %th= t("orders.report.net")
+    %th= t("orders.report.gross")
+    %th
+    %th
+  = render :partial => "line_item", :collection => @order.order_items.visible
+  
+  %tr
+    %td.right{ :colspan => 7 }= I18n.t("activerecord.attributes.total")
+    %td.right= humanized_money_with_symbol @order.total
+  
+  - @order.payment_method_items.visible.each do |pmi|
+    %tr.no-stripe
+      %td.right{ :colspan => 7 }= pmi.payment_method.name
+      %td.right= humanized_money_with_symbol pmi.amount
+   
+= t('menu.refund_payment_method')
+= select_tag 'refund_payment_method', options_from_collection_for_select(@current_vendor.payment_methods.visible.where(:change => nil, :quote => nil, :unpaid => nil).order('cash DESC'), :id, :name)
+
+
+
+
+

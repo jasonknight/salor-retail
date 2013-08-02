@@ -21,14 +21,15 @@ class OrdersController < ApplicationController
   end
   
   def merge_into_current_order
-    @current = @current_vendor.orders.find_by_id(params[:order_id])
+    @current_order = @current_vendor.orders.visible.where(:completed_at => nil).find_by_id(@current_user.current_order_id)
+    
     @to_merge = @current_vendor.orders.find_by_id(params[:id])
     @to_merge.order_items.visible.each do |oi|
        noi = oi.dup
-       noi.order_id = @current.id
+       noi.order_id = @current_order.id
        noi.save
     end
-    redirect_to edit_order_path(@current)
+    redirect_to edit_order_path(@current_order)
   end
   
   def index
@@ -42,6 +43,8 @@ class OrdersController < ApplicationController
       @orders = @current_vendor.orders.order("nr desc").where(:is_unpaid => true).page(params[:page]).per(@current_vendor.pagination)
     when 'quote'
       @orders = @current_vendor.orders.order("qnr desc").where(:is_quote => true).page(params[:page]).per(@current_vendor.pagination)
+    when 'subscription'
+      @orders = @current_vendor.orders.order("created_at DESC").where(:subscription => true).page(params[:page]).per(@current_vendor.pagination)
     else
       @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(@current_vendor.pagination)
     end

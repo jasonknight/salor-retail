@@ -32,6 +32,7 @@ class PaymentMethodItem < ActiveRecord::Base
   end
   
   def payment_method_id=(pmid)
+    # TODO: When changed from unpaid, mark order and all belonging order_items, payment_method_items and drawer_transactison as paid, and set paid_at too.
     write_attribute :payment_method_id, pmid
   end
 end

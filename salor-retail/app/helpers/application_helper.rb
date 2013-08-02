@@ -72,6 +72,7 @@ module ApplicationHelper
 
   def get_icons_map
     icons = {
+      :subscription_order => 'subscription_order',
       :add_item => 'add_item',
       :location => 'location',
       :search => 'search',
