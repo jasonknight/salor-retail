@@ -32,7 +32,49 @@ class PaymentMethodItem < ActiveRecord::Base
   end
   
   def payment_method_id=(pmid)
-    # TODO: When changed from unpaid, mark order and all belonging order_items, payment_method_items and drawer_transactison as paid, and set paid_at too.
+    log_action "payment_method_id=() called"
+    # called from orders/print
+    
+    pm = self.vendor.payment_methods.visible.find_by_id(pmid)
+    
+    if self.unpaid != true
+      log_action "payment_method_id=(): we only allow changing unpaid to something else. returning"
+      return
+    end
+    
+    self.paid = true
+    self.paid_at = Time.now
+    self.is_unpaid = nil
+    self.save!
+    
+    o = self.order
+    o.paid = true
+    o.paid_at = Time.now
+    o.is_unpaid = nil
+    o.save!
+    
+    o.order_items.update_all :paid => true, :paid_at => Time.now, :is_unpaid => nil
+    
+    if pm.cash
+      drawer = self.drawer
+      
+      # create drawer transaction
+      dt = DrawerTransaction.new
+      dt.company = self.company
+      dt.vendor = self.vendor
+      dt.drawer = drawer
+      dt.user = self.user
+      dt.amount = self.amount
+      dt.complete_order = true
+      dt.drawer_amount = self.drawer.amount
+      dt.cash_register = self.cash_register
+      dt.save!
+      
+      drawer.amount += self.amount
+      drawer.save!
+    end
+      
+    
     write_attribute :payment_method_id, pmid
   end
 end

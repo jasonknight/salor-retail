@@ -431,7 +431,6 @@ class Order < ActiveRecord::Base
     self.report_errors_to_technician
     
     self.save
-    
   end
   
   def set_unique_numbers
@@ -563,7 +562,7 @@ class Order < ActiveRecord::Base
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
 
     
-    if self.is_proforma.nil? and self.is_unpaid.nil?
+    if self.is_proforma.nil? and self.is_unpaid.nil? and self.is_quote.nil?
       # create a change payment method item
       pmi = PaymentMethodItem.new
       pmi.payment_method = change_payment_method
@@ -576,9 +575,9 @@ class Order < ActiveRecord::Base
       pmi.paid_at = self.paid_at
       pmi.paid = self.paid
       pmi.completed_at = self.completed_at
-      pmi.is_proforma = self.is_proforma
-      pmi.is_quote = self.is_quote
-      pmi.is_unpaid = self.is_unpaid
+      pmi.is_proforma = nil
+      pmi.is_quote = nil
+      pmi.is_unpaid = nil
       pmi.amount = change
       pmi.change = true
       result = pmi.save
@@ -976,7 +975,7 @@ class Order < ActiveRecord::Base
     header +=
     "\ea\x00" +  # align left
     "\e!\x01" +  # Font B
-    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.paid_at, :format => :iso)) + ' ' + self.cash_register.name + "\n"
+    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.completed_at, :format => :iso)) + ' ' + self.cash_register.name + "\n"
 
     header += "\n\n" +
     "\e!\x00" +  # Font A

@@ -120,10 +120,10 @@ class Vendor < ActiveRecord::Base
     return Regexp.new "\\d{#{ parts[0] }}(\\d{#{ parts[1] }})(\\d{#{ parts[2] }})"
   end
   
-  # this is currently only used on orders/print to change unpaid orders. we don't support cash right now, since it needs a DrawerTrasnaction
+  # this is currently only used on orders/print to change unpaid orders. using cash/change/unpaid/quote there doesn't make sense, so we exclude it.
   def payment_methods_types_list
     types = []
-    self.payment_methods.visible.where(:change => nil, :cash => nil).order("name ASC").each do |p|
+    self.payment_methods.visible.where(:change => nil, :unpaid => nil, :quote => nil).order("name ASC").each do |p|
       types << [p.name, p.id]
     end
     return types

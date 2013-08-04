@@ -46,7 +46,10 @@ class User < ActiveRecord::Base
     login = self.user_logins.last
     if login then
       login.hourly_rate = self.hourly_rate
-      login.save
+      result = login.save
+      if result != true
+        raise "Could not save UserLogin because #{ login.errors.messages }"
+      end
     end
   end
   
