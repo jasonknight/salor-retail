@@ -5,6 +5,7 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      company_id: Company
       language: Language
       cash: Cash
       change: Change

@@ -5,6 +5,7 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      company_id: Firma
       language: Sprache
       cash: Bar
       change: Wechselgeld
