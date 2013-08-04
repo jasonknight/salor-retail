@@ -10,6 +10,7 @@ class Drawer < ActiveRecord::Base
 
   has_one :user
   belongs_to :company
+  belongs_to :vendor
   
   has_many :orders
   has_many :drawer_transactions

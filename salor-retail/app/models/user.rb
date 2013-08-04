@@ -93,10 +93,14 @@ class User < ActiveRecord::Base
   
   def get_drawer
     if self.uses_drawer_id then
-      return self.company.drawers.find_by_id(self.uses_drawer_id)
-      return d if d
+      d = self.company.drawers.find_by_id(self.uses_drawer_id)
+    else 
+      d = self.drawer
     end
-    return self.drawer
+    if not d then
+      raise "UserHasNoDrawer"
+    end
+    return d
   end
   
   def can(action)

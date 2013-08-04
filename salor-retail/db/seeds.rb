@@ -162,6 +162,9 @@ company_count.times do |c|
       u.password = "#{ c }#{ v }#{ i }"
       u.username = "#{ role_names[i] }#{ c }#{ v }"
       u.language = languages[v]
+      u.drawer = Drawer.new
+      u.drawer.company = company
+      u.drawer.vendor = vendor
       res = u.save
       user_objects << u
       puts "User #{ u.username } with password #{ c }#{ v }#{ i } created." if res == true
