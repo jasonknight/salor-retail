@@ -59,6 +59,8 @@ class Vendor < ActiveRecord::Base
   serialize :unused_quote_numbers
   
   validates_presence_of :name
+  validates_presence_of :company_id
+  
   validates_uniqueness_of :name, :scope => :hidden
   validates_uniqueness_of :identifier, :scope => :hidden
   validate :identifer_present_and_ascii
@@ -118,9 +120,10 @@ class Vendor < ActiveRecord::Base
     return Regexp.new "\\d{#{ parts[0] }}(\\d{#{ parts[1] }})(\\d{#{ parts[2] }})"
   end
   
+  # this is currently only used on orders/print to change unpaid orders. using cash/change/unpaid/quote there doesn't make sense, so we exclude it.
   def payment_methods_types_list
     types = []
-    self.payment_methods.visible.where(:change => nil).order("name ASC").each do |p|
+    self.payment_methods.visible.where(:change => nil, :unpaid => nil, :quote => nil).order("name ASC").each do |p|
       types << [p.name, p.id]
     end
     return types
@@ -157,16 +160,6 @@ class Vendor < ActiveRecord::Base
     else
       write_attribute :receipt_logo_footer, Escper::Img.new(data.read, :blob).to_s 
     end
-  end
-
-  def logo=(data)
-    write_attribute :logo_image_content_type, data.content_type.chomp
-    write_attribute :logo_image, data.read
-  end
-
-  def logo_invoice=(data)
-    write_attribute :logo_invoice_image_content_type, data.content_type.chomp
-    write_attribute :logo_invoice_image, data.read
   end
   
   def location_stock_location_list
@@ -1154,6 +1147,62 @@ class Vendor < ActiveRecord::Base
     ]
     Item.connection.execute(sql)
     Item.connection.execute("UPDATE items SET quantity = real_quantity, real_quantity_updated = NULL WHERE real_quantity_updated IS TRUE AND vendor_id=#{ self.id} AND company_id=#{ self.company_id }")
+  end
+  
+  def recurrable_subscription_orders
+    self.orders.visible.where(:subscription => true).where("subscription_next <= '#{ (Time.now + 1.day).strftime('%Y-%m-%d') }'")
+  end
+  
+  def csv_dump(model, from, to)
+    case model
+    when 'OrderItem'
+      order_items = self.order_items.existing.where(:created_at => from..to)
+      attributes = "order.nr;created_at;order.user.login;quantity;total_cents;tax_amount"
+      output = ''
+      output += "#{attributes}\n"
+      output += Report.to_csv(order_items, OrderItem, attributes)
+    else
+      output = nil
+    end
+    return output
+  end
+
+  def fisc_dump(from, to, location)
+    tmppath = SalorRetail::Application.config.paths['tmp'].first
+    
+    label = "salor-retail-fiscal-backup-#{ I18n.l(Time.now, :format => :datetime_iso2) }"
+    dumppath = File.join(tmppath, label)
+    FileUtils.mkdir_p(dumppath)
+      
+    # DUMP DATABASE
+    dbconfig = YAML::load(File.open(SalorRetail::Application.config.paths['config/database'].first))
+    sqldump_in_tmp = File.join(tmppath, 'database.sql')
+    mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+    username = dbconfig[mode]['username']
+    password = dbconfig[mode]['password']
+    database = dbconfig[mode]['database']
+    `mysqldump -u #{username} -p#{password} #{database} > #{dumppath}/database.sql`
+
+    
+    # DUMP LOGFILE
+    logfile = SalorRetail::Application.config.paths['log'].first
+    logfile_basename = File.basename(logfile)
+    logfile_in_tmp = File.join(tmppath, logfile_basename)
+    FileUtils.cp(logfile, dumppath)
+    
+
+    # GENERATE CSV FILES
+    Report.dump_all(self, from, to, dumppath)
+    
+    # ZIP IT UP
+    zip_outfile = "#{ location }/#{ label }.zip"
+    Dir.chdir(dumppath)
+    `zip -r #{ zip_outfile } .`
+    `chmod 777 #{ zip_outfile }`
+    
+    FileUtils.rm_r dumppath # causes exception
+    
+    return zip_outfile
   end
   
   private

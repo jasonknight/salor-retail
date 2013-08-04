@@ -150,9 +150,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:index_customers) %>
-         <div class="widget master" onmousedown="window.location = '/customers?vendor_id=<%= @vendor.id %>';">
+         <div class="widget master" onmousedown="window.location = '/customers';">
           <div align="center">
-            <a href="/customers?vendor_id=<%= @vendor.id %>">
+            <a href="/customers">
             <%= salor_icon(:customer,{},64) %>
               <br />
               <%= t("menu.customers") %>
@@ -260,9 +260,9 @@
         </div>
         <% end %>
         <% if @current_user.can(:show_reports) %>
-        <div class="widget master onmousedown="window.location = '/reports?vendor_id=<%= @vendor.id %>';"">
+        <div class="widget master" onmousedown="window.location = '/reports';">
           <div align="center">
-            <a href="/reports?vendor_id=<%= @vendor.id %>">
+            <a href="/reports">
               <%= salor_icon(:save_download,{},64) %><br />
               <%= raw t("menu.law_reports") %>
             </a>

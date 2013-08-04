@@ -13,6 +13,8 @@ class Drawer < ActiveRecord::Base
   
   has_many :orders
   has_many :drawer_transactions
+  
+  validates_presence_of :vendor_id, :company_id
 
   monetize :amount_cents, :allow_nil => true
   

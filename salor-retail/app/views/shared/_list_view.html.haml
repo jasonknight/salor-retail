@@ -1,29 +1,22 @@
-%table{:class => 'tools', :width=> width, :align=> 'center'}
-  %tr{:class=>'no-stripe'}
-    %td{:align=>:center}
-      %div.tool-icon
-        =link_to(salor_icon(:add,{},20),"/#{klass.table_name}/new")
+%table.tools{ :width => '50%' }
+  %tr.no-stripe
+    %td
+      .tool-icon
+        = link_to(salor_icon(:add,{},20),"/#{klass.table_name}/new")
         %br
         %span.icon-caption=I18n.t('views.single_words.new')
-%table{:class => 'tools', :width=> width, :align=> 'center'}
-  %tr{:class=>'no-stripe'}
-    %td{:align=>:center}
-      %hr
-%table{:class => 'list-view', :width=> width, :align=> 'center'}
-  - if collection.length > 24 then
-    %tr{:class=> 'no-stripe'}
-      %td{:colspan => columns.length + 3}
-        %div.pagination
-          = paginate collection if collection
-    %tr{:class=>'no-stripe'}
-      %td{:colspan => columns.length + 3}
-        %hr
+
+- if collection.respond_to?(:current_page)
+  %div.pagination= paginate collection if collection
+
+%table.list-view{ :width => '100%' }
   %tr
     %th
     - columns.each do |col|
       %th=I18n.t('activerecord.attributes.' + col.to_s).upcase
-    %th=""
-    %th=""
+    %th
+    %th
+
   - collection.each do |entry|
     - row_id = "#{klass.table_name.singularize}_#{entry.id}"
     - to_location = "window.location = '/#{entry.class.table_name}/#{entry.id}';"
@@ -31,11 +24,16 @@
       %td{:width => "40px"}=salor_icon(klass.table_name.singularize.to_sym,{:id => row_id,:onclick => to_location},48)
       - columns.each do |col|
         - if entry.class == TaxProfile and col == :value then
-          %td{:align=>:center}=number_to_percentage(entry.send(col))
+          %td{:align=>:center}= number_to_percentage(entry.send(col))
         - elsif entry.class == Action and col == :whento then
           %td=I18n.t("when_list.#{entry.whento}") if entry.whento
         - else
-          %td=entry.send(col)
+          %td
+            - val = entry.send(col)
+            - if val.class == ActiveSupport::TimeWithZone
+              = val.strftime("%Y-%m-%d")
+            - else
+              = val
       - if @current_user.can("edit_#{klass.table_name}")
         %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:edit,{},16), "/#{entry.class.table_name}/#{entry.id}/edit" 
       - else
@@ -44,10 +42,6 @@
         %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:delete,{},16), "/#{entry.class.table_name}/#{entry.id}", :confirm => 'Are you sure?', :method => :delete 
       - else
         %td
-  %tr{:class=>'no-stripe'}
-    %td{:colspan => columns.length + 3}
-      %div.pagination
-        = paginate collection
-  %tr{:class=>'no-stripe'}
-    %td{:colspan => columns.length + 3}
-      %hr
+
+- if collection.respond_to?(:current_page)
+  %div.pagination= paginate collection

@@ -19,6 +19,7 @@ class BrokenItem < ActiveRecord::Base
   
   validates_presence_of :sku
   validates_presence_of :quantity
+  validates_presence_of :vendor_id, :company_id
   
   #README
   # 1. The rails way would lead to many duplications

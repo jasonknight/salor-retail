@@ -335,11 +335,11 @@ function makeItemMenu(col, row) {
 
 
 window.showOrderOptions = function () {
-  var dialog = shared.draw.dialog(i18n.menu.configuration + ' ID ' + Order.id,"order_options");
+  var dialog = shared.draw.dialog(i18n.menu.configuration, "order_options");
   
   // Customer code
   if (Order.customer) {
-    var e = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
+    var elem = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
     obj = Order.customer;
     lc = Order.loyalty_card;
     var name = $('<div><span class="customer_name"></span></div>');
@@ -365,7 +365,7 @@ window.showOrderOptions = function () {
     col.addClass('editme');
     make_in_place_edit(col);
     row.append(col);
-    e.append(row);
+    elem.append(row);
   }
   // End customer code
   
@@ -415,17 +415,6 @@ window.showOrderOptions = function () {
   // end Rebate
   
   
-  var config_table = shared.element('table',{id: 'order_item_edit_table', width: '90%', align:'center'},'',dialog);
-  var config_table_rows = [ shared.element('tr',{id: 'order_item_edit_table_row_1'},'',config_table) ];
-  
-  var config_table_cols_left = [ shared.element('td',{id: 'order_item_edit_table_lcol_1'},'',config_table_rows[0]) ];
-  var config_table_cols_right = [ shared.element('td',{id: 'order_item_edit_table_rcol_1'},'',config_table_rows[0]) ];
-  
-  config_table.find('td').each(function () {
-    $(this).attr('valign','top');
-  });
-  
-  
   // TaxProfiles
   var options = {
     name: 'tax_profiles',
@@ -463,11 +452,12 @@ window.showOrderOptions = function () {
     name: 'is_proforma',
     title: i18n.activerecord.attributes.is_proforma,
     value: Order.is_proforma,
-    append_to: config_table_cols_right[0]
+    append_to: dialog
   };
-  var callbacks = {change: function () {
-    get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js",function () {});
-    }
+  var callbacks = {
+    change: function () {
+      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js");
+      }
   };
   var proforma_check = shared.draw.check_option(options,callbacks);
   
@@ -476,14 +466,30 @@ window.showOrderOptions = function () {
     name: 'is_buy_order',
     title: i18n.menu.buy_order,
     value: Order.buy_order,
-    append_to: config_table_cols_left[0]
+    append_to: dialog
   };
-  var callbacks = {change: function () {
-    get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js",function () {});
-  }
+  var callbacks = {
+    change: function () {
+      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js");
+    }
   };
   var buy_order_check = shared.draw.check_option(options,callbacks);
   // end Buy Order
+  
+  // Subscription
+  var options = {
+    name: 'is_subscription',
+    title: i18n.menu.subscription,
+    value: Order.subscription,
+    append_to: dialog
+  };
+  var callbacks = {
+    change: function () {
+      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_subscription&value=x","ordersjs.js");
+    }
+  };
+  var buy_order_check = shared.draw.check_option(options,callbacks);
+  // end Subscription
   
   // salestype and countries
   var options = {

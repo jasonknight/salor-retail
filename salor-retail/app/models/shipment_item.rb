@@ -16,13 +16,16 @@ class ShipmentItem < ActiveRecord::Base
   belongs_to :company
   belongs_to :item_type
   belongs_to :tax_profile
+  has_and_belongs_to_many :stock_locations
+  
+  validates_presence_of :vendor_id, :company_id
   
   monetize :price_cents
   monetize :total_cents
   monetize :purchase_price_cents
   monetize :purchase_price_total_cents
   
-  has_and_belongs_to_many :stock_locations
+  
   
   
   def set_stock_location_ids=(ids) 

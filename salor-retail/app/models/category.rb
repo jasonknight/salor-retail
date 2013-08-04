@@ -23,6 +23,9 @@ class Category < ActiveRecord::Base
   before_create :set_sku
   
   validates_presence_of :name
+  validates_presence_of :vendor_id, :company_id
+  
+  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files

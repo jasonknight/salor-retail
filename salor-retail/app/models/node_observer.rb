@@ -10,6 +10,7 @@ require 'uri'
 
 class NodeObserver < ActiveRecord::Observer
   include SalorBase
+  
   observe :item,:tax_profile,:button, :customer, :category, :loyalty_card
   def send_json(record)
     snode = Node.scopied.where(:is_self => true).limit(1).first

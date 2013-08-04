@@ -1,55 +1,3 @@
-<%= raw content_box_top(t("views.order_heading", :store => @order.vendor.name, :id => @order.nr)) %>
-
-<table align="center">
-  <tr>
-    <td>
-      <%= salor_icon(:thermal_printer, {:style => "cursor:pointer;", :onclick => "print_order('#{@order.id }');"}, 32, t('activerecord.attributes.thermal_printer')) %>
-    </td>
-    <td>
-      <%= link_to salor_icon(:a4print, {}, 32, t('menu.regular_printer')), "/orders/#{@order.id}/print" %>
-    </td>
-  </tr>
-</table>
-     
-<table id="order_items_table" width="80%" align=center class="ui-corner-all ui-widget ui-content stripe-me">
-  <tr>
-    <th><%= t("activerecord.attributes.name") %></th>
-    <th><%= I18n.t("activerecord.attributes.sku") %></th>
-    <th><%= t("activerecord.attributes.quantity") %></th>
-    <th><%= t("activerecord.attributes.rebate") %></th>
-    <th><%= t("orders.report.net") %></th>
-    <th><%= t("orders.report.gross") %></th>
-    <th>&nbsp;</th>
-  </tr>
-  
-  <%= render :partial => "line_items", :locals => {:order_items => @order.order_items.visible} %>
-  
-  <tr>
-    <td colspan=6 align="right"><%=  I18n.t("activerecord.attributes.total")%>:</td>
-    <td align="right"><%= humanized_money_with_symbol @order.total %></td>
-  </tr>
-  
-  <% @order.payment_method_items.visible.each do |pmi| %>
-    <tr class="no-stripe">
-      <td colspan="6" align="right"><%= pmi.payment_method.name %></td>
-      <td align="right"><%= humanized_money_with_symbol pmi.amount %></td>
-    </tr>
-  <% end %>
-  
-  <tr class="no-stripe">
-      <td align=center colspan=6>
-        <%= t('menu.refund_payment_method') %>:
-        <select id='refund_payment_method'>
-        <%= options_from_collection_for_select @current_vendor.payment_methods.visible.where(:change => nil, :quote => nil, :unpaid => nil).order('cash DESC'), :id, :name %>
-        </select>
-      </td>
-  </tr>
-  
-</table>
-
-
-
-
 
 
 <table width="80%" align="center" class="ui-corner-all ui-widget ui-content stripe-me overflowing-table">
@@ -114,5 +62,3 @@
 <br />
 <br />
 <br />
-
-

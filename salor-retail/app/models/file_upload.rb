@@ -24,7 +24,6 @@ class FileUpload
     @updated_items = 0
     @created_items = 0
     @created_categories = 0
-    @created_tax_profiles = 0
     
     @updated_item_ids = []
     @created_item_ids = []
@@ -121,7 +120,8 @@ class FileUpload
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
         :company_id => @company.id,
-        :item_type_id => @item_type.id
+        :item_type_id => @item_type.id,
+        :currency => @vendor.currency
       }
       sku_carton = columns[8].strip
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
@@ -167,7 +167,8 @@ class FileUpload
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
         :company_id => @company.id,
-        :item_type_id => @item_type.id
+        :item_type_id => @item_type.id,
+        :currency => @vendor.currency
       }
       sku_pack = columns[9].strip
       pack_item = @vendor.items.visible.where( :name => name + " Packung").first
@@ -221,7 +222,8 @@ class FileUpload
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
         :company_id => @company.id,
-        :item_type_id => @item_type.id
+        :item_type_id => @item_type.id,
+        :currency => @vendor.currency
       }
       sku_piece = columns[19].strip if columns[19]
       piece_item = @vendor.items.visible.where( :name => name + " Stk.").first
@@ -353,7 +355,8 @@ class FileUpload
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
         :company_id => @company.id,
-        :item_type_id => @item_type.id
+        :item_type_id => @item_type.id,
+        :currency => @vendor.currency
       }
       sku_carton = columns[8].strip
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
@@ -400,7 +403,8 @@ class FileUpload
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
         :company_id => @company.id,
-        :item_type_id => @item_type.id
+        :item_type_id => @item_type.id,
+        :currency => @vendor.currency
       }
       sku_pack = columns[9].strip
       pack_item = @vendor.items.visible.where( :name => name + " Packung" ).first
@@ -454,7 +458,8 @@ class FileUpload
         :shipper_id => @shipper.id,
         :vendor_id => @vendor.id,
         :company_id => @company.id,
-        :item_type_id => @item_type.id
+        :item_type_id => @item_type.id,
+        :currency => @vendor.currency
       }
       sku_piece = columns[19].strip if columns[19]
       piece_item = @vendor.items.visible.where( :name => name + " Stk." ).first
@@ -577,73 +582,71 @@ class FileUpload
       end
     end
   end
-
-  # TODO there should only be 1 salorretail upload algorithm
-  # And it should be this one, so don't mess with it
+  
+  # TODO: This needs to be made fit for SAAS: Scoping by Vendor and Company, for querying and creating new records
   def salor(trusted=true)
-    csv = Kcsv.new(@lines,{:header => true,:separator => "\t"})
+    csv = Kcsv.new(@lines, {:header => true,:separator => "\t"})
     csv.to_a.each do |rec|
-      begin
-        kls = Kernel.const_get(rec[:class])
-        rec.delete(:class)
-        if kls == Item then
-          begin
-          tp = TaxProfile.find_or_create_by_value(rec[:tax_profile_amount])
-          created_tax_profiles += 1 if tp.new_record?
-          cat = @vendor.categories.visible.find_by_name(rec[:category_name])
-          rec.delete(:category_name)
-          if rec[:location_name] then
-            loc = Location.find_or_create_by_name(rec[:location_name]) if trusted
-            if not loc.save then
-              loc.errors.full_messages.each do |m|
+      
+      kls = Kernel.const_get(rec[:class])
+      rec.delete(:class)
+      
+      if kls == Item then
+        tp = @vendor.tax_profiles.visible.find_by_value(rec[:tax_profile_amount])
+        if tp.nil?
+          # Managing TaxProfiles is the user's responsibility alone. The software won't create that automatically.
+          @messages << "No TaxProfile with #{ rec[:tax_profile_amount] }% found. You have to create it manually."
+          next
+        end
+        
+        cat = @vendor.categories.visible.find_by_name(rec[:category_name])
+        rec.delete(:category_name)
+        if rec[:location_name] then
+          loc = Location.find_or_create_by_name(rec[:location_name]) if trusted
+          if not loc.save then
+            loc.errors.full_messages.each do |m|
 #                 puts "Errors #{m}"
-              end
             end
           end
-          rec.delete(:location_name)
-          item = Item.find_or_create_by_sku(rec[:sku])
-          item.tax_profile = tp
-          item.category = cat
-          item.location = loc
-          item.attributes = rec
-          item.base_price = rec[:base_price]
+        end
+        rec.delete(:location_name)
+        item = Item.find_or_create_by_sku(rec[:sku])
+        item.tax_profile = tp
+        item.category = cat
+        item.location = loc
+        item.attributes = rec
+        item.base_price = rec[:base_price]
 #           puts "\n\nITEM IS: #{item.inspect}"
-          created_items += 1 if item.new_record?
-          updated_items += 1 if not item.new_record?
-          rescue
-#             puts "## ERROR #{$!.inspect}"
-          end
-        elsif kls == Button then
-          item = Button.find_or_create_by_sku(rec)
-          item.attributes = rec
-        elsif kls == @vendor.categories.visible then
-          item = @vendor.categories.visible.find_or_create_by_sku(rec[:sku])
-          item.attributes = rec
-          created_categories += 1 if item.new_record?
-        elsif kls == LoyaltyCard and trusted then
-          item = LoyaltyCard.find_or_create_by_sku(rec[:sku])
-          item.attributes = rec
-        elsif kls == Customer and trusted then
-          item = Customer.find_or_create_by_sku(rec[:sku])
-          item.attributes = rec
-        elsif kls == Discount and trusted then
-          item = Discount.find_or_create_by_sku(rec[:sku])
-          item.attributes = rec
-        end
-#         puts "Saving Item #{item.inspect}"
-        if not item.save then
-          SalorBase.log_action "DistUpload","failed to save #{item.attributes.inspect}"
-          item.errors.full_messages.each do |msg|
-            SalorBase.log_action "DistUpload","#{msg}"
-#             puts "UnSaved #{item.sku} #{item.base_price} #{msg}"
-          end 
-        else
-#           puts "Saved #{item.sku} #{item.base_price}"
-        end
-      rescue 
-        SalorBase.log_action "DistUpload","Some error occured: " + $!.inspect
+        created_items += 1 if item.new_record?
+        updated_items += 1 if not item.new_record?
+        
+      elsif kls == Button then
+        item = Button.find_or_create_by_sku(rec)
+        item.attributes = rec
+      elsif kls == @vendor.categories.visible then
+        item = @vendor.categories.visible.find_or_create_by_sku(rec[:sku])
+        item.attributes = rec
+        created_categories += 1 if item.new_record?
+      elsif kls == LoyaltyCard and trusted then
+        item = LoyaltyCard.find_or_create_by_sku(rec[:sku])
+        item.attributes = rec
+      elsif kls == Customer and trusted then
+        item = Customer.find_or_create_by_sku(rec[:sku])
+        item.attributes = rec
+      elsif kls == Discount and trusted then
+        item = Discount.find_or_create_by_sku(rec[:sku])
+        item.attributes = rec
       end
-      $Notice = I18n.t("wholesaler_upload_report",{ :updated_items => updated_items, :created_items => created_items, :created_categories => created_categories, :created_tax_profiles => created_tax_profiles })
+#         puts "Saving Item #{item.inspect}"
+      if not item.save then
+        SalorBase.log_action "DistUpload","failed to save #{item.attributes.inspect}"
+        item.errors.full_messages.each do |msg|
+          SalorBase.log_action "DistUpload","#{msg}"
+#             puts "UnSaved #{item.sku} #{item.base_price} #{msg}"
+        end 
+      else
+#           puts "Saved #{item.sku} #{item.base_price}"
+      end
     end # end csv.to_a.each
   end # def dist(file)
   # {END}

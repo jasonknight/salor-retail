@@ -15,11 +15,13 @@ class Image < ActiveRecord::Base
   belongs_to :imageable, :polymorphic => true
   belongs_to :vendor
   belongs_to :company
+
+  validate :is_valid_upload
+  #validates_presence_of :vendor_id, :company_id
+  
   before_save :associate
   after_save :process
   after_destroy :cleanup
-
-  validate :is_valid_upload
 
   DIRECTORY = File.join('public', 'uploads', SalorRetail::Application::SR_DEBIAN_SITEID)
   THUMB_MAX_SIZE = [90,90]
@@ -28,6 +30,8 @@ class Image < ActiveRecord::Base
   IMAGE_QUALITY = 80
   MAX_IMAGE_UPLOAD_SIZE = 500.kilobytes
   VALID_IMAGE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/gif', 'image/png', 'image/x-png', 'image/bmp']
+  
+  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files
@@ -42,6 +46,7 @@ class Image < ActiveRecord::Base
       return super
     end
   end
+  
   def image
     large_url
   end
@@ -127,7 +132,7 @@ class Image < ActiveRecord::Base
 
 
 
-  def process    
+  def process
     if @file_data
       # Delete existing image dirs
       VERSIONS.each { |ver| FileUtils.rm_rf(plot_dir(ver)) if File.exists?(plot_dir(ver)) }

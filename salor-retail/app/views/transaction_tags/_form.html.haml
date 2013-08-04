@@ -4,7 +4,7 @@
       %td{:colspan=>2}
         - if @transaction_tag.errors.any?
           %div#error_explanation
-            %h2= pluralize(@transaction_tag.errors.count, "error")
+            %h2= I18n.t("activerecord.errors.template.header.other", :count => @transaction_tag.errors.count,:model => t("activerecord.models.transaction_tag.one"))
             %ul
               - @transaction_tag.errors.full_messages.each do |msg| 
                 %li= msg 

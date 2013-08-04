@@ -75,12 +75,12 @@ SalorRetail::Application.routes.draw do
   match "orders/print" => "orders#print"
   match "orders/log" => "orders#log"
   match "orders/:id/customer_display" => 'orders#customer_display'
+  match "orders/create_all_recurring" => "orders#create_all_recurring"
   
   
   
-  match "reports/index" => "reports#selector"
-  match "reports" => "reports#selector"
-  match "reports/selector" => "reports#selector"
+  match "reports/index" => "reports#index"
+  match "reports" => "reports#index"
   match "reports/daily" => "reports#daily"
   match "reports/cash_account" => "reports#cash_account"
   
@@ -194,6 +194,10 @@ SalorRetail::Application.routes.draw do
     get :test_exception
     post :email
     get :test_email
+    get :remote_service
+    get :connect_remote_service
+    get :update_connection_status
+    get :documentation
   end
 
   if defined?(SrSaas) == 'constant'

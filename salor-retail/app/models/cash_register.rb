@@ -19,6 +19,8 @@ class CashRegister < ActiveRecord::Base
   has_many :orders
   
   validates_presence_of :name
+  validates_presence_of :vendor_id, :company_id
+  
   before_save :sanitize_path
   
   #README

@@ -1,0 +1,17 @@
+%table
+  %tr
+    %td= Order.human_attribute_name :subscription_start
+    %td
+      .square-button.editme{ :klass => 'Order', :model_id => @order.id, :field => 'subscription_start', :type => 'date' }= @order.subscription_start_formatted
+  %tr
+    %td= Order.human_attribute_name :subscription_interval
+    %td
+      .square-button.editme{ :klass => 'Order', :model_id => @order.id, :field => 'subscription_interval', :type => 'keyboard', :keyboard_layout => 'num' }= @order.subscription_interval.to_i
+  %tr
+    %td= Order.human_attribute_name :subscription_last
+    %td
+      .square-button.editme{ :klass => 'Order', :model_id => @order.id, :field => 'subscription_last', :type => 'date' }= @order.subscription_last_formatted
+  %tr
+    %td= Order.human_attribute_name :subscription_next
+    %td
+      .square-button.editme{ :klass => 'Order', :model_id => @order.id, :field => 'subscription_next', :type => 'date' }= @order.subscription_next_formatted

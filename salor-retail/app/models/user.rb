@@ -7,27 +7,25 @@
 
 require 'digest/sha2'
 class User < ActiveRecord::Base
-
   include SalorScope
   include SalorBase
 
   has_and_belongs_to_many :vendors
-  belongs_to :company
+  has_and_belongs_to_many :roles
   
+  belongs_to :company
   belongs_to :drawer
-
   has_many :orders
   has_many :order_items
   has_many :receipts
   has_many :current_register_dailies
   has_many :user_meta
-  has_and_belongs_to_many :roles
-  
   has_many :drawer_transactions
   has_many :histories
   has_many :user_logins
   
   validates_presence_of :username
+  validates_presence_of :company_id
   
   before_update :set_role_cache, :update_hourly_rate
   before_save :set_role_cache, :update_hourly_rate
@@ -48,7 +46,10 @@ class User < ActiveRecord::Base
     login = self.user_logins.last
     if login then
       login.hourly_rate = self.hourly_rate
-      login.save
+      result = login.save
+      if result != true
+        raise "Could not save UserLogin because #{ login.errors.messages }"
+      end
     end
   end
   
@@ -135,34 +136,34 @@ class User < ActiveRecord::Base
     return true
   end
   
-  def owns_vendor?(id)
-    return self.vendor_id == id
-  end
-  
-  def owns_this?(model)
-    
-    if model.class == LoyaltyCard then
-      return owns_this?(model.customer)
-    end
-    if model.respond_to? :vendor_id and not model.vendor_id.nil?
-      return true if owns_vendor?(model.vendor_id)  
-    end
-    if model.respond_to? :user_id then
-      return true if self.class == User and model.user_id == self.user.id
-    end
-   
-    if model.respond_to? :user_id then
-       return model.user_id == self.id
-    end
-    if model.class == ShipmentItem then
-      return owns_this?(model.shipment)
-    end
-    if model.class == OrderItem then
-      return owns_this?(model.order)
-    end
-    raise "You cannot do what you are trying to do. Please stop."
-    return false
-  end
+#   def owns_vendor?(id)
+#     return self.vendor_id == id
+#   end
+#   
+#   def owns_this?(model)
+#     
+#     if model.class == LoyaltyCard then
+#       return owns_this?(model.customer)
+#     end
+#     if model.respond_to? :vendor_id and not model.vendor_id.nil?
+#       return true if owns_vendor?(model.vendor_id)  
+#     end
+#     if model.respond_to? :user_id then
+#       return true if self.class == User and model.user_id == self.user.id
+#     end
+#    
+#     if model.respond_to? :user_id then
+#        return model.user_id == self.id
+#     end
+#     if model.class == ShipmentItem then
+#       return owns_this?(model.shipment)
+#     end
+#     if model.class == OrderItem then
+#       return owns_this?(model.order)
+#     end
+#     raise "You cannot do what you are trying to do. Please stop."
+#     return false
+#   end
   
   def end_day
     login = self.user_logins.last

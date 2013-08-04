@@ -11,6 +11,8 @@ class Receipt < ActiveRecord::Base
   belongs_to :order
   belongs_to :cash_register
   belongs_to :drawer
+  
+  validates_presence_of :vendor_id, :company_id
 
   
   def to_html

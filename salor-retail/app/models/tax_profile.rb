@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 
 class TaxProfile < ActiveRecord::Base
-	include SalorScope
+  include SalorScope
   include SalorBase
   
   has_many :items
@@ -16,6 +16,9 @@ class TaxProfile < ActiveRecord::Base
   belongs_to :company
   
   validates_presence_of :name, :value, :letter
+  validates_presence_of :vendor_id, :company_id
+  
+  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files

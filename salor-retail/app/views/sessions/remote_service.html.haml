@@ -1,22 +1,20 @@
 = javascript_include_tag 'request_service'
 
-= raw content_box_top(t(".title"))
-
 #request_service
   = text_field_tag 'service_connect_host', 'red-e.eu'
   %br
   = text_field_tag 'service_connect_user', 'service'
   %br
-  = text_field_tag 'service_connect_password', t('.password')
+  = text_field_tag 'service_connect_password', ''
   %br
   .connect_service_button_container
-    .generic-button#connect_service_ssh{ :onclick => 'connect_service("ssh");' }= t('.connect_ssh')
+    .generic-button#connect_service_ssh{ :onclick => 'connect_service("ssh");' }= t('home.remote_service..connect_ssh')
   .connect_service_button_container
-    .generic-button#connect_service_vnc{ :onclick => 'connect_service("vnc");' }= t('.connect_vnc')
-  #connection_status= t('.requesting_connection_status')
+    .generic-button#connect_service_vnc{ :onclick => 'connect_service("vnc");' }= t('home.remote_service..connect_vnc')
+  #connection_status= t('home.remote_service.requesting_connection_status')
   %br
-  %img{ :id => 'progress', :src => '/images/upload.gif' }
+  = image_tag 'loader.gif', :id => 'progress'
 
 :javascript
-  var i18n_connected = "#{ escape_javascript t '.connected' }";
-  var i18n_disconnected = "#{ escape_javascript t '.disconnected' }";
+  var i18n_connected = "#{ escape_javascript t 'home.remote_service..connected' }";
+  var i18n_disconnected = "#{ escape_javascript t 'home.remote_service..disconnected' }";

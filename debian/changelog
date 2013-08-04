@@ -1,3 +1,35 @@
+salor-retail (4.0.2.22) unstable; urgency=low
+
+  * pmi edit on orders/print
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 16:15:15 +0200
+
+salor-retail (4.0.2.21) unstable; urgency=low
+
+  * userLogin fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 14:10:10 +0200
+
+salor-retail (4.0.2.20) unstable; urgency=low
+
+  * validations, fiscal report, remote service, pagination etc.
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 10:50:38 +0200
+
+salor-retail (4.0.2.19) unstable; urgency=low
+
+  * various order fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 02 Aug 2013 20:59:37 +0200
+
+salor-retail (4.0.2.18) unstable; urgency=low
+
+  * various fixes
+  * style adaptions and migration for subscription orders
+  * recurring subscriptions done
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 02 Aug 2013 14:23:31 +0200
+
 salor-retail (4.0.2.17) unstable; urgency=low
 
   * various small fixes

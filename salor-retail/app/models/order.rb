@@ -69,6 +69,16 @@ class Order < ActiveRecord::Base
   
   has_many :gift_cards, :class_name => "OrderItem", :conditions => "behavior = 'gift_card' and hidden != 1"
   
+  def self.human_attribute_name(attrib, options={})
+    begin
+      trans = I18n.t("activerecord.attributes.#{attrib.downcase}", :raise => true) 
+      return trans
+    rescue
+      SalorBase.log_action self.class, "trans error raised for activerecord.attributes.#{attrib} with locale: #{I18n.locale}"
+      return super
+    end
+  end
+  
   def as_csv
     return attributes
   end
@@ -393,7 +403,7 @@ class Order < ActiveRecord::Base
 
   
 
-  def complete(params)
+  def complete(params={})
     raise "cannot complete a paid order" if self.paid
     
     # History
@@ -406,8 +416,6 @@ class Order < ActiveRecord::Base
     h.changes_made = "Beginning complete order"
     h.save
 
-    self.paid = true
-    self.paid_at = Time.now # TODO: Don't set this for unpaid orders
     self.completed_at = Time.now
     # the user is re-assigned in OrdersController#complete
     self.drawer = self.user.get_drawer
@@ -416,31 +424,59 @@ class Order < ActiveRecord::Base
     self.update_item_quantities
     self.activate_giftcard_items
     self.update_giftcard_remaining_amounts
-    self.create_payment_method_items(params)
+    self.create_payment_method_items(params) unless params == {}
     self.create_drawer_transaction
     self.update_associations
+    self.set_unique_numbers
     self.report_errors_to_technician
     
-    
+    self.save
+  end
+  
+  def set_unique_numbers
     if self.is_quote
       self.qnr = self.vendor.get_unique_model_number('quote')
     else
       self.nr = self.vendor.get_unique_model_number('order')
     end
-    self.save
-    
   end
   
   def update_associations
+    if self.payment_method_items.visible.where(:unpaid => true).any?
+      self.is_unpaid = true
+    end
+    
+    if self.payment_method_items.visible.where(:quote => true).any?
+      self.is_quote = true
+    end
+    
+    if self.payment_method_items.visible.where(:unpaid => nil, :quote => nil).sum(:amount_cents) >= self.total_cents
+      self.paid = true
+      self.paid_at = Time.now
+    end
+    
+    self.save
+    
     self.order_items.update_all({
-                                 :completed_at => self.completed_at,
-                                 :paid_at => self.paid_at,
-                                 :paid => self.paid,
-                                 :is_proforma => self.is_proforma,
-                                 :is_quote => self.is_quote,
-                                 :user_id => self.user_id,
-                                 :drawer_id => self.drawer_id
-                                 })
+      :completed_at => self.completed_at,
+      :paid_at => self.paid_at,
+      :paid => self.paid,
+      :is_proforma => self.is_proforma,
+      :is_quote => self.is_quote,
+      :user_id => self.user_id,
+      :drawer_id => self.drawer_id
+    })
+    
+    self.payment_method_items.update_all({
+      :completed_at => self.completed_at,
+      :paid_at => self.paid_at,
+      :paid => self.paid,
+      :is_unpaid => self.is_unpaid,
+      :is_quote => self.is_quote,
+      :is_proforma => self.is_proforma
+    })
+    
+
   end
   
   def create_drawer_transaction
@@ -483,7 +519,7 @@ class Order < ActiveRecord::Base
     end
   end
   
-  def create_payment_method_items(params)    
+  def create_payment_method_items(params)
     params[:payment_method_items].each do |k,v|
       pm = self.vendor.payment_methods.visible.find_by_id(v[:id])
       
@@ -505,6 +541,7 @@ class Order < ActiveRecord::Base
       pmi.cash = pm.cash
       pmi.quote = pm.quote
       pmi.unpaid = pm.unpaid
+      pmi.currency = self.currency
       result = pmi.save
       if result != true
         raise "Could not save PaymentMethodItem because #{ pmi.errors.messages }"
@@ -512,7 +549,6 @@ class Order < ActiveRecord::Base
       
       self.payment_method_items << pmi
       
-      # TODO this should be applied to all PMIs after it was discovered
       self.is_quote = true if pm.quote == true
       self.is_unpaid = true if pm.unpaid == true
     end
@@ -525,7 +561,8 @@ class Order < ActiveRecord::Base
     change = (payment_total - self.total)
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
 
-    unless self.is_proforma
+    
+    if self.is_proforma.nil? and self.is_unpaid.nil? and self.is_quote.nil?
       # create a change payment method item
       pmi = PaymentMethodItem.new
       pmi.payment_method = change_payment_method
@@ -538,9 +575,9 @@ class Order < ActiveRecord::Base
       pmi.paid_at = self.paid_at
       pmi.paid = self.paid
       pmi.completed_at = self.completed_at
-      pmi.is_proforma = self.is_proforma
-      pmi.is_quote = self.is_quote
-      pmi.is_unpaid = self.is_unpaid
+      pmi.is_proforma = nil
+      pmi.is_quote = nil
+      pmi.is_unpaid = nil
       pmi.amount = change
       pmi.change = true
       result = pmi.save
@@ -938,7 +975,7 @@ class Order < ActiveRecord::Base
     header +=
     "\ea\x00" +  # align left
     "\e!\x01" +  # Font B
-    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.paid_at, :format => :iso)) + ' ' + self.cash_register.name + "\n"
+    I18n.t("receipts.invoice_numer_X_at_time", :number => self.nr, :datetime => I18n.l(self.completed_at, :format => :iso)) + ' ' + self.cash_register.name + "\n"
 
     header += "\n\n" +
     "\e!\x00" +  # Font A
@@ -1061,24 +1098,22 @@ class Order < ActiveRecord::Base
   end
     
   def report_errors_to_technician
-    if self.vendor.enable_technician_emails == true and not self.vendor.technician_email.blank?
-      errors = self.check
-      #if errors.any?
-        subject = "Errors in Order #{ self.id }"
-        body = errors.to_s
-        UserMailer.technician_message(self.vendor, subject, body).deliver
-        em = Email.new
-        em.company = self.company
-        em.vendor = self.vendor
-        em.receipient = self.vendor.technician_email
-        em.subject = subject
-        em.body = body
-        em.user = self.user
-        em.technician = true
-        em.model = self
-        em.save
-      end
-    #end
+    errors = self.check
+    if errors.any? and self.vendor.enable_technician_emails == true and not self.vendor.technician_email.blank?
+      subject = "Errors in Order #{ self.id }"
+      body = errors.to_s
+      UserMailer.technician_message(self.vendor, subject, body).deliver
+      em = Email.new
+      em.company = self.company
+      em.vendor = self.vendor
+      em.receipient = self.vendor.technician_email
+      em.subject = subject
+      em.body = body
+      em.user = self.user
+      em.technician = true
+      em.model = self
+      em.save
+    end
   end
   
   def check
@@ -1276,19 +1311,21 @@ class Order < ActiveRecord::Base
     
     # checks for paid_at timestamp
     
-    should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
-    actual = self.order_items.visible.collect{ |oi| oi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
-    pass = should == actual
-    msg = "OrderItems should have the same paid_at timestamp as the Order"
-    type = :orderOrderItemsPaidAtMatch
-    tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
-    
-    should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
-    pass = should == actual
-    msg = "PaymentMethodItems should have the same paid_at timestamp as the Order"
-    type = :orderPaymentMethodItemsPaidAtMatch
-    tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    unless self.paid_at.nil?
+      should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
+      actual = self.order_items.visible.collect{ |oi| oi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
+      pass = should == actual
+      msg = "OrderItems should have the same paid_at timestamp as the Order"
+      type = :orderOrderItemsPaidAtMatch
+      tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+      
+      should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
+      actual = self.payment_method_items.visible.collect{ |pmi| pmi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
+      pass = should == actual
+      msg = "PaymentMethodItems should have the same paid_at timestamp as the Order"
+      type = :orderPaymentMethodItemsPaidAtMatch
+      tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    end
     
     
     # checks for is_quote flag
@@ -1309,9 +1346,18 @@ class Order < ActiveRecord::Base
     msg = "Order specifies drawer_id #{ actual } and user_id #{ self.user_id } but this user's drawer is #{ should }."
     type = :orderUserDrawerMatch
     tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
-    
-    
+
+
     return tests
+  end
+  
+  def hide(by_id)
+    # TODO: move nr to stack of unused numbers
+    self.hidden = true
+    self.hidden_by = by_id
+    self.hidden_at = Time.now
+    self.save
+    self.order_items.visible.update_all :hidden => true, :hidden_at => Time.now, :hidden_by => by_id
   end
   
   # for better debugging in the console
@@ -1336,7 +1382,8 @@ class Order < ActiveRecord::Base
       :origin => self.origin_country,
       :destination => self.destination_country,
       :is_proforma => self.is_proforma,
-      :order_items_length => self.order_items.visible.size
+      :order_items_length => self.order_items.visible.size,
+      :subscription => self.subscription
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs
@@ -1348,4 +1395,134 @@ class Order < ActiveRecord::Base
   def self.order_items_to_json(order_items=[])
     "[#{order_items.collect { |oi| oi.to_json }.join(", ") }]"
   end
+  
+  def customer_name
+    self.customer.full_name if self.customer
+  end
+  
+  def subscription_start_formatted
+    if self.subscription_start
+      self.subscription_start.strftime("%Y-%m-%d")
+    else
+      ""
+    end
+  end
+  
+  def subscription_last_formatted
+    if self.subscription_last
+      self.subscription_last.strftime("%Y-%m-%d")
+    else
+      ""
+    end
+  end
+  
+  def subscription_next_formatted
+    if self.subscription_next
+      self.subscription_next.strftime("%Y-%m-%d")
+    else
+      ""
+    end
+  end
+  
+  def toggle_subscription=(x)
+    self.subscription = !self.subscription
+    if self.subscription == true
+      self.subscription_interval = 12
+      self.subscription_start = Time.now
+    else
+      self.subscription_start = nil
+      self.subscription_interval = nil
+      self.subscription_next = nil
+    end
+    self.save
+  end
+  
+  def subscription_start=(start_date)
+    write_attribute :subscription_start, start_date
+    if self.subscription_next.nil?
+      self.subscription_next = self.subscription_start
+    else
+      self.subscription_next = self.subscription_start + self.subscription_interval.months
+    end
+    
+    self.save
+  end
+  
+  def create_recurring_order
+    unpaid_pm = self.vendor.payment_methods.visible.find_by_unpaid(true)
+    
+    o = Order.new
+    # we copy over attributes manually. better be explicit.
+    o.company = self.company
+    o.vendor = self.vendor
+    o.user = self.user
+    o.drawer = self.drawer
+    o.cash_register = self.cash_register
+    o.paid = nil
+    o.customer_id = self.customer_id
+    o.origin_country_id = self.origin_country_id
+    o.destination_country_id = self.destination_country_id
+    o.sale_type_id = self.sale_type_id
+    o.currency = self.currency
+    o.subscription_order_id = self.id
+    result = o.save
+    if result != true
+      raise "Could not save Order because #{ o.errors.messages }"
+    end
+    
+    self.order_items.visible.each do |oi|
+      noi = OrderItem.new
+      noi.company = oi.company
+      noi.vendor = oi.vendor
+      noi.item_id = oi.item_id
+      noi.quantity = oi.quantity
+      noi.tax_profile = oi.tax_profile
+      noi.item_type = oi.item_type
+      noi.behavior = oi.behavior
+      noi.tax = oi.tax
+      noi.category = oi.category
+      noi.location = oi.location
+      noi.rebate = oi.rebate
+      noi.sku = oi.sku
+      noi.user = oi.user
+      noi.drawer = oi.drawer
+      noi.price = oi.price
+      noi.currency = oi.currency
+      noi.order = o
+      result = noi.save
+      if result != true
+        raise "Could not save OrderItem because #{ noi.errors.messages }"
+      end
+      noi.calculate_totals
+      o.order_items << noi
+    end
+    o.save
+    o.reload # needed since we do not call .calculate_totals on self
+    o.calculate_totals
+    
+    pmi = PaymentMethodItem.new
+    pmi.company = self.company
+    pmi.vendor = self.vendor
+    pmi.user = self.user
+    pmi.drawer = self.drawer
+    pmi.payment_method = unpaid_pm
+    pmi.unpaid = true
+    pmi.order = o
+    pmi.cash_register = self.cash_register
+    pmi.amount = o.total
+    pmi.currency = o.currency
+    result = pmi.save
+    if result != true
+      raise "Could not save PaymentMethodItem because #{ pmi.errors.messages }"
+    end
+        
+    o.reload # needed since we do not call .complete on self
+    o.complete
+
+    self.subscription_last = self.subscription_next
+    self.subscription_next = self.subscription_last + self.subscription_interval.months
+    self.save
+    return o
+  end
+
 end

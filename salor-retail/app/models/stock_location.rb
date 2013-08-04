@@ -13,4 +13,6 @@ class StockLocation < ActiveRecord::Base
   belongs_to :company
   
   has_many :item_stocks, :as => :location
+  
+  validates_presence_of :vendor_id, :company_id
 end

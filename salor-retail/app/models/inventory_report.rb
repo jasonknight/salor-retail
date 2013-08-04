@@ -6,5 +6,7 @@ class InventoryReport < ActiveRecord::Base
   belongs_to :company
   has_many :inventory_report_items
   
+  validates_presence_of :vendor_id, :company_id
+  
   
 end

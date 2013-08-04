@@ -32,7 +32,7 @@ function add_payment_method() {
     amount.select();
   });
 
-  amount.val(rest_value);
+  amount.val(toDelimited(rest_value));
   // ---
   
   oldSelectedIndex = null;

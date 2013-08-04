@@ -1,5 +1,5 @@
 - if @invoice_note.errors.any?
-  .errors
+  #error_explanation
     %h3= t 'activerecord.errors.template.header', :count => @invoice_note.errors.size, :model => InvoiceNote.model_name.human
     %ul
       - @invoice_note.errors.full_messages.each do |msg|

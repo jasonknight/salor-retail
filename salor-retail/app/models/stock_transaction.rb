@@ -5,9 +5,8 @@ class StockTransaction < ActiveRecord::Base
   belongs_to :user
   belongs_to :from, :polymorphic => true
   belongs_to :to, :polymorphic => true
-  
-  validates_presence_of :vendor_id
-  validates_presence_of :company_id
+
+  validates_presence_of :vendor_id, :company_id
   
   
   # This creates a StockTransaction and acutally does the incrementing/decrementing on the model. "model1" can be a StockItem or an Item (it must respond to a quantity setter). "model2" only serves for labelling purposes of the StockTransaction. It can be any model that logically can send or receive a quantity (e.g. ShipmentItem, StockItem, Item, Order, etc.)
@@ -28,7 +27,7 @@ class StockTransaction < ActiveRecord::Base
     when 'Item'
       st.from_quantity = model2.quantity
     when 'ShipmentItem'
-      st.from_quantity = model2.quantity - model2.in_stock_quantity      
+      st.from_quantity = model2.quantity.to_f - model2.in_stock_quantity.to_f
     end
     
     SalorBase.log_action "ItemStock", "[transact()] model1 (#{ model1.class.to_s } ID #{ model1.id }). Adding #{ diff } to it", :cyan

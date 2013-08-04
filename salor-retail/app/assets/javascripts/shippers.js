@@ -8,7 +8,7 @@ var shippers = {
       ajax_log({
         action_taken:'confirmed_update_shipper_dialog'
       });
-      window.location = '/shippers/update_wholesaler';
+      window.location = '/shippers/update_all';
     });
     dialog.append(okbutton);
   }

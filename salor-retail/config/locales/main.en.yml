@@ -5,6 +5,18 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      company_id: Company
+      language: Language
+      cash: Cash
+      change: Change
+      unpaid: Unpaid
+      quote: Quote
+      subscription_start: Subscription start
+      subscription_interval: Subscription interval
+      subscription_last: Last payment
+      subscription_next: Next payment
+      nr: Number
+      customer_name: Customer
       invoice_logo: Invoice Logo
       pagination_invoice_one: Pagination Invoice first page
       pagination_invoice_one: Pagination Invoice other pages
@@ -203,6 +215,9 @@ en:
       whento: When
       width: width
     models:
+      invoice_blurb:
+        one: Invoice Blurb
+        other: Invoice Blurbs
       action:
         one: Action
         other: Actions
@@ -249,10 +264,11 @@ en:
       order:
         one: Order
         other: Orders
-        proforma_orders: Proforma Invoices
+        proforma_orders: Proforma
         quote: Quote
         quotes: Quotes
-        unpaid_orders: Unpaid Invoices
+        unpaid_orders: Unpaid
+        subscriptions: Subscriptions
       order_item:
         one: Order Item
         other: Order Items
@@ -425,6 +441,10 @@ en:
       upload: upload
   label: label
   menu:
+    invoice_notes: Invoice Notes
+    sale_types: Sale Types
+    countries: Countries
+    subscription: Subscription
     enter_inventory_items: Enter
     logos: Logos
     print-dialog: print dialog
@@ -560,6 +580,9 @@ en:
     shipments_move_all_items: all items were successfully moved
     shipments_move_item: item was successfully moved
   orders:
+    index:
+      recurrable_subscriptions: Recurrable subscriptions
+      create_all_recurring_orders: Create orders from recurrable subscriptions
     print:
       delivery_note: Delivery note
       invoice: Invoice

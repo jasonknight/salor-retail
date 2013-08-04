@@ -21,29 +21,32 @@ class OrdersController < ApplicationController
   end
   
   def merge_into_current_order
-    @current = @current_vendor.orders.find_by_id(params[:order_id])
+    @current_order = @current_vendor.orders.visible.where(:completed_at => nil).find_by_id(@current_user.current_order_id)
+    
     @to_merge = @current_vendor.orders.find_by_id(params[:id])
     @to_merge.order_items.visible.each do |oi|
        noi = oi.dup
-       noi.order_id = @current.id
+       noi.order_id = @current_order.id
        noi.save
     end
-    redirect_to edit_order_path(@current)
+    redirect_to edit_order_path(@current_order)
   end
   
   def index
     params[:type] ||= 'normal'
     case params[:type]
     when 'normal'
-      @orders = @current_vendor.orders.order("nr desc").where(:paid => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:paid => true).page(params[:page]).per(@current_vendor.pagination)
     when 'proforma'
-      @orders = @current_vendor.orders.order("nr desc").where(:is_proforma => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_proforma => true).page(params[:page]).per(@current_vendor.pagination)
     when 'unpaid'
-      @orders = @current_vendor.orders.order("nr desc").where(:is_unpaid => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_unpaid => true).page(params[:page]).per(@current_vendor.pagination)
     when 'quote'
-      @orders = @current_vendor.orders.order("qnr desc").where(:is_quote => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("qnr desc").where(:is_quote => true).page(params[:page]).per(@current_vendor.pagination)
+    when 'subscription'
+      @orders = @current_vendor.orders.visible.order("created_at DESC").where(:subscription => true).page(params[:page]).per(@current_vendor.pagination)
     else
-      @orders = @current_vendor.orders.order("id desc").page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("id desc").page(params[:page]).per(@current_vendor.pagination)
     end
   end
 
@@ -119,6 +122,16 @@ class OrdersController < ApplicationController
       # if it was a scanned Loyalty card, @order_item is nil. Else clause must stay empty.
     end
     render :update_pos_display
+  end
+  
+  def destroy
+    @order = @current_vendor.orders.find_by_id(params[:id])
+    if @order.completed.nil?
+      @order.hide(@current_user.id)
+    else
+      $MESSAGES[:alerts] << "Order ID #{ @order.id } is either paid or already hidden"
+    end
+    redirect_to request.referer
   end
 
 
@@ -227,11 +240,17 @@ class OrdersController < ApplicationController
     o.user = @current_user
     o.drawer = @current_user.get_drawer
     o.cash_register = @current_register
-    o.save
+    result = o.save
+    if result != true
+      raise "Could not save Order because #{ o.errors.messages }"
+    end
     
     # save new order on user
     @current_user.current_order_id = o.id
-    @current_user.save
+    result = @current_user.save
+    if result != true
+      raise "Could not save User because #{ @current_user.errors.messages }"
+    end
     redirect_to new_order_path
   end
   
@@ -302,6 +321,18 @@ class OrdersController < ApplicationController
       History.record("cannot clear order because already paid", @order, 1)
     end
     render 'update_pos_display' and return
+  end
+  
+  def create_all_recurring
+    recurrable_orders = @current_vendor.recurrable_subscription_orders
+    recurrable_orders.each do |ro|
+      o = ro.create_recurring_order
+      $MESSAGES[:notices] << "Created recurring order nr. #{ o.nr }"
+    end
+    if recurrable_orders.blank?
+      $MESSAGES[:notices] << "Currently there are no recurrable orders."
+    end
+    redirect_to '/orders?type=unpaid'
   end
   
   def log

@@ -88,8 +88,7 @@ $images: "/images"
 
 h1, h2, h3, label, div.breadcrumb-container, div.list 
   text-transform: uppercase
-.warning,div.warning,td * input.warning,button.warning
-  background-color: $warning
+
 
 /* Mixins */
 @mixin dark_input 
@@ -257,6 +256,12 @@ a
 
 /* Non Specific */
 
+form
+  :text-align left
+
+table
+  margin: 0px auto
+
 th.left,
 td.left
   :text-align left
@@ -295,13 +300,6 @@ div.form_image
 
 .striped-table 
   text-align: center
-
-
-.striped-table tr:nth-child(odd) 
-  //background-color: white
-
-.striped-table tr:nth-child(even) 
-  //background-color: #d0d0d0
 
 
 .striped-table td:first-child 
@@ -447,13 +445,12 @@ div.main_sku
 
 .even 
   background-color: $light_background
-  color: $foreground
+  
+.odd
+  background-color: #4D565A
   
 tr.recursive
   background-color: #615443
-
-.even 
-  @include rounded_corners_all
 
 /* Form Styling */
 .stylish-text 
@@ -591,7 +588,12 @@ body
   font-family: Ubuntu-R
   letter-spacing: 1.5px
 
+  
 div.salor-icon
+  cursor: pointer
+  display: inline-block
+  text-align: center
+  padding: 5px
   span.icon-caption 
     font-size: $text_size_tiny
     text-transform: uppercase
@@ -637,7 +639,7 @@ div.header
       position: relative
       bottom: 7px
   div#header_drawer_amount
-    :margin -26px 0px 0px 0px
+    :margin -21px 0px 0px 0px
     :font-weight bold
     :font-size 90%
     :width 65px
@@ -791,18 +793,9 @@ div.content-box
   div.title-container
     :margin 15px auto
     position: relative
-    width: 91%
     text-align: center
     font-size: $text_size_massive
     height: 40px
-    
-  div.content-container-home-user_user_index 
-    margin: auto
-    width: 80%
-
-
-.content-box-home-user_user_index 
-  padding-top: 60px
 
 
 div.content-box > div.title-container > div.back-button,
@@ -902,9 +895,6 @@ div.content-box > div.title-container > div.title-box-admin
 /* The ul.list */
 div.list 
   list-style: none
-  text-align: center
-  width: 80%
-  margin: auto
   font-size: $text_size_big
 
     
@@ -1262,6 +1252,8 @@ div.pos-button
 
 div.square-button 
   padding: 3px
+  width: 120px
+  height: 20px
   @include pointer
   background-color: $foreground
   color: $background
@@ -1335,6 +1327,8 @@ div.pos-item-purchase_price_total
   background-color: $green
   font-weight: bolder
   font-size: 150%
+  width: 10%
+
 .quantity-button
   border: 1px solid $border_color
   
@@ -1343,13 +1337,7 @@ div.pos-item-name
   padding-left: 10px
   overflow-x: hidden
   text-align: right
-  width: 20%
-
-.pos-item-total
-  width: 11%
-
-.pos-item-sku 
-  width: 18%
+  width: 30%
 
 .pos-item-rebate
   width: 7%
@@ -1843,20 +1831,16 @@ table.tools
   clear: both
   align: center
   @include raised_element
-  margin: 5px auto 10px auto
+  margin: 5px auto 20px auto
   @include rounded_corners_all
   background-color: $background
 
 div.tools 
   @include raised_element
   clear: both
-  margin: 0px auto
-  width: 50%
-
-
-div.tools a 
-  margin: 0px 20px
-  text-decoration: none
+  margin: 5px auto 20px auto
+  a
+    text-decoration: none
 
 
 input.checkbox-input 
@@ -2524,6 +2508,8 @@ div#buttons
   display: none
   position: absolute
   top: 0px
+  left: 0px
+  text-align: left
   width: 100%
   height: 100%
   z-index: 2000
@@ -3195,3 +3181,11 @@ div.new_inventory_box
       :color green
       :font-size 500%
       :display none
+      
+.yieldbox
+  :margin -10px auto 0px auto
+  :width 75%
+  :text-align center
+  :background-color rgba(0,0,0, 0.3)
+  :padding 10px 50px 150px 50px
+  box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.4)

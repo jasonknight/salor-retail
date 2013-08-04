@@ -11,7 +11,7 @@
 = raw content_box_top(t(title))
 
 .tools
-  %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+  %span{ :onmousedown => 'print_dialog();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
   - if params[:delivery_note]
     = link_to salor_icon(:document, {}, 32, t('orders.print.invoice')), "/orders/#{ @order.id }/print"
   - else
@@ -45,10 +45,10 @@
   - else
     - if @order.is_proforma
       %h2== #{ I18n.t("receipts.proforma_invoice") } #{ @order.nr }
-    - elsif @order.paid
+    - elsif @order.paid or @order.is_unpaid
       %h2== #{ I18n.t("receipts.invoice") } #{ @order.nr }
-    - else
-      %h2== #{ I18n.t("receipts.offer") } #{ @order.nr }
+    - elsif @order.is_quote
+      %h2== #{ I18n.t("receipts.offer") } #{ @order.qnr }
     %h3= I18n.l(@order.created_at, :format => :just_day)
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@report[:invoice_note][:header]).to_html) if @report[:invoice_note][:header]

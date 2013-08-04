@@ -16,7 +16,9 @@ class Shipper < ActiveRecord::Base
   belongs_to :user
   belongs_to :vendor
   belongs_to :company
+  
   validates_presence_of :name
+  validates_presence_of :vendor_id, :company_id
   
   def fetch_csv
     log_action "fetch_csv for #{ self.name }: called"

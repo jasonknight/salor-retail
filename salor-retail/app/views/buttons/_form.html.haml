@@ -1,9 +1,11 @@
 %script{:type => "text/javascript", :src => "/assets/jquery.modcoder.excolor.js"}
 = form_for(@button) do |f|
   - if @button.errors.any?
-    .form_errors
-      - @button.errors.full_messages.each do |msg|
-        %p= msg
+    %div#error_explanation
+      %h2= I18n.t("activerecord.errors.template.header.other", :count => @button.errors.count,:model => t("activerecord.models.button.one"))
+      %ul
+        - @button.errors.full_messages.each do |msg| 
+          %li= msg 
   %table{:width => '90%', :align => 'center'}
     %tr
       %td

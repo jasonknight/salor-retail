@@ -17,6 +17,8 @@ class Shipment < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :company
   belongs_to :user
+  
+  validates_presence_of :vendor_id, :company_id
 
   monetize :price_cents
   monetize :total_cents

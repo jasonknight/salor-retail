@@ -1,5 +1,5 @@
 - if @sale_type.errors.any?
-  .errors
+  #error_explanation
     %h3= t('activerecord.errors.template.header', :count => @sale_type.errors.size, :model => SaleType.model_name.human)
     %ul
       - @sale_type.errors.full_messages.each do |msg|

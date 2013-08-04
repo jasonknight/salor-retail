@@ -14,6 +14,7 @@
 
     = javascript_include_tag 'application'
     = javascript_include_tag "/jslocales/main.#{I18n.locale}.js"
+    = javascript_include_tag "jquery.ui.datepicker-#{ I18n.locale }"
     - if @current_vendor
       = javascript_include_tag "/jslocales/region.#{@current_vendor.region}.js"
     - if @current_user
@@ -27,7 +28,7 @@
     .help.hidden
     = render :partial => "shared/cash_drop" if @current_user
     
-    = yield
+    .yieldbox= yield
     
     = form_tag session_path, :id => 'logoutform', :method => 'delete' do
       %span

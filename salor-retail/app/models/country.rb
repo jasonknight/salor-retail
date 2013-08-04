@@ -4,6 +4,9 @@ class Country < ActiveRecord::Base
   
   belongs_to :vendor
   belongs_to :company
+  
+  validates_presence_of :vendor_id, :company_id, :name
+  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files

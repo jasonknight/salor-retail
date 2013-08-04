@@ -18,6 +18,11 @@ class DrawerTransaction < ActiveRecord::Base
 
   monetize :amount_cents, :allow_nil => true
   monetize :drawer_amount_cents, :allow_nil => true
+  
+  validates_presence_of :vendor_id
+  validates_presence_of :company_id
+  validates_presence_of :drawer_id
+  validates_presence_of :user_id
 
   before_create :set_nr
 

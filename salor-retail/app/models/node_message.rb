@@ -6,5 +6,8 @@
 # See license.txt for the license applying to all files within this software.
 class NodeMessage < ActiveRecord::Base
   include SalorBase
+  include SalorScope
+  
+  validates_presence_of :vendor_id, :company_id
 
 end

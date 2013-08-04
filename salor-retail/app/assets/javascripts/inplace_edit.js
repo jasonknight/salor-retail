@@ -1,4 +1,4 @@
-var field_types = {
+var get_inputs = {
   category_id: function (value) {
     s = $(inplace_cats);
     s = set_selected(s,value,0);
@@ -78,7 +78,7 @@ function make_in_place_edit(elem) {
     return;    
   }
   elem.click(function (event) {
-    in_place_edit($(this).attr('id'),event.pageX,event.pageY);
+    in_place_edit(elem, event.pageX, event.pageY);
   });
   elem.addClass('editmedone');
 }
@@ -87,127 +87,163 @@ function make_in_place_edit(elem) {
  * This allows us to easily turn off the binding to the enter key when we need
  * something else to catch it
  */
-function inplaceEditBindEnter(doBind, id) {
+function inplaceEditBindEnter(elem) {
   $('#inplaceedit').unbind('keypress');
-  if (doBind) {
-	$('#inplaceedit').bind('keypress', function (e) {
-			var code = (e.keyCode ? e.keyCode : e.which);
-			 if(code == 13) { //Enter keycode
-				   in_place_edit_go(id);
-			 }
- 	});
- }
+  $('#inplaceedit').bind('keypress', function (e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if(code == 13) {
+      in_place_edit_go(elem);
+    }
+  });
 }
 
-function in_place_edit_go(id) {
-  var type = $('#' + id).attr('field');
-	var datatype = $('#' + id).attr('data_type');
-	var klass = $('#' + id).attr('klass');
-	var withstring = $('#' + id).attr('withstring');
-	withstring = withstring + '&ajax=true';
-	var value = $('#' + id).html();
 
 
-  var final_value = $('#inplaceedit').val();
-  final_value = final_value.replace("%",'');
-  var string = '/vendors/edit_field_on_child?id='+ $('#' + id).attr('model_id') +'&klass='+klass+'&field='+type+'&value=' + final_value + '&' + withstring
-  get(string, '_in_place_edit.html.erb', function () {
-  });
-  if ($('#' + id).attr('update_pos_display') == 'true') {
-    //update_order_items();
-    //update_pos_display();
-  }
-  if ($('#inplaceedit')[0].tagName == 'SELECT') {
-    $('#' + id).html($('#inplaceedit option:selected').html());
+function in_place_edit(elem, x, y) {
+  //$('#inplaceedit-div').remove();
+  var field = elem.attr('field');
+  var type = elem.attr('type');
+  var keyboard_layout = elem.attr('keyboard_layout');
+  var withstring = elem.attr('withstring');
+  var value = elem.html();
+
+  if (get_inputs[field]) {
+    console.log('getting inputs');
+    var inputhtml = get_inputs[field](value);
   } else {
-    $('#' + id).html(final_value);
+    console.log('setting text input field');
+    var inputhtml = "<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />";
   }
+  var input = $(inputhtml);
+  
+  if (fields_callbacks[field]) {
+    console.log("callback for", field);
+    fields_callbacks[field](input);
+  }
+
+  //var savelink = '<a id="inplaceeditsave" class="button-confirm">' + i18n.menu.ok + '</a>';
+  //var cancellink = '<a id="inplaceeditcancel" class="button-cancel">' + i18n.menu.cancel + '</a>';
+  //var linktable = "<table class='inp-menu' align='right'><tr><td>"+cancellink+"</td><td>"+savelink+"</td></tr></table>";
+
+
+  //var offset = {'top' : 20, 'left' : '20%', 'position' : 'absolute', 'width': '60%'}
+  //var div = $("<div id='inplaceedit-div'></div>");
+  //$('body').append(div);
+  //div.append(input);
+  //div.append('<br />');
+  //div.append(linktable);
+  //$('body').append(input);
+  
+  if (typeof type == 'undefined') {
+    console.log('type is undefined');
+    // the type attr has not been set on the element, so we get type depeding on the input element used
+    var tagname = input[0].tagName
+    console.log('tagname is', tagname);
+
+    switch(tagname) {
+      case 'SELECT':
+        type = 'select';
+        break;
+      case 'INPUT':
+        type = 'keyboard';
+        break;
+    }
+  }
+  
+  console.log('type is now', type);
+  //console.log('x', x);
+  //console.log('y', y);
+    
+  switch(type) {
+    case 'keyboard':
+      if ( input.hasClass('keyboardable-int') || keyboard_layout == 'num' ) {
+        keyboard_layout = 'num';
+      } else {
+        keyboard_layout = i18nlocale;
+      }
+      input.keyboard({
+        openOn   : 'focus',
+        stayOpen : true,
+        layout   : keyboard_layout,
+        customLayout : null,
+        position: {
+          of: elem,
+          my: 'center center',
+          at: 'center center'
+        },
+        visible : function() { 
+          if (IS_APPLE_DEVICE) {
+            $('.ui-keyboard-preview').val("");
+          } 
+          $('.ui-keyboard-preview').select();
+        },
+        accepted: function() {
+          in_place_edit_go(elem, input.val());
+        }
+      });
+      input.getkeyboard().reveal();
+      $('#inplaceedit-div').hide();
+      break;
+    
+    case 'select':
+      make_select_widget('', $('#inplaceedit'));
+      break;
+      
+    case 'date':
+      elem.hide();
+      input.insertAfter(elem);
+      input.datepicker({
+        onSelect: function(date, inst) {
+          elem.show();
+          in_place_edit_go(elem, input.val());
+          input.remove();
+        }
+      });
+//         "",
+//         function() {
+//           //onSelect
+//         },
+//         {},
+//         event
+//       );
+      input.datepicker('show');
+      //input.datepicker('dialog');
+      //$('#inplaceedit').trigger('click');
+      //widget.css('top', '0px');
+      break;
+  }
+
+  //$('#inplaceedit-div').css(offset);
+  $('#inplaceeditsave').mousedown(function() {
+    in_place_edit_go(elem);
+  });
+  
+  $('#inplaceeditcancel').mousedown(function() {
+    $('#inplaceedit-div').remove();
+  });
+
+  inplaceEditBindEnter(elem);
+}
+
+
+
+
+function in_place_edit_go(elem, value) {
+  console.log(value);
+  var field = elem.attr('field');
+  var klass = elem.attr('klass');
+  var withstring = elem.attr('withstring');
+  var model_id = elem.attr('model_id');
+  
+  value = value.replace("%",'');
+  
+  elem.html(value);
+  
+  var string = '/vendors/edit_field_on_child?id=' + model_id +'&klass=' + klass + '&field=' + field + '&value=' + value + '&' + withstring;
+  get(string, 'inplace_edit.js');
 
   $('#inplaceedit-div').remove();
-  if ($('#main_sku_field').length != 0) {
-    focuseKeyboardInput = true;
-  }
 }
-
-function in_place_edit(id,x,y) {
-  $('#inplaceedit-div').remove();
-  var type = $('#' + id).attr('field');
-  var datatype = $('#' + id).attr('data_type');
-  var klass = $('#' + id).attr('klass');
-  var withstring = $('#' + id).attr('withstring');
-  withstring = withstring + '&ajax=true';
-  var value = $('#' + id).html();
-
-  if (value == '' || value == null) {
-    value = i18n.system.errors.value_not_set;
-  }
-
-  if (field_types[type]) {
-    field = field_types[type].call(this,value);
-  } else {
-    var field = $("<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />");
-  }
-  if (fields_callbacks[type]) {
-    fields_callbacks[type].call(this,field);
-  }
-
-  var savelink = '<a id="inplaceeditsave" class="button-confirm">' + i18n.menu.ok + '</a>';
-  var cancellink = '<a id="inplaceeditcancel" class="button-cancel">' + i18n.menu.cancel + '</a>';
-  var linktable = "<table class='inp-menu' align='right'><tr><td>"+cancellink+"</td><td>"+savelink+"</td></tr></table>";
-
-  if (id == 'pos_order_total') {
-    x = x - 200;
-  }
-  if ($('#' + id).hasClass('pos-item-total') || $('#' + id).hasClass('pos-item-rebate')) {
-    x = x - 200;
-  }
-  var offset = {'top' : 20, 'left' : '20%', 'position' : 'absolute', 'width': '60%'}
-  var div = $("<div id='inplaceedit-div'></div>");
-  $('body').append(div);
-  div.append(field);
-  div.append('<br />');
-  div.append(linktable);
-
-  if (field[0].tagName != 'SELECT') {
-          field.keyboard({
-            openOn   : 'focus',
-            stayOpen : true,
-            layout       : field.hasClass('keyboardable-int') ? 'num' : i18nlocale,
-            customLayout : null,
-            visible : function(){ 
-              if (IS_APPLE_DEVICE) {
-                $('.ui-keyboard-preview').val("");
-              } 
-              $('.ui-keyboard-preview').select();
-            },
-            accepted: function(){ in_place_edit_go(id); }
-          });
-          field.getkeyboard().reveal();
-          $('#inplaceedit-div').hide();
-  }
-
-  $('#inplaceedit-div').css(offset);
-  $('#inplaceeditsave').mousedown(function () {
-		  in_place_edit_go(id);
-		  focuseKeyboardInput = true;
-  });
-  $('#inplaceeditcancel').mousedown(function () {
-		  $('#inplaceedit-div').remove();
-		  focuseKeyboardInput = true;
-  });
-
-  if (type == 'datepicker') {
-	  $('#inplaceedit').datepicker();
-  }
-  if (field[0].tagName == 'SELECT') {
-    make_select_widget('', $('#inplaceedit'));
-  }
-  inplaceEditBindEnter(true, id);
-  //div.children('.kbd-show-button').trigger('mousedown');
-  //focusInput($('#inplaceedit'));
-}
-
-
 
 
 var receiver_shipper_select = function (value) {

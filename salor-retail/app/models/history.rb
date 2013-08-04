@@ -6,10 +6,13 @@
 # See license.txt for the license applying to all files within this software.
 
 class History < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :model, :polymorphic => true
   include SalorBase
   include SalorScope
+  
+  belongs_to :user
+  belongs_to :model, :polymorphic => true
+  
+  validates_presence_of :vendor_id, :company_id
   
   before_create :set_fields
   

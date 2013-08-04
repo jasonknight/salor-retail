@@ -11,4 +11,6 @@ class TransactionTag < ActiveRecord::Base
 
   belongs_to :vendor
   belongs_to :company
+  
+  validates_presence_of :vendor_id, :company_id, :name
 end

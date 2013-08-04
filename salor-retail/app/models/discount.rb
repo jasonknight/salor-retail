@@ -18,6 +18,7 @@ class Discount < ActiveRecord::Base
   has_and_belongs_to_many :orders
   
   validates_presence_of :name
+  validates_presence_of :vendor_id, :company_id
   
   APPLIES = [
     [I18n.t("activerecord.models.vendor.one"),"Vendor"],

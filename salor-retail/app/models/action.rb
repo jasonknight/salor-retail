@@ -15,6 +15,8 @@ class Action < ActiveRecord::Base
   belongs_to :company
   belongs_to :user
   belongs_to :model, :polymorphic => true
+  
+  validates_presence_of :vendor_id, :company_id, :name, :sku
 
   #README
   # 1. The rails way would lead to many duplications

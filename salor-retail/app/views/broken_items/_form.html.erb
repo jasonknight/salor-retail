@@ -5,7 +5,7 @@
 <%= form_for(@item) do |f| %>
   <% if @item.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this broken_item from being saved:</h2>
+      <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @item.errors.count, :model => t("activerecord.models.cash_register.one"))%></h2>
 
       <ul>
       <% @item.errors.full_messages.each do |msg| %>

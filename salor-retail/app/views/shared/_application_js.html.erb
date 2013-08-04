@@ -89,7 +89,7 @@ window.params = {
 
 
 <% unless flash[:notices].blank? %>
-  messagesHash['notices'] = messagesHash['notices'].concat(<%= raw flash[:notices].to_json %>;
+  messagesHash['notices'] = messagesHash['notices'].concat(<%= raw flash[:notices].to_json %>);
 <% end %>
 <% unless flash[:alerts].blank? %>
   messagesHash['alerts'] = messagesHash['alerts'].concat(<%= raw flash[:alerts].to_json %>);

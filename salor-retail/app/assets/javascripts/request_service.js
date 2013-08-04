@@ -15,7 +15,7 @@ $(function(){
 
 function update_connection_status(){
   $.ajax({
-    url: "/home/update_connection_status",
+    url: "/session/update_connection_status",
     dataType: 'script'
   });
   ssh_connected = connection_status.ssh;
@@ -63,12 +63,12 @@ function connect_service(type) {
   password = $('#service_connect_password').val();
   if(type == 'ssh') {
     $.ajax({
-      url: "/home/connect_remote_service",
+      url: "/session/connect_remote_service",
       data: {type:'ssh', host:host, user:user, pw:password}
     });
   } else if (type == 'vnc') {
     $.ajax({
-      url: "/home/connect_remote_service",
+      url: "/session/connect_remote_service",
       data: {type:'vnc', host:host, user:user, pw:password}
     });
   }

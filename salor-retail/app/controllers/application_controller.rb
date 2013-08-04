@@ -133,7 +133,6 @@ class ApplicationController < ActionController::Base
     $PARAMS = nil
     $REQUEST = nil
     $MESSAGES = {}
-    @messages = {:notices => ['abc']}
     
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
 
@@ -159,6 +158,7 @@ class ApplicationController < ActionController::Base
       :alerts => [],
       :prompts => []
     }
+
     $DIRS = {
       :uploads => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
     }
@@ -168,6 +168,7 @@ class ApplicationController < ActionController::Base
   
   def loaddown
     # just to make sure we clear out these globals
+    copy_messages_to_flash
     $COMPANYID = nil
     $VENDORID = nil
     $USERID = nil

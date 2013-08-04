@@ -1,0 +1,41 @@
+= raw content_box_top(t("menu.reports"))
+
+
+
+.tools
+  = form_tag '/reports', :class => 'no-print', :method => :get do
+    = label('from', t('views.single_words.from'))
+    %br
+    = select_date(@from, :prefix => 'from')
+    %br
+    = label('to', t('views.single_words.to'))
+    %br
+    = select_date(@to, :prefix => 'to')
+    %br
+    
+    - if @current_company.mode == 'local'
+      %hr
+      %h3 Fiscal
+      %table
+        %tr
+          %td
+            %select{:name => 'location', :id => 'location_select'}
+              = options_for_select @locations
+            %br
+            = submit_tag t('helpers.submit.save'), :onclick => '$("#progress2").show()', :name => 'fisc_save'
+            %br
+          %td
+            = submit_tag t('menu.download'), :onclick => '$("#progress2").show()', :name => 'fisc_download'
+            %br
+            = image_tag 'loader.gif', :id => 'progress2', :style => 'display: none;'
+
+    %hr
+    %h3 CSV
+    %select{ :name => 'csv_type' }
+      - @models_for_csv.each do |m|
+        %option{ :value => m.to_s }= m.model_name.human
+    %br
+    = submit_tag t('menu.download'), :onclick => '', :name => 'csv_download'
+
+
+
