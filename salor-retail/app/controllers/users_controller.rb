@@ -30,7 +30,7 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(params[:user])
-    @user.vendor = @current_vendor
+    @user.vendors << @current_vendor
     @user.company = @current_company
     if @user.save
       @user.set_drawer

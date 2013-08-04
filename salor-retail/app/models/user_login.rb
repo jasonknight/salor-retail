@@ -1,13 +1,19 @@
 class UserLogin < ActiveRecord::Base
   include SalorBase
   include SalorScope
+  
   belongs_to :user
   belongs_to :vendor
   belongs_to :company
   before_save :set_totals
   before_update :set_totals
   attr_accessible :amount_due, :hourly_rate, :login, :logout, :shift_seconds, :user_id,:vendor_id
+  
+  validates_presence_of :vendor_id, :company_id
+  
   DATE_PATTERN = /(\d{4,4})\/(\d{2,2})\/(\d{2,2}) (\d{2,2}):(\d{2,2}):(\d{2,2})/
+  
+  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files

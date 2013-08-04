@@ -15,6 +15,9 @@ class Customer < ActiveRecord::Base
   belongs_to :company  
   has_many :orders
   has_many :notes, :as => :notable, :order => "id desc"
+  
+  validates_presence_of :company_id
+  
   after_save :set_loyalty_card_relations
   
   

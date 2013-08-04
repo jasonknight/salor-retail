@@ -19,6 +19,7 @@ class CashRegistersController < ApplicationController
 
   def new
     @cash_register = CashRegister.new
+    @cash_register.company = @current_company # needed for view
   end
 
   def edit

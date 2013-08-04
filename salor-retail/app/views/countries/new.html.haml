@@ -1,5 +1,5 @@
 - if @country.errors.any?
-  .errors
+  #error_explanation
     %h3= t 'activerecord.errors.template.header', :count => @country.errors.size, :model => Country.model_name.human
     %ul
       - @country.errors.full_messages.each do |msg|

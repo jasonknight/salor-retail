@@ -12,6 +12,9 @@ class Node < ActiveRecord::Base
   belongs_to :vendor
   attr_accessor :record, :target, :klass, :inst, :hash, :params, :request
   @@a = ["Button", "Category","Customer","Item","TaxProfile","LoyaltyCard"]
+  
+  validates_presence_of :vendor_id, :company_id
+  
   def node_type=(t)
     write_attribute(:node_type,t.downcase)
   end

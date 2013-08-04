@@ -5,6 +5,11 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      language: Language
+      cash: Cash
+      change: Change
+      unpaid: Unpaid
+      quote: Quote
       subscription_start: Subscription start
       subscription_interval: Subscription interval
       subscription_last: Last payment
@@ -209,6 +214,9 @@ en:
       whento: When
       width: width
     models:
+      invoice_blurb:
+        one: Invoice Blurb
+        other: Invoice Blurbs
       action:
         one: Action
         other: Actions
@@ -432,6 +440,9 @@ en:
       upload: upload
   label: label
   menu:
+    invoice_notes: Invoice Notes
+    sale_types: Sale Types
+    countries: Countries
     subscription: Subscription
     enter_inventory_items: Enter
     logos: Logos

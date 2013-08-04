@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130802095306) do
+ActiveRecord::Schema.define(:version => 20130804071437) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -868,6 +868,7 @@ ActiveRecord::Schema.define(:version => 20130802095306) do
     t.boolean  "unpaid"
     t.boolean  "quote"
     t.integer  "position"
+    t.integer  "company_id"
   end
 
   create_table "plugins", :force => true do |t|

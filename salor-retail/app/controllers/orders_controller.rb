@@ -126,7 +126,7 @@ class OrdersController < ApplicationController
   
   def destroy
     @order = @current_vendor.orders.find_by_id(params[:id])
-    if @order.hidden.nil? and @order.paid.nil?
+    if @order.completed.nil?
       @order.hide(@current_user.id)
     else
       $MESSAGES[:alerts] << "Order ID #{ @order.id } is either paid or already hidden"
@@ -240,11 +240,17 @@ class OrdersController < ApplicationController
     o.user = @current_user
     o.drawer = @current_user.get_drawer
     o.cash_register = @current_register
-    o.save
+    result = o.save
+    if result != true
+      raise "Could not save Order because #{ o.errors.messages }"
+    end
     
     # save new order on user
     @current_user.current_order_id = o.id
-    @current_user.save
+    result = @current_user.save
+    if result != true
+      raise "Could not save User because #{ @current_user.errors.messages }"
+    end
     redirect_to new_order_path
   end
   

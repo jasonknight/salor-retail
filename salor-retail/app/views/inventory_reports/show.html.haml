@@ -39,7 +39,6 @@
         %tr
           %th SKU
           %th= t 'activerecord.attributes.name'
-          %th= t 'activerecord.attributes.quantity'
           %th= t 'activerecord.attributes.real_quantity'
           %th= t 'activerecord.attributes.purchase_price'
           %th= t 'items.inventory_report.price'
@@ -53,7 +52,6 @@
           %tr
             %td= i.sku
             %td= i.name
-            %td.right= i.quantity
             %td.right= i.real_quantity
             %td.right= humanized_money_with_symbol i.purchase_price
             %td.right= humanized_money_with_symbol i.price
@@ -61,7 +59,7 @@
             %td.right= humanized_money_with_symbol item_price_total
 
         %tr.total
-          %td{ :colspan => 6 }
+          %td{ :colspan => 5 }
           %td.right.colsum= humanized_money_with_symbol category_purchase_price_total
           %td.right.colsum= humanized_money_with_symbol category_price_total
           

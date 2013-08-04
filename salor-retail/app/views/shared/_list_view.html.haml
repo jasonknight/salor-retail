@@ -6,11 +6,10 @@
         %br
         %span.icon-caption=I18n.t('views.single_words.new')
 
+- if collection.respond_to?(:current_page)
+  %div.pagination= paginate collection if collection
+
 %table.list-view{ :width => '100%' }
-  - if collection.respond_to?(:current_page) and collection.length > 24 then
-    %tr.no-stripe
-      %td{:colspan => columns.length + 3}
-        %div.pagination= paginate collection if collection
   %tr
     %th
     - columns.each do |col|
@@ -43,3 +42,6 @@
         %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:delete,{},16), "/#{entry.class.table_name}/#{entry.id}", :confirm => 'Are you sure?', :method => :delete 
       - else
         %td
+
+- if collection.respond_to?(:current_page)
+  %div.pagination= paginate collection

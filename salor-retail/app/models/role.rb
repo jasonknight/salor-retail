@@ -12,6 +12,9 @@ class Role < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :company
   has_and_belongs_to_many :users
+  
+  validates_presence_of :vendor_id, :company_id
+  
   # This is a role black list, if it isn't here
   # it means they can do it. Only put roles here
   # that the user cannot do, this should be over-

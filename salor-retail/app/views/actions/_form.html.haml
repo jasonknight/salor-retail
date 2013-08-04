@@ -6,7 +6,7 @@
           #error_explanation
             %h2= I18n.t("activerecord.errors.template.header.other", :count => @action.errors.count,:model => t("activerecord.models.action.one"))
             - @action.errors.full_messages.each do |msg|
-              %p msg
+              %p= msg
     %tr
       %td{:colspan => 2}
         %h2= @action.model.name if @action.model

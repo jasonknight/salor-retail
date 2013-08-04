@@ -47,6 +47,7 @@ class ButtonsController < ApplicationController
   def destroy
     @button = @current_vendor.buttons.visible.find_by_id(params[:id])
     @button.hide(@current_user)
+    redirect_to buttons_path
   end
 
   def position

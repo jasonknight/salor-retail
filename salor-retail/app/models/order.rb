@@ -1347,16 +1347,18 @@ class Order < ActiveRecord::Base
     msg = "Order specifies drawer_id #{ actual } and user_id #{ self.user_id } but this user's drawer is #{ should }."
     type = :orderUserDrawerMatch
     tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
-    
-    
+
+
     return tests
   end
   
   def hide(by_id)
+    # TODO: move nr to stack of unused numbers
     self.hidden = true
     self.hidden_by = by_id
     self.hidden_at = Time.now
     self.save
+    self.order_items.visible.update_all :hidden => true, :hidden_at => Time.now, :hidden_by => by_id
   end
   
   # for better debugging in the console

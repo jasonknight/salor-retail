@@ -4,7 +4,7 @@
       <%= form_for(@payment_method) do |f| %>
       <% if @payment_method.errors.any? %>
         <div id="error_explanation">
-          <h2><%= pluralize(@payment_method.errors.count, "error") %> prohibited this payment_method from being saved:</h2>
+          <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @payment_method.errors.count,:model => t("activerecord.models.payment_method.one")) %></h2>
 
           <ul>
           <% @payment_method.errors.full_messages.each do |msg| %>

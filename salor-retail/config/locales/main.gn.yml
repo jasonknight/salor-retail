@@ -5,6 +5,11 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
+      language: Sprache
+      cash: Bar
+      change: Wechselgeld
+      unpaid: Unbezahlt
+      quote: Angebot
       subscription_start: Abo start
       subscription_interval: Abo Intervall
       subscription_last: Letzte Zahlung
@@ -108,7 +113,7 @@ gn:
       last_name: Familienname
       lc_points: Punkteabzug
       length: Länge
-      letter: Steuerklasse
+      letter: Abkürzung
       location_id: Ort
       lp_per_dollar: Punkte pro Euro
       min_quantity: Mindestmenge
@@ -208,6 +213,9 @@ gn:
       whento: When
       width: Breite
     models:
+      invoice_blurb:
+        one: Rechnungsdaten
+        other: Rechnungsdaten
       action:
         one: Aktion
         other: Aktionen
@@ -286,8 +294,8 @@ gn:
         one: Steuerklasse
         other: Steuerklassen
       transaction_tag:
-        one: Tag
-        other: Tags
+        one: Buchungstyp
+        other: Buchungstypen
       user:
         one: Angestellter
         other: Angestellte
@@ -429,6 +437,9 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    invoice_notes: Rechnungstexte
+    sale_types: Verkaufsarten
+    countries: Länder
     subscription: Abo
     enter_inventory_items: Eingeben
     logos: Logos
@@ -474,11 +485,11 @@ gn:
     edit_category: Kategorie bearbeiten
     edit_customer: Kunde bearbeiten
     edit_discount: Preisnachlass bearbeiten
-    edit_invoice_blurb: Rechnungstext bearbeiten
+    edit_invoice_blurb: Rechnungsdaten bearbeiten
     edit_invoice_note: Rechnungsnotiz bearbeiten
     edit_item: Artikel bearbeiten
     edit_location: Ort bearbeiten
-    edit_payment_method: Edit Payment Method
+    edit_payment_method: Zahlungsmethode bearbeiten
     edit_sale_type: Verkaufs-Art bearbeiten
     edit_shipment: Lieferung bearbeiten
     edit_shipment_type: Lieferstatus bearbeiten
@@ -490,7 +501,7 @@ gn:
     general_configuration: Allgemein
     home: Filialen
     inventory_report: Bericht Inventur
-    invoice_blurbs: Rechnungstexte
+    invoice_blurbs: Rechnungsdaten
     item_types: Artikeltypen
     items: Artikel
     labels: Etiketten
@@ -507,26 +518,26 @@ gn:
     new_country: Neues Land
     new_customer: Neuer Kunde
     new_discount: Neuer Preisnachlass
-    new_invoice_blurb: Neuer Rechnungstext
+    new_invoice_blurb: Neue Rechnungsdaten
     new_invoice_note: Neuer Rechnungstext
     new_item: Neuer Artikel
     new_location: Neuer Ort
     new_order: Neu
-    new_payment_method: New Payment Method
+    new_payment_method: Neue Zahlungsmethode
     new_sale_type: Neue Verkaufs-Art
     new_shipment: Neue Lieferung
     new_shipment_type: Neuer Lieferstatus
     new_shipper: Neuer Lieferant
     new_stock_location: Neues Lager
     new_tax_profile: Neue Steuerklasse
-    new_transaction_tag: New Transaction Tag
+    new_transaction_tag: Neuer Buchungstyp
     new_user: Neuer Angestellter
     new_vendor: Neue Filiale
     ok: OK
     order: Verkauf
     orders: Verkäufe
     overview: Überblick
-    payment_methods: Payment Methods
+    payment_methods: Zahlungsmethoden
     points: Treuepunkte
     pos: POS
     print: Etiketten
@@ -550,7 +561,7 @@ gn:
     stock_locations: Lager
     support: Unterstützung
     tax_profiles: Steuerklassen
-    transaction_tags: Buchungen
+    transaction_tags: Buchungstypen
     update_gift_card: Gutschein aktualisieren
     update_location: Orte
     update_real_quantity: Inventur
@@ -881,7 +892,7 @@ gn:
     item: Artikel
     language: Sprache
     listing: Auflistung
-    listing_invoice_blurbs: Rechnungstexte
+    listing_invoice_blurbs: Rechnungsdaten
     listing_items: Artikel auflisten
     locations: Orte
     loyalty_card: Kundenkarte

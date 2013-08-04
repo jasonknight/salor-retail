@@ -7,8 +7,9 @@ class ItemStock < ActiveRecord::Base
   belongs_to :vendor
   belongs_to :company
   belongs_to :location, :polymorphic => true
-  
   has_many :stock_transactions, :as => :to
+  
+  validates_presence_of :vendor_id, :company_id
   
   def locationstring
     if self.new_record?

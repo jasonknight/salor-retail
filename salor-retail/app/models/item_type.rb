@@ -6,21 +6,25 @@
 # See license.txt for the license applying to all files within this software.
 
 class ItemType < ActiveRecord::Base
-	include SalorScope
-
+  include SalorScope
+  include SalorBase
   
   belongs_to :vendor
   belongs_to :company
-  
   has_many :items
   has_many :order_items
   has_many :shipment_items
+  
+  validates_presence_of :vendor_id, :company_id
+  
   def get_name
     return I18n.t("activerecord.models.item_type.#{self.behavior}")
   end
+  
   def as_json(x=nil)
     return to_json(x)
   end
+  
   def to_json(x=nil)
     obj = {
         :name => self.get_name,
