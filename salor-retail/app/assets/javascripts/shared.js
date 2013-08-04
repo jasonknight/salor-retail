@@ -5,7 +5,6 @@ var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
 var _key_codes = {tab: 9,shift: 16, ctrl: 17, alt: 18, f2: 113};
 var _keys_down = {tab: false,shift: false, ctrl: false, alt: false, f2: false};
 var _called = 0;
-var messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
 
 
 // documentready
@@ -39,40 +38,7 @@ $(function(){
 
 
 
-function displayMessages() {
-  var notices = messagesHash['notices'];
-  var alerts = messagesHash['alerts'];
-  var prompts = messagesHash['prompts'];
-  if ( notices.length > 0 ) {
-    $('#notices').html('<span>' + notices.join('</span><br /><span>') + '</span>');
-  }
-  if ( alerts.length > 0 ) {
-    $('#alerts').html('<span>' + alerts.join('</span><br /><span>') + '</span>');
-  }
-  if ( prompts.length > 0 ) {
-    $.each(prompts, function(i,o) {
-      var dialog_id = 'prompt-dialog_' + i;
-      var dialog = shared.draw.dialog('', dialog_id, o);
-      var okbutton = shared.create.dialog_button('OK', function() {
-        ajax_log({
-          action_taken:'confirmed_prompt_dialog',
-          called_from: o
-        });
-        dialog.remove();
-      });
-      dialog.append(okbutton);
-    });
-  }
-  fadeMessages();
-}
 
-
-function fadeMessages() {
-  $('#messages').fadeIn(1000);
-  setTimeout(function(){
-    $('#messages').fadeOut(1000);
-  }, 10000);
-}
 
 
 

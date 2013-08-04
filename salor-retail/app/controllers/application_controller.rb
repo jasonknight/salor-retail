@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
   helper_method :workstation?, :mobile?
   
   #protect_from_forgery
-  
   before_filter :loadup
+  before_filter :fetch_current_user
   before_filter :get_cash_register
   before_filter :set_tailor
   before_filter :set_locale
@@ -125,17 +125,8 @@ class ApplicationController < ActionController::Base
     return "application"
   end
   
-  def loadup
-    log_action "-----------------------------------\n\n\n\n\n"
-    $COMPANYID = nil
-    $VENDORID = nil
-    $USERID = nil
-    $PARAMS = nil
-    $REQUEST = nil
-    $MESSAGES = {}
-    
+  def fetch_current_user
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
-
     if @current_user.nil?
       redirect_to new_session_path and return 
     end
@@ -151,6 +142,21 @@ class ApplicationController < ActionController::Base
     $COMPANYID = @current_company.id
     $VENDORID = @current_vendor.id
     $USERID = @current_user.id
+    @current_plugin_manager = PluginManager.new(@current_vendor,@current_company, @current_user)
+    $DIRS = {
+      :uploads => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
+    }
+    return @current_user
+  end
+  
+  def loadup
+    log_action "-----------------------------------\n\n\n\n\n"
+    $COMPANYID = nil
+    $VENDORID = nil
+    $USERID = nil
+    $PARAMS = nil
+    $REQUEST = nil
+    $MESSAGES = {}
     $PARAMS = params
     $REQUEST = request
     $MESSAGES = {
@@ -158,12 +164,6 @@ class ApplicationController < ActionController::Base
       :alerts => [],
       :prompts => []
     }
-
-    $DIRS = {
-      :uploads => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
-    }
-    @current_plugin_manager = PluginManager.new(@current_vendor,@current_company, @current_user)
-    return @current_user
   end
   
   def loaddown
@@ -175,6 +175,7 @@ class ApplicationController < ActionController::Base
     $PARAMS = nil
     $REQUEST = nil
     $MESSAGES = {}
+    $DIRS = nil
     log_action "End of request."
   end
   

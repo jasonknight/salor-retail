@@ -76,7 +76,7 @@ function print_url(printer_path, url, param_string, confirmation_url, callback) 
   }
 }
 
-function playSound(file) {
+function playsound(file) {
   if (isSalorBin()) {
     Salor.playSound(file);
   }
@@ -150,7 +150,7 @@ function weigh_last_item() {
           '&value=' + weight_float;
   get(string, '');
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) {
-    Salor.playSound('medium_warning');
+    playsound('medium_warning');
   }
 }
 

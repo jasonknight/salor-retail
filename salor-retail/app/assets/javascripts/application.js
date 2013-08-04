@@ -36,6 +36,7 @@
 //= require shippers
 //= require cash_registers
 //= require search
+//= require messages
 //= require complete-order-payment
 //= require complete-order-change
 //= require complete-order

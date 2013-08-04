@@ -34,7 +34,7 @@ $(function () {
   $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
   $('input:radio').checkbox();
   
-  if (params.controller == 'orders' && params.action == 'new') {
+  if (typeof params != 'undefined' && params.controller == 'orders' && params.action == 'new') {
     $('.yieldbox').css('width', '100%');
     $('.yieldbox').css('padding-left', '0px');
     $('.yieldbox').css('padding-right', '0px');

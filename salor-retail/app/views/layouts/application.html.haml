@@ -32,7 +32,7 @@
     
     = form_tag session_path, :id => 'logoutform', :method => 'delete' do
       %span
-    
+    = render :partial => "shared/messages"
     %span.version= SalorRetail::Application::VERSION
 
       

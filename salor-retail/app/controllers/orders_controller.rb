@@ -114,6 +114,10 @@ class OrdersController < ApplicationController
     if @order_item
       @order_items << @order_item
       
+      if @order_item.price.zero?
+        $MESSAGES[:alerts] << 'Warning: Price is zero!'
+      end
+      
       if @order_item.behavior == 'coupon'
         @matching_coupon_item = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
         @order_items << @matching_coupon_item

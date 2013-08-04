@@ -6,7 +6,7 @@
 # See license.txt for the license applying to all files within this software.
 class SessionsController < ApplicationController
   
-  skip_before_filter :loadup, :only => [:new, :create]
+  skip_before_filter :fetch_current_user, :only => [:new, :create]
   skip_before_filter :get_cash_register, :only => [:new, :create]
   
   def new
@@ -36,9 +36,11 @@ class SessionsController < ApplicationController
       if vendor.enable_technician_emails and vendor.technician_email and company.mode == 'demo' and SalorRetail::Application::SR_DEBIAN_SITEID != 'none'
         UserMailer.technician_message(vendor, "Login to #{ company.name }", '', request).deliver
       end
-      redirect_to '/' and return
+      $MESSAGES[:notices] << "Welcome, #{ user.username }! ☺"
+      redirect_to root_path and return
     else
-      redirect_to '/' and return
+      $MESSAGES[:alerts] << "Wrong login ☹"
+      redirect_to new_session_path and return
     end
   end
   

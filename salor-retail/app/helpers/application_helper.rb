@@ -186,7 +186,7 @@ module ApplicationHelper
   end
   
   def salor_icon(name, options = {}, size = '64', caption=nil,caption_class='')
-    name = @current_plugin_manager.apply_filter('salor_icon',name)
+    name = @current_plugin_manager.apply_filter('salor_icon',name) if @current_plugin_manager
     if caption then
       o = []
       options.each do |k,v|

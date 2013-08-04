@@ -1,5 +1,7 @@
 // README: This view only takes a single instance of @order, and an Array @order_items. The controllers are responsible for supplying those variables to keep this view simple.
 
+
+
 // ---------- update order -------------
 Order = <%= raw @order.to_json %>;
 try {
@@ -7,6 +9,7 @@ try {
 } catch (err) {
   send_email("Error in update_pos_display updateOrder", err);
 }
+
 
 
 // ----------- update order items ----------
@@ -18,23 +21,30 @@ try {
   send_email("Error in update_pos_display updateOrderItems", err);
 }
 
-// ------- dynamic gift card autoprinting, see VendorsController#edit_field_on_child---------
+// ------- dynamic gift card autoprinting, see
+// VendorsController#edit_field_on_child---------
 <% if @gift_card_item_id_for_print %>
   print_url(Register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
 <% end %>
-
 
 // ---------- other stuff ----------
 focusInput($('#main_sku_field'));
 display_change('update_pos_display');
 updateCustomerDisplay(<%= @order.id %>, {}, false);
 Drawer = <%= raw @current_user.get_drawer.to_json %>;
-                         
-if (order_item_json.price == 0 ) {
-  playSound('medium_warning');
-} else {
-  playSound('drop2');
-}
+
+
+<% if @order_items.first.price.zero? %>
+  playsound('medium_warning');
+<% else %>
+  playsound('drop2');
+<% end %>
+
          
 // we run this regularly to reduce the chance that the drawer observer is blocking the printer
 stop_drawer_observer();
+
+// ajax messages stuff
+messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
+<%= render :partial => '/shared/messagesjs.js' %>
+displayMessages();
