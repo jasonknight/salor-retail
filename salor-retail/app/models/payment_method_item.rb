@@ -70,11 +70,11 @@ class PaymentMethodItem < ActiveRecord::Base
       dt.cash_register = self.cash_register
       dt.save!
       
+      # add to drawer amount
       drawer.amount += self.amount
       drawer.save!
     end
-      
-    
+
     write_attribute :payment_method_id, pmid
   end
 end
