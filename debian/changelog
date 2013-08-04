@@ -1,3 +1,9 @@
+salor-retail (4.0.2.20) unstable; urgency=low
+
+  * validations, fiscal report, remote service, pagination etc.
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 10:50:38 +0200
+
 salor-retail (4.0.2.19) unstable; urgency=low
 
   * various order fixes
