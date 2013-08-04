@@ -8,11 +8,13 @@ class AddCompanyIdToAllModels < ActiveRecord::Migration
         next
       end
       
-      cid = Company.first.id
+      if Company.first then
+        cid = Company.first.id
       
-      if model.column_names.include? 'company_id' then
-        puts "Setting #{ t } to company_id #{ cid }"
-        model.connection.execute("UPDATE #{ t } SET company_id=#{ cid };")
+        if model.column_names.include? 'company_id' then
+          puts "Setting #{ t } to company_id #{ cid }"
+          model.connection.execute("UPDATE #{ t } SET company_id=#{ cid };")
+        end
       end
     end
   end
