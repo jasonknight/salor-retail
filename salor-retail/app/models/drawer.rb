@@ -10,12 +10,11 @@ class Drawer < ActiveRecord::Base
 
   has_one :user
   belongs_to :company
-  belongs_to :vendor
   
   has_many :orders
   has_many :drawer_transactions
   
-  validates_presence_of :vendor_id, :company_id
+  validates_presence_of :company_id
 
   monetize :amount_cents, :allow_nil => true
   

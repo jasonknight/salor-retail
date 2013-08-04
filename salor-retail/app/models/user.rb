@@ -268,8 +268,8 @@ class User < ActiveRecord::Base
       d.company = self.company
       # if a user belongs to several vendors, and those vendors use different currencies, this user should not put money in his drawer, since the drawer total would be the sum of different currencies. we advise customers to create a separate user account (that only belongs to one vendor) for sales instead. they should use the user account that can access several vendor only for administration purposes. In case the different vendors use the same currency, then this is not a problem. by default, the user's drawer will inherit the currency of the first of the user's vendors.
       d.currency = self.vendors.visible.first.currency
-      d.save
       self.drawer = d
+      self.drawer.save
       self.save
     end
   end

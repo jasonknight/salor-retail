@@ -19,7 +19,6 @@ class Vendor < ActiveRecord::Base
   has_many :payment_methods
   has_many :payment_method_items
   has_many :drawer_transactions
-  has_many :drawers
   has_many :sale_types
   has_many :countries
   has_many :transaction_tags
