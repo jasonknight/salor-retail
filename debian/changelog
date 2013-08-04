@@ -1,3 +1,9 @@
+salor-retail (4.0.2.22) unstable; urgency=low
+
+  * pmi edit on orders/print
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 16:15:15 +0200
+
 salor-retail (4.0.2.21) unstable; urgency=low
 
   * userLogin fix
