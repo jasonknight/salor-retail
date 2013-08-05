@@ -2,11 +2,23 @@
 
 # Copyright (c) 2012 Red (E) Tools Ltd.
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+# Permission is hereby granted, free of charge, to any person obtaining a 
+# copy of this software and associated documentation files (the "Software"), 
+# to deal in the Software without restriction, including without limitation 
+# the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+# and/or sell copies of the Software, and to permit persons to whom the 
+# Software is furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included 
+# in all copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
+# OTHER DEALINGS IN THE SOFTWARE.
 
 
 if User.any?
@@ -15,7 +27,7 @@ if User.any?
 end
 
 
-# WARNING: Uncommenting the following will destroy all data!
+#ARNING: Uncommenting the following will destroy all data!
 # ActiveRecord::Base.connection.tables.each do |t|      
 #   begin
 #     model = t.classify.constantize
@@ -41,6 +53,61 @@ company_count = 0
 #   languages = ['en']
 #   company_count = 1
 # end
+
+actions_to_create = [
+  {
+    :name => 'Action to add amount to price', 
+    :whento => :add_to_order, 
+    :behavior => :add,
+    :afield => :price_cents,
+    :value => 100 # i.e.  1 dollar
+  },
+  {
+    :name => 'Action to multiply price', 
+    :whento => :add_to_order, 
+    :behavior => :multiply,
+    :afield => :price_cents,
+    :value => 2 # i.e.  double the price
+  },
+  {
+    :name => 'Action to multiply quantity', 
+    :whento => :add_to_order, 
+    :behavior => :multiply,
+    :afield => :quantity,
+    :value => 5 # i.e.  make the quantity 5 for instances of a unit that is always sold as a set from cigarman
+  },
+  {
+    :name => 'Action to divide price', 
+    :whento => :add_to_order, 
+    :behavior => :divide,
+    :afield => :price,
+    :value => 5 # i.e.  sometimes a unit price is the carton price
+  },
+  {
+    :name => 'Action to discount after threshold', 
+    :whento => :add_to_order, 
+    :behavior => :discount_after_threshold,
+    :afield => :price_cents,
+    :value => 1, # i.e. 100% discount
+    :value2 => 5 # i.e. must buy 5 items to receive the discount
+  },
+  {
+    :name => 'Action to discount after threshold category', 
+    :whento => :add_to_order, 
+    :behavior => :discount_after_threshold,
+    :afield => :price_cents,
+    :value => 1, # i.e. 100% discount
+    :value2 => 5 # i.e. must buy 5 items to receive the discount
+  },
+  {
+    :name => 'Action to execute js code', 
+    :whento => :add_to_order, 
+    :behavior => :execute,
+    :afield => :price_cents,
+    :js_code => %Q[api.update_attributes({ price_cents: 1095 });]
+  }
+  
+]
 
 # we create 3 different tax amounts because that is usual in some countries and we need it to test
 tax_percentages = [20, 10, 0]
@@ -87,6 +154,11 @@ company_count.times do |c|
   puts "\n\n =========\nCOMPANY #{ c } created\n\n" if r == true
   
   countries.size.times do |v|
+
+    # variables we will use for actions
+    the_button_category = nil
+    the_discount_category = nil
+
     vendor = Vendor.new
     vendor.name = "Vendor#{ c }#{ v }"
     vendor.country = countries[v]
@@ -195,6 +267,14 @@ company_count.times do |c|
       puts "Category #{ cat.name } created" if res == true
       # raise "ERROR: #{ cat.errors.messages }" if res == false
     end
+
+    # Create the discount category
+      cat = Category.new
+      cat.company = company
+      cat.vendor = vendor
+      cat.name = "Thresh Category"
+      cat.save!
+    the_discount_category = cat
     
     # create a special button category for special items
     special_cat = Category.new
@@ -212,12 +292,55 @@ company_count.times do |c|
       cat = Category.new
       cat.company = company
       cat.vendor = vendor
-      cat.name = "Category#{ c }#{ v }#{ i }"
+      cat.name = "Button Cat #{ c }#{ v }#{ i }"
       cat.button_category = true
       res = cat.save!
       button_category_objects << cat
       puts "ButtonCategory #{ cat.name } created" if res == true
       # raise "ERROR: #{ cat.errors.messages }" if res == false
+    end
+
+    the_button_category = button_category_objects.last
+
+    action_num = 0
+    actions_to_create.each do |attrs|
+      action = Action.new(attrs)
+      action.company = company
+      action.vendor = vendor
+      # create an item for this action
+        if attrs[:name].include? 'threshold category' then
+          thr_prices = [ 123, 156, 189 ]
+          3.times do |thr_i|
+            item = Item.new
+            item.company = company
+            item.vendor = vendor
+            item.tax_profile = tax_profile_objects.last
+            item.category = the_discount_category
+            item.sku = "THR#{ thr_i }"
+            item.name = "Test Item for Threshold Action #{ action_num } #{ thr_i }"
+            item.price_cents = thr_prices[ rand(thr_prices.length) ] # choose a price at random
+            # this is because thresh items are supposed to discount the min price of the group!
+            item.item_type = item_type_objects[0]
+            item.currency = currencies[v]
+            item.save!
+          end
+          action.model = the_discount_category
+        else
+          item = Item.new
+          item.company = company
+          item.vendor = vendor
+          item.tax_profile = tax_profile_objects.last
+          item.sku = "ACTION#{ action_num }"
+          item.category = category_objects.first # we don't want this to be the thresh category
+          item.name = "Test Item for Action #{ action_num }"
+          item.price_cents = 595
+          item.item_type = item_type_objects[0]
+          item.currency = currencies[v]
+          item.save!
+          action.model = item
+        end
+        action.save!
+      action_num += 1
     end
     
     item_objects = []
@@ -240,6 +363,8 @@ company_count.times do |c|
         # raise "ERROR: #{ item.errors.messages }" if res == false
       end
     end
+
+
     
     
     # special items

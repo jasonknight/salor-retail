@@ -16,7 +16,7 @@ class Action < ActiveRecord::Base
   belongs_to :user
   belongs_to :model, :polymorphic => true
   
-  validates_presence_of :vendor_id, :company_id, :name, :sku
+  validates_presence_of :vendor_id, :company_id, :name, :model_type, :model_id
 
   #README
   # 1. The rails way would lead to many duplications
@@ -159,6 +159,7 @@ class Action < ActiveRecord::Base
   def self.apply_action(action, item, act)
     SalorBase.log_action Action, "Action.apply_action " + action.name + " action_id:#{action.id}"
     return item if action.whento.nil?
+    item.action_applied = true
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
       if action.behavior.to_sym == :execute then
         return action.execute_script(item, act);
@@ -181,7 +182,6 @@ class Action < ActiveRecord::Base
       
       if action.behavior.to_sym == :discount_after_threshold then
         SalorBase.log_action Action,"Discount after threshold"
-        item.action_applied = true
         if act == :add_to_order and action.model.class == Category
           SalorBase.log_action Action,"Is a category discount"
           items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id)
@@ -191,24 +191,26 @@ class Action < ActiveRecord::Base
           num_discountables = (total_quantity / action.value2).floor
         elsif action.behavior.to_sym == :discount_after_threshold and act == :add_to_order
           SalorBase.log_action Action,"Is regular discount_after_threshold"
-          item_price = item.price
+          item_price = item.price_cents
           num_discountables = (item.quantity / action.value2).floor
         end
         item.rebate = 0 # Important
         if num_discountables >= 1 then
           SalorBase.log_action Action,"discount #{num_discountables} and item_price is #{item_price}"
-          total_2_discount = Money.new(item_price * num_discountables, item.currency)
-          
-          percentage = total_2_discount.to_f / (item.price * item.quantity).to_f
+          total_2_discount = item_price * num_discountables
+          SalorBase.log_action Action, total_2_discount.inspect
+          percentage = total_2_discount / (item.price_cents * item.quantity)
+          SalorBase.log_action Action, "total_2_discount is #{total_2_discount} and percentage is #{percentage}"
           item.rebate = (percentage * 100).to_i
           SalorBase.log_action Action,"rebate is #{item.rebate}"
+
           item.save
         else
           SalorBase.log_action Action,"num_discountables is not sufficient"
         end
-        item.save # Important
       end
     end
+    item.save!
     return item
   end
 end
