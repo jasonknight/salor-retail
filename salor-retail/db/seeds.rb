@@ -21,23 +21,13 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 
 
-if User.any?
+# =====================================
+# README: Leave this uncommented and intact at all times, otherwise the seed script will pollute already existing databases.
+if User.any? or Item.any? or Company.any? or Order.any? or OrderItem.any?
   puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
   Process.exit 0
 end
-
-
-#ARNING: Uncommenting the following will destroy all data!
-# ActiveRecord::Base.connection.tables.each do |t|      
-#   begin
-#     model = t.classify.constantize
-#     model.reset_column_information
-#   rescue
-#     next
-#   end
-#   puts "Purging table #{ model }"
-#   model.delete_all
-# end
+# =====================================
 
 company_count = 0
 
