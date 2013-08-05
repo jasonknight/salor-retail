@@ -1,8 +1,8 @@
 namespace :salor do
   task :seed => [:environment] do
-    system("rake db:drop")
-    system("rake db:create")
-    system("rake db:migrate")
+    #system("rake db:drop")
+    #system("rake db:create")
+    #system("rake db:migrate")
     system("rake db:seed --trace")
   end
   task :refresh => [:environment] do

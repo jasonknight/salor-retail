@@ -203,10 +203,13 @@ class VendorsController < ApplicationController
       #README If someone edits the quantity or price of an item, Actions need to be informed of this.
       case params[:field]
       when 'price'
-        Action.run(@current_vendor, @order_item, :change_price)
+        @order_item = Action.run(@current_vendor, @order_item, :change_price)
       when 'quantity'
-        Action.run(@current_vendor, @order_item, :change_quantity)
+        @order_item = Action.run(@current_vendor, @order_item, :change_quantity)
+        @order_item = Action.run(@current_vendor, @order_item, :add_to_order) # a change in qty is the same
+        # as adding to an order otherwise we have to create 2 actions to accomplish the same thing.
       end
+
       @order_item.calculate_totals
       @order_item.order.calculate_totals
       
