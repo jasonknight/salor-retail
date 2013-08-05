@@ -66,38 +66,6 @@ module SalorBase
     end
     ActiveRecord::Base.logger.info "#####[#{ fromcolor}#{from}] #{txtcolor}#{txt}#{ normalcolor }"
   end
-  
-  def self.string_to_float(str)
-    return str if str.class == Float or str.class == Fixnum
-    string = "#{str}"
-    #puts string
-    string.gsub!(/[^-\d.,]/,'')
-    #puts string
-    if string =~ /^.*[\.,]\d{1}$/
-      string = string + "0"
-    end
-    # puts string
-    unless string =~ /^.*[\.,]\d{2,3}$/
-      string = string + "00"
-    end
-    #puts string
-    return string if string.class == Float or string.class == Fixnum or string == 0
-    if string =~ /^.*[\.,]\d{3}$/ then
-        string.gsub!(/[\.,]/,'')
-        string = string.to_f / 1000
-        #puts string
-    else
-      string.gsub!(/[\.,]/,'')
-      string = string.to_f / 100
-      #puts string
-    end
-    #puts string
-    return string
-   end
-   
-   def string_to_float(string)
-      return SalorBase.string_to_float(string)
-   end
    
   def self.get_url(url, headers={}, user=nil, pass=nil)
     uri = URI.parse(url)
@@ -143,18 +111,31 @@ module SalorBase
     return [self.class.to_s,self.id.to_s,rand(9999)].join('_').to_s
   end
   
-  def self.number_to_currency(number,options={})
-    options.symbolize_keys!
-    defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
-    currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :default => {})
-    defaults[:negative_format] = "-" + options[:format] if options[:format]
-    options   = defaults.merge!(options)
-    unit      = I18n.t("number.currency.format.unit")
-    format    = I18n.t("number.currency.format.format")
-    value = self.number_with_precision(number)
-    format.gsub(/%n/, value).gsub(/%u/, unit)
+  # deprecated in favor of Money
+#   def self.number_to_currency(number,options={})
+#     options.symbolize_keys!
+#     defaults  = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
+#     currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :default => {})
+#     defaults[:negative_format] = "-" + options[:format] if options[:format]
+#     options   = defaults.merge!(options)
+#     unit      = I18n.t("number.currency.format.unit")
+#     format    = I18n.t("number.currency.format.format")
+#     value = self.number_with_precision(number)
+#     format.gsub(/%n/, value).gsub(/%u/, unit)
+#   end
+
+  def self.string_to_float(str, options = { :locale => 'en-us' })
+    return str if str.class == Float or str.class == Fixnum
+    str.gsub!(/[^-\d.,]/, '') # cleanup
+    str.gsub! I18n.t('number.currency.format.delimiter', :locale => options[:locale]), ''
+    str.gsub! I18n.t('number.currency.format.separator', :locale => options[:locale]), '.'
+    return str.to_f
   end
 
+  def string_to_float(string, options = { :locale => 'en-us' })
+    return SalorBase.string_to_float(string, options)
+  end
+  
   def self.number_with_precision(number, options = {})
     options.symbolize_keys!
 
@@ -173,7 +154,7 @@ module SalorBase
     defaults           = defaults.merge(precision_defaults)
 
     options = options.reverse_merge(defaults)  # Allow the user to unset default values: Eg.: :significant => false
-    precision = 2
+    precision = options[:precision]
     significant = options.delete :significant
     strip_insignificant_zeros = options.delete :strip_insignificant_zeros
 
@@ -207,7 +188,7 @@ module SalorBase
       end
     end
 
-    defaults = I18n.translate(:'number.format', :locale => options[:locale], :default => {})
+    defaults = I18n.translate('number.format', :locale => options[:locale], :default => {})
     options = options.reverse_merge(defaults)
 
     parts = number.to_s.split('.')

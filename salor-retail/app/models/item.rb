@@ -104,16 +104,16 @@ class Item < ActiveRecord::Base
   
   # ----- old name aliases setters
   def buyback_price=(p)
-    self.buy_price_cents = self.string_to_float(p) * 100.0
+    self.buy_price_cents = self.string_to_float(p, :locale => self.vendor.region) * 100.0
   end
   
   def base_price=(p)
-    p = self.string_to_float(p) * 100.0
+    p = self.string_to_float(p, :locale => self.vendor.region) * 100.0
     self.price_cents = p
   end
   
   def amount_remaining=(p)
-    p = self.string_to_float(p) * 100.0
+    p = self.string_to_float(p, :locale => self.vendor.region) * 100.0
     self.gift_card_amount_cents = p
   end
   # ------ end old name aliases setters
@@ -268,7 +268,7 @@ class Item < ActiveRecord::Base
   # ----- setters for advanced float parsing
   def purchase_price=(p)
     if p.class == String then
-      p = self.string_to_float(p) * 100
+      p = self.string_to_float(p, :locale => self.vendor.region) * 100
       write_attribute(:purchase_price_cents,p)
       return
     end
@@ -276,32 +276,32 @@ class Item < ActiveRecord::Base
   end
 
   def height=(p)
-    p = self.string_to_float(p)
+    p = self.string_to_float(p, :locale => self.vendor.region)
     write_attribute(:height,p)
   end
   
   def width=(p)
-    p = self.string_to_float(p)
+    p = self.string_to_float(p, :locale => self.vendor.region)
     write_attribute(:width,p)
   end
   
   def weight=(p)
-    p = self.string_to_float(p)
+    p = self.string_to_float(p, :locale => self.vendor.region)
     write_attribute(:weight,p)
   end
   
   def length=(p)
-    p = self.string_to_float(p)
+    p = self.string_to_float(p, :locale => self.vendor.region)
     write_attribute(:length,p)
   end
   
   def min_quantity=(p)
-    p = self.string_to_float(p)
+    p = self.string_to_float(p, :locale => self.vendor.region)
     write_attribute(:min_quantity,p)
   end
   
   def packaging_unit=(p)
-    p = self.string_to_float(p)
+    p = self.string_to_float(p, :locale => self.vendor.region)
     write_attribute(:packaging_unit,p)
   end
   

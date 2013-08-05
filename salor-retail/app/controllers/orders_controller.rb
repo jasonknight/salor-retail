@@ -8,7 +8,7 @@
 class OrdersController < ApplicationController
 
   respond_to :html, :xml, :json, :csv
-  after_filter :customerscreen_push_notification, :only => [:add_item_ajax, :delete_order_item]
+  after_filter :customerscreen_push_notification, :only => [:add_item_ajax, :delete_order_item, :new]
   before_filter :update_devicenodes, :only => [:new, :new_order]
 
    

@@ -1,7 +1,3 @@
 = raw content_box_top(@item.name)
-%table{:width => "90%", :align => "center"}
-  %tr
-    %td{:valign => "top"}
-      =render(:partial => "item_info")
-    %td{:valign => "top"}
-      =render(:partial => "sold_query")
+= render :partial => "sold_query"
+= render :partial => "item_info"

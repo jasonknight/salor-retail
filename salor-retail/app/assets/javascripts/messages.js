@@ -1,7 +1,6 @@
 var messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
 
 function displayMessages() {
-  console.log(messagesHash);
   var notices = messagesHash['notices'];
   var alerts = messagesHash['alerts'];
   var prompts = messagesHash['prompts'];

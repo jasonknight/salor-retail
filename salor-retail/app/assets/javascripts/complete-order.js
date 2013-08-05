@@ -32,7 +32,7 @@ function complete_order_show() {
   $("#payment_methods").show();
   $("#payment_methods").html("");
   add_payment_method();
-  $("#payment_amount_0").val( Order.total );
+  $("#payment_amount_0").val(toDelimited(Order.total));
   $("#payment_amount_0").select();
   display_change('function complete_order_show');
   show_denominations();
@@ -91,7 +91,7 @@ function complete_order_process(print) {
   var current_payment_method_items = paymentMethodItems();
   $.ajax({
     url: "/orders/complete",
-    type: 'post',
+    type: 'POST',
     data: {
       order_id: Order.id,
       change: toFloat($('#complete_order_change').html()),
@@ -111,6 +111,10 @@ function complete_order_process(print) {
       }
       sendingOrder = false;
       updateCustomerDisplay(order_id, false, true);
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      messagesHash['prompts'].push(errorThrown);
+      displayMessages();
     }
   });
 }

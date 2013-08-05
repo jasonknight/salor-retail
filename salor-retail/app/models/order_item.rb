@@ -89,7 +89,7 @@ class OrderItem < ActiveRecord::Base
   def base_price=(p)
     if p.class == String
       # a string is sent from Vendor.edit_field_on_child
-      p = Money.new(self.string_to_float(p) * 100.0, self.currency)
+      p = Money.new(self.string_to_float(p, :locale => self.vendor.region) * 100.0, self.currency)
     elsif p.class == Float
       # not sure which parts of the code send a Float, but we leave it here for now
       p = Money.new(p * 100.0, self.currency)
@@ -193,7 +193,7 @@ class OrderItem < ActiveRecord::Base
   def price=(p)
     if p.class == String
       # a string is sent from Vendor.edit_field_on_child
-      p = Money.new(self.string_to_float(p) * 100.0, self.currency)
+      p = Money.new(self.string_to_float(p, :locale => self.vendor.region) * 100.0, self.currency)
     elsif p.class == Float
       # not sure which parts of the code send a Float, but we leave it here for now
       p = Money.new(p * 100.0, self.currency)
@@ -424,7 +424,7 @@ class OrderItem < ActiveRecord::Base
   
   
   def quantity=(q)
-    q = self.string_to_float(q)
+    q = self.string_to_float(q, :locale => self.vendor.region)
     if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
       log_action "Cannot have more than 1 coupon or gift card"
       return
@@ -467,7 +467,7 @@ class OrderItem < ActiveRecord::Base
         :activated => self.item.activated,
         :gift_card_amount => self.item.gift_card_amount.to_f,
         :coupon_type => self.item.coupon_type,
-        :quantity => self.quantity,
+        :quantity => SalorBase.number_with_precision(self.quantity, :locale => self.vendor.region),
         :price => self.price.to_f,
         :discount_amount => self.discount_amount.to_f,
         :rebate_amount => self.rebate_amount.to_f,

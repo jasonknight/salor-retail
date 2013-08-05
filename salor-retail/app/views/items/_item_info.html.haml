@@ -2,11 +2,11 @@
   %h2=I18n.t("activerecord.models.item.one") + " SKU: " + @item.sku + " ID: " + @item.id.to_s
   %hr
   .fieldset
-    =link_to t("views.single_words.edit"),"/items/#{@item.id}/edit"
+    .square-button= link_to t("views.single_words.edit"),"/items/#{@item.id}/edit"
     %table
       %tr
-        %td=label_tag(I18n.t("activerecord.attributes.base_price"))
-        %td=number_to_currency(@item.base_price)
+        %td= label_tag(I18n.t("activerecord.attributes.base_price"))
+        %td= humanized_money_with_symbol @item.price
       %tr
         %td=label_tag(I18n.t("activerecord.models.location.one"))
         %td=@item.location.name if @item.location
@@ -22,4 +22,4 @@
   %h2=I18n.t("activerecord.models.shipper.other")
   %hr
   - @item.item_shippers.each do |item_shipper|
-    =render "item_shipper_info", :item_shipper => item_shipper
+    = render :partial => "item_shipper_info", :locals => { :item_shipper => item_shipper }

@@ -43,27 +43,25 @@ module ApplicationHelper
     return number_with_delimiter(num, :locale => @region)
   end
   
-  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []}, hideuser = false)
+  def content_box_top(title, options = {:width => '90%', :small => false, :menu => true, :classes => []})
     clses = ['box-title','shadow']
     bbt = '<div class="left-blank"></div>'
     rbtn = '<div class="right-blank"></div>'
     options[:classes] ||= []
-    adminclass = ''
-    adminbox = ''
 
     if options[:small] then
       classes = ['small-title','shadow']
     else
       unless options[:menu] == false
-        bbt = '<div onclick="history.go(-1);" class="back-button' + adminclass + '"> &lt; </div>'
-        rbtn = '<div onclick="window.location.reload();" class="reload-button' + adminclass + '"> &#x267A; </div>'
+        bbt = "<div onclick=\"window.location='/#{ params[:controller] }';\" class='back-button'> &lt; </div>"
+        rbtn = "<div onclick='window.location.reload();' class='reload-button'> &#x267A; </div>"
       end
     end
 
     %Q[
     <div class="content-box content-box-#{params[:controller]}-#{params[:action]} #{options[:classes].join(' ')}">
       <div class="title-container">
-          #{bbt} <div class="title-box #{clses.join(' ')}">#{title}</div>  #{adminbox} #{rbtn}
+          #{bbt} <div class="title-box #{clses.join(' ')}">#{title}</div> #{rbtn}
       </div>
     </div>
     ]

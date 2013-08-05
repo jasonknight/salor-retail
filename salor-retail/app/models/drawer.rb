@@ -69,4 +69,28 @@ class Drawer < ActiveRecord::Base
     return tests
   end
   
+  def transact(amount_cents, user, cash_register, tag='', notes='', order=nil)
+    dt = DrawerTransaction.new
+    dt.vendor = cash_register.vendor
+    dt.company = self.company
+    dt.drawer_amount = self.amount
+    dt.drawer = self
+    dt.user = user
+    dt.amount_cents = amount_cents
+    dt.currency = cash_register.vendor.currency
+    dt.tag = tag
+    dt.notes = notes
+    dt.cash_register = cash_register
+    if order
+      dt.order = order
+      dt.complete_order = true
+    end
+    dt.save!
+    
+    self.amount_cents += amount_cents
+    self.save
+    
+    return dt
+  end
+  
 end

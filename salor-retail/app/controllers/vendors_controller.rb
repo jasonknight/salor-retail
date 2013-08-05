@@ -60,28 +60,12 @@ class VendorsController < ApplicationController
     end
   end
 
-
   def new_drawer_transaction
-    user = @current_vendor.users.visible.find_by_id(params[:user_id])
-    @drawer = user.get_drawer
-    
-    @dt = DrawerTransaction.new
-    @dt.vendor = @current_vendor
-    @dt.company = @current_company
-    @dt.drawer_amount = @drawer.amount
-    @dt.drawer = @drawer
-    @dt.user = user
-    @dt.amount = Money.new(SalorBase.string_to_float(params[:transaction][:amount]) * 100, @current_vendor.currency)
-    @dt.tag = params[:transaction][:tag]
-    @dt.notes = params[:transaction][:notes]
-    @dt.cash_register = @current_register
+    amount_cents = SalorBase.string_to_float(params[:transaction][:amount], :locale => @region) * 100
     if params[:transaction][:trans_type] == "payout"
-      @dt.amount *= -1
+      amount_cents *= -1
     end
-    ret = @dt.save
-    raise "Failed to save drawer transaction" unless ret == true
-    @drawer.amount += @dt.amount
-    @drawer.save
+    @dt = @current_user.drawer_transact(amount_cents, @current_register, params[:transaction][:tag], params[:transaction][:notes])
   end
 
   def open_cash_drawer
