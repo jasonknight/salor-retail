@@ -28,6 +28,8 @@ function displayMessages() {
   if (notices.length > 0 || alerts.length > 0) {
     fadeMessages();
   }
+  
+  messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
 }
 
 

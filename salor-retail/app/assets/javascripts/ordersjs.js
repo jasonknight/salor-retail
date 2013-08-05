@@ -613,11 +613,7 @@ function detailedOrderItemMenu(event) {
   if (!Register.scale == '') {
     var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
     wicon.click(function () {
-      var string = '/vendors/edit_field_on_child?id=' +
-      item.id +'&klass=OrderItem' +
-      '&field=quantity'+
-      '&value=' + Register.scale;
-      $.get(string);
+      weigh_item(item.id);
       focusInput($('#main_sku_field'));
     }).mouseup(function () {
       focusInput($('#main_sku_field'));

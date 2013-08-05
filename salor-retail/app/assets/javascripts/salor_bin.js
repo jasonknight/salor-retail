@@ -129,29 +129,39 @@ function observe_drawer() {
   }
 }
 
-function weigh_last_item() {
+function weigh_item(id) {
   if ( ! isSalorBin() ) {
-    echo("Weighing is only supported with our thin client salor-bin")
-    return;
+    messagesHash['prompts'].push("Weighing is only supported with our thin client salor-bin.");
+    displayMessages();
+    return
   }
-    
-  var top_item = $(".pos-table-left-column-items").children()[0]
-  var itemid = $(top_item).attr('model_id');
   if (typeof Register.scale != 'undefined' && Register.scale != '') {
     var weight = Salor.weigh(Register.scale, 0);
+    
   } else {
+    messagesHash['prompts'].push("No scale configured. Please add a scale path to the CashRegister settings.");
+    displayMessages();
     var weight = 0;
   }
+
   var weight_float = parseFloat(weight);
-  
   var string = '/vendors/edit_field_on_child?id=' +
-          itemid +'&klass=OrderItem' +
-          '&field=quantity'+
-          '&value=' + weight_float;
-  get(string, '');
+  id +
+  '&klass=OrderItem' +
+  '&field=quantity'+
+  '&value=' + weight_float;
+  
+  get(string, 'weigh_item()');
+  
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) {
     playsound('medium_warning');
   }
+}
+
+function weigh_last_item() {
+  var top_item = $(".pos-table-left-column-items").children()[0]
+  var id = $(top_item).attr('model_id');
+  weigh_item(id);
 }
 
 function print_dialog() {
