@@ -108,7 +108,7 @@ class ApplicationController < ActionController::Base
   
   def customerscreen_push_notification
     t = SalorRetail.tailor
-    if t
+    if t and @order
       log_action "[TAILOR] Sending CUSTOMERSCREENEVENT"
       t.puts "CUSTOMERSCREENEVENT|#{@current_vendor.hash_id}|#{ @current_register.name }|/orders/#{ @order.id }/customer_display"
     end

@@ -71,7 +71,8 @@ function get(url, calledFrom, sFunc, type, eFunc) {
     },
     error: function(jqXHR, textStatus, errorThrown) {
       eFunc();
-     // alert(textStatus + "--" + errorThrown + "\nCalled from: " + calledFrom + "\nURL: " + url);
+      messagesHash['prompts'].push(errorThrown);
+      displayMessages();
     }
   });
 }

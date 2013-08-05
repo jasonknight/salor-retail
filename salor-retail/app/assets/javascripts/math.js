@@ -7,6 +7,10 @@ function RoundFixed(Number, DecimalPlaces) {
 }
 
 function toFloat(str, returnString) {
+  //console.log(typeof str);
+  //str.replace(',','.');
+  //return parseFloat(str);
+  
   /* if (str == '') {return 0.0;}
   if (returnString == null) returnString = false;
   if (typeof str == 'number') {
@@ -29,7 +33,7 @@ function toFloat(str, returnString) {
     }
   }
   return (returnString) ? nstr : parseFloat(nstr); */
-  var r = /([\d,\.]+)[,\.](\d{1,2})/g;
+  var r = /([\d,\.]+)[,\.](\d{1,4})/g;
   var matches = r.exec(str);
   if (matches) {
     var lpart = matches[1].replace(/[\.,]+/g,'');

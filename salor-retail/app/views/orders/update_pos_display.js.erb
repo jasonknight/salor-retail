@@ -34,9 +34,9 @@ updateCustomerDisplay(<%= @order.id %>, {}, false);
 Drawer = <%= raw @current_user.get_drawer.to_json %>;
 
 
-<% if @order_items.first.price.zero? %>
+<% if @order_items.any? and @order_items.first.price.zero? %>
   playsound('medium_warning');
-<% else %>
+<% elsif @order_items.any? %>
   playsound('drop2');
 <% end %>
 

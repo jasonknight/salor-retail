@@ -285,6 +285,12 @@ class User < ActiveRecord::Base
     }.to_json
   end
   
+  def drawer_transact(amount_cents, cash_register, tag='', notes='', order=nil)
+    drawer = self.get_drawer
+    dt = drawer.transact(amount_cents, self, cash_register, tag, notes, order)
+    return dt
+  end
+  
   private
   
   def generate_random_string

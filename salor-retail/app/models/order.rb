@@ -482,24 +482,7 @@ class Order < ActiveRecord::Base
   def create_drawer_transaction
     add_amount = (self.cash - self.change)
     return if add_amount.zero?
-    
-    drawer = self.user.get_drawer
-    
-    dt = DrawerTransaction.new
-    dt.vendor = self.vendor
-    dt.company = self.company
-    dt.currency = self.vendor.currency
-    dt.user = self.user
-    dt.cash_register = self.cash_register
-    dt.drawer = drawer
-    dt.drawer_amount = drawer.amount
-    dt.order = self
-    dt.complete_order = true
-    dt.amount = add_amount
-    dt.save
-    
-    drawer.amount += add_amount
-    drawer.save
+    self.user.drawer_transact(add_amount.fractional, self.cash_register, '', '', self)
   end
   
   def update_item_quantities
@@ -537,7 +520,7 @@ class Order < ActiveRecord::Base
       pmi.is_proforma = self.is_proforma
       pmi.is_quote = self.is_quote
       pmi.is_unpaid = self.is_unpaid
-      pmi.amount = Money.new(SalorBase.string_to_float(v[:amount]) * 100.0, self.currency)
+      pmi.amount = Money.new(SalorBase.string_to_float(v[:amount], :locale => self.vendor.region) * 100.0, self.currency)
       pmi.cash = pm.cash
       pmi.quote = pm.quote
       pmi.unpaid = pm.unpaid

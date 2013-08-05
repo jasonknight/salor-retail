@@ -37,8 +37,9 @@ function cash_drop_save() {
         $('div.dt-tag-target').html(' Tag ');
         hide_cash_drop();
       },
-      error: function (data,status,err) {
-        alert(err);
+      error: function (data,status,errorThrown) {
+      messagesHash['prompts'].push(errorThrown);
+      displayMessages();
       }
   });
   focusInput($('#main_sku_field'));

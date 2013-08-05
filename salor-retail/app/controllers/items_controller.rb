@@ -34,9 +34,7 @@ class ItemsController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now
-    @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :is_buyback => nil, :refunded => nil, :created_at => @from..@to).collect do |i| 
-      (i.order.paid and not i.order.is_proforma) ? i.quantity : 0 
-    end.sum
+    @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :is_buyback => nil, :refunded => nil, :completed_at => @from..@to, :is_quote => nil, :is_proforma => nil).sum(:quantity)
   end
 
   def new
@@ -133,8 +131,7 @@ class ItemsController < ApplicationController
       if params[:keywords].empty? then
         @items = @current_vendor.items.visible.page(params[:page]).per(@current_vendor.pagination)
       else
-        # TODO: Add price range search
-        @items = @current_vendor.items.visible.where("sku LIKE '%#{params[:keywords]}%' or name LIKE '%#{params[:keywords]}%'").page(params[:page]).per(@current_vendor.pagination)
+        @items = @current_vendor.items.visible.by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
       end
     elsif params[:klass] == 'Order'
       if params[:keywords].empty? then
@@ -247,7 +244,7 @@ class ItemsController < ApplicationController
   end
   
   def report
-    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.price_cents,items.category_id,items.location_id,items.id,items.vendor_id").visible.includes(:location,:category).by_keywords(params[:keywords]).page(params[:page]).per(100)
+    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.price_cents,items.category_id,items.location_id,items.id,items.vendor_id,items.currency").visible.includes(:location,:category).by_keywords(params[:keywords]).page(params[:page]).per(100)
     @view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     @view ||= 'default'
     render "items/reports/#{@view}/page"

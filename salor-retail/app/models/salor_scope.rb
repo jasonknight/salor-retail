@@ -38,24 +38,24 @@ module SalorScope
       return nil if words.blank?
                                       
       if klass == Order then
-        conds << "nr = '#{words}' or qnr = '#{words}' or tag LIKE '#{words}%'"  
+        conds << "nr = '#{words}' OR qnr = '#{words}' OR tag LIKE '#{words}%'"  
         return klass.where(conds.join())
       end
                                       
       conds << "id = '#{words}'"
       if klass.column_names.include?('name')
                                       
-        if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and klass.column_names.include?('base_price')
+        if words =~ /([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/ and klass.column_names.include?('price_cents')
           parts = words.match(/([\w\*]+) (\d{1,5}[\.\,]\d{1,2})/)
-          price = SalorBase.string_to_float(parts[2]) 
+          price_cents = (SalorBase.string_to_float(parts[2].gsub(',','.'), :locale => 'en-us') * 100).to_i
           if parts[1] == '*'
-            conds << "base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}"
+            conds << "`price_cents` > #{(price_cents - 500).to_i} AND `price_cents` < #{(price_cents + 500).to_i}"
           else
-            conds << "name LIKE '%#{parts[1].split(" ").join("%")}%' and base_price > #{(price - 5).to_i} and base_price < #{(price + 5).to_i}"
+            conds << "`name` LIKE '%#{parts[1].split(" ").join("%")}%' AND `price_cents` > #{(price_cents - 500).to_i} AND `price_cents` < #{(price_cents + 500).to_i}"
           end
         else
           words = words.split(" ").join("%")
-          conds << "name LIKE '%#{words}%'"
+          conds << "`name` LIKE '%#{words}%'"
         end
                                       
       end

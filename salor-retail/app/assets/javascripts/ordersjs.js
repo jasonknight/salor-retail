@@ -179,7 +179,7 @@ function drawOrderItemRow(item) {
           up.addClass('pointer quantity-button');
           row.append(up);
           up.on('mousedown', function () {
-            var v = toFloat($('.' + base_id + '-quantity').html()) + 1;
+            var v = toDelimited(toFloat($('.' + base_id + '-quantity').html()) + 1);
             var string = '/vendors/edit_field_on_child?id=' +
             item.id +'&klass=OrderItem' +
             '&field=quantity'+
@@ -195,7 +195,9 @@ function drawOrderItemRow(item) {
           down.addClass('pointer quantity-button');
           row.append(down);
           down.on('mousedown', function () {
-            var v = toFloat($('.' + base_id + '-quantity').html()) - 1;
+            var html = $('.' + base_id + '-quantity').html();
+            console.log(html, toFloat(html), toDelimited(html));
+            var v = toDelimited(toFloat($('.' + base_id + '-quantity').html()) - 1);
             var string = '/vendors/edit_field_on_child?id=' +
             item.id +'&klass=OrderItem' +
             '&field=quantity'+
