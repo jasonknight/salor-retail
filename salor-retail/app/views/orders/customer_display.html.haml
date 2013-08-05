@@ -25,7 +25,7 @@
       %br
       %span== #{ t('printr.order_receipt.current_loyalty_points') }: #{ @report[:customer][:current_loyalty_points] }
 
-- - unless @order.completed_at.nil?
+- unless @order.completed_at.nil?
   :javascript
     setTimeout(function() {
       window.location = window.location.origin + "/vendors/#{ @current_vendor.id }/display_logo";

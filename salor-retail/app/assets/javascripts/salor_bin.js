@@ -144,18 +144,19 @@ function weigh_item(id) {
     var weight = 0;
   }
 
-  var weight_float = parseFloat(weight);
+  var weight_formatted = weight.replace('.', Region.number.currency.format.separator);
   var string = '/vendors/edit_field_on_child?id=' +
   id +
   '&klass=OrderItem' +
   '&field=quantity'+
-  '&value=' + weight_float;
+  '&value=' + weight_formatted;
   
   get(string, 'weigh_item()');
   
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) {
     playsound('medium_warning');
   }
+  return parseFloat(weight);
 }
 
 function weigh_last_item() {
