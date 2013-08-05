@@ -1,3 +1,9 @@
+salor-retail (4.0.2.25) unstable; urgency=low
+
+  * i18n of numbers, style improvements, various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 05 Aug 2013 13:40:48 +0200
+
 salor-retail (4.0.2.24) unstable; urgency=low
 
   [ Jason Knight ]
