@@ -23,21 +23,21 @@
 
 if User.any?
   puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
-  #Process.exit 0
+  Process.exit 0
 end
 
 
 #ARNING: Uncommenting the following will destroy all data!
-ActiveRecord::Base.connection.tables.each do |t|      
-  begin
-    model = t.classify.constantize
-    model.reset_column_information
-  rescue
-    next
-  end
-  puts "Purging table #{ model }"
-  model.delete_all
-end
+# ActiveRecord::Base.connection.tables.each do |t|      
+#   begin
+#     model = t.classify.constantize
+#     model.reset_column_information
+#   rescue
+#     next
+#   end
+#   puts "Purging table #{ model }"
+#   model.delete_all
+# end
 
 company_count = 0
 
