@@ -1,26 +1,15 @@
 <script type="text/javascript">
 
-$(document).ready(function(){
-  $(".delimit-number").each(function(){
+$(function () {
+  $(".delimit-number").each(function() {
     $(this).val(toDelimited($(this).val()));
   })
-});
-
-$(function () {
-    $('#item_item_type_id').change(function () {
-        if ($(this).val() == 3) {
-          $('#coupon').show();
-        } else {
-          $('#coupon').hide();
-        }
-        if ($(this).val() == 2) {
-          $('#gcardamount').show();
-        } else {
-          $('#gcardamount').hide();
-        }
-    });
-    if ($('#item_item_type_id').val() == 3) {$('#coupon').show();}
-    if ($('#item_item_type_id').val() == 2) {$('#gcardamount').show();}
+  
+  $('input').keypress(function(e) {
+    if (e.which == 13) {
+      e.preventDefault();
+    }
+  });
 });
 </script>
 
