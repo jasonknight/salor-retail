@@ -10,7 +10,6 @@ el:
       afield: πεδίο
       always_open_drawer: Always Open Drawer
       amount: ποσό
-      amount_remaining: υπόλοιπο ποσό
       amount_type: τύπος ποσού
       applies_to: ισχύει για
       auto_drop: Αρχίστε τη Μέρα Αυτόματα
@@ -29,7 +28,7 @@ el:
       cellphone: κινητό τηλέφωνο
       child_sku: Child SKU
       city: πόλη
-      code: κώδικας
+      color: color
       company_name: όνομα εταιρίας
       contact_address: διεύθυνση επικοινωνίας
       contact_email: ηλεκτρονική διεύθυνση
@@ -192,7 +191,27 @@ el:
       when: πότε
       whento: When
       width: πλάτος
-      color: color
+      attributes: attributes
+      cash: Cash
+      change: Change
+      company_id: Company
+      currency: Währung
+      customer_name: Customer
+      enable_technician_emails: Send emails to technician
+      gift_card_amount: Gift Card Amount
+      invoice_logo: Invoice Logo
+      js_code: Javascript Code
+      language: Language
+      nr: Number
+      pagination_invoice_one: Pagination Invoice other pages
+      quote: Quote
+      subscription_interval: Subscription interval
+      subscription_last: Last payment
+      subscription_next: Next payment
+      subscription_start: Subscription start
+      technician_email: Technician email
+      time_zone: Time zone
+      unpaid: Unpaid
     models:
       action:
         one: Πράξη
@@ -233,6 +252,7 @@ el:
         normal: Normal
         one: Τύπος Αντικείμενου
         other: Τύποι Αντικείμενου
+        aconto: On Account
       location:
         one: Τοποθεσία
         other: Τοποθεσίες
@@ -243,6 +263,7 @@ el:
         quote: Quote
         quotes: Quotes
         unpaid_orders: Unpaid Invoices
+        subscriptions: Subscriptions
       order_item:
         one: Αντικείμενο Παραγγελίας
         other: Αντικείμενα Παραγγελίας
@@ -278,6 +299,12 @@ el:
       vendor:
         one: Κατάστημα
         other: Καταστήματα
+      cash_register:
+        one: Cash Register
+        other: Cash Registers
+      invoice_blurb:
+        one: Invoice Blurb
+        other: Invoice Blurbs
   api:
     user_does_not_exist: ο χρήστης δεν υπάρχει
   are_you_sure: Are you sure you want to do this?
@@ -288,6 +315,7 @@ el:
     divide: διαιρέστε
     multiply: πολλαπλασιάστε
     subtract: αφαιρέστε
+    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Συρτάρι Μετρητών
@@ -339,6 +367,7 @@ el:
     update_location: ενημέρωση τοποθεσίας
     update_real_quantity: ενημέρωση πραγματικής ποσότητας
     users: users
+    inventory_report: Inventory Report
   helpers:
     select:
       prompt: παρακαλώ επιλέξτε
@@ -387,6 +416,8 @@ el:
       only_for_tobacco_stores: Αυτή η λειτουργία είναι μόνο για καταστήματα καπνού.
         Τώρα θα δημιουργηθούν και θα ενημερωθούν αντικείμενα καπνού. Αυτή η εκτέλεση
         θα διαρκέσει περίπου 20 λεπτά. Είστε απόλυτα σίγουροι πως θέλετε να προχωρήσετε;
+      inventory_report: Inventur
+      report: Report
     inventory_report:
       price: Τιμή πώλησης
       subtotal_purchase_price: Υποσύνολο Τιμής Αγοράς
@@ -394,6 +425,7 @@ el:
       title: Έκθεση Απογραφής
       total_buying_price: Άθροισμα Τιμής Αγοράς
       total_selling_price: Άθροισμα Τιμής Πώλησης
+      no_category: No Category
     selection:
       print: Print
     show:
@@ -530,6 +562,20 @@ el:
     vendors: προμηθευτές
     void: άκυρο
     wholesaler_update: ενημέρωση χονδρέμπορου
+    countries: Countries
+    enter_inventory_items: Enter
+    invoice_notes: Invoice Notes
+    last_completed: Last completed
+    last_orders: Orders
+    last_uncompleted: Last uncompleted
+    logos: Logos
+    open_drawer: drawer
+    print-dialog: print dialog
+    refund_payment_method: refund payment method
+    regular_printer: regular printer
+    sale_types: Sale Types
+    subscription: Subscription
+    weigh: weigh
   notifications:
     shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
     shipments_move_all_items: όλα τα αντικείμενα μεταφέρθηκαν επιτυχώς
@@ -592,6 +638,9 @@ el:
       transaction_tag: ετικέτα συναλλαγής
       transaction_total: ολικό συναλλαγής
       transactions: συναλλαγές
+    index:
+      create_all_recurring_orders: Create orders from recurrable subscriptions
+      recurrable_subscriptions: Recurrable subscriptions
   printr:
     eod_report:
       None: Μη ονομαζόμενα
@@ -647,12 +696,12 @@ el:
       rebate_subtotal: Υποσύνολο επιστροφής
       refund: Ολικό επιστροφών
       refunded: ΕΠΙΣΤΡΕΦΟΜΕΝΟ
-      subsubtotal: ΟΛΙΚΟ
       subtotal1: Υποσύνολο
       subtotal2: Υποσύνολο
       subtotal3: Υποσύνολο
       subtotal4: Υποσύνολο
       tax: Φόρος
+      total: TOTAL
     word:
       drop: προσθήκη μετρητών
       payout: αποπληρωμή
@@ -680,6 +729,8 @@ el:
       report: Αναφορά
     show:
       purchase_price_sum: Σύνολο τιμής αγοράς
+      move_into_stock: Move into stock!
+      need_tax_profile: Shipment Item needs tax profile!
   sticker: αυτοκόλλητο
   support: XXX
   system:
@@ -799,6 +850,13 @@ el:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+      as_aconto_from: On account from
+      count_order_items: Count of sold items
+      gift_card_redeem_total: Giftcard redeem total
+      gift_card_sales_total: Giftcard sales total
+      open_contracts: Open payments from running contracts
+      proforma_payments: Proforma Payments
+      tax: Tax
   views:
     advanced_field: προηγμένο πεδίο
     cash_register_heading: ! '%{name} για %{store}'
@@ -928,3 +986,4 @@ el:
     on_export: κατά την εξαγωγή
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
+    on_sku_not_found: on sku not found

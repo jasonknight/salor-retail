@@ -10,7 +10,6 @@ it:
       afield: campo
       always_open_drawer: Always Open Drawer
       amount: importo
-      amount_remaining: importo rimanente
       amount_type: importo tipo
       applies_to: applica a
       auto_drop: Inizia Giorno Automaticamente
@@ -29,7 +28,7 @@ it:
       cellphone: cellulare
       child_sku: Figlio SKU
       city: città
-      code: cap
+      color: color
       company_name: nome azienda
       contact_address: indirizzo contatto
       contact_email: email contatto
@@ -192,7 +191,27 @@ it:
       when: quando
       whento: When
       width: larghezza
-      color: color
+      attributes: attributes
+      cash: Cash
+      change: Change
+      company_id: Company
+      currency: Währung
+      customer_name: Customer
+      enable_technician_emails: Send emails to technician
+      gift_card_amount: Gift Card Amount
+      invoice_logo: Invoice Logo
+      js_code: Javascript Code
+      language: Language
+      nr: Number
+      pagination_invoice_one: Pagination Invoice other pages
+      quote: Quote
+      subscription_interval: Subscription interval
+      subscription_last: Last payment
+      subscription_next: Next payment
+      subscription_start: Subscription start
+      technician_email: Technician email
+      time_zone: Time zone
+      unpaid: Unpaid
     models:
       action:
         one: Azione
@@ -233,6 +252,7 @@ it:
         normal: Normal
         one: Tipo Articolo
         other: Tipi Articolo
+        aconto: On Account
       location:
         one: Posizione
         other: Posizioni
@@ -243,6 +263,7 @@ it:
         quote: Quote
         quotes: Quotes
         unpaid_orders: Unpaid Invoices
+        subscriptions: Subscriptions
       order_item:
         one: Articolo Ordine
         other: Articoli Ordine
@@ -278,6 +299,12 @@ it:
       vendor:
         one: Negozio
         other: NEgozi
+      cash_register:
+        one: Cash Register
+        other: Cash Registers
+      invoice_blurb:
+        one: Invoice Blurb
+        other: Invoice Blurbs
   api:
     user_does_not_exist: utente non esistente
   are_you_sure: Are you sure you want to do this?
@@ -288,6 +315,7 @@ it:
     divide: dividi
     multiply: moltiplica
     subtract: sottrai
+    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Cassetto Cassa
@@ -338,6 +366,7 @@ it:
     update_location: aggiorna posizione
     update_real_quantity: aggiorna quantità reale
     users: users
+    inventory_report: Inventory Report
   helpers:
     select:
       prompt: prego selezionare
@@ -384,6 +413,8 @@ it:
       only_for_tobacco_stores: Questa funzione è esclusiva delle tabaccherie. Gli
         articoli di tabaccheria verranno ora creati e aggiornati. Il tempo di attesa
         è di 20 minuti. Sei veramente sicuro di procedere?
+      inventory_report: Inventur
+      report: Report
     inventory_report:
       price: Prezzo di vendita
       subtotal_purchase_price: Subtotale Prezzo di Acquisto
@@ -391,6 +422,7 @@ it:
       title: Rapporto Inventario
       total_buying_price: Somma Prezzo di Acquisto
       total_selling_price: Somma Prezzo di Vendita
+      no_category: No Category
     selection:
       print: Print
     show:
@@ -527,6 +559,20 @@ it:
     vendors: venditori
     void: vuoto
     wholesaler_update: aggiorna grossista
+    countries: Countries
+    enter_inventory_items: Enter
+    invoice_notes: Invoice Notes
+    last_completed: Last completed
+    last_orders: Orders
+    last_uncompleted: Last uncompleted
+    logos: Logos
+    open_drawer: drawer
+    print-dialog: print dialog
+    refund_payment_method: refund payment method
+    regular_printer: regular printer
+    sale_types: Sale Types
+    subscription: Subscription
+    weigh: weigh
   notifications:
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
     shipments_move_all_items: tutti gli articoli sono stati spostati con successo
@@ -589,6 +635,9 @@ it:
       transaction_tag: etichetta transazione
       transaction_total: totale transazione
       transactions: transazioni
+    index:
+      create_all_recurring_orders: Create orders from recurrable subscriptions
+      recurrable_subscriptions: Recurrable subscriptions
   printr:
     eod_report:
       None: Senza nome
@@ -642,12 +691,12 @@ it:
       rebate_subtotal: Riduzione Subtotale
       refund: Riduzione totale
       refunded: RIMBORSATO
-      subsubtotal: SUBTOTALE
       subtotal1: Subtotale1
       subtotal2: Subtotale2
       subtotal3: Subtotale3
       subtotal4: Subtotale4
       tax: Iva
+      total: TOTAL
     word:
       drop: versamento
       payout: prelievo
@@ -675,6 +724,8 @@ it:
       report: Rapporto
     show:
       purchase_price_sum: Somma prezzo di acquisto
+      move_into_stock: Move into stock!
+      need_tax_profile: Shipment Item needs tax profile!
   sticker: adesivo
   support: XXX
   system:
@@ -786,6 +837,13 @@ it:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+      as_aconto_from: On account from
+      count_order_items: Count of sold items
+      gift_card_redeem_total: Giftcard redeem total
+      gift_card_sales_total: Giftcard sales total
+      open_contracts: Open payments from running contracts
+      proforma_payments: Proforma Payments
+      tax: Tax
   views:
     advanced_field: campo avanzato
     cash_register_heading: ! '%{name} for %{store}'
@@ -912,3 +970,4 @@ it:
     on_export: esportazione
     on_import: importazione
     on_save: salvataggio
+    on_sku_not_found: on sku not found

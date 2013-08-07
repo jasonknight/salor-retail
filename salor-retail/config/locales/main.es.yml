@@ -10,7 +10,6 @@ es:
       afield: Campo
       always_open_drawer: Always Open Drawer
       amount: Monto
-      amount_remaining: Monto restante
       amount_type: Tipo de monto
       applies_to: Se aplica a
       auto_drop: Comenzar el día automáticamente
@@ -29,7 +28,7 @@ es:
       cellphone: Móvil
       child_sku: SKU hijo
       city: Cuidad
-      code: Código
+      color: color
       company_name: Nombre de la empresa
       contact_address: Dirección de contacto
       contact_email: E-mail de contacto
@@ -192,7 +191,27 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
-      color: color
+      attributes: attributes
+      cash: Cash
+      change: Change
+      company_id: Company
+      currency: Währung
+      customer_name: Customer
+      enable_technician_emails: Send emails to technician
+      gift_card_amount: Gift Card Amount
+      invoice_logo: Invoice Logo
+      js_code: Javascript Code
+      language: Language
+      nr: Number
+      pagination_invoice_one: Pagination Invoice other pages
+      quote: Quote
+      subscription_interval: Subscription interval
+      subscription_last: Last payment
+      subscription_next: Next payment
+      subscription_start: Subscription start
+      technician_email: Technician email
+      time_zone: Time zone
+      unpaid: Unpaid
     models:
       action:
         one: Acción
@@ -233,6 +252,7 @@ es:
         normal: Normal
         one: Tipo de artículo
         other: Tipo de artículo
+        aconto: On Account
       location:
         one: Ubicación
         other: Ubicaciones
@@ -243,6 +263,7 @@ es:
         quote: Quote
         quotes: Quotes
         unpaid_orders: Unpaid Invoices
+        subscriptions: Subscriptions
       order_item:
         one: Artículo de pedido
         other: Otro artículo de pedido
@@ -278,6 +299,12 @@ es:
       vendor:
         one: Tienda
         other: Tiendas
+      cash_register:
+        one: Cash Register
+        other: Cash Registers
+      invoice_blurb:
+        one: Invoice Blurb
+        other: Invoice Blurbs
   api:
     user_does_not_exist: Este usuario no existe
   are_you_sure: Are you sure you want to do this?
@@ -288,6 +315,7 @@ es:
     divide: Dividir
     multiply: Multiplicar
     subtract: Restar
+    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Caja
@@ -339,6 +367,7 @@ es:
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
     users: users
+    inventory_report: Inventory Report
   helpers:
     select:
       prompt: Por favor seleccione
@@ -385,6 +414,8 @@ es:
       only_for_tobacco_stores: Esta función sólo existe para expendidoras de tabaco.
         Artículos de tabaco serán creados y actualizados. Esta acción llevará unos
         20 minutos. ¿Está seguro de continuar?
+      inventory_report: Inventur
+      report: Report
     inventory_report:
       price: Precio de venta
       subtotal_purchase_price: Subtotal del precio de compra
@@ -392,6 +423,7 @@ es:
       title: Informe de inventario
       total_buying_price: Total del precio de compra
       total_selling_price: Total del precio de venta
+      no_category: No Category
     selection:
       print: Print
     show:
@@ -528,6 +560,20 @@ es:
     vendors: Tiendas
     void: Anular
     wholesaler_update: Actualización del disteibuidor
+    countries: Countries
+    enter_inventory_items: Enter
+    invoice_notes: Invoice Notes
+    last_completed: Last completed
+    last_orders: Orders
+    last_uncompleted: Last uncompleted
+    logos: Logos
+    open_drawer: drawer
+    print-dialog: print dialog
+    refund_payment_method: refund payment method
+    regular_printer: regular printer
+    sale_types: Sale Types
+    subscription: Subscription
+    weigh: weigh
   notifications:
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
@@ -590,6 +636,9 @@ es:
       transaction_tag: Etiqueta de transacción
       transaction_total: transacción total
       transactions: transacción
+    index:
+      create_all_recurring_orders: Create orders from recurrable subscriptions
+      recurrable_subscriptions: Recurrable subscriptions
   printr:
     eod_report:
       None: Sin nombre
@@ -645,12 +694,12 @@ es:
       rebate_subtotal: subtotal de la rebaja
       refund: Total de reintegros
       refunded: REINTEGRADO
-      subsubtotal: TOTAL
       subtotal1: Subtotal
       subtotal2: Subtotal
       subtotal3: Subtotal
       subtotal4: Subtotal
       tax: IVA
+      total: TOTAL
     word:
       drop: Depósito
       payout: Extracción
@@ -678,6 +727,8 @@ es:
       report: Informe
     show:
       purchase_price_sum: Suma precio de venta
+      move_into_stock: Move into stock!
+      need_tax_profile: Shipment Item needs tax profile!
   sticker: Etiqueta adhesiva
   support: XXX
   system:
@@ -795,6 +846,13 @@ es:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+      as_aconto_from: On account from
+      count_order_items: Count of sold items
+      gift_card_redeem_total: Giftcard redeem total
+      gift_card_sales_total: Giftcard sales total
+      open_contracts: Open payments from running contracts
+      proforma_payments: Proforma Payments
+      tax: Tax
   views:
     advanced_field: Campo avanzado
     cash_register_heading: ! '%{name} para %{store}'
@@ -924,3 +982,4 @@ es:
     on_export: al exportar
     on_import: al importar
     on_save: al guardar
+    on_sku_not_found: on sku not found

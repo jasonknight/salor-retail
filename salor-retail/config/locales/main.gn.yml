@@ -5,32 +5,11 @@ gn:
   InCash: In Bar
   activerecord:
     attributes:
-      company_id: Firma
-      language: Sprache
-      cash: Bar
-      change: Wechselgeld
-      unpaid: Unbezahlt
-      quote: Angebot
-      subscription_start: Abo start
-      subscription_interval: Abo Intervall
-      subscription_last: Letzte Zahlung
-      subscription_next: Nächste Zahlung
-      nr: Nr.
-      customer_name: Kunde
-      invoice_logo: Rechnungslogo
-      pagination_invoice_one: Artikel auf Rechung erste Seite
-      pagination_invoice_one: Artikel auf Rechung weitere Seiten
-      technician_email: Techniker E-Mail
-      enable_technician_emails: E-Mail an Techniker senden
-      time_zone: Zeitzone
-      currency: Währung
-      gift_card_amount: Gutschein Restbetrag
       active: aktiv
       address: Adresse
       afield: Feld
       always_open_drawer: Always Open Drawer
       amount: Betrag
-      amount_remaining: Betrag
       amount_type: Art
       applies_to: bezieht sich auf
       auto_drop: Auto-Buchung Tagesbeginn
@@ -41,16 +20,18 @@ gn:
       buyback_price: Pfandbetrag
       calculate_part_price: Setpreis berechnen
       calculate_tax: Nettopreise
+      cash: Bar
       cash_drawer: Kassenlade
       cash_made: eingenommener Betrag
       cash_register:
         sticker_printer: Etikettendrucker
       category_id: Kategorie
       cellphone: Mobil
+      change: Wechselgeld
       child_sku: Kind-SKU
       city: Stadt
-      code: Code
       color: Farbe
+      company_id: Firma
       company_name: Firmenname
       contact_address: Kontaktadresse
       contact_email: Kontakt E-Mail
@@ -64,8 +45,10 @@ gn:
       created_at: Angelegt am
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
+      currency: Währung
       customer:
         tax_number: Steuernummer
+      customer_name: Kunde
       customer_screen_blurb: Standardtext Verkaufsanzeige
       decimal_points: Dezimalstellen
       default: Standard
@@ -74,12 +57,14 @@ gn:
       dollar_per_lp: Euro pro Punkt
       drop: Einzahlen
       email: E-Mail
+      enable_technician_emails: E-Mail an Techniker senden
       end_amount: Schlussbetrag
       end_date: Ende
       eod_show: Zeige bei Tagesabschluss
       expires_on: läuft ab am
       first_name: Vorname
       full_name: Name
+      gift_card_amount: Gutschein Restbetrag
       height: Höhe
       hide_buttons: Tasten ausblenden
       hide_discounts: Preisnachlässe ausblenden
@@ -90,6 +75,7 @@ gn:
         body_receipt: Beleg
         is_header: Kopf
         lang: Language
+      invoice_logo: Rechnungslogo
       invoice_note:
         destination_country_id: Zielland
         note_footer: Text Fuß
@@ -111,6 +97,7 @@ gn:
       item_sku: Artikel SKU
       itemsviewlist: Listenansicht für Artikel
       lang: Sprache
+      language: Sprache
       last_name: Familienname
       lc_points: Punkteabzug
       length: Länge
@@ -122,6 +109,7 @@ gn:
       name: Name
       no_print: Nicht drucken bei Enter
       notes: Notiz
+      nr: Nr.
       open_cash_drawer: Öffne Kassenlade
       order_id: Verkaufs-Id
       order_item:
@@ -131,6 +119,7 @@ gn:
       owner_type: Owner Type
       packaging_unit: Verpackung
       pagination: Artikel pro Seite
+      pagination_invoice_one: Artikel auf Rechung weitere Seiten
       paid: Bezahlt
       parent_sku: Eltern-SKU
       part_quantity: Menge
@@ -146,6 +135,7 @@ gn:
       purchase_price: Kaufpreis
       quantity: Menge
       quantity_sold: Menge verkauft
+      quote: Angebot
       real_quantity: Inventur
       rebate: Rabatt
       rebate_type: Rabatt-Typ
@@ -181,19 +171,26 @@ gn:
       street1: Adresse 1
       street2: Adresse 2
       stylesheets: Stylesheets
+      subscription_interval: Abo Intervall
+      subscription_last: Letzte Zahlung
+      subscription_next: Nächste Zahlung
+      subscription_start: Abo start
       subtotal: Zwischensumme
       tag: Tag
       tax: Steuer
       tax_free: Steuerfrei
       tax_profile_id: Steuerklasse
+      technician_email: Techniker E-Mail
       telephone: Telefon
       the_receiver: Geliefert an
       the_shipper: Geliefert durch
       thermal_printer: Thermodrucker
+      time_zone: Zeitzone
       title: Titel
       total: Gesamt
       track_expiry: Ablaufdatum beobachten
       type: Typ
+      unpaid: Unbezahlt
       url: URL
       user:
         hourly_rate: Hourly Rate
@@ -213,10 +210,9 @@ gn:
       when: Wenn
       whento: When
       width: Breite
+      attributes: attributes
+      js_code: Javascript Code
     models:
-      invoice_blurb:
-        one: Rechnungsdaten
-        other: Rechnungsdaten
       action:
         one: Aktion
         other: Aktionen
@@ -226,6 +222,9 @@ gn:
       button:
         one: Taste
         other: Tasten
+      cash_register:
+        one: Kasse
+        other: Kassen
       category:
         one: Kategorie
         other: Kategorien
@@ -244,6 +243,9 @@ gn:
       drawer_transaction:
         one: Buchung
         other: Buchungen
+      invoice_blurb:
+        one: Rechnungsdaten
+        other: Rechnungsdaten
       invoice_note:
         one: Rechnungstext
         other: Rechnungstexte
@@ -251,10 +253,10 @@ gn:
         one: Artikel
         other: Artikel
       item_type:
+        aconto: Akonto
         coupon: Kupon
         gift_card: Gutschein
         normal: Normal
-        aconto: Akonto
         one: Artikel-Typ
         other: Artikel-Typen
       location:
@@ -266,8 +268,8 @@ gn:
         proforma_orders: Proforma
         quote: Angebot
         quotes: Angebote
-        unpaid_orders: Unbezahlt
         subscriptions: Abos
+        unpaid_orders: Unbezahlt
       order_item:
         one: Verkaufter Artikel
         other: Verkaufte Artikel
@@ -303,9 +305,6 @@ gn:
       vendor:
         one: Filiale
         other: Filialen
-      cash_register:
-        one: Kasse
-        other: Kassen
   api:
     user_does_not_exist: Dieser Benutzer existiert nicht oder darf die API nicht benutzen.
   are_you_sure: Sind Sie sicher?
@@ -316,6 +315,7 @@ gn:
     divide: dividieren
     multiply: multiplizieren
     subtract: subtrahieren
+    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Kassenlade
@@ -341,7 +341,6 @@ gn:
     exception_in_files: ! 'Der Fehler trat in diesen Dateien auf:'
     oops_an_error_occurred: Oops! Es ist leider ein Fehler aufgetreten
   headings:
-    inventory_report: Inventurbericht
     almost_out: Artikel, die nachbestellt werden müssen
     bank_machine_types: Typ unterstützen
     best_sellers: Bestseller
@@ -354,6 +353,7 @@ gn:
     edit_shipper: Lieferant %{name} bearbeiten
     expiring_soon: läuft bald ab
     export: Exports
+    inventory_report: Inventurbericht
     item_selection: Etiketten-Druckauswahl
     new_discount_for: Neuer Rabatt for %{store}
     notes: Notizen
@@ -409,13 +409,13 @@ gn:
       unused_item_ids: Nicht verwendete Artikel
       used_item_ids: Bisher verwendete Artikel
     index:
-      report: Bericht
-      inventory_report: Inventur
       database_distiller_warning: Der Aufruf dieser Funktion dauert wegen der Generierung
         von Statistiken etwa eine halbe Minute. Dennoch Fortfahren?
+      inventory_report: Inventur
       only_for_tobacco_stores: Diese Funktion ist nur für Trafiken. Tabak-Artikel
         werden nun angelegt bzw. aktualisiert. Diese Aktion dauert etwa 20 Minuten.
         Sind Sie wirklich sicher, dass Sie fortfahren möchten?
+      report: Bericht
     inventory_report:
       no_category: Keine Kategorie
       price: Verkaufspreis
@@ -434,24 +434,12 @@ gn:
     update_real_quantity:
       inventory_report: Inventurbericht
       update_quantity: Inventurmengen übernehmen
+      are_you_sure: This will copy the inventory quantities into the database and
+        reset the inventory report. Continue?
     upload:
       upload: Importieren
   label: Regaletikett
   menu:
-    invoice_notes: Rechnungstexte
-    sale_types: Verkaufsarten
-    countries: Länder
-    subscription: Abo
-    enter_inventory_items: Eingeben
-    logos: Logos
-    print-dialog: Druckdialog
-    refund_payment_method: Storno-Rückzahlugsmethode
-    regular_printer: Normaler Drucker
-    last_completed: Kürzlich abgeschlossen
-    last_uncompleted: Kürzlich offen
-    last_orders: Kürzlich
-    open_drawer: Lade
-    weigh: wiegen
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf
@@ -470,6 +458,7 @@ gn:
     close: Schließen
     configuration: Details
     contact: Kontakt
+    countries: Länder
     current_order: Aktueller Verkauf
     customer: Kunde
     customers: Kunden
@@ -499,15 +488,21 @@ gn:
     edit_user: Angestellter bearbeiten
     edit_vendor: Filiale bearbeiten
     end_day: Tag beenden
+    enter_inventory_items: Eingeben
     general_configuration: Allgemein
     home: Filialen
     inventory_report: Bericht Inventur
     invoice_blurbs: Rechnungsdaten
+    invoice_notes: Rechnungstexte
     item_types: Artikeltypen
     items: Artikel
     labels: Etiketten
+    last_completed: Kürzlich abgeschlossen
+    last_orders: Kürzlich
+    last_uncompleted: Kürzlich offen
     law_reports: §131 Abs. 2, 3 BAO<br>Bericht-Download
     locations: Verkaufsflächen
+    logos: Logos
     loyalty_cards: Kundenkarten
     merge_into_current_order: In aktuellen Verkauf aufnehmen
     move_shipment_item: Lieferartikel in den Bestand aufnehmen
@@ -535,6 +530,7 @@ gn:
     new_user: Neuer Angestellter
     new_vendor: Neue Filiale
     ok: OK
+    open_drawer: Lade
     order: Verkauf
     orders: Verkäufe
     overview: Überblick
@@ -542,7 +538,10 @@ gn:
     points: Treuepunkte
     pos: POS
     print: Etiketten
+    print-dialog: Druckdialog
     receipts: Belege
+    refund_payment_method: Storno-Rückzahlugsmethode
+    regular_printer: Normaler Drucker
     remote_service: Fernwartung
     reorder: Nachbestellung
     report: Verkaufsbericht
@@ -550,6 +549,7 @@ gn:
     report_day_range: Monatsbericht
     report_range: Gesamtbericht
     reports: Berichte
+    sale_types: Verkaufsarten
     salorlive: Salor Live!
     salortrainer: Salor Trainer
     search: Suche
@@ -560,6 +560,7 @@ gn:
     split: splitten
     statistics: Statistik
     stock_locations: Lager
+    subscription: Abo
     support: Unterstützung
     tax_profiles: Steuerklassen
     transaction_tags: Buchungstypen
@@ -571,6 +572,7 @@ gn:
     users: Angestellte
     vendors: Filialen
     void: Storno
+    weigh: wiegen
     wholesaler_update: Artikelupdate Großhändler
   notifications:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
@@ -578,8 +580,8 @@ gn:
     shipments_move_item: Artikel erfolgreich verschoben ...
   orders:
     index:
-      recurrable_subscriptions: Wiederholbare Abos
       create_all_recurring_orders: Alle Abos wiederholen
+      recurrable_subscriptions: Wiederholbare Abos
     print:
       delivery_note: Lieferschein
       invoice: Rechnung
@@ -613,7 +615,7 @@ gn:
       OrderRefund: Gesamtstornierung
       cash-refunds: Bargeld-Stornierungen
       cash_drawer: Kassenlade
-      count_orders: Anzahl Verkäufe      
+      count_orders: Anzahl Verkäufe
       drop: Einzahlung
       from: von
       gross: brutto
@@ -692,12 +694,12 @@ gn:
       rebate_subtotal: Summe Rabatte
       refund: Rabatte auf gesamten Einkauf
       refunded: STORNIERUNG
-      total: SUMME
       subtotal1: Zwischensumme
       subtotal2: Zwischensumme
       subtotal3: Zwischensumme
       subtotal4: Zwischensumme
       tax: USt.
+      total: SUMME
     word:
       drop: einbezahlt
       payout: ausbezahlt
@@ -724,9 +726,9 @@ gn:
     index:
       report: Bericht
     show:
-      purchase_price_sum: Gesamt
-      need_tax_profile: Lieferartikel muss eine Steuerklasse haben
       move_into_stock: Einlagern!
+      need_tax_profile: Lieferartikel muss eine Steuerklasse haben
+      purchase_price_sum: Gesamt
   sticker: Aufkleber
   support: Support
   system:
@@ -811,26 +813,25 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
     report_day:
-      as_aconto_from: Als Akonto aus
-      proforma_payments: Proforma Zahlungen
-      open_contracts: Laufende Aufträge
-      gift_card_redeem_total: Gutschein Einlösung
-      gift_card_sales_total: Gutschein Verkauf
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
+      as_aconto_from: Als Akonto aus
       cash-refunds: Bargeld-Stornierungen
       cash_drawer: Kassenlade
-      count_orders: Anzahl Verkäufe
       count_order_items: Anzahl Verkaufsartikel
+      count_orders: Anzahl Verkäufe
       drop: Einzahlung
       from: von
+      gift_card_redeem_total: Gutschein Einlösung
+      gift_card_sales_total: Gutschein Verkauf
       gross: brutto
       net: netto
-      refunds: Stornierungen
+      open_contracts: Laufende Aufträge
       payments: Zahlungen
       payout: Auszahlung
       payouts: Auszahlungen
+      proforma_payments: Proforma Zahlungen
       revenue: Umsatz
       sales: Verkäufe
       sum: Summe
@@ -840,13 +841,14 @@ gn:
       sums_by_category: nach Kategorie
       sums_by_payment_methods: nach Zahlungsmethoden
       sums_by_tax_profile: nach Steuern
+      tax: Steuer
       time: Zeit
       title: Tagesbericht
       to: bis
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
-      tax: Steuer
+      noncash-refunds: Noncash-Refunds
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'
@@ -974,3 +976,4 @@ gn:
     on_export: beim Export
     on_import: beim Import
     on_save: beim Speichern
+    on_sku_not_found: on sku not found
