@@ -106,7 +106,7 @@ class OrderItem < ActiveRecord::Base
     if tp.nil?
       msg = "A TaxProfile with value #{ value } has to be created before you can assign this value"
       log_action msg
-      raise msg
+      #raise msg
     else
       write_attribute :tax_profile_id, tp.id
       write_attribute :tax, tp.value
@@ -212,6 +212,13 @@ class OrderItem < ActiveRecord::Base
     # make price negative when it is a buyback OrderItem
     if self.is_buyback
       p = - p.abs
+    end
+    
+    # update item only when price is 0
+    i = self.item
+    if i.weigh_compulsory != true and i.price.zero?
+      i.price = p
+      i.save!
     end
     write_attribute :price_cents, p.fractional
   end

@@ -3,7 +3,7 @@ function isSalorBin() {
 }
 
 function usePole() {
-  return (isSalorBin() && typeof Register.pole_display != "undefined" && Register.pole_display.length > 1);
+  return (isSalorBin() && !(typeof Register.pole_display != "undefined" || Register.pole_display != null || Register.pole_display.length > 1));
 }
 
 function useMimo() {
@@ -77,7 +77,9 @@ function print_url(printer_path, url, param_string, confirmation_url, callback) 
 }
 
 function playsound(file) {
+  
   if (isSalorBin()) {
+    console.log('playsound', file);
     Salor.playSound(file);
   }
 }

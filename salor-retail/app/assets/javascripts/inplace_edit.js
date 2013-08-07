@@ -167,7 +167,7 @@ function in_place_edit(elem, x, y) {
         layout   : keyboard_layout,
         customLayout : null,
         position: {
-          of: elem,
+          of: $('.yieldbox'),
           my: 'center center',
           at: 'center center'
         },
