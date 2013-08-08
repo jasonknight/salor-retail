@@ -25,7 +25,6 @@ function make_select_widget(name,elem) {
   button.insertAfter(elem);
   button.attr('select_target',"#" + elem.attr("id"));
   button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
-  button.css({width: max_len * char_width});
   
   
   button.click(function () {

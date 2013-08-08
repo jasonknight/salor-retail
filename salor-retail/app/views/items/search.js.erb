@@ -85,7 +85,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     <% if order.paid == 1 %>
       var btn = $('<td></td>');
     <% else %>
-    var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:edit,32) %>" width="32" onmousedown="window.location = \'/orders/new?order_id=<%= order.id %>\';" /></div></td>');
+    var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:edit,32) %>" width="32" onmousedown="window.location = \'/orders/<%= order.id %>/edit\';" /></div></td>');
     <% end %>
 
     var btn2 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:printer,32) %>" width="32" onmousedown="print_order(\'<%= order.id %>\');" /></div></td>');

@@ -30,7 +30,7 @@ class Barcode
   end
 
   def plot_path
-    hash_id = @vendor.hash_id
+    hash_id = @vendor.hash_id if @vendor
     hash_id = "unknown" if hash_id.blank?
     path = File.join(@path_prefix, hash_id, "images", "barcodes", @sku)
   end

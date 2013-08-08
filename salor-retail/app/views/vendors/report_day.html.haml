@@ -24,7 +24,7 @@
 
 
 = form_tag "/vendors/report_day", :class => 'no-print', :id => 'date_range', :method => :get do
-  %table.tools{ :width => '50%' }
+  %table.tools{ :width => '70%' }
     %tr
       %td{:align => :left, :width => "20%"}
         = label 'from', t('.from')
@@ -37,22 +37,26 @@
         = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
     %tr
       %td{:align => :left}
+        = label 'user_select', User.model_name.human
+      %td{:align => :right}
         %select{:id => 'user_select', :name => 'user_id' }
           %option
           = options_from_collection_for_select(@users, 'id', 'username', params[:user_id])
+    %tr
+      %td
       %td{ :align => :right}
         = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
     %tr
       %td{:colspan => 2, :align => :center}
         = salor_icon(:a4print, {:onclick => 'print_dialog()'}, 40, t('menu.print_dialog'))
         = salor_icon(:thermal_printer, {:onclick => "print_url(Register.thermal_printer,'/vendors/render_report_day',decodeURIComponent($('#date_range').serialize()));" }, 40, t('.thermal'))
-  %br
-  %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
+    %tr
+      %td{:colspan => 2, :align => :center}= image_tag 'loader.gif', :id => 'progress', :style => 'display: none;'
 
 .clear
 
 .paper-invoice
-  %h2== #{ t '.title' } #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @current_vendor.name }<br />#{ @user.name_with_username if @user }
+  %h2== #{ t '.title' }: #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @current_vendor.name }<br />#{ @user.name_with_username if @user }
   
   %p= l DateTime.now
 

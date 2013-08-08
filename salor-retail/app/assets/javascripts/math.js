@@ -7,52 +7,9 @@ function RoundFixed(Number, DecimalPlaces) {
 }
 
 function toFloat(str, returnString) {
-  //console.log(typeof str);
-  //str.replace(',','.');
-  //return parseFloat(str);
-  
-  /* if (str == '') {return 0.0;}
-  if (returnString == null) returnString = false;
-  if (typeof str == 'number') {
-    return str;
-  }
-  if (str.match(/\d+\.\d+\,\d+/)) {
-   echo('matched');
-    str = str.replace('.','');
-  }
-  var ac = [0,1,2,3,4,5,6,7,8,9,'.',',','-'];
-  var nstr = '';
-  for (var i = 0; i < str.length; i++) {
-    c = str.charAt(i);
-    if (inArray(c,ac)) {
-      if (c == ',') {
-        nstr = nstr + '.';
-      } else {
-        nstr = nstr + c;
-      }
-    }
-  }
-  return (returnString) ? nstr : parseFloat(nstr); */
-  var r = /([\d,\.]+)[,\.](\d{1,4})/g;
-  var matches = r.exec(str);
-  if (matches) {
-    var lpart = matches[1].replace(/[\.,]+/g,'');
-    var rpart = matches[2].replace(/[\.,]+/g,'');
-    var num = lpart + '.' + rpart;
-  } else {
-    num = parseFloat(str);
-  }
-  
-  if (returnString) {
-    return num;
-  } else {
-    num = parseFloat(num);
-    if (num+'' == 'NaN') {
-      return 0.0;
-    } else {
-      return num;
-    }
-  }
+  str = str.replace(Region.number.currency.format.delimiter, '');
+  str = str.replace(Region.number.currency.format.separator, '.');
+  return parseFloat(str);
 }
 
 function roundNumber(num, dec) {

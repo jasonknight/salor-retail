@@ -198,7 +198,7 @@ class Order < ActiveRecord::Base
       if oi.is_normal?
         log_action "Item is normal, and present, just increment"
         oi.quantity += 1 
-        oi.modify_price_for_actions       
+        oi.modify_price_for_actions
         oi.calculate_totals
         oi.save
         self.calculate_totals

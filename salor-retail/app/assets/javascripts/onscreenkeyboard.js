@@ -1,5 +1,14 @@
 $(function() {
+  $('.keyboardable').each(function(i, el) {
+    make_keyboardable($(el));
+  });
   
+  $('.keyboardable-int').each(function(i, el) {
+    make_keyboardable($(el));
+  });
+
+
+  // i18n layout definitions
   $.keyboard.layouts['gn'] = {
     'default' : [
       "\u0302 1 2 3 4 5 6 7 8 9 0 \u00df \u0301 {b}",
@@ -22,9 +31,9 @@ $(function() {
       "{shift} \u007c y x c v b n \u00b5 , . - {shift}",
       "{c} {clear} {alt} {space} {alt} {a}"
     ]
-  };
-  
-  $.keyboard.layouts['en'] = {
+    };
+
+    $.keyboard.layouts['en'] = {
     'default' : [
       "` 1 2 3 4 5 6 7 8 9 0 - = {b}",
       "{tab} q w e r t y u i o p [ ]",
@@ -46,9 +55,9 @@ $(function() {
       "{shift} z x c v b n m < > ? {shift}",
       "{c} {clear} {alt} {space} {alt} {a}"
     ]
-  };
-  
-  $.keyboard.layouts['fr'] = {
+    };
+
+    $.keyboard.layouts['fr'] = {
     'default' : [
       "\u00b2 & \u00e9 \" ' ( - \u00e8 _ \u00e7 \u00e0 ) = {b}",
       "{tab} a z e r t y u i o p \u02c4 $",
@@ -70,9 +79,9 @@ $(function() {
       "{shift} < w x c v b n , ; : ! {shift}",
       "{c} {clear} {alt} {space} {alt} {a}"
     ]
-  };
-  
-  $.keyboard.layouts['num'] = {
+    };
+
+    $.keyboard.layouts['num'] = {
     'default' : [
       "7 8 9",
       "4 5 6",
@@ -80,9 +89,9 @@ $(function() {
       "{clear} 0 ,",
       "{c} {a}"
     ]
-  };
+    };
 
-  $.keyboard.layouts['num_old'] = {
+    $.keyboard.layouts['num_old'] = {
     'default' : [
       '{cancel} {clear} {bksp}',
       '1 2 3 4',
@@ -91,14 +100,7 @@ $(function() {
       '{accept}'
     ]
   };
-  
-  $('.keyboardable').each(function(i, el) {
-    make_keyboardable($(el));
-  });
-  
-  $('.keyboardable-int').each(function(i, el) {
-    make_keyboardable($(el));
-  });
+
 });
   
 
@@ -142,7 +144,7 @@ function make_keyboardable(elem) {
     elem.keyboard({
       openOn   : '',
       stayOpen : true,
-      layout       : 'int',
+      layout       : 'num',
       customLayout : null,
       visible: function(){ $('.ui-keyboard-preview').select(); }
     });
@@ -157,6 +159,7 @@ function make_keyboardable(elem) {
   }
   
   elem.addClass("keyboardable-done");
+  
   if (elem.hasClass('left-kbd')) {
     kbd.addClass('kbd-show-left pointer');
     kbd.insertAfter(elem);

@@ -65,11 +65,11 @@ en:
       expires_on: expires on
       first_name: first name
       full_name: Name
-      gift_card_amount: Gift Card Amount
+      gift_card_amount: Gift Card remaining
       height: height
       hide_buttons: Hide Buttons
       hide_discounts: Hide Discounts
-      ignore_qty: Ignore Qty
+      ignore_qty: Ignore Quantity
       internal_type: Type
       invoice_blurb:
         body: Invoice
@@ -107,7 +107,7 @@ en:
       location_id: location id
       lp_per_dollar: loyalty points per dollar
       min_quantity: min quantity
-      must_change_price: Must Change Price
+      must_change_price: Change price on scan
       name: name
       no_print: Don't Print on Enter
       notes: notes
@@ -133,7 +133,7 @@ en:
       pole_display: Pole display
       postalcode: postal code
       price: price
-      price_by_qty: price by quantity
+      price_by_qty: GS1 price by quantity
       purchase_price: purchase price
       quantity: quantity
       quantity_sold: quantity sold
@@ -184,8 +184,8 @@ en:
       tax_profile_id: tax
       technician_email: Technician email
       telephone: telephone
-      the_receiver: the receiver
-      the_shipper: the shipper
+      the_receiver: receiver
+      the_shipper: shipper
       thermal_printer: Thermal Printer
       time_zone: Time zone
       title: title
@@ -207,7 +207,7 @@ en:
         receipt_logo_header: Receipt Logo Header
       vendor_id: Store
       vendor_printers: printers
-      weigh_compulsory: compulsory weighing
+      weigh_compulsory: Weigh on scan
       weight: weight
       when: when
       whento: When
@@ -300,8 +300,8 @@ en:
         one: Tag
         other: Tags
       user:
-        one: Employee
-        other: Employees
+        one: User
+        other: Users
       vendor:
         one: Store
         other: Stores
@@ -322,7 +322,7 @@ en:
       counted: Counted
       difference: Difference
       end_of_day_thermal_report: Print Report
-      paper_report: Detail Report
+      paper_report: Financial Report
   customers:
     show:
       bought_items: Bought items
@@ -439,6 +439,7 @@ en:
       upload: upload
   label: label
   menu:
+    stock_management: Stock management
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
@@ -633,7 +634,7 @@ en:
       sums_by_payment_methods: sums by payment methods
       sums_by_tax_profile: sums by tax profile
       time: time
-      title: day report
+      title: Financial report
       to: To
       transaction_tag: transaction tag
       transaction_total: transaction total
@@ -837,7 +838,7 @@ en:
       sums_by_tax_profile: sums by tax profile
       tax: Tax
       time: time
-      title: day report
+      title: Financial report
       to: To
       transaction_tag: transaction tag
       transaction_total: transaction total
@@ -861,7 +862,7 @@ en:
       unknown_vendor: Unknown
     eticket: Shelf label
     forms:
-      applies_to_item: applies to item with SKU
+      applies_to_item: Coupon applies to item
       buy_one_get_one: buy one get one
       cashier: cashier
       fixed_amount_off: fixed amount off
@@ -882,7 +883,7 @@ en:
           returned: returned
           shipped: shipped
     gift_card: gift card
-    gift_card_amount: gift card amount
+    gift_card_amount: gift card remaining
     given: given
     in_cash: in cash
     item: item

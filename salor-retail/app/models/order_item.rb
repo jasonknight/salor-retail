@@ -24,7 +24,7 @@ class OrderItem < ActiveRecord::Base
   belongs_to :order_item,:foreign_key => :coupon_id
   has_many :histories, :as => :user
   has_one :drawer_transaction # set for refunds only
-  belongs_to :refund_payment_method_item, :class_name => 'PaymentMethodItem'
+  has_one :refund_payment_method_item, :class_name => 'PaymentMethodItem', :foreign_key => :order_item_id
 
 
   monetize :total_cents, :allow_nil => true
@@ -143,8 +143,12 @@ class OrderItem < ActiveRecord::Base
     pmi.payment_method = refund_payment_method
     pmi.order_item_id = self.id
     pmi.cash = refund_payment_method.cash
+    pmi.cash_register = self.order.cash_register
     pmi.refund = true
-    pmi.save
+    result = pmi.save
+    if result != true
+      raise "Could not save PMI because #{ pmi.errors.messages }"
+    end
     
     if refund_payment_method.cash == true
       dt = DrawerTransaction.new
@@ -216,7 +220,7 @@ class OrderItem < ActiveRecord::Base
     
     # update item only when price is 0
     i = self.item
-    if i.weigh_compulsory != true and i.price.zero?
+    if i.weigh_compulsory != true and i.must_change_price != true and i.price.zero?
       i.price = p
       i.save!
     end
@@ -328,6 +332,8 @@ class OrderItem < ActiveRecord::Base
       # at this point, total is net for the USA tax system and gross for the Europe tax system.
       self.total = self.price * self.quantity
     end
+    
+    self.adapt_gross
 
     # Now, the total can be subject to price reductions. the following apply_ methods handle this and modify self.total
     self.apply_discount
@@ -342,13 +348,21 @@ class OrderItem < ActiveRecord::Base
   # this method calculates taxes and transforms "total" to always include tax
   def calculate_tax
     if self.vendor.net_prices
-      # this is for the US tax system
+      # this is for the US tax system. At this point, total is still net.
       self.tax_amount = self.total * self.tax / 100.0
+      # here, total becomes gross
       self.total += tax_amount
     else
-      # this is for the Europe tax system. Note that self.total already includes taxes, so we don't have to modify it here.
-      self.tax_amount = self.total * ( 1 - 1 / ( 1 + self.tax / 100.0))
+      # this is for the Europe tax system. self.total is already gross, so we don't have to modify it here.
+      self.tax_amount = self.total * ( 1 - 1 / ( 1 + self.tax / 100.0 ) )
     end
+  end
+  
+  # This is only for the European tax system. Item.price is already gross and implicitly includes a tax amount for the specific TaxProfile set on Item, However, the user can change the TaxProfile from the POS screen. If that happens, we have to find the implied net part of self.total, and re-calculate self.total according to the set tax.
+  def adapt_gross
+    return if self.vendor.net_prices
+    net = self.total / ( 1 + ( self.item.tax_profile.value / 100.0 ) )
+    self.total = net * ( 1 + ( self.tax / 100.0 ) )
   end
   
   # coupons have to be added after the matching product
@@ -373,7 +387,11 @@ class OrderItem < ActiveRecord::Base
     if ctype == 1
       # percent rebate
       factor = self.price_cents / 100.0 / 100.0
-      coitem.coupon_amount_cents = coitem.total_cents * factor
+      if self.vendor.net_prices
+        coitem.coupon_amount_cents = coitem.net.fractional * factor
+      else
+        coitem.coupon_amount_cents = coitem.gross.fractional * factor
+      end
       log_action "Applying Percent rebate coupon: price_cents is #{ self.price_cents }, factor is #{ factor }, coupon_amount_cents is #{ coitem.coupon_amount_cents }"
     elsif ctype == 2
       # fixed amount

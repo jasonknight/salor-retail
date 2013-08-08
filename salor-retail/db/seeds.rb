@@ -165,7 +165,7 @@ company_count.times do |c|
       it = ItemType.new
       it.company = company
       it.vendor = vendor
-      it.name = "#{ item_type_names[i] }#{ c }#{ v }"
+      it.name = item_type_names[i]
       it.behavior = item_type_behaviors[i]
       r = it.save!
       item_type_objects << it

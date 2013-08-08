@@ -426,6 +426,9 @@ div.table-cell.btn
   text-align: center
   padding: 0px 15px
   vertical-align: bottom
+  
+div.field_with_errors
+  :border 2px solid red
 
 div.main_sku
   text-align: center
@@ -1513,6 +1516,7 @@ span.complete_order_highlight
   @include dialog
   padding: 10px 10px 50px 10px
   z-index: 102
+  text-align: left
 
 .reorder-types 
   @include rounded_corners_all
@@ -2821,6 +2825,7 @@ div.select-widget-entry
   @include bright_button 
   @include pointer
   @include rounded_corners_all
+  :text-align center
   :padding 10px 30px
   :margin 5px
   :display inline-block
