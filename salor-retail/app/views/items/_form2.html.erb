@@ -462,104 +462,41 @@
     
     <tr>
       <td colspan="2"> 
-      <table width="90%" align="center">
-        <% if @item.actions.any?  %>    
-            <tr>
-            <td colspan="6"> <h3> <%= I18n.t("activerecord.models.action.other") %></h3> <hr />  </td>
-          </tr>
-          <% @item.actions.visible.each do |action| %> 
-            <tr >
-              <td width="40%"> <%= link_to action.name, edit_action_path(action) %> </td>
-              <td>
-                <%=I18n.t("when_list.#{Action.when_list.find {|w| action.whento.to_sym == w}}") if not action.whento.nil? %>
-              </td>
-              <td>
-                <%= I18n.t("behavior_list.#{Action.behavior_list.find {|b| b == action.behavior.to_sym }}") if not action.behavior.nil?  %>
-              </td>
-              <td>
-                <%= action.value %>
-              </td>
-              <td>
-                <%= salor_number_to_currency(Action.simulate(@item, action).base_price) if false == true %>
-              </td>
-              <td>
-                <div>
-                <%= link_to salor_icon(:delete,{},16), action,:confirm => 'Are you sure?', :method => :delete %>
-              </div>
-              </td>
+        <table width="90%" align="center">
+          <% if @item.actions.any?  %>    
+              <tr>
+              <td colspan="6"> <h3> <%= I18n.t("activerecord.models.action.other") %></h3> <hr />  </td>
             </tr>
-          <% end %>
-        <% end %>
-        <% discounts = @item.vendor.get_current_discounts.find_all {|disc| 
-            (disc.applies_to == 'Item' and disc.item_sku == @item.sku) or 
-            (disc.applies_to == 'Category' and disc.category_id == @item.category_id) or
-            (disc.applies_to == 'Location' and disc.location_id == @item.location_id)
-              
-        }  %>
-        <% if discounts.any? then  %>
-          <tr>
-            <td colspan="6"> <h3> <%= I18n.t("activerecord.models.discount.other") %></h3><hr />  </td>
-          </tr>
-            <% discounts.each do |discount|  %>
+            <% @item.actions.visible.each do |action| %> 
               <tr >
-                <td width="40%"> <%= link_to discount.name, "/discounts/#{discount.id}/edit"%> </td>
-                <td colspan="2">
-                  <%= Discount::TYPES.find {|d| d[:value] == discount.amount_type}[:text] %>
+                <td width="40%"> <%= link_to action.name, edit_action_path(action) %> </td>
+                <td>
+                  <%=I18n.t("when_list.#{Action.when_list.find {|w| action.whento.to_sym == w}}") if not action.whento.nil? %>
                 </td>
                 <td>
-                  <%= discount.amount %>
+                  <%= I18n.t("behavior_list.#{Action.behavior_list.find {|b| b == action.behavior.to_sym }}") if not action.behavior.nil?  %>
                 </td>
                 <td>
-                  <%= salor_number_to_currency(discount.simulate(@item).base_price) %>
+                  <%= action.value %>
+                </td>
+                <td>
+                  <%= salor_number_to_currency(Action.simulate(@item, action).base_price) if false == true %>
+                </td>
+                <td>
+                  <div>
+                  <%= link_to salor_icon(:delete,{},16), action,:confirm => 'Are you sure?', :method => :delete %>
+                </div>
                 </td>
               </tr>
             <% end %>
-        <% end %>
-        <% coupons = @item.vendor.items.visible.where(["coupon_applies = ?",@item.sku]) %>
-        <% if coupons.any? then  %>
-          
-        <% end %>
-        </table>
-      </td>
-    </tr>
-    
-    
-    <!-- 
-    <tr>
-      <td>
-      
-      </td>
-      <td>
-        
-        <table border=1>
-          <tr>
-            <th>ID</th>
-            <th>to type</th>
-            <th>to id</th>
-            <th>from type</th>
-            <th>from id</th>
-            <th>from quantity</th>
-            <th>to quantity</th>
-            <th>quantity </th>
-            
-          </tr>
-          <% @item.stock_transactions.order('created_at DESC').limit(10).each do |st| %>
-            <tr>
-              <td><%= st.id %></td>
-              <td><%= st.to_type %></td>
-              <td><%= st.to_id %></td>
-              <td><%= st.from_type %></td>
-              <td><%= st.from_id %></td>
-              <td><%= st.from_quantity %></td>
-              <td><%= st.to_quantity %></td>
-              <td><%= st.quantity %></td>
-              
-            </tr>
           <% end %>
         </table>
-    </td>
+      </td>
     </tr>
-    -->
+    
+
+    
+
     
     
     

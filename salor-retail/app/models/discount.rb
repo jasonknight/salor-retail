@@ -78,9 +78,10 @@ class Discount < ActiveRecord::Base
     end
     return self.amount_type
   end
+  
   def item
     if self.applies_to == 'Item' then
-      return Item.scopied.find_by_sku(self.item_sku)
+      return self.vendor.items.find_by_sku(self.item_sku)
     end
   end
     # WTF? I have no idea what this is even doing here...

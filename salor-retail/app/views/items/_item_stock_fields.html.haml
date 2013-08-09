@@ -12,14 +12,15 @@
     %tr
       %td=f.label I18n.t("activerecord.attributes.quantity")
       %td=f.text_field :quantity, :class => "keyboardable-int delimit-number"
-    %tr
-      %td{:colspan => 2}
-        %h4 Transactions
-        %table.stock_transactions
-          %tr
-            %th from
-            %th quantity
-          - f.object.stock_transactions.order('created_at DESC').limit(10).reverse.each do |st|
+    - if f.object.stock_transactions.any?
+      %tr
+        %td{:colspan => 2}
+          %h4 Transactions
+          %table.stock_transactions
             %tr
-              %td== #{ st.from_type } #{ st.from_id }
-              %td= st.quantity
+              %th from
+              %th quantity
+            - f.object.stock_transactions.order('created_at DESC').limit(10).reverse.each do |st|
+              %tr
+                %td== #{ st.from_type } #{ st.from_id }
+                %td= st.quantity
