@@ -1,3 +1,15 @@
+salor-retail (4.0.2.28) unstable; urgency=low
+
+  * small fixes
+  * updated translationx
+  * prevent enter from submitting items form
+  * tax adaptions and various fixes
+  * items form fix
+  * js fix
+  * various fixed discovered by making screencasts
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 09 Aug 2013 17:45:14 +0200
+
 salor-retail (4.0.2.27) unstable; urgency=low
 
   * weighing and customer screen fix
