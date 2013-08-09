@@ -22,6 +22,7 @@
 //= require debug
 //= require documentready
 //= require focus
+//= require customers
 //= require helpers
 //= require inplace_edit
 //= require keypress

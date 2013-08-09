@@ -141,7 +141,7 @@ function allow_complete_order(userRequest) {
 
 function show_password_dialog(print) {
   var el = $("#simple_input_dialog").dialog({
-    modal: true,
+    modal: false,
     buttons: {
       "Cancel": function() {
         $("#simple_input_dialog").dialog( "close" );
@@ -163,6 +163,7 @@ function show_password_dialog(print) {
                 } else {
                   updateTips("Correct, sending...");
                   complete_order_process(print);
+                  updateTips("");
                   $("#simple_input_dialog").dialog( "close" );
                 }
               } // end complete

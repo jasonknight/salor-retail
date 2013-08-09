@@ -57,6 +57,7 @@ class ItemsController < ApplicationController
     if @item.save
       @item.assign_parts(params[:part_skus])
       @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
+      @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       redirect_to items_path
     else
       render :new
@@ -81,6 +82,7 @@ class ItemsController < ApplicationController
     if @item.update_attributes(params[:item])
       @item.assign_parts(params[:part_skus])
       @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
+      @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       redirect_to items_path
     else
       render :edit

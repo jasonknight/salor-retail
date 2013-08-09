@@ -51,6 +51,7 @@ class CustomersController < ApplicationController
     @customer.vendor = @current_vendor
     @customer.company = @current_company
     if @customer.save
+      @customer.notes.update_all :company_id => @customer.company_id
       redirect_to customers_path
     else
       render :new
@@ -60,6 +61,7 @@ class CustomersController < ApplicationController
   def update
     @customer = @current_company.customers.visible.find_by_id(params[:id])
     if @customer.update_attributes(params[:customer])
+      @customer.notes.update_all :company_id => @customer.company_id
       redirect_to customers_path
     else
       render :edit

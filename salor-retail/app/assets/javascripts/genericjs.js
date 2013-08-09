@@ -37,9 +37,8 @@ function updateTips( t ) {
 
 }
 function showClockin() {
-  
   var el = $("#simple_input_dialog").dialog({
-    modal: true,
+    modal: false,
     buttons: {
       "Cancel": function() {
         var bValid = true;
@@ -65,7 +64,6 @@ function showClockin() {
         bValid = bValid && checkLength($('#dialog_input'),"password",3,255);
         if (bValid) {            
             jQuery.post("/users/clockin",{password: $('#dialog_input').val()},function (data,textStatus,jqHXR) {
-              console.log(data);
               if (data == "NO") {
                 updateTips("Wrong Password");
               } else if (data == "ALREADY") {
@@ -91,7 +89,7 @@ function showClockin() {
         $(".ui-dialog * button:contains('"+i18n.system.login+"')").trigger("click");
       }
     });
-        focusInput($('#dialog_input'));
+    focusInput($('#dialog_input'));
     var ttl = el.parent().find('.ui-dialog-title');
     ttl.html(i18n.system.login); 
     ttl = el.parent().find('.input_label');

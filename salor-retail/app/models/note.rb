@@ -9,8 +9,6 @@ class Note < ActiveRecord::Base
   include SalorScope
   include SalorBase
   
-  validates_presence_of :vendor_id, :company_id
-  
   #README
   # 1. The rails way would lead to many duplications
   # 2. The rails way would require us to reorganize all the translation files

@@ -1,5 +1,11 @@
-.fieldset
-  %table#new_item_stock_id.fields
+.fieldset.item_stock_fieldset
+  %table#new_item_stock_id.item_stock_form.fields
+    %tr
+      %td
+        = f.hidden_field :hidden
+        .square-button= link_to_function I18n.t('menu.destroy'),"remove_item_stock_fields(this);"
+      %td
+
     %tr
       %td= f.label I18n.t("activerecord.attributes.location")
       %td= f.select :locationstring, @item.vendor.location_stock_location_list, :include_blank => true
@@ -7,28 +13,13 @@
       %td=f.label I18n.t("activerecord.attributes.quantity")
       %td=f.text_field :quantity, :class => "keyboardable-int delimit-number"
     %tr
-      %td{:colspan => 2, :align => "right"}
-        = f.hidden_field :_destroy, :class => 'destroy'
-        = link_to_function I18n.t('menu.destroy'),"remove_item_stock_fields(this);"
-    %tr
-      %h4 StockTransactions
-      %table{ :border => 1 }
-        %tr
-          %th ID
-          %th from_type
-          %th from_id
-          %th from_quantity
-          %th to_type
-          %th to_id
-          %th to_quantity
-          %th quantity
-        - f.object.stock_transactions.order('created_at DESC').limit(10).each do |st|
+      %td{:colspan => 2}
+        %h4 Transactions
+        %table.stock_transactions
           %tr
-            %td= st.id
-            %td= st.from_type
-            %td= st.from_id
-            %td= st.from_quantity
-            %td= st.to_type
-            %td= st.to_id
-            %td= st.to_quantity
-            %td= st.quantity
+            %th from
+            %th quantity
+          - f.object.stock_transactions.order('created_at DESC').limit(10).reverse.each do |st|
+            %tr
+              %td= st.from_type
+              %td= st.quantity

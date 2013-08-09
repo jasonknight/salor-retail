@@ -69,8 +69,8 @@ class ShipmentItem < ActiveRecord::Base
         
         item_stock = location.item_stocks.visible.find_by_item_id(item.id)
         if item_stock
-          log_action "move_into_stock: An ItemStock #{ existing_item_stock.id } for location #{ location.class } ID #{ location.id } has been found. Transacting to it"
-          StockTransaction.transact(q, existing_item_stock, self)
+          log_action "move_into_stock: An ItemStock #{ item_stock.id } for location #{ location.class } ID #{ location.id } has been found. Transacting to it"
+          StockTransaction.transact(q, item_stock, self)
 
         else
           # this method creates an ItemStock if not yet present. see item.rb

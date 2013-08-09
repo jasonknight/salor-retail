@@ -1,5 +1,10 @@
-.fieldset
+.fieldset.item_shipper_fieldset
   %table#new_item_shipper_id.fields
+    %tr
+      %td
+        = f.hidden_field :hidden
+        .square-button= link_to_function I18n.t('menu.destroy'),"remove_item_shipper_fields(this);"
+      %td
     %tr
       %td= f.label :shipper_sku
       %td= f.text_field :shipper_sku
@@ -14,7 +19,3 @@
     %tr>
       %td=f.label I18n.t("activerecord.attributes.base_price")
       %td=f.text_field salor_number_with_delimiter(:list_price), :class => "keyboardable-int delimit-number"
-    %tr
-      %td{:colspan => 2, :align => "right"}
-        = f.hidden_field :_destroy
-        = link_to_function I18n.t('menu.destroy'),"remove_item_shipper_fields(this);"

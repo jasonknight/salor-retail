@@ -1,12 +1,11 @@
 class ItemShipper < ActiveRecord::Base
+  include SalorScope
+  
   belongs_to :shipper
   belongs_to :vendor
   belongs_to :company
   belongs_to :item
   
-  validates_presence_of :vendor_id, :company_id
-  
-  attr_accessible :item_sku, :list_price, :purchase_price, :shipper_sku, :shipper_id,:item_id
   before_save :set_item_sku
   before_update :set_item_sku
   

@@ -185,7 +185,7 @@ class User < ActiveRecord::Base
     login.user = self
     login.hourly_rate = self.hourly_rate
     login.login = Time.now
-    login.save
+    login.save!
   end
   
 #   def best_sellers

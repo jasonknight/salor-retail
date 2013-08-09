@@ -10,8 +10,8 @@ function itemsAddNameTranslation(locale) {
   return inp;
 }
 function remove_item_shipper_fields(link) {
-  $(link).prev("input[type=hidden]").val("1");
-  $(link).closest(".fields").hide();
+  $(link).parent().prev("input").val("1");
+  $(link).closest(".fieldset").hide();
 }
 
 function add_item_shipper_fields(link, association, content) {
@@ -24,8 +24,7 @@ function add_item_shipper_fields(link, association, content) {
 }
 
 function remove_item_stock_fields(link) {
-  console.log($(link).prev("input[type=hidden]"));
-  $(link).prev("input[type=hidden]").val("1");
+  $(link).parent().prev("input").val("1");
   $(link).closest(".fieldset").hide();
 }
 

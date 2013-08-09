@@ -9,7 +9,7 @@ class UserLogin < ActiveRecord::Base
   before_update :set_totals
   attr_accessible :amount_due, :hourly_rate, :login, :logout, :shift_seconds, :user_id,:vendor_id
   
-  validates_presence_of :vendor_id, :company_id
+  validates_presence_of :company_id
   
   DATE_PATTERN = /(\d{4,4})\/(\d{2,2})\/(\d{2,2}) (\d{2,2}):(\d{2,2}):(\d{2,2})/
   

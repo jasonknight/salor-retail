@@ -39,7 +39,7 @@ class Item < ActiveRecord::Base
   
   accepts_nested_attributes_for :item_shippers, :reject_if => lambda {|a| a[:shipper_sku].blank? }, :allow_destroy => true
   
-  accepts_nested_attributes_for :item_stocks #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }, :allow_destroy => true
+  accepts_nested_attributes_for :item_stocks, :allow_destroy => true #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }
 
   validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id
   #validates_uniqueness_of :sku, :scope => :vendor_id

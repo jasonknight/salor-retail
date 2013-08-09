@@ -1257,15 +1257,15 @@ div.pos-button
     padding: 0px
 
 div.square-button 
-  padding: 3px
-  width: 120px
-  height: 20px
+  text-align: center
+  display: inline-block
   @include pointer
   background-color: $foreground
   color: $background
-  margin-right: 7px
-  a
+  a, span
     color: black
+    padding: 5px 20px
+    display: inline-block
 
 div.pos-menu div.new-order
   @include rounded_corners_left
@@ -2826,7 +2826,7 @@ div.select-widget-entry
   @include pointer
   @include rounded_corners_all
   :text-align center
-  :padding 10px 30px
+  :padding 5px 10px
   :margin 5px
   :display inline-block
 div.select-widget-display
@@ -3116,12 +3116,8 @@ div#error_explanation
 
 div.pagination
   text-align: center
-.fieldset
-  border: 2px solid $middleground2
-  @include rounded_corners_all
-  padding: 10px
-  width: 300px
-  margin: 5px
+
+
   
 div.black-text,td.black-text, a.black-text, div.black-text a
   color: black
@@ -3199,3 +3195,31 @@ div.new_inventory_box
   :background-color rgba(0,0,0, 0.3)
   :padding 10px 50px 150px 50px
   box-shadow: 0px 5px 10px rgba(255, 255, 255, 0.4)
+  
+table.item_stock_form
+  td
+    :text-align left
+
+table.stock_transactions
+  :border-collapse collapse
+  :width 244px
+  td, th
+    :border 1px solid #243239
+  th
+    :background-color #243239
+    
+.fieldset
+  border: 2px solid $middleground2
+  @include rounded_corners_all
+  padding: 10px
+  width: 300px
+  margin: 5px
+  
+.item_stock_fieldset,
+.item_shipper_fieldset
+  :display inline-block
+  :width 250px
+  :min-height 300px
+  :background-color rgba(0,0,0,0.5)
+  input
+    :width 50%
