@@ -178,6 +178,7 @@ function show_password_dialog(print) {
     $('#dialog_input').val("");
     $(".ui-dialog * button > span:contains('Complete')").text(i18n.menu.ok);
     $(".ui-dialog * button > span:contains('Cancel')").text(i18n.menu.cancel);
+    $('#dialog_input').unbind('keyup');
     $('#dialog_input').keyup(function (event) {
       if (event.which == 13) {
         ajax_log({log_action:'Keyup enter on password dlg', order_id:Order.id});

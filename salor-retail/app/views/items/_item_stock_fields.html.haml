@@ -21,5 +21,5 @@
             %th quantity
           - f.object.stock_transactions.order('created_at DESC').limit(10).reverse.each do |st|
             %tr
-              %td= st.from_type
+              %td== #{ st.from_type } #{ st.from_id }
               %td= st.quantity

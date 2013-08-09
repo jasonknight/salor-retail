@@ -191,7 +191,11 @@ class OrdersController < ApplicationController
   
   # ajax
   def complete
-    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+    @order = @current_vendor.orders.where(:completed_at => nil).find_by_id(params[:order_id])
+    
+    if @order.nil?
+      raise "@order is nil in OrdersController. This should not have happened."
+    end
 
     History.record("Initialized order for complete", @order, 5)
 
