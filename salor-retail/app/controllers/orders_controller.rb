@@ -115,7 +115,7 @@ class OrdersController < ApplicationController
       @order_items << @order_item
       
       if @order_item.price.zero?
-        $MESSAGES[:alerts] << 'Warning: Price is zero!'
+        $MESSAGES[:alerts] << I18n.t('system.errors.item_price_is_zero')
       end
       
       if @order_item.behavior == 'coupon'

@@ -66,7 +66,8 @@ class DrawerTransaction < ActiveRecord::Base
     "\x1B\x70\x00\x30\x01" + # open cash drawer early
     "\ea\x01" +  # align center
     "\e!\x38" +
-    DrawerTransaction.model_name.human + ' ' +
+    DrawerTransaction.model_name.human +
+    "\n" +
     self.id.to_s +
     "\n\n" +
     "\e!\x01" +

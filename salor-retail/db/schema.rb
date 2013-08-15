@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130804120856) do
+ActiveRecord::Schema.define(:version => 20130815100802) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(:version => 20130804120856) do
     t.datetime "hidden_at"
     t.integer  "company_id"
     t.integer  "user_id"
+    t.string   "customerscreen_mode"
   end
 
   add_index "cash_registers", ["company_id"], :name => "index_cash_registers_on_company_id"
@@ -868,6 +869,8 @@ ActiveRecord::Schema.define(:version => 20130804120856) do
     t.boolean  "quote"
     t.integer  "position"
     t.integer  "company_id"
+    t.datetime "hidden_at"
+    t.integer  "hidden_by"
   end
 
   create_table "plugins", :force => true do |t|

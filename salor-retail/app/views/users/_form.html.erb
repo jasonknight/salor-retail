@@ -108,7 +108,7 @@
               </script>
             </div>
             <br />
-              <% for role in Role.order('name asc').all  %>
+              <% for role in @current_vendor.roles.visible.order('name asc').all  %>
                 <div class="role-check" name="<%= role.name.titleize%>">
                   <%= check_box_tag "user[role_ids][]", role.id, @user.role_ids.include?(role.id)  %>
                   <%= I18n.t(role.name) %>

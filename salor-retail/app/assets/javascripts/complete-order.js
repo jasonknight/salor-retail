@@ -63,6 +63,9 @@ function complete_order_hide() {
   $('.pieces-button ').remove();
   $('body').triggerHandler({type: "CompleteOrderHide"});
   ajax_log({log_action:'complete_order_hide', order_id:Order.id});
+  if ( useMimo() ) {
+    Salor.mimoRefresh(location.origin + "/vendors/" + Vendor.id + "/display_logo", 800, 480);
+  }
   if ( parseInt( Order.id ) % 20 == 0) { 
     // reload the page every 20 orders to trigger garbage collection
     window.location = '/orders/new'; 

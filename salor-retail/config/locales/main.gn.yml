@@ -322,7 +322,7 @@ gn:
       counted: Gezählt
       difference: Differenz
       end_of_day_thermal_report: Bericht drucken
-      paper_report: Detailbericht
+      paper_report: Finanzbericht
   customers:
     show:
       bought_items: Verkaufte Anzahl
@@ -440,6 +440,7 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    print_dialog: Druckdialog
     stock_management: Lagerverwaltung
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
@@ -546,7 +547,7 @@ gn:
     remote_service: Fernwartung
     reorder: Nachbestellung
     report: Verkaufsbericht
-    report_day: Tagesbericht
+    report_day: Finanzbericht
     report_day_range: Monatsbericht
     report_range: Gesamtbericht
     reports: Berichte
@@ -814,6 +815,7 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
     report_day:
+      thermal: Thermodrucker
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
@@ -844,7 +846,7 @@ gn:
       sums_by_tax_profile: nach Steuern
       tax: Steuer
       time: Zeit
-      title: Tagesbericht
+      title: Finanzbericht
       to: bis
       transaction_tag: Journal
       transaction_total: Gesamtbewegung

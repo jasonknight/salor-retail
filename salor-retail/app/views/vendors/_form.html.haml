@@ -68,4 +68,4 @@
         %td.value
           = image_form.file_field :file_data
           = image_form.hidden_field :image_type
-          .floatright= image_tag @vendor.image(image_form.object.image_type.to_s)
+          .floatright= image_tag @vendor.image(image_form.object.image_type.to_s), :style => 'width: 150px'

@@ -7,7 +7,7 @@ function usePole() {
 }
 
 function useMimo() {
-  return isSalorBin() && !usePole();
+  return isSalorBin() && Register.customerscreen_mode == "mimo";
 }
 
 function onCashDrawerClose() {
@@ -88,10 +88,7 @@ function playsound(file) {
 
 function updateCustomerDisplay(order_id, item, show_change) {
   if ( useMimo() ) {
-    var show_change_param = ""
-    if (show_change) show_change_param = "?display_change=1";
-    Salor.mimoRefresh(location.origin + "/orders/" + order_id + "/customer_display" + show_change_param, 800, 480);
-    
+    Salor.mimoRefresh(location.origin + "/orders/" + order_id + "/customer_display", 800, 480);
   }
   
   if ( usePole() ) {
