@@ -1,5 +1,5 @@
 / we are on the last page
-- unless params[:delivery_note]
+- unless params[:delivery_note] == "1"
   %table.striped-table2.has-total
     - if @order.is_proforma
       %tr
