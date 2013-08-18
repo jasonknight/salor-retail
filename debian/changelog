@@ -1,3 +1,9 @@
+salor-retail (4.0.2.30) unstable; urgency=low
+
+  * invoice view fix, add unpaid to financial report
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 18 Aug 2013 17:32:53 +0200
+
 salor-retail (4.0.2.29) unstable; urgency=low
 
   * small improvements
