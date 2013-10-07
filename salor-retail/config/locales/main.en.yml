@@ -410,7 +410,7 @@ en:
     index:
       database_distiller_warning: Due to the generation of statistics, calling this
         function will last for about 30 seconds. Proceed anyway?
-      inventory_report: Inventur
+      inventory_report: Inventory
       only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items
         will now be created and updated. This action will take about 20 minutes. Are
         you really sure that you want to proceed?

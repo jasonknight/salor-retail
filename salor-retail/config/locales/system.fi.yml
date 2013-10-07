@@ -37,7 +37,7 @@ fi:
     - Fri
     - Sat
     abbr_month_names:
-    -
+    - 
     - Jan
     - Feb
     - Mar
@@ -60,10 +60,10 @@ fi:
     - Saturday
     formats:
       default: ! '%Y-%m-%d'
-      long: ! '%d. %B %Y'
+      long: ! '%d. %B  %Y'
       short: ! '%d. %b'
     month_names:
-    -
+    - 
     - January
     - February
     - March
@@ -150,6 +150,6 @@ fi:
       long: ! '%d. %B %Y %H:%M:%S'
       month_and_day: ! '%d. %B'
       salor: ! '%a, %b %d %H:%M'
-      short: ! '%d. %b. %y %y %H:%M'
+      short: ! '%d. %b. %y  %y %H:%M'
       time_short: ! '%H:%M'
     pm: ''

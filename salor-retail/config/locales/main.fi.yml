@@ -1,738 +1,735 @@
 ---
 fi:
-  ByCard: By Debit
-  ByGiftCard: By Gift Card
-  InCash: In Cash
+  ByCard: pankkikortilla
+  ByGiftCard: lahjakortilla
+  InCash: käteisellä
   activerecord:
     attributes:
-      active: active
-      address: address
-      afield: field
-      always_open_drawer: Always Open Drawer
-      amount: amount
-      amount_type: amount type
-      applies_to: applies to
-      attributes: attributes
-      auto_drop: Automatically Begin Day
-      bank_machine_path: ATM
-      base_price: List Price
-      behavior: behavior
-      body: body
-      buyback_price: buyback price
-      calculate_part_price: calculate part price
-      calculate_tax: Calculate Tax
-      cash: Cash
-      cash_drawer: cash drawer
-      cash_made: cash made
+      active: aktiivinen
+      address: osoite
+      afield: kenttä
+      always_open_drawer: Avaa aina kassa
+      amount: määrä
+      amount_type: määrän tyyppi
+      applies_to: soveltu
+      attributes: määritteet
+      auto_drop: Aloita päivä automaattisesti
+      bank_machine_path: Pankkiautomaatti
+      base_price: Ohjehinta
+      behavior: käyttö
+      body: runko
+      buyback_price: takaisinostohinta
+      calculate_part_price: laske osa hinta
+      calculate_tax: Laske vero
+      cash: Käteinen
+      cash_drawer: kassa
+      cash_made: käteistä saatu
       cash_register:
-        sticker_printer: Sticker printer
-      category_id: Category
-      cellphone: cell phone
-      change: Change
-      child_sku: Child SKU
-      city: city
-      color: color
-      company_id: Company
-      company_name: company name
-      contact_address: contact address
-      contact_email: contact email
-      contact_fax: contact fax
-      contact_person: contact person
-      contact_phone: contact phone
-      country: country
-      coupon_applies: coupon applies
-      coupon_total: coupon total
-      coupon_type: coupon type
-      created_at: Created
-      csv_imports: CSV Imports
-      csv_imports_url: CSV Imports URL
-      currency: Währung
+        sticker_printer: Tarratulostin
+      category_id: Kategoria
+      cellphone: Kännykkä
+      change: Vaihtoraha
+      child_sku: Tytär-SKU
+      city: kaupunki
+      color: väri
+      company_id: Yritys
+      company_name: Yrityksen nimi
+      contact_address: Osoite
+      contact_email: sähköposti
+      contact_fax: fax-numero
+      contact_person: yhteyshenkilö
+      contact_phone: puhelin
+      country: maa
+      coupon_applies: kuponki kelpaa
+      coupon_total: kuponki yhteensä
+      coupon_type: kuponki tyyppi
+      created_at: Luotu
+      csv_imports: CSV-lataus
+      csv_imports_url: CSV-lataus URL
+      currency: Valuutta
       customer:
-        tax_number: Tax number
-      customer_name: Customer
-      customer_screen_blurb: Standard text customer screen
-      decimal_points: decimal points
-      default: Default
-      default_buyback: default buyback
-      detailed_edit: Detailed Edit?
-      dollar_per_lp: dollar per loyalty point
-      drop: drop
-      email: email
-      enable_technician_emails: Send emails to technician
-      end_amount: end amount
-      end_date: end date
-      eod_show: show at end of day
-      expires_on: expires on
-      first_name: first name
-      full_name: Name
-      gift_card_amount: Gift Card remaining
-      height: height
-      hide_buttons: Hide Buttons
-      hide_discounts: Hide Discounts
-      ignore_qty: Ignore Quantity
-      internal_type: Type
+        tax_number: y-tunnus
+      customer_name: Asiakas
+      customer_screen_blurb: asikasnäytön vakioteksti
+      decimal_points: desimaalit
+      default: Oletus
+      default_buyback: takaisinoston oletus
+      detailed_edit: Yksityiskohtainen muokkaus?
+      dollar_per_lp: Euro per kanta-asiakaspiste
+      drop: pudotus
+      email: sähköposti
+      enable_technician_emails: Lähetä sähköpostia teknikolle
+      end_amount: loppusumma
+      end_date: päättymispäivä
+      eod_show: näytä päivän päättyessä
+      expires_on: voimassaolo päättyy
+      first_name: etunimi
+      full_name: Nimi
+      gift_card_amount: Lahjakortissa jäljellä
+      height: korkeus
+      hide_buttons: Piilota painikkeet
+      hide_discounts: Piilota alennukset
+      ignore_qty: Sivuuta määrä
+      internal_type: Tyyppi
       invoice_blurb:
-        body: Invoice
-        body_receipt: Receipt
-        is_header: Header
-        lang: Language
-      invoice_logo: Invoice Logo
+        body: Lasku
+        body_receipt: Kuitti
+        is_header: Otsikko
+        lang: Kieli
+      invoice_logo: Laskun logo
       invoice_note:
-        destination_country_id: Destination Country
-        note_footer: Note footer
-        note_header: Note header
-        origin_country_id: Origin Country
-        sale_type_id: Sale Type
-      is_header: Header?
+        destination_country_id: Kohdemaa
+        note_footer: Lapun alatunniste
+        note_header: Lapun ylätunniste
+        origin_country_id: Alkuperämaa
+        sale_type_id: Myyntityyppi
+      is_header: Ylätunniste?
       is_proforma: Proforma?
-      is_refund: Is Refund?
-      is_shipment_item: is shipment item
+      is_refund: Onko palautus?
+      is_shipment_item: onko lähetys?
       item:
-        customs_code: Customs Code
-        description: Description
-        manufacturer_price: Manufacturer Price
-        origin_country: Origin Country
-        purchase_price: Purchase Price
-        quantity: Quantity
-        weight: Weight
-      item_sku: item sku
-      itemsviewlist: List View for Items
-      js_code: Javascript Code
-      lang: Language
-      language: Language
-      last_name: last name
-      lc_points: loyalty card points
-      length: length
-      letter: Letter
-      location_id: location id
-      lp_per_dollar: loyalty points per dollar
-      min_quantity: min quantity
-      must_change_price: Change price on scan
-      name: name
-      no_print: Don't Print on Enter
-      notes: notes
-      nr: Number
-      open_cash_drawer: open cash drawer
-      order_id: order
+        customs_code: Tullikoodi
+        description: Kuvaus
+        manufacturer_price: Valmistajan hinta
+        origin_country: Alkuperämaa
+        purchase_price: Ostohinta
+        quantity: Määrä
+        weight: Paino
+      item_sku: nimikkeen sku
+      itemsviewlist: Nimikenäkymä
+      js_code: Javascript koodi
+      lang: Kieli
+      language: Kieli
+      last_name: sukunimi
+      lc_points: kanta-asiakkaan pisteet
+      length: leveys
+      letter: Kirje
+      location_id: paikkatunnus
+      lp_per_dollar: kanta-asiakkaan pisteet per euro
+      min_quantity: min. määrä
+      must_change_price: muuta skannaushinta
+      name: nimi
+      no_print: Älä tulosta kirjatessasi
+      notes: huomautukset
+      nr: Numero
+      open_cash_drawer: avaa kassa
+      order_id: tilaus
       order_item:
-        quantity: Qty.
-        tax_free: Tax Free
-      owner_id: Owner
-      owner_type: Owner Type
-      packaging_unit: packaging unit
-      pagination: pagination
-      pagination_invoice_one: Pagination Invoice other pages
-      paid: paid
-      parent_sku: Parent SKU
-      part_quantity: part quantity
-      parts: parts
-      password: password
+        quantity: Määrä
+        tax_free: Verovapaa
+      owner_id: Omistaja
+      owner_type: Omistajaluokitus
+      packaging_unit: pakkausyksikkö
+      pagination: sivutus
+      pagination_invoice_one: Sivutus laskun muut sivut
+      paid: maksettu
+      parent_sku: Emo-SKU
+      part_quantity: määrä
+      parts: osat
+      password: salasana
       paylife: Paylife
-      payout: payout
-      points: points
-      pole_display: Pole display
-      postalcode: postal code
-      price: price
-      price_by_qty: GS1 price by quantity
-      purchase_price: purchase price
-      quantity: quantity
-      quantity_sold: quantity sold
-      quote: Quote
-      real_quantity: real quantity
-      rebate: rebate
-      rebate_type: rebate type
-      reorder_type: Reorder Type
-      require_password: Require Password
-      role_cache: Roles
-      roles: Roles
-      sales_metric: sales metric
+      payout: maksaminen
+      points: pisteet
+      pole_display: Myyntinäyttö
+      postalcode: postinumero
+      price: hinta
+      price_by_qty: GS1-hinta määrittäin
+      purchase_price: ostohinta
+      quantity: määrä
+      quantity_sold: myyty määrä
+      quote: Hintatarjous
+      real_quantity: todellinen määrä
+      rebate: hyvitys
+      rebate_type: hyvityksen laji
+      reorder_type: uusintatilauksen tyyppi
+      require_password: Vaatii salasanan
+      role_cache: Asemat
+      roles: Asemat
+      sales_metric: myynnin mittarit
       salor_configuration:
-        invoice_blurb: Invoice Blurb Header
-        invoice_blurb_footer: Invoice Blurb Footer
-        receipt_blurb: Receipt Blurb Header
-        receipt_blurb_footer: Receipt Blurb Footer
-      salor_printer: Print Client Side
-      scale: scale
+        invoice_blurb: Laskun mainoksen ylätunniste
+        invoice_blurb_footer: Laskun mainoksen alatunniste
+        receipt_blurb: Kuitin mainoksen ylätunniste
+        receipt_blurb_footer: Kuitin mainoksen alatunniste
+      salor_printer: Tulosta asiakkaan sivu
+      scale: vaaka
       shipment:
-        from: from
-        paid: paid
-        price: price
-        to: to
+        from: lähettäjä
+        paid: maksettu
+        price: hinta
+        to: vastaanottaja
       shipment_item:
-        name: name
-        quantity: quantity
+        name: nimi
+        quantity: määrä
         sku: SKU
-        stock_location_id: Stock location
-      shipper_sku: Shipper SKU
+        stock_location_id: Varaston sijaintipaikka
+      shipper_sku: Toimittajan SKU
       sku: SKU
-      start_amount: start amount
-      start_date: start date
+      start_amount: alkumäärä
+      start_date: aloituspäivä
       state: state
       status: status
-      stock_location_ids: Stock location
-      street1: Address 1
-      street2: Address 2
-      stylesheets: stylesheets
-      subscription_interval: Subscription interval
-      subscription_last: Last payment
-      subscription_next: Next payment
-      subscription_start: Subscription start
-      subtotal: subtotal
-      tag: tag
-      tax: tax
-      tax_free: Tax Free
-      tax_profile_id: tax
-      technician_email: Technician email
-      telephone: telephone
-      the_receiver: receiver
-      the_shipper: shipper
-      thermal_printer: Thermal Printer
-      time_zone: Time zone
-      title: title
-      total: total
-      track_expiry: Track Expiry
-      type: type
-      unpaid: Unpaid
+      stock_location_ids: Varaston sijaintipaikka
+      street1: Osoite 1
+      street2: Osoite 2
+      stylesheets: tyylikaaviot
+      subscription_interval: Tilauksen aikaväli
+      subscription_last: Viimeinen maksu
+      subscription_next: Seuraava maksu
+      subscription_start: Tilauksen alku
+      subtotal: välisumma
+      tag: tunniste
+      tax: vero
+      tax_free: Verovapaa
+      tax_profile_id: vero
+      technician_email: Sähköposti tekniseen apuun
+      telephone: puhelin
+      the_receiver: vastaanottaja
+      the_shipper: lähettäjä
+      thermal_printer: Lämpötulostin
+      time_zone: Aikavyöhyke
+      title: nimike
+      total: yhteensä
+      track_expiry: Seuraa päättymisaikaa
+      type: typpi
+      unpaid: maksamatta
       url: URL
       user:
-        hourly_rate: Hourly Rate
-        uses_drawer_id: Uses drawer of
-      username: username
-      uses_drawer_id: Uses Drawer of
-      value: value
+        hourly_rate: Tuntihinta
+        uses_drawer_id: Käytettävä kassa
+      username: käyttäjänimi
+      uses_drawer_id: Käytettävä kassa
+      value: arvo
       vendor:
-        logo: Screen Logo
-        logo_invoice: Paper Invoice Logo
-        receipt_logo_footer: Receipt Logo Footer
-        receipt_logo_header: Receipt Logo Header
-      vendor_id: Store
-      vendor_printers: printers
-      weigh_compulsory: Weigh on scan
-      weight: weight
-      when: when
-      whento: When
-      width: width
+        logo: Näytön logo
+        logo_invoice: Paperilaskun logo
+        receipt_logo_footer: Kuitin logon alatunniste
+        receipt_logo_header: Kuitin logon ylätunniste
+      vendor_id: Kauppa
+      vendor_printers: tulostimet
+      weigh_compulsory: Punnitse skannauksessa
+      weight: paino
+      when: milloin
+      whento: milloin
+      width: leveys
     models:
       action:
-        one: Action
-        other: Actions
+        one: Toiminta
+        other: Toiminnot
       broken_item:
-        one: Broken item
-        other: Broken items
+        one: Käyttäkelvoton
+        other: Käyttäkelvottomia
       button:
-        one: Button
-        other: Buttons
+        one: Painike
+        other: Painikkeet
       cash_register:
-        one: Cash Register
-        other: Cash Registers
+        one: Kassa
+        other: Kassat
       category:
-        one: Category
-        other: Categories
+        one: Kategoria
+        other: Kategoriat
       country:
-        one: Country
-        other: Countries
+        one: Maa
+        other: Maat
       customer:
-        one: Customer
-        other: Customers
+        one: Asiakas
+        other: Asiakkaat
       discount:
-        one: Discount
-        other: Discounts
+        one: Alennus
+        other: Alennukset
       drawer:
-        one: Drawer
-        other: Drawers
+        one: Kassa
+        other: Kassat
       drawer_transaction:
-        one: Drawer Transaction
-        other: Drawer Transactions
+        one: Kassan liiketoimi
+        other: Kassan liiketoimet
       invoice_blurb:
-        one: Invoice Blurb
-        other: Invoice Blurbs
+        one: Laskun mainos
+        other: Laskun mainokset
       invoice_note:
-        one: Invoice Note
-        other: Invoice Notes
+        one: Laskun huomautus
+        other: Laskun huomautukset
       item:
-        one: Item
-        other: Items
+        one: Nimike
+        other: Nimikkeet
       item_type:
-        aconto: On Account
-        coupon: Coupon
-        gift_card: Gift Card
-        normal: Normal
-        one: Item Type
-        other: Item Types
+        aconto: Laskutus
+        coupon: Kuponki
+        gift_card: Lahjakortti
+        normal: Normaali
+        one: Nimiketyyppi
+        other: Nimiketyypit
       location:
-        one: Location
-        other: Locations
+        one: Sijainti
+        other: Sijainnit
       order:
-        one: Order
-        other: Orders
+        one: Tilaus
+        other: Tilaukset
         proforma_orders: Proforma
-        quote: Quote
-        quotes: Quotes
-        subscriptions: Subscriptions
-        unpaid_orders: Unpaid
+        quote: Hintatarjous
+        quotes: Hintatarjoukset
+        subscriptions: Tilaukset
+        unpaid_orders: Maksamatta
       order_item:
-        one: Order Item
-        other: Order Items
+        one: Tilaa nimike
+        other: Tilaa nimikkeet
       payment_method:
-        one: Payment Method
-        other: Payment Methods
+        one: Maksutapa
+        other: Maksutavat
       sale_type:
-        one: Sale Type
-        other: Sale Types
+        one: Myyntityyppi
+        other: Myyntityypit
       shipment:
-        default_name: Default Name
-        one: Shipment
-        other: Shipments
+        default_name: Oletusnimi
+        one: Lähetys
+        other: Lähetykset
       shipment_type:
-        default_name: Default Name
-        one: Shipment Type
-        other: Shipment Types
+        default_name: Oletusnimi
+        one: Lähetyksen tyyppi
+        other: Lähetyksen tyypit
       shipper:
-        one: Shipper
-        other: Shippers
+        one: Lähettäjä
+        other: Lähettäjät
       stock_location:
-        one: Stock Location
-        other: Stock Locations
+        one: Varaston sijaintipaikka
+        other: Varaston sijaintipaikat
       tax_profile:
-        one: Tax Profile
-        other: Tax Profiles
+        one: Veroprofiili
+        other: Veroprofiilit
       transaction_tag:
-        one: Tag
-        other: Tags
+        one: Tunniste
+        other: Tunnisteet
       user:
-        one: User
-        other: Users
+        one: Käyttäjä
+        other: Käyttäjät
       vendor:
-        one: Store
-        other: Stores
+        one: Kauppa
+        other: Kaupat
   api:
-    user_does_not_exist: user does not exist
-  are_you_sure: Are you sure you want to do this?
+    user_does_not_exist: Käyttäjää ei löydy
+  are_you_sure: Haluatko tehdä tämän varmasti?
   behavior_list:
-    add: add
-    assign: assign
-    discount_after_threshold: discount after threshold
-    divide: divide
-    execute: execute
-    multiply: multiply
-    subtract: subtract
+    add: lisää
+    assign: määrää
+    discount_after_threshold: alennus kynnyksen jälkeen
+    divide: jaa
+    execute: suorita
+    multiply: kerro
+    subtract: vähennä
   cash_registers:
     end_of_day:
-      cash_drawer: Cash Drawer
-      counted: Counted
-      difference: Difference
-      end_of_day_thermal_report: Print Report
-      paper_report: Financial Report
+      cash_drawer: Kassa
+      counted: Laskettu
+      difference: Ero
+      end_of_day_thermal_report: Tulosta raportti
+      paper_report: Rahatilanne raportti
   customers:
     show:
-      bought_items: Bought items
-      last_orders: Last orders
-      order_id: Order Number
-      order_total: Order total
-      sold_count: sold count
-  delete: Delete
-  edit: Edit
-  end_of_day: End of Day
+      bought_items: Ostetut nimikkeet
+      last_orders: Viimeiset tilaukset
+      order_id: Tilausnumero
+      order_total: Tilauksen loppusumma
+      sold_count: myyty määrä
+  delete: Poista
+  edit: Muokka
+  end_of_day: Päivän päätös
   exception_page:
-    assistance_text: Please click on the button "Home" and try again. If the error
-      happens again, please call the customer support, and connect your computer to
-      the Remote Service with the button "Remote Service". We will help you immediately.
-    exception_description: ! 'Error description:'
-    exception_in_files: ! 'The Error occurred in the following files:'
-    oops_an_error_occurred: Oops! An Error occurred
+    assistance_text: Klikkaa "Home" ja yritä uudelleen. Jos virhe tapahtuu 
+      jälleen, soita asiakaspalveluun ja yhdistä tietokoneesi "Remote Service"-palveluun
+      painamalla "Remote Service"-painiketta. Autamme sinua välittömästi.
+    exception_description: ! 'Virheen kuvaus:'
+    exception_in_files: ! 'Virhe tapahtui seuraavissa tiedostoissa:'
+    oops_an_error_occurred: Hups! Tapahtui virhe
   headings:
-    almost_out: almost out
-    bank_machine_types: supported bank machines
-    best_sellers: bestsellers
-    best_selling_category: best selling category
-    best_selling_location: best selling location
-    crd: Time,Amount,Type,Notes
-    database_distiller: Database distiller
-    discount_for: rebate for %{store}
-    discounts_for: rebates for %{store}
-    edit_shipper: Editshipper %{name}
-    expiring_soon: expiring soon
-    export: export
-    inventory_report: Inventory Report
-    item_selection: item selection
-    new_discount_for: New discount for %{store}
-    notes: notes
-    order_validation: Order Validation
+    almost_out: melkein lopussa
+    bank_machine_types: yhteensopivat pankkilaitteet
+    best_sellers: myydyimmät
+    best_selling_category: myydyin kategoria
+    best_selling_location: eniten myyvä sijaintipaikka
+    crd: Aika,Määrä,Tyyppi,Huomautukset
+    database_distiller: Tietokannan puhdistaja
+    discount_for: hyvitys - %{store}
+    discounts_for: hyvitykset - %{store}
+    edit_shipper: muokka toimittaja %{name}
+    expiring_soon: vanhenee pian
+    export: siirrä
+    inventory_report: Inventaarioraportti
+    item_selection: nimikkeen valinta
+    new_discount_for: Uusi alennus - %{store}
+    notes: huomautukset
+    order_validation: Tilaus vahvistus
     paylife: Paylife(Artema Hybrid)
-    shipment_items: shipment items
-    shipment_types: shipment types
-    shipments: shipments
-    signup: Signup for a 14 day free trial!
-    time_sheet: Employee Time Sheet
-    update_location: update location
-    update_real_quantity: update real quantity
-    users: users
+    shipment_items: lähetysnimikkeet
+    shipment_types: lähetystyypit
+    shipments: lähetykset
+    signup: Tilaa 14 päivän ilmainen kokeiluversio!
+    time_sheet: työntekijän työaikakortti
+    update_location: päivitä sijaintipaikka
+    update_real_quantity: päivitä todellinen määrä
+    users: käyttäjät
   helpers:
     select:
-      prompt: Please select
+      prompt: Valitse
     submit:
-      cancel: Cancel
-      clear: Clear
-      complete_sale: Complete Sale
-      create: create
-      edit: Edit
-      get_item: get item
+      cancel: Peruuta
+      clear: Tyhjennä
+      complete_sale: Suorita myynti
+      create: luo
+      edit: Muokkaa
+      get_item: valitse nimike
       ok: OK
-      print: Print
-      save: Save
-      submit: Submit
-      update: Update
+      print: Tulosta
+      save: Tallenna
+      submit: Lähetä
+      update: Päivitä
   home:
     remote_service:
       connect_ssh: Remote service
-      connect_vnc: Share screen
-      connected: connected
-      disconnected: disconnected
-      host: Server
-      not_supported_by_browser: Remote service is not supported by this browser.
-      password: Password
-      requesting_connection_status: Requesting connection status ...
+      connect_vnc: jaa näyttö
+      connected: yhdistetty
+      disconnected: katkaistu
+      host: serveri
+      not_supported_by_browser: Tämä selain ei tue Remote service-palvelua. 
+      password: salasana
+      requesting_connection_status: Pyytää yhteystilannetta ...
       title: Remote Service
-      user: User
+      user: Kättäjä
     user_user_index:
-      backup_database: Backup Database
-      backup_logfile: Backup Logfile
+      backup_database: varmuuskopioi tietokanta
+      backup_logfile: varmuuskopioi lokitiedosto
   items:
     database_distiller:
-      are_you_sure: All unused Items will be deleted. This cannot be undone. Are you
-        sure you want to proceed?
-      delete_unused_items: Delete unused Items!
-      hidden: Already deleted Items
-      hidden_by_distiller: Items deleted by Database Distiller
-      relevant_item_ids: Items relevant for deletion
-      unused_item_ids: Unused Items
-      used_item_ids: Used Items
+      are_you_sure: Kaikki käyttämättömät nimikkeet poistetaan. Tätä ei voi perua. Haluatko varmasti jatkaa?
+      delete_unused_items: Poista käyttämättömät nimikkeet!
+      hidden: Jo poistetut nimikkeet
+      hidden_by_distiller: Tietokannan puhdistajalla poistetut nimikkeet 
+      relevant_item_ids: Olennaiset nimikkeet poistettavaksi
+      unused_item_ids: Käyttämättömät nimikkeet
+      used_item_ids: Käytetyt nimikkeet
     index:
-      database_distiller_warning: Due to the generation of statistics, calling this
-        function will last for about 30 seconds. Proceed anyway?
-      inventory_report: Inventur
-      only_for_tobacco_stores: This function is only for Tobacco stores. Tobacco items
-        will now be created and updated. This action will take about 20 minutes. Are
-        you really sure that you want to proceed?
-      report: Report
+      database_distiller_warning: Tämä toiminto kestää noin 30 sek. tilastoinnin luomista varten. Jatka kuitenkin?
+      inventory_report: Inventaario
+      only_for_tobacco_stores: Tämä toiminto koskee vain tupakkakauppoja. Tupakkanimikkeet
+        luodaan ja päivitetään nyt. Tämä toiminto kestää noin 20 min.
+        Haluatko varmasti jatkaa?
+      report: Raportti
     inventory_report:
-      no_category: No Category
-      price: Selling price
-      subtotal_purchase_price: Subtotal Purchase Price
-      subtotal_selling_price: Subtotal Selling Price
-      title: Inventory Report
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
+      no_category: Ei kategoriaa
+      price: Myyntihinta 
+      subtotal_purchase_price: Ostohinnan välisumma 
+      subtotal_selling_price: Myyntihinnan välisumma
+      title: Inventaarioraportti
+      total_buying_price: Ostohinnan loppusumma
+      total_selling_price: Myyntihinnan loppusumma
     selection:
-      print: Print
+      print: Tulosta
     show:
-      from: from
-      quantity_sold: Sold quantity
-      query: Query!
-      to: to
+      from: alkaen
+      quantity_sold: Myyty määrä
+      query: Kyselypyyntö!
+      to: asti
     update_real_quantity:
-      are_you_sure: This will copy the inventory quantities into the database and
-        reset the inventory report. Continue?
-      inventory_report: Inventory Report
-      update_quantity: Update inventory quantities
+      are_you_sure: Tämä kopioi varastomäärät tietokantaan ja nollaa inventaarioraportin. Jatkatko?
+      inventory_report: Inventaarioraportti
+      update_quantity: Päivitä varastomäärät
     upload:
-      upload: upload
-  label: label
+      upload: siirrä
+  label: selite
   menu:
-    stock_management: Stock management
-    actions: actions
-    activate_gift_card: activate gift card
-    add_to_current_order: add to current order
-    additional: Additional
-    back: back
-    broken_items: broken items
-    buttons: buttons
-    buy_order: Buy
-    cameras: cameras
-    cancel: cancel
-    cash_drop: cash drop
-    cash_register: cash register
-    cash_registers: cash registers
-    categories: categories
-    clear_order: Clear
-    close: Close
-    configuration: Config.
-    contact: contact
-    countries: Countries
-    current_order: ! 'current order: #%{id}'
-    customer: Customer
-    customers: Customers
-    database_distiller: Database Distiller
-    delete: delete
-    delete_confirm: Are you sure?
-    destroy: destroy
-    discounts: discounts
-    documentation: Documentation
-    done: Done
-    download: Download
-    edit: Edit
-    edit_cash_register: Editcash register
-    edit_category: Editcategory
-    edit_customer: Editcustomer
-    edit_discount: Editdiscount
-    edit_invoice_blurb: Edit Invoice Blurb
-    edit_invoice_note: Edit Inovice Note
-    edit_item: Edititem
-    edit_location: Editlocation
-    edit_payment_method: Edit Payment Method
-    edit_sale_type: Edit Sale type
-    edit_shipment: Editshipment
-    edit_shipment_type: Editshipment type
-    edit_shipper: Edit Shipper %{name}
-    edit_tax_profile: Edittax profile
-    edit_user: Edituser
-    edit_vendor: EditStore
-    end_day: end day
-    enter_inventory_items: Enter
-    general_configuration: general configuration
-    home: home
-    inventory_report: Inventory report
-    invoice_blurbs: Invoice Blurbs
-    invoice_notes: Invoice Notes
-    item_types: item types
-    items: items
-    labels: Labels
-    last_completed: Last completed
-    last_orders: Orders
-    last_uncompleted: Last uncompleted
-    law_reports: Report Download
-    locations: locations
-    logos: Logos
-    loyalty_cards: loyalty cards
-    merge_into_current_order: Merge into current order
-    move_shipment_item: move shipment item
-    new_action: New Action
-    new_broken_item: New Broken Item
-    new_button: New Button
-    new_cash_register: New cash register
-    new_category: New category
-    new_country: New Country
-    new_customer: New customer
-    new_discount: New discount
-    new_invoice_blurb: New Invoice Blurb
-    new_invoice_note: New Invoice Note
-    new_item: New item
-    new_location: New location
-    new_order: New
-    new_payment_method: New Payment Method
-    new_sale_type: New Sale Type
-    new_shipment: New shipment
-    new_shipment_type: New shipment type
-    new_shipper: New shipper
-    new_stock_location: New stock location
-    new_tax_profile: New tax profile
-    new_transaction_tag: New Transaction Tag
-    new_user: New user
-    new_vendor: New Store
+    stock_management: Varaston hallinta
+    actions: toimet
+    activate_gift_card: aktivoi lahjakortti
+    add_to_current_order: lisää nykyiseen tilaukseen
+    additional: Lisä
+    back: takaisin
+    broken_items: Käyttäkelvoton
+    buttons: painikkeet
+    buy_order: Osta
+    cameras: kamerat
+    cancel: peruta
+    cash_drop: käteistalletus
+    cash_register: kassa
+    cash_registers: kassat
+    categories: kategoriat
+    clear_order: Tyhjennä
+    close: Sulje
+    configuration: määritys
+    contact: yhteydenotto
+    countries: Maat
+    current_order: ! 'nykyinen tilaus: #%{id}'
+    customer: Asiakas
+    customers: Asiakkaat
+    database_distiller: Tietokannan puhdistaja
+    delete: poista
+    delete_confirm: Oletko varma?
+    destroy: tuhoa
+    discounts: alennukset
+    documentation: Dokumentointi
+    done: Valmis
+    download: Lataa
+    edit: Muokkaa
+    edit_cash_register: Muokkaa kassa
+    edit_category: Muokkaa kategoria
+    edit_customer: Muokkaa asiakas
+    edit_discount: Muokkaa alennus
+    edit_invoice_blurb: Muokkaa laskun mainos
+    edit_invoice_note: Muokkaa laskun huomautus
+    edit_item: Muokkaa nimike
+    edit_location: Muokkaa sijaintipaikka
+    edit_payment_method: Muokkaa maksutapa
+    edit_sale_type: Muokkaa myyntityyppi
+    edit_shipment: Muokkaa lähetys
+    edit_shipment_type: Muokkaa lähetystyyppi
+    edit_shipper: Muokkaa lähettäjä %{name}
+    edit_tax_profile: Muokkaa veroprofiili
+    edit_user: Muokkaa käyttäjä
+    edit_vendor: Muokkaa kauppa
+    end_day: lopeta päivä
+    enter_inventory_items: Syötä
+    general_configuration: yleismääritys
+    home: alku
+    inventory_report: Inventaarioraportti
+    invoice_blurbs: Laskun mainokset
+    invoice_notes: Laskun huomautukset
+    item_types: nimiketyypit
+    items: nimikkeet
+    labels: Selitteet
+    last_completed: Viimeksi täydenetty
+    last_orders: Tilaukset
+    last_uncompleted: Viimeinen keskeneräinen
+    law_reports: Raporttilataus
+    locations: sijaintipaikat
+    logos: Logot
+    loyalty_cards: kanta-asiakaskortit
+    merge_into_current_order: Yhdistä nykyiseen tilaukseen
+    move_shipment_item: siirrä lähetysnimike
+    new_action: Uusi toiminto
+    new_broken_item: Uusi käyttäkelvoton tuote
+    new_button: Uusi painike
+    new_cash_register: Uusi kassa
+    new_category: Uusi kategoria
+    new_country: Uusi maa
+    new_customer: Uusi asiakas
+    new_discount: Uusi alennus
+    new_invoice_blurb: Uusi laskun mainos
+    new_invoice_note: Uusi laskun huomautus
+    new_item: Uusi nimike
+    new_location: Uusi sijaintipaikka
+    new_order: Uusi
+    new_payment_method: Uusi maksutapa
+    new_sale_type: Uusi myyntityyppi
+    new_shipment: Uusi lähetys
+    new_shipment_type: Uusi lähetystyyppi
+    new_shipper: Uusi lähettäjä
+    new_stock_location: Uusi varastosijaintipaikka
+    new_tax_profile: Uusi veroprofiili
+    new_transaction_tag: Uusi liiketoimitunniste
+    new_user: Uusi käyttäjä
+    new_vendor: Uusi kauppa
     ok: OK
-    open_drawer: drawer
-    order: order
-    orders: orders
-    overview: overview
-    payment_methods: Payment Methods
-    points: points
+    open_drawer: kassa
+    order: tilaus
+    orders: tilaukset
+    overview: yleiskatsaus
+    payment_methods: Maksutavat
+    points: pisteet
     pos: POS
-    print: print
-    print-dialog: print dialog
-    receipts: Receipts
-    refund_payment_method: refund payment method
-    regular_printer: regular printer
-    remote_service: Remote Service
-    reorder: reorder
-    report: report
-    report_day: report day
-    report_day_range: monthly report
-    report_range: report detail
-    reports: reports
-    sale_types: Sale Types
+    print: tulosta
+    print-dialog: tulostusvalintaikkuna
+    receipts: Kuitit
+    refund_payment_method: palautsmaksutapa
+    regular_printer: normaalitulostin
+    remote_service: Remote Service-palvelu
+    reorder: uusintatilaus
+    report: raportti
+    report_day: raportointipäivä
+    report_day_range: kuukausiraportti
+    report_range: raportin yksityiskohdat
+    reports: raportit
+    sale_types: Myyntityypit
     salorlive: Salor Live!
     salortrainer: Salor Trainer
-    search: search
-    shipment_types: shipment types
-    shipments: shipments
-    shippers: shippers
-    show: show
-    split: split
-    statistics: Statistics
-    stock_locations: stock locations
-    subscription: Subscription
-    support: support
-    tax_profiles: tax profiles
-    transaction_tags: transaction tags
-    update_gift_card: update gift card
-    update_location: update location
-    update_real_quantity: update real quantity
-    upload: upload
-    usb_device: Usb Stick
-    users: users
-    vendors: Stores
-    void: void
-    weigh: weigh
-    wholesaler_update: wholesaler update
+    search: etsi
+    shipment_types: lähetystyypit
+    shipments: lähetykset
+    shippers: lähettäjät
+    show: näytä
+    split: jaa
+    statistics: Tilastot
+    stock_locations: varastojen sijaintipaikat
+    subscription: Tilaus
+    support: tuki
+    tax_profiles: veroprofiilit
+    transaction_tags: liiketoimitunnisteet
+    update_gift_card: päivitä lahjakortti
+    update_location: päivitä sijaintipaikka
+    update_real_quantity: päivitä todellinen määrä
+    upload: siirrä
+    usb_device: Usb-tikku
+    users: käyttäjät
+    vendors: Kaupat
+    void: mitätöi
+    weigh: punnitse
+    wholesaler_update: tukkumyyjäpäivitys
   notifications:
-    shipments_item_could_not_be_saved: shipments item could not be saved
-    shipments_move_all_items: all items were successfully moved
-    shipments_move_item: item was successfully moved
+    shipments_item_could_not_be_saved: lähetysnimikkeen tallennus epäonnistui
+    shipments_move_all_items: kaikkien nimikkeiden siirtäminen onnistui
+    shipments_move_item: nimikkeen siirtäminen onnistui
   orders:
     index:
-      create_all_recurring_orders: Create orders from recurrable subscriptions
-      recurrable_subscriptions: Recurrable subscriptions
+      create_all_recurring_orders: Luo tilaukset toistuvista tilauksista
+      recurrable_subscriptions: Toistavat tilaukset
     print:
-      delivery_note: Delivery note
-      invoice: Invoice
-      labels: Labels
-      print: Print-Dialog
+      delivery_note: Lähetyslista
+      invoice: Lasku
+      labels: Selitteet
+      print: Tulostusvalintaikkuna
     report:
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
-      points: points
-      rebate: rebate
-      start_date: start date
-      sum: sum
-      sum_total: sum total
-      title: Sums
+      display: näytä
+      end_date: päättymispäivä
+      gross: brutto
+      net: netto
+      points: pisteet
+      rebate: hyvitys
+      start_date: alkamispäivä
+      sum: summa
+      sum_total: loppusumma
+      title: Summat
     report_day_range:
-      display: display
-      end_date: end date
-      gross: gross
-      net: net
-      points: points
-      rebate: rebate
-      start_date: start date
-      sum: sum
-      sum_total: sum total
-      title: monthly report
+      display: näytä
+      end_date: päättymispäivä
+      gross: brutto
+      net: netto
+      points: pisteet
+      rebate: hyvitys
+      start_date: alkamispäivä
+      sum: summa
+      sum_total: loppusumma
+      title: kuukausiraportti
     report_range:
-      None: Not specified
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      cash-refunds: Cash-Refunds
-      cash_drawer: Cash drawer
-      count_orders: Count of orders
-      drop: drop
-      from: From
-      gross: gross
-      net: net
-      noncash-refunds: Noncash-Refunds
-      payments: Payments
-      payout: payout
-      payouts: payouts
-      revenue: Revenue
-      sales: Sales
-      sum: sum
-      sum_gross: Sum gross
-      sum_net: Sum net
-      sum_transactions: Sum transactions
-      sums_by_category: sums by category
-      sums_by_payment_methods: sums by payment methods
-      sums_by_tax_profile: sums by tax profile
-      time: time
-      title: Financial report
-      to: To
-      transaction_tag: transaction tag
-      transaction_total: transaction total
-      transactions: transactions
+      None: Ei määritetty
+      OrderItemRefund: Nimikkeen palautus
+      OrderRefund: Tilauksen palautus
+      cash-refunds: Käteispalautukset
+      cash_drawer: Kassa
+      count_orders: Tilausten määrä
+      drop: talletus
+      from: alkaen
+      gross: brutto
+      net: netto
+      noncash-refunds: Ei käteispalautuksia
+      payments: Maksut
+      payout: maksun suorittaminen
+      payouts: maksujen suorittamiset
+      revenue: Tulot
+      sales: Myynti
+      sum: summa
+      sum_gross: Bruttosumma
+      sum_net: Nettosumma
+      sum_transactions: liiketoimien summa
+      sums_by_category: summat kategorioittain
+      sums_by_payment_methods: summat maksutavoittain
+      sums_by_tax_profile: summat veroittain
+      time: aika
+      title: Rahatilanne raportti
+      to: Asti
+      transaction_tag: liiketoimitunniste
+      transaction_total: liiketoimen loppusumma
+      transactions: liiketoimet
   printr:
     eod_report:
-      None: Not named
-      OrderItemRefund: Order Item Refund
-      OrderRefund: Order Refund
-      calculated_drawer_amount: Cash
-      cash-refunds: Cash-Refunds
-      cash_refunds_total: TOTAL
-      no_category: No Category
-      orders_total: Orders total
-      payment_method_total: TOTAL
-      payments: Payments
-      refund: Refund
-      refunds: Refunds
-      revenue: Revenue
-      revenue_total: TOTAL
-      sales: Sales
-      system_drawer_amount: System drawer amount
-      transaction_total: TOTAL
-      warning_drawer_amount_not_zero: Warning! Your drawer amount is not zero. You
-        are advised to finish and start each day with a drawer amount of zero to ease
-        accounting work. Make a cash payout accordingly and print this report again.
+      None: Nimeämätön
+      OrderItemRefund: Tilausnimikkeen palautus
+      OrderRefund: Tilaushyvitys
+      calculated_drawer_amount: Käteinen
+      cash-refunds: Käteispalautukset
+      cash_refunds_total: LOPPUSUMMA
+      no_category: Ei kategoriaa
+      orders_total: Tilausten loppusumma
+      payment_method_total: LOPPUSUMMA
+      payments: Maksut
+      refund: Palautus
+      refunds: Palautukset
+      revenue: Tulot
+      revenue_total: LOPPUSUMMA
+      sales: Myynti
+      system_drawer_amount: Kassajärjestelmän määrä
+      transaction_total: LOPPUSUMMA
+      warning_drawer_amount_not_zero: Varoitus! Kassan määrä ei ole nolla. Voit lopettaa ja 
+        aloittaa joka päivän kassamäärän nollasta helpottaaksesi kirjanpitoa. Suorita 
+        käteismaksu vastaavasti ja tulosta tämä raportti uudelleen.
     formats:
-      advert: ! 'The Innovative Point of Sale
+      advert: ! 'Innovatiivinen myyntipiste
 
         www.salorpos.com'
-      cancel: Cancel EUR %8.2f
-      change: ! 'Change: EUR %8.2f'
-      coupon_subtotal: Coupon EUR %8.2f
-      discount_subtotal: Discount EUR %8.2f
+      cancel: Peruuta                  EUR %8.2f
+      change: ! 'Takaisin:                       EUR %8.2f'
+      coupon_subtotal: Kuponki                   EUR %8.2f
+      discount_subtotal: Alennus                       EUR %8.2f
       end_of_day: ! '%20.20s EUR %5.2f'
-      fixed_rebate: Rebate EUR %8.2f
+      fixed_rebate: Hyvitys                         EUR %8.2f
       item: ! '%c %20.20s %7.2f %3u %7.2f'
-      rebate_amount: Rebate %4.2f%% EUR %8.2f
-      rebate_subtotal: Rebate Total EUR %8.2f
-      subtotal: Subtotal EUR %8.2f
-      thanks: Thank you for shopping with us!
-      total: TOTAL EUR %8.2f
+      rebate_amount: Hyvitys %4.2f%%                 EUR %8.2f
+      rebate_subtotal: Hyvitys Loppusumma                  EUR %8.2f
+      subtotal: Välisumma                      EUR %8.2f
+      thanks: Kittos että ostitte meiltä!
+      total: LOPPUSUMMA                         EUR %8.2f
     order_receipt:
-      change: Change
-      coupon_subtotal: Coupon Subtotal
-      current_loyalty_points: Your loyalty points
-      discount: Discount
-      discount_subtotal: Discount Subtotal
-      given: Given money
-      gross: gross
-      lc_points_substracted: Substracted Loyalty Points
-      net: net
-      rebate: Single rebate
-      rebate_fixed: Fixed rebate
-      rebate_percent: Percent rebate
-      rebate_subtotal: Rebate Subtotal
-      refund: Total refunds
-      refunded: REFUNDED
-      subtotal1: Subtotal
-      subtotal2: Subtotal
-      subtotal3: Subtotal
-      subtotal4: Subtotal
-      tax: Tax
-      total: TOTAL
+      change: Takaisin
+      coupon_subtotal: Kuponki välisumma
+      current_loyalty_points: Kanta-asiakaspisteet
+      discount: Alennus
+      discount_subtotal: Alennus välisumma
+      given: Annettu
+      gross: brutto
+      lc_points_substracted: Vähennetyt kanta-asiakaspisteet
+      net: netto
+      rebate: Yksittäinen hyvitys
+      rebate_fixed: Kiinteä hyvitys
+      rebate_percent: Prosenttihyvitys
+      rebate_subtotal: Hyvityksen välisumma
+      refund: Hyvitys yhteensä
+      refunded: HYVITETTY
+      subtotal1: Välisumma
+      subtotal2: Välisumma
+      subtotal3: Välisumma
+      subtotal4: Välisumma
+      tax: Vero
+      total: LOPPUSUMMA
     word:
-      drop: drop
-      payout: payout
-      sold: sold
+      drop: talletus
+      payout: maksun suoritus
+      sold: myyty
   receipts:
-    a_conto: on account
-    delivery_note: Delivery Note
-    invoice: Invoice
-    invoice_numer_X_at_time: Order Nr. %{number} at %{datetime}
-    offer: Offer
-    proforma_invoice: Proforma Invoice
+    a_conto: Laskutus
+    delivery_note: Lähetyslista
+    invoice: Lasku
+    invoice_numer_X_at_time: Tilausnro %{number} pvm %{datetime}
+    offer: Tarjous
+    proforma_invoice: Proformalasku
   reports:
-    amount: amount
-    description: description
-    item_zero: Sold out items
-    tax_class: tax class
-    total: total
-    unit_price: unit price
+    amount: määrä
+    description: kuvaus
+    item_zero: Loppuunmyydyt nimikkeet
+    tax_class: veroluokka
+    total: loppusumma
+    unit_price: yksikköhinta
   roles:
-    cashier: cashier
-    manager: manager
-    stockboy: stockboy
+    cashier: kassa
+    manager: päällikkö
+    stockboy: varastomies
   shipments:
     index:
-      report: Report
+      report: Raportti
     show:
-      move_into_stock: Move into stock!
-      need_tax_profile: Shipment Item needs tax profile!
-      purchase_price_sum: Purchase price sum
-  sticker: sticker
-  support: Support
+      move_into_stock: Siirrä varastoon!
+      need_tax_profile: Lähetysnimike tarvitse veroprofiilin!
+      purchase_price_sum: Ostohintasumma
+  sticker: tarra
+  support: Tuki
   system:
-    add_payment_method: Add Method
-    complete_sale: Complete
+    add_payment_method: Lisää tapa
+    complete_sale: Suorita loppuun
     errors:
       action_code_error: Code could not be executed because %{error}
       action_error: Action could not complute because %{error}
@@ -971,4 +968,3 @@ fi:
     on_import: on import
     on_save: on save
     on_sku_not_found: on sku not found
-
