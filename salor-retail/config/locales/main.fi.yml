@@ -56,7 +56,7 @@ fi:
       default_buyback: takaisinoston oletus
       detailed_edit: Yksityiskohtainen muokkaus?
       dollar_per_lp: Euro per kanta-asiakaspiste
-      drop: pudotus
+      drop: talletus
       email: sähköposti
       enable_technician_emails: Lähetä sähköpostia teknikolle
       end_amount: loppusumma
@@ -128,7 +128,7 @@ fi:
       parts: osat
       password: salasana
       paylife: Paylife
-      payout: maksaminen
+      payout: kassanosto
       points: pisteet
       pole_display: Myyntinäyttö
       postalcode: postinumero
@@ -619,8 +619,8 @@ fi:
       net: netto
       noncash-refunds: Ei käteispalautuksia
       payments: Maksut
-      payout: maksun suorittaminen
-      payouts: maksujen suorittamiset
+      payout: kassanosto
+      payouts: kassanostot
       revenue: Tulot
       sales: Myynti
       sum: summa
@@ -631,7 +631,7 @@ fi:
       sums_by_payment_methods: summat maksutavoittain
       sums_by_tax_profile: summat veroittain
       time: aika
-      title: Rahatilanne raportti
+      title: Rahatilanneraportti
       to: Asti
       transaction_tag: liiketoimitunniste
       transaction_total: liiketoimen loppusumma
@@ -656,8 +656,8 @@ fi:
       system_drawer_amount: Kassajärjestelmän määrä
       transaction_total: LOPPUSUMMA
       warning_drawer_amount_not_zero: Varoitus! Kassan määrä ei ole nolla. Voit lopettaa ja 
-        aloittaa joka päivän kassamäärän nollasta helpottaaksesi kirjanpitoa. Suorita 
-        käteismaksu vastaavasti ja tulosta tämä raportti uudelleen.
+        aloittaa jokaisen päivän kassamäärän nollasta helpottaaksesi kirjanpitoa. Suorita 
+        kassanosto vastaavasti ja tulosta tämä raportti uudelleen.
     formats:
       advert: ! 'Innovatiivinen myyntipiste
 
@@ -698,7 +698,7 @@ fi:
       total: LOPPUSUMMA
     word:
       drop: talletus
-      payout: maksun suoritus
+      payout: kassanosto
       sold: myyty
   receipts:
     a_conto: Laskutus
@@ -731,240 +731,232 @@ fi:
     add_payment_method: Lisää tapa
     complete_sale: Suorita loppuun
     errors:
-      action_code_error: Code could not be executed because %{error}
-      action_error: Action could not complute because %{error}
-      auto_drop_failed: The system failed to auto drop, please manually create a beginning
-        of day cash drop
-      cannot_edit_completed_order: That order is completed and cannot be modified.
-      cannot_reorder: No items must be reordered.
-      child_sku_must_exist: Child Item Must Exist!
-      coupon_cannot_be_buy_one_get_one: coupon %{sku} cannot be_buy_one_get_one when
-        applied to %{applies}
-      coupon_not_enough_items: You have not purchased enough items for this to apply
-      csv_item_exists: Item %{sku} exists!
-      csv_item_failed: ! '%{id} %{i} failed.'
-      failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
-        dass Set-Items existieren.
-      gift_card_empty: Gift Card is Empty, notify client, and destroy card.
-      gs1_item_not_found: Item marked as gs1, but %{sku} is not in the correct format.
-      insufficient_quantity_on_item: Warning, Item %{sku} quantity is insufficient,
-        time to update your stock levels!
-      inventory_update_error: inventory update error
-      item_not_found: The item you are looking for could not be found, try searching?
-      item_price_is_zero: ! 'Warning: Item price is 0'
-      limited_alphabet: Only a-z permitted. No spaces or accented characters allowed.
-      lp_calculation_failed: Failed to apply Loyalty Points, are you sure you setup
-        this up in your store configuration?
-      must_cash_drop: Your drawer does not have any money, please add a cash drop!
-      must_choose_register: You must login to a cash register!
-      must_choose_vendor: You minsufficient_quantity_on_itemust choose a Store!
-      must_set_receiver_to_vendor: You must set this shipment's receiver field to
-        a valid Store
-      must_specify_drop_or_payout: You must specify either drop or payout!
-      no_class: There is no class for %{model} at line %{i}
-      no_role: You do not have the necessary role to access this resource.
-      no_such_item: There is no item with this SKU
-      not_enough_in_drawer: not enough in drawer
-      order_failed: Order could not be finished.
-      order_must_have_user: You cannot save an order without a User or Employee assigned
-        to it.
-      order_register_required: You must specify a register for this order
-      order_totals_validation_failed: Order total validation failed, refreshing the
-        order may repair the issue. Press OK to refresh.
-      order_vendor_required: You must supply a Store for this order
-      parent_sku_must_exist: Parent Item Must Exist!
-      payment_required: ! 'Error 402: Full Payment is Required'
-      payment_required_explanation: We regret to inform you that your system has automatically
-        shutdown as your pre-payment license has run out. You must complete the full
-        payment of Salor to continue benefitting from it. Please contact your Salor
-        technical support representative.
-      sanity_check: Requested action is insane, verify order total and notify customer
-        of correction.
-      shipment_item_already_in_stock: Item %{sku} is already in stock
-      shipment_item_move_failed: ! 'Item %{sku} failed to move with error: %{error}'
-      shipment_item_nil: Item returned from_shipment_item was nil?
-      sku_must_be_unique: ! '%{sku} must be unique'
-      value_not_set: NotSet
-    inventory_updated: inventory updated
-    logged_in_as: logged in as
-    login: Clockin
-    logout: Clockout
-    not_you: not you?
-    owner_mode: OWNER MODE
-    owner_success: Owner properties were successfully updated
+      action_code_error: Koodia ei voitu suorittaa. Virhe - %{error}
+      action_error: Toimintaa ei voitu suorittaa. Virhe - %{error}
+      auto_drop_failed: Automaattinen talletus epäonnistui, luo käteistalletus päivän alkaessa manuaalisesti.
+      cannot_edit_completed_order: Tilaus on suoritettu eikä sitä voi muuttaa.
+      cannot_reorder: Mitään nimikettä ei tarvitse tilata uudestaan.
+      child_sku_must_exist: tytärnimike pakko olla!
+      coupon_cannot_be_buy_one_get_one: kuponki %{sku} osta_yksi_saat_kaksi ei koske %{applies} 
+      csv_item_exists: Nimike %{sku} on jo olemassa!
+      csv_item_failed: ! '%{id} %{i} epäonnistui.'
+      failed_to_save_parts: Tietoa ei voitu tallentaa. Varmista että nimikkeiden ryhmä on olemassa.
+      gift_card_empty: Lahjakortti on tyhjä, ilmoita asiakkaalle ja tuhoa kortti.
+      gs1_item_not_found: Tuote merkitty GS1, mutta %{sku} ei ole oikeassa muodossa.
+      insufficient_quantity_on_item: Varoitus, nimikkeen %{sku} määrä on riittämätön,
+         aika päivittää varastotasot!
+      inventory_update_error: varaston päivitys virhe
+      item_not_found: Etsimääsi nimikettä ei löytynyt, yritä hakea?
+      item_price_is_zero: ! 'Varoitus: Nimikkeen hinta on 0'
+      limited_alphabet: Vain a-z sallittu. Ei välilyöntejä eikä erikoismerkkejä.
+      lp_calculation_failed: Kanta-asiakaspisteiden käyttö epäonnistui, oletko varmasti
+        sisällyttänyt ne kokoonpanoon?
+      must_cash_drop: Kassassa ei ole rahaa, lisää vaihtorahaa!
+      must_choose_register: Sinun täytyy kirjautua kassaan!
+      must_choose_vendor: Valitse kauppa!
+      must_set_receiver_to_vendor: Valitse voimassa oleva myyntipiste toimituksen vastaanottajaksi.
+      must_specify_drop_or_payout: Sinun täytyy määrittää joko käteistalletus tai kassanosto!
+      no_class: ! '%{model}:lle ei ole luokitusta rivillä %{i}'
+      no_role: Sinulla eil ole riittävää asemaa päästäksi tähän resurssiin.
+      no_such_item: Nimikettä ei löydy tällä SKU:lla
+      not_enough_in_drawer: kassa ei riitä
+      order_failed: Tilausta ei voitu suorittaa loppuun.
+      order_must_have_user: Et voi tallentaa tilausta ilman siihen osoitettua käyttäjää tai työntekijää.
+      order_register_required: Aseta kassa täälle tilaukselle
+      order_totals_validation_failed: Tilauksen loppusumman tilauksen validointi
+        epäonnistui, tilauksen päivitys voi korjata ongelman. Paina OK päivittääksesi. 
+      order_vendor_required: Merkitse tälle tilaukselle myyntipiste.
+      parent_sku_must_exist: Emonimikkeen pitää olla olemassa!
+      payment_required: ! 'Error 402: Vaaditaan koko maksusuoritus'
+      payment_required_explanation: Valitettavasti meidän on ilmoitettava, että järjestelmässä
+        on automaattinen sulku, koska ennakkomaksun lupa on loppunut. Sinun pitää
+        maksaa Salor-maksu kokonaan hyötyäksesi siitä edelleen. Ota yhteys Salorin tekniseen tukeen.
+      sanity_check: Pyydetty toiminto on järjetön, tarkista tilauksen kokonaissumma ja 
+        ilmoitta asiakkaalle korjauksesta.
+      shipment_item_already_in_stock: Nimike %{sku} on jo varastossa
+      shipment_item_move_failed: ! 'Nimikkeen %{sku} muuttaminen epäonnistui virheen %{error} johdosta'
+      shipment_item_nil: Nimike palautettu lähetyksestä oli nolla?
+      sku_must_be_unique: ! '%{sku}  on oltava yksilöllinen'
+      value_not_set: ei ole asetettu
+    inventory_updated: varasto päivitetty
+    logged_in_as: kirjauttu nimella
+    login: Kirjaudusisään
+    logout: Kirjauduulos
+    not_you: et sinä?
+    owner_mode: OMISTAJATILA 
+    owner_success: Omistajatietojen päivitys onnistui
     rebate_types:
       fixed: $
       percent: ! '%'
-    sign_up: sign up
+    sign_up: ilmoittautua
   vendors:
-    clear_cache_button: clear cache
-    clear_cache_header: cache
+    clear_cache_button: tyhjennä välimuisti
+    clear_cache_header: välimuisti
     form:
       logo: logo
-      receipt_logo_footer: receipt logo footer
-      receipt_logo_header: receipt logo header
+      receipt_logo_footer: kuitin logon alatunniste
+      receipt_logo_header: kuitin logon ylätunniste
     report_day:
-      None: Not specified
-      OrderItemRefund: Item Refund
-      OrderRefund: Order Refund
-      as_aconto_from: On account from
-      cash-refunds: Cash-Refunds
-      cash_drawer: Cash drawer
+      None: Ei määritetty
+      OrderItemRefund: Nimikkeen palautus
+      OrderRefund: Tilauksen palautus
+      as_aconto_from: Maksettu tilille
+      cash-refunds: Käteispalautukset
+      cash_drawer: Kassa
       count_order_items: Count of sold items
-      count_orders: Count of orders
-      drop: drop
-      from: From
-      gift_card_redeem_total: Giftcard redeem total
-      gift_card_sales_total: Giftcard sales total
-      gross: gross
-      net: net
-      noncash-refunds: Noncash-Refunds
-      open_contracts: Open payments from running contracts
-      payments: Payments
-      payout: payout
-      payouts: payouts
-      proforma_payments: Proforma Payments
-      revenue: Revenue
-      sales: Sales
-      sum: sum
-      sum_gross: Sum gross
-      sum_net: Sum net
-      sum_transactions: Sum transactions
-      sums_by_category: sums by category
-      sums_by_payment_methods: sums by payment methods
-      sums_by_tax_profile: sums by tax profile
-      tax: Tax
-      time: time
-      title: Financial report
-      to: To
-      transaction_tag: transaction tag
-      transaction_total: transaction total
-      transactions: transactions
+      count_orders: Myytyjen nimikkeiden määrä
+      drop: talletus
+      from: Alkaen
+      gift_card_redeem_total: Lahjakorttilunastus yhteensä
+      gift_card_sales_total: Lahjakorttimyynti yhteensä
+      gross: brutto
+      net: netto
+      noncash-refunds: Ei käteispalautuksia
+      open_contracts: Avoinna olevat maksut meneillään olevista sopimuksista
+      payments: Maksut
+      payout: kassanosto
+      payouts: kassanostot
+      proforma_payments: Proformamaksut
+      revenue: Tulo
+      sales: Myynit
+      sum: summa
+      sum_gross: Bruttosumma
+      sum_net: Nettosumma
+      sum_transactions: Liiketoimien summa
+      sums_by_category: summat kategorioittain
+      sums_by_payment_methods: summat maksutavoittain
+      sums_by_tax_profile: summat veroittain
+      tax: Vero
+      time: aika
+      title: Rahatilanneraportti
+      to: Asti
+      transaction_tag: liiketoimitunniste
+      transaction_total: liiketoimen loppusumma
+      transactions: liiketoimet
   views:
-    advanced_field: advanced field
-    cash_register_heading: ! '%{name} for %{store}'
-    cash_registers: cash registers
-    category_heading: category %{name} for %{store}
-    change: Change
-    create_new_item: Create New Article
-    customers: customers
-    download_may_last_long: This download may last long. Continue?
-    dummy_item: dummy item
-    edit_item_heading: Edititem heading
-    email: email
+    advanced_field: kehittynyt kenttä
+    cash_register_heading: ! '%{name} %{store}: lle'
+    cash_registers: kassat
+    category_heading: ! 'Kategoria %{name} %{store}:lle'
+    change: vaihtoraha
+    create_new_item: Luo uusi artikkeli
+    customers: asiakkaat
+    download_may_last_long: Tämä lataus saattaa kestää kauan. Jatkatko?
+    dummy_item: testinimike
+    edit_item_heading: Muokkaa nimikkeen otsikko
+    email: sähköposti
     errors:
-      no_access_right: You do not have the right to access this resource. This error
-        has been logged.
-      nothing_found: Nothing found
-      unknown_vendor: Unknown
-    eticket: Shelf label
+      no_access_right: Sinulla ei ole oikeutta käyttää tätä resurssia. Tämä virhe 
+        on kirjattu logiin.
+      nothing_found: Mitään ei löytynyt
+      unknown_vendor: Ei tiedossa
+    eticket: Hyllyselite
     forms:
-      applies_to_item: Coupon applies to item
-      buy_one_get_one: buy one get one
-      cashier: cashier
-      fixed_amount_off: fixed amount off
-      items: items
-      manager: Manager
-      no_change: no change
-      notes: notes
-      parts: parts
-      percent_off: ! '% off'
-      roles: roles
-      search: search
+      applies_to_item: Kuponki koskee nimikettä
+      buy_one_get_one: osta yksi saat yhden
+      cashier: kassa
+      fixed_amount_off: kiinteän määrän vähennys
+      items: nimikkeet
+      manager: Päällikkö
+      no_change: ei vaihtorahaa
+      notes: huomautukset
+      parts: osat
+      percent_off: ! '% vähennys'
+      roles: asemat
+      search: haku
       shipment:
         types:
-          canceled: canceled
-          complete: complete
-          in_stock: in stock
-          new: New
-          returned: returned
-          shipped: shipped
-    gift_card: gift card
-    gift_card_amount: gift card remaining
-    given: given
-    in_cash: in cash
-    item: item
-    language: language
-    listing: listing
-    listing_invoice_blurbs: Listing Invoice Blurbs
-    listing_items: listing items
-    locations: locations
-    loyalty_card: loyalty card
-    name: name
-    new_item_heading: New item for %{store}
-    new_stock_location: New stock location
+          canceled: peruutettu
+          complete: valmis
+          in_stock: varastossa
+          new: Uusi
+          returned: palautettu
+          shipped: lähetetty
+    gift_card: lahjakortti
+    gift_card_amount: lahjakortissa jäljellä
+    given: annettu
+    in_cash: käteisellä
+    item: nimike
+    language: kieli
+    listing: listaus
+    listing_invoice_blurbs: Listaus laskumainoksista
+    listing_items: listaus nimikkeistä
+    locations: sijaintipaikat
+    loyalty_card: kanta-asiakaskortti
+    name: nimi
+    new_item_heading: ! 'Uusi nimike %{store}:lle'
+    new_stock_location: Uusi varaston sijaintipaikka
     notice:
-      cache_was_cleared: Cache files deleted.
-      csv_edit_starting: csv edit starting
-      model_create: ! '%{model} was created successfully'
-      model_edit: ! '%{model} was edited successfully'
-      move_real_quantities_success: Item quantities were successfully updated
-      new_order: New order created
+      cache_was_cleared: Välimuistitiedostot on poistettu.
+      csv_edit_starting: cvs-muokkaus alkaa
+      model_create: ! '%{model} luonti onnistui'
+      model_edit: ! '%{model} muokkaaminen onnistui'
+      move_real_quantities_success: Nimikkeiden määrien päivittäminen onnistui
+      new_order: Uusi tilaus luotu
       order_refund_dt: ! '#%{id}'
-      please_backup: Please backup your system regularly!
-      save_before: Save before leaving?
-      wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:
-        %{created_items}, Created categories: %{created_categories}, Created Tax Profiles
+      please_backup: Ole hyvä ja varmuuskopioi säännöllisesti!
+      save_before: Tallenna ennen poistumista?
+      wholesaler_upload_report: ! 'Päivitetty nimikkeet: %{updated_items}, luodut nimikkeet:
+        %{created_items}, luodut kategoriat: %{created_categories}, luodut veroprofiilit
         %{created_tax_profiles}'
-    order_heading: ! 'Order #%{id} for %{store}'
-    order_number: ! 'Order #%{id}'
+    order_heading: ! 'Tilausnro %{id} %{store}:lle'
+    order_number: ! 'Tilausnro %{id}'
     pagination:
-      last: last
-      next: next &gt;
-      previous: ! '&lt; previous'
+      last: viimeinen
+      next: seuraava &gt;
+      previous: ! '&lt; edellinen'
       truncate: ! '...'
-    password: password
-    password_confirm: confirm password
-    please_test_before_upload: ! 'WARNING: You are about to overwrite data in the
-      database.'
-    price: price
-    quantity: quantity
-    rebate: rebate
-    remember_me: remember me
-    report: report
+    password: salasana
+    password_confirm: vahvista salasana
+    please_test_before_upload: ! 'VAROITUS: Olet aikeissa ylikirjoittaa tiedot tietokantaan.'    
+    price: hinta
+    quantity: määrä
+    rebate: hyvitys
+    remember_me: muista minut
+    report: raportti
     reports:
-      cash_account: Cash Account
-      daily: Daily
+      cash_account: Käteistili
+      daily: päivittäin
     shipments:
       state: State
     single_words:
-      all: All
-      body: body
-      bottom: bottom
-      camera: camera
-      choose: choose
-      continue: continue
-      coupons: Coupons
-      delete: delete
-      destroy: destroy
-      download: download
-      edit: edit
-      from: from
-      gift_cards: Gift Cards
-      loading: loading
-      new: New
-      order: order
-      ordering: ordering
-      processing: processing...
-      saving: saving...
+      all: Kaikki
+      body: runko
+      bottom: pohja
+      camera: kamera
+      choose: valitse
+      continue: jatka
+      coupons: Kupongit
+      delete: poista
+      destroy: tuhoa
+      download: lataa
+      edit: muokkaa
+      from: alkaen
+      gift_cards: Lahjakortit
+      loading: lataamassa
+      new: Uusi
+      order: tilaus
+      ordering: tilaamassa
+      processing: käsittelee...
+      saving: tallentaa...
       sku: SKU
-      title: title
-      to: to
-      top: top
-      waiting: waiting...
-    sticky_ticket: Sticky label
-    stock_locations: stock_locations
-    subtotal: subtotal
-    tax_profile: tax profile
-    three_easy_ways: three easy ways
-    total: total
-    username: username
-    vendor: Store
-    wholesaler_refresh: Fetching wholesaler updates. This can take several minutes.
+      title: otsikko
+      to: asto
+      top: yläosa
+      waiting: odottaa...
+    sticky_ticket: Tarra
+    stock_locations: varastojen sijaintipaikat
+    subtotal: välisumma
+    tax_profile: veroprofiili
+    three_easy_ways: kolme helppoa tapaa
+    total: yhteensä
+    username: käyttäjätunnus
+    vendor: myyntipiste
+    wholesaler_refresh: Haetaan tukkuliikepäivityksiä. Tämä voi kestää useita minuutteja.
   when_list:
-    add_to_order: on add to order
-    always: always
-    on_export: on export
-    on_import: on import
-    on_save: on save
-    on_sku_not_found: on sku not found
+    add_to_order: lisättäessä tilaukseen
+    always: aina
+    on_export: siirtymässä
+    on_import: laatamista
+    on_save: tallentamassa
+    on_sku_not_found: sku ei löytyessä
