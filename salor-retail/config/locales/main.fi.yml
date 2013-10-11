@@ -205,7 +205,7 @@ fi:
         logo_invoice: Paperilaskun logo
         receipt_logo_footer: Kuitin logon alatunniste
         receipt_logo_header: Kuitin logon ylätunniste
-      vendor_id: Kauppa
+      vendor_id: Myyntipiste
       vendor_printers: tulostimet
       weigh_compulsory: Punnitse skannauksessa
       weight: paino
@@ -303,8 +303,8 @@ fi:
         one: Käyttäjä
         other: Käyttäjät
       vendor:
-        one: Kauppa
-        other: Kaupat
+        one: Myyntipiste
+        other: Myyntipisteet
   api:
     user_does_not_exist: Käyttäjää ei löydy
   are_you_sure: Haluatko tehdä tämän varmasti?
@@ -334,9 +334,9 @@ fi:
   edit: Muokka
   end_of_day: Päivän päätös
   exception_page:
-    assistance_text: Klikkaa "Home" ja yritä uudelleen. Jos virhe tapahtuu 
-      jälleen, soita asiakaspalveluun ja yhdistä tietokoneesi "Remote Service"-palveluun
-      painamalla "Remote Service"-painiketta. Autamme sinua välittömästi.
+    assistance_text: Klikkaa "Home" ja yritä uudelleen. Jos virhe tapahtuu jälleen,
+      soita asiakaspalveluun ja yhdistä tietokoneesi "Remote Service"-palveluun painamalla
+      "Remote Service"-painiketta. Autamme sinua välittömästi.
     exception_description: ! 'Virheen kuvaus:'
     exception_in_files: ! 'Virhe tapahtui seuraavissa tiedostoissa:'
     oops_an_error_occurred: Hups! Tapahtui virhe
@@ -389,7 +389,7 @@ fi:
       connected: yhdistetty
       disconnected: katkaistu
       host: serveri
-      not_supported_by_browser: Tämä selain ei tue Remote service-palvelua. 
+      not_supported_by_browser: Tämä selain ei tue Remote service-palvelua.
       password: salasana
       requesting_connection_status: Pyytää yhteystilannetta ...
       title: Remote Service
@@ -399,24 +399,26 @@ fi:
       backup_logfile: varmuuskopioi lokitiedosto
   items:
     database_distiller:
-      are_you_sure: Kaikki käyttämättömät nimikkeet poistetaan. Tätä ei voi perua. Haluatko varmasti jatkaa?
+      are_you_sure: Kaikki käyttämättömät nimikkeet poistetaan. Tätä ei voi perua.
+        Haluatko varmasti jatkaa?
       delete_unused_items: Poista käyttämättömät nimikkeet!
       hidden: Jo poistetut nimikkeet
-      hidden_by_distiller: Tietokannan puhdistajalla poistetut nimikkeet 
+      hidden_by_distiller: Tietokannan puhdistajalla poistetut nimikkeet
       relevant_item_ids: Olennaiset nimikkeet poistettavaksi
       unused_item_ids: Käyttämättömät nimikkeet
       used_item_ids: Käytetyt nimikkeet
     index:
-      database_distiller_warning: Tämä toiminto kestää noin 30 sek. tilastoinnin luomista varten. Jatka kuitenkin?
+      database_distiller_warning: Tämä toiminto kestää noin 30 sek. tilastoinnin luomista
+        varten. Jatka kuitenkin?
       inventory_report: Inventaario
       only_for_tobacco_stores: Tämä toiminto koskee vain tupakkakauppoja. Tupakkanimikkeet
-        luodaan ja päivitetään nyt. Tämä toiminto kestää noin 20 min.
-        Haluatko varmasti jatkaa?
+        luodaan ja päivitetään nyt. Tämä toiminto kestää noin 20 min. Haluatko varmasti
+        jatkaa?
       report: Raportti
     inventory_report:
       no_category: Ei kategoriaa
-      price: Myyntihinta 
-      subtotal_purchase_price: Ostohinnan välisumma 
+      price: Myyntihinta
+      subtotal_purchase_price: Ostohinnan välisumma
       subtotal_selling_price: Myyntihinnan välisumma
       title: Inventaarioraportti
       total_buying_price: Ostohinnan loppusumma
@@ -429,14 +431,14 @@ fi:
       query: Kyselypyyntö!
       to: asti
     update_real_quantity:
-      are_you_sure: Tämä kopioi varastomäärät tietokantaan ja nollaa inventaarioraportin. Jatkatko?
+      are_you_sure: Tämä kopioi varastomäärät tietokantaan ja nollaa inventaarioraportin.
+        Jatkatko?
       inventory_report: Inventaarioraportti
       update_quantity: Päivitä varastomäärät
     upload:
       upload: siirrä
   label: selite
   menu:
-    stock_management: Varaston hallinta
     actions: toimet
     activate_gift_card: aktivoi lahjakortti
     add_to_current_order: lisää nykyiseen tilaukseen
@@ -483,7 +485,7 @@ fi:
     edit_shipper: Muokkaa lähettäjä %{name}
     edit_tax_profile: Muokkaa veroprofiili
     edit_user: Muokkaa käyttäjä
-    edit_vendor: Muokkaa kauppa
+    edit_vendor: Muokkaa myyntipiste
     end_day: lopeta päivä
     enter_inventory_items: Syötä
     general_configuration: yleismääritys
@@ -525,7 +527,7 @@ fi:
     new_tax_profile: Uusi veroprofiili
     new_transaction_tag: Uusi liiketoimitunniste
     new_user: Uusi käyttäjä
-    new_vendor: Uusi kauppa
+    new_vendor: Uusi myyntipiste
     ok: OK
     open_drawer: kassa
     order: tilaus
@@ -557,6 +559,7 @@ fi:
     split: jaa
     statistics: Tilastot
     stock_locations: varastojen sijaintipaikat
+    stock_management: Varaston hallinta
     subscription: Tilaus
     support: tuki
     tax_profiles: veroprofiilit
@@ -567,7 +570,7 @@ fi:
     upload: siirrä
     usb_device: Usb-tikku
     users: käyttäjät
-    vendors: Kaupat
+    vendors: Myyntipisteet
     void: mitätöi
     weigh: punnitse
     wholesaler_update: tukkumyyjäpäivitys
@@ -655,9 +658,9 @@ fi:
       sales: Myynti
       system_drawer_amount: Kassajärjestelmän määrä
       transaction_total: LOPPUSUMMA
-      warning_drawer_amount_not_zero: Varoitus! Kassan määrä ei ole nolla. Voit lopettaa ja 
-        aloittaa jokaisen päivän kassamäärän nollasta helpottaaksesi kirjanpitoa. Suorita 
-        kassanosto vastaavasti ja tulosta tämä raportti uudelleen.
+      warning_drawer_amount_not_zero: Varoitus! Kassan määrä ei ole nolla. Voit lopettaa
+        ja aloittaa jokaisen päivän kassamäärän nollasta helpottaaksesi kirjanpitoa.
+        Suorita kassanosto vastaavasti ja tulosta tämä raportti uudelleen.
     formats:
       advert: ! 'Innovatiivinen myyntipiste
 
@@ -717,7 +720,7 @@ fi:
   roles:
     cashier: kassa
     manager: päällikkö
-    stockboy: varastomies
+    stockboy: varastotyöntekijä
   shipments:
     index:
       report: Raportti
@@ -733,18 +736,21 @@ fi:
     errors:
       action_code_error: Koodia ei voitu suorittaa. Virhe - %{error}
       action_error: Toimintaa ei voitu suorittaa. Virhe - %{error}
-      auto_drop_failed: Automaattinen talletus epäonnistui, luo käteistalletus päivän alkaessa manuaalisesti.
+      auto_drop_failed: Automaattinen talletus epäonnistui, luo käteistalletus päivän
+        alkaessa manuaalisesti.
       cannot_edit_completed_order: Tilaus on suoritettu eikä sitä voi muuttaa.
       cannot_reorder: Mitään nimikettä ei tarvitse tilata uudestaan.
       child_sku_must_exist: tytärnimike pakko olla!
-      coupon_cannot_be_buy_one_get_one: kuponki %{sku} osta_yksi_saat_kaksi ei koske %{applies} 
+      coupon_cannot_be_buy_one_get_one: kuponki %{sku} osta_yksi_saat_kaksi ei koske
+        %{applies}
       csv_item_exists: Nimike %{sku} on jo olemassa!
       csv_item_failed: ! '%{id} %{i} epäonnistui.'
-      failed_to_save_parts: Tietoa ei voitu tallentaa. Varmista että nimikkeiden ryhmä on olemassa.
+      failed_to_save_parts: Tietoa ei voitu tallentaa. Varmista että nimikkeiden ryhmä
+        on olemassa.
       gift_card_empty: Lahjakortti on tyhjä, ilmoita asiakkaalle ja tuhoa kortti.
       gs1_item_not_found: Tuote merkitty GS1, mutta %{sku} ei ole oikeassa muodossa.
       insufficient_quantity_on_item: Varoitus, nimikkeen %{sku} määrä on riittämätön,
-         aika päivittää varastotasot!
+        aika päivittää varastotasot!
       inventory_update_error: varaston päivitys virhe
       item_not_found: Etsimääsi nimikettä ei löytynyt, yritä hakea?
       item_price_is_zero: ! 'Varoitus: Nimikkeen hinta on 0'
@@ -753,37 +759,43 @@ fi:
         sisällyttänyt ne kokoonpanoon?
       must_cash_drop: Kassassa ei ole rahaa, lisää vaihtorahaa!
       must_choose_register: Sinun täytyy kirjautua kassaan!
-      must_choose_vendor: Valitse kauppa!
-      must_set_receiver_to_vendor: Valitse voimassa oleva myyntipiste toimituksen vastaanottajaksi.
-      must_specify_drop_or_payout: Sinun täytyy määrittää joko käteistalletus tai kassanosto!
+      must_choose_vendor: Valitse myyntipiste!
+      must_set_receiver_to_vendor: Valitse voimassa oleva myyntipiste toimituksen
+        vastaanottajaksi.
+      must_specify_drop_or_payout: Sinun täytyy määrittää joko käteistalletus tai
+        kassanosto!
       no_class: ! '%{model}:lle ei ole luokitusta rivillä %{i}'
       no_role: Sinulla eil ole riittävää asemaa päästäksi tähän resurssiin.
       no_such_item: Nimikettä ei löydy tällä SKU:lla
       not_enough_in_drawer: kassa ei riitä
       order_failed: Tilausta ei voitu suorittaa loppuun.
-      order_must_have_user: Et voi tallentaa tilausta ilman siihen osoitettua käyttäjää tai työntekijää.
+      order_must_have_user: Et voi tallentaa tilausta ilman siihen osoitettua käyttäjää
+        tai työntekijää.
       order_register_required: Aseta kassa täälle tilaukselle
-      order_totals_validation_failed: Tilauksen loppusumman tilauksen validointi
-        epäonnistui, tilauksen päivitys voi korjata ongelman. Paina OK päivittääksesi. 
+      order_totals_validation_failed: Tilauksen loppusumman tilauksen validointi epäonnistui,
+        tilauksen päivitys voi korjata ongelman. Paina OK päivittääksesi.
       order_vendor_required: Merkitse tälle tilaukselle myyntipiste.
       parent_sku_must_exist: Emonimikkeen pitää olla olemassa!
       payment_required: ! 'Error 402: Vaaditaan koko maksusuoritus'
       payment_required_explanation: Valitettavasti meidän on ilmoitettava, että järjestelmässä
         on automaattinen sulku, koska ennakkomaksun lupa on loppunut. Sinun pitää
-        maksaa Salor-maksu kokonaan hyötyäksesi siitä edelleen. Ota yhteys Salorin tekniseen tukeen.
-      sanity_check: Pyydetty toiminto on järjetön, tarkista tilauksen kokonaissumma ja 
-        ilmoitta asiakkaalle korjauksesta.
+        maksaa Salor-maksu kokonaan hyötyäksesi siitä edelleen. Ota yhteys Salorin
+        tekniseen tukeen.
+      sanity_check: Pyydetty toiminto on järjetön, tarkista tilauksen kokonaissumma
+        ja ilmoitta asiakkaalle korjauksesta.
       shipment_item_already_in_stock: Nimike %{sku} on jo varastossa
-      shipment_item_move_failed: ! 'Nimikkeen %{sku} muuttaminen epäonnistui virheen %{error} johdosta'
+      shipment_item_move_failed: Nimikkeen %{sku} muuttaminen epäonnistui virheen
+        %{error} johdosta
       shipment_item_nil: Nimike palautettu lähetyksestä oli nolla?
       sku_must_be_unique: ! '%{sku}  on oltava yksilöllinen'
       value_not_set: ei ole asetettu
+      coupon_not_enough_items: Et ole ostanut tarpeeksi nimikkeitä tämän soveltamiseksi
     inventory_updated: varasto päivitetty
     logged_in_as: kirjauttu nimella
-    login: Kirjaudusisään
-    logout: Kirjauduulos
+    login: Kirjaudu sisään
+    logout: Kirjaudu ulos
     not_you: et sinä?
-    owner_mode: OMISTAJATILA 
+    owner_mode: OMISTAJATILA
     owner_success: Omistajatietojen päivitys onnistui
     rebate_types:
       fixed: $
@@ -803,8 +815,8 @@ fi:
       as_aconto_from: Maksettu tilille
       cash-refunds: Käteispalautukset
       cash_drawer: Kassa
-      count_order_items: Count of sold items
-      count_orders: Myytyjen nimikkeiden määrä
+      count_order_items: Myytyjen nimikkeiden määrä
+      count_orders: Tilauksien määrä
       drop: talletus
       from: Alkaen
       gift_card_redeem_total: Lahjakorttilunastus yhteensä
@@ -837,7 +849,7 @@ fi:
     advanced_field: kehittynyt kenttä
     cash_register_heading: ! '%{name} %{store}: lle'
     cash_registers: kassat
-    category_heading: ! 'Kategoria %{name} %{store}:lle'
+    category_heading: Kategoria %{name} %{store}:lle
     change: vaihtoraha
     create_new_item: Luo uusi artikkeli
     customers: asiakkaat
@@ -846,7 +858,7 @@ fi:
     edit_item_heading: Muokkaa nimikkeen otsikko
     email: sähköposti
     errors:
-      no_access_right: Sinulla ei ole oikeutta käyttää tätä resurssia. Tämä virhe 
+      no_access_right: Sinulla ei ole oikeutta käyttää tätä resurssia. Tämä virhe
         on kirjattu logiin.
       nothing_found: Mitään ei löytynyt
       unknown_vendor: Ei tiedossa
@@ -884,7 +896,7 @@ fi:
     locations: sijaintipaikat
     loyalty_card: kanta-asiakaskortti
     name: nimi
-    new_item_heading: ! 'Uusi nimike %{store}:lle'
+    new_item_heading: Uusi nimike %{store}:lle
     new_stock_location: Uusi varaston sijaintipaikka
     notice:
       cache_was_cleared: Välimuistitiedostot on poistettu.
@@ -896,11 +908,11 @@ fi:
       order_refund_dt: ! '#%{id}'
       please_backup: Ole hyvä ja varmuuskopioi säännöllisesti!
       save_before: Tallenna ennen poistumista?
-      wholesaler_upload_report: ! 'Päivitetty nimikkeet: %{updated_items}, luodut nimikkeet:
-        %{created_items}, luodut kategoriat: %{created_categories}, luodut veroprofiilit
-        %{created_tax_profiles}'
-    order_heading: ! 'Tilausnro %{id} %{store}:lle'
-    order_number: ! 'Tilausnro %{id}'
+      wholesaler_upload_report: ! 'Päivitetty nimikkeet: %{updated_items}, luodut
+        nimikkeet: %{created_items}, luodut kategoriat: %{created_categories}, luodut
+        veroprofiilit %{created_tax_profiles}'
+    order_heading: Tilausnro %{id} %{store}:lle
+    order_number: Tilausnro %{id}
     pagination:
       last: viimeinen
       next: seuraava &gt;
@@ -908,7 +920,7 @@ fi:
       truncate: ! '...'
     password: salasana
     password_confirm: vahvista salasana
-    please_test_before_upload: ! 'VAROITUS: Olet aikeissa ylikirjoittaa tiedot tietokantaan.'    
+    please_test_before_upload: ! 'VAROITUS: Olet aikeissa ylikirjoittaa tiedot tietokantaan.'
     price: hinta
     quantity: määrä
     rebate: hyvitys
@@ -941,7 +953,7 @@ fi:
       saving: tallentaa...
       sku: SKU
       title: otsikko
-      to: asto
+      to: asti
       top: yläosa
       waiting: odottaa...
     sticky_ticket: Tarra
@@ -959,4 +971,4 @@ fi:
     on_export: siirtymässä
     on_import: laatamista
     on_save: tallentamassa
-    on_sku_not_found: sku ei löytyessä
+    on_sku_not_found: kun sku ei löytynyt

@@ -439,7 +439,6 @@ en:
       upload: upload
   label: label
   menu:
-    stock_management: Stock management
     actions: actions
     activate_gift_card: activate gift card
     add_to_current_order: add to current order
@@ -560,6 +559,7 @@ en:
     split: split
     statistics: Statistics
     stock_locations: stock locations
+    stock_management: Stock management
     subscription: Subscription
     support: support
     tax_profiles: tax profiles
