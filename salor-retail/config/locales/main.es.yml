@@ -12,6 +12,7 @@ es:
       amount: Monto
       amount_type: Tipo de monto
       applies_to: Se aplica a
+      attributes: attributes
       auto_drop: Comenzar el día automáticamente
       bank_machine_path: Cajero automático
       base_price: Precio de lista
@@ -20,15 +21,18 @@ es:
       buyback_price: Precio de recompra
       calculate_part_price: Calcular precio de partes
       calculate_tax: Calcular el IVA
+      cash: Cash
       cash_drawer: Caja
       cash_made: Efectivo realizado
       cash_register:
         sticker_printer: Impresora de etiquetas adhesivas
       category_id: Categoría
       cellphone: Móvil
+      change: Change
       child_sku: SKU hijo
       city: Cuidad
       color: color
+      company_id: Company
       company_name: Nombre de la empresa
       contact_address: Dirección de contacto
       contact_email: E-mail de contacto
@@ -42,8 +46,10 @@ es:
       created_at: Creado
       csv_imports: Importaciones CSV
       csv_imports_url: URL de importaciones CSV
+      currency: Währung
       customer:
         tax_number: Tax number
+      customer_name: Customer
       customer_screen_blurb: Texto estánda pantalla cliente
       decimal_points: Puntos decimales
       default: Por defecto
@@ -52,12 +58,14 @@ es:
       dollar_per_lp: dólar por punto de fidelización
       drop: Depósito
       email: E-mail
+      enable_technician_emails: Send emails to technician
       end_amount: Monto final
       end_date: Fecha final
       eod_show: Mostrar al final del día
       expires_on: Fecha de vencimiento
       first_name: Nombre
       full_name: Name
+      gift_card_amount: Gift Card Amount
       height: Altura
       hide_buttons: Ocultar Botones
       hide_discounts: Ocultar descuentos
@@ -68,6 +76,7 @@ es:
         body_receipt: Receipt
         is_header: Header
         lang: Language
+      invoice_logo: Invoice Logo
       invoice_note:
         destination_country_id: Destination Country
         note_footer: Note footer
@@ -88,7 +97,9 @@ es:
         weight: Weight
       item_sku: SKU del artículo
       itemsviewlist: Ver lista de artículos
+      js_code: Javascript Code
       lang: Language
+      language: Language
       last_name: Apellido
       lc_points: Puntos de tarjeta de fidelización
       length: largo
@@ -100,6 +111,7 @@ es:
       name: Nombre
       no_print: No imprimir con la techa "Entrar"
       notes: Notas
+      nr: Number
       open_cash_drawer: Abrir caja
       order_id: Pedido
       order_item:
@@ -109,6 +121,7 @@ es:
       owner_type: Tipo de dueño
       packaging_unit: Unidad de embalaje
       pagination: Paginación
+      pagination_invoice_one: Pagination Invoice other pages
       paid: Pagado
       parent_sku: SKU padre
       part_quantity: Cantidad de partes
@@ -124,6 +137,7 @@ es:
       purchase_price: Precio de compra
       quantity: Cantidad
       quantity_sold: Cantidad vendida
+      quote: Quote
       real_quantity: Cantidad real
       rebate: Rebaja
       rebate_type: Tipo de rebaja
@@ -159,19 +173,26 @@ es:
       street1: Dirección 1
       street2: Dirección 2
       stylesheets: Hojas de estilo
+      subscription_interval: Subscription interval
+      subscription_last: Last payment
+      subscription_next: Next payment
+      subscription_start: Subscription start
       subtotal: Subtotal
       tag: Etiqueta
       tax: IVA
       tax_free: Tax Free
       tax_profile_id: IVA
+      technician_email: Technician email
       telephone: Teléfono
       the_receiver: El receptor
       the_shipper: El transportador
       thermal_printer: Impresora térmica
+      time_zone: Time zone
       title: Título
       total: Total
       track_expiry: Monitorear fecha de vencimiento
       type: Tipo
+      unpaid: Unpaid
       url: URL
       user:
         hourly_rate: Hourly Rate
@@ -191,27 +212,6 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
-      attributes: attributes
-      cash: Cash
-      change: Change
-      company_id: Company
-      currency: Währung
-      customer_name: Customer
-      enable_technician_emails: Send emails to technician
-      gift_card_amount: Gift Card Amount
-      invoice_logo: Invoice Logo
-      js_code: Javascript Code
-      language: Language
-      nr: Number
-      pagination_invoice_one: Pagination Invoice other pages
-      quote: Quote
-      subscription_interval: Subscription interval
-      subscription_last: Last payment
-      subscription_next: Next payment
-      subscription_start: Subscription start
-      technician_email: Technician email
-      time_zone: Time zone
-      unpaid: Unpaid
     models:
       action:
         one: Acción
@@ -222,6 +222,9 @@ es:
       button:
         one: Botón
         other: Botones
+      cash_register:
+        one: Cash Register
+        other: Cash Registers
       category:
         one: Categoría
         other: Categorías
@@ -240,6 +243,9 @@ es:
       drawer_transaction:
         one: Transacción de caja
         other: Transacciones de caja
+      invoice_blurb:
+        one: Invoice Blurb
+        other: Invoice Blurbs
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -247,12 +253,12 @@ es:
         one: Artículo
         other: Artículos
       item_type:
+        aconto: On Account
         coupon: Coupon
         gift_card: Gift Card
         normal: Normal
         one: Tipo de artículo
         other: Tipo de artículo
-        aconto: On Account
       location:
         one: Ubicación
         other: Ubicaciones
@@ -262,8 +268,8 @@ es:
         proforma_orders: Proforma Invoices
         quote: Quote
         quotes: Quotes
-        unpaid_orders: Unpaid Invoices
         subscriptions: Subscriptions
+        unpaid_orders: Unpaid Invoices
       order_item:
         one: Artículo de pedido
         other: Otro artículo de pedido
@@ -299,12 +305,6 @@ es:
       vendor:
         one: Tienda
         other: Tiendas
-      cash_register:
-        one: Cash Register
-        other: Cash Registers
-      invoice_blurb:
-        one: Invoice Blurb
-        other: Invoice Blurbs
   api:
     user_does_not_exist: Este usuario no existe
   are_you_sure: Are you sure you want to do this?
@@ -313,9 +313,9 @@ es:
     assign: Asignar
     discount_after_threshold: discount after threshold
     divide: Dividir
+    execute: execute
     multiply: Multiplicar
     subtract: Restar
-    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Caja
@@ -354,6 +354,7 @@ es:
     edit_shipper: Editar transportador %{name}
     expiring_soon: Se vence pronto
     export: Exportar
+    inventory_report: Inventory Report
     item_selection: Selección de artículos
     new_discount_for: Nuevo descuento de %{store}
     notes: Notas
@@ -367,7 +368,6 @@ es:
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
     users: users
-    inventory_report: Inventory Report
   helpers:
     select:
       prompt: Por favor seleccione
@@ -411,19 +411,19 @@ es:
     index:
       database_distiller_warning: Dado que se generarán estadísticas, esta función
         llevará unos 30 segundos. ¿Continuar igual?
+      inventory_report: Inventur
       only_for_tobacco_stores: Esta función sólo existe para expendidoras de tabaco.
         Artículos de tabaco serán creados y actualizados. Esta acción llevará unos
         20 minutos. ¿Está seguro de continuar?
-      inventory_report: Inventur
       report: Report
     inventory_report:
+      no_category: No Category
       price: Precio de venta
       subtotal_purchase_price: Subtotal del precio de compra
       subtotal_selling_price: Subtotal del precio de venta
       title: Informe de inventario
       total_buying_price: Total del precio de compra
       total_selling_price: Total del precio de venta
-      no_category: No Category
     selection:
       print: Print
     show:
@@ -458,6 +458,7 @@ es:
     close: Close
     configuration: Config.
     contact: Contacto
+    countries: Countries
     current_order: ! 'pedido actual: #%{id}'
     customer: Cliente
     customers: Clientes
@@ -487,15 +488,21 @@ es:
     edit_user: Edituser
     edit_vendor: Editar tienda
     end_day: Finalizar el día
+    enter_inventory_items: Enter
     general_configuration: Configuración general
     home: Inicio
     inventory_report: Resúmen de inventario
     invoice_blurbs: Invoice Blurbs
+    invoice_notes: Invoice Notes
     item_types: Tipos de artículo
     items: Artículos
     labels: Labels
+    last_completed: Last completed
+    last_orders: Orders
+    last_uncompleted: Last uncompleted
     law_reports: Descargar el informe
     locations: Ubicaciones
+    logos: Logos
     loyalty_cards: Tarjetas de fidelización
     merge_into_current_order: Merge into current order
     move_shipment_item: Desplazar artículo de envío
@@ -523,6 +530,7 @@ es:
     new_user: New user
     new_vendor: Nueva tienda
     ok: OK
+    open_drawer: drawer
     order: Pedido
     orders: Pedidos
     overview: Vista general
@@ -530,7 +538,10 @@ es:
     points: Puntos
     pos: PDV
     print: Imprimir
+    print-dialog: print dialog
     receipts: XXX Receipts
+    refund_payment_method: refund payment method
+    regular_printer: regular printer
     remote_service: Servicio a distancia
     reorder: Pasar nuevo pedido
     report: Informe
@@ -538,6 +549,7 @@ es:
     report_day_range: Informe mensual
     report_range: Informe detallado
     reports: Informes
+    sale_types: Sale Types
     salorlive: ¡Salor en vivo!
     salortrainer: Entrenador de Salor
     search: Buscar
@@ -548,6 +560,8 @@ es:
     split: Separar
     statistics: Statistics
     stock_locations: Ubicaciones del stock
+    stock_management: Stock management
+    subscription: Subscription
     support: Soporte
     tax_profiles: Tipos de IVA
     transaction_tags: Etiquetas de transacción
@@ -559,26 +573,16 @@ es:
     users: users
     vendors: Tiendas
     void: Anular
-    wholesaler_update: Actualización del disteibuidor
-    countries: Countries
-    enter_inventory_items: Enter
-    invoice_notes: Invoice Notes
-    last_completed: Last completed
-    last_orders: Orders
-    last_uncompleted: Last uncompleted
-    logos: Logos
-    open_drawer: drawer
-    print-dialog: print dialog
-    refund_payment_method: refund payment method
-    regular_printer: regular printer
-    sale_types: Sale Types
-    subscription: Subscription
     weigh: weigh
+    wholesaler_update: Actualización del disteibuidor
   notifications:
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
     shipments_move_item: El artículo ha sido desplazado con éxito.
   orders:
+    index:
+      create_all_recurring_orders: Create orders from recurrable subscriptions
+      recurrable_subscriptions: Recurrable subscriptions
     print:
       delivery_note: Delivery note
       invoice: Invoice
@@ -636,9 +640,6 @@ es:
       transaction_tag: Etiqueta de transacción
       transaction_total: transacción total
       transactions: transacción
-    index:
-      create_all_recurring_orders: Create orders from recurrable subscriptions
-      recurrable_subscriptions: Recurrable subscriptions
   printr:
     eod_report:
       None: Sin nombre
@@ -726,9 +727,9 @@ es:
     index:
       report: Informe
     show:
-      purchase_price_sum: Suma precio de venta
       move_into_stock: Move into stock!
       need_tax_profile: Shipment Item needs tax profile!
+      purchase_price_sum: Suma precio de venta
   sticker: Etiqueta adhesiva
   support: XXX
   system:
@@ -820,17 +821,23 @@ es:
       None: Not specified
       OrderItemRefund: Item Refund
       OrderRefund: Order Refund
+      as_aconto_from: On account from
       cash-refunds: Cash-Refunds
       cash_drawer: Cash drawer
+      count_order_items: Count of sold items
       count_orders: Count of orders
       drop: drop
       from: From
+      gift_card_redeem_total: Giftcard redeem total
+      gift_card_sales_total: Giftcard sales total
       gross: gross
       net: net
       noncash-refunds: Noncash-Refunds
+      open_contracts: Open payments from running contracts
       payments: Payments
       payout: payout
       payouts: payouts
+      proforma_payments: Proforma Payments
       revenue: Revenue
       sales: Sales
       sum: sum
@@ -840,19 +847,13 @@ es:
       sums_by_category: sums by category
       sums_by_payment_methods: sums by payment methods
       sums_by_tax_profile: sums by tax profile
+      tax: Tax
       time: time
       title: day report
       to: To
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
-      as_aconto_from: On account from
-      count_order_items: Count of sold items
-      gift_card_redeem_total: Giftcard redeem total
-      gift_card_sales_total: Giftcard sales total
-      open_contracts: Open payments from running contracts
-      proforma_payments: Proforma Payments
-      tax: Tax
   views:
     advanced_field: Campo avanzado
     cash_register_heading: ! '%{name} para %{store}'

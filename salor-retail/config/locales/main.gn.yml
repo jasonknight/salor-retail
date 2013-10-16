@@ -12,6 +12,7 @@ gn:
       amount: Betrag
       amount_type: Art
       applies_to: bezieht sich auf
+      attributes: attributes
       auto_drop: Auto-Buchung Tagesbeginn
       bank_machine_path: Bankomat
       base_price: Betrag
@@ -96,6 +97,7 @@ gn:
         weight: Gewicht
       item_sku: Artikel SKU
       itemsviewlist: Listenansicht für Artikel
+      js_code: Javascript Code
       lang: Sprache
       language: Sprache
       last_name: Familienname
@@ -210,8 +212,6 @@ gn:
       when: Wenn
       whento: When
       width: Breite
-      attributes: attributes
-      js_code: Javascript Code
     models:
       action:
         one: Aktion
@@ -313,9 +313,9 @@ gn:
     assign: setze zu
     discount_after_threshold: Discount After Threshold
     divide: dividieren
+    execute: execute
     multiply: multiplizieren
     subtract: subtrahieren
-    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: Kassenlade
@@ -432,16 +432,14 @@ gn:
       query: Abfragen
       to: bis
     update_real_quantity:
-      inventory_report: Inventurbericht
-      update_quantity: Inventurmengen übernehmen
       are_you_sure: This will copy the inventory quantities into the database and
         reset the inventory report. Continue?
+      inventory_report: Inventurbericht
+      update_quantity: Inventurmengen übernehmen
     upload:
       upload: Importieren
   label: Regaletikett
   menu:
-    print_dialog: Druckdialog
-    stock_management: Lagerverwaltung
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf
@@ -562,6 +560,7 @@ gn:
     split: splitten
     statistics: Statistik
     stock_locations: Lager
+    stock_management: Lagerverwaltung
     subscription: Abo
     support: Unterstützung
     tax_profiles: Steuerklassen
@@ -815,7 +814,6 @@ gn:
       receipt_logo_footer: Rechnungslogo Fuß
       receipt_logo_header: Rechnungslogo Kopf
     report_day:
-      thermal: Thermodrucker
       None: Unbenannt
       OrderItemRefund: Einzelstornierung
       OrderRefund: Gesamtstornierung
@@ -830,6 +828,7 @@ gn:
       gift_card_sales_total: Gutschein Verkauf
       gross: brutto
       net: netto
+      noncash-refunds: Noncash-Refunds
       open_contracts: Laufende Aufträge
       payments: Zahlungen
       payout: Auszahlung
@@ -851,7 +850,6 @@ gn:
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
-      noncash-refunds: Noncash-Refunds
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

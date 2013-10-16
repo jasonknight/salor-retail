@@ -1,0 +1,155 @@
+---
+fi:
+  activerecord:
+    errors:
+      messages:
+        accepted: on hyväksyttävä
+        blank: ei saa olla täyttämättä
+        confirmation: ei yhteensopiva
+        empty: ei saa olla tyhjä
+        equal_to: on oltava yhtä suuri kuin %{count}
+        even: on oltava parillinen
+        exclusion: ei pitaisi olla listassa
+        greater_than: on oltava suurempi kuin %{count}
+        greater_than_or_equal_to: on oltava suurempi tai yhtä suuri kuin %{count}
+        inclusion: ei ole listassa
+        invalid: on virheellinen
+        less_than: on oltava vähemmin kuin %{count}
+        less_than_or_equal_to: on oltava vähemmin tai yhtä suuri kuin %{count}
+        not_a_number: ei ole numero
+        odd: on oltava pariton
+        taken: on jo ottetu
+        too_long: on liian pitkä (enitään %{count} kirjainmerkkiä)
+        too_short: on liian lyhyt (vähintään %{count} kirjainmerkkiä)
+        wrong_length: on vääränpituinen (pitää olla %{count} kirjainmerkkiä)
+      template:
+        body: ! 'Tarkista seuravat syötöt:'
+        header:
+          one: "%{count} virhe esti lomakeen '%{model}' tallentamisen."
+          other: "%{count} virhettä esti lomakeen '%{model}' tallentamisen."
+  date:
+    abbr_day_names:
+    - su
+    - ma
+    - ti
+    - ke
+    - to
+    - pe
+    - la
+    abbr_month_names:
+    - 
+    - tam
+    - hel
+    - maa
+    - huh
+    - tou
+    - kes
+    - hei
+    - elo
+    - syy
+    - lok
+    - mar
+    - jou
+    day_names:
+    - sunnuntai
+    - maanantai
+    - tiistai
+    - keskiviiko
+    - torstai
+    - perjantai
+    - lauantai
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%d. %B  %Y'
+      short: ! '%d. %b'
+    month_names:
+    - 
+    - tammikuu
+    - helmikuu
+    - maaliskuu
+    - huhtikuu
+    - toukokuu
+    - kesäkuu
+    - heinakuu
+    - elokuu
+    - syyskuu
+    - lokakuu
+    - marraskuu
+    - joulukuu
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: noin 1 tunti
+        other: noin %{count} tuntia
+      about_x_months:
+        one: noin 1 kuukausi
+        other: noin %{count} kuukautta
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: melkein 1 vuosi
+        other: melkein %{count} vuotta
+      half_a_minute: puoli minuuttia
+      less_than_x_minutes:
+        one: alle minuutin
+        other: alle %{count} minuuttia
+      less_than_x_seconds:
+        one: alle 1 sekuntia
+        other: alle %{count} sekuntia
+      over_x_years:
+        one: yli 1 vuosi
+        other: yli %{count} vuotta
+      x_days:
+        one: 1 päivää
+        other: ! '%{count} päivää'
+      x_minutes:
+        one: 1 minuutti
+        other: ! '%{count} minuuttia'
+      x_months:
+        one: 1 kuukausi
+        other: ! '%{count} kuukautta'
+      x_seconds:
+        one: 1 sekunti
+        other: ! '%{count} seconds'
+    prompts:
+      day: päivä
+      hour: tunti
+      minute: minuutti
+      month: kuukausi
+      second: sekuntia
+      year: vuosi
+  helpers:
+    select:
+      prompt: Valitse
+    submit:
+      create: Luo %{model}
+      submit: Tallenna %{model}
+      update: Päivitä %{model}
+  support:
+    array:
+      words_connector:
+        last_word_connector: ! ', ja '
+        two_words_connector: ! ' ja '
+  time:
+    am: ''
+    formats:
+      date_iso: ! '%Y-%m-%d'
+      date_normal: ! '%d. %B %Y'
+      date_short: ! '%d. %b %y'
+      datetime_iso: ! '%Y-%m-%d %H:%M:%S'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      default: ! '%a, %d. %b. %Y, %H:%M:%S %z'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      long: ! '%d. %B %Y %H:%M:%S'
+      month_and_day: ! '%d. %B'
+      salor: ! '%a, %b %d %H:%M'
+      short: ! '%d. %b. %y  %y %H:%M'
+      time_short: ! '%H:%M'
+    pm: ''

@@ -291,7 +291,7 @@ namespace :translations do
   task :update do
     base_path = File.join(Rails.root,'config','locales')
     base_name = "main.XXX.yml" # i.e. the pattern name of the files
-    langs = ['en','gn','fr','es','ru','it','cn','el']
+    langs = ['en','gn','fr','es','ru','it','cn','el','fi']
     default_file = File.join(base_path,base_name.gsub('XXX',langs[0])) #i.e. the first file is the default file
     langs.each do |lang|
       current_file = File.join(base_path,base_name.gsub('XXX',lang))

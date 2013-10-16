@@ -12,6 +12,7 @@ cn:
       amount: 金額
       amount_type: 金額類型
       applies_to: 適用於
+      attributes: attributes
       auto_drop: 自動開始日
       bank_machine_path: 自動櫃員機
       base_price: 基價
@@ -20,15 +21,18 @@ cn:
       buyback_price: buyback price 回購價格
       calculate_part_price: 計算部分價格
       calculate_tax: 計稅
+      cash: Cash
       cash_drawer: 錢抽屜
       cash_made: 賺的錢
       cash_register:
         sticker_printer: 標籤打印機
       category_id: 類別
       cellphone: 手機
+      change: Change
       child_sku: 孩子的 SKU
       city: 城市
       color: color
+      company_id: Company
       company_name: 公司名稱
       contact_address: 聯繫地址
       contact_email: 聯絡電郵
@@ -42,8 +46,10 @@ cn:
       created_at: 創建了
       csv_imports: CSV 進口
       csv_imports_url: CSV 進口的 URL
+      currency: Währung
       customer:
         tax_number: Tax number
+      customer_name: Customer
       customer_screen_blurb: 標準文本顧客屏幕
       decimal_points: 小數點
       default: 默認
@@ -52,12 +58,14 @@ cn:
       dollar_per_lp: 美元每忠誠點
       drop: 下拉
       email: 電子郵件
+      enable_technician_emails: Send emails to technician
       end_amount: 最後金額
       end_date: 結束日期
       eod_show: 顯示在天結束
       expires_on: 到期
       first_name: 名字
       full_name: Name
+      gift_card_amount: Gift Card Amount
       height: 高度
       hide_buttons: 隱藏按鈕
       hide_discounts: 隱藏折扣
@@ -68,6 +76,7 @@ cn:
         body_receipt: Receipt
         is_header: Header
         lang: Language
+      invoice_logo: Invoice Logo
       invoice_note:
         destination_country_id: Destination Country
         note_footer: Note footer
@@ -88,7 +97,9 @@ cn:
         weight: Weight
       item_sku: 產品的SKU
       itemsviewlist: 為產品的列表視圖
+      js_code: Javascript Code
       lang: Language
+      language: Language
       last_name: 姓
       lc_points: 忠誠卡點
       length: 長度
@@ -100,6 +111,7 @@ cn:
       name: 名稱
       no_print: 不要在輸入打印
       notes: 筆記
+      nr: Number
       open_cash_drawer: 打開錢抽屜
       order_id: 訂購
       order_item:
@@ -109,6 +121,7 @@ cn:
       owner_type: 雇主類型
       packaging_unit: 包裝單位
       pagination: 分頁
+      pagination_invoice_one: Pagination Invoice other pages
       paid: 支付
       parent_sku: 父母的SKU
       part_quantity: 部分數量
@@ -124,6 +137,7 @@ cn:
       purchase_price: 購買價格
       quantity: quantity 數量
       quantity_sold: 銷售數量
+      quote: Quote
       real_quantity: 實際數量
       rebate: 回扣
       rebate_type: 回扣類型
@@ -159,19 +173,26 @@ cn:
       street1: 地址1
       street2: 地址2
       stylesheets: 樣式表
+      subscription_interval: Subscription interval
+      subscription_last: Last payment
+      subscription_next: Next payment
+      subscription_start: Subscription start
       subtotal: 小計
       tag: 標籤
       tax: 稅
       tax_free: Tax Free
       tax_profile_id: 稅
+      technician_email: Technician email
       telephone: 電話
       the_receiver: 收到人
       the_shipper: 發貨人
       thermal_printer: 熱敏打印機
+      time_zone: Time zone
       title: 稱號
       total: 共計
       track_expiry: 跟踪屆滿
       type: 類型
+      unpaid: Unpaid
       url: URL
       user:
         hourly_rate: Hourly Rate
@@ -191,27 +212,6 @@ cn:
       when: 何時
       whento: When
       width: 寬度
-      attributes: attributes
-      cash: Cash
-      change: Change
-      company_id: Company
-      currency: Währung
-      customer_name: Customer
-      enable_technician_emails: Send emails to technician
-      gift_card_amount: Gift Card Amount
-      invoice_logo: Invoice Logo
-      js_code: Javascript Code
-      language: Language
-      nr: Number
-      pagination_invoice_one: Pagination Invoice other pages
-      quote: Quote
-      subscription_interval: Subscription interval
-      subscription_last: Last payment
-      subscription_next: Next payment
-      subscription_start: Subscription start
-      technician_email: Technician email
-      time_zone: Time zone
-      unpaid: Unpaid
     models:
       action:
         one: 行動
@@ -222,6 +222,9 @@ cn:
       button:
         one: 按鈕
         other: 按鈕
+      cash_register:
+        one: Cash Register
+        other: Cash Registers
       category:
         one: 類別
         other: 類別
@@ -240,6 +243,9 @@ cn:
       drawer_transaction:
         one: 抽屜交易
         other: 抽屜交易
+      invoice_blurb:
+        one: Invoice Blurb
+        other: Invoice Blurbs
       invoice_note:
         one: Invoice Note
         other: Invoice Notes
@@ -247,12 +253,12 @@ cn:
         one: 產品
         other: 產品
       item_type:
+        aconto: On Account
         coupon: Coupon
         gift_card: Gift Card
         normal: Normal
         one: 產品類型
         other: 產品類型
-        aconto: On Account
       location:
         one: 位置
         other: 位置
@@ -262,8 +268,8 @@ cn:
         proforma_orders: Proforma Invoices
         quote: Quote
         quotes: Quotes
-        unpaid_orders: Unpaid Invoices
         subscriptions: Subscriptions
+        unpaid_orders: Unpaid Invoices
       order_item:
         one: 訂購產品
         other: 訂購產品
@@ -299,12 +305,6 @@ cn:
       vendor:
         one: 商店
         other: 商店
-      cash_register:
-        one: Cash Register
-        other: Cash Registers
-      invoice_blurb:
-        one: Invoice Blurb
-        other: Invoice Blurbs
   api:
     user_does_not_exist: 用戶不存在
   are_you_sure: Are you sure you want to do this?
@@ -313,9 +313,9 @@ cn:
     assign: 分配
     discount_after_threshold: discount after threshold
     divide: 分
+    execute: execute
     multiply: 乘
     subtract: 減
-    execute: execute
   cash_registers:
     end_of_day:
       cash_drawer: 錢抽屜
@@ -351,6 +351,7 @@ cn:
     edit_shipper: 編輯托運人 %{name}
     expiring_soon: 即將到期
     export: 出口
+    inventory_report: Inventory Report
     item_selection: 產品選擇
     new_discount_for: ! '%{store} 的新折扣'
     notes: 註釋
@@ -364,7 +365,6 @@ cn:
     update_location: 更新位置
     update_real_quantity: 更新實際數量
     users: users
-    inventory_report: Inventory Report
   helpers:
     select:
       prompt: 請選擇
@@ -406,17 +406,17 @@ cn:
       used_item_ids: 使用的項目
     index:
       database_distiller_warning: 由於統計生成, 調用此函數將持續約30秒. 繼續嗎?
-      only_for_tobacco_stores: 此功能只有在煙草店. 煙草項目現在將被創建和更新. 這一行動將需要大約20分鐘. 你真的確定要繼續嗎?
       inventory_report: Inventur
+      only_for_tobacco_stores: 此功能只有在煙草店. 煙草項目現在將被創建和更新. 這一行動將需要大約20分鐘. 你真的確定要繼續嗎?
       report: Report
     inventory_report:
+      no_category: No Category
       price: 售價
       subtotal_purchase_price: 小計購買價格
       subtotal_selling_price: 小計銷售價格
       title: 庫存報告
       total_buying_price: 總和購買價格
       total_selling_price: 總和銷售價格
-      no_category: No Category
     selection:
       print: Print
     show:
@@ -450,6 +450,7 @@ cn:
     close: Close
     configuration: 組態
     contact: contact 聯絡
+    countries: Countries
     current_order: ! '當前的訂單: #%{id}'
     customer: 顧客
     customers: 顧客
@@ -479,15 +480,21 @@ cn:
     edit_user: Edituser
     edit_vendor: 編輯供應商
     end_day: end day 結束日
+    enter_inventory_items: Enter
     general_configuration: 一般組態
     home: 主頁
     inventory_report: 庫存報告
     invoice_blurbs: Invoice Blurbs
+    invoice_notes: Invoice Notes
     item_types: 產品類型
     items: 產品
     labels: Labels
+    last_completed: Last completed
+    last_orders: Orders
+    last_uncompleted: Last uncompleted
     law_reports: 報告下載
     locations: 位置
+    logos: Logos
     loyalty_cards: 忠誠卡
     merge_into_current_order: Merge into current order
     move_shipment_item: 移動裝船產品
@@ -515,6 +522,7 @@ cn:
     new_user: New user
     new_vendor: 新供應商
     ok: OK
+    open_drawer: drawer
     order: 訂購
     orders: 訂購
     overview: 概貌
@@ -522,7 +530,10 @@ cn:
     points: 點
     pos: POS
     print: 打印
+    print-dialog: print dialog
     receipts: XXXX Receipts
+    refund_payment_method: refund payment method
+    regular_printer: regular printer
     remote_service: 遠程服務
     reorder: 重新排序
     report: 報告
@@ -530,6 +541,7 @@ cn:
     report_day_range: 月度報告
     report_range: 報告詳細
     reports: 報告
+    sale_types: Sale Types
     salorlive: Salor 活著!
     salortrainer: Salor訓練者
     search: 尋找
@@ -540,6 +552,8 @@ cn:
     split: 分裂
     statistics: Statistics
     stock_locations: 貨物位置
+    stock_management: Stock management
+    subscription: Subscription
     support: 支持
     tax_profiles: 稅務個人資料
     transaction_tags: 交易標籤
@@ -551,26 +565,16 @@ cn:
     users: users
     vendors: 供應商
     void: 廢止
-    wholesaler_update: 批發商更新
-    countries: Countries
-    enter_inventory_items: Enter
-    invoice_notes: Invoice Notes
-    last_completed: Last completed
-    last_orders: Orders
-    last_uncompleted: Last uncompleted
-    logos: Logos
-    open_drawer: drawer
-    print-dialog: print dialog
-    refund_payment_method: refund payment method
-    regular_printer: regular printer
-    sale_types: Sale Types
-    subscription: Subscription
     weigh: weigh
+    wholesaler_update: 批發商更新
   notifications:
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
     shipments_move_item: 項目均順利搬遷
   orders:
+    index:
+      create_all_recurring_orders: Create orders from recurrable subscriptions
+      recurrable_subscriptions: Recurrable subscriptions
     print:
       delivery_note: Delivery note
       invoice: Invoice
@@ -628,9 +632,6 @@ cn:
       transaction_tag: 交易標籤
       transaction_total: 交易總計
       transactions: 交易
-    index:
-      create_all_recurring_orders: Create orders from recurrable subscriptions
-      recurrable_subscriptions: Recurrable subscriptions
   printr:
     eod_report:
       None: 未命名
@@ -715,9 +716,9 @@ cn:
     index:
       report: 報告
     show:
-      purchase_price_sum: 購買價格的總和
       move_into_stock: Move into stock!
       need_tax_profile: Shipment Item needs tax profile!
+      purchase_price_sum: 購買價格的總和
   sticker: 貼紙
   support: 支持
   system:
@@ -789,17 +790,23 @@ cn:
       None: Not specified
       OrderItemRefund: Item Refund
       OrderRefund: Order Refund
+      as_aconto_from: On account from
       cash-refunds: Cash-Refunds
       cash_drawer: Cash drawer
+      count_order_items: Count of sold items
       count_orders: Count of orders
       drop: drop
       from: From
+      gift_card_redeem_total: Giftcard redeem total
+      gift_card_sales_total: Giftcard sales total
       gross: gross
       net: net
       noncash-refunds: Noncash-Refunds
+      open_contracts: Open payments from running contracts
       payments: Payments
       payout: payout
       payouts: payouts
+      proforma_payments: Proforma Payments
       revenue: Revenue
       sales: Sales
       sum: sum
@@ -809,19 +816,13 @@ cn:
       sums_by_category: sums by category
       sums_by_payment_methods: sums by payment methods
       sums_by_tax_profile: sums by tax profile
+      tax: Tax
       time: time
       title: day report
       to: To
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
-      as_aconto_from: On account from
-      count_order_items: Count of sold items
-      gift_card_redeem_total: Giftcard redeem total
-      gift_card_sales_total: Giftcard sales total
-      open_contracts: Open payments from running contracts
-      proforma_payments: Proforma Payments
-      tax: Tax
   views:
     advanced_field: 先進的現場
     cash_register_heading: ! '%{name} 為 %{store}'
