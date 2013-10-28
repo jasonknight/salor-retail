@@ -1,0 +1,161 @@
+---
+fi:
+  :any_actions: Toiminnot
+  :any_buttons: Painikkeet
+  :any_cash_registers: Kassat
+  :any_categories: Kategoriat
+  :any_customers: Asiakkaat
+  :any_discounts: Alennukset
+  :any_employees: Työntekijät
+  :any_histories: Tapahtumat
+  :any_items: Nimikkeet
+  :any_locations: Sijaintipaikat
+  :any_orders: Tilaukset
+  :any_reports: Raportit
+  :any_shipment_items: Lähetysnimikkeet
+  :any_shipment_types: Lähetystyypit 
+  :any_shipments: Lähetykset
+  :any_shippers: Toimittajat
+  :any_stock_locations: Varastosijaintipaikat
+  :any_tax_profiles: Veroprofiilit
+  :any_tender_methods: Maksutavat
+  :any_transaction_tags: Tapahtumatunnisteet
+  :any_vendors: Myyntipisteet
+  :assistant: Apulaispäällikkö
+  :cashier: Kassa
+  :change_prices: Muuta hintoja
+  :clear_orders: Tyhjennä tilaukset
+  :create_actions: Luo toiminnot
+  :create_buttons: Luo painikkeet
+  :create_cash_registers: Luo kassat
+  :create_categories: Luo kategoriat
+  :create_customers: Luo asiakkaat
+  :create_discounts: Luo alennukset
+  :create_employees: Luo työntekijät
+  :create_histories: Luo tapahtumat
+  :create_items: Luo nimikkeet
+  :create_locations: Luo sijaintipaikat
+  :create_orders: Luo tilaukset
+  :create_reports: Luo raportit
+  :create_shipment_items: Luo lähetysnimikkeet
+  :create_shipment_types: Luo lähetystyypit
+  :create_shipments: Luo lähetykset
+  :create_shippers: Luo toimittajat
+  :create_stock_locations: Luo varastojen sijaintipaikat
+  :create_tax_profiles: Luo veroprofiilit
+  :create_tender_methods: Luo maksutavat
+  :create_transaction_tags: Luo tapahtumatunnisteet
+  :create_vendors: Luo myyntipisteet
+  :destroy_actions: Tuhoa toimet
+  :destroy_buttons: Tuhoa painikkeet
+  :destroy_cash_registers: Tuhoa kassat
+  :destroy_categories: Tuhoa kategoriat
+  :destroy_customers: Tuhoa asiakkaat
+  :destroy_discounts: Tuhoa alennukset
+  :destroy_employees: Tuhoa työntekijät
+  :destroy_histories: Tuhoa tapahtumat
+  :destroy_items: Tuhoa nimikkeet
+  :destroy_locations: Tuhoa sijaintipaikat
+  :destroy_order_items: Tuhoa tilausnimukkeet
+  :destroy_orders: Tuhoa tilaukset
+  :destroy_reports: Tuhoa raportit
+  :destroy_shipment_items: Tuhoa lähetysnimikkeet
+  :destroy_shipment_types: Tuhoa lähetystyypit
+  :destroy_shipments: Tuhoa lähetyksetf
+  :destroy_shippers: Tuhoa toimittajat
+  :destroy_stock_locations: Tuhoa varastosijaintipaikat
+  :destroy_tax_profiles: Tuhoa veroprofiilit
+  :destroy_tender_methods: Tuhoa maksutavat
+  :destroy_transaction_tags: Tuhoa liiketoiminimikkeet
+  :destroy_vendors: Tuhoa myyntipisteet
+  :edit_actions: Muokkaa toiminnot
+  :edit_buttons: Muokkaa painikkeet
+  :edit_cash_registers: Muokkaa kassat
+  :edit_categories: Muokkaa kategoriat
+  :edit_customers: Muokkaa asiakkaat
+  :edit_discounts: Muokkaa alennukset
+  :edit_employees: Muokkaa työntekijät
+  :edit_histories: Muokkaa tapahtumat
+  :edit_items: Muokkaa nimikkeet
+  :edit_locations: Muokkaa sijaintipaikat
+  :edit_orders: Muokkaa tilaukset
+  :edit_others_orders: Muokkaa muut tilaukset
+  :edit_reports: Muokkaa raportit
+  :edit_shipment_items: Muokkaa lähetysnimikkeet
+  :edit_shipment_types: Muokkaa lähetystyypit
+  :edit_shipments: Muokkaa lähetykset
+  :edit_shippers: Muokkaa toimittajat
+  :edit_stock_locations: Muokkaa varasto sijaintipaikat
+  :edit_tax_profiles: Muokkaa veroprofiilit
+  :edit_tender_methods: Muokkaa maksutavat
+  :edit_transaction_tags: Muokkaa liiketoiminimikkeet
+  :edit_vendors: Muokkaa myyntipisteet
+  :employee: Työntekijä
+  :head_cashier: Pääkassa
+  :index_actions: Laadi toimintoluettelo
+  :index_buttons: Laadi Painikeluettelo
+  :index_cash_registers: Laadi kassaluettelo
+  :index_categories: Laadi kategorialuettelo
+  :index_customers: Laadi asiakasluettelo
+  :index_discounts: Laadi alennusluettelo
+  :index_employees: Laadi työntekijäluettelo
+  :index_histories: Laadi tapahtumaluettelo
+  :index_items: Laadi nimikeluettelo
+  :index_locations: Laadi sijaintipaikkaluettelo
+  :index_orders: Laadi tilausluettelo
+  :index_reports: Laadi raporttiluettelo
+  :index_shipment_items: Laadi lähetysnimikeluettelo
+  :index_shipment_types: Laadi Lähetystyyppiluettelo
+  :index_shipments: Laadi lähetysluettelo
+  :index_shippers: Laadi toimittajaluettelo
+  :index_stock_locations: Laadi varastosijaintipaikkaluettelo
+  :index_tax_profiles: Laadi veroprofiililuettelo
+  :index_tender_methods: Laadi maksutapaluettelo
+  :index_transaction_tags: Laadi liiketoiminimikeluettelo
+  :index_vendors: Laadi myyntipisteluettelo
+  :manager: Päällikkö
+  :remove_order_items: Poista tilausnimikkeet
+  :see_header: Katso ylätunniste
+  :show_actions: Näytä toiminnot
+  :show_buttons: Näytä painikkeet
+  :show_cash_registers: Näytä kassat
+  :show_categories: Näytä kategoriat
+  :show_customers: Näytä asiakkaat
+  :show_discounts: Näytä alennukset
+  :show_employees: Näytä työntekijät
+  :show_histories: Näytä tapahtumat
+  :show_items: Näytä nimikkeet
+  :show_locations: Näytä sijaintipaikat
+  :show_orders: Näytä tilaukset
+  :show_reports: Näytä raportit
+  :show_shipment_items: Näytä lähetysnimukkeet
+  :show_shipment_types: Näytä lähetystyypit
+  :show_shipments: Näytä lähetykset
+  :show_shippers: Näytä toimittajat
+  :show_stock_locations: Näytä varastosijaintipaikat
+  :show_tax_profiles: Näytä veroprofiilit
+  :show_tender_methods: Näytä maksutavat
+  :show_transaction_tags: Näytä liiketoiminimikkeet
+  :show_vendors: Näytä myyntipisteet
+  :stockboy: Varastotyöntekijä
+  :update_actions: Päivitä toiminnot
+  :update_buttons: Päivitä painikkeet
+  :update_cash_registers: Päivitä kassat
+  :update_categories: Päivitä kategoriat
+  :update_customers: Päivitä asiakkaat
+  :update_discounts: Päivitä alennukset
+  :update_employees: Päivitä työntekijät
+  :update_histories: Päivitä tapahtumat
+  :update_items: Päivitä nimikkeet
+  :update_locations: Päivitä sijaintipaikat
+  :update_orders: Päivitä tilaukset
+  :update_reports: Päivitä raportit
+  :update_shipment_items: Päivitä lähetysnimikkeet
+  :update_shipment_types: Päivitä lähetystyypit
+  :update_shipments: Päivitä lähetykset
+  :update_shippers: Päivitä toimittajat
+  :update_stock_locations: Päivitä varastosijaintipaikat
+  :update_tax_profiles: Päivitä veroprofiilit
+  :update_tender_methods: Päivitä maksutavat
+  :update_transaction_tags: Päivitä liiketoiminimikkeet
+  :update_vendors: Päivitä myyntipisteet
