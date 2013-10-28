@@ -1,3 +1,9 @@
+salor-retail (4.0.2.31) unstable; urgency=low
+
+  * on invoice show completed_at date instead created_at
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 28 Oct 2013 11:15:08 +0100
+
 salor-retail (4.0.2.30) unstable; urgency=low
 
   * invoice view fix, add unpaid to financial report
