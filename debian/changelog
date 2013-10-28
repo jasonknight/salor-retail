@@ -1,8 +1,21 @@
 salor-retail (4.0.2.31) unstable; urgency=low
 
-  * on invoice show completed_at date instead created_at
+  [ BretonFin ]
+  * Create main.fi.yml
+  * Create region.fi-fi.yml
+  * Create roles.fi.yml
+  * Create system.fi.yml
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 28 Oct 2013 11:15:08 +0100
+  [ brett ]
+  * First set of Finnish translations. Incomplete.
+  * Update Finnish translations
+  * Update for Finnisg 2013.10.11
+
+  [ Michael Franzl ]
+  * on invoice show completed_at date instead created_at
+  * build
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 28 Oct 2013 11:16:08 +0100
 
 salor-retail (4.0.2.30) unstable; urgency=low
 
