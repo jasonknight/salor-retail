@@ -220,7 +220,7 @@
         %th.right= t '.payout'
       - transactions.each do |d|
         %tr
-          %td.left= t ('.' + d[:tag].to_s)
+          %td.left= d[:tag]
           %td.left{:style => 'width:40%'}= d[:notes]
           %td.left= d[:time].strftime('%d. %b %H:%M')
           %td.right= humanized_money_with_symbol d[:amount] if d[:amount].fractional > 0

@@ -594,8 +594,8 @@ class Vendor < ActiveRecord::Base
 
     drawer_transactions.each do |dt|
       transactions << {
-        :tag => dt.tag,
-        :notes => dt.notes,
+        :tag => dt.tag.to_s,
+        :notes => dt.notes.to_s,
         :amount => dt.amount,
         :time => dt.created_at
       }
