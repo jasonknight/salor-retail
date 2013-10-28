@@ -14,8 +14,9 @@ salor-retail (4.0.2.31) unstable; urgency=low
   [ Michael Franzl ]
   * on invoice show completed_at date instead created_at
   * build
+  * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 28 Oct 2013 11:16:08 +0100
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 28 Oct 2013 11:17:31 +0100
 
 salor-retail (4.0.2.30) unstable; urgency=low
 
