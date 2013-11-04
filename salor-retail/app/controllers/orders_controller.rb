@@ -130,7 +130,7 @@ class OrdersController < ApplicationController
   
   def destroy
     @order = @current_vendor.orders.find_by_id(params[:id])
-    if @order.completed.nil?
+    if @order.completed_at.nil?
       @order.hide(@current_user.id)
     else
       $MESSAGES[:alerts] << "Order ID #{ @order.id } is either paid or already hidden"
