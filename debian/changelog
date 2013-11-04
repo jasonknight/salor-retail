@@ -1,3 +1,9 @@
+salor-retail (4.0.2.32) unstable; urgency=low
+
+  * order deletion fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 04 Nov 2013 12:16:54 +0100
+
 salor-retail (4.0.2.31) unstable; urgency=low
 
   [ BretonFin ]
