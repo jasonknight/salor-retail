@@ -60,7 +60,7 @@ window.shipments = {
     
     var row_id = 'shipment_item_' + item.id;
     var base_id = shipments.getShipmentItemId(item);
-    var row = create_dom_element('div', {id:row_id, model_id:item.id, klass:base_id }, '');
+    var row = create_dom_element('div', {id:row_id, model_id:item.id, clss:base_id }, '');
     
     _set('item', item, row);
     
@@ -70,7 +70,7 @@ window.shipments = {
       var col_id = base_id + '_' + field + '_inp';
       var col_class1 = base_id + '-' + field;
       var col_class2 = 'pos-item-' + field;
-      var col = create_dom_element('div', {klass:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'ShipmentItem', field:field}, '');
+      var col = create_dom_element('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'ShipmentItem', field:field}, '');
       col.addClass(col_class1);
       col.addClass(col_class2);
       
@@ -105,7 +105,7 @@ window.shipments = {
           col.html(toCurrency(item.purchase_price_total));
           break;
         case 'tax_profile':
-          var tax_profile_select = shared.element('select',{klass: 'si_tax_profile_select'},'',col);
+          var tax_profile_select = shared.element('select',{clss: 'si_tax_profile_select'},'',col);
           tax_profile_select.on('change',function () {
             var string = '/vendors/edit_field_on_child?id=' + item.id +'&klass=ShipmentItem' + '&field=tax_profile_id&value=' + $(this).val();
             get(string, '');

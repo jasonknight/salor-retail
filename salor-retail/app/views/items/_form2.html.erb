@@ -414,11 +414,11 @@
           var elem = $("<div class='part'></div>");
           var inp_id = 'inp-'+Math.floor(Math.random() * 1000);
           elem.append($('<%= label_tag I18n.t("activerecord.attributes.sku") %><br />'));
-          var inp = shared.element('input',{id: inp_id,type: "text", name: "part_skus[][sku]", class: "text-input keyboardable part-input"},'',elem);
+          var inp = shared.element('input',{id: inp_id,type: "text", name: "part_skus[][sku]", klass: "text-input keyboardable part-input"},'',elem);
           elem.append('<br />');
           var qinp_id = 'qinp-'+Math.floor(Math.random() * 1000);
           elem.append($('<%= label_tag I18n.t("activerecord.attributes.part_quantity") %> <br />'));
-          var inp = shared.element('input',{id: qinp_id,type: "text", name: "part_skus[][part_quantity]", class: "text-input keyboardable part-input"},'',elem);
+          var inp = shared.element('input',{id: qinp_id,type: "text", name: "part_skus[][part_quantity]", klass: "text-input keyboardable part-input"},'',elem);
           elem.append('<br />');
           var del = $('<div align="center" style="padding-top: 10px;"><%= image_tag "/images/icons/" + icon(:delete,16) %></div>');
           del.click(function () {

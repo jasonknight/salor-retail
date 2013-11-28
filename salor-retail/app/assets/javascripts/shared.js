@@ -191,10 +191,10 @@ function _push(object) {
 }
 function create_dom_element (tag,attrs,content,append_to) {
   var element = $(document.createElement(tag));
-  if ( typeof attrs.klass != 'undefined' ) {
+  if ( typeof attrs.clss != 'undefined' ) {
     //class is a reserved word
-    var cls = attrs['klass'];
-    delete attrs.klass;
+    var cls = attrs['clss'];
+    delete attrs.clss;
     element.addClass(cls);
   }
   $.each(attrs, function (k,v) {

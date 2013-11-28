@@ -5,7 +5,7 @@ function itemsAddNameTranslation(locale) {
 
   }
   var label = shared.element('label',{id: 'name_translation_'+locale+'_label'},locale + ": &nbsp;",tdiv);
-  var inp = shared.element('input', {name: 'item[name_translations][' + locale + ']', type: 'text', klass:'keyboardable' }, '', label);
+  var inp = shared.element('input', {name: 'item[name_translations][' + locale + ']', type: 'text', clss:'keyboardable' }, '', label);
   inp.css({width: '50%'});
   return inp;
 }

@@ -65,7 +65,7 @@ function drawOrderItemRow(item) {
   
   var row_id = 'order_item_' + item.id;
   var base_id = getOrderItemId(item);
-  var row = create_dom_element('div', {id:row_id, model_id:item.id, item_id:item.item_id, klass:base_id }, '');
+  var row = create_dom_element('div', {id:row_id, model_id:item.id, item_id:item.item_id, clss:base_id }, '');
   
    _set('item',item,row);
    
@@ -75,7 +75,7 @@ function drawOrderItemRow(item) {
     var col_id = base_id + '_' + attr + '_inp';
     var col_class1 = base_id + '-' + attr;
     var col_class2 = 'pos-item-' + attr;
-    var col = create_dom_element('div', {klass:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'OrderItem', field:attr}, '');
+    var col = create_dom_element('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'OrderItem', field:attr}, '');
     col.addClass(col_class1);
     col.addClass(col_class2);
     
