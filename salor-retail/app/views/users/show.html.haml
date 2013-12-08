@@ -6,19 +6,15 @@
 = raw content_box_top(t("views.users"))
 
 .tools
-  %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+  %span{ :onmousedown => 'print_dialog();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
   %br
-  = form_tag "/employees/#{@user.id}", :method => :get do
+  = form_tag "/users/#{@user.id}", :method => :get do
     = label 'from', t('vendors.report_day.from')
     = select_date(@from, :prefix => 'from')
     %br
     = label 'to', t('vendors.report_day.to')
     = select_date(@to, :prefix => 'to')
     %br
-    %select{:id => "limit_select", :name => "limit"}
-      %option 15
-      %option 25
-      %option 50
     %br
     = submit_tag t('helpers.submit.ok'), :onclick => '$("#progress").show()'
 .clear
@@ -27,6 +23,3 @@
   = render :partial => "details"
   = render :partial => "time_sheet"
   = render :partial => "drawer_transactions"
-  
-  .center
-    %img.salorlogo{ :src => '/images/salor-logo-reports.png'}

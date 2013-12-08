@@ -88,7 +88,7 @@ function complete_order_send(print) {
 }
 
 // this function handles all the magic regarding printing, drawer opening, drawer observing, pole display update and mimo screen update. detects usage of salor-bin too.
-function complete_order_process(print) {
+function complete_order_process(print,change_user_id) {
   var drawer_opened = conditionally_open_drawer();
   var order_id = Order.id;
   var current_payment_method_items = paymentMethodItems();
@@ -97,6 +97,7 @@ function complete_order_process(print) {
     type: 'POST',
     data: {
       order_id: Order.id,
+      change_user_id: change_user_id,
       change: toFloat($('#complete_order_change').html()),
       print: print,
       payment_method_items: current_payment_method_items
@@ -165,7 +166,8 @@ function show_password_dialog(print) {
                   updateTips("Wrong Password");
                 } else {
                   updateTips("Correct, sending...");
-                  complete_order_process(print);
+                  var change_user_id = data.id;
+                  complete_order_process(print,change_user_id);
                   updateTips("");
                   $("#simple_input_dialog").dialog( "close" );
                 }

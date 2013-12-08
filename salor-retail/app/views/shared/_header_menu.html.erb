@@ -5,7 +5,7 @@
       <div align="center" class="first">
         <a href="<%= main_app.vendors_path %>">
           <img src="/images/salor-icon.png" />
-          <span class="icon-caption"><%= @current_register.name if @current_register %></span>
+          <span class="icon-caption"><%= @current_user.username %></span>
           
         </a>
       </div>
@@ -41,7 +41,7 @@
     <% if @current_user and @current_user.can(:index_orders) %>
     <li>
       <div align="center" id="btn-orders-new" class="">
-      <%=  link_to raw(salor_icon(:cash_register,{},32,I18n.t("menu.pos"))), "/orders/new" %>
+      <%=  link_to raw(salor_icon(:cash_register,{},32,@current_register.name)), "/orders/new" %>
       </div>
     </li>
     <% end %>

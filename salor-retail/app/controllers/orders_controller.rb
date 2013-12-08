@@ -199,13 +199,14 @@ class OrdersController < ApplicationController
 
     History.record("Initialized order for complete", @order, 5)
 
-    if params[:user_id] and params[:user_id] != @current_user.id then
-      tmp_user = User.find_by_id(params[:user_id])
-      if tmp_user and tmp_user.vendor_id == @current_user.vendor_id then
-        tmp_user.update_attribute :current_register_id, @current_register
-        History.record("swapped user #{@current_user.id} with #{tmp_user.id}",@order,3)
-        @current_user = tmp_user
-        @order.update_attribute :user_id, @current_user.id
+    if params[:change_user_id] and params[:change_user_id] != @current_user.id then
+      tmp_user = @current_vendor.users.find_by_id(params[:change_user_id])
+      if tmp_user
+        History.record("swapping user #{@current_user.id} with #{tmp_user.id}",@order,3)
+
+        @order.user = tmp_user
+        @order.save!
+        
         SalorBase.log_action("OrdersController","tmp_user swapped")
       else
         SalorBase.log_action("OrdersController","tmp_user does not belong to this store")
@@ -213,7 +214,7 @@ class OrdersController < ApplicationController
       end
     end
     
-    @order.user = @current_user
+    #@order.user = @current_user
     @order.complete(params)
 
     if @order.is_proforma == true then

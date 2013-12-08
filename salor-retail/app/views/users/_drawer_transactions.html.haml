@@ -1,11 +1,13 @@
 %h2=I18n.t('activerecord.models.drawer_transaction.other')
 %table.striped-table2
   %tr
-    %td= l @from, :format => :long
-    %td=raw "&nbsp;"
-    %td{:align=>'right'}= l @to, :format => :long
-  - @user.drawer_transactions.visible.where("tag != 'CompleteOrder' and tag != 'Change'").where(:created_at => (@from-1.day)..(@to + 1.day)).each do |crd|
+    %td= t "activerecord.attributes.tag"
+    %td= t "activerecord.attributes.created_at"
+    %td= t "activerecord.attributes.notes"
+    %td= t "activerecord.attributes.amount"
+  - @user.drawer_transactions.visible.where("tag != 'CompleteOrder' and tag != 'Change'").where(:created_at => (@from-1.day)..(@to + 1.day)).each do |dt|
     %tr
-      %td= l crd.created_at, :format => :short
-      %td{:align=>"right"}= number_to_currency crd.amount
-      %td= raw crd.notes
+      %td= dt.tag
+      %td= l dt.created_at, :format => :short
+      %td= raw dt.notes
+      %td{:align=>"right"}= humanized_money_with_symbol dt.amount

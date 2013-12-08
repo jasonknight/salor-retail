@@ -263,8 +263,9 @@ class OrderItem < ActiveRecord::Base
   # This method is only called on add to order
   # otherwise calculate_totals is called
   def modify_price
-    log_action "Modifying price"
+    log_action "Modifying price for actions"
     self.modify_price_for_actions
+    log_action "Modifying price for gs1"
     self.modify_price_for_gs1
     if self.is_buyback
       log_action "modify_price_for_buyback"

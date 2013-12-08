@@ -1,0 +1,3 @@
+clockin / clockout messages
+iOS keyboard hiding
+iOS cash drop select 

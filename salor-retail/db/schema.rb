@@ -863,6 +863,7 @@ ActiveRecord::Schema.define(:version => 20130815100802) do
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
     t.integer  "hidden",        :default => 0
+    t.integer  "hidden_by"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"
@@ -870,7 +871,6 @@ ActiveRecord::Schema.define(:version => 20130815100802) do
     t.integer  "position"
     t.integer  "company_id"
     t.datetime "hidden_at"
-    t.integer  "hidden_by"
   end
 
   create_table "plugins", :force => true do |t|
@@ -908,13 +908,13 @@ ActiveRecord::Schema.define(:version => 20130815100802) do
 
   create_table "roles", :force => true do |t|
     t.string   "name"
-    t.integer  "vendor_id"
-    t.integer  "company_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
     t.integer  "user_id"
   end
 
