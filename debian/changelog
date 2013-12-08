@@ -1,3 +1,12 @@
+salor-retail (4.0.2.33) unstable; urgency=low
+
+  * ipad js fix
+  * ipad js fix
+  * ipad js fix
+  * various small improvements
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 08 Dec 2013 11:01:40 +0100
+
 salor-retail (4.0.2.32) unstable; urgency=low
 
   * order deletion fix
