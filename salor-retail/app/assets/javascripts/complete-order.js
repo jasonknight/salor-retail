@@ -104,14 +104,18 @@ function complete_order_process(print,change_user_id) {
     },
     complete: function(data, status) {
       ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
-      if (print == true) { 
+      if (print == true) {
         print_order(order_id, function() {
-          // observe after print has finished
-          if (drawer_opened == true) observe_drawer();
+          // Callback: observe drawer after printing
+          // print_order() is a convenience wrapper for print_url(), which in turn calls the C++ method Salor.printURL().
+          // This callback will be executed by print_url(), after the call to Salor.printURL().
+          // However, Salor.printURL() is executed asynchronously, and we can't pass a callback to this C++ method. This means we have no way of knowing when the server has finished sending print data to the C++ backend, and when the C++ has finished writing to the printer. This is problematical since we want to call observe_drawer(), which blocks the printer. As a workaround, we simply pass a delay to observe_drawer(). A delay of about 2 seconds will work for 99.9% of all print jobs when SR is ran on a local network (unless there are Apache/Passenger/Rails hickups). If SR is operated via the internet, then the delay has to be increased, but the delay should not be greater than the minimum time that a user needs to open the drawer, input/ouput cash, and close it again.
+          // To fix this timing issue, the JS must fetch binary print data from the server (/orders/print_receipt) and send the binary data to Salor.printText(). However, Salor.printText() currently uses QString input, but it would have to be converted to a QByteArray so that bitmap graphics won't get corrupted.
+          if (drawer_opened == true) observe_drawer(2000);
         });
       } else {
-        // observe immediately
-        if (drawer_opened == true) observe_drawer();
+        // do not print, observe immediately
+        if (drawer_opened == true) observe_drawer(0);
       }
       sendingOrder = false;
       updateCustomerDisplay(order_id, false, true);

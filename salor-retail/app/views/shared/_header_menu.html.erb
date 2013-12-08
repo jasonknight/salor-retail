@@ -41,7 +41,7 @@
     <% if @current_user and @current_user.can(:index_orders) %>
     <li>
       <div align="center" id="btn-orders-new" class="">
-      <%=  link_to raw(salor_icon(:cash_register,{},32,@current_register.name)), "/orders/new" %>
+      <%=  link_to raw(salor_icon(:cash_register,{},32,@current_register ? @current_register.name : "")), "/orders/new" %>
       </div>
     </li>
     <% end %>

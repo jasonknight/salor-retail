@@ -66,7 +66,7 @@ function print_url(printer_path, url, param_string, confirmation_url, callback) 
   if (param_string.indexOf('download=true') != -1) {
     window.location = url + param_string;
   } else if (isSalorBin() && Register.salor_printer == true) {
-    stop_drawer_observer()
+    stop_drawer_observer();
     Salor.printURL(printer_path, location.origin + url + param_string, c_url);
     if (typeof callback == "function") {
       callback.call();
@@ -118,13 +118,13 @@ function format_pole(name, price, quantity, weight_metric, total) {
   return pole_name + pole_price + pole_quantity + pole_total;
 }
 
-// this is a callback for print_url. the timeout must be greater than the time that escper needs to open and close the device node, which is just a few milliseconds.
-function observe_drawer() {
+// this is a callback used mainly by print_url
+function observe_drawer(delay) {
   if (isSalorBin()) {
     setTimeout(function() {
       Salor.startDrawerObserver(Register.thermal_printer);
     },
-    1000);
+    delay);
   }
 }
 
