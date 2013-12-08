@@ -89,7 +89,7 @@ function complete_order_send(print) {
 
 // this function handles all the magic regarding printing, drawer opening, drawer observing, pole display update and mimo screen update. detects usage of salor-bin too.
 function complete_order_process(print,change_user_id) {
-  var drawer_opened = conditionally_open_drawer();
+  conditionally_open_drawer();
   var order_id = Order.id;
   var current_payment_method_items = paymentMethodItems();
   $.ajax({
@@ -105,17 +105,10 @@ function complete_order_process(print,change_user_id) {
     complete: function(data, status) {
       ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
       if (print == true) {
-        print_order(order_id, function() {
-          // Callback: observe drawer after printing
-          // print_order() is a convenience wrapper for print_url(), which in turn calls the C++ method Salor.printURL().
-          // This callback will be executed by print_url(), after the call to Salor.printURL().
-          // However, Salor.printURL() is executed asynchronously. This means we have no way of knowing when the server has finished sending print data to the C++ backend, and when the C++ has finished writing to the printer. This is problematical since we want to call observe_drawer(), which blocks the printer. As a workaround, we simply pass a delay to observe_drawer(). A delay of about 2 seconds will work for 99.9% of all print jobs when SR is ran on a local network (unless there are Apache/Passenger/Rails hickups). If SR is operated via the internet, then the delay has to be increased, but the delay should not be greater than the minimum time that a user needs to open the drawer, input/ouput cash, and close it again.
-          // To fix this timing issue, Salor.printURL() should accept one more argument, which could be a string of JS to evaluate after the request has finished.
-          if (drawer_opened == true) observe_drawer(2000);
-        });
+        print_order(order_id, "callback_printing_done(); conditionally_observe_drawer(0);");
       } else {
-        // do not print, observe immediately
-        if (drawer_opened == true) observe_drawer(0);
+        // do not print, observe immediately, but only if the drawer has actually opened.
+        conditionally_observe_drawer(0);
       }
       sendingOrder = false;
       updateCustomerDisplay(order_id, false, true);
@@ -125,6 +118,11 @@ function complete_order_process(print,change_user_id) {
       displayMessages();
     }
   });
+}
+
+function callback_printing_done() {
+  console.log("callback_printing_done");
+  // more functionality can go here, e.g. sending a print confirmation to the server.
 }
 
 function allow_complete_order(userRequest) {
