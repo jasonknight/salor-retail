@@ -1159,11 +1159,17 @@ class Vendor < ActiveRecord::Base
   def csv_dump(model, from, to)
     case model
     when 'OrderItem'
-      order_items = self.order_items.existing.where(:created_at => from..to)
+      order_items = self.order_items.visible.where(:created_at => from..to)
       attributes = "order.nr;created_at;order.user.login;quantity;total_cents;tax_amount"
       output = ''
       output += "#{attributes}\n"
       output += Report.to_csv(order_items, OrderItem, attributes)
+    when 'Item'
+      items = self.items.visible
+      attributes = "id;sku;name;description;location.name;category.name"
+      output = ''
+      output += "#{attributes}\n"
+      output += Report.to_csv(items, Item, attributes)
     else
       output = nil
     end

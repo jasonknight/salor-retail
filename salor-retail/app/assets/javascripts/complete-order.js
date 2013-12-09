@@ -88,8 +88,8 @@ function complete_order_send(print) {
 }
 
 // this function handles all the magic regarding printing, drawer opening, drawer observing, pole display update and mimo screen update. detects usage of salor-bin too.
-function complete_order_process(print) {
-  var drawer_opened = conditionally_open_drawer();
+function complete_order_process(print,change_user_id) {
+  conditionally_open_drawer();
   var order_id = Order.id;
   var current_payment_method_items = paymentMethodItems();
   $.ajax({
@@ -97,20 +97,18 @@ function complete_order_process(print) {
     type: 'POST',
     data: {
       order_id: Order.id,
+      change_user_id: change_user_id,
       change: toFloat($('#complete_order_change').html()),
       print: print,
       payment_method_items: current_payment_method_items
     },
     complete: function(data, status) {
       ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
-      if (print == true) { 
-        print_order(order_id, function() {
-          // observe after print has finished
-          if (drawer_opened == true) observe_drawer();
-        });
+      if (print == true) {
+        print_order(order_id, "callback_printing_done(); conditionally_observe_drawer(0);");
       } else {
-        // observe immediately
-        if (drawer_opened == true) observe_drawer();
+        // do not print, observe immediately, but only if the drawer has actually opened.
+        conditionally_observe_drawer(0);
       }
       sendingOrder = false;
       updateCustomerDisplay(order_id, false, true);
@@ -120,6 +118,11 @@ function complete_order_process(print) {
       displayMessages();
     }
   });
+}
+
+function callback_printing_done() {
+  console.log("callback_printing_done");
+  // more functionality can go here, e.g. sending a print confirmation to the server.
 }
 
 function allow_complete_order(userRequest) {
@@ -165,7 +168,8 @@ function show_password_dialog(print) {
                   updateTips("Wrong Password");
                 } else {
                   updateTips("Correct, sending...");
-                  complete_order_process(print);
+                  var change_user_id = data.id;
+                  complete_order_process(print,change_user_id);
                   updateTips("");
                   $("#simple_input_dialog").dialog( "close" );
                 }

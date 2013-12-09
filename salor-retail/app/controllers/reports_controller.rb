@@ -13,7 +13,7 @@ class ReportsController < ApplicationController
     @locations << Dir['/home/*']
     @locations.flatten!
     @from, @to = assign_from_to(params)
-    @models_for_csv = [OrderItem]
+    @models_for_csv = [OrderItem, Item]
     
     if params.has_key?(:fisc_save)
       zip_outfile = @current_vendor.fisc_dump(@from, @to, params[:location])
@@ -27,24 +27,5 @@ class ReportsController < ApplicationController
       send_data csv_outfile, :filename => "#{ params[:csv_type] }.csv" if csv_outfile
     end
   end
-
-# 
-#   def cash_account
-#     @from, @to = assign_from_to(params)
-#     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
-#     @to = @to ? @to.end_of_day : @from.end_of_day
-#     @orders = Order.find(:all, :conditions => { :created_at => @from..@to, :paid => true })
-#     @orders.reverse!
-#     @taxes = TaxProfile.where( :hidden => 0)
-#   end
-# 
-#   def daily
-#     @from, @to = assign_from_to(params)
-#     @from = @from ? @from.beginning_of_day : DateTime.now.beginning_of_day
-#     @to = @to ? @to.end_of_day : @from.end_of_day
-#     @orders = Order.find(:all, :conditions => { :created_at => @from..@to, :paid => true })
-#     @orders.reverse!
-#     @taxes = TaxProfile.where( :hidden => 0)
-#   end
 
 end

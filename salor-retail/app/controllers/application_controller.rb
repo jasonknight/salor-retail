@@ -126,6 +126,10 @@ class ApplicationController < ActionController::Base
   end
   
   def fetch_current_user
+    if session[:user_id_hash].blank?
+      redirect_to new_session_path and return 
+    end
+    
     @current_user = User.visible.find_by_id_hash(session[:user_id_hash])
     if @current_user.nil?
       redirect_to new_session_path and return 
@@ -217,7 +221,9 @@ class ApplicationController < ActionController::Base
 
   def get_cash_register
     @current_register = @current_vendor.cash_registers.visible.find_by_id(session[:cash_register_id])
-    redirect_to cash_registers_path and return unless @current_register
+    if @current_register.blank?
+      redirect_to cash_registers_path
+    end
   end
   
   def set_tailor

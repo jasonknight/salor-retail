@@ -103,6 +103,18 @@ class User < ActiveRecord::Base
     return d
   end
   
+  def drawer_username
+    if self.uses_drawer_id then
+      d = self.company.drawers.find_by_id(self.uses_drawer_id)
+    else 
+      d = self.drawer
+    end
+    if not d then
+      raise "UserHasNoDrawer"
+    end
+    return d.user.username
+  end
+  
   def can(action)
     if self.role_cache.include? "manager" then
       return true

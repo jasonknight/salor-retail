@@ -103,7 +103,10 @@ class UsersController < ApplicationController
       if not emp then
         render :text => "NO" and return
       else
-        render :json => {:username => emp.username, :id => emp.id} and return
+        render :json => {
+          :username => emp.username,
+          :id => emp.id
+        } and return
       end
     end
   end

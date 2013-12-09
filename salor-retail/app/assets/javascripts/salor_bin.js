@@ -3,7 +3,7 @@ function isSalorBin() {
 }
 
 function usePole() {
-  return (isSalorBin() && !(typeof Register.pole_display != "undefined" || Register.pole_display != null || Register.pole_display.length > 1));
+  return isSalorBin() && Register.customerscreen_mode == "pole";
 }
 
 function useMimo() {
@@ -37,9 +37,8 @@ function quick_open_drawer() {
   }
 }
 
-
-// opens the drawer only if customer has given cash or if the register configuration tells to open it always. no drawer observation is started at this point, since it would block subsequent printing.
-function conditionally_open_drawer() {
+// this function returns true or false, which tells other functions if the cash drawer should be opened. for example, for a credit card transaction no cash drawer is needed.
+function open_drawer_condition() {
   var contains_cash_payment_method_item = false;
   var current_payment_method_items = paymentMethodItems();
   $.each(current_payment_method_items, function(k,v) {
@@ -49,37 +48,40 @@ function conditionally_open_drawer() {
     }
   });
   var open_drawer = contains_cash_payment_method_item || Register.always_open_drawer == true;
-  if ( open_drawer ) {
-    quick_open_drawer();
-  }
   return open_drawer;
 }
 
-
-function print_order(id, callback) {
-   print_url(Register.thermal_printer, '/orders/print_receipt', '&order_id=' + id,'/orders/print_confirmed?order_id=' + id, callback);
+// opens the drawer only if customer has given cash or if the register configuration tells to open it always. no drawer observation is started at this point, since it would block subsequent printing.
+function conditionally_open_drawer() {
+  console.log("conditionally_open_drawer");
+  if ( open_drawer_condition() == true ) quick_open_drawer();
 }
 
-function print_url(printer_path, url, param_string, confirmation_url, callback) {
+function conditionally_observe_drawer(delay) {
+  console.log("conditionally_observe_drawer");
+  if ( open_drawer_condition() == true ) observe_drawer(delay);
+}
+
+function print_order(id, callback) {
+   print_url(Register.thermal_printer, '/orders/print_receipt', '&order_id=' + id, callback);
+}
+
+function print_url(printer_path, url, param_string, callback) {
   c_url = typeof(confirmation_url) !== 'undefined' ? location.origin + confirmation_url : '';
   param_string = "?printurl=1&" + param_string;
   if (param_string.indexOf('download=true') != -1) {
     window.location = url + param_string;
   } else if (isSalorBin() && Register.salor_printer == true) {
-    stop_drawer_observer()
-    Salor.printURL(printer_path, location.origin + url + param_string, c_url);
-    if (typeof callback == "function") {
-      callback.call();
-    }
+    stop_drawer_observer();
+    Salor.printURL(printer_path, location.origin + url + param_string, callback);
   } else {
     $.get(url + param_string, callback);
   }
 }
 
 function playsound(file) {
-  
   if (isSalorBin()) {
-    console.log('playsound', file);
+    //console.log('playsound', file);
     Salor.playSound(file);
   }
 }
@@ -88,6 +90,7 @@ function playsound(file) {
 
 function updateCustomerDisplay(order_id, item, show_change) {
   if ( useMimo() ) {
+    console.log(location.origin + "/orders/" + order_id + "/customer_display")
     Salor.mimoRefresh(location.origin + "/orders/" + order_id + "/customer_display", 800, 480);
   }
   
@@ -118,13 +121,13 @@ function format_pole(name, price, quantity, weight_metric, total) {
   return pole_name + pole_price + pole_quantity + pole_total;
 }
 
-// this is a callback for print_url. the timeout must be greater than the time that escper needs to open and close the device node, which is just a few milliseconds.
-function observe_drawer() {
+// this is a callback used mainly by print_url
+function observe_drawer(delay) {
   if (isSalorBin()) {
     setTimeout(function() {
       Salor.startDrawerObserver(Register.thermal_printer);
     },
-    1000);
+    delay);
   }
 }
 

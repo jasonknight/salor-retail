@@ -16,22 +16,20 @@
     - if @current_company.mode == 'local'
       %hr
       %h3 Fiscal
-      %table
-        %tr
-          %td
-            %select{:name => 'location', :id => 'location_select'}
-              = options_for_select @locations
-            %br
-            = submit_tag t('helpers.submit.save'), :onclick => '$("#progress2").show()', :name => 'fisc_save'
-            %br
-          %td
-            = submit_tag t('menu.download'), :onclick => '$("#progress2").show()', :name => 'fisc_download'
-            %br
-            = image_tag 'loader.gif', :id => 'progress2', :style => 'display: none;'
+     
+      %select{:name => 'location', :id => 'location_select'}
+        = options_for_select @locations
+  
+      = submit_tag t('menu.download'), :onclick => '$("#progress2").show()', :name => 'fisc_download'
+      %br
+      = image_tag 'loader.gif', :id => 'progress2', :style => 'display: none;'
+      %br
+      = submit_tag t('helpers.submit.save'), :onclick => '$("#progress2").show()', :name => 'fisc_save'
+      %br
 
     %hr
     %h3 CSV
-    %select{ :name => 'csv_type' }
+    %select{ :id => 'csv_type', :name => 'csv_type' }
       - @models_for_csv.each do |m|
         %option{ :value => m.to_s }= m.model_name.human
     %br

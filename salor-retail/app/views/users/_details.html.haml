@@ -1,8 +1,12 @@
-%h2=link_to @user.full_name + " (#{@user.username})", "/employees/#{@user.id}/edit", :style => "color:black;"
+%h2= @user.full_name + " (#{@user.username})"
+
+%p== #{ t "views.single_words.from" } #{ l @from, :format => :long }
+%p== #{ t "views.single_words.to" } #{ l @to, :format => :long }
+
 %table.striped-table2
   %tr
-    %td= l @from, :format => :long
-    %td{:align=>'right'}= l @to, :format => :long
+    %td &nbsp;
+    %td
   %tr
     %td= I18n.t('activerecord.models.drawer.one')
     %td{:align=>"right"}= number_to_currency(@user.get_drawer.amount)

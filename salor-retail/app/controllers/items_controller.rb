@@ -184,35 +184,10 @@ class ItemsController < ApplicationController
       @uploader.crunch
     end
   end
-# 
-#   def upload_danczek_tobaccoland_plattner
-#     if params[:file]
-#       lines = params[:file].read.split("\n")
-#       i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type1("tobaccoland", lines)
-#       redirect_to(:action => 'index')
-#     end
-#   end
-# 
-#   def upload_house_of_smoke
-#     if params[:file]
-#       lines = params[:file].read.split("\n")
-#       i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type2("dios", lines)
-#       redirect_to(:action => 'index')
-#     end
-#   end
-# 
-#   def upload_optimalsoft
-#     if params[:file]
-#       lines = params[:file].read.split("\n")
-#       i, updated_items, created_items, created_categories, created_tax_profiles = FileUpload.new.type3("Optimalsoft", lines)
-#       redirect_to(:action => 'index')
-#     end
-#   end
   
   def download
     params[:page] ||= 1
     params[:order_by] = "id DESC" if not params[:order_by] or params[:order_by].blank?
-    orderby ||= params[:order_by]
     orderby ||= params[:order_by]
     unless params[:keywords].blank?
       # search function should display recursive items

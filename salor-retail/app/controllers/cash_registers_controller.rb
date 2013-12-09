@@ -10,6 +10,9 @@ class CashRegistersController < ApplicationController
 
   def index
     @registers = @current_vendor.cash_registers.visible.page(params[:page]).order("created_at DESC")
+    if session[:cash_register_id].blank?
+      $MESSAGES[:notices] = I18n.t("notifications.please_select_cash_register")
+    end
   end
   
   def show

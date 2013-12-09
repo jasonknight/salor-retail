@@ -40,6 +40,7 @@ class Action < ActiveRecord::Base
       return ""
     end
   end
+  
   def vendor_model=(v)
     if v.include? "Vendor:" then
       t,id = v.split(":")
@@ -47,6 +48,7 @@ class Action < ActiveRecord::Base
       self.model_id = id
     end
   end
+  
   def self.when_list
     return [
       :add_to_order, 
@@ -107,6 +109,7 @@ class Action < ActiveRecord::Base
   end
   
   def self.run(the_vendor, item, act)
+    SalorBase.log_action "Action", "run called", :light_red
     if item.class == OrderItem then
       base_item = item.item
     else
@@ -133,6 +136,7 @@ class Action < ActiveRecord::Base
     end
     return item
   end
+  
   def execute_script(item, act)
     return item if self.js_code.nil?
     the_user = User.find_by_id($USERID)
@@ -156,6 +160,7 @@ class Action < ActiveRecord::Base
     item = api.get_object(secret) # and then we get it back out
     return item
   end
+  
   def self.apply_action(action, item, act)
     SalorBase.log_action Action, "Action.apply_action " + action.name + " action_id:#{action.id}"
     return item if action.whento.nil?
