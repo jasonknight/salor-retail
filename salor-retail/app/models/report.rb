@@ -28,13 +28,13 @@ class Report
       cls = klass.columns_hash[a].type if klass.columns_hash[a]
       case cls
       when :integer
-        formatstring += "%i;"
+        formatstring += "\"%i\";"
       when :datetime, :string, :boolean, :text
-        formatstring += "%s;"
+        formatstring += "\"%s\";"
       when :float
-        formatstring += "%.2f;"
+        formatstring += "\"%.2f\";"
       else
-        formatstring += "%s;"
+        formatstring += "\"%s\";"
       end
     end
     lines = []

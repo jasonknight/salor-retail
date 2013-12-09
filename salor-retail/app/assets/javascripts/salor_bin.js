@@ -3,7 +3,7 @@ function isSalorBin() {
 }
 
 function usePole() {
-  return (isSalorBin() && !(typeof Register.pole_display != "undefined" || Register.pole_display != null || Register.pole_display.length > 1));
+  return isSalorBin() && Register.customerscreen_mode == "pole";
 }
 
 function useMimo() {
@@ -37,7 +37,7 @@ function quick_open_drawer() {
   }
 }
 
-
+// this function returns true or false, which tells other functions if the cash drawer should be opened. for example, for a credit card transaction no cash drawer is needed.
 function open_drawer_condition() {
   var contains_cash_payment_method_item = false;
   var current_payment_method_items = paymentMethodItems();
@@ -90,6 +90,7 @@ function playsound(file) {
 
 function updateCustomerDisplay(order_id, item, show_change) {
   if ( useMimo() ) {
+    console.log(location.origin + "/orders/" + order_id + "/customer_display")
     Salor.mimoRefresh(location.origin + "/orders/" + order_id + "/customer_display", 800, 480);
   }
   
