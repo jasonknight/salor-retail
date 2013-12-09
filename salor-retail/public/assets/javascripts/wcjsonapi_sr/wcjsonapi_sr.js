@@ -1,1 +1,0 @@
-console.log("wcjsonapi_sr.js loaded :)");
