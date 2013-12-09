@@ -54,7 +54,8 @@ module SalorBase
     :light_blue     => "\e[0;94;49m",
     :light_magenta  => "\e[0;95;49m",
     :light_cyan     => "\e[0;96;49m",
-    :light_white    => "\e[0;97;49m"
+    :light_white    => "\e[0;97;49m",
+    :grey_on_red    => "\e[0;39;44m",
   }
     fromcolor = colors[:light_yellow]
     normalcolor = colors[:default]

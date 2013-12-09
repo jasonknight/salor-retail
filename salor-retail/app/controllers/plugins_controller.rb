@@ -27,11 +27,15 @@ class PluginsController < ApplicationController
   end
 
   def create
-    @plugin = Plugin.new(params[:plugin])
+    @plugin = Plugin.new
     @plugin.vendor = @current_vendor
     @plugin.company = @current_company
+    @plugin.save
+    
+    @plugin.filename = params[:plugin][:filename]
 
     if @plugin.save
+      @plugin.unzip
       redirect_to plugins_path
     else
       render :new

@@ -1214,6 +1214,22 @@ class Vendor < ActiveRecord::Base
     return zip_outfile
   end
   
+  def paths
+    paths = {
+      :uploads        => File.join(Rails.root, "public", "uploads", SalorRetail::Application::SR_DEBIAN_SITEID, self.hash_id),
+      :plugins        => File.join(Rails.root, "public", "uploads",SalorRetail::Application::SR_DEBIAN_SITEID, self.hash_id, "plugins"),
+    }
+    return paths
+  end
+  
+  def urls
+    urls = {
+      :uploads        => "/uploads/#{ SalorRetail::Application::SR_DEBIAN_SITEID }/#{ self.hash_id }",
+      :plugins        => "/uploads/#{ SalorRetail::Application::SR_DEBIAN_SITEID }/#{ self.hash_id }/plugins",
+    }
+    return urls
+  end
+  
   private
   
   def generate_random_string

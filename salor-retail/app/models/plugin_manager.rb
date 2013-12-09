@@ -9,52 +9,53 @@ class PluginManager < AbstractController::Base
   self.view_paths = "app/views/"
   attr_accessor :javascript_files, :stylesheet_files, :image_files, :metas
   
-  def initialize(current_vendor,current_company,current_user)
-    @current_company        = current_company
-    @current_vendor         = current_vendor
-    @current_user           = current_user
-    @current_plugin_manager = self
-    @plugins                = Plugin.visible.where(:vendor_id => @current_vendor.id)
+  def initialize(current_vendor)
+    @vendor                 = current_vendor
+    @plugins                = @vendor.plugins.visible
     @context                = V8::Context.new
     @context['Salor']       = self
     @context['Params']      = $PARAMS
     @context['Request']     = $REQUEST
-    @context['URLS']        = $URLS;
+    @context['PLUGINS_BASE_URL']         = @vendor.urls[:plugins]
     @code = nil
-    @javascript_files = []
-    @stylesheet_files = []
+    @javascript_files = {}
+    @stylesheet_files = {}
     @image_files = {}
     @metas = {}
     # Filters are organized by name, which will be an
     # array of filters which will be sorted by their priority
     # { :some_filter => [
-    # 		{:function => "my_callback"}
-    # 	]
+    #       {:function => "my_callback"}
+    #   ]
     # }
     @filters                = {}
     @hooks                  = {}
     text                    = "(function () {\nvar __plugin__ = null;\nvar plugins = {};\n"
     @plugins.each do |plugin|
-    	log_action plugin.filename.current_path
+        #log_action plugin.filename.current_path
+      
       _files = plugin.files
       plugin_file_name = nil
       @metas[self.get_plugin_name(plugin)] = plugin.meta
       _files.each do |f|
         if f.match(/\.pl\.js$/) then
-          plugin_file_name = File.join($DIRS[:plugins],f)
+          plugin_file_name = File.join(plugin.full_path,f)
         elsif f.match(/\.js$/) then
-          @javascript_files << f
+          @javascript_files[plugin.name] ||= []
+          @javascript_files[plugin.name] << f
         elsif f.match(/\.css$/) then
-          @stylesheet_files << f
+          @stylesheet_files[plugin.name] ||= []
+          @stylesheet_files[plugin.name] << f
         elsif f.match(/\.svg$/) then
-          @image_files[self.get_plugin_name(plugin)] ||= []
-          @image_files[self.get_plugin_name(plugin)] << f
+          @image_files[plugin.name] ||= []
+          @image_files[plugin.name] << f
         end
       end
+      
       if plugin_file_name and File.exists? plugin_file_name
         begin
           log_action("Opening plugin file " + plugin_file_name)
-    	   File.open(plugin_file_name,'r') do |f|
+          File.open(plugin_file_name,'r') do |f|
           text += "\n__plugin__ = #{plugin.attributes.to_json};\n";
           text += f.read
          end
@@ -73,11 +74,18 @@ class PluginManager < AbstractController::Base
       log_action e.inspect
     end
   end
+  
+  def log_action_plugin(txt="",color=:grey_on_red)
+    from = self.class.to_s
+    SalorBase.log_action(from, "PLUGIN: #{ txt }", color)
+  end
+  
+  
   def get_icon_for(plugin)
     if @image_files[self.get_plugin_name(plugin)] and @image_files[self.get_plugin_name(plugin)].any? then
       @image_files[self.get_plugin_name(plugin)].each do |img|
-        if img.match(/\/icon\.svg$/) then
-          return File.join($URLS[:images], img)
+        if img.match(/icon\.svg$/) then
+          return "#{plugin.full_url}/#{img}"
         end
       end
     end

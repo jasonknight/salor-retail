@@ -21,11 +21,13 @@
     - if @current_user
       = render :partial => "shared/application_js"
     - if @current_plugin_manager and @current_plugin_manager.javascript_files.any?
-      - @current_plugin_manager.javascript_files.each do |f|
-        %script{ :type => "text/javascript", :src => File.join($URLS[:javascripts], f)} 
+      - @current_plugin_manager.javascript_files.each do |k,v|
+        - v.each do |f|
+          %script{ :type => "text/javascript", :src => "#{ @current_vendor.urls[:plugins] }/#{ k }/#{ f }"}
     - if @current_plugin_manager and @current_plugin_manager.stylesheet_files.any?
-      - @current_plugin_manager.stylesheet_files.each do |f|
-        %link{ :rel => "stylesheet", :type => "text/css", :href => File.join($URLS[:stylesheets], f)}
+      - @current_plugin_manager.stylesheet_files.each do |k,v|
+        - v.each do |f|
+          %link{ :rel => "stylesheet", :type => "text/css", :href => "#{ @current_vendor.urls[:plugins] }/#{ k }/#{ f }"}
 
 
 
