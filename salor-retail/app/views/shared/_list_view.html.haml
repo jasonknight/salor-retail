@@ -21,7 +21,15 @@
     - row_id = "#{klass.table_name.singularize}_#{entry.id}"
     - to_location = "window.location = '/#{entry.class.table_name}/#{entry.id}';"
     %tr
-      %td{:width => "40px"}=salor_icon(klass.table_name.singularize.to_sym,{:id => row_id,:onclick => to_location},48)
+      - if klass == Plugin
+        - icon = @current_plugin_manager.get_icon_for(entry)
+        - if not icon.empty? then
+          %td{:width => "40px"}
+            %img{ :src => icon, :onclick => to_location, :id => row_id, :width => 48 }
+        - else
+          %td{:width => "40px"}=salor_icon(klass.table_name.singularize.to_sym,{:id => row_id,:onclick => to_location},48)
+      - else
+        %td{:width => "40px"}=salor_icon(klass.table_name.singularize.to_sym,{:id => row_id,:onclick => to_location},48)
       - columns.each do |col|
         - if entry.class == TaxProfile and col == :value then
           %td{:align=>:center}= number_to_percentage(entry.send(col))

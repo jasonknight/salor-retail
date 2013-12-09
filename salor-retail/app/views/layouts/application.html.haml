@@ -15,10 +15,17 @@
     = javascript_include_tag 'application'
     = javascript_include_tag "/jslocales/main.#{I18n.locale}.js"
     = javascript_include_tag "jquery.ui.datepicker-#{ I18n.locale }"
+     
     - if @current_vendor
       = javascript_include_tag "/jslocales/region.#{@current_vendor.region}.js"
     - if @current_user
       = render :partial => "shared/application_js"
+    - if @current_plugin_manager and @current_plugin_manager.javascript_files.any?
+      - @current_plugin_manager.javascript_files.each do |f|
+        %script{ :type => "text/javascript", :src => File.join($URLS[:javascripts], f)} 
+    - if @current_plugin_manager and @current_plugin_manager.stylesheet_files.any?
+      - @current_plugin_manager.stylesheet_files.each do |f|
+        %link{ :rel => "stylesheet", :type => "text/css", :href => File.join($URLS[:stylesheets], f)}
 
 
 

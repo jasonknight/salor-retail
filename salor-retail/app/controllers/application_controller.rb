@@ -136,16 +136,21 @@ class ApplicationController < ActionController::Base
     else
       @current_company = @current_user.company
     end
+
     @current_vendor = @current_user.vendors.visible.find_by_id(session[:vendor_id])
+
+    if @current_vendor.nil? then
+      # Something is up...
+      session[:user_id_hash] = nil
+      redirect_to new_session_path and return 
+    end
     Time.zone = @current_vendor.time_zone if @current_vendor
     I18n.locale = @current_user.language
     $COMPANYID = @current_company.id
     $VENDORID = @current_vendor.id
     $USERID = @current_user.id
     @current_plugin_manager = PluginManager.new(@current_vendor,@current_company, @current_user)
-    $DIRS = {
-      :uploads => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
-    }
+    
     return @current_user
   end
   
@@ -163,6 +168,31 @@ class ApplicationController < ActionController::Base
       :notices => [],
       :alerts => [],
       :prompts => []
+    }
+    if Rails.env == "development" then
+      $DIRS = {
+        :uploads        => File.join(Rails.root,"public","uploads"),
+        :javascripts    => File.join(Rails.root,"public","uploads","javascripts"),
+        :images         => File.join(Rails.root,"public","uploads","images"),
+        :stylesheets    => File.join(Rails.root,"public","uploads","stylesheets"),
+        :plugins        => File.join(Rails.root,"public","uploads","plugins"),
+      }
+    else
+      $DIRS = {
+        :uploads        => File.join(Rails.root,"public","uploads",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
+        :javascripts    => File.join(Rails.root,"public","uploads","javascripts",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
+        :images         => File.join(Rails.root,"public","uploads","images",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
+        :stylesheets    => File.join(Rails.root,"public","uploads","stylesheets",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
+        :plugins        => File.join(Rails.root,"public","uploads","plugins",SalorRetail::Application::SR_DEBIAN_SITEID,@current_vendor.hash_id),
+      }
+
+    end
+    $URLS = {
+      :uploads          => "/" + File.join("uploads"),
+      :javascripts      => "/" + File.join("uploads","javascripts"),
+      :images           => "/" + File.join("uploads","images"),
+      :stylesheets      => "/" + File.join("uploads","stylesheets"),
+      :plugins          => "/" + File.join("uploads","plugins"),
     }
   end
   

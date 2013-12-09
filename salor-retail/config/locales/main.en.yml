@@ -438,6 +438,9 @@ en:
     upload:
       upload: upload
   label: label
+  plugins:
+    meta_fields: Meta Fields for this Plugin
+    files_list: Files in this plugin
   menu:
     actions: actions
     activate_gift_card: activate gift card

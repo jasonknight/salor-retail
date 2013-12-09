@@ -22,6 +22,7 @@ gem 'money-rails', '0.8.1'
 gem 'google_currency'
 gem "therubyracer", '0.11.4', :require => 'v8'
 gem 'carrierwave'
+gem 'rubyzip', '0.9.9'
 
 # The following are not yet part of Debian Jessie/sid but of the Red E repository and do NOT cause a dependency to the online API of rubygems.org
 

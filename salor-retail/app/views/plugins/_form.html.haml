@@ -13,5 +13,28 @@
     %tr
       %td= f.label :filename
       %td= f.file_field :filename
+    - fields = @current_plugin_manager.get_meta_fields_for(@plugin)
+    - if fields.any? then
+      %tr
+        %td{ :colspan=>2}
+          .content-box
+            .title-container
+              .title-box.shadow=I18n.t("plugins.meta_fields")
+      - fields.each do |k,v|
+        %tr
+          %td
+            %label=v[:name].titleize
+          %td
+            %input{ :type=> v[:type], :size => v[:size], :name=> "plugin[meta][" + v[:name] + "]", :value => (@plugin.meta ? @plugin.meta[v[:name]] : '') }
+    - if @plugin.files and @plugin.files.any?
+      %tr
+        %td{ :colspan=>2}
+          .content-box
+            .title-container
+              .title-box.shadow=I18n.t("plugins.files_list")
+      - @plugin.files.each do |f|
+        %tr
+          %td{:colspan=>2}=f
     %tr
       %td{ :colspan => 2, :align => :right }= f.submit
+    

@@ -22,6 +22,9 @@
     = item.quantity_with_stock
     
 %td= item.packaging_unit
+- custom_columns.each do |col|
+  - col = current_plugin_manager.apply_filter('item_list_column',{:item => item.attributes, :column => col})
+  %td=raw(col[:column])
 %td
   - if @current_user.can(:edit_items)
     = link_to salor_icon(:edit,{},20), edit_item_path(item)
