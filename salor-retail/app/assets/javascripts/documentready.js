@@ -8,6 +8,7 @@ var sr = {
     complete: {},
     customers: {},
     debug: {},
+    drawer: {},
   },
   data: {
     pos_core: {},

@@ -61,3 +61,12 @@ done
 
 # ./vartransform.sh remove_note_fields sr.fn.customers.removeNoteFields
 # ./vartransform.sh add_note_fields sr.fn.customers.addNoteFields
+
+# ./vartransform.sh echo sr.fn.debug.echo
+# ./vartransform.sh ajax_log sr.fn.debug.ajaxLog
+# ./vartransform.sh send_email sr.fn.debug.sendEmail
+
+# ./vartransform.sh show_cash_drop sr.fn.drawer.showTransactionPopup
+# ./vartransform.sh hide_cash_drop sr.fn.drawer.hideTransactionPopup
+# ./vartransform.sh cash_drop_save sr.fn.drawer.saveTransaction
+# ./vartransform.sh updateDrawer sr.fn.drawer.update

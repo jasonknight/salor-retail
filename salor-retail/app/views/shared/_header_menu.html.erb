@@ -29,7 +29,7 @@
     <% end %>
     <% if @current_user and @current_register and @current_user.can(:cashier) %>
       <li>
-        <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="show_cash_drop();">
+        <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="sr.fn.drawer.showTransactionPopup();">
           <%= salor_icon(:cash_drop, {}, 20, @current_user.get_drawer.user.username ) %>
           <br />
           <div id='header_drawer_amount'>

@@ -1,17 +1,17 @@
-function show_cash_drop() {
+sr.fn.drawer.showTransactionPopup = function() {
   $('#cash_drop').show();
   $("#transaction_type").val('');
   focusInput($("#cash_drop_amount"));
 }
 
-function hide_cash_drop() {
+sr.fn.drawer.hideTransactionPopup = function() {
   $('#cash_drop').hide();
   $('.cash-drop-amount').removeClass('error-input');
   $('.cash-drop-amount').val('');
   focusInput($('#main_sku_field'));
 }
 
-function cash_drop_save() {
+sr.fn.drawer.saveTransaction = function() {
   if ($('.cash-drop-amount').val() == '') {
     $('.cash-drop-amount').addClass('error-input');
     $('.trans-button').removeClass('button-highlight');
@@ -35,7 +35,7 @@ function cash_drop_save() {
         $('.dt-tag-button').removeClass("highlight");
         $('input#dt_tag').val('None');
         $('div.dt-tag-target').html(' Tag ');
-        hide_cash_drop();
+        sr.fn.drawer.hideTransactionPopup();
       },
       error: function (data,status,errorThrown) {
       messagesHash['prompts'].push(errorThrown);
@@ -45,9 +45,7 @@ function cash_drop_save() {
   focusInput($('#main_sku_field'));
 }
 
-
-
-function updateDrawer(string) {
+sr.fn.drawer.update = function(string) {
   $('.pos-cash-register-amount').html(string);
   $('.eod-drawer-total').html(string);
   $('#header_drawer_amount').html(string);
