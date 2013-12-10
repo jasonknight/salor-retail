@@ -83,7 +83,8 @@ class ItemsController < ApplicationController
       @item.assign_parts(params[:part_skus])
       @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
-      redirect_to items_path
+      # redirect_to items_path
+      render :edit
     else
       render :edit
     end
