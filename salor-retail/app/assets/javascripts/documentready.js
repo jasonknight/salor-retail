@@ -108,12 +108,14 @@ $(function () {
   
   $("#category_color").modcoder_excolor();
   
+  //TODO: move the following functions to the individual views. they needn't be loaded for every page.
   sr.fn.user_logins.display();
   sr.fn.coin_calculator.setup();
   sr.fn.focus.setup();
   sr.fn.inventory.setup();
   sr.fn.invoice.setup();
   sr.fn.onscreen_keyboard.setup();
+  sr.fn.remotesupport.setup();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;
