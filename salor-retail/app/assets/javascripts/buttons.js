@@ -15,3 +15,8 @@ sr.fn.buttons.makeSortable = function(id) {
     }
   });
 };
+
+sr.fn.buttons.showCategoryContainer = function(id) {
+  $('.button-category-container').hide();
+  $('#' + id).show();
+}

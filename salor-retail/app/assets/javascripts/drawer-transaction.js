@@ -50,3 +50,22 @@ sr.fn.drawer.update = function(string) {
   $('.eod-drawer-total').html(string);
   $('#header_drawer_amount').html(string);
 }
+
+sr.fn.drawer.makeTagButtons = function(btn) {
+  if (btn.hasClass("btn-done")) {
+    return;
+  }
+  btn.mousedown(function (event) {
+    $('.dt-tag-button').removeClass("highlight");
+    $(this).addClass("highlight");
+    if ($(this).attr('value') == 'None'){
+      $('#dt_tag').val($(this).attr('value'));
+      $('.dt-tag-target').html(i18n.activerecord.models.transaction_tag.one);
+    } else {
+      $('#dt_tag').val($(this).attr('value'));
+      $('.dt-tag-target').html($(this).html());
+    }
+    $('.dt-tags').hide();
+   });
+  btn.addClass("button-done");
+}

@@ -82,12 +82,12 @@ $(function () {
   }
   
 
-  $('.toggle').each(function () {
-    make_toggle($(this));
-  });
+//   $('.toggle').each(function () {
+//     make_toggle($(this));
+//   });
   
   $('.dt-tag-button').each(function () {
-    make_dt_button($(this));
+    sr.fn.drawer.makeTagButtons($(this));
   });
   
 
@@ -113,6 +113,13 @@ $(function () {
   // focus stuff
   //focusInput($('#generic_search_input'));
   
+  jQuery.ajaxSetup({
+      'beforeSend': function(xhr) {
+          //xhr.setRequestHeader("Accept", "text/javascript");
+          xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+      }
+  });
+  
   $("#category_color").modcoder_excolor();
   
   //TODO: move the following functions to the individual views. they needn't be loaded for every page.
@@ -123,6 +130,7 @@ $(function () {
   sr.fn.invoice.setup();
   sr.fn.onscreen_keyboard.setup();
   sr.fn.search_generic.setup();
+  sr.fn.messages.displayMessages();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

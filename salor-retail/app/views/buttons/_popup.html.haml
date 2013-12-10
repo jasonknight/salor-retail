@@ -4,7 +4,7 @@
       - if params[:controller] == 'orders'
         .generic-button-cool.popup-hide-button{ :onclick => '$("#buttons").hide()'} X
       - @button_categories.each do |cat|
-        .button-category.generic-button-cool{ :onclick => "showButtonCategoryContainer('button-category-container-#{ cat.id }')" }= cat.name
+        .button-category.generic-button-cool{ :onclick => "sr.fn.buttons.showCategoryContainer('button-category-container-#{ cat.id }')" }= cat.name
       %div.button-category-containers
         - @button_categories.each do |cat|
           %div.button-category-container{ :id => "button-category-container-#{ cat.id }" }
