@@ -1,6 +1,6 @@
 var highlightAttrs = ['sku', 'price', 'total'];
 
-function add_item(sku, additional_params) {
+sr.fn.pos_core.addItem = function(sku, additional_params) {
   if (sku == "") return
   get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
   $('#main_sku_field').val('');

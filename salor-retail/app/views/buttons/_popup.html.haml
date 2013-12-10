@@ -16,8 +16,8 @@
               - next unless item
               - additional_params = (item.must_change_price or item.default_buyback) ? '&no_inc=true' : ''
               - if params[:controller] == 'orders'
-                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }'); $('#buttons').hide();" if @current_register.hide_buttons == true
-                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }');" if @current_register.hide_buttons == false
+                - onmousedown = "sr.fn.pos_core.addItem('#{ b.sku }', '#{ additional_params }'); $('#buttons').hide();" if @current_register.hide_buttons == true
+                - onmousedown = "sr.fn.pos_core.addItem('#{ b.sku }', '#{ additional_params }');" if @current_register.hide_buttons == false
               %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }
                 = b.name
                 - if params[:controller] == 'buttons'

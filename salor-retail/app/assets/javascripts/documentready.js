@@ -1,3 +1,12 @@
+var sr = {
+  fn: {
+    pos_core: {},
+  },
+  data: {
+  },
+}
+
+
 var focuseKeyboardInput = false;
 var calledFrom = 'TopOfAppJS';
 var filename = "_application_js.html.erb";

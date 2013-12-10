@@ -8,7 +8,7 @@ $(function() {
       
       $("#main_sku_field").keyup(function(e) {
         if (e.keyCode == 13) {
-          add_item($("#main_sku_field").val(), '');
+          sr.fn.pos_core.addItem($("#main_sku_field").val(), '');
         }
       })
       

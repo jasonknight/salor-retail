@@ -125,7 +125,7 @@ function make_keyboardable(elem) {
       layout       : i18nlocale,
       customLayout : null,
       accepted    : function () {
-        add_item($("#main_sku_field").val(),'');
+        sr.fn.pos_core.addItem($("#main_sku_field").val(),'');
       },
       visible: function(){ $('.ui-keyboard-preview').select(); }
     });
