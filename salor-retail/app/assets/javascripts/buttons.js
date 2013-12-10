@@ -1,4 +1,4 @@
-function makeSortable(id) {
+sr.fn.buttons.makeSortable = function(id) {
   return $('#' + id).sortable({
     dropOnEmpty: false,
     cursor: 'crosshair',

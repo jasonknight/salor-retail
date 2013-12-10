@@ -9,7 +9,7 @@
         - @button_categories.each do |cat|
           %div.button-category-container{ :id => "button-category-container-#{ cat.id }" }
             - if params[:controller] == 'buttons'
-              %script== makeSortable('button-category-container-#{ cat.id }')
+              %script== sr.fn.buttons.makeSortable('button-category-container-#{ cat.id }')
             - cat.buttons.visible.each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
               - item = @current_vendor.items.visible.find_by_sku(b.sku)

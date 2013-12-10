@@ -1,6 +1,7 @@
 var sr = {
   fn: {
     pos_core: {},
+    buttons: {},
   },
   data: {
     pos_core: {}
