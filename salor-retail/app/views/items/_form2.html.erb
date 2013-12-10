@@ -78,13 +78,13 @@
     
     <tr>
       <td> 
-        <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "itemsAddNameTranslation($(this).val());" %>
+        <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "sr.fn.items.itemsAddNameTranslation($(this).val());" %>
       </td>
       <td> 
       <script type="text/javascript">
       $(function () {
         <% @item.name_translations.each do |k,v|%>
-          inp = itemsAddNameTranslation('<%= k %>');
+          inp = sr.fn.items.itemsAddNameTranslation('<%= k %>');
           inp.val("<%= escape_javascript v %>");
         <% end %>
         });

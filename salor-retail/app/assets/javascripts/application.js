@@ -15,6 +15,7 @@
 //= require jquery_ujs
 //= require sprintf
 //= require documentready
+//= require invoices
 //= require user_logins
 //= require math
 //= require buttons

@@ -14,6 +14,7 @@ var sr = {
     inplace_edit: {},
     inventory: {},
     invoice: {},
+    items: {},
     
     
   },
