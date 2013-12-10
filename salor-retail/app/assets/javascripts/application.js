@@ -16,14 +16,12 @@
 //= require sprintf
 //= require documentready
 //= require user_logins
-//= require genericjs
 //= require math
 //= require buttons
 //= require items
 //= require debug
 //= require focus
 //= require customers
-//= require helpers
 //= require inplace_edit
 //= require keypress
 //= require onscreenkeyboard

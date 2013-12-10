@@ -11,11 +11,13 @@ var sr = {
     drawer: {},
     user_logins: {},
     focus: {},
+    inplace_edit: {},
     
   },
   data: {
     pos_core: {},
     complete: {},
+    inplace_edit: {},
   },
 }
 

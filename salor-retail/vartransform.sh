@@ -76,3 +76,5 @@ done
 
 # ./vartransform.sh focusSetup sr.fn.focus.setup
 # ./vartransform.sh focusInput sr.fn.focus.set
+
+#./vartransform.sh showClockin sr.fn.user_logins.showPopup

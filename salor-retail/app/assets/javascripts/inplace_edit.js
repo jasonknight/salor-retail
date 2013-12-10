@@ -1,3 +1,9 @@
+var receiver_shipper_select = function (value) {
+  s = $(inplace_ships);
+  s = set_selected(s,value,0);
+  return s;
+}
+
 var get_inputs = {
   category_id: function (value) {
     s = $(inplace_cats);
@@ -73,15 +79,7 @@ var fields_callbacks = {
   }
 };
 
-function make_in_place_edit(elem) {
-  if (elem.hasClass('editmedone')) {
-    return;    
-  }
-  elem.click(function (event) {
-    in_place_edit(elem, event.pageX, event.pageY);
-  });
-  elem.addClass('editmedone');
-}
+
 
 /**
  * This allows us to easily turn off the binding to the enter key when we need
@@ -97,132 +95,112 @@ function inplaceEditBindEnter(elem) {
   });
 }
 
-
-
-function in_place_edit(elem, x, y) {
-  //$('#inplaceedit-div').remove();
-  var field = elem.attr('field');
-  var type = elem.attr('type');
-  var keyboard_layout = elem.attr('keyboard_layout');
-  var withstring = elem.attr('withstring');
-  var value = elem.html();
-
-  if (get_inputs[field]) {
-    console.log('getting inputs');
-    var inputhtml = get_inputs[field](value);
-  } else {
-    console.log('setting text input field');
-    var inputhtml = "<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />";
+function make_in_place_edit(elem) {
+  if (elem.hasClass('editmedone')) {
+    return;    
   }
-  var input = $(inputhtml);
-  
-  if (fields_callbacks[field]) {
-    console.log("callback for", field);
-    fields_callbacks[field](input);
-  }
+  elem.click(function (event) {
+    var x = event.pageX;
+    var y = evnet.pageY;
+    
+    var field = elem.attr('field');
+    var type = elem.attr('type');
+    var keyboard_layout = elem.attr('keyboard_layout');
+    var withstring = elem.attr('withstring');
+    var value = elem.html();
 
-  //var savelink = '<a id="inplaceeditsave" class="button-confirm">' + i18n.menu.ok + '</a>';
-  //var cancellink = '<a id="inplaceeditcancel" class="button-cancel">' + i18n.menu.cancel + '</a>';
-  //var linktable = "<table class='inp-menu' align='right'><tr><td>"+cancellink+"</td><td>"+savelink+"</td></tr></table>";
+    if (get_inputs[field]) {
+      console.log('getting inputs');
+      var inputhtml = get_inputs[field](value);
+    } else {
+      console.log('setting text input field');
+      var inputhtml = "<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />";
+    }
+    var input = $(inputhtml);
 
+    if (fields_callbacks[field]) {
+      console.log("callback for", field);
+      fields_callbacks[field](input);
+    }
 
-  //var offset = {'top' : 20, 'left' : '20%', 'position' : 'absolute', 'width': '60%'}
-  //var div = $("<div id='inplaceedit-div'></div>");
-  //$('body').append(div);
-  //div.append(input);
-  //div.append('<br />');
-  //div.append(linktable);
-  //$('body').append(input);
-  
-  if (typeof type == 'undefined') {
-    console.log('type is undefined');
-    // the type attr has not been set on the element, so we get type depeding on the input element used
-    var tagname = input[0].tagName
-    console.log('tagname is', tagname);
+    if (typeof type == 'undefined') {
+      console.log('type is undefined');
+      // the type attr has not been set on the element, so we get type depeding on the input element used
+      var tagname = input[0].tagName
+      console.log('tagname is', tagname);
 
-    switch(tagname) {
-      case 'SELECT':
-        type = 'select';
+      switch(tagname) {
+        case 'SELECT':
+          type = 'select';
+          break;
+        case 'INPUT':
+          type = 'keyboard';
+          break;
+      }
+    }
+      
+    switch(type) {
+      case 'keyboard':
+        if ( input.hasClass('keyboardable-int') || keyboard_layout == 'num' ) {
+          keyboard_layout = 'num';
+        } else {
+          keyboard_layout = i18nlocale;
+        }
+        input.keyboard({
+          openOn   : 'focus',
+          stayOpen : true,
+          layout   : keyboard_layout,
+          customLayout : null,
+          position: {
+            of: $('.yieldbox'),
+            my: 'center center',
+            at: 'center center'
+          },
+          visible : function() { 
+            if (IS_APPLE_DEVICE) {
+              $('.ui-keyboard-preview').val("");
+            } 
+            $('.ui-keyboard-preview').select();
+          },
+          accepted: function() {
+            in_place_edit_go(elem, input.val());
+          }
+        });
+        input.getkeyboard().reveal();
+        $('#inplaceedit-div').hide();
         break;
-      case 'INPUT':
-        type = 'keyboard';
+      
+      case 'select':
+        make_select_widget('', $('#inplaceedit'));
+        break;
+        
+      case 'date':
+        elem.hide();
+        input.insertAfter(elem);
+        input.datepicker({
+          onSelect: function(date, inst) {
+            elem.show();
+            in_place_edit_go(elem, input.val());
+            input.remove();
+          }
+        });
+        input.datepicker('show');
         break;
     }
-  }
-  
-  console.log('type is now', type);
-  //console.log('x', x);
-  //console.log('y', y);
-    
-  switch(type) {
-    case 'keyboard':
-      if ( input.hasClass('keyboardable-int') || keyboard_layout == 'num' ) {
-        keyboard_layout = 'num';
-      } else {
-        keyboard_layout = i18nlocale;
-      }
-      input.keyboard({
-        openOn   : 'focus',
-        stayOpen : true,
-        layout   : keyboard_layout,
-        customLayout : null,
-        position: {
-          of: $('.yieldbox'),
-          my: 'center center',
-          at: 'center center'
-        },
-        visible : function() { 
-          if (IS_APPLE_DEVICE) {
-            $('.ui-keyboard-preview').val("");
-          } 
-          $('.ui-keyboard-preview').select();
-        },
-        accepted: function() {
-          in_place_edit_go(elem, input.val());
-        }
-      });
-      input.getkeyboard().reveal();
-      $('#inplaceedit-div').hide();
-      break;
-    
-    case 'select':
-      make_select_widget('', $('#inplaceedit'));
-      break;
-      
-    case 'date':
-      elem.hide();
-      input.insertAfter(elem);
-      input.datepicker({
-        onSelect: function(date, inst) {
-          elem.show();
-          in_place_edit_go(elem, input.val());
-          input.remove();
-        }
-      });
-//         "",
-//         function() {
-//           //onSelect
-//         },
-//         {},
-//         event
-//       );
-      input.datepicker('show');
-      //input.datepicker('dialog');
-      //$('#inplaceedit').trigger('click');
-      //widget.css('top', '0px');
-      break;
-  }
 
-  //$('#inplaceedit-div').css(offset);
-  $('#inplaceeditsave').mousedown(function() {
-    in_place_edit_go(elem);
-  });
-  
-  $('#inplaceeditcancel').mousedown(function() {
-    $('#inplaceedit-div').remove();
-  });
+    //$('#inplaceedit-div').css(offset);
+    $('#inplaceeditsave').mousedown(function() {
+      in_place_edit_go(elem);
+    });
 
-  inplaceEditBindEnter(elem);
+    $('#inplaceeditcancel').mousedown(function() {
+      $('#inplaceedit-div').remove();
+    });
+
+    inplaceEditBindEnter(elem);
+    
+  });
+  elem.addClass('editmedone');
 }
 
 
@@ -246,8 +224,4 @@ function in_place_edit_go(elem, value) {
 }
 
 
-var receiver_shipper_select = function (value) {
-  s = $(inplace_ships);
-  s = set_selected(s,value,0);
-  return s;
-}
+
