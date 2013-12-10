@@ -3,6 +3,7 @@ var sr = {
     pos_core: {},
   },
   data: {
+    pos_core: {}
   },
 }
 

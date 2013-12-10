@@ -34,7 +34,7 @@ sr.fn.pos_core.updateOrder = function(order) {
 sr.fn.pos_core.updateOrderItems = function(items) {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    var id = getOrderItemId(item);
+    var id = sr.fn.pos_core.getOrderItemId(item);
     if ($('.' + id).length != 0) {
       /* Item is in list, and we need to update it */
       sr.fn.pos_core.updatePosItem(item);
@@ -64,7 +64,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
   }
   
   var row_id = 'order_item_' + item.id;
-  var base_id = getOrderItemId(item);
+  var base_id = sr.fn.pos_core.getOrderItemId(item);
   var row = create_dom_element('div', {id:row_id, model_id:item.id, item_id:item.item_id, clss:base_id }, '');
   
    _set('item',item,row);
@@ -238,7 +238,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
     
   
     if (item.is_buyback && highlightAttrs.indexOf(attr) != -1) {
-      highlight(col);
+      sr.fn.pos_core.highlight(col);
     }
 
   } // end loop through attrs
@@ -271,7 +271,7 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
     col.unbind();
     col.mousedown(function (event) {
         if (Register.detailed_edit == true) {
-          detailedOrderItemMenu(event);
+          sr.fn.pos_core.detailedOrderItemMenu(event);
           return;
         }
         $('.item-menu-div').remove();
@@ -336,7 +336,7 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
 
 
 
-window.showOrderOptions = function () {
+sr.fn.pos_core.showOrderOptions = function() {
   var dialog = shared.draw.dialog(i18n.menu.configuration, "order_options");
   
   // Customer code
@@ -572,7 +572,7 @@ window.showOrderOptions = function () {
 }
 
 
-function detailedOrderItemMenu(event) {
+sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   $('.item-menu-div').remove();
   var target = $(event.currentTarget).parent();
   var item = _get('item',target);
@@ -631,7 +631,7 @@ function detailedOrderItemMenu(event) {
   });
   title.append(btn);
   
-  orderItemNameOption(config, item);
+  sr.fn.pos_core.orderItemNameOption(config, item);
   
   var edit_item_hr = shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item + '( ' + item.sku + ' )',config);
   edit_item_hr.click(function () {
@@ -653,7 +653,7 @@ function detailedOrderItemMenu(event) {
   shared.element('h4',{id: 'oi_item_type_h4'},i18n.activerecord.models.item_type.one,config_table_cols_left[0]);
   var item_type_select = shared.element('select',{id: 'oi_item_type_select'},'',config_table_cols_left[0]);
   item_type_select.on('change',function () {
-    editItemAndOrderItem(item,'item_type_id',$(this).val());
+    sr.fn.pos_core.editItemAndOrderItem(item,'item_type_id',$(this).val());
     focusInput($('#main_sku_field'));
   });
   $.each(ItemTypes,function (i,item_type) {
@@ -666,7 +666,7 @@ function detailedOrderItemMenu(event) {
   shared.element('h4',{id: 'oi_tax_profile_h4'},i18n.activerecord.models.tax_profile.one,config_table_cols_center[0]);
   var tax_profile_select = shared.element('select',{id: 'oi_tax_profile_select'},'',config_table_cols_center[0]);
   tax_profile_select.on('change',function () {
-    editItemAndOrderItem(item,'tax_profile_id',$(this).val());
+    sr.fn.pos_core.editItemAndOrderItem(item,'tax_profile_id',$(this).val());
     focusInput($('#main_sku_field'));
   });
   $.each(TaxProfiles,function (i,tax_profile) {
@@ -680,7 +680,7 @@ function detailedOrderItemMenu(event) {
   shared.element('h4',{id: 'oi_category_h4'},i18n.activerecord.models.category.one,config_table_cols_right[0]);
   var category_select = shared.element('select',{id: 'oi_category_select'},'',config_table_cols_right[0]);
   category_select.on('change',function () {
-    editItemAndOrderItem(item,'category_id',$(this).val());
+    sr.fn.pos_core.editItemAndOrderItem(item,'category_id',$(this).val());
     focusInput($('#main_sku_field'));
   });
   shared.element('option',{value: ''},'',category_select); // create empty option
@@ -699,7 +699,7 @@ function detailedOrderItemMenu(event) {
   shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
 }
 
-function editItemAndOrderItem(item,field,val,callback) {
+sr.fn.pos_core.editItemAndOrderItem = function(item,field,val,callback) {
   // This is supposed to be doubled, it edits both the orderitem and the item at the same go. Item should be first. OrderItem only after Item request has completed.
   var string = '/vendors/edit_field_on_child?id=' +
   item.item_id +'&klass=Item' +
@@ -714,7 +714,7 @@ function editItemAndOrderItem(item,field,val,callback) {
   });
 }
 
-function getBehaviorById(id) {
+sr.fn.pos_core.getBehaviorById = function(id) {
   var itid = 0;
   $.each(ItemTypes,function (i,item_type) {
     if (item_type.id == id) {
@@ -724,12 +724,12 @@ function getBehaviorById(id) {
   return itid;
 }
 
-function orderItemNameOption(append_to, item) {
+sr.fn.pos_core.orderItemNameOption = function(append_to, item) {
   // name edit field
   var save_edit = function () {
     var id = '#option_order_item_name_input';
     var value = $(id).val();
-    editItemAndOrderItem(item, 'name', value);
+    sr.fn.pos_core.editItemAndOrderItem(item, 'name', value);
   };
   var callbacks = {
     click: save_edit,
@@ -751,7 +751,7 @@ function orderItemNameOption(append_to, item) {
   var save_edit = function () {
     var id = '#option_order_item_sku_input';
     var value = $(id).val();
-    editItemAndOrderItem(item, 'sku', value);
+    sr.fn.pos_core.editItemAndOrderItem(item, 'sku', value);
   };
   var callbacks = {
     click: save_edit,
@@ -770,26 +770,18 @@ function orderItemNameOption(append_to, item) {
   var opt = shared.draw.option(options, callbacks);
 }
 
-function getOrderItemId(item) {
+sr.fn.pos_core.getOrderItemId = function(item) {
   var id = 'order-item-' + item.id;
   return id;
 }
 
-function highlight(elem) {
+sr.fn.pos_core.highlight = function(elem) {
   if (!elem.hasClass("pos-highlight")) {
     elem.addClass("pos-highlight");
   }
 }
 
-function refund_item(id) {
-  refund_payment_method_id = $('#refund_payment_method').val();
-  window.location = '/orders/refund_item?id=' + id + '&pm=' + refund_payment_method_id;
-  if (PaymentMethodObjects[refund_payment_method_id].cash == true) {
-    quick_open_drawer()
-  }
-}
-
-function clearOrder() {
+sr.fn.pos_core.clearOrder = function() {
   $.get('/orders/clear?order_id=' + Order.id);
 }
 

@@ -32,6 +32,7 @@
 //= require style
 //= require shared
 //= require pos_core
+//= require refund
 //= require shipments
 //= require shippers
 //= require cash_registers

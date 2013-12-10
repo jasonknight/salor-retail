@@ -3,7 +3,7 @@
   <div id="new_order_button" onclick="window.location = '/orders/new_order'" class="input pos-button new-order">
     <%= raw salor_icon(:delete, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.new_order")) %>
   </div>
-  <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button">
+  <div id="configuration_button" onclick="sr.fn.pos_core.showOrderOptions();" class="input pos-button">
     <%= raw salor_icon(:wrench, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.configuration")) %>
   </div> 
   <div id="show_customers" onclick="$('#last_orders').show();" class="input pos-button">
