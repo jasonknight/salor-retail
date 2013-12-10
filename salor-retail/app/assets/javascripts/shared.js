@@ -16,7 +16,7 @@ $(function(){
       }
   });
   
-  displayMessages();
+  sr.fn.messages.displayMessages();
   
 
   $(window).keydown(function(e){
@@ -123,7 +123,7 @@ function get(url, calledFrom, sFunc, type, eFunc) {
     error: function(jqXHR, textStatus, errorThrown) {
       eFunc();
       messagesHash['prompts'].push(errorThrown);
-      displayMessages();
+      sr.fn.messages.displayMessages();
     }
   });
 }

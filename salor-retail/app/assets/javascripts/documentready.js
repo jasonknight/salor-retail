@@ -15,6 +15,8 @@ var sr = {
     inventory: {},
     invoice: {},
     items: {},
+    math: {},
+    messages: {},
     
     
   },
@@ -22,6 +24,7 @@ var sr = {
     pos_core: {},
     complete: {},
     inplace_edit: {},
+    messages: {},
   },
 }
 

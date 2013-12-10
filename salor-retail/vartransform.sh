@@ -86,3 +86,14 @@ done
 # ./vartransform.sh invoiceSetup sr.fn.invoice.setup
 # ./vartransform.sh make_editabl_pm sr.fn.invoice.edit_pm
 
+# ./vartransform.sh Round sr.fn.math.round
+# ./vartransform.sh RoundFixed sr.fn.math.roundFixed
+# ./vartransform.sh toFloat sr.fn.math.toFloat
+# ./vartransform.sh roundNumber sr.fn.math.roundNumber
+# ./vartransform.sh toDelimited sr.fn.math.toDelimited
+# ./vartransform.sh toCurrency sr.fn.math.toCurrency
+# ./vartransform.sh toPercent sr.fn.math.toPercent
+
+# ./vartransform.sh displayMessage sr.fn.messages.displayMessage
+# ./vartransform.sh displayMessages sr.fn.messages.displayMessages
+# ./vartransform.sh fadeMessages sr.fn.messages.fadeMessages

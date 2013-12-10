@@ -1,7 +1,7 @@
 sr.fn.change.display_change = function(called_from) {
   var paymentTotal = sr.fn.payment.getTotal();
   var change = paymentTotal - Order.total;
-  change = Round(change,2);
+  change = sr.fn.math.round(change,2);
   if (change < 0 && Order.total > 0 && !Order.is_proforma) {
     change = 0;
     sr.fn.complete.allowSending(false);
@@ -11,7 +11,7 @@ sr.fn.change.display_change = function(called_from) {
     }
     sr.fn.complete.allowSending(true);
   }
-  $('#complete_order_change').html(toCurrency(change));
+  $('#complete_order_change').html(sr.fn.math.toCurrency(change));
   sr.fn.debug.ajaxLog({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:Order.total, change:change, called_from:called_from});
   return change;
 }
@@ -21,13 +21,13 @@ sr.fn.change.show_denominations = function() {
     var doc = 99; // radius
     var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
     for (var i in i18n_pieces) {
-      p = $('<div id="complete_piece_'+ i18n_pieces[i] + '">'+toCurrency(i18n_pieces[i])+'</div>');
+      p = $('<div id="complete_piece_'+ i18n_pieces[i] + '">'+sr.fn.math.toCurrency(i18n_pieces[i])+'</div>');
       p.css({height: '35px',width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
       p.addClass("pieces-button shadow");
         cpos = {x: cpos.x, y: cpos.y + 54};
         p.attr('amount',i18n_pieces[i]);
         p.click(function () {
-          var val = toFloat($(this).attr('amount'));
+          var val = sr.fn.math.toFloat($(this).attr('amount'));
           $("#payment_amount_0").val( val );
           sr.fn.change.display_change('pieces-button ' + val);
           sr.fn.debug.ajaxLog({log_action:'pieces-button', value:val, order_id:Order.id});
@@ -52,8 +52,8 @@ sr.fn.change.get_highest = function(num) {
     }
   }
   var times = Math.floor(num / i18n_pieces[highest_piece]);
-  var display_line = times + ' x ' + toCurrency(i18n_pieces[highest_piece]);
-  var remainder = roundNumber(num - (times * i18n_pieces[highest_piece]),2);
+  var display_line = times + ' x ' + sr.fn.math.toCurrency(i18n_pieces[highest_piece]);
+  var remainder = sr.fn.math.roundNumber(num - (times * i18n_pieces[highest_piece]),2);
   return [display_line,remainder];
 }
 

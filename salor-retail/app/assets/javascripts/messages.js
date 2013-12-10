@@ -1,6 +1,6 @@
 var messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
 
-function displayMessage(type, msg, id) {
+sr.fn.messages.displayMessage = function(type, msg, id) {
   var statusbar = $("#messages");
   if ($("#" + id).length > 0) {
     $("#" + id).html(msg);
@@ -28,19 +28,19 @@ function displayMessage(type, msg, id) {
   }
 }
 
-function displayMessages() {
+sr.fn.messages.displayMessages = function() {
   var notices = messagesHash['notices'];
   var alerts = messagesHash['alerts'];
   var prompts = messagesHash['prompts'];
   
   $.each(notices, function(idx) {
     var random_id = "message_" + Math.floor((Math.random()*10000)+1);
-    displayMessage("notice", notices[idx], random_id);
+    sr.fn.messages.displayMessage("notice", notices[idx], random_id);
   });
   
   $.each(alerts, function(idx) {
     var random_id = "message_" + Math.floor((Math.random()*10000)+1);
-    displayMessage("alert", notices[idx], random_id);
+    sr.fn.messages.displayMessage("alert", notices[idx], random_id);
   });
   
  
@@ -63,7 +63,7 @@ function displayMessages() {
 }
 
 /*
-function displayMessages() {
+sr.fn.messages.displayMessages = function() {
   var notices = messagesHash['notices'];
   var alerts = messagesHash['alerts'];
   var prompts = messagesHash['prompts'];
@@ -89,7 +89,7 @@ function displayMessages() {
   }
   
   if (notices.length > 0 || alerts.length > 0) {
-    fadeMessages();
+    sr.fn.messages.fadeMessages();
   }
   
   messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
@@ -97,7 +97,7 @@ function displayMessages() {
 */
 
 
-function fadeMessages() {
+sr.fn.messages.fadeMessages = function() {
   $('#messages').fadeIn(1000);
   setTimeout(function(){
     $('#messages').fadeOut(1000);

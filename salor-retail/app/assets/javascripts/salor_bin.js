@@ -134,7 +134,7 @@ function observe_drawer(delay) {
 function weigh_item(id) {
   if ( ! isSalorBin() ) {
     messagesHash['prompts'].push("Weighing is only supported with our thin client salor-bin.");
-    displayMessages();
+    sr.fn.messages.displayMessages();
     return
   }
   if (typeof Register.scale != 'undefined' && Register.scale != '') {
@@ -142,7 +142,7 @@ function weigh_item(id) {
     
   } else {
     messagesHash['prompts'].push("No scale configured. Please add a scale path to the CashRegister settings.");
-    displayMessages();
+    sr.fn.messages.displayMessages();
     var weight = 0;
   }
 

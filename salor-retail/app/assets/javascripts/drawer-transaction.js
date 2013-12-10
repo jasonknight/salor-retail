@@ -39,7 +39,7 @@ sr.fn.drawer.saveTransaction = function() {
       },
       error: function (data,status,errorThrown) {
       messagesHash['prompts'].push(errorThrown);
-      displayMessages();
+      sr.fn.messages.displayMessages();
       }
   });
   sr.fn.focus.set($('#main_sku_field'));

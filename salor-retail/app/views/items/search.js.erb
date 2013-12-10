@@ -75,7 +75,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     
     var order_total = $('<td></td>');
     order_total.addClass('table-cell id');
-    order_total.html(toCurrency("<%= order.total %>"));
+    order_total.html(sr.fn.math.toCurrency("<%= order.total %>"));
 
     
     var sku = $('<td></td>');

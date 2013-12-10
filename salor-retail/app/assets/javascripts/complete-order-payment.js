@@ -30,7 +30,7 @@ sr.fn.payment.add = function() {
     amount.select();
   });
 
-  amount.val(toDelimited(rest_value));
+  amount.val(sr.fn.math.toDelimited(rest_value));
   // ---
   
   oldSelectedIndex = null;
@@ -79,7 +79,7 @@ sr.fn.payment.getTotal = function() {
   var paymentTotal = 0;
   var current_payment_method_items = sr.fn.payment.getItems();
   $.each(current_payment_method_items, function(k,v) {
-    var tval = toFloat(v.amount);
+    var tval = sr.fn.math.toFloat(v.amount);
     paymentTotal += tval;
   });
   return paymentTotal;

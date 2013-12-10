@@ -2,7 +2,7 @@
   $(function () {
     // i18n numbers
     $(".delimit-number").each(function() {
-      $(this).val(toDelimited($(this).val()));
+      $(this).val(sr.fn.math.toDelimited($(this).val()));
     })
     
     // no form submission on enter key

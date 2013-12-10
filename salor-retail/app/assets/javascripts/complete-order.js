@@ -32,7 +32,7 @@ sr.fn.complete.showPopup = function() {
   $("#payment_methods").show();
   $("#payment_methods").html("");
   sr.fn.payment.add();
-  $("#payment_amount_0").val(toDelimited(Order.total));
+  $("#payment_amount_0").val(sr.fn.math.toDelimited(Order.total));
   $("#payment_amount_0").select();
   sr.fn.change.display_change('function complete_order_show');
   sr.fn.change.show_denominations();
@@ -98,7 +98,7 @@ sr.fn.complete.process = function(print,change_user_id) {
     data: {
       order_id: Order.id,
       change_user_id: change_user_id,
-      change: toFloat($('#complete_order_change').html()),
+      change: sr.fn.math.toFloat($('#complete_order_change').html()),
       print: print,
       payment_method_items: current_payment_method_items
     },
@@ -115,7 +115,7 @@ sr.fn.complete.process = function(print,change_user_id) {
     },
     error: function(jqXHR, textStatus, errorThrown) {
       messagesHash['prompts'].push(errorThrown);
-      displayMessages();
+      sr.fn.messages.displayMessages();
     }
   });
 }

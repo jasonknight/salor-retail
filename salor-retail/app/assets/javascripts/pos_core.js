@@ -17,8 +17,8 @@ sr.fn.pos_core.updateOrder = function(order) {
     $(button).addClass('pos-configuration');
     $('#pos_order_total').removeClass("pos-highlight");
   }
-  $('#pos_order_total').html(toCurrency(order.total));
-  $('.complete-order-total').html(toCurrency(order.total));
+  $('#pos_order_total').html(sr.fn.math.toCurrency(order.total));
+  $('.complete-order-total').html(sr.fn.math.toCurrency(order.total));
   $('.order-rebate_type').html(order.rebate_type);
   $('.order-rebate').attr('model_id',order.id);
   $('.order-tag').attr('model_id',order.id);
@@ -90,18 +90,18 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
       case 'price':
         switch(item.behavior) {
           case 'normal':
-            col.html(toCurrency(item.price));
+            col.html(sr.fn.math.toCurrency(item.price));
             break;
           case 'aconto':
-            col.html(toCurrency(item.price));
+            col.html(sr.fn.math.toCurrency(item.price));
             break;
           case 'coupon':
             switch(item.coupon_type) {
               case 1:
-                col.html(toPercent(item.price));
+                col.html(sr.fn.math.toPercent(item.price));
                 break;
               case 2:
-                col.html(toCurrency(item.price));
+                col.html(sr.fn.math.toCurrency(item.price));
                 break;
               case 3:
                 col.html('b1g1');
@@ -109,32 +109,32 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
             }
             break;
           case 'gift_card':
-            col.html(toCurrency(item.price));
+            col.html(sr.fn.math.toCurrency(item.price));
             break;
         }
         break;
       case 'rebate':
         if (item.behavior != 'coupon' && item.behavior != 'gift_card' ) {
-          col.html(toPercent(item.rebate));
+          col.html(sr.fn.math.toPercent(item.rebate));
         }
         break;
       case 'price_reductions':
         if (item.behavior == 'normal' ) {
           var contents = [];
-          contents[0] = toCurrency(item.discount_amount);
-          contents[1] = toCurrency(item.rebate_amount);
-          contents[2] = toCurrency(item.coupon_amount);
+          contents[0] = sr.fn.math.toCurrency(item.discount_amount);
+          contents[1] = sr.fn.math.toCurrency(item.rebate_amount);
+          contents[2] = sr.fn.math.toCurrency(item.coupon_amount);
           col.html(contents.join("<br />"));
         }
         break;
       case 'total':
         if (item.behavior != 'coupon') {
-          col.html(toCurrency(item.total));
+          col.html(sr.fn.math.toCurrency(item.total));
         }
         break;
       case 'tax':
         if (item.behavior != 'coupon') {
-          col.html(toPercent(item.tax));
+          col.html(sr.fn.math.toPercent(item.tax));
         }
         break;
     }
@@ -179,7 +179,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
           up.addClass('pointer quantity-button');
           row.append(up);
           up.on('mousedown', function () {
-            var v = toDelimited(toFloat($('.' + base_id + '-quantity').html()) + 1);
+            var v = sr.fn.math.toDelimited(sr.fn.math.toFloat($('.' + base_id + '-quantity').html()) + 1);
             var string = '/vendors/edit_field_on_child?id=' +
             item.id +'&klass=OrderItem' +
             '&field=quantity'+
@@ -196,8 +196,8 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
           row.append(down);
           down.on('mousedown', function () {
             var html = $('.' + base_id + '-quantity').html();
-            console.log(html, toFloat(html), toDelimited(html));
-            var v = toDelimited(toFloat($('.' + base_id + '-quantity').html()) - 1);
+            console.log(html, sr.fn.math.toFloat(html), sr.fn.math.toDelimited(html));
+            var v = sr.fn.math.toDelimited(sr.fn.math.toFloat($('.' + base_id + '-quantity').html()) - 1);
             var string = '/vendors/edit_field_on_child?id=' +
             item.id +'&klass=OrderItem' +
             '&field=quantity'+

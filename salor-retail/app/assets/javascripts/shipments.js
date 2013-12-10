@@ -17,7 +17,7 @@ window.shipments = {
   },
   
   updateShipment: function() {
-    $('#pos_order_total').html(toCurrency(Shipment.purchase_price_total));
+    $('#pos_order_total').html(sr.fn.math.toCurrency(Shipment.purchase_price_total));
   },
   
   updateLineItems: function() {
@@ -91,18 +91,18 @@ window.shipments = {
           sr.fn.inplace_edit.make(col);
           break;
         case 'price':
-          col.html(toCurrency(item.price));
+          col.html(sr.fn.math.toCurrency(item.price));
           sr.fn.inplace_edit.make(col);
           break;
         case 'purchase_price':
-          col.html(toCurrency(item.purchase_price));
+          col.html(sr.fn.math.toCurrency(item.purchase_price));
           sr.fn.inplace_edit.make(col);
           break;
         case 'total':
-          col.html(toCurrency(item.total));
+          col.html(sr.fn.math.toCurrency(item.total));
           break;
         case 'purchase_price_total':
-          col.html(toCurrency(item.purchase_price_total));
+          col.html(sr.fn.math.toCurrency(item.purchase_price_total));
           break;
         case 'tax_profile':
           var tax_profile_select = shared.element('select',{clss: 'si_tax_profile_select'},'',col);
