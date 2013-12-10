@@ -12,7 +12,7 @@ done
 for file in `find app -name *.js -o -name *.erb -o -name *.haml`
 do
   echo "Processing ${file}"
-  perl -i -pe "s/${fn_in}\(/${fn_out}(/g" $file
+  perl -i -pe "s/([^\.])${fn_in}\(/\1${fn_out}(/g" $file
 done
 
 # ./vartransform.sh add_item sr.fn.pos_core.addItem
