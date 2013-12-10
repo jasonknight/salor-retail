@@ -78,3 +78,7 @@ done
 # ./vartransform.sh focusInput sr.fn.focus.set
 
 #./vartransform.sh showClockin sr.fn.user_logins.showPopup
+
+# ./vartransform.sh make_in_place_edit sr.fn.inplace_edit.make
+# ./vartransform.sh inplaceEditBindEnter sr.fn.inplace_edit.bindEnter
+# ./vartransform.sh in_place_edit_go sr.fn.inplace_edit.submit

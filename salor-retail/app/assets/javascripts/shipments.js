@@ -83,20 +83,20 @@ window.shipments = {
           col.html(item.name);
           if (item.name == '?') {
             // editing a name of an existing Item is dangerous, since for the recursive import function, names are like SKUs. so we enable it only for new Items.
-            make_in_place_edit(col);
+            sr.fn.inplace_edit.make(col);
           }
           break;
         case 'quantity':
           col.html(item.quantity);
-          make_in_place_edit(col);
+          sr.fn.inplace_edit.make(col);
           break;
         case 'price':
           col.html(toCurrency(item.price));
-          make_in_place_edit(col);
+          sr.fn.inplace_edit.make(col);
           break;
         case 'purchase_price':
           col.html(toCurrency(item.purchase_price));
-          make_in_place_edit(col);
+          sr.fn.inplace_edit.make(col);
           break;
         case 'total':
           col.html(toCurrency(item.total));

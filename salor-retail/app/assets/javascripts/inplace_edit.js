@@ -4,7 +4,7 @@ var receiver_shipper_select = function (value) {
   return s;
 }
 
-var get_inputs = {
+sr.fn.inplace_edit.get_inputs = {
   category_id: function (value) {
     s = $(inplace_cats);
     s = set_selected(s,value,0);
@@ -39,7 +39,7 @@ var get_inputs = {
   the_receiver: receiver_shipper_select
 };
 
-var fields_callbacks = {
+sr.fn.inplace_edit.field_callbacks = {
   rebate: function (elem) {
     elem.addClass("keyboardable-int");
     elem.addClass("rebate-amount");
@@ -85,23 +85,23 @@ var fields_callbacks = {
  * This allows us to easily turn off the binding to the enter key when we need
  * something else to catch it
  */
-function inplaceEditBindEnter(elem) {
+sr.fn.inplace_edit.bindEnter = function(elem) {
   $('#inplaceedit').unbind('keypress');
   $('#inplaceedit').bind('keypress', function (e) {
     var code = (e.keyCode ? e.keyCode : e.which);
     if(code == 13) {
-      in_place_edit_go(elem);
+      sr.fn.inplace_edit.submit(elem);
     }
   });
 }
 
-function make_in_place_edit(elem) {
+sr.fn.inplace_edit.make = function(elem) {
   if (elem.hasClass('editmedone')) {
     return;    
   }
   elem.click(function (event) {
     var x = event.pageX;
-    var y = evnet.pageY;
+    var y = event.pageY;
     
     var field = elem.attr('field');
     var type = elem.attr('type');
@@ -109,18 +109,18 @@ function make_in_place_edit(elem) {
     var withstring = elem.attr('withstring');
     var value = elem.html();
 
-    if (get_inputs[field]) {
+    if (sr.fn.inplace_edit.get_inputs[field]) {
       console.log('getting inputs');
-      var inputhtml = get_inputs[field](value);
+      var inputhtml = sr.fn.inplace_edit.get_inputs[field](value);
     } else {
       console.log('setting text input field');
       var inputhtml = "<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />";
     }
     var input = $(inputhtml);
 
-    if (fields_callbacks[field]) {
+    if (sr.fn.inplace_edit.field_callbacks[field]) {
       console.log("callback for", field);
-      fields_callbacks[field](input);
+      sr.fn.inplace_edit.field_callbacks[field](input);
     }
 
     if (typeof type == 'undefined') {
@@ -163,7 +163,7 @@ function make_in_place_edit(elem) {
             $('.ui-keyboard-preview').select();
           },
           accepted: function() {
-            in_place_edit_go(elem, input.val());
+            sr.fn.inplace_edit.submit(elem, input.val());
           }
         });
         input.getkeyboard().reveal();
@@ -180,7 +180,7 @@ function make_in_place_edit(elem) {
         input.datepicker({
           onSelect: function(date, inst) {
             elem.show();
-            in_place_edit_go(elem, input.val());
+            sr.fn.inplace_edit.submit(elem, input.val());
             input.remove();
           }
         });
@@ -190,14 +190,14 @@ function make_in_place_edit(elem) {
 
     //$('#inplaceedit-div').css(offset);
     $('#inplaceeditsave').mousedown(function() {
-      in_place_edit_go(elem);
+      sr.fn.inplace_edit.submit(elem);
     });
 
     $('#inplaceeditcancel').mousedown(function() {
       $('#inplaceedit-div').remove();
     });
 
-    inplaceEditBindEnter(elem);
+    sr.fn.inplace_edit.bindEnter(elem);
     
   });
   elem.addClass('editmedone');
@@ -206,7 +206,7 @@ function make_in_place_edit(elem) {
 
 
 
-function in_place_edit_go(elem, value) {
+sr.fn.inplace_edit.submit = function(elem, value) {
   console.log(value);
   var field = elem.attr('field');
   var klass = elem.attr('klass');

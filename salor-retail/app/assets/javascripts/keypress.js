@@ -138,6 +138,6 @@
 // function bindInplaceEnter(doBind) {
 //   if (doBind == null) doBind = true;
 //   try {
-//     inplaceEditBindEnter(doBind);
+//     sr.fn.inplace_edit.bindEnter(doBind);
 //   } catch(e){}
 // }

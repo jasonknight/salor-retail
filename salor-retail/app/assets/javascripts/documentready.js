@@ -76,7 +76,7 @@ $(function () {
 
   // inplace edit
   $('.editme').each(function () {
-    make_in_place_edit($(this));                  
+    sr.fn.inplace_edit.make($(this));                  
   });
   
   

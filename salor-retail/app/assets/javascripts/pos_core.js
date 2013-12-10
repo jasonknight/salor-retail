@@ -171,7 +171,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
         break;
         
       case 'quantity':
-        make_in_place_edit(col);
+        sr.fn.inplace_edit.make(col);
         col.addClass('editme pointer no-select');
         if (Register.show_plus_minus) {
           var up = td().removeClass('jtable-cell').addClass('table-cell');
@@ -227,7 +227,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
         (User.role_cache.indexOf('manager') != -1) ||
         (item.must_change_price == true)
          ) {
-        make_in_place_edit(col);
+        sr.fn.inplace_edit.make(col);
         col.addClass('editme pointer no-select');
         }
     }
@@ -357,7 +357,7 @@ sr.fn.pos_core.showOrderOptions = function() {
     col.attr('klass','LoyaltyCard');
     col.attr('field','points');
     col.addClass('editme');
-    make_in_place_edit(col);
+    sr.fn.inplace_edit.make(col);
     row.append(col);
     row.append('<span class="">'+i18n.activerecord.attributes.lc_points+'</span>');
     var col = $('<span id="pos-order-points" class="order-points">' + Order.lc_points + '</span>');
@@ -365,7 +365,7 @@ sr.fn.pos_core.showOrderOptions = function() {
     col.attr('klass','Order');
     col.attr('field','lc_points');
     col.addClass('editme');
-    make_in_place_edit(col);
+    sr.fn.inplace_edit.make(col);
     row.append(col);
     elem.append(row);
   }
