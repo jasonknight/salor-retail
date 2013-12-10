@@ -2,7 +2,7 @@
 
 .tools
   .tool-icon
-    %span= salor_icon(:shipper, {:style => "cursor:pointer;", :onclick => "shippers.update_confirm_dialog();"}, 32, I18n.t("menu.wholesaler_update"))
+    %span= salor_icon(:shipper, {:style => "cursor:pointer;", :onclick => "sr.fn.shippers.showConfirmationDialog();"}, 32, I18n.t("menu.wholesaler_update"))
     
         
 = render :partial => 'shared/list_view', :locals => { :klass => Shipper,  :width => '60%',:collection => @shippers, :columns => [:name]}

@@ -24,6 +24,7 @@ var sr = {
     search_generic: {},
     search_pos: {},
     shipments: {},
+    shippers: {},
     
     
   },
@@ -121,7 +122,6 @@ $(function () {
   sr.fn.inventory.setup();
   sr.fn.invoice.setup();
   sr.fn.onscreen_keyboard.setup();
-  sr.fn.remotesupport.setup();
   sr.fn.search_generic.setup();
   
   // don't run this twice, a known jQuery bug
