@@ -123,3 +123,12 @@ done
 # ./vartransform.sh observe_drawer sr.fn.salor_bin.observeDrawer
 # ./vartransform.sh weigh_item sr.fn.salor_bin.weighItem
 # ./vartransform.sh print_dialog sr.fn.salor_bin.showPrintDialog
+
+# ./vartransform.sh searchSetup sr.fn.search_generic.setup
+# ./vartransform.sh generic_search sr.fn.search_generic.go
+# ./vartransform.sh showSearch sr.fn.search_pos.showPopup
+# ./vartransform.sh hideSearch sr.fn.search_pos.hidePopup
+# ./vartransform.sh search sr.fn.search_pos.go
+# ./vartransform.sh search_get_next_page sr.fn.search_pos.displayNextPage
+# ./vartransform.sh search_get_prev_page sr.fn.search_pos.displayPreviousPage
+

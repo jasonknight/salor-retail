@@ -1,20 +1,18 @@
 // the following is for the generic search on the top right corner of the screen
 
-$(function() {
+function searchSetup() {
   $('#generic_search_input').keyup(function(e) {
     if (e.keyCode == 13) {
       generic_search('#generic_search_input');
     }
   })
-})
+}
 
 function generic_search(caller) {
   window.location = '?keywords=' + $('#generic_search_input').val();
 }
 
 // the following is for the search popup on the POS screen
-
-var search_last_query = '';
 var current_page = 1;
 
 function showSearch() {
@@ -48,8 +46,8 @@ function hideSearch() {
 
 function search(caller) {
   sr.fn.debug.echo('search', caller);
-  search_last_query = '/items/search?keywords=' + $('#search_keywords').val() + '&klass=' + $('#search_models').val() + '&page=' + current_page;
-  get(search_last_query, '_search.html.erb');
+  var query = '/items/search?keywords=' + $('#search_keywords').val() + '&klass=' + $('#search_models').val() + '&page=' + current_page;
+  get(query, '_search.html.erb');
 }
 
 function search_get_next_page() {

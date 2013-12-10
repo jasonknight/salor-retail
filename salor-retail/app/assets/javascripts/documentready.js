@@ -20,6 +20,9 @@ var sr = {
     onscreen_keyboard: {},
     refund: {},
     remotesupport: {},
+    salor_bin: {},
+    search_generic: {},
+    search_pos: {},
     
     
   },
@@ -28,6 +31,7 @@ var sr = {
     complete: {},
     inplace_edit: {},
     messages: {},
+    search: {},
   },
 }
 
@@ -116,6 +120,7 @@ $(function () {
   sr.fn.invoice.setup();
   sr.fn.onscreen_keyboard.setup();
   sr.fn.remotesupport.setup();
+  searchSetup();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;
