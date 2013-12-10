@@ -58,3 +58,6 @@ done
 
 # ./vartransform.sh allow_complete_order sr.fn.complete.allowSending
 # ./vartransform.sh callback_printing_done sr.fn.complete.printingDoneCallback
+
+# ./vartransform.sh remove_note_fields sr.fn.customers.removeNoteFields
+# ./vartransform.sh add_note_fields sr.fn.customers.addNoteFields

@@ -6,6 +6,7 @@ var sr = {
     change: {},
     payment: {},
     complete: {},
+    customers: {},
   },
   data: {
     pos_core: {},
