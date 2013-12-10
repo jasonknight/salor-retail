@@ -26,7 +26,7 @@ sr.fn.payment.add = function() {
     }
   });
   amount.on("click",function() {
-    focusInput(amount);
+    sr.fn.focus.set(amount);
     amount.select();
   });
 
@@ -62,7 +62,7 @@ sr.fn.payment.add = function() {
   });
   
   setTimeout(function () {
-    focusInput(amount);
+    sr.fn.focus.set(amount);
     amount.select();
   }, 100);
 }

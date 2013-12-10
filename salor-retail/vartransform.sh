@@ -70,3 +70,9 @@ done
 # ./vartransform.sh hide_cash_drop sr.fn.drawer.hideTransactionPopup
 # ./vartransform.sh cash_drop_save sr.fn.drawer.saveTransaction
 # ./vartransform.sh updateDrawer sr.fn.drawer.update
+
+# ./vartransform.sh displayUserLogins sr.fn.user_logins.display
+# ./vartransform.sh remove_user_login sr.fn.user_logins.remove
+
+# ./vartransform.sh focusSetup sr.fn.focus.setup
+# ./vartransform.sh focusInput sr.fn.focus.set

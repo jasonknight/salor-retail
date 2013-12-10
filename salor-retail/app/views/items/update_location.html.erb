@@ -2,12 +2,12 @@
 function update_location_submit() {
   $.post('/items/update_location',$('#update_location_form').serialize());
   $('#sku').val('');
-  focusInput($('#sku'));
+  sr.fn.focus.set($('#sku'));
 }
 $(function () {
     try {
       $('#sku').val('');
-      focusInput($('#sku'));
+      sr.fn.focus.set($('#sku'));
     } catch (err) {
           txt="There was an error on this page update_location.\n\n";
           txt+="Error description: " + err.description + "\n\n";

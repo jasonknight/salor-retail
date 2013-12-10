@@ -89,7 +89,7 @@ function showClockin() {
         $(".ui-dialog * button:contains('"+i18n.system.login+"')").trigger("click");
       }
     });
-    focusInput($('#dialog_input'));
+    sr.fn.focus.set($('#dialog_input'));
     var ttl = el.parent().find('.ui-dialog-title');
     ttl.html(i18n.system.login); 
     ttl = el.parent().find('.input_label');

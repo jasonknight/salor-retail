@@ -192,7 +192,7 @@ sr.fn.complete.showPasswordPopup = function(print) {
         $(".ui-dialog * button:contains('"+i18n.menu.ok+"')").trigger("click");
       }
     });
-    focusInput($('#dialog_input'));
+    sr.fn.focus.set($('#dialog_input'));
     var ttl = el.parent().find('.ui-dialog-title');
     ttl.html(i18n.activerecord.attributes.require_password); 
     ttl = el.parent().find('.input_label');

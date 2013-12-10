@@ -1,21 +1,21 @@
 sr.fn.drawer.showTransactionPopup = function() {
   $('#cash_drop').show();
   $("#transaction_type").val('');
-  focusInput($("#cash_drop_amount"));
+  sr.fn.focus.set($("#cash_drop_amount"));
 }
 
 sr.fn.drawer.hideTransactionPopup = function() {
   $('#cash_drop').hide();
   $('.cash-drop-amount').removeClass('error-input');
   $('.cash-drop-amount').val('');
-  focusInput($('#main_sku_field'));
+  sr.fn.focus.set($('#main_sku_field'));
 }
 
 sr.fn.drawer.saveTransaction = function() {
   if ($('.cash-drop-amount').val() == '') {
     $('.cash-drop-amount').addClass('error-input');
     $('.trans-button').removeClass('button-highlight');
-    focusInput($('.cash-drop-amount'));
+    sr.fn.focus.set($('.cash-drop-amount'));
     return;
   }
   $('.cash-drop-amount').removeClass('error-input');
@@ -42,7 +42,7 @@ sr.fn.drawer.saveTransaction = function() {
       displayMessages();
       }
   });
-  focusInput($('#main_sku_field'));
+  sr.fn.focus.set($('#main_sku_field'));
 }
 
 sr.fn.drawer.update = function(string) {

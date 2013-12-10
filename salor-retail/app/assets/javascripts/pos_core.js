@@ -185,7 +185,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
             '&field=quantity'+
             '&value=' + v;
             get(string, filename);
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
           });
         }
         row.append(col);
@@ -203,7 +203,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
             '&field=quantity'+
             '&value=' + v;
             get(string, filename);
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
           });
         }
         break;
@@ -284,7 +284,7 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
             get('/orders/delete_order_item?id=' + item.id, filename);
             menu.remove();
             //setScrollerState();
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
         });
         menu.append(dicon);
         
@@ -297,9 +297,9 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
                           '&value=undefined';
                           get(string, filename);
                           menu.remove();
-                          focusInput($('#main_sku_field'));
+                          sr.fn.focus.set($('#main_sku_field'));
         }).mouseup(function () {
-          focusInput($('#main_sku_field'));
+          sr.fn.focus.set($('#main_sku_field'));
         });
         menu.append(buyback);
         if (!Register.scale == '') {
@@ -311,9 +311,9 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
                             '&value=' + Register.scale;
                             get(string, filename);
               menu.remove();
-              focusInput($('#main_sku_field'));
+              sr.fn.focus.set($('#main_sku_field'));
           }).mouseup(function () {
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
           });
 
           menu.append(wicon);
@@ -322,9 +322,9 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
         var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
         btn.mousedown(function () {
             menu.remove();
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
         }).mouseup(function () {
-          focusInput($('#main_sku_field'));
+          sr.fn.focus.set($('#main_sku_field'));
         });
         menu.append(btn);
     });
@@ -592,7 +592,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     title.remove();
     config.remove();
     $('#order_item_' + item.id).remove();
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   title.append(dicon);
   
@@ -604,9 +604,9 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     '&field=toggle_buyback'+
     '&value=undefined';
     $.get(string);
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   }).mouseup(function () {
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   title.append(buyback);
   
@@ -614,9 +614,9 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
     wicon.click(function () {
       weigh_item(item.id);
-      focusInput($('#main_sku_field'));
+      sr.fn.focus.set($('#main_sku_field'));
     }).mouseup(function () {
-      focusInput($('#main_sku_field'));
+      sr.fn.focus.set($('#main_sku_field'));
     });
     title.append(wicon);
   }
@@ -625,9 +625,9 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   btn.click(function () {
     title.remove();
     config.remove();
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   }).mouseup(function () {
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   title.append(btn);
   
@@ -654,7 +654,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   var item_type_select = shared.element('select',{id: 'oi_item_type_select'},'',config_table_cols_left[0]);
   item_type_select.on('change',function () {
     sr.fn.pos_core.editItemAndOrderItem(item,'item_type_id',$(this).val());
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   $.each(ItemTypes,function (i,item_type) {
     shared.element('option',{value: item_type.id},item_type.name,item_type_select);
@@ -667,7 +667,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   var tax_profile_select = shared.element('select',{id: 'oi_tax_profile_select'},'',config_table_cols_center[0]);
   tax_profile_select.on('change',function () {
     sr.fn.pos_core.editItemAndOrderItem(item,'tax_profile_id',$(this).val());
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   $.each(TaxProfiles,function (i,tax_profile) {
     shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
@@ -681,7 +681,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   var category_select = shared.element('select',{id: 'oi_category_select'},'',config_table_cols_right[0]);
   category_select.on('change',function () {
     sr.fn.pos_core.editItemAndOrderItem(item,'category_id',$(this).val());
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   shared.element('option',{value: ''},'',category_select); // create empty option
   $.each(Categories,function (i,category) {

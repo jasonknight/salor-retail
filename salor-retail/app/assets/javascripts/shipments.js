@@ -109,7 +109,7 @@ window.shipments = {
           tax_profile_select.on('change',function () {
             var string = '/vendors/edit_field_on_child?id=' + item.id +'&klass=ShipmentItem' + '&field=tax_profile_id&value=' + $(this).val();
             get(string, '');
-            focusInput($('#main_shipment_sku_field'));
+            sr.fn.focus.set($('#main_shipment_sku_field'));
           });
           shared.element('option',{value: ''},'',tax_profile_select); // empty option
           $.each(TaxProfiles,function (i,tax_profile) {

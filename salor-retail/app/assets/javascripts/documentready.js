@@ -10,6 +10,8 @@ var sr = {
     debug: {},
     drawer: {},
     user_logins: {},
+    focus: {},
+    
   },
   data: {
     pos_core: {},
@@ -96,6 +98,7 @@ $(function () {
   
   sr.fn.user_logins.display();
   sr.fn.coin_calculator.setup();
+  sr.fn.focus.setup();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

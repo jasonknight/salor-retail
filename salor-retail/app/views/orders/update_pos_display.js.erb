@@ -28,7 +28,7 @@ try {
 <% end %>
 
 // ---------- other stuff ----------
-focusInput($('#main_sku_field'));
+sr.fn.focus.set($('#main_sku_field'));
 sr.fn.change.display_change('update_pos_display');
 updateCustomerDisplay(<%= @order.id %>, {}, false);
 Drawer = <%= raw @current_user.get_drawer.to_json %>;

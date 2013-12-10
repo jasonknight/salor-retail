@@ -1,4 +1,4 @@
-$(function() {
+sr.fn.focus.setup = function() {
   
   if (typeof params != 'undefined') {
     var view = params.controller + '#' + params.action;
@@ -30,12 +30,10 @@ $(function() {
     if (params.action == 'index') {
       $("#generic_search_input").focus();
     }
-  }
+  } 
+}
 
-  
-}); // documentready
-
-function focusInput(inp) {
+sr.fn.focus.set = function(inp) {
   $('.salor-focused').removeClass('salor-focused');
   inp.addClass('salor-focused');
   inp.focus();

@@ -21,7 +21,7 @@ function showSearch() {
   $('#search').show();
   $('#search').css({'z-index':'1010'});
   $('#search_keywords').val("");
-  focusInput($('#search_keywords'));
+  sr.fn.focus.set($('#search_keywords'));
   var inp = $('<input type="text" id="search_keywords" name="keywords" class="keyboardable" value="" />');
   inp.keyup(function(e) {
     if (e.keyCode == 13) {
@@ -42,7 +42,7 @@ function hideSearch() {
   $('#search').hide();
   $('#search_results').html('');
   setTimeout(function () {
-    focusInput($('#keyboard_input'));
+    sr.fn.focus.set($('#keyboard_input'));
   },120);
 }
 
