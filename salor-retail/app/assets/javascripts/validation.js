@@ -71,7 +71,7 @@ function validatePaymentMethod(element) {
     
     $(pay_input).val(cardTotal);
     $(pay_input).addClass('bycard-amount');
-    display_change('function validatePaymentMethod');
+    sr.fn.change.display_change('function validatePaymentMethod');
   } else {
     $(pay_input).val(cardTotal);
   }

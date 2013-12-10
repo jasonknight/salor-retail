@@ -34,8 +34,8 @@ function complete_order_show() {
   add_payment_method();
   $("#payment_amount_0").val(toDelimited(Order.total));
   $("#payment_amount_0").select();
-  display_change('function complete_order_show');
-  show_denominations();
+  sr.fn.change.display_change('function complete_order_show');
+  sr.fn.change.show_denominations();
   allow_complete_order(true);
   $('body').triggerHandler({type: "CompleteOrderShow"});
 }

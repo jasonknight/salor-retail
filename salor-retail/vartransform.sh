@@ -36,3 +36,8 @@ done
 
 #./vartransform.sh displayCalculatorTotal sr.fn.coin_calculator.displayTotal
 #./vartransform.sh setupCoinCalculator sr.fn.coin_calculator.setup
+
+# ./vartransform.sh display_change sr.fn.change.display_change
+# ./vartransform.sh show_denominations sr.fn.change.show_denominations
+# ./vartransform.sh get_highest sr.fn.change.get_highest
+# ./vartransform.sh recommend sr.fn.change.recommend

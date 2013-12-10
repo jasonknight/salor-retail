@@ -10,7 +10,7 @@ function add_payment_method() {
   // selector
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
   sel.on('change', function(){
-    display_change();
+    sr.fn.change.display_change();
     ajax_log({log_action:'select_payment_method', button_id:sel.attr('id'), value:sel.val(), order_id:Order.id});
   });
   $(sel)[0].selectedIndex = numMethods;
@@ -24,7 +24,7 @@ function add_payment_method() {
     if (event.keyCode == 13) {
       complete_order_send(!Register.no_print);
     } else {
-      display_change("payment-amount.onKeyUp " + event.which + " " + amount.val() + " " + amount.attr('id'));
+      sr.fn.change.display_change("payment-amount.onKeyUp " + event.which + " " + amount.val() + " " + amount.attr('id'));
     }
   });
   amount.on("click",function() {
@@ -44,7 +44,7 @@ function add_payment_method() {
   $("#payment_methods").append(sel).append(amount);
   $('#payment_methods').append('<br />');
   
-  display_change('function add_payment_method');
+  sr.fn.change.display_change('function add_payment_method');
   
   make_select_widget($(sel).find("option:selected"), $(sel));
   
@@ -59,7 +59,7 @@ function add_payment_method() {
       $('.text-input').select();
     },
     accepted: function() {
-      display_change('keyboard ' + sel.val());
+      sr.fn.change.display_change('keyboard ' + sel.val());
     }
   });
   

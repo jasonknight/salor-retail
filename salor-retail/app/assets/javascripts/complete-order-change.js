@@ -1,4 +1,4 @@
-function display_change(called_from) {
+sr.fn.change.display_change = function(called_from) {
   var paymentTotal = get_payment_total();
   var change = paymentTotal - Order.total;
   change = Round(change,2);
@@ -16,7 +16,7 @@ function display_change(called_from) {
   return change;
 }
 
-function show_denominations() {
+sr.fn.change.show_denominations = function() {
     var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
     var doc = 99; // radius
     var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
@@ -29,14 +29,14 @@ function show_denominations() {
         p.click(function () {
           var val = toFloat($(this).attr('amount'));
           $("#payment_amount_0").val( val );
-          display_change('pieces-button ' + val);
+          sr.fn.change.display_change('pieces-button ' + val);
           ajax_log({log_action:'pieces-button', value:val, order_id:Order.id});
         } );
         $('body').append(p);
     }
 }
 
-function get_highest(num) {
+sr.fn.change.get_highest = function(num) {
   if (isNaN(num)) {
     num = 0;
   }
@@ -57,15 +57,15 @@ function get_highest(num) {
   return [display_line,remainder];
 }
 
-function recommend(num) {
+sr.fn.change.recommend = function(num) {
   var parts = [];
 
-  var ret = get_highest(num);
+  var ret = sr.fn.change.get_highest(num);
   parts.push(div_wrap(ret[0],'complete-recommendation-item'));
   cap = 20;
   x = 0;
   while (ret[1] > 0) {
-    var ret = get_highest(ret[1]);
+    var ret = sr.fn.change.get_highest(ret[1]);
     parts.push(div_wrap(ret[0],'complete-recommendation-item'));
     x = x + 1;
     if (x > cap) {

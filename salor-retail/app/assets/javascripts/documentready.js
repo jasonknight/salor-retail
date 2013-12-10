@@ -3,9 +3,10 @@ var sr = {
     pos_core: {},
     buttons: {},
     coin_calculator: {},
+    change: {},
   },
   data: {
-    pos_core: {}
+    pos_core: {},
   },
 }
 

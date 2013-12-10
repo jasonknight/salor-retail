@@ -17,7 +17,6 @@
 //= require documentready
 //= require genericjs
 //= require math
-//= require categories
 //= require buttons
 //= require items
 //= require debug
