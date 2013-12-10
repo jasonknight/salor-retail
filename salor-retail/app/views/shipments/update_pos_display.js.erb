@@ -5,7 +5,7 @@ Shipment = <%= raw @shipment.to_json %>;
 try {
   shipments.updateShipment();
 } catch (err) {
-  send_email("Error in update_pos_display updateShipment", err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateShipment", err);
 }
 
 
@@ -14,9 +14,9 @@ ShipmentItems = <%= raw Shipment.shipment_items_to_json(@shipment_items) %>;
 try {
   shipments.updateLineItems(); 
 } catch (err) {
-  echo("Failed to update items properly, please reload");
-  echo(err);
-  send_email("Error in update_pos_display updateLineItems", err);
+  sr.fn.debug.echo("Failed to update items properly, please reload");
+  sr.fn.debug.echo(err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateLineItems", err);
 }
 
 // ---------- other stuff ----------

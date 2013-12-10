@@ -12,7 +12,7 @@ sr.fn.change.display_change = function(called_from) {
     sr.fn.complete.allowSending(true);
   }
   $('#complete_order_change').html(toCurrency(change));
-  ajax_log({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:Order.total, change:change, called_from:called_from});
+  sr.fn.debug.ajaxLog({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:Order.total, change:change, called_from:called_from});
   return change;
 }
 
@@ -30,7 +30,7 @@ sr.fn.change.show_denominations = function() {
           var val = toFloat($(this).attr('amount'));
           $("#payment_amount_0").val( val );
           sr.fn.change.display_change('pieces-button ' + val);
-          ajax_log({log_action:'pieces-button', value:val, order_id:Order.id});
+          sr.fn.debug.ajaxLog({log_action:'pieces-button', value:val, order_id:Order.id});
         } );
         $('body').append(p);
     }

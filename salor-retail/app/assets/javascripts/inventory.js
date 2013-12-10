@@ -68,7 +68,7 @@ var inventory = {
     var loader = shared.draw.loading(true,null,dialog);
     var okbutton = shared.create.dialog_button(i18n.menu.ok, function() {
       loader.show();
-      ajax_log({
+      sr.fn.debug.ajaxLog({
         action_taken:'confirmed_create_inventory_report_dialog'
       });
       window.location = '/items/create_inventory_report';

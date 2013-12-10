@@ -1,4 +1,4 @@
-function echo(str) {
+sr.fn.debug.echo = function(str) {
   if ( isSalorBin() && typeof Salor.echo != 'undefined' ) {
     Salor.echo(str);
   } else if (typeof console != 'undefined') {
@@ -6,7 +6,7 @@ function echo(str) {
   }
 }
 
-function ajax_log(data) {
+sr.fn.debug.ajaxLog = function(data) {
   $.ajax({
     url:'/orders/log',
     type:'post',
@@ -14,7 +14,7 @@ function ajax_log(data) {
   });
 }
 
-function send_email(subject, message) {
+sr.fn.debug.sendEmail = function(subject, message) {
   console.log('send_email:', subject, message);
   message += "\n\nuser login: " + User.username;
   message += "\n\n" + navigator["userAgent"];

@@ -49,7 +49,7 @@ function displayMessages() {
       var dialog_id = 'prompt-dialog_' + i;
       var dialog = shared.draw.dialog('', dialog_id, o);
       var okbutton = shared.create.dialog_button('OK', function() {
-        ajax_log({
+        sr.fn.debug.ajaxLog({
           action_taken:'confirmed_prompt_dialog',
           called_from: o
         });
@@ -78,7 +78,7 @@ function displayMessages() {
       var dialog_id = 'prompt-dialog_' + i;
       var dialog = shared.draw.dialog('', dialog_id, o);
       var okbutton = shared.create.dialog_button('OK', function() {
-        ajax_log({
+        sr.fn.debug.ajaxLog({
           action_taken:'confirmed_prompt_dialog',
           called_from: o
         });

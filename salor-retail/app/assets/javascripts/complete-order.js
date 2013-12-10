@@ -16,7 +16,7 @@ sr.fn.complete.showPopup = function() {
   if (sr.data.complete.sendqueue.length > 0) {
     return;
   }
-  ajax_log({log_action:'complete_order_show', order_id:Order.id});
+  sr.fn.debug.ajaxLog({log_action:'complete_order_show', order_id:Order.id});
   
   sr.data.complete.sending_order = false;
   $(".payment-amount").remove();
@@ -62,7 +62,7 @@ sr.fn.complete.hidePopup = function() {
   $('.a4-print-button').remove();
   $('.pieces-button ').remove();
   $('body').triggerHandler({type: "CompleteOrderHide"});
-  ajax_log({log_action:'complete_order_hide', order_id:Order.id});
+  sr.fn.debug.ajaxLog({log_action:'complete_order_hide', order_id:Order.id});
   if ( useMimo() ) {
     Salor.mimoRefresh(location.origin + "/vendors/" + Vendor.id + "/display_logo", 800, 480);
   }
@@ -103,7 +103,7 @@ sr.fn.complete.process = function(print,change_user_id) {
       payment_method_items: current_payment_method_items
     },
     complete: function(data, status) {
-      ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
+      sr.fn.debug.ajaxLog({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
       if (print == true) {
         print_order(order_id, "sr.fn.complete.printingDoneCallback(); conditionally_observe_drawer(0);");
       } else {
@@ -164,7 +164,7 @@ sr.fn.complete.showPasswordPopup = function(print) {
               { password: $('#dialog_input').val() }, 
               function (data, status) {
                 if (data == "NO") {
-                  ajax_log({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
+                  sr.fn.debug.ajaxLog({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
                   updateTips("Wrong Password");
                 } else {
                   updateTips("Correct, sending...");
@@ -188,7 +188,7 @@ sr.fn.complete.showPasswordPopup = function(print) {
     $('#dialog_input').unbind('keyup');
     $('#dialog_input').keyup(function (event) {
       if (event.which == 13) {
-        ajax_log({log_action:'Keyup enter on password dlg', order_id:Order.id});
+        sr.fn.debug.ajaxLog({log_action:'Keyup enter on password dlg', order_id:Order.id});
         $(".ui-dialog * button:contains('"+i18n.menu.ok+"')").trigger("click");
       }
     });

@@ -7,7 +7,7 @@ Order = <%= raw @order.to_json %>;
 try {
   sr.fn.pos_core.updateOrder(Order);
 } catch (err) {
-  send_email("Error in update_pos_display updateOrder", err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateOrder", err);
 }
 
 
@@ -16,9 +16,9 @@ try {
 try {
   sr.fn.pos_core.updateOrderItems(<%= raw Order.order_items_to_json(@order_items) %>); 
 } catch (err) {
-  echo("Failed to update items properly, please reload");
-  echo(err);
-  send_email("Error in update_pos_display updateOrderItems", err);
+  sr.fn.debug.echo("Failed to update items properly, please reload");
+  sr.fn.debug.echo(err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateOrderItems", err);
 }
 
 // ------- dynamic gift card autoprinting, see

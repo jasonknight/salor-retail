@@ -47,7 +47,7 @@ function hideSearch() {
 }
 
 function search(caller) {
-  echo('search', caller);
+  sr.fn.debug.echo('search', caller);
   search_last_query = '/items/search?keywords=' + $('#search_keywords').val() + '&klass=' + $('#search_models').val() + '&page=' + current_page;
   get(search_last_query, '_search.html.erb');
 }

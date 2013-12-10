@@ -88,7 +88,7 @@ function _set(name,value,context) {
   } 
 }
 function scroll_to(element, speed) {
-  echo("SCROLLING");
+  sr.fn.debug.echo("SCROLLING");
   target_y = $(window).scrollTop();
   current_y = $(element).offset().top;
   if (settings.workstation) {
@@ -99,12 +99,12 @@ function scroll_to(element, speed) {
 }
 
 function scroll_for(distance, speed) {
-  echo("SCROLLING");
+  sr.fn.debug.echo("SCROLLING");
   do_scroll(distance, speed);
 }
 
 function do_scroll(diff, speed) {
-  echo("SCROLLING");
+  sr.fn.debug.echo("SCROLLING");
   window.scrollBy(0,diff/speed);
   newdiff = (speed-1)*diff/speed;
   scrollAnimation = setTimeout(function(){ do_scroll(newdiff, speed) }, 20);

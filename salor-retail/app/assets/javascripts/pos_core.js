@@ -330,7 +330,7 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
     });
 
   } catch (err) {
-    echo(err);
+    sr.fn.debug.echo(err);
   }
 }
 

@@ -19,7 +19,7 @@ function roundNumber(num, dec) {
 
 function toDelimited(number) {
   if (typeof number == 'undefined') {
-    echo("warning in toDelimited");
+    sr.fn.debug.echo("warning in toDelimited");
     return "";
   }
   
@@ -45,7 +45,7 @@ function toDelimited(number) {
 
 function toCurrency(number) {
   if (typeof number == 'undefined') {
-    echo("toCurrency: number is type undefined");
+    sr.fn.debug.echo("toCurrency: number is type undefined");
     return "";
   }
   
@@ -72,7 +72,7 @@ function toCurrency(number) {
 
 function toPercent(number) {
   if (typeof number == 'undefined') {
-    echo("warning in toPercent");
+    sr.fn.debug.echo("warning in toPercent");
     return "";
   }
   var match, property, integerPart, fractionalPart;

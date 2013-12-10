@@ -5,7 +5,7 @@ var shippers = {
     var loader = shared.draw.loading(true,null,dialog);
     var okbutton = shared.create.dialog_button(i18n.menu.ok, function() {
       loader.show();
-      ajax_log({
+      sr.fn.debug.ajaxLog({
         action_taken:'confirmed_update_shipper_dialog'
       });
       window.location = '/shippers/update_all';

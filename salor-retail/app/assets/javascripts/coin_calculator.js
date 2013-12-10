@@ -8,7 +8,7 @@ sr.fn.coin_calculator.setup = function() {
     if (!$(elem).hasClass('calculator-done')) {
       $(elem).on('keyup', function() {
         sr.fn.coin_calculator.displayTotal();
-        return ajax_log({
+        return sr.fn.debug.ajaxLog({
           log_action: 'coin_calculator',
           called_from: $(this).attr('id') + "->" + $(this).val()
         });
