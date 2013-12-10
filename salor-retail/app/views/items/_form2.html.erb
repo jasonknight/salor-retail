@@ -427,8 +427,8 @@
           elem.append(del);
           $("#parts_target").append(elem);
           
-          make_keyboardable($('#' + inp_id).removeClass('keyboardable-done'));
-          make_keyboardable($('#' + qinp_id).removeClass('keyboardable-done'));
+          sr.fn.onscreen_keyboard.make($('#' + inp_id).removeClass('keyboardable-done'));
+          sr.fn.onscreen_keyboard.make($('#' + qinp_id).removeClass('keyboardable-done'));
         }
         </script>
         <div id="parts_target" class="parts">

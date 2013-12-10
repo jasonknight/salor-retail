@@ -97,3 +97,11 @@ done
 # ./vartransform.sh displayMessage sr.fn.messages.displayMessage
 # ./vartransform.sh displayMessages sr.fn.messages.displayMessages
 # ./vartransform.sh fadeMessages sr.fn.messages.fadeMessages
+
+# ./vartransform.sh onScreenKeyboardSetup sr.fn.onscreen_keyboard.setup
+# ./vartransform.sh make_keyboardable sr.fn.onscreen_keyboard.make
+# ./vartransform.sh make_keyboardable_with_options sr.fn.makeWithOptions
+
+# ./vartransform.sh remoteSupportSetup sr.fn.remotesupport.setup
+# ./vartransform.sh update_connection_status sr.fn.remotesupport.getStatus
+# ./vartransform.sh connect_service sr.fn.remotesupport.connect

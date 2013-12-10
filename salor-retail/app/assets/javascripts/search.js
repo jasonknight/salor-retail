@@ -30,7 +30,7 @@ function showSearch() {
     }
   })
   $('.search-div-input-constrainer').html(inp);
-  make_keyboardable(inp);
+  sr.fn.onscreen_keyboard.make(inp);
   $('#search').height($(window).height() * 0.75);
   $('#search').width($(window).width() * 0.75);
   $('.search-results').height($('#search').height() - 136);

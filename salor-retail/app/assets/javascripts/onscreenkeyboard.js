@@ -1,10 +1,10 @@
-$(function() {
+sr.fn.onscreen_keyboard.setup = function() {
   $('.keyboardable').each(function(i, el) {
-    make_keyboardable($(el));
+    sr.fn.onscreen_keyboard.make($(el));
   });
   
   $('.keyboardable-int').each(function(i, el) {
-    make_keyboardable($(el));
+    sr.fn.onscreen_keyboard.make($(el));
   });
 
 
@@ -101,10 +101,10 @@ $(function() {
     ]
   };
 
-});
+}
   
 
-function make_keyboardable(elem) {
+sr.fn.onscreen_keyboard.make = function(elem) {
   if (elem.hasClass('keyboardable-done')) {
     return;
   }
@@ -185,7 +185,7 @@ function make_keyboardable(elem) {
 }
 
 
-function make_keyboardable_with_options(elem,opts) {
+sr.fn.onscreen_keyboard.makeWithOptions = function(elem,opts) {
   if (elem.hasClass('keyboardable-done')) {
     return;
   }

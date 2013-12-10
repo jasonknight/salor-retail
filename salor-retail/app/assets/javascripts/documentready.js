@@ -17,6 +17,9 @@ var sr = {
     items: {},
     math: {},
     messages: {},
+    onscreen_keyboard: {},
+    refund: {},
+    remotesupport: {},
     
     
   },
@@ -110,6 +113,7 @@ $(function () {
   sr.fn.focus.setup();
   sr.fn.inventory.setup();
   sr.fn.invoice.setup();
+  sr.fn.onscreen_keyboard.setup();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

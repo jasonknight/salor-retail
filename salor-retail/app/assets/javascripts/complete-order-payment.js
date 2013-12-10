@@ -47,7 +47,7 @@ sr.fn.payment.add = function() {
   make_select_widget($(sel).find("option:selected"), $(sel));
   
 
-  make_keyboardable_with_options(amount, {
+  sr.fn.onscreen_keyboard.makeWithOptions(amount, {
     visible: function () {
       var cls = $(sel).val() + '-amount';
       $(".ui-keyboard-preview").removeClass('payment-amount');
