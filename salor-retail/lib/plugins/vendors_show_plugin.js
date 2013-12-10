@@ -7,7 +7,7 @@ plugins.vendors_show_plugin = {
   after_hook: function (icon) {
     Salor.log_action("Hello from " + plugins.vendors_show_plugin.conf.name);
     var div = Salor.render_partial('vendors/show_list_entry',{
-      mousedown: 'window.location = "/countries"',
+      mouseclick: 'window.location = "/countries"',
       href: '/countries',
       icon_name: 'plugin',
       translation: 'activerecord.models.plugin.other'

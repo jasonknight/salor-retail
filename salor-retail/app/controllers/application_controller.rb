@@ -162,6 +162,7 @@ class ApplicationController < ActionController::Base
       :plugins          => "/" + File.join("uploads","plugins"),
     }
     @current_plugin_manager = PluginManager.new(@current_vendor)
+    @current_plugin_manager.logger = logger
     
     return @current_user
   end

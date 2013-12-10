@@ -45,6 +45,7 @@ class PluginsController < ApplicationController
   def update
     @plugin = @current_vendor.plugins.visible.find_by_id(params[:id])
     if @plugin.update_attributes(params[:plugin])
+      @plugin.unzip
       redirect_to plugins_path
     else
       render :edit

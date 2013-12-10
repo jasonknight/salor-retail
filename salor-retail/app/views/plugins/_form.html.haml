@@ -23,7 +23,12 @@
           %td
             %label=v[:name].titleize
           %td
-            %input{ :type=> v[:type], :size => v[:size], :name=> "plugin[meta][" + v[:name] + "]", :value => (@plugin.meta ? @plugin.meta[v[:name]] : '') }
+            - if v[:type] == 'yesorno' then
+              %select{:name=> "plugin[meta][" + v[:name] + "]", :id => "plugin_#{v[:name]}"}
+                %option{:value=>'yes'} Yes
+                %option{:value=>'no'} No
+            - else
+              %input{ :type=> v[:type], :size => v[:size], :name=> "plugin[meta][" + v[:name] + "]", :value => (@plugin.meta ? @plugin.meta[v[:name]] : '') }
     - if @plugin.files and @plugin.files.any?
       %tr
         %td{ :colspan=>2}

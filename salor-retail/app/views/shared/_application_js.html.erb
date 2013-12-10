@@ -95,7 +95,11 @@ _.templateSettings = {
     evaluate: /\{\{(.+?)\}\}/g
 };
 <% @current_plugin_manager.metas.each do |name,hash| %>
-var <%= name %> = {};
-<%= name %>.meta = <%= raw hash.to_json %>;
+  var <%= name %> = {};
+  <%= name %>.meta = <%= raw hash.to_json %>;
+<% end %>
+var CurrentItem = {};
+<% if @item then %>
+  CurrentItem = <%= raw @item.attributes.to_json %>;
 <% end %>
 </script>

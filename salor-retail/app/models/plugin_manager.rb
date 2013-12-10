@@ -7,7 +7,7 @@ class PluginManager < AbstractController::Base
   include Rails.application.routes.url_helpers
   helper ApplicationHelper
   self.view_paths = "app/views/"
-  attr_accessor :javascript_files, :stylesheet_files, :image_files, :metas
+  attr_accessor :javascript_files, :stylesheet_files, :image_files, :metas,:logger
   
   def initialize(current_vendor)
     @vendor                 = current_vendor
@@ -190,11 +190,13 @@ class PluginManager < AbstractController::Base
   end
 
   def do_hook(name)
-
+    name = name.to_s
+    log_action("Beginning HOOK " + name)
     return '' if not @code
     content = ''
     if @hooks[name.to_sym] then
       @hooks[name.to_sym].each do |callback|
+        log_action("Executing HOOK " + name)
         begin
           function_name = callback[:function]
           
@@ -203,10 +205,18 @@ class PluginManager < AbstractController::Base
           if not function then
             log_action "function #{callback[:function]} is not set."
           else
-            tmp = function.methodcall(function)
+            log_action("About to call HOOK " + name)
+            begin
+              tmp = function.methodcall(function)
+            rescue => e
+              log_action("There was an error in the HOOK " + name + ": " + e.inspect)
+              log_action e.backtrace.join("\n")
+            end
+            log_action("Call to HOOK " + name + " completed")
             if tmp.nil? then
               log_action "Must return a string from a hook"
             else
+              log_action("HOOK returned: " + tmp)
               content += tmp
             end
           end
@@ -216,7 +226,10 @@ class PluginManager < AbstractController::Base
            log_action e.backtrace.join("\n")
         end
       end 
+    else
+      log_action("There are no HOOKs")
     end
+    log_action("HOOK COMPLETE")
     return content.html_safe
 
   end

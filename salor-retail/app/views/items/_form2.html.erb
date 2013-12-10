@@ -43,6 +43,7 @@
           <span class="icon-caption"><%= I18n.t("menu.new_button") %></span>
         </div>
       </td>
+      <%= @current_plugin_manager.do_hook("after_edit_item_tools") %>
     </tr>
   </table>
 <% end %>
