@@ -1,4 +1,4 @@
-var highlightAttrs = ['sku', 'price', 'total'];
+sr.data.pos_core.highlight_attrs = ['sku', 'price', 'total'];
 
 sr.fn.pos_core.addItem = function(sku, additional_params) {
   if (sku == "") return
@@ -237,7 +237,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
     }
     
   
-    if (item.is_buyback && highlightAttrs.indexOf(attr) != -1) {
+    if (item.is_buyback && sr.data.pos_core.highlight_attrs.indexOf(attr) != -1) {
       sr.fn.pos_core.highlight(col);
     }
 
