@@ -13,6 +13,8 @@ var sr = {
     focus: {},
     inplace_edit: {},
     inventory: {},
+    invoice: {},
+    
     
   },
   data: {
@@ -103,6 +105,7 @@ $(function () {
   sr.fn.coin_calculator.setup();
   sr.fn.focus.setup();
   sr.fn.inventory.setup();
+  sr.fn.invoice.setup();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

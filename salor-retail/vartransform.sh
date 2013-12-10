@@ -82,3 +82,7 @@ done
 # ./vartransform.sh make_in_place_edit sr.fn.inplace_edit.make
 # ./vartransform.sh inplaceEditBindEnter sr.fn.inplace_edit.bindEnter
 # ./vartransform.sh in_place_edit_go sr.fn.inplace_edit.submit
+
+# ./vartransform.sh invoiceSetup sr.fn.invoice.setup
+# ./vartransform.sh make_editabl_pm sr.fn.invoice.edit_pm
+
