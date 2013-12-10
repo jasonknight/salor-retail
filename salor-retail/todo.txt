@@ -1,3 +1,2 @@
 clockin / clockout messages
-iOS keyboard hiding
-iOS cash drop select 
+user login time edit
