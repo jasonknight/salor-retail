@@ -90,11 +90,11 @@
             - unless item.blank? or item_stocks.blank?
               = select_tag "shipment_item_move_to_#{ si.id }", options_for_select(@shipment.vendor.location_stock_location_list), :class => 'shipment_item_move_to' , :include_blank => true, :onchange => "$('#shipment_item_move_button_#{ si.id }').fadeIn();"
               
-              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :style => "display:none;", :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), $('#shipment_item_move_to_#{ si.id }').val() );" }= t('.move_into_stock')
+              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :style => "display:none;", :onclick => "sr.fn.shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val(), $('#shipment_item_move_to_#{ si.id }').val() );" }= t('.move_into_stock')
               
             - else
             
-              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :onclick => "shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val() );" }= t('.move_into_stock')
+              .dialog-button{ :id => "shipment_item_move_button_#{ si.id }", :onclick => "sr.fn.shipments.move_item_into_stock(#{ si.id }, $('#shipment_item_quantity_to_move_#{ si.id }').val() );" }= t('.move_into_stock')
         %td
           - if item
             - if item_stocks.blank?

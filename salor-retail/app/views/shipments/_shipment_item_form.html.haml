@@ -1,13 +1,13 @@
 :javascript
   $(function() {
-    ShipmentItems = #{ raw Shipment.shipment_items_to_json(@shipment_items) };
-    Shipment = #{ raw @shipment.to_json };
-    shipments.updateLineItems();
-    shipments.updateShipment();
+    sr.data.shipments.shipment_items = #{ raw Shipment.shipment_items_to_json(@shipment_items) };
+    sr.data.shipments.shipment = #{ raw @shipment.to_json };
+    sr.fn.shipments.updateLineItems();
+    sr.fn.shipments.updateShipment();
 
     $('#main_shipment_sku_field').keydown(function(e) {
       if (e.which == 13) {
-        shipments.submitLineItem($('#main_shipment_sku_field').val());
+        sr.fn.shipments.submitLineItem($('#main_shipment_sku_field').val());
         $('#main_shipment_sku_field').val('');
         return false;
       }

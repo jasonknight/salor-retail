@@ -16,7 +16,6 @@
 //= require sprintf
 //= require documentready
 //= require invoices
-//= require remotesupport
 //= require user_logins
 //= require math
 //= require buttons

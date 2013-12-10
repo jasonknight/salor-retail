@@ -1,4 +1,4 @@
-window.shipments = {
+sr.fn.shipments = {
   
   getShipmentItemId: function(item) {
     var id = 'shipment-item-' + item.id;
@@ -7,7 +7,7 @@ window.shipments = {
   
   submitLineItem: function(sku) {
     if (sku == "") return
-    get('/shipments/add_item?shipment_id=' + Shipment.id + '&sku=' + sku, '', '');
+    get('/shipments/add_item?shipment_id=' + sr.data.shipments.shipment.id + '&sku=' + sku, '', '');
     $('#main_shipment_sku_field').val('');
     setTimeout(function() {
       // doesn't work without timeout, JS issue
@@ -17,37 +17,37 @@ window.shipments = {
   },
   
   updateShipment: function() {
-    $('#pos_order_total').html(sr.fn.math.toCurrency(Shipment.purchase_price_total));
+    $('#pos_order_total').html(sr.fn.math.toCurrency(sr.data.shipments.shipment.purchase_price_total));
   },
   
   updateLineItems: function() {
-    for (var i = 0; i < ShipmentItems.length; i++) {
-      var item = ShipmentItems[i];
-      var id = shipments.getShipmentItemId(item);
+    for (var i = 0; i < sr.data.shipments.shipment_items.length; i++) {
+      var item = sr.data.shipments.shipment_items[i];
+      var id = sr.fn.shipments.getShipmentItemId(item);
       if ($('.' + id).length != 0) {
         /* Item is in list, and we need to update it */
         console.log(item.hidden);
         if (item.hidden) {
-          shipments.deleteLineItem(item);
+          sr.fn.shipments.deleteLineItem(item);
         } else {
-          shipments.updateLineItem(item);
+          sr.fn.shipments.updateLineItem(item);
         }
       } else {
         /* Item is not in list, we need to add it */
-        shipments.addLineItem(item);
+        sr.fn.shipments.addLineItem(item);
       }
     }
   },
     
   addLineItem: function(item) {
-    var row_new = shipments.drawLineItemRow(item);
+    var row_new = sr.fn.shipments.drawLineItemRow(item);
     $('#shipment_items_container').prepend(row_new);
   },
   
   updateLineItem: function(item) {
     var row_existing = $('#shipment_item_' + item.id);
     $('#shipment_items_container').prepend(row_existing);
-    row_existing.html(shipments.drawLineItemRow(item));
+    row_existing.html(sr.fn.shipments.drawLineItemRow(item));
   },
   
   deleteLineItem: function(item) {
@@ -59,7 +59,7 @@ window.shipments = {
     var fields = ['sku', 'name', 'quantity', 'purchase_price', 'purchase_price_total', 'tax_profile'];
     
     var row_id = 'shipment_item_' + item.id;
-    var base_id = shipments.getShipmentItemId(item);
+    var base_id = sr.fn.shipments.getShipmentItemId(item);
     var row = create_dom_element('div', {id:row_id, model_id:item.id, clss:base_id }, '');
     
     _set('item', item, row);

@@ -23,6 +23,7 @@ var sr = {
     salor_bin: {},
     search_generic: {},
     search_pos: {},
+    shipments: {},
     
     
   },
@@ -31,7 +32,8 @@ var sr = {
     complete: {},
     inplace_edit: {},
     messages: {},
-    search: {},
+    search_pos: {},
+    shipments: {},
   },
 }
 
