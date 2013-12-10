@@ -1,4 +1,4 @@
-$(function () {
+function displayUserLogins() {
   if (User.role_cache.indexOf('manager') != -1) {
     try {
       var lin = $('.user_login_time');
@@ -33,7 +33,7 @@ $(function () {
       );
     } catch (e) { var e = '';}
   } // if user.role_cache
-});
+}
 
 function remove_user_login(thetd) {
   var thetr = $(thetd).closest("tr")

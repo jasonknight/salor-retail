@@ -9,6 +9,7 @@ var sr = {
     customers: {},
     debug: {},
     drawer: {},
+    user_logins: {},
   },
   data: {
     pos_core: {},
@@ -93,6 +94,7 @@ $(function () {
   
   $("#category_color").modcoder_excolor();
   
+  displayUserLogins();
   sr.fn.coin_calculator.setup();
   
   // don't run this twice, a known jQuery bug
