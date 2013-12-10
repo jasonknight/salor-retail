@@ -41,3 +41,8 @@ done
 # ./vartransform.sh show_denominations sr.fn.change.show_denominations
 # ./vartransform.sh get_highest sr.fn.change.get_highest
 # ./vartransform.sh recommend sr.fn.change.recommend
+
+# ./vartransform.sh add_payment_method sr.fn.payment.add
+# ./vartransform.sh payment_method_options sr.fn.payment.getOptions
+# ./vartransform.sh get_payment_total sr.fn.payment.getTotal
+# ./vartransform.sh paymentMethodItems sr.fn.payment.getItems

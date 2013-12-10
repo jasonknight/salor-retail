@@ -4,6 +4,7 @@ var sr = {
     buttons: {},
     coin_calculator: {},
     change: {},
+    payment: {},
   },
   data: {
     pos_core: {},

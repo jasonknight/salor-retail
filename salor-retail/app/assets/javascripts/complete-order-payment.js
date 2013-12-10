@@ -1,5 +1,3 @@
-var oldPaymentMethod = "";
-
 function add_payment_method() {
   //  if ($(".payment-amount").size() >= payment_internal_types.length) return;
   var d = div();
