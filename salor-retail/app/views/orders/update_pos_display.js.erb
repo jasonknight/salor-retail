@@ -14,7 +14,7 @@ try {
 
 // ----------- update order items ----------
 try {
-  updateOrderItems(<%= raw Order.order_items_to_json(@order_items) %>); 
+  sr.fn.pos_core.updateOrderItems(<%= raw Order.order_items_to_json(@order_items) %>); 
 } catch (err) {
   echo("Failed to update items properly, please reload");
   echo(err);

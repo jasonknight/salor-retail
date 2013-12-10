@@ -31,32 +31,32 @@ sr.fn.pos_core.updateOrder = function(order) {
   $('.order-points').html(order.lc_points);
 }
 
-function updateOrderItems(items) {
+sr.fn.pos_core.updateOrderItems = function(items) {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
     var id = getOrderItemId(item);
     if ($('.' + id).length != 0) {
       /* Item is in list, and we need to update it */
-      updatePosItem(item);
+      sr.fn.pos_core.updatePosItem(item);
     } else {
       /* Item is not in list, we need to add it */
-      addPosItem(item);
+      sr.fn.pos_core.addPosItem(item);
     }
   }
 }
 
-function addPosItem(item) {
-  var row_new = drawOrderItemRow(item);
+sr.fn.pos_core.addPosItem = function(item) {
+  var row_new = sr.fn.pos_core.drawOrderItemRow(item);
   $('.pos-table-left-column-items').prepend(row_new);
 }
 
-function updatePosItem(item) {
+sr.fn.pos_core.updatePosItem = function(item) {
   var row_existing = $('#order_item_' + item.id)
-  row_existing.html(drawOrderItemRow(item));
+  row_existing.html(sr.fn.pos_core.drawOrderItemRow(item));
 }
 
 
-function drawOrderItemRow(item) {
+sr.fn.pos_core.drawOrderItemRow = function(item) {
   if (Register.hide_discounts == true) {
     var attrs = ['name', 'quantity', 'price', 'total'];
   } else {
@@ -144,7 +144,7 @@ function drawOrderItemRow(item) {
     switch(attr) {
       case 'name':
         row.append(col);
-        makeItemMenu(col, row);
+        sr.fn.pos_core.makeItemMenu(col, row);
         break;
       case 'tax':
         var color = TaxProfiles[item.tax_profile_id].color;
@@ -233,7 +233,7 @@ function drawOrderItemRow(item) {
     }
     
     if (attr == "price" && item.must_change_price && item.price == 0 ) {
-      setTimeout(trigger_click(col), 50);
+      setTimeout(sr.fn.pos_core.triggerClick(col), 50);
     }
     
   
@@ -265,7 +265,7 @@ var trigger_click = function(col) {
 
 
 
-function makeItemMenu(col, row) {
+sr.fn.pos_core.makeItemMenu = function(col, row) {
   try {
     var item = _get('item', row);
     col.unbind();

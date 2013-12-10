@@ -16,3 +16,11 @@ do
 done
 
 # ./vartransform.sh add_item sr.fn.pos_core.addItem
+# ./vartransform.sh updateOrder sr.fn.pos_core.updateOrder
+
+# ./vartransform.sh updateOrderItems sr.fn.pos_core.updateOrderItems
+# ./vartransform.sh addPosItem sr.fn.pos_core.addPosItem
+# ./vartransform.sh updatePosItem sr.fn.pos_core.updatePosItem
+# ./vartransform.sh drawOrderItemRow sr.fn.pos_core.drawOrderItemRow
+# ./vartransform.sh trigger_click sr.fn.pos_core.triggerClick
+# ./vartransform.sh makeItemMenu sr.fn.pos_core.makeItemMenu
