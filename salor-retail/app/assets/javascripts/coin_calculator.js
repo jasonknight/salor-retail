@@ -1,4 +1,4 @@
-function setupCoinCalculator() {
+sr.fn.coin_calculator.setup = function() {
   var elem, _i, _len, _ref, _results;
 
   _ref = $('.eod-calculator-input');
@@ -7,7 +7,7 @@ function setupCoinCalculator() {
     elem = _ref[_i];
     if (!$(elem).hasClass('calculator-done')) {
       $(elem).on('keyup', function() {
-        displayCalculatorTotal();
+        sr.fn.coin_calculator.displayTotal();
         return ajax_log({
           log_action: 'coin_calculator',
           called_from: $(this).attr('id') + "->" + $(this).val()
@@ -19,9 +19,9 @@ function setupCoinCalculator() {
     }
   }
   return _results;
-});
+}
 
-function displayCalculatorTotal() {
+sr.fn.coin_calculator.displayTotal = function() {
   var cls, diff, elem, ttl, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
 
   var calculator_total = 0;

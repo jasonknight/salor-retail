@@ -14,13 +14,13 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require sprintf
+//= require documentready
 //= require genericjs
 //= require math
 //= require categories
 //= require buttons
 //= require items
 //= require debug
-//= require documentready
 //= require focus
 //= require customers
 //= require helpers
@@ -35,7 +35,7 @@
 //= require refund
 //= require shipments
 //= require shippers
-//= require cash_registers
+//= require coin_calculator
 //= require search
 //= require messages
 //= require complete-order-payment

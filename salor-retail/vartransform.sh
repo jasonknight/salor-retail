@@ -32,4 +32,7 @@ done
 # ./vartransform.sh highlight sr.fn.pos_core.highlight
 # ./vartransform.sh clearOrder sr.fn.pos_core.clearOrder
 
+#./vartransform.sh makeSortable sr.fn.buttons.makeSortable
 
+#./vartransform.sh displayCalculatorTotal sr.fn.coin_calculator.displayTotal
+#./vartransform.sh setupCoinCalculator sr.fn.coin_calculator.setup

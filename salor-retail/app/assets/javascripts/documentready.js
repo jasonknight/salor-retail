@@ -2,6 +2,7 @@ var sr = {
   fn: {
     pos_core: {},
     buttons: {},
+    coin_calculator: {},
   },
   data: {
     pos_core: {}
@@ -82,6 +83,8 @@ $(function () {
 
   // focus stuff
   //focusInput($('#generic_search_input'));
+  
+  sr.fn.coin_calculator.setup();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;
