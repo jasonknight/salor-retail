@@ -90,10 +90,6 @@ window.params = {
 <% end %>
 
 
-_.templateSettings = {
-    interpolate: /\{\{\=(.+?)\}\}/g,
-    evaluate: /\{\{(.+?)\}\}/g
-};
 <% @current_plugin_manager.metas.each do |name,hash| %>
 var <%= name %> = {};
 <%= name %>.meta = <%= raw hash.to_json %>;
