@@ -120,7 +120,7 @@ $(function () {
   sr.fn.invoice.setup();
   sr.fn.onscreen_keyboard.setup();
   sr.fn.remotesupport.setup();
-  searchSetup();
+  sr.fn.search_generic.setup();
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

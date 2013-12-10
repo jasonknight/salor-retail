@@ -12,7 +12,7 @@
   <div id="show_butons" onclick="$('#buttons').show();" class="input pos-button">
     <%= raw salor_icon(:button, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.buttons")) %>
   </div>
-  <div id="show_search" onclick="showSearch();" class="input pos-button">
+  <div id="show_search" onclick="sr.fn.search_pos.showPopup();" class="input pos-button">
     <%= raw salor_icon(:search, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.search")) %>
   </div>
   <div class="pos-button" align="center" onmousedown="weigh_last_item();">
