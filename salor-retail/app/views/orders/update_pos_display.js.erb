@@ -5,7 +5,7 @@
 // ---------- update order -------------
 Order = <%= raw @order.to_json %>;
 try {
-  updateOrder(Order);
+  sr.fn.pos_core.updateOrder(Order);
 } catch (err) {
   send_email("Error in update_pos_display updateOrder", err);
 }

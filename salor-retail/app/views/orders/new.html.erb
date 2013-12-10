@@ -1,7 +1,7 @@
 <script type="text/javascript">
   $(function () {
     Order = <%= raw @current_order.to_json %>;
-    updateOrder(Order);
+    sr.fn.pos_core.updateOrder(Order);
     <%
       items = []
       @current_order.order_items.visible.each do |oi|

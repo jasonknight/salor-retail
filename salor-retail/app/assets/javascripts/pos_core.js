@@ -6,7 +6,7 @@ sr.fn.pos_core.addItem = function(sku, additional_params) {
   $('#main_sku_field').val('');
 }
 
-function updateOrder(order) {
+sr.fn.pos_core.updateOrder = function(order) {
   var button = $('#buy_order_button');
   if (order.buy_order) {
     $(button).addClass('pos-highlight');

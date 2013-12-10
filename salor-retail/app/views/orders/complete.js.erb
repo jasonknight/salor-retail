@@ -1,6 +1,6 @@
 Drawer = <%= raw @current_user.get_drawer.to_json %>;
 $('.pos-table-left-column-items').html('');
-updateOrder(<%= raw @order.to_json %>);
+sr.fn.pos_core.updateOrder(<%= raw @order.to_json %>);
 $('#complete_order_total').html(toCurrency(<%= @old_order.total %>));
 $('.pos-customer').html('');
 $('.pos-cash-register-amount').html('<%= humanized_money_with_symbol(@current_user.get_drawer.amount) %>');
