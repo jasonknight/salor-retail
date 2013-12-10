@@ -1,26 +1,26 @@
-$(function () {
-  $("#inventory_sku").on('click', function() {
-    $(this).select();
-  });
-  $("#inventory_sku").keyup(function(e) {
-    if (e.which == 13) {
-      inventory.fetch_json($(this).val());
-    }
-  });
-  $("#inventory_quantity").keyup(function(e) {
-    if (e.which == 13) {
-      inventory.update_real_quantity($('#inventory_item_sku').html(), $(this).val());
-    }
-  });
-});
-
-var inventory = {
+sr.fn.inventory = {
+  
+  setup: function() {
+    $("#inventory_sku").on('click', function() {
+      $(this).select();
+    });
+    $("#inventory_sku").keyup(function(e) {
+      if (e.which == 13) {
+        sr.fn.inventory.fetch_json($(this).val());
+      }
+    });
+    $("#inventory_quantity").keyup(function(e) {
+      if (e.which == 13) {
+        sr.fn.inventory.update_real_quantity($('#inventory_item_sku').html(), $(this).val());
+      }
+    });
+  },
   
   fetch_json: function(sku) {
     $.ajax({
       url: "/items/inventory_json?sku=" + $("#inventory_sku").val(),
       dataType: 'json',
-      success: inventory.fetch_json_success
+      success: sr.fn.inventory.fetch_json_success
     });
     
   },
@@ -44,7 +44,7 @@ var inventory = {
     $.ajax({
       url: "/items/update_real_quantity?sku=" + sku + "&real_quantity=" + quantity,
       dataType: 'json',
-      success: inventory.update_real_quantity_success
+      success: sr.fn.inventory.update_real_quantity_success
     });
   },
   
