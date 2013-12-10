@@ -31,8 +31,7 @@
 //= require inventory
 //= require style
 //= require shared
-//= require ordersjs
-//= require ordersjs
+//= require pos_core
 //= require shipments
 //= require shippers
 //= require cash_registers
