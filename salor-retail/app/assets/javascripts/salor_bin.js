@@ -40,7 +40,7 @@ function quick_open_drawer() {
 // this function returns true or false, which tells other functions if the cash drawer should be opened. for example, for a credit card transaction no cash drawer is needed.
 function open_drawer_condition() {
   var contains_cash_payment_method_item = false;
-  var current_payment_method_items = paymentMethodItems();
+  var current_payment_method_items = sr.fn.payment.getItems();
   $.each(current_payment_method_items, function(k,v) {
     if (v.cash == true) {
       contains_cash_payment_method_item = true;
@@ -97,7 +97,7 @@ function updateCustomerDisplay(order_id, item, show_change) {
   if ( usePole() ) {
     if (item == false) {
       // after complete order
-      given = parseFloat(get_payment_total());
+      given = parseFloat(sr.fn.payment.getTotal());
       given = sprintf(" %s %6.2f", Region.number.currency.format.unit, given);
       change = parseFloat($('#complete_order_change').html().replace(',','.').substring(1));
       change = sprintf(" %s %6.2f", Region.number.currency.format.unit, change);

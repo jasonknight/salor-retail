@@ -31,7 +31,7 @@ function complete_order_show() {
   $("#add_payment_method_button").show();
   $("#payment_methods").show();
   $("#payment_methods").html("");
-  add_payment_method();
+  sr.fn.payment.add();
   $("#payment_amount_0").val(toDelimited(Order.total));
   $("#payment_amount_0").select();
   sr.fn.change.display_change('function complete_order_show');
@@ -91,7 +91,7 @@ function complete_order_send(print) {
 function complete_order_process(print,change_user_id) {
   conditionally_open_drawer();
   var order_id = Order.id;
-  var current_payment_method_items = paymentMethodItems();
+  var current_payment_method_items = sr.fn.payment.getItems();
   $.ajax({
     url: "/orders/complete",
     type: 'POST',

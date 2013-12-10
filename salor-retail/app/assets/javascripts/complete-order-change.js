@@ -1,5 +1,5 @@
 sr.fn.change.display_change = function(called_from) {
-  var paymentTotal = get_payment_total();
+  var paymentTotal = sr.fn.payment.getTotal();
   var change = paymentTotal - Order.total;
   change = Round(change,2);
   if (change < 0 && Order.total > 0 && !Order.is_proforma) {

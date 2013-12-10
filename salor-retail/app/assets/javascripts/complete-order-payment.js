@@ -1,4 +1,4 @@
-function add_payment_method() {
+sr.fn.payment.add = function() {
   //  if ($(".payment-amount").size() >= payment_internal_types.length) return;
   var d = div();
   d.addClass('payment-method');
@@ -6,7 +6,7 @@ function add_payment_method() {
   var numMethods = $(".payment-amount").size();
   
   // selector
-  var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+payment_method_options()+'</select>');
+  var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+sr.fn.payment.getOptions()+'</select>');
   sel.on('change', function(){
     sr.fn.change.display_change();
     ajax_log({log_action:'select_payment_method', button_id:sel.attr('id'), value:sel.val(), order_id:Order.id});
@@ -16,7 +16,7 @@ function add_payment_method() {
   
   
   // amount field
-  var rest_value = Order.total - get_payment_total();
+  var rest_value = Order.total - sr.fn.payment.getTotal();
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   amount.on("keyup",function (event) {
     if (event.keyCode == 13) {
@@ -67,7 +67,7 @@ function add_payment_method() {
   }, 100);
 }
 
-function payment_method_options() {
+sr.fn.payment.getOptions = function() {
   var txt = '';
   $.each(PaymentMethodObjects, function(k,v) {
     txt = txt + '<option value="' + k + '">' + v.name + '</option>';
@@ -75,9 +75,9 @@ function payment_method_options() {
   return txt;
 }
 
-function get_payment_total() {
+sr.fn.payment.getTotal = function() {
   var paymentTotal = 0;
-  var current_payment_method_items = paymentMethodItems();
+  var current_payment_method_items = sr.fn.payment.getItems();
   $.each(current_payment_method_items, function(k,v) {
     var tval = toFloat(v.amount);
     paymentTotal += tval;
@@ -85,7 +85,7 @@ function get_payment_total() {
   return paymentTotal;
 }
 
-function paymentMethodItems() {
+sr.fn.payment.getItems = function() {
   var returnObj = {};
   $.each($(".payment-method"), function() {
     var id = $(this).attr('id').split("_")[2];
