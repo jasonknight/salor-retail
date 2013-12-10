@@ -32,9 +32,9 @@
   function print(download) {
     var skus = $('#skus').val().split("\n");
     if($("#label:checked").val() == 'label') {
-      print_url(Register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val() + '&download=' + download);
+      sr.fn.salor_bin.printUrl(Register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val() + '&download=' + download);
     }
     if($("#sticker:checked").val() == 'sticker') {
-      print_url(Register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val() + '&download=' + download);
+      sr.fn.salor_bin.printUrl(Register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val() + '&download=' + download);
     }
   }

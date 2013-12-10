@@ -24,25 +24,25 @@ try {
 // ------- dynamic gift card autoprinting, see
 // VendorsController#edit_field_on_child---------
 <% if @gift_card_item_id_for_print %>
-  print_url(Register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
+  sr.fn.salor_bin.printUrl(Register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
 <% end %>
 
 // ---------- other stuff ----------
 sr.fn.focus.set($('#main_sku_field'));
 sr.fn.change.display_change('update_pos_display');
-updateCustomerDisplay(<%= @order.id %>, {}, false);
+sr.fn.salor_bin.updateCustomerDisplay(<%= @order.id %>, {}, false);
 Drawer = <%= raw @current_user.get_drawer.to_json %>;
 
 
 <% if @order_items.any? and @order_items.first.price.zero? %>
-  playsound('medium_warning');
+  sr.fn.salor_bin.playSound('medium_warning');
 <% elsif @order_items.any? %>
-  playsound('drop2');
+  sr.fn.salor_bin.playSound('drop2');
 <% end %>
 
          
 // we run this regularly to reduce the chance that the drawer observer is blocking the printer
-stop_drawer_observer();
+sr.fn.salor_bin.stopDrawerObserver();
 
 // ajax messages stuff
 messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};

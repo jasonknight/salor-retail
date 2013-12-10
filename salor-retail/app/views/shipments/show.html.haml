@@ -4,7 +4,7 @@
 = raw content_box_top(@shipment.name)
 
 .tools
-  .tool-icon{ :onmousedown => 'print_dialog()' }= salor_icon(:print, {}, 32)
+  .tool-icon{ :onmousedown => 'sr.fn.salor_bin.showPrintDialog()' }= salor_icon(:print, {}, 32)
   .tool-icon{ :onmousedown => "window.location = '/shipments/#{ @shipment.id }/edit'" }
     = salor_icon(:edit, {}, 32)
   

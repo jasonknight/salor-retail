@@ -55,7 +55,7 @@ sr.fn.complete.setInvoiceButton = function() {
 }
 
 sr.fn.complete.hidePopup = function() {
-  stop_drawer_observer();
+  sr.fn.salor_bin.stopDrawerObserver();
   $("#payment_methods").html("");
   $(".payment-amount").attr("disabled", true);
   $('#complete_order').hide();
@@ -63,7 +63,7 @@ sr.fn.complete.hidePopup = function() {
   $('.pieces-button ').remove();
   $('body').triggerHandler({type: "CompleteOrderHide"});
   sr.fn.debug.ajaxLog({log_action:'complete_order_hide', order_id:Order.id});
-  if ( useMimo() ) {
+  if ( sr.fn.salor_bin.useMimo() ) {
     Salor.mimoRefresh(location.origin + "/vendors/" + Vendor.id + "/display_logo", 800, 480);
   }
   if ( parseInt( Order.id ) % 20 == 0) { 
@@ -89,7 +89,7 @@ sr.fn.complete.send = function(print) {
 
 // this function handles all the magic regarding printing, drawer opening, drawer observing, pole display update and mimo screen update. detects usage of salor-bin too.
 sr.fn.complete.process = function(print,change_user_id) {
-  conditionally_open_drawer();
+  sr.fn.salor_bin.maybeOpenDrawer();
   var order_id = Order.id;
   var current_payment_method_items = sr.fn.payment.getItems();
   $.ajax({
@@ -105,13 +105,13 @@ sr.fn.complete.process = function(print,change_user_id) {
     complete: function(data, status) {
       sr.fn.debug.ajaxLog({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
       if (print == true) {
-        print_order(order_id, "sr.fn.complete.printingDoneCallback(); conditionally_observe_drawer(0);");
+        sr.fn.salor_bin.printOrder(order_id, "sr.fn.complete.printingDoneCallback(); sr.fn.salor_bin.maybeObserveDrawer(0);");
       } else {
         // do not print, observe immediately, but only if the drawer has actually opened.
-        conditionally_observe_drawer(0);
+        sr.fn.salor_bin.maybeObserveDrawer(0);
       }
       sr.data.complete.sending_order = false;
-      updateCustomerDisplay(order_id, false, true);
+      sr.fn.salor_bin.updateCustomerDisplay(order_id, false, true);
     },
     error: function(jqXHR, textStatus, errorThrown) {
       messagesHash['prompts'].push(errorThrown);

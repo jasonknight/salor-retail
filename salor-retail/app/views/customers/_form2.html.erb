@@ -128,9 +128,9 @@
             <div style="display: inline-block; background-color: white;">
               <img src="<%= barcodepath %>.png" />
             </div>
-            <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/customers/labels', '&id=#{ @customer.id }&type=sticker&style=default')"},32)%> 
+            <%= salor_icon(:sticker_printer, {:onclick => "sr.fn.salor_bin.printUrl(Register.sticker_printer, '/customers/labels', '&id=#{ @customer.id }&type=sticker&style=default')"},32)%> 
             &nbsp;&nbsp;&nbsp;
-            <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=label&style=default')"},32) %> 
+            <%= salor_icon(:thermal_printer,{ :onclick => "sr.fn.salor_bin.printUrl(Register.thermal_printer,'/customers/labels', '&id=#{ @customer.id }&type=label&style=default')"},32) %> 
           </div>
         <% end %>
       <% end %>

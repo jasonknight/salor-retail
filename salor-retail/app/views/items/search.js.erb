@@ -88,7 +88,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:edit,32) %>" width="32" onmousedown="window.location = \'/orders/<%= order.id %>/edit\';" /></div></td>');
     <% end %>
 
-    var btn2 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:printer,32) %>" width="32" onmousedown="print_order(\'<%= order.id %>\');" /></div></td>');
+    var btn2 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:printer,32) %>" width="32" onmousedown="sr.fn.salor_bin.printOrder(\'<%= order.id %>\');" /></div></td>');
     var btn3 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:show,32) %>" width="32" onmousedown="window.location= \'/orders/<%= order.id %>\';" /></div></td>');
     btn.addClass('table-cell btn');
     row.append(oname);

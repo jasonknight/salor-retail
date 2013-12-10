@@ -4,7 +4,7 @@
 = raw content_box_top(t("views.orders"))
 
 .tools
-  %span{ :onmousedown => 'print_dialog()' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+  %span{ :onmousedown => 'sr.fn.salor_bin.showPrintDialog()' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
   %br
   = form_tag "/orders/order_reports", :method => :get do
     = label 'from', t('orders.report_day.from')

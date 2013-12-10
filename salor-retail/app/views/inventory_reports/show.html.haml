@@ -10,7 +10,7 @@
     .tool-icon
       = salor_icon(:update_real_quantity, {:onclick=>"inventory.create_inventory_report_confirm_dialog();"}, 32, t('items.update_real_quantity.update_quantity'))
   .tool-icon
-    = salor_icon(:print, {:onclick => 'print_dialog()' }, 32, t('menu.print-dialog'))
+    = salor_icon(:print, {:onclick => 'sr.fn.salor_bin.showPrintDialog()' }, 32, t('menu.print-dialog'))
 
 .paper-invoice.invoice_print
   %div

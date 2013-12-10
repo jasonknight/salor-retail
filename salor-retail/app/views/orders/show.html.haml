@@ -1,7 +1,7 @@
 = raw content_box_top(@order.nr)
 
 .tools
-  .tool-icon= salor_icon(:thermal_printer, {:onclick => "print_order('#{@order.id }');"}, 32, t('activerecord.attributes.thermal_printer'))
+  .tool-icon= salor_icon(:thermal_printer, {:onclick => "sr.fn.salor_bin.printOrder('#{@order.id }');"}, 32, t('activerecord.attributes.thermal_printer'))
   .tool-icon= link_to salor_icon(:a4print, {}, 32, t('menu.regular_printer')), "/orders/#{@order.id}/print"
   
 - if @order.subscription

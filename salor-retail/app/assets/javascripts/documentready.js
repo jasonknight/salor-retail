@@ -42,7 +42,7 @@ $(function () {
     return
   }
   
-  if (isSalorBin()) {
+  if (sr.fn.salor_bin.is()) {
     Salor.stopDrawerObserver();
   }
 

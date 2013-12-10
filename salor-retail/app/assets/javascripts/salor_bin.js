@@ -1,31 +1,31 @@
-function isSalorBin() {
+sr.fn.salor_bin.is = function() {
   return (typeof(Salor) != 'undefined' );
 }
 
-function usePole() {
-  return isSalorBin() && Register.customerscreen_mode == "pole";
+sr.fn.salor_bin.usePole = function() {
+  return sr.fn.salor_bin.is() && Register.customerscreen_mode == "pole";
 }
 
-function useMimo() {
-  return isSalorBin() && Register.customerscreen_mode == "mimo";
+sr.fn.salor_bin.useMimo = function() {
+  return sr.fn.salor_bin.is() && Register.customerscreen_mode == "mimo";
 }
 
-function onCashDrawerClose() {
+sr.fn.salor_bin.onCashDrawerClose = function() {
   sr.fn.complete.hidePopup();
 }
 
-function stop_drawer_observer() {
-  if ( isSalorBin() && Register.thermal_printer != "") {
+sr.fn.salor_bin.stopDrawerObserver = function() {
+  if ( sr.fn.salor_bin.is() && Register.thermal_printer != "") {
     Salor.stopDrawerObserver(Register.thermal_printer);
   }
 }
 
 
 // always stops the drawer observer, then opens the drawer immediately and detects usage of salor-bin
-function quick_open_drawer() {
-  stop_drawer_observer()
+sr.fn.salor_bin.quickOpenDrawer = function() {
+  sr.fn.salor_bin.stopDrawerObserver()
   if ( Register.thermal_printer != '') {
-    if (isSalorBin()) {
+    if (sr.fn.salor_bin.is()) {
       if ( Register.salor_printer == true ) {
         Salor.newOpenCashDrawer(Register.thermal_printer);
       } else {
@@ -38,7 +38,7 @@ function quick_open_drawer() {
 }
 
 // this function returns true or false, which tells other functions if the cash drawer should be opened. for example, for a credit card transaction no cash drawer is needed.
-function open_drawer_condition() {
+sr.fn.salor_bin.shouldOpenDrawer = function() {
   var contains_cash_payment_method_item = false;
   var current_payment_method_items = sr.fn.payment.getItems();
   $.each(current_payment_method_items, function(k,v) {
@@ -52,35 +52,35 @@ function open_drawer_condition() {
 }
 
 // opens the drawer only if customer has given cash or if the register configuration tells to open it always. no drawer observation is started at this point, since it would block subsequent printing.
-function conditionally_open_drawer() {
+sr.fn.salor_bin.maybeOpenDrawer = function() {
   console.log("conditionally_open_drawer");
-  if ( open_drawer_condition() == true ) quick_open_drawer();
+  if ( sr.fn.salor_bin.shouldOpenDrawer() == true ) sr.fn.salor_bin.quickOpenDrawer();
 }
 
-function conditionally_observe_drawer(delay) {
+sr.fn.salor_bin.maybeObserveDrawer = function(delay) {
   console.log("conditionally_observe_drawer");
-  if ( open_drawer_condition() == true ) observe_drawer(delay);
+  if ( sr.fn.salor_bin.shouldOpenDrawer() == true ) sr.fn.salor_bin.observeDrawer(delay);
 }
 
-function print_order(id, callback) {
-   print_url(Register.thermal_printer, '/orders/print_receipt', '&order_id=' + id, callback);
+sr.fn.salor_bin.printOrder = function(id, callback) {
+   sr.fn.salor_bin.printUrl(Register.thermal_printer, '/orders/print_receipt', '&order_id=' + id, callback);
 }
 
-function print_url(printer_path, url, param_string, callback) {
+sr.fn.salor_bin.printUrl = function(printer_path, url, param_string, callback) {
   c_url = typeof(confirmation_url) !== 'undefined' ? location.origin + confirmation_url : '';
   param_string = "?printurl=1&" + param_string;
   if (param_string.indexOf('download=true') != -1) {
     window.location = url + param_string;
-  } else if (isSalorBin() && Register.salor_printer == true) {
-    stop_drawer_observer();
+  } else if (sr.fn.salor_bin.is() && Register.salor_printer == true) {
+    sr.fn.salor_bin.stopDrawerObserver();
     Salor.printURL(printer_path, location.origin + url + param_string, callback);
   } else {
     $.get(url + param_string, callback);
   }
 }
 
-function playsound(file) {
-  if (isSalorBin()) {
+sr.fn.salor_bin.playSound = function(file) {
+  if (sr.fn.salor_bin.is()) {
     //console.log('playsound', file);
     Salor.playSound(file);
   }
@@ -88,13 +88,13 @@ function playsound(file) {
 
 
 
-function updateCustomerDisplay(order_id, item, show_change) {
-  if ( useMimo() ) {
+sr.fn.salor_bin.updateCustomerDisplay = function(order_id, item, show_change) {
+  if ( sr.fn.salor_bin.useMimo() ) {
     console.log(location.origin + "/orders/" + order_id + "/customer_display")
     Salor.mimoRefresh(location.origin + "/orders/" + order_id + "/customer_display", 800, 480);
   }
   
-  if ( usePole() ) {
+  if ( sr.fn.salor_bin.usePole() ) {
     if (item == false) {
       // after complete order
       given = parseFloat(sr.fn.payment.getTotal());
@@ -106,13 +106,13 @@ function updateCustomerDisplay(order_id, item, show_change) {
       Salor.poleDancer(Register.pole_display, blurb_line1 + given + blurb_line2 + change );
     } else {
       // after item add
-      output = format_pole(item['name'], item['price'], item['quantity'], item['weight_metric'], item['subtotal']); 
+      output = sr.fn.salor_bin.formatPole(item['name'], item['price'], item['quantity'], item['weight_metric'], item['subtotal']); 
       Salor.poleDancer(Register.pole_display, output );
     }
   }
 }
 
-function format_pole(name, price, quantity, weight_metric, total) {
+sr.fn.salor_bin.formatPole = function(name, price, quantity, weight_metric, total) {
   if (weight_metric == null) { weight_metric = '' };
   pole_name     = (name.substring(0,14) + '                ').substring(0,14);
   pole_price    = sprintf("%6.2f",price);
@@ -122,8 +122,8 @@ function format_pole(name, price, quantity, weight_metric, total) {
 }
 
 // this is a callback used mainly by print_url
-function observe_drawer(delay) {
-  if (isSalorBin()) {
+sr.fn.salor_bin.observeDrawer = function(delay) {
+  if (sr.fn.salor_bin.is()) {
     setTimeout(function() {
       Salor.startDrawerObserver(Register.thermal_printer);
     },
@@ -131,8 +131,8 @@ function observe_drawer(delay) {
   }
 }
 
-function weigh_item(id) {
-  if ( ! isSalorBin() ) {
+sr.fn.salor_bin.weighItem = function(id) {
+  if ( ! sr.fn.salor_bin.is() ) {
     messagesHash['prompts'].push("Weighing is only supported with our thin client salor-bin.");
     sr.fn.messages.displayMessages();
     return
@@ -153,10 +153,10 @@ function weigh_item(id) {
   '&field=quantity'+
   '&value=' + weight_formatted;
   
-  get(string, 'weigh_item()');
+  get(string, 'sr.fn.salor_bin.weighItem()');
   
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) {
-    playsound('medium_warning');
+    sr.fn.salor_bin.playSound('medium_warning');
   }
   return parseFloat(weight);
 }
@@ -164,11 +164,11 @@ function weigh_item(id) {
 function weigh_last_item() {
   var top_item = $(".pos-table-left-column-items").children()[0]
   var id = $(top_item).attr('model_id');
-  weigh_item(id);
+  sr.fn.salor_bin.weighItem(id);
 }
 
-function print_dialog() {
-  if (isSalorBin()) {
+sr.fn.salor_bin.showPrintDialog = function() {
+  if (sr.fn.salor_bin.is()) {
     Salor.printPage();
   } else {
     print();

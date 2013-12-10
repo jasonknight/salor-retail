@@ -105,3 +105,21 @@ done
 # ./vartransform.sh remoteSupportSetup sr.fn.remotesupport.setup
 # ./vartransform.sh update_connection_status sr.fn.remotesupport.getStatus
 # ./vartransform.sh connect_service sr.fn.remotesupport.connect
+
+# ./vartransform.sh isSalorBin sr.fn.salor_bin.is
+# ./vartransform.sh usePole sr.fn.salor_bin.usePole
+# ./vartransform.sh useMimo sr.fn.salor_bin.useMimo
+# ./vartransform.sh onCashDrawerClose sr.fn.salor_bin.onCashDrawerClose
+# ./vartransform.sh stop_drawer_observer sr.fn.salor_bin.stopDrawerObserver
+# ./vartransform.sh quick_open_drawer sr.fn.salor_bin.quickOpenDrawer
+# ./vartransform.sh open_drawer_condition sr.fn.salor_bin.shouldOpenDrawer
+# ./vartransform.sh conditionally_open_drawer sr.fn.salor_bin.maybeOpenDrawer
+# ./vartransform.sh conditionally_observe_drawer sr.fn.salor_bin.maybeObserveDrawer
+# ./vartransform.sh print_order sr.fn.salor_bin.printOrder
+# ./vartransform.sh print_url sr.fn.salor_bin.printUrl
+# ./vartransform.sh playsound sr.fn.salor_bin.playSound
+# ./vartransform.sh updateCustomerDisplay sr.fn.salor_bin.updateCustomerDisplay
+# ./vartransform.sh format_pole sr.fn.salor_bin.formatPole
+# ./vartransform.sh observe_drawer sr.fn.salor_bin.observeDrawer
+# ./vartransform.sh weigh_item sr.fn.salor_bin.weighItem
+# ./vartransform.sh print_dialog sr.fn.salor_bin.showPrintDialog

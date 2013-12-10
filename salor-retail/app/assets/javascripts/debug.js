@@ -1,5 +1,5 @@
 sr.fn.debug.echo = function(str) {
-  if ( isSalorBin() && typeof Salor.echo != 'undefined' ) {
+  if ( sr.fn.salor_bin.is() && typeof Salor.echo != 'undefined' ) {
     Salor.echo(str);
   } else if (typeof console != 'undefined') {
     console.log(str);

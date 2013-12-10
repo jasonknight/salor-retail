@@ -6,7 +6,7 @@
 = raw content_box_top(t("views.users"))
 
 .tools
-  %span{ :onmousedown => 'print_dialog();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+  %span{ :onmousedown => 'sr.fn.salor_bin.showPrintDialog();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
   %br
   = form_tag "/users/#{@user.id}", :method => :get do
     = label 'from', t('vendors.report_day.from')

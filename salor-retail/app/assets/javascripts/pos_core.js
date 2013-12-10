@@ -613,7 +613,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   if (!Register.scale == '') {
     var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
     wicon.click(function () {
-      weigh_item(item.id);
+      sr.fn.salor_bin.weighItem(item.id);
       sr.fn.focus.set($('#main_sku_field'));
     }).mouseup(function () {
       sr.fn.focus.set($('#main_sku_field'));
@@ -693,7 +693,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   make_select_widget('Category',category_select);
   var print_sticker = shared.element('div',{id: 'oi_print_sticker'},i18n.helpers.submit.print,config);
   print_sticker.mousedown(function () {
-    print_url(Register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
+    sr.fn.salor_bin.printUrl(Register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
   });
   print_sticker.addClass('button-confirm');
   shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
