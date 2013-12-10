@@ -84,6 +84,8 @@ $(function () {
   // focus stuff
   //focusInput($('#generic_search_input'));
   
+  $("#category_color").modcoder_excolor();
+  
   sr.fn.coin_calculator.setup();
   
   // don't run this twice, a known jQuery bug
