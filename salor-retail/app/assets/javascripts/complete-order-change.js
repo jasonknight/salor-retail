@@ -4,12 +4,12 @@ sr.fn.change.display_change = function(called_from) {
   change = Round(change,2);
   if (change < 0 && Order.total > 0 && !Order.is_proforma) {
     change = 0;
-    allow_complete_order(false);
+    sr.fn.complete.allowSending(false);
   } else {
     if (Order.is_proforma) {
       change = 0;
     }
-    allow_complete_order(true);
+    sr.fn.complete.allowSending(true);
   }
   $('#complete_order_change').html(toCurrency(change));
   ajax_log({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:Order.total, change:change, called_from:called_from});

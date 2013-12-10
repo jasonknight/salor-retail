@@ -5,9 +5,11 @@ var sr = {
     coin_calculator: {},
     change: {},
     payment: {},
+    complete: {},
   },
   data: {
     pos_core: {},
+    complete: {},
   },
 }
 

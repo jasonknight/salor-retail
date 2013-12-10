@@ -58,16 +58,16 @@ function get(url, calledFrom, sFunc, type, eFunc) {
   if (eFunc == null) eFunc = function(){};
   
   var datestamp = new Date().getTime();
-  sendqueue.push(datestamp);
-  disablePrintReceiptButton();
+  sr.data.complete.sendqueue.push(datestamp);
+  sr.fn.complete.disablePrintReceiptButton();
 
   $.ajax({
     url: url,
     success: sFunc,
     complete: function () {
-      var idx = sendqueue.indexOf(datestamp);
-      sendqueue.splice(idx, 1);
-      enablePrintReceiptButton();
+      var idx = sr.data.complete.sendqueue.indexOf(datestamp);
+      sr.data.complete.sendqueue.splice(idx, 1);
+      sr.fn.complete.enablePrintReceiptButton();
     },
     error: function(jqXHR, textStatus, errorThrown) {
       eFunc();

@@ -20,7 +20,7 @@ sr.fn.payment.add = function() {
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   amount.on("keyup",function (event) {
     if (event.keyCode == 13) {
-      complete_order_send(!Register.no_print);
+      sr.fn.complete.send(!Register.no_print);
     } else {
       sr.fn.change.display_change("payment-amount.onKeyUp " + event.which + " " + amount.val() + " " + amount.attr('id'));
     }

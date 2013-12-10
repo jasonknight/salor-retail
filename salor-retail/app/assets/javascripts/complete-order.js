@@ -1,32 +1,32 @@
-var sendingOrder = false;
-var orderCompleteDisplayed = false;
-var sendqueue = [];
+sr.data.complete.sending_order = false;
+sr.data.complete.order_complete_displayed = false;
+sr.data.complete.sendqueue = [];
 
-function enablePrintReceiptButton() {
-  if (sendqueue.length == 0 ) {
+sr.fn.complete.enablePrintReceiptButton = function() {
+  if (sr.data.complete.sendqueue.length == 0 ) {
      $('#print_receipt_button').css('background-color', '#ed8b00');
   }
 }
 
-function disablePrintReceiptButton() {
+sr.fn.complete.disablePrintReceiptButton = function() {
   $('#print_receipt_button').css('background-color', '#999999');
 }
 
-function complete_order_show() {
-  if (sendqueue.length > 0) {
+sr.fn.complete.showPopup = function() {
+  if (sr.data.complete.sendqueue.length > 0) {
     return;
   }
   ajax_log({log_action:'complete_order_show', order_id:Order.id});
   
-  sendingOrder = false;
+  sr.data.complete.sending_order = false;
   $(".payment-amount").remove();
   $(".complete-order-total").html($('#pos_order_total').html());
   $("#complete_order_change").html('');
   $("#recommendation").html('');
   $('#complete_order').show();  
-  set_invoice_button();
+  sr.fn.complete.setInvoiceButton();
 
-  orderCompleteDisplayed = true;
+  sr.data.complete.order_complete_displayed = true;
 
   $("#add_payment_method_button").show();
   $("#payment_methods").show();
@@ -36,11 +36,11 @@ function complete_order_show() {
   $("#payment_amount_0").select();
   sr.fn.change.display_change('function complete_order_show');
   sr.fn.change.show_denominations();
-  allow_complete_order(true);
+  sr.fn.complete.allowSending(true);
   $('body').triggerHandler({type: "CompleteOrderShow"});
 }
 
-function set_invoice_button() {
+sr.fn.complete.setInvoiceButton = function() {
   $('.a4-print-button').remove(); 
   var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print.svg' height='32' /></div>");
   var left = $('#complete_order').position().left;
@@ -54,7 +54,7 @@ function set_invoice_button() {
   $("body").append(a4print);
 }
 
-function complete_order_hide() {
+sr.fn.complete.hidePopup = function() {
   stop_drawer_observer();
   $("#payment_methods").html("");
   $(".payment-amount").attr("disabled", true);
@@ -72,23 +72,23 @@ function complete_order_hide() {
   }
 }
 
-function complete_order_send(print) {
-  if (sendingOrder) return;
-  if (Order.order_items_length == 0) { complete_order_hide(); return;}
-  sendingOrder = true;
-  allow_complete_order(false);
+sr.fn.complete.send = function(print) {
+  if (sr.data.complete.sending_order) return;
+  if (Order.order_items_length == 0) { sr.fn.complete.hidePopup(); return;}
+  sr.data.complete.sending_order = true;
+  sr.fn.complete.allowSending(false);
   if (Register.require_password) {
     // process after password entry
-    show_password_dialog(print);
+    sr.fn.complete.showPasswordPopup(print);
     return
   } else {
     // process immediately
-    complete_order_process(print);
+    sr.fn.complete.process(print);
   }  
 }
 
 // this function handles all the magic regarding printing, drawer opening, drawer observing, pole display update and mimo screen update. detects usage of salor-bin too.
-function complete_order_process(print,change_user_id) {
+sr.fn.complete.process = function(print,change_user_id) {
   conditionally_open_drawer();
   var order_id = Order.id;
   var current_payment_method_items = sr.fn.payment.getItems();
@@ -105,12 +105,12 @@ function complete_order_process(print,change_user_id) {
     complete: function(data, status) {
       ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
       if (print == true) {
-        print_order(order_id, "callback_printing_done(); conditionally_observe_drawer(0);");
+        print_order(order_id, "sr.fn.complete.printingDoneCallback(); conditionally_observe_drawer(0);");
       } else {
         // do not print, observe immediately, but only if the drawer has actually opened.
         conditionally_observe_drawer(0);
       }
-      sendingOrder = false;
+      sr.data.complete.sending_order = false;
       updateCustomerDisplay(order_id, false, true);
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -120,21 +120,21 @@ function complete_order_process(print,change_user_id) {
   });
 }
 
-function callback_printing_done() {
+sr.fn.complete.printingDoneCallback = function() {
   console.log("callback_printing_done");
   // more functionality can go here, e.g. sending a print confirmation to the server.
 }
 
-function allow_complete_order(userRequest) {
+sr.fn.complete.allowSending = function(userRequest) {
   var allowedBySystem = $('#pos-table-left-column-items').children().length > 0 || Order.is_proforma; // sine qua non condition of the system that the user cannot override.
   
   if (allowedBySystem && userRequest) {
     $("#confirm_complete_order_button").removeClass("button-inactive");
     $("#confirm_complete_order_button").off('click');
-    $("#confirm_complete_order_button").on('click', function() {complete_order_send(true)});
+    $("#confirm_complete_order_button").on('click', function() {sr.fn.complete.send(true)});
     $("#confirm_complete_order_noprint_button").removeClass("button-inactive");
     $("#confirm_complete_order_noprint_button").off('click');
-    $("#confirm_complete_order_noprint_button").on('click', function() {complete_order_send(false)});
+    $("#confirm_complete_order_noprint_button").on('click', function() {sr.fn.complete.send(false)});
   } else {
     
     $("#confirm_complete_order_button").addClass("button-inactive");
@@ -145,7 +145,7 @@ function allow_complete_order(userRequest) {
 }
 
 
-function show_password_dialog(print) {
+sr.fn.complete.showPasswordPopup = function(print) {
   var el = $("#simple_input_dialog").dialog({
     modal: false,
     buttons: {
@@ -169,7 +169,7 @@ function show_password_dialog(print) {
                 } else {
                   updateTips("Correct, sending...");
                   var change_user_id = data.id;
-                  complete_order_process(print,change_user_id);
+                  sr.fn.complete.process(print,change_user_id);
                   updateTips("");
                   $("#simple_input_dialog").dialog( "close" );
                 }

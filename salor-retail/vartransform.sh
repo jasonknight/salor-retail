@@ -55,3 +55,6 @@ done
 # ./vartransform.sh complete_order_send sr.fn.complete.send
 # ./vartransform.sh complete_order_process sr.fn.complete.process
 # ./vartransform.sh show_password_dialog sr.fn.complete.showPasswordPopup
+
+# ./vartransform.sh allow_complete_order sr.fn.complete.allowSending
+# ./vartransform.sh callback_printing_done sr.fn.complete.printingDoneCallback

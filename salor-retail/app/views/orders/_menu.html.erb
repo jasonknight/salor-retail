@@ -21,7 +21,7 @@
   <div class="pos-button" onmousedown="quick_open_drawer();">
     <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("menu.open_drawer")) %>
   </div>
-  <div id="print_receipt_button" onclick="complete_order_show();" class="input pos-button print-receipt">
+  <div id="print_receipt_button" onclick="sr.fn.complete.showPopup();" class="input pos-button print-receipt">
     <%= salor_icon(:okay_orange, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("system.complete_sale")) %>
   </div>
   

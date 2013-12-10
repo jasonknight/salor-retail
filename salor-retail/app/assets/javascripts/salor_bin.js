@@ -11,7 +11,7 @@ function useMimo() {
 }
 
 function onCashDrawerClose() {
-  complete_order_hide();
+  sr.fn.complete.hidePopup();
 }
 
 function stop_drawer_observer() {
