@@ -46,3 +46,12 @@ done
 # ./vartransform.sh payment_method_options sr.fn.payment.getOptions
 # ./vartransform.sh get_payment_total sr.fn.payment.getTotal
 # ./vartransform.sh paymentMethodItems sr.fn.payment.getItems
+
+# ./vartransform.sh enablePrintReceiptButton sr.fn.complete.enablePrintReceiptButton
+# ./vartransform.sh disablePrintReceiptButton sr.fn.complete.disablePrintReceiptButton
+# ./vartransform.sh complete_order_show sr.fn.complete.showPopup
+# ./vartransform.sh set_invoice_button sr.fn.complete.setInvoiceButton
+# ./vartransform.sh complete_order_hide sr.fn.complete.hidePopup
+# ./vartransform.sh complete_order_send sr.fn.complete.send
+# ./vartransform.sh complete_order_process sr.fn.complete.process
+# ./vartransform.sh show_password_dialog sr.fn.complete.showPasswordPopup
