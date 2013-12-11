@@ -22,6 +22,7 @@
     <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("menu.open_drawer")) %>
   </div>
   <div id="print_receipt_button" onclick="sr.fn.complete.showPopup();" class="input pos-button print-receipt">
+    <span id="order_id_display"></span>
     <%= salor_icon(:okay_orange, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("system.complete_sale")) %>
   </div>
   

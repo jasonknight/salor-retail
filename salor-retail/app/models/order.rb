@@ -322,7 +322,8 @@ class Order < ActiveRecord::Base
     pm = sku.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1]
       # a price in the format xx,xx was entered
-      i.sku = "DMY" + Time.now.strftime("%y%m%d") + rand(999).to_s
+      timestamp = Time.now.strftime("%y%m%d%H%M%S%L")
+      i.sku = "DMY" + timestamp
       i.price = sku
     else
       # dummy item
@@ -331,7 +332,8 @@ class Order < ActiveRecord::Base
       i.price = 0
       i = Action.run(i.vendor, i, :on_sku_not_found) 
     end
-    i.save
+    result = i.save
+    raise "Could not generate Item from #{ self.inspect } because of #{ i.errors.messages }" if result != true
     return i
   end
 
@@ -1366,7 +1368,8 @@ class Order < ActiveRecord::Base
       :destination => self.destination_country,
       :is_proforma => self.is_proforma,
       :order_items_length => self.order_items.visible.size,
-      :subscription => self.subscription
+      :subscription => self.subscription,
+      :nr => self.nr
     }
     if self.customer then
       attrs[:customer] = self.customer.json_attrs

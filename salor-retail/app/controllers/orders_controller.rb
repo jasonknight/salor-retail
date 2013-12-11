@@ -236,6 +236,8 @@ class OrdersController < ApplicationController
     result = @order.save
     raise "Could not create a new order in OrdersController#complete because #{ @order.errors.messages }" unless result == true
     
+    @current_vendor.reload # to update the new largest_order_number, needed in the view
+    
     # save new order on user
     @current_user.current_order_id = @order.id
     @current_user.save

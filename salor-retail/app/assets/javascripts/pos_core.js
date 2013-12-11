@@ -7,6 +7,7 @@ sr.fn.pos_core.addItem = function(sku, additional_params) {
 }
 
 sr.fn.pos_core.updateOrder = function(order) {
+  $("#order_id_display").html(sr.data.session.vendor.largest_order_number + 1);
   var button = $('#buy_order_button');
   if (order.buy_order) {
     $(button).addClass('pos-highlight');

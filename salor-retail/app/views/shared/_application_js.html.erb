@@ -78,7 +78,7 @@ sr.data.session.params = {
 
 <% if @current_user %>
   sr.data.session.user = <%= raw @current_user.to_json %>;
-  sr.data.session.vendor = <%= raw ({ :id => @current_vendor.id }).to_json %>;
+  sr.data.session.vendor = <%= raw @current_vendor.to_json %>;
   sr.data.session.drawer = <%= raw @current_user.get_drawer.to_json %>;
 <% end %>
 

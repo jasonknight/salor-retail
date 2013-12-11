@@ -1230,6 +1230,14 @@ class Vendor < ActiveRecord::Base
     return urls
   end
   
+  def to_json
+    attrs = {
+      :id => self.id,
+      :largest_order_number => self.largest_order_number,
+    }
+    return attrs.to_json
+  end
+  
   private
   
   def generate_random_string

@@ -1,4 +1,5 @@
-Drawer = <%= raw @current_user.get_drawer.to_json %>;
+sr.data.session.drawer = <%= raw @current_user.get_drawer.to_json %>;
+sr.data.session.vendor = <%= raw @current_vendor.to_json %>;
 $('.pos-table-left-column-items').html('');
 sr.fn.pos_core.updateOrder(<%= raw @order.to_json %>);
 $('#complete_order_total').html(sr.fn.math.toCurrency(<%= @old_order.total %>));
@@ -6,6 +7,6 @@ $('.pos-customer').html('');
 $('.pos-cash-register-amount').html('<%= humanized_money_with_symbol(@current_user.get_drawer.amount) %>');
 $('#header_drawer_amount').html('<%= humanized_money_with_symbol(@current_user.get_drawer.amount.to_f) %>');
 $('#last_orders').replaceWith('<%= escape_javascript render :partial => "last_orders" %>');
-Order = <%= raw @order.to_json %>;
-Order.total = <%= @old_order.total %>;
+sr.data.pos_core.order = <%= raw @order.to_json %>;
+sr.data.pos_core.order.total = <%= @old_order.total %>;
 $('#payment_amount_0').select();
