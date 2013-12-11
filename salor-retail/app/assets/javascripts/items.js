@@ -20,7 +20,7 @@ sr.fn.items.addItemShipperFields = function(link, association, content) {
   content = content.replace("new_item_shipper_id","new_item_shipper_" + new_id);
   $('#item_shippers_hook').after(content.replace(regexp, new_id));
   var elem = $("#item_item_shippers_attributes_"+new_id+"_shipper_id");
-  make_select_widget("Shipper Id",elem);
+  shared.makeSelectWidget("Shipper Id",elem);
 }
 
 sr.fn.items.removeItemStockFields = function(link) {
@@ -34,5 +34,5 @@ sr.fn.items.addItemStockFields = function(link, association, content) {
   content = content.replace("new_item_stock_id","new_item_stock_" + new_id);
   $('#item_stocks_hook').after(content.replace(regexp, new_id));
   var elem = $("#item_item_stocks_attributes_"+new_id+"_shipper_id");
-  make_select_widget("Shipper Id",elem);
+  shared.makeSelectWidget("Shipper Id",elem);
 }

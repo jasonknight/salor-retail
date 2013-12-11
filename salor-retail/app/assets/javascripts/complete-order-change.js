@@ -68,16 +68,20 @@ sr.fn.change.get_highest = function(num) {
   return [display_line,remainder];
 }
 
+sr.fn.change.wrapDiv = function(text,cls) {
+  return '<div class="' + cls + '">'+text+'</div>';
+}
+
 sr.fn.change.recommend = function(num) {
   var parts = [];
 
   var ret = sr.fn.change.get_highest(num);
-  parts.push(div_wrap(ret[0],'complete-recommendation-item'));
+  parts.push(sr.fn.change.wrapDiv(ret[0],'complete-recommendation-item'));
   cap = 20;
   x = 0;
   while (ret[1] > 0) {
     var ret = sr.fn.change.get_highest(ret[1]);
-    parts.push(div_wrap(ret[0],'complete-recommendation-item'));
+    parts.push(sr.fn.change.wrapDiv(ret[0],'complete-recommendation-item'));
     x = x + 1;
     if (x > cap) {
       break;

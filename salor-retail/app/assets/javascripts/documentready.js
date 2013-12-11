@@ -121,11 +121,11 @@ $(function () {
   if (typeof workstation != 'undefined') {
     $('select').each(function () {
       if ($(this).val() == '') {
-      make_select_widget(i18n.views.single_words.choose,$(this));
+      shared.makeSelectWidget(i18n.views.single_words.choose,$(this));
       } else if ($(this).find("option:selected").html()) {
-      make_select_widget($(this).find("option:selected").html(),$(this));
+      shared.makeSelectWidget($(this).find("option:selected").html(),$(this));
       } else {
-      make_select_widget($(this).find("option:first").html(),$(this));
+      shared.makeSelectWidget($(this).find("option:first").html(),$(this));
       }
     }); 
   } 
@@ -158,6 +158,8 @@ $(function () {
     sr.data.various.mouse_x = e.pageX;
     sr.data.various.mouse_y = e.pageY;
   });
+  
+  sr.data.session.other.is_apple_device = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

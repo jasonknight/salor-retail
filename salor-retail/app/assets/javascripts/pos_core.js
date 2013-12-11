@@ -175,7 +175,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
         sr.fn.inplace_edit.make(col);
         col.addClass('editme pointer no-select');
         if (sr.data.session.cash_register.show_plus_minus) {
-          var up = td().removeClass('jtable-cell').addClass('table-cell');
+          var up = $("<div></div>").addClass('table-cell');
           up.html("<div><img src=\"/images/icons/up.svg\" height='32' />");
           up.addClass('pointer quantity-button');
           row.append(up);
@@ -191,7 +191,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
         }
         row.append(col);
         if (sr.data.session.cash_register.show_plus_minus) {
-          var down = td().removeClass('jtable-cell').addClass('table-cell');
+          var down = $("<div></div>").addClass('table-cell');
           down.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
           down.addClass('pointer quantity-button');
           row.append(down);
@@ -446,7 +446,7 @@ sr.fn.pos_core.showOrderOptions = function() {
     ]
   };
   var taxprofiles = shared.draw.select_option(options);
-  taxprofiles.find('select').each(function () {make_select_widget($(this).attr('name'),$(this));});
+  taxprofiles.find('select').each(function () {shared.makeSelectWidget($(this).attr('name'),$(this));});
   // end TaxProfiles
   
   // Proforma
@@ -565,7 +565,7 @@ sr.fn.pos_core.showOrderOptions = function() {
     ]
   };
   var additional = shared.draw.select_option(options);
-  additional.find('select').each(function () {make_select_widget($(this).attr('name'),$(this));});
+  additional.find('select').each(function () {shared.makeSelectWidget($(this).attr('name'),$(this));});
   shared.helpers.expand(dialog,0.60,'vertical');
   shared.helpers.center(dialog);
   dialog.show();
@@ -660,7 +660,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     shared.element('option',{value: item_type.id},item_type.name,item_type_select);
   });
   item_type_select.val(item.item_type_id);
-  make_select_widget('ItemType',item_type_select);
+  shared.makeSelectWidget('ItemType',item_type_select);
   
   // Edit TaxProfile
   shared.element('h4',{id: 'oi_tax_profile_h4'},i18n.activerecord.models.tax_profile.one,config_table_cols_center[0]);
@@ -673,7 +673,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
   });
   tax_profile_select.val(item.tax_profile_id);  // select current value
-  make_select_widget('TaxProfile',tax_profile_select);
+  shared.makeSelectWidget('TaxProfile',tax_profile_select);
   
   
   // Edit Category
@@ -690,7 +690,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   });
   category_select.val(item.category_id); // select current value
 
-  make_select_widget('Category',category_select);
+  shared.makeSelectWidget('Category',category_select);
   var print_sticker = shared.element('div',{id: 'oi_print_sticker'},i18n.helpers.submit.print,config);
   print_sticker.mousedown(function () {
     sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')

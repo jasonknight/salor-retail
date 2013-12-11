@@ -40,7 +40,7 @@ sr.fn.invoice.editPm = function(pm) {
     } // end var options
     
     var additional = shared.draw.select_option(options);
-    additional.find('select').each(function () {make_select_widget($(this).attr('payment_method_name'),$(this));_set('pm',pm,$(this));});
+    additional.find('select').each(function () {shared.makeSelectWidget($(this).attr('payment_method_name'),$(this));_set('pm',pm,$(this));});
     dialog.show();
     dialog.offset({
       left: sr.data.various.mouse_x - 100,

@@ -132,24 +132,26 @@ done
 # ./vartransform.sh search_get_next_page sr.fn.search_pos.displayNextPage
 # ./vartransform.sh search_get_prev_page sr.fn.search_pos.displayPreviousPage
 
-inplace_ships sr.data.inplace_edit.shippers_select_html
-inplace_cats sr.data.inplace_edit.categories_select_html
-inplace_stores sr.data.inplace_edit.vendors_select_html
-inplace_locations sr.data.inplace_edit.locations_select_html
-inplace_itemtypes sr.data.inplace_edit.itemtypes_select_html
+# inplace_ships sr.data.inplace_edit.shippers_select_html
+# inplace_cats sr.data.inplace_edit.categories_select_html
+# inplace_stores sr.data.inplace_edit.vendors_select_html
+# inplace_locations sr.data.inplace_edit.locations_select_html
+# inplace_itemtypes sr.data.inplace_edit.itemtypes_select_html
+# 
+# SaleTypes sr.data.resources.sale_type_array
+# Countries sr.data.resources.country_array
+# ItemTypes sr.data.resources.item_type_array
+# Categories sr.data.resources.cateogory_array
+# PaymentMethods sr.data.resources.payment_method_array
+# PaymentMethodObjects sr.data.resources.payment_method_object
+# TaxProfiles sr.data.resources.tax_profile_object
+# 
+# params sr.data.session.params
+# User sr.data.session.user
+# Vendor sr.data.session.vendor
+# Drawer sr.data.session.drawer
+# Register sr.data.session.cash_register
+# 
+# Region
 
-SaleTypes sr.data.resources.sale_type_array
-Countries sr.data.resources.country_array
-ItemTypes sr.data.resources.item_type_array
-Categories sr.data.resources.cateogory_array
-PaymentMethods sr.data.resources.payment_method_array
-PaymentMethodObjects sr.data.resources.payment_method_object
-TaxProfiles sr.data.resources.tax_profile_object
-
-params sr.data.session.params
-User sr.data.session.user
-Vendor sr.data.session.vendor
-Drawer sr.data.session.drawer
-Register sr.data.session.cash_register
-
-Region
+#./vartransform.sh make_select_widget shared.makeSelectWidget

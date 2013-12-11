@@ -1,6 +1,6 @@
 sr.fn.payment.add = function() {
   //  if ($(".payment-amount").size() >= payment_internal_types.length) return;
-  var d = div();
+  var d = $('<div></div>');
   d.addClass('payment-method');
   
   var numMethods = $(".payment-amount").size();
@@ -50,7 +50,7 @@ sr.fn.payment.add = function() {
   
   sr.fn.change.display_change('function add_payment_method');
   
-  make_select_widget($(sel).find("option:selected"), $(sel));
+  shared.makeSelectWidget($(sel).find("option:selected"), $(sel));
   
 
   sr.fn.onscreen_keyboard.makeWithOptions(amount, {

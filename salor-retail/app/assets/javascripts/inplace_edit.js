@@ -93,7 +93,7 @@ sr.fn.inplace_edit.field_callbacks = {
     elem.addClass("keyboardable-int");
   },
   rebate_type: function (elem) {
-    //make_select_widget('xxx',elem);
+    //shared.makeSelectWidget('xxx',elem);
   }
 };
 
@@ -189,7 +189,7 @@ sr.fn.inplace_edit.make = function(elem) {
         break;
       
       case 'select':
-        make_select_widget('', $('#inplaceedit'));
+        shared.makeSelectWidget('', $('#inplaceedit'));
         break;
         
       case 'date':
