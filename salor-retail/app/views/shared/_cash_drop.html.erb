@@ -53,14 +53,14 @@
               <div id="confirm_cash_drop" 
                    class="button-confirm-left trans-button" 
                    name="drop" 
-                   onclick="$('#transaction_type').val('drop');cash_drop_save();"
+                   onclick="$('#transaction_type').val('drop');sr.fn.drawer.saveTransaction();"
                    style="margin-left:0;margin-right:10px;width:64px;height:64px;background-color:#26ad74;display:block;float:left;padding-right:10px;color: white;font-size: 60px;line-height: 60px;">
                    +
               </div>
               <div id="confirm_cash_payout" 
                    class="button-confirm trans-button" 
                    name="payout" 
-                   onclick="$('#transaction_type').val('payout');cash_drop_save();"
+                   onclick="$('#transaction_type').val('payout');sr.fn.drawer.saveTransaction();"
                    style="margin-left:10px;margin-right:0;width:64px;height:64px;background-color:#db422b;display:block;float:left;padding-left:10px;color: white;font-size: 60px;line-height: 60px;">
                    &ndash;
               </div>
@@ -69,7 +69,7 @@
 </form>
 <div class="clear-hr"></div>
 <div class="button-row" align="right">
-      <div id="cancel_cash_drop" class="button-cancel" onclick="hide_cash_drop();"><%= I18n.t("helpers.submit.cancel") %></div>
+      <div id="cancel_cash_drop" class="button-cancel" onclick="sr.fn.drawer.hideTransactionPopup();"><%= I18n.t("helpers.submit.cancel") %></div>
 </div>
 </div>
 

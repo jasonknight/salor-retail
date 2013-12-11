@@ -145,7 +145,7 @@ I18n.translate = function(scope, options) {
 I18n.localize = function(scope, value) {
   switch (scope) {
     case "currency":
-      return this.toCurrency(value);
+      return this.sr.fn.math.toCurrency(value);
     case "number":
       scope = this.lookup("number.format");
       return this.toNumber(value, scope);

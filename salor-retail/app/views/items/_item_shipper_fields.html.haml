@@ -3,7 +3,7 @@
     %tr
       %td
         = f.hidden_field :hidden
-        .square-button= link_to_function I18n.t('menu.destroy'),"remove_item_shipper_fields(this);"
+        .square-button= link_to_function I18n.t('menu.destroy'),"sr.fn.items.removeItemShipperFields(this);"
       %td
     %tr
       %td= f.label :shipper_sku

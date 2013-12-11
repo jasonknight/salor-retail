@@ -1,5 +1,5 @@
 <% if @order.customer %>
-updateOrder(<%= raw @order.to_json %>);
+sr.fn.pos_core.updateOrder(<%= raw @order.to_json %>);
 updateCustomerView({},<%= @order.id %>);
 <% end %>
 Order = <%= raw @order.to_json %>;

@@ -3,18 +3,18 @@
     @inst.calculate_totals
 %>
   Order = <%= raw @inst.to_json %>;
-  updateOrder(<%= raw @inst.to_json %>);
-  updateOrderItems([<%= raw items.join(',') %>]);
+  sr.fn.pos_core.updateOrder(<%= raw @inst.to_json %>);
+  sr.fn.pos_core.updateOrderItems([<%= raw items.join(',') %>]);
 <% elsif @inst.class == OrderItem 
   @inst.calculate_total
   @inst.order.update_self_and_save
 %>
   Order = <%= raw @inst.order.to_json %>;
-  updateOrder(<%= raw @inst.order.to_json %>);
+  sr.fn.pos_core.updateOrder(<%= raw @inst.order.to_json %>);
   <%
     items = @inst.order.order_items_as_array
   %>
-  updateOrderItems([<%= raw items.join(',') %>]);
+  sr.fn.pos_core.updateOrderItems([<%= raw items.join(',') %>]);
 <% end %>
 
-focusInput($('#keyboard_input'));
+sr.fn.focus.set($('#keyboard_input'));

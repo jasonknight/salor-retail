@@ -1,14 +1,14 @@
-$(function() {
+sr.fn.focus.setup = function() {
   
-  if (typeof params != 'undefined') {
-    var view = params.controller + '#' + params.action;
+  if (typeof sr.data.session.params != 'undefined') {
+    var view = sr.data.session.params.controller + '#' + sr.data.session.params.action;
     
     if (view == 'orders#new' ) {
       $("#main_sku_field").focus();
       
       $("#main_sku_field").keyup(function(e) {
         if (e.keyCode == 13) {
-          add_item($("#main_sku_field").val(), '');
+          sr.fn.pos_core.addItem($("#main_sku_field").val(), '');
         }
       })
       
@@ -27,15 +27,13 @@ $(function() {
       }, 2000);
     }
     
-    if (params.action == 'index') {
+    if (sr.data.session.params.action == 'index') {
       $("#generic_search_input").focus();
     }
-  }
+  } 
+}
 
-  
-}); // documentready
-
-function focusInput(inp) {
+sr.fn.focus.set = function(inp) {
   $('.salor-focused').removeClass('salor-focused');
   inp.addClass('salor-focused');
   inp.focus();

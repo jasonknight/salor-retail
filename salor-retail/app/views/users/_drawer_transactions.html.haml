@@ -5,9 +5,9 @@
     %td= t "activerecord.attributes.created_at"
     %td= t "activerecord.attributes.notes"
     %td= t "activerecord.attributes.amount"
-  - @user.drawer_transactions.visible.where("tag != 'CompleteOrder' and tag != 'Change'").where(:created_at => (@from-1.day)..(@to + 1.day)).each do |dt|
+  - @user.drawer_transactions.visible.where(:complete_order => nil).where(:created_at => (@from.beginning_of_day)..(@to.end_of_day)).each do |dt|
     %tr
       %td= dt.tag
-      %td= l dt.created_at, :format => :short
+      %td= l dt.created_at, :format => :long
       %td= raw dt.notes
       %td{:align=>"right"}= humanized_money_with_symbol dt.amount

@@ -79,7 +79,7 @@ class UsersController < ApplicationController
         if login and login.logout.nil? then
           render :text => "ALREADY" and return
         end
-        u.start_day
+        u.start_day(@current_vendor)
         render :json => {:username => u.username, :id => u.id} and return
       end
     end

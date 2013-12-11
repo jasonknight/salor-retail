@@ -8,12 +8,12 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-$(function(){
+sr.fn.remotesupport.setup = function() {
   $('#service_connect_password').select();
-  setInterval("update_connection_status()", 4000);
-})
+  setInterval("sr.fn.remotesupport.getStatus()", 4000);
+}
 
-function update_connection_status(){
+sr.fn.remotesupport.getStatus = function(){
   $.ajax({
     url: "/session/update_connection_status",
     dataType: 'script'
@@ -56,7 +56,7 @@ function update_connection_status(){
   $('img#progress').hide();
 }
 
-function connect_service(type) {
+sr.fn.remotesupport.connect = function(type) {
   $('img#progress').show();
   host = $('#service_connect_host').val();
   user = $('#service_connect_user').val();

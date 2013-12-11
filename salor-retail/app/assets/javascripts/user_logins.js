@@ -1,42 +1,41 @@
-function positionSearchInput() {
-  var elem = $("#generic_search");
-  if (elem.length == 0) {
-    return;
-  }
-  shared.helpers.top_right(elem,$('body'),{left: -20,top: 0});
-  var off = elem.offset();
-  off.top = 0;
-  elem.offset(off);
-  elem.css({'z-index': 1005});
-  var elem = $(".generic-search-button");
-  shared.helpers.bottom_right(elem,$("#generic_search_input"),{left: 45,top:-5});
+sr.fn.user_logins.display = function() {
+  if (sr.data.session.user.role_cache.indexOf('manager') != -1) {
+    try {
+      var lin = $('.user_login_time');
+      var lout = $('.user_logout_time');
+      lin.datetimepicker(
+        {
+          timeFormat: 'HH:mm:ss',
+          dateFormat: 'yy-mm-dd',
+          onSelect: function (dateTimeText,picker) {
+            
+            var string = '/vendors/edit_field_on_child?id=' +
+            $(picker.$input).attr('model_id') +'&klass=UserLogin' +
+            '&field=login'+
+            '&value=' + dateTimeText;
+            $.get(string);
+          }
+        }
+            );
+            lout.datetimepicker(
+              {
+                timeFormat: 'HH:mm:ss',
+                dateFormat: 'yy-mm-dd',
+                onSelect: function (dateTimeText,picker) {
+                  
+                  var string = '/vendors/edit_field_on_child?id=' +
+                  $(picker.$input).attr('model_id') +'&klass=UserLogin' +
+                  '&field=logout'+
+                  '&value=' + dateTimeText;
+                  $.get(string);
+                }
+              }
+      );
+    } catch (e) { var e = '';}
+  } // if user.role_cache
 }
-function checkLength( o, n, min, max ) {
-  if ( o.val().length > max || o.val().length < min ) {
-    o.addClass( "ui-state-error" );
-    updateTips( "Length of " + n + " must be between " +
-    min + " and " + max + "." );
-    return false;
-  } else {
-    return true;
-  }
-}
-function checkRegexp( o, regexp, n ) {
-  if ( !( regexp.test( o.val() ) ) ) {
-    o.addClass( "ui-state-error" );
-    updateTips( n );
-    return false;
-  } else {
-    return true;
-  }
-}
-function updateTips( t ) {
-  $(".validateTips")
-  .text( t )
-  .addClass( "ui-state-highlight" );
 
-}
-function showClockin() {
+sr.fn.user_logins.showPopup = function() {
   var el = $("#simple_input_dialog").dialog({
     modal: false,
     buttons: {
@@ -89,7 +88,7 @@ function showClockin() {
         $(".ui-dialog * button:contains('"+i18n.system.login+"')").trigger("click");
       }
     });
-    focusInput($('#dialog_input'));
+    sr.fn.focus.set($('#dialog_input'));
     var ttl = el.parent().find('.ui-dialog-title');
     ttl.html(i18n.system.login); 
     ttl = el.parent().find('.input_label');
@@ -98,20 +97,4 @@ function showClockin() {
       console.log(err);
     }
   },55);
-}
-
-
-
-function showButtonCategoryContainer(id) {
-  $('.button-category-container').hide();
-  $('#' + id).show();
-}
-
-function showButtonCategoryContainer(id) {
-  $('.button-category-container').hide();
-  $('#' + id).show();
-}
-
-function logout() {
-  $('#logoutform').submit();
 }

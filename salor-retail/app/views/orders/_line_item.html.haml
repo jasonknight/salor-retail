@@ -13,4 +13,4 @@
       - if line_item.refunded
         = salor_icon(:refunded, {}, 32)
       - else
-        = salor_icon(:refund, {:onclick => "refund_item(#{ line_item.id });"}, 32, t('printr.eod_report.refund'))
+        = salor_icon(:refund, {:onclick => "sr.fn.refund.go(#{ line_item.id });"}, 32, t('printr.eod_report.refund'))

@@ -1,4 +1,4 @@
-= javascript_include_tag 'request_service'
+= javascript_include_tag "remotesupport.js"
 
 #request_service
   = text_field_tag 'service_connect_host', 'red-e.eu'
@@ -8,9 +8,9 @@
   = text_field_tag 'service_connect_password', ''
   %br
   .connect_service_button_container
-    .generic-button#connect_service_ssh{ :onclick => 'connect_service("ssh");' }= t('home.remote_service..connect_ssh')
+    .generic-button#connect_service_ssh{ :onclick => 'sr.fn.remotesupport.connect("ssh");' }= t('home.remote_service..connect_ssh')
   .connect_service_button_container
-    .generic-button#connect_service_vnc{ :onclick => 'connect_service("vnc");' }= t('home.remote_service..connect_vnc')
+    .generic-button#connect_service_vnc{ :onclick => 'sr.fn.remotesupport.connect("vnc");' }= t('home.remote_service..connect_vnc')
   #connection_status= t('home.remote_service.requesting_connection_status')
   %br
   = image_tag 'loader.gif', :id => 'progress'
@@ -18,3 +18,4 @@
 :javascript
   var i18n_connected = "#{ escape_javascript t 'home.remote_service..connected' }";
   var i18n_disconnected = "#{ escape_javascript t 'home.remote_service..disconnected' }";
+  sr.fn.remotesupport.setup();

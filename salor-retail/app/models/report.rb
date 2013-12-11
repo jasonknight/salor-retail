@@ -44,7 +44,7 @@ class Report
         val = attrs[j].split('.').inject(item) do |klass, method|
           klass.send(method) unless klass.nil?
         end
-        val = 0 if val.nil?
+        #val = 0 if val.nil?
         values << val
       end
       lines << sprintf(formatstring, *values)

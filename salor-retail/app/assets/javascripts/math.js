@@ -1,25 +1,25 @@
-function Round(Number, DecimalPlaces) {
+sr.fn.math.round = function(Number, DecimalPlaces) {
  return Math.round(parseFloat(Number) * Math.pow(10, DecimalPlaces)) / Math.pow(10, DecimalPlaces);
 }
 
-function RoundFixed(Number, DecimalPlaces) {
- return Round(Number, DecimalPlaces).toFixed(DecimalPlaces);
+sr.fn.math.roundFixed = function(Number, DecimalPlaces) {
+ return sr.fn.math.round(Number, DecimalPlaces).toFixed(DecimalPlaces);
 }
 
-function toFloat(str, returnString) {
+sr.fn.math.toFloat = function(str, returnString) {
   str = str.replace(Region.number.currency.format.delimiter, '');
   str = str.replace(Region.number.currency.format.separator, '.');
   return parseFloat(str);
 }
 
-function roundNumber(num, dec) {
+sr.fn.math.roundNumber = function(num, dec) {
   var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
   return result;
 }
 
-function toDelimited(number) {
+sr.fn.math.toDelimited = function(number) {
   if (typeof number == 'undefined') {
-    echo("warning in toDelimited");
+    sr.fn.debug.echo("warning in toDelimited");
     return "";
   }
   
@@ -43,9 +43,9 @@ function toDelimited(number) {
   return integerPart + ( settings.precision > 0 ? settings.separator + fractionalPart : "");
 }
 
-function toCurrency(number) {
+sr.fn.math.toCurrency = function(number) {
   if (typeof number == 'undefined') {
-    echo("toCurrency: number is type undefined");
+    sr.fn.debug.echo("toCurrency: number is type undefined");
     return "";
   }
   
@@ -56,7 +56,7 @@ function toCurrency(number) {
     delimiter : Region.number.currency.format.delimiter
   };
   if (!typeof number == 'number') {
-    number = toFloat(number);
+    number = sr.fn.math.toFloat(number);
   }
   if (typeof number == 'undefined' || number == null) {
     number = 0.0;
@@ -70,9 +70,9 @@ function toCurrency(number) {
   return settings.unit + integerPart + ( settings.precision > 0 ? settings.separator + fractionalPart : "");
 }
 
-function toPercent(number) {
+sr.fn.math.toPercent = function(number) {
   if (typeof number == 'undefined') {
-    echo("warning in toPercent");
+    sr.fn.debug.echo("warning in toPercent");
     return "";
   }
   var match, property, integerPart, fractionalPart;

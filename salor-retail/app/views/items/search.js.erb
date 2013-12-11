@@ -23,7 +23,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
   
     var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" /></div></td>');
     btn.click(function () {
-      add_item('<%= item.sku %>','');
+      sr.fn.pos_core.addItem('<%= item.sku %>','');
     });
     btn.mouseup(function () {
       $(this).removeClass('active-icon');
@@ -50,7 +50,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     sku.addClass('sku');
     sku.html("<%= customer.loyalty_cards.visible.first.sku if customer.loyalty_cards.visible.any? %>");
   
-    var btn = $('<div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" onclick="add_item(\'<%= customer.loyalty_cards.visible.first.sku if customer.loyalty_cards.visible.first %>\',\'\');" /></div>');
+    var btn = $('<div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" onclick="sr.fn.pos_core.addItem(\'<%= customer.loyalty_cards.visible.first.sku if customer.loyalty_cards.visible.first %>\',\'\');" /></div>');
     btn.addClass('btn');
     row.append(cname);
     row.append(sku);
@@ -75,7 +75,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     
     var order_total = $('<td></td>');
     order_total.addClass('table-cell id');
-    order_total.html(toCurrency("<%= order.total %>"));
+    order_total.html(sr.fn.math.toCurrency("<%= order.total %>"));
 
     
     var sku = $('<td></td>');
@@ -88,7 +88,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
     var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:edit,32) %>" width="32" onmousedown="window.location = \'/orders/<%= order.id %>/edit\';" /></div></td>');
     <% end %>
 
-    var btn2 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:printer,32) %>" width="32" onmousedown="print_order(\'<%= order.id %>\');" /></div></td>');
+    var btn2 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:printer,32) %>" width="32" onmousedown="sr.fn.salor_bin.printOrder(\'<%= order.id %>\');" /></div></td>');
     var btn3 = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:show,32) %>" width="32" onmousedown="window.location= \'/orders/<%= order.id %>\';" /></div></td>');
     btn.addClass('table-cell btn');
     row.append(oname);

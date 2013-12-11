@@ -1,23 +1,23 @@
 // README: This view only takes a single instance of @shipment, and an Array @shipment_items. The controllers are responsible for supplying those variables to keep this view simple.
 
 // ---------- update order -------------
-Shipment = <%= raw @shipment.to_json %>;
+sr.data.shipments.shipment = <%= raw @shipment.to_json %>;
 try {
-  shipments.updateShipment();
+  sr.fn.shipments.updateShipment();
 } catch (err) {
-  send_email("Error in update_pos_display updateShipment", err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateShipment", err);
 }
 
 
 // ----------- update order items ----------
-ShipmentItems = <%= raw Shipment.shipment_items_to_json(@shipment_items) %>;
+sr.data.shipments.shipment_items = <%= raw Shipment.shipment_items_to_json(@shipment_items) %>;
 try {
-  shipments.updateLineItems(); 
+  sr.fn.shipments.updateLineItems(); 
 } catch (err) {
-  echo("Failed to update items properly, please reload");
-  echo(err);
-  send_email("Error in update_pos_display updateLineItems", err);
+  sr.fn.debug.echo("Failed to update items properly, please reload");
+  sr.fn.debug.echo(err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateLineItems", err);
 }
 
 // ---------- other stuff ----------
-focusInput($('#main_sku_field'));
+sr.fn.focus.set($('#main_sku_field'));

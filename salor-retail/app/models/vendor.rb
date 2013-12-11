@@ -1166,7 +1166,7 @@ class Vendor < ActiveRecord::Base
       output += Report.to_csv(order_items, OrderItem, attributes)
     when 'Item'
       items = self.items.visible
-      attributes = "id;sku;name;description;location.name;category.name"
+      attributes = "id;sku;name;description;price_cents;location.name;category.name;tax_profile.value;quantity;quantity_sold;shipper.name;shipper_sku;packaging_unit"
       output = ''
       output += "#{attributes}\n"
       output += Report.to_csv(items, Item, attributes)
@@ -1228,6 +1228,14 @@ class Vendor < ActiveRecord::Base
       :plugins        => "/uploads/#{ SalorRetail::Application::SR_DEBIAN_SITEID }/#{ self.hash_id }/plugins",
     }
     return urls
+  end
+  
+  def to_json
+    attrs = {
+      :id => self.id,
+      :largest_order_number => self.largest_order_number,
+    }
+    return attrs.to_json
   end
   
   private

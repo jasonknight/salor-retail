@@ -1,8 +1,9 @@
 <script type="text/javascript">
 
-var workstation = <%= workstation? %>;
-var mobile = <%= not workstation? %>;
-var i18n_pieces = [<%= I18n.t('number.currency.format.pieces', :locale => @region).split(',').find_all { |piece| piece.to_f > 2.0}.join(',') %>];
+sr.data.session.other.workstation = <%= workstation? %>;
+sr.data.session.other.mobile = <%= not workstation? %>;
+
+i18n.pieces = [<%= I18n.t('number.currency.format.pieces', :locale => @region).split(',').find_all { |piece| piece.to_f > 2.0}.join(',') %>];
 
 <%
   if @current_user
@@ -53,47 +54,39 @@ var i18n_pieces = [<%= I18n.t('number.currency.format.pieces', :locale => @regio
   end
 %>
 
-var inplace_ships = "<%= escape_javascript raw inplace_ships %>";
-var inplace_cats = "<%= escape_javascript raw inplace_cats %>";
-var inplace_cats = "<%= escape_javascript raw inplace_stores %>";
-var inplace_locations = "<%= escape_javascript raw inplace_locations %>";
-var inplace_itemtypes = "<%= escape_javascript raw inplace_itemtypes %>";
-var SaleTypes = <%= raw @current_vendor.sale_types.visible.to_json %>;
-var Countries = <%= raw @current_vendor.countries.visible.to_json %>;
-var ItemTypes = <%= raw @current_vendor.item_types.visible.to_json %>;
-var Categories = <%= raw @current_vendor.categories.visible.to_json %>;
-var PaymentMethods = <%= raw @current_vendor.payment_methods_types_list.to_json %>;
-var PaymentMethodObjects = <%= raw @current_vendor.payment_methods_as_objects.to_json %>;
-var TaxProfiles = <%= raw @current_vendor.json_tax_profiles %>;
+// TODO: modernize this: render the following as underscore templates from JSON
+sr.data.inplace_edit.shippers_select_html = "<%= escape_javascript raw inplace_ships %>";
+sr.data.inplace_edit.categories_select_html = "<%= escape_javascript raw inplace_cats %>";
+sr.data.inplace_edit.vendors_select_html = "<%= escape_javascript raw inplace_stores %>";
+sr.data.inplace_edit.locations_select_html = "<%= escape_javascript raw inplace_locations %>";
+sr.data.inplace_edit.itemtypes_select_html = "<%= escape_javascript raw inplace_itemtypes %>";
+
+sr.data.resources.sale_type_array = <%= raw @current_vendor.sale_types.visible.to_json %>;
+sr.data.resources.country_array = <%= raw @current_vendor.countries.visible.to_json %>;
+sr.data.resources.item_type_array = <%= raw @current_vendor.item_types.visible.to_json %>;
+sr.data.resources.cateogory_array = <%= raw @current_vendor.categories.visible.to_json %>;
+sr.data.resources.payment_method_array = <%= raw @current_vendor.payment_methods_types_list.to_json %>;
+sr.data.resources.payment_method_object = <%= raw @current_vendor.payment_methods_as_objects.to_json %>;
+sr.data.resources.tax_profile_object = <%= raw @current_vendor.json_tax_profiles %>;
 
 
-window.params = {
+sr.data.session.params = {
   action: "<%= params[:action] %>",
   controller: "<%= params[:controller] %>",
   user: { name: "<%= @current_user.username if @current_user %>" }
 };
 
-<% if @current_user then %>
-  window.User = <%= raw @current_user.to_json %>;
-  window.Vendor = <%= raw ({ :id => @current_vendor.id }).to_json %>;
-  window.Drawer = <%= raw @current_user.get_drawer.to_json %>;
-<% else %>
-  window.User = {};  
-  window.Drawer = {};
-  window.Vendor = {};
+<% if @current_user %>
+  sr.data.session.user = <%= raw @current_user.to_json %>;
+  sr.data.session.vendor = <%= raw @current_vendor.to_json %>;
+  sr.data.session.drawer = <%= raw @current_user.get_drawer.to_json %>;
 <% end %>
 
-<% if @current_register then %>
-  window.Register = <%= raw @current_register.attributes.to_json %>;
-<% else %>
-  window.Register = {};
+<% if @current_register %>
+  sr.data.session.cash_register = <%= raw @current_register.attributes.to_json %>;
 <% end %>
 
 
-_.templateSettings = {
-    interpolate: /\{\{\=(.+?)\}\}/g,
-    evaluate: /\{\{(.+?)\}\}/g
-};
 <% @current_plugin_manager.metas.each do |name,hash| %>
   var <%= name %> = {};
   <%= name %>.meta = <%= raw hash.to_json %>;

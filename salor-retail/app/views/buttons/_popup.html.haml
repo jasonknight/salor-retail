@@ -4,20 +4,20 @@
       - if params[:controller] == 'orders'
         .generic-button-cool.popup-hide-button{ :onclick => '$("#buttons").hide()'} X
       - @button_categories.each do |cat|
-        .button-category.generic-button-cool{ :onclick => "showButtonCategoryContainer('button-category-container-#{ cat.id }')" }= cat.name
+        .button-category.generic-button-cool{ :onclick => "sr.fn.buttons.showCategoryContainer('button-category-container-#{ cat.id }')" }= cat.name
       %div.button-category-containers
         - @button_categories.each do |cat|
           %div.button-category-container{ :id => "button-category-container-#{ cat.id }" }
             - if params[:controller] == 'buttons'
-              %script== makeSortable('button-category-container-#{ cat.id }')
+              %script== sr.fn.buttons.makeSortable('button-category-container-#{ cat.id }')
             - cat.buttons.visible.each do |b|
               - color = b.color ? "background-color: #{ b.color }" : ""
               - item = @current_vendor.items.visible.find_by_sku(b.sku)
               - next unless item
               - additional_params = (item.must_change_price or item.default_buyback) ? '&no_inc=true' : ''
               - if params[:controller] == 'orders'
-                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }'); $('#buttons').hide();" if @current_register.hide_buttons == true
-                - onmousedown = "add_item('#{ b.sku }', '#{ additional_params }');" if @current_register.hide_buttons == false
+                - onmousedown = "sr.fn.pos_core.addItem('#{ b.sku }', '#{ additional_params }'); $('#buttons').hide();" if @current_register.hide_buttons == true
+                - onmousedown = "sr.fn.pos_core.addItem('#{ b.sku }', '#{ additional_params }');" if @current_register.hide_buttons == false
               %div.item-button.generic-button{ :id => "button_#{ b.id }", :style => color, :onmousedown => onmousedown }
                 = b.name
                 - if params[:controller] == 'buttons'

@@ -1,50 +1,56 @@
 // README: This view only takes a single instance of @order, and an Array @order_items. The controllers are responsible for supplying those variables to keep this view simple.
 
-
+sr.data.session.drawer = <%= raw @current_user.get_drawer.to_json %>;
+sr.data.session.vendor = <%= raw @current_vendor.to_json %>;
 
 // ---------- update order -------------
-Order = <%= raw @order.to_json %>;
+sr.data.pos_core.order = <%= raw @order.to_json %>;
 try {
-  updateOrder(Order);
+  sr.fn.pos_core.updateOrder(sr.data.pos_core.order);
 } catch (err) {
-  send_email("Error in update_pos_display updateOrder", err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateOrder", err);
 }
 
 
 
 // ----------- update order items ----------
 try {
-  updateOrderItems(<%= raw Order.order_items_to_json(@order_items) %>); 
+  sr.fn.pos_core.updateOrderItems(<%= raw Order.order_items_to_json(@order_items) %>); 
 } catch (err) {
-  echo("Failed to update items properly, please reload");
-  echo(err);
-  send_email("Error in update_pos_display updateOrderItems", err);
+  sr.fn.debug.echo("Failed to update items properly, please reload");
+  sr.fn.debug.echo(err);
+  sr.fn.debug.sendEmail("Error in update_pos_display updateOrderItems", err);
 }
 
-// ------- dynamic gift card autoprinting, see
-// VendorsController#edit_field_on_child---------
+// --- dynamic gift card autoprinting, see VendorsController#edit_field_on_child-----
 <% if @gift_card_item_id_for_print %>
-  print_url(Register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
+  sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
 <% end %>
 
 // ---------- other stuff ----------
-focusInput($('#main_sku_field'));
-display_change('update_pos_display');
-updateCustomerDisplay(<%= @order.id %>, {}, false);
-Drawer = <%= raw @current_user.get_drawer.to_json %>;
+sr.fn.focus.set($('#main_sku_field'));
+sr.fn.change.display_change('update_pos_display');
+sr.fn.salor_bin.updateCustomerDisplay(<%= @order.id %>, {}, false);
 
-
-<% if @order_items.any? and @order_items.first.price.zero? %>
-  playsound('medium_warning');
+<% 
+   current_order_item = @order_items.first
+   if @order_items.any? and
+      current_order_item.price.zero? and
+      current_order_item.behavior != "coupon"
+%>
+  sr.fn.salor_bin.playSound('medium_warning');
+  sr.fn.messages.displayMessage("alert", i18n.system.errors.item_price_is_zero);
 <% elsif @order_items.any? %>
-  playsound('drop2');
+  sr.fn.salor_bin.playSound('drop2');
 <% end %>
 
          
 // we run this regularly to reduce the chance that the drawer observer is blocking the printer
-stop_drawer_observer();
+sr.fn.salor_bin.stopDrawerObserver();
 
 // ajax messages stuff
-messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
+sr.data.messages.notices = [];
+sr.data.messages.alerts = [];
+sr.data.messages.prompts = [];
 <%= render :partial => '/shared/messagesjs.js' %>
-displayMessages();
+sr.fn.messages.displayMessages();

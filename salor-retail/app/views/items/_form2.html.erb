@@ -2,7 +2,7 @@
   $(function () {
     // i18n numbers
     $(".delimit-number").each(function() {
-      $(this).val(toDelimited($(this).val()));
+      $(this).val(sr.fn.math.toDelimited($(this).val()));
     })
     
     // no form submission on enter key
@@ -79,13 +79,13 @@
     
     <tr>
       <td> 
-        <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "itemsAddNameTranslation($(this).val());" %>
+        <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "sr.fn.items.itemsAddNameTranslation($(this).val());" %>
       </td>
       <td> 
       <script type="text/javascript">
       $(function () {
         <% @item.name_translations.each do |k,v|%>
-          inp = itemsAddNameTranslation('<%= k %>');
+          inp = sr.fn.items.itemsAddNameTranslation('<%= k %>');
           inp.val("<%= escape_javascript v %>");
         <% end %>
         });
@@ -153,9 +153,9 @@
             </td>
             <td valign="middle" align="center"> 
                   <div class="new-item-field">
-                  <%= salor_icon(:sticker_printer, {:onclick => "print_url(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
+                  <%= salor_icon(:sticker_printer, {:onclick => "sr.fn.salor_bin.printUrl(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
         &nbsp;&nbsp;&nbsp;
-                  <%= salor_icon(:thermal_printer,{ :onclick => "print_url(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
+                  <%= salor_icon(:thermal_printer,{ :onclick => "sr.fn.salor_bin.printUrl(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
                   </div>
                 <div class="clear">
                   &nbsp;
@@ -428,8 +428,8 @@
           elem.append(del);
           $("#parts_target").append(elem);
           
-          make_keyboardable($('#' + inp_id).removeClass('keyboardable-done'));
-          make_keyboardable($('#' + qinp_id).removeClass('keyboardable-done'));
+          sr.fn.onscreen_keyboard.make($('#' + inp_id).removeClass('keyboardable-done'));
+          sr.fn.onscreen_keyboard.make($('#' + qinp_id).removeClass('keyboardable-done'));
         }
         </script>
         <div id="parts_target" class="parts">

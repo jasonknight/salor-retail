@@ -14,7 +14,7 @@
       </select>
     </td>
     <td valign="top">
-      <div class="button-up" onmousedown="search()">
+      <div class="button-up" onmousedown="sr.fn.search_pos.go()">
         <%= t("views.forms.search") %>
       </div>
     </td>
@@ -24,9 +24,9 @@
   </div>
   <br />
   <div id="" align="right" class="button-row">
-    <div class="button-confirm-left" onmousedown="search_get_prev_page();"><%= raw I18n.t("views.pagination.previous") %></div>
+    <div class="button-confirm-left" onmousedown="sr.fn.search_pos.displayPreviousPage();"><%= raw I18n.t("views.pagination.previous") %></div>
     <div class="spacer">&nbsp;</div>
-    <div class="button-confirm" onmousedown="search_get_next_page();"><%= raw I18n.t("views.pagination.next") %></div>
-    <div class="button-cancel" onmousedown="hideSearch();"><%= raw I18n.t("menu.done") %></div>
+    <div class="button-confirm" onmousedown="sr.fn.search_pos.displayNextPage();"><%= raw I18n.t("views.pagination.next") %></div>
+    <div class="button-cancel" onmousedown="sr.fn.search_pos.hidePopup();"><%= raw I18n.t("menu.done") %></div>
   </div>
 </div>

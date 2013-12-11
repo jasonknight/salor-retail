@@ -155,6 +155,7 @@ company_count.times do |c|
     vendor.currency = currencies[v]
     vendor.company = company
     vendor.identifier = "vendor#{c}#{v}"
+    vendor.time_zone = "Paris"
     r = vendor.save!
     puts "\n---------\nVENDOR #{ c } #{ v } created\n" if r == true
     ## raise "ERROR: #{ vendor.errors.messages }" if r == false

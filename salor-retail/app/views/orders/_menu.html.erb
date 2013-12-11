@@ -3,7 +3,7 @@
   <div id="new_order_button" onclick="window.location = '/orders/new_order'" class="input pos-button new-order">
     <%= raw salor_icon(:delete, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.new_order")) %>
   </div>
-  <div id="configuration_button" onclick="showOrderOptions();" class="input pos-button">
+  <div id="configuration_button" onclick="sr.fn.pos_core.showOrderOptions();" class="input pos-button">
     <%= raw salor_icon(:wrench, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.configuration")) %>
   </div> 
   <div id="show_customers" onclick="$('#last_orders').show();" class="input pos-button">
@@ -12,16 +12,17 @@
   <div id="show_butons" onclick="$('#buttons').show();" class="input pos-button">
     <%= raw salor_icon(:button, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.buttons")) %>
   </div>
-  <div id="show_search" onclick="showSearch();" class="input pos-button">
+  <div id="show_search" onclick="sr.fn.search_pos.showPopup();" class="input pos-button">
     <%= raw salor_icon(:search, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.search")) %>
   </div>
   <div class="pos-button" align="center" onmousedown="weigh_last_item();">
     <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32, t("menu.weigh")) %>
   </div>
-  <div class="pos-button" onmousedown="quick_open_drawer();">
+  <div class="pos-button" onmousedown="sr.fn.salor_bin.quickOpenDrawer();">
     <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("menu.open_drawer")) %>
   </div>
-  <div id="print_receipt_button" onclick="complete_order_show();" class="input pos-button print-receipt">
+  <div id="print_receipt_button" onclick="sr.fn.complete.showPopup();" class="input pos-button print-receipt">
+    <span id="order_id_display"></span>
     <%= salor_icon(:okay_orange, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("system.complete_sale")) %>
   </div>
   

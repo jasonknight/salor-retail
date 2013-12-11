@@ -1,6 +1,4 @@
-var messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
-
-function displayMessage(type, msg, id) {
+sr.fn.messages.displayMessage = function(type, msg, id) {
   var statusbar = $("#messages");
   if ($("#" + id).length > 0) {
     $("#" + id).html(msg);
@@ -28,76 +26,41 @@ function displayMessage(type, msg, id) {
   }
 }
 
-function displayMessages() {
-  var notices = messagesHash['notices'];
-  var alerts = messagesHash['alerts'];
-  var prompts = messagesHash['prompts'];
+sr.fn.messages.displayMessages = function() {
+  var notices = sr.data.messages.notices;
+  var alerts = sr.data.messages.alerts;
+  var prompts = sr.data.messages.prompts;
   
   $.each(notices, function(idx) {
     var random_id = "message_" + Math.floor((Math.random()*10000)+1);
-    displayMessage("notice", notices[idx], random_id);
+    sr.fn.messages.displayMessage("notice", notices[idx], random_id);
   });
   
   $.each(alerts, function(idx) {
     var random_id = "message_" + Math.floor((Math.random()*10000)+1);
-    displayMessage("alert", notices[idx], random_id);
+    sr.fn.messages.displayMessage("alert", notices[idx], random_id);
   });
   
- 
-  if ( prompts.length > 0 ) {
-    $.each(prompts, function(i,o) {
-      var dialog_id = 'prompt-dialog_' + i;
-      var dialog = shared.draw.dialog('', dialog_id, o);
-      var okbutton = shared.create.dialog_button('OK', function() {
-        ajax_log({
-          action_taken:'confirmed_prompt_dialog',
-          called_from: o
-        });
-        dialog.remove();
+  $.each(prompts, function(i,o) {
+    var dialog_id = 'prompt-dialog_' + i;
+    var dialog = shared.draw.dialog('', dialog_id, o);
+    var okbutton = shared.create.dialog_button('OK', function() {
+      sr.fn.debug.ajaxLog({
+        action_taken:'confirmed_prompt_dialog',
+        called_from: o,
       });
-      dialog.append(okbutton);
+      dialog.remove();
     });
-  }
+    dialog.append(okbutton);
+  });
   
-  messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
+  sr.data.messages.notices = [];
+  sr.data.messages.alerts = [];
+  sr.data.messages.prompts = [];
 }
 
-/*
-function displayMessages() {
-  var notices = messagesHash['notices'];
-  var alerts = messagesHash['alerts'];
-  var prompts = messagesHash['prompts'];
-  if ( notices.length > 0 ) {
-    $('#notices').html('<span>' + notices.join('</span><br /><span>') + '</span>');
-  }
-  if ( alerts.length > 0 ) {
-    $('#alerts').html('<span>' + alerts.join('</span><br /><span>') + '</span>');
-  }
-  if ( prompts.length > 0 ) {
-    $.each(prompts, function(i,o) {
-      var dialog_id = 'prompt-dialog_' + i;
-      var dialog = shared.draw.dialog('', dialog_id, o);
-      var okbutton = shared.create.dialog_button('OK', function() {
-        ajax_log({
-          action_taken:'confirmed_prompt_dialog',
-          called_from: o
-        });
-        dialog.remove();
-      });
-      dialog.append(okbutton);
-    });
-  }
-  
-  if (notices.length > 0 || alerts.length > 0) {
-    fadeMessages();
-  }
-  
-  messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
-}
-*/
 
-
-function fadeMessages() {
+sr.fn.messages.fadeMessages = function() {
   $('#messages').fadeIn(1000);
   setTimeout(function(){
     $('#messages').fadeOut(1000);

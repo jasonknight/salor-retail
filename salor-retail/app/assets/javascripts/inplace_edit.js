@@ -1,39 +1,63 @@
-var get_inputs = {
+sr.fn.inplace_edit.getReceiverShipperSelect = function (value) {
+  s = $(sr.data.inplace_edit.shippers_select_html);
+  s = sr.fn.inplace_edit.setSelected(s,value,0);
+  return s;
+}
+
+sr.fn.inplace_edit.setSelected = function(elem,value,type) { /* 0: Match text, 1: match option value*/
+  if (value == null) {
+    return elem;
+  }
+  elem.children("option").each(function () {
+    if (type == 0) {
+      if ($(this).html() == value) {
+        $(this).attr('selected',true);
+      }
+    } else {
+      if ($(this).attr('value') == value) {
+        $(this).attr('selected',true);
+      }
+    }
+  });
+  return elem;
+}
+
+sr.fn.inplace_edit.get_inputs = {
   category_id: function (value) {
-    s = $(inplace_cats);
-    s = set_selected(s,value,0);
+    s = $(sr.data.inplace_edit.categories_select_html);
+    s = sr.fn.inplace_edit.setSelected(s,value,0);
     return s;
   },
   vendor_id: function (value) {
-    s = $(inplace_stores);
-    s = set_selected(s,value,0);
+    s = $(sr.data.inplace_edit.vendors_select_html);
+    s = sr.fn.inplace_edit.setSelected(s,value,0);
     return s;
   },
   location_id: function (value) {
-    s = $(inplace_locations);
-    s = set_selected(s,value,0);
+    s = $(sr.data.inplace_edit.locations_select_html);
+    s = sr.fn.inplace_edit.setSelected(s,value,0);
     return s;
   },
   item_type_id: function (value) {
-    s = $(inplace_itemtypes);
-    s = set_selected(s,value,0);
+    s = $(sr.data.inplace_edit.itemtypes_select_html);
+    s = sr.fn.inplace_edit.setSelected(s,value,0);
     return s;
   },
-  status: function (value) {
-    s = $(inplace_shipmentstatuses);
-    s = set_selected(s,value,0);
-    return s;
-  },
-  rebate_type: function (value) {
-    s = $(inplace_rebatetypes);
-    s = set_selected(s,value,1);
-    return s;
-  },
-  the_shipper: receiver_shipper_select,
-  the_receiver: receiver_shipper_select
+//   status: function (value) {
+//     s = $(inplace_shipmentstatuses);
+//     s = sr.fn.inplace_edit.setSelected(s,value,0);
+//     return s;
+//   },
+//   rebate_type: function (value) {
+//     s = $(inplace_rebatetypes);
+//     s = sr.fn.inplace_edit.setSelected(s,value,1);
+//     return s;
+//   },
+  the_shipper: sr.fn.inplace_edit.getReceiverShipperSelect,
+  the_receiver: sr.fn.inplace_edit.getReceiverShipperSelect
 };
 
-var fields_callbacks = {
+sr.fn.inplace_edit.field_callbacks = {
   rebate: function (elem) {
     elem.addClass("keyboardable-int");
     elem.addClass("rebate-amount");
@@ -69,166 +93,138 @@ var fields_callbacks = {
     elem.addClass("keyboardable-int");
   },
   rebate_type: function (elem) {
-    //make_select_widget('xxx',elem);
+    //shared.makeSelectWidget('xxx',elem);
   }
 };
 
-function make_in_place_edit(elem) {
-  if (elem.hasClass('editmedone')) {
-    return;    
-  }
-  elem.click(function (event) {
-    in_place_edit(elem, event.pageX, event.pageY);
-  });
-  elem.addClass('editmedone');
-}
+
 
 /**
  * This allows us to easily turn off the binding to the enter key when we need
  * something else to catch it
  */
-function inplaceEditBindEnter(elem) {
+sr.fn.inplace_edit.bindEnter = function(elem) {
   $('#inplaceedit').unbind('keypress');
   $('#inplaceedit').bind('keypress', function (e) {
     var code = (e.keyCode ? e.keyCode : e.which);
     if(code == 13) {
-      in_place_edit_go(elem);
+      sr.fn.inplace_edit.submit(elem);
     }
   });
 }
 
-
-
-function in_place_edit(elem, x, y) {
-  //$('#inplaceedit-div').remove();
-  var field = elem.attr('field');
-  var type = elem.attr('type');
-  var keyboard_layout = elem.attr('keyboard_layout');
-  var withstring = elem.attr('withstring');
-  var value = elem.html();
-
-  if (get_inputs[field]) {
-    console.log('getting inputs');
-    var inputhtml = get_inputs[field](value);
-  } else {
-    console.log('setting text input field');
-    var inputhtml = "<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />";
+sr.fn.inplace_edit.make = function(elem) {
+  if (elem.hasClass('editmedone')) {
+    return;    
   }
-  var input = $(inputhtml);
-  
-  if (fields_callbacks[field]) {
-    console.log("callback for", field);
-    fields_callbacks[field](input);
-  }
-
-  //var savelink = '<a id="inplaceeditsave" class="button-confirm">' + i18n.menu.ok + '</a>';
-  //var cancellink = '<a id="inplaceeditcancel" class="button-cancel">' + i18n.menu.cancel + '</a>';
-  //var linktable = "<table class='inp-menu' align='right'><tr><td>"+cancellink+"</td><td>"+savelink+"</td></tr></table>";
-
-
-  //var offset = {'top' : 20, 'left' : '20%', 'position' : 'absolute', 'width': '60%'}
-  //var div = $("<div id='inplaceedit-div'></div>");
-  //$('body').append(div);
-  //div.append(input);
-  //div.append('<br />');
-  //div.append(linktable);
-  //$('body').append(input);
-  
-  if (typeof type == 'undefined') {
-    console.log('type is undefined');
-    // the type attr has not been set on the element, so we get type depeding on the input element used
-    var tagname = input[0].tagName
-    console.log('tagname is', tagname);
-
-    switch(tagname) {
-      case 'SELECT':
-        type = 'select';
-        break;
-      case 'INPUT':
-        type = 'keyboard';
-        break;
-    }
-  }
-  
-  console.log('type is now', type);
-  //console.log('x', x);
-  //console.log('y', y);
+  elem.click(function (event) {
+    var x = event.pageX;
+    var y = event.pageY;
     
-  switch(type) {
-    case 'keyboard':
-      if ( input.hasClass('keyboardable-int') || keyboard_layout == 'num' ) {
-        keyboard_layout = 'num';
-      } else {
-        keyboard_layout = i18nlocale;
+    var field = elem.attr('field');
+    var type = elem.attr('type');
+    var keyboard_layout = elem.attr('keyboard_layout');
+    var withstring = elem.attr('withstring');
+    var value = elem.html();
+
+    if (sr.fn.inplace_edit.get_inputs[field]) {
+      console.log('getting inputs');
+      var inputhtml = sr.fn.inplace_edit.get_inputs[field](value);
+    } else {
+      console.log('setting text input field');
+      var inputhtml = "<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />";
+    }
+    var input = $(inputhtml);
+
+    if (sr.fn.inplace_edit.field_callbacks[field]) {
+      console.log("callback for", field);
+      sr.fn.inplace_edit.field_callbacks[field](input);
+    }
+
+    if (typeof type == 'undefined') {
+      console.log('type is undefined');
+      // the type attr has not been set on the element, so we get type depeding on the input element used
+      var tagname = input[0].tagName
+      console.log('tagname is', tagname);
+
+      switch(tagname) {
+        case 'SELECT':
+          type = 'select';
+          break;
+        case 'INPUT':
+          type = 'keyboard';
+          break;
       }
-      input.keyboard({
-        openOn   : 'focus',
-        stayOpen : true,
-        layout   : keyboard_layout,
-        customLayout : null,
-        position: {
-          of: $('.yieldbox'),
-          my: 'center center',
-          at: 'center center'
-        },
-        visible : function() { 
-          if (IS_APPLE_DEVICE) {
-            $('.ui-keyboard-preview').val("");
-          } 
-          $('.ui-keyboard-preview').select();
-        },
-        accepted: function() {
-          in_place_edit_go(elem, input.val());
-        }
-      });
-      input.getkeyboard().reveal();
-      $('#inplaceedit-div').hide();
-      break;
-    
-    case 'select':
-      make_select_widget('', $('#inplaceedit'));
-      break;
+    }
       
-    case 'date':
-      elem.hide();
-      input.insertAfter(elem);
-      input.datepicker({
-        onSelect: function(date, inst) {
-          elem.show();
-          in_place_edit_go(elem, input.val());
-          input.remove();
+    switch(type) {
+      case 'keyboard':
+        if ( input.hasClass('keyboardable-int') || keyboard_layout == 'num' ) {
+          keyboard_layout = 'num';
+        } else {
+          keyboard_layout = i18nlocale;
         }
-      });
-//         "",
-//         function() {
-//           //onSelect
-//         },
-//         {},
-//         event
-//       );
-      input.datepicker('show');
-      //input.datepicker('dialog');
-      //$('#inplaceedit').trigger('click');
-      //widget.css('top', '0px');
-      break;
-  }
+        input.keyboard({
+          openOn   : 'focus',
+          stayOpen : true,
+          layout   : keyboard_layout,
+          customLayout : null,
+          position: {
+            of: $('.yieldbox'),
+            my: 'center center',
+            at: 'center center'
+          },
+          visible : function() { 
+            if (sr.data.session.other.is_apple_device) {
+              $('.ui-keyboard-preview').val("");
+            } 
+            $('.ui-keyboard-preview').select();
+          },
+          accepted: function() {
+            sr.fn.inplace_edit.submit(elem, input.val());
+          }
+        });
+        input.getkeyboard().reveal();
+        $('#inplaceedit-div').hide();
+        break;
+      
+      case 'select':
+        shared.makeSelectWidget('', $('#inplaceedit'));
+        break;
+        
+      case 'date':
+        elem.hide();
+        input.insertAfter(elem);
+        input.datepicker({
+          onSelect: function(date, inst) {
+            elem.show();
+            sr.fn.inplace_edit.submit(elem, input.val());
+            input.remove();
+          }
+        });
+        input.datepicker('show');
+        break;
+    }
 
-  //$('#inplaceedit-div').css(offset);
-  $('#inplaceeditsave').mousedown(function() {
-    in_place_edit_go(elem);
-  });
-  
-  $('#inplaceeditcancel').mousedown(function() {
-    $('#inplaceedit-div').remove();
-  });
+    //$('#inplaceedit-div').css(offset);
+    $('#inplaceeditsave').mousedown(function() {
+      sr.fn.inplace_edit.submit(elem);
+    });
 
-  inplaceEditBindEnter(elem);
+    $('#inplaceeditcancel').mousedown(function() {
+      $('#inplaceedit-div').remove();
+    });
+
+    sr.fn.inplace_edit.bindEnter(elem);
+    
+  });
+  elem.addClass('editmedone');
 }
 
 
 
 
-function in_place_edit_go(elem, value) {
+sr.fn.inplace_edit.submit = function(elem, value) {
   console.log(value);
   var field = elem.attr('field');
   var klass = elem.attr('klass');
@@ -246,8 +242,4 @@ function in_place_edit_go(elem, value) {
 }
 
 
-var receiver_shipper_select = function (value) {
-  s = $(inplace_ships);
-  s = set_selected(s,value,0);
-  return s;
-}
+

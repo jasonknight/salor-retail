@@ -1,3 +1,59 @@
+var sr = {
+  fn: {
+    pos_core: {},
+    buttons: {},
+    coin_calculator: {},
+    change: {},
+    payment: {},
+    complete: {},
+    customers: {},
+    debug: {},
+    drawer: {},
+    user_logins: {},
+    focus: {},
+    inplace_edit: {},
+    inventory: {},
+    invoice: {},
+    items: {},
+    math: {},
+    messages: {},
+    onscreen_keyboard: {},
+    refund: {},
+    remotesupport: {},
+    salor_bin: {},
+    search_generic: {},
+    search_pos: {},
+    shipments: {},
+    shippers: {},
+    session: {},
+    
+    
+  },
+  data: {
+    resources: {},
+    session: {
+      params: {},
+      user: {},
+      vendor: {},
+      drawer: {},
+      cash_register: {},
+      other: {},
+    },
+    pos_core: {},
+    complete: {},
+    inplace_edit: {},
+    messages: {
+      notices: [],
+      alerts: [],
+      prompts: [],
+    },
+    search_pos: {},
+    shipments: {},
+    various: {},
+  },
+}
+
+
 var focuseKeyboardInput = false;
 var calledFrom = 'TopOfAppJS';
 var filename = "_application_js.html.erb";
@@ -8,7 +64,7 @@ $(function () {
     return
   }
   
-  if (isSalorBin()) {
+  if (sr.fn.salor_bin.is()) {
     Salor.stopDrawerObserver();
   }
 
@@ -34,25 +90,30 @@ $(function () {
   $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
   $('input:radio').checkbox();
   
-  if (typeof params != 'undefined' && ((params.controller == 'orders' && params.action == 'new') || (params.controller == 'items' && params.action == 'index'))) {
+  if (typeof sr.data.session.params != 'undefined' &&
+    (
+      (sr.data.session.params.controller == 'orders' && sr.data.session.params.action == 'new') ||
+      (sr.data.session.params.controller == 'items' && sr.data.session.params.action == 'index')
+    )
+  ) {
     $('.yieldbox').css('width', '100%');
     $('.yieldbox').css('padding-left', '0px');
     $('.yieldbox').css('padding-right', '0px');
   }
   
 
-  $('.toggle').each(function () {
-    make_toggle($(this));
-  });
+//   $('.toggle').each(function () {
+//     make_toggle($(this));
+//   });
   
   $('.dt-tag-button').each(function () {
-    make_dt_button($(this));
+    sr.fn.drawer.makeTagButtons($(this));
   });
   
 
   // inplace edit
   $('.editme').each(function () {
-    make_in_place_edit($(this));                  
+    sr.fn.inplace_edit.make($(this));                  
   });
   
   
@@ -60,17 +121,45 @@ $(function () {
   if (typeof workstation != 'undefined') {
     $('select').each(function () {
       if ($(this).val() == '') {
-      make_select_widget(i18n.views.single_words.choose,$(this));
+      shared.makeSelectWidget(i18n.views.single_words.choose,$(this));
       } else if ($(this).find("option:selected").html()) {
-      make_select_widget($(this).find("option:selected").html(),$(this));
+      shared.makeSelectWidget($(this).find("option:selected").html(),$(this));
       } else {
-      make_select_widget($(this).find("option:first").html(),$(this));
+      shared.makeSelectWidget($(this).find("option:first").html(),$(this));
       }
     }); 
   } 
 
   // focus stuff
   //focusInput($('#generic_search_input'));
+  
+  jQuery.ajaxSetup({
+      'beforeSend': function(xhr) {
+          //xhr.setRequestHeader("Accept", "text/javascript");
+          xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
+      }
+  });
+  
+  $("#category_color").modcoder_excolor();
+  
+  $('#btn-' + sr.data.session.params.controller + '-' + sr.data.session.params.action).addClass('active');
+  
+  //TODO: move the following functions to the individual views. they needn't be loaded for every page.
+  sr.fn.user_logins.display();
+  sr.fn.coin_calculator.setup();
+  sr.fn.focus.setup();
+  sr.fn.inventory.setup();
+  sr.fn.invoice.setup();
+  sr.fn.onscreen_keyboard.setup();
+  sr.fn.search_generic.setup();
+  sr.fn.messages.displayMessages();
+  
+  $(document).mousemove(function(e){
+    sr.data.various.mouse_x = e.pageX;
+    sr.data.various.mouse_y = e.pageY;
+  });
+  
+  sr.data.session.other.is_apple_device = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

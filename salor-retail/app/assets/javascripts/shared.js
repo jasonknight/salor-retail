@@ -1,361 +1,130 @@
-var IS_APPLE_DEVICE = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
-var IS_IPAD = navigator.userAgent.match(/iPad/i) != null;
-var IS_IPOD = navigator.userAgent.match(/iPod/i) != null;
-var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
-var _key_codes = {tab: 9,shift: 16, ctrl: 17, alt: 18, f2: 113};
-var _keys_down = {tab: false,shift: false, ctrl: false, alt: false, f2: false};
-var _called = 0;
 
+sr.data.session.other.container = $(window);
 
-// documentready
-$(function(){
-  jQuery.ajaxSetup({
-      'beforeSend': function(xhr) {
-          //xhr.setRequestHeader("Accept", "text/javascript");
-          xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'));
-      }
-  });
-  
-  displayMessages();
-  
-
-  $(window).keydown(function(e){
-    for (var key in _key_codes) {
-      if (e.keyCode == _key_codes[key]) {
-        _keys_down[key] = true;
-      }
-    }
-  });
-  
-  $(window).keyup(function(e){
-    for (var key in _key_codes) {
-      if (e.keyCode == _key_codes[key]) {
-        _keys_down[key] = false;
-      }
-    }
-  });
-});
-
-
-
-
-
-
-
-function blurInput(type) {
-  var input = $("#complete_in_" + type);
-  if ($(input).val() == "") $(input).val("0");
-}
-
-function displayAdvertising() {
-  
-}
-
-/*
- *  Allows us to latch onto events in the UI for adding menu items, i.e. in this case, customers, but later more.
- */
-function emit(msg,packet) {
-  $('body').triggerHandler({type: msg, packet:packet});
-}
-
-function connect(unique_name,msg,fun) {
-  var pcd = _get('plugin_callbacks_done');
-  if (!pcd)
-    pcd = [];
-  if (pcd.indexOf(unique_name) == -1) {
-    $('body').on(msg,fun);
-    pcd.push(unique_name);
-  }
-  _set('plugin_callbacks_done',pcd)
-}
-
-function _get(name,context) {
-  if (context) {
-    // if you pass in a 3rd argument, which should be an html element, then that is set as teh context.
-    // this ensures garbage collection of the values when that element is removed.
-    return $.data(context[0],name);
-  } else {
-    return $.data(document.body,name);
-  }
-}
-function _set(name,value,context) {
-  if (context) {
-    // if you pass in a 3rd argument, which should be an html element, then that is set as teh context.
-    // this ensures garbage collection of the values when that element is removed.
-    return $.data(context[0],name,value);
-  } else {
-    return $.data(document.body,name,value);
-  } 
-}
-function scroll_to(element, speed) {
-  echo("SCROLLING");
-  target_y = $(window).scrollTop();
-  current_y = $(element).offset().top;
-  if (settings.workstation) {
-    do_scroll((current_y - target_y)*1.05, speed);
-  } else {
-    window.scrollTo(0, current_y);
-  }
-}
-
-function scroll_for(distance, speed) {
-  echo("SCROLLING");
-  do_scroll(distance, speed);
-}
-
-function do_scroll(diff, speed) {
-  echo("SCROLLING");
-  window.scrollBy(0,diff/speed);
-  newdiff = (speed-1)*diff/speed;
-  scrollAnimation = setTimeout(function(){ do_scroll(newdiff, speed) }, 20);
-  if(Math.abs(diff) < 5) { clearTimeout(scrollAnimation); }
-}
-
-function toggle_all_option_checkboxes(source) {
-  if ($(source).attr('checked') == 'checked') {
-    $('input.category_checkbox:checkbox').attr('checked',true);
-  } else {
-    $('input.category_checkbox:checkbox').attr('checked',false);
-  }
-}
-
-function date_as_ymd(date) {
-  return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
-}
-function get_date(str) {
-  return new Date(Date.parse(str));
-}
-/*
-  _fetch is a quick way to fetch a result from the server.
- */
-function _fetch(url,callback) {
-  $.ajax({
-    url: url,
-    context: window,
-    success: callback
-  });
-}
-/*
- *  _push is a quick way to deliver an object to the server
- *  It takes a data object, a string url, and a success callback.
- *  Additionally, you can pass, after those three an error callback,
- *  and an object of options to override the options used with
- *  the ajax request.
- */
-function _push(object) {
-  var payload = null;
-  var callback = null;
-  var error_callback = function (jqXHR,status,err) {
-  };
-  var user_options = {};
-  var url;
-  for (var i = 0; i < arguments.length; i++) {
-    switch(typeof arguments[i]) {
-      case 'object':
-        if (!payload) {
-          payload = {currentview: 'push', model: {}}
-          $.each(arguments[i], function (key,value) {
-            payload[key] = value;
-          });
-        } else {
-          user_options = arguments[i];
-        }
-        break;
-      case 'function':
-        if (!callback) {
-          callback = arguments[i];
-        } else {
-          error_callback = arguments[i];
-        }
-        break;
-      case 'string':
-        url = arguments[i];
-        break;
-    }
-  }
-  options = { 
-    context: window,
-    url: url, 
-    type: 'post', 
-    data: payload, 
-    timeout: 20000, 
-    success: callback, 
-    error: error_callback
-  };
-  if (typeof user_options == 'object') {
-    $.each(user_options, function (key,value) {
-      options[key] = value;
-    });
-  }
-  $.ajax(options);
-}
-function create_dom_element (tag,attrs,content,append_to) {
-  var element = $(document.createElement(tag));
-  if ( typeof attrs.clss != 'undefined' ) {
-    //class is a reserved word
-    var cls = attrs['clss'];
-    delete attrs.clss;
-    element.addClass(cls);
-  }
-  $.each(attrs, function (k,v) {
-    element.attr(k, v);
-  });
-  element.html(content);
-  if (append_to != '') {
-    $(append_to).append(element);
-  }
-  return element;
-}
-
-/*
-  Call this function on an input that you want to have auto complete functionality.
-  requires a jquery element, a dictionary (array, or object, or hash mapping)
-  options, which is an object where the only required key is the field if you use an object, or hash mapping, then a callback,
-  which is what function to run when someone clicks a search result.
-  
-  On an input try:
-  
-  auto_completable($('#my_input'),['abc yay','123 ghey'],{},function (result) {
-      alert('You chose ' + result);
-  });
-  in the callback, $(this) == $('#my_input')
- */
-function auto_completable(element,dictionary,options,callback) {
-  var key = 'auto_completable.' + element.attr('id');
-  element.attr('auto_completable_key',key);
-  _set(key + ".dictionary",dictionary,element); // i.e. we set the context of the variable to the element so that it will be gc'ed
-  _set(key + ".options", options,element);
-  _set(key + ".callback", callback,element);
-  element.on('keyup',function () {
-    var val = $(this).val();
-    var key = $(this).attr('auto_completable_key');
-    var results = [];
-    if (val.length > 2) {
-      var options = _get(key + '.options',$(this));
-      var dictionary = _get(key + ".dictionary",$(this));
-      if (options.map) { 
-        // We are using a hash map, where terms are organized by first letter, then first two letters
-        var c = val.substr(0,1).toLowerCase();
-        var c2 = val.substr(0,2).toLowerCase();
-        // i.e. if the search term is doe, the check to see if dictionary['d'] is set
-        if (dictionary[c]) {
-          // i.e. if the search term is doe, the check to see if dictionary['do'] is set
-          if (dictionary[c][c2]) {
-            // i.e. we consider dictionary['do'] to be an array of objects
-            for (var i in dictionary[c][c2]) {
-              // we assume that you have set options { field: "name"} or some such
-              if (dictionary[c][c2][i][options.field].toLowerCase().indexOf(val.toLowerCase()) != -1) {
-                results.push(dictionary[c][c2][i]);
-              }
-            }
-          }
-        }
-      } else { // We assume that it's just an array of possible values
-        for (var i = 0; i < dictionary.length; i++) {
-          if (options.field) {
-            if (dictionary[i][options.field].indexOf(val.toLowerCase()) != -1) {
-              results.push(dictionary[i])
-            } 
-          } else {
-            if (dictionary[i].indexOf(val.toLowerCase()) != -1) {
-              results.push(dictionary[i])
-            } 
-          }
-        }
-      }
-    }
-    auto_completable_show_results($(this),results);
-  });
-}
-function auto_completable_show_results(elem,results) {
-  $('#auto_completable').remove();
-  if (results.length > 0) {
-    var key = elem.attr('auto_completable_key');
-    var options = _get(key + '.options',elem);
-    ac = create_dom_element('div',{id: 'auto_completable'},'',$('body'));
-    var offset = elem.offset();
-    var css = {left: offset.left, top: offset.top + elem.outerHeight(), width: elem.outerWidth() + ($.support.boxModel ? 0 : 2)};
-    ac.css(css);
-    for (var i in results) {
-      var result = results[i];
-      var div = create_dom_element('div',{'class': 'result'},result[options.field],ac);
-      // i.e. we set up the vars we will need on the callback on the element in context
-      _set('auto_completable.result',result,div);
-      _set('auto_completable.target',elem,div);
-      div.on('mousedown', function () {
-        var target = _get('auto_completable.target',$(this));
-        var result = _get('auto_completable.result',$(this));
-        var key = target.attr('auto_completable_key');
-        var callback = _get(key + ".callback",target);
-        callback.call(target,result,$(this)); //i.e. the callback will be executed with the input as this, the result is the first argument
-        // the last optional argument will be the origin of the event, i.e. the div
-        $('#auto_completable').remove();
-      });
-    }
-  }
-}
-
-function days_between_dates(from, to) {
-  var days = Math.floor((Date.parse(to) - Date.parse(from)) / 86400000);
-  if (days == 0)
-    days = 0
-  return days;
-}
-function _log(arg1,arg2,arg3) {
-}
-/* Adds a delete/X button to the element. Type options  are right and append. The default callback simply slides the element up.
- if you want special behavior on click, you can pass a closure.*/
-function deletable(elem,type,callback) {
-  if (typeof type == 'function') {
-    callback = type;
-    type = 'right'
-  }
-  if (!type)
-    type = 'right';
-  if ($('#' + elem.attr('id') + '_delete').length == 0) {
-    var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
-    if (!callback) {
-      del_button.on('click',function () {
-        $('#' + $(this).attr('target')).slideUp();
-      });
-    } else {
-      del_button.on('click',callback);
-    }
-  } else {
-    var del_button = $('#' + elem.attr('id') + '_delete');
-    if (callback) {
-      del_button.unbind('click').on('click',callback);
-    }
-  }
-  var offset = elem.offset();
-  if (type == 'right') {
-    offset.left += elem.outerWidth() - del_button.outerWidth() - 5;
-    offset.top += 5
-    del_button.offset(offset);
-  } else if (type == 'append') {
-    elem.append(del_button);
-  }
-  
-}
-/* Pass in a hex code to get back an object of red, green, blue*/
-function to_rgb(hex) {
-  var h = (hex.charAt(0)=="#") ? hex.substring(1,7):h;
-  var r = parseInt(h.substring(0,2),16);
-  var g = parseInt(h.substring(2,4),16);
-  var b = parseInt(h.substring(4,6),16);
-  return {red: r, green: g, blue: b};
-}
-window.retail = {container: $(window)};
-window.shared = {
+var shared = {
   element: function (tag,attrs,content,append_to) {
     if (attrs["id"] && $('#' + attrs["id"]).length != 0) {
       var elem = $('#' + attrs["id"]);
       _set('existed',true,elem);
       return elem;
     } else {
-      return create_dom_element(tag,attrs,content,append_to)
+      return shared.create.domElement(tag,attrs,content,append_to)
     }
   },
+  makeSelectWidget: function(name,elem) {
+    var _currentSelectTarget = '';
+    var _currentSelectButton;
+
+    if (elem.children("option").length > 10) {
+      return;
+    }
+    elem.hide();
+    // Find the max length
+    var max_len = 0;
+    
+    elem.children("option").each(function () {
+      var txt = $(this).text();
+      if (txt.length > max_len) {
+        max_len = txt.length;
+      }
+    });
+    var char_width = 8;
+    var button = $('<div id="select_widget_button_for_' + elem.attr("id") + '"></div>');
+    button.html($(elem).find("option:selected").text());
+    if (button.html() == "")
+      button.html($(elem).find("option:first").text());
+    if (button.html() == "")
+      button.html(name);
+    button.insertAfter(elem);
+    button.attr('select_target',"#" + elem.attr("id"));
+    button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
+    
+    
+    button.click(function () {
+      var pos = $(this).position();
+      var off = $(this).offset();
+      var mdiv = $('<div></div>');
+      _currentSelectTarget = $(this).attr("select_target");
+      _currentSelectButton = $(this);
+      mdiv.addClass("select-widget-display select-widget-display-" + _currentSelectTarget.replace("#",""));
+      mdiv.css({width: (max_len * char_width + 50) * 2});
+      var x = 0;
+      $(_currentSelectTarget).children("option").each(function () {
+        var d = $('<div id="active_select_'+$(this).attr('value').replace(':','-')+'"></div>');
+        d.html($(this).text());
+        d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
+        d.attr("value", $(this).attr('value'));
+        d.css({width: max_len * char_width, overflow: 'hidden'});
+        d.click(function () {
+        $(_currentSelectTarget).find("option:selected").removeAttr("selected"); 
+        $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected");
+        $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").change(); 
+        _currentSelectButton.html($(this).html());
+        var input_id = _currentSelectTarget.replace("type","amount");
+        setTimeout(function () { $(input_id).select(); },55);
+        $('.select-widget-display').hide();
+        });
+        mdiv.append(d);
+        x++;
+        if (x == 4) {
+          x = 0;
+          mdiv.append("<br />");
+        }
+
+      });
+      mdiv.css({position: 'absolute'});
+      $('body').append(mdiv);
+      mdiv.offset({left: button.offset().left - 1, top: button.offset().top - 1});
+      mdiv.show();
+    });
+  },
+  array_tools: {
+    arrayCompare: function(a1, a2) {
+      if (a1.length != a2.length) return false;
+      var length = a2.length;
+      for (var i = 0; i < length; i++) {
+        if (a1[i] !== a2[i]) return false;
+      }
+      return true;
+    },
+    inArray: function(needle, haystack) {
+      var length = haystack.length;
+      for(var i = 0; i < length; i++) {
+        if(typeof haystack[i] == 'object') {
+          if(shared.array_tools.arrayCompare(haystack[i], needle)) return true;
+        } else {
+          if(haystack[i] == needle) return true;
+        }
+      }
+      return false;
+    },
+  },
+  scrolling_helpers: {
+    scrollTo: function(element, speed) {
+      sr.fn.debug.echo("SCROLLING");
+      target_y = $(window).scrollTop();
+      current_y = $(element).offset().top;
+      if (sr.data.session.other.workstation) {
+        shared.scrolling_helpers.doScroll((current_y - target_y)*1.05, speed);
+      } else {
+        window.scrollTo(0, current_y);
+      }
+    },
+    scrollFor: function(distance, speed) {
+      sr.fn.debug.echo("SCROLLING");
+      shared.scrolling_helpers.doScroll(distance, speed);
+    },
+    doScroll: function(diff, speed) {
+      sr.fn.debug.echo("SCROLLING");
+      window.scrollBy(0,diff/speed);
+      newdiff = (speed-1)*diff/speed;
+      scrollAnimation = setTimeout(function(){
+        do_scroll(newdiff, speed)
+      }, 20);
+      if ( Math.abs(diff) < 5 ) clearTimeout(scrollAnimation);
+    },
+  },
+  
   date: {
     hm: function (date,sep) {
       if (!date)
@@ -561,7 +330,7 @@ window.shared = {
       var nstr = '';
       for (var i = 0; i < str.length; i++) {
         c = str.charAt(i);
-        if (inArray(c,ac)) {
+        if (shared.array_tools.inArray(c,ac)) {
           if (c == ',') {
             nstr = nstr + '.';
           } else {
@@ -578,45 +347,98 @@ window.shared = {
     }
   },
   create: {
+    domElement: function(tag,attrs,content,append_to) {
+      var element = $(document.createElement(tag));
+      if ( typeof attrs.clss != 'undefined' ) {
+        //class is a reserved word
+        var cls = attrs['clss'];
+        delete attrs.clss;
+        element.addClass(cls);
+      }
+      $.each(attrs, function (k,v) {
+        element.attr(k, v);
+      });
+      element.html(content);
+      if (append_to != '') {
+        $(append_to).append(element);
+      }
+      return element;
+    },
     plus_button: function (callback) {
-      var button = create_dom_element('div',{},'','');
+      var button = shared.create.domElement('div',{},'','');
       button.addClass('add-button');
       button.on('mousedown',callback);
       return button;
     },
     finish_button: function (callback) {
-      var button = create_dom_element('div',{},'','');
+      var button = shared.create.domElement('div',{},'','');
       button.addClass('finish-button');
       button.on('mousedown',callback);
       return button;
     },
     dialog_button: function (caption, callback) {
-      var button = create_dom_element('div',{},caption,'');
+      var button = shared.create.domElement('div',{},caption,'');
       button.addClass('dialog-button');
       button.on('mousedown',callback);
       return button;
     }
   },
+  
+  /* Adds a delete/X button to the element. Type options  are right and append. The default callback simply slides the element up. if you want special behavior on click, you can pass a closure.
+   */
+  makeDeletable: function(elem,type,callback) {
+    if (typeof type == 'function') {
+      callback = type;
+      type = 'right'
+    }
+    if (!type)
+      type = 'right';
+    if ($('#' + elem.attr('id') + '_delete').length == 0) {
+      var del_button = shared.create.domElement('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
+      if (!callback) {
+        del_button.on('click',function () {
+          $('#' + $(this).attr('target')).slideUp();
+        });
+      } else {
+        del_button.on('click',callback);
+      }
+    } else {
+      var del_button = $('#' + elem.attr('id') + '_delete');
+      if (callback) {
+        del_button.unbind('click').on('click',callback);
+      }
+    }
+    var offset = elem.offset();
+    if (type == 'right') {
+      offset.left += elem.outerWidth() - del_button.outerWidth() - 5;
+      offset.top += 5
+      del_button.offset(offset);
+    } else if (type == 'append') {
+      elem.append(del_button);
+    }
+    
+  },
+  
   draw: {
     /* returns a happy, centered dialog that you can use to display stuff */
     dialog: function (title,id,text,clear) {
       var dialog = shared.element('div',{id: id},'',$('body'));
       dialog.addClass('salor-dialog');
       dialog.css({
-        width: retail.container.width() * 0.50,
-        height: retail.container.height() * 0.40,
+        width: sr.data.session.other.container.width() * 0.50,
+        height: sr.data.session.other.container.height() * 0.40,
         'z-index':150
       });
       if (_get('existed',dialog)) {
         dialog.html('');
         _set('existed',false,dialog);
       }
-      var pad_div = create_dom_element('h2',{},title,dialog);
+      var pad_div = shared.create.domElement('h2',{},title,dialog);
       dialog.append('<hr />');
       pad_div.addClass('header');
-      var contents = create_dom_element('div',{},text,dialog);
+      var contents = shared.create.domElement('div',{},text,dialog);
       contents.addClass('contents');
-      deletable(dialog,function () { $(this).parent().remove()});
+      shared.makeDeletable(dialog,function () { $(this).parent().remove()});
       shared.helpers.center(dialog, $(window));
       return dialog;
     },

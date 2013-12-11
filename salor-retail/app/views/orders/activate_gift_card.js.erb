@@ -1,5 +1,5 @@
 <% if not @error then %>
-   updateOrderItems([<%= raw @order_item.to_json %>]);
-   updateOrder(<%= raw @order.to_json %>);
+   sr.fn.pos_core.updateOrderItems([<%= raw @order_item.to_json %>]);
+   sr.fn.pos_core.updateOrder(<%= raw @order.to_json %>);
 <% end %>
 

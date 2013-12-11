@@ -1,10 +1,10 @@
-$(function() {
+sr.fn.onscreen_keyboard.setup = function() {
   $('.keyboardable').each(function(i, el) {
-    make_keyboardable($(el));
+    sr.fn.onscreen_keyboard.make($(el));
   });
   
   $('.keyboardable-int').each(function(i, el) {
-    make_keyboardable($(el));
+    sr.fn.onscreen_keyboard.make($(el));
   });
 
 
@@ -101,10 +101,10 @@ $(function() {
     ]
   };
 
-});
+}
   
 
-function make_keyboardable(elem) {
+sr.fn.onscreen_keyboard.make = function(elem) {
   if (elem.hasClass('keyboardable-done')) {
     return;
   }
@@ -125,7 +125,7 @@ function make_keyboardable(elem) {
       layout       : i18nlocale,
       customLayout : null,
       accepted    : function () {
-        add_item($("#main_sku_field").val(),'');
+        sr.fn.pos_core.addItem($("#main_sku_field").val(),'');
       },
       visible: function(){ $('.ui-keyboard-preview').select(); }
     });
@@ -185,7 +185,7 @@ function make_keyboardable(elem) {
 }
 
 
-function make_keyboardable_with_options(elem,opts) {
+sr.fn.onscreen_keyboard.makeWithOptions = function(elem,opts) {
   if (elem.hasClass('keyboardable-done')) {
     return;
   }
@@ -212,7 +212,7 @@ function make_keyboardable_with_options(elem,opts) {
   // as is the case with payment methods
   if (!options["visible"]) {
     options["visible"]= function(){ 
-      if (IS_APPLE_DEVICE) {
+      if (sr.data.session.other.is_apple_device) {
         $(".ui-keyboard-preview").val("");
       }
       $('.ui-keyboard-preview').select(); 

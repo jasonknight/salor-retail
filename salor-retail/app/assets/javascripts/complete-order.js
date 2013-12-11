@@ -1,140 +1,150 @@
-var sendingOrder = false;
-var orderCompleteDisplayed = false;
-var sendqueue = [];
+sr.data.complete.sending_order = false;
+sr.data.complete.order_complete_displayed = false;
+sr.data.complete.sendqueue = [];
 
-function enablePrintReceiptButton() {
-  if (sendqueue.length == 0 ) {
+sr.fn.complete.enablePrintReceiptButton = function() {
+  if (sr.data.complete.sendqueue.length == 0 ) {
      $('#print_receipt_button').css('background-color', '#ed8b00');
   }
 }
 
-function disablePrintReceiptButton() {
+sr.fn.complete.disablePrintReceiptButton = function() {
   $('#print_receipt_button').css('background-color', '#999999');
 }
 
-function complete_order_show() {
-  if (sendqueue.length > 0) {
+sr.fn.complete.showPopup = function() {
+  if (sr.data.complete.sendqueue.length > 0) {
     return;
   }
-  ajax_log({log_action:'complete_order_show', order_id:Order.id});
+  sr.fn.debug.ajaxLog({
+    log_action: 'complete_order_show',
+    order_id: sr.data.pos_core.order.id
+  });
   
-  sendingOrder = false;
+  sr.data.complete.sending_order = false;
   $(".payment-amount").remove();
   $(".complete-order-total").html($('#pos_order_total').html());
   $("#complete_order_change").html('');
   $("#recommendation").html('');
   $('#complete_order').show();  
-  set_invoice_button();
+  sr.fn.complete.setInvoiceButton();
 
-  orderCompleteDisplayed = true;
+  sr.data.complete.order_complete_displayed = true;
 
   $("#add_payment_method_button").show();
   $("#payment_methods").show();
   $("#payment_methods").html("");
-  add_payment_method();
-  $("#payment_amount_0").val(toDelimited(Order.total));
+  sr.fn.payment.add();
+  $("#payment_amount_0").val(sr.fn.math.toDelimited(sr.data.pos_core.order.total));
   $("#payment_amount_0").select();
-  display_change('function complete_order_show');
-  show_denominations();
-  allow_complete_order(true);
+  sr.fn.change.display_change('function complete_order_show');
+  sr.fn.change.show_denominations();
+  sr.fn.complete.allowSending(true);
   $('body').triggerHandler({type: "CompleteOrderShow"});
 }
 
-function set_invoice_button() {
+sr.fn.complete.setInvoiceButton = function() {
   $('.a4-print-button').remove(); 
   var a4print = $("<div class='a4-print-button'><img src='/images/icons/a4print.svg' height='32' /></div>");
   var left = $('#complete_order').position().left;
   var width = $('#complete_order').width();
   var cpos = {x: width + left + 21, y:$('#complete_order').position().top + $('#complete_order').height() - 40 }; //because the first div needs to be on top
   a4print.css({width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
-  relevant_order_id = Order.id;
+  relevant_order_id = sr.data.pos_core.order.id;
   a4print.click(function () {
     window.location = '/orders/' + relevant_order_id + '/print';      
   });
   $("body").append(a4print);
 }
 
-function complete_order_hide() {
-  stop_drawer_observer();
+sr.fn.complete.hidePopup = function() {
+  sr.fn.salor_bin.stopDrawerObserver();
   $("#payment_methods").html("");
   $(".payment-amount").attr("disabled", true);
   $('#complete_order').hide();
   $('.a4-print-button').remove();
   $('.pieces-button ').remove();
   $('body').triggerHandler({type: "CompleteOrderHide"});
-  ajax_log({log_action:'complete_order_hide', order_id:Order.id});
-  if ( useMimo() ) {
-    Salor.mimoRefresh(location.origin + "/vendors/" + Vendor.id + "/display_logo", 800, 480);
+  sr.fn.debug.ajaxLog({
+    log_action: 'complete_order_hide',
+    order_id: sr.data.pos_core.order.id
+  });
+  if ( sr.fn.salor_bin.useMimo() ) {
+    Salor.mimoRefresh(location.origin + "/vendors/" + sr.data.session.vendor.id + "/display_logo", 800, 480);
   }
-  if ( parseInt( Order.id ) % 20 == 0) { 
+  if ( parseInt( sr.data.pos_core.order.id ) % 20 == 0) { 
     // reload the page every 20 orders to trigger garbage collection
     window.location = '/orders/new'; 
   }
 }
 
-function complete_order_send(print) {
-  if (sendingOrder) return;
-  if (Order.order_items_length == 0) { complete_order_hide(); return;}
-  sendingOrder = true;
-  allow_complete_order(false);
-  if (Register.require_password) {
+sr.fn.complete.send = function(print) {
+  if (sr.data.complete.sending_order) return;
+  if (sr.data.pos_core.order.order_items_length == 0) { sr.fn.complete.hidePopup(); return;}
+  sr.data.complete.sending_order = true;
+  sr.fn.complete.allowSending(false);
+  if (sr.data.session.cash_register.require_password) {
     // process after password entry
-    show_password_dialog(print);
+    sr.fn.complete.showPasswordPopup(print);
     return
   } else {
     // process immediately
-    complete_order_process(print);
+    sr.fn.complete.process(print);
   }  
 }
 
 // this function handles all the magic regarding printing, drawer opening, drawer observing, pole display update and mimo screen update. detects usage of salor-bin too.
-function complete_order_process(print,change_user_id) {
-  conditionally_open_drawer();
-  var order_id = Order.id;
-  var current_payment_method_items = paymentMethodItems();
+sr.fn.complete.process = function(print,change_user_id) {
+  sr.fn.salor_bin.maybeOpenDrawer();
+  var order_id = sr.data.pos_core.order.id;
+  var current_payment_method_items = sr.fn.payment.getItems();
   $.ajax({
     url: "/orders/complete",
     type: 'POST',
     data: {
-      order_id: Order.id,
+      order_id: sr.data.pos_core.order.id,
       change_user_id: change_user_id,
-      change: toFloat($('#complete_order_change').html()),
+      change: sr.fn.math.toFloat($('#complete_order_change').html()),
       print: print,
       payment_method_items: current_payment_method_items
     },
     complete: function(data, status) {
-      ajax_log({log_action:'get:complete_order_ajax:callback', order_id:Order.id, require_password: false});
+      sr.fn.debug.ajaxLog({
+        log_action: 'get:complete_order_ajax:callback',
+        order_id: sr.data.pos_core.order.id,
+        require_password: false
+      });
       if (print == true) {
-        print_order(order_id, "callback_printing_done(); conditionally_observe_drawer(0);");
+        sr.fn.salor_bin.printOrder(order_id, "sr.fn.complete.printingDoneCallback(); sr.fn.salor_bin.maybeObserveDrawer(0);");
       } else {
         // do not print, observe immediately, but only if the drawer has actually opened.
-        conditionally_observe_drawer(0);
+        sr.fn.salor_bin.maybeObserveDrawer(0);
       }
-      sendingOrder = false;
-      updateCustomerDisplay(order_id, false, true);
+      sr.data.complete.sending_order = false;
+      sr.fn.salor_bin.updateCustomerDisplay(order_id, false, true);
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      messagesHash['prompts'].push(errorThrown);
-      displayMessages();
+      sr.data.messages.prompts.push("Error during request: orders complete");
+      sr.fn.messages.displayMessages();
     }
   });
 }
 
-function callback_printing_done() {
+sr.fn.complete.printingDoneCallback = function() {
   console.log("callback_printing_done");
   // more functionality can go here, e.g. sending a print confirmation to the server.
 }
 
-function allow_complete_order(userRequest) {
-  var allowedBySystem = $('#pos-table-left-column-items').children().length > 0 || Order.is_proforma; // sine qua non condition of the system that the user cannot override.
+sr.fn.complete.allowSending = function(userRequest) {
+  var allowedBySystem = $('#pos-table-left-column-items').children().length > 0 || sr.data.pos_core.order.is_proforma; // sine qua non condition of the system that the user cannot override.
   
   if (allowedBySystem && userRequest) {
     $("#confirm_complete_order_button").removeClass("button-inactive");
     $("#confirm_complete_order_button").off('click');
-    $("#confirm_complete_order_button").on('click', function() {complete_order_send(true)});
+    $("#confirm_complete_order_button").on('click', function() {sr.fn.complete.send(true)});
     $("#confirm_complete_order_noprint_button").removeClass("button-inactive");
     $("#confirm_complete_order_noprint_button").off('click');
-    $("#confirm_complete_order_noprint_button").on('click', function() {complete_order_send(false)});
+    $("#confirm_complete_order_noprint_button").on('click', function() {sr.fn.complete.send(false)});
   } else {
     
     $("#confirm_complete_order_button").addClass("button-inactive");
@@ -145,7 +155,7 @@ function allow_complete_order(userRequest) {
 }
 
 
-function show_password_dialog(print) {
+sr.fn.complete.showPasswordPopup = function(print) {
   var el = $("#simple_input_dialog").dialog({
     modal: false,
     buttons: {
@@ -164,12 +174,16 @@ function show_password_dialog(print) {
               { password: $('#dialog_input').val() }, 
               function (data, status) {
                 if (data == "NO") {
-                  ajax_log({log_action:'password attempt failed!', order_id:Order.id, require_password: true});
+                  sr.fn.debug.ajaxLog({
+                    log_action: 'password attempt failed!',
+                    order_id: sr.data.pos_core.order.id,
+                    require_password: true
+                  });
                   updateTips("Wrong Password");
                 } else {
                   updateTips("Correct, sending...");
                   var change_user_id = data.id;
-                  complete_order_process(print,change_user_id);
+                  sr.fn.complete.process(print,change_user_id);
                   updateTips("");
                   $("#simple_input_dialog").dialog( "close" );
                 }
@@ -188,11 +202,14 @@ function show_password_dialog(print) {
     $('#dialog_input').unbind('keyup');
     $('#dialog_input').keyup(function (event) {
       if (event.which == 13) {
-        ajax_log({log_action:'Keyup enter on password dlg', order_id:Order.id});
+        sr.fn.debug.ajaxLog({
+          log_action: 'Keyup enter on password dlg',
+          order_id: sr.data.pos_core.order.id
+        });
         $(".ui-dialog * button:contains('"+i18n.menu.ok+"')").trigger("click");
       }
     });
-    focusInput($('#dialog_input'));
+    sr.fn.focus.set($('#dialog_input'));
     var ttl = el.parent().find('.ui-dialog-title');
     ttl.html(i18n.activerecord.attributes.require_password); 
     ttl = el.parent().find('.input_label');

@@ -1,12 +1,13 @@
-var highlightAttrs = ['sku', 'price', 'total'];
+sr.data.pos_core.highlight_attrs = ['sku', 'price', 'total'];
 
-function add_item(sku, additional_params) {
+sr.fn.pos_core.addItem = function(sku, additional_params) {
   if (sku == "") return
-  get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
+  get('/orders/add_item_ajax?order_id=' + sr.data.pos_core.order.id + '&sku=' + sku + additional_params);
   $('#main_sku_field').val('');
 }
 
-function updateOrder(order) {
+sr.fn.pos_core.updateOrder = function(order) {
+  $("#order_id_display").html(sr.data.session.vendor.largest_order_number + 1);
   var button = $('#buy_order_button');
   if (order.buy_order) {
     $(button).addClass('pos-highlight');
@@ -17,8 +18,8 @@ function updateOrder(order) {
     $(button).addClass('pos-configuration');
     $('#pos_order_total').removeClass("pos-highlight");
   }
-  $('#pos_order_total').html(toCurrency(order.total));
-  $('.complete-order-total').html(toCurrency(order.total));
+  $('#pos_order_total').html(sr.fn.math.toCurrency(order.total));
+  $('.complete-order-total').html(sr.fn.math.toCurrency(order.total));
   $('.order-rebate_type').html(order.rebate_type);
   $('.order-rebate').attr('model_id',order.id);
   $('.order-tag').attr('model_id',order.id);
@@ -31,41 +32,41 @@ function updateOrder(order) {
   $('.order-points').html(order.lc_points);
 }
 
-function updateOrderItems(items) {
+sr.fn.pos_core.updateOrderItems = function(items) {
   for (var i = 0; i < items.length; i++) {
     var item = items[i];
-    var id = getOrderItemId(item);
+    var id = sr.fn.pos_core.getOrderItemId(item);
     if ($('.' + id).length != 0) {
       /* Item is in list, and we need to update it */
-      updatePosItem(item);
+      sr.fn.pos_core.updatePosItem(item);
     } else {
       /* Item is not in list, we need to add it */
-      addPosItem(item);
+      sr.fn.pos_core.addPosItem(item);
     }
   }
 }
 
-function addPosItem(item) {
-  var row_new = drawOrderItemRow(item);
+sr.fn.pos_core.addPosItem = function(item) {
+  var row_new = sr.fn.pos_core.drawOrderItemRow(item);
   $('.pos-table-left-column-items').prepend(row_new);
 }
 
-function updatePosItem(item) {
+sr.fn.pos_core.updatePosItem = function(item) {
   var row_existing = $('#order_item_' + item.id)
-  row_existing.html(drawOrderItemRow(item));
+  row_existing.html(sr.fn.pos_core.drawOrderItemRow(item));
 }
 
 
-function drawOrderItemRow(item) {
-  if (Register.hide_discounts == true) {
+sr.fn.pos_core.drawOrderItemRow = function(item) {
+  if (sr.data.session.cash_register.hide_discounts == true) {
     var attrs = ['name', 'quantity', 'price', 'total'];
   } else {
     var attrs = ['name', 'quantity', 'price', 'rebate', 'price_reductions', 'total', 'tax'];
   }
   
   var row_id = 'order_item_' + item.id;
-  var base_id = getOrderItemId(item);
-  var row = create_dom_element('div', {id:row_id, model_id:item.id, item_id:item.item_id, clss:base_id }, '');
+  var base_id = sr.fn.pos_core.getOrderItemId(item);
+  var row = shared.create.domElement('div', {id:row_id, model_id:item.id, item_id:item.item_id, clss:base_id }, '');
   
    _set('item',item,row);
    
@@ -75,7 +76,7 @@ function drawOrderItemRow(item) {
     var col_id = base_id + '_' + attr + '_inp';
     var col_class1 = base_id + '-' + attr;
     var col_class2 = 'pos-item-' + attr;
-    var col = create_dom_element('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'OrderItem', field:attr}, '');
+    var col = shared.create.domElement('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'OrderItem', field:attr}, '');
     col.addClass(col_class1);
     col.addClass(col_class2);
     
@@ -90,18 +91,18 @@ function drawOrderItemRow(item) {
       case 'price':
         switch(item.behavior) {
           case 'normal':
-            col.html(toCurrency(item.price));
+            col.html(sr.fn.math.toCurrency(item.price));
             break;
           case 'aconto':
-            col.html(toCurrency(item.price));
+            col.html(sr.fn.math.toCurrency(item.price));
             break;
           case 'coupon':
             switch(item.coupon_type) {
               case 1:
-                col.html(toPercent(item.price));
+                col.html(sr.fn.math.toPercent(item.price));
                 break;
               case 2:
-                col.html(toCurrency(item.price));
+                col.html(sr.fn.math.toCurrency(item.price));
                 break;
               case 3:
                 col.html('b1g1');
@@ -109,32 +110,32 @@ function drawOrderItemRow(item) {
             }
             break;
           case 'gift_card':
-            col.html(toCurrency(item.price));
+            col.html(sr.fn.math.toCurrency(item.price));
             break;
         }
         break;
       case 'rebate':
         if (item.behavior != 'coupon' && item.behavior != 'gift_card' ) {
-          col.html(toPercent(item.rebate));
+          col.html(sr.fn.math.toPercent(item.rebate));
         }
         break;
       case 'price_reductions':
         if (item.behavior == 'normal' ) {
           var contents = [];
-          contents[0] = toCurrency(item.discount_amount);
-          contents[1] = toCurrency(item.rebate_amount);
-          contents[2] = toCurrency(item.coupon_amount);
+          contents[0] = sr.fn.math.toCurrency(item.discount_amount);
+          contents[1] = sr.fn.math.toCurrency(item.rebate_amount);
+          contents[2] = sr.fn.math.toCurrency(item.coupon_amount);
           col.html(contents.join("<br />"));
         }
         break;
       case 'total':
         if (item.behavior != 'coupon') {
-          col.html(toCurrency(item.total));
+          col.html(sr.fn.math.toCurrency(item.total));
         }
         break;
       case 'tax':
         if (item.behavior != 'coupon') {
-          col.html(toPercent(item.tax));
+          col.html(sr.fn.math.toPercent(item.tax));
         }
         break;
     }
@@ -144,10 +145,10 @@ function drawOrderItemRow(item) {
     switch(attr) {
       case 'name':
         row.append(col);
-        makeItemMenu(col, row);
+        sr.fn.pos_core.makeItemMenu(col, row);
         break;
       case 'tax':
-        var color = TaxProfiles[item.tax_profile_id].color;
+        var color = sr.data.resources.tax_profile_object[item.tax_profile_id].color;
         if (color != null && color != "" ) {
           col.css('background-color', color);
         } else {
@@ -171,39 +172,39 @@ function drawOrderItemRow(item) {
         break;
         
       case 'quantity':
-        make_in_place_edit(col);
+        sr.fn.inplace_edit.make(col);
         col.addClass('editme pointer no-select');
-        if (Register.show_plus_minus) {
-          var up = td().removeClass('jtable-cell').addClass('table-cell');
+        if (sr.data.session.cash_register.show_plus_minus) {
+          var up = $("<div></div>").addClass('table-cell');
           up.html("<div><img src=\"/images/icons/up.svg\" height='32' />");
           up.addClass('pointer quantity-button');
           row.append(up);
           up.on('mousedown', function () {
-            var v = toDelimited(toFloat($('.' + base_id + '-quantity').html()) + 1);
+            var v = sr.fn.math.toDelimited(sr.fn.math.toFloat($('.' + base_id + '-quantity').html()) + 1);
             var string = '/vendors/edit_field_on_child?id=' +
             item.id +'&klass=OrderItem' +
             '&field=quantity'+
             '&value=' + v;
             get(string, filename);
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
           });
         }
         row.append(col);
-        if (Register.show_plus_minus) {
-          var down = td().removeClass('jtable-cell').addClass('table-cell');
+        if (sr.data.session.cash_register.show_plus_minus) {
+          var down = $("<div></div>").addClass('table-cell');
           down.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
           down.addClass('pointer quantity-button');
           row.append(down);
           down.on('mousedown', function () {
             var html = $('.' + base_id + '-quantity').html();
-            console.log(html, toFloat(html), toDelimited(html));
-            var v = toDelimited(toFloat($('.' + base_id + '-quantity').html()) - 1);
+            //console.log(html, sr.fn.math.toFloat(html), sr.fn.math.toDelimited(html));
+            var v = sr.fn.math.toDelimited(sr.fn.math.toFloat($('.' + base_id + '-quantity').html()) - 1);
             var string = '/vendors/edit_field_on_child?id=' +
             item.id +'&klass=OrderItem' +
             '&field=quantity'+
             '&value=' + v;
             get(string, filename);
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
           });
         }
         break;
@@ -223,22 +224,24 @@ function drawOrderItemRow(item) {
     // additional rules of field groups
     if (attr == "price" || attr == "rebate" || attr == "tax") {
       if (
-        (User.role_cache.indexOf('change_prices') != -1) ||
-        (User.role_cache.indexOf('manager') != -1) ||
+        (sr.data.session.user.role_cache.indexOf('change_prices') != -1) ||
+        (sr.data.session.user.role_cache.indexOf('manager') != -1) ||
         (item.must_change_price == true)
          ) {
-        make_in_place_edit(col);
+        sr.fn.inplace_edit.make(col);
         col.addClass('editme pointer no-select');
         }
     }
     
+    
     if (attr == "price" && item.must_change_price && item.price == 0 ) {
-      setTimeout(trigger_click(col), 50);
+      //console.log("XXXXXXXX", attr, item);
+      setTimeout(sr.fn.pos_core.triggerClick(col), 50);
     }
     
   
-    if (item.is_buyback && highlightAttrs.indexOf(attr) != -1) {
-      highlight(col);
+    if (item.is_buyback && sr.data.pos_core.highlight_attrs.indexOf(attr) != -1) {
+      sr.fn.pos_core.highlight(col);
     }
 
   } // end loop through attrs
@@ -254,7 +257,7 @@ function drawOrderItemRow(item) {
 }
 
 // this is a closure needed to remember the value of col in the above loop. Without closure, the variable col would change before the timout triggers. The timeout is needed for the onscreen keyboard.
-var trigger_click = function(col) {
+sr.fn.pos_core.triggerClick = function(col) {
   return function() {
     col.trigger('click');
   };
@@ -265,13 +268,13 @@ var trigger_click = function(col) {
 
 
 
-function makeItemMenu(col, row) {
+sr.fn.pos_core.makeItemMenu = function(col, row) {
   try {
     var item = _get('item', row);
     col.unbind();
     col.mousedown(function (event) {
-        if (Register.detailed_edit == true) {
-          detailedOrderItemMenu(event);
+        if (sr.data.session.cash_register.detailed_edit == true) {
+          sr.fn.pos_core.detailedOrderItemMenu(event);
           return;
         }
         $('.item-menu-div').remove();
@@ -284,7 +287,7 @@ function makeItemMenu(col, row) {
             get('/orders/delete_order_item?id=' + item.id, filename);
             menu.remove();
             //setScrollerState();
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
         });
         menu.append(dicon);
         
@@ -297,53 +300,54 @@ function makeItemMenu(col, row) {
                           '&value=undefined';
                           get(string, filename);
                           menu.remove();
-                          focusInput($('#main_sku_field'));
+                          sr.fn.focus.set($('#main_sku_field'));
         }).mouseup(function () {
-          focusInput($('#main_sku_field'));
+          sr.fn.focus.set($('#main_sku_field'));
         });
         menu.append(buyback);
-        if (!Register.scale == '') {
+        if (!sr.data.session.cash_register.scale == '') {
           var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
           wicon.mousedown(function () {
               var string = '/vendors/edit_field_on_child?id=' +
                             item.id +'&klass=OrderItem' +
                             '&field=quantity'+
-                            '&value=' + Register.scale;
+                            '&value=' + sr.data.session.cash_register.scale;
                             get(string, filename);
               menu.remove();
-              focusInput($('#main_sku_field'));
+              sr.fn.focus.set($('#main_sku_field'));
           }).mouseup(function () {
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
           });
 
           menu.append(wicon);
-        } // end  if (!Register.scale == '') {
+        } // end  if (!sr.data.session.cash_register.scale == '') {
 
         var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
         btn.mousedown(function () {
             menu.remove();
-            focusInput($('#main_sku_field'));
+            sr.fn.focus.set($('#main_sku_field'));
         }).mouseup(function () {
-          focusInput($('#main_sku_field'));
+          sr.fn.focus.set($('#main_sku_field'));
         });
         menu.append(btn);
     });
 
   } catch (err) {
-    echo(err);
+    sr.fn.debug.echo("Error in sr.fn.pos_core.makeItemMenu:" + err);
+    sr.fn.debug.send_email("Error in sr.fn.pos_core.makeItemMenu", err)
   }
 }
 
 
 
-window.showOrderOptions = function () {
+sr.fn.pos_core.showOrderOptions = function() {
   var dialog = shared.draw.dialog(i18n.menu.configuration, "order_options");
   
   // Customer code
-  if (Order.customer) {
+  if (sr.data.pos_core.order.customer) {
     var elem = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
-    obj = Order.customer;
-    lc = Order.loyalty_card;
+    obj = sr.data.pos_core.order.customer;
+    lc = sr.data.pos_core.order.loyalty_card;
     var name = $('<div><span class="customer_name"></span></div>');
     name.html(obj.first_name + ' ' + obj.last_name);
     var row = $('<div></div>');
@@ -357,15 +361,15 @@ window.showOrderOptions = function () {
     col.attr('klass','LoyaltyCard');
     col.attr('field','points');
     col.addClass('editme');
-    make_in_place_edit(col);
+    sr.fn.inplace_edit.make(col);
     row.append(col);
     row.append('<span class="">'+i18n.activerecord.attributes.lc_points+'</span>');
-    var col = $('<span id="pos-order-points" class="order-points">' + Order.lc_points + '</span>');
-    col.attr('model_id',Order.id);
+    var col = $('<span id="pos-order-points" class="order-points">' + sr.data.pos_core.order.lc_points + '</span>');
+    col.attr('model_id',sr.data.pos_core.order.id);
     col.attr('klass','Order');
     col.attr('field','lc_points');
     col.addClass('editme');
-    make_in_place_edit(col);
+    sr.fn.inplace_edit.make(col);
     row.append(col);
     elem.append(row);
   }
@@ -377,7 +381,7 @@ window.showOrderOptions = function () {
     click: function () {
       var id = '#option_order_tag_input';
       var value = $(id).val();
-      var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=tag&value=' + value;
+      var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=tag&value=' + value;
       get(string, 'showOrderOptions', function () {
         
       });
@@ -392,7 +396,7 @@ window.showOrderOptions = function () {
   var options = {
     name: 'order_tag',
     title: i18n.activerecord.attributes.tag,
-    value: Order.tag,
+    value: sr.data.pos_core.order.tag,
     append_to: dialog
   };
   var tag = shared.draw.option(options,callbacks);
@@ -403,14 +407,14 @@ window.showOrderOptions = function () {
     click: function () {
       var id = '#option_order_rebate_input';
       var value = $(id).val();
-      var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=rebate&value=' + value;
+      var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=rebate&value=' + value;
       get(string, 'showOrderOptions');
     }
   };
   var options = {
     name: 'order_rebate',
     title: i18n.activerecord.attributes.rebate,
-    value: Order.rebate,
+    value: sr.data.pos_core.order.rebate,
     append_to: dialog
   };
   var rebate = shared.draw.option(options,callbacks);
@@ -428,37 +432,35 @@ window.showOrderOptions = function () {
         title: i18n.activerecord.models.tax_profile.one,
         options: (function () {
           var stys = {};
-          for (var t in TaxProfiles) {
-            var tax_profile = TaxProfiles[t];
+          for (var t in sr.data.resources.tax_profile_object) {
+            var tax_profile = sr.data.resources.tax_profile_object[t];
             stys[tax_profile.id] = tax_profile.name;
           }
           return stys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=tax_profile_id&value=' + $(this).val();
-          get(string, 'showOrderOptions->tax_profile', function () {
-            //
-          });
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=tax_profile_id&value=' + $(this).val();
+          get(string, 'showOrderOptions->tax_profile');
         },
         attributes: {name: i18n.activerecord.models.tax_profile.one},
-        value: Order.tax_profile_id,
+        value: sr.data.pos_core.order.tax_profile_id,
       }
     ]
   };
   var taxprofiles = shared.draw.select_option(options);
-  taxprofiles.find('select').each(function () {make_select_widget($(this).attr('name'),$(this));});
+  taxprofiles.find('select').each(function () {shared.makeSelectWidget($(this).attr('name'),$(this));});
   // end TaxProfiles
   
   // Proforma
   var options = {
     name: 'is_proforma',
     title: i18n.activerecord.attributes.is_proforma,
-    value: Order.is_proforma,
+    value: sr.data.pos_core.order.is_proforma,
     append_to: dialog
   };
   var callbacks = {
     change: function () {
-      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js");
+      get("/vendors/edit_field_on_child?id=" + sr.data.pos_core.order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js");
       }
   };
   var proforma_check = shared.draw.check_option(options,callbacks);
@@ -467,12 +469,12 @@ window.showOrderOptions = function () {
   var options = {
     name: 'is_buy_order',
     title: i18n.menu.buy_order,
-    value: Order.buy_order,
+    value: sr.data.pos_core.order.buy_order,
     append_to: dialog
   };
   var callbacks = {
     change: function () {
-      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js");
+      get("/vendors/edit_field_on_child?id=" + sr.data.pos_core.order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js");
     }
   };
   var buy_order_check = shared.draw.check_option(options,callbacks);
@@ -482,12 +484,12 @@ window.showOrderOptions = function () {
   var options = {
     name: 'is_subscription',
     title: i18n.menu.subscription,
-    value: Order.subscription,
+    value: sr.data.pos_core.order.subscription,
     append_to: dialog
   };
   var callbacks = {
     change: function () {
-      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_subscription&value=x","ordersjs.js");
+      get("/vendors/edit_field_on_child?id=" + sr.data.pos_core.order.id + "&klass=Order&field=toggle_subscription&value=x","ordersjs.js");
     }
   };
   var buy_order_check = shared.draw.check_option(options,callbacks);
@@ -505,20 +507,20 @@ window.showOrderOptions = function () {
         title: i18n.activerecord.models.sale_type.one,
         options: (function () {
           var stys = {};
-          for (var t in SaleTypes) {
-            var sale_type = SaleTypes[t];
+          for (var t in sr.data.resources.sale_type_array) {
+            var sale_type = sr.data.resources.sale_type_array[t];
             stys[sale_type.id] = sale_type.name;
           }
           return stys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=sale_type_id&value=' + $(this).val();
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=sale_type_id&value=' + $(this).val();
           get(string, 'showOrderOptions->sale_type', function () {
             //
           });
         },
         attributes: {name: i18n.activerecord.models.sale_type.one},
-        value: Order.sale_type_id,
+        value: sr.data.pos_core.order.sale_type_id,
       }, 
       // end sale_types
       {
@@ -526,20 +528,20 @@ window.showOrderOptions = function () {
         title: i18n.activerecord.models.country.one,
         options: (function () {
           var ctys = {};
-          for (var t in Countries) {
-            var country = Countries[t];
+          for (var t in sr.data.resources.country_array) {
+            var country = sr.data.resources.country_array[t];
             ctys[country.id] = country.name;
           }
           return ctys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=origin_country_id&value=' + $(this).val();
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=origin_country_id&value=' + $(this).val();
           get(string, 'showOrderOptions->origin_country', function () {
             //
           });
         },
         attributes: {name: i18n.activerecord.models.country.one},
-        value: Order.origin_country_id,
+        value: sr.data.pos_core.order.origin_country_id,
       }, 
       // end origin country
       {
@@ -547,32 +549,32 @@ window.showOrderOptions = function () {
         title: i18n.activerecord.models.country.one,
         options: (function () {
           var ctys = {};
-          for (var t in Countries) {
-            var country = Countries[t];
+          for (var t in sr.data.resources.country_array) {
+            var country = sr.data.resources.country_array[t];
             ctys[country.id] = country.name;
           }
           return ctys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=destination_country_id&value=' + $(this).val();
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=destination_country_id&value=' + $(this).val();
           get(string, 'showOrderOptions->destination_country', function () {
             //
           });
         },
         attributes: {name: i18n.activerecord.models.country.one},
-        value: Order.destination_country_id,
+        value: sr.data.pos_core.order.destination_country_id,
       }, 
     ]
   };
   var additional = shared.draw.select_option(options);
-  additional.find('select').each(function () {make_select_widget($(this).attr('name'),$(this));});
+  additional.find('select').each(function () {shared.makeSelectWidget($(this).attr('name'),$(this));});
   shared.helpers.expand(dialog,0.60,'vertical');
   shared.helpers.center(dialog);
   dialog.show();
 }
 
 
-function detailedOrderItemMenu(event) {
+sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   $('.item-menu-div').remove();
   var target = $(event.currentTarget).parent();
   var item = _get('item',target);
@@ -592,7 +594,7 @@ function detailedOrderItemMenu(event) {
     title.remove();
     config.remove();
     $('#order_item_' + item.id).remove();
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   title.append(dicon);
   
@@ -604,19 +606,19 @@ function detailedOrderItemMenu(event) {
     '&field=toggle_buyback'+
     '&value=undefined';
     $.get(string);
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   }).mouseup(function () {
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   title.append(buyback);
   
-  if (!Register.scale == '') {
+  if (!sr.data.session.cash_register.scale == '') {
     var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
     wicon.click(function () {
-      weigh_item(item.id);
-      focusInput($('#main_sku_field'));
+      sr.fn.salor_bin.weighItem(item.id);
+      sr.fn.focus.set($('#main_sku_field'));
     }).mouseup(function () {
-      focusInput($('#main_sku_field'));
+      sr.fn.focus.set($('#main_sku_field'));
     });
     title.append(wicon);
   }
@@ -625,13 +627,13 @@ function detailedOrderItemMenu(event) {
   btn.click(function () {
     title.remove();
     config.remove();
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   }).mouseup(function () {
-    focusInput($('#main_sku_field'));
+    sr.fn.focus.set($('#main_sku_field'));
   });
   title.append(btn);
   
-  orderItemNameOption(config, item);
+  sr.fn.pos_core.orderItemNameOption(config, item);
   
   var edit_item_hr = shared.element('h3',{id: 'order_item_options_h3'},i18n.menu.edit_item + '( ' + item.sku + ' )',config);
   edit_item_hr.click(function () {
@@ -653,70 +655,69 @@ function detailedOrderItemMenu(event) {
   shared.element('h4',{id: 'oi_item_type_h4'},i18n.activerecord.models.item_type.one,config_table_cols_left[0]);
   var item_type_select = shared.element('select',{id: 'oi_item_type_select'},'',config_table_cols_left[0]);
   item_type_select.on('change',function () {
-    editItemAndOrderItem(item,'item_type_id',$(this).val());
-    focusInput($('#main_sku_field'));
+    sr.fn.pos_core.editItemAndOrderItem(item,'item_type_id',$(this).val());
+    sr.fn.focus.set($('#main_sku_field'));
   });
-  $.each(ItemTypes,function (i,item_type) {
+  $.each(sr.data.resources.item_type_array,function (i,item_type) {
     shared.element('option',{value: item_type.id},item_type.name,item_type_select);
   });
   item_type_select.val(item.item_type_id);
-  make_select_widget('ItemType',item_type_select);
+  shared.makeSelectWidget('ItemType',item_type_select);
   
   // Edit TaxProfile
   shared.element('h4',{id: 'oi_tax_profile_h4'},i18n.activerecord.models.tax_profile.one,config_table_cols_center[0]);
   var tax_profile_select = shared.element('select',{id: 'oi_tax_profile_select'},'',config_table_cols_center[0]);
   tax_profile_select.on('change',function () {
-    editItemAndOrderItem(item,'tax_profile_id',$(this).val());
-    focusInput($('#main_sku_field'));
+    sr.fn.pos_core.editItemAndOrderItem(item,'tax_profile_id',$(this).val());
+    sr.fn.focus.set($('#main_sku_field'));
   });
-  $.each(TaxProfiles,function (i,tax_profile) {
+  $.each(sr.data.resources.tax_profile_object,function (i,tax_profile) {
     shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
   });
   tax_profile_select.val(item.tax_profile_id);  // select current value
-  make_select_widget('TaxProfile',tax_profile_select);
+  shared.makeSelectWidget('TaxProfile',tax_profile_select);
   
   
   // Edit Category
   shared.element('h4',{id: 'oi_category_h4'},i18n.activerecord.models.category.one,config_table_cols_right[0]);
   var category_select = shared.element('select',{id: 'oi_category_select'},'',config_table_cols_right[0]);
   category_select.on('change',function () {
-    editItemAndOrderItem(item,'category_id',$(this).val());
-    focusInput($('#main_sku_field'));
+    sr.fn.pos_core.editItemAndOrderItem(item,'category_id',$(this).val());
+    sr.fn.focus.set($('#main_sku_field'));
   });
   shared.element('option',{value: ''},'',category_select); // create empty option
-  $.each(Categories,function (i,category) {
+  $.each(sr.data.resources.cateogory_array,function (i,category) {
     var is_selected = category.id == 
     shared.element('option',{value: category.id},category.name,category_select);
   });
   category_select.val(item.category_id); // select current value
 
-  make_select_widget('Category',category_select);
+  shared.makeSelectWidget('Category',category_select);
   var print_sticker = shared.element('div',{id: 'oi_print_sticker'},i18n.helpers.submit.print,config);
   print_sticker.mousedown(function () {
-    print_url(Register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
+    sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
   });
   print_sticker.addClass('button-confirm');
   shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
 }
 
-function editItemAndOrderItem(item,field,val,callback) {
+sr.fn.pos_core.editItemAndOrderItem = function(order_item, field, val, callback) {
   // This is supposed to be doubled, it edits both the orderitem and the item at the same go. Item should be first. OrderItem only after Item request has completed.
-  var string = '/vendors/edit_field_on_child?id=' +
-  item.item_id +'&klass=Item' +
-  '&field=' + field +
-  '&value=' + val;
-  $.get(string,function() {
-    var string = '/vendors/edit_field_on_child?id=' +
-    item.id +'&klass=OrderItem' +
-    '&field=' + field +
-    '&value=' + val;
-    $.get(string);
+  var string_for_item = '/vendors/edit_field_on_child?id=' + order_item.item_id +'&klass=Item' + '&field=' + field + '&value=' + val;
+  var string_for_order_item = '/vendors/edit_field_on_child?id=' + order_item.id +'&klass=OrderItem' + '&field=' + field + '&value=' + val;
+  
+  get(string_for_item, "sr.fn.pos_core.editItemAndOrderItem", function() {
+    get(string_for_order_item, "sr.fn.pos_core.editItemAndOrderItem", function() {
+      if (typeof callback != "undefined") {
+        callback();
+      }
+    });
   });
 }
 
-function getBehaviorById(id) {
+sr.fn.pos_core.getBehaviorById = function(id) {
   var itid = 0;
-  $.each(ItemTypes,function (i,item_type) {
+  $.each(sr.data.resources.item_type_array,function (i,item_type) {
     if (item_type.id == id) {
       itid = item_type.id;
     }
@@ -724,12 +725,12 @@ function getBehaviorById(id) {
   return itid;
 }
 
-function orderItemNameOption(append_to, item) {
+sr.fn.pos_core.orderItemNameOption = function(append_to, item) {
   // name edit field
   var save_edit = function () {
     var id = '#option_order_item_name_input';
     var value = $(id).val();
-    editItemAndOrderItem(item, 'name', value);
+    sr.fn.pos_core.editItemAndOrderItem(item, 'name', value);
   };
   var callbacks = {
     click: save_edit,
@@ -751,7 +752,7 @@ function orderItemNameOption(append_to, item) {
   var save_edit = function () {
     var id = '#option_order_item_sku_input';
     var value = $(id).val();
-    editItemAndOrderItem(item, 'sku', value);
+    sr.fn.pos_core.editItemAndOrderItem(item, 'sku', value);
   };
   var callbacks = {
     click: save_edit,
@@ -770,26 +771,18 @@ function orderItemNameOption(append_to, item) {
   var opt = shared.draw.option(options, callbacks);
 }
 
-function getOrderItemId(item) {
+sr.fn.pos_core.getOrderItemId = function(item) {
   var id = 'order-item-' + item.id;
   return id;
 }
 
-function highlight(elem) {
+sr.fn.pos_core.highlight = function(elem) {
   if (!elem.hasClass("pos-highlight")) {
     elem.addClass("pos-highlight");
   }
 }
 
-function refund_item(id) {
-  refund_payment_method_id = $('#refund_payment_method').val();
-  window.location = '/orders/refund_item?id=' + id + '&pm=' + refund_payment_method_id;
-  if (PaymentMethodObjects[refund_payment_method_id].cash == true) {
-    quick_open_drawer()
-  }
-}
-
-function clearOrder() {
-  $.get('/orders/clear?order_id=' + Order.id);
+sr.fn.pos_core.clearOrder = function() {
+  $.get('/orders/clear?order_id=' + sr.data.pos_core.order.id);
 }
 
