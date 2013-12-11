@@ -331,7 +331,8 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
     });
 
   } catch (err) {
-    sr.fn.debug.echo(err);
+    sr.fn.debug.echo("Error in sr.fn.pos_core.makeItemMenu:" + err);
+    sr.fn.debug.send_email("Error in sr.fn.pos_core.makeItemMenu", err)
   }
 }
 
@@ -437,9 +438,7 @@ sr.fn.pos_core.showOrderOptions = function() {
         })(),
         change: function () {
           var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=tax_profile_id&value=' + $(this).val();
-          get(string, 'showOrderOptions->tax_profile', function () {
-            //
-          });
+          get(string, 'showOrderOptions->tax_profile');
         },
         attributes: {name: i18n.activerecord.models.tax_profile.one},
         value: sr.data.pos_core.order.tax_profile_id,
@@ -548,8 +547,8 @@ sr.fn.pos_core.showOrderOptions = function() {
         title: i18n.activerecord.models.country.one,
         options: (function () {
           var ctys = {};
-          for (var t in Countries) {
-            var country = Countries[t];
+          for (var t in sr.data.resources.country_array) {
+            var country = sr.data.resources.country_array[t];
             ctys[country.id] = country.name;
           }
           return ctys;
@@ -700,18 +699,17 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
 }
 
-sr.fn.pos_core.editItemAndOrderItem = function(item,field,val,callback) {
+sr.fn.pos_core.editItemAndOrderItem = function(order_item, field, val, callback) {
   // This is supposed to be doubled, it edits both the orderitem and the item at the same go. Item should be first. OrderItem only after Item request has completed.
-  var string = '/vendors/edit_field_on_child?id=' +
-  item.item_id +'&klass=Item' +
-  '&field=' + field +
-  '&value=' + val;
-  $.get(string,function() {
-    var string = '/vendors/edit_field_on_child?id=' +
-    item.id +'&klass=OrderItem' +
-    '&field=' + field +
-    '&value=' + val;
-    $.get(string);
+  var string_for_item = '/vendors/edit_field_on_child?id=' + order_item.item_id +'&klass=Item' + '&field=' + field + '&value=' + val;
+  var string_for_order_item = '/vendors/edit_field_on_child?id=' + order_item.id +'&klass=OrderItem' + '&field=' + field + '&value=' + val;
+  
+  get(string_for_item, "sr.fn.pos_core.editItemAndOrderItem", function() {
+    get(string_for_order_item, "sr.fn.pos_core.editItemAndOrderItem", function() {
+      if (typeof callback != "undefined") {
+        callback();
+      }
+    });
   });
 }
 

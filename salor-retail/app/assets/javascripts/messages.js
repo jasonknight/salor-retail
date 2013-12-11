@@ -41,21 +41,18 @@ sr.fn.messages.displayMessages = function() {
     sr.fn.messages.displayMessage("alert", notices[idx], random_id);
   });
   
- 
-  if ( prompts.length > 0 ) {
-    $.each(prompts, function(i,o) {
-      var dialog_id = 'prompt-dialog_' + i;
-      var dialog = shared.draw.dialog('', dialog_id, o);
-      var okbutton = shared.create.dialog_button('OK', function() {
-        sr.fn.debug.ajaxLog({
-          action_taken:'confirmed_prompt_dialog',
-          called_from: o
-        });
-        dialog.remove();
+  $.each(prompts, function(i,o) {
+    var dialog_id = 'prompt-dialog_' + i;
+    var dialog = shared.draw.dialog('', dialog_id, o);
+    var okbutton = shared.create.dialog_button('OK', function() {
+      sr.fn.debug.ajaxLog({
+        action_taken:'confirmed_prompt_dialog',
+        called_from: o,
       });
-      dialog.append(okbutton);
+      dialog.remove();
     });
-  }
+    dialog.append(okbutton);
+  });
   
   sr.data.messages.notices = [];
   sr.data.messages.alerts = [];

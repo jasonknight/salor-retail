@@ -53,7 +53,6 @@ function make_select_widget(name,elem) {
        var input_id = _currentSelectTarget.replace("type","amount");
        setTimeout(function () { $(input_id).select(); },55);
        $('.select-widget-display').hide();
-       _
       });
       mdiv.append(d);
       x++;
@@ -100,23 +99,7 @@ function div_wrap(text,cls) {
   return '<div class="' + cls + '">'+text+'</div>';
 }
 
-function set_selected(elem,value,type) { /* 0: Match text, 1: match option value*/
-  if (value == null) {
-    return elem;
-  }
-  elem.children("option").each(function () {
-    if (type == 0) {
-      if ($(this).html() == value) {
-        $(this).attr('selected',true);
-      }
-    } else {
-      if ($(this).attr('value') == value) {
-        $(this).attr('selected',true);
-      }
-    }
-  });
-  return elem;
-}
+
 
 function get(url, calledFrom, sFunc, type, eFunc) {
   if (type == null) type = 'get';
@@ -139,32 +122,13 @@ function get(url, calledFrom, sFunc, type, eFunc) {
     },
     error: function(jqXHR, textStatus, errorThrown) {
       eFunc();
-      sr.data.messages.prompts.push("error during request to" + url);
+      sr.data.messages.prompts.push("Error during request to" + url + "<br><br>Please contact customer service.");
       sr.fn.messages.displayMessages();
     }
   });
 }
 
-function arrayCompare(a1, a2) {
-  if (a1.length != a2.length) return false;
-  var length = a2.length;
-  for (var i = 0; i < length; i++) {
-    if (a1[i] !== a2[i]) return false;
-  }
-  return true;
-}
 
-function inArray(needle, haystack) {
-  var length = haystack.length;
-  for(var i = 0; i < length; i++) {
-    if(typeof haystack[i] == 'object') {
-      if(arrayCompare(haystack[i], needle)) return true;
-    } else {
-      if(haystack[i] == needle) return true;
-    }
-  }
-  return false;
-}
 
 function checkLength( o, n, min, max ) {
   if ( o.val().length > max || o.val().length < min ) {
@@ -204,46 +168,7 @@ function _set(name,value,context) {
     return $.data(document.body,name,value);
   } 
 }
-function scroll_to(element, speed) {
-  sr.fn.debug.echo("SCROLLING");
-  target_y = $(window).scrollTop();
-  current_y = $(element).offset().top;
-  if (sr.data.session.other.workstation) {
-    do_scroll((current_y - target_y)*1.05, speed);
-  } else {
-    window.scrollTo(0, current_y);
-  }
-}
 
-function scroll_for(distance, speed) {
-  sr.fn.debug.echo("SCROLLING");
-  do_scroll(distance, speed);
-}
-
-function do_scroll(diff, speed) {
-  sr.fn.debug.echo("SCROLLING");
-  window.scrollBy(0,diff/speed);
-  newdiff = (speed-1)*diff/speed;
-  scrollAnimation = setTimeout(function(){ do_scroll(newdiff, speed) }, 20);
-  if(Math.abs(diff) < 5) { clearTimeout(scrollAnimation); }
-}
-
-
-
-function date_as_ymd(date) {
-  return date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
-}
-
-function get_date(str) {
-  return new Date(Date.parse(str));
-}
-
-function days_between_dates(from, to) {
-  var days = Math.floor((Date.parse(to) - Date.parse(from)) / 86400000);
-  if (days == 0)
-    days = 0
-  return days;
-}
 
 
 
@@ -268,43 +193,12 @@ function create_dom_element(tag,attrs,content,append_to) {
 
 
 
-/* Adds a delete/X button to the element. Type options  are right and append. The default callback simply slides the element up.
- if you want special behavior on click, you can pass a closure.*/
-function deletable(elem,type,callback) {
-  if (typeof type == 'function') {
-    callback = type;
-    type = 'right'
-  }
-  if (!type)
-    type = 'right';
-  if ($('#' + elem.attr('id') + '_delete').length == 0) {
-    var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
-    if (!callback) {
-      del_button.on('click',function () {
-        $('#' + $(this).attr('target')).slideUp();
-      });
-    } else {
-      del_button.on('click',callback);
-    }
-  } else {
-    var del_button = $('#' + elem.attr('id') + '_delete');
-    if (callback) {
-      del_button.unbind('click').on('click',callback);
-    }
-  }
-  var offset = elem.offset();
-  if (type == 'right') {
-    offset.left += elem.outerWidth() - del_button.outerWidth() - 5;
-    offset.top += 5
-    del_button.offset(offset);
-  } else if (type == 'append') {
-    elem.append(del_button);
-  }
-  
-}
+
+
 
 sr.data.session.other.container = $(window);
-window.shared = {
+
+var shared = {
   element: function (tag,attrs,content,append_to) {
     if (attrs["id"] && $('#' + attrs["id"]).length != 0) {
       var elem = $('#' + attrs["id"]);
@@ -314,6 +208,53 @@ window.shared = {
       return create_dom_element(tag,attrs,content,append_to)
     }
   },
+  array_tools: {
+    arrayCompare: function(a1, a2) {
+      if (a1.length != a2.length) return false;
+      var length = a2.length;
+      for (var i = 0; i < length; i++) {
+        if (a1[i] !== a2[i]) return false;
+      }
+      return true;
+    },
+    inArray: function(needle, haystack) {
+      var length = haystack.length;
+      for(var i = 0; i < length; i++) {
+        if(typeof haystack[i] == 'object') {
+          if(shared.array_tools.arrayCompare(haystack[i], needle)) return true;
+        } else {
+          if(haystack[i] == needle) return true;
+        }
+      }
+      return false;
+    },
+  },
+  scrolling_helpers: {
+    scrollTo: function(element, speed) {
+      sr.fn.debug.echo("SCROLLING");
+      target_y = $(window).scrollTop();
+      current_y = $(element).offset().top;
+      if (sr.data.session.other.workstation) {
+        shared.scrolling_helpers.doScroll((current_y - target_y)*1.05, speed);
+      } else {
+        window.scrollTo(0, current_y);
+      }
+    },
+    scrollFor: function(distance, speed) {
+      sr.fn.debug.echo("SCROLLING");
+      shared.scrolling_helpers.doScroll(distance, speed);
+    },
+    doScroll: function(diff, speed) {
+      sr.fn.debug.echo("SCROLLING");
+      window.scrollBy(0,diff/speed);
+      newdiff = (speed-1)*diff/speed;
+      scrollAnimation = setTimeout(function(){
+        do_scroll(newdiff, speed)
+      }, 20);
+      if ( Math.abs(diff) < 5 ) clearTimeout(scrollAnimation);
+    },
+  },
+  
   date: {
     hm: function (date,sep) {
       if (!date)
@@ -519,7 +460,7 @@ window.shared = {
       var nstr = '';
       for (var i = 0; i < str.length; i++) {
         c = str.charAt(i);
-        if (inArray(c,ac)) {
+        if (shared.array_tools.inArray(c,ac)) {
           if (c == ',') {
             nstr = nstr + '.';
           } else {
@@ -555,6 +496,42 @@ window.shared = {
       return button;
     }
   },
+  
+  /* Adds a delete/X button to the element. Type options  are right and append. The default callback simply slides the element up. if you want special behavior on click, you can pass a closure.
+   */
+  makeDeletable: function(elem,type,callback) {
+    if (typeof type == 'function') {
+      callback = type;
+      type = 'right'
+    }
+    if (!type)
+      type = 'right';
+    if ($('#' + elem.attr('id') + '_delete').length == 0) {
+      var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
+      if (!callback) {
+        del_button.on('click',function () {
+          $('#' + $(this).attr('target')).slideUp();
+        });
+      } else {
+        del_button.on('click',callback);
+      }
+    } else {
+      var del_button = $('#' + elem.attr('id') + '_delete');
+      if (callback) {
+        del_button.unbind('click').on('click',callback);
+      }
+    }
+    var offset = elem.offset();
+    if (type == 'right') {
+      offset.left += elem.outerWidth() - del_button.outerWidth() - 5;
+      offset.top += 5
+      del_button.offset(offset);
+    } else if (type == 'append') {
+      elem.append(del_button);
+    }
+    
+  },
+  
   draw: {
     /* returns a happy, centered dialog that you can use to display stuff */
     dialog: function (title,id,text,clear) {
@@ -574,7 +551,7 @@ window.shared = {
       pad_div.addClass('header');
       var contents = create_dom_element('div',{},text,dialog);
       contents.addClass('contents');
-      deletable(dialog,function () { $(this).parent().remove()});
+      shared.makeDeletable(dialog,function () { $(this).parent().remove()});
       shared.helpers.center(dialog, $(window));
       return dialog;
     },
