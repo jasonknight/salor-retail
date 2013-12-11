@@ -314,7 +314,8 @@ namespace :translations do
     write_javascript_i18n
   end
   
-  task :write_i18n_js do 
+  task :write_i18n_js do
+    puts "\n\nWriting translations to JS"
     write_javascript_i18n
   end
 end

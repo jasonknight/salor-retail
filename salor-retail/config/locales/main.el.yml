@@ -212,6 +212,7 @@ el:
       when: πότε
       whento: When
       width: πλάτος
+      drawer_username: Drawer user
     models:
       action:
         one: Πράξη
@@ -581,6 +582,7 @@ el:
     shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
     shipments_move_all_items: όλα τα αντικείμενα μεταφέρθηκαν επιτυχώς
     shipments_move_item: το αντικείμενο μεταφέρθηκε επιτυχώς
+    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -988,3 +990,6 @@ el:
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
     on_sku_not_found: on sku not found
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin

@@ -5,7 +5,6 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
-      drawer_username: Drawer user
       active: active
       address: address
       afield: field
@@ -57,6 +56,7 @@ en:
       default_buyback: default buyback
       detailed_edit: Detailed Edit?
       dollar_per_lp: dollar per loyalty point
+      drawer_username: Drawer user
       drop: drop
       email: email
       enable_technician_emails: Send emails to technician
@@ -439,9 +439,6 @@ en:
     upload:
       upload: upload
   label: label
-  plugins:
-    meta_fields: Meta Fields for this Plugin
-    files_list: Files in this plugin
   menu:
     actions: actions
     activate_gift_card: activate gift card
@@ -579,10 +576,10 @@ en:
     weigh: weigh
     wholesaler_update: wholesaler update
   notifications:
+    please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: shipments item could not be saved
     shipments_move_all_items: all items were successfully moved
     shipments_move_item: item was successfully moved
-    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -644,6 +641,9 @@ en:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin
   printr:
     eod_report:
       None: Not named

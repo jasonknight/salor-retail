@@ -212,6 +212,7 @@ ru:
       when: когда
       whento: When
       width: ширина
+      drawer_username: Drawer user
     models:
       action:
         one: Действие
@@ -578,6 +579,7 @@ ru:
     shipments_item_could_not_be_saved: товар поставки не может быть сохранен
     shipments_move_all_items: все товары были успешно перемещёны
     shipments_move_item: товар был успешно перемещён
+    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -973,3 +975,6 @@ ru:
     on_import: при импорте
     on_save: при сохранении
     on_sku_not_found: on sku not found
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin

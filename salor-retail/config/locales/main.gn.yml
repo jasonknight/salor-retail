@@ -212,6 +212,7 @@ gn:
       when: Wenn
       whento: When
       width: Breite
+      drawer_username: Drawer user
     models:
       action:
         one: Aktion
@@ -579,6 +580,7 @@ gn:
     shipments_item_could_not_be_saved: Artikel konnte nicht verschoben werden
     shipments_move_all_items: Alle Artikel wurden erfolgreich verschoben.
     shipments_move_item: Artikel erfolgreich verschoben ...
+    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Alle Abos wiederholen
@@ -978,3 +980,6 @@ gn:
     on_import: beim Import
     on_save: beim Speichern
     on_sku_not_found: on sku not found
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin

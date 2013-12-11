@@ -212,6 +212,7 @@ fr:
       when: Quand
       whento: When
       width: Largeur
+      drawer_username: Drawer user
     models:
       action:
         one: Action
@@ -580,6 +581,7 @@ fr:
     shipments_item_could_not_be_saved: Article livraisons n'a pas pu être enregistré.
     shipments_move_all_items: Tous les articles ont été déplacés avec succès.
     shipments_move_item: L'article a été déplacé avec succès.
+    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -986,3 +988,6 @@ fr:
     on_import: Lors de l'importation
     on_save: Lors de la sauvegarde
     on_sku_not_found: on sku not found
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin

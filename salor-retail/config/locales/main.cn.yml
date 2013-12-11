@@ -212,6 +212,7 @@ cn:
       when: 何時
       whento: When
       width: 寬度
+      drawer_username: Drawer user
     models:
       action:
         one: 行動
@@ -571,6 +572,7 @@ cn:
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
     shipments_move_item: 項目均順利搬遷
+    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -948,3 +950,6 @@ cn:
     on_import: 在進口
     on_save: 在儲存
     on_sku_not_found: on sku not found
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin

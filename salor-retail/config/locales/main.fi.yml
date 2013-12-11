@@ -212,6 +212,7 @@ fi:
       when: milloin
       whento: milloin
       width: leveys
+      drawer_username: Drawer user
     models:
       action:
         one: Toiminta
@@ -578,6 +579,7 @@ fi:
     shipments_item_could_not_be_saved: lähetysnimikkeen tallennus epäonnistui
     shipments_move_all_items: kaikkien nimikkeiden siirtäminen onnistui
     shipments_move_item: nimikkeen siirtäminen onnistui
+    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Luo tilaukset toistuvista tilauksista
@@ -743,6 +745,7 @@ fi:
       child_sku_must_exist: tytärnimike pakko olla!
       coupon_cannot_be_buy_one_get_one: kuponki %{sku} osta_yksi_saat_kaksi ei koske
         %{applies}
+      coupon_not_enough_items: Et ole ostanut tarpeeksi nimikkeitä tämän soveltamiseksi
       csv_item_exists: Nimike %{sku} on jo olemassa!
       csv_item_failed: ! '%{id} %{i} epäonnistui.'
       failed_to_save_parts: Tietoa ei voitu tallentaa. Varmista että nimikkeiden ryhmä
@@ -789,7 +792,6 @@ fi:
       shipment_item_nil: Nimike palautettu lähetyksestä oli nolla?
       sku_must_be_unique: ! '%{sku}  on oltava yksilöllinen'
       value_not_set: ei ole asetettu
-      coupon_not_enough_items: Et ole ostanut tarpeeksi nimikkeitä tämän soveltamiseksi
     inventory_updated: varasto päivitetty
     logged_in_as: kirjauttu nimella
     login: Kirjaudu sisään
@@ -972,3 +974,6 @@ fi:
     on_import: laatamista
     on_save: tallentamassa
     on_sku_not_found: kun sku ei löytynyt
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin
