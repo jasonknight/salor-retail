@@ -1,6 +1,5 @@
 <script type="text/javascript">
   sr.data.pos_core.order = <%= raw @current_order.to_json %>;
-  sr.fn.pos_core.updateOrder(sr.data.pos_core.order);
   <%
     items = []
     @current_order.order_items.visible.each do |oi|
@@ -9,6 +8,7 @@
   %>
   sr.data.pos_core.order_items = [<%= raw items.join(',') %>];
   $(function () {
+    sr.fn.pos_core.updateOrder(sr.data.pos_core.order);
     sr.fn.pos_core.updateOrderItems(sr.data.pos_core.order_items);
   });
 </script>
