@@ -38,8 +38,8 @@ sr.fn.drawer.saveTransaction = function() {
         sr.fn.drawer.hideTransactionPopup();
       },
       error: function (data,status,errorThrown) {
-      messagesHash['prompts'].push(errorThrown);
-      sr.fn.messages.displayMessages();
+        sr.data.messages.prompts.push("Error during request: vendors new_drawer_transaction");
+        sr.fn.messages.displayMessages();
       }
   });
   sr.fn.focus.set($('#main_sku_field'));

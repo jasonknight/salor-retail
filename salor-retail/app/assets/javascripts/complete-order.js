@@ -114,7 +114,7 @@ sr.fn.complete.process = function(print,change_user_id) {
       sr.fn.salor_bin.updateCustomerDisplay(order_id, false, true);
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      messagesHash['prompts'].push(errorThrown);
+      sr.data.messages.prompts.push("Error during request: orders complete");
       sr.fn.messages.displayMessages();
     }
   });

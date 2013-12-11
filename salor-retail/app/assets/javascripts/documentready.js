@@ -41,7 +41,11 @@ var sr = {
     pos_core: {},
     complete: {},
     inplace_edit: {},
-    messages: {},
+    messages: {
+      notices: [],
+      alerts: [],
+      prompts: [],
+    },
     search_pos: {},
     shipments: {},
   },

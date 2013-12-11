@@ -157,7 +157,7 @@ sr.fn.inplace_edit.make = function(elem) {
             at: 'center center'
           },
           visible : function() { 
-            if (IS_APPLE_DEVICE) {
+            if (sr.data.session.other.is_apple_device) {
               $('.ui-keyboard-preview').val("");
             } 
             $('.ui-keyboard-preview').select();

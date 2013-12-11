@@ -133,7 +133,7 @@ sr.fn.salor_bin.observeDrawer = function(delay) {
 
 sr.fn.salor_bin.weighItem = function(id) {
   if ( ! sr.fn.salor_bin.is() ) {
-    messagesHash['prompts'].push("Weighing is only supported with our thin client salor-bin.");
+    sr.data.messages.prompts.push("Weighing is only supported with our thin client salor-bin.");
     sr.fn.messages.displayMessages();
     return
   }
@@ -141,7 +141,7 @@ sr.fn.salor_bin.weighItem = function(id) {
     var weight = Salor.weigh(sr.data.session.cash_register.scale, 0);
     
   } else {
-    messagesHash['prompts'].push("No scale configured. Please add a scale path to the CashRegister settings.");
+    sr.data.messages.prompts.push("No scale configured. Please add a scale path to the CashRegister settings.");
     sr.fn.messages.displayMessages();
     var weight = 0;
   }

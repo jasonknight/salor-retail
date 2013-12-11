@@ -48,7 +48,7 @@ sr.fn.payment.add = function() {
     visible: function () {
       var cls = $(sel).val() + '-amount';
       $(".ui-keyboard-preview").removeClass('payment-amount');
-      if (IS_APPLE_DEVICE) {
+      if (sr.data.session.other.is_apple_device) {
         $(".ui-keyboard-preview").val("");
       }
       $('.text-input').select();

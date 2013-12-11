@@ -1,7 +1,4 @@
-var IS_APPLE_DEVICE = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
-var IS_IPAD = navigator.userAgent.match(/iPad/i) != null;
-var IS_IPOD = navigator.userAgent.match(/iPod/i) != null;
-var IS_IPHONE = navigator.userAgent.match(/iPhone/i) != null;
+sr.data.session.other.is_apple_device = navigator.userAgent.match(/iPhone|iPad|iPod/i) != null;
 
 
 function make_select_widget(name,elem) {
@@ -157,7 +154,7 @@ function get(url, calledFrom, sFunc, type, eFunc) {
     },
     error: function(jqXHR, textStatus, errorThrown) {
       eFunc();
-      messagesHash['prompts'].push(errorThrown);
+      sr.data.messages.prompts.push("error during request to" + url);
       sr.fn.messages.displayMessages();
     }
   });

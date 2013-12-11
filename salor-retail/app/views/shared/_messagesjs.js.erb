@@ -1,19 +1,19 @@
 <% unless flash[:notices].blank? %>
-  messagesHash['notices'] = messagesHash['notices'].concat(<%= raw flash[:notices].to_json %>);
+  sr.data.messages.notices = sr.data.messages.notices.concat(<%= raw flash[:notices].to_json %>);
 <% end %>
 <% unless flash[:alerts].blank? %>
-  messagesHash['alerts'] = messagesHash['alerts'].concat(<%= raw flash[:alerts].to_json %>);
+  sr.data.messages.alerts = sr.data.messages.alerts.concat(<%= raw flash[:alerts].to_json %>);
 <% end %>
 <% unless flash[:prompts].blank? %>
-  messagesHash['prompts'] = messagesHash['prompts'].concat(<%= raw flash[:prompts].to_json %>);
+  sr.data.messages.prompts = sr.data.messages.prompts.concat(<%= raw flash[:prompts].to_json %>);
 <% end %>
 
 <% unless $MESSAGES[:notices].blank? %>
-  messagesHash['notices'] = messagesHash['notices'].concat(<%= raw $MESSAGES[:notices].to_json %>);
+  sr.data.messages.notices = sr.data.messages.notices.concat(<%= raw $MESSAGES[:notices].to_json %>);
 <% end %>
 <% unless $MESSAGES[:alerts].blank? %>
-  messagesHash['alerts'] = messagesHash['alerts'].concat(<%= raw $MESSAGES[:alerts].to_json %>);
+  sr.data.messages.alerts = sr.data.messages.alerts.concat(<%= raw $MESSAGES[:alerts].to_json %>);
 <% end %>
 <% unless $MESSAGES[:prompts].blank? %>
-  messagesHash['prompts'] = messagesHash['prompts'].concat(<%= raw $MESSAGES[:prompts].to_json %>);
+  sr.data.messages.prompts = sr.data.messages.prompts.concat(<%= raw $MESSAGES[:prompts].to_json %>);
 <% end %>

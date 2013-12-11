@@ -45,6 +45,8 @@ Drawer = <%= raw @current_user.get_drawer.to_json %>;
 sr.fn.salor_bin.stopDrawerObserver();
 
 // ajax messages stuff
-messagesHash = {'notices':[], 'alerts':[], 'prompts':[]};
+sr.data.messages.notices = [];
+sr.data.messages.alerts = [];
+sr.data.messages.prompts = [];
 <%= render :partial => '/shared/messagesjs.js' %>
 sr.fn.messages.displayMessages();
