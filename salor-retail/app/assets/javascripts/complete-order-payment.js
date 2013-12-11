@@ -20,7 +20,7 @@ sr.fn.payment.add = function() {
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   amount.on("keyup",function (event) {
     if (event.keyCode == 13) {
-      sr.fn.complete.send(!Register.no_print);
+      sr.fn.complete.send(!sr.data.session.cash_register.no_print);
     } else {
       sr.fn.change.display_change("payment-amount.onKeyUp " + event.which + " " + amount.val() + " " + amount.attr('id'));
     }
@@ -33,14 +33,11 @@ sr.fn.payment.add = function() {
   amount.val(sr.fn.math.toDelimited(rest_value));
   // ---
   
-  oldSelectedIndex = null;
-  //validatePaymentMethod($(sel));
-  
   
   sr.fn.debug.ajaxLog({log_action:'add_payment_method', order_id:Order.id, value:sel.val()});
   
   $("#payment_methods").append(sel).append(amount);
-  $('#payment_methods').append('<br />');
+  $("#payment_methods").append('<br />');
   
   sr.fn.change.display_change('function add_payment_method');
   
@@ -69,7 +66,7 @@ sr.fn.payment.add = function() {
 
 sr.fn.payment.getOptions = function() {
   var txt = '';
-  $.each(PaymentMethodObjects, function(k,v) {
+  $.each(sr.data.resources.payment_method_object, function(k,v) {
     txt = txt + '<option value="' + k + '">' + v.name + '</option>';
   });
   return txt;
@@ -92,9 +89,9 @@ sr.fn.payment.getItems = function() {
     var amount = $("#payment_amount_" + id).val();
     var val = $(this).val();
     returnObj[val] = {
-      id:PaymentMethodObjects[val].id,
-      name:PaymentMethodObjects[val].name,
-      cash:PaymentMethodObjects[val].cash,
+      id: sr.data.resources.payment_method_object[val].id,
+      name: sr.data.resources.payment_method_object[val].name,
+      cash: sr.data.resources.payment_method_object[val].cash,
       amount: amount
     }
   });

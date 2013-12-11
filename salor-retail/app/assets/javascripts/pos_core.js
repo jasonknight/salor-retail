@@ -57,7 +57,7 @@ sr.fn.pos_core.updatePosItem = function(item) {
 
 
 sr.fn.pos_core.drawOrderItemRow = function(item) {
-  if (Register.hide_discounts == true) {
+  if (sr.data.session.cash_register.hide_discounts == true) {
     var attrs = ['name', 'quantity', 'price', 'total'];
   } else {
     var attrs = ['name', 'quantity', 'price', 'rebate', 'price_reductions', 'total', 'tax'];
@@ -147,7 +147,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
         sr.fn.pos_core.makeItemMenu(col, row);
         break;
       case 'tax':
-        var color = TaxProfiles[item.tax_profile_id].color;
+        var color = sr.data.resources.tax_profile_object[item.tax_profile_id].color;
         if (color != null && color != "" ) {
           col.css('background-color', color);
         } else {
@@ -173,7 +173,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
       case 'quantity':
         sr.fn.inplace_edit.make(col);
         col.addClass('editme pointer no-select');
-        if (Register.show_plus_minus) {
+        if (sr.data.session.cash_register.show_plus_minus) {
           var up = td().removeClass('jtable-cell').addClass('table-cell');
           up.html("<div><img src=\"/images/icons/up.svg\" height='32' />");
           up.addClass('pointer quantity-button');
@@ -189,7 +189,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
           });
         }
         row.append(col);
-        if (Register.show_plus_minus) {
+        if (sr.data.session.cash_register.show_plus_minus) {
           var down = td().removeClass('jtable-cell').addClass('table-cell');
           down.html("<div><img src=\"/images/icons/down.svg\" height='32' />");
           down.addClass('pointer quantity-button');
@@ -223,8 +223,8 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
     // additional rules of field groups
     if (attr == "price" || attr == "rebate" || attr == "tax") {
       if (
-        (User.role_cache.indexOf('change_prices') != -1) ||
-        (User.role_cache.indexOf('manager') != -1) ||
+        (sr.data.session.user.role_cache.indexOf('change_prices') != -1) ||
+        (sr.data.session.user.role_cache.indexOf('manager') != -1) ||
         (item.must_change_price == true)
          ) {
         sr.fn.inplace_edit.make(col);
@@ -270,7 +270,7 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
     var item = _get('item', row);
     col.unbind();
     col.mousedown(function (event) {
-        if (Register.detailed_edit == true) {
+        if (sr.data.session.cash_register.detailed_edit == true) {
           sr.fn.pos_core.detailedOrderItemMenu(event);
           return;
         }
@@ -302,13 +302,13 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
           sr.fn.focus.set($('#main_sku_field'));
         });
         menu.append(buyback);
-        if (!Register.scale == '') {
+        if (!sr.data.session.cash_register.scale == '') {
           var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
           wicon.mousedown(function () {
               var string = '/vendors/edit_field_on_child?id=' +
                             item.id +'&klass=OrderItem' +
                             '&field=quantity'+
-                            '&value=' + Register.scale;
+                            '&value=' + sr.data.session.cash_register.scale;
                             get(string, filename);
               menu.remove();
               sr.fn.focus.set($('#main_sku_field'));
@@ -317,7 +317,7 @@ sr.fn.pos_core.makeItemMenu = function(col, row) {
           });
 
           menu.append(wicon);
-        } // end  if (!Register.scale == '') {
+        } // end  if (!sr.data.session.cash_register.scale == '') {
 
         var btn = $('<div id="item_menu_done" class="oi-menu-icon"><img src="/images/icons/okay.svg" width="31px" height="32px" /></div>');
         btn.mousedown(function () {
@@ -428,8 +428,8 @@ sr.fn.pos_core.showOrderOptions = function() {
         title: i18n.activerecord.models.tax_profile.one,
         options: (function () {
           var stys = {};
-          for (var t in TaxProfiles) {
-            var tax_profile = TaxProfiles[t];
+          for (var t in sr.data.resources.tax_profile_object) {
+            var tax_profile = sr.data.resources.tax_profile_object[t];
             stys[tax_profile.id] = tax_profile.name;
           }
           return stys;
@@ -505,8 +505,8 @@ sr.fn.pos_core.showOrderOptions = function() {
         title: i18n.activerecord.models.sale_type.one,
         options: (function () {
           var stys = {};
-          for (var t in SaleTypes) {
-            var sale_type = SaleTypes[t];
+          for (var t in sr.data.resources.sale_type_array) {
+            var sale_type = sr.data.resources.sale_type_array[t];
             stys[sale_type.id] = sale_type.name;
           }
           return stys;
@@ -526,8 +526,8 @@ sr.fn.pos_core.showOrderOptions = function() {
         title: i18n.activerecord.models.country.one,
         options: (function () {
           var ctys = {};
-          for (var t in Countries) {
-            var country = Countries[t];
+          for (var t in sr.data.resources.country_array) {
+            var country = sr.data.resources.country_array[t];
             ctys[country.id] = country.name;
           }
           return ctys;
@@ -610,7 +610,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   });
   title.append(buyback);
   
-  if (!Register.scale == '') {
+  if (!sr.data.session.cash_register.scale == '') {
     var wicon = $('<div id="item_menu_scale" class="oi-menu-icon"><img src="/images/icons/scale.svg" width="31px" height="32px" /></div>');
     wicon.click(function () {
       sr.fn.salor_bin.weighItem(item.id);
@@ -656,7 +656,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     sr.fn.pos_core.editItemAndOrderItem(item,'item_type_id',$(this).val());
     sr.fn.focus.set($('#main_sku_field'));
   });
-  $.each(ItemTypes,function (i,item_type) {
+  $.each(sr.data.resources.item_type_array,function (i,item_type) {
     shared.element('option',{value: item_type.id},item_type.name,item_type_select);
   });
   item_type_select.val(item.item_type_id);
@@ -669,7 +669,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     sr.fn.pos_core.editItemAndOrderItem(item,'tax_profile_id',$(this).val());
     sr.fn.focus.set($('#main_sku_field'));
   });
-  $.each(TaxProfiles,function (i,tax_profile) {
+  $.each(sr.data.resources.tax_profile_object,function (i,tax_profile) {
     shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
   });
   tax_profile_select.val(item.tax_profile_id);  // select current value
@@ -684,7 +684,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     sr.fn.focus.set($('#main_sku_field'));
   });
   shared.element('option',{value: ''},'',category_select); // create empty option
-  $.each(Categories,function (i,category) {
+  $.each(sr.data.resources.cateogory_array,function (i,category) {
     var is_selected = category.id == 
     shared.element('option',{value: category.id},category.name,category_select);
   });
@@ -693,7 +693,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
   make_select_widget('Category',category_select);
   var print_sticker = shared.element('div',{id: 'oi_print_sticker'},i18n.helpers.submit.print,config);
   print_sticker.mousedown(function () {
-    sr.fn.salor_bin.printUrl(Register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
+    sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=' + item.item_id + '&type=sticker&style=default')
   });
   print_sticker.addClass('button-confirm');
   shared.helpers.bottom_right(print_sticker,config,{top: -20,left: 5});
@@ -716,7 +716,7 @@ sr.fn.pos_core.editItemAndOrderItem = function(item,field,val,callback) {
 
 sr.fn.pos_core.getBehaviorById = function(id) {
   var itid = 0;
-  $.each(ItemTypes,function (i,item_type) {
+  $.each(sr.data.resources.item_type_array,function (i,item_type) {
     if (item_type.id == id) {
       itid = item_type.id;
     }

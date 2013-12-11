@@ -29,6 +29,15 @@ var sr = {
     
   },
   data: {
+    resources: {},
+    session: {
+      params: {},
+      user: {},
+      vendor: {},
+      drawer: {},
+      cash_register: {},
+      other: {},
+    },
     pos_core: {},
     complete: {},
     inplace_edit: {},
@@ -75,7 +84,12 @@ $(function () {
   $('input[safari]:checkbox').checkbox({cls:'jquery-safari-checkbox'});
   $('input:radio').checkbox();
   
-  if (typeof params != 'undefined' && ((params.controller == 'orders' && params.action == 'new') || (params.controller == 'items' && params.action == 'index'))) {
+  if (typeof sr.data.session.params != 'undefined' &&
+    (
+      (sr.data.session.params.controller == 'orders' && sr.data.session.params.action == 'new') ||
+      (sr.data.session.params.controller == 'items' && sr.data.session.params.action == 'index')
+    )
+  ) {
     $('.yieldbox').css('width', '100%');
     $('.yieldbox').css('padding-left', '0px');
     $('.yieldbox').css('padding-right', '0px');
@@ -121,6 +135,8 @@ $(function () {
   });
   
   $("#category_color").modcoder_excolor();
+  
+  $('#btn-' + sr.data.session.params.controller + '-' + sr.data.session.params.action).addClass('active');
   
   //TODO: move the following functions to the individual views. they needn't be loaded for every page.
   sr.fn.user_logins.display();

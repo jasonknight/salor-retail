@@ -28,7 +28,6 @@
 //= require onscreenkeyboard
 //= require salor_bin
 //= require inventory
-//= require style
 //= require shared
 //= require pos_core
 //= require refund

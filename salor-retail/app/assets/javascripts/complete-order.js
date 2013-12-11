@@ -64,7 +64,7 @@ sr.fn.complete.hidePopup = function() {
   $('body').triggerHandler({type: "CompleteOrderHide"});
   sr.fn.debug.ajaxLog({log_action:'complete_order_hide', order_id:Order.id});
   if ( sr.fn.salor_bin.useMimo() ) {
-    Salor.mimoRefresh(location.origin + "/vendors/" + Vendor.id + "/display_logo", 800, 480);
+    Salor.mimoRefresh(location.origin + "/vendors/" + sr.data.session.vendor.id + "/display_logo", 800, 480);
   }
   if ( parseInt( Order.id ) % 20 == 0) { 
     // reload the page every 20 orders to trigger garbage collection
@@ -77,7 +77,7 @@ sr.fn.complete.send = function(print) {
   if (Order.order_items_length == 0) { sr.fn.complete.hidePopup(); return;}
   sr.data.complete.sending_order = true;
   sr.fn.complete.allowSending(false);
-  if (Register.require_password) {
+  if (sr.data.session.cash_register.require_password) {
     // process after password entry
     sr.fn.complete.showPasswordPopup(print);
     return

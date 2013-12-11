@@ -1,42 +1,42 @@
-var receiver_shipper_select = function (value) {
-  s = $(inplace_ships);
+sr.fn.inplace_edit.getReceiverShipperSelect = function (value) {
+  s = $(sr.data.inplace_edit.shippers_select_html);
   s = set_selected(s,value,0);
   return s;
 }
 
 sr.fn.inplace_edit.get_inputs = {
   category_id: function (value) {
-    s = $(inplace_cats);
+    s = $(sr.data.inplace_edit.categories_select_html);
     s = set_selected(s,value,0);
     return s;
   },
   vendor_id: function (value) {
-    s = $(inplace_stores);
+    s = $(sr.data.inplace_edit.vendors_select_html);
     s = set_selected(s,value,0);
     return s;
   },
   location_id: function (value) {
-    s = $(inplace_locations);
+    s = $(sr.data.inplace_edit.locations_select_html);
     s = set_selected(s,value,0);
     return s;
   },
   item_type_id: function (value) {
-    s = $(inplace_itemtypes);
+    s = $(sr.data.inplace_edit.itemtypes_select_html);
     s = set_selected(s,value,0);
     return s;
   },
-  status: function (value) {
-    s = $(inplace_shipmentstatuses);
-    s = set_selected(s,value,0);
-    return s;
-  },
-  rebate_type: function (value) {
-    s = $(inplace_rebatetypes);
-    s = set_selected(s,value,1);
-    return s;
-  },
-  the_shipper: receiver_shipper_select,
-  the_receiver: receiver_shipper_select
+//   status: function (value) {
+//     s = $(inplace_shipmentstatuses);
+//     s = set_selected(s,value,0);
+//     return s;
+//   },
+//   rebate_type: function (value) {
+//     s = $(inplace_rebatetypes);
+//     s = set_selected(s,value,1);
+//     return s;
+//   },
+  the_shipper: sr.fn.inplace_edit.getReceiverShipperSelect,
+  the_receiver: sr.fn.inplace_edit.getReceiverShipperSelect
 };
 
 sr.fn.inplace_edit.field_callbacks = {

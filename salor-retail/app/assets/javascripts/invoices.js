@@ -21,8 +21,8 @@ sr.fn.invoice.editPm = function(pm) {
         title: i18n.activerecord.models.payment_method.one,
         options: (function () {
           var stys = {};
-          for (var t in PaymentMethods) {
-            var payment_method = PaymentMethods[t];
+          for (var t in sr.data.resources.payment_method_array) {
+            var payment_method = sr.data.resources.payment_method_array[t];
             stys[payment_method[1]] = payment_method[0];
           }
           return stys;

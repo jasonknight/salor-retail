@@ -112,11 +112,10 @@ sr.fn.shipments = {
             sr.fn.focus.set($('#main_shipment_sku_field'));
           });
           shared.element('option',{value: ''},'',tax_profile_select); // empty option
-          $.each(TaxProfiles,function (i,tax_profile) {
+          $.each(sr.data.resources.tax_profile_object,function (i,tax_profile) {
             shared.element('option',{value: tax_profile.id},tax_profile.name,tax_profile_select);
           });
           tax_profile_select.val(item.tax_profile_id);  // select current value
-          //make_select_widget('TaxProfile',tax_profile_select);
           break;
       }
       row.append(col);

@@ -3,11 +3,11 @@ sr.fn.salor_bin.is = function() {
 }
 
 sr.fn.salor_bin.usePole = function() {
-  return sr.fn.salor_bin.is() && Register.customerscreen_mode == "pole";
+  return sr.fn.salor_bin.is() && sr.data.session.cash_register.customerscreen_mode == "pole";
 }
 
 sr.fn.salor_bin.useMimo = function() {
-  return sr.fn.salor_bin.is() && Register.customerscreen_mode == "mimo";
+  return sr.fn.salor_bin.is() && sr.data.session.cash_register.customerscreen_mode == "mimo";
 }
 
 sr.fn.salor_bin.onCashDrawerClose = function() {
@@ -15,8 +15,8 @@ sr.fn.salor_bin.onCashDrawerClose = function() {
 }
 
 sr.fn.salor_bin.stopDrawerObserver = function() {
-  if ( sr.fn.salor_bin.is() && Register.thermal_printer != "") {
-    Salor.stopDrawerObserver(Register.thermal_printer);
+  if ( sr.fn.salor_bin.is() && sr.data.session.cash_register.thermal_printer != "") {
+    Salor.stopDrawerObserver(sr.data.session.cash_register.thermal_printer);
   }
 }
 
@@ -24,10 +24,10 @@ sr.fn.salor_bin.stopDrawerObserver = function() {
 // always stops the drawer observer, then opens the drawer immediately and detects usage of salor-bin
 sr.fn.salor_bin.quickOpenDrawer = function() {
   sr.fn.salor_bin.stopDrawerObserver()
-  if ( Register.thermal_printer != '') {
+  if ( sr.data.session.cash_register.thermal_printer != '') {
     if (sr.fn.salor_bin.is()) {
-      if ( Register.salor_printer == true ) {
-        Salor.newOpenCashDrawer(Register.thermal_printer);
+      if ( sr.data.session.cash_register.salor_printer == true ) {
+        Salor.newOpenCashDrawer(sr.data.session.cash_register.thermal_printer);
       } else {
         $.get('/vendors/open_cash_drawer');
       }
@@ -47,7 +47,7 @@ sr.fn.salor_bin.shouldOpenDrawer = function() {
       return false;
     }
   });
-  var open_drawer = contains_cash_payment_method_item || Register.always_open_drawer == true;
+  var open_drawer = contains_cash_payment_method_item || sr.data.session.cash_register.always_open_drawer == true;
   return open_drawer;
 }
 
@@ -63,7 +63,7 @@ sr.fn.salor_bin.maybeObserveDrawer = function(delay) {
 }
 
 sr.fn.salor_bin.printOrder = function(id, callback) {
-   sr.fn.salor_bin.printUrl(Register.thermal_printer, '/orders/print_receipt', '&order_id=' + id, callback);
+   sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer, '/orders/print_receipt', '&order_id=' + id, callback);
 }
 
 sr.fn.salor_bin.printUrl = function(printer_path, url, param_string, callback) {
@@ -71,7 +71,7 @@ sr.fn.salor_bin.printUrl = function(printer_path, url, param_string, callback) {
   param_string = "?printurl=1&" + param_string;
   if (param_string.indexOf('download=true') != -1) {
     window.location = url + param_string;
-  } else if (sr.fn.salor_bin.is() && Register.salor_printer == true) {
+  } else if (sr.fn.salor_bin.is() && sr.data.session.cash_register.salor_printer == true) {
     sr.fn.salor_bin.stopDrawerObserver();
     Salor.printURL(printer_path, location.origin + url + param_string, callback);
   } else {
@@ -103,11 +103,11 @@ sr.fn.salor_bin.updateCustomerDisplay = function(order_id, item, show_change) {
       change = sprintf(" %s %6.2f", Region.number.currency.format.unit, change);
       blurb_line1 = (i18n.views.given + '       ').substring(0,9);
       blurb_line2 = (i18n.views.change + '       ').substring(0,9);
-      Salor.poleDancer(Register.pole_display, blurb_line1 + given + blurb_line2 + change );
+      Salor.poleDancer(sr.data.session.cash_register.pole_display, blurb_line1 + given + blurb_line2 + change );
     } else {
       // after item add
       output = sr.fn.salor_bin.formatPole(item['name'], item['price'], item['quantity'], item['weight_metric'], item['subtotal']); 
-      Salor.poleDancer(Register.pole_display, output );
+      Salor.poleDancer(sr.data.session.cash_register.pole_display, output );
     }
   }
 }
@@ -125,7 +125,7 @@ sr.fn.salor_bin.formatPole = function(name, price, quantity, weight_metric, tota
 sr.fn.salor_bin.observeDrawer = function(delay) {
   if (sr.fn.salor_bin.is()) {
     setTimeout(function() {
-      Salor.startDrawerObserver(Register.thermal_printer);
+      Salor.startDrawerObserver(sr.data.session.cash_register.thermal_printer);
     },
     delay);
   }
@@ -137,8 +137,8 @@ sr.fn.salor_bin.weighItem = function(id) {
     sr.fn.messages.displayMessages();
     return
   }
-  if (typeof Register.scale != 'undefined' && Register.scale != '') {
-    var weight = Salor.weigh(Register.scale, 0);
+  if (typeof sr.data.session.cash_register.scale != 'undefined' && sr.data.session.cash_register.scale != '') {
+    var weight = Salor.weigh(sr.data.session.cash_register.scale, 0);
     
   } else {
     messagesHash['prompts'].push("No scale configured. Please add a scale path to the CashRegister settings.");

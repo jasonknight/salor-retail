@@ -20,12 +20,12 @@ sr.fn.change.show_denominations = function() {
     var center = {x: $('#complete_order').position().left - 135,y: $('#complete_order').position().top + 15};
     var doc = 99; // radius
     var cpos = {x: center.x, y: center.y }; //because the first div needs to be on top
-    for (var i in i18n_pieces) {
-      p = $('<div id="complete_piece_'+ i18n_pieces[i] + '">'+sr.fn.math.toCurrency(i18n_pieces[i])+'</div>');
+    for (var i in i18n.pieces) {
+      p = $('<div id="complete_piece_'+ i18n.pieces[i] + '">'+sr.fn.math.toCurrency(i18n.pieces[i])+'</div>');
       p.css({height: '35px',width: '125px',position: 'absolute',top: cpos.y, left: cpos.x});
       p.addClass("pieces-button shadow");
         cpos = {x: cpos.x, y: cpos.y + 54};
-        p.attr('amount',i18n_pieces[i]);
+        p.attr('amount',i18n.pieces[i]);
         p.click(function () {
           var val = sr.fn.math.toFloat($(this).attr('amount'));
           $("#payment_amount_0").val( val );
@@ -43,17 +43,17 @@ sr.fn.change.get_highest = function(num) {
   if (num == 0) {
     return ['<%= t("views.forms.no_change") %>',0];
   }
-  var highest_piece = i18n_pieces.length - 1;
-  for (var i = i18n_pieces.length-1; i > 0; i--) {
-    if (i18n_pieces[i] >= num) {
+  var highest_piece = i18n.pieces.length - 1;
+  for (var i = i18n.pieces.length-1; i > 0; i--) {
+    if (i18n.pieces[i] >= num) {
       highest_piece = i-1;
     } else {
       break;
     }
   }
-  var times = Math.floor(num / i18n_pieces[highest_piece]);
-  var display_line = times + ' x ' + sr.fn.math.toCurrency(i18n_pieces[highest_piece]);
-  var remainder = sr.fn.math.roundNumber(num - (times * i18n_pieces[highest_piece]),2);
+  var times = Math.floor(num / i18n.pieces[highest_piece]);
+  var display_line = times + ' x ' + sr.fn.math.toCurrency(i18n.pieces[highest_piece]);
+  var remainder = sr.fn.math.roundNumber(num - (times * i18n.pieces[highest_piece]),2);
   return [display_line,remainder];
 }
 

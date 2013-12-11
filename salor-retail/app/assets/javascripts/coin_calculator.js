@@ -46,12 +46,12 @@ sr.fn.coin_calculator.displayTotal = function() {
   }
   $('.eod-calculator-difference').html(sr.fn.math.toCurrency(0));
   diff = 0;
-  if (Drawer.amount > calculator_total) {
-    diff = Math.round((Drawer.amount - calculator_total) * 100) / 100;
+  if (sr.data.session.drawer.amount > calculator_total) {
+    diff = Math.round((sr.data.session.drawer.amount - calculator_total) * 100) / 100;
     $('.eod-calculator-total').addClass('eod-error');
   }
-  if (calculator_total > Drawer.amount) {
-    diff = Math.round((calculator_total - Drawer.amount) * 100) / 100;
+  if (calculator_total > sr.data.session.drawer.amount) {
+    diff = Math.round((calculator_total - sr.data.session.drawer.amount) * 100) / 100;
     $('.eod-drawer-total').addClass('eod-error');
   }
   $('.eod-calculator-difference').html(sr.fn.math.toCurrency(diff));
