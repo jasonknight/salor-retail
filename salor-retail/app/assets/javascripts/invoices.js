@@ -42,7 +42,10 @@ sr.fn.invoice.editPm = function(pm) {
     var additional = shared.draw.select_option(options);
     additional.find('select').each(function () {make_select_widget($(this).attr('payment_method_name'),$(this));_set('pm',pm,$(this));});
     dialog.show();
-    dialog.offset({left: MX - 100, top: MY - 20});
+    dialog.offset({
+      left: sr.data.various.mouse_x - 100,
+      top: sr.data.various.mouse_y - 20
+    });
     shared.helpers.expand(dialog,0.10,'vertical');
     
   });

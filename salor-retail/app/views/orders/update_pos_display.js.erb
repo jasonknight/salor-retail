@@ -3,9 +3,9 @@
 
 
 // ---------- update order -------------
-Order = <%= raw @order.to_json %>;
+sr.data.pos_core.order = <%= raw @order.to_json %>;
 try {
-  sr.fn.pos_core.updateOrder(Order);
+  sr.fn.pos_core.updateOrder(sr.data.pos_core.order);
 } catch (err) {
   sr.fn.debug.sendEmail("Error in update_pos_display updateOrder", err);
 }
@@ -48,5 +48,5 @@ sr.fn.salor_bin.stopDrawerObserver();
 sr.data.messages.notices = [];
 sr.data.messages.alerts = [];
 sr.data.messages.prompts = [];
-<%= render :partial => '/shared/messagesjs.js' %>
+<%= render :partial => '/shared/messages.js' %>
 sr.fn.messages.displayMessages();

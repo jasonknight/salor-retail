@@ -101,11 +101,7 @@ function div_wrap(text,cls) {
 }
 
 
-var MX,MY;
-$(document).mousemove(function(e){
-  MX = e.pageX;
-  MY = e.pageY;
-});
+
 
 
 
@@ -339,7 +335,7 @@ function deletable(elem,type,callback) {
   
 }
 
-window.retail = {container: $(window)};
+sr.data.session.other.container = $(window);
 window.shared = {
   element: function (tag,attrs,content,append_to) {
     if (attrs["id"] && $('#' + attrs["id"]).length != 0) {
@@ -597,8 +593,8 @@ window.shared = {
       var dialog = shared.element('div',{id: id},'',$('body'));
       dialog.addClass('salor-dialog');
       dialog.css({
-        width: retail.container.width() * 0.50,
-        height: retail.container.height() * 0.40,
+        width: sr.data.session.other.container.width() * 0.50,
+        height: sr.data.session.other.container.height() * 0.40,
         'z-index':150
       });
       if (_get('existed',dialog)) {

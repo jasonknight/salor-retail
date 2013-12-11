@@ -2,7 +2,7 @@ sr.data.pos_core.highlight_attrs = ['sku', 'price', 'total'];
 
 sr.fn.pos_core.addItem = function(sku, additional_params) {
   if (sku == "") return
-  get('/orders/add_item_ajax?order_id=' + Order.id + '&sku=' + sku + additional_params);
+  get('/orders/add_item_ajax?order_id=' + sr.data.pos_core.order.id + '&sku=' + sku + additional_params);
   $('#main_sku_field').val('');
 }
 
@@ -340,10 +340,10 @@ sr.fn.pos_core.showOrderOptions = function() {
   var dialog = shared.draw.dialog(i18n.menu.configuration, "order_options");
   
   // Customer code
-  if (Order.customer) {
+  if (sr.data.pos_core.order.customer) {
     var elem = shared.element('div',{id:'pos_customer_div', align: 'center'},'',dialog);
-    obj = Order.customer;
-    lc = Order.loyalty_card;
+    obj = sr.data.pos_core.order.customer;
+    lc = sr.data.pos_core.order.loyalty_card;
     var name = $('<div><span class="customer_name"></span></div>');
     name.html(obj.first_name + ' ' + obj.last_name);
     var row = $('<div></div>');
@@ -360,8 +360,8 @@ sr.fn.pos_core.showOrderOptions = function() {
     sr.fn.inplace_edit.make(col);
     row.append(col);
     row.append('<span class="">'+i18n.activerecord.attributes.lc_points+'</span>');
-    var col = $('<span id="pos-order-points" class="order-points">' + Order.lc_points + '</span>');
-    col.attr('model_id',Order.id);
+    var col = $('<span id="pos-order-points" class="order-points">' + sr.data.pos_core.order.lc_points + '</span>');
+    col.attr('model_id',sr.data.pos_core.order.id);
     col.attr('klass','Order');
     col.attr('field','lc_points');
     col.addClass('editme');
@@ -377,7 +377,7 @@ sr.fn.pos_core.showOrderOptions = function() {
     click: function () {
       var id = '#option_order_tag_input';
       var value = $(id).val();
-      var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=tag&value=' + value;
+      var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=tag&value=' + value;
       get(string, 'showOrderOptions', function () {
         
       });
@@ -392,7 +392,7 @@ sr.fn.pos_core.showOrderOptions = function() {
   var options = {
     name: 'order_tag',
     title: i18n.activerecord.attributes.tag,
-    value: Order.tag,
+    value: sr.data.pos_core.order.tag,
     append_to: dialog
   };
   var tag = shared.draw.option(options,callbacks);
@@ -403,14 +403,14 @@ sr.fn.pos_core.showOrderOptions = function() {
     click: function () {
       var id = '#option_order_rebate_input';
       var value = $(id).val();
-      var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=rebate&value=' + value;
+      var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=rebate&value=' + value;
       get(string, 'showOrderOptions');
     }
   };
   var options = {
     name: 'order_rebate',
     title: i18n.activerecord.attributes.rebate,
-    value: Order.rebate,
+    value: sr.data.pos_core.order.rebate,
     append_to: dialog
   };
   var rebate = shared.draw.option(options,callbacks);
@@ -435,13 +435,13 @@ sr.fn.pos_core.showOrderOptions = function() {
           return stys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=tax_profile_id&value=' + $(this).val();
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=tax_profile_id&value=' + $(this).val();
           get(string, 'showOrderOptions->tax_profile', function () {
             //
           });
         },
         attributes: {name: i18n.activerecord.models.tax_profile.one},
-        value: Order.tax_profile_id,
+        value: sr.data.pos_core.order.tax_profile_id,
       }
     ]
   };
@@ -453,12 +453,12 @@ sr.fn.pos_core.showOrderOptions = function() {
   var options = {
     name: 'is_proforma',
     title: i18n.activerecord.attributes.is_proforma,
-    value: Order.is_proforma,
+    value: sr.data.pos_core.order.is_proforma,
     append_to: dialog
   };
   var callbacks = {
     change: function () {
-      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js");
+      get("/vendors/edit_field_on_child?id=" + sr.data.pos_core.order.id + "&klass=Order&field=toggle_is_proforma&value=x","ordersjs.js");
       }
   };
   var proforma_check = shared.draw.check_option(options,callbacks);
@@ -467,12 +467,12 @@ sr.fn.pos_core.showOrderOptions = function() {
   var options = {
     name: 'is_buy_order',
     title: i18n.menu.buy_order,
-    value: Order.buy_order,
+    value: sr.data.pos_core.order.buy_order,
     append_to: dialog
   };
   var callbacks = {
     change: function () {
-      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js");
+      get("/vendors/edit_field_on_child?id=" + sr.data.pos_core.order.id + "&klass=Order&field=toggle_buy_order&value=x","ordersjs.js");
     }
   };
   var buy_order_check = shared.draw.check_option(options,callbacks);
@@ -482,12 +482,12 @@ sr.fn.pos_core.showOrderOptions = function() {
   var options = {
     name: 'is_subscription',
     title: i18n.menu.subscription,
-    value: Order.subscription,
+    value: sr.data.pos_core.order.subscription,
     append_to: dialog
   };
   var callbacks = {
     change: function () {
-      get("/vendors/edit_field_on_child?id=" + Order.id + "&klass=Order&field=toggle_subscription&value=x","ordersjs.js");
+      get("/vendors/edit_field_on_child?id=" + sr.data.pos_core.order.id + "&klass=Order&field=toggle_subscription&value=x","ordersjs.js");
     }
   };
   var buy_order_check = shared.draw.check_option(options,callbacks);
@@ -512,13 +512,13 @@ sr.fn.pos_core.showOrderOptions = function() {
           return stys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=sale_type_id&value=' + $(this).val();
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=sale_type_id&value=' + $(this).val();
           get(string, 'showOrderOptions->sale_type', function () {
             //
           });
         },
         attributes: {name: i18n.activerecord.models.sale_type.one},
-        value: Order.sale_type_id,
+        value: sr.data.pos_core.order.sale_type_id,
       }, 
       // end sale_types
       {
@@ -533,13 +533,13 @@ sr.fn.pos_core.showOrderOptions = function() {
           return ctys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=origin_country_id&value=' + $(this).val();
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=origin_country_id&value=' + $(this).val();
           get(string, 'showOrderOptions->origin_country', function () {
             //
           });
         },
         attributes: {name: i18n.activerecord.models.country.one},
-        value: Order.origin_country_id,
+        value: sr.data.pos_core.order.origin_country_id,
       }, 
       // end origin country
       {
@@ -554,13 +554,13 @@ sr.fn.pos_core.showOrderOptions = function() {
           return ctys;
         })(),
         change: function () {
-          var string = '/vendors/edit_field_on_child?id='+ Order.id +'&klass=Order&field=destination_country_id&value=' + $(this).val();
+          var string = '/vendors/edit_field_on_child?id='+ sr.data.pos_core.order.id +'&klass=Order&field=destination_country_id&value=' + $(this).val();
           get(string, 'showOrderOptions->destination_country', function () {
             //
           });
         },
         attributes: {name: i18n.activerecord.models.country.one},
-        value: Order.destination_country_id,
+        value: sr.data.pos_core.order.destination_country_id,
       }, 
     ]
   };
@@ -782,6 +782,6 @@ sr.fn.pos_core.highlight = function(elem) {
 }
 
 sr.fn.pos_core.clearOrder = function() {
-  $.get('/orders/clear?order_id=' + Order.id);
+  $.get('/orders/clear?order_id=' + sr.data.pos_core.order.id);
 }
 

@@ -9,14 +9,19 @@ sr.fn.payment.add = function() {
   var sel = $('<select name="payment_methods[][internal_type]" id="' + "payment_type_" + numMethods + '" class="payment-method">'+sr.fn.payment.getOptions()+'</select>');
   sel.on('change', function(){
     sr.fn.change.display_change();
-    sr.fn.debug.ajaxLog({log_action:'select_payment_method', button_id:sel.attr('id'), value:sel.val(), order_id:Order.id});
+    sr.fn.debug.ajaxLog({
+      log_action: 'select_payment_method',
+      button_id: sel.attr('id'),
+      value: sel.val(),
+      order_id: sr.data.pos_core.order.id
+    });
   });
   $(sel)[0].selectedIndex = numMethods;
   //---
   
   
   // amount field
-  var rest_value = Order.total - sr.fn.payment.getTotal();
+  var rest_value = sr.data.pos_core.order.total - sr.fn.payment.getTotal();
   var amount = $('<input type="text" name="payment_methods[][amount]" id="' + "payment_amount_" + numMethods + '" class="payment-amount text-input keyboardable-int" value="" size="5" /> ');
   amount.on("keyup",function (event) {
     if (event.keyCode == 13) {
@@ -34,7 +39,11 @@ sr.fn.payment.add = function() {
   // ---
   
   
-  sr.fn.debug.ajaxLog({log_action:'add_payment_method', order_id:Order.id, value:sel.val()});
+  sr.fn.debug.ajaxLog({
+    log_action: 'add_payment_method',
+    order_id: sr.data.pos_core.order.id,
+    value: sel.val()
+  });
   
   $("#payment_methods").append(sel).append(amount);
   $("#payment_methods").append('<br />');

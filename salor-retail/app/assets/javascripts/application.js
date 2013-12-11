@@ -24,7 +24,6 @@
 //= require focus
 //= require customers
 //= require inplace_edit
-//= require keypress
 //= require onscreenkeyboard
 //= require salor_bin
 //= require inventory
@@ -40,6 +39,7 @@
 //= require complete-order-change
 //= require complete-order
 //= require drawer-transaction
+//= require session
 //= require jquery.modcoder.excolor
 //= require jquery.keyboard
 //= require jquery.checkbox

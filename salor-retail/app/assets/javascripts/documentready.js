@@ -25,6 +25,7 @@ var sr = {
     search_pos: {},
     shipments: {},
     shippers: {},
+    session: {},
     
     
   },
@@ -48,6 +49,7 @@ var sr = {
     },
     search_pos: {},
     shipments: {},
+    various: {},
   },
 }
 
@@ -151,6 +153,11 @@ $(function () {
   sr.fn.onscreen_keyboard.setup();
   sr.fn.search_generic.setup();
   sr.fn.messages.displayMessages();
+  
+  $(document).mousemove(function(e){
+    sr.data.various.mouse_x = e.pageX;
+    sr.data.various.mouse_y = e.pageY;
+  });
   
   // don't run this twice, a known jQuery bug
   ready_ran = true;

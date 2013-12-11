@@ -1,18 +1,25 @@
 sr.fn.change.display_change = function(called_from) {
   var paymentTotal = sr.fn.payment.getTotal();
-  var change = paymentTotal - Order.total;
+  var change = paymentTotal - sr.data.pos_core.order.total;
   change = sr.fn.math.round(change,2);
-  if (change < 0 && Order.total > 0 && !Order.is_proforma) {
+  if (change < 0 && sr.data.pos_core.order.total > 0 && !sr.data.pos_core.order.is_proforma) {
     change = 0;
     sr.fn.complete.allowSending(false);
   } else {
-    if (Order.is_proforma) {
+    if (sr.data.pos_core.order.is_proforma) {
       change = 0;
     }
     sr.fn.complete.allowSending(true);
   }
   $('#complete_order_change').html(sr.fn.math.toCurrency(change));
-  sr.fn.debug.ajaxLog({log_action:'display_change', order_id:Order.id, paymentTotal:paymentTotal, ototal:Order.total, change:change, called_from:called_from});
+  sr.fn.debug.ajaxLog({
+    log_action: 'display_change',
+    order_id: sr.data.pos_core.order.id,
+    paymentTotal: paymentTotal,
+    ototal: sr.data.pos_core.order.total,
+    change: change,
+    called_from: called_from
+  });
   return change;
 }
 
@@ -30,7 +37,11 @@ sr.fn.change.show_denominations = function() {
           var val = sr.fn.math.toFloat($(this).attr('amount'));
           $("#payment_amount_0").val( val );
           sr.fn.change.display_change('pieces-button ' + val);
-          sr.fn.debug.ajaxLog({log_action:'pieces-button', value:val, order_id:Order.id});
+          sr.fn.debug.ajaxLog({
+            log_action: 'pieces-button',
+            value: val,
+            order_id: sr.data.pos_core.order.id
+          });
         } );
         $('body').append(p);
     }
