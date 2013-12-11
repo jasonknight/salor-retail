@@ -61,11 +61,12 @@ class VendorsController < ApplicationController
   end
 
   def new_drawer_transaction
+    user = @current_vendor.users.visible.find_by_id(params[:user_id])
     amount_cents = SalorBase.string_to_float(params[:transaction][:amount], :locale => @region) * 100
     if params[:transaction][:trans_type] == "payout"
       amount_cents *= -1
     end
-    @dt = @current_user.drawer_transact(amount_cents, @current_register, params[:transaction][:tag], params[:transaction][:notes])
+    @dt = user.drawer_transact(amount_cents, @current_register, params[:transaction][:tag], params[:transaction][:notes])
   end
 
   def open_cash_drawer

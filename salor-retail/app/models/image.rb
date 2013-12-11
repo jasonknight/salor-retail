@@ -135,6 +135,7 @@ class Image < ActiveRecord::Base
   def process
     if @file_data
       # Delete existing image dirs
+      
       VERSIONS.each { |ver| FileUtils.rm_rf(plot_dir(ver)) if File.exists?(plot_dir(ver)) }
       create_directory('original')
       # Save temp file

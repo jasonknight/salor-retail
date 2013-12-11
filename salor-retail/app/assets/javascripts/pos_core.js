@@ -66,7 +66,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
   
   var row_id = 'order_item_' + item.id;
   var base_id = sr.fn.pos_core.getOrderItemId(item);
-  var row = create_dom_element('div', {id:row_id, model_id:item.id, item_id:item.item_id, clss:base_id }, '');
+  var row = shared.create.domElement('div', {id:row_id, model_id:item.id, item_id:item.item_id, clss:base_id }, '');
   
    _set('item',item,row);
    
@@ -76,7 +76,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
     var col_id = base_id + '_' + attr + '_inp';
     var col_class1 = base_id + '-' + attr;
     var col_class2 = 'pos-item-' + attr;
-    var col = create_dom_element('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'OrderItem', field:attr}, '');
+    var col = shared.create.domElement('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'OrderItem', field:attr}, '');
     col.addClass(col_class1);
     col.addClass(col_class2);
     
@@ -197,7 +197,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
           row.append(down);
           down.on('mousedown', function () {
             var html = $('.' + base_id + '-quantity').html();
-            console.log(html, sr.fn.math.toFloat(html), sr.fn.math.toDelimited(html));
+            //console.log(html, sr.fn.math.toFloat(html), sr.fn.math.toDelimited(html));
             var v = sr.fn.math.toDelimited(sr.fn.math.toFloat($('.' + base_id + '-quantity').html()) - 1);
             var string = '/vendors/edit_field_on_child?id=' +
             item.id +'&klass=OrderItem' +
@@ -233,7 +233,9 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
         }
     }
     
+    
     if (attr == "price" && item.must_change_price && item.price == 0 ) {
+      //console.log("XXXXXXXX", attr, item);
       setTimeout(sr.fn.pos_core.triggerClick(col), 50);
     }
     
@@ -255,7 +257,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
 }
 
 // this is a closure needed to remember the value of col in the above loop. Without closure, the variable col would change before the timout triggers. The timeout is needed for the onscreen keyboard.
-var trigger_click = function(col) {
+sr.fn.pos_core.triggerClick = function(col) {
   return function() {
     col.trigger('click');
   };

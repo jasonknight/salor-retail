@@ -112,5 +112,5 @@
                   %th= t 'views.quantity'
                 - item_stocks.each do |is|
                   %tr
-                    %td= is.location.name
+                    %td= is.location.name if is.location
                     %td= is.quantity

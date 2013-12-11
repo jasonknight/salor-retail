@@ -23,7 +23,7 @@
       .cool-button-left{ :onclick => "print(true);" }= t '.download'
 
 :javascript
-  window.setTimeout("set_focus()", 1000);
+  setTimeout("set_focus()", 1000);
   
   function set_focus() {
     $('#skus')[0].focus();
@@ -32,9 +32,9 @@
   function print(download) {
     var skus = $('#skus').val().split("\n");
     if($("#label:checked").val() == 'label') {
-      sr.fn.salor_bin.printUrl(Register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val() + '&download=' + download);
+      sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val() + '&download=' + download);
     }
     if($("#sticker:checked").val() == 'sticker') {
-      sr.fn.salor_bin.printUrl(Register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val() + '&download=' + download);
+      sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val() + '&download=' + download);
     }
   }

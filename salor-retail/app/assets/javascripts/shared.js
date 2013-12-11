@@ -1,81 +1,3 @@
-function get(url, calledFrom, sFunc, type, eFunc) {
-  if (type == null) type = 'get';
-  type = type.toLowerCase();
-  if (type !== 'get' && type != 'post') type = 'get';
-  if (sFunc == null) sFunc = function(){};
-  if (eFunc == null) eFunc = function(){};
-  
-  var datestamp = new Date().getTime();
-  sr.data.complete.sendqueue.push(datestamp);
-  sr.fn.complete.disablePrintReceiptButton();
-
-  $.ajax({
-    url: url,
-    success: sFunc,
-    complete: function () {
-      var idx = sr.data.complete.sendqueue.indexOf(datestamp);
-      sr.data.complete.sendqueue.splice(idx, 1);
-      sr.fn.complete.enablePrintReceiptButton();
-    },
-    error: function(jqXHR, textStatus, errorThrown) {
-      eFunc();
-      sr.data.messages.prompts.push("Error during request to" + url + "<br><br>Please contact customer service.");
-      sr.fn.messages.displayMessages();
-    }
-  });
-}
-
-
-
-function checkLength( o, n, min, max ) {
-  if ( o.val().length > max || o.val().length < min ) {
-    o.addClass( "ui-state-error" );
-    updateTips( "Length of " + n + " must be between " +
-    min + " and " + max + "." );
-    return false;
-  } else {
-    return true;
-  }
-}
-
-function updateTips( t ) {
-  $(".validateTips")
-  .text( t )
-  .addClass( "ui-state-highlight" );
-}
-
-
-
-
-function _get(name,context) {
-  if (context) {
-    // if you pass in a 3rd argument, which should be an html element, then that is set as teh context.
-    // this ensures garbage collection of the values when that element is removed.
-    return $.data(context[0],name);
-  } else {
-    return $.data(document.body,name);
-  }
-}
-function _set(name,value,context) {
-  if (context) {
-    // if you pass in a 3rd argument, which should be an html element, then that is set as teh context.
-    // this ensures garbage collection of the values when that element is removed.
-    return $.data(context[0],name,value);
-  } else {
-    return $.data(document.body,name,value);
-  } 
-}
-
-
-
-
-
-
-
-
-
-
-
 
 sr.data.session.other.container = $(window);
 
@@ -86,7 +8,7 @@ var shared = {
       _set('existed',true,elem);
       return elem;
     } else {
-      return create_dom_element(tag,attrs,content,append_to)
+      return shared.create.domElement(tag,attrs,content,append_to)
     }
   },
   makeSelectWidget: function(name,elem) {
@@ -425,7 +347,7 @@ var shared = {
     }
   },
   create: {
-    domElement: function((tag,attrs,content,append_to) {
+    domElement: function(tag,attrs,content,append_to) {
       var element = $(document.createElement(tag));
       if ( typeof attrs.clss != 'undefined' ) {
         //class is a reserved word
@@ -443,19 +365,19 @@ var shared = {
       return element;
     },
     plus_button: function (callback) {
-      var button = create_dom_element('div',{},'','');
+      var button = shared.create.domElement('div',{},'','');
       button.addClass('add-button');
       button.on('mousedown',callback);
       return button;
     },
     finish_button: function (callback) {
-      var button = create_dom_element('div',{},'','');
+      var button = shared.create.domElement('div',{},'','');
       button.addClass('finish-button');
       button.on('mousedown',callback);
       return button;
     },
     dialog_button: function (caption, callback) {
-      var button = create_dom_element('div',{},caption,'');
+      var button = shared.create.domElement('div',{},caption,'');
       button.addClass('dialog-button');
       button.on('mousedown',callback);
       return button;
@@ -472,7 +394,7 @@ var shared = {
     if (!type)
       type = 'right';
     if ($('#' + elem.attr('id') + '_delete').length == 0) {
-      var del_button = create_dom_element('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
+      var del_button = shared.create.domElement('div',{id: elem.attr('id') + '_delete', 'class':'delete', 'target': elem.attr('id')},'X',elem);
       if (!callback) {
         del_button.on('click',function () {
           $('#' + $(this).attr('target')).slideUp();
@@ -511,10 +433,10 @@ var shared = {
         dialog.html('');
         _set('existed',false,dialog);
       }
-      var pad_div = create_dom_element('h2',{},title,dialog);
+      var pad_div = shared.create.domElement('h2',{},title,dialog);
       dialog.append('<hr />');
       pad_div.addClass('header');
-      var contents = create_dom_element('div',{},text,dialog);
+      var contents = shared.create.domElement('div',{},text,dialog);
       contents.addClass('contents');
       shared.makeDeletable(dialog,function () { $(this).parent().remove()});
       shared.helpers.center(dialog, $(window));

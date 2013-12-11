@@ -280,7 +280,8 @@ class Order < ActiveRecord::Base
     gcs.each do |gc|
       i = gc.item
       i.gift_card_amount += gc.price # gc.price is always negative, so this is actually a subtraction
-      i.save
+      i.must_change_price = ! i.gift_card_amount.zero?
+      i.save!
     end
   end
   
@@ -1425,6 +1426,8 @@ class Order < ActiveRecord::Base
   
   def subscription_start=(start_date)
     write_attribute :subscription_start, start_date
+    return if start_date.nil?
+    
     if self.subscription_next.nil?
       self.subscription_next = self.subscription_start
     else

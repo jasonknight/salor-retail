@@ -1166,7 +1166,7 @@ class Vendor < ActiveRecord::Base
       output += Report.to_csv(order_items, OrderItem, attributes)
     when 'Item'
       items = self.items.visible
-      attributes = "id;sku;name;description;location.name;category.name"
+      attributes = "id;sku;name;description;price_cents;location.name;category.name;tax_profile.value;quantity;quantity_sold;shipper.name;shipper_sku;packaging_unit"
       output = ''
       output += "#{attributes}\n"
       output += Report.to_csv(items, Item, attributes)

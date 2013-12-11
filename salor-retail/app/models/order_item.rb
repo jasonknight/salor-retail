@@ -376,14 +376,14 @@ class OrderItem < ActiveRecord::Base
       
       # coitem is the OrderItem to which the coupon acts upon
       coitem = self.order.order_items.visible.find_by_sku(item.coupon_applies)
-      log_action "coitem was not found" and return if coitem.nil?
+      log_action "apply_coupon: coitem was not found" and return if coitem.nil?
 
       unless coitem.coupon_amount.zero? then
-        log_action "This item is a coupon, but a coupon_amount has already been set"
+        log_action "apply_coupon: This item is a coupon, but a coupon_amount has already been set"
         return
       end
       
-      log_action "Starting to apply coupons. total before is #{ coitem.total_cents }"
+      log_action "apply_coupon: Starting to apply coupons. total before is #{ coitem.total_cents }"
       
       ctype = self.item.coupon_type
       if ctype == 1
@@ -394,26 +394,33 @@ class OrderItem < ActiveRecord::Base
         else
           coitem.coupon_amount_cents = coitem.gross.fractional * factor
         end
-        log_action "Applying Percent rebate coupon: price_cents is #{ self.price_cents }, factor is #{ factor }, coupon_amount_cents is #{ coitem.coupon_amount_cents }"
+        log_action "apply_coupon: Applying Percent rebate coupon: price_cents is #{ self.price_cents }, factor is #{ factor }, coupon_amount_cents is #{ coitem.coupon_amount_cents }"
       elsif ctype == 2
         # fixed amount
         coitem.coupon_amount_cents = self.price_cents
-        log_action "Applying Fixed amount coupon: coupon_amount_cents is #{ coitem.coupon_amount_cents }"
+        log_action "apply_coupon: Applying Fixed amount coupon: coupon_amount_cents is #{ coitem.coupon_amount_cents }"
       elsif ctype == 3
         # buy x get y free
-        log_action "Applying B1G1"
+        log_action "apply_coupon: Applying B1G1"
         x = 2
         y = 1
         if coitem.quantity >= x
-          coitem.coupon_amount_cents = y * coitem.total_cents / coitem.quantity
-          log_action "Applying B1G1 coupon: coupon_amount_cents is #{ coitem.coupon_amount_cents }"
+          if self.vendor.net_prices
+            coitem.coupon_amount_cents = y * coitem.net.fractional / coitem.quantity
+          else
+            coitem.coupon_amount_cents = y * coitem.gross.fractional / coitem.quantity
+          end
+          log_action "apply_coupon: Applying B1G1 coupon: coupon_amount_cents is #{ coitem.coupon_amount_cents }"
         end
       end
-      coitem.total_cents -= coitem.coupon_amount_cents
-      log_action "OrderItem Total after coupon applied is: #{coitem.total_cents} and coupon_amount is #{coitem.coupon_amount_cents}"
-
+      if self.vendor.net_prices
+        coitem.total = coitem.net - coitem.coupon_amount
+      else
+        coitem.total = coitem.gross - coitem.coupon_amount
+      end
+      log_action "apply_coupon: OrderItem Total after coupon applied is: #{coitem.total_cents} and coupon_amount is #{coitem.coupon_amount_cents}"
       coitem.calculate_tax
-      coitem.save
+      coitem.save!
     else
       self.total -= self.coupon_amount
     end

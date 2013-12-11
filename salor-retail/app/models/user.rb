@@ -189,11 +189,12 @@ class User < ActiveRecord::Base
     end
   end
   
-  def start_day
+  def start_day(current_vendor)
     login = self.user_logins.last
     return if login and login.logout.nil?
     login = UserLogin.new
     login.company = self.company
+    login.vendor = current_vendor
     login.user = self
     login.hourly_rate = self.hourly_rate
     login.login = Time.now

@@ -34,6 +34,7 @@
 //= require shippers
 //= require coin_calculator
 //= require search
+//= require globals
 //= require messages
 //= require complete-order-payment
 //= require complete-order-change

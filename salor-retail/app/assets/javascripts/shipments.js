@@ -60,7 +60,7 @@ sr.fn.shipments = {
     
     var row_id = 'shipment_item_' + item.id;
     var base_id = sr.fn.shipments.getShipmentItemId(item);
-    var row = create_dom_element('div', {id:row_id, model_id:item.id, clss:base_id }, '');
+    var row = shared.create.domElement('div', {id:row_id, model_id:item.id, clss:base_id }, '');
     
     _set('item', item, row);
     
@@ -70,7 +70,7 @@ sr.fn.shipments = {
       var col_id = base_id + '_' + field + '_inp';
       var col_class1 = base_id + '-' + field;
       var col_class2 = 'pos-item-' + field;
-      var col = create_dom_element('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'ShipmentItem', field:field}, '');
+      var col = shared.create.domElement('div', {clss:'table-cell table-column pos-item-attr', id:col_id, model_id:item.id, klass:'ShipmentItem', field:field}, '');
       col.addClass(col_class1);
       col.addClass(col_class2);
       

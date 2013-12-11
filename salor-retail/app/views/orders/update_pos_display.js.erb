@@ -22,10 +22,9 @@ try {
   sr.fn.debug.sendEmail("Error in update_pos_display updateOrderItems", err);
 }
 
-// ------- dynamic gift card autoprinting, see
-// VendorsController#edit_field_on_child---------
+// --- dynamic gift card autoprinting, see VendorsController#edit_field_on_child-----
 <% if @gift_card_item_id_for_print %>
-  sr.fn.salor_bin.printUrl(Register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
+  sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=<%= @gift_card_item_id_for_print %>&type=sticker&style=default')
 <% end %>
 
 // ---------- other stuff ----------
@@ -33,10 +32,14 @@ sr.fn.focus.set($('#main_sku_field'));
 sr.fn.change.display_change('update_pos_display');
 sr.fn.salor_bin.updateCustomerDisplay(<%= @order.id %>, {}, false);
 
-
-
-<% if @order_items.any? and @order_items.first.price.zero? %>
+<% 
+   current_order_item = @order_items.first
+   if @order_items.any? and
+      current_order_item.price.zero? and
+      current_order_item.behavior != "coupon"
+%>
   sr.fn.salor_bin.playSound('medium_warning');
+  sr.fn.messages.displayMessage("alert", i18n.system.errors.item_price_is_zero);
 <% elsif @order_items.any? %>
   sr.fn.salor_bin.playSound('drop2');
 <% end %>

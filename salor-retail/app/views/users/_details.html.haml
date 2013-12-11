@@ -9,13 +9,13 @@
     %td
   %tr
     %td= I18n.t('activerecord.models.drawer.one')
-    %td{:align=>"right"}= number_to_currency(@user.get_drawer.amount)
+    %td{:align=>"right"}= humanized_money_with_symbol @user.get_drawer.amount
   %tr
     %td= I18n.t('activerecord.models.order.other')
-    %td{:align=>"right"}= @user.orders.where(:created_at => @from..@to, :paid => 1).count
+    %td{:align=>"right"}= @user.orders.where(:completed_at => @from..@to, :paid => 1).count
   %tr
     %td= I18n.t('activerecord.attributes.cash_made')
-    %td{:align=>"right"}= number_to_currency @user.orders.where(:created_at => @from..@to, :paid => 1).sum(:total_cents)
+    %td{:align=>"right"}= humanized_money_with_symbol Money.new(@user.orders.where(:completed_at => @from..@to, :paid => 1).sum(:total_cents), @current_vendor.currency)
   %tr
     %td= I18n.t('activerecord.attributes.rebate')
-    %td{:align=>"right"}= number_to_currency @user.order_items.where(:created_at => @from..@to).collect {|oi|  oi.order.paid == 1 ? oi.rebate_amount : 0 }.sum
+    %td{:align=>"right"}= humanized_money_with_symbol Money.new(@user.order_items.where(:completed_at => @from..@to).sum(:rebate_amount_cents), @current_vendor.currency)
