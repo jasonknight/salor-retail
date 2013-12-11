@@ -25,6 +25,10 @@ function get(url, calledFrom, sFunc, type, eFunc) {
   });
 }
 
+function onCashDrawerClose() {
+  sr.fn.complete.hidePopup();
+}
+
 function checkLength( o, n, min, max ) {
   if ( o.val().length > max || o.val().length < min ) {
     o.addClass( "ui-state-error" );

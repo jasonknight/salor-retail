@@ -10,10 +10,6 @@ sr.fn.salor_bin.useMimo = function() {
   return sr.fn.salor_bin.is() && sr.data.session.cash_register.customerscreen_mode == "mimo";
 }
 
-sr.fn.salor_bin.onCashDrawerClose = function() {
-  sr.fn.complete.hidePopup();
-}
-
 sr.fn.salor_bin.stopDrawerObserver = function() {
   if ( sr.fn.salor_bin.is() && sr.data.session.cash_register.thermal_printer != "") {
     Salor.stopDrawerObserver(sr.data.session.cash_register.thermal_printer);
@@ -53,12 +49,12 @@ sr.fn.salor_bin.shouldOpenDrawer = function() {
 
 // opens the drawer only if customer has given cash or if the register configuration tells to open it always. no drawer observation is started at this point, since it would block subsequent printing.
 sr.fn.salor_bin.maybeOpenDrawer = function() {
-  console.log("conditionally_open_drawer");
+  console.log("sr.fn.salor_bin.maybeOpenDrawer");
   if ( sr.fn.salor_bin.shouldOpenDrawer() == true ) sr.fn.salor_bin.quickOpenDrawer();
 }
 
 sr.fn.salor_bin.maybeObserveDrawer = function(delay) {
-  console.log("conditionally_observe_drawer");
+  console.log("sr.fn.salor_bin.maybeObserveDrawer");
   if ( sr.fn.salor_bin.shouldOpenDrawer() == true ) sr.fn.salor_bin.observeDrawer(delay);
 }
 
@@ -75,7 +71,9 @@ sr.fn.salor_bin.printUrl = function(printer_path, url, param_string, callback) {
     sr.fn.salor_bin.stopDrawerObserver();
     Salor.printURL(printer_path, location.origin + url + param_string, callback);
   } else {
-    $.get(url + param_string, callback);
+    $.get(url + param_string, function() {
+      eval(callback);
+    });
   }
 }
 

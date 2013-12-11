@@ -153,9 +153,9 @@
             </td>
             <td valign="middle" align="center"> 
                   <div class="new-item-field">
-                  <%= salor_icon(:sticker_printer, {:onclick => "sr.fn.salor_bin.printUrl(Register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
+                  <%= salor_icon(:sticker_printer, {:onclick => "sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
         &nbsp;&nbsp;&nbsp;
-                  <%= salor_icon(:thermal_printer,{ :onclick => "sr.fn.salor_bin.printUrl(Register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
+                  <%= salor_icon(:thermal_printer,{ :onclick => "sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
                   </div>
                 <div class="clear">
                   &nbsp;

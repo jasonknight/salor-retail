@@ -1000,7 +1000,7 @@ class Vendor < ActiveRecord::Base
         end
       end
     elsif model == 'customer'
-      @customers = self.customers.visible.where(:id => params[:id])
+      @customers = self.company.customers.visible.where(:id => params[:id])
     end
     
     @currency = I18n.t('number.currency.format.friendly_unit', :locale => self.region)
