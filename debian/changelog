@@ -1,9 +1,77 @@
+salor-retail (4.0.2.35) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * item csv download
+
+  [ Jason Knight ]
+  * Adding plugin functionality
+
+  [ Michael Franzl ]
+  * cleanup
+  * adapted plugin paths for SAAS, colorful log ouput for plugins
+
+  [ Jason Knight ]
+  * Working plugin for WC
+  * Render edit on edit, instead of redirect to list for items
+
+  [ Michael Franzl ]
+  * add_item
+  * rename
+  * updateOrder
+  * change in script
+  * more
+  * more
+  * more
+  * more
+  * more
+  * more
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * working
+  * salor-bin
+  * more
+  * working
+  * shipments working
+  * working
+  * removed underscore since not used
+  * more
+  * more
+  * working
+  * messages stuff
+  * js error
+  * working
+  * fixes
+  * working
+  * working
+  * all working, tested
+  * chmod
+  * updated tranlations
+  * fixed stuff for rails and salor-bin printing and drawer detection
+
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 11 Dec 2013 12:45:21 +0100
+
 salor-retail (4.0.2.34) unstable; urgency=low
 
   * JS printing timing issue, login/logout issue
   * comments
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 08 Dec 2013 14:00:29 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 08 Dec 2013 14:00:29 +0100
 
 salor-retail (4.0.2.33) unstable; urgency=low
 
@@ -12,13 +80,13 @@ salor-retail (4.0.2.33) unstable; urgency=low
   * ipad js fix
   * various small improvements
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 08 Dec 2013 11:01:40 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 08 Dec 2013 11:01:40 +0100
 
 salor-retail (4.0.2.32) unstable; urgency=low
 
   * order deletion fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 04 Nov 2013 12:16:54 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 04 Nov 2013 12:16:54 +0100
 
 salor-retail (4.0.2.31) unstable; urgency=low
 
@@ -39,19 +107,19 @@ salor-retail (4.0.2.31) unstable; urgency=low
   * build
   * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 28 Oct 2013 11:18:43 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 28 Oct 2013 11:18:43 +0100
 
 salor-retail (4.0.2.30) unstable; urgency=low
 
   * invoice view fix, add unpaid to financial report
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 18 Aug 2013 17:32:53 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 18 Aug 2013 17:32:53 +0200
 
 salor-retail (4.0.2.29) unstable; urgency=low
 
   * small improvements
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 15 Aug 2013 12:17:15 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 15 Aug 2013 12:17:15 +0200
 
 salor-retail (4.0.2.28) unstable; urgency=low
 
@@ -63,13 +131,13 @@ salor-retail (4.0.2.28) unstable; urgency=low
   * js fix
   * various fixed discovered by making screencasts
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 09 Aug 2013 17:45:14 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 09 Aug 2013 17:45:14 +0200
 
 salor-retail (4.0.2.27) unstable; urgency=low
 
   * weighing and customer screen fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 05 Aug 2013 19:58:16 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 05 Aug 2013 19:58:16 +0200
 
 salor-retail (4.0.2.26) unstable; urgency=low
 
@@ -81,13 +149,13 @@ salor-retail (4.0.2.26) unstable; urgency=low
   * weighing fix
   * removed dangerous code from seeds.rb
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 05 Aug 2013 14:06:20 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 05 Aug 2013 14:06:20 +0200
 
 salor-retail (4.0.2.25) unstable; urgency=low
 
   * i18n of numbers, style improvements, various fixes
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 05 Aug 2013 13:40:48 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 05 Aug 2013 13:40:48 +0200
 
 salor-retail (4.0.2.24) unstable; urgency=low
 
@@ -98,7 +166,7 @@ salor-retail (4.0.2.24) unstable; urgency=low
   * style improvements for small screen
   * enabled messaging system for login screen and add_item_ajax
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 05 Aug 2013 09:00:03 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 05 Aug 2013 09:00:03 +0200
 
 salor-retail (4.0.2.23) unstable; urgency=low
 
@@ -109,31 +177,31 @@ salor-retail (4.0.2.23) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 04 Aug 2013 11:15:52 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 04 Aug 2013 11:15:52 -0400
 
 salor-retail (4.0.2.22) unstable; urgency=low
 
   * pmi edit on orders/print
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 16:15:15 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 04 Aug 2013 16:15:15 +0200
 
 salor-retail (4.0.2.21) unstable; urgency=low
 
   * userLogin fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 14:10:10 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 04 Aug 2013 14:10:10 +0200
 
 salor-retail (4.0.2.20) unstable; urgency=low
 
   * validations, fiscal report, remote service, pagination etc.
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 04 Aug 2013 10:50:38 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 04 Aug 2013 10:50:38 +0200
 
 salor-retail (4.0.2.19) unstable; urgency=low
 
   * various order fixes
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 02 Aug 2013 20:59:37 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 02 Aug 2013 20:59:37 +0200
 
 salor-retail (4.0.2.18) unstable; urgency=low
 
@@ -141,19 +209,19 @@ salor-retail (4.0.2.18) unstable; urgency=low
   * style adaptions and migration for subscription orders
   * recurring subscriptions done
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 02 Aug 2013 14:23:31 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 02 Aug 2013 14:23:31 +0200
 
 salor-retail (4.0.2.17) unstable; urgency=low
 
   * various small fixes
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 30 Jul 2013 16:47:35 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 30 Jul 2013 16:47:35 +0200
 
 salor-retail (4.0.2.16) unstable; urgency=low
 
   * fixed immediate weighing and config dialog style problem
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 28 Jul 2013 19:47:45 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 28 Jul 2013 19:47:45 +0200
 
 salor-retail (4.0.2.15) unstable; urgency=low
 
@@ -163,20 +231,20 @@ salor-retail (4.0.2.15) unstable; urgency=low
   * ItemStock list for StockLocations
   * inventory reports
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 28 Jul 2013 11:34:41 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 28 Jul 2013 11:34:41 +0200
 
 salor-retail (4.0.2.14) unstable; urgency=low
 
   * JS fix, pagination config on vendors table, translations
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 27 Jul 2013 19:32:01 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 27 Jul 2013 19:32:01 +0200
 
 salor-retail (4.0.2.13) unstable; urgency=low
 
   * made ItemStocks polymorphic
   * StockTransactions working, even with recursion
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 27 Jul 2013 14:44:05 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 27 Jul 2013 14:44:05 +0200
 
 salor-retail (4.0.2.12) unstable; urgency=low
 
@@ -204,7 +272,7 @@ salor-retail (4.0.2.12) unstable; urgency=low
   * fixed thermal day report for new system
   * Gemfile adaption
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Jul 2013 18:04:05 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 26 Jul 2013 18:04:05 +0200
 
 salor-retail (4.0.2.11) unstable; urgency=low
 
@@ -217,7 +285,7 @@ salor-retail (4.0.2.11) unstable; urgency=low
   * fixed customer add
   * made sku onscreen button larger
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 23 Jul 2013 11:34:11 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 23 Jul 2013 11:34:11 +0200
 
 salor-retail (4.0.2.10) unstable; urgency=low
 
@@ -225,14 +293,14 @@ salor-retail (4.0.2.10) unstable; urgency=low
   * test fixes and day report fixes
   * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 22 Jul 2013 08:25:24 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 22 Jul 2013 08:25:24 +0200
 
 salor-retail (4.0.2.9) unstable; urgency=low
 
   * migration fixes, display refunds links on day report
   * various
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 22:02:54 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 21 Jul 2013 22:02:54 +0200
 
 salor-retail (4.0.2.8) unstable; urgency=low
 
@@ -243,14 +311,14 @@ salor-retail (4.0.2.8) unstable; urgency=low
 
   [ Michael Franzl ]
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 17:15:22 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 21 Jul 2013 17:15:22 +0200
 
 salor-retail (4.0.2.7) unstable; urgency=low
 
   * added sending of emails from javascript
   * added locking of complete order button when running ajax requests
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 16:11:04 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 21 Jul 2013 16:11:04 +0200
 
 salor-retail (4.0.2.6) unstable; urgency=low
 
@@ -262,14 +330,14 @@ salor-retail (4.0.2.6) unstable; urgency=low
   * stack error fixed
   * created email model, checked histories and ajax_log, js cleanup
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 15:23:34 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 21 Jul 2013 15:23:34 +0200
 
 salor-retail (4.0.2.5) unstable; urgency=low
 
   * adding checks and actually much more
   * enabled mailings on errors
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Jul 2013 11:13:12 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 21 Jul 2013 11:13:12 +0200
 
 salor-retail (4.0.2.4) unstable; urgency=low
 
@@ -282,26 +350,26 @@ salor-retail (4.0.2.4) unstable; urgency=low
   * day report work
   * added gift cards and proforma to day report
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 20 Jul 2013 06:50:26 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 20 Jul 2013 06:50:26 +0200
 
 salor-retail (4.0.2.3) unstable; urgency=low
 
   * more exchange stuff
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 20:11:02 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 18 Jul 2013 20:11:02 +0200
 
 salor-retail (4.0.2.2) unstable; urgency=low
 
   * build
   * added google-currency
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 17:04:26 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 18 Jul 2013 17:04:26 +0200
 
 salor-retail (4.0.2.1) unstable; urgency=low
 
   * currency switch for invoices
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 16:55:54 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 18 Jul 2013 16:55:54 +0200
 
 salor-retail (4.0.2) unstable; urgency=low
 
@@ -487,7 +555,7 @@ salor-retail (4.0.2) unstable; urgency=low
   * tested invoice and receipt for coupons, discounts, rebates
   * fixed customer screen for Money
   * coverted day report to Money
-  * more migrations  for existing clients
+  * more migrations for existing clients
   * giftcard fixes
   * ajax cleanup
   * trigger enter for various search fields
@@ -522,19 +590,19 @@ salor-retail (4.0.2) unstable; urgency=low
   * day report printing thermal
   * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 18 Jul 2013 16:06:21 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 18 Jul 2013 16:06:21 +0200
 
 salor-retail (4.0.1.94) unstable; urgency=low
 
-  * no validation for shipment since causes  purchase price to be nil
+  * no validation for shipment since causes purchase price to be nil
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 04 Jul 2013 06:50:50 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 04 Jul 2013 06:50:50 +0200
 
 salor-retail (4.0.1.93) unstable; urgency=low
 
   * missing purchase price on shipments
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 03 Jul 2013 20:40:09 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 03 Jul 2013 20:40:09 +0200
 
 salor-retail (4.0.1.92) unstable; urgency=low
 
@@ -544,7 +612,7 @@ salor-retail (4.0.1.92) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 29 Jun 2013 04:48:03 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sat, 29 Jun 2013 04:48:03 -0400
 
 salor-retail (4.0.1.91) unstable; urgency=low
 
@@ -554,7 +622,7 @@ salor-retail (4.0.1.91) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 27 Jun 2013 11:34:02 -0400
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 27 Jun 2013 11:34:02 -0400
 
 salor-retail (4.0.1.90) unstable; urgency=low
 
@@ -563,7 +631,7 @@ salor-retail (4.0.1.90) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 19 Jun 2013 08:08:49 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 19 Jun 2013 08:08:49 -0400
 
 salor-retail (4.0.1.89) unstable; urgency=low
 
@@ -572,7 +640,7 @@ salor-retail (4.0.1.89) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 18 Jun 2013 03:11:14 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 18 Jun 2013 03:11:14 -0400
 
 salor-retail (4.0.1.88) unstable; urgency=low
 
@@ -584,7 +652,7 @@ salor-retail (4.0.1.88) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Fri, 14 Jun 2013 12:31:50 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Fri, 14 Jun 2013 12:31:50 -0400
 
 salor-retail (4.0.1.87) unstable; urgency=low
 
@@ -594,32 +662,32 @@ salor-retail (4.0.1.87) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 11 Jun 2013 07:00:57 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 11 Jun 2013 07:00:57 -0400
 
 salor-retail (4.0.1.86) unstable; urgency=low
 
   * sudo is the only thing that works
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 22:21:09 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 10 Jun 2013 22:21:09 +0200
 
 salor-retail (4.0.1.85) unstable; urgency=low
 
   * switched back to gksu instead of gksudo.
   * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 21:59:35 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 10 Jun 2013 21:59:35 +0200
 
 salor-retail (4.0.1.84) unstable; urgency=low
 
   * added printer feedback since epson doesnt work with the old salor-bin method
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 14:10:33 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 10 Jun 2013 14:10:33 +0200
 
 salor-retail (4.0.1.83) unstable; urgency=low
 
   * fix for old salor-bin
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 10 Jun 2013 13:26:13 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 10 Jun 2013 13:26:13 +0200
 
 salor-retail (4.0.1.82) unstable; urgency=low
 
@@ -628,7 +696,7 @@ salor-retail (4.0.1.82) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 10 Jun 2013 07:07:10 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 10 Jun 2013 07:07:10 -0400
 
 salor-retail (4.0.1.81) unstable; urgency=low
 
@@ -637,7 +705,7 @@ salor-retail (4.0.1.81) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 04 Jun 2013 17:24:31 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 04 Jun 2013 17:24:31 -0400
 
 salor-retail (4.0.1.80) unstable; urgency=low
 
@@ -646,7 +714,7 @@ salor-retail (4.0.1.80) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 04 Jun 2013 06:38:15 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 04 Jun 2013 06:38:15 -0400
 
 salor-retail (4.0.1.79) unstable; urgency=low
 
@@ -656,7 +724,7 @@ salor-retail (4.0.1.79) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 04 Jun 2013 05:36:49 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 04 Jun 2013 05:36:49 -0400
 
 salor-retail (4.0.1.78) unstable; urgency=low
 
@@ -665,7 +733,7 @@ salor-retail (4.0.1.78) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 02 Jun 2013 06:19:43 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 02 Jun 2013 06:19:43 -0400
 
 salor-retail (4.0.1.77) unstable; urgency=low
 
@@ -677,7 +745,7 @@ salor-retail (4.0.1.77) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 16:14:59 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 27 May 2013 16:14:59 -0400
 
 salor-retail (4.0.1.76) unstable; urgency=low
 
@@ -686,7 +754,7 @@ salor-retail (4.0.1.76) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 15:13:04 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 27 May 2013 15:13:04 -0400
 
 salor-retail (4.0.1.75) unstable; urgency=low
 
@@ -697,7 +765,7 @@ salor-retail (4.0.1.75) unstable; urgency=low
   * build
   * sid
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 14:25:44 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 27 May 2013 14:25:44 -0400
 
 salor-retail (4.0.1.74) unstable; urgency=low
 
@@ -722,7 +790,7 @@ salor-retail (4.0.1.74) unstable; urgency=low
   * build
   * sid
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 27 May 2013 14:21:36 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 27 May 2013 14:21:36 -0400
 
 salor-retail (4.0.1.73) unstable; urgency=low
 
@@ -749,7 +817,7 @@ salor-retail (4.0.1.73) unstable; urgency=low
   * api of salor-bin has changed
   * added a load file to prevent the white screen of annoyance at startup
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 24 May 2013 17:29:18 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 24 May 2013 17:29:18 +0200
 
 salor-retail (4.0.1.72) unstable; urgency=low
 
@@ -758,7 +826,7 @@ salor-retail (4.0.1.72) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Thu, 18 Apr 2013 15:41:29 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Thu, 18 Apr 2013 15:41:29 -0400
 
 salor-retail (4.0.1.71) unstable; urgency=low
 
@@ -768,7 +836,7 @@ salor-retail (4.0.1.71) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Thu, 18 Apr 2013 15:27:46 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Thu, 18 Apr 2013 15:27:46 -0400
 
 salor-retail (4.0.1.70) unstable; urgency=low
 
@@ -777,7 +845,7 @@ salor-retail (4.0.1.70) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Thu, 18 Apr 2013 14:22:42 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Thu, 18 Apr 2013 14:22:42 -0400
 
 salor-retail (4.0.1.69) unstable; urgency=low
 
@@ -786,7 +854,7 @@ salor-retail (4.0.1.69) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 17 Apr 2013 18:14:21 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 17 Apr 2013 18:14:21 -0400
 
 salor-retail (4.0.1.68) unstable; urgency=low
 
@@ -795,7 +863,7 @@ salor-retail (4.0.1.68) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 17 Apr 2013 18:02:51 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 17 Apr 2013 18:02:51 -0400
 
 salor-retail (4.0.1.67) unstable; urgency=low
 
@@ -804,7 +872,7 @@ salor-retail (4.0.1.67) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 17 Apr 2013 17:43:48 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 17 Apr 2013 17:43:48 -0400
 
 salor-retail (4.0.1.66) unstable; urgency=low
 
@@ -813,7 +881,7 @@ salor-retail (4.0.1.66) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 17 Apr 2013 17:39:10 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 17 Apr 2013 17:39:10 -0400
 
 salor-retail (4.0.1.65) unstable; urgency=low
 
@@ -822,7 +890,7 @@ salor-retail (4.0.1.65) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 17 Apr 2013 17:03:43 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 17 Apr 2013 17:03:43 -0400
 
 salor-retail (4.0.1.64) unstable; urgency=low
 
@@ -832,7 +900,7 @@ salor-retail (4.0.1.64) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 17 Apr 2013 14:28:10 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 17 Apr 2013 14:28:10 -0400
 
 salor-retail (4.0.1.63) unstable; urgency=low
 
@@ -841,7 +909,7 @@ salor-retail (4.0.1.63) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 16 Apr 2013 13:47:00 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 16 Apr 2013 13:47:00 -0400
 
 salor-retail (4.0.1.62) unstable; urgency=low
 
@@ -850,7 +918,7 @@ salor-retail (4.0.1.62) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 16 Apr 2013 12:41:36 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 16 Apr 2013 12:41:36 -0400
 
 salor-retail (4.0.1.61) unstable; urgency=low
 
@@ -859,7 +927,7 @@ salor-retail (4.0.1.61) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 16 Apr 2013 12:16:18 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 16 Apr 2013 12:16:18 -0400
 
 salor-retail (4.0.1.60) unstable; urgency=low
 
@@ -868,7 +936,7 @@ salor-retail (4.0.1.60) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 16 Apr 2013 11:10:52 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 16 Apr 2013 11:10:52 -0400
 
 salor-retail (4.0.1.59) unstable; urgency=low
 
@@ -877,7 +945,7 @@ salor-retail (4.0.1.59) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 16 Apr 2013 10:07:56 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 16 Apr 2013 10:07:56 -0400
 
 salor-retail (4.0.1.58) unstable; urgency=low
 
@@ -893,7 +961,7 @@ salor-retail (4.0.1.58) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 16 Apr 2013 10:03:59 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 16 Apr 2013 10:03:59 -0400
 
 salor-retail (4.0.1.57) unstable; urgency=low
 
@@ -904,7 +972,7 @@ salor-retail (4.0.1.57) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 14 Apr 2013 06:56:47 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 14 Apr 2013 06:56:47 -0400
 
 salor-retail (4.0.1.56) unstable; urgency=low
 
@@ -913,7 +981,7 @@ salor-retail (4.0.1.56) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Fri, 12 Apr 2013 06:34:31 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Fri, 12 Apr 2013 06:34:31 -0400
 
 salor-retail (4.0.1.55) unstable; urgency=low
 
@@ -922,7 +990,7 @@ salor-retail (4.0.1.55) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 10 Apr 2013 14:35:26 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 10 Apr 2013 14:35:26 -0400
 
 salor-retail (4.0.1.54) unstable; urgency=low
 
@@ -931,7 +999,7 @@ salor-retail (4.0.1.54) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 10 Apr 2013 14:30:56 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 10 Apr 2013 14:30:56 -0400
 
 salor-retail (4.0.1.53) unstable; urgency=low
 
@@ -940,7 +1008,7 @@ salor-retail (4.0.1.53) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 10 Apr 2013 03:46:19 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 10 Apr 2013 03:46:19 -0400
 
 salor-retail (4.0.1.52) unstable; urgency=low
 
@@ -950,7 +1018,7 @@ salor-retail (4.0.1.52) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 09 Apr 2013 08:59:25 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 09 Apr 2013 08:59:25 -0400
 
 salor-retail (4.0.1.51) unstable; urgency=low
 
@@ -960,7 +1028,7 @@ salor-retail (4.0.1.51) unstable; urgency=low
   [ Jason Martin ]
   * sid
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 02 Apr 2013 06:20:50 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 02 Apr 2013 06:20:50 -0400
 
 salor-retail (4.0.1.50) unstable; urgency=low
 
@@ -970,7 +1038,7 @@ salor-retail (4.0.1.50) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 27 Mar 2013 12:36:47 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 27 Mar 2013 12:36:47 -0400
 
 salor-retail (4.0.1.49) unstable; urgency=low
 
@@ -979,7 +1047,7 @@ salor-retail (4.0.1.49) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 26 Mar 2013 10:07:55 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 26 Mar 2013 10:07:55 -0400
 
 salor-retail (4.0.1.48) unstable; urgency=low
 
@@ -988,7 +1056,7 @@ salor-retail (4.0.1.48) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 25 Mar 2013 09:22:55 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 25 Mar 2013 09:22:55 -0400
 
 salor-retail (4.0.1.47) unstable; urgency=low
 
@@ -998,7 +1066,7 @@ salor-retail (4.0.1.47) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 25 Mar 2013 09:01:08 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 25 Mar 2013 09:01:08 -0400
 
 salor-retail (4.0.1.46) unstable; urgency=low
 
@@ -1007,7 +1075,7 @@ salor-retail (4.0.1.46) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 24 Mar 2013 10:00:03 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 24 Mar 2013 10:00:03 -0400
 
 salor-retail (4.0.1.45) unstable; urgency=low
 
@@ -1030,7 +1098,7 @@ salor-retail (4.0.1.45) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 24 Mar 2013 09:13:29 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 24 Mar 2013 09:13:29 -0400
 
 salor-retail (4.0.1.44) unstable; urgency=low
 
@@ -1039,7 +1107,7 @@ salor-retail (4.0.1.44) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 14:28:00 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sat, 23 Mar 2013 14:28:00 -0400
 
 salor-retail (4.0.1.43) unstable; urgency=low
 
@@ -1048,7 +1116,7 @@ salor-retail (4.0.1.43) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 14:03:47 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sat, 23 Mar 2013 14:03:47 -0400
 
 salor-retail (4.0.1.42) unstable; urgency=low
 
@@ -1059,7 +1127,7 @@ salor-retail (4.0.1.42) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 13:48:10 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sat, 23 Mar 2013 13:48:10 -0400
 
 salor-retail (4.0.1.41) unstable; urgency=low
 
@@ -1068,7 +1136,7 @@ salor-retail (4.0.1.41) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 23 Mar 2013 12:26:14 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sat, 23 Mar 2013 12:26:14 -0400
 
 salor-retail (4.0.1.40) unstable; urgency=low
 
@@ -1079,7 +1147,7 @@ salor-retail (4.0.1.40) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 10:31:39 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 20 Mar 2013 10:31:39 -0400
 
 salor-retail (4.0.1.39) unstable; urgency=low
 
@@ -1088,7 +1156,7 @@ salor-retail (4.0.1.39) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 10:01:52 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 20 Mar 2013 10:01:52 -0400
 
 salor-retail (4.0.1.38) unstable; urgency=low
 
@@ -1097,7 +1165,7 @@ salor-retail (4.0.1.38) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 09:53:05 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 20 Mar 2013 09:53:05 -0400
 
 salor-retail (4.0.1.37) unstable; urgency=low
 
@@ -1108,7 +1176,7 @@ salor-retail (4.0.1.37) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Wed, 20 Mar 2013 08:02:49 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Wed, 20 Mar 2013 08:02:49 -0400
 
 salor-retail (4.0.1.36) unstable; urgency=low
 
@@ -1117,7 +1185,7 @@ salor-retail (4.0.1.36) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 11:48:59 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 19 Mar 2013 11:48:59 -0400
 
 salor-retail (4.0.1.35) unstable; urgency=low
 
@@ -1127,7 +1195,7 @@ salor-retail (4.0.1.35) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 10:42:36 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 19 Mar 2013 10:42:36 -0400
 
 salor-retail (4.0.1.34) unstable; urgency=low
 
@@ -1136,7 +1204,7 @@ salor-retail (4.0.1.34) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 09:55:33 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 19 Mar 2013 09:55:33 -0400
 
 salor-retail (4.0.1.33) unstable; urgency=low
 
@@ -1145,7 +1213,7 @@ salor-retail (4.0.1.33) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 09:37:56 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 19 Mar 2013 09:37:56 -0400
 
 salor-retail (4.0.1.32) unstable; urgency=low
 
@@ -1155,7 +1223,7 @@ salor-retail (4.0.1.32) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Tue, 19 Mar 2013 06:39:00 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Tue, 19 Mar 2013 06:39:00 -0400
 
 salor-retail (4.0.1.31) unstable; urgency=low
 
@@ -1164,7 +1232,7 @@ salor-retail (4.0.1.31) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 18 Mar 2013 15:01:23 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 18 Mar 2013 15:01:23 -0400
 
 salor-retail (4.0.1.30) unstable; urgency=low
 
@@ -1174,7 +1242,7 @@ salor-retail (4.0.1.30) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Mon, 18 Mar 2013 13:38:30 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Mon, 18 Mar 2013 13:38:30 -0400
 
 salor-retail (4.0.1.29) unstable; urgency=low
 
@@ -1195,7 +1263,7 @@ salor-retail (4.0.1.29) unstable; urgency=low
   [ Jason Martin ]
   * build
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 16 Mar 2013 08:50:50 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sat, 16 Mar 2013 08:50:50 -0400
 
 salor-retail (4.0.1.28) unstable; urgency=low
 
@@ -1206,13 +1274,13 @@ salor-retail (4.0.1.28) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sat, 16 Mar 2013 08:50:13 -0400
+ -- Jason Martin <jason@jason-knight-martin.com> Sat, 16 Mar 2013 08:50:13 -0400
 
 salor-retail (4.0.1.27) unstable; urgency=low
 
   * changed to default.sr.localhost
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 07 Mar 2013 14:36:51 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 07 Mar 2013 14:36:51 +0100
 
 salor-retail (4.0.1.26) unstable; urgency=low
 
@@ -1220,7 +1288,7 @@ salor-retail (4.0.1.26) unstable; urgency=low
   * allow number passwords for database
   * cleaned up and fixed dependencies
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 07 Mar 2013 14:10:49 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 07 Mar 2013 14:10:49 +0100
 
 salor-retail (4.0.1.25) unstable; urgency=low
 
@@ -1230,7 +1298,7 @@ salor-retail (4.0.1.25) unstable; urgency=low
   [ Jason Martin ]
   * removing the rm for Gemfile.lock
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 03 Mar 2013 09:23:10 -0500
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 03 Mar 2013 09:23:10 -0500
 
 salor-retail (4.0.1.24) unstable; urgency=low
 
@@ -1239,7 +1307,7 @@ salor-retail (4.0.1.24) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 03 Mar 2013 09:11:27 -0500
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 03 Mar 2013 09:11:27 -0500
 
 salor-retail (4.0.1.23) unstable; urgency=low
 
@@ -1254,7 +1322,7 @@ salor-retail (4.0.1.23) unstable; urgency=low
   * Time Picker for Employee Logins
   * Edit Employee Logins
   * Closes features #1655, #1654, #1653
-  *  delete_order_item.js.erb needs to update Order
+  * delete_order_item.js.erb needs to update Order
   * Fixing actions based on cats
   * various
   * timepicker css
@@ -1265,13 +1333,13 @@ salor-retail (4.0.1.23) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 03 Mar 2013 08:23:20 -0500
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 03 Mar 2013 08:23:20 -0500
 
 salor-retail (4.0.1.22) unstable; urgency=low
 
   * build
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 03 Mar 2013 07:19:59 -0500
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 03 Mar 2013 07:19:59 -0500
 
 salor-retail (4.0.1.21) unstable; urgency=low
 
@@ -1282,7 +1350,7 @@ salor-retail (4.0.1.21) unstable; urgency=low
 
   [ Jason Martin ]
 
- -- Jason Martin <jason@jason-knight-martin.com>  Sun, 03 Mar 2013 07:19:01 -0500
+ -- Jason Martin <jason@jason-knight-martin.com> Sun, 03 Mar 2013 07:19:01 -0500
 
 salor-retail (4.0.1.20) unstable; urgency=low
 
@@ -1292,7 +1360,7 @@ salor-retail (4.0.1.20) unstable; urgency=low
 
   [ Jason Knight ]
 
- -- Jason Knight <jason@red-e.eu>  Wed, 27 Feb 2013 10:06:33 -0500
+ -- Jason Knight <jason@red-e.eu> Wed, 27 Feb 2013 10:06:33 -0500
 
 salor-retail (4.0.1.19) unstable; urgency=low
 
@@ -1325,25 +1393,25 @@ salor-retail (4.0.1.19) unstable; urgency=low
 
   [ Jason Knight ]
 
- -- Jason Knight <jason@red-e.eu>  Wed, 27 Feb 2013 10:04:09 -0500
+ -- Jason Knight <jason@red-e.eu> Wed, 27 Feb 2013 10:04:09 -0500
 
 salor-retail (4.0.1.18) unstable; urgency=low
 
   * debian fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 16 Jan 2013 09:27:29 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 16 Jan 2013 09:27:29 +0100
 
 salor-retail (4.0.1.17) unstable; urgency=low
 
   * debian fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 16 Jan 2013 08:59:39 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 16 Jan 2013 08:59:39 +0100
 
 salor-retail (4.0.1.16) unstable; urgency=low
 
   * Closes Bug #1646 Don't refer to ExceptionNotifier when config.yml setting is false
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 16 Jan 2013 08:47:25 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 16 Jan 2013 08:47:25 +0100
 
 salor-retail (4.0.1.15) unstable; urgency=low
 
@@ -1353,12 +1421,13 @@ salor-retail (4.0.1.15) unstable; urgency=low
 
   [ Michael Franzl ]
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 15 Jan 2013 19:53:27 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 15 Jan 2013 19:53:27 +0100
 
 salor-retail (4.0.1.14) unstable; urgency=low
 
   [ Jason Knight ]
-  * Inventory taking and real_quantity was lost if you accidentally pushed the button. To avoid that in the future, a new flag was added, as well as and inventory_report and inventory_report item etc.
+  * Inventory taking and real_quantity was lost if you accidentally pushed the button. To avoid that in the future, a new flag was added, as well as and 
+inventory_report and inventory_report item etc.
   * Make inventory report consider real_quantity_updated flag instead of > 0
 
   [ Michael Franzl ]
@@ -1371,7 +1440,7 @@ salor-retail (4.0.1.14) unstable; urgency=low
   [ Michael Franzl ]
   * debian installation fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 09 Jan 2013 11:20:48 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 09 Jan 2013 11:20:48 +0100
 
 salor-retail (4.0.1.13) unstable; urgency=low
 
@@ -1406,7 +1475,7 @@ salor-retail (4.0.1.13) unstable; urgency=low
 
   [ Michael Franzl ]
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 28 Dec 2012 18:52:50 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 28 Dec 2012 18:52:50 +0100
 
 salor-retail (4.0.1.12) unstable; urgency=low
 
@@ -1427,7 +1496,7 @@ salor-retail (4.0.1.12) unstable; urgency=low
   [ Michael Franzl ]
   * Closes #1580 Racing condition for display change money
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 12 Dec 2012 13:04:02 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 12 Dec 2012 13:04:02 +0100
 
 salor-retail (4.0.1.11) unstable; urgency=low
 
@@ -1436,19 +1505,21 @@ salor-retail (4.0.1.11) unstable; urgency=low
   * Amends #1561 Day report modifications
   * Closes #1571 Make the easy GiftCard feature even easier
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 07 Dec 2012 18:00:34 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 07 Dec 2012 18:00:34 +0100
 
 salor-retail (4.0.1.10) unstable; urgency=low
 
   [ Jason Knight ]
-  * Closes feature #1564 Additional fix that SKU input was not focused when closing search popup, possibly leading to reported bug that sku input sometimes loses focus.
+  * Closes feature #1564 Additional fix that SKU input was not focused when closing search popup, possibly leading to reported bug that sku input sometimes 
+loses focus.
   * removing console.log
 
   [ Michael Franzl ]
   * Closes #1561 Day report modifications
 
   [ Jason Knight ]
-  * Closes bug #1563 this was due to two problems: 1) too many shippers were created and scoping was preventing the finding of dynamically created shippers from the wholesaler import.
+  * Closes bug #1563 this was due to two problems: 1) too many shippers were created and scoping was preventing the finding of dynamically created shippers from 
+the wholesaler import.
   * Closes feature #1566
   * Allowing text passwords Login field is now a password field added coupon_applies to order_items
   * Making customers notable
@@ -1458,7 +1529,7 @@ salor-retail (4.0.1.10) unstable; urgency=low
   * Closes #1568 Wholesaler import: Failed to save new associated parent
   * Closes #1565 Display available printing device nodes on cash register screen
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 05 Dec 2012 20:26:11 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 05 Dec 2012 20:26:11 +0100
 
 salor-retail (4.0.1.9) unstable; urgency=low
 
@@ -1469,26 +1540,26 @@ salor-retail (4.0.1.9) unstable; urgency=low
   [ Michael Franzl ]
   * Closes #1540 Invoice pagination broken
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 02 Dec 2012 19:15:44 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 02 Dec 2012 19:15:44 +0100
 
 salor-retail (4.0.1.8) unstable; urgency=low
 
   * cash pieces
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 01 Dec 2012 11:09:00 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 01 Dec 2012 11:09:00 +0100
 
 salor-retail (4.0.1.7) unstable; urgency=low
 
   * added automatic backup to cronjobs
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 30 Nov 2012 18:29:21 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 30 Nov 2012 18:29:21 +0100
 
 salor-retail (4.0.1.6) unstable; urgency=low
 
   [ Jason Knight ]
   * Closes bug #1525
   * Closes bug #1526
-  *  fixed shipment item form
+  * fixed shipment item form
   * fixing shipments
 
   [ Michael Franzl ]
@@ -1497,7 +1568,7 @@ salor-retail (4.0.1.6) unstable; urgency=low
   * Closes #1518 [RedE] Show client name on orders#index for better overview
   * Closes #1522 Last-open-orders-popup should show the assigned customer for better overview
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 30 Nov 2012 16:07:19 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 30 Nov 2012 16:07:19 +0100
 
 salor-retail (4.0.1.3) unstable; urgency=low
 
@@ -1509,13 +1580,13 @@ salor-retail (4.0.1.3) unstable; urgency=low
   * Amends #1497 [FISC] A deb package update should log date and time of the update into a file
   * fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 26 Nov 2012 19:39:19 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 26 Nov 2012 19:39:19 +0100
 
 salor-retail (4.0.1.2) unstable; urgency=low
 
   * Closes #1507 Add packaging_unit to actions and fix layout
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 23:11:00 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 25 Nov 2012 23:11:00 +0100
 
 salor-retail (4.0.1.1) unstable; urgency=low
 
@@ -1529,21 +1600,21 @@ salor-retail (4.0.1.1) unstable; urgency=low
   [ Michael Franzl ]
   * Closes #1505 Display packaging unit on items#index
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 22:55:43 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 25 Nov 2012 22:55:43 +0100
 
 salor-retail (4.0.1.0) unstable; urgency=low
 
   * Closes #1500 Add iframe with documentation from the red e website
   * Closes #1497 [FISC] A deb package update should log date and time of the update into a file
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 09:52:59 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 25 Nov 2012 09:52:59 +0100
 
 salor-retail (4.0.0.29) unstable; urgency=low
 
   * Closes #1499 Allow edit_field_on_child on paid orders
   * Closes #1449 Onscreen keyboard seems to be broken in many places
 
- -- Michael Franzl <office@michaelfranzl.com>  Sun, 25 Nov 2012 09:23:02 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sun, 25 Nov 2012 09:23:02 +0100
 
 salor-retail (4.0.0.28) unstable; urgency=low
 
@@ -1557,13 +1628,13 @@ salor-retail (4.0.0.28) unstable; urgency=low
   [ Michael Franzl ]
   * Closes #1498 various fixes
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 24 Nov 2012 20:35:13 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 24 Nov 2012 20:35:13 +0100
 
 salor-retail (4.0.0.27) unstable; urgency=low
 
   * Closes #1490 OrderItem refund sum is wrong when Vendor is configured for net prices
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 24 Nov 2012 16:56:58 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 24 Nov 2012 16:56:58 +0100
 
 salor-retail (4.0.0.26) unstable; urgency=low
 
@@ -1576,25 +1647,25 @@ salor-retail (4.0.0.26) unstable; urgency=low
   * Closes #1486, #1485
   * Closes #1487
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 24 Nov 2012 14:47:16 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 24 Nov 2012 14:47:16 +0100
 
 salor-retail (4.0.0.25) unstable; urgency=low
 
   * new escper version
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 24 Nov 2012 00:52:40 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 24 Nov 2012 00:52:40 +0100
 
 salor-retail (4.0.0.24) unstable; urgency=low
 
   * Closes #1482 Merge Printr into Escper
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 23 Nov 2012 23:52:26 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 23 Nov 2012 23:52:26 +0100
 
 salor-retail (4.0.0.23) unstable; urgency=low
 
   * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 22 Nov 2012 10:39:11 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 22 Nov 2012 10:39:11 +0100
 
 salor-retail (4.0.0.22) unstable; urgency=low
 
@@ -1607,14 +1678,14 @@ salor-retail (4.0.0.22) unstable; urgency=low
   * Closes #1474 OrderItem sticker and label printing broken
   * Closes #1475 Change puts to ActiveRecord::Base.logger.info for wholesaler import
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 22 Nov 2012 10:11:15 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 22 Nov 2012 10:11:15 +0100
 
 salor-retail (4.0.0.21) unstable; urgency=low
 
   * Closes #1472 Image tag on transaction_tags#edit throws error
   * Closes #1469 #1468 Name change of OrderItem doesn't change it on screen immediately
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 21 Nov 2012 19:09:51 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 21 Nov 2012 19:09:51 +0100
 
 salor-retail (4.0.0.20) unstable; urgency=low
 
@@ -1630,20 +1701,20 @@ salor-retail (4.0.0.20) unstable; urgency=low
   * Closes #1460 POS search popup: Modify search by Order attribute nr instead of id
   * Closes #1470 Reorder system
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 21 Nov 2012 14:15:24 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 21 Nov 2012 14:15:24 +0100
 
 salor-retail (4.0.0.19) unstable; urgency=low
 
   * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 12:49:04 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 20 Nov 2012 12:49:04 +0100
 
 salor-retail (4.0.0.18) unstable; urgency=low
 
   * build
   * Closes ##1457 Receipt logos get distorted due to Printr's sanitization
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 12:21:00 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 20 Nov 2012 12:21:00 +0100
 
 salor-retail (4.0.0.17) unstable; urgency=low
 
@@ -1651,14 +1722,14 @@ salor-retail (4.0.0.17) unstable; urgency=low
   * Closes #1455 Fix order report for the new Change PaymentMethod
   * Closes #1456 Add new SalorRetail logos
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 09:02:21 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 20 Nov 2012 09:02:21 +0100
 
 salor-retail (4.0.0.16) unstable; urgency=low
 
   * Closes #1450
   * Closes #1451 intelligently start browsers
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 Nov 2012 07:55:30 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 20 Nov 2012 07:55:30 +0100
 
 salor-retail (4.0.0.15) unstable; urgency=low
 
@@ -1673,7 +1744,7 @@ salor-retail (4.0.0.15) unstable; urgency=low
   * Bug fixes and new reports template for advanced statistics
   * Item name translations added in
   * name translations added to invoice
-  * - added language select on invoice print page - switched invoice to show @order.amount_paid instead of report   total for proforma invoices.
+  * - added language select on invoice print page - switched invoice to show @order.amount_paid instead of report total for proforma invoices.
   * Closes bug #1418 sticker labels not printing
   * Moved printr.rb to lib
   * Altering gitignore
@@ -1696,8 +1767,9 @@ salor-retail (4.0.0.15) unstable; urgency=low
   [ Jason Knight ]
   * Closes bug #1415 card total is NaN in some circumstances
   * Closes bug #1399 payment amount not being focused
-  * Closes bug #1435 category and location cash_made attribute was off   due to initial nil value of that field. It has been this way since   the beginning of salor, and is now corrected.
-  * Closes bug #1434 sold quantity query was considering order_items     from non-paid orders.
+  * Closes bug #1435 category and location cash_made attribute was off due to initial nil value of that field. It has been this way since the beginning of 
+salor, and is now corrected.
+  * Closes bug #1434 sold quantity query was considering order_items from non-paid orders.
 
   [ Michael Franzl ]
   * added more translation files
@@ -1718,7 +1790,7 @@ salor-retail (4.0.0.15) unstable; urgency=low
   * Closes #1448
   * Closes #1412
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 19 Nov 2012 19:16:36 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 19 Nov 2012 19:16:36 +0100
 
 salor-retail (4.0.0.13) unstable; urgency=low
 
@@ -1740,38 +1812,38 @@ salor-retail (4.0.0.13) unstable; urgency=low
   * fixed SalorScope, Ubuntu font
   * Closes #1400, #1401
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 13 Nov 2012 22:12:25 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Tue, 13 Nov 2012 22:12:25 +0100
 
 salor-retail (4.0.0.12) unstable; urgency=low
 
   * added download for item label printcode
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 09 Nov 2012 15:21:35 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 09 Nov 2012 15:21:35 +0100
 
 salor-retail (4.0.0.11) unstable; urgency=low
 
   * backup fix for multi-instances, no limit by vendor
   * sticky labels type1
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 08 Nov 2012 16:50:11 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 08 Nov 2012 16:50:11 +0100
 
 salor-retail (4.0.0.10) unstable; urgency=low
 
   * added missing plusminus migration
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Nov 2012 17:39:47 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 07 Nov 2012 17:39:47 +0100
 
 salor-retail (4.0.0.9) unstable; urgency=low
 
   * seeds fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Nov 2012 17:12:45 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 07 Nov 2012 17:12:45 +0100
 
 salor-retail (4.0.0.8) unstable; urgency=low
 
   * run seed script only on an empty db, added all tables to db dump
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Nov 2012 16:53:58 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 07 Nov 2012 16:53:58 +0100
 
 salor-retail (4.0.0.7) unstable; urgency=low
 
@@ -1782,7 +1854,7 @@ salor-retail (4.0.0.7) unstable; urgency=low
   [ Michael Franzl ]
   * added udev rules, italian translations, better invoice note
 
- -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Nov 2012 16:35:26 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Wed, 07 Nov 2012 16:35:26 +0100
 
 salor-retail (4.0.0.6) unstable; urgency=low
 
@@ -1804,7 +1876,7 @@ salor-retail (4.0.0.6) unstable; urgency=low
   [ Michael Franzl ]
   * added comments to upload
 
- -- Michael Franzl <office@michaelfranzl.com>  Mon, 05 Nov 2012 19:49:40 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Mon, 05 Nov 2012 19:49:40 +0100
 
 salor-retail (4.0.0.5) unstable; urgency=low
 
@@ -1835,19 +1907,19 @@ salor-retail (4.0.0.5) unstable; urgency=low
   * debian stuff, preparation for email notifications
   * debian fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 03 Nov 2012 15:07:58 +0100
+ -- Michael Franzl <office@michaelfranzl.com> Sat, 03 Nov 2012 15:07:58 +0100
 
 salor-retail (4.0.0.4) unstable; urgency=low
 
   * restricted barcodes from other instances
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Oct 2012 20:29:19 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 26 Oct 2012 20:29:19 +0200
 
 salor-retail (4.0.0.3) unstable; urgency=low
 
   * barcode permissions
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Oct 2012 18:10:44 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 26 Oct 2012 18:10:44 +0200
 
 salor-retail (4.0.0.2) unstable; urgency=low
 
@@ -1857,7 +1929,7 @@ salor-retail (4.0.0.2) unstable; urgency=low
   [ Michael Franzl ]
   * fixed postinst
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Oct 2012 17:50:08 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 26 Oct 2012 17:50:08 +0200
 
 salor-retail (4.0.0.1) unstable; urgency=low
 
@@ -1869,10 +1941,10 @@ salor-retail (4.0.0.1) unstable; urgency=low
   * more multi instance barcode fixes, deleted database.yml
   * build
 
- -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Oct 2012 17:21:46 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Fri, 26 Oct 2012 17:21:46 +0200
 
 salor-retail (4.0.0.0) unstable; urgency=low
 
   * initial
 
- -- Michael Franzl <office@michaelfranzl.com>  Thu, 25 Oct 2012 14:55:47 +0200
+ -- Michael Franzl <office@michaelfranzl.com> Thu, 25 Oct 2012 14:55:47 +0200
