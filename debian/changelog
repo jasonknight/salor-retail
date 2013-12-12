@@ -1,3 +1,10 @@
+salor-retail (4.0.2.38) unstable; urgency=low
+
+  * fixed POS update of loyalty points
+  * fixed printing for financial report
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 12 Dec 2013 20:13:32 +0100
+
 salor-retail (4.0.2.37) unstable; urgency=low
 
   * fixing receipts view
