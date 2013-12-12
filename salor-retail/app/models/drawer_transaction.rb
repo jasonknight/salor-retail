@@ -55,7 +55,7 @@ class DrawerTransaction < ActiveRecord::Base
     r.drawer = self.drawer
     r.cash_register = self.cash_register
     r.content = text
-    r.save
+    r.save!
     
     return text
   end

@@ -1042,6 +1042,16 @@ class Order < ActiveRecord::Base
       print_engine.close
     end
     
+    r = Receipt.new
+    r.vendor = self.vendor
+    r.company = self.company
+    r.user = self.user
+    r.drawer = self.drawer
+    r.order = self
+    r.cash_register = self.cash_register
+    r.content = contents[:text]
+    r.save!
+    
     return contents[:text]
   end
     

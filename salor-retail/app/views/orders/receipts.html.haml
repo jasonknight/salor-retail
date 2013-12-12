@@ -6,7 +6,7 @@
   = form_tag "/orders/receipts", :class => 'no-print', :id => 'date_range', :method => :get do
     %input{:id => "should_print", :type => "hidden",:name => "print", :value => "false"}
     %div.tools
-      %table{:align => :center}
+      %table{:align => :center, :width => "80%"}
         %tr
           %td{:align => :left, :width => "20%"}
             = label 'from', t('vendors.report_day.from')
@@ -19,14 +19,14 @@
             = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
         %tr
           %td{:align => :left}
+            = label 'cash_register', CashRegister.model_name.human
+          %td{:align => :right}
             %select{:id => 'cash_register_select', :name => 'cash_register_id' }= options_from_collection_for_select(@current_vendor.cash_registers.visible, 'id', 'name', params[:cash_register_id])
+        %tr
           %td{ :align => :right}
             = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
         %tr
-          %td{:colspan => 2, :align => :center}
-            /= salor_icon(:print, {:onclick => "$('#should_print').val('true');$('#date_range').submit();" }, 32, t('.thermal'))
-      %br
-      %img{ :id => 'progress', :src => '/images/upload.gif', :style => 'display: none;' }
+          %td{:colspan => 2, :align => :center}= image_tag 'loader.gif', :id => 'progress', :style => 'display: none;'
 .clear
 - @receipts.each do |r|
   - id = r.order ? r.order.id : r.id

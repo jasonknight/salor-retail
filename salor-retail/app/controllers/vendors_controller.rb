@@ -87,15 +87,6 @@ class VendorsController < ApplicationController
       text = @dt.print
       render :nothing => true
     end
-    r = Receipt.new
-    r.vendor = @current_vendor
-    r.company = @current_company
-    r.cash_register = @current_register
-    r.user = @current_user
-    r.drawer = @current_user.get_drawer
-    r.content = text
-    r.ip = request.ip
-    r.save
   end
   
   def report_day
