@@ -137,7 +137,8 @@ class VendorsController < ApplicationController
   
   def edit_field_on_child
     klass = params[:klass].constantize
-    @inst = klass.where(:vendor_id => @current_vendor).find_by_id(params[:id])
+    company = @current_vendor.company
+    @inst = klass.where(:company_id => company).find_by_id(params[:id])
     
     if @inst.nil?
       raise "edit_field_on_child: @inst is nil. The model with ID #{ params[:id] } probably not existing."
