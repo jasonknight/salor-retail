@@ -17,17 +17,9 @@ sr.fn.messages.displayMessage = function(type, msg, id) {
     statusmessage.attr("id", id);
     statusbar.prepend(statusmessage);
     setTimeout(function() {
-      sr.fn.messages.fadeMessage(statusmessage);
+      statusmessage.slideUp(1000);
     }, 4000);
   }
-}
-
-sr.fn.messages.fadeMessage = function(element) {
-  element.fadeOut(3000, function() {
-      $(this).slideUp(function() {
-        $(this).remove();
-      });
-  });
 }
 
 sr.fn.messages.displayMessages = function() {
