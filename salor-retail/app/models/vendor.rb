@@ -457,7 +457,8 @@ class Vendor < ActiveRecord::Base
     used_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
       raise "#{ r.inspect }" if pm.nil?
-      next if pm.change
+      
+      next if pm.change # ignore change. we only consider cash (separately), and all others pms
       
       if pm.cash
         # cash needs special treatment, since actual cash amount = cash given - change given

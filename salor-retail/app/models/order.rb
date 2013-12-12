@@ -483,7 +483,7 @@ class Order < ActiveRecord::Base
   end
   
   def create_drawer_transaction
-    add_amount = (self.cash - self.change)
+    add_amount = self.cash + self.change # change is negative! so this is actuall a subtraction
     return if add_amount.zero?
     self.user.drawer_transact(add_amount.fractional, self.cash_register, '', '', self)
   end
@@ -544,7 +544,7 @@ class Order < ActiveRecord::Base
     payment_cash = Money.new(self.payment_method_items.visible.where(:cash => true).sum(:amount_cents), self.currency)
     payment_total = Money.new(self.payment_method_items.visible.sum(:amount_cents), self.currency)
     payment_noncash = (payment_total - payment_cash)
-    change = (payment_total - self.total)
+    change = - (payment_total - self.total) # change must be negative!
     change_payment_method = self.vendor.payment_methods.visible.find_by_change(true)
 
     
@@ -580,45 +580,7 @@ class Order < ActiveRecord::Base
     self.change = change
     self.save
   end
-
   
-  
-  
-  
-#   def order_items_as_array
-#     items = []
-#     self.order_items.visible.each do |oi|
-#       items << oi.to_json
-#     end
-#     return items
-#   end
-
-#   def payment_method_sums
-#     sums = Hash.new
-#     self.payment_methods.each do |pm|
-#       s = pm.internal_type.to_sym
-#       next if s.nil?
-#       sums[s] = 0 if sums[s].nil?
-#       pm.amount = 0 if pm.amount.nil?
-#       sums[s] += pm.amount
-#     end
-#     log_action "payment_method_sums #{sums.inspect}"
-#     return sums
-#   end
-
-#   def payment_display
-#     if self.payment_methods.length > 1 then
-#       return ["Mix",self.total]
-#     else
-#       pm = self.payment_methods.first
-#       return ['Unk',0] if pm.nil?
-#       return [pm.internal_type,self.total]
-#     end
-#   end
-  
-
-  
-
   def to_list_of_items_raw(array)
     ret = {}
     i = 0
@@ -1143,7 +1105,7 @@ class Order < ActiveRecord::Base
     
     # ---
     unless self.is_proforma == true
-      should = self.payment_method_items.where(:cash => true).sum(:amount_cents)
+      should = self.payment_method_items.where(:cash => true).sum(:amount_cents) + self.payment_method_items.where(:change => true).sum(:amount_cents)
       actual = self.drawer_transactions.sum(:amount_cents)
       pass = should == actual
       msg = "Sum of cash PaymentMethodItems should match sum of DrawerTransactions"
@@ -1154,7 +1116,7 @@ class Order < ActiveRecord::Base
     
     # ---
     unless self.is_proforma == true
-      should = self.payment_method_items.where(:change => nil).sum(:amount_cents) - self.total_cents
+      should = - (self.payment_method_items.where(:change => nil).sum(:amount_cents) - self.total_cents)
       actual = self.payment_method_items.where(:change => true).sum(:amount_cents)
       pass = should == actual
       msg = "Change PaymentMethodItem should be correct"
@@ -1385,6 +1347,14 @@ class Order < ActiveRecord::Base
   
   def customer_name
     self.customer.full_name if self.customer
+  end
+  
+  def user_name
+    self.user.username
+  end
+  
+  def drawer_user_name
+    self.drawer.user.username
   end
   
   def subscription_start_formatted

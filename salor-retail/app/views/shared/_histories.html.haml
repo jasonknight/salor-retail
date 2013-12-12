@@ -1,0 +1,19 @@
+- if @current_user.role_cache.include?("manager")
+  %br
+  %br
+  %br
+  %p{ :style => 'text-align: left', :onclick => '$("#histories_container").show()' } Show History
+  #histories_container{ :style => "display: none" }
+    %h2 History
+    %table.stripe-me{ :width => '80%' }
+      - histories.each do |h|
+        %tr
+          %td= l h.created_at, :format => :short
+          %td= h.user.username
+          %td= h.action_taken
+          %td= h.changes_made
+          %td{:align => "left"}
+            - JSON.parse(h.params).each do |k,v|
+              - next if ["log_action", "controller", "action", "called_from"].include?(k)
+              == #{ k }: #{ v}
+              %br

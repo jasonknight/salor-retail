@@ -27,4 +27,4 @@
   = link_to salor_icon(:subscription_order, {}, 32, t('.create_all_recurring_orders')), '/orders/create_all_recurring'
   = render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @current_vendor.recurrable_subscription_orders, :columns => [:nr, :customer_name, :total, :subscription_start, :subscription_interval, :subscription_last, :subscription_next]}
 - else
-  = render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @orders, :columns => [:nr, :customer_name, :total, :created_at]}
+  = render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @orders, :columns => [:nr, :total, :completed_at, :user_name, :drawer_user_name, :customer_name,]}

@@ -15,15 +15,19 @@ sr.fn.messages.displayMessage = function(type, msg, id) {
       id = "notice_" + Math.floor((Math.random()*100000)+1);
     }
     statusmessage.attr("id", id);
-    
     statusbar.prepend(statusmessage);
-    statusmessage.fadeOut(5000, function() {
+    setTimeout(function() {
+      sr.fn.messages.fadeMessage(statusmessage);
+    }, 4000);
+  }
+}
+
+sr.fn.messages.fadeMessage = function(element) {
+  element.fadeOut(3000, function() {
       $(this).slideUp(function() {
         $(this).remove();
       });
-      
-    });
-  }
+  });
 }
 
 sr.fn.messages.displayMessages = function() {
@@ -38,7 +42,7 @@ sr.fn.messages.displayMessages = function() {
   
   $.each(alerts, function(idx) {
     var random_id = "message_" + Math.floor((Math.random()*10000)+1);
-    sr.fn.messages.displayMessage("alert", notices[idx], random_id);
+    sr.fn.messages.displayMessage("alert", alerts[idx], random_id);
   });
   
   $.each(prompts, function(i,o) {

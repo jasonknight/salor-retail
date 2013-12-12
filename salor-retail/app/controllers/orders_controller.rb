@@ -52,6 +52,7 @@ class OrdersController < ApplicationController
 
   def show
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
+    @histories = @order.histories
   end
 
   def new
@@ -83,11 +84,12 @@ class OrdersController < ApplicationController
 
 
   def edit
-    requested_order = @current_vendor.orders.visible.where(:completed_at => nil).find_by_id(params[:id])
+    requested_order = @current_vendor.orders.visible.find_by_id(params[:id])
     
-    if requested_order.nil?
+    unless requested_order.completed_at.nil?
       # the requested order is already completed. We cannot edit that and rediect to #new.
-      redirect_to new_order_path
+      $MESSAGES[:alerts] << "Order NR #{ requested_order.nr } is already completed, cannot edit."
+      redirect_to request.referer
       return
     end
     
@@ -95,7 +97,8 @@ class OrdersController < ApplicationController
     
     if user_which_has_requested_order and user_which_has_requested_order != @current_user
       # another user is editing this order. We cannot edit that and redirect to #new.
-      redirect_to new_order_path
+      $MESSAGES[:alerts] << "Order NR #{ requested_order.nr } is currently edited by user #{ user_which_has_requested_order.username }. Cannot edit."
+      redirect_to request.referer
       return
     end
     
@@ -133,7 +136,7 @@ class OrdersController < ApplicationController
     if @order.completed_at.nil?
       @order.hide(@current_user.id)
     else
-      $MESSAGES[:alerts] << "Order ID #{ @order.id } is either paid or already hidden"
+      $MESSAGES[:alerts] << "Order NR #{ @order.nr } is already completed, cannot delete."
     end
     redirect_to request.referer
   end
@@ -348,13 +351,15 @@ class OrdersController < ApplicationController
   
   def log
     h = History.new
+    h.vendor = @current_vendor
+    h.company = @current_company
     h.url = "/orders/log"
     h.params = params
     h.model_id = params[:order_id]
     h.model_type = 'Order'
     h.action_taken = params[:log_action]
     h.changes_made = params[:called_from]
-    h.save
+    h.save!
     render :nothing => true
   end
 end

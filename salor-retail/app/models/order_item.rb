@@ -546,7 +546,7 @@ class OrderItem < ActiveRecord::Base
       if self.vendor.net_prices
         should = Money.new((self.quantity * self.price_cents) - price_reductions + self.tax_amount_cents, self.vendor.currency)
         actual = self.total
-        pass = (should - actual) == 1 # ignore 1 cent rounding errors
+        pass = (should.fractional - actual.fractional).abs <= 1 # ignore 1 cent rounding errors
         msg = "total must be (price * quantity) - price reductions + tax_amount"
         type = :orderItemTotalCorrectNet
         tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
@@ -608,12 +608,12 @@ class OrderItem < ActiveRecord::Base
       
       should = Money.new(subtotal * self.tax / 100.0, self.currency)
       actual = self.tax_amount
-      pass = (should.fractional - actual.fractional).abs == 1 # ignore 1 cent rounding errors
+      pass = (should.fractional - actual.fractional).abs <= 1 # ignore 1 cent rounding errors
       msg = "tax must be correct"
       type = :orderItemTaxCorrectNet
       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
-      pass = (should.fractional - actual.fractional) != 0
+      pass = (should.fractional - actual.fractional).abs != 1
       msg = "1 cent rounding error"
       type = :orderItemTaxRoundingNet
       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false

@@ -31,7 +31,5 @@
 = t('menu.refund_payment_method')
 = select_tag 'refund_payment_method', options_from_collection_for_select(@current_vendor.payment_methods.visible.where(:change => nil, :quote => nil, :unpaid => nil).order('cash DESC'), :id, :name)
 
-
-
-
+= render :partial => "shared/histories", :locals => {:histories => @histories }
 

@@ -1,0 +1,9 @@
+%table
+  - histories.each do |h|
+    %tr
+      %td= l h.created_at, :format => :short
+      %td= h.url
+      %td= h.action_taken
+      %td= h.changes_made
+      %td
+        %pre= raw PP.pp(JSON.parse(h.params), "").gsub("\n", "<br />")

@@ -39,7 +39,7 @@
           %td
             - val = entry.send(col)
             - if val.class == ActiveSupport::TimeWithZone
-              = val.strftime("%Y-%m-%d")
+              = val.strftime("%Y-%m-%d %H:%M")
             - else
               = val
       - if @current_user.can("edit_#{klass.table_name}")

@@ -10,6 +10,8 @@ class History < ActiveRecord::Base
   include SalorScope
   
   belongs_to :user
+  belongs_to :vendor
+  belongs_to :company
   belongs_to :model, :polymorphic => true
   
   validates_presence_of :vendor_id, :company_id
@@ -27,6 +29,8 @@ class History < ActiveRecord::Base
   
   def self.record(action, object, sen=5, url=nil)
     h = History.new
+    h.vendor_id = $VENDORID
+    h.company_id = $COMPANYID
     h.url = url
     h.sensitivity = sen
     h.model = object if object
@@ -34,6 +38,6 @@ class History < ActiveRecord::Base
     if object and object.respond_to? :changes then
       h.changes_made = object.changes.to_json
     end
-    h.save
+    h.save!
   end
 end

@@ -5,6 +5,9 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
+      user_name: User
+      drawer_user_name: Drawer
+      completed_at: completed at
       active: active
       address: address
       afield: field

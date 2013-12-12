@@ -21,6 +21,7 @@ class Item < ActiveRecord::Base
   belongs_to :item_type
   belongs_to :item
   belongs_to :shipper
+  has_many :histories, :as => :model
   has_many :order_items
   has_many :item_shippers
   has_many :item_stocks

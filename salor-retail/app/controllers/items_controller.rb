@@ -39,10 +39,12 @@ class ItemsController < ApplicationController
 
   def new
     @item = @current_vendor.items.build
+    @histories = @item.histories.order("created_at DESC").limit(20)
   end
 
   def edit
     @item = @current_vendor.items.visible.where(["id = ? or sku = ?",params[:id],params[:keywords]]).first
+    @histories = @item.histories.order("created_at DESC").limit(20)
     #@item.item_stocks.build if not @item.item_stocks.any?
     #@item.item_shippers.build if not @item.item_shippers.any?
   end
@@ -60,6 +62,7 @@ class ItemsController < ApplicationController
       @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       redirect_to items_path
     else
+      @histories = @item.histories.order("created_at DESC").limit(20)
       render :new
     end
   end
@@ -83,6 +86,7 @@ class ItemsController < ApplicationController
       @item.assign_parts(params[:part_skus])
       @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
+      @histories = @item.histories.order("created_at DESC").limit(20)
       # redirect_to items_path
       render :edit
     else

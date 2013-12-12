@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 # The following are already part of Debian Jessie/sid and do not cause a dependency to the online API of rubygems.org
 
+##### IMPORTANT: ALWAYS HARDCODE THE VERSION FOR EACH GEM ############
+
 gem 'rails', '3.2.6'
 gem 'rake', '0.9.2.2'
 gem 'rack','1.4.1'
