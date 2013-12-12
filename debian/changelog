@@ -1,3 +1,10 @@
+salor-retail (4.0.2.36) unstable; urgency=low
+
+  * change money fix, added history views
+  * updated translations
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 12 Dec 2013 13:11:32 +0100
+
 salor-retail (4.0.2.35) unstable; urgency=low
 
   [ Michael Franzl ]
