@@ -5,9 +5,6 @@ en:
   InCash: In Cash
   activerecord:
     attributes:
-      user_name: User
-      drawer_user_name: Drawer
-      completed_at: completed at
       active: active
       address: address
       afield: field
@@ -37,6 +34,7 @@ en:
       color: color
       company_id: Company
       company_name: company name
+      completed_at: completed at
       contact_address: contact address
       contact_email: contact email
       contact_fax: contact fax
@@ -59,6 +57,7 @@ en:
       default_buyback: default buyback
       detailed_edit: Detailed Edit?
       dollar_per_lp: dollar per loyalty point
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: drop
       email: email
@@ -201,6 +200,7 @@ en:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: username
       uses_drawer_id: Uses Drawer of
       value: value

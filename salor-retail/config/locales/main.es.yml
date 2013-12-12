@@ -56,6 +56,7 @@ es:
       default_buyback: Recompra por defecto
       detailed_edit: Detailed Edit?
       dollar_per_lp: dólar por punto de fidelización
+      drawer_username: Drawer user
       drop: Depósito
       email: E-mail
       enable_technician_emails: Send emails to technician
@@ -212,7 +213,9 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
-      drawer_username: Drawer user
+      completed_at: completed at
+      drawer_user_name: Drawer
+      user_name: User
     models:
       action:
         one: Acción
@@ -577,10 +580,10 @@ es:
     weigh: weigh
     wholesaler_update: Actualización del disteibuidor
   notifications:
+    please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
     shipments_move_all_items: Todos los artículos han sido desplazados con éxito.
     shipments_move_item: El artículo ha sido desplazado con éxito.
-    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -642,6 +645,9 @@ es:
       transaction_tag: Etiqueta de transacción
       transaction_total: transacción total
       transactions: transacción
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin
   printr:
     eod_report:
       None: Sin nombre
@@ -986,6 +992,3 @@ es:
     on_import: al importar
     on_save: al guardar
     on_sku_not_found: on sku not found
-  plugins:
-    files_list: Files in this plugin
-    meta_fields: Meta Fields for this Plugin

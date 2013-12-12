@@ -56,6 +56,7 @@ el:
       default_buyback: προεπιλογή αγοράς ιδίων
       detailed_edit: Detailed Edit?
       dollar_per_lp: ευρώ ανά πόντους επιβράβευσης
+      drawer_username: Drawer user
       drop: προσθήκη μετρητών
       email: ηλεκτρονική διεύθυνση
       enable_technician_emails: Send emails to technician
@@ -212,7 +213,9 @@ el:
       when: πότε
       whento: When
       width: πλάτος
-      drawer_username: Drawer user
+      completed_at: completed at
+      drawer_user_name: Drawer
+      user_name: User
     models:
       action:
         one: Πράξη
@@ -579,10 +582,10 @@ el:
     weigh: weigh
     wholesaler_update: ενημέρωση χονδρέμπορου
   notifications:
+    please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
     shipments_move_all_items: όλα τα αντικείμενα μεταφέρθηκαν επιτυχώς
     shipments_move_item: το αντικείμενο μεταφέρθηκε επιτυχώς
-    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -644,6 +647,9 @@ el:
       transaction_tag: ετικέτα συναλλαγής
       transaction_total: ολικό συναλλαγής
       transactions: συναλλαγές
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin
   printr:
     eod_report:
       None: Μη ονομαζόμενα
@@ -990,6 +996,3 @@ el:
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
     on_sku_not_found: on sku not found
-  plugins:
-    files_list: Files in this plugin
-    meta_fields: Meta Fields for this Plugin

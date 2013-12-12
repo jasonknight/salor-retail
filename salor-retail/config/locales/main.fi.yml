@@ -56,6 +56,7 @@ fi:
       default_buyback: takaisinoston oletus
       detailed_edit: Yksityiskohtainen muokkaus?
       dollar_per_lp: Euro per kanta-asiakaspiste
+      drawer_username: Drawer user
       drop: talletus
       email: sähköposti
       enable_technician_emails: Lähetä sähköpostia teknikolle
@@ -212,7 +213,9 @@ fi:
       when: milloin
       whento: milloin
       width: leveys
-      drawer_username: Drawer user
+      completed_at: completed at
+      drawer_user_name: Drawer
+      user_name: User
     models:
       action:
         one: Toiminta
@@ -576,10 +579,10 @@ fi:
     weigh: punnitse
     wholesaler_update: tukkumyyjäpäivitys
   notifications:
+    please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: lähetysnimikkeen tallennus epäonnistui
     shipments_move_all_items: kaikkien nimikkeiden siirtäminen onnistui
     shipments_move_item: nimikkeen siirtäminen onnistui
-    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Luo tilaukset toistuvista tilauksista
@@ -641,6 +644,9 @@ fi:
       transaction_tag: liiketoimitunniste
       transaction_total: liiketoimen loppusumma
       transactions: liiketoimet
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin
   printr:
     eod_report:
       None: Nimeämätön
@@ -974,6 +980,3 @@ fi:
     on_import: laatamista
     on_save: tallentamassa
     on_sku_not_found: kun sku ei löytynyt
-  plugins:
-    files_list: Files in this plugin
-    meta_fields: Meta Fields for this Plugin

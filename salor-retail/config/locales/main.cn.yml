@@ -56,6 +56,7 @@ cn:
       default_buyback: 默認的下回購
       detailed_edit: Detailed Edit?
       dollar_per_lp: 美元每忠誠點
+      drawer_username: Drawer user
       drop: 下拉
       email: 電子郵件
       enable_technician_emails: Send emails to technician
@@ -212,7 +213,9 @@ cn:
       when: 何時
       whento: When
       width: 寬度
-      drawer_username: Drawer user
+      completed_at: completed at
+      drawer_user_name: Drawer
+      user_name: User
     models:
       action:
         one: 行動
@@ -569,10 +572,10 @@ cn:
     weigh: weigh
     wholesaler_update: 批發商更新
   notifications:
+    please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: 出貨項目不能保存
     shipments_move_all_items: 所有項目均順利搬遷
     shipments_move_item: 項目均順利搬遷
-    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -634,6 +637,9 @@ cn:
       transaction_tag: 交易標籤
       transaction_total: 交易總計
       transactions: 交易
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin
   printr:
     eod_report:
       None: 未命名
@@ -950,6 +956,3 @@ cn:
     on_import: 在進口
     on_save: 在儲存
     on_sku_not_found: on sku not found
-  plugins:
-    files_list: Files in this plugin
-    meta_fields: Meta Fields for this Plugin

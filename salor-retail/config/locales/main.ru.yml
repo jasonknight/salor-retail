@@ -56,6 +56,7 @@ ru:
       default_buyback: выкуп по умолчанию
       detailed_edit: Detailed Edit?
       dollar_per_lp: рублей за единицу бонуса
+      drawer_username: Drawer user
       drop: внесение
       email: email
       enable_technician_emails: Send emails to technician
@@ -212,7 +213,9 @@ ru:
       when: когда
       whento: When
       width: ширина
-      drawer_username: Drawer user
+      completed_at: completed at
+      drawer_user_name: Drawer
+      user_name: User
     models:
       action:
         one: Действие
@@ -576,10 +579,10 @@ ru:
     weigh: weigh
     wholesaler_update: обновление оптового поставщика
   notifications:
+    please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: товар поставки не может быть сохранен
     shipments_move_all_items: все товары были успешно перемещёны
     shipments_move_item: товар был успешно перемещён
-    please_select_cash_register: Please select a Cash Register
   orders:
     index:
       create_all_recurring_orders: Create orders from recurrable subscriptions
@@ -641,6 +644,9 @@ ru:
       transaction_tag: метка транзакции
       transaction_total: итого за транзакцию
       transactions: транзакции
+  plugins:
+    files_list: Files in this plugin
+    meta_fields: Meta Fields for this Plugin
   printr:
     eod_report:
       None: Без имени
@@ -975,6 +981,3 @@ ru:
     on_import: при импорте
     on_save: при сохранении
     on_sku_not_found: on sku not found
-  plugins:
-    files_list: Files in this plugin
-    meta_fields: Meta Fields for this Plugin
