@@ -49,7 +49,7 @@
     %tr
       %td{:colspan => 2, :align => :center}
         = salor_icon(:a4print, {:onclick => 'sr.fn.salor_bin.showPrintDialog()'}, 40, t('menu.print_dialog'))
-        = salor_icon(:thermal_printer, {:onclick => "sr.fn.salor_bin.printUrl(Register.thermal_printer,'/vendors/render_report_day',decodeURIComponent($('#date_range').serialize()));" }, 40, t('.thermal'))
+        = salor_icon(:thermal_printer, {:onclick => "sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer,'/vendors/render_report_day',decodeURIComponent($('#date_range').serialize()));" }, 40, t('.thermal'))
     %tr
       %td{:colspan => 2, :align => :center}= image_tag 'loader.gif', :id => 'progress', :style => 'display: none;'
 
