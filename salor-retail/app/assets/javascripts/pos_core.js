@@ -686,7 +686,7 @@ sr.fn.pos_core.detailedOrderItemMenu = function(event) {
     sr.fn.focus.set($('#main_sku_field'));
   });
   shared.element('option',{value: ''},'',category_select); // create empty option
-  $.each(sr.data.resources.cateogory_array,function (i,category) {
+  $.each(sr.data.resources.category_array,function (i,category) {
     var is_selected = category.id == 
     shared.element('option',{value: category.id},category.name,category_select);
   });
