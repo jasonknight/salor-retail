@@ -168,6 +168,7 @@ class ApplicationController < ActionController::Base
   end
   
   def loadup
+    #debugger
     log_action "-----------------------------------\n\n\n\n\n"
     $COMPANYID = nil
     $VENDORID = nil

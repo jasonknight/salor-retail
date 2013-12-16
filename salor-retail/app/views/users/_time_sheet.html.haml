@@ -22,3 +22,6 @@
         %td{:align=>"right"}= "N/A"
       %td{:class => "pointer"}
         %div{:class => 'black-text no-print'}=link_to I18n.t('menu.destroy'), "/users/destroy_login?id=#{@user.id}&login=#{login.id}"
+
+:javascript
+  sr.fn.user_logins.display();
