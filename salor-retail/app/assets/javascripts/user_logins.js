@@ -1,5 +1,5 @@
 sr.fn.user_logins.display = function() {
-  if (sr.data.session.user.role_cache && sr.data.session.user.role_cache.indexOf('manager') != -1) {
+  if (sr.data.session.user.role_cache.indexOf('manager') != -1) {
     try {
       var lin = $('.user_login_time');
       var lout = $('.user_logout_time');
