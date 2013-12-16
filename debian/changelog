@@ -1,3 +1,15 @@
+salor-retail (4.0.2.39) unstable; urgency=low
+
+  [ Michael Franzl ]
+  * small adaptions for plugins
+
+  [ Jason Knight ]
+  * Trying a simple js fix
+
+  [ Jason Martin ]
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Mon, 16 Dec 2013 12:12:36 -0500
+
 salor-retail (4.0.2.38) unstable; urgency=low
 
   * fixed POS update of loyalty points
