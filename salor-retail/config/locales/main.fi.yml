@@ -216,6 +216,7 @@ fi:
       when: milloin
       whento: milloin
       width: leveys
+      shipper_name: Shipper
     models:
       action:
         one: Toiminta
@@ -980,3 +981,4 @@ fi:
     on_import: laatamista
     on_save: tallentamassa
     on_sku_not_found: kun sku ei löytynyt
+    change_quantity: on change quantity

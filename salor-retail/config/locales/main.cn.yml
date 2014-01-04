@@ -216,6 +216,7 @@ cn:
       when: 何時
       whento: When
       width: 寬度
+      shipper_name: Shipper
     models:
       action:
         one: 行動
@@ -956,3 +957,4 @@ cn:
     on_import: 在進口
     on_save: 在儲存
     on_sku_not_found: on sku not found
+    change_quantity: on change quantity

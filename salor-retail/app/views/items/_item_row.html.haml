@@ -20,7 +20,9 @@
     = item.quantity_with_stock.to_i
   - else
     = item.quantity_with_stock
-    
+
+%td= item.shipper_name
+
 %td= item.packaging_unit
 - custom_columns.each do |col|
   - col = current_plugin_manager.apply_filter('item_list_column',{:item => item.attributes, :column => col})

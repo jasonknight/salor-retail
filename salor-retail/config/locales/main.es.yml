@@ -216,6 +216,7 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
+      shipper_name: Shipper
     models:
       action:
         one: Acción
@@ -992,3 +993,4 @@ es:
     on_import: al importar
     on_save: al guardar
     on_sku_not_found: on sku not found
+    change_quantity: on change quantity

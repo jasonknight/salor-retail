@@ -166,6 +166,7 @@ en:
         quantity: quantity
         sku: SKU
         stock_location_id: Stock location
+      shipper_name: Shipper
       shipper_sku: Shipper SKU
       sku: SKU
       start_amount: start amount
@@ -975,8 +976,8 @@ en:
   when_list:
     add_to_order: on add to order
     always: always
+    change_quantity: on change quantity
     on_export: on export
     on_import: on import
     on_save: on save
     on_sku_not_found: on sku not found
-    change_quantity: on change quantity

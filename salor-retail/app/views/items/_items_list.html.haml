@@ -1,6 +1,6 @@
 %table.items_index
   %tr
-    - cols = [:name,:base_price,:sku,:tax_profile_id,:quantity,:packaging_unit]
+    - cols = [:name,:base_price,:sku,:tax_profile_id,:quantity,:shipper_name,:packaging_unit]
     - custom_columns = []
     - custom_columns = @current_plugin_manager.apply_filter('item_list_columns',custom_columns)
     - cols += custom_columns + ['','']

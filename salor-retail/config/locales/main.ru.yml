@@ -216,6 +216,7 @@ ru:
       when: когда
       whento: When
       width: ширина
+      shipper_name: Shipper
     models:
       action:
         one: Действие
@@ -981,3 +982,4 @@ ru:
     on_import: при импорте
     on_save: при сохранении
     on_sku_not_found: on sku not found
+    change_quantity: on change quantity

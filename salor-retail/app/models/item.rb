@@ -387,6 +387,14 @@ class Item < ActiveRecord::Base
     
   end
   
+  def shipper_name
+    if self.shipper
+      return self.shipper.name
+    else
+      return ""
+    end
+  end
+  
   def to_record
     attrs = self.attributes.clone
     attrs[:category] = self.category.name if self.category

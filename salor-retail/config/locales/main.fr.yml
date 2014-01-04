@@ -216,6 +216,7 @@ fr:
       when: Quand
       whento: When
       width: Largeur
+      shipper_name: Shipper
     models:
       action:
         one: Action
@@ -994,3 +995,4 @@ fr:
     on_import: Lors de l'importation
     on_save: Lors de la sauvegarde
     on_sku_not_found: on sku not found
+    change_quantity: on change quantity

@@ -189,7 +189,7 @@ class FileUpload
       else
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.blank?
         attributes.merge! :sku => sku_pack
-        pack_item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
+        pack_item = Item.new; pack_item.vendor = @vendor; pack_item.attributes = attributes
         result = pack_item.save
         if result == false
           msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be saved because #{ pack_item.errors.messages}"
@@ -244,7 +244,7 @@ class FileUpload
       else
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.blank?
         attributes.merge! :sku => sku_piece
-        piece_item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
+        piece_item = Item.new; piece_item.vendor = @vendor; piece_item.attributes = attributes
         result = piece_item.save
         if result == false
           msg = "piece_item #{ piece_item.sku } #{ piece_item.name } could not be saved because #{ piece_item.errors.messages}"
@@ -425,7 +425,7 @@ class FileUpload
       else
         sku_pack = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_pack.blank?
         attributes.merge! :sku => sku_pack
-        pack_item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
+        pack_item = Item.new; pack_item.vendor = @vendor; pack_item.attributes = attributes
         result = pack_item.save
         if result == false
           msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be saved because #{ pack_item.errors.messages}"
@@ -480,7 +480,7 @@ class FileUpload
       else
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.blank?
         attributes.merge! :sku => sku_piece
-        piece_item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
+        piece_item = Item.new; piece_item.vendor = @vendor; piece_item.attributes = attributes
         Action.run(@vendor,piece_item,:on_import)
         result = piece_item.save
         if result == false

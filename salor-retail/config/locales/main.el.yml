@@ -216,6 +216,7 @@ el:
       when: πότε
       whento: When
       width: πλάτος
+      shipper_name: Shipper
     models:
       action:
         one: Πράξη
@@ -996,3 +997,4 @@ el:
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
     on_sku_not_found: on sku not found
+    change_quantity: on change quantity

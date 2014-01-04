@@ -184,7 +184,7 @@ gn:
       tag: Tag
       tax: Steuer
       tax_free: Steuerfrei
-      tax_profile_id: Steuerklasse
+      tax_profile_id: Steuer
       technician_email: Techniker E-Mail
       telephone: Telefon
       the_receiver: Geliefert an
@@ -216,6 +216,7 @@ gn:
       when: Wenn
       whento: When
       width: Breite
+      shipper_name: Lieferant
     models:
       action:
         one: Aktion
@@ -986,3 +987,4 @@ gn:
     on_import: beim Import
     on_save: beim Speichern
     on_sku_not_found: on sku not found
+    change_quantity: on change quantity
