@@ -21,7 +21,7 @@ gem 'json'
 gem 'serialport'
 gem 'money', '5.1.1'
 gem 'money-rails', '0.8.1'
-gem 'google_currency'
+#gem 'google_currency'
 gem "therubyracer", '0.11.4', :require => 'v8'
 gem 'rubyzip', '0.9.9'
 

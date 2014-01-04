@@ -120,7 +120,7 @@ class ShipmentItem < ActiveRecord::Base
     end
     
     self.in_stock_quantity = self.in_stock_quantity.to_f + q
-    self.save
+    self.save!
   end
   
   def to_json

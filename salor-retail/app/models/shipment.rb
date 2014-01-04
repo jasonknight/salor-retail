@@ -139,60 +139,15 @@ class Shipment < ActiveRecord::Base
     #self.save
   end
 
-  def move_all_to_items
-    if self.receiver.nil? then
-      raise "Receiver is nil"
-      return
-    end
-    self.shipment_items.each do |item|
-      if item.in_stock then
-        log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => item.sku)
+  def move_all_items_into_stock
+    self.shipment_items.each do |si|
+      if si.in_stock_quantity == si.quantity || si.tax_profile_id.nil?
+        log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => si.sku)
         next
       end
-      i = Item.new.from_shipment_item(item)    
-      if i.save then
-        item.update_attribute(:in_stock,true)
-      else
-        msg = []
-        i.errors.full_messages.each do |error|
-          msg << error
-        end
-        log_action I18n.t("system.errors.shipment_item_move_failed", :sku => item.sku, :error => msg.join('<br />'))
-      end
+      si.move_into_stock(si.quantity - si.in_stock_quantity)
     end
   end
-  
-  def move_shipment_item_to_item(id)
-    
-    if self.receiver.nil? or not self.receiver_type == 'Vendor' then
-      add_salor_error("system.errors.must_set_receiver_to_vendor")
-      return
-    end
-
-    i = self.shipment_items.find(id)
-    if i.in_stock then
-      log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => i.sku)
-      return
-    end
-    if i then
-      item = Item.new.from_shipment_item(i)
-#       if item.nil? then
-#         return
-#       end
-      if item.save then
-        i.update_attribute(:in_stock,true)
-      else
-        # puts "##Shipment: Couldn't save ShipmentItem"
-        add_salor_error(I18n.t("notifications.shipments_item_could_not_be_saved"))
-        item.errors.full_messages.each do |error|
-          add_salor_error(error)
-        end
-      end
-    else
-      # puts "##Shipment: Couldn't find ShipmentItem"
-    end
-  end
-  
   
   def to_json
     attrs = {

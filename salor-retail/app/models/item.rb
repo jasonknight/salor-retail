@@ -447,7 +447,7 @@ class Item < ActiveRecord::Base
   end
   
   def self.clean_self_loop_items
-    self_loop_items = self.find_infinite_loop_items
+    self_loop_items = self.find_self_loop_items
     self_loop_items.update_all :hidden => true, :hidden_by => -20, :hidden_at => Time.now
     self_loop_item_ids = self_loop_items.collect{ |i| i.id }
     return self_loop_item_ids
@@ -499,7 +499,7 @@ class Item < ActiveRecord::Base
   def self.cleanup
     cleaned_up_ids = []
     cleaned_up_ids << self.clean_duplicates
-    cleaned_up_ids << self.clean_infinite_loop_items
+    cleaned_up_ids << self.clean_self_loop_items
     cleaned_up_ids << self.clean_nonhidden_items_with_hidden_child
     cleaned_up_ids << self.clean_nonhidden_items_with_hidden_parent
     return cleaned_up_ids.flatten

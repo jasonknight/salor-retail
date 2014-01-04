@@ -124,7 +124,7 @@ SalorRetail::Application.routes.draw do
   
 
   
-  match "shipments/move_all_to_items" => "shipments#move_all_to_items"
+  match "shipments/move_all_items_into_stock" => "shipments#move_all_items_into_stock"
   match "shipments/new_shipments" => "shipments#new_shipments"
   match "shipments/move_item_into_stock" => "shipments#move_item_into_stock"
   match "shipments/add_item" => "shipments#add_item"

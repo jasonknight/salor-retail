@@ -62,7 +62,8 @@
       %td.right= humanized_money_with_symbol @shipment.purchase_price_total
       
 .paper-invoice
-  %h2= t('menu.move_shipment_item')
+  %p
+    .dialog-button{ :onclick => "sr.fn.shipments.moveAllItemsIntoStock(#{ @shipment.id });" }= t('menu.move_shipment_item')
   %table.striped-table2
     %tr
       %th= ShipmentItem.human_attribute_name(:name)
