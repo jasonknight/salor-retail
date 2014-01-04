@@ -378,7 +378,7 @@ class FileUpload
         sku_carton = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_carton.blank?
         attributes.merge! :sku => sku_carton
         carton_item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
-        Action.run(@vendor,carton_item,:on_import)
+        #Action.run(@vendor,carton_item,:on_import)
         result = carton_item.save
         if result == false
           msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be saved because #{ carton_item.errors.messages}"
@@ -481,7 +481,7 @@ class FileUpload
         sku_piece = 'C' + (1000000000 + rand(9999999999)).to_s[0..12] if sku_piece.blank?
         attributes.merge! :sku => sku_piece
         piece_item = Item.new; piece_item.vendor = @vendor; piece_item.attributes = attributes
-        Action.run(@vendor,piece_item,:on_import)
+        #Action.run(@vendor,piece_item,:on_import)
         result = piece_item.save
         if result == false
           msg = "piece_item #{ piece_item.sku } #{ piece_item.name } could not be saved because #{ piece_item.errors.messages}"
@@ -552,12 +552,12 @@ class FileUpload
       item = Item.find_by_sku(sku)
       if item
         item.update_attributes attributes
-        Action.run(@vendor,item,:on_import)
+        #Action.run(@vendor,item,:on_import)
         item.save
         @updated_items += 1
       else
         item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
-        Action.run(@vendor,item,:on_import)
+        #Action.run(@vendor,item,:on_import)
         item.save
         @created_items += 1
       end
