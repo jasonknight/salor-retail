@@ -1,3 +1,21 @@
+salor-retail (4.0.2.43) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Fixes Issue #5
+  * Fix Issue #8, fix Issue #9
+  * Took out salor icon filter as it's called alot
+
+  [ Michael Franzl ]
+  * shipments, focus stuff, small fixes
+
+  [ Jason Knight ]
+  * xxx
+
+  [ Michael Franzl ]
+  * blank instead of empty
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 04 Jan 2014 21:10:15 +0100
+
 salor-retail (4.0.2.42) unstable; urgency=low
 
   * shipper update fix
