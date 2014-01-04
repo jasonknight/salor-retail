@@ -1,3 +1,10 @@
+salor-retail (4.0.2.42) unstable; urgency=low
+
+  * shipper update fix
+  * disabled actions on import
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 04 Jan 2014 15:18:53 +0100
+
 salor-retail (4.0.2.41) unstable; urgency=low
 
   [ EeeCeeGee ]
