@@ -1,3 +1,19 @@
+salor-retail (4.0.2.41) unstable; urgency=low
+
+  [ EeeCeeGee ]
+  * Dutch localization files
+
+  [ Eric Gaston ]
+  * Delete .DS_Store
+  * Delete .DS_Store
+  * Delete .DS_Store
+
+  [ Michael Franzl ]
+  * updated translations
+  * various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 04 Jan 2014 14:44:40 +0100
+
 salor-retail (4.0.2.40) unstable; urgency=low
 
   * fixed js error on login form
