@@ -69,5 +69,6 @@ class ShippersController < ApplicationController
   def destroy
     @shipper = @current_vendor.shippers.visible.find_by_id(params[:id])
     @shipper.hide(@current_user)
+    redirect_to shippers_path
   end
 end
