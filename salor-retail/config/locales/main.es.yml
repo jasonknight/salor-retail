@@ -34,6 +34,7 @@ es:
       color: color
       company_id: Company
       company_name: Nombre de la empresa
+      completed_at: completed at
       contact_address: Dirección de contacto
       contact_email: E-mail de contacto
       contact_fax: Fax de contacto
@@ -56,6 +57,7 @@ es:
       default_buyback: Recompra por defecto
       detailed_edit: Detailed Edit?
       dollar_per_lp: dólar por punto de fidelización
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: Depósito
       email: E-mail
@@ -198,6 +200,7 @@ es:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: Nombre de usuario
       uses_drawer_id: Utiliza la caja de
       value: Valor
@@ -213,9 +216,6 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Acción

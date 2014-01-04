@@ -34,6 +34,7 @@ fr:
       color: color
       company_id: Company
       company_name: nom de la société
+      completed_at: completed at
       contact_address: adresse à contacter
       contact_email: email à contacter
       contact_fax: fax à contacter
@@ -56,6 +57,7 @@ fr:
       default_buyback: rachat par défaut
       detailed_edit: Detailed Edit?
       dollar_per_lp: dollar par point fidélité
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: versement caisse
       email: email
@@ -198,6 +200,7 @@ fr:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: Nom d'utilisateur
       uses_drawer_id: XXX Uses Drawer of
       value: Valeur
@@ -213,9 +216,6 @@ fr:
       when: Quand
       whento: When
       width: Largeur
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Action

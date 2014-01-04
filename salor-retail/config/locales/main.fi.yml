@@ -34,6 +34,7 @@ fi:
       color: väri
       company_id: Yritys
       company_name: Yrityksen nimi
+      completed_at: completed at
       contact_address: Osoite
       contact_email: sähköposti
       contact_fax: fax-numero
@@ -56,6 +57,7 @@ fi:
       default_buyback: takaisinoston oletus
       detailed_edit: Yksityiskohtainen muokkaus?
       dollar_per_lp: Euro per kanta-asiakaspiste
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: talletus
       email: sähköposti
@@ -198,6 +200,7 @@ fi:
       user:
         hourly_rate: Tuntihinta
         uses_drawer_id: Käytettävä kassa
+      user_name: User
       username: käyttäjänimi
       uses_drawer_id: Käytettävä kassa
       value: arvo
@@ -213,9 +216,6 @@ fi:
       when: milloin
       whento: milloin
       width: leveys
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Toiminta

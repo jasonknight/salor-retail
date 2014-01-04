@@ -34,6 +34,7 @@ el:
       color: color
       company_id: Company
       company_name: όνομα εταιρίας
+      completed_at: completed at
       contact_address: διεύθυνση επικοινωνίας
       contact_email: ηλεκτρονική διεύθυνση
       contact_fax: Φαξ
@@ -56,6 +57,7 @@ el:
       default_buyback: προεπιλογή αγοράς ιδίων
       detailed_edit: Detailed Edit?
       dollar_per_lp: ευρώ ανά πόντους επιβράβευσης
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: προσθήκη μετρητών
       email: ηλεκτρονική διεύθυνση
@@ -198,6 +200,7 @@ el:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: όνομα χρήστη
       uses_drawer_id: Χρήση συρταριού του/της
       value: αξία
@@ -213,9 +216,6 @@ el:
       when: πότε
       whento: When
       width: πλάτος
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Πράξη

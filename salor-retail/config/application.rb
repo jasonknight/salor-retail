@@ -61,10 +61,10 @@ module SalorRetail
       CONFIGURATION = YAML::load(File.open(File.join(Rails.root, 'config', 'config.yml'), 'r').read)
     end
     
-    LANGUAGES = { 'en' => 'English', 'gn' => 'Deutsch', 'fr' => 'Français', 'es' => 'Español', 'el' => 'Greek', 'ru' => 'Русский', 'it' => 'Italiana', 'cn' => 'Chinese', 'hr' => 'Hrvatska','fi' => 'Suomi' }
-    COUNTRIES = { 'cc' => :default, 'us' => 'USA', 'gb' => 'England', 'ca' => 'Canada', 'de' => 'Deutschland', 'at' => 'Österreich', 'fr' => 'France', 'es' => 'España', 'el' => 'Ελλάδα', 'ru' => 'Россия', :it => 'Italia', 'cn' => '中国', 'hr' => 'Hrvatska','fi' => 'Suomi' }
-    COUNTRIES_REGIONS = { 'cc' => 'en-us', 'us' => 'en-us', 'gb' => 'en-gb', 'ca' => 'en-ca', 'de' => 'gn-de', 'at' => 'gn-de', 'fr' => 'fr-fr', 'es' => 'es-es', 'el' => 'el-el', 'ru' => 'ru-ru', 'it' => 'it-it', 'cn' => 'cn-cn', 'hr' => 'hr-hr' ,'fi' => 'fi-fi'}
-    COUNTRIES_INVOICES = { 'cc' => 'cc', 'us' => 'cc', 'gb' => 'cc', 'ca' => 'ca', 'de' => 'cc', 'at' => 'cc', 'fr' => 'cc', 'es' => 'cc', 'el' => 'cc', 'ru' => 'cc', 'it' => 'cc', 'cn' => 'cc', 'hr' => 'cc','fi' => 'cc' }
+    LANGUAGES = { 'en' => 'English', 'gn' => 'Deutsch', 'fr' => 'Français', 'es' => 'Español', 'el' => 'Greek', 'ru' => 'Русский', 'it' => 'Italiana', 'cn' => 'Chinese', 'hr' => 'Hrvatska','fi' => 'Suomi', 'nl' => 'Dutch' }
+    COUNTRIES = { 'cc' => :default, 'us' => 'USA', 'gb' => 'England', 'ca' => 'Canada', 'de' => 'Deutschland', 'at' => 'Österreich', 'fr' => 'France', 'es' => 'España', 'el' => 'Ελλάδα', 'ru' => 'Россия', :it => 'Italia', 'cn' => '中国', 'hr' => 'Hrvatska','fi' => 'Suomi', 'nl' => 'Nederland' }
+    COUNTRIES_REGIONS = { 'cc' => 'en-us', 'us' => 'en-us', 'gb' => 'en-gb', 'ca' => 'en-ca', 'de' => 'gn-de', 'at' => 'gn-de', 'fr' => 'fr-fr', 'es' => 'es-es', 'el' => 'el-el', 'ru' => 'ru-ru', 'it' => 'it-it', 'cn' => 'cn-cn', 'hr' => 'hr-hr' ,'fi' => 'fi-fi', 'nl' => 'nl-nl'}
+    COUNTRIES_INVOICES = { 'cc' => 'cc', 'us' => 'cc', 'gb' => 'cc', 'ca' => 'ca', 'de' => 'cc', 'at' => 'cc', 'fr' => 'cc', 'es' => 'cc', 'el' => 'cc', 'ru' => 'cc', 'it' => 'cc', 'cn' => 'cc', 'hr' => 'cc','fi' => 'cc', 'nl' => 'cc' }
     CURRENCIES = ["USD", "EUR", "CHF", "CAD"]
     
     # Settings in config/environments/* take precedence over those specified here.

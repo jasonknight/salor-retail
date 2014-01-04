@@ -381,11 +381,7 @@ nl:
       unused_item_ids: Ongebruikte artikelen
       used_item_ids: Gebruikte artikelen
     index:
-      database_distiller_warning:   Door het genereren van statistieken, 
-      duurt deze functie ongeveer 30 seconden. Doorgaan?
-      only_for_tobacco_stores: Deze functie is alleen voor tabak winkels. Tabak artikelen
-               wordt nu gemaakt en geactualiseerd. Deze actie duurt ongeveer 20 minuten. Weet
-               u zeker dat u wilt doorgaan?
+      database_distiller_warning:   Door het genereren van statistieken, duurt deze functie ongeveer 30 seconden. Doorgaan?
     inventory_report:
       price: Verkoopprijs
       subtotal_purchase_price: Subtotaal aankoopprijs
@@ -638,13 +634,9 @@ nl:
       sales: Verkopen
       system_drawer_amount: Kassalade huidig totaal
       transaction_total: TOTAAL
-      warning_drawer_amount_not_zero: Waarschuwing! Je hebt een lade die niet leeg is. geadviseerd wordt
-      om elke dag met een lege lade te beginnen en eindigen om de boekhouding te vergemakkelijken. 
-      Maak een contante uibetalingen en druk het verslag opnieuw af.
+      warning_drawer_amount_not_zero: Waarschuwing! Je hebt een lade die niet leeg is. geadviseerd wordt om elke dag met een lege lade te beginnen en eindigen om de boekhouding te vergemakkelijken. Maak een contante uibetalingen en druk het verslag opnieuw af.
     formats:
-      advert: ! 'The Innovative Point of Sale
-
-        www.salorpos.com'
+      advert: The Innovative Point of Sale www.salorpos.com
       cancel: Cancel                  EUR %8.2f
       change: ! 'Change:                       EUR %8.2f'
       coupon_subtotal: Kortingsbon                   EUR %8.2f
