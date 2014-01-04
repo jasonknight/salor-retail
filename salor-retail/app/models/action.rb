@@ -16,7 +16,7 @@ class Action < ActiveRecord::Base
   belongs_to :user
   belongs_to :model, :polymorphic => true
   
-  validates_presence_of :vendor_id, :company_id, :name, :model_type, :model_id
+  validates_presence_of :vendor_id, :company_id, :name, :whento, :behavior
 
   #README
   # 1. The rails way would lead to many duplications
@@ -51,12 +51,13 @@ class Action < ActiveRecord::Base
   
   def self.when_list
     return [
-      :add_to_order, 
-      :change_quantity, 
-      :change_price, 
-      :always, 
-      :on_save, 
-      :on_import, 
+      nil,
+      :add_to_order,
+      :change_quantity,
+      :change_price,
+      :always,
+      :on_save,
+      :on_import,
       :on_export,
       :on_sku_not_found
     ]
@@ -64,6 +65,7 @@ class Action < ActiveRecord::Base
 
   def self.behavior_list
     return [
+      nil,
       :add, 
       :subtract, 
       :multiply, 
@@ -76,6 +78,7 @@ class Action < ActiveRecord::Base
   
   def self.afield_list
     return [
+      nil,
       :price_cents, 
       :quantity, 
       :tax_profile_id, 
@@ -116,25 +119,31 @@ class Action < ActiveRecord::Base
       base_item = item
     end
     
+    redraw_all_pos_items = nil
+    
+    
+    
     if base_item.class != Vendor and base_item.kind_of? ActiveRecord::Base then
       the_vendor.actions.visible.where(:model_type => 'Vendor', :model_id => the_vendor).where(["whento = ? or whento = 'always'",act]).each do |action|
-        item = Action.apply_action(action, item, act)
+        redraw_all_pos_items = Action.apply_action(action, item, act)
       end
+      
       base_item.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
-        item = Action.apply_action(action, item, act)
+        redraw_all_pos_items = Action.apply_action(action, item, act)
       end
 
       if base_item.category then
         base_item.category.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
-          item = Action.apply_action(action, item, act)
+          redraw_all_pos_items = Action.apply_action(action, item, act)
         end
       end
+      
     else
       the_vendor.actions.visible.where(:model_type => 'Vendor', :model_id => the_vendor.id).where(["whento = ? or whento = 'always'",act]).each do |action|
-        item = action.execute_script(item)
+        redraw_all_pos_items = action.execute_script(item)
       end
     end
-    return item
+    return redraw_all_pos_items
   end
   
   def execute_script(item, act)
@@ -163,59 +172,118 @@ class Action < ActiveRecord::Base
   
   def self.apply_action(action, item, act)
     SalorBase.log_action Action, "Action.apply_action " + action.name + " action_id:#{action.id}"
-    return item if action.whento.nil?
-    item.action_applied = true
+    
+    redraw_all_pos_items = nil
+    
+    return redraw_all_pos_items if action.whento.nil?
+    
     if act == action.whento.to_sym or action.whento.to_sym == :always  then
+      
       if action.behavior.to_sym == :execute then
         return action.execute_script(item, act);
       end
-      #SalorBase.log_action Action, "item.#{action.afield} += action.value" + " #{item.send(action.afield).inspect}"
-      if ([:price, :base_price].include? action.afield.to_sym) then
-        the_value = Money.new(action.value * 100, item.currency)
+
+      if action.afield == "base_price_cents"
+        the_value *= 100
       else
         the_value = action.value
       end
-
-      #SalorBase.log_action Action, "item.#{action.afield} += action.value" + " #{item.send(action.afield).inspect} + #{the_value.inspect}"
-      eval("item.#{action.afield} += the_value") if action.behavior.to_sym == :add
-      eval("item.#{action.afield} -= the_value") if action.behavior.to_sym == :subtract
-      eval("item.#{action.afield} *= the_value") if action.behavior.to_sym == :multiply
-      eval("item.#{action.afield} /= the_value") if action.behavior.to_sym == :divide
-      eval("item.#{action.afield} = the_value") if action.behavior.to_sym == :assign
-
-
       
-      if action.behavior.to_sym == :discount_after_threshold then
-        SalorBase.log_action Action,"Discount after threshold"
-        if act == :add_to_order and action.model.class == Category
-          SalorBase.log_action Action,"Is a category discount"
+#       if action.afield.to_sym == :price_cents
+#         # Reset the price to the Item price_cents
+#         item.price_cents = item.item.price_cents
+#       end
+      
+      case action.behavior.to_sym
+        
+      when :add
+        eval("item.#{action.afield} += the_value")
+        item.action_applied = true
+        item.save!
+        
+      when :substract
+        eval("item.#{action.afield} -= the_value")
+        item.action_applied = true
+        item.save!
+        
+      when :multiply
+        eval("item.#{action.afield} *= the_value")
+        item.action_applied = true
+        item.save!
+        
+      when :divide
+        eval("item.#{action.afield} /= the_value")
+        item.action_applied = true
+        item.save!
+        
+      when :assign
+        eval("item.#{action.afield} = the_value")
+        item.action_applied = true
+        item.save!
+        
+      when :discount_after_threshold
+        SalorBase.log_action Action,"[Discount after threshold]: called"
+        
+        if action.model.class == Category
+          SalorBase.log_action Action,"[Discount after threshold]: Is a category discount"
           items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id)
+          return if items_in_cat.blank?
           total_quantity = items_in_cat.sum(:quantity)
-          items_in_cat.update_all :rebate => 0
-          item_price = items_in_cat.minimum(:price_cents)
-          num_discountables = (total_quantity / action.value2).floor
-        elsif action.behavior.to_sym == :discount_after_threshold and act == :add_to_order
-          SalorBase.log_action Action,"Is regular discount_after_threshold"
-          item_price = item.price_cents
+          SalorBase.log_action Action,"[Discount after threshold]: Total quantity is #{ total_quantity }"
+          minimum_price_item = nil
+          minimum_price = 9999999
+          items_in_cat.each do |i|
+            if i.price_cents < minimum_price
+              minimum_price_item = i 
+              minimum_price = i.price_cents
+            end
+          end
+          SalorBase.log_action Action,"[Discount after threshold]: Minimum price is #{ minimum_price }, minimum price item ID is #{ minimum_price_item.inspect }"
+          num_discountables = (total_quantity / (action.value2 + 1)).floor
+          SalorBase.log_action Action,"[Discount after threshold]: num_discountables is #{ num_discountables}"
+          
+          # reset all relevant items
+          items_in_cat.each do |oi|
+            oi.price_cents = oi.item.price_cents
+            oi.coupon_amount_cents = 0
+            oi.action_applied = nil
+            oi.calculate_totals
+          end
+          
+          if num_discountables >= 1
+            SalorBase.log_action Action,"[Discount after threshold]: Applying action"
+            # Note: This is misusing the coupon_amount attribute. TODO: Create an 'action_amount_cents' attribute, however this will require quite extensive changes in the calculations in Order and Item models. It works for now.
+            
+            if num_discountables > minimum_price_item.quantity
+              max_discountables = minimum_price_item.quantity
+            else
+              max_discountables = num_discountables
+            end
+            
+            minimum_price_item.coupon_amount_cents = action.value * max_discountables * minimum_price_item.price_cents
+            minimum_price_item.action_applied = true
+            minimum_price_item.calculate_totals
+          else
+            SalorBase.log_action Action,"[Discount after threshold]: num_discountables is not sufficient"
+            minimum_price_item.coupon_amount_cents = 0
+            minimum_price_item.action_applied = nil
+            minimum_price_item.calculate_totals
+          end
+          
+          
+          
+          redraw_all_pos_items = true
+          
+        else
+          SalorBase.log_action Action,"[Discount after threshold]: Is regular"
+          minimum_price = item.price_cents
           num_discountables = (item.quantity / action.value2).floor
         end
-        item.rebate = 0 # Important
-        if num_discountables >= 1 then
-          SalorBase.log_action Action,"discount #{num_discountables} and item_price is #{item_price}"
-          total_2_discount = item_price * num_discountables
-          SalorBase.log_action Action, total_2_discount.inspect
-          percentage = total_2_discount / (item.price_cents * item.quantity)
-          SalorBase.log_action Action, "total_2_discount is #{total_2_discount} and percentage is #{percentage}"
-          item.rebate = (percentage * 100).to_i
-          SalorBase.log_action Action,"rebate is #{item.rebate}"
+        
 
-          item.save
-        else
-          SalorBase.log_action Action,"num_discountables is not sufficient"
-        end
       end
     end
-    item.save!
-    return item
+
+    return redraw_all_pos_items
   end
 end

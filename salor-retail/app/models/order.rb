@@ -188,6 +188,9 @@ class Order < ActiveRecord::Base
 
   def add_order_item(params={})
     return nil if params[:sku].blank?
+    
+    redraw_all_order_items = nil
+    
     if self.completed_at then
       log_action "Order is completed already, cannot add items to it #{self.completed_at}"
     end
@@ -197,10 +200,10 @@ class Order < ActiveRecord::Base
     if oi then
       if oi.is_normal?
         log_action "Item is normal, and present, just increment"
-        oi.quantity += 1 
-        oi.modify_price_for_actions
+        oi.quantity += 1
+        redraw_all_order_items = oi.modify_price_for_actions
         oi.calculate_totals
-        oi.save
+        oi.save!
         self.calculate_totals
         return oi
       else
@@ -212,7 +215,7 @@ class Order < ActiveRecord::Base
     
     # at this point, we know that the added order item is not yet in the order. so we add a new one
     i = self.get_item_by_sku(params[:sku])
-    log_action "Item is: #{i.inspect}"
+    #log_action "Item is: #{i.inspect}"
     if i.class == LoyaltyCard then
       log_action "Item is a loyalty card"
       self.customer = i.customer
@@ -240,11 +243,12 @@ class Order < ActiveRecord::Base
     end
     oi.no_inc ||= params[:no_inc]
     log_action "no_inc is: #{oi.no_inc.inspect}"
-    oi.modify_price
+    oi.save # this is needed so that Action has the complete set of OrderItems taken from oi.order
+    redraw_all_order_items = oi.modify_price
     oi.calculate_totals
     self.order_items << oi
     self.calculate_totals
-    return oi
+    return oi, redraw_all_order_items
   end
 
   
@@ -300,7 +304,8 @@ class Order < ActiveRecord::Base
   
   
   
-  def get_item_by_sku(sku)    
+  def get_item_by_sku(sku)
+    
     item = self.vendor.items.visible.find_by_sku(sku)
     return item if item # a sku was entered
 
@@ -330,11 +335,12 @@ class Order < ActiveRecord::Base
       # dummy item
       # we didn't find the item, let's see if a plugin wants to handle it
       i.sku = sku
-      i.price = 0
-      i = Action.run(i.vendor, i, :on_sku_not_found) 
+      i.price_cents = 0
+      Action.run(i.vendor, i, :on_sku_not_found) 
     end
-    result = i.save
-    raise "Could not generate Item from #{ self.inspect } because of #{ i.errors.messages }" if result != true
+    
+    i.save!
+
     return i
   end
 

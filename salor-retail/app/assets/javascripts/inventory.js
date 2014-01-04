@@ -30,8 +30,8 @@ sr.fn.inventory = {
       $('#inventory_sku').val('');
       $('#inventory_item_name').html(data.name);
       $('#inventory_item_sku').html(data.sku);
-      $('#inventory_item_name').effect('highlight');
-      $('#inventory_item_sku').effect('highlight');
+      //$('#inventory_item_name').effect('highlight');
+      //$('#inventory_item_sku').effect('highlight');
       $('#inventory_quantity').val(data.quantity)
       $('#inventory_quantity').select();
     } else {

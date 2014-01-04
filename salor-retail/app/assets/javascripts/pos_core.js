@@ -144,6 +144,9 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
     // various settings of individual fields and adding of col to row
     switch(attr) {
       case 'name':
+        if (item.action_applied) {
+          col.addClass("pos-action-applied");
+        }
         row.append(col);
         sr.fn.pos_core.makeItemMenu(col, row);
         break;
@@ -165,9 +168,6 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
         break;
         
       case 'price':
-        if (item.action_applied) {
-          col.addClass("pos-action-applied");
-        }
         row.append(col);
         break;
         

@@ -979,3 +979,4 @@ en:
     on_import: on import
     on_save: on save
     on_sku_not_found: on sku not found
+    change_quantity: on change quantity

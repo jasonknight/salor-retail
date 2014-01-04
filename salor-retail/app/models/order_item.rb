@@ -229,6 +229,7 @@ class OrderItem < ActiveRecord::Base
   
   # this method is just for documentation purposes: that total always includes tax. it is the physical money that has to be collected from the customer.
   def gross
+    log_action "XXXXXXXXX gross #{ self.total_cents.inspect }"
     return self.total
   end
   
@@ -264,7 +265,7 @@ class OrderItem < ActiveRecord::Base
   # otherwise calculate_totals is called
   def modify_price
     log_action "Modifying price for actions"
-    self.modify_price_for_actions
+    redraw_all_order_items = self.modify_price_for_actions
     log_action "Modifying price for gs1"
     self.modify_price_for_gs1
     if self.is_buyback
@@ -276,12 +277,14 @@ class OrderItem < ActiveRecord::Base
       log_action "modify_price_for_giftcards"
       self.modify_price_for_giftcards 
     end
-    self.save
+    self.save!
+    return redraw_all_order_items
   end
   
   def modify_price_for_actions
     log_action "modify_price_for_actions"
-    Action.run(self.vendor, self, :add_to_order)
+    redraw_all_order_items = Action.run(self.vendor, self, :add_to_order)
+    return redraw_all_order_items
   end
   
   def modify_price_for_gs1
@@ -343,7 +346,7 @@ class OrderItem < ActiveRecord::Base
     
     # this method calculates taxes and transforms "total" to always include tax
     self.calculate_tax
-    self.save
+    self.save!
   end
   
   # this method calculates taxes and transforms "total" to always include tax
@@ -362,16 +365,14 @@ class OrderItem < ActiveRecord::Base
   # This is only for the European tax system. Item.price is already gross and implicitly includes a tax amount for the specific TaxProfile set on Item, However, the user can change the TaxProfile from the POS screen. If that happens, we have to find the implied net part of self.total, and re-calculate self.total according to the set tax.
   def adapt_gross
     return if self.vendor.net_prices
-    net = self.total / ( 1 + ( self.item.tax_profile.value / 100.0 ) )
-    self.total = net * ( 1 + ( self.tax / 100.0 ) )
+    net_cents = self.total_cents / ( 1.0 + ( self.item.tax_profile.value / 100.0 ) )
+    self.total_cents = net_cents * ( 1.0 + ( self.tax / 100.0 ) )
   end
   
-  # coupons have to be added after the matching product
+  # coupons have to be added on the POS screen AFTER the matching product
   # coupons do not have a price by themselves, they just reduce the total of the matching OrderItem. Note that this method does not act on self, but to the matching OrderItem.
   def apply_coupon
     if self.behavior == 'coupon'
-    
-      
       item = self.item
       
       # coitem is the OrderItem to which the coupon acts upon
@@ -416,6 +417,7 @@ class OrderItem < ActiveRecord::Base
       if self.vendor.net_prices
         coitem.total = coitem.net - coitem.coupon_amount
       else
+        log_action "XXXXXXXXX #{ coitem.gross.inspect } #{ coitem.coupon_amount.inspect  }"
         coitem.total = coitem.gross - coitem.coupon_amount
       end
       log_action "apply_coupon: OrderItem Total after coupon applied is: #{coitem.total_cents} and coupon_amount is #{coitem.coupon_amount_cents}"
@@ -520,7 +522,7 @@ class OrderItem < ActiveRecord::Base
         :weight_metric => self.item.weight_metric,
         :tax => self.tax,
         :tax_profile_id => self.tax_profile_id,
-        :action_applied => self.item.actions.visible.any?
+        :action_applied => self.action_applied
       }
     end
     return obj.to_json

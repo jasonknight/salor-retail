@@ -132,7 +132,7 @@ class VendorsController < ApplicationController
     r.drawer = @current_user.get_drawer
     r.content = text
     r.ip = request.ip
-    r.save
+    r.save!
   end
   
   def edit_field_on_child
@@ -180,11 +180,14 @@ class VendorsController < ApplicationController
       #README If someone edits the quantity or price of an item, Actions need to be informed of this.
       case params[:field]
       when 'price'
-        @order_item = Action.run(@current_vendor, @order_item, :change_price)
+        redraw_all_pos_items = Action.run(@current_vendor, @order_item, :change_price)
+        @order_item.reload
       when 'quantity'
-        @order_item = Action.run(@current_vendor, @order_item, :change_quantity)
-        @order_item = Action.run(@current_vendor, @order_item, :add_to_order) # a change in qty is the same
+        redraw_all_pos_items = Action.run(@current_vendor, @order_item, :change_quantity)
+        @order_item.reload
+        #@order_item = Action.run(@current_vendor, @order_item, :add_to_order) # a change in qty is the same
         # as adding to an order otherwise we have to create 2 actions to accomplish the same thing.
+        # MF: I disabled this again because it broke the :add, :substract, :multiply and :divide actions because it would increase or decrease the oi price on each scan. We really need :change_quantity as a separate event because we want fine-grained control, and we need to extend the Action model to support an array of possible events if we want to do DRY.
       end
 
       @order_item.calculate_totals
@@ -192,7 +195,12 @@ class VendorsController < ApplicationController
       
       # set variables for the js.erb view
       @order = @order_item.order
-      @order_items = [@order_item]
+      if redraw_all_pos_items == true
+        @order_items = @order.order_items.visible
+      else
+        @order_items = [@order_item]
+      end
+      
       if @order_item.behavior == 'gift_card' and @order_item.activated.nil? and @order_item.price_cents > 0
         # this is a dynamically generated gift card item. if this variable is set, the view has to start a print request to print a sticker.
         @gift_card_item_id_for_print = @order_item.item_id
