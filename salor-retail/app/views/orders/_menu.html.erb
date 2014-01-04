@@ -15,9 +15,11 @@
   <div id="show_search" onclick="sr.fn.search_pos.showPopup();" class="input pos-button">
     <%= raw salor_icon(:search, {:class => "no-select",:style => "cursor:pointer;"},32, t("menu.search")) %>
   </div>
-  <div class="pos-button" align="center" onmousedown="weigh_last_item();">
-    <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32, t("menu.weigh")) %>
-  </div>
+  <% if not @current_register.scale.empty? then %>
+    <div class="pos-button" align="center" onmousedown="weigh_last_item();">
+      <%= raw salor_icon(:weight,{:class => "no-select",:style => "cursor:pointer;"},32, t("menu.weigh")) %>
+    </div>
+  <% end %>
   <div class="pos-button" onmousedown="sr.fn.salor_bin.quickOpenDrawer();">
     <%= salor_icon(:cash_drawer, {:class => "no-select",:style => "top: -5px;cursor: pointer;"},32, t("menu.open_drawer")) %>
   </div>
