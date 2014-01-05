@@ -52,7 +52,7 @@
           %tr
             %td= i.sku
             %td= i.name
-            %td.right= i.real_quantity
+            %td.right= number_with_precision i.real_quantity, :precision => 1
             %td.right= humanized_money_with_symbol i.purchase_price
             %td.right= humanized_money_with_symbol i.price
             %td.right= humanized_money_with_symbol item_purchase_price_total
