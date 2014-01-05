@@ -43,10 +43,9 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :item_stocks, :allow_destroy => true #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }
 
   validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id
-  #validates_uniqueness_of :sku, :scope => :vendor_id
   validate :sku_unique_in_visible
 
-  before_save :run_actions
+  before_save :run_onsave_actions
   before_save :cache_behavior
   
   COUPON_TYPES = [
@@ -203,7 +202,7 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def run_actions
+  def run_onsave_actions
     Action.run(self.vendor,self, :on_item_save)
   end
   

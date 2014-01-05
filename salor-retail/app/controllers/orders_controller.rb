@@ -122,10 +122,6 @@ class OrdersController < ApplicationController
         @order_items << @order_item
       end
       
-      if @order_item.price.zero?
-        #$MESSAGES[:alerts] << I18n.t('system.errors.item_price_is_zero')
-      end
-      
       if @order_item.behavior == 'coupon'
         @matching_coupon_item = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
         @order_items << @matching_coupon_item
