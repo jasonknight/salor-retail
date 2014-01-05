@@ -1,3 +1,10 @@
+salor-retail (4.0.2.44) unstable; urgency=low
+
+  * csv upload improvement
+  * added gift card overview
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 05 Jan 2014 12:19:36 +0100
+
 salor-retail (4.0.2.43) unstable; urgency=low
 
   [ Jason Knight ]
