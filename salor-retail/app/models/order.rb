@@ -330,7 +330,7 @@ class Order < ActiveRecord::Base
       # a price in the format xx,xx was entered
       timestamp = Time.now.strftime("%y%m%d%H%M%S%L")
       i.sku = "DMY" + timestamp
-      i.price = self.string_to_float(sku, :locale => self.vendor.region)
+      i.price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
     else
       # dummy item
       # we didn't find the item, let's see if a plugin wants to handle it
@@ -338,7 +338,6 @@ class Order < ActiveRecord::Base
       i.price_cents = 0
       Action.run(i.vendor, i, :on_sku_not_found) 
     end
-    
     i.save!
 
     return i

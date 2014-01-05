@@ -112,6 +112,7 @@ SalorRetail::Application.routes.draw do
   match "items/upload_optimalsoft" => "items#upload_optimalsoft"
   match "items/download" => "items#download"
   match "items/info" => "items#info"
+  match "items/gift_cards" => "items#gift_cards"
   match "items/inventory_json" => "items#inventory_json"
   match "items/create_ajax" => "items#create_ajax"
   match "items/render_label" => "items#render_label"

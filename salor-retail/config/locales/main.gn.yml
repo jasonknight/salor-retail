@@ -445,6 +445,7 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
+    gift_cards: Gutscheine
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf

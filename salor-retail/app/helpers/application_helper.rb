@@ -70,6 +70,7 @@ module ApplicationHelper
 
   def get_icons_map
     icons = {
+      :gift_card => 'gift_card',
       :subscription_order => 'subscription_order',
       :add_item => 'add_item',
       :location => 'location',
