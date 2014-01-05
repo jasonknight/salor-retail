@@ -433,6 +433,17 @@ class Item < ActiveRecord::Base
     end
   end
   
+  def recursive_child_sku_chain(depth=0, chain=[])
+    depth += 1
+    return chain << "and ongoing... " if depth > 5
+    if self.child
+      chain << self.sku
+      self.child.recursive_child_sku_chain(depth, chain)
+    else
+      chain << self.sku
+    end
+  end
+  
   def self.get_too_long_recursion_items
     too_long_item_ids = []
     Item.visible.where('child_id IS NULL OR child_id = 0').each do |i|

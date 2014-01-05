@@ -16,7 +16,14 @@ class ItemsController < ApplicationController
     orderby ||= params[:order_by]
     unless params[:keywords].blank?
       # search function should display recursive items
-      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
+      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+      child_item_skus = []
+      @items.each do |i|
+        
+        upmost_parent = @current_vendor.items.find_by_sku(i.recursive_sku_chain.last)
+        child_item_skus << upmost_parent.recursive_child_sku_chain.last
+      end
+      @items = @current_vendor.items.where(:sku => child_item_skus).page(params[:page]).per(@current_vendor.pagination)
     else
       @items = @current_vendor.items.visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
     end
