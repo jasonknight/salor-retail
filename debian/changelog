@@ -1,3 +1,9 @@
+salor-retail (4.0.2.47) unstable; urgency=low
+
+  * small fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 06 Jan 2014 14:30:50 +0100
+
 salor-retail (4.0.2.46) unstable; urgency=low
 
   * localization
