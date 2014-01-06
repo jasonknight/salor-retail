@@ -1,3 +1,10 @@
+salor-retail (4.0.2.46) unstable; urgency=low
+
+  * localization
+  * various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 06 Jan 2014 07:16:03 +0100
+
 salor-retail (4.0.2.45) unstable; urgency=low
 
   * keyword search enabled for recursion
