@@ -88,7 +88,6 @@
         %th.right= t '.net'
         %th.right= t '.tax'
       - taxes[i[0]].to_a.each do |t|
-        - next if t[1][:gro].zero?
         %tr
           %td.left= number_to_percentage t[0]
           %td.right= humanized_money_with_symbol t[1][:gro]

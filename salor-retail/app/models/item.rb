@@ -42,7 +42,7 @@ class Item < ActiveRecord::Base
   
   accepts_nested_attributes_for :item_stocks, :allow_destroy => true #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }
 
-  validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id
+  validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id, :currency
   validate :sku_unique_in_visible
 
   before_save :run_onsave_actions
@@ -81,7 +81,7 @@ class Item < ActiveRecord::Base
       trans = I18n.t("activerecord.attributes.#{attrib.downcase}", :raise => true) 
       return trans
     rescue
-      SalorBase.log_action self.class, "trans error raised for activerecord.attributes.#{attrib} with locale: #{I18n.locale}"
+      #SalorBase.log_action self.class, "trans error raised for activerecord.attributes.#{attrib} with locale: #{I18n.locale}"
       return super
     end
   end

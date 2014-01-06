@@ -47,7 +47,13 @@ module MoneyRails
     alias_method :orig_humanized_money_with_symbol, :humanized_money_with_symbol
     
     def humanized_money_with_symbol(arg1, arg2={})
-      arg1.format :decimal_mark => I18n.t("number.currency.format.separator", :locale => @region), :thousands_separator => I18n.t("number.currency.format.separator", :locale => @region)
+      if @region
+        arg2.merge!(
+          :decimal_mark => I18n.t("number.currency.format.separator", :locale => @region),
+          :thousands_separator => I18n.t("number.currency.format.delimiter", :locale => @region)
+        )
+      end
+      arg1.format(arg2)
     end
   end
 end

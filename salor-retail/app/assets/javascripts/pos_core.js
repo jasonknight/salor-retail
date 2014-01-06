@@ -224,7 +224,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item) {
     // additional rules of field groups
     if (attr == "price" || attr == "rebate" || attr == "tax") {
       if (
-        (sr.data.session.user.role_cache.indexOf('change_prices') != -1) ||
+        (sr.data.session.user.role_cache.indexOf('head_cashier') != -1) ||
         (sr.data.session.user.role_cache.indexOf('manager') != -1) ||
         (item.must_change_price == true)
          ) {
