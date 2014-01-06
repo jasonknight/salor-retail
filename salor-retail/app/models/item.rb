@@ -43,7 +43,7 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :item_stocks, :allow_destroy => true #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }
 
   validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id, :currency
-  validate :sku_unique_in_visible
+  validate :sku_unique_in_visible, :not_selfloop, :not_too_long_child_chain, :not_too_long_parent_chain
 
   before_save :run_onsave_actions
   before_save :cache_behavior
@@ -66,6 +66,32 @@ class Item < ActiveRecord::Base
     end
     if self.vendor.items.visible.where(:sku => self.sku).count > number
       errors.add(:sku, I18n.t('activerecord.errors.messages.taken'))
+      return
+    end
+  end
+  
+  def not_selfloop
+    if self.sku == self.child_sku
+      errors.add(:child_sku, "cannot have the same SKU as this item!")
+      return
+    end
+  end
+  
+  def not_too_long_child_chain
+    chain = self.recursive_child_sku_chain
+    chain.shift
+    if chain.include? self.sku
+      errors.add(:child_sku, "would create a child-infinite loop!")
+      return
+    end
+  end
+  
+  def not_too_long_parent_chain
+    chain = self.recursive_sku_chain
+    #debugger
+    chain.shift
+    if chain.include? self.sku
+      errors.add(:child_sku, "would create a parent-infinite loop!")
       return
     end
   end
@@ -104,25 +130,18 @@ class Item < ActiveRecord::Base
   
   # ----- old name aliases setters
   def buyback_price=(p)
-    self.buy_price_cents = self.string_to_float(p, :locale => self.vendor.region) * 100.0
+    self.buy_price_cents = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
   end
   
   def base_price=(p)
-    p = self.string_to_float(p, :locale => self.vendor.region) * 100.0
-    self.price_cents = p
+    self.price_cents = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
   end
   
   def amount_remaining=(p)
-    p = self.string_to_float(p, :locale => self.vendor.region) * 100.0
+    p = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
     self.gift_card_amount_cents = p
   end
   # ------ end old name aliases setters
-  
-  
-  
-  
-  
-
 
 
   # ----- convenience methods for CSV
@@ -231,11 +250,11 @@ class Item < ActiveRecord::Base
       self.child = nil
       return
     end
-    if self.sku == string then
-      # this would create an infinite loop on self, we don't allow that
-      self.child = nil
-      return
-    end
+#     if self.sku == string then
+#       # this would create an infinite loop on self, we don't allow that
+#       self.child = nil
+#       return
+#     end
     child_item = self.vendor.items.visible.find_by_sku(string)
     if child_item then
       self.child_id = child_item.id
@@ -337,7 +356,7 @@ class Item < ActiveRecord::Base
     end
     result = self.save
     if result == false
-      raise "Could not save Item because #{ i.errors.messages }"
+      raise "Could not save Item because #{ self.errors.messages }"
     end
   end
   
@@ -465,6 +484,10 @@ class Item < ActiveRecord::Base
   
   def self.find_duplicates
     Vendor.connection.execute("SELECT sku, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
+  end
+  
+  def self.find_child_duplicates
+    Vendor.connection.execute("SELECT sku, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY child_id HAVING count(*) > 1").to_a
   end
   
   def self.clean_duplicates

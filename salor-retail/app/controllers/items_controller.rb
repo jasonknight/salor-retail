@@ -6,6 +6,9 @@
 # See license.txt for the license applying to all files within this software.
 
 
+#   9.70
+#   C8704191257
+
 class ItemsController < ApplicationController
   before_filter :check_role, :except => [:info, :search]
   before_filter :update_devicenodes, :only => [:index]
@@ -18,9 +21,12 @@ class ItemsController < ApplicationController
       # search function should display recursive items
       @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
       child_item_skus = []
+      log_action "XXXXX[recursive find]: @items #{ @items.collect{ |i| i.sku } }"
       @items.each do |i|
-        
-        upmost_parent = @current_vendor.items.find_by_sku(i.recursive_sku_chain.last)
+        log_action "XXXXX[recursive find]: finding upmost parent for Item id #{ i.id }"
+        log_action "XXXXX[recursive find]: upmost parent sku is #{ i.recursive_sku_chain.last }"
+        upmost_parent = @current_vendor.items.visible.find_by_sku(i.recursive_sku_chain.last)
+        log_action "XXXXX[recursive find]: bottom most child sku is #{ upmost_parent.recursive_child_sku_chain.last }"
         child_item_skus << upmost_parent.recursive_child_sku_chain.last
       end
       @items = @current_vendor.items.where(:sku => child_item_skus).page(params[:page]).per(@current_vendor.pagination)
@@ -44,6 +50,7 @@ class ItemsController < ApplicationController
     @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :is_buyback => nil, :refunded => nil, :completed_at => @from..@to, :is_quote => nil, :is_proforma => nil).sum(:quantity)
   end
 
+  
   def new
     @item = @current_vendor.items.build
     @histories = @item.histories.order("created_at DESC").limit(20)
@@ -99,6 +106,7 @@ class ItemsController < ApplicationController
       # redirect_to items_path
       render :edit
     else
+      @histories = @item.histories.order("created_at DESC").limit(20)
       render :edit
     end
   end
