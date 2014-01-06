@@ -130,15 +130,17 @@ class Item < ActiveRecord::Base
   
   # ----- old name aliases setters
   def buyback_price=(p)
-    self.buy_price_cents = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
+    self.buy_price_cents = (self.string_to_float(p, :locale => self.vendor.region) * 100).ceil
   end
   
-  def base_price=(p)
-    self.price_cents = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
+  def base_price=(pricestring)
+    price_float = self.string_to_float(pricestring, :locale => self.vendor.region)
+    price_c = (price_float * 100).ceil
+    self.price_cents = price_c
   end
   
   def amount_remaining=(p)
-    p = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
+    p = (self.string_to_float(p, :locale => self.vendor.region) * 100).ceil
     self.gift_card_amount_cents = p
   end
   # ------ end old name aliases setters
@@ -388,6 +390,7 @@ class Item < ActiveRecord::Base
     self.parent = nil
     self.child = nil
     self.hidden = true
+    self.sku = "OLD#{ Time.now.strftime("%Y%m%d%H%M%S") }#{ self.sku }"
     self.hidden_by = by
     self.hidden_at = Time.now
     result = self.save
@@ -487,7 +490,7 @@ class Item < ActiveRecord::Base
   end
   
   def self.find_child_duplicates
-    Vendor.connection.execute("SELECT sku, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY child_id HAVING count(*) > 1").to_a
+    Vendor.connection.execute("SELECT child_id, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY child_id HAVING count(*) > 1").to_a
   end
   
   def self.clean_duplicates

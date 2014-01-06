@@ -498,6 +498,12 @@ class OrderItem < ActiveRecord::Base
   def to_json
     obj = {}
     if self.item then
+      quantity_string = ""
+      if self.quantity.round == self.quantity
+        quantity_string = self.quantity.to_i.to_s
+      else
+        quantity_string = self.quantity.to_s
+      end
       obj = {
         :name => self.get_translated_name(I18n.locale)[0..20],
         :category_id => self.category_id,
@@ -506,7 +512,7 @@ class OrderItem < ActiveRecord::Base
         :activated => self.item.activated,
         :gift_card_amount => self.item.gift_card_amount.to_f,
         :coupon_type => self.item.coupon_type,
-        :quantity => SalorBase.number_with_precision(self.quantity, :locale => self.vendor.region),
+        :quantity => quantity_string,
         :price => self.price.to_f,
         :discount_amount => self.discount_amount.to_f,
         :rebate_amount => self.rebate_amount.to_f,

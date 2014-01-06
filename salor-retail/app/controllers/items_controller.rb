@@ -5,10 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
-
-#   9.70
-#   C8704191257
-
 class ItemsController < ApplicationController
   before_filter :check_role, :except => [:info, :search]
   before_filter :update_devicenodes, :only => [:index]

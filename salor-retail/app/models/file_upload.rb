@@ -67,19 +67,19 @@ class FileUpload
       purchase_price = columns[15].to_i
 
       #piece price calculation
-      base_price_piece = base_price / packaging_unit_container
-      purchase_price_piece = purchase_price / packaging_unit_container
+      base_price_piece = base_price.to_f / packaging_unit_container.to_f
+      purchase_price_piece = purchase_price.to_f / packaging_unit_container.to_f
 
       #pack price calculation
-      base_price_pack = base_price_piece * packaging_unit_pack
-      purchase_price_pack = purchase_price_piece * packaging_unit_pack
+      base_price_pack = base_price_piece.to_f * packaging_unit_pack.to_f
+      purchase_price_pack = purchase_price_piece.to_f * packaging_unit_pack.to_f
 
       #carton price calculation
-      base_price_carton = base_price_piece * packaging_unit_carton
-      purchase_price_carton = purchase_price_piece * packaging_unit_carton
+      base_price_carton = base_price_piece.to_f * packaging_unit_carton.to_f
+      purchase_price_carton = purchase_price_piece.to_f * packaging_unit_carton.to_f
 
       # packaging_unit_modification
-      packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
+      packaging_unit_carton = packaging_unit_carton.to_f / packaging_unit_pack.to_f
 
       if columns[36]
         tax_profile = @vendor.tax_profiles.visible.find_by_value(columns[36].to_f / 100.0)
@@ -170,6 +170,7 @@ class FileUpload
         :currency => @vendor.currency
       }
       sku_pack = columns[9].strip
+
       pack_item = @vendor.items.visible.where( :name => name + " Packung").first
       pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if pack_item.blank? and not sku_pack.blank? # second chance to find by sku in case name has changed
       if pack_item
@@ -302,19 +303,19 @@ class FileUpload
       purchase_price = columns[15].gsub(',','.').to_f / 100
 
       # piece price calculation
-      base_price_piece = base_price / packaging_unit_container
-      purchase_price_piece = purchase_price / packaging_unit_container
+      base_price_piece = base_price.to_f / packaging_unit_container.to_f
+      purchase_price_piece = purchase_price.to_f / packaging_unit_container.to_f
 
       # pack price calculation
-      base_price_pack =  base_price_piece * packaging_unit_pack
-      purchase_price_pack =  purchase_price_piece * packaging_unit_pack
+      base_price_pack =  base_price_piece.to_f * packaging_unit_pack.to_f
+      purchase_price_pack =  purchase_price_piece.to_f * packaging_unit_pack.to_f
 
       # carton price calculation
-      base_price_carton = base_price_piece * packaging_unit_carton
-      purchase_price_carton = purchase_price_piece * packaging_unit_carton
+      base_price_carton = base_price_piece.to_f * packaging_unit_carton.to_f
+      purchase_price_carton = purchase_price_piece.to_f * packaging_unit_carton.to_f
 
       # packaging_unit_modification
-      packaging_unit_carton = packaging_unit_carton / packaging_unit_pack
+      packaging_unit_carton = packaging_unit_carton.to_f / packaging_unit_pack.to_f
 
       if columns[36]
         tax_profile = @vendor.tax_profiles.visible.find_by_value(columns[36].to_f / 100)
