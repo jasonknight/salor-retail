@@ -1,3 +1,9 @@
+salor-retail (4.0.2.49) unstable; urgency=low
+
+  * tests
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 06 Jan 2014 20:24:09 +0100
+
 salor-retail (4.0.2.48) unstable; urgency=low
 
   * small fixes
