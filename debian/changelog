@@ -1,3 +1,10 @@
+salor-retail (4.0.2.53) unstable; urgency=low
+
+  * show recently updated orders instead of recently created
+  * fixed setter for purchase_price
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 11:31:29 +0100
+
 salor-retail (4.0.2.52) unstable; urgency=low
 
   * fixed customer screen logo
