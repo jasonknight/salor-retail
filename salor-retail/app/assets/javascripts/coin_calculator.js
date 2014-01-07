@@ -28,7 +28,7 @@ sr.fn.coin_calculator.displayTotal = function() {
   _ref = $('.eod-calculator-input');
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     elem = _ref[_i];
-    ttl = parseInt(elem.value) * sr.fn.math.toFloat($(elem).attr('amount'));
+    ttl = parseInt(elem.value) * parseFloat($(elem).attr('amount'));
     if (ttl > 0) {
       calculator_total += ttl;
     }
