@@ -108,7 +108,7 @@ class ItemsController < ApplicationController
   end
   
   def gift_cards
-    @gift_cards_sold = @current_vendor.order_items.visible.where(:behavior => "gift_card", :activated => nil)
+    @gift_cards_sold = @current_vendor.order_items.visible.where(:behavior => "gift_card", :activated => nil, :paid => true)
   end
   
   def update_real_quantity

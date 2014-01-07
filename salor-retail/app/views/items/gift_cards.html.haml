@@ -10,9 +10,14 @@
 .paper-invoice.invoice_print
   - @gift_cards_sold.reverse.each do |gcoi|
     - gci = gcoi.item
-    %h3
-      = t 'activerecord.models.item_type.gift_card'
-      = link_to gci.sku, edit_item_path(gci)
+    - if gci.hidden
+      %h3
+        = t 'activerecord.models.item_type.gift_card'
+        (deleted)
+    - else
+      %h3
+        = t 'activerecord.models.item_type.gift_card'
+        = link_to gci.sku, edit_item_path(gci)
     %table.striped-table2
       - gci.vendor.order_items.visible.where(:item_id => gci.id).each do |gcoi|
         %tr
