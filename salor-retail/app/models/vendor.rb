@@ -297,17 +297,17 @@ class Vendor < ActiveRecord::Base
                :net => Money.new(0, self.currency)
               }
     }
-#     used_categories = self.order_items.visible.where(
-#       :completed_at => from..to,
-#       :drawer_id => drawer,
-#       :is_proforma => nil,
-#       :is_quote => nil,
-#       :behavior => 'normal',
-#     ).select("DISTINCT category_id")
-    used_categories = self.categories.visible.order(:name)
-    used_categories << nil
-    used_categories.each do |cat|
-      #cat = self.categories.find_by_id(r.category_id)
+    used_categories = self.order_items.visible.where(
+      :completed_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
+      :is_quote => nil,
+      :behavior => 'normal',
+    ).select("DISTINCT category_id")
+#     used_categories = self.categories.visible.order(:name)
+#     used_categories << nil
+    used_categories.each do |r|
+      cat = self.categories.find_by_id(r.category_id)
       label = cat ? cat.name : "-"
       
       pos_total_cents = self.order_items.visible.where(
@@ -379,24 +379,24 @@ class Vendor < ActiveRecord::Base
       :pos => {},
       :neg => {}
     }
-#     used_tax_amounts = self.order_items.visible.where(
-#       :completed_at => from..to,
-#       :drawer_id => drawer,
-#       :is_proforma => nil,
-#       :is_quote => nil,
-#       :behavior => 'normal',
-#     ).select("DISTINCT tax")
-    used_taxes = self.tax_profiles.visible
-    used_taxes.each do |tax|
-      taxes[:pos][tax.value] = {}
-      taxes[:neg][tax.value] = {}
+    used_tax_amounts = self.order_items.visible.where(
+      :completed_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
+      :is_quote => nil,
+      :behavior => 'normal',
+    ).select("DISTINCT tax")
+    #used_taxes = self.tax_profiles.visible
+    used_tax_amounts.each do |r|
+      taxes[:pos][r.tax] = {}
+      taxes[:neg][r.tax] = {}
       
       pos_total_cents = self.order_items.visible.where(
         :completed_at => from..to,
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :tax => tax.value,
+        :tax => r.tax,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
@@ -406,7 +406,7 @@ class Vendor < ActiveRecord::Base
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :tax => tax.value,
+        :tax => r.tax,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
@@ -416,7 +416,7 @@ class Vendor < ActiveRecord::Base
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :tax => tax.value,
+        :tax => r.tax,
         :is_buyback => true,
         :behavior => 'normal'
       ).where("total_cents < 0").sum(:total_cents)
@@ -427,18 +427,18 @@ class Vendor < ActiveRecord::Base
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :tax => tax.value,
+        :tax => r.tax,
         :is_buyback => true,
         :behavior => 'normal'
       ).where("total_cents < 0").sum(:tax_amount_cents)
       neg_tax = Money.new(neg_tax_cents, self.currency)
       
-      taxes[:pos][tax.value][:tax] = pos_tax
-      taxes[:neg][tax.value][:tax] = neg_tax
-      taxes[:pos][tax.value][:gro] = pos_total
-      taxes[:neg][tax.value][:gro] = neg_total
-      taxes[:pos][tax.value][:net] = pos_total - pos_tax
-      taxes[:neg][tax.value][:net] = neg_total - neg_tax
+      taxes[:pos][r.tax][:tax] = pos_tax
+      taxes[:neg][r.tax][:tax] = neg_tax
+      taxes[:pos][r.tax][:gro] = pos_total
+      taxes[:neg][r.tax][:gro] = neg_total
+      taxes[:pos][r.tax][:net] = pos_total - pos_tax
+      taxes[:neg][r.tax][:net] = neg_total - neg_tax
     end
     
     # PaymentMethods
@@ -451,15 +451,15 @@ class Vendor < ActiveRecord::Base
     ).sum(:amount_cents)
     paymentmethods_total = Money.new(paymentmethods_total_cents, self.currency)
     
-#     used_payment_methods = self.payment_method_items.visible.where(
-#       :completed_at => from..to,
-#       :drawer_id => drawer,
-#       :is_proforma => nil,
-#       :is_quote => nil,
-#     ).select("DISTINCT payment_method_id")
-    used_payment_methods = self.payment_methods.visible.order(:name)
-    used_payment_methods.each do |pm|
-      #pm = self.payment_methods.find_by_id(r.payment_method_id)
+    used_payment_methods = self.payment_method_items.visible.where(
+      :completed_at => from..to,
+      :drawer_id => drawer,
+      :is_proforma => nil,
+      :is_quote => nil,
+    ).select("DISTINCT payment_method_id")
+    #used_payment_methods = self.payment_methods.visible.order(:name)
+    used_payment_methods.each do |r|
+      pm = self.payment_methods.find_by_id(r.payment_method_id)
       #raise "#{ r.inspect }" if pm.nil?
       
       next if pm.change # ignore change. we only consider cash (separately), and all others pms
