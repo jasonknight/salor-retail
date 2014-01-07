@@ -88,7 +88,6 @@ class Item < ActiveRecord::Base
   
   def not_too_long_parent_chain
     chain = self.recursive_sku_chain
-    #debugger
     chain.shift
     if chain.include? self.sku
       errors.add(:child_sku, "would create a parent-infinite loop!")
@@ -252,11 +251,6 @@ class Item < ActiveRecord::Base
       self.child = nil
       return
     end
-#     if self.sku == string then
-#       # this would create an infinite loop on self, we don't allow that
-#       self.child = nil
-#       return
-#     end
     child_item = self.vendor.items.visible.find_by_sku(string)
     if child_item then
       self.child_id = child_item.id
@@ -288,12 +282,8 @@ class Item < ActiveRecord::Base
   
   # ----- setters for advanced float parsing
   def purchase_price=(p)
-    if p.class == String then
-      p = self.string_to_float(p, :locale => self.vendor.region) * 100
-      write_attribute(:purchase_price_cents,p)
-      return
-    end
-    write_attribute(:purchase_price_cents,p)
+    p = (self.string_to_float(p, :locale => self.vendor.region) * 100).ceil
+    write_attribute(:purchase_price_cents, p)
   end
 
   def height=(p)

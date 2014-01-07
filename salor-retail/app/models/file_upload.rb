@@ -301,7 +301,7 @@ class FileUpload
 
       base_price = columns[14].gsub(',','.').to_f / 100
       purchase_price = columns[15].gsub(',','.').to_f / 100
-
+      
       # piece price calculation
       base_price_piece = base_price.to_f / packaging_unit_container.to_f
       purchase_price_piece = purchase_price.to_f / packaging_unit_container.to_f
