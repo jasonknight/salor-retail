@@ -284,6 +284,7 @@ class OrderItem < ActiveRecord::Base
   def modify_price_for_actions
     log_action "modify_price_for_actions"
     redraw_all_order_items = Action.run(self.vendor, self, :add_to_order)
+    self.reload
     return redraw_all_order_items
   end
   

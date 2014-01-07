@@ -264,7 +264,7 @@ class Action < ActiveRecord::Base
             minimum_price_item.action_applied = true
             minimum_price_item.calculate_totals
           else
-            SalorBase.log_action Action,"[Discount after threshold]: num_discountables is not sufficient"
+            SalorBase.log_action Action,"XXXX[Discount after threshold]: num_discountables is not sufficient"
             minimum_price_item.coupon_amount_cents = 0
             minimum_price_item.action_applied = nil
             minimum_price_item.calculate_totals
