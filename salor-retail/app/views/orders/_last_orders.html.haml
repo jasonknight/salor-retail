@@ -13,7 +13,7 @@
   
   #last_completed_orders
     %h2= t 'menu.last_completed'
-    - @current_vendor.orders.visible.where(:paid => true).order("updated_at DESC").limit(5).each do |o|
+    - @current_vendor.orders.visible.where(:paid => true).order("nr DESC").limit(5).each do |o|
       .recent-order{ :style => "background-color: #{ o.cash_register.color };" }
         %p.recent-order-number== ##{ o.nr } #{ o.user.username[0..7] }
         %p.recent_price== #{ number_to_currency(o.total) } ➠ #{ number_to_currency(o.change) }

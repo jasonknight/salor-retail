@@ -105,8 +105,6 @@ class FileUpload
         @created_categories += 1
       end
       category_id = category.id
-      
-
 
       # carton
       attributes = {

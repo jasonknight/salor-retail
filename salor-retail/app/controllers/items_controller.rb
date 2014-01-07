@@ -25,7 +25,7 @@ class ItemsController < ApplicationController
         log_action "XXXXX[recursive find]: bottom most child sku is #{ upmost_parent.recursive_child_sku_chain.last }"
         child_item_skus << upmost_parent.recursive_child_sku_chain.last
       end
-      @items = @current_vendor.items.where(:sku => child_item_skus).page(params[:page]).per(@current_vendor.pagination)
+      @items = @current_vendor.items.visible.where(:sku => child_item_skus).page(params[:page]).per(@current_vendor.pagination)
     else
       @items = @current_vendor.items.visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
     end
