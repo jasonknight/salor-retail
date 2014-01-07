@@ -1,5 +1,5 @@
 .customer-display
-  .logo= image_tag @current_vendor.image('invoice_logo')
+  .logo= image_tag @current_vendor.image('logo')
 
   - @report[:list_of_items_raw].reverse[0..4].each do |item|
     - highlight = item[:price].blank? or item[:price].fractional < 0
