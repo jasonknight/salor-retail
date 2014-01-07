@@ -1,3 +1,10 @@
+salor-retail (4.0.2.54) unstable; urgency=low
+
+  * search function fix and sort recent orders by number
+  * fixed cash drawer open at cash refund
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 12:15:18 +0100
+
 salor-retail (4.0.2.53) unstable; urgency=low
 
   * show recently updated orders instead of recently created
