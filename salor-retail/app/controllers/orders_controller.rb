@@ -72,11 +72,11 @@ class OrdersController < ApplicationController
       @current_order.user = @current_user
       @current_order.cash_register = @current_register
       @current_order.drawer = @current_user.get_drawer
-      @current_order.save
+      @current_order.save!
       
       # remember this for the current user
       @current_user.current_order_id = @current_order.id
-      @current_user.save
+      @current_user.save!
     end
  
     @button_categories = @current_vendor.categories.visible.where(:button_category => true).order(:position)
@@ -104,7 +104,7 @@ class OrdersController < ApplicationController
     
     # the order is available for editing
     @current_user.current_order_id = requested_order.id
-    @current_user.save
+    @current_user.save!
     redirect_to new_order_path
   end
 
@@ -244,7 +244,7 @@ class OrdersController < ApplicationController
     
     # save new order on user
     @current_user.current_order_id = @order.id
-    @current_user.save
+    @current_user.save!
   end
   
   def new_order

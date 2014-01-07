@@ -220,7 +220,7 @@ class Order < ActiveRecord::Base
       log_action "Item is a loyalty card"
       self.customer = i.customer
       self.tag = self.customer.full_name
-      self.save
+      self.save!
       return nil
     end
     
@@ -243,7 +243,7 @@ class Order < ActiveRecord::Base
     end
     oi.no_inc ||= params[:no_inc]
     log_action "no_inc is: #{oi.no_inc.inspect}"
-    oi.save # this is needed so that Action has the complete set of OrderItems taken from oi.order
+    oi.save! # this is needed so that Action has the complete set of OrderItems taken from oi.order
     redraw_all_order_items = oi.modify_price
     oi.calculate_totals
     self.order_items << oi
@@ -296,7 +296,7 @@ class Order < ActiveRecord::Base
       item = gc.item
       item.activated = true
       item.gift_card_amount = item.price
-      item.save
+      item.save!
     end
   end
   
@@ -353,7 +353,7 @@ class Order < ActiveRecord::Base
     final.tax_profile = nil
     final.tax = nil
     final.proforma_order = self
-    final.save
+    final.save!
     
     self.order_items.visible.each do |oi|
       noi = oi.dup
@@ -361,7 +361,7 @@ class Order < ActiveRecord::Base
       # reset the tax profile, since all OrderItems of a proforma invoice have zero taxes. the final invoice however needs the actual taxes.
       noi.tax_profile = noi.item.tax_profile
       noi.tax = noi.item.tax_profile.value
-      result = noi.save
+      result = noi.save!
       raise "Could not save OrderItem: #{ noi.errors.messages }" if result != true
     end
     
@@ -375,12 +375,12 @@ class Order < ActiveRecord::Base
     item.item_type = aconto_item_type
     item.name = I18n.t("receipts.a_conto")
     item.tax_profile = zero_tax_profile
-    item.save
+    item.save!
 
 
     noi = final.add_order_item({:sku => "DMYACONTO"})
     noi.price = - self.amount_paid
-    noi.save # must be called before calulate totals!
+    noi.save! # must be called before calulate totals!
     noi.calculate_totals
     
     final.calculate_totals
@@ -427,7 +427,7 @@ class Order < ActiveRecord::Base
     self.completed_at = Time.now
     # the user is re-assigned in OrdersController#complete
     self.drawer = self.user.get_drawer
-    self.save
+    self.save!
     
     self.update_item_quantities
     self.activate_giftcard_items
@@ -438,7 +438,7 @@ class Order < ActiveRecord::Base
     self.set_unique_numbers
     self.report_errors_to_technician
     
-    self.save
+    self.save!
   end
   
   def set_unique_numbers
@@ -463,7 +463,7 @@ class Order < ActiveRecord::Base
       self.paid_at = Time.now
     end
     
-    self.save
+    self.save!
     
     self.order_items.update_all({
       :completed_at => self.completed_at,
@@ -505,7 +505,7 @@ class Order < ActiveRecord::Base
           q = -q if oi.is_buyback
           Item.transact_quantity(-oi.quantity, i, self)
         end
-        i.save
+        i.save!
       end
     end
   end
@@ -544,7 +544,7 @@ class Order < ActiveRecord::Base
       self.is_unpaid = true if pm.unpaid == true
     end
     
-    self.save
+    self.save!
     
     payment_cash = Money.new(self.payment_method_items.visible.where(:cash => true).sum(:amount_cents), self.currency)
     payment_total = Money.new(self.payment_method_items.visible.sum(:amount_cents), self.currency)
@@ -571,7 +571,7 @@ class Order < ActiveRecord::Base
       pmi.is_unpaid = nil
       pmi.amount = change
       pmi.change = true
-      result = pmi.save
+      result = pmi.save!
       if result != true
         raise "Could not save change PaymentMethodItem because #{ pmi.errors.messages }"
       end
@@ -583,7 +583,7 @@ class Order < ActiveRecord::Base
     self.cash = payment_cash
     self.noncash = payment_noncash
     self.change = change
-    self.save
+    self.save!
   end
   
   def to_list_of_items_raw(array)
