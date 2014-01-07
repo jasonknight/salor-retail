@@ -1,3 +1,11 @@
+salor-retail (4.0.2.56) unstable; urgency=low
+
+  * only show actually sold gift cards
+  * changed eod report back to mysql DISTINCT
+  * more indices
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 19:45:42 +0100
+
 salor-retail (4.0.2.55) unstable; urgency=low
 
   * fixing threshold action
