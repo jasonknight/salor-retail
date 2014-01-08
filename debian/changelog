@@ -1,3 +1,9 @@
+salor-retail (4.0.2.60) unstable; urgency=low
+
+  * fixed and improved actions
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Jan 2014 20:27:22 +0100
+
 salor-retail (4.0.2.59) unstable; urgency=low
 
   * improved selection for recent orders
