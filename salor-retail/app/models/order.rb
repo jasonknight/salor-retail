@@ -1317,13 +1317,13 @@ class Order < ActiveRecord::Base
     return tests
   end
   
-  def hide(by_id)
+  def hide(by)
     # TODO: move nr to stack of unused numbers
     self.hidden = true
-    self.hidden_by = by_id
+    self.hidden_by = by.id
     self.hidden_at = Time.now
     self.save
-    self.order_items.visible.update_all :hidden => true, :hidden_at => Time.now, :hidden_by => by_id
+    self.order_items.visible.update_all :hidden => true, :hidden_at => Time.now, :hidden_by => by.id
   end
   
   # for better debugging in the console

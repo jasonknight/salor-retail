@@ -135,7 +135,7 @@ class OrdersController < ApplicationController
   def destroy
     @order = @current_vendor.orders.find_by_id(params[:id])
     if @order.completed_at.nil?
-      @order.hide(@current_user.id)
+      @order.hide(@current_user)
     else
       $MESSAGES[:prompts] << I18n.t("views.notice.delete_completed_order")
     end
