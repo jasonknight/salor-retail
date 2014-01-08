@@ -1,3 +1,9 @@
+salor-retail (4.0.2.57) unstable; urgency=low
+
+  * various fixes and improvements
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Jan 2014 13:35:40 +0100
+
 salor-retail (4.0.2.56) unstable; urgency=low
 
   * only show actually sold gift cards
