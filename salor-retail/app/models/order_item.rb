@@ -476,7 +476,7 @@ class OrderItem < ActiveRecord::Base
   
   def hide(by)
     self.hidden = true
-    self.hidden_by = by
+    self.hidden_by = by.id
     self.hidden_at = Time.now
     if not self.save then
       log_action self.errors.full_messages.to_sentence

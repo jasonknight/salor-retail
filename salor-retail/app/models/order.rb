@@ -195,15 +195,16 @@ class Order < ActiveRecord::Base
       log_action "Order is completed already, cannot add items to it #{self.completed_at}"
     end
     
+    
     # get existing regular item
     oi = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
     if oi then
       if oi.is_normal?
         log_action "Item is normal, and present, just increment"
         oi.quantity += 1
+        oi.save! # this is required here since modify_price_for_actions reloads OrderItem
         redraw_all_order_items = oi.modify_price_for_actions
         oi.calculate_totals
-        oi.save!
         self.calculate_totals
         return oi
       else
@@ -332,13 +333,15 @@ class Order < ActiveRecord::Base
       i.sku = "DMY" + timestamp
       i.price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
     else
-      # dummy item
+      $MESSAGES[:prompts] << I18n.t("views.notice.item_not_existing")
       # we didn't find the item, let's see if a plugin wants to handle it
       i.sku = sku
       i.price_cents = 0
-      Action.run(i.vendor, i, :on_sku_not_found) 
+      #Action.run(i.vendor, i, :on_sku_not_found) 
     end
-    i.save!
+    log_action "Will create item #{ i.sku } because not found"
+    result = i.save!
+    log_action "Result of saving #{ i.sku } is #{ result }. Item is #{ i.inspect }"
 
     return i
   end

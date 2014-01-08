@@ -914,6 +914,10 @@ gn:
     new_item_heading: Neuer Artikel für %{store}
     new_stock_location: Neues Lager
     notice:
+      delete_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht löschen.
+      edit_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht öffnen.
+      edit_order_by_other_user: Dieser Verkauf wird im Moment durch den Benutzer %{username} bearbeitet. Kann ihn nicht öffnen. Benutzer %{username} muss auf den 'Neu' Button drücken, danach nochmals probieren.
+      item_not_existing: Dieser Artikel hat noch nicht existiert. Er wurde angelegt und der Preis auf 0 gesetzt. Sie können den Preis nun verändern. Der Preis wird in der Datenbank permanent gespeichert.
       cache_was_cleared: Cache wurde gelöscht
       csv_edit_starting: Bearbeitung startet
       model_create: ! '%{model} wurde erfolgreich angelegt.'

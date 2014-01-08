@@ -140,12 +140,12 @@ class Shipment < ActiveRecord::Base
   end
 
   def move_all_items_into_stock
-    self.shipment_items.each do |si|
+    self.shipment_items.visible.each do |si|
       if si.in_stock_quantity == si.quantity || si.tax_profile_id.nil?
         log_action I18n.t("system.errors.shipment_item_already_in_stock", :sku => si.sku)
         next
       end
-      si.move_into_stock(si.quantity - si.in_stock_quantity)
+      si.move_into_stock(si.quantity - si.in_stock_quantity.to_i)
     end
   end
   

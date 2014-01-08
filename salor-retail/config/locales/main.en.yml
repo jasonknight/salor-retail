@@ -907,6 +907,10 @@ en:
     new_item_heading: New item for %{store}
     new_stock_location: New stock location
     notice:
+      edit_order_by_other_user: This order is currently edited by user %{username}. Cannot open it. User %{username} must click on the 'New' button, then try again.
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      item_not_existing: This item did not exist. It has been created and the price set to zero. You can change the price and it will be saved permanently in the database.
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
       model_create: ! '%{model} was created successfully'

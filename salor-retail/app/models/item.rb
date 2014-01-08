@@ -376,12 +376,16 @@ class Item < ActiveRecord::Base
     end
   end
   
+  def self.find_like_sku_in_hidden(sku)
+    Item.hidden.where("sku LIKE %#{ sku }%")
+  end
+  
   def hide(by)
     self.parent = nil
     self.child = nil
     self.hidden = true
     self.sku = "OLD#{ Time.now.strftime("%Y%m%d%H%M%S") }#{ self.sku }"
-    self.hidden_by = by
+    self.hidden_by = by.id
     self.hidden_at = Time.now
     result = self.save
     if result == false

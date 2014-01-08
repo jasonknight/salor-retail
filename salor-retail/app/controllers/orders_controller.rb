@@ -88,7 +88,7 @@ class OrdersController < ApplicationController
     
     unless requested_order.completed_at.nil?
       # the requested order is already completed. We cannot edit that and rediect to #new.
-      $MESSAGES[:alerts] << "Order NR #{ requested_order.nr } is already completed, cannot edit."
+      $MESSAGES[:prompts] << I18n.t("views.notice.edit_completed_order")
       redirect_to request.referer
       return
     end
@@ -97,7 +97,7 @@ class OrdersController < ApplicationController
     
     if user_which_has_requested_order and user_which_has_requested_order != @current_user
       # another user is editing this order. We cannot edit that and redirect to #new.
-      $MESSAGES[:alerts] << "Order NR #{ requested_order.nr } is currently edited by user #{ user_which_has_requested_order.username }. Cannot edit."
+      $MESSAGES[:prompts] << I18n.t("views.notice.edit_order_by_other_user", :username => user_which_has_requested_order.username)
       redirect_to request.referer
       return
     end
@@ -137,7 +137,7 @@ class OrdersController < ApplicationController
     if @order.completed_at.nil?
       @order.hide(@current_user.id)
     else
-      $MESSAGES[:alerts] << "Order NR #{ @order.nr } is already completed, cannot delete."
+      $MESSAGES[:prompts] << I18n.t("views.notice.delete_completed_order")
     end
     redirect_to request.referer
   end
