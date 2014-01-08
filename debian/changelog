@@ -1,3 +1,10 @@
+salor-retail (4.0.2.58) unstable; urgency=low
+
+  * correct hidden_by for orders, display shipments purchase price in list
+  * fixed move shipmentItems to Items, added created_by for items for more transparency
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Jan 2014 14:05:20 +0100
+
 salor-retail (4.0.2.57) unstable; urgency=low
 
   * various fixes and improvements
