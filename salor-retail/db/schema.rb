@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140107183614) do
+ActiveRecord::Schema.define(:version => 20140108125445) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -548,6 +548,7 @@ ActiveRecord::Schema.define(:version => 20140107183614) do
     t.integer  "buy_price_cents",          :default => 0
     t.integer  "manufacturer_price_cents", :default => 0
     t.string   "currency"
+    t.integer  "created_by"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"

@@ -268,6 +268,7 @@ class Order < ActiveRecord::Base
     i.vendor = self.vendor
     i.company = self.company
     i.currency = self.vendor.currency
+    i.created_by = -103 # magic number for auto gift card
     i.tax_profile = zero_tax_profile
     i.category = auto_giftcard_item.category
     i.name = "Auto Giftcard #{timecode}"
@@ -325,6 +326,7 @@ class Order < ActiveRecord::Base
     i.vendor = self.vendor
     i.company = self.company
     i.currency = self.vendor.currency
+    i.created_by = -100 # magic number for created by POS screen
     i.name = sku
     pm = sku.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1]

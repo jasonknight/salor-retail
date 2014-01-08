@@ -118,7 +118,8 @@ class FileUpload
         :vendor_id => @vendor.id,
         :company_id => @company.id,
         :item_type_id => @item_type.id,
-        :currency => @vendor.currency
+        :currency => @vendor.currency,
+        :created_by => -102
       }
       sku_carton = columns[8].strip
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
@@ -165,7 +166,8 @@ class FileUpload
         :vendor_id => @vendor.id,
         :company_id => @company.id,
         :item_type_id => @item_type.id,
-        :currency => @vendor.currency
+        :currency => @vendor.currency,
+        :created_by => -102
       }
       sku_pack = columns[9].strip
 
@@ -221,7 +223,8 @@ class FileUpload
         :vendor_id => @vendor.id,
         :company_id => @company.id,
         :item_type_id => @item_type.id,
-        :currency => @vendor.currency
+        :currency => @vendor.currency,
+        :created_by => -102
       }
       sku_piece = columns[19].strip if columns[19]
       piece_item = @vendor.items.visible.where( :name => name + " Stk.").first
@@ -354,7 +357,8 @@ class FileUpload
         :vendor_id => @vendor.id,
         :company_id => @company.id,
         :item_type_id => @item_type.id,
-        :currency => @vendor.currency
+        :currency => @vendor.currency,
+        :created_by => -102
       }
       sku_carton = columns[8].strip # EAN_GB
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
@@ -402,7 +406,8 @@ class FileUpload
         :vendor_id => @vendor.id,
         :company_id => @company.id,
         :item_type_id => @item_type.id,
-        :currency => @vendor.currency
+        :currency => @vendor.currency,
+        :created_by => -102
       }
       sku_pack = columns[9].strip # EAN_PA
       pack_item = @vendor.items.visible.where( :name => name + " Packung" ).first
@@ -457,7 +462,8 @@ class FileUpload
         :vendor_id => @vendor.id,
         :company_id => @company.id,
         :item_type_id => @item_type.id,
-        :currency => @vendor.currency
+        :currency => @vendor.currency,
+        :created_by => -102
       }
       sku_piece = columns[19].strip if columns[19] # EAN_STK
       piece_item = @vendor.items.visible.where( :name => name + " Stk." ).first

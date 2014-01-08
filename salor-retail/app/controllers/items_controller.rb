@@ -65,6 +65,7 @@ class ItemsController < ApplicationController
     @item.vendor = @current_vendor
     @item.company = @current_company
     @item.currency = @current_vendor.currency
+    @item.created_by = @current_user.id
     @item.attributes = params[:item]
     if @item.save
       @item.assign_parts(params[:part_skus])
@@ -77,18 +78,18 @@ class ItemsController < ApplicationController
     end
   end
   
-  # from shipment form
-  def create_ajax
-    @item = Item.new
-    @item.vendor = @current_vendor
-    @item.company = @current_company
-    @item.currency = @current_vendor.currency
-    @item.item_type = @current_vendor.item_types.find_by_behavior("normal")
-    @item.tax_profile_id = params[:item][:tax_profile_id]
-    @item.attributes = params[:item]
-    @item.save
-    render :nothing => true
-  end
+#   # from shipment form
+#   def create_ajax
+#     @item = Item.new
+#     @item.vendor = @current_vendor
+#     @item.company = @current_company
+#     @item.currency = @current_vendor.currency
+#     @item.item_type = @current_vendor.item_types.find_by_behavior("normal")
+#     @item.tax_profile_id = params[:item][:tax_profile_id]
+#     @item.attributes = params[:item]
+#     @item.save
+#     render :nothing => true
+#   end
 
   def update
     @item = @current_vendor.items.visible.find_by_id(params[:id])
