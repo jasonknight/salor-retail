@@ -223,7 +223,7 @@ class Item < ActiveRecord::Base
   end
 
   def run_onsave_actions
-    Action.run(self.vendor,self, :on_item_save)
+    # Action.run(self.vendor,self, :on_item_save) # MF: disabled this because it would run even when another Action would save an item, so we would have nested saves which are difficult to debug.
   end
   
   def cache_behavior
@@ -272,6 +272,8 @@ class Item < ActiveRecord::Base
     action.vendor = self.vendor
     action.company = self.company
     action.model = self
+    action.whento = "on_import"
+    action.behavior = "divide"
     action.name = Time.now.strftime("%Y%m%d%H%M%S")
     result = action.save
     if result == false

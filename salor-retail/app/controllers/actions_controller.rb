@@ -29,6 +29,7 @@ class ActionsController < ApplicationController
     @action = Action.new
     @action.vendor = @current_vendor
     @action.company = @current_company
+    @action.created_by = @current_user.id
     @action.update_attributes(params[:act])
     if @action.save
       redirect_to actions_path
@@ -39,6 +40,7 @@ class ActionsController < ApplicationController
 
   def update
     @action = @current_vendor.actions.visible.find_by_id(params[:id])
+    @action.created_by = @current_user.id if @action.created_by.nil?
     if @action.update_attributes(params[:act])
       redirect_to actions_path
     else

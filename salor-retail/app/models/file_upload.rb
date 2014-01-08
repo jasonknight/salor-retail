@@ -133,6 +133,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,carton_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 1] Updating carton item #{carton_item.name} #{carton_item.sku}"
           @updated_items += 1
           @updated_item_ids << carton_item.id
@@ -148,6 +149,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,carton_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 1] Creating carton item #{carton_item.name} #{carton_item.sku}", :light_green
           @created_items += 1
           @created_item_ids << carton_item.id
@@ -182,6 +184,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,pack_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 1] Updating pack item #{pack_item.name} #{pack_item.sku}"
           @updated_items += 1
           @updated_item_ids << pack_item.id
@@ -197,6 +200,8 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          debugger if sku_pack == "879790888804"
+          Action.run(@vendor,pack_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}", :light_green
           @created_items += 1
           @created_item_ids << pack_item.id
@@ -238,6 +243,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,piece_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 1] Updating piece item #{piece_item.name} #{piece_item.sku}"
           @updated_items += 1
           @updated_item_ids << piece_item.id
@@ -253,6 +259,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,piece_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 1] Creating piece item #{piece_item.name} #{piece_item.sku}", :light_green
           @created_items += 1
           @created_item_ids << piece_item.id
@@ -372,6 +379,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,carton_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 2] Updating carton item #{carton_item.name} #{carton_item.sku}"
           @updated_items += 1
           @updated_item_ids << carton_item.id
@@ -381,13 +389,13 @@ class FileUpload
         attributes.merge! :sku => sku_carton
         attributes.merge! :packaging_unit => packaging_unit_carton # only for create
         carton_item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
-        #Action.run(@vendor,carton_item,:on_import)
         result = carton_item.save
         if result == false
           msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be saved because #{ carton_item.errors.messages}"
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,carton_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 2] Creating carton item #{carton_item.name} #{carton_item.sku}", :light_green
           @created_items += 1
           @created_item_ids << carton_item.id
@@ -421,6 +429,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,pack_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 2] Updating pack item #{pack_item.name} #{pack_item.sku}"
           @updated_items += 1
           @updated_item_ids << pack_item.id
@@ -436,6 +445,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,pack_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 2] Creating pack item #{pack_item.name} #{pack_item.sku}", :light_green
           @created_items += 1
           @created_item_ids << pack_item.id
@@ -477,6 +487,7 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,piece_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 2] Updating piece item #{piece_item.name} #{piece_item.sku}"
           @updated_items += 1
           @updated_item_ids << piece_item.id
@@ -486,13 +497,13 @@ class FileUpload
         attributes.merge! :sku => sku_piece
         attributes.merge! :packaging_unit => 1 # only for create
         piece_item = Item.new; piece_item.vendor = @vendor; piece_item.attributes = attributes
-        #Action.run(@vendor,piece_item,:on_import)
         result = piece_item.save
         if result == false
           msg = "piece_item #{ piece_item.sku } #{ piece_item.name } could not be saved because #{ piece_item.errors.messages}"
           @messages << msg
           log_action msg, :light_red
         else
+          Action.run(@vendor,piece_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 2] Creating piece item #{piece_item.name} #{piece_item.sku}", :light_green
           @created_items += 1
           @created_item_ids << piece_item.id
@@ -557,12 +568,12 @@ class FileUpload
       item = Item.find_by_sku(sku)
       if item
         item.update_attributes attributes
-        #Action.run(@vendor,item,:on_import)
+        Action.run(@vendor,item,:on_import)
         item.save
         @updated_items += 1
       else
         item = Item.new; carton_item.vendor = @vendor; carton_item.attributes = attributes
-        #Action.run(@vendor,item,:on_import)
+        Action.run(@vendor,item,:on_import)
         item.save
         @created_items += 1
       end

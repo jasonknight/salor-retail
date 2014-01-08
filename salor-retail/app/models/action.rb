@@ -112,7 +112,7 @@ class Action < ActiveRecord::Base
   end
   
   def self.run(the_vendor, item, act)
-    SalorBase.log_action "Action", "run called", :light_red
+    SalorBase.log_action "Action", "run called for #{ act }", :light_red
     if item.class == OrderItem then
       base_item = item.item
     else
@@ -198,27 +198,28 @@ class Action < ActiveRecord::Base
         
       when :add
         eval("item.#{action.afield} += the_value")
-        item.action_applied = true
+        #item.action_applied = true
         item.save!
         
       when :substract
         eval("item.#{action.afield} -= the_value")
-        item.action_applied = true
+        #item.action_applied = true
         item.save!
         
       when :multiply
         eval("item.#{action.afield} *= the_value")
-        item.action_applied = true
+        SalorBase.log_action Action, "multiplying", :blue
+        #item.action_applied = true
         item.save!
         
       when :divide
         eval("item.#{action.afield} /= the_value")
-        item.action_applied = true
+        #item.action_applied = true
         item.save!
         
       when :assign
         eval("item.#{action.afield} = the_value")
-        item.action_applied = true
+        #item.action_applied = true
         item.save!
         
       when :discount_after_threshold
@@ -246,7 +247,7 @@ class Action < ActiveRecord::Base
           items_in_cat.each do |oi|
             oi.price_cents = oi.item.price_cents
             oi.coupon_amount_cents = 0
-            oi.action_applied = nil
+            #oi.action_applied = nil
             oi.calculate_totals
           end
           
@@ -261,12 +262,12 @@ class Action < ActiveRecord::Base
             end
             
             minimum_price_item.coupon_amount_cents = action.value * max_discountables * minimum_price_item.price_cents
-            minimum_price_item.action_applied = true
+            #minimum_price_item.action_applied = true
             minimum_price_item.calculate_totals
           else
             SalorBase.log_action Action,"XXXX[Discount after threshold]: num_discountables is not sufficient"
             minimum_price_item.coupon_amount_cents = 0
-            minimum_price_item.action_applied = nil
+            #minimum_price_item.action_applied = nil
             minimum_price_item.calculate_totals
           end
           
