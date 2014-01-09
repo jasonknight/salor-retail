@@ -15,15 +15,22 @@ class ItemsController < ApplicationController
     orderby ||= params[:order_by]
     unless params[:keywords].blank?
       # search function should display recursive items
-      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'")
       child_item_skus = []
       log_action "XXXXX[recursive find]: @items #{ @items.collect{ |i| i.sku } }"
       @items.each do |i|
+#         if i.parent.nil? and i.child.nil?
+#           child_item_skus << i.sku
+#           next
+#         end
         log_action "XXXXX[recursive find]: finding upmost parent for Item id #{ i.id }"
-        log_action "XXXXX[recursive find]: upmost parent sku is #{ i.recursive_sku_chain.last }"
-        upmost_parent = @current_vendor.items.visible.find_by_sku(i.recursive_sku_chain.last)
-        log_action "XXXXX[recursive find]: bottom most child sku is #{ upmost_parent.recursive_child_sku_chain.last }"
-        child_item_skus << upmost_parent.recursive_child_sku_chain.last
+        upmost_parent_sku = i.recursive_parent_sku_chain.last
+        log_action "XXXXX[recursive find]: upmost parent sku is #{ upmost_parent_sku }"
+        upmost_parent = @current_vendor.items.visible.find_by_sku(upmost_parent_sku)
+        
+        bottom_most_child = upmost_parent.recursive_child_sku_chain.last
+        log_action "XXXXX[recursive find]: bottom most child sku is #{ bottom_most_child }"
+        child_item_skus << bottom_most_child
       end
       @items = @current_vendor.items.visible.where(:sku => child_item_skus).page(params[:page]).per(@current_vendor.pagination)
     else
@@ -135,7 +142,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item = @current_vendor.items.visible.find_by_id(params[:id])
-    @item.hide(@current_user)
+    @item.hide(@current_user.id)
     redirect_to items_path
   end
   

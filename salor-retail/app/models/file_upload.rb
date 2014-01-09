@@ -57,11 +57,13 @@ class FileUpload
       shipper_sku = columns[0].strip
 
       name = columns[1].strip
+      longname = columns[2].strip.gsub(/\s+/, " ")
       name.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => "?")
+      longname.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => "?")
 
-      packaging_unit_pack = columns[12].to_i
-      packaging_unit_carton = columns[11].to_i
-      packaging_unit_container = columns[13].to_i
+      packaging_unit_pack = columns[12].to_i # Menge_PA
+      packaging_unit_carton = columns[11].to_i # Menge_GB
+      packaging_unit_container = columns[13].to_i # Menge_BEH
 
       base_price = columns[14].to_i
       purchase_price = columns[15].to_i
@@ -109,7 +111,9 @@ class FileUpload
       # carton
       attributes = {
         :shipper_sku => shipper_sku,
-        :name => name + " Karton",
+        :name => longname + " Karton",
+        :longname => longname + " Karton",
+        :shortname => name + " Karton",
         :price_cents => base_price_carton,
         :purchase_price_cents => purchase_price_carton,
         :tax_profile_id => tax_profile_id,
@@ -122,7 +126,8 @@ class FileUpload
         :created_by => -102
       }
       sku_carton = columns[8].strip
-      carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
+      carton_item = @vendor.items.visible.where( :name => longname + " Karton" ).first if carton_item.blank?
+      carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first if carton_item.blank?
       carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if carton_item.blank? and not sku_carton.blank? # second chance to find by sku in case name has changed
       if carton_item
         attributes.merge! :sku => sku_carton unless sku_carton.blank?
@@ -159,7 +164,9 @@ class FileUpload
       # pack
       attributes = {
         :shipper_sku => shipper_sku,
-        :name => name + " Packung",
+        :name => longname + " Packung",
+        :longname => longname + " Packung",
+        :shortname => name + " Packung",
         :price_cents => base_price_pack,
         :purchase_price_cents => purchase_price_pack,
         :tax_profile_id => tax_profile_id,
@@ -172,8 +179,8 @@ class FileUpload
         :created_by => -102
       }
       sku_pack = columns[9].strip
-
-      pack_item = @vendor.items.visible.where( :name => name + " Packung").first
+      pack_item = @vendor.items.visible.where( :name => longname + " Packung" ).first
+      pack_item = @vendor.items.visible.where( :name => name + " Packung").first if pack_item.blank?
       pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if pack_item.blank? and not sku_pack.blank? # second chance to find by sku in case name has changed
       if pack_item
         attributes.merge! :sku => sku_pack unless sku_pack.blank? # SKUs can update!
@@ -200,7 +207,6 @@ class FileUpload
           @messages << msg
           log_action msg, :light_red
         else
-          debugger if sku_pack == "879790888804"
           Action.run(@vendor,pack_item,:on_import)
           log_action "[WHOLESALER IMPORT TYPE 1] Creating pack item #{pack_item.name} #{pack_item.sku}", :light_green
           @created_items += 1
@@ -208,7 +214,9 @@ class FileUpload
         end
       end
       
-      carton_item.child_id = pack_item.id if pack_item
+      #pack_item.parent = nil
+      #Item.where(:child_id => pack_item.id).update_all :child_id => nil
+      carton_item.child = pack_item
       result = carton_item.save
       if result == false
         msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be assigned the child #{ pack_item.sku } because #{ carton_item.errors.messages }"
@@ -219,7 +227,9 @@ class FileUpload
       # piece
       attributes = {
         :shipper_sku => shipper_sku,
-        :name => name + " Stk.",
+        :name => longname + " Stk.",
+        :longname => longname + " Stk.",
+        :shortname => name + " Stk.",
         :price_cents => base_price_piece,
         :purchase_price_cents => purchase_price_piece,
         :tax_profile_id => tax_profile_id,
@@ -232,7 +242,8 @@ class FileUpload
         :created_by => -102
       }
       sku_piece = columns[19].strip if columns[19]
-      piece_item = @vendor.items.visible.where( :name => name + " Stk.").first
+      piece_item = @vendor.items.visible.where( :name => longname + " Stk." ).first
+      piece_item = @vendor.items.visible.where( :name => name + " Stk.").first if piece_item.blank?
       piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if piece_item.blank? and not sku_piece.blank?
       if piece_item
         attributes.merge! :sku => sku_piece unless sku_piece.blank?
@@ -265,11 +276,14 @@ class FileUpload
           @created_item_ids << piece_item.id
         end
       end
-
-      pack_item.child_id = piece_item.id
+      debugger if longname.include? "La Aurora Princ Natural 25"
+      #piece_item.parent = nil
+      #Item.where(:child_id => piece_item.id).update_all :child_id => nil
+      pack_item.child = piece_item
       result = pack_item.save
       if result == false
         msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be assigned the child #{ piece_item.sku } because #{ pack_item.errors.messages }"
+        @messages << msg
         log_action msg, :light_red
       end
 
@@ -298,7 +312,9 @@ class FileUpload
       shipper_sku = columns[0].strip
 
       name = columns[1].strip
+      longname = columns[2].strip.gsub(/\s+/, " ")
       name.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => "?")
+      longname.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => "?")
 
       packaging_unit_pack = columns[12].gsub(',','.').to_f # MENGE_PA
       packaging_unit_pack = 1 if packaging_unit_pack.zero?
@@ -356,6 +372,8 @@ class FileUpload
       attributes = {
         :shipper_sku => shipper_sku,
         :name => name + " Karton",
+        :longname => longname + " Karton",
+        :shortname => name + " Karton",
         :base_price => base_price_carton,
         :purchase_price => purchase_price_carton,
         :tax_profile_id => tax_profile_id,
@@ -406,6 +424,8 @@ class FileUpload
       attributes = {
         :shipper_sku => shipper_sku,
         :name => name + " Packung",
+        :longname => longname + " Packung",
+        :shortname => name + " Packung",
         :base_price => base_price_pack,
         :purchase_price => purchase_price_pack,
         :tax_profile_id => tax_profile_id,
@@ -452,8 +472,13 @@ class FileUpload
         end
       end
 
-      carton_item.child_id = pack_item.id if pack_item
+      #debugger if name.include?("1 Diamond Crown No.3")
+      #pack_item.parent = nil
+      carton_item.child = pack_item
       result = carton_item.save
+      log_action "XXXX result #{ result } #{ carton_item.child.id }", :blue
+      #carton_item.reload
+      #debugger if carton_item.child.nil?
       if result == false
         msg = "carton_item #{ carton_item.sku } #{ carton_item.name } could not be assigned the child #{ pack_item.sku } because #{ carton_item.errors.messages }"
         @messages << msg
@@ -464,6 +489,8 @@ class FileUpload
       attributes = {
         :shipper_sku => shipper_sku,
         :name => name + " Stk.",
+        :longname => longname + " Stk.",
+        :shortname => name + " Stk.",
         :base_price => base_price_piece,
         :purchase_price => purchase_price_piece,
         :tax_profile_id => tax_profile_id,
@@ -477,7 +504,7 @@ class FileUpload
       }
       sku_piece = columns[19].strip if columns[19] # EAN_STK
       piece_item = @vendor.items.visible.where( :name => name + " Stk." ).first
-      carton_item = @vendor.items.visible.where( :sku => sku_piece ).first if piece_item.blank? and not sku_piece.blank? and not sku_piece.to_i.zero? # second chance to find something in case name has changed
+      piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if piece_item.blank? and not sku_piece.blank? and not sku_piece.to_i.zero? # second chance to find something in case name has changed
       if piece_item
         attributes.merge! :sku => sku_piece unless sku_piece.blank? || sku_piece.to_i.zero? # protect against bad overwrites
         piece_item.attributes = attributes
@@ -510,8 +537,10 @@ class FileUpload
         end
       end
       
-      pack_item.child_id = piece_item.id
+      #piece_item.parent = nil
+      pack_item.child = piece_item
       result = pack_item.save
+      log_action "XXXX result #{ result } #{ pack_item.child.id }", :blue
       if result == false
         msg = "pack_item #{ pack_item.sku } #{ pack_item.name } could not be assigned the child #{ piece_item.sku } because #{ pack_item.errors.messages }"
         log_action msg, :light_red
