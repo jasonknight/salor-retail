@@ -1,3 +1,9 @@
+salor-retail (4.0.2.61) unstable; urgency=low
+
+  * wholesaler import
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 09 Jan 2014 19:38:01 +0100
+
 salor-retail (4.0.2.60) unstable; urgency=low
 
   * fixed and improved actions
