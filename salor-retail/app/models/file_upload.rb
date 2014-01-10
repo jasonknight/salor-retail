@@ -276,7 +276,7 @@ class FileUpload
           @created_item_ids << piece_item.id
         end
       end
-      debugger if longname.include? "La Aurora Princ Natural 25"
+      #debugger if longname.include? "La Aurora Princ Natural 25"
       #piece_item.parent = nil
       #Item.where(:child_id => piece_item.id).update_all :child_id => nil
       pack_item.child = piece_item
