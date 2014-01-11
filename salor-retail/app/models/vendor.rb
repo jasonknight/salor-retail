@@ -83,6 +83,10 @@ class Vendor < ActiveRecord::Base
     end
   end
   
+  def run_diagnostics
+    return Item.run_diagnostics
+  end
+  
   def identifer_present_and_ascii
     if self.identifier.blank?
       errors.add(:identifier, I18n.t('activerecord.errors.messages.empty'))

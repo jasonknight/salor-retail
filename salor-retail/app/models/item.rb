@@ -524,7 +524,7 @@ class Item < ActiveRecord::Base
     
     info = duplicate_array.collect {|d| [d[0], Item.visible.where(:child_id => d[0]).collect {|i| i.id }] }
     
-    puts "Duplicates: #{ info.inspect }"
+    #puts "Duplicates: #{ info.inspect }"
     duplicate_ids = duplicate_array.collect { |x| x[0] }
     duplicate_ids.delete(nil)
     duplicate_ids.delete(0)
@@ -537,7 +537,7 @@ class Item < ActiveRecord::Base
 
   def self.get_sku_duplicate_ids # Item.get_sku_duplicate_ids
     duplicate_array = Vendor.connection.execute("SELECT id, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
-    puts "Duplicates: #{ duplicate_array.inspect }"
+    #puts "Duplicates: #{ duplicate_array.inspect }"
     duplicate_ids = duplicate_array.collect { |x| x[0] }
     return duplicate_ids
   end
@@ -638,16 +638,28 @@ class Item < ActiveRecord::Base
     end
   end
   
-  def self.cleanup_ids # Item.cleanup_ids
+  def self.run_diagnostics # Item.run_diagnostics
+    cd = self.get_child_duplicate_ids
+    sd = self.get_sku_duplicate_ids
+    sl = self.get_self_loop_ids
+    tlpr = self.get_too_long_parent_recursion_ids
+    tlcr = self.get_too_long_child_recursion_ids
+    nhihc = self.get_nonhidden_items_with_hidden_child_ids
+    nhihp = self.get_nonhidden_items_with_hidden_parent_ids
+    
     result = {}
-    result[:child_duplicates] = self.get_child_duplicate_ids
-    result[:sku_duplicates] = self.get_sku_duplicate_ids
-    result[:self_loops] = self.get_self_loop_ids
-    result[:too_long_parent_recursion] = self.get_too_long_parent_recursion_ids
-    result[:too_long_child_recursion] = self.get_too_long_child_recursion_ids
-    result[:hidden_child] = self.get_nonhidden_items_with_hidden_child_ids
-    result[:hidden_parent] = self.get_nonhidden_items_with_hidden_parent_ids
-    return result
+    result[:child_duplicates] = cd
+    result[:sku_duplicates] = sd
+    result[:self_loops] = sl
+    result[:too_long_parent_recursion] = tlpr
+    result[:too_long_child_recursion] = tlcr
+    result[:hidden_child] = nhihc
+    result[:hidden_parent] = nhihp
+    
+    #status = ! (cd.any? || sd.any? || sl.any? || tlpr.any? || tlcr.any? || nhihc.any? || nhihp.any?)
+    status = false # for email testing
+    
+    return {:status => status, :result => result}
   end
   
   # This is the main method that should be used to transact a quantity of an Item. Transactions are safer and more transparent than setting the "quantity" attribute directly, so this should be used. This method also takes care of recursion of parent/child items as well as Items with many StockItem in many locations. "diff" is the amount that will be transacted for the Item "item". "model2" is just for labeling purposes of StockTransactions and can be of any class that can logially send or receive quantities (e.g. StockItem, Item, ShipmentItem, Order, etc.). If "item" does not have any StockItems defined, the simple quantity attribute will used instead for backwards-compatibility.

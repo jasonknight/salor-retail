@@ -7,11 +7,6 @@ class UserMailer < ActionMailer::Base
       @useragent = request.env['HTTP_USER_AGENT']
     end
     @message = msg
-    if vendor.is_a?(String) then
-    	mail(:to => vendor, :subject => "[SalorRetailMessage] #{ subject }") 
-    else
-    	mail(:to => vendor.technician_email, :subject => "[SalorRetailMessage #{ vendor.name }] #{ subject }") 
-    end
-    
+    mail(:to => vendor.technician_email, :subject => "[SalorRetailMessage #{ vendor.name }] #{ subject }") 
   end
 end

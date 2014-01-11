@@ -1,11 +1,12 @@
 namespace :salor do
-  task :shipper_import => [:environment] do
+  task :shippers_import => [:environment] do
     body = ''
     Vendor.visible.each do |v|
+      puts "\n\nRunning shipper import for vendor #{ v.name }. Please wait ..."
       v.shippers.visible.where("csv_url IS NOT NULL").each do |s| 
         begin
           uploader = s.fetch_and_import_csv
-          body += "<h1>#{s.name} for vendor: #{s.vendor_id} </h1>"
+          body += "<h1>#{s.name} for #{s.vendor.name} </h1>"
           body += "<ul>\n"
           uploader.messages.each do |m|
             body += "<li>#{m}</li>\n"
@@ -21,8 +22,7 @@ namespace :salor do
           body += "</ul>"
         end
       end
-      UserMailer.technician_message(v, "Shippers Rake Task Ran for #{v.id}", body, nil).deliver
+      UserMailer.technician_message(v, "Shippers Import Report", body, nil).deliver
     end
-    
   end
 end
