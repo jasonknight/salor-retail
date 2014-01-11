@@ -1,3 +1,14 @@
+salor-retail (4.0.2.62) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Rake script to import shippers
+
+  [ Michael Franzl ]
+  * reduced globals for less console annoyance, changed child_id default to nil
+  * added rake tasks
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 11 Jan 2014 07:40:17 +0100
+
 salor-retail (4.0.2.61) unstable; urgency=low
 
   * wholesaler import
