@@ -3,7 +3,8 @@ namespace :salor do
     body = ''
     Vendor.visible.each do |v|
       puts "\n\nRunning shipper import for vendor #{ v.name }. Please wait ..."
-      v.shippers.visible.where("csv_url IS NOT NULL").each do |s| 
+      v.shippers.visible.each do |s|
+        next if s.csv_url.blank?
         begin
           uploader = s.fetch_and_import_csv
           body += "<h1>#{s.name} for #{s.vendor.name} </h1>"

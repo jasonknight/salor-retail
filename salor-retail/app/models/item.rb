@@ -656,8 +656,8 @@ class Item < ActiveRecord::Base
     result[:hidden_child] = nhihc
     result[:hidden_parent] = nhihp
     
-    #status = ! (cd.any? || sd.any? || sl.any? || tlpr.any? || tlcr.any? || nhihc.any? || nhihp.any?)
-    status = false # for email testing
+    status = ! (cd.any? || sd.any? || sl.any? || tlpr.any? || tlcr.any? || nhihc.any? || nhihp.any?)
+    #status = false # for email testing
     
     return {:status => status, :result => result}
   end
