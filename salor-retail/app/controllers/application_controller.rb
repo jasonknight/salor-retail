@@ -150,8 +150,8 @@ class ApplicationController < ActionController::Base
     end
     Time.zone = @current_vendor.time_zone if @current_vendor
     I18n.locale = @current_user.language
-    $COMPANYID = @current_company.id
-    $VENDORID = @current_vendor.id
+#     $COMPANYID = @current_company.id
+#     $VENDORID = @current_vendor.id
     $USERID = @current_user.id
 
     $URLS = {
@@ -170,8 +170,8 @@ class ApplicationController < ActionController::Base
   def loadup
     #debugger
     log_action "-----------------------------------\n\n\n\n\n"
-    $COMPANYID = nil
-    $VENDORID = nil
+#     $COMPANYID = nil
+#     $VENDORID = nil
     $USERID = nil
     $PARAMS = nil
     $REQUEST = nil
@@ -189,8 +189,8 @@ class ApplicationController < ActionController::Base
   def loaddown
     # just to make sure we clear out these globals
     copy_messages_to_flash
-    $COMPANYID = nil
-    $VENDORID = nil
+#     $COMPANYID = nil
+#     $VENDORID = nil
     $USERID = nil
     $PARAMS = nil
     $REQUEST = nil

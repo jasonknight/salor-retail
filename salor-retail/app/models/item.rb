@@ -531,11 +531,11 @@ class Item < ActiveRecord::Base
     return info
   end
   
-  def self.get_duplicate_names
+  def self.get_duplicate_names # Item.get_duplicate_names
     duplicate_array = Vendor.connection.execute("SELECT name, count(*) FROM items WHERE hidden IS NULL GROUP BY name HAVING count(*) > 1").to_a
   end
 
-  def self.get_sku_duplicate_ids
+  def self.get_sku_duplicate_ids # Item.get_sku_duplicate_ids
     duplicate_array = Vendor.connection.execute("SELECT id, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
     puts "Duplicates: #{ duplicate_array.inspect }"
     duplicate_ids = duplicate_array.collect { |x| x[0] }
@@ -638,7 +638,7 @@ class Item < ActiveRecord::Base
     end
   end
   
-  def self.cleanup_ids
+  def self.cleanup_ids # Item.cleanup_ids
     result = {}
     result[:child_duplicates] = self.get_child_duplicate_ids
     result[:sku_duplicates] = self.get_sku_duplicate_ids

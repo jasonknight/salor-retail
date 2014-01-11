@@ -419,12 +419,10 @@ class Order < ActiveRecord::Base
   def complete(params={})
     raise "cannot complete a paid order" if self.paid
     
-    # History
     h = History.new
     h.url = "Order::complete"
     h.params = $Params
-    h.model_id = self.id
-    h.model_type = 'Order'
+    h.model = self
     h.action_taken = "CompleteOrder"
     h.changes_made = "Beginning complete order"
     h.save

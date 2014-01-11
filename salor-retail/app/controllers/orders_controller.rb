@@ -201,12 +201,12 @@ class OrdersController < ApplicationController
       raise "@order is nil in OrdersController. This should not have happened."
     end
 
-    History.record("Initialized order for complete", @order, 5)
+    #History.record("Initialized order for complete", @order)
 
     if params[:change_user_id] and params[:change_user_id] != @current_user.id then
       tmp_user = @current_vendor.users.find_by_id(params[:change_user_id])
       if tmp_user
-        History.record("swapping user #{@current_user.id} with #{tmp_user.id}",@order,3)
+        History.record("swapping user #{@current_user.id} with #{tmp_user.id}",@order)
 
         @order.user = tmp_user
         @order.save!
@@ -222,7 +222,7 @@ class OrdersController < ApplicationController
     @order.complete(params)
 
     if @order.is_proforma == true then
-      History.record("Order is proforma, completing",@order,5)
+      History.record("Order is proforma, completing", @order)
       render :js => " window.location = '/orders/#{@order.id}/print'; " and return
     end
     
@@ -309,34 +309,34 @@ class OrdersController < ApplicationController
   end
 
   
-  def clear
-    if not @current_user.can(:clear_orders) then
-      History.record(:failed_to_clear, @order, 1)
-      render 'update_pos_display' and return
-    end
-    
-    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    
-    if @order then
-      History.record("Destroying #{@order.order_items.visible.count} OrderItems", @order, 1)
-      
-      @order.order_items.visible.each do |oi|
-        oi.hidden = 1
-        oi.hidden_by = @current_user.id
-        oi.save
-      end
-      
-      @order.customer_id = nil
-      @order.tag = nil
-      @order.subtotal = 0
-      @order.total = 0
-      @order.tax = 0
-      @order.save
-    else
-      History.record("cannot clear order because already paid", @order, 1)
-    end
-    render 'update_pos_display' and return
-  end
+#   def clear
+#     if not @current_user.can(:clear_orders) then
+#       #History.record(:failed_to_clear, @order, 1)
+#       render 'update_pos_display' and return
+#     end
+#     
+#     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+#     
+#     if @order then
+#       History.record("Destroying #{@order.order_items.visible.count} OrderItems", @order, 1)
+#       
+#       @order.order_items.visible.each do |oi|
+#         oi.hidden = 1
+#         oi.hidden_by = @current_user.id
+#         oi.save
+#       end
+#       
+#       @order.customer_id = nil
+#       @order.tag = nil
+#       @order.subtotal = 0
+#       @order.total = 0
+#       @order.tax = 0
+#       @order.save
+#     else
+#       History.record("cannot clear order because already paid", @order, 1)
+#     end
+#     render 'update_pos_display' and return
+#   end
   
   def create_all_recurring
     recurrable_orders = @current_vendor.recurrable_subscription_orders

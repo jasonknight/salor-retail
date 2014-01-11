@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140109130553) do
+ActiveRecord::Schema.define(:version => 20140111050554) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -530,7 +530,7 @@ ActiveRecord::Schema.define(:version => 20140109130553) do
     t.string   "shipper_sku"
     t.float    "packaging_unit",           :default => 1.0
     t.boolean  "ignore_qty"
-    t.integer  "child_id",                 :default => 0
+    t.integer  "child_id"
     t.boolean  "must_change_price"
     t.boolean  "hidden_by_distiller"
     t.boolean  "track_expiry"
