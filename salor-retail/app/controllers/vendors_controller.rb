@@ -274,7 +274,7 @@ class VendorsController < ApplicationController
     username = dbconfig[mode]['username']
     password = dbconfig[mode]['password']
     database = dbconfig[mode]['database']
-    `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
+    `/usr/bin/mysqldump -u #{username} -p#{password} #{database} | /bin/bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
 
     send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
   end
