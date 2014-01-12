@@ -1,0 +1,8 @@
+server {
+  listen 80;
+  server_name INSTANCE_ID.sr.localhost;
+  root /usr/share/salor-retail/INSTANCE_ID/public;
+  passenger_enabled on;
+  passenger_set_cgi_param SR_DEBIAN_SITEID INSTANCE_ID;
+  passenger_set_cgi_param BUNDLE_GEMFILE /etc/salor-retail/INSTANCE_ID/Gemfile;
+}

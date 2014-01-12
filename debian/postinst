@@ -49,8 +49,10 @@ for lInstance in $gOldInstances; do
   fi
   
   rm -rf /etc/salor-retail/$lInstance
-  rm -rf /etc/apache2/sites-available/sr-$lInstance-http
-  rm -rf /etc/apache2/sites-enabled/sr-$lInstance-http
+  rm -rf /etc/salor-retail/$lInstance/sr-$lInstance-apache2-http
+  rm -rf /etc/salor-retail/$lInstance/sr-$lInstance-apache2-https
+  rm -rf /etc/salor-retail/$lInstance/sr-$lInstance-nginx-http
+  rm -rf /etc/salor-retail/$lInstance/sr-$lInstance-nginx-https
   rm -rf /usr/share/salor-retail/$lInstance
   rm -rf /var/log/salor-retail/$lInstance
   rm -rf /var/cache/salor-retail/$lInstance
@@ -190,16 +192,17 @@ for lInstance in $gInstances; do
       fi
       
       for protocol in http https; do
-        echo "  postinst: creating apache2 site configuration file $protocol..."
-        apache_site_maintainer_config=/etc/apache2/sites-available/sr-${lInstance}-$protocol
+        echo "  postinst: creating apache2 and nginx site configuration file for $protocol..."
+        apache_site_maintainer_config=/etc/salor-retail/$lInstance/sr-$lInstance-apache2-$protocol
+        nginx_site_maintainer_config=/etc/salor-retail/$lInstance/sr-$lInstance-nginx-$protocol
         cp $app_root/config/apache-site-$protocol.template $apache_site_maintainer_config.maintainer
+        cp $app_root/config/nginx-site-$protocol.template $nginx_site_maintainer_config.maintainer
         sed -i "s/INSTANCE_ID/${lInstance}/g" $apache_site_maintainer_config.maintainer
+        sed -i "s/INSTANCE_ID/${lInstance}/g" $nginx_site_maintainer_config.maintainer
         ucf --debconf-ok $apache_site_maintainer_config.maintainer $apache_site_maintainer_config
+        ucf --debconf-ok $nginx_site_maintainer_config.maintainer $nginx_site_maintainer_config
         rm -rf $apache_site_maintainer_config.maintainer
-        cd /etc/apache2/sites-enabled
-        if [ $protocol = "http" ]; then
-          ln -sf ../sites-available/sr-${lInstance}-$protocol sr-${lInstance}-$protocol
-        fi
+        rm -rf $nginx_site_maintainer_config.maintainer
       done
      
       echo "  postinst: Adding salor-retail to /etc/hosts if not yet there..."
@@ -243,9 +246,9 @@ chmod -R 755 /var/log/salor-retail
 echo "  postinst: changing permissions for user $app_user"
 chmod 770 /etc/salor-retail
   
-echo "  postinst: restarting Apache ..."
-a2enmod actions
-service apache2 restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
+# echo "  postinst: restarting Apache ..."
+# a2enmod actions
+# service apache2 restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
 echo "  postinst: restarting udev ..."
 service udev restart 0>/dev/null 1>/dev/null 2>/dev/null 3>/dev/null
       

@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  default from: "#{SalorRetail::Application::SR_DEBIAN_SITEID}.sr@#{ `hostname`.strip }"
+  default from: "#{SalorRetail::Application::SR_DEBIAN_SITEID}.sr@#{ `/bin/hostname`.strip }"
   
   def technician_message(vendor, subject, msg='', request=nil)
     if request
