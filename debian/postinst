@@ -172,8 +172,9 @@ for lInstance in $gInstances; do
       gemfile_target=$rails_etc/Gemfile
       ucf --debconf-ok $gemfile_source $gemfile_target
 
+      echo "  postinst: Installing Gemfile.lock as configuration file ..."
       gemfile_lock_source=$app_root/Gemfile.lock
-      gemfile_lock_target=$rails_etc/Gemfile/lock
+      gemfile_lock_target=$rails_etc/Gemfile.lock
       ucf --debconf-ok $gemfile_lock_source $gemfile_lock_target
       
       hasPack=$(dpkg -l | grep salor-virtual | wc -l)
