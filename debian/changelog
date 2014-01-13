@@ -1,3 +1,9 @@
+salor-retail (4.0.2.65) unstable; urgency=low
+
+  * deployment
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 13 Jan 2014 14:27:56 +0100
+
 salor-retail (4.0.2.64) unstable; urgency=low
 
   * removed apache dependency, added nginx configuration
