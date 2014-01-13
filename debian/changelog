@@ -1,3 +1,10 @@
+salor-retail (4.0.2.68) unstable; urgency=low
+
+  * build
+  * test
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 13 Jan 2014 17:50:28 +0100
+
 salor-retail (4.0.2.67) unstable; urgency=low
 
   * gemfile group
