@@ -102,8 +102,8 @@ class SessionsController < ApplicationController
   
   def update_connection_status
     render :nothing => true and return if @current_company.mode != 'local'
-    @status_ssh = not(`/bin/netstat -pna | grep :26`.empty?)
-    @status_vnc = not(`/bin/netstat -pna | grep :28`.empty?)
+    @status_ssh = not(`netstat -pna | grep :26`.empty?)
+    @status_vnc = not(`netstat -pna | grep :28`.empty?)
     #@status_ssh = false
     #@status_vnc = false
     render :js => "connection_status = {ssh:#{@status_ssh}, vnc:#{@status_vnc}};"
@@ -112,18 +112,18 @@ class SessionsController < ApplicationController
   def connect_remote_service
     render :nothing => true and return if @current_company.mode != 'local'
     if params[:type] == 'ssh'
-      @status_ssh = `/bin/netstat -pna | grep :26`
+      @status_ssh = `netstat -pna | grep :26`
       if @status_ssh.empty? # don't create more process than one
         connection_thread_ssh = fork do
-          exec "/usr/bin/expect #{ File.join('/', 'usr', 'share', 'remotesupport', 'remotesupportssh.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
+          exec "expect #{ File.join('/', 'usr', 'share', 'remotesupport', 'remotesupportssh.expect').to_s } #{ params[:host] } #{ params[:user] } #{ params[:pw] }"
         end
         Process.detach(connection_thread_ssh)
       end
     end
     if params[:type] == 'vnc'
-      @status_vnc = `/bin/netstat -pna | grep :28`
+      @status_vnc = `netstat -pna | grep :28`
       if @status_vnc.empty? # don't create more process than one
-        spawn "/usr/bin/expect /usr/share/remotesupport/remotesupportvnc.expect #{ params[:host] } #{ params[:user] } #{ params[:pw] }", :out => "/tmp/salor-hospitality-x11vnc-stdout.log", :err => "/tmp/salor-hospitality-x11vnc-stderr.log"
+        spawn "expect /usr/share/remotesupport/remotesupportvnc.expect #{ params[:host] } #{ params[:user] } #{ params[:pw] }", :out => "/tmp/salor-hospitality-x11vnc-stdout.log", :err => "/tmp/salor-hospitality-x11vnc-stderr.log"
       end
     end
     render :nothing => true
