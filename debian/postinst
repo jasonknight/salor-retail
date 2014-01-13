@@ -168,9 +168,13 @@ for lInstance in $gInstances; do
       fi
       
       echo "  postinst: Installing Gemfile as configuration file ..."
-      gemfile_source=$app_root/Gemfile.production
+      gemfile_source=$app_root/Gemfile
       gemfile_target=$rails_etc/Gemfile
       ucf --debconf-ok $gemfile_source $gemfile_target
+
+      gemfile_lock_source=$app_root/Gemfile.lock
+      gemfile_lock_target=$rails_etc/Gemfile/lock
+      ucf --debconf-ok $gemfile_lock_source $gemfile_lock_target
       
       hasPack=$(dpkg -l | grep salor-virtual | wc -l)
       if [ "$hasPack" = "0" ]; then
