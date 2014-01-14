@@ -9,7 +9,7 @@
       - histories.each do |h|
         %tr
           %td= l h.created_at, :format => :short
-          %td= h.user.username
+          %td= h.user.username if h.user
           %td= h.action_taken
           %td= h.changes_made
           %td{:align => "left"}

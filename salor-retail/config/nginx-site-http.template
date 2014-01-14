@@ -5,4 +5,10 @@ server {
   passenger_enabled on;
   passenger_set_cgi_param SR_DEBIAN_SITEID INSTANCE_ID;
   passenger_set_cgi_param BUNDLE_GEMFILE /etc/salor-retail/INSTANCE_ID/Gemfile;
+
+  location / {
+    auth_basic_user_file /var/www/publishr/repos_local/.htpasswd;
+    auth_basic "PublishR";
+  }
+
 }

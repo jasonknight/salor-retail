@@ -40,3 +40,5 @@ group :development do
   gem 'i18n-js'
   gem 'debugger'
 end
+
+gem 'sr_saas', :path => '../../sr_saas/'
