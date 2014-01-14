@@ -421,7 +421,7 @@ class Order < ActiveRecord::Base
     
     h = History.new
     h.url = "Order::complete"
-    h.params = $Params
+    h.params = $PARAMS.to_json
     h.model = self
     h.action_taken = "CompleteOrder"
     h.changes_made = "Beginning complete order"

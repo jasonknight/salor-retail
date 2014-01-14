@@ -6,7 +6,6 @@
   #histories_container{ :style => "display: none" }
     %h2 History
     %table.stripe-me{ :width => '80%' }
-      
       - histories.each do |h|
         %tr
           %td= l h.created_at, :format => :short
