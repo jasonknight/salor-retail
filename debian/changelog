@@ -1,3 +1,9 @@
+salor-retail (4.0.2.71) wheezy; urgency=low
+
+  * fixed global name typo
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 14 Jan 2014 12:41:19 +0100
+
 salor-retail (4.0.2.70) wheezy; urgency=low
 
   * test
