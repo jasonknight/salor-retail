@@ -31,14 +31,9 @@ gem 'escper', '1.2.1'
 # The following are not yet part of Debian Jessie/sid and cause a dependency to the online API of rubygems.org
 gem 'kaminari', '0.14.1'
 
-
-
-
 # The following are only required in development
 
 group :development do
   gem 'i18n-js'
   gem 'debugger'
 end
-
-gem 'sr_saas', :path => '../../sr_saas/'
