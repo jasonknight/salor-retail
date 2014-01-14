@@ -1,3 +1,9 @@
+salor-retail (4.0.2.70) wheezy; urgency=low
+
+  * test
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 14 Jan 2014 12:19:17 +0100
+
 salor-retail (4.0.2.69) unstable; urgency=low
 
   * histories view fix
