@@ -1,3 +1,10 @@
+salor-retail (4.0.2.72) wheezy; urgency=low
+
+  * fixed price rounding for 4.9
+  * updated readme and deb deployment
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 15 Jan 2014 14:32:16 +0100
+
 salor-retail (4.0.2.71) wheezy; urgency=low
 
   * fixed global name typo
