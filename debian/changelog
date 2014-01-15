@@ -1,3 +1,9 @@
+salor-retail (4.0.2.73) wheezy; urgency=low
+
+  * deployment
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 15 Jan 2014 14:53:28 +0100
+
 salor-retail (4.0.2.72) wheezy; urgency=low
 
   * fixed price rounding for 4.9
