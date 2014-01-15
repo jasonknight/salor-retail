@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Michael Franzl <office@michaelfranzl.com>
 Build-Depends: debhelper (>= 8.0.0), po-debconf
 Standards-Version: 3.9.3
-Homepage: http://red-e.eu/app/salor-retail/
+Homepage: http://thebigrede.net
 #Vcs-Git: git@github.com:jasonknight/salor-retail.git
 #Vcs-Browser: https://github.com/jasonknight/salor-retail
 
