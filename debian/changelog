@@ -1,3 +1,9 @@
+salor-retail (4.0.2.75) wheezy; urgency=low
+
+  * small improvements
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 16 Jan 2014 15:39:25 +0100
+
 salor-retail (4.0.2.74) wheezy; urgency=low
 
   * fixed regular actions
