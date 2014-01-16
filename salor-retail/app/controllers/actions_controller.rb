@@ -8,7 +8,15 @@ class ActionsController < ApplicationController
   before_filter :check_role
 
   def index
-    @actions = @current_vendor.actions.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    if params[:keywords].blank?
+      @actions = @current_vendor.actions.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    else
+      items = @current_company.items.visible.by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+      @actions = []
+      items.each do |i|
+        @actions += i.actions.visible
+      end
+    end
   end
 
   def show

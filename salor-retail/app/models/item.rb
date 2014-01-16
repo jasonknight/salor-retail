@@ -293,7 +293,7 @@ class Item < ActiveRecord::Base
     action.model = self
     action.whento = "on_import"
     action.behavior = "divide"
-    action.name = Time.now.strftime("%Y%m%d%H%M%S")
+    action.name = self.name
     result = action.save
     if result == false
       raise "Could not save Action because #{ action.errors.messages }"

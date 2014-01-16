@@ -36,7 +36,7 @@
       %td= f.select :afield, Action.afield_list
     %tr
       %td= f.label :value
-      %td= f.text_field :value
+      %td= f.text_field :value, :value => salor_number_with_delimiter(f.object.value)
 
     %tr
       %td= f.label :field2

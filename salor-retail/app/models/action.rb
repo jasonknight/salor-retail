@@ -49,6 +49,12 @@ class Action < ActiveRecord::Base
     end
   end
   
+  def value=(pricestring)
+    val = self.string_to_float(pricestring, :locale => self.vendor.region)
+    write_attribute :value, val
+  end
+  
+  
   def self.when_list
     return [
       nil,
@@ -120,10 +126,8 @@ class Action < ActiveRecord::Base
     end
     
     redraw_all_pos_items = nil
-    
-    
-    
-    if base_item.class != Vendor and base_item.kind_of? ActiveRecord::Base then
+   
+    if base_item.class != Vendor and base_item.kind_of? ActiveRecord::Base
       the_vendor.actions.visible.where(:model_type => 'Vendor', :model_id => the_vendor).where(["whento = ? or whento = 'always'",act]).each do |action|
         redraw_all_pos_items = Action.apply_action(action, item, act)
       end
@@ -183,43 +187,37 @@ class Action < ActiveRecord::Base
         return action.execute_script(item, act);
       end
 
-      if action.afield == "base_price_cents"
-        the_value *= 100
+      if action.afield == "price_cents"
+        the_value = action.value * 100
       else
         the_value = action.value
       end
       
-#       if action.afield.to_sym == :price_cents
-#         # Reset the price to the Item price_cents
-#         item.price_cents = item.item.price_cents
-#       end
-      
       case action.behavior.to_sym
-        
       when :add
         eval("item.#{action.afield} += the_value")
-        #item.action_applied = true
+        item.action_applied = true
         item.save!
         
       when :substract
         eval("item.#{action.afield} -= the_value")
-        #item.action_applied = true
+        item.action_applied = true
         item.save!
         
       when :multiply
         eval("item.#{action.afield} *= the_value")
         SalorBase.log_action Action, "multiplying", :blue
-        #item.action_applied = true
+        item.action_applied = true
         item.save!
         
       when :divide
         eval("item.#{action.afield} /= the_value")
-        #item.action_applied = true
+        item.action_applied = true
         item.save!
         
       when :assign
         eval("item.#{action.afield} = the_value")
-        #item.action_applied = true
+        item.action_applied = true
         item.save!
         
       when :discount_after_threshold
@@ -247,7 +245,7 @@ class Action < ActiveRecord::Base
           items_in_cat.each do |oi|
             oi.price_cents = oi.item.price_cents
             oi.coupon_amount_cents = 0
-            #oi.action_applied = nil
+            oi.action_applied = nil
             oi.calculate_totals
           end
           
@@ -262,16 +260,14 @@ class Action < ActiveRecord::Base
             end
             
             minimum_price_item.coupon_amount_cents = action.value * max_discountables * minimum_price_item.price_cents
-            #minimum_price_item.action_applied = true
+            minimum_price_item.action_applied = true
             minimum_price_item.calculate_totals
           else
             SalorBase.log_action Action,"XXXX[Discount after threshold]: num_discountables is not sufficient"
             minimum_price_item.coupon_amount_cents = 0
-            #minimum_price_item.action_applied = nil
+            minimum_price_item.action_applied = nil
             minimum_price_item.calculate_totals
           end
-          
-          
           
           redraw_all_pos_items = true
           
