@@ -67,6 +67,7 @@ class ShipmentsController < ApplicationController
   def destroy
     @shipment = @current_vendor.shipments.visible.find_by_id(params[:id])
     @shipment.hide(@current_user)
+    redirect_to shipments_path
   end
   
   #ajax

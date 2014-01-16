@@ -19,7 +19,7 @@
       = l @shipment.created_at, :format => :date_short
     %p
       %b== #{ I18n.t("activerecord.attributes.price") }:
-      = humanized_money_with_symbol @shipment.total
+      = humanized_money_with_symbol @shipment.purchase_price_total
     %p
       %b== #{ I18n.t("activerecord.attributes.status") }:
       = @shipment.shipment_type.name if @shipment.shipment_type

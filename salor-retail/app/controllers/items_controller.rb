@@ -107,8 +107,7 @@ class ItemsController < ApplicationController
       @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       @histories = @item.histories.order("created_at DESC").limit(20)
-      # redirect_to items_path
-      render :edit
+      redirect_to items_path
     else
       @histories = @item.histories.order("created_at DESC").limit(20)
       render :edit

@@ -510,7 +510,7 @@ en:
     logos: Logos
     loyalty_cards: loyalty cards
     merge_into_current_order: Merge into current order
-    move_shipment_item: move shipment item
+    move_shipment_item: Move all shipment items into stock
     new_action: New Action
     new_broken_item: New Broken Item
     new_button: New Button
