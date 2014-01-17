@@ -355,7 +355,7 @@ class OrdersController < ApplicationController
     h.vendor = @current_vendor
     h.company = @current_company
     h.url = "/orders/log"
-    h.params = params
+    h.params = params.to_json
     h.model_id = params[:order_id]
     h.model_type = 'Order'
     h.action_taken = params[:log_action]
