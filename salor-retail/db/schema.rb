@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "vendor_id"
     t.integer  "user_id"
     t.string   "whento"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.string   "behavior"
     t.integer  "weight",     :default => 0
     t.string   "afield"
@@ -47,8 +47,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "vendor_id"
     t.integer  "shipper_id"
     t.text     "note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.boolean  "is_shipment_item"
     t.boolean  "hidden"
     t.integer  "hidden_by"
@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.string   "sku"
     t.string   "old_category_name"
     t.integer  "weight"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.integer  "vendor_id"
     t.boolean  "is_buyback"
     t.integer  "category_id"
@@ -80,8 +80,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
 
   create_table "cash_registers", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                        :null => false
+    t.datetime "updated_at",                                        :null => false
     t.integer  "vendor_id"
     t.string   "scale"
     t.boolean  "hidden"
@@ -122,8 +122,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   create_table "categories", :force => true do |t|
     t.integer  "vendor_id"
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.float    "quantity_sold",   :default => 0.0
     t.float    "cash_made"
     t.boolean  "button_category"
@@ -206,8 +206,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.string   "telephone"
     t.string   "cellphone"
     t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.integer  "vendor_id"
     t.string   "company_name"
     t.string   "sku"
@@ -232,8 +232,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "location_id"
     t.string   "item_sku"
     t.string   "applies_to"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.float    "amount"
     t.string   "amount_type"
     t.boolean  "hidden"
@@ -263,8 +263,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
 
   create_table "drawer_transactions", :force => true do |t|
     t.integer  "drawer_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.text     "notes"
     t.boolean  "refund"
     t.string   "tag"
@@ -294,8 +294,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   add_index "drawer_transactions", ["vendor_id"], :name => "index_drawer_transactions_on_vendor_id"
 
   create_table "drawers", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
@@ -474,8 +474,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   create_table "item_types", :force => true do |t|
     t.string   "name"
     t.string   "behavior"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "vendor_id"
     t.boolean  "hidden"
     t.integer  "hidden_by"
@@ -490,8 +490,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.string   "sku"
     t.string   "image"
     t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.integer  "location_id"
     t.integer  "category_id"
     t.integer  "tax_profile_id"
@@ -574,8 +574,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.float    "y"
     t.string   "shape"
     t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.string   "applies_to"
     t.float    "quantity_sold", :default => 0.0
     t.float    "cash_made",     :default => 0.0
@@ -596,8 +596,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "num_swipes"
     t.integer  "num_used"
     t.integer  "customer_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.string   "sku"
     t.string   "customer_sku"
     t.boolean  "hidden"
@@ -680,8 +680,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "notable_id"
     t.string   "notable_type"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
@@ -696,8 +696,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "order_id"
     t.integer  "item_id"
     t.float    "quantity"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
     t.integer  "tax_profile_id"
     t.integer  "item_type_id"
     t.boolean  "activated"
@@ -766,8 +766,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   add_index "order_items", ["vendor_id"], :name => "index_order_items_on_vendor_id"
 
   create_table "orders", :force => true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.integer  "vendor_id"
     t.integer  "user_id"
     t.integer  "location_id"
@@ -830,8 +830,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
 
   create_table "payment_method_items", :force => true do |t|
     t.integer  "order_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.integer  "vendor_id"
     t.boolean  "hidden"
     t.integer  "hidden_by"
@@ -876,10 +876,9 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.string   "name"
     t.string   "internal_type"
     t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
     t.integer  "hidden",        :default => 0
-    t.integer  "hidden_by"
     t.boolean  "cash"
     t.boolean  "change"
     t.boolean  "unpaid"
@@ -887,6 +886,7 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "position"
     t.integer  "company_id"
     t.datetime "hidden_at"
+    t.integer  "hidden_by"
   end
 
   create_table "plugins", :force => true do |t|
@@ -926,13 +926,13 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
 
   create_table "roles", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer  "vendor_id"
+    t.integer  "company_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
-    t.integer  "vendor_id"
-    t.integer  "company_id"
     t.integer  "user_id"
   end
 
@@ -960,8 +960,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.integer  "item_type_id"
     t.string   "sku"
     t.integer  "shipment_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.boolean  "in_stock"
     t.float    "quantity"
     t.boolean  "hidden"
@@ -997,8 +997,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   create_table "shipment_types", :force => true do |t|
     t.string   "name"
     t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.boolean  "hidden"
     t.integer  "vendor_id"
     t.integer  "hidden_by"
@@ -1017,8 +1017,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.boolean  "paid"
     t.integer  "user_id"
     t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "name"
     t.integer  "vendor_id"
     t.boolean  "hidden"
@@ -1048,8 +1048,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.string   "contact_email"
     t.integer  "user_id"
     t.text     "contact_address"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.boolean  "hidden"
     t.string   "reorder_type"
     t.string   "sku"
@@ -1066,8 +1066,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   create_table "stock_locations", :force => true do |t|
     t.string   "name"
     t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
@@ -1101,8 +1101,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.string   "name"
     t.float    "value"
     t.integer  "default"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "user_id"
     t.boolean  "hidden"
     t.string   "sku"
@@ -1120,8 +1120,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   create_table "transaction_tags", :force => true do |t|
     t.string   "name"
     t.integer  "vendor_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.boolean  "hidden"
     t.integer  "hidden_by"
     t.datetime "hidden_at"
@@ -1168,8 +1168,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
     t.string   "username"
     t.integer  "vendor_id"
     t.string   "first_name"
@@ -1204,8 +1204,8 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
     t.string   "name"
     t.integer  "user_id"
     t.text     "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
     t.boolean  "hidden"
     t.binary   "receipt_logo_header"
     t.binary   "receipt_logo_footer"

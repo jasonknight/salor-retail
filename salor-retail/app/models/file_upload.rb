@@ -476,7 +476,7 @@ class FileUpload
       #pack_item.parent = nil
       carton_item.child = pack_item
       result = carton_item.save
-      log_action "XXXX result #{ result } #{ carton_item.child.id }", :blue
+      #log_action "XXXX result #{ result } #{ carton_item.child.id }", :blue
       #carton_item.reload
       #debugger if carton_item.child.nil?
       if result == false

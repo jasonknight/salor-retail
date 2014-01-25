@@ -289,9 +289,10 @@ company_count.times do |c|
 
     action_num = 0
     actions_to_create.each do |attrs|
-      action = Action.new(attrs)
+      action = Action.new
       action.company = company
       action.vendor = vendor
+      action.attributes = attrs
       # create an item for this action
       if attrs[:name].include? "B5G6 for Category"
         action.model = b5g6_category
