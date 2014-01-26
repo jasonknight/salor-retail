@@ -1169,7 +1169,7 @@ class Vendor < ActiveRecord::Base
   
   # outputs total per month
   def recurrable_order_total
-    total = self.recurrable_subscription_orders.collect do |o|
+    total = self.orders.visible.where(:subscription => true).collect do |o|
       o.total_cents / o.subscription_interval
     end.sum
     return Money.new(total, self.currency)
