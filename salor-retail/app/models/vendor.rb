@@ -1167,6 +1167,14 @@ class Vendor < ActiveRecord::Base
     self.orders.visible.where(:subscription => true).where("subscription_next <= '#{ (Time.now + 1.day).strftime('%Y-%m-%d') }'")
   end
   
+  # outputs total per month
+  def recurrable_order_total
+    total = self.recurrable_subscription_orders.collect do |o|
+      o.total_cents / o.subscription_interval
+    end.sum
+    return Money.new(total, self.currency)
+  end
+  
   def csv_dump(model, from, to)
     case model
     when 'OrderItem'
