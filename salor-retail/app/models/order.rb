@@ -322,7 +322,7 @@ class Order < ActiveRecord::Base
     i = Item.new
     i.item_type = self.vendor.item_types.find_by_behavior('normal')
     i.behavior = i.item_type.behavior
-    i.tax_profile = self.vendor.tax_profiles.where(:default => true).first
+    i.tax_profile = self.vendor.tax_profiles.visible.where(:default => true).first
     i.vendor = self.vendor
     i.company = self.company
     i.currency = self.vendor.currency
