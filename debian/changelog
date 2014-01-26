@@ -1,3 +1,9 @@
+salor-retail (4.0.2.81) wheezy; urgency=low
+
+  * fixed subscription total
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 Jan 2014 12:49:56 +0100
+
 salor-retail (4.0.2.80) wheezy; urgency=low
 
   * added subscription reminder rake task
