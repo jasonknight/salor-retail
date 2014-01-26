@@ -1,3 +1,11 @@
+salor-retail (4.0.2.80) wheezy; urgency=low
+
+  * added subscription reminder rake task
+  * no cronjob for subscription reminder
+  * added total per month for subscriptions
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 Jan 2014 12:38:13 +0100
+
 salor-retail (4.0.2.79) wheezy; urgency=low
 
   * unpaid association fix
