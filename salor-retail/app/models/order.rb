@@ -474,6 +474,7 @@ class Order < ActiveRecord::Base
       :paid => self.paid,
       :is_proforma => self.is_proforma,
       :is_quote => self.is_quote,
+      :is_unpaid => self.is_unpaid,
       :user_id => self.user_id,
       :drawer_id => self.drawer_id
     })
@@ -486,8 +487,6 @@ class Order < ActiveRecord::Base
       :is_quote => self.is_quote,
       :is_proforma => self.is_proforma
     })
-    
-
   end
   
   def create_drawer_transaction
@@ -543,8 +542,9 @@ class Order < ActiveRecord::Base
       
       self.payment_method_items << pmi
       
-      self.is_quote = true if pm.quote == true
-      self.is_unpaid = true if pm.unpaid == true
+      # this is now done in update_associations
+#       self.is_quote = true if pm.quote == true
+#       self.is_unpaid = true if pm.unpaid == true
     end
     
     self.save!
