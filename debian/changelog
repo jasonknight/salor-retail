@@ -1,3 +1,9 @@
+salor-retail (4.0.2.78) wheezy; urgency=low
+
+  * tax profile visible fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 Jan 2014 10:46:37 +0100
+
 salor-retail (4.0.2.77) wheezy; urgency=low
 
   * seed fix
