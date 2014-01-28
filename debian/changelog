@@ -1,3 +1,9 @@
+salor-retail (4.0.2.82) wheezy; urgency=low
+
+  * hidden fix, parent/child list on items#edit, last cash drop fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 28 Jan 2014 15:24:39 +0100
+
 salor-retail (4.0.2.81) wheezy; urgency=low
 
   * fixed subscription total
