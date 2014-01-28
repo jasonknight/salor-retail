@@ -51,122 +51,135 @@
 <!-- Begin Form -->
 <div class="right">
   <%= form_for(@item) do |f| %>
-  <table width="90%" align="center">
-    <tr>
-      <td colspan="2" align="right"> 
-        <div class="actions">
-          <%= f.submit t('helpers.submit.save')%>
-        </div>
-        <% if @item.errors.any? %>
-          <div id="error_explanation">
-            <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @item.errors.count,:model => t("activerecord.models.item.one"))%></h2>
-            <ul>
-            <% @item.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-            </ul>
+    <table width="90%" align="center">
+      <tr>
+        <td colspan="2" align="right"> 
+          <div class="actions">
+            <%= f.submit t('helpers.submit.save')%>
           </div>
-        <% end %>
-      </td>
-    </tr>
-    
-  <!--   Begin Form Fields -->
-    
-    <tr>
-      <td> <%= f.label I18n.t("activerecord.attributes.name") %> </td>
-      <td> <%= f.text_field :name, :class => "keyboardable", :style => "width: 80%;" %> </td>
-    </tr>
-    
-    <tr>
-      <td> 
-        <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "sr.fn.items.itemsAddNameTranslation($(this).val());" %>
-      </td>
-      <td> 
-      <script type="text/javascript">
-      $(function () {
-        <% @item.name_translations.each do |k,v|%>
-          inp = sr.fn.items.itemsAddNameTranslation('<%= k %>');
-          inp.val("<%= escape_javascript v %>");
-        <% end %>
-        });
-      </script>
-        <div id="name_translations">
-        
-        </div>
-      </td>
-    </tr>
-    
-    <tr>
-      <td> <%= f.label I18n.t("activerecord.attributes.sku") %> </td>
-      <td> <%= f.text_field :sku, :class => "keyboardable", :style => "width: 80%;" %> </td>
-    </tr>
-    
-    <tr>
-      <td> <%= f.label Item.human_attribute_name :description %> </td>
-      <td> <%= f.text_field :description, :class => "keyboardable", :style => "width: 80%;" %> </td>
-    </tr>
-    
-    <tr>
-      <td> <%= f.label I18n.t("activerecord.attributes.base_price") %> </td>
-      <td> <%= f.text_field salor_number_with_delimiter(:base_price), :class => "keyboardable-int delimit-number" %> </td>
-    </tr>
-    
+          <% if @item.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= I18n.t("activerecord.errors.template.header.other", :count => @item.errors.count,:model => t("activerecord.models.item.one"))%></h2>
+              <ul>
+              <% @item.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>
+        </td>
+      </tr>
+      
+    <!--   Begin Form Fields -->
+      
+      <tr>
+        <td> <%= f.label I18n.t("activerecord.attributes.name") %> </td>
+        <td> <%= f.text_field :name, :class => "keyboardable", :style => "width: 80%;" %> </td>
+      </tr>
+      
+      <tr>
+        <td> 
+          <%= select_tag :locale_select, options_for_select(SalorRetail::Application::LANGUAGES.to_a.collect{ |a| a.reverse }), :onchange => "sr.fn.items.itemsAddNameTranslation($(this).val());" %>
+        </td>
+        <td> 
+        <script type="text/javascript">
+        $(function () {
+          <% @item.name_translations.each do |k,v|%>
+            inp = sr.fn.items.itemsAddNameTranslation('<%= k %>');
+            inp.val("<%= escape_javascript v %>");
+          <% end %>
+          });
+        </script>
+          <div id="name_translations">
+          
+          </div>
+        </td>
+      </tr>
+      
+      <tr>
+        <td> <%= f.label I18n.t("activerecord.attributes.sku") %> </td>
+        <td> <%= f.text_field :sku, :class => "keyboardable", :style => "width: 80%;" %> </td>
+      </tr>
+      
+      <tr>
+        <td> <%= f.label Item.human_attribute_name :description %> </td>
+        <td> <%= f.text_field :description, :class => "keyboardable", :style => "width: 80%;" %> </td>
+      </tr>
+      
+      <tr>
+        <td> <%= f.label I18n.t("activerecord.attributes.base_price") %> </td>
+        <td> <%= f.text_field salor_number_with_delimiter(:base_price), :class => "keyboardable-int delimit-number" %> </td>
+      </tr>
+      
 
-    
-    <tr>
-      <td> <%= f.label I18n.t("activerecord.attributes.buyback_price") %> </td>
-      <td> <%= f.text_field :buyback_price, :class => 'keyboardable-int delimit-number'%> </td>
-    </tr>
-    
-    
-    <tr>
-      <td>  <%= f.label I18n.t("activerecord.models.tax_profile.one") %> </td>
-      <td> <%= f.collection_select :tax_profile_id, @item.vendor.tax_profiles.visible, :id, :name, :include_blank => true %> </td>
-    </tr>
-    
-    <tr>
-      <td> <%= f.label I18n.t("activerecord.models.category.one") %> </td>
-      <td> <%= f.collection_select :category_id, @item.vendor.categories.visible, :id, :name, :include_blank => true %> </td>
-    </tr>
-    
-    <tr>
-      <td> <%= f.label I18n.t("activerecord.models.item_type.one") %> </td>
-      <td>  <%= f.collection_select :item_type_id, @current_vendor.item_types.visible, :id, :name %> </td>
-    </tr>
-    
+      
+      <tr>
+        <td> <%= f.label I18n.t("activerecord.attributes.buyback_price") %> </td>
+        <td> <%= f.text_field :buyback_price, :class => 'keyboardable-int delimit-number'%> </td>
+      </tr>
+      
+      
+      <tr>
+        <td>  <%= f.label I18n.t("activerecord.models.tax_profile.one") %> </td>
+        <td> <%= f.collection_select :tax_profile_id, @item.vendor.tax_profiles.visible, :id, :name, :include_blank => true %> </td>
+      </tr>
+      
+      <tr>
+        <td> <%= f.label I18n.t("activerecord.models.category.one") %> </td>
+        <td> <%= f.collection_select :category_id, @item.vendor.categories.visible, :id, :name, :include_blank => true %> </td>
+      </tr>
+      
+      <tr>
+        <td> <%= f.label I18n.t("activerecord.models.item_type.one") %> </td>
+        <td>  <%= f.collection_select :item_type_id, @current_vendor.item_types.visible, :id, :name %> </td>
+      </tr>
+      
 
-    
-    <% if not @item.sku.blank?  %>
-    <tr>
-      <td>&nbsp;</td>
-      <td>
-        <table align="left" height="150px">
-          <tr>
-            <td>
-                <%
-                    b = Barcode.new(@item)
-                    barcodepath = b.create
-                  %>
-                  <div style="background-color: white;">
-                    <img src="<%= barcodepath %>.png" />
-                  </div>
-            </td>
-            <td valign="middle" align="center"> 
+      
+      <% if not @item.sku.blank?  %>
+        <tr>
+          <td>&nbsp;</td>
+          <td>
+            <table align="left" height="150px">
+              <tr>
+                <td>
+                    <%
+                        b = Barcode.new(@item)
+                        barcodepath = b.create
+                      %>
+                      <div style="background-color: white;">
+                        <img src="<%= barcodepath %>.png" />
+                      </div>
+                </td>
+                <td valign="middle" align="center"> 
                   <div class="new-item-field">
-                  <%= salor_icon(:sticker_printer, {:onclick => "sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
-        &nbsp;&nbsp;&nbsp;
-                  <%= salor_icon(:thermal_printer,{ :onclick => "sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
+                    <%= salor_icon(:sticker_printer, {:onclick => "sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer, '/items/labels', '&id=#{ @item.id }&type=sticker&style=default')"},32)%> 
+                    &nbsp;&nbsp;&nbsp;
+                    <%= salor_icon(:thermal_printer,{ :onclick => "sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer,'/items/labels', '&id=#{ @item.id }&type=label&style=default')"},32) %> 
                   </div>
-                <div class="clear">
-                  &nbsp;
-                </div>
-              
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-    <% end %>
+                  <div class="clear">&nbsp;</div>              
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      <% end %>
+      
+      <% if @item.parent or @item.child %>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <div>
+              <% topmost_parent = @current_vendor.items.visible.find_by_sku(@item.recursive_parent_sku_chain.last) %>
+              <% topmost_parent.recursive_child_sku_chain.each do |sku| %>
+                <% i = @current_vendor.items.visible.find_by_sku(sku) %>
+                <p><%= link_to(i.name + " (" + i.sku + ")", edit_item_path(i)) %></p>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
     
     <!-- ################### -->
     

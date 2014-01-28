@@ -612,7 +612,7 @@ class Vendor < ActiveRecord::Base
     transactions_sum = Money.new(drawer_transactions.sum(:amount_cents), self.currency)
     
     # Total of everything for this day based on drawer transactions. this also includes proforma payments, since proforma Orders are effective re. payment methods. this is Cash only. This must match the current Drawer.amount at all times during a working day.
-    calc_drawer_cents = self.drawer_transactions.where(
+    calc_drawer_cents = self.drawer_transactions.visible.where(
       :created_at => from..to,
       :drawer_id => drawer
     ).sum(:amount_cents)
