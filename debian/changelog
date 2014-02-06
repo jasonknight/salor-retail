@@ -1,3 +1,9 @@
+salor-retail (4.0.2.84) wheezy; urgency=low
+
+  * more robust demo mode
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 06 Feb 2014 10:54:36 +0100
+
 salor-retail (4.0.2.83) wheezy; urgency=low
 
   * inventory report nil fix
