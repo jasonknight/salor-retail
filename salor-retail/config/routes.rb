@@ -138,13 +138,13 @@ SalorRetail::Application.routes.draw do
 
   
     
-  match "api/order" => "api#order"
-  "authenticate,create,update,destroy,add_item".split(',').each do |u|
-    post "api/#{u}"
-  end
-  %Q[search,time,registers,vendors,order,order_items,locations,categories,customers,discounts,items].split(',').each do |u|
-    get "api/#{u}"
-  end
+#   match "api/order" => "api#order"
+#   "authenticate,create,update,destroy,add_item".split(',').each do |u|
+#     post "api/#{u}"
+#   end
+#   %Q[search,time,registers,vendors,order,order_items,locations,categories,customers,discounts,items].split(',').each do |u|
+#     get "api/#{u}"
+#   end
 
   
   

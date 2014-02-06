@@ -1044,7 +1044,7 @@ class Order < ActiveRecord::Base
       vp.codepage = 0
       vp.baudrate = 9600
       
-      print_engine = Escper::Printer.new('local', vp)
+      print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.vendor.hash_id))
       print_engine.open
       print_engine.print(0, contents[:text], contents[:raw_insertations])
       print_engine.close

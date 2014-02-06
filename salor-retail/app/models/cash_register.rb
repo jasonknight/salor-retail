@@ -48,7 +48,7 @@ class CashRegister < ActiveRecord::Base
     vp.codepage = 0
     vp.baudrate = 9600
     
-    print_engine = Escper::Printer.new('', vp)
+    print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.vendor.hash_id))
     print_engine.open
     text = self.open_cash_drawer_code
     print_engine.print(0, text)

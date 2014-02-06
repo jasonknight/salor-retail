@@ -36,7 +36,12 @@ class VendorsController < ApplicationController
 
   def edit
     @vendor = @current_user.vendors.visible.find_by_id(params[:id])
-    session[:vendor_id] = @vendor.id
+    if @vendor
+      session[:vendor_id] = @vendor.id
+    else
+      $MESSAGES[:alerts] << "This Vendor does not belong to you. This incident will be reported."
+      redirect_to vendors_path
+    end
   end
 
   def create
@@ -267,17 +272,17 @@ class VendorsController < ApplicationController
     render :layout => 'customer_display'
   end
   
-  def backup
-    configpath = SalorRetail::Application::SR_DEBIAN_SITEID == 'none' ? 'config/database.yml' : "/etc/salor-retail/#{SalorRetail::Application::SR_DEBIAN_SITEID}/database.yml"
-    dbconfig = YAML::load(File.open(configpath))
-    mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
-    username = dbconfig[mode]['username']
-    password = dbconfig[mode]['password']
-    database = dbconfig[mode]['database']
-    `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
-
-    send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
-  end
+#   def backup
+#     configpath = SalorRetail::Application::SR_DEBIAN_SITEID == 'none' ? 'config/database.yml' : "/etc/salor-retail/#{SalorRetail::Application::SR_DEBIAN_SITEID}/database.yml"
+#     dbconfig = YAML::load(File.open(configpath))
+#     mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
+#     username = dbconfig[mode]['username']
+#     password = dbconfig[mode]['password']
+#     database = dbconfig[mode]['database']
+#     `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
+# 
+#     send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
+#   end
 
 
   private

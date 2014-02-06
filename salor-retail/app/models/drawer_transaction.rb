@@ -43,7 +43,7 @@ class DrawerTransaction < ActiveRecord::Base
     vp.baudrate = 9600
     
     text = self.escpos
-    print_engine = Escper::Printer.new('local', vp)
+    print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.vendor.hash_id))
     print_engine.open
     print_engine.print(0, text)
     print_engine.close
