@@ -121,6 +121,7 @@ class ItemsController < ApplicationController
   def update_real_quantity
     @item = @current_vendor.items.visible.find_by_sku(params[:sku])
     @item.real_quantity = params[:real_quantity]
+    @item.real_quantity ||= 0 # protect against errenous JS requests with missing 'real_quantity' param
     @item.real_quantity_updated = true
     result = @item.save
     if result != true
