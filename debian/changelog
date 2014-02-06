@@ -1,3 +1,9 @@
+salor-retail (4.0.2.83) wheezy; urgency=low
+
+  * inventory report nil fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 06 Feb 2014 10:19:19 +0100
+
 salor-retail (4.0.2.82) wheezy; urgency=low
 
   * hidden fix, parent/child list on items#edit, last cash drop fix
