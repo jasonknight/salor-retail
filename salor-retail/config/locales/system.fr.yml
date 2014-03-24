@@ -4,7 +4,7 @@ fr:
     errors:
       messages:
         accepted: doit être accepté
-        blank: ne doit pas être blanc
+        blank: ne doit pas être vide
         confirmation: ne correspond pas
         empty: ne doit pas être vide
         equal_to: doit être égal à %{count}
@@ -12,14 +12,14 @@ fr:
         exclusion: doit être dans la liste
         greater_than: doit être supérieure à %{count}
         greater_than_or_equal_to: doit être supérieur ou égal à %{count}
-        inclusion: n'est pas dans la liste
+        inclusion: pas dans la liste
         invalid: invalide
         less_than: doit être inférieur à %{count}
         less_than_or_equal_to: doit être inférieur ou égal à %{count}
-        not_a_number: n'est pas un nombre
+        not_a_number: n'est pas un chiffre
         odd: doit être impair
         taken: est déjà pris
-        too_long: est trop longue (maximum %{count} characters)
+        too_long: est trop long (maximum %{count} characters)
         too_short: est trop court (minimum %{count} characters)
         wrong_length: longueur erronée (should be %{count} characters)
       template:
@@ -70,67 +70,66 @@ fr:
     - Avril
     - Mai
     - Juin
-    - Julliet
+    - Juillet
     - Août
-    - Septembre
     - Septembre
     - Octobre
     - Novembre
     - Décembre
     order:
-    - :year
-    - :month
-    - :day
+    - :année
+    - :mois
+    - :jour
   datetime:
     distance_in_words:
       about_x_hours:
-        one: about 1 hour
-        other: about %{count} hours
+        one: approx. 1 heure
+        other: approx. %{count} heures
       about_x_months:
-        one: about 1 month
-        other: about %{count} months
+        one: approx. 1 mois
+        other: approx. %{count} mois
       about_x_years:
-        one: about 1 year
-        other: about %{count} years
+        one: approx. 1 an
+        other: approx. %{count} ans
       almost_x_years:
-        one: almost 1 year
-        other: almost %{count} years
-      half_a_minute: half a minute
+        one: presque 1 an
+        other: presque %{count} ans
+      half_a_minute: 30 secondes
       less_than_x_minutes:
-        one: less than a minute
-        other: less than %{count} minutes
+        one: moins d'1 minute
+        other: moins de %{count} minutes
       less_than_x_seconds:
-        one: less than 1 second
-        other: less than %{count} seconds
+        one: moins d'1 seconde
+        other: mois de %{count} secondes
       over_x_years:
-        one: over 1 year
-        other: over %{count} years
+        one: plus d'un an
+        other: plus de %{count} ans
       x_days:
-        one: 1 day
-        other: ! '%{count} days'
+        one: 1 jour
+        other: ! '%{count} jours'
       x_minutes:
         one: 1 minute
         other: ! '%{count} minutes'
       x_months:
-        one: 1 month
-        other: ! '%{count} months'
+        one: 1 mois
+        other: ! '%{count} mois'
       x_seconds:
-        one: 1 second
-        other: ! '%{count} seconds'
+        one: 1 seconde
+        other: ! '%{count} secondes'
     prompts:
-      day: Day
-      hour: Hour
+      day: Jour
+      hour: Heure
       minute: Minute
-      month: Month
-      second: Seconds
-      year: Year
+      month: Mois
+      second: Secondes
+      year: Année
   helpers:
     select:
-      prompt: Please select
+      prompt: Selectionner
     submit:
-      create: Create %{model}
-      submit: Save %{model}
-      update: Update %{model}
+      create: Créer %{model}
+      submit: Enregistrer %{model}
+      update: Mettre à jour %{model}
   support:
     array:
       words_connector:
@@ -154,3 +153,4 @@ fr:
       short: ! '%d. %b. %y  %y %H:%M'
       time_short: ! '%H:%M'
     pm: ''
+
