@@ -50,7 +50,7 @@ class ItemsController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now
-    @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :is_buyback => nil, :refunded => nil, :completed_at => @from..@to, :is_quote => nil, :is_proforma => nil).sum(:quantity)
+    @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :refunded => nil, :completed_at => @from..@to, :is_quote => nil, :is_proforma => nil).where("is_buyback = false OR is_buyback IS NULL").sum(:quantity)
   end
 
   

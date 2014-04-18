@@ -18,6 +18,7 @@ class ReportsController < ApplicationController
     @from, @to = assign_from_to(params)
     @models_for_csv = [OrderItem, Item]
     
+    
     if params.has_key?(:fisc_save)
       zip_outfile = @current_vendor.fisc_dump(@from, @to, params[:location])
       redirect_to reports_path

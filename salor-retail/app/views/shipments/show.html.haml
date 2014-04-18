@@ -56,7 +56,7 @@
         %td.right= humanized_money_with_symbol si.purchase_price
         %td.right= si.tax_profile.name if si.tax_profile
         %td.center= si.quantity
-        %td.right= humanized_money_with_symbol si.purchase_price_total
+        %td.right= humanized_money_with_symbol si.purchase_price_total if si.purchase_price_total
     %tr.total
       %td{ :colspan => 5 }
       %td.right= humanized_money_with_symbol @shipment.purchase_price_total

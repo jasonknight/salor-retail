@@ -1035,7 +1035,7 @@ class Vendor < ActiveRecord::Base
       vp.codepage = 0
       vp.baudrate = 9600
       
-      print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.vendor.hash_id))
+      print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.hash_id))
       print_engine.open
       print_engine.print(0, text)
       print_engine.close
@@ -1179,7 +1179,7 @@ class Vendor < ActiveRecord::Base
     case model
     when 'OrderItem'
       order_items = self.order_items.visible.where(:created_at => from..to)
-      attributes = "order.nr;created_at;order.user.login;quantity;total_cents;tax_amount"
+      attributes = "order.nr;created_at;order.user.username;quantity;total_cents;tax_amount"
       output = ''
       output += "#{attributes}\n"
       output += Report.to_csv(order_items, OrderItem, attributes)

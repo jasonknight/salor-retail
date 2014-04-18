@@ -293,6 +293,8 @@ class ApplicationController < ActionController::Base
       t = Date.civil( p[:to  ][:year ].to_i,
                       p[:to  ][:month].to_i,
                       p[:to  ][:day  ].to_i) if p[:to]
+      f = f.beginning_of_day
+      t = t.end_of_day
     rescue
 #       f = t = nil
       
