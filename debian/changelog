@@ -1,3 +1,13 @@
+salor-retail (4.0.2.85) wheezy; urgency=low
+
+  [ Jason Knight ]
+  * various xlation french
+
+  [ Michael Franzl ]
+  * various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 19 Apr 2014 06:29:07 +0200
+
 salor-retail (4.0.2.84) wheezy; urgency=low
 
   * more robust demo mode
