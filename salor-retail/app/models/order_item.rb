@@ -257,6 +257,7 @@ class OrderItem < ActiveRecord::Base
     self.gift_card_amount = item.gift_card_amount
     self.weigh_compulsory = item.weigh_compulsory
     self.quantity     = self.weigh_compulsory ? 0 : 1
+    self.no_inc       = self.weigh_compulsory
     self.calculate_part_price = item.calculate_part_price # cache for faster processing
     self.user         = self.order.user
   end
