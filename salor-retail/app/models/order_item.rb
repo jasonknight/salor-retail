@@ -366,9 +366,10 @@ class OrderItem < ActiveRecord::Base
   
   # This is only for the European tax system. Item.price is already gross and implicitly includes a tax amount for the specific TaxProfile set on Item, However, the user can change the TaxProfile from the POS screen. If that happens, we have to find the implied net part of self.total, and re-calculate self.total according to the set tax.
   def adapt_gross
-    return if self.vendor.net_prices
+    return if self.vendor.net_prices || self.tax == self.item.tax_profile.value
+    
     net_cents = self.total_cents / ( 1.0 + ( self.item.tax_profile.value / 100.0 ) )
-    self.total_cents = net_cents * ( 1.0 + ( self.tax / 100.0 ) )
+    self.total_cents = (net_cents * ( 1.0 + ( self.tax / 100.0 ) )).round(2)
   end
   
   # coupons have to be added on the POS screen AFTER the matching product

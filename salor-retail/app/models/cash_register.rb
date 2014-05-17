@@ -80,7 +80,7 @@ class CashRegister < ActiveRecord::Base
       # Answer: Because device paths can change after reboot, which would break printing for non-techie users, and we only take the ieee1284_id name for granted (stored on the microchips of the devices) and update the path accordingly when they log in or visit the POS page (see before_filters when this is executed). The alternative is to write custom udev rules that give device nodes a specific name based on the USB port location (e.g. /dev/usb-port-top-left), instead of generic ones (e.g. /dev/usb/lp0), but that has to be done manually and specifically for each mainboard revision, which is time consuming and painful.
       if not devicename.include? '.txt' then
         match = /^.*L:(.*?)\;.*/.match(devicename)
-        devicename = match ? match[1] : '?' + n
+        devicename = match ? match[1] : '' + n
       end
       devices_for_select << [devicename,n]
     end
