@@ -1,3 +1,9 @@
+salor-retail (4.0.2.87) wheezy; urgency=low
+
+  * prevent js endless loop on weighing of 0 weight item, console.log cleanup, pos quantity formatting
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 18 May 2014 12:30:56 +0200
+
 salor-retail (4.0.2.86) wheezy; urgency=low
 
   * do not increment weighed items
