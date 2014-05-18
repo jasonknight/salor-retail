@@ -128,24 +128,24 @@ sr.fn.inplace_edit.make = function(elem) {
     var value = elem.html();
 
     if (sr.fn.inplace_edit.get_inputs[field]) {
-      console.log('getting inputs');
+      //console.log('getting inputs');
       var inputhtml = sr.fn.inplace_edit.get_inputs[field](value);
     } else {
-      console.log('setting text input field');
+      //console.log('setting text input field');
       var inputhtml = "<input type='text' class='inplaceeditinput' id='inplaceedit' value='"+value+"' />";
     }
     var input = $(inputhtml);
 
     if (sr.fn.inplace_edit.field_callbacks[field]) {
-      console.log("callback for", field);
+      //console.log("callback for", field);
       sr.fn.inplace_edit.field_callbacks[field](input);
     }
 
     if (typeof type == 'undefined') {
-      console.log('type is undefined');
+      //console.log('type is undefined');
       // the type attr has not been set on the element, so we get type depeding on the input element used
       var tagname = input[0].tagName
-      console.log('tagname is', tagname);
+      //console.log('tagname is', tagname);
 
       switch(tagname) {
         case 'SELECT':

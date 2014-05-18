@@ -203,19 +203,35 @@ class Vendor < ActiveRecord::Base
     return nr
   end
   
-  def self.reset_for_tests
-    t = Time.now - 24.hours
-    Drawer.update_all :amount => 0
-    Order.where(:created_at => t...(Time.now)).delete_all
-    OrderItem.where(:created_at => t...(Time.now)).delete_all
-    DrawerTransaction.where(:created_at => t...(Time.now)).delete_all
-    PaymentMethod.where(:created_at => t...(Time.now)).delete_all
-    Category.update_all :cash_made => 0
-    Category.update_all :quantity_sold => 0
-    Location.update_all :cash_made => 0
-    Location.update_all :quantity_sold => 0
-    SalorConfiguration.update_all :calculate_tax => false
-    CashRegister.update_all :require_password => false
+#   def self.reset_for_tests
+#     t = Time.now - 24.hours
+#     Drawer.update_all :amount => 0
+#     Order.where(:created_at => t...(Time.now)).delete_all
+#     OrderItem.where(:created_at => t...(Time.now)).delete_all
+#     DrawerTransaction.where(:created_at => t...(Time.now)).delete_all
+#     PaymentMethodItem.where(:created_at => t...(Time.now)).delete_all
+#     Category.update_all :cash_made => 0
+#     Category.update_all :quantity_sold => 0
+#     Location.update_all :cash_made => 0
+#     Location.update_all :quantity_sold => 0
+#     SalorConfiguration.update_all :calculate_tax => false
+#     CashRegister.update_all :require_password => false
+#   end
+  
+  # to set all sales related data to zero, useful when the system goes operational after a testing period
+  def self.nullify
+    Drawer.update_all :amount_cents => 0
+    Order.delete_all
+    OrderItem.delete_all
+    DrawerTransaction.delete_all
+    PaymentMethodItem.delete_all
+    ItemStock.delete_all
+    BrokenItem.delete_all
+    History.delete_all
+    StockTransaction.delete_all
+    UserLogin.delete_all
+    Vendor.update_all :largest_order_number => 0
+    Vendor.update_all :largest_quote_number => 0
   end
   
   def self.debug_setup
