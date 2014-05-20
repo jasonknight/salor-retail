@@ -1,3 +1,9 @@
+salor-retail (4.0.2.88) wheezy; urgency=low
+
+  * added copies input for printing labels
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 May 2014 11:27:58 +0200
+
 salor-retail (4.0.2.87) wheezy; urgency=low
 
   * prevent js endless loop on weighing of 0 weight item, console.log cleanup, pos quantity formatting
