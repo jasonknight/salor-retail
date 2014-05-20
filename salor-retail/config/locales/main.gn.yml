@@ -12,7 +12,7 @@ gn:
       amount: Betrag
       amount_type: Art
       applies_to: bezieht sich auf
-      attributes: attributes
+      attributes: Attribute
       auto_drop: Auto-Buchung Tagesbeginn
       bank_machine_path: Bankomat
       base_price: Betrag
@@ -34,7 +34,7 @@ gn:
       color: Farbe
       company_id: Firma
       company_name: Firmenname
-      completed_at: completed at
+      completed_at: abgeschlossen
       contact_address: Kontaktadresse
       contact_email: Kontakt E-Mail
       contact_fax: Kontakt Fax
@@ -57,8 +57,8 @@ gn:
       default_buyback: Pfand
       detailed_edit: Detail Modus
       dollar_per_lp: Euro pro Punkt
-      drawer_user_name: Drawer
-      drawer_username: Drawer user
+      drawer_user_name: Lade
+      drawer_username: Lade Benutzer
       drop: Einzahlen
       email: E-Mail
       enable_technician_emails: E-Mail an Techniker senden
@@ -166,6 +166,7 @@ gn:
         quantity: Liefermenge
         sku: SKU
         stock_location_id: Lagerort
+      shipper_name: Lieferant
       shipper_sku: Bestellnummer
       sku: SKU
       start_amount: Startbetrag
@@ -216,7 +217,6 @@ gn:
       when: Wenn
       whento: When
       width: Breite
-      shipper_name: Lieferant
     models:
       action:
         one: Aktion
@@ -445,7 +445,6 @@ gn:
       upload: Importieren
   label: Regaletikett
   menu:
-    gift_cards: Gutscheine
     actions: Aktionen
     activate_gift_card: Gutschein aktivieren
     add_to_current_order: Zum aktuellen Verkauf
@@ -496,6 +495,7 @@ gn:
     end_day: Tag beenden
     enter_inventory_items: Eingeben
     general_configuration: Allgemein
+    gift_cards: Gutscheine
     home: Filialen
     inventory_report: Bericht Inventur
     invoice_blurbs: Rechnungsdaten
@@ -914,12 +914,18 @@ gn:
     new_item_heading: Neuer Artikel für %{store}
     new_stock_location: Neues Lager
     notice:
-      delete_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht löschen.
-      edit_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht öffnen.
-      edit_order_by_other_user: Dieser Verkauf wird im Moment durch den Benutzer %{username} bearbeitet. Kann ihn nicht öffnen. Benutzer %{username} muss auf den 'Neu' Button drücken, danach nochmals probieren.
-      item_not_existing: Dieser Artikel hat noch nicht existiert. Er wurde angelegt und der Preis auf 0 gesetzt. Sie können den Preis nun verändern. Der Preis wird in der Datenbank permanent gespeichert.
       cache_was_cleared: Cache wurde gelöscht
       csv_edit_starting: Bearbeitung startet
+      delete_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht
+        löschen.
+      edit_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht
+        öffnen.
+      edit_order_by_other_user: Dieser Verkauf wird im Moment durch den Benutzer %{username}
+        bearbeitet. Kann ihn nicht öffnen. Benutzer %{username} muss auf den 'Neu'
+        Button drücken, danach nochmals probieren.
+      item_not_existing: Dieser Artikel hat noch nicht existiert. Er wurde angelegt
+        und der Preis auf 0 gesetzt. Sie können den Preis nun verändern. Der Preis
+        wird in der Datenbank permanent gespeichert.
       model_create: ! '%{model} wurde erfolgreich angelegt.'
       model_edit: ! '%{model} wurde erfolgreich bearbeitet.'
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
@@ -985,11 +991,12 @@ gn:
     vendor: Filiale
     wholesaler_refresh: Großhändlerdaten werden aktualisiert. Dies kann einige Minuten
       dauern.
+    copies: Kopien
   when_list:
     add_to_order: beim Verkauf
     always: immer
+    change_quantity: on change quantity
     on_export: beim Export
     on_import: beim Import
     on_save: beim Speichern
     on_sku_not_found: on sku not found
-    change_quantity: on change quantity

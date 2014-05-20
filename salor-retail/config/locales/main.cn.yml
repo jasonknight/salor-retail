@@ -166,6 +166,7 @@ cn:
         quantity: quantity 數量
         sku: SKU
         stock_location_id: 庫存位置
+      shipper_name: Shipper
       shipper_sku: 發貨人SKU
       sku: SKU
       start_amount: 開始金額
@@ -216,7 +217,6 @@ cn:
       when: 何時
       whento: When
       width: 寬度
-      shipper_name: Shipper
     models:
       action:
         one: 行動
@@ -572,6 +572,7 @@ cn:
     void: 廢止
     weigh: weigh
     wholesaler_update: 批發商更新
+    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: 出貨項目不能保存
@@ -896,6 +897,14 @@ cn:
       save_before: 儲存在離開之前?
       wholesaler_upload_report: ! '更新的項目: %{updated_items}, 創建的項目: %{created_items},
         創建的類: %{created_categories}, 創建的稅務信息 %{created_tax_profiles}'
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
     order_heading: ! '訂單 #%{id} 為了 %{store}'
     order_number: ! '訂單 #%{id}'
     pagination:
@@ -950,11 +959,12 @@ cn:
     username: 用戶名
     vendor: 供應商
     wholesaler_refresh: 取批發商更新. 這可能需要幾分鐘.
+    copies: Copies
   when_list:
     add_to_order: 加入訂單
     always: 總是
+    change_quantity: on change quantity
     on_export: 在出口
     on_import: 在進口
     on_save: 在儲存
     on_sku_not_found: on sku not found
-    change_quantity: on change quantity

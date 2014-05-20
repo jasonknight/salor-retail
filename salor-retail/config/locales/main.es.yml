@@ -166,6 +166,7 @@ es:
         quantity: Cantidad
         sku: SKU
         stock_location_id: Ubicación del stock
+      shipper_name: Shipper
       shipper_sku: SKU del transportador
       sku: SKU
       start_amount: Monto inicial
@@ -216,7 +217,6 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
-      shipper_name: Shipper
     models:
       action:
         one: Acción
@@ -580,6 +580,7 @@ es:
     void: Anular
     weigh: weigh
     wholesaler_update: Actualización del disteibuidor
+    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: No se ha podido grabar el artículo de envío.
@@ -930,6 +931,14 @@ es:
       wholesaler_upload_report: ! 'Artículos actualizados: %{updated_items}, Artículos
         creados: %{created_items}, Categorías creadas: %{created_categories}, Tipos
         de IVA creados %{created_tax_profiles}'
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
     order_heading: ! 'Pedido #%{id} para %{store}'
     order_number: ! 'Pedido #%{id}'
     pagination:
@@ -986,11 +995,12 @@ es:
     vendor: Tienda
     wholesaler_refresh: Actualización del distribuidor en curso. Esto puede llevar
       algunos minutos.
+    copies: Copies
   when_list:
     add_to_order: al añadir al pedido
     always: siempre
+    change_quantity: on change quantity
     on_export: al exportar
     on_import: al importar
     on_save: al guardar
     on_sku_not_found: on sku not found
-    change_quantity: on change quantity

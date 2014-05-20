@@ -232,6 +232,7 @@ class Vendor < ActiveRecord::Base
     UserLogin.delete_all
     Vendor.update_all :largest_order_number => 0
     Vendor.update_all :largest_quote_number => 0
+    Receipt.delete_all
   end
   
   def self.debug_setup
@@ -1036,18 +1037,19 @@ class Vendor < ActiveRecord::Base
     if params[:download] == 'true'
       return Escper::Asciifier.new.process(text)
     elsif cash_register.salor_printer
-      return Escper::Asciifier.new.process(text)
+      return Escper::Asciifier.new.process(text) * params[:copies].to_i
     elsif self.company.mode == 'local'
       if params[:type] == 'sticker'
         printer_path = cash_register.sticker_printer
       else
         printer_path = cash_register.thermal_printer
       end
+
       vp = Escper::VendorPrinter.new({})
       vp.id = 0
       vp.name = cash_register.name
       vp.path = printer_path
-      vp.copies = 1
+      vp.copies = params[:copies].to_i
       vp.codepage = 0
       vp.baudrate = 9600
       

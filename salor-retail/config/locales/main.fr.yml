@@ -1,6 +1,6 @@
 ---
 fr:
-  ByCard: Carte 
+  ByCard: Carte
   ByGiftCard: Carte Cadeau
   InCash: Espèces
   activerecord:
@@ -166,6 +166,7 @@ fr:
         quantity: quantité
         sku: UGS
         stock_location_id: Emplacement stock
+      shipper_name: Livreur
       shipper_sku: UGS livreur
       sku: UGS
       start_amount: Montant initial
@@ -216,7 +217,6 @@ fr:
       when: Quand
       whento: Quand
       width: Largeur
-      shipper_name: Livreur
     models:
       action:
         one: Action
@@ -581,6 +581,7 @@ fr:
     void: Détruire
     weigh: weigh
     wholesaler_update: Mettre à jour distributeur
+    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Choisissez une Caisse
     shipments_item_could_not_be_saved: Article livraisons n'a pas pu être enregistré.
@@ -801,11 +802,13 @@ fr:
         périmé. Vous devez règler le montant dû pour Salor afin de continuer d'en
         bénéficier.  veuillez contacter votre représentant du support technique de
         Salor.
-      sanity_check: "L'action demandée est impossible. Vérifiez le total de la commande et notifier le client de la correction."
+      sanity_check: L'action demandée est impossible. Vérifiez le total de la commande
+        et notifier le client de la correction.
       shipment_item_already_in_stock: L'article %{sku} est déjà en stock
-      shipment_item_move_failed: "Larticle %{sku} n'a pas été déplacé. Erreur: %{error}"
-      shipment_item_nil: "Article refusé dans la livraison. L'article était néant ?"
-      sku_must_be_unique: "%{sku} doit être unique"
+      shipment_item_move_failed: ! 'Larticle %{sku} n''a pas été déplacé. Erreur:
+        %{error}'
+      shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
+      sku_must_be_unique: ! '%{sku} doit être unique'
       value_not_set: PasDéfini
     inventory_updated: Inventaie mis à jour
     logged_in_as: Connecté en tant que
@@ -836,7 +839,7 @@ fr:
       count_orders: Total de commandes
       drop: Versement
       from: De
-      gift_card_redeem_total: Réduction totale par chèque cadeau 
+      gift_card_redeem_total: Réduction totale par chèque cadeau
       gift_card_sales_total: Total ventes chèque cadeau
       gross: brut
       net: net
@@ -861,6 +864,7 @@ fr:
       to: À
       transaction_tag: Etiquette transaction
       transaction_total: Total transaction
+      transactions: transactions
   views:
     advanced_field: Champ avancé
     cash_register_heading: ! '%{name} pour %{store}'
@@ -929,6 +933,14 @@ fr:
       wholesaler_upload_report: ! 'Articles mis à jour: %{updated_items}, Articles
         créés: %{created_items}, Catégories créées: %{created_categories}, Types de
         taxe créés %{created_tax_profiles}'
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
     order_heading: ! 'Commande #%{id} pour %{store}'
     order_number: ! 'Commande #%{id}'
     pagination:
@@ -985,11 +997,12 @@ fr:
     vendor: Vendeur
     wholesaler_refresh: Recherche des mises à jour du distributeur. Ceci peut prendre
       quelques minutes.
+    copies: Copies
   when_list:
     add_to_order: Lors de l'ajout à une commande
     always: Toujours
+    change_quantity: Lors d'un change de quantité
     on_export: Lors de l'exportation
     on_import: Lors de l'importation
     on_save: Lors de la sauvegarde
     on_sku_not_found: Lors de UGS non trouvé
-    change_quantity: Lors d'un change de quantité

@@ -166,6 +166,7 @@ ru:
         quantity: количество
         sku: SKU
         stock_location_id: Расположение склада
+      shipper_name: Shipper
       shipper_sku: SKU отправителя
       sku: SKU
       start_amount: начальное количество
@@ -216,7 +217,6 @@ ru:
       when: когда
       whento: When
       width: ширина
-      shipper_name: Shipper
     models:
       action:
         one: Действие
@@ -579,6 +579,7 @@ ru:
     void: пусто
     weigh: weigh
     wholesaler_update: обновление оптового поставщика
+    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: товар поставки не может быть сохранен
@@ -919,6 +920,14 @@ ru:
       wholesaler_upload_report: ! 'Обновленные товары: %{updated_items}, Созданные
         товары: %{created_items}, Созданные категории: %{created_categories}, Созданные
         налоговые профили %{created_tax_profiles}'
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
     order_heading: ! 'Заказ #%{id} для %{store}'
     order_number: ! 'Заказ #%{id}'
     pagination:
@@ -975,11 +984,12 @@ ru:
     vendor: магазин
     wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять
       несколько минут.
+    copies: Copies
   when_list:
     add_to_order: при добавлении к заказу
     always: всегда
+    change_quantity: on change quantity
     on_export: при экспорте
     on_import: при импорте
     on_save: при сохранении
     on_sku_not_found: on sku not found
-    change_quantity: on change quantity

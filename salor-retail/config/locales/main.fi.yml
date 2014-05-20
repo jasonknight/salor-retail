@@ -166,6 +166,7 @@ fi:
         quantity: määrä
         sku: SKU
         stock_location_id: Varaston sijaintipaikka
+      shipper_name: Shipper
       shipper_sku: Toimittajan SKU
       sku: SKU
       start_amount: alkumäärä
@@ -216,7 +217,6 @@ fi:
       when: milloin
       whento: milloin
       width: leveys
-      shipper_name: Shipper
     models:
       action:
         one: Toiminta
@@ -579,6 +579,7 @@ fi:
     void: mitätöi
     weigh: punnitse
     wholesaler_update: tukkumyyjäpäivitys
+    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: lähetysnimikkeen tallennus epäonnistui
@@ -920,6 +921,14 @@ fi:
       wholesaler_upload_report: ! 'Päivitetty nimikkeet: %{updated_items}, luodut
         nimikkeet: %{created_items}, luodut kategoriat: %{created_categories}, luodut
         veroprofiilit %{created_tax_profiles}'
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
     order_heading: Tilausnro %{id} %{store}:lle
     order_number: Tilausnro %{id}
     pagination:
@@ -974,11 +983,12 @@ fi:
     username: käyttäjätunnus
     vendor: myyntipiste
     wholesaler_refresh: Haetaan tukkuliikepäivityksiä. Tämä voi kestää useita minuutteja.
+    copies: Copies
   when_list:
     add_to_order: lisättäessä tilaukseen
     always: aina
+    change_quantity: on change quantity
     on_export: siirtymässä
     on_import: laatamista
     on_save: tallentamassa
     on_sku_not_found: kun sku ei löytynyt
-    change_quantity: on change quantity

@@ -166,6 +166,7 @@ el:
         quantity: ποσότητα
         sku: SKU
         stock_location_id: Τοποθεσία αποθέματος
+      shipper_name: Shipper
       shipper_sku: SKU Αποστολέα
       sku: SKU
       start_amount: αρχικό ποσό
@@ -216,7 +217,6 @@ el:
       when: πότε
       whento: When
       width: πλάτος
-      shipper_name: Shipper
     models:
       action:
         one: Πράξη
@@ -582,6 +582,7 @@ el:
     void: άκυρο
     weigh: weigh
     wholesaler_update: ενημέρωση χονδρέμπορου
+    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
@@ -934,6 +935,14 @@ el:
         }, Δημιουργημένα αντικείμενα: %{δημιουργημένα_αντικείμενα}, Δημιουργημένες
         κατηγορίες: %{δημιουργημένες_κατηγορίες}, Δημιουργημένα φορολογικά προφίλ
         %{δημιουργημένα_φορολογικά_προφίλ}'
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
     order_heading: ! 'Παραγγελία #%{id} για %{store}'
     order_number: ! 'Παραγγελία #%{id}'
     pagination:
@@ -990,11 +999,12 @@ el:
     vendor: προμηθευτής
     wholesaler_refresh: Ψάχνουμε για ενημερώσεις χονδρεμπόρου. Αυτό μπορεί να διαρκέσει
       λίγα λεπτά.
+    copies: Copies
   when_list:
     add_to_order: προσθέστε για παραγγελία
     always: πάντα
+    change_quantity: on change quantity
     on_export: κατά την εξαγωγή
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
     on_sku_not_found: on sku not found
-    change_quantity: on change quantity

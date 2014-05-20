@@ -166,6 +166,7 @@ it:
         quantity: quantità
         sku: SKU
         stock_location_id: Posizione Stock
+      shipper_name: Shipper
       shipper_sku: Spedizioniere SKU
       sku: SKU
       start_amount: importo di partenza
@@ -216,7 +217,6 @@ it:
       when: quando
       whento: When
       width: larghezza
-      shipper_name: Shipper
     models:
       action:
         one: Azione
@@ -579,6 +579,7 @@ it:
     void: vuoto
     weigh: weigh
     wholesaler_update: aggiorna grossista
+    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
@@ -920,6 +921,14 @@ it:
       wholesaler_upload_report: ! 'Articoli aggiornati: %{updated_items}, Articoli
         creati: %{created_items}, Categorie create: %{created_categories}, Profili
         Iva creati %{created_tax_profiles}'
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
     order_heading: ! 'Ordine #%{id} per %{store}'
     order_number: ! 'Ordine #%{id}'
     pagination:
@@ -974,11 +983,12 @@ it:
     username: nome utente
     vendor: venditore
     wholesaler_refresh: Recupero aggiornamenti fornitori. Può richiedere diversi minuti.
+    copies: Copies
   when_list:
     add_to_order: aggiungo ad ordine
     always: sempre
+    change_quantity: on change quantity
     on_export: esportazione
     on_import: importazione
     on_save: salvataggio
     on_sku_not_found: on sku not found
-    change_quantity: on change quantity
