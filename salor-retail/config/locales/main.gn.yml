@@ -743,6 +743,7 @@ gn:
   sticker: Aufkleber
   support: Support
   system:
+    finish_day: Abschluss
     add_payment_method: Zahlungsmethode hinzufügen
     complete_sale: abschließen
     errors:

@@ -742,6 +742,7 @@ en:
   sticker: sticker
   support: Support
   system:
+    finish_day: End of day
     add_payment_method: Add Method
     complete_sale: Complete
     errors:
