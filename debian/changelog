@@ -1,3 +1,12 @@
+salor-retail (4.0.2.89) wheezy; urgency=low
+
+  * added sales statistics by category
+  * updated translations and correct header for financial report and sales report
+  * style improvements for end of day screen
+  * fixed documentation iframe link
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 28 May 2014 13:40:26 +0200
+
 salor-retail (4.0.2.88) wheezy; urgency=low
 
   * added copies input for printing labels
