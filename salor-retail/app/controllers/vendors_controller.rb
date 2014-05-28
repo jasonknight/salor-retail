@@ -237,16 +237,11 @@ class VendorsController < ApplicationController
     @histories = @current_vendor.histories.order("created_at desc").page(params[:page]).per(@current_vendor.pagination)
   end
   
-  def statistics
-    f, t = assign_from_to(params)
-    params[:limit] ||= 15
-    @limit = params[:limit].to_i - 1
-    
-    @reports = @current_vendor.get_statistics(f, t)
-    
-    view = SalorRetail::Application::CONFIGURATION[:reports][:style]
-    view ||= 'default'
-    render "/vendors/reports/#{view}/page"
+  def sales_statistics
+    @from, @to = assign_from_to(params)
+    @reports = @current_vendor.get_sales_statistics(@from, @to)
+
+    render "/vendors/sales_statistics"
   end
   
   def export
@@ -265,24 +260,12 @@ class VendorsController < ApplicationController
   end
 
   def labels
-    render :layout => false    
+    render :layout => false
   end
   
   def display_logo
     render :layout => 'customer_display'
   end
-  
-#   def backup
-#     configpath = SalorRetail::Application::SR_DEBIAN_SITEID == 'none' ? 'config/database.yml' : "/etc/salor-retail/#{SalorRetail::Application::SR_DEBIAN_SITEID}/database.yml"
-#     dbconfig = YAML::load(File.open(configpath))
-#     mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
-#     username = dbconfig[mode]['username']
-#     password = dbconfig[mode]['password']
-#     database = dbconfig[mode]['database']
-#     `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
-# 
-#     send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
-#   end
 
 
   private

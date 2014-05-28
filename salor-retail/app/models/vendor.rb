@@ -104,7 +104,6 @@ class Vendor < ActiveRecord::Base
     end
   end
   
-  
   def region
     SalorRetail::Application::COUNTRIES_REGIONS[self.country] 
   end
@@ -694,46 +693,11 @@ class Vendor < ActiveRecord::Base
     return report
   end
   
-  def get_statistics(from, to)
-    orders = self.orders.visible.where(:paid => true, :completed_at => from..to)
-
+  def get_sales_statistics(from, to)
+    order_item_quantities_by_category = OrderItem.connection.execute("SELECT category_id, item_id, sku, SUM(quantity), SUM(total_cents), count(*) FROM order_items WHERE vendor_id = #{ self.id } AND hidden IS NULL AND completed_at BETWEEN '#{ from.strftime("%Y-%m-%d %H:%M:%S") }' AND '#{ to.strftime("%Y-%m-%d %H:%M:%S") }' GROUP BY category_id ").to_a
     reports = {
-        :items => {},
-        :categories => {},
-        :locations => {}
+      :order_item_quantities_by_category => order_item_quantities_by_category,
     }
-    
-    # TODO: Replace this loop by self.mymodel.where().sum(:blah) SQL queries for high speed. removed the UI icon in the meantime
-#     orders.each do |o|
-#       o.order_items.visible.each do |oi|
-#         next if oi.item.nil?
-#         key = oi.item.name + " (#{oi.price})"
-#         cat_key = oi.get_category_name
-#         loc_key = oi.get_location_name
-#         
-#         reports[:items][key] ||= {:sku => '', :quantity_sold => 0.0, :cash_made => 0.0 }
-#         reports[:items][key][:quantity_sold] += oi.quantity
-#         reports[:items][key][:cash_made] += oi.total
-#         reports[:items][key][:sku] = oi.sku
-#         
-#         reports[:categories][cat_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-#         
-#         reports[:categories][cat_key][:quantity_sold] += oi.quantity
-#         reports[:categories][cat_key][:cash_made] += oi.total
-#         
-#         reports[:locations][loc_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-#         
-#         reports[:locations][loc_key][:quantity_sold] += oi.quantity
-#         reports[:locations][loc_key][:cash_made] += oi.total
-#       end
-#     end
-# 
-#     reports[:categories_by_cash_made] = reports[:categories].sort_by { |k,v| v[:cash_made] }
-#     reports[:categories_by_quantity_sold] = reports[:categories].sort_by { |k,v| v[:quantity_sold] }
-#     reports[:locations_by_cash_made] = reports[:locations].sort_by { |k,v| v[:cash_made] }
-#     reports[:locations_by_quantity_sold] = reports[:locations].sort_by { |k,v| v[:quantity_sold] }
-#     reports[:items].sort_by { |k,v| v[:quantity_sold] }
-    
     return reports
   end
   

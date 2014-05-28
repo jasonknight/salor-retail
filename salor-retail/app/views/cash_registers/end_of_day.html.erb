@@ -4,7 +4,7 @@
 <div class="button-row" align='right'>
           <div id="confirm_print_end_of_day_report" class='button-print rounded-corners-left' onclick="sr.fn.salor_bin.printUrl(Register.thermal_printer,'/vendors/render_report_day','');"><%= t('.end_of_day_thermal_report')%></div>
           <div id="go_to_report_day" class='button-print' onclick="window.location.href='/vendors/report_day';"><%= t('.paper_report')%></div>
-          <div class="spacer">&nbsp;</div>
+          <div id="go_to_sales_statistics" class="button-print" onclick="window.location.href='/vendors/sales_statistics' "><%= I18n.t('.sales_statistics') %></div>
           <div id="confirm_end_of_day" class="button-confirm rounded-corners-right" onclick="sr.fn.session.logout();"><%= I18n.t("system.logout") %></div>
 </div>
 

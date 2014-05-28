@@ -1,5 +1,6 @@
 ---
 en:
+  sales_statistics: Sale Statistics
   ByCard: By Debit
   ByGiftCard: By Gift Card
   InCash: In Cash
@@ -816,6 +817,14 @@ en:
       logo: logo
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
+    sales_statistics:
+      from: From
+      to: To
+      title: Sales Statistics
+      category_name: Category name
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
     report_day:
       None: Not specified
       OrderItemRefund: Item Refund
