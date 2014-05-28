@@ -497,6 +497,7 @@ el:
     end_day: τέλος μέρας
     enter_inventory_items: Enter
     general_configuration: γενικές ρυθμίσεις
+    gift_cards: Gift Cards
     home: κύριο μενού
     inventory_report: Αναφορά απογραφής
     invoice_blurbs: Invoice Blurbs
@@ -582,7 +583,6 @@ el:
     void: άκυρο
     weigh: weigh
     wholesaler_update: ενημέρωση χονδρέμπορου
-    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: το αντικείμενο αποστολών δεν μπόρεσε να αποθηκευτεί
@@ -868,12 +868,21 @@ el:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: προηγμένο πεδίο
     cash_register_heading: ! '%{name} για %{store}'
     cash_registers: ταμειακές μηχανές
     category_heading: κατηγορία %{name} για %{store}
     change: αλλαγή
+    copies: Copies
     create_new_item: xxx Create New Article
     customers: πελάτες
     download_may_last_long: Αυτή η μεταφόρτωση μπορεί να διαρκέσει πολύ. Θα συνεχίσετε;
@@ -924,6 +933,14 @@ el:
     notice:
       cache_was_cleared: Τα αρχεία της κρυφής μνήμης διαγράφηκαν.
       csv_edit_starting: αρχίζει η επεξεργασία csv
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} δημιουργήθηκε επιτυχώς'
       model_edit: ! '%{model} επεξεργάστηκε επιτυχώς'
       move_real_quantities_success: Οι ποσότητες των προϊόντων ενημερώθηκαν επιτυχώς
@@ -935,14 +952,6 @@ el:
         }, Δημιουργημένα αντικείμενα: %{δημιουργημένα_αντικείμενα}, Δημιουργημένες
         κατηγορίες: %{δημιουργημένες_κατηγορίες}, Δημιουργημένα φορολογικά προφίλ
         %{δημιουργημένα_φορολογικά_προφίλ}'
-      delete_completed_order: This order is already completed. Cannot delete.
-      edit_completed_order: This order is already completed. Cannot edit it.
-      edit_order_by_other_user: This order is currently edited by user %{username}.
-        Cannot open it. User %{username} must click on the 'New' button, then try
-        again.
-      item_not_existing: This item did not exist. It has been created and the price
-        set to zero. You can change the price and it will be saved permanently in
-        the database.
     order_heading: ! 'Παραγγελία #%{id} για %{store}'
     order_number: ! 'Παραγγελία #%{id}'
     pagination:
@@ -999,7 +1008,6 @@ el:
     vendor: προμηθευτής
     wholesaler_refresh: Ψάχνουμε για ενημερώσεις χονδρεμπόρου. Αυτό μπορεί να διαρκέσει
       λίγα λεπτά.
-    copies: Copies
   when_list:
     add_to_order: προσθέστε για παραγγελία
     always: πάντα
@@ -1008,3 +1016,4 @@ el:
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
     on_sku_not_found: on sku not found
+  sales_statistics: Sale Statistics

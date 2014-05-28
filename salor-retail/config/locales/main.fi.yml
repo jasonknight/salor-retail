@@ -494,6 +494,7 @@ fi:
     end_day: lopeta päivä
     enter_inventory_items: Syötä
     general_configuration: yleismääritys
+    gift_cards: Gift Cards
     home: alku
     inventory_report: Inventaarioraportti
     invoice_blurbs: Laskun mainokset
@@ -579,7 +580,6 @@ fi:
     void: mitätöi
     weigh: punnitse
     wholesaler_update: tukkumyyjäpäivitys
-    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: lähetysnimikkeen tallennus epäonnistui
@@ -855,12 +855,21 @@ fi:
       transaction_tag: liiketoimitunniste
       transaction_total: liiketoimen loppusumma
       transactions: liiketoimet
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: kehittynyt kenttä
     cash_register_heading: ! '%{name} %{store}: lle'
     cash_registers: kassat
     category_heading: Kategoria %{name} %{store}:lle
     change: vaihtoraha
+    copies: Copies
     create_new_item: Luo uusi artikkeli
     customers: asiakkaat
     download_may_last_long: Tämä lataus saattaa kestää kauan. Jatkatko?
@@ -911,6 +920,14 @@ fi:
     notice:
       cache_was_cleared: Välimuistitiedostot on poistettu.
       csv_edit_starting: cvs-muokkaus alkaa
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} luonti onnistui'
       model_edit: ! '%{model} muokkaaminen onnistui'
       move_real_quantities_success: Nimikkeiden määrien päivittäminen onnistui
@@ -921,14 +938,6 @@ fi:
       wholesaler_upload_report: ! 'Päivitetty nimikkeet: %{updated_items}, luodut
         nimikkeet: %{created_items}, luodut kategoriat: %{created_categories}, luodut
         veroprofiilit %{created_tax_profiles}'
-      delete_completed_order: This order is already completed. Cannot delete.
-      edit_completed_order: This order is already completed. Cannot edit it.
-      edit_order_by_other_user: This order is currently edited by user %{username}.
-        Cannot open it. User %{username} must click on the 'New' button, then try
-        again.
-      item_not_existing: This item did not exist. It has been created and the price
-        set to zero. You can change the price and it will be saved permanently in
-        the database.
     order_heading: Tilausnro %{id} %{store}:lle
     order_number: Tilausnro %{id}
     pagination:
@@ -983,7 +992,6 @@ fi:
     username: käyttäjätunnus
     vendor: myyntipiste
     wholesaler_refresh: Haetaan tukkuliikepäivityksiä. Tämä voi kestää useita minuutteja.
-    copies: Copies
   when_list:
     add_to_order: lisättäessä tilaukseen
     always: aina
@@ -992,3 +1000,4 @@ fi:
     on_import: laatamista
     on_save: tallentamassa
     on_sku_not_found: kun sku ei löytynyt
+  sales_statistics: Sale Statistics

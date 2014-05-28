@@ -1,6 +1,5 @@
 ---
 en:
-  sales_statistics: Sale Statistics
   ByCard: By Debit
   ByGiftCard: By Gift Card
   InCash: In Cash
@@ -732,6 +731,7 @@ en:
     cashier: cashier
     manager: manager
     stockboy: stockboy
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Report
@@ -817,14 +817,6 @@ en:
       logo: logo
       receipt_logo_footer: receipt logo footer
       receipt_logo_header: receipt logo header
-    sales_statistics:
-      from: From
-      to: To
-      title: Sales Statistics
-      category_name: Category name
-      item_name: Item name
-      quantity: Quantity
-      sum: Sum
     report_day:
       None: Not specified
       OrderItemRefund: Item Refund
@@ -862,6 +854,14 @@ en:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'

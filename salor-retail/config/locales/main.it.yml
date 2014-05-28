@@ -494,6 +494,7 @@ it:
     end_day: fine giornata
     enter_inventory_items: Enter
     general_configuration: configurazione generale
+    gift_cards: Gift Cards
     home: principale
     inventory_report: Rapporto inventario
     invoice_blurbs: Invoice Blurbs
@@ -579,7 +580,6 @@ it:
     void: vuoto
     weigh: weigh
     wholesaler_update: aggiorna grossista
-    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: gli articoli spediti non possono essere salvati
@@ -855,12 +855,21 @@ it:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: campo avanzato
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: registri di cassa
     category_heading: categoria %{name} per %{store}
     change: cambio
+    copies: Copies
     create_new_item: Create New Article
     customers: clienti
     download_may_last_long: Questo download può durare a lungo. Continuare?
@@ -911,6 +920,14 @@ it:
     notice:
       cache_was_cleared: Documenti in cache cancellati.
       csv_edit_starting: inizio modifica csv
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} è stato creato con successo'
       model_edit: ! '%{model} è stato modificato con successo'
       move_real_quantities_success: Quantità articoli aggiornate con successo
@@ -921,14 +938,6 @@ it:
       wholesaler_upload_report: ! 'Articoli aggiornati: %{updated_items}, Articoli
         creati: %{created_items}, Categorie create: %{created_categories}, Profili
         Iva creati %{created_tax_profiles}'
-      delete_completed_order: This order is already completed. Cannot delete.
-      edit_completed_order: This order is already completed. Cannot edit it.
-      edit_order_by_other_user: This order is currently edited by user %{username}.
-        Cannot open it. User %{username} must click on the 'New' button, then try
-        again.
-      item_not_existing: This item did not exist. It has been created and the price
-        set to zero. You can change the price and it will be saved permanently in
-        the database.
     order_heading: ! 'Ordine #%{id} per %{store}'
     order_number: ! 'Ordine #%{id}'
     pagination:
@@ -983,7 +992,6 @@ it:
     username: nome utente
     vendor: venditore
     wholesaler_refresh: Recupero aggiornamenti fornitori. Può richiedere diversi minuti.
-    copies: Copies
   when_list:
     add_to_order: aggiungo ad ordine
     always: sempre
@@ -992,3 +1000,4 @@ it:
     on_import: importazione
     on_save: salvataggio
     on_sku_not_found: on sku not found
+  sales_statistics: Sale Statistics

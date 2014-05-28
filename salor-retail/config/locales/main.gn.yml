@@ -860,12 +860,21 @@ gn:
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
+    sales_statistics:
+      category_name: Kategorie Name
+      from: Von
+      item_name: Artikelname
+      quantity: Verkaufsmenge
+      sum: Summe
+      title: Mengenstatistik
+      to: Bis
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'
     cash_registers: Kassen
     category_heading: Kategorie %{name} für %{store}
     change: Retour
+    copies: Kopien
     create_new_item: NEUEN ARTIKEL ANLEGEN
     customers: Kunden
     download_may_last_long: Der Download kann eine längere Zeit dauern. Fortfahren?
@@ -991,7 +1000,6 @@ gn:
     vendor: Filiale
     wholesaler_refresh: Großhändlerdaten werden aktualisiert. Dies kann einige Minuten
       dauern.
-    copies: Kopien
   when_list:
     add_to_order: beim Verkauf
     always: immer
@@ -1000,3 +1008,4 @@ gn:
     on_import: beim Import
     on_save: beim Speichern
     on_sku_not_found: on sku not found
+  sales_statistics: Sale Statistics

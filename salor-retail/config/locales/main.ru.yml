@@ -494,6 +494,7 @@ ru:
     end_day: конец дня
     enter_inventory_items: Enter
     general_configuration: основные настройки
+    gift_cards: Gift Cards
     home: домой
     inventory_report: Отчет по товарам
     invoice_blurbs: Invoice Blurbs
@@ -579,7 +580,6 @@ ru:
     void: пусто
     weigh: weigh
     wholesaler_update: обновление оптового поставщика
-    gift_cards: Gift Cards
   notifications:
     please_select_cash_register: Please select a Cash Register
     shipments_item_could_not_be_saved: товар поставки не может быть сохранен
@@ -855,12 +855,21 @@ ru:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: дополнительное поле
     cash_register_heading: ! '%{name} для %{store}'
     cash_registers: кассовые аппараты
     category_heading: категория %{name} для %{store}
     change: сдача
+    copies: Copies
     create_new_item: xxx Create New Article
     customers: покупатели
     download_may_last_long: Скачивание может длится долго. Продолжить?
@@ -910,6 +919,14 @@ ru:
     notice:
       cache_was_cleared: Кэш-файлы удалены.
       csv_edit_starting: начало редактирования CSV
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} была успешно создана'
       model_edit: ! '%{model} была успешно отредактирована'
       move_real_quantities_success: Количество товара было успешно обновлено
@@ -920,14 +937,6 @@ ru:
       wholesaler_upload_report: ! 'Обновленные товары: %{updated_items}, Созданные
         товары: %{created_items}, Созданные категории: %{created_categories}, Созданные
         налоговые профили %{created_tax_profiles}'
-      delete_completed_order: This order is already completed. Cannot delete.
-      edit_completed_order: This order is already completed. Cannot edit it.
-      edit_order_by_other_user: This order is currently edited by user %{username}.
-        Cannot open it. User %{username} must click on the 'New' button, then try
-        again.
-      item_not_existing: This item did not exist. It has been created and the price
-        set to zero. You can change the price and it will be saved permanently in
-        the database.
     order_heading: ! 'Заказ #%{id} для %{store}'
     order_number: ! 'Заказ #%{id}'
     pagination:
@@ -984,7 +993,6 @@ ru:
     vendor: магазин
     wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять
       несколько минут.
-    copies: Copies
   when_list:
     add_to_order: при добавлении к заказу
     always: всегда
@@ -993,3 +1001,4 @@ ru:
     on_import: при импорте
     on_save: при сохранении
     on_sku_not_found: on sku not found
+  sales_statistics: Sale Statistics
