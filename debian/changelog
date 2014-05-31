@@ -1,3 +1,9 @@
+salor-retail (4.0.2.90) wheezy; urgency=low
+
+  * sales statistics fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 31 May 2014 15:15:00 +0200
+
 salor-retail (4.0.2.89) wheezy; urgency=low
 
   * added sales statistics by category
