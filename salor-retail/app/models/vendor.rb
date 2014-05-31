@@ -482,6 +482,8 @@ class Vendor < ActiveRecord::Base
       pm = self.payment_methods.find_by_id(r.payment_method_id)
       #raise "#{ r.inspect }" if pm.nil?
       
+      # next if pm.nil? # temporary fix for old db's
+      
       next if pm.change # ignore change. we only consider cash (separately), and all others pms
       
       if pm.cash
@@ -693,8 +695,10 @@ class Vendor < ActiveRecord::Base
     return report
   end
   
+  # OrderItem.connection.execute("SELECT category_id, item_id, sku, ROUND(SUM(quantity), 2), SUM(total_cents) FROM order_items WHERE hidden IS NULL GROUP BY category_id, item_id ").to_a
+  
   def get_sales_statistics(from, to)
-    order_item_quantities_by_category = OrderItem.connection.execute("SELECT category_id, item_id, sku, SUM(quantity), SUM(total_cents), count(*) FROM order_items WHERE vendor_id = #{ self.id } AND hidden IS NULL AND completed_at BETWEEN '#{ from.strftime("%Y-%m-%d %H:%M:%S") }' AND '#{ to.strftime("%Y-%m-%d %H:%M:%S") }' GROUP BY category_id ").to_a
+    order_item_quantities_by_category = OrderItem.connection.execute("SELECT category_id, item_id, sku, SUM(quantity), SUM(total_cents) FROM order_items WHERE vendor_id = #{ self.id } AND hidden IS NULL AND completed_at BETWEEN '#{ from.strftime("%Y-%m-%d %H:%M:%S") }' AND '#{ to.strftime("%Y-%m-%d %H:%M:%S") }' GROUP BY category_id, item_id").to_a
     reports = {
       :order_item_quantities_by_category => order_item_quantities_by_category,
     }

@@ -33,12 +33,14 @@
   
   %table.striped-table2
     %tr
-      %th= t ".quantity_name"
+      %th= t ".category_name"
       %th= t ".item_name"
       %th SKU
-      %th= t ".sum"
       %th= t ".quantity"
+      %th= t ".sum"
+    - total_cents = 0
     - @reports[:order_item_quantities_by_category].each do |arr|
+      - total_cents += arr[4]
       %tr
         %td
           - unless arr[0].nil?
@@ -47,5 +49,11 @@
         %td= arr[2]
         %td= number_with_precision arr[3]
         %td= humanized_money_with_symbol Money.new(arr[4], @current_vendor.currency)
+    %tr
+      %td
+      %td
+      %td
+      %td
+      %td= humanized_money_with_symbol Money.new(total_cents, @current_vendor.currency)
         
   %p= l DateTime.now
