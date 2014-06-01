@@ -335,10 +335,10 @@ class Order < ActiveRecord::Base
       i.sku = "DMY" + timestamp
       i.price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
     else
-      $MESSAGES[:prompts] << I18n.t("views.notice.item_not_existing")
-      # we didn't find the item, let's see if a plugin wants to handle it
+      # $MESSAGES[:prompts] << I18n.t("views.notice.item_not_existing")
       i.sku = sku
       i.price_cents = 0
+      # we didn't find the item, let's see if a plugin wants to handle it
       #Action.run(i.vendor, i, :on_sku_not_found) 
     end
     log_action "Will create item #{ i.sku } because not found"

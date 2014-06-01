@@ -101,7 +101,7 @@ sr.fn.pos_core.drawOrderItemRow = function(item, mode) {
           case 'normal':
             col.html(sr.fn.math.toCurrency(item.price));
             if (item.price == 0) {
-              col.css("background-color", "black");
+              col.css("background-color", "red");
             }
             break;
           case 'aconto':
