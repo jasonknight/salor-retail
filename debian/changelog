@@ -1,3 +1,9 @@
+salor-retail (4.0.2.91) wheezy; urgency=low
+
+  * background image for customer screen
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 01 Jun 2014 12:32:24 +0200
+
 salor-retail (4.0.2.90) wheezy; urgency=low
 
   * sales statistics fix
