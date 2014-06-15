@@ -110,8 +110,8 @@ class Item < ActiveRecord::Base
     c_id = child_item.id
     items_which_have_this_child = self.vendor.items.visible.where("sku != '#{ self.sku }'").where(:child_id => c_id)
     if items_which_have_this_child.any?
-      skus = items_which_have_this_child.collect {|i| i.sku }
-      errors.add(:child_sku, "items #{ skus.join(',') } already have this child")
+      info = items_which_have_this_child.collect {|i| [i.id, i.sku] }
+      errors.add(:child_sku, "items #{ info.inspect } already have this child #{ self.child_sku }")
     end
   end
   
