@@ -1012,6 +1012,8 @@ class Vendor < ActiveRecord::Base
       else
         printer_path = cash_register.thermal_printer
       end
+      
+      params[:copies] ||= 1
 
       vp = Escper::VendorPrinter.new({})
       vp.id = 0
