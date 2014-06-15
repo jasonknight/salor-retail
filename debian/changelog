@@ -1,3 +1,10 @@
+salor-retail (4.0.2.94) wheezy; urgency=low
+
+  * newline to cronjob, better error reporting
+  * printing copies fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 15 Jun 2014 11:28:48 +0200
+
 salor-retail (4.0.2.93) wheezy; urgency=low
 
   * less complex svg app icon
