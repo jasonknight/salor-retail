@@ -5,3 +5,4 @@
 0 3 * * * root test -x /usr/bin/salor-remote-backup && /usr/bin/salor-remote-backup r
 0 4 * * * root test -x /usr/bin/salor-diagnostics && /usr/bin/salor-diagnostics r
 0 5 * * * root test -x /usr/bin/salor-shippers-import && /usr/bin/salor-shippers-import r
+
