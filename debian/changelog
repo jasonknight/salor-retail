@@ -1,3 +1,14 @@
+salor-retail (4.0.2.96) wheezy; urgency=low
+
+  [ Jason Knight ]
+  * Added SKU filtering and SKU repair script rake salor:fix_weird_skus
+  * Moved translation to system.errors for weird SKU validation
+
+  [ Jason Martin ]
+  * build
+
+ -- Jason Martin <jason@jason-knight-martin.com>  Tue, 17 Jun 2014 12:29:14 -0400
+
 salor-retail (4.0.2.95) wheezy; urgency=low
 
   * duplicate sku fix
