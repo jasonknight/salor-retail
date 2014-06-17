@@ -44,7 +44,7 @@ class Item < ActiveRecord::Base
 
   validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id, :currency
   validate :sku_unique_in_visible, :not_selfloop, :not_too_long_child_chain, :not_too_long_parent_chain, :no_child_duplicate
-
+  validate :sku_is_not_weird
   before_save :run_onsave_actions
   before_save :cache_behavior
   
@@ -58,6 +58,11 @@ class Item < ActiveRecord::Base
   
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
   
+  def sku_is_not_weird
+    if not self.sku == self.sku.gsub(/[^0-9a-zA-Z]/,'') then
+      errors.add(:sku, I18n.t('activerecord.errors.messages.dont_use_weird_skus'))
+    end
+  end
   def sku_unique_in_visible
     if self.new_record?
       number = 0

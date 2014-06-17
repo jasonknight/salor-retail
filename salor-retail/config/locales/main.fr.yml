@@ -734,6 +734,7 @@ fr:
     cashier: Caissière
     manager: Gérant
     stockboy: Magasinier
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Rapport
@@ -821,6 +822,7 @@ fr:
       fixed: $
       percent: ! '%'
     sign_up: S'inscrire
+    finish_day: End of day
   vendors:
     clear_cache_button: Effacer les caches
     clear_cache_header: Cache
@@ -1014,4 +1016,3 @@ fr:
     on_import: Lors de l'importation
     on_save: Lors de la sauvegarde
     on_sku_not_found: Lors de UGS non trouvé
-  sales_statistics: Sale Statistics

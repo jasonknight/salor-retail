@@ -733,6 +733,7 @@ es:
     cashier: Cajera
     manager: Gerente
     stockboy: Almacenero
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Informe
@@ -820,6 +821,7 @@ es:
       fixed: $
       percent: ! '%'
     sign_up: Conectarse
+    finish_day: End of day
   vendors:
     clear_cache_button: borrar cache
     clear_cache_header: cache
@@ -1012,4 +1014,3 @@ es:
     on_import: al importar
     on_save: al guardar
     on_sku_not_found: on sku not found
-  sales_statistics: Sale Statistics

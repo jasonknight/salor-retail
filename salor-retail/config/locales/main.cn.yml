@@ -722,6 +722,7 @@ cn:
     cashier: 出納員
     manager: 經理
     stockboy: 補充庫存的人
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: 報告
@@ -789,6 +790,7 @@ cn:
       fixed: $
       percent: ! '%'
     sign_up: 報名
+    finish_day: End of day
   vendors:
     clear_cache_button: 清除緩存
     clear_cache_header: 緩存
@@ -976,4 +978,3 @@ cn:
     on_import: 在進口
     on_save: 在儲存
     on_sku_not_found: on sku not found
-  sales_statistics: Sale Statistics

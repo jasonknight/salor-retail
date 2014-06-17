@@ -730,6 +730,7 @@ it:
     cashier: cassiere
     manager: manager
     stockboy: stockboy
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Rapporto
@@ -811,6 +812,7 @@ it:
       fixed: $
       percent: ! '%'
     sign_up: accedi
+    finish_day: End of day
   vendors:
     clear_cache_button: cancella cache
     clear_cache_header: cache
@@ -1000,4 +1002,3 @@ it:
     on_import: importazione
     on_save: salvataggio
     on_sku_not_found: on sku not found
-  sales_statistics: Sale Statistics

@@ -3,6 +3,7 @@ el:
   activerecord:
     errors:
       messages:
+        dont_use_weird_skus: XXX Only Aa-Zz and 0-9 are permitted in the SKU field
         accepted: must be accepted
         blank: must not be blank
         confirmation: does not match

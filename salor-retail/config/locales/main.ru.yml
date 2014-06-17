@@ -730,6 +730,7 @@ ru:
     cashier: кассир
     manager: менеджер
     stockboy: кладовщик
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Отчет
@@ -811,6 +812,7 @@ ru:
       fixed: $
       percent: ! '%'
     sign_up: войти
+    finish_day: End of day
   vendors:
     clear_cache_button: отчистить кэш
     clear_cache_header: кэш
@@ -1001,4 +1003,3 @@ ru:
     on_import: при импорте
     on_save: при сохранении
     on_sku_not_found: on sku not found
-  sales_statistics: Sale Statistics

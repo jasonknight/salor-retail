@@ -47,7 +47,7 @@ en:
       created_at: Created
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
-      currency: Währung
+      currency: Currency
       customer:
         tax_number: Tax number
       customer_name: Customer
@@ -742,7 +742,6 @@ en:
   sticker: sticker
   support: Support
   system:
-    finish_day: End of day
     add_payment_method: Add Method
     complete_sale: Complete
     errors:
@@ -800,6 +799,7 @@ en:
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
+    finish_day: End of day
     inventory_updated: inventory updated
     logged_in_as: logged in as
     login: Clockin

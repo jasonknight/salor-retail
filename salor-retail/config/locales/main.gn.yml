@@ -733,6 +733,7 @@ gn:
     cashier: Kassier
     manager: Manager
     stockboy: Lagerarbeiter
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Bericht
@@ -743,7 +744,6 @@ gn:
   sticker: Aufkleber
   support: Support
   system:
-    finish_day: Abschluss
     add_payment_method: Zahlungsmethode hinzufügen
     complete_sale: abschließen
     errors:
@@ -806,6 +806,7 @@ gn:
       shipment_item_nil: Artikel aus from_shipment_item war nil?
       sku_must_be_unique: ! '%{sku} muss einzigartig sein.'
       value_not_set: Nicht gesetzt
+    finish_day: Abschluss
     inventory_updated: Inventar wurde aktualisiert
     logged_in_as: Eingeloggt als
     login: Einloggen
@@ -1009,4 +1010,3 @@ gn:
     on_import: beim Import
     on_save: beim Speichern
     on_sku_not_found: on sku not found
-  sales_statistics: Sale Statistics

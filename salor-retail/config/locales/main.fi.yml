@@ -731,6 +731,7 @@ fi:
     cashier: kassa
     manager: päällikkö
     stockboy: varastotyöntekijä
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Raportti
@@ -811,6 +812,7 @@ fi:
       fixed: $
       percent: ! '%'
     sign_up: ilmoittautua
+    finish_day: End of day
   vendors:
     clear_cache_button: tyhjennä välimuisti
     clear_cache_header: välimuisti
@@ -1000,4 +1002,3 @@ fi:
     on_import: laatamista
     on_save: tallentamassa
     on_sku_not_found: kun sku ei löytynyt
-  sales_statistics: Sale Statistics

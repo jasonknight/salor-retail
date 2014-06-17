@@ -735,6 +735,7 @@ el:
     cashier: ταμίας
     manager: διευθυντής
     stockboy: αναπληρωτής αποθεμάτων
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Αναφορά
@@ -824,6 +825,7 @@ el:
       fixed: $
       percent: ! '%'
     sign_up: εγγραφείτε
+    finish_day: End of day
   vendors:
     clear_cache_button: καθαρίστε την κρυφή μνήμη
     clear_cache_header: κρυφή μνήμη
@@ -1016,4 +1018,3 @@ el:
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση
     on_sku_not_found: on sku not found
-  sales_statistics: Sale Statistics
