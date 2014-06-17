@@ -101,6 +101,7 @@ class ItemsController < ApplicationController
   def update
     @item = @current_vendor.items.visible.find_by_id(params[:id])
     params[:item][:currency] = @current_vendor.currency
+    
     if @item.update_attributes(params[:item])
       
       @item.assign_parts(params[:part_skus])

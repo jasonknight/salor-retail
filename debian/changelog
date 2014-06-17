@@ -1,3 +1,9 @@
+salor-retail (4.0.2.95) wheezy; urgency=low
+
+  * duplicate sku fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 16 Jun 2014 22:39:36 +0200
+
 salor-retail (4.0.2.94) wheezy; urgency=low
 
   * newline to cronjob, better error reporting

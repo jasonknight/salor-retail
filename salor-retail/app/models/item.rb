@@ -65,11 +65,11 @@ class Item < ActiveRecord::Base
   end
   def sku_unique_in_visible
     if self.new_record?
-      number = 0
+      error = self.vendor.items.visible.where(:sku => self.sku).count > 0
     else
-      number = 1
+      error = self.vendor.items.visible.where("sku = '#{self.sku}' AND NOT id = #{ self.id }").count > 0
     end
-    if self.vendor.items.visible.where(:sku => self.sku).count > number
+    if error == true
       errors.add(:sku, I18n.t('activerecord.errors.messages.taken'))
       return
     end
@@ -540,6 +540,7 @@ class Item < ActiveRecord::Base
     duplicate_array = Vendor.connection.execute("SELECT name, count(*) FROM items WHERE hidden IS NULL GROUP BY name HAVING count(*) > 1").to_a
   end
 
+  # duplicate_array = Vendor.connection.execute("SELECT id, sku, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
   def self.get_sku_duplicate_ids # Item.get_sku_duplicate_ids
     duplicate_array = Vendor.connection.execute("SELECT id, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
     #puts "Duplicates: #{ duplicate_array.inspect }"
