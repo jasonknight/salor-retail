@@ -83,6 +83,10 @@ class Vendor < ActiveRecord::Base
     end
   end
   
+  def run_diagnostics
+    return Item.run_diagnostics
+  end
+  
   def identifer_present_and_ascii
     if self.identifier.blank?
       errors.add(:identifier, I18n.t('activerecord.errors.messages.empty'))
@@ -99,7 +103,6 @@ class Vendor < ActiveRecord::Base
       errors.add(:identifier, I18n.t('activerecord.errors.messages.must_be_ascii'))
     end
   end
-  
   
   def region
     SalorRetail::Application::COUNTRIES_REGIONS[self.country] 
@@ -199,19 +202,36 @@ class Vendor < ActiveRecord::Base
     return nr
   end
   
-  def self.reset_for_tests
-    t = Time.now - 24.hours
-    Drawer.update_all :amount => 0
-    Order.where(:created_at => t...(Time.now)).delete_all
-    OrderItem.where(:created_at => t...(Time.now)).delete_all
-    DrawerTransaction.where(:created_at => t...(Time.now)).delete_all
-    PaymentMethod.where(:created_at => t...(Time.now)).delete_all
-    Category.update_all :cash_made => 0
-    Category.update_all :quantity_sold => 0
-    Location.update_all :cash_made => 0
-    Location.update_all :quantity_sold => 0
-    SalorConfiguration.update_all :calculate_tax => false
-    CashRegister.update_all :require_password => false
+#   def self.reset_for_tests
+#     t = Time.now - 24.hours
+#     Drawer.update_all :amount => 0
+#     Order.where(:created_at => t...(Time.now)).delete_all
+#     OrderItem.where(:created_at => t...(Time.now)).delete_all
+#     DrawerTransaction.where(:created_at => t...(Time.now)).delete_all
+#     PaymentMethodItem.where(:created_at => t...(Time.now)).delete_all
+#     Category.update_all :cash_made => 0
+#     Category.update_all :quantity_sold => 0
+#     Location.update_all :cash_made => 0
+#     Location.update_all :quantity_sold => 0
+#     SalorConfiguration.update_all :calculate_tax => false
+#     CashRegister.update_all :require_password => false
+#   end
+  
+  # to set all sales related data to zero, useful when the system goes operational after a testing period
+  def self.nullify
+    Drawer.update_all :amount_cents => 0
+    Order.delete_all
+    OrderItem.delete_all
+    DrawerTransaction.delete_all
+    PaymentMethodItem.delete_all
+    ItemStock.delete_all
+    BrokenItem.delete_all
+    History.delete_all
+    StockTransaction.delete_all
+    UserLogin.delete_all
+    Vendor.update_all :largest_order_number => 0
+    Vendor.update_all :largest_quote_number => 0
+    Receipt.delete_all
   end
   
   def self.debug_setup
@@ -304,6 +324,8 @@ class Vendor < ActiveRecord::Base
       :is_quote => nil,
       :behavior => 'normal',
     ).select("DISTINCT category_id")
+#     used_categories = self.categories.visible.order(:name)
+#     used_categories << nil
     used_categories.each do |r|
       cat = self.categories.find_by_id(r.category_id)
       label = cat ? cat.name : "-"
@@ -313,7 +335,7 @@ class Vendor < ActiveRecord::Base
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :category_id => r.category_id,
+        :category_id => cat,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
@@ -323,7 +345,7 @@ class Vendor < ActiveRecord::Base
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :category_id => r.category_id,
+        :category_id => cat,
         :behavior => 'normal'
       ).where("total_cents > 0").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
@@ -333,7 +355,7 @@ class Vendor < ActiveRecord::Base
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :category_id => r.category_id,
+        :category_id => cat,
         :is_buyback => true,
         :behavior => 'normal'
       ).where("total_cents < 0").sum(:total_cents)
@@ -344,7 +366,7 @@ class Vendor < ActiveRecord::Base
         :drawer_id => drawer,
         :is_proforma => nil,
         :is_quote => nil,
-        :category_id => r.category_id,
+        :category_id => cat,
         :is_buyback => true,
         :behavior => 'normal'
       ).where("total_cents < 0").sum(:tax_amount_cents)
@@ -384,6 +406,7 @@ class Vendor < ActiveRecord::Base
       :is_quote => nil,
       :behavior => 'normal',
     ).select("DISTINCT tax")
+    #used_taxes = self.tax_profiles.visible
     used_tax_amounts.each do |r|
       taxes[:pos][r.tax] = {}
       taxes[:neg][r.tax] = {}
@@ -454,9 +477,12 @@ class Vendor < ActiveRecord::Base
       :is_proforma => nil,
       :is_quote => nil,
     ).select("DISTINCT payment_method_id")
+    #used_payment_methods = self.payment_methods.visible.order(:name)
     used_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
-      raise "#{ r.inspect }" if pm.nil?
+      #raise "#{ r.inspect }" if pm.nil?
+      
+      # next if pm.nil? # temporary fix for old db's
       
       next if pm.change # ignore change. we only consider cash (separately), and all others pms
       
@@ -493,7 +519,7 @@ class Vendor < ActiveRecord::Base
           :payment_method_id => pm
         ).sum(:amount_cents)
         
-        paymentmethods[pm.id] = {:name => pm.name, :amount => Money.new(pmi_cents, self.currency)}
+        paymentmethods[pm.id] = {:name => pm.name, :amount => Money.new(pmi_cents, self.currency)} unless pmi_cents.zero?
       end
     end
 
@@ -604,7 +630,7 @@ class Vendor < ActiveRecord::Base
     transactions_sum = Money.new(drawer_transactions.sum(:amount_cents), self.currency)
     
     # Total of everything for this day based on drawer transactions. this also includes proforma payments, since proforma Orders are effective re. payment methods. this is Cash only. This must match the current Drawer.amount at all times during a working day.
-    calc_drawer_cents = self.drawer_transactions.where(
+    calc_drawer_cents = self.drawer_transactions.visible.where(
       :created_at => from..to,
       :drawer_id => drawer
     ).sum(:amount_cents)
@@ -669,46 +695,13 @@ class Vendor < ActiveRecord::Base
     return report
   end
   
-  def get_statistics(from, to)
-    orders = self.orders.visible.where(:paid => true, :completed_at => from..to)
-
+  # OrderItem.connection.execute("SELECT category_id, item_id, sku, ROUND(SUM(quantity), 2), SUM(total_cents) FROM order_items WHERE hidden IS NULL GROUP BY category_id, item_id ").to_a
+  
+  def get_sales_statistics(from, to)
+    order_item_quantities_by_category = OrderItem.connection.execute("SELECT category_id, item_id, sku, SUM(quantity), SUM(total_cents) FROM order_items WHERE vendor_id = #{ self.id } AND hidden IS NULL AND completed_at BETWEEN '#{ from.strftime("%Y-%m-%d %H:%M:%S") }' AND '#{ to.strftime("%Y-%m-%d %H:%M:%S") }' GROUP BY category_id, item_id").to_a
     reports = {
-        :items => {},
-        :categories => {},
-        :locations => {}
+      :order_item_quantities_by_category => order_item_quantities_by_category,
     }
-    
-    # TODO: Replace this loop by self.mymodel.where().sum(:blah) SQL queries for high speed. removed the UI icon in the meantime
-#     orders.each do |o|
-#       o.order_items.visible.each do |oi|
-#         next if oi.item.nil?
-#         key = oi.item.name + " (#{oi.price})"
-#         cat_key = oi.get_category_name
-#         loc_key = oi.get_location_name
-#         
-#         reports[:items][key] ||= {:sku => '', :quantity_sold => 0.0, :cash_made => 0.0 }
-#         reports[:items][key][:quantity_sold] += oi.quantity
-#         reports[:items][key][:cash_made] += oi.total
-#         reports[:items][key][:sku] = oi.sku
-#         
-#         reports[:categories][cat_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-#         
-#         reports[:categories][cat_key][:quantity_sold] += oi.quantity
-#         reports[:categories][cat_key][:cash_made] += oi.total
-#         
-#         reports[:locations][loc_key] ||= { :quantity_sold => 0.0, :cash_made => 0.0 }
-#         
-#         reports[:locations][loc_key][:quantity_sold] += oi.quantity
-#         reports[:locations][loc_key][:cash_made] += oi.total
-#       end
-#     end
-# 
-#     reports[:categories_by_cash_made] = reports[:categories].sort_by { |k,v| v[:cash_made] }
-#     reports[:categories_by_quantity_sold] = reports[:categories].sort_by { |k,v| v[:quantity_sold] }
-#     reports[:locations_by_cash_made] = reports[:locations].sort_by { |k,v| v[:cash_made] }
-#     reports[:locations_by_quantity_sold] = reports[:locations].sort_by { |k,v| v[:quantity_sold] }
-#     reports[:items].sort_by { |k,v| v[:quantity_sold] }
-    
     return reports
   end
   
@@ -724,7 +717,7 @@ class Vendor < ActiveRecord::Base
     vp.codepage = 0
     vp.baudrate = 9600
 
-    print_engine = Escper::Printer.new('local', vp)
+    print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.hash_id))
     print_engine.open
     print_engine.print(0, text)
     print_engine.close
@@ -1012,22 +1005,25 @@ class Vendor < ActiveRecord::Base
     if params[:download] == 'true'
       return Escper::Asciifier.new.process(text)
     elsif cash_register.salor_printer
-      return Escper::Asciifier.new.process(text)
+      return Escper::Asciifier.new.process(text) * params[:copies].to_i
     elsif self.company.mode == 'local'
       if params[:type] == 'sticker'
         printer_path = cash_register.sticker_printer
       else
         printer_path = cash_register.thermal_printer
       end
+      
+      params[:copies] ||= 1
+
       vp = Escper::VendorPrinter.new({})
       vp.id = 0
       vp.name = cash_register.name
       vp.path = printer_path
-      vp.copies = 1
+      vp.copies = params[:copies].to_i
       vp.codepage = 0
       vp.baudrate = 9600
       
-      print_engine = Escper::Printer.new('local', vp)
+      print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.hash_id))
       print_engine.open
       print_engine.print(0, text)
       print_engine.close
@@ -1128,6 +1124,7 @@ class Vendor < ActiveRecord::Base
           purchase_price_cents,
           category_id,
           name,
+          currency,
           sku
          ) SELECT 
             ir.id,
@@ -1142,6 +1139,7 @@ class Vendor < ActiveRecord::Base
             i.purchase_price_cents,
             i.category_id,
             i.name,
+            i.currency,
             i.sku FROM
           items AS i, 
           inventory_reports AS ir WHERE 
@@ -1157,11 +1155,19 @@ class Vendor < ActiveRecord::Base
     self.orders.visible.where(:subscription => true).where("subscription_next <= '#{ (Time.now + 1.day).strftime('%Y-%m-%d') }'")
   end
   
+  # outputs total per month
+  def recurrable_order_total
+    total = self.orders.visible.where(:subscription => true).collect do |o|
+      o.total_cents / o.subscription_interval
+    end.sum
+    return Money.new(total, self.currency)
+  end
+  
   def csv_dump(model, from, to)
     case model
     when 'OrderItem'
       order_items = self.order_items.visible.where(:created_at => from..to)
-      attributes = "order.nr;created_at;order.user.login;quantity;total_cents;tax_amount"
+      attributes = "order.nr;created_at;order.user.username;quantity;total_cents;tax_amount"
       output = ''
       output += "#{attributes}\n"
       output += Report.to_csv(order_items, OrderItem, attributes)

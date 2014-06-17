@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131208131212) do
+ActiveRecord::Schema.define(:version => 20140617151835) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
     t.string   "model_type"
     t.integer  "model_id"
     t.text     "js_code"
+    t.integer  "created_by"
   end
 
   add_index "actions", ["user_id"], :name => "index_actions_on_user_id"
@@ -285,6 +286,7 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
 
   add_index "drawer_transactions", ["company_id"], :name => "index_drawer_transactions_on_company_id"
   add_index "drawer_transactions", ["complete_order"], :name => "index_drawer_transactions_on_complete_order"
+  add_index "drawer_transactions", ["created_at"], :name => "index_drawer_transactions_on_created_at"
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
   add_index "drawer_transactions", ["hidden"], :name => "index_drawer_transactions_on_hidden"
   add_index "drawer_transactions", ["refund"], :name => "index_drawer_transactions_on_refund"
@@ -372,6 +374,7 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
     t.integer  "price_cents"
     t.string   "name"
     t.string   "sku"
+    t.string   "currency"
   end
 
   add_index "inventory_report_items", ["inventory_report_id"], :name => "index_inventory_report_items_on_inventory_report_id"
@@ -527,7 +530,7 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
     t.string   "shipper_sku"
     t.float    "packaging_unit",           :default => 1.0
     t.boolean  "ignore_qty"
-    t.integer  "child_id",                 :default => 0
+    t.integer  "child_id"
     t.boolean  "must_change_price"
     t.boolean  "hidden_by_distiller"
     t.boolean  "track_expiry"
@@ -546,9 +549,13 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
     t.integer  "buy_price_cents",          :default => 0
     t.integer  "manufacturer_price_cents", :default => 0
     t.string   "currency"
+    t.integer  "created_by"
+    t.string   "longname"
+    t.string   "shortname"
   end
 
   add_index "items", ["category_id"], :name => "index_items_on_category_id"
+  add_index "items", ["child_id"], :name => "index_items_on_child_id"
   add_index "items", ["company_id"], :name => "index_items_on_company_id"
   add_index "items", ["coupon_applies"], :name => "index_items_on_coupon_applies"
   add_index "items", ["coupon_type"], :name => "index_items_on_coupon_type"
@@ -734,13 +741,17 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
     t.integer  "refund_payment_method_item_id"
   end
 
+  add_index "order_items", ["activated"], :name => "index_order_items_on_activated"
   add_index "order_items", ["behavior"], :name => "index_order_items_on_behavior"
   add_index "order_items", ["category_id"], :name => "index_order_items_on_category_id"
   add_index "order_items", ["company_id"], :name => "index_order_items_on_company_id"
+  add_index "order_items", ["completed_at"], :name => "index_order_items_on_completed_at"
   add_index "order_items", ["coupon_id"], :name => "index_order_items_on_coupon_id"
   add_index "order_items", ["drawer_id"], :name => "index_order_items_on_drawer_id"
   add_index "order_items", ["hidden"], :name => "index_order_items_on_hidden"
   add_index "order_items", ["is_buyback"], :name => "index_order_items_on_is_buyback"
+  add_index "order_items", ["is_proforma"], :name => "index_order_items_on_is_proforma"
+  add_index "order_items", ["is_quote"], :name => "index_order_items_on_is_quote"
   add_index "order_items", ["item_id"], :name => "index_order_items_on_item_id"
   add_index "order_items", ["item_type_id"], :name => "index_order_items_on_item_type_id"
   add_index "order_items", ["location_id"], :name => "index_order_items_on_location_id"
@@ -748,7 +759,9 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
   add_index "order_items", ["order_id"], :name => "index_order_items_on_order_id"
   add_index "order_items", ["refunded"], :name => "index_order_items_on_refunded"
   add_index "order_items", ["sku"], :name => "index_order_items_on_sku"
+  add_index "order_items", ["tax"], :name => "index_order_items_on_tax"
   add_index "order_items", ["tax_profile_id"], :name => "index_order_items_on_tax_profile_id"
+  add_index "order_items", ["total_cents"], :name => "index_order_items_on_total_cents"
   add_index "order_items", ["user_id"], :name => "index_order_items_on_user_id"
   add_index "order_items", ["vendor_id"], :name => "index_order_items_on_vendor_id"
 
@@ -848,8 +861,11 @@ ActiveRecord::Schema.define(:version => 20131208131212) do
   add_index "payment_method_items", ["cash_register_id"], :name => "index_payment_method_items_on_cash_register_id"
   add_index "payment_method_items", ["change"], :name => "index_payment_method_items_on_change"
   add_index "payment_method_items", ["company_id"], :name => "index_payment_method_items_on_company_id"
+  add_index "payment_method_items", ["completed_at"], :name => "index_payment_method_items_on_completed_at"
   add_index "payment_method_items", ["drawer_id"], :name => "index_payment_method_items_on_drawer_id"
   add_index "payment_method_items", ["hidden"], :name => "index_payment_method_items_on_hidden"
+  add_index "payment_method_items", ["is_proforma"], :name => "index_payment_method_items_on_is_proforma"
+  add_index "payment_method_items", ["is_quote"], :name => "index_payment_method_items_on_is_quote"
   add_index "payment_method_items", ["order_id"], :name => "index_payment_methods_on_order_id"
   add_index "payment_method_items", ["payment_method_id"], :name => "index_payment_method_items_on_payment_method_id"
   add_index "payment_method_items", ["refund"], :name => "index_payment_method_items_on_refund"

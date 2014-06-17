@@ -34,6 +34,7 @@ ru:
       color: color
       company_id: Company
       company_name: название компании
+      completed_at: completed at
       contact_address: контактный адрес
       contact_email: контактный email
       contact_fax: контактный факс
@@ -56,6 +57,7 @@ ru:
       default_buyback: выкуп по умолчанию
       detailed_edit: Detailed Edit?
       dollar_per_lp: рублей за единицу бонуса
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: внесение
       email: email
@@ -164,6 +166,7 @@ ru:
         quantity: количество
         sku: SKU
         stock_location_id: Расположение склада
+      shipper_name: Shipper
       shipper_sku: SKU отправителя
       sku: SKU
       start_amount: начальное количество
@@ -198,6 +201,7 @@ ru:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: имя пользователя
       uses_drawer_id: Использует кассу как
       value: объем
@@ -213,9 +217,6 @@ ru:
       when: когда
       whento: When
       width: ширина
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Действие
@@ -493,6 +494,7 @@ ru:
     end_day: конец дня
     enter_inventory_items: Enter
     general_configuration: основные настройки
+    gift_cards: Gift Cards
     home: домой
     inventory_report: Отчет по товарам
     invoice_blurbs: Invoice Blurbs
@@ -728,6 +730,7 @@ ru:
     cashier: кассир
     manager: менеджер
     stockboy: кладовщик
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Отчет
@@ -798,6 +801,8 @@ ru:
       shipment_item_nil: Товар, вернувшийся из поставки, пустой?
       sku_must_be_unique: ! '%{sku} должен быть уникальным'
       value_not_set: НеУказано
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: проведен переучет товара
     logged_in_as: вошли как
     login: войти
@@ -853,12 +858,21 @@ ru:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: дополнительное поле
     cash_register_heading: ! '%{name} для %{store}'
     cash_registers: кассовые аппараты
     category_heading: категория %{name} для %{store}
     change: сдача
+    copies: Copies
     create_new_item: xxx Create New Article
     customers: покупатели
     download_may_last_long: Скачивание может длится долго. Продолжить?
@@ -908,6 +922,14 @@ ru:
     notice:
       cache_was_cleared: Кэш-файлы удалены.
       csv_edit_starting: начало редактирования CSV
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} была успешно создана'
       model_edit: ! '%{model} была успешно отредактирована'
       move_real_quantities_success: Количество товара было успешно обновлено
@@ -977,6 +999,7 @@ ru:
   when_list:
     add_to_order: при добавлении к заказу
     always: всегда
+    change_quantity: on change quantity
     on_export: при экспорте
     on_import: при импорте
     on_save: при сохранении

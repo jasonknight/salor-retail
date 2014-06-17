@@ -34,6 +34,7 @@ cn:
       color: color
       company_id: Company
       company_name: 公司名稱
+      completed_at: completed at
       contact_address: 聯繫地址
       contact_email: 聯絡電郵
       contact_fax: 聯絡傳真
@@ -56,6 +57,7 @@ cn:
       default_buyback: 默認的下回購
       detailed_edit: Detailed Edit?
       dollar_per_lp: 美元每忠誠點
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: 下拉
       email: 電子郵件
@@ -164,6 +166,7 @@ cn:
         quantity: quantity 數量
         sku: SKU
         stock_location_id: 庫存位置
+      shipper_name: Shipper
       shipper_sku: 發貨人SKU
       sku: SKU
       start_amount: 開始金額
@@ -198,6 +201,7 @@ cn:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: 用戶名
       uses_drawer_id: 使用的抽屜
       value: 價值
@@ -213,9 +217,6 @@ cn:
       when: 何時
       whento: When
       width: 寬度
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: 行動
@@ -486,6 +487,7 @@ cn:
     end_day: end day 結束日
     enter_inventory_items: Enter
     general_configuration: 一般組態
+    gift_cards: Gift Cards
     home: 主頁
     inventory_report: 庫存報告
     invoice_blurbs: Invoice Blurbs
@@ -720,6 +722,7 @@ cn:
     cashier: 出納員
     manager: 經理
     stockboy: 補充庫存的人
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: 報告
@@ -776,6 +779,8 @@ cn:
       shipment_item_nil: 產品 returned from_shipment_item 是零?
       sku_must_be_unique: ! '%{sku} 必須是唯一的'
       value_not_set: 未設置
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: 庫存更新了
     logged_in_as: 登錄為
     login: 登錄
@@ -831,12 +836,21 @@ cn:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: 先進的現場
     cash_register_heading: ! '%{name} 為 %{store}'
     cash_registers: 收款台
     category_heading: 類別 %{name} 為 %{store}
     change: 零錢
+    copies: Copies
     create_new_item: xxx Create New Article
     customers: 客戶
     download_may_last_long: 此下載可能會持續很長時間. 繼續嗎?
@@ -886,6 +900,14 @@ cn:
     notice:
       cache_was_cleared: 刪除緩存文件刪除了.
       csv_edit_starting: CSV編輯起動了
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} 成功創建了'
       model_edit: ! '%{model} 編輯成功了'
       move_real_quantities_success: 產品數量已成功更新了
@@ -952,6 +974,7 @@ cn:
   when_list:
     add_to_order: 加入訂單
     always: 總是
+    change_quantity: on change quantity
     on_export: 在出口
     on_import: 在進口
     on_save: 在儲存

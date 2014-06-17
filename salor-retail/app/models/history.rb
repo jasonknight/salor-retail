@@ -16,22 +16,15 @@ class History < ActiveRecord::Base
   
   validates_presence_of :vendor_id, :company_id
   
-  before_create :set_fields
-  
-  def set_fields
-    self.url = $REQUEST.url if $REQUEST and not self.url
-    self.params = $PARAMS.to_json if $PARAMS
-    self.ip = $REQUEST.ip if $REQUEST
-    self.vendor_id = $VENDORID
-    self.company_id = $COMPANYID
-    self.user_id = $USERID
-  end
-  
   def self.record(action, object, sen=5, url=nil)
     h = History.new
-    h.vendor_id = $VENDORID
-    h.company_id = $COMPANYID
+    h.vendor = object.vendor
+    h.company = object.company
+    h.user_id = $USERID
     h.url = url
+    h.url ||= $REQUEST.url if $REQUEST
+    h.ip = $REQUEST.ip if $REQUEST
+    h.params = $PARAMS.to_json if $PARAMS
     h.sensitivity = sen
     h.model = object if object
     h.action_taken = action

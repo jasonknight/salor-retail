@@ -7,13 +7,17 @@
 class ReportsController < ApplicationController
   
   def index
-    redirect_to '/' and return if @current_company.mode != 'local'
+    if @current_company.mode != 'local'
+      $MESSAGES[:alerts] << "This feature is not available in Demo mode"
+      redirect_to '/' and return 
+    end
     
     @locations = Dir['/media/*']
     @locations << Dir['/home/*']
     @locations.flatten!
     @from, @to = assign_from_to(params)
     @models_for_csv = [OrderItem, Item]
+    
     
     if params.has_key?(:fisc_save)
       zip_outfile = @current_vendor.fisc_dump(@from, @to, params[:location])

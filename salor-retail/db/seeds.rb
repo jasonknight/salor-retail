@@ -22,7 +22,7 @@
 
 
 # =====================================
-# README: Leave this uncommented and intact at all times, otherwise the seed script will pollute already existing databases.
+# DANGER: DO NOT REMOVE OR DISABLE THIS CODE BLOCK
 if User.any? or Item.any? or Company.any? or Order.any? or OrderItem.any?
   puts "Database is already seeded. Danger of overwriting database records. Not running seed script again."
   Process.exit 0
@@ -31,66 +31,67 @@ end
 
 company_count = 0
 
-# if ENV['SEED_MODE'] == 'full'
-  puts "SEED_MODE is 'full'"
-  countries = ['us','at','fr','es','el','ru','it','cn', 'hr', 'ca', 'nl']
-  languages = ['en','gn','fr','es','el','ru','it','cn', 'hr', 'en', 'nl']
-  currencies = ['USD', 'EUR', 'EUR', 'EUR', 'EUR', 'RUB', 'EUR', 'CNY', 'EUR', 'CAD', 'NLG']
-  company_count = 1
-# else
-#   puts "SEED_MODE is 'minimal'"
-#   countries = ['us']
-#   languages = ['en']
-#   company_count = 1
-# end
+countries = ['us','at','fr','es','el','ru','it','cn', 'hr', 'ca', 'nl']
+languages = ['en','gn','fr','es','el','ru','it','cn', 'hr', 'en', 'nl']
+currencies = ['USD', 'EUR', 'EUR', 'EUR', 'EUR', 'RUB', 'EUR', 'CNY', 'EUR', 'CAD', 'NLG']
+company_count = 1
+
 
 actions_to_create = [
   {
-    :name => 'Action to add amount to price', 
+    :name => 'Add price', 
     :whento => :add_to_order, 
     :behavior => :add,
     :afield => :price_cents,
     :value => 100 # i.e.  1 dollar
   },
   {
-    :name => 'Action to multiply price', 
+    :name => 'Multiply price', 
     :whento => :add_to_order, 
     :behavior => :multiply,
     :afield => :price_cents,
     :value => 2 # i.e.  double the price
   },
   {
-    :name => 'Action to multiply quantity', 
+    :name => 'Multiply quantity', 
     :whento => :add_to_order, 
     :behavior => :multiply,
     :afield => :quantity,
     :value => 5 # i.e.  make the quantity 5 for instances of a unit that is always sold as a set from cigarman
   },
   {
-    :name => 'Action to divide price', 
+    :name => 'Divide price', 
     :whento => :add_to_order, 
     :behavior => :divide,
-    :afield => :price,
+    :afield => :price_cents,
     :value => 5 # i.e.  sometimes a unit price is the carton price
   },
   {
-    :name => 'Action to discount after threshold', 
-    :whento => :add_to_order, 
+    :name => 'B6G6 for SKU', 
+    :whento => :change_quantity, 
     :behavior => :discount_after_threshold,
-    :afield => :price_cents,
+    :afield => nil,
     :value => 1, # i.e. 100% discount
-    :value2 => 5 # i.e. must buy 5 items to receive the discount
+    :value2 => 5 # i.e. must buy 5 items to receive the discount, the 6th will trigger the action
   },
   {
-    :name => 'Action to discount after threshold category', 
+    :name => 'B5G6 for Category ADD', 
     :whento => :add_to_order, 
     :behavior => :discount_after_threshold,
-    :afield => :price_cents,
+    :afield => nil,
     :value => 1, # i.e. 100% discount
-    :value2 => 5 # i.e. must buy 5 items to receive the discount
+    :value2 => 5 # i.e. must buy 5 items to receive the discount, the 6th will trigger the action
   },
   {
-    :name => 'Action to execute js code', 
+   :name => 'B5G6 for Category INCREMENT', 
+   :whento => :change_quantity, 
+   :behavior => :discount_after_threshold,
+   :afield => nil,
+   :value => 1, # i.e. 100% discount
+   :value2 => 5 # i.e. must buy 5 items to receive the discount, the 6th will trigger the action
+   },
+  {
+    :name => 'Execute JS code', 
     :whento => :add_to_order, 
     :behavior => :execute,
     :afield => :price_cents,
@@ -144,10 +145,11 @@ company_count.times do |c|
   puts "\n\n =========\nCOMPANY #{ c } created\n\n" if r == true
   
   countries.size.times do |v|
+    
+    special_item_objects = []
 
     # variables we will use for actions
     the_button_category = nil
-    the_discount_category = nil
 
     vendor = Vendor.new
     vendor.name = "Vendor#{ c }#{ v }"
@@ -184,10 +186,9 @@ company_count.times do |c|
       pm.change = payment_methods_change[i]
       pm.quote = payment_methods_quote[i]
       pm.unpaid = payment_methods_unpaid[i]
-      res = pm.save!
+      pm.save!
       payment_method_objects << pm
-      puts "PaymentMethod #{ c } #{ v } created" if res == true
-      # raise "ERROR: #{ pm.errors.messages }" if res == false
+      puts "PaymentMethod #{ c } #{ v } created"
     end
     
     cash_register_objects = []
@@ -210,10 +211,9 @@ company_count.times do |c|
       r.company = company
       r.vendor = vendor
       r.name = "#{ role_names[i] }"
-      res = r.save!
+      r.save!
       role_objects << r
-      puts "Role #{ r.name } created" if res == true
-      ## raise "ERROR: #{ r.errors.messages }" if res == false
+      puts "Role #{ r.name } created"
     end
     
     user_objects = []
@@ -225,10 +225,9 @@ company_count.times do |c|
       u.password = "#{ c }#{ v }#{ i }"
       u.username = "#{ role_names[i] }#{ c }#{ v }"
       u.language = languages[v]
-      res = u.save!
+      u.save!
       user_objects << u
-      puts "User #{ u.username } with password #{ c }#{ v }#{ i } created." if res == true
-      # raise "ERROR: #{ u.errors.messages }" if res == false
+      puts "User #{ u.username } with password #{ c }#{ v }#{ i } created."
       u.set_drawer
     end
     
@@ -241,10 +240,9 @@ company_count.times do |c|
       tp.value = tax_percentages[i]
       tp.default = tax_profile_defaults[i]
       tp.letter = tax_profile_letters[i]
-      res = tp.save!
+      tp.save!
       tax_profile_objects << tp
-      puts "TaxProfile #{ tp.name } created" if res == true
-      # raise "ERROR: #{ tp.errors.messages }" if res == false
+      puts "TaxProfile #{ tp.name } created"
     end
     
     category_objects = []
@@ -253,19 +251,17 @@ company_count.times do |c|
       cat.company = company
       cat.vendor = vendor
       cat.name = "Category #{ c }#{ v }#{ i }"
-      res = cat.save!
+      cat.save!
       category_objects << cat
-      puts "Category #{ cat.name } created" if res == true
-      # raise "ERROR: #{ cat.errors.messages }" if res == false
+      puts "Category #{ cat.name } created"
     end
 
-    # Create the discount category
-      cat = Category.new
-      cat.company = company
-      cat.vendor = vendor
-      cat.name = "Thresh Category"
-      cat.save!
-    the_discount_category = cat
+    # Create the B5G6 Category
+    b5g6_category = Category.new
+    b5g6_category.company = company
+    b5g6_category.vendor = vendor
+    b5g6_category.name = "B5G6"
+    b5g6_category.save!
     
     # create a special button category for special items
     special_cat = Category.new
@@ -273,10 +269,9 @@ company_count.times do |c|
     special_cat.vendor = vendor
     special_cat.name = "Specials"
     special_cat.button_category = true
-    res = special_cat.save!
+    special_cat.save!
     category_objects << special_cat
-    puts "Special Category #{ special_cat.name } created" if res == true
-    # raise "ERROR: #{ special_cat.errors.messages }" if res == false
+    puts "Special Category #{ special_cat.name } created"
     
     button_category_objects = []
     3.times do |i|
@@ -285,53 +280,61 @@ company_count.times do |c|
       cat.vendor = vendor
       cat.name = "Button Cat #{ c }#{ v }#{ i }"
       cat.button_category = true
-      res = cat.save!
+      cat.save!
       button_category_objects << cat
-      puts "ButtonCategory #{ cat.name } created" if res == true
-      # raise "ERROR: #{ cat.errors.messages }" if res == false
+      puts "ButtonCategory #{ cat.name } created"
     end
 
     the_button_category = button_category_objects.last
 
     action_num = 0
     actions_to_create.each do |attrs|
-      action = Action.new(attrs)
+      action = Action.new
       action.company = company
       action.vendor = vendor
+      action.attributes = attrs
       # create an item for this action
-        if attrs[:name].include? 'threshold category' then
-          thr_prices = [ 123, 156, 189 ]
-          3.times do |thr_i|
-            item = Item.new
-            item.company = company
-            item.vendor = vendor
-            item.tax_profile = tax_profile_objects.last
-            item.category = the_discount_category
-            item.sku = "THR#{ thr_i }"
-            item.name = "Test Item for Threshold Action #{ action_num } #{ thr_i }"
-            item.price_cents = thr_prices[ rand(thr_prices.length) ] # choose a price at random
-            # this is because thresh items are supposed to discount the min price of the group!
-            item.item_type = item_type_objects[0]
-            item.currency = currencies[v]
-            item.save!
-          end
-          action.model = the_discount_category
-        else
-          item = Item.new
-          item.company = company
-          item.vendor = vendor
-          item.tax_profile = tax_profile_objects.last
-          item.sku = "ACTION#{ action_num }"
-          item.category = category_objects.first # we don't want this to be the thresh category
-          item.name = "Test Item for Action #{ action_num }"
-          item.price_cents = 595
-          item.item_type = item_type_objects[0]
-          item.currency = currencies[v]
-          item.save!
-          action.model = item
-        end
-        action.save!
+      if attrs[:name].include? "B5G6 for Category"
+        action.model = b5g6_category
+      end
+      action.save!
+
+      unless attrs[:name].include? "B5G6 for Category"
+        # create test item for this action. b5g6 test items will be created below
+        item = Item.new
+        item.company = company
+        item.vendor = vendor
+        item.tax_profile = tax_profile_objects.last
+        item.sku = "ACTION#{ action_num }"
+        item.category = category_objects.first # we don't want this to be the thresh category
+        item.name = "Item for Action '#{ attrs[:name] }'"
+        item.price_cents = 1000
+        item.item_type = item_type_objects[0]
+        item.currency = currencies[v]
+        item.save!
+        action.model = item
+        special_item_objects << item
+      end
+        
       action_num += 1
+    end
+    
+    # create 3 test items for b5g6 action
+    thr_prices = [ 100, 200, 300 ]
+    3.times do |thr_i|
+      item = Item.new
+      item.company = company
+      item.vendor = vendor
+      item.tax_profile = tax_profile_objects.first
+      item.category = b5g6_category
+      item.sku = "THR#{ thr_i }"
+      item.name = "Item #{ thr_i } for B5G6"
+      item.price_cents = thr_prices[thr_i] # choose a price at random
+      # this is because thresh items are supposed to discount the min price of the group!
+      item.item_type = item_type_objects[0]
+      item.currency = currencies[v]
+      item.save!
+      special_item_objects << item
     end
     
     item_objects = []
@@ -348,18 +351,16 @@ company_count.times do |c|
         item.price_cents = 100 * (10 * i + j + 1)
         item.item_type = item_type_objects[0]
         item.currency = currencies[v]
-        res = item.save!
+        item.save!
         item_objects << item
-        puts "Item #{ item.sku } created" if res == true
-        # raise "ERROR: #{ item.errors.messages }" if res == false
+        puts "Item #{ item.sku } created"
       end
     end
 
 
     
     
-    # special items
-    special_item_objects = []
+
     
     # for recursion test
     recursion_item_names = ['piece', 'pack', 'carton']
@@ -382,9 +383,8 @@ company_count.times do |c|
       item.currency = currencies[v]
       item.child = previous_item
       item.quantity = recursion_item_quantities[i]
-      result = item.save!
-      # raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
-      puts "Test Recursion Item #{ c } #{ v } #{ i } created" if result == true
+      item.save!
+      puts "Test Recursion Item #{ c } #{ v } #{ i } created"
       previous_item = item
       special_item_objects << item
     end
@@ -401,9 +401,9 @@ company_count.times do |c|
     item.currency = currencies[v]
     item.weigh_compulsory = true
     item.price_cents = 100
-    result = item.save!
-    # raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
-    puts "Immediate Weighing Item #{ c } #{ v } created" if result == true
+    item.save!
+    puts "Immediate Weighing Item #{ c } #{ v } created"
+    
     special_item_objects << item
     
     # create an "must change price" item
@@ -418,9 +418,8 @@ company_count.times do |c|
     item.currency = currencies[v]
     item.must_change_price = true
     item.price_cents = 0
-    result = item.save!
-    # raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
-    puts "Must Change Price Item #{ c } #{ v } created" if result == true
+    item.save!
+    puts "Must Change Price Item #{ c } #{ v } created"
     special_item_objects << item
     
     # create an "default buyback" item
@@ -436,9 +435,26 @@ company_count.times do |c|
     item.default_buyback = true
     item.buy_price_cents = 200
     item.buy_price_cents = 100
-    result = item.save!
-    # raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
-    puts "Default Buyback Item #{ c } #{ v } created" if result == true
+    item.save!
+    puts "Default Buyback Item #{ c } #{ v } created"
+    special_item_objects << item
+    
+    # create an "default buyback + must change price" item
+    item = Item.new
+    item.company = company
+    item.vendor = vendor
+    item.tax_profile = tax_profile_objects[1]
+    item.category = special_cat
+    item.sku = "BUYBACKCHANGEPRICE"
+    item.name = "Buyback + Must change price"
+    item.item_type = item_type_objects[0]
+    item.currency = currencies[v]
+    item.default_buyback = true
+    item.must_change_price = true
+    item.buy_price_cents = 0
+    item.buy_price_cents = 0
+    item.save!
+    puts "Default Buyback+MustChangePrice Item #{ c } #{ v } created"
     special_item_objects << item
     
     # create dynamic giftcard item
@@ -453,9 +469,10 @@ company_count.times do |c|
     item.name = "Dynamic Gift Card"
     item.item_type = gift_card_item_type
     item.currency = currencies[v]
-    result = item.save!
-    # raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
-    puts "Dynamic Gift Card Item #{ c } #{ v } created" if result == true
+    item.save!
+    
+    puts "Dynamic Gift Card Item #{ c } #{ v } created"
+    
     special_item_objects << item
     
     # create special DMYACONTO item
@@ -469,9 +486,9 @@ company_count.times do |c|
     item.name = "On account"
     item.item_type = aconto_item_type
     item.currency = currencies[v]
-    result = item.save!
-    # raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
-    puts "Special Item 'On Account' DMYACONTO #{ c } #{ v } created" if result == true
+    item.save!
+    
+    puts "Special Item 'On Account' DMYACONTO #{ c } #{ v } created"
     
     # create test coupon items
     coupon_types = [1, 2, 3] # 1=percent, 2=fixed, 3=buyonegetone
@@ -492,9 +509,10 @@ company_count.times do |c|
       item.coupon_type = coupon_types[i]
       item.price_cents = coupon_amounts[i]
       item.currency = currencies[v]
-      result = item.save!
-      # raise "ERROR during saving of #{ item.class.to_s } because #{ item.errors.messages }" unless result == true
-      puts "Test Coupon Item #{ coupon_descriptions[i] } #{ c } #{ v } created" if result == true
+      item.save!
+     
+      puts "Test Coupon Item #{ coupon_descriptions[i] } #{ c } #{ v } created"
+      
       special_item_objects << item
     end
     
@@ -504,10 +522,9 @@ company_count.times do |c|
       l.vendor = vendor
       l.company = company
       l.name = "Location#{ c }#{ v }#{ i }"
-      res = l.save!
+      l.save!
       location_objects << l
-      puts "#{ l.name } created" if res == true
-      # raise "ERROR: #{ l.errors.messages }" if res == false
+      puts "#{ l.name } created"
     end
     
     stock_location_objects = []
@@ -518,8 +535,7 @@ company_count.times do |c|
       l.name = "StockLocation#{ c }#{ v }#{ i }"
       res = l.save!
       stock_location_objects << l
-      puts "#{ l.name } created" if res == true
-      # raise "ERROR: #{ l.errors.messages }" if res == false
+      puts "#{ l.name } created"
     end
     
     broken_item_objects = []
@@ -531,10 +547,9 @@ company_count.times do |c|
       b.sku = "BI#{ c }#{ v }#{ i }"
       b.quantity = i
       b.currency = currencies[v]
-      res = b.save!
+      b.save!
       broken_item_objects << b
-      puts "#{ b.name } created" if res == true
-      # raise "ERROR: #{ b.errors.messages }" if res == false
+      puts "#{ b.name } created"
     end
     
     # Create test discount
@@ -549,10 +564,9 @@ company_count.times do |c|
     d.item_sku = item_objects[2].sku
     d.amount = 10
     d.amount_type = 'percent'
-    res = d.save!
+    d.save!
     discount_objects << d
-    puts "#{ d.name } created" if res == true
-    # raise "ERROR: #{ d.errors.messages }" if res == false
+    puts "#{ d.name } created"
     
     
     shipment_type_objects = []
@@ -561,10 +575,9 @@ company_count.times do |c|
       st.vendor = vendor
       st.company = company
       st.name = "#{ shipment_types_names[i] }#{ c }#{ v }"
-      res = st.save!
+      st.save!
       shipment_type_objects << st
-      puts "#{ st.name } created" if res == true
-      # raise "ERROR: #{ st.errors.messages }" if res == false
+      puts "#{ st.name } created"
     end
     
     shipper_objects = []
@@ -573,10 +586,9 @@ company_count.times do |c|
       s.vendor = vendor
       s.company = company
       s.name = "Shipper#{ c }#{ v }#{ i }"
-      res = s.save!
+      s.save!
       shipper_objects << s
-      puts "#{ s.name } created" if res == true
-      # raise "ERROR: #{ s.errors.messages }" if res == false
+      puts "#{ s.name } created"
     end
     
     customer_objects = []
@@ -587,21 +599,17 @@ company_count.times do |c|
       cu.first_name = "Bob"
       cu.last_name = "Doe#{ c }#{ v }#{ i }"
 
-      
       lc = LoyaltyCard.new
       lc.vendor = vendor
       lc.company = company
       lc.sku = "LC#{ c }#{ v }#{ i }"
-      res = lc.save!
-      puts "#{ lc.sku } created" if res == true
-      # raise "ERROR: #{ lc.errors.messages }" if res == false
+      lc.save!
       
       cu.loyalty_cards << lc
-      res = cu.save!
+      cu.save!
       customer_objects << cu
       
-      puts "#{ cu.first_name } #{ cu.last_name } created" if res == true
-      # raise "ERROR: #{ cu.errors.messages }" if res == false
+      puts "#{ cu.first_name } #{ cu.last_name } created"
     end
     
     transaction_tag_objects = []
@@ -610,10 +618,9 @@ company_count.times do |c|
       tt.vendor = vendor
       tt.company = company
       tt.name = "#{ transaction_tag_names[i] }#{ c }#{ v }"
-      res = tt.save!
+      tt.save!
       transaction_tag_objects << tt
-      puts "#{ tt.name } created" if res == true
-      # raise "ERROR: #{ tt.errors.messages }" if res == false
+      puts "#{ tt.name } created"
     end
     
     country_objects = []
@@ -622,10 +629,9 @@ company_count.times do |c|
       co.vendor = vendor
       co.company = company
       co.name = "#{ country_names[i] }#{ c }#{ v }"
-      res = co.save!
+      co.save!
       country_objects << co
-      puts "#{ co.name } created" if res == true
-      # raise "ERROR: #{ co.errors.messages }" if res == false
+      puts "#{ co.name } created"
     end
     
     sale_type_objects = []
@@ -634,10 +640,9 @@ company_count.times do |c|
       st.vendor = vendor
       st.company = company
       st.name = "#{ sale_type_names[i] }#{ c }#{ v }"
-      res = st.save!
+      st.save!
       sale_type_objects << st
-      puts "#{ st.name } created" if res == true
-      # raise "ERROR: #{ st.errors.messages }" if res == false
+      puts "#{ st.name } created"
     end
     
     button_objects = []
@@ -650,10 +655,9 @@ company_count.times do |c|
         b.sku = item_objects[item_index].sku
         b.category = button_category_objects[i]
         b.name = item_objects[item_index].name
-        res = b.save!
+        b.save!
         button_objects << b
-        puts "#{ b.name } created" if res == true
-        # raise "ERROR: #{ b.errors.messages }" if res == false
+        puts "#{ b.name } created"
       end
     end
     
@@ -664,10 +668,9 @@ company_count.times do |c|
       b.sku = special_item_objects[i].sku
       b.category = special_cat
       b.name = special_item_objects[i].name
-      res = b.save!
+      b.save!
       button_objects << b
-      puts "#{ b.name } created" if res == true
-      # raise "ERROR: #{ b.errors.messages }" if res == false
+      puts "#{ b.name } created"
     end
     
     invoice_blurb_objects = []
@@ -680,10 +683,9 @@ company_count.times do |c|
         ib.body = invoice_blurb_texts[invoice_blurb_languages[i]][j] + invoice_blurb_invoiceaddon[invoice_blurb_languages[i]]
         ib.body_receipt = invoice_blurb_texts[invoice_blurb_languages[i]][j]
         ib.is_header = j.zero?
-        res = ib.save!
+        ib.save!
         invoice_blurb_objects << ib
-        puts "InvoiceBlurb #{ ib.body } created" if res == true
-        # raise "ERROR: #{ ib.errors.messages }" if res == false
+        puts "InvoiceBlurb #{ ib.body } created"
       end
     end
     
@@ -700,31 +702,11 @@ company_count.times do |c|
           ivn.destination_country = country_objects[j]
           ivn.sale_type = sale_type_objects[k]
           ivn.name = "sales from #{ country_objects[i].name } to #{ country_objects[j].name } of SaleType #{ sale_type_objects[k].name }"
-          res = ivn.save!
+          ivn.save!
           invoice_note_objects << ivn
-          puts "InvoiceNote #{ ivn.name } created" if res == true
-          # raise "ERROR: #{ ivn.errors.messages }" if res == false
+          puts "InvoiceNote #{ ivn.name } created"
         end
       end
     end
-    
-    
-    
   end
-    
-    
 end
-    
-    
-    
-    
-      
-      
-    
-    
-
-    
-    
-    
-
-

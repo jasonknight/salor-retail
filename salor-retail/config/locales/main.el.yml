@@ -34,6 +34,7 @@ el:
       color: color
       company_id: Company
       company_name: όνομα εταιρίας
+      completed_at: completed at
       contact_address: διεύθυνση επικοινωνίας
       contact_email: ηλεκτρονική διεύθυνση
       contact_fax: Φαξ
@@ -56,6 +57,7 @@ el:
       default_buyback: προεπιλογή αγοράς ιδίων
       detailed_edit: Detailed Edit?
       dollar_per_lp: ευρώ ανά πόντους επιβράβευσης
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: προσθήκη μετρητών
       email: ηλεκτρονική διεύθυνση
@@ -164,6 +166,7 @@ el:
         quantity: ποσότητα
         sku: SKU
         stock_location_id: Τοποθεσία αποθέματος
+      shipper_name: Shipper
       shipper_sku: SKU Αποστολέα
       sku: SKU
       start_amount: αρχικό ποσό
@@ -198,6 +201,7 @@ el:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: όνομα χρήστη
       uses_drawer_id: Χρήση συρταριού του/της
       value: αξία
@@ -213,9 +217,6 @@ el:
       when: πότε
       whento: When
       width: πλάτος
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Πράξη
@@ -496,6 +497,7 @@ el:
     end_day: τέλος μέρας
     enter_inventory_items: Enter
     general_configuration: γενικές ρυθμίσεις
+    gift_cards: Gift Cards
     home: κύριο μενού
     inventory_report: Αναφορά απογραφής
     invoice_blurbs: Invoice Blurbs
@@ -733,6 +735,7 @@ el:
     cashier: ταμίας
     manager: διευθυντής
     stockboy: αναπληρωτής αποθεμάτων
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Αναφορά
@@ -811,6 +814,8 @@ el:
         άκυρο;
       sku_must_be_unique: ! '%{sku} πρέπει να είναι μοναδικό'
       value_not_set: ΜηΚαθορισμένο
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: η απογραφή ενημερώθηκε
     logged_in_as: συνδεδεμένοι ως
     login: συνδεθείτε
@@ -866,12 +871,21 @@ el:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: προηγμένο πεδίο
     cash_register_heading: ! '%{name} για %{store}'
     cash_registers: ταμειακές μηχανές
     category_heading: κατηγορία %{name} για %{store}
     change: αλλαγή
+    copies: Copies
     create_new_item: xxx Create New Article
     customers: πελάτες
     download_may_last_long: Αυτή η μεταφόρτωση μπορεί να διαρκέσει πολύ. Θα συνεχίσετε;
@@ -922,6 +936,14 @@ el:
     notice:
       cache_was_cleared: Τα αρχεία της κρυφής μνήμης διαγράφηκαν.
       csv_edit_starting: αρχίζει η επεξεργασία csv
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} δημιουργήθηκε επιτυχώς'
       model_edit: ! '%{model} επεξεργάστηκε επιτυχώς'
       move_real_quantities_success: Οι ποσότητες των προϊόντων ενημερώθηκαν επιτυχώς
@@ -992,6 +1014,7 @@ el:
   when_list:
     add_to_order: προσθέστε για παραγγελία
     always: πάντα
+    change_quantity: on change quantity
     on_export: κατά την εξαγωγή
     on_import: κατά την εισαγωγή
     on_save: κατά την αποθήκευση

@@ -4,7 +4,7 @@
 = raw content_box_top(t("views.items"))
 
 .tools
-  %span{ :onmousedown => 'Salor.printPage();' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+  %span{ :onmousedown => 'sr.fn.salor_bin.showPrintDialog()' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
 .clear
 
 .paper-invoice.invoice_print

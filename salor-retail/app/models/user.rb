@@ -140,6 +140,7 @@ class User < ActiveRecord::Base
           cant_do_list = Role::CANNOTDO[r]
           return false if cant_do_list.include? :anything
           next if cant_do_list.nil?
+          
           if cant_do_list.include? action.to_sym then
             return false
           end

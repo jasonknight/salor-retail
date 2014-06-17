@@ -229,6 +229,7 @@ class OrderItem < ActiveRecord::Base
   
   # this method is just for documentation purposes: that total always includes tax. it is the physical money that has to be collected from the customer.
   def gross
+    log_action "XXXXXXXXX gross #{ self.total_cents.inspect }"
     return self.total
   end
   
@@ -256,6 +257,7 @@ class OrderItem < ActiveRecord::Base
     self.gift_card_amount = item.gift_card_amount
     self.weigh_compulsory = item.weigh_compulsory
     self.quantity     = self.weigh_compulsory ? 0 : 1
+    self.no_inc       = self.weigh_compulsory
     self.calculate_part_price = item.calculate_part_price # cache for faster processing
     self.user         = self.order.user
   end
@@ -264,7 +266,7 @@ class OrderItem < ActiveRecord::Base
   # otherwise calculate_totals is called
   def modify_price
     log_action "Modifying price for actions"
-    self.modify_price_for_actions
+    redraw_all_order_items = self.modify_price_for_actions
     log_action "Modifying price for gs1"
     self.modify_price_for_gs1
     if self.is_buyback
@@ -276,12 +278,15 @@ class OrderItem < ActiveRecord::Base
       log_action "modify_price_for_giftcards"
       self.modify_price_for_giftcards 
     end
-    self.save
+    self.save!
+    return redraw_all_order_items
   end
   
   def modify_price_for_actions
     log_action "modify_price_for_actions"
-    Action.run(self.vendor, self, :add_to_order)
+    redraw_all_order_items = Action.run(self.vendor, self, :add_to_order)
+    self.reload
+    return redraw_all_order_items
   end
   
   def modify_price_for_gs1
@@ -343,7 +348,7 @@ class OrderItem < ActiveRecord::Base
     
     # this method calculates taxes and transforms "total" to always include tax
     self.calculate_tax
-    self.save
+    self.save!
   end
   
   # this method calculates taxes and transforms "total" to always include tax
@@ -361,17 +366,16 @@ class OrderItem < ActiveRecord::Base
   
   # This is only for the European tax system. Item.price is already gross and implicitly includes a tax amount for the specific TaxProfile set on Item, However, the user can change the TaxProfile from the POS screen. If that happens, we have to find the implied net part of self.total, and re-calculate self.total according to the set tax.
   def adapt_gross
-    return if self.vendor.net_prices
-    net = self.total / ( 1 + ( self.item.tax_profile.value / 100.0 ) )
-    self.total = net * ( 1 + ( self.tax / 100.0 ) )
+    return if self.vendor.net_prices || self.tax == self.item.tax_profile.value
+    
+    net_cents = self.total_cents / ( 1.0 + ( self.item.tax_profile.value / 100.0 ) )
+    self.total_cents = (net_cents * ( 1.0 + ( self.tax / 100.0 ) )).round(2)
   end
   
-  # coupons have to be added after the matching product
+  # coupons have to be added on the POS screen AFTER the matching product
   # coupons do not have a price by themselves, they just reduce the total of the matching OrderItem. Note that this method does not act on self, but to the matching OrderItem.
   def apply_coupon
     if self.behavior == 'coupon'
-    
-      
       item = self.item
       
       # coitem is the OrderItem to which the coupon acts upon
@@ -416,6 +420,7 @@ class OrderItem < ActiveRecord::Base
       if self.vendor.net_prices
         coitem.total = coitem.net - coitem.coupon_amount
       else
+        log_action "XXXXXXXXX #{ coitem.gross.inspect } #{ coitem.coupon_amount.inspect  }"
         coitem.total = coitem.gross - coitem.coupon_amount
       end
       log_action "apply_coupon: OrderItem Total after coupon applied is: #{coitem.total_cents} and coupon_amount is #{coitem.coupon_amount_cents}"
@@ -473,7 +478,7 @@ class OrderItem < ActiveRecord::Base
   
   def hide(by)
     self.hidden = true
-    self.hidden_by = by
+    self.hidden_by = by.id
     self.hidden_at = Time.now
     if not self.save then
       log_action self.errors.full_messages.to_sentence
@@ -504,7 +509,7 @@ class OrderItem < ActiveRecord::Base
         :activated => self.item.activated,
         :gift_card_amount => self.item.gift_card_amount.to_f,
         :coupon_type => self.item.coupon_type,
-        :quantity => SalorBase.number_with_precision(self.quantity, :locale => self.vendor.region),
+        :quantity => self.quantity, #quantity_string,
         :price => self.price.to_f,
         :discount_amount => self.discount_amount.to_f,
         :rebate_amount => self.rebate_amount.to_f,
@@ -520,7 +525,7 @@ class OrderItem < ActiveRecord::Base
         :weight_metric => self.item.weight_metric,
         :tax => self.tax,
         :tax_profile_id => self.tax_profile_id,
-        :action_applied => self.item.actions.visible.any?
+        :action_applied => self.action_applied
       }
     end
     return obj.to_json
@@ -546,7 +551,7 @@ class OrderItem < ActiveRecord::Base
       if self.vendor.net_prices
         should = Money.new((self.quantity * self.price_cents) - price_reductions + self.tax_amount_cents, self.vendor.currency)
         actual = self.total
-        pass = (should.fractional - actual.fractional).abs <= 1 # ignore 1 cent rounding errors
+        pass = should == actual
         msg = "total must be (price * quantity) - price reductions + tax_amount"
         type = :orderItemTotalCorrectNet
         tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
@@ -608,28 +613,28 @@ class OrderItem < ActiveRecord::Base
       
       should = Money.new(subtotal * self.tax / 100.0, self.currency)
       actual = self.tax_amount
-      pass = (should.fractional - actual.fractional).abs <= 1 # ignore 1 cent rounding errors
+      pass = should == actual
       msg = "tax must be correct"
       type = :orderItemTaxCorrectNet
       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
-      pass = (should.fractional - actual.fractional).abs != 1
-      msg = "1 cent rounding error"
-      type = :orderItemTaxRoundingNet
-      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+#       pass = (should.fractional - actual.fractional).abs != 1
+#       msg = "1 cent rounding error"
+#       type = :orderItemTaxRoundingNet
+#       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
     else
       should = Money.new(self.total_cents * ( 1 - 1 / ( 1 + self.tax / 100.0)), self.currency)
       actual = self.tax_amount
-      pass = (should.fractional - actual.fractional).abs == 1 # ignore 1 cent rounding errors
+      pass = should == actual
       msg = "tax must be correct"
       type = :orderItemTaxCorrect
       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
-      pass = (should.fractional - actual.fractional) != 0
-      msg = "1 cent rounding error"
-      type = :orderItemTaxRounding
-      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+#       pass = (should.fractional - actual.fractional).abs != 1
+#       msg = "1 cent rounding error"
+#       type = :orderItemTaxRounding
+#       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
     # ---

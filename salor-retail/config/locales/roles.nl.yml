@@ -1,0 +1,161 @@
+---
+nl:
+  any_actions: Elke actie
+  any_buttons: Elke knop
+  any_cash_registers: Elke kassa
+  any_categories: Elke Categorie
+  any_customers: Elke Klant
+  any_discounts: Elke Korting
+  any_employees: Elke Werknemer
+  any_histories: Elke Geschiedenis
+  any_Items: Elk Item
+  any_locations: Elke Locatie
+  any_orders: Elke Order
+  any_reports: Elk Rapport
+  any_shipment_Items: Elk Verzonden Item
+  any_shipment_types: Elke Verzend type
+  any_shipments: Elke Verzending
+  any_shippers: Elke Verlader
+  any_stock_locations: Elke Magazijnlocatie
+  any_tax_profiles: Elke Belasting profiel
+  any_tender_methods: Elke Betalingsmethode
+  any_transaction_tags: Elke Transactie label
+  any_vendors: Elke Verkoper
+  assistant: Assistent Manager
+  cashier: Kassier
+  change_prices: Verander Prijzen
+  clear_orders: Wis een Bestelling
+  create_actions: Creëer Actie
+  create_buttons: Creëer Knop
+  create_cash_registers: Creëer een Kassa
+  create_categories: Creëer Categorie
+  create_customers: Creëer Klant
+  create_discounts: Creëer Korting
+  create_employees: Creëer Werknemer
+  create_histories: Creëer Geschiedenis
+  create_Items: Creëer Item
+  create_locations: Creëer Locatie
+  create_orders: Creëer Bestelling
+  create_reports: Creëer Rapport
+  create_shipment_Items: Creëer Verzend Item
+  create_shipment_types: Creëer Verzend Type
+  create_shipments: Creëer Verzending
+  create_shippers: Creëer Verlader
+  create_stock_locations: Creëer Magazijnlocatie
+  create_tax_profiles: Creëer Belasting profiel
+  create_tender_methods: Creëer Betalingsmethode
+  create_transaction_tags: Creëer Transactie label
+  create_vendors: Creëer Verkoper
+  destroy_actions: Verwijder Actie
+  destroy_buttons: Verwijder Knop
+  destroy_cash_registers: Verwijder Kassa
+  destroy_categories: Verwijder Categorie
+  destroy_customers: Verwijder Klant
+  destroy_discounts: Verwijder Korting
+  destroy_employees: Verwijder Werknemer
+  destroy_histories: Verwijder Geschiedenis
+  destroy_Items: Verwijder Item
+  destroy_locations: Verwijder Locatie
+  destroy_order_Items: Verwijder Bestelde Items
+  destroy_orders: Verwijder Bestelling
+  destroy_reports: Verwijder Rapport
+  destroy_shipment_Items: Verwijder Verzend Item
+  destroy_shipment_types: Verwijder Verzend Type
+  destroy_shipments: Verwijder Verzending
+  destroy_shippers: Verwijder Verlader
+  destroy_stock_locations: Verwijder Magazijnlocatie
+  destroy_tax_profiles: Verwijder Belasting profiel
+  destroy_tender_methods: Verwijder Betalingsmethode
+  destroy_transaction_tags: Verwijder Transactie label
+  destroy_vendors: Verwijder Verkoper
+  edit_actions: Bewerk Actie
+  edit_buttons: Bewerk Knop
+  edit_cash_registers: Bewerk Kassa
+  edit_categories: Bewerk Categorie
+  edit_customers: Bewerk Klant
+  edit_discounts: Bewerk Korting
+  edit_employees: Bewerk Werknemer
+  edit_histories: Bewerk Geschiedenis
+  edit_Items: Bewerk Item
+  edit_locations: Bewerk Locatie
+  edit_orders: Bewerk Bestelling
+  edit_others_orders: Bewerk Others Bestelling
+  edit_reports: Bewerk Reports
+  edit_shipment_Items: Bewerk Verzend Item
+  edit_shipment_types: Bewerk Verzend Type
+  edit_shipments: Bewerk Verzending
+  edit_shippers: Bewerk Verlader
+  edit_stock_locations: Bewerk Magazijnlocatie
+  edit_tax_profiles: Bewerk Belasting profiel
+  edit_tender_methods: Bewerk Betalingsmethode
+  edit_transaction_tags: Bewerk Transactie label
+  edit_vendors: Bewerk Verkoper
+  employee: Employee
+  head_cashier: Head Cashier
+  index_actions: Index Actie
+  index_buttons: Index Knop
+  index_cash_registers: Index Kassa
+  index_categories: Index Categorie
+  index_customers: Index Klant
+  index_discounts: Index Korting
+  index_employees: Index Werknemer
+  index_histories: Index Geschiedenis
+  index_Items: Index Items
+  index_locations: Index Locatie
+  index_orders: Index Bestelling
+  index_reports: Index Reports
+  index_shipment_Items: Index Verzend Item
+  index_shipment_types: Index Verzend Type
+  index_shipments: Index Verzending
+  index_shippers: Index Verlader
+  index_stock_locations: Index Magazijnlocatie
+  index_tax_profiles: Index Belasting profiel
+  index_tender_methods: Index Betalingsmethode
+  index_transaction_tags: Index Transactie label
+  index_vendors: Index Verkoper
+  manager: Manager
+  remove_order_Items: Verwijder bestelde Items
+  see_header: Zie Header
+  show_actions: Toon Actie
+  show_buttons: Toon Knop
+  show_cash_registers: Toon Kassa
+  show_categories: Toon Categorie
+  show_customers: Toon Klant
+  show_discounts: Toon Korting
+  show_employees: Toon Werknemer
+  show_histories: Toon Geschiedenis
+  show_Items: Toon Items
+  show_locations: Toon Locatie
+  show_orders: Toon Bestelling
+  show_reports: Toon Reports
+  show_shipment_Items: Toon Verzend Item
+  show_shipment_types: Toon Verzend Type
+  show_shipments: Toon Verzending
+  show_shippers: Toon Verlader
+  show_stock_locations: Toon Magazijnlocatie
+  show_tax_profiles: Toon Belasting profiel
+  show_tender_methods: Toon Betalingsmethode
+  show_transaction_tags: Toon Transactie label
+  show_vendors: Toon Verkoper
+  stockboy: Magazijnbediende
+  update_actions: Bijwerken Actie
+  update_buttons: Bijwerken Knop
+  update_cash_registers: Bijwerken Kassa
+  update_categories: Bijwerken Categorie
+  update_customers: Bijwerken Klant
+  update_discounts: Bijwerken Korting
+  update_employees: Bijwerken Werknemer
+  update_histories: Bijwerken Geschiedenis
+  update_Items: Bijwerken Items
+  update_locations: Bijwerken Locatie
+  update_orders: Bijwerken Bestelling
+  update_reports: Bijwerken Reports
+  update_shipment_Items: Bijwerken Verzend Item
+  update_shipment_types: Bijwerken Verzend Type
+  update_shipments: Bijwerken Verzending
+  update_shippers: Bijwerken Verlader
+  update_stock_locations: Bijwerken Magazijnlocatie
+  update_tax_profiles: Bijwerken Belasting profiel
+  update_tender_methods: Bijwerken Betalingsmethode
+  update_transaction_tags: Bijwerken Transactie label
+  update_vendors: Bijwerken Verkoper

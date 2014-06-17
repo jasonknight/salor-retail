@@ -34,6 +34,7 @@ es:
       color: color
       company_id: Company
       company_name: Nombre de la empresa
+      completed_at: completed at
       contact_address: Dirección de contacto
       contact_email: E-mail de contacto
       contact_fax: Fax de contacto
@@ -56,6 +57,7 @@ es:
       default_buyback: Recompra por defecto
       detailed_edit: Detailed Edit?
       dollar_per_lp: dólar por punto de fidelización
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: Depósito
       email: E-mail
@@ -164,6 +166,7 @@ es:
         quantity: Cantidad
         sku: SKU
         stock_location_id: Ubicación del stock
+      shipper_name: Shipper
       shipper_sku: SKU del transportador
       sku: SKU
       start_amount: Monto inicial
@@ -198,6 +201,7 @@ es:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: Nombre de usuario
       uses_drawer_id: Utiliza la caja de
       value: Valor
@@ -213,9 +217,6 @@ es:
       when: Cuándo
       whento: When
       width: Ancho
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Acción
@@ -494,6 +495,7 @@ es:
     end_day: Finalizar el día
     enter_inventory_items: Enter
     general_configuration: Configuración general
+    gift_cards: Gift Cards
     home: Inicio
     inventory_report: Resúmen de inventario
     invoice_blurbs: Invoice Blurbs
@@ -731,6 +733,7 @@ es:
     cashier: Cajera
     manager: Gerente
     stockboy: Almacenero
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Informe
@@ -807,6 +810,8 @@ es:
       shipment_item_nil: El artículo volvió del envío. ¿Es una artículo vacío?
       sku_must_be_unique: ! '%{sku} debe ser único.'
       value_not_set: NoDeterminado
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: Inventario actualizado
     logged_in_as: Conectado como
     login: Nombre de usuario
@@ -862,12 +867,21 @@ es:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: Campo avanzado
     cash_register_heading: ! '%{name} para %{store}'
     cash_registers: Cajas
     category_heading: Categoría %{name} para %{store}
     change: Vuelto
+    copies: Copies
     create_new_item: xxx Create New Article
     customers: Clientes
     download_may_last_long: Esta dercarga puede llevar tiempo. ¿Continuar?
@@ -918,6 +932,14 @@ es:
     notice:
       cache_was_cleared: Archvos cache borrados.
       csv_edit_starting: Comienzo de la edición de csv
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} ha sido creado con éxito.'
       model_edit: ! '%{model} ha sido editado con éxito.'
       move_real_quantities_success: Las cantidades de artículos han sido actualizadas
@@ -988,6 +1010,7 @@ es:
   when_list:
     add_to_order: al añadir al pedido
     always: siempre
+    change_quantity: on change quantity
     on_export: al exportar
     on_import: al importar
     on_save: al guardar

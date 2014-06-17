@@ -67,12 +67,7 @@ class ShipmentsController < ApplicationController
   def destroy
     @shipment = @current_vendor.shipments.visible.find_by_id(params[:id])
     @shipment.hide(@current_user)
-  end
-  
-  def move_all_to_items
-    @shipment = @current_vendor.shipments.visible.find_by_id(params[:id])
-    @shipment.move_all_to_items
-    redirect_to shipment_path(@shipment)
+    redirect_to shipments_path
   end
   
   #ajax
@@ -85,6 +80,12 @@ class ShipmentsController < ApplicationController
     render :update_pos_display
   end
   
+  #ajax
+  def move_all_items_into_stock
+    @shipment = @current_vendor.shipments.visible.find_by_id(params[:shipment_id])
+    @shipment.move_all_items_into_stock
+    render :nothing => true
+  end
   
   #ajax
   def move_item_into_stock

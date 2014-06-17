@@ -1,5 +1,5 @@
 .customer-display
-  .logo= image_tag @current_vendor.image('invoice_logo')
+  .logo= image_tag @current_vendor.image('logo')
 
   - @report[:list_of_items_raw].reverse[0..4].each do |item|
     - highlight = item[:price].blank? or item[:price].fractional < 0
@@ -9,8 +9,7 @@
         - next if k == :type or k == :letter
         %span{ :class => k }= v
 
-
-  %div#subsubtotal= humanized_money_with_symbol @report[:subtotal]
+  %div#subsubtotal= humanized_money_with_symbol @report[:total]
 
   - unless @order.completed_at.nil?
     %div#change== #{ t('printr.order_receipt.change') }: #{ humanized_money_with_symbol @report[:change] }

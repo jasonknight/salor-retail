@@ -9,11 +9,12 @@
       - histories.each do |h|
         %tr
           %td= l h.created_at, :format => :short
-          %td= h.user.username
+          %td= h.user.username if h.user
           %td= h.action_taken
           %td= h.changes_made
           %td{:align => "left"}
-            - JSON.parse(h.params).each do |k,v|
-              - next if ["log_action", "controller", "action", "called_from"].include?(k)
-              == #{ k }: #{ v}
-              %br
+            - if h.params
+              - JSON.parse(h.params).each do |k,v|
+                - next if ["log_action", "controller", "action", "called_from"].include?(k)
+                == #{ k }: #{ v}
+                %br

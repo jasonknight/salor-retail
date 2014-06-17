@@ -49,12 +49,12 @@ sr.fn.salor_bin.shouldOpenDrawer = function() {
 
 // opens the drawer only if customer has given cash or if the register configuration tells to open it always. no drawer observation is started at this point, since it would block subsequent printing.
 sr.fn.salor_bin.maybeOpenDrawer = function() {
-  console.log("sr.fn.salor_bin.maybeOpenDrawer");
+  //console.log("sr.fn.salor_bin.maybeOpenDrawer");
   if ( sr.fn.salor_bin.shouldOpenDrawer() == true ) sr.fn.salor_bin.quickOpenDrawer();
 }
 
 sr.fn.salor_bin.maybeObserveDrawer = function(delay) {
-  console.log("sr.fn.salor_bin.maybeObserveDrawer");
+  //console.log("sr.fn.salor_bin.maybeObserveDrawer");
   if ( sr.fn.salor_bin.shouldOpenDrawer() == true ) sr.fn.salor_bin.observeDrawer(delay);
 }
 
@@ -135,23 +135,28 @@ sr.fn.salor_bin.weighItem = function(id) {
     sr.fn.messages.displayMessages();
     return
   }
+  
+  var weight = "";
+  
   if (typeof sr.data.session.cash_register.scale != 'undefined' && sr.data.session.cash_register.scale != '') {
-    var weight = Salor.weigh(sr.data.session.cash_register.scale, 0);
+     weight = Salor.weigh(sr.data.session.cash_register.scale, 0);
+     //weight = new Date().getSeconds() + ".123"; // test without scale
     
   } else {
     sr.data.messages.prompts.push("No scale configured. Please add a scale path to the CashRegister settings.");
     sr.fn.messages.displayMessages();
-    var weight = 0;
+    weight = "0.000";
   }
 
   var weight_formatted = weight.replace('.', Region.number.currency.format.separator);
-  var string = '/vendors/edit_field_on_child?id=' +
+  
+  var req = '/vendors/edit_field_on_child?id=' +
   id +
   '&klass=OrderItem' +
   '&field=quantity'+
   '&value=' + weight_formatted;
   
-  get(string, 'sr.fn.salor_bin.weighItem()');
+  get(req, 'sr.fn.salor_bin.weighItem()');
   
   if (parseFloat(weight) == 0 || isNaN(parseFloat(weight))) {
     sr.fn.salor_bin.playSound('medium_warning');

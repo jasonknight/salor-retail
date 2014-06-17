@@ -47,16 +47,24 @@ case "$1" in
       for lInstance in $gOldInstances; do
         ucf --purge /etc/salor-retail/$lInstance/database.yml
         ucf --purge /etc/salor-retail/$lInstance/config.yml
+        ucf --purge /etc/salor-retail/$lInstance/codepages.yml
         ucf --purge /etc/salor-retail/$lInstance/Gemfile
-        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-http
-        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-https
+        ucf --purge /etc/salor-retail/$lInstance/Gemfile.lock
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-apache-http
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-apache-https
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-nginx-http
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-nginx-https
       done
       for lInstance in $gInstances; do
         ucf --purge /etc/salor-retail/$lInstance/database.yml
         ucf --purge /etc/salor-retail/$lInstance/config.yml
+        ucf --purge /etc/salor-retail/$lInstance/codepages.yml
         ucf --purge /etc/salor-retail/$lInstance/Gemfile
-        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-http
-        ucf --purge /etc/apache2/sites-available/sr-${lInstance}-https
+        ucf --purge /etc/salor-retail/$lInstance/Gemfile.lock
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-apache-http
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-apache-https
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-nginx-http
+        ucf --purge /etc/salor-retail/$lInstance/sr-$lInstance-nginx-https
       done
     fi
     

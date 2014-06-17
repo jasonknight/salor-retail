@@ -188,19 +188,23 @@ class Order < ActiveRecord::Base
 
   def add_order_item(params={})
     return nil if params[:sku].blank?
+    
+    redraw_all_order_items = nil
+    
     if self.completed_at then
       log_action "Order is completed already, cannot add items to it #{self.completed_at}"
     end
+    
     
     # get existing regular item
     oi = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
     if oi then
       if oi.is_normal?
         log_action "Item is normal, and present, just increment"
-        oi.quantity += 1 
-        oi.modify_price_for_actions
+        oi.quantity += 1
+        oi.save! # this is required here since modify_price_for_actions reloads OrderItem
+        redraw_all_order_items = oi.modify_price_for_actions
         oi.calculate_totals
-        oi.save
         self.calculate_totals
         return oi
       else
@@ -212,12 +216,12 @@ class Order < ActiveRecord::Base
     
     # at this point, we know that the added order item is not yet in the order. so we add a new one
     i = self.get_item_by_sku(params[:sku])
-    log_action "Item is: #{i.inspect}"
+    #log_action "Item is: #{i.inspect}"
     if i.class == LoyaltyCard then
       log_action "Item is a loyalty card"
       self.customer = i.customer
       self.tag = self.customer.full_name
-      self.save
+      self.save!
       return nil
     end
     
@@ -240,11 +244,12 @@ class Order < ActiveRecord::Base
     end
     oi.no_inc ||= params[:no_inc]
     log_action "no_inc is: #{oi.no_inc.inspect}"
-    oi.modify_price
+    oi.save! # this is needed so that Action has the complete set of OrderItems taken from oi.order
+    redraw_all_order_items = oi.modify_price
     oi.calculate_totals
     self.order_items << oi
     self.calculate_totals
-    return oi
+    return oi, redraw_all_order_items
   end
 
   
@@ -263,6 +268,7 @@ class Order < ActiveRecord::Base
     i.vendor = self.vendor
     i.company = self.company
     i.currency = self.vendor.currency
+    i.created_by = -103 # magic number for auto gift card
     i.tax_profile = zero_tax_profile
     i.category = auto_giftcard_item.category
     i.name = "Auto Giftcard #{timecode}"
@@ -292,7 +298,7 @@ class Order < ActiveRecord::Base
       item = gc.item
       item.activated = true
       item.gift_card_amount = item.price
-      item.save
+      item.save!
     end
   end
   
@@ -300,7 +306,8 @@ class Order < ActiveRecord::Base
   
   
   
-  def get_item_by_sku(sku)    
+  def get_item_by_sku(sku)
+    
     item = self.vendor.items.visible.find_by_sku(sku)
     return item if item # a sku was entered
 
@@ -315,26 +322,29 @@ class Order < ActiveRecord::Base
     i = Item.new
     i.item_type = self.vendor.item_types.find_by_behavior('normal')
     i.behavior = i.item_type.behavior
-    i.tax_profile = self.vendor.tax_profiles.where(:default => true).first
+    i.tax_profile = self.vendor.tax_profiles.visible.where(:default => true).first
     i.vendor = self.vendor
     i.company = self.company
     i.currency = self.vendor.currency
+    i.created_by = -100 # magic number for created by POS screen
     i.name = sku
     pm = sku.match(/(\d{1,9}[\.\,]\d{1,2})/)
     if pm and pm[1]
       # a price in the format xx,xx was entered
       timestamp = Time.now.strftime("%y%m%d%H%M%S%L")
       i.sku = "DMY" + timestamp
-      i.price = sku
+      i.price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
     else
-      # dummy item
-      # we didn't find the item, let's see if a plugin wants to handle it
+      # $MESSAGES[:prompts] << I18n.t("views.notice.item_not_existing")
       i.sku = sku
-      i.price = 0
-      i = Action.run(i.vendor, i, :on_sku_not_found) 
+      i.price_cents = 0
+      # we didn't find the item, let's see if a plugin wants to handle it
+      #Action.run(i.vendor, i, :on_sku_not_found) 
     end
-    result = i.save
-    raise "Could not generate Item from #{ self.inspect } because of #{ i.errors.messages }" if result != true
+    log_action "Will create item #{ i.sku } because not found"
+    result = i.save!
+    log_action "Result of saving #{ i.sku } is #{ result }. Item is #{ i.inspect }"
+
     return i
   end
 
@@ -348,7 +358,7 @@ class Order < ActiveRecord::Base
     final.tax_profile = nil
     final.tax = nil
     final.proforma_order = self
-    final.save
+    final.save!
     
     self.order_items.visible.each do |oi|
       noi = oi.dup
@@ -356,7 +366,7 @@ class Order < ActiveRecord::Base
       # reset the tax profile, since all OrderItems of a proforma invoice have zero taxes. the final invoice however needs the actual taxes.
       noi.tax_profile = noi.item.tax_profile
       noi.tax = noi.item.tax_profile.value
-      result = noi.save
+      result = noi.save!
       raise "Could not save OrderItem: #{ noi.errors.messages }" if result != true
     end
     
@@ -370,12 +380,12 @@ class Order < ActiveRecord::Base
     item.item_type = aconto_item_type
     item.name = I18n.t("receipts.a_conto")
     item.tax_profile = zero_tax_profile
-    item.save
+    item.save!
 
 
     noi = final.add_order_item({:sku => "DMYACONTO"})
     noi.price = - self.amount_paid
-    noi.save # must be called before calulate totals!
+    noi.save! # must be called before calulate totals!
     noi.calculate_totals
     
     final.calculate_totals
@@ -409,12 +419,10 @@ class Order < ActiveRecord::Base
   def complete(params={})
     raise "cannot complete a paid order" if self.paid
     
-    # History
     h = History.new
     h.url = "Order::complete"
-    h.params = $Params
-    h.model_id = self.id
-    h.model_type = 'Order'
+    h.params = $PARAMS.to_json
+    h.model = self
     h.action_taken = "CompleteOrder"
     h.changes_made = "Beginning complete order"
     h.save
@@ -422,7 +430,7 @@ class Order < ActiveRecord::Base
     self.completed_at = Time.now
     # the user is re-assigned in OrdersController#complete
     self.drawer = self.user.get_drawer
-    self.save
+    self.save!
     
     self.update_item_quantities
     self.activate_giftcard_items
@@ -433,7 +441,7 @@ class Order < ActiveRecord::Base
     self.set_unique_numbers
     self.report_errors_to_technician
     
-    self.save
+    self.save!
   end
   
   def set_unique_numbers
@@ -458,7 +466,7 @@ class Order < ActiveRecord::Base
       self.paid_at = Time.now
     end
     
-    self.save
+    self.save!
     
     self.order_items.update_all({
       :completed_at => self.completed_at,
@@ -466,6 +474,7 @@ class Order < ActiveRecord::Base
       :paid => self.paid,
       :is_proforma => self.is_proforma,
       :is_quote => self.is_quote,
+      :is_unpaid => self.is_unpaid,
       :user_id => self.user_id,
       :drawer_id => self.drawer_id
     })
@@ -478,8 +487,6 @@ class Order < ActiveRecord::Base
       :is_quote => self.is_quote,
       :is_proforma => self.is_proforma
     })
-    
-
   end
   
   def create_drawer_transaction
@@ -500,7 +507,7 @@ class Order < ActiveRecord::Base
           q = -q if oi.is_buyback
           Item.transact_quantity(-oi.quantity, i, self)
         end
-        i.save
+        i.save!
       end
     end
   end
@@ -535,11 +542,12 @@ class Order < ActiveRecord::Base
       
       self.payment_method_items << pmi
       
-      self.is_quote = true if pm.quote == true
-      self.is_unpaid = true if pm.unpaid == true
+      # this is now done in update_associations
+#       self.is_quote = true if pm.quote == true
+#       self.is_unpaid = true if pm.unpaid == true
     end
     
-    self.save
+    self.save!
     
     payment_cash = Money.new(self.payment_method_items.visible.where(:cash => true).sum(:amount_cents), self.currency)
     payment_total = Money.new(self.payment_method_items.visible.sum(:amount_cents), self.currency)
@@ -566,7 +574,7 @@ class Order < ActiveRecord::Base
       pmi.is_unpaid = nil
       pmi.amount = change
       pmi.change = true
-      result = pmi.save
+      result = pmi.save!
       if result != true
         raise "Could not save change PaymentMethodItem because #{ pmi.errors.messages }"
       end
@@ -578,7 +586,7 @@ class Order < ActiveRecord::Base
     self.cash = payment_cash
     self.noncash = payment_noncash
     self.change = change
-    self.save
+    self.save!
   end
   
   def to_list_of_items_raw(array)
@@ -1036,7 +1044,7 @@ class Order < ActiveRecord::Base
       vp.codepage = 0
       vp.baudrate = 9600
       
-      print_engine = Escper::Printer.new('local', vp)
+      print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.vendor.hash_id))
       print_engine.open
       print_engine.print(0, contents[:text], contents[:raw_insertations])
       print_engine.close
@@ -1309,13 +1317,13 @@ class Order < ActiveRecord::Base
     return tests
   end
   
-  def hide(by_id)
+  def hide(by)
     # TODO: move nr to stack of unused numbers
     self.hidden = true
-    self.hidden_by = by_id
+    self.hidden_by = by.id
     self.hidden_at = Time.now
     self.save
-    self.order_items.visible.update_all :hidden => true, :hidden_at => Time.now, :hidden_by => by_id
+    self.order_items.visible.update_all :hidden => true, :hidden_at => Time.now, :hidden_by => by.id
   end
   
   # for better debugging in the console

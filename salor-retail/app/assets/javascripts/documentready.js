@@ -145,7 +145,6 @@ $(function () {
   $('#btn-' + sr.data.session.params.controller + '-' + sr.data.session.params.action).addClass('active');
   
   //TODO: move the following functions to the individual views. they needn't be loaded for every page.
-  sr.fn.user_logins.display();
   sr.fn.coin_calculator.setup();
   sr.fn.focus.setup();
   sr.fn.inventory.setup();

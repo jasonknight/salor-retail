@@ -60,14 +60,18 @@ class ShippersController < ApplicationController
     @shipper = @current_vendor.shippers.visible.find_by_id(params[:shipper_id])
     if params[:file]
       @uploader = @shipper.import_csv(params[:file].read)
+      @uploaders = [@uploader]
+      render :update_all
+    else
+      redirect_to shipper_path(@shipper)
     end
     
-    @uploaders = [@uploader]
-    render :update_wholesaler
+    
   end
 
   def destroy
     @shipper = @current_vendor.shippers.visible.find_by_id(params[:id])
     @shipper.hide(@current_user)
+    redirect_to shippers_path
   end
 end

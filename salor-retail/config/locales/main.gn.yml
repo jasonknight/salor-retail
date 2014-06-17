@@ -12,7 +12,7 @@ gn:
       amount: Betrag
       amount_type: Art
       applies_to: bezieht sich auf
-      attributes: attributes
+      attributes: Attribute
       auto_drop: Auto-Buchung Tagesbeginn
       bank_machine_path: Bankomat
       base_price: Betrag
@@ -34,6 +34,7 @@ gn:
       color: Farbe
       company_id: Firma
       company_name: Firmenname
+      completed_at: abgeschlossen
       contact_address: Kontaktadresse
       contact_email: Kontakt E-Mail
       contact_fax: Kontakt Fax
@@ -56,7 +57,8 @@ gn:
       default_buyback: Pfand
       detailed_edit: Detail Modus
       dollar_per_lp: Euro pro Punkt
-      drawer_username: Drawer user
+      drawer_user_name: Lade
+      drawer_username: Lade Benutzer
       drop: Einzahlen
       email: E-Mail
       enable_technician_emails: E-Mail an Techniker senden
@@ -164,6 +166,7 @@ gn:
         quantity: Liefermenge
         sku: SKU
         stock_location_id: Lagerort
+      shipper_name: Lieferant
       shipper_sku: Bestellnummer
       sku: SKU
       start_amount: Startbetrag
@@ -182,7 +185,7 @@ gn:
       tag: Tag
       tax: Steuer
       tax_free: Steuerfrei
-      tax_profile_id: Steuerklasse
+      tax_profile_id: Steuer
       technician_email: Techniker E-Mail
       telephone: Telefon
       the_receiver: Geliefert an
@@ -198,6 +201,7 @@ gn:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Kassenlade von
+      user_name: User
       username: Benutzername
       uses_drawer_id: Uses Drawer of
       value: Betrag
@@ -213,9 +217,6 @@ gn:
       when: Wenn
       whento: When
       width: Breite
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Aktion
@@ -494,6 +495,7 @@ gn:
     end_day: Tag beenden
     enter_inventory_items: Eingeben
     general_configuration: Allgemein
+    gift_cards: Gutscheine
     home: Filialen
     inventory_report: Bericht Inventur
     invoice_blurbs: Rechnungsdaten
@@ -731,6 +733,7 @@ gn:
     cashier: Kassier
     manager: Manager
     stockboy: Lagerarbeiter
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Bericht
@@ -803,6 +806,8 @@ gn:
       shipment_item_nil: Artikel aus from_shipment_item war nil?
       sku_must_be_unique: ! '%{sku} muss einzigartig sein.'
       value_not_set: Nicht gesetzt
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: Abschluss
     inventory_updated: Inventar wurde aktualisiert
     logged_in_as: Eingeloggt als
     login: Einloggen
@@ -858,12 +863,21 @@ gn:
       transaction_tag: Journal
       transaction_total: Gesamtbewegung
       transactions: Buchungen
+    sales_statistics:
+      category_name: Kategorie Name
+      from: Von
+      item_name: Artikelname
+      quantity: Verkaufsmenge
+      sum: Summe
+      title: Mengenstatistik
+      to: Bis
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'
     cash_registers: Kassen
     category_heading: Kategorie %{name} für %{store}
     change: Retour
+    copies: Kopien
     create_new_item: NEUEN ARTIKEL ANLEGEN
     customers: Kunden
     download_may_last_long: Der Download kann eine längere Zeit dauern. Fortfahren?
@@ -914,6 +928,16 @@ gn:
     notice:
       cache_was_cleared: Cache wurde gelöscht
       csv_edit_starting: Bearbeitung startet
+      delete_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht
+        löschen.
+      edit_completed_order: Dieser Verkauf ist bereits abgeschlossen. Kann ihn nicht
+        öffnen.
+      edit_order_by_other_user: Dieser Verkauf wird im Moment durch den Benutzer %{username}
+        bearbeitet. Kann ihn nicht öffnen. Benutzer %{username} muss auf den 'Neu'
+        Button drücken, danach nochmals probieren.
+      item_not_existing: Dieser Artikel hat noch nicht existiert. Er wurde angelegt
+        und der Preis auf 0 gesetzt. Sie können den Preis nun verändern. Der Preis
+        wird in der Datenbank permanent gespeichert.
       model_create: ! '%{model} wurde erfolgreich angelegt.'
       model_edit: ! '%{model} wurde erfolgreich bearbeitet.'
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
@@ -982,6 +1006,7 @@ gn:
   when_list:
     add_to_order: beim Verkauf
     always: immer
+    change_quantity: on change quantity
     on_export: beim Export
     on_import: beim Import
     on_save: beim Speichern

@@ -36,7 +36,12 @@ class VendorsController < ApplicationController
 
   def edit
     @vendor = @current_user.vendors.visible.find_by_id(params[:id])
-    session[:vendor_id] = @vendor.id
+    if @vendor
+      session[:vendor_id] = @vendor.id
+    else
+      $MESSAGES[:alerts] << "This Vendor does not belong to you. This incident will be reported."
+      redirect_to vendors_path
+    end
   end
 
   def create
@@ -62,7 +67,7 @@ class VendorsController < ApplicationController
 
   def new_drawer_transaction
     user = @current_vendor.users.visible.find_by_id(params[:user_id])
-    amount_cents = SalorBase.string_to_float(params[:transaction][:amount], :locale => @region) * 100
+    amount_cents = (SalorBase.string_to_float(params[:transaction][:amount], :locale => @region) * 100.0).round
     if params[:transaction][:trans_type] == "payout"
       amount_cents *= -1
     end
@@ -132,7 +137,7 @@ class VendorsController < ApplicationController
     r.drawer = @current_user.get_drawer
     r.content = text
     r.ip = request.ip
-    r.save
+    r.save!
   end
   
   def edit_field_on_child
@@ -180,11 +185,14 @@ class VendorsController < ApplicationController
       #README If someone edits the quantity or price of an item, Actions need to be informed of this.
       case params[:field]
       when 'price'
-        @order_item = Action.run(@current_vendor, @order_item, :change_price)
+        redraw_all_pos_items = Action.run(@current_vendor, @order_item, :change_price)
+        @order_item.reload
       when 'quantity'
-        @order_item = Action.run(@current_vendor, @order_item, :change_quantity)
-        @order_item = Action.run(@current_vendor, @order_item, :add_to_order) # a change in qty is the same
+        redraw_all_pos_items = Action.run(@current_vendor, @order_item, :change_quantity)
+        @order_item.reload
+        #@order_item = Action.run(@current_vendor, @order_item, :add_to_order) # a change in qty is the same
         # as adding to an order otherwise we have to create 2 actions to accomplish the same thing.
+        # MF: I disabled this again because it broke the :add, :substract, :multiply and :divide actions because it would increase or decrease the oi price on each scan. We really need :change_quantity as a separate event because we want fine-grained control, and we need to extend the Action model to support an array of possible events if we want to do DRY.
       end
 
       @order_item.calculate_totals
@@ -192,7 +200,12 @@ class VendorsController < ApplicationController
       
       # set variables for the js.erb view
       @order = @order_item.order
-      @order_items = [@order_item]
+      if redraw_all_pos_items == true
+        @order_items = @order.order_items.visible
+      else
+        @order_items = [@order_item]
+      end
+      
       if @order_item.behavior == 'gift_card' and @order_item.activated.nil? and @order_item.price_cents > 0
         # this is a dynamically generated gift card item. if this variable is set, the view has to start a print request to print a sticker.
         @gift_card_item_id_for_print = @order_item.item_id
@@ -224,16 +237,11 @@ class VendorsController < ApplicationController
     @histories = @current_vendor.histories.order("created_at desc").page(params[:page]).per(@current_vendor.pagination)
   end
   
-  def statistics
-    f, t = assign_from_to(params)
-    params[:limit] ||= 15
-    @limit = params[:limit].to_i - 1
-    
-    @reports = @current_vendor.get_statistics(f, t)
-    
-    view = SalorRetail::Application::CONFIGURATION[:reports][:style]
-    view ||= 'default'
-    render "/vendors/reports/#{view}/page"
+  def sales_statistics
+    @from, @to = assign_from_to(params)
+    @reports = @current_vendor.get_sales_statistics(@from, @to)
+
+    render "/vendors/sales_statistics"
   end
   
   def export
@@ -252,23 +260,11 @@ class VendorsController < ApplicationController
   end
 
   def labels
-    render :layout => false    
+    render :layout => false
   end
   
   def display_logo
     render :layout => 'customer_display'
-  end
-  
-  def backup
-    configpath = SalorRetail::Application::SR_DEBIAN_SITEID == 'none' ? 'config/database.yml' : "/etc/salor-retail/#{SalorRetail::Application::SR_DEBIAN_SITEID}/database.yml"
-    dbconfig = YAML::load(File.open(configpath))
-    mode = ENV['RAILS_ENV'] ? ENV['RAILS_ENV'] : 'development'
-    username = dbconfig[mode]['username']
-    password = dbconfig[mode]['password']
-    database = dbconfig[mode]['database']
-    `mysqldump -u #{username} -p#{password} #{database} | bzip2 -c > #{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2`
-
-    send_file("#{Rails.root}/tmp/backup-#{$Vendor.id}.sql.bz2",:type => :bzip,:disposition => "attachment",:filename => "backup-#{$Vendor.id}.sql.bz2")
   end
 
 

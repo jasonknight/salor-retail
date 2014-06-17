@@ -5,7 +5,6 @@
 # 
 # See license.txt for the license applying to all files within this software.
 
-
 class ItemsController < ApplicationController
   before_filter :check_role, :except => [:info, :search]
   before_filter :update_devicenodes, :only => [:index]
@@ -16,7 +15,24 @@ class ItemsController < ApplicationController
     orderby ||= params[:order_by]
     unless params[:keywords].blank?
       # search function should display recursive items
-      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'").page(params[:page]).per(@current_vendor.pagination).order(orderby)
+      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'")
+      child_item_skus = []
+      log_action "XXXXX[recursive find]: @items #{ @items.collect{ |i| i.sku } }"
+      @items.each do |i|
+#         if i.parent.nil? and i.child.nil?
+#           child_item_skus << i.sku
+#           next
+#         end
+        log_action "XXXXX[recursive find]: finding upmost parent for Item id #{ i.id }"
+        upmost_parent_sku = i.recursive_parent_sku_chain.last
+        log_action "XXXXX[recursive find]: upmost parent sku is #{ upmost_parent_sku }"
+        upmost_parent = @current_vendor.items.visible.find_by_sku(upmost_parent_sku)
+        
+        bottom_most_child = upmost_parent.recursive_child_sku_chain.last
+        log_action "XXXXX[recursive find]: bottom most child sku is #{ bottom_most_child }"
+        child_item_skus << bottom_most_child
+      end
+      @items = @current_vendor.items.visible.where(:sku => child_item_skus).page(params[:page]).per(@current_vendor.pagination)
     else
       @items = @current_vendor.items.visible.where("items.sku NOT LIKE 'DMY%'").where('child_id = 0 or child_id IS  NULL').page(params[:page]).per(@current_vendor.pagination).order(orderby)
     end
@@ -34,9 +50,10 @@ class ItemsController < ApplicationController
     @from, @to = assign_from_to(params)
     @from = @from ? @from.beginning_of_day : 1.month.ago.beginning_of_day
     @to = @to ? @to.end_of_day : DateTime.now
-    @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :is_buyback => nil, :refunded => nil, :completed_at => @from..@to, :is_quote => nil, :is_proforma => nil).sum(:quantity)
+    @sold_times = @current_vendor.order_items.visible.where(:sku => @item.sku, :refunded => nil, :completed_at => @from..@to, :is_quote => nil, :is_proforma => nil).where("is_buyback = false OR is_buyback IS NULL").sum(:quantity)
   end
 
+  
   def new
     @item = @current_vendor.items.build
     @histories = @item.histories.order("created_at DESC").limit(20)
@@ -55,6 +72,7 @@ class ItemsController < ApplicationController
     @item.vendor = @current_vendor
     @item.company = @current_company
     @item.currency = @current_vendor.currency
+    @item.created_by = @current_user.id
     @item.attributes = params[:item]
     if @item.save
       @item.assign_parts(params[:part_skus])
@@ -67,37 +85,44 @@ class ItemsController < ApplicationController
     end
   end
   
-  # from shipment form
-  def create_ajax
-    @item = Item.new
-    @item.vendor = @current_vendor
-    @item.company = @current_company
-    @item.currency = @current_vendor.currency
-    @item.item_type = @current_vendor.item_types.find_by_behavior("normal")
-    @item.tax_profile_id = params[:item][:tax_profile_id]
-    @item.attributes = params[:item]
-    @item.save
-    render :nothing => true
-  end
+#   # from shipment form
+#   def create_ajax
+#     @item = Item.new
+#     @item.vendor = @current_vendor
+#     @item.company = @current_company
+#     @item.currency = @current_vendor.currency
+#     @item.item_type = @current_vendor.item_types.find_by_behavior("normal")
+#     @item.tax_profile_id = params[:item][:tax_profile_id]
+#     @item.attributes = params[:item]
+#     @item.save
+#     render :nothing => true
+#   end
 
   def update
     @item = @current_vendor.items.visible.find_by_id(params[:id])
+    params[:item][:currency] = @current_vendor.currency
+    
     if @item.update_attributes(params[:item])
+      
       @item.assign_parts(params[:part_skus])
       @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       @histories = @item.histories.order("created_at DESC").limit(20)
-      # redirect_to items_path
-      render :edit
+      redirect_to items_path
     else
+      @histories = @item.histories.order("created_at DESC").limit(20)
       render :edit
     end
   end
   
+  def gift_cards
+    @gift_cards_sold = @current_vendor.order_items.visible.where(:behavior => "gift_card", :activated => nil, :paid => true)
+  end
   
   def update_real_quantity
     @item = @current_vendor.items.visible.find_by_sku(params[:sku])
     @item.real_quantity = params[:real_quantity]
+    @item.real_quantity ||= 0 # protect against errenous JS requests with missing 'real_quantity' param
     @item.real_quantity_updated = true
     result = @item.save
     if result != true
@@ -118,7 +143,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item = @current_vendor.items.visible.find_by_id(params[:id])
-    @item.hide(@current_user)
+    @item.hide(@current_user.id)
     redirect_to items_path
   end
   
@@ -226,7 +251,7 @@ class ItemsController < ApplicationController
   end
   
   def report
-    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.price_cents,items.category_id,items.location_id,items.id,items.vendor_id,items.currency").visible.includes(:location,:category).by_keywords(params[:keywords]).page(params[:page]).per(100)
+    @items = @current_vendor.items.select("items.quantity,items.name,items.sku,items.price_cents,items.category_id,items.location_id,items.id,items.vendor_id,items.currency").visible.includes(:location,:category).by_keywords(params[:keywords]).page(params[:page]).per(10)
     @view = SalorRetail::Application::CONFIGURATION[:reports][:style]
     @view ||= 'default'
     render "items/reports/#{@view}/page"

@@ -1,0 +1,156 @@
+---
+nl:
+  activerecord:
+    errors:
+      messages:
+        dont_use_weird_skus: XXX Only Aa-Zz and 0-9 are permitted in the SKU field
+        accepted: moet worden aanvaard
+        blank: moet worden ingevoerd
+        confirmation: komt niet overeen
+        empty: mag niet leeg zijn
+        equal_to: moet gelijk zijn aan %{count}
+        even: moet even zijn
+        exclusion: moet niet in de lijst
+        greater_than: moet groter zijn dan %{count}
+        greater_than_or_equal_to: moet groter zijn dan of gelijk zijn aan %{count}
+        inclusion: is niet in de lijst
+        invalid: is ongeldig
+        less_than: moet minder zijn dan %{count}
+        less_than_or_equal_to: moet minder zijn dan of gelijk zijn aan %{count}
+        not_a_number: is geen getal
+        odd: moet oneven zijn
+        taken: is al in gebruik
+        too_long: is te lang (maximum %{count} karakters)
+        too_short: is te kort (minimum %{count} karakters)
+        wrong_length: is de verkeerde lengte (moet zijn %{count} karakters)
+      template:
+        body: ! 'Controleer dan het volgende waarden:'
+        header:
+          one: ! '%{count} een fout verhindert het formulier''%{model}'' te worden bewaard.'
+          other: ! '%{count} fouten verhinderen het formulier ''%{model}'' te worden bewaard.'
+  date:
+    abbr_day_names:
+    - Zo
+    - Ma
+    - Di
+    - Wo
+    - Do
+    - Vr
+    - Za
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - Mei
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Okt
+    - Nov
+    - Dec
+    day_names:
+    - Zondag
+    - Maandag
+    - Dinsdag
+    - Woensdag
+    - Donderdag
+    - Vrijdag
+    - Zaterdag
+    formats:
+      default: ! '%Y-%m-%d'
+      long: ! '%d. %B  %Y'
+      short: ! '%d. %b'
+    month_names:
+    - 
+    - Januari
+    - Februari
+    - Maart
+    - April
+    - Mei
+    - Juni
+    - Juli
+    - Augustus
+    - September
+    - Oktober
+    - November
+    - December
+    order:
+    - :jaar
+    - :maand
+    - :dag
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: ongeveer 1 uur
+        other: ongeveer %{count} uren
+      about_x_months:
+        one: ongeveer 1 maand
+        other: ongeveer %{count} maanden
+      about_x_years:
+        one: ongeveer 1 jaar
+        other: ongeveer %{count} jaren
+      almost_x_years:
+        one: bijna 1 jaar
+        other: bijna %{count} jaren
+      half_a_minute: een halve minuut
+      less_than_x_minutes:
+        one: minder dan een minuut
+        other: minder dan  %{count} minuten
+      less_than_x_seconds:
+        one:  minder dan 1 seconde
+        other:  minder dan %{count} seconden
+      over_x_years:
+        one: meer dan  1 year
+        other: meer dan  %{count} jaren
+      x_days:
+        one: 1 dag
+        other: ! '%{count} dagen'
+      x_minutes:
+        one: 1 minute
+        other: ! '%{count} minuten'
+      x_months:
+        one: 1 month
+        other: ! '%{count} maanden'
+      x_seconds:
+        one: 1 second
+        other: ! '%{count} seconden'
+    prompts:
+      day: Dag
+      hour: Uur
+      minute: Minuten
+      month: Maanden
+      second: Seconden
+      year: Jaren
+  helpers:
+    select:
+      prompt: Seleceteer aub
+    submit:
+      create: Creeer %{model}
+      submit: Bewaar %{model}
+      update: Bijwerken %{model}
+  support:
+    array:
+      words_connector:
+        last_word_connector: ! ', en '
+        two_words_connector: ! ' en '
+  time:
+    am: ''
+    formats:
+      date_iso: ! '%Y-%m-%d'
+      date_normal: ! '%d. %B %Y'
+      date_short: ! '%d. %b %y'
+      datetime_iso: ! '%Y-%m-%d %H:%M:%S'
+      datetime_iso2: ! '%Y%m%dT%H%M%S'
+      default: ! '%a, %d. %b. %Y, %H:%M:%S %z'
+      iso: ! '%Y-%m-%d %H:%M:%S'
+      just_day: ! '%d. %B %Y'
+      just_time: ! '%H:%M'
+      long: ! '%d. %B %Y %H:%M:%S'
+      month_and_day: ! '%d. %B'
+      salor: ! '%a, %b %d %H:%M'
+      short: ! '%d. %b. %y  %y %H:%M'
+      time_short: ! '%H:%M'
+    pm: ''

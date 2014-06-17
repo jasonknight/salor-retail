@@ -105,6 +105,8 @@ class ShipmentItem < ActiveRecord::Base
       i = Item.new
       i.vendor = self.vendor
       i.company = self.company
+      i.currency = self.vendor.currency
+      i.created_by = -101 # -101 is magic number for shipment
       i.sku = self.sku
       i.tax_profile = self.tax_profile
       i.name = self.name
@@ -120,7 +122,7 @@ class ShipmentItem < ActiveRecord::Base
     end
     
     self.in_stock_quantity = self.in_stock_quantity.to_f + q
-    self.save
+    self.save!
   end
   
   def to_json

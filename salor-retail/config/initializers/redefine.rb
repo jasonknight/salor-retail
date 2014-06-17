@@ -39,3 +39,21 @@ module ActionView
     end
   end
 end
+
+require 'money-rails/helpers/action_view_extension'
+
+module MoneyRails
+  module ActionViewExtension
+    alias_method :orig_humanized_money_with_symbol, :humanized_money_with_symbol
+    
+    def humanized_money_with_symbol(arg1, arg2={})
+      if @region
+        arg2.merge!(
+          :decimal_mark => I18n.t("number.currency.format.separator", :locale => @region),
+          :thousands_separator => I18n.t("number.currency.format.delimiter", :locale => @region)
+        )
+      end
+      arg1.format(arg2)
+    end
+  end
+end

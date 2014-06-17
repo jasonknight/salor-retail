@@ -48,7 +48,7 @@
   </Location>
   
   # Passenger configuration for this VirtualHost
-  PassengerMaxRequests 2000
+  PassengerMaxRequests 100000
   RailsAutoDetect off
   PassengerStatThrottleRate 30
   PassengerSpawnMethod smart

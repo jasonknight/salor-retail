@@ -30,7 +30,7 @@ SalorRetail::Application.routes.draw do
   match 'vendors/:id/logo' => 'vendors#logo'
   match 'vendors/:id/logo_invoice' => 'vendors#logo_invoice'
   match "vendors/report_day" => "vendors#report_day"
-  match "vendors/statistics" => "vendors#statistics"
+  match "vendors/sales_statistics" => "vendors#sales_statistics"
   
   match "buttons/position" => "buttons#position"
   
@@ -112,6 +112,7 @@ SalorRetail::Application.routes.draw do
   match "items/upload_optimalsoft" => "items#upload_optimalsoft"
   match "items/download" => "items#download"
   match "items/info" => "items#info"
+  match "items/gift_cards" => "items#gift_cards"
   match "items/inventory_json" => "items#inventory_json"
   match "items/create_ajax" => "items#create_ajax"
   match "items/render_label" => "items#render_label"
@@ -124,7 +125,7 @@ SalorRetail::Application.routes.draw do
   
 
   
-  match "shipments/move_all_to_items" => "shipments#move_all_to_items"
+  match "shipments/move_all_items_into_stock" => "shipments#move_all_items_into_stock"
   match "shipments/new_shipments" => "shipments#new_shipments"
   match "shipments/move_item_into_stock" => "shipments#move_item_into_stock"
   match "shipments/add_item" => "shipments#add_item"
@@ -137,13 +138,13 @@ SalorRetail::Application.routes.draw do
 
   
     
-  match "api/order" => "api#order"
-  "authenticate,create,update,destroy,add_item".split(',').each do |u|
-    post "api/#{u}"
-  end
-  %Q[search,time,registers,vendors,order,order_items,locations,categories,customers,discounts,items].split(',').each do |u|
-    get "api/#{u}"
-  end
+#   match "api/order" => "api#order"
+#   "authenticate,create,update,destroy,add_item".split(',').each do |u|
+#     post "api/#{u}"
+#   end
+#   %Q[search,time,registers,vendors,order,order_items,locations,categories,customers,discounts,items].split(',').each do |u|
+#     get "api/#{u}"
+#   end
 
   
   
@@ -200,7 +201,7 @@ SalorRetail::Application.routes.draw do
     get :documentation
   end
 
-  if defined?(SrSaas) == 'constant'
+  if defined?(SrSaas::Engine) == 'constant'
     mount SrSaas::Engine => "/saas"
     match '/signin' => 'sr_saas/sessions#new'
     match '*path' => 'sr_saas/sessions#new'

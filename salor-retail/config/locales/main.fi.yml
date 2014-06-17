@@ -34,6 +34,7 @@ fi:
       color: väri
       company_id: Yritys
       company_name: Yrityksen nimi
+      completed_at: completed at
       contact_address: Osoite
       contact_email: sähköposti
       contact_fax: fax-numero
@@ -56,6 +57,7 @@ fi:
       default_buyback: takaisinoston oletus
       detailed_edit: Yksityiskohtainen muokkaus?
       dollar_per_lp: Euro per kanta-asiakaspiste
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: talletus
       email: sähköposti
@@ -164,6 +166,7 @@ fi:
         quantity: määrä
         sku: SKU
         stock_location_id: Varaston sijaintipaikka
+      shipper_name: Shipper
       shipper_sku: Toimittajan SKU
       sku: SKU
       start_amount: alkumäärä
@@ -198,6 +201,7 @@ fi:
       user:
         hourly_rate: Tuntihinta
         uses_drawer_id: Käytettävä kassa
+      user_name: User
       username: käyttäjänimi
       uses_drawer_id: Käytettävä kassa
       value: arvo
@@ -213,9 +217,6 @@ fi:
       when: milloin
       whento: milloin
       width: leveys
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Toiminta
@@ -493,6 +494,7 @@ fi:
     end_day: lopeta päivä
     enter_inventory_items: Syötä
     general_configuration: yleismääritys
+    gift_cards: Gift Cards
     home: alku
     inventory_report: Inventaarioraportti
     invoice_blurbs: Laskun mainokset
@@ -729,6 +731,7 @@ fi:
     cashier: kassa
     manager: päällikkö
     stockboy: varastotyöntekijä
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Raportti
@@ -798,6 +801,8 @@ fi:
       shipment_item_nil: Nimike palautettu lähetyksestä oli nolla?
       sku_must_be_unique: ! '%{sku}  on oltava yksilöllinen'
       value_not_set: ei ole asetettu
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: varasto päivitetty
     logged_in_as: kirjauttu nimella
     login: Kirjaudu sisään
@@ -853,12 +858,21 @@ fi:
       transaction_tag: liiketoimitunniste
       transaction_total: liiketoimen loppusumma
       transactions: liiketoimet
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: kehittynyt kenttä
     cash_register_heading: ! '%{name} %{store}: lle'
     cash_registers: kassat
     category_heading: Kategoria %{name} %{store}:lle
     change: vaihtoraha
+    copies: Copies
     create_new_item: Luo uusi artikkeli
     customers: asiakkaat
     download_may_last_long: Tämä lataus saattaa kestää kauan. Jatkatko?
@@ -909,6 +923,14 @@ fi:
     notice:
       cache_was_cleared: Välimuistitiedostot on poistettu.
       csv_edit_starting: cvs-muokkaus alkaa
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} luonti onnistui'
       model_edit: ! '%{model} muokkaaminen onnistui'
       move_real_quantities_success: Nimikkeiden määrien päivittäminen onnistui
@@ -976,6 +998,7 @@ fi:
   when_list:
     add_to_order: lisättäessä tilaukseen
     always: aina
+    change_quantity: on change quantity
     on_export: siirtymässä
     on_import: laatamista
     on_save: tallentamassa

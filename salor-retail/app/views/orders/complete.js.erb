@@ -5,8 +5,10 @@ sr.fn.pos_core.updateOrder(<%= raw @order.to_json %>);
 $('#complete_order_total').html(sr.fn.math.toCurrency(<%= @old_order.total %>));
 $('.pos-customer').html('');
 $('.pos-cash-register-amount').html('<%= humanized_money_with_symbol(@current_user.get_drawer.amount) %>');
-$('#header_drawer_amount').html('<%= humanized_money_with_symbol(@current_user.get_drawer.amount.to_f) %>');
+$('#header_drawer_amount').html('<%= humanized_money_with_symbol(@current_user.get_drawer.amount) %>');
 $('#last_orders').replaceWith('<%= escape_javascript render :partial => "last_orders" %>');
 sr.data.pos_core.order = <%= raw @order.to_json %>;
 sr.data.pos_core.order.total = <%= @old_order.total %>;
 $('#payment_amount_0').select();
+<%= render :partial => '/shared/messagesjs.js' %>
+sr.fn.messages.displayMessages();

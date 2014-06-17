@@ -42,11 +42,10 @@ class Item < ActiveRecord::Base
   
   accepts_nested_attributes_for :item_stocks, :allow_destroy => true #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }
 
-  validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id
-  #validates_uniqueness_of :sku, :scope => :vendor_id
-  validate :sku_unique_in_visible
-
-  before_save :run_actions
+  validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id, :currency
+  validate :sku_unique_in_visible, :not_selfloop, :not_too_long_child_chain, :not_too_long_parent_chain, :no_child_duplicate
+  validate :sku_is_not_weird
+  before_save :run_onsave_actions
   before_save :cache_behavior
   
   COUPON_TYPES = [
@@ -59,18 +58,67 @@ class Item < ActiveRecord::Base
   
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
   
+  def sku_is_not_weird
+    if not self.sku == self.sku.gsub(/[^0-9a-zA-Z]/,'') then
+      errors.add(:sku, I18n.t('system.errors.dont_use_weird_skus'))
+    end
+  end
   def sku_unique_in_visible
     if self.new_record?
-      number = 0
+      error = self.vendor.items.visible.where(:sku => self.sku).count > 0
     else
-      number = 1
+      error = self.vendor.items.visible.where("sku = '#{self.sku}' AND NOT id = #{ self.id }").count > 0
     end
-    if self.vendor.items.visible.where(:sku => self.sku).count > number
+    if error == true
       errors.add(:sku, I18n.t('activerecord.errors.messages.taken'))
       return
     end
   end
   
+  def not_selfloop
+    if self.sku == self.child_sku
+      errors.add(:child_sku, "cannot have the same SKU as this item!")
+      return
+    end
+  end
+  
+  def not_too_long_child_chain
+    chain = self.recursive_child_sku_chain
+    chain.shift
+    if chain.include? self.sku
+      errors.add(:child_sku, "would create a child-infinite loop!")
+      return
+    end
+#     if self.recursive_child_count > 2
+#       errors.add(:child_sku, "would create a too long child chain")
+#       return
+#     end
+  end
+  
+  def not_too_long_parent_chain
+    chain = self.recursive_parent_sku_chain
+    chain.shift
+    if chain.include? self.sku
+      errors.add(:child_sku, "would create a parent-infinite loop!")
+      return
+    end
+#     if self.recursive_parent_count > 2
+#       errors.add(:child_sku, "would create a too long parent chain")
+#       return
+#     end
+  end
+  
+  def no_child_duplicate
+    child_item = self.vendor.items.visible.find_by_sku(self.child_sku)
+    return if child_item.nil?
+    
+    c_id = child_item.id
+    items_which_have_this_child = self.vendor.items.visible.where("sku != '#{ self.sku }'").where(:child_id => c_id)
+    if items_which_have_this_child.any?
+      info = items_which_have_this_child.collect {|i| [i.id, i.sku] }
+      errors.add(:child_sku, "items #{ info.inspect } already have this child #{ self.child_sku }")
+    end
+  end
   
   #README
   # 1. The rails way would lead to many duplications
@@ -82,7 +130,7 @@ class Item < ActiveRecord::Base
       trans = I18n.t("activerecord.attributes.#{attrib.downcase}", :raise => true) 
       return trans
     rescue
-      SalorBase.log_action self.class, "trans error raised for activerecord.attributes.#{attrib} with locale: #{I18n.locale}"
+      #SalorBase.log_action self.class, "trans error raised for activerecord.attributes.#{attrib} with locale: #{I18n.locale}"
       return super
     end
   end
@@ -105,25 +153,20 @@ class Item < ActiveRecord::Base
   
   # ----- old name aliases setters
   def buyback_price=(p)
-    self.buy_price_cents = self.string_to_float(p, :locale => self.vendor.region) * 100.0
+    self.buy_price_cents = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
   end
   
-  def base_price=(p)
-    p = self.string_to_float(p, :locale => self.vendor.region) * 100.0
-    self.price_cents = p
+  def base_price=(pricestring)
+    price_float = self.string_to_float(pricestring, :locale => self.vendor.region)
+    price_c = (price_float * 100).round
+    self.price_cents = price_c
   end
   
   def amount_remaining=(p)
-    p = self.string_to_float(p, :locale => self.vendor.region) * 100.0
+    p = (self.string_to_float(p, :locale => self.vendor.region) * 100).round
     self.gift_card_amount_cents = p
   end
   # ------ end old name aliases setters
-  
-  
-  
-  
-  
-
 
 
   # ----- convenience methods for CSV
@@ -203,8 +246,8 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def run_actions
-    Action.run(self.vendor,self, :on_item_save)
+  def run_onsave_actions
+    # Action.run(self.vendor,self, :on_item_save) # MF: disabled this because it would run even when another Action would save an item, so we would have nested saves which are difficult to debug.
   end
   
   def cache_behavior
@@ -232,11 +275,6 @@ class Item < ActiveRecord::Base
       self.child = nil
       return
     end
-    if self.sku == string then
-      # this would create an infinite loop on self, we don't allow that
-      self.child = nil
-      return
-    end
     child_item = self.vendor.items.visible.find_by_sku(string)
     if child_item then
       self.child_id = child_item.id
@@ -258,7 +296,9 @@ class Item < ActiveRecord::Base
     action.vendor = self.vendor
     action.company = self.company
     action.model = self
-    action.name = Time.now.strftime("%Y%m%d%H%M%S")
+    action.whento = "on_import"
+    action.behavior = "divide"
+    action.name = self.name
     result = action.save
     if result == false
       raise "Could not save Action because #{ action.errors.messages }"
@@ -268,12 +308,8 @@ class Item < ActiveRecord::Base
   
   # ----- setters for advanced float parsing
   def purchase_price=(p)
-    if p.class == String then
-      p = self.string_to_float(p, :locale => self.vendor.region) * 100
-      write_attribute(:purchase_price_cents,p)
-      return
-    end
-    write_attribute(:purchase_price_cents,p)
+    p = (self.string_to_float(p, :locale => self.vendor.region) * 100).ceil
+    write_attribute(:purchase_price_cents, p)
   end
 
   def height=(p)
@@ -322,6 +358,7 @@ class Item < ActiveRecord::Base
   
   
   def assign_parts(hash={})
+    return if hash.nil? or hash == {}
     self.parts = []
     hash ||= {}
     hash.each do |h|
@@ -338,7 +375,7 @@ class Item < ActiveRecord::Base
     end
     result = self.save
     if result == false
-      raise "Could not save Item because #{ i.errors.messages }"
+      raise "Could not save Item because #{ self.errors.messages }"
     end
   end
   
@@ -366,25 +403,36 @@ class Item < ActiveRecord::Base
     end
   end
   
-  def hide(by)
+  def self.find_like_sku_in_hidden(sku)
+    Item.hidden.where("sku LIKE %#{ sku }%")
+  end
+  
+  def hide(by_id)
     self.parent = nil
     self.child = nil
     self.hidden = true
-    self.hidden_by = by
+    self.sku = "OLD#{ Time.now.strftime("%Y%m%d%H%M%S") }#{ self.sku }"
+    self.hidden_by = by_id
     self.hidden_at = Time.now
-    result = self.save
-    if result == false
-      raise "Could not hide Item #{ self.id } because #{ self.errors.messages }"
-    end
+    self.save!
     
     b = self.vendor.buttons.visible.where(:sku => self.sku)
-    b.update_all :hidden => true, :hidden_by => by, :hidden_at => Time.now
+    b.update_all :hidden => true, :hidden_by => by_id, :hidden_at => Time.now
     
     is = self.item_stocks.visible
-    is.update_all :hidden => true, :hidden_by => by, :hidden_at => Time.now
+    is.update_all :hidden => true, :hidden_by => by_id, :hidden_at => Time.now
     
     #TODO: if part is deleted, remove from part container
+    #TODO: remove actions
     
+  end
+  
+  def shipper_name
+    if self.shipper
+      return self.shipper.name
+    else
+      return ""
+    end
   end
   
   def to_record
@@ -407,7 +455,7 @@ class Item < ActiveRecord::Base
   # Useful debug methods
   
   def recursive_parent_count(depth=0)
-    return depth if depth > 5
+    return Float::INFINITY if depth > 5
     if self.parent
       return self.parent.recursive_parent_count(depth + 1)
     else
@@ -415,66 +463,101 @@ class Item < ActiveRecord::Base
     end
   end
   
-  def recursive_sku_chain(depth=0, chain=[])
+  def recursive_child_count(depth=0)
+    return Float::INFINITY if depth > 5
+    if self.child
+      return self.child.recursive_child_count(depth + 1)
+    else
+      return depth
+    end
+  end
+  
+  def recursive_parent_sku_chain(depth=0, chain=[])
     depth += 1
-    return chain << "and ongoing... " if depth > 5
+    return chain << "..." if depth > 5
     if self.parent
       chain << self.sku
-      self.parent.recursive_sku_chain(depth, chain)
+      self.parent.recursive_parent_sku_chain(depth, chain)
     else
       chain << self.sku
     end
   end
   
-  def self.get_too_long_recursion_items
+  def unlink
+    self.parent = nil
+    self.child = nil
+    self.save!
+  end
+  
+  def recursive_child_sku_chain(depth=0, chain=[])
+    depth += 1
+    return chain << "..." if depth > 5
+    if self.child
+      chain << self.sku
+      self.child.recursive_child_sku_chain(depth, chain)
+    else
+      chain << self.sku
+    end
+  end
+  
+  def self.get_zero_child_ids # Item.get_zero_child_ids
+    Item.where(:child_id => 0).collect { |i| i.id }
+  end
+  
+  def self.get_self_loop_ids # Item.get_self_loop_ids
+    Item.visible.where("id = child_id").collect { |i| i.id }
+  end
+  
+  def self.get_too_long_parent_recursion_ids # Item.get_too_long_parent_recursion_ids 
     too_long_item_ids = []
-    Item.visible.where('child_id IS NULL OR child_id = 0').each do |i|
-      too_long_item_ids << i.id if i.recursive_parent_count > 4
+    Item.visible.each do |i|
+      too_long_item_ids << i.id if i.recursive_parent_count > 2
     end
     return too_long_item_ids
   end
   
-  def self.find_self_loop_items
-    Item.visible.where("id = child_id")
-  end
-  
-  def self.clean_self_loop_items
-    self_loop_items = self.find_infinite_loop_items
-    self_loop_items.update_all :hidden => true, :hidden_by => -20, :hidden_at => Time.now
-    self_loop_item_ids = self_loop_items.collect{ |i| i.id }
-    return self_loop_item_ids
-  end
-  
-  def self.find_duplicates
-    Vendor.connection.execute("SELECT sku, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
-  end
-  
-  def self.clean_duplicates
-    duplicates = find_duplicates
-    deleted_item_ids = []
-    duplicates.each do |d|
-      duplicate_items = Item.visible.where(:sku => d[0])
-      duplicate_items.update_all :hidden => true, :hidden_by => -21, :hidden_at => Time.now
-      deleted_item_ids << duplicate_items.collect{ |i| i.id }
+  def self.get_too_long_child_recursion_ids # Item.get_too_long_child_recursion_ids
+    too_long_item_ids = []
+    Item.visible.each do |i|
+      too_long_item_ids << i.id if i.recursive_child_count > 2
     end
-    return deleted_item_ids
+    return too_long_item_ids
   end
   
-  def self.find_nonhidden_items_with_hidden_child
+  def self.get_child_duplicate_ids # Item.get_child_duplicate_ids
+    duplicate_array = Vendor.connection.execute("SELECT child_id, count(*) FROM items WHERE hidden IS NULL AND child_id IS NOT NULL AND child_id != 0 GROUP BY child_id HAVING count(*) > 1").to_a
+    
+    info = duplicate_array.collect {|d| [d[0], Item.visible.where(:child_id => d[0]).collect {|i| i.id }] }
+    
+    #puts "Duplicates: #{ info.inspect }"
+    duplicate_ids = duplicate_array.collect { |x| x[0] }
+    duplicate_ids.delete(nil)
+    duplicate_ids.delete(0)
+    return info
+  end
+  
+  def self.get_duplicate_names # Item.get_duplicate_names
+    duplicate_array = Vendor.connection.execute("SELECT name, count(*) FROM items WHERE hidden IS NULL GROUP BY name HAVING count(*) > 1").to_a
+  end
+
+  # duplicate_array = Vendor.connection.execute("SELECT id, sku, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
+  def self.get_sku_duplicate_ids # Item.get_sku_duplicate_ids
+    duplicate_array = Vendor.connection.execute("SELECT id, count(*) FROM items WHERE hidden IS NULL OR hidden IS FALSE GROUP BY sku HAVING count(*) > 1").to_a
+    #puts "Duplicates: #{ duplicate_array.inspect }"
+    duplicate_ids = duplicate_array.collect { |x| x[0] }
+    return duplicate_ids
+  end
+  
+  def self.get_nonhidden_items_with_hidden_child_ids # Item.get_nonhidden_items_with_hidden_child_ids
     ids = []
-    Item.visible.where("child_id IS NOT NULL OR child_id != 0").each do |i|
+    # get all parents
+    Item.visible.where("child_id IS NOT NULL").each do |i|
       ids << i.id if i.child and i.child.hidden == true
     end
     return ids
   end
   
-  def self.clean_nonhidden_items_with_hidden_child
-    ids = self.find_nonhidden_items_with_hidden_child
-    Item.where(:id => ids).update_all :hidden => true, :hidden_by => -22, :hidden_at => Time.now
-    return ids
-  end
-  
-  def self.find_nonhidden_items_with_hidden_parent
+  def self.get_nonhidden_items_with_hidden_parent_ids # Item.get_nonhidden_items_with_hidden_parent_ids
     ids = []
     Item.visible.each do |i|
       ids << i.id if i.parent and i.parent.hidden == true
@@ -482,19 +565,107 @@ class Item < ActiveRecord::Base
     return ids
   end
   
-  def self.clean_nonhidden_items_with_hidden_parent
-    ids = self.find_nonhidden_items_with_hidden_parent
-    Item.where(:id => ids).update_all :hidden => true, :hidden_by => -23, :hidden_at => Time.now
+  # cleaning methods
+  
+  def self.clean_zero_child
+    ids = self.get_zero_child_ids
+    Item.where(:id => ids).update_all :child_id => nil
+  end
+
+  def self.clean_self_loops
+    ids = self.get_self_loop_ids
+    items = Item.where(:id => ids)
+    items.each { |i| i.hide(-20) }
     return ids
   end
   
-  def self.cleanup
-    cleaned_up_ids = []
-    cleaned_up_ids << self.clean_duplicates
-    cleaned_up_ids << self.clean_infinite_loop_items
-    cleaned_up_ids << self.clean_nonhidden_items_with_hidden_child
-    cleaned_up_ids << self.clean_nonhidden_items_with_hidden_parent
-    return cleaned_up_ids.flatten
+  def self.clean_duplicates
+    ids = self.get_sku_duplicate_ids
+    items = Item.where(:id => ids)
+    items.each { |i| i.hide(-21) }
+    return ids
+  end
+
+  def self.clean_nonhidden_items_with_hidden_child # Item.clean_get_nonhidden_items_with_hidden_child
+    ids = self.get_nonhidden_items_with_hidden_child_ids
+    ids.each do |id|
+      item = Item.find(id)
+      item.child_id = nil
+      item.save!
+    end
+    return ids
+  end
+  
+  def self.clean_nonhidden_items_with_hidden_parent # Item.clean_get_nonhidden_items_with_hidden_parent
+    Item.where(:hidden => true).update_all :child_id => nil
+#     ids = self.get_nonhidden_items_with_hidden_parent_ids
+#     ids.each do |id|
+#       item = Item.find(id)
+#       item.parent = nil
+#       #item.save!
+#     end
+#     return ids
+  end
+  
+  def self.clean_child_duplicates # Item.clean_child_duplicates
+    deletable_ids = []
+    array = get_child_duplicate_ids
+    array.each do |a|
+      item_ids = a[1]
+      item_ids.each do |i|
+        any_sales = OrderItem.visible.where(:item_id => i).any?
+        any_inventory = InventoryReportItem.where(:item_id => i).any?
+        deletable = any_sales == false && any_inventory == false
+        deletable_ids << i if deletable
+      end
+    end
+    Item.where(:id => deletable_ids).each {|i| i.hide(-24) }
+    return deletable_ids 
+  end
+  
+  def self.clean_too_long_chains # Item.clean_too_long_chains
+    ids = self.get_too_long_parent_recursion_ids
+    ids.each do |id|
+      item = Item.find(id)
+      parent_skus = item.recursive_parent_sku_chain
+      parent_skus.each do |psku|
+        i = Item.find_by_sku(psku)
+        i.unlink
+      end
+    end
+    ids = self.get_too_long_child_recursion_ids
+    ids.each do |id|
+      item = Item.find(id)
+      child_skus = item.recursive_child_sku_chain
+      child_skus.each do |csku|
+        i = Item.find_by_sku(csku)
+        i.unlink
+      end
+    end
+  end
+  
+  def self.run_diagnostics # Item.run_diagnostics
+    cd = self.get_child_duplicate_ids
+    sd = self.get_sku_duplicate_ids
+    sl = self.get_self_loop_ids
+    tlpr = self.get_too_long_parent_recursion_ids
+    tlcr = self.get_too_long_child_recursion_ids
+    nhihc = self.get_nonhidden_items_with_hidden_child_ids
+    nhihp = self.get_nonhidden_items_with_hidden_parent_ids
+    
+    result = {}
+    result[:child_duplicates] = cd
+    result[:sku_duplicates] = sd
+    result[:self_loops] = sl
+    result[:too_long_parent_recursion] = tlpr
+    result[:too_long_child_recursion] = tlcr
+    result[:hidden_child] = nhihc
+    result[:hidden_parent] = nhihp
+    
+    status = ! (cd.any? || sd.any? || sl.any? || tlpr.any? || tlcr.any? || nhihc.any? || nhihp.any?)
+    #status = false # for email testing
+    
+    return {:status => status, :result => result}
   end
   
   # This is the main method that should be used to transact a quantity of an Item. Transactions are safer and more transparent than setting the "quantity" attribute directly, so this should be used. This method also takes care of recursion of parent/child items as well as Items with many StockItem in many locations. "diff" is the amount that will be transacted for the Item "item". "model2" is just for labeling purposes of StockTransactions and can be of any class that can logially send or receive quantities (e.g. StockItem, Item, ShipmentItem, Order, etc.). If "item" does not have any StockItems defined, the simple quantity attribute will used instead for backwards-compatibility.

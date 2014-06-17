@@ -20,7 +20,7 @@
 - calculated_drawer_amount =   @report['calculated_drawer_amount']
 - categories_sum = @report['categories_sum']
 
-= raw content_box_top(t("menu.reports"))
+= raw content_box_top(t("vendors.report_day.title"))
 
 
 = form_tag "/vendors/report_day", :class => 'no-print', :id => 'date_range', :method => :get do
@@ -88,7 +88,6 @@
         %th.right= t '.net'
         %th.right= t '.tax'
       - taxes[i[0]].to_a.each do |t|
-        - next if t[1][:gro].zero?
         %tr
           %td.left= number_to_percentage t[0]
           %td.right= humanized_money_with_symbol t[1][:gro]

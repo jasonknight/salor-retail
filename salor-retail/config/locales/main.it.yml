@@ -34,6 +34,7 @@ it:
       color: color
       company_id: Company
       company_name: nome azienda
+      completed_at: completed at
       contact_address: indirizzo contatto
       contact_email: email contatto
       contact_fax: fax contatto
@@ -56,6 +57,7 @@ it:
       default_buyback: riacquisto predefinito
       detailed_edit: Detailed Edit?
       dollar_per_lp: euro per punti fedeltà
+      drawer_user_name: Drawer
       drawer_username: Drawer user
       drop: versamento
       email: email
@@ -164,6 +166,7 @@ it:
         quantity: quantità
         sku: SKU
         stock_location_id: Posizione Stock
+      shipper_name: Shipper
       shipper_sku: Spedizioniere SKU
       sku: SKU
       start_amount: importo di partenza
@@ -198,6 +201,7 @@ it:
       user:
         hourly_rate: Hourly Rate
         uses_drawer_id: Uses drawer of
+      user_name: User
       username: nome utente
       uses_drawer_id: Usa Cassa di
       value: valore
@@ -213,9 +217,6 @@ it:
       when: quando
       whento: When
       width: larghezza
-      completed_at: completed at
-      drawer_user_name: Drawer
-      user_name: User
     models:
       action:
         one: Azione
@@ -493,6 +494,7 @@ it:
     end_day: fine giornata
     enter_inventory_items: Enter
     general_configuration: configurazione generale
+    gift_cards: Gift Cards
     home: principale
     inventory_report: Rapporto inventario
     invoice_blurbs: Invoice Blurbs
@@ -728,6 +730,7 @@ it:
     cashier: cassiere
     manager: manager
     stockboy: stockboy
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Rapporto
@@ -798,6 +801,8 @@ it:
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: inventario aggiornato
     logged_in_as: autenticato come
     login: registrati
@@ -853,12 +858,21 @@ it:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: campo avanzato
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: registri di cassa
     category_heading: categoria %{name} per %{store}
     change: cambio
+    copies: Copies
     create_new_item: Create New Article
     customers: clienti
     download_may_last_long: Questo download può durare a lungo. Continuare?
@@ -909,6 +923,14 @@ it:
     notice:
       cache_was_cleared: Documenti in cache cancellati.
       csv_edit_starting: inizio modifica csv
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} è stato creato con successo'
       model_edit: ! '%{model} è stato modificato con successo'
       move_real_quantities_success: Quantità articoli aggiornate con successo
@@ -976,6 +998,7 @@ it:
   when_list:
     add_to_order: aggiungo ad ordine
     always: sempre
+    change_quantity: on change quantity
     on_export: esportazione
     on_import: importazione
     on_save: salvataggio

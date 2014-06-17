@@ -136,11 +136,17 @@ sr.fn.shipments = {
       return;
     }    
     var string = "/shipments/move_item_into_stock?shipment_item_id=" + shipment_item_id + "&quantity=" + quantity + "&locationstring=" + locationstring;
-    get(string, 'shipments.js', function() {
+    get(string, 'shipments.move_item_into_stock', function() {
       location.reload();
     });
-    
-  }
+  },
+  
+  moveAllItemsIntoStock: function(shipment_id) {
+    var string = "/shipments/move_all_items_into_stock?shipment_id=" + shipment_id;
+    get(string, 'shipments.moveAllItemsIntoStock', function() {
+      location.reload();
+    });
+  },
   
 
 }

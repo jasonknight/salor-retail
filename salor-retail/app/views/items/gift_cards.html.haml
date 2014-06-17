@@ -1,0 +1,33 @@
+= stylesheet_link_tag 'invoice_default'
+= stylesheet_link_tag 'invoice_default_print', :media => 'print'
+
+= raw content_box_top(t("views.single_words.gift_cards"))
+
+.tools
+  %span{ :onmousedown => 'sr.fn.salor_bin.showPrintDialog()' }= salor_icon(:a4print, {}, 32, t('orders.print.print'))
+.clear
+
+.paper-invoice.invoice_print
+  - @gift_cards_sold.reverse.each do |gcoi|
+    - gci = gcoi.item
+    - if gci.hidden
+      %h3
+        = t 'activerecord.models.item_type.gift_card'
+        (deleted)
+    - else
+      %h3
+        = t 'activerecord.models.item_type.gift_card'
+        = link_to gci.sku, edit_item_path(gci)
+    %table.striped-table2
+      - gci.vendor.order_items.visible.where(:item_id => gci.id).each do |gcoi|
+        %tr
+          %td
+            - if gcoi.activated
+              == #{ t "vendors.report_day.gift_card_redeem_total" }
+            - else
+              == #{ t "vendors.report_day.gift_card_sales_total" }
+          %td= l gcoi.created_at, :format => :datetime_iso
+          %td= link_to "#{ Order.model_name.human } ##{ gcoi.order.nr }", "/orders/#{ gcoi.order.id }/print"
+          %td= humanized_money_with_symbol gcoi.total
+    %br
+    %br

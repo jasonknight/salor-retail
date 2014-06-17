@@ -19,7 +19,7 @@
       = l @shipment.created_at, :format => :date_short
     %p
       %b== #{ I18n.t("activerecord.attributes.price") }:
-      = humanized_money_with_symbol @shipment.total
+      = humanized_money_with_symbol @shipment.purchase_price_total
     %p
       %b== #{ I18n.t("activerecord.attributes.status") }:
       = @shipment.shipment_type.name if @shipment.shipment_type
@@ -56,13 +56,14 @@
         %td.right= humanized_money_with_symbol si.purchase_price
         %td.right= si.tax_profile.name if si.tax_profile
         %td.center= si.quantity
-        %td.right= humanized_money_with_symbol si.purchase_price_total
+        %td.right= humanized_money_with_symbol si.purchase_price_total if si.purchase_price_total
     %tr.total
       %td{ :colspan => 5 }
       %td.right= humanized_money_with_symbol @shipment.purchase_price_total
       
 .paper-invoice
-  %h2= t('menu.move_shipment_item')
+  %p
+    .dialog-button{ :onclick => "sr.fn.shipments.moveAllItemsIntoStock(#{ @shipment.id });" }= t('menu.move_shipment_item')
   %table.striped-table2
     %tr
       %th= ShipmentItem.human_attribute_name(:name)

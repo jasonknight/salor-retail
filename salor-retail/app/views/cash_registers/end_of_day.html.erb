@@ -1,46 +1,54 @@
-<div class="clear">
-<br />
-</div>
-<div class="button-row" align='right'>
-          <div id="confirm_print_end_of_day_report" class='button-print rounded-corners-left' onclick="sr.fn.salor_bin.printUrl(Register.thermal_printer,'/vendors/render_report_day','');"><%= t('.end_of_day_thermal_report')%></div>
-          <div id="go_to_report_day" class='button-print' onclick="window.location.href='/vendors/report_day';"><%= t('.paper_report')%></div>
-          <div class="spacer">&nbsp;</div>
-          <div id="confirm_end_of_day" class="button-confirm rounded-corners-right" onclick="sr.fn.session.logout();"><%= I18n.t("system.logout") %></div>
+<div class="clear"><br /></div>
+
+<div class="pos-menu" align='center'>
+  <div id="go_to_report_day" class='button-print' onclick="window.location.href='/vendors/report_day';"><%= t('.paper_report')%></div>
+  <div id="go_to_sales_statistics" class="button-print" onclick="window.location.href='/vendors/sales_statistics' "><%= I18n.t('vendors.sales_statistics.title') %></div>
+  <div id="confirm_end_of_day" class="button-confirm rounded-corners-right" onclick="sr.fn.session.logout();"><%= I18n.t("system.logout") %></div>
 </div>
 
 <br/>
-<div  align="center" width="100%">
 
-      <div id="eod-drawer-total"><span class='eod-drawer-total'><%= t '.cash_drawer' %>: <%= number_to_currency @current_user.get_drawer.reload.amount %></span></div>
-          
+<div class="pos-menu" align="center" width="100%">
+  <div id="eod-drawer-total">
+    <span class='eod-drawer-total'>
+      <%= t '.cash_drawer' %>: <%= number_to_currency @current_user.get_drawer.reload.amount %>
+    </span>
+  </div>
 
-</div>
 
 <br/>
 <br/>
 
-<div align="center">
-      <% I18n.t("number.currency.format.pieces", :locale => @region).split(',').each do |piece| %>
-        <div class="eod-piece">
-              <label class="eod-calculator-input-label"><%= raw leftpad(piece.to_s.gsub('0.','.'),3,'&nbsp;') %></label>
-       
-              <input id="eod_piece_<%= (piece.to_f * 100).to_i %>"
-                 type="text"
-                 name="eod_piece_<%= num2name(piece) %>"
-                 class="text-input eod-calculator-input"
-                 value=""
-                 amount="<%= piece %>" />
-        </div> 
-      <% end %>
-</div>
+  <% I18n.t("number.currency.format.pieces", :locale => @region).split(',').each do |piece| %>
+    <div class="eod-piece">
+      <label class="eod-calculator-input-label"><%= raw leftpad(piece.to_s.gsub('0.','.'),3,'&nbsp;') %></label>
+    
+      <input id="eod_piece_<%= (piece.to_f * 100).to_i %>"
+              type="text"
+              name="eod_piece_<%= num2name(piece) %>"
+              class="text-input eod-calculator-input"
+              value=""
+              amount="<%= piece %>" />
+    </div> 
+  <% end %>
 
 <br/>
 <br/>
 <br/>
 
 
-<div class="button-row" align="center">
-      <div id="eod-calculator-total"><%= t '.counted' %>: <span class='eod-calculator-total'><%= number_to_currency(0, :locale => @region) %></span></div>
-      <div id="eod-calculator-difference"><%= t '.difference' %>: <span class='eod-calculator-difference'><%= number_to_currency(0, :locale => @region) %></span></div>
+  <div id="eod-calculator-total">
+    <%= t '.counted' %>:
+    <span class='eod-calculator-total'>
+      <%= number_to_currency(0, :locale => @region) %>
+    </span>
+  </div>
+  
+  <div id="eod-calculator-difference">
+    <%= t '.difference' %>:
+    <span class='eod-calculator-difference'>
+      <%= number_to_currency(0, :locale => @region) %>
+    </span>
+  </div>
 </div>
 

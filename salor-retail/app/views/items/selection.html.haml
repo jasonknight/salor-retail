@@ -6,17 +6,21 @@
       %p= text_area_tag 'skus', @skus, :class => 'labels-snag-me keyboardable', :style => 'width:245px;height:245px;'
   %tr
     %td{ :style => "text-align: center" }
-      = I18n.t("views.eticket")
+      %label{ :for => 'label' }= I18n.t("views.eticket")
       %br
       %input{ :id => 'label', :type => "radio", :name => "type", :value => "label", :checked => true}
       %br
       = select_tag 'label_style', options_for_select(['default'])
     %td{ :style => "text-align: center" }
-      = I18n.t("views.sticky_ticket")
+      %label{ :for => 'sticker' }= I18n.t("views.sticky_ticket")
       %br
       %input{ :id => 'sticker', :type => "radio", :name => "type", :value => "sticker"}
       %br
-      = select_tag 'sticker_style', options_for_select(['default', 'type1'])
+      = select_tag 'sticker_style', options_for_select(['default', 'type1', 'type2'])
+  %tr
+    %td{ :colspan => 2, :style => "text-align: center" }
+      %label{ :for => 'copies' }= t('views.copies')
+      %input{ :id => 'copies', :name => 'copies', :type => 'number', :value => 1}
   %tr
     %td{ :colspan => 2, :style => "text-align: center" }
       .cool-button-left{ :onclick => "print(false);" }= t '.print'
@@ -32,9 +36,9 @@
   function print(download) {
     var skus = $('#skus').val().split("\n");
     if($("#label:checked").val() == 'label') {
-      sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val() + '&download=' + download);
+      sr.fn.salor_bin.printUrl(sr.data.session.cash_register.thermal_printer,'/items/labels', '&type=label&skus=' + skus + '&style=' + $('#label_style').val() + '&download=' + download + '&copies=' + $('#copies').val());
     }
     if($("#sticker:checked").val() == 'sticker') {
-      sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val() + '&download=' + download);
+      sr.fn.salor_bin.printUrl(sr.data.session.cash_register.sticker_printer,'/items/labels', '&type=sticker&skus=' + skus + '&style=' + $('#sticker_style').val() + '&download=' + download + '&copies=' + $('#copies').val());
     }
   }

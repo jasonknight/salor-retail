@@ -1,3 +1,392 @@
+salor-retail (4.0.2.95) wheezy; urgency=low
+
+  * duplicate sku fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 16 Jun 2014 22:39:36 +0200
+
+salor-retail (4.0.2.94) wheezy; urgency=low
+
+  * newline to cronjob, better error reporting
+  * printing copies fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 15 Jun 2014 11:28:48 +0200
+
+salor-retail (4.0.2.93) wheezy; urgency=low
+
+  * less complex svg app icon
+  * start salor-bin fullscreen
+  * thermal financial report button fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 06 Jun 2014 18:51:49 +0200
+
+salor-retail (4.0.2.92) wheezy; urgency=low
+
+  * style improvements
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 01 Jun 2014 12:50:23 +0200
+
+salor-retail (4.0.2.91) wheezy; urgency=low
+
+  * background image for customer screen
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 01 Jun 2014 12:32:24 +0200
+
+salor-retail (4.0.2.90) wheezy; urgency=low
+
+  * sales statistics fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 31 May 2014 15:15:00 +0200
+
+salor-retail (4.0.2.89) wheezy; urgency=low
+
+  * added sales statistics by category
+  * updated translations and correct header for financial report and sales report
+  * style improvements for end of day screen
+  * fixed documentation iframe link
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 28 May 2014 13:40:26 +0200
+
+salor-retail (4.0.2.88) wheezy; urgency=low
+
+  * added copies input for printing labels
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 20 May 2014 11:27:58 +0200
+
+salor-retail (4.0.2.87) wheezy; urgency=low
+
+  * prevent js endless loop on weighing of 0 weight item, console.log cleanup, pos quantity formatting
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 18 May 2014 12:30:56 +0200
+
+salor-retail (4.0.2.86) wheezy; urgency=low
+
+  * do not increment weighed items
+  * fix rounding problem
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 17 May 2014 16:33:23 +0200
+
+salor-retail (4.0.2.85) wheezy; urgency=low
+
+  [ Jason Knight ]
+  * various xlation french
+
+  [ Michael Franzl ]
+  * various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 19 Apr 2014 06:29:07 +0200
+
+salor-retail (4.0.2.84) wheezy; urgency=low
+
+  * more robust demo mode
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 06 Feb 2014 10:54:36 +0100
+
+salor-retail (4.0.2.83) wheezy; urgency=low
+
+  * inventory report nil fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 06 Feb 2014 10:19:19 +0100
+
+salor-retail (4.0.2.82) wheezy; urgency=low
+
+  * hidden fix, parent/child list on items#edit, last cash drop fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 28 Jan 2014 15:24:39 +0100
+
+salor-retail (4.0.2.81) wheezy; urgency=low
+
+  * fixed subscription total
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 Jan 2014 12:49:56 +0100
+
+salor-retail (4.0.2.80) wheezy; urgency=low
+
+  * added subscription reminder rake task
+  * no cronjob for subscription reminder
+  * added total per month for subscriptions
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 Jan 2014 12:38:13 +0100
+
+salor-retail (4.0.2.79) wheezy; urgency=low
+
+  * unpaid association fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 Jan 2014 11:34:13 +0100
+
+salor-retail (4.0.2.78) wheezy; urgency=low
+
+  * tax profile visible fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 26 Jan 2014 10:46:37 +0100
+
+salor-retail (4.0.2.77) wheezy; urgency=low
+
+  * seed fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 25 Jan 2014 11:01:32 +0100
+
+salor-retail (4.0.2.76) wheezy; urgency=low
+
+  * fixed params logging
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 17 Jan 2014 10:37:41 +0100
+
+salor-retail (4.0.2.75) wheezy; urgency=low
+
+  * small improvements
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 16 Jan 2014 15:39:25 +0100
+
+salor-retail (4.0.2.74) wheezy; urgency=low
+
+  * fixed regular actions
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 16 Jan 2014 11:26:18 +0100
+
+salor-retail (4.0.2.73) wheezy; urgency=low
+
+  * deployment
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 15 Jan 2014 14:53:28 +0100
+
+salor-retail (4.0.2.72) wheezy; urgency=low
+
+  * fixed price rounding for 4.9
+  * updated readme and deb deployment
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 15 Jan 2014 14:32:16 +0100
+
+salor-retail (4.0.2.71) wheezy; urgency=low
+
+  * fixed global name typo
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 14 Jan 2014 12:41:19 +0100
+
+salor-retail (4.0.2.70) wheezy; urgency=low
+
+  * test
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 14 Jan 2014 12:19:17 +0100
+
+salor-retail (4.0.2.69) unstable; urgency=low
+
+  * histories view fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 14 Jan 2014 12:10:13 +0100
+
+salor-retail (4.0.2.68) unstable; urgency=low
+
+  * build
+  * test
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 13 Jan 2014 17:50:28 +0100
+
+salor-retail (4.0.2.67) unstable; urgency=low
+
+  * gemfile group
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 13 Jan 2014 17:47:39 +0100
+
+salor-retail (4.0.2.66) unstable; urgency=low
+
+  * typo
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 13 Jan 2014 14:46:00 +0100
+
+salor-retail (4.0.2.65) unstable; urgency=low
+
+  * deployment
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 13 Jan 2014 14:27:56 +0100
+
+salor-retail (4.0.2.64) unstable; urgency=low
+
+  * removed apache dependency, added nginx configuration
+  * absolute execution paths
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 12 Jan 2014 20:39:01 +0100
+
+salor-retail (4.0.2.63) unstable; urgency=low
+
+  * rake fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 11 Jan 2014 08:43:58 +0100
+
+salor-retail (4.0.2.62) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Rake script to import shippers
+
+  [ Michael Franzl ]
+  * reduced globals for less console annoyance, changed child_id default to nil
+  * added rake tasks
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 11 Jan 2014 07:40:17 +0100
+
+salor-retail (4.0.2.61) unstable; urgency=low
+
+  * wholesaler import
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 09 Jan 2014 19:38:01 +0100
+
+salor-retail (4.0.2.60) unstable; urgency=low
+
+  * fixed and improved actions
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Jan 2014 20:27:22 +0100
+
+salor-retail (4.0.2.59) unstable; urgency=low
+
+  * improved selection for recent orders
+  * render messages during orders#complete
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Jan 2014 14:27:53 +0100
+
+salor-retail (4.0.2.58) unstable; urgency=low
+
+  * correct hidden_by for orders, display shipments purchase price in list
+  * fixed move shipmentItems to Items, added created_by for items for more transparency
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Jan 2014 14:05:20 +0100
+
+salor-retail (4.0.2.57) unstable; urgency=low
+
+  * various fixes and improvements
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Jan 2014 13:35:40 +0100
+
+salor-retail (4.0.2.56) unstable; urgency=low
+
+  * only show actually sold gift cards
+  * changed eod report back to mysql DISTINCT
+  * more indices
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 19:45:42 +0100
+
+salor-retail (4.0.2.55) unstable; urgency=low
+
+  * fixing threshold action
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 14:04:39 +0100
+
+salor-retail (4.0.2.54) unstable; urgency=low
+
+  * search function fix and sort recent orders by number
+  * fixed cash drawer open at cash refund
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 12:15:18 +0100
+
+salor-retail (4.0.2.53) unstable; urgency=low
+
+  * show recently updated orders instead of recently created
+  * fixed setter for purchase_price
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 11:31:29 +0100
+
+salor-retail (4.0.2.52) unstable; urgency=low
+
+  * fixed customer screen logo
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 10:49:18 +0100
+
+salor-retail (4.0.2.51) unstable; urgency=low
+
+  * replaced save with save! for orders
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 08:50:19 +0100
+
+salor-retail (4.0.2.50) unstable; urgency=low
+
+  * fixed coin calculator
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 07 Jan 2014 07:56:51 +0100
+
+salor-retail (4.0.2.49) unstable; urgency=low
+
+  * tests
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 06 Jan 2014 20:24:09 +0100
+
+salor-retail (4.0.2.48) unstable; urgency=low
+
+  * small fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 06 Jan 2014 20:15:47 +0100
+
+salor-retail (4.0.2.47) unstable; urgency=low
+
+  * small fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 06 Jan 2014 14:30:50 +0100
+
+salor-retail (4.0.2.46) unstable; urgency=low
+
+  * localization
+  * various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 06 Jan 2014 07:16:03 +0100
+
+salor-retail (4.0.2.45) unstable; urgency=low
+
+  * keyword search enabled for recursion
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 05 Jan 2014 13:18:23 +0100
+
+salor-retail (4.0.2.44) unstable; urgency=low
+
+  * csv upload improvement
+  * added gift card overview
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 05 Jan 2014 12:19:36 +0100
+
+salor-retail (4.0.2.43) unstable; urgency=low
+
+  [ Jason Knight ]
+  * Fixes Issue #5
+  * Fix Issue #8, fix Issue #9
+  * Took out salor icon filter as it's called alot
+
+  [ Michael Franzl ]
+  * shipments, focus stuff, small fixes
+
+  [ Jason Knight ]
+  * xxx
+
+  [ Michael Franzl ]
+  * blank instead of empty
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 04 Jan 2014 21:10:15 +0100
+
+salor-retail (4.0.2.42) unstable; urgency=low
+
+  * shipper update fix
+  * disabled actions on import
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 04 Jan 2014 15:18:53 +0100
+
+salor-retail (4.0.2.41) unstable; urgency=low
+
+  [ EeeCeeGee ]
+  * Dutch localization files
+
+  [ Eric Gaston ]
+  * Delete .DS_Store
+  * Delete .DS_Store
+  * Delete .DS_Store
+
+  [ Michael Franzl ]
+  * updated translations
+  * various fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 04 Jan 2014 14:44:40 +0100
+
+salor-retail (4.0.2.40) unstable; urgency=low
+
+  * fixed js error on login form
+  * js fix  Please enter the commit message for your changes. Lines starting
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 16 Dec 2013 20:45:02 +0100
+
 salor-retail (4.0.2.39) unstable; urgency=low
 
   [ Michael Franzl ]

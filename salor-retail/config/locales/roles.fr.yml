@@ -2,7 +2,7 @@
 fr:
   any_actions: Toutes les actions
   any_buttons: Tous les boutons
-  any_cash_registers: Any Cash Registers
+  any_cash_registers: Toutes les caisses
   any_categories: Toutes les catégories
   any_customers: Tous les clients
   any_discounts: Toutes les remises
@@ -13,21 +13,21 @@ fr:
   any_orders: Toutes les commandes
   any_reports: Tous les rapports
   any_shipment_items: Tous les articles de livraison
-  any_shipment_types: Any Shipment Types
+  any_shipment_types: Tous les types de livraison
   any_shipments: Toutes les livraisons
   any_shippers: Tous les livreurs
   any_stock_locations: Tous les emplacements de stock
   any_tax_profiles: Tous les types de taxe
-  any_tender_methods: Any Payment Methods
+  any_tender_methods: Tous les moeys de paiement
   any_transaction_tags: Toutes les étiquettes de transaction
   any_vendors: Tous les vendeurs
-  assistant: Assistant Manager
+  assistant: Sous-gérant
   cashier: Caissière
   change_prices: Modifier les prix
   clear_orders: Effacer le contenu des commandes
   create_actions: Créer des actions
   create_buttons: Créer des boutons
-  create_cash_registers: Create Cash Registers
+  create_cash_registers: Créer des caisses
   create_categories: Créer des catégories
   create_customers: Créer des clients
   create_discounts: Créer des remises
@@ -38,17 +38,17 @@ fr:
   create_orders: Créer des les commandes
   create_reports: Créer des rapports
   create_shipment_items: Créer des articles de livraison
-  create_shipment_types: Create Shipment Types
+  create_shipment_types: Créer des types de livraison
   create_shipments: Créer des livraisons
   create_shippers: Créer des livreurs
   create_stock_locations: Créer des emplacements de stock
   create_tax_profiles: Créer des types de taxe
-  create_tender_methods: Create Payment Methods
+  create_tender_methods: Créer des moyens de paiement
   create_transaction_tags: Créer des étiquettes de transaction
   create_vendors: Créer des vendeurs
   destroy_actions: Effacer les actions
   destroy_buttons: Effacer des boutons
-  destroy_cash_registers: Destroy Cash Registers
+  destroy_cash_registers: Effacer des caisses
   destroy_categories: Effacer des catégories
   destroy_customers: Effacer des clients
   destroy_discounts: Effacer des remises
@@ -60,17 +60,17 @@ fr:
   destroy_orders: Effacer des commandes
   destroy_reports: Effacer des rapports
   destroy_shipment_items: Effacer des articles de livraison
-  destroy_shipment_types: Destroy Shipment Types
+  destroy_shipment_types: Effacer des types de livraison
   destroy_shipments: Effacer des livraisons
   destroy_shippers: Effacer des livreurs
   destroy_stock_locations: Effacer des emplacements de stock
   destroy_tax_profiles: Effacer des types de taxe
-  destroy_tender_methods: Destroy Payment Methods
+  destroy_tender_methods: Effacer des moyens de paiement
   destroy_transaction_tags: Effacer des étiquettes de transaction
   destroy_vendors: Effacer des vendeurs
   edit_actions: Editer les actions
   edit_buttons: Editer les boutons
-  edit_cash_registers: Edit Cash Registers
+  edit_cash_registers: Editer les caisses
   edit_categories: Editer les catégories
   edit_customers: Editer les clients
   edit_discounts: Editer les remises
@@ -82,19 +82,19 @@ fr:
   edit_others_orders: Editer les commandes des autres
   edit_reports: Editer les rapports
   edit_shipment_items: Editer les articles de livraison
-  edit_shipment_types: Edit Shipment Types
+  edit_shipment_types: Edites les types de livraison
   edit_shipments: Editer les livraisons
   edit_shippers: Editer les livreurs
   edit_stock_locations: Editer les emplacements de stock
   edit_tax_profiles: Editer les types de taxe
-  edit_tender_methods: Edit Payment Methods
+  edit_tender_methods: Edites les moyens de paiement
   edit_transaction_tags: Editer les étiquettes de transaction
   edit_vendors: Editer les vendeurs
   employee: Employé
   head_cashier: Chef de caissières
   index_actions: Indexer les actions
   index_buttons: Indexer les boutons
-  index_cash_registers: Index Cash Registers
+  index_cash_registers: Indexer les caisses
   index_categories: Indexer les catégories
   index_customers: Indexer les clients
   index_discounts: Indexer les remises
@@ -105,20 +105,20 @@ fr:
   index_orders: Indexer les commandes
   index_reports: Indexer les rapports
   index_shipment_items: Indexer les articles de livraison
-  index_shipment_types: Index Shipment Types
+  index_shipment_types: Indexer les types de livraison
   index_shipments: Indexer les livraisons
   index_shippers: Indexer les livreurs
   index_stock_locations: Indexer les emplacements de stock
   index_tax_profiles: Indexer les types de taxe
-  index_tender_methods: Index Payment Methods
+  index_tender_methods: Indexer les moyens de paiement
   index_transaction_tags: Indexer les étiquettes de transaction
   index_vendors: Indexer les vendeurs
   manager: Gérant
-  remove_order_items: Remove Order Items
+  remove_order_items: Enlever articles commande
   see_header: Voir en-tête
   show_actions: Montrer les actions
   show_buttons: Montrer les boutons
-  show_cash_registers: Show Cash Registers
+  show_cash_registers: Montrer les caisses
   show_categories: Montrer les catégories
   show_customers: Montrer les clients
   show_discounts: Montrer les remises
@@ -129,18 +129,18 @@ fr:
   show_orders: Montrer les commandes
   show_reports: Montrer les rapports
   show_shipment_items: Montrer les articles de livraison
-  show_shipment_types: Show Shipment Types
+  show_shipment_types: Montrer les types de livraison
   show_shipments: Montrer les livraisons
   show_shippers: Montrer les livreurs
   show_stock_locations: Montrer les emplacements de stock
   show_tax_profiles: Montrer les types de taxe
-  show_tender_methods: Show Payment Methods
+  show_tender_methods: Montrer les moyens de paiement
   show_transaction_tags: Montrer les étiquettes de transaction
   show_vendors: Montrer les vendeurs
   stockboy: Magasinier
   update_actions: Mettre à jour les actions
   update_buttons: Mettre à jour les boutons
-  update_cash_registers: Update Cash Registers
+  update_cash_registers: Mettre à jour les caisses
   update_categories: Mettre à jour les catégories
   update_customers: Mettre à jour les clients
   update_discounts: Mettre à jour les remises
@@ -150,12 +150,13 @@ fr:
   update_locations: Mettre à jour les emplacements
   update_orders: Mettre à jour les commandes
   update_reports: Mettre à jour les rapports
-  update_shipment_items: Update les articles de livraison
-  update_shipment_types: Update Shipment Types
+  update_shipment_items: Mettre à jour les articles de livraison
+  update_shipment_types: Mettre à jour les types de livraison
   update_shipments: Mettre à jour les livraisons
   update_shippers: Mettre à jour les livreurs
   update_stock_locations: Mettre à jour les emplacements de stock
   update_tax_profiles: Mettre à jour les types de taxe
-  update_tender_methods: Update Payment Methods
+  update_tender_methods: Mettre à jour les moyens de paiement
   update_transaction_tags: Mettre à jour les étiquettes de transaction
   update_vendors: Mettre à jour les vendeurs
+

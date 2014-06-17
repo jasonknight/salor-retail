@@ -48,7 +48,7 @@ class Company < ActiveRecord::Base
     user = self.users.visible.where( :encrypted_password => encrypted_password ).first
     return user
   end
-  
+
   # this for debugging only, when currencies have accidentally become mixed
   def change_currency(c)
     self.vendors.update_all :currency => c

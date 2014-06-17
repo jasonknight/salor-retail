@@ -8,7 +8,15 @@ class ActionsController < ApplicationController
   before_filter :check_role
 
   def index
-    @actions = @current_vendor.actions.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    if params[:keywords].blank?
+      @actions = @current_vendor.actions.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    else
+      items = @current_company.items.visible.by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+      @actions = []
+      items.each do |i|
+        @actions += i.actions.visible
+      end
+    end
   end
 
   def show
@@ -29,6 +37,7 @@ class ActionsController < ApplicationController
     @action = Action.new
     @action.vendor = @current_vendor
     @action.company = @current_company
+    @action.created_by = @current_user.id
     @action.update_attributes(params[:act])
     if @action.save
       redirect_to actions_path
@@ -39,6 +48,7 @@ class ActionsController < ApplicationController
 
   def update
     @action = @current_vendor.actions.visible.find_by_id(params[:id])
+    @action.created_by = @current_user.id if @action.created_by.nil?
     if @action.update_attributes(params[:act])
       redirect_to actions_path
     else

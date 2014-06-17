@@ -39,7 +39,7 @@ sr.fn.salor_bin.updateCustomerDisplay(<%= @order.id %>, {}, false);
       current_order_item.behavior != "coupon"
 %>
   sr.fn.salor_bin.playSound('medium_warning');
-  sr.fn.messages.displayMessage("alert", i18n.system.errors.item_price_is_zero);
+  //sr.fn.messages.displayMessage("alert", i18n.system.errors.item_price_is_zero);
 <% elsif @order_items.any? %>
   sr.fn.salor_bin.playSound('drop2');
 <% end %>

@@ -72,11 +72,11 @@ class OrdersController < ApplicationController
       @current_order.user = @current_user
       @current_order.cash_register = @current_register
       @current_order.drawer = @current_user.get_drawer
-      @current_order.save
+      @current_order.save!
       
       # remember this for the current user
       @current_user.current_order_id = @current_order.id
-      @current_user.save
+      @current_user.save!
     end
  
     @button_categories = @current_vendor.categories.visible.where(:button_category => true).order(:position)
@@ -88,7 +88,7 @@ class OrdersController < ApplicationController
     
     unless requested_order.completed_at.nil?
       # the requested order is already completed. We cannot edit that and rediect to #new.
-      $MESSAGES[:alerts] << "Order NR #{ requested_order.nr } is already completed, cannot edit."
+      $MESSAGES[:prompts] << I18n.t("views.notice.edit_completed_order")
       redirect_to request.referer
       return
     end
@@ -97,28 +97,29 @@ class OrdersController < ApplicationController
     
     if user_which_has_requested_order and user_which_has_requested_order != @current_user
       # another user is editing this order. We cannot edit that and redirect to #new.
-      $MESSAGES[:alerts] << "Order NR #{ requested_order.nr } is currently edited by user #{ user_which_has_requested_order.username }. Cannot edit."
+      $MESSAGES[:prompts] << I18n.t("views.notice.edit_order_by_other_user", :username => user_which_has_requested_order.username)
       redirect_to request.referer
       return
     end
     
     # the order is available for editing
     @current_user.current_order_id = requested_order.id
-    @current_user.save
+    @current_user.save!
     redirect_to new_order_path
   end
 
 
   def add_item_ajax
     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    @order_item = @order.add_order_item(params)
+    
+    @order_item, redraw_all_order_items = @order.add_order_item(params)
     @order_items = []
     
     if @order_item
-      @order_items << @order_item
-      
-      if @order_item.price.zero?
-        $MESSAGES[:alerts] << I18n.t('system.errors.item_price_is_zero')
+      if redraw_all_order_items == true
+        @order_items = @order.order_items.visible
+      else
+        @order_items << @order_item
       end
       
       if @order_item.behavior == 'coupon'
@@ -134,9 +135,9 @@ class OrdersController < ApplicationController
   def destroy
     @order = @current_vendor.orders.find_by_id(params[:id])
     if @order.completed_at.nil?
-      @order.hide(@current_user.id)
+      @order.hide(@current_user)
     else
-      $MESSAGES[:alerts] << "Order NR #{ @order.nr } is already completed, cannot delete."
+      $MESSAGES[:prompts] << I18n.t("views.notice.delete_completed_order")
     end
     redirect_to request.referer
   end
@@ -200,12 +201,12 @@ class OrdersController < ApplicationController
       raise "@order is nil in OrdersController. This should not have happened."
     end
 
-    History.record("Initialized order for complete", @order, 5)
+    #History.record("Initialized order for complete", @order)
 
     if params[:change_user_id] and params[:change_user_id] != @current_user.id then
       tmp_user = @current_vendor.users.find_by_id(params[:change_user_id])
       if tmp_user
-        History.record("swapping user #{@current_user.id} with #{tmp_user.id}",@order,3)
+        History.record("swapping user #{@current_user.id} with #{tmp_user.id}",@order)
 
         @order.user = tmp_user
         @order.save!
@@ -221,7 +222,7 @@ class OrdersController < ApplicationController
     @order.complete(params)
 
     if @order.is_proforma == true then
-      History.record("Order is proforma, completing",@order,5)
+      History.record("Order is proforma, completing", @order)
       render :js => " window.location = '/orders/#{@order.id}/print'; " and return
     end
     
@@ -243,7 +244,7 @@ class OrdersController < ApplicationController
     
     # save new order on user
     @current_user.current_order_id = @order.id
-    @current_user.save
+    @current_user.save!
   end
   
   def new_order
@@ -308,34 +309,34 @@ class OrdersController < ApplicationController
   end
 
   
-  def clear
-    if not @current_user.can(:clear_orders) then
-      History.record(:failed_to_clear, @order, 1)
-      render 'update_pos_display' and return
-    end
-    
-    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-    
-    if @order then
-      History.record("Destroying #{@order.order_items.visible.count} OrderItems", @order, 1)
-      
-      @order.order_items.visible.each do |oi|
-        oi.hidden = 1
-        oi.hidden_by = @current_user.id
-        oi.save
-      end
-      
-      @order.customer_id = nil
-      @order.tag = nil
-      @order.subtotal = 0
-      @order.total = 0
-      @order.tax = 0
-      @order.save
-    else
-      History.record("cannot clear order because already paid", @order, 1)
-    end
-    render 'update_pos_display' and return
-  end
+#   def clear
+#     if not @current_user.can(:clear_orders) then
+#       #History.record(:failed_to_clear, @order, 1)
+#       render 'update_pos_display' and return
+#     end
+#     
+#     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+#     
+#     if @order then
+#       History.record("Destroying #{@order.order_items.visible.count} OrderItems", @order, 1)
+#       
+#       @order.order_items.visible.each do |oi|
+#         oi.hidden = 1
+#         oi.hidden_by = @current_user.id
+#         oi.save
+#       end
+#       
+#       @order.customer_id = nil
+#       @order.tag = nil
+#       @order.subtotal = 0
+#       @order.total = 0
+#       @order.tax = 0
+#       @order.save
+#     else
+#       History.record("cannot clear order because already paid", @order, 1)
+#     end
+#     render 'update_pos_display' and return
+#   end
   
   def create_all_recurring
     recurrable_orders = @current_vendor.recurrable_subscription_orders
@@ -354,7 +355,7 @@ class OrdersController < ApplicationController
     h.vendor = @current_vendor
     h.company = @current_company
     h.url = "/orders/log"
-    h.params = params
+    h.params = params.to_json
     h.model_id = params[:order_id]
     h.model_type = 'Order'
     h.action_taken = params[:log_action]

@@ -47,7 +47,7 @@ en:
       created_at: Created
       csv_imports: CSV Imports
       csv_imports_url: CSV Imports URL
-      currency: Währung
+      currency: Currency
       customer:
         tax_number: Tax number
       customer_name: Customer
@@ -166,6 +166,7 @@ en:
         quantity: quantity
         sku: SKU
         stock_location_id: Stock location
+      shipper_name: Shipper
       shipper_sku: Shipper SKU
       sku: SKU
       start_amount: start amount
@@ -493,6 +494,7 @@ en:
     end_day: end day
     enter_inventory_items: Enter
     general_configuration: general configuration
+    gift_cards: Gift Cards
     home: home
     inventory_report: Inventory report
     invoice_blurbs: Invoice Blurbs
@@ -508,7 +510,7 @@ en:
     logos: Logos
     loyalty_cards: loyalty cards
     merge_into_current_order: Merge into current order
-    move_shipment_item: move shipment item
+    move_shipment_item: Move all shipment items into stock
     new_action: New Action
     new_broken_item: New Broken Item
     new_button: New Button
@@ -729,6 +731,7 @@ en:
     cashier: cashier
     manager: manager
     stockboy: stockboy
+  sales_statistics: Sale Statistics
   shipments:
     index:
       report: Report
@@ -754,6 +757,7 @@ en:
       coupon_not_enough_items: You have not purchased enough items for this to apply
       csv_item_exists: Item %{sku} exists!
       csv_item_failed: ! '%{id} %{i} failed.'
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.
@@ -796,6 +800,7 @@ en:
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
+    finish_day: End of day
     inventory_updated: inventory updated
     logged_in_as: logged in as
     login: Clockin
@@ -851,12 +856,21 @@ en:
       transaction_tag: transaction tag
       transaction_total: transaction total
       transactions: transactions
+    sales_statistics:
+      category_name: Category name
+      from: From
+      item_name: Item name
+      quantity: Quantity
+      sum: Sum
+      title: Sales Statistics
+      to: To
   views:
     advanced_field: advanced field
     cash_register_heading: ! '%{name} for %{store}'
     cash_registers: cash registers
     category_heading: category %{name} for %{store}
     change: Change
+    copies: Copies
     create_new_item: Create New Article
     customers: customers
     download_may_last_long: This download may last long. Continue?
@@ -907,6 +921,14 @@ en:
     notice:
       cache_was_cleared: Cache files deleted.
       csv_edit_starting: csv edit starting
+      delete_completed_order: This order is already completed. Cannot delete.
+      edit_completed_order: This order is already completed. Cannot edit it.
+      edit_order_by_other_user: This order is currently edited by user %{username}.
+        Cannot open it. User %{username} must click on the 'New' button, then try
+        again.
+      item_not_existing: This item did not exist. It has been created and the price
+        set to zero. You can change the price and it will be saved permanently in
+        the database.
       model_create: ! '%{model} was created successfully'
       model_edit: ! '%{model} was edited successfully'
       move_real_quantities_success: Item quantities were successfully updated
@@ -975,6 +997,7 @@ en:
   when_list:
     add_to_order: on add to order
     always: always
+    change_quantity: on change quantity
     on_export: on export
     on_import: on import
     on_save: on save

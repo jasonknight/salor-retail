@@ -65,7 +65,9 @@ module SalorBase
         f.puts "##[#{fromcolor}#{from}] #{txtcolor}#{txt}#{normalcolor}\n"
       end
     end
-    ActiveRecord::Base.logger.info "#####[#{ fromcolor}#{from}] #{txtcolor}#{txt}#{ normalcolor }"
+    output = "#####[#{ fromcolor}#{from}] #{txtcolor}#{txt}#{ normalcolor }"
+    ActiveRecord::Base.logger.info output
+    puts output
   end
    
   def self.get_url(url, headers={}, user=nil, pass=nil)
