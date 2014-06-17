@@ -22,6 +22,7 @@ salor-retail/vendor/bundle
 salor-retail/vendor/plugins
 salor-retail/.bundle
 salor-retail/tmp
+salor-retail/app/assets/images/customer_screen.jpg
 *.log
 *.bill
 .sass-cache

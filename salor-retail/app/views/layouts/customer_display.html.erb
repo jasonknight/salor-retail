@@ -4,7 +4,9 @@
 <%= stylesheet_link_tag 'workstation' %>
 <%= stylesheet_link_tag 'customer_screen' %>
 </head>
-<body>
+
+<% bgimage = " style=\"background-image: url('/assets/customer_screen.jpg')\" " %>
+<body <%= raw File.exists?(File.join(Rails.root, "app", "assets", "images", "customer_screen.jpg")) ? bgimage : "" %>>
 <%= yield %>
 </body>
 </html>
