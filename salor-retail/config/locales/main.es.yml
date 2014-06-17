@@ -810,6 +810,8 @@ es:
       shipment_item_nil: El artículo volvió del envío. ¿Es una artículo vacío?
       sku_must_be_unique: ! '%{sku} debe ser único.'
       value_not_set: NoDeterminado
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: Inventario actualizado
     logged_in_as: Conectado como
     login: Nombre de usuario
@@ -821,7 +823,6 @@ es:
       fixed: $
       percent: ! '%'
     sign_up: Conectarse
-    finish_day: End of day
   vendors:
     clear_cache_button: borrar cache
     clear_cache_header: cache

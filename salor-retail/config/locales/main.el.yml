@@ -814,6 +814,8 @@ el:
         άκυρο;
       sku_must_be_unique: ! '%{sku} πρέπει να είναι μοναδικό'
       value_not_set: ΜηΚαθορισμένο
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: η απογραφή ενημερώθηκε
     logged_in_as: συνδεδεμένοι ως
     login: συνδεθείτε
@@ -825,7 +827,6 @@ el:
       fixed: $
       percent: ! '%'
     sign_up: εγγραφείτε
-    finish_day: End of day
   vendors:
     clear_cache_button: καθαρίστε την κρυφή μνήμη
     clear_cache_header: κρυφή μνήμη

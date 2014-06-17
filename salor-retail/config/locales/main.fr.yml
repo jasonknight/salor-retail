@@ -811,6 +811,8 @@ fr:
       shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
       sku_must_be_unique: ! '%{sku} doit être unique'
       value_not_set: PasDéfini
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: Inventaie mis à jour
     logged_in_as: Connecté en tant que
     login: Connect
@@ -822,7 +824,6 @@ fr:
       fixed: $
       percent: ! '%'
     sign_up: S'inscrire
-    finish_day: End of day
   vendors:
     clear_cache_button: Effacer les caches
     clear_cache_header: Cache

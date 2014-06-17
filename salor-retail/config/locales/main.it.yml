@@ -801,6 +801,8 @@ it:
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+    finish_day: End of day
     inventory_updated: inventario aggiornato
     logged_in_as: autenticato come
     login: registrati
@@ -812,7 +814,6 @@ it:
       fixed: $
       percent: ! '%'
     sign_up: accedi
-    finish_day: End of day
   vendors:
     clear_cache_button: cancella cache
     clear_cache_header: cache

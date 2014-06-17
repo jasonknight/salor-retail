@@ -757,6 +757,7 @@ en:
       coupon_not_enough_items: You have not purchased enough items for this to apply
       csv_item_exists: Item %{sku} exists!
       csv_item_failed: ! '%{id} %{i} failed.'
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.

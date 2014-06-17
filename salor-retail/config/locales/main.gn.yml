@@ -806,6 +806,7 @@ gn:
       shipment_item_nil: Artikel aus from_shipment_item war nil?
       sku_must_be_unique: ! '%{sku} muss einzigartig sein.'
       value_not_set: Nicht gesetzt
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
     finish_day: Abschluss
     inventory_updated: Inventar wurde aktualisiert
     logged_in_as: Eingeloggt als
