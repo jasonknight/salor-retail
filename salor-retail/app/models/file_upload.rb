@@ -54,7 +54,7 @@ class FileUpload
       next if @i == 1 # skip headers
       columns = row.split(delim)
 
-      shipper_sku = columns[0].strip
+      shipper_sku = columns[0].strip.gsub(/[^0-9a-zA-Z]/,'')
 
       name = columns[1].strip
       longname = columns[2].strip.gsub(/\s+/, " ")
@@ -125,7 +125,7 @@ class FileUpload
         :currency => @vendor.currency,
         :created_by => -102
       }
-      sku_carton = columns[8].strip
+      sku_carton = columns[8].strip.gsub(/[^0-9a-zA-Z]/,'')
       carton_item = @vendor.items.visible.where( :name => longname + " Karton" ).first if carton_item.blank?
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first if carton_item.blank?
       carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if carton_item.blank? and not sku_carton.blank? # second chance to find by sku in case name has changed
@@ -178,7 +178,7 @@ class FileUpload
         :currency => @vendor.currency,
         :created_by => -102
       }
-      sku_pack = columns[9].strip
+      sku_pack = columns[9].strip.gsub(/[^0-9a-zA-Z]/,'')
       pack_item = @vendor.items.visible.where( :name => longname + " Packung" ).first
       pack_item = @vendor.items.visible.where( :name => name + " Packung").first if pack_item.blank?
       pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if pack_item.blank? and not sku_pack.blank? # second chance to find by sku in case name has changed
@@ -241,7 +241,7 @@ class FileUpload
         :currency => @vendor.currency,
         :created_by => -102
       }
-      sku_piece = columns[19].strip if columns[19]
+      sku_piece = columns[19].strip.gsub(/[^0-9a-zA-Z]/,'') if columns[19]
       piece_item = @vendor.items.visible.where( :name => longname + " Stk." ).first
       piece_item = @vendor.items.visible.where( :name => name + " Stk.").first if piece_item.blank?
       piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if piece_item.blank? and not sku_piece.blank?
@@ -309,7 +309,7 @@ class FileUpload
       next if row.strip.blank?
       columns = row.chomp.split(delim)
 
-      shipper_sku = columns[0].strip
+      shipper_sku = columns[0].strip.gsub(/[^0-9a-zA-Z]/,'')
 
       name = columns[1].strip
       longname = columns[2].strip.gsub(/\s+/, " ")
@@ -385,7 +385,7 @@ class FileUpload
         :currency => @vendor.currency,
         :created_by => -102
       }
-      sku_carton = columns[8].strip # EAN_GB
+      sku_carton = columns[8].strip.gsub(/[^0-9a-zA-Z]/,'') # EAN_GB
       carton_item = @vendor.items.visible.where( :name => name + " Karton" ).first
       carton_item = @vendor.items.visible.where( :sku => sku_carton ).first if carton_item.blank? and not sku_carton.blank? and not sku_carton.to_i.zero? # second chance to find something in case name has changed
       if carton_item
@@ -437,7 +437,7 @@ class FileUpload
         :currency => @vendor.currency,
         :created_by => -102
       }
-      sku_pack = columns[9].strip # EAN_PA
+      sku_pack = columns[9].strip.gsub(/[^0-9a-zA-Z]/,'') # EAN_PA
       pack_item = @vendor.items.visible.where( :name => name + " Packung" ).first
       pack_item = @vendor.items.visible.where( :sku => sku_pack ).first if pack_item.blank? and not sku_pack.blank? and not sku_pack.to_i.zero? # second chance to find something in case name has changed
       if pack_item
@@ -502,7 +502,7 @@ class FileUpload
         :currency => @vendor.currency,
         :created_by => -102
       }
-      sku_piece = columns[19].strip if columns[19] # EAN_STK
+      sku_piece = columns[19].strip.gsub(/[^0-9a-zA-Z]/,'') if columns[19] # EAN_STK
       piece_item = @vendor.items.visible.where( :name => name + " Stk." ).first
       piece_item = @vendor.items.visible.where( :sku => sku_piece ).first if piece_item.blank? and not sku_piece.blank? and not sku_piece.to_i.zero? # second chance to find something in case name has changed
       if piece_item

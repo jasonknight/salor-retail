@@ -63,6 +63,7 @@ class Item < ActiveRecord::Base
       errors.add(:sku, I18n.t('system.errors.dont_use_weird_skus'))
     end
   end
+  
   def sku_unique_in_visible
     if self.new_record?
       error = self.vendor.items.visible.where(:sku => self.sku).count > 0
