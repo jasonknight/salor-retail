@@ -1,3 +1,14 @@
+salor-retail (4.0.2.98) wheezy; urgency=low
+
+  [ Jason Martin ]
+  * build
+
+  [ Michael Franzl ]
+  * optional customer screen background image
+  * close drawer transaction popup immediately to prevent double transactions when double click and slow backend request
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 19 Jun 2014 08:12:47 +0200
+
 salor-retail (4.0.2.97) wheezy; urgency=low
 
   * build
