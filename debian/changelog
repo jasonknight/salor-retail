@@ -1,3 +1,9 @@
+salor-retail (4.0.2.99) wheezy; urgency=low
+
+  * sku cleanup on import, fixed rake task parameter
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 19 Jun 2014 08:57:27 +0200
+
 salor-retail (4.0.2.98) wheezy; urgency=low
 
   [ Jason Martin ]
