@@ -35,13 +35,13 @@ sr.fn.drawer.saveTransaction = function() {
         $('.dt-tag-button').removeClass("highlight");
         $('input#dt_tag').val('None');
         $('div.dt-tag-target').html(' Tag ');
-        sr.fn.drawer.hideTransactionPopup();
       },
       error: function (data,status,errorThrown) {
         sr.data.messages.prompts.push("Error during request: vendors new_drawer_transaction");
         sr.fn.messages.displayMessages();
       }
   });
+  sr.fn.drawer.hideTransactionPopup();
   sr.fn.focus.set($('#main_sku_field'));
 }
 
