@@ -2,7 +2,7 @@ salor-retail (4.0.2.100) wheezy; urgency=low
 
   * different permissions for log directory
 
- -- Michael Franzl <office@michaelfranzl.com>  Tue, 01 Jul 2014 12:06:16 +0200
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 01 Jul 2014 12:14:06 +0200
 
 salor-retail (4.0.2.99) wheezy; urgency=low
 
