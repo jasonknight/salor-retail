@@ -227,7 +227,7 @@ class OrderItem < ActiveRecord::Base
     
     # update item only when price is 0
     i = self.item
-    if i.weigh_compulsory != true and i.must_change_price != true and i.price.zero?
+    if i.weigh_compulsory != true and i.must_change_price != true and i.default_buyback != true and i.price.zero?
       i.price = p
       i.save!
     end
@@ -613,6 +613,15 @@ class OrderItem < ActiveRecord::Base
       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
+    if self.is_buyback == nil
+      should = self.total_cents.abs
+      actual = self.total_cents
+      pass = should == actual
+      msg = "non-buyback items must have a positive price"
+      type = :orderItemNonBuybackPricePositive
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+    end
+    
     # ---
     if self.vendor.net_prices
       price_reductions = coupon_amount_cents.to_i + discount_amount_cents.to_i + rebate_amount_cents.to_i
@@ -638,10 +647,10 @@ class OrderItem < ActiveRecord::Base
       type = :orderItemTaxCorrect
       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
-#       pass = (should.fractional - actual.fractional).abs != 1
-#       msg = "1 cent rounding error"
-#       type = :orderItemTaxRounding
-#       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+      pass = (should.fractional - actual.fractional).abs != 1
+      msg = "1 cent rounding error"
+      type = :orderItemTaxRounding
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
     # ---

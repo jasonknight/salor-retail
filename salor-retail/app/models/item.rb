@@ -59,11 +59,11 @@ class Item < ActiveRecord::Base
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
   
   def not_negative
-    if self.base_price < 0
+    if self.base_price.fractional < 0
       errors.add(:base_price, I18n.t('system.errors.dont_use_negative_prices'))
     end
     
-    if self.buyback_price < 0
+    if self.buyback_price.fractional < 0
       errors.add(:buyback_price, I18n.t('system.errors.dont_use_negative_prices'))
     end
   end

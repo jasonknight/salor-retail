@@ -8,6 +8,8 @@
     = number_to_percentage item.price
   - elsif item.behavior == 'coupon' and item.coupon_type == 3
     /nothing
+  - elsif not item.buy_price.zero?
+    == #{ humanized_money_with_symbol item.price } (#{ humanized_money_with_symbol item.buy_price })
   - else
     = humanized_money_with_symbol item.price
   

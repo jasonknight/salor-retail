@@ -337,7 +337,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :category_id => cat,
         :behavior => 'normal'
-      ).where("total_cents > 0").sum(:total_cents)
+      ).where("is_buyback != TRUE").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
@@ -347,7 +347,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :category_id => cat,
         :behavior => 'normal'
-      ).where("total_cents > 0").sum(:tax_amount_cents)
+      ).where("is_buyback != TRUE").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(
@@ -356,9 +356,8 @@ class Vendor < ActiveRecord::Base
         :is_proforma => nil,
         :is_quote => nil,
         :category_id => cat,
-        :is_buyback => true,
         :behavior => 'normal'
-      ).where("total_cents < 0").sum(:total_cents)
+      ).where("is_buyback = TRUE").sum(:total_cents)
       neg_total = Money.new(neg_total_cents, self.currency)
       
       neg_tax_cents = self.order_items.visible.where(
@@ -367,9 +366,8 @@ class Vendor < ActiveRecord::Base
         :is_proforma => nil,
         :is_quote => nil,
         :category_id => cat,
-        :is_buyback => true,
         :behavior => 'normal'
-      ).where("total_cents < 0").sum(:tax_amount_cents)
+      ).where("is_buyback = TRUE").sum(:tax_amount_cents)
       neg_tax = Money.new(neg_tax_cents, self.currency)
       
       unless pos_total.zero?
@@ -418,7 +416,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :tax => r.tax,
         :behavior => 'normal'
-      ).where("total_cents > 0").sum(:total_cents)
+      ).where("is_buyback != TRUE").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
@@ -428,7 +426,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :tax => r.tax,
         :behavior => 'normal'
-      ).where("total_cents > 0").sum(:tax_amount_cents)
+      ).where("is_buyback != TRUE").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(
@@ -437,9 +435,8 @@ class Vendor < ActiveRecord::Base
         :is_proforma => nil,
         :is_quote => nil,
         :tax => r.tax,
-        :is_buyback => true,
         :behavior => 'normal'
-      ).where("total_cents < 0").sum(:total_cents)
+      ).where("is_buyback = TRUE").sum(:total_cents)
       neg_total = Money.new(neg_total_cents, self.currency)
       
       neg_tax_cents = self.order_items.visible.where(
@@ -448,9 +445,8 @@ class Vendor < ActiveRecord::Base
         :is_proforma => nil,
         :is_quote => nil,
         :tax => r.tax,
-        :is_buyback => true,
         :behavior => 'normal'
-      ).where("total_cents < 0").sum(:tax_amount_cents)
+      ).where("is_buyback = TRUE").sum(:tax_amount_cents)
       neg_tax = Money.new(neg_tax_cents, self.currency)
       
       taxes[:pos][r.tax][:tax] = pos_tax

@@ -61,9 +61,14 @@ class ItemsController < ApplicationController
 
   def edit
     @item = @current_vendor.items.visible.where(["id = ? or sku = ?",params[:id],params[:keywords]]).first
-    @histories = @item.histories.order("created_at DESC").limit(20)
-    #@item.item_stocks.build if not @item.item_stocks.any?
-    #@item.item_shippers.build if not @item.item_shippers.any?
+    if @item
+      @histories = @item.histories.order("created_at DESC").limit(20)
+      #@item.item_stocks.build if not @item.item_stocks.any?
+      #@item.item_shippers.build if not @item.item_shippers.any?
+    else
+      $MESSAGES[:notices] << "Not found"
+      redirect_to items_path
+    end
   end
 
 
