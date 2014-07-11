@@ -807,6 +807,8 @@ gn:
       sku_must_be_unique: ! '%{sku} muss einzigartig sein.'
       value_not_set: Nicht gesetzt
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+      dont_use_negative_prices: Preise können nicht negativ sein. Verwenden Sie stattdessen positive Pfandpreise.
+      cannot_set_negative_price: Negative Preise sind nicht erlaubt. Bitte schalten Sie in den Pfandmodus und setzen Sie einen positiven Preis.
     finish_day: Abschluss
     inventory_updated: Inventar wurde aktualisiert
     logged_in_as: Eingeloggt als

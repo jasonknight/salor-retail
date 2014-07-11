@@ -213,6 +213,13 @@ class OrderItem < ActiveRecord::Base
       end
     end
     
+    # don't allow negative inputs
+    if not self.is_buyback and p.fractional < 0
+      $MESSAGES[:prompts] << I18n.t("system.errors.cannot_set_negative_price")
+      p *= -1
+      return
+    end
+    
     # make price negative when it is a buyback OrderItem
     if self.is_buyback
       p = - p.abs

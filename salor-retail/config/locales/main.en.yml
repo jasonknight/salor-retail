@@ -758,6 +758,8 @@ en:
       csv_item_exists: Item %{sku} exists!
       csv_item_failed: ! '%{id} %{i} failed.'
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price instead.
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch to buyback mode and enter a positive price.
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.

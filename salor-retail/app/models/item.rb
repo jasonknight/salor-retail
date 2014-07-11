@@ -43,7 +43,7 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :item_stocks, :allow_destroy => true #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }
 
   validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id, :currency
-  validate :sku_unique_in_visible, :not_selfloop, :not_too_long_child_chain, :not_too_long_parent_chain, :no_child_duplicate
+  validate :sku_unique_in_visible, :not_selfloop, :not_too_long_child_chain, :not_too_long_parent_chain, :no_child_duplicate, :not_negative
   validate :sku_is_not_weird
   before_save :run_onsave_actions
   before_save :cache_behavior
@@ -57,6 +57,16 @@ class Item < ActiveRecord::Base
   SHIPPER_EXPORT_FORMATS = ['default_export','tobacco_land']
   
   SHIPPER_IMPORT_FORMATS = ['type1', 'type2', 'salor', 'optimalsoft']
+  
+  def not_negative
+    if self.base_price < 0
+      errors.add(:base_price, I18n.t('system.errors.dont_use_negative_prices'))
+    end
+    
+    if self.buyback_price < 0
+      errors.add(:buyback_price, I18n.t('system.errors.dont_use_negative_prices'))
+    end
+  end
   
   def sku_is_not_weird
     if not self.sku == self.sku.gsub(/[^0-9a-zA-Z]/,'') then

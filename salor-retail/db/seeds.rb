@@ -433,7 +433,7 @@ company_count.times do |c|
     item.item_type = item_type_objects[0]
     item.currency = currencies[v]
     item.default_buyback = true
-    item.buy_price_cents = 200
+    item.price_cents = 200
     item.buy_price_cents = 100
     item.save!
     puts "Default Buyback Item #{ c } #{ v } created"
