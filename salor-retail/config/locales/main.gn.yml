@@ -753,6 +753,8 @@ gn:
         of day cash drop
       cannot_edit_completed_order: That order is completed and cannot be modified.
       cannot_reorder: Es müssen keine Artikel nachbestellt werden.
+      cannot_set_negative_price: Negative Preise sind nicht erlaubt. Bitte schalten
+        Sie in den Pfandmodus und setzen Sie einen positiven Preis.
       child_sku_must_exist: Kind-Arikel existiert nicht.
       coupon_cannot_be_buy_one_get_one: ! 'Coupon %{sku} kann nicht sein: Kaufe eines,
         bekomme eines geschenkt wenn auf Artikel %{applies} angewendet.'
@@ -760,6 +762,9 @@ gn:
         werden kann.
       csv_item_exists: Item %{sku} existiert!
       csv_item_failed: ! '%{id} %{i} schlug fehl.'
+      dont_use_negative_prices: Preise können nicht negativ sein. Verwenden Sie stattdessen
+        positive Pfandpreise.
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
       gift_card_empty: Der Gutschein ist leer. Benachrichten Sie den Kunden und vernichten
@@ -806,9 +811,6 @@ gn:
       shipment_item_nil: Artikel aus from_shipment_item war nil?
       sku_must_be_unique: ! '%{sku} muss einzigartig sein.'
       value_not_set: Nicht gesetzt
-      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
-      dont_use_negative_prices: Preise können nicht negativ sein. Verwenden Sie stattdessen positive Pfandpreise.
-      cannot_set_negative_price: Negative Preise sind nicht erlaubt. Bitte schalten Sie in den Pfandmodus und setzen Sie einen positiven Preis.
     finish_day: Abschluss
     inventory_updated: Inventar wurde aktualisiert
     logged_in_as: Eingeloggt als

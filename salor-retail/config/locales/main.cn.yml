@@ -746,6 +746,7 @@ cn:
       coupon_not_enough_items: 你還沒有購買足夠的產品申請
       csv_item_exists: 產品 %{sku} 存在!
       csv_item_failed: ! '%{id} %{i} 失敗.'
+      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: 無法儲存的部分. 請檢查這些部分是否存在.
       gift_card_empty: 禮品卡是空的, 通知客戶, 並摧毀卡.
       gs1_item_not_found: 禮品標記為gs1, 但 %{sku} 是不正確的格式.
@@ -779,7 +780,10 @@ cn:
       shipment_item_nil: 產品 returned from_shipment_item 是零?
       sku_must_be_unique: ! '%{sku} 必須是唯一的'
       value_not_set: 未設置
-      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
+        to buyback mode and enter a positive price.
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
+        instead.
     finish_day: End of day
     inventory_updated: 庫存更新了
     logged_in_as: 登錄為
