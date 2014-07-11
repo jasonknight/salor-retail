@@ -1,3 +1,12 @@
+salor-retail (4.0.2.101) wheezy; urgency=low
+
+  * build
+  * dont allow negative prices, use buyback instead
+  * translations
+  * buyback fixes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 11 Jul 2014 17:45:54 +0200
+
 salor-retail (4.0.2.100) wheezy; urgency=low
 
   * different permissions for log directory
