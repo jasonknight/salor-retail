@@ -868,7 +868,7 @@ gn:
       transaction_total: Gesamtbewegung
       transactions: Buchungen
     sales_statistics:
-      category_name: Kategorie Name
+      category: Kategorie
       from: Von
       item_name: Artikelname
       quantity: Verkaufsmenge

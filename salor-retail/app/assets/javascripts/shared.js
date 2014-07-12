@@ -15,20 +15,11 @@ var shared = {
     var _currentSelectTarget = '';
     var _currentSelectButton;
 
-    if (elem.children("option").length > 10) {
+    if (elem.children("option").length > 32) {
       return;
     }
     elem.hide();
-    // Find the max length
-    var max_len = 0;
-    
-    elem.children("option").each(function () {
-      var txt = $(this).text();
-      if (txt.length > max_len) {
-        max_len = txt.length;
-      }
-    });
-    var char_width = 8;
+
     var button = $('<div id="select_widget_button_for_' + elem.attr("id") + '"></div>');
     button.html($(elem).find("option:selected").text());
     if (button.html() == "")
@@ -39,30 +30,29 @@ var shared = {
     button.attr('select_target',"#" + elem.attr("id"));
     button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
     
-    
     button.click(function () {
-      var pos = $(this).position();
-      var off = $(this).offset();
+      $('.select-widget-display').remove();
       var mdiv = $('<div></div>');
       _currentSelectTarget = $(this).attr("select_target");
       _currentSelectButton = $(this);
       mdiv.addClass("select-widget-display select-widget-display-" + _currentSelectTarget.replace("#",""));
-      mdiv.css({width: (max_len * char_width + 50) * 2});
       var x = 0;
       $(_currentSelectTarget).children("option").each(function () {
         var d = $('<div id="active_select_'+$(this).attr('value').replace(':','-')+'"></div>');
-        d.html($(this).text());
+        var label = $(this).text();
+        if (label == "")
+          label = "&nbsp;"
+        d.html(label);
         d.addClass("select-widget-entry select-widget-entry-" + _currentSelectTarget.replace("#",""));
         d.attr("value", $(this).attr('value'));
-        d.css({width: max_len * char_width, overflow: 'hidden'});
-        d.click(function () {
-        $(_currentSelectTarget).find("option:selected").removeAttr("selected"); 
-        $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected");
-        $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").change(); 
-        _currentSelectButton.html($(this).html());
-        var input_id = _currentSelectTarget.replace("type","amount");
-        setTimeout(function () { $(input_id).select(); },55);
-        $('.select-widget-display').hide();
+        d.on("click", function () {
+          $(_currentSelectTarget).find("option:selected").removeAttr("selected"); 
+          $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").attr("selected","selected");
+          $(_currentSelectTarget).find("option[value='"+$(this).attr('value')+"']").change(); 
+          _currentSelectButton.html($(this).html());
+          var input_id = _currentSelectTarget.replace("type","amount");
+          setTimeout(function () { $(input_id).select(); },55);
+          $('.select-widget-display').hide();
         });
         mdiv.append(d);
         x++;
@@ -72,10 +62,10 @@ var shared = {
         }
 
       });
-      mdiv.css({position: 'absolute'});
       $('body').append(mdiv);
-      mdiv.offset({left: button.offset().left - 1, top: button.offset().top - 1});
-      mdiv.show();
+      mdiv.on("click", function() {
+        $(this).hide();
+      });
     });
   },
   array_tools: {

@@ -693,8 +693,16 @@ class Vendor < ActiveRecord::Base
   
   # OrderItem.connection.execute("SELECT category_id, item_id, sku, ROUND(SUM(quantity), 2), SUM(total_cents) FROM order_items WHERE hidden IS NULL GROUP BY category_id, item_id ").to_a
   
-  def get_sales_statistics(from, to)
-    order_item_quantities_by_category = OrderItem.connection.execute("SELECT category_id, item_id, sku, SUM(quantity), SUM(total_cents) FROM order_items WHERE vendor_id = #{ self.id } AND hidden IS NULL AND completed_at BETWEEN '#{ from.strftime("%Y-%m-%d %H:%M:%S") }' AND '#{ to.strftime("%Y-%m-%d %H:%M:%S") }' GROUP BY category_id, item_id").to_a
+  def get_sales_statistics(from, to, category_id=nil)
+    category_id = nil if category_id == 0
+    
+    if category_id
+      category_query = "AND category_id = #{ category_id }"
+    else
+      category_query = ""
+    end
+    
+    order_item_quantities_by_category = OrderItem.connection.execute("SELECT category_id, item_id, sku, SUM(quantity), SUM(total_cents) FROM order_items WHERE vendor_id = #{ self.id } AND hidden IS NULL AND completed_at BETWEEN '#{ from.strftime("%Y-%m-%d %H:%M:%S") }' AND '#{ to.strftime("%Y-%m-%d %H:%M:%S") }'  #{ category_query } GROUP BY category_id, item_id").to_a
     reports = {
       :order_item_quantities_by_category => order_item_quantities_by_category,
     }
@@ -1018,6 +1026,9 @@ class Vendor < ActiveRecord::Base
       vp.copies = params[:copies].to_i
       vp.codepage = 0
       vp.baudrate = 9600
+      
+      
+      SalorBase.log_action "[Vendor#print_labels]: #{ vp.inspect }"
       
       print_engine = Escper::Printer.new(self.company.mode, vp, File.join(SalorRetail::Application::SR_DEBIAN_SITEID, self.hash_id))
       print_engine.open

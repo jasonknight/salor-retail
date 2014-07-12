@@ -17,6 +17,13 @@
       %td{:align => :right}
         = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
     %tr
+      %td{:align => :left}
+        = label 'category', t('.category')
+      %td{:align => :right}
+        %select{ :id => "category_id", :name => "category_id" }
+          %option
+          = options_from_collection_for_select @categories, :id, :name, :include_blank => true
+    %tr
       %td
       %td{ :align => :right}
         = submit_tag t('orders.report.display'), :onclick => '$("#progress").show()', :id => 'display_report_day'
@@ -33,7 +40,7 @@
   
   %table.striped-table2
     %tr
-      %th= t ".category_name"
+      %th= t ".category"
       %th= t ".item_name"
       %th SKU
       %th= t ".quantity"

@@ -239,7 +239,9 @@ class VendorsController < ApplicationController
   
   def sales_statistics
     @from, @to = assign_from_to(params)
-    @reports = @current_vendor.get_sales_statistics(@from, @to)
+    @categories = @current_vendor.categories.visible
+    @category_id = params[:category_id].to_i
+    @reports = @current_vendor.get_sales_statistics(@from, @to, @category_id)
 
     render "/vendors/sales_statistics"
   end
