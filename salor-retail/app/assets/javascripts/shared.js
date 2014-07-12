@@ -55,7 +55,7 @@ var shared = {
           _currentSelectButton.html($(this).html());
           var input_id = _currentSelectTarget.replace("type","amount");
           setTimeout(function () { $(input_id).select(); },55);
-          $('.select-widget-display').hide();
+          $('.select-widget-display').remove();
         });
         mdiv.append(d);
         x++;
