@@ -1,8 +1,10 @@
 salor-retail (4.0.2.102) wheezy; urgency=low
 
   * category selection for sales statistics, JS select_widget style improvements
+  * build
+  * css fix
 
- -- Michael Franzl <office@michaelfranzl.com>  Sat, 12 Jul 2014 11:01:16 +0200
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 12 Jul 2014 11:07:05 +0200
 
 salor-retail (4.0.2.101) wheezy; urgency=low
 
