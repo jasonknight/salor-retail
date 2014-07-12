@@ -110,7 +110,7 @@ gn:
       location_id: Ort
       lp_per_dollar: Punkte pro Euro
       min_quantity: Mindestmenge
-      must_change_price: Must Change Price
+      must_change_price: Sofortige Preisänderung
       name: Name
       no_print: Nicht drucken bei Enter
       notes: Notiz

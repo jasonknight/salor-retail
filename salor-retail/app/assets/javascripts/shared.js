@@ -31,7 +31,10 @@ var shared = {
     button.addClass("select-widget-button select-widget-button-" + elem.attr("id"));
     
     button.click(function () {
-      $('.select-widget-display').remove();
+      if ($('.select-widget-display').length > 0) {
+        $('.select-widget-display').remove();
+        return;
+      }
       var mdiv = $('<div></div>');
       _currentSelectTarget = $(this).attr("select_target");
       _currentSelectButton = $(this);
@@ -62,7 +65,12 @@ var shared = {
         }
 
       });
+      //mdiv.css({position: 'absolute'});
       $('body').append(mdiv);
+      mdiv.offset({
+        left: button.offset().left - 50,
+        top: button.offset().top + 30
+      });
       mdiv.on("click", function() {
         $(this).hide();
       });
