@@ -198,7 +198,7 @@ class OrderItem < ActiveRecord::Base
     if p.class == String
       # a string is sent from Vendor.edit_field_on_child
       p = Money.new(self.string_to_float(p, :locale => self.vendor.region) * 100.0, self.currency)
-    elsif p.class == Float
+    elsif p.class == Float or p.class == Fixnum
       # not sure which parts of the code send a Float, but we leave it here for now
       p = Money.new(p * 100.0, self.currency)
     end

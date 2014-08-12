@@ -153,6 +153,20 @@ class VendorsController < ApplicationController
 
     value = params[:value]
     if @inst.respond_to?("#{ params[:field] }=".to_sym)
+      
+      
+      if @inst.class == OrderItem and params[:field] == "price" and params[:value].include? "+"
+        # this is an arithmetrical expression. eval it!
+        evalstring = params[:value]
+        evalstring.gsub! ",", "." # replace europaean comma with ruby comma
+        evalstring.gsub! /[^0-9,.+]/, "" # security, allow only additions of numbers
+        begin
+          value = eval(evalstring)
+        rescue SyntaxError => se
+          value = 0
+        end
+      end
+      
       log_action "edit_field_on_child: sending #{  params[:field] } = #{ value } to #{ @inst.class } id #{ @inst.id }"
       @inst.send("#{ params[:field] }=", value)
       result = @inst.save
@@ -163,7 +177,7 @@ class VendorsController < ApplicationController
       end
       
     else
-      msg = "VendorsController#edit_field_on_child: #{ klass } does not respond well to setter method #{ params[:field] }!"
+      msg = "VendorsController#edit_field_on_child: #{ klass } does not respond to setter method #{ params[:field] }!"
       log_action msg
       raise msg
     end

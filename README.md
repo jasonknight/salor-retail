@@ -64,6 +64,6 @@ For production installations see our page [http:/documentation.thebigrede.net/re
 
 ## Demo
 
-(http://demo1.sr.red-e.eu)[http://demo1.sr.red-e.eu]
+[http://srdemo1.salorpos.com](http://srdemo1.salorpos.com)
 
 Log in with the password for the English user interface: 000

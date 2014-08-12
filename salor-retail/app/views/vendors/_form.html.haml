@@ -46,7 +46,7 @@
     %tr
       %td.attr= f.label :country
       %td.value
-        %select{ :name => 'vendor[country]' }
+        %select#country{ :name => 'vendor[country]' }
           - SalorRetail::Application::COUNTRIES.each do |key, val|
             %option{ :value => key, :selected => f.object.country == key }= t val
           
