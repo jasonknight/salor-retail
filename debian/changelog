@@ -1,3 +1,9 @@
+salor-retail (4.0.2.104) wheezy; urgency=low
+
+  * arithmetic expressions for price edits on POS screen, country select box fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 12 Aug 2014 13:58:23 +0200
+
 salor-retail (4.0.2.103) wheezy; urgency=low
 
   [ root ]
