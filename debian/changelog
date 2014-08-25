@@ -1,3 +1,9 @@
+salor-retail (4.0.2.105) wheezy; urgency=low
+
+  * financial report: fix empty category, only one page if possible
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 25 Aug 2014 17:26:56 +0200
+
 salor-retail (4.0.2.104) wheezy; urgency=low
 
   * arithmetic expressions for price edits on POS screen, country select box fix
