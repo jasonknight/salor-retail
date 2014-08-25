@@ -324,6 +324,7 @@ class Vendor < ActiveRecord::Base
       :is_quote => nil,
       :behavior => 'normal',
     ).select("DISTINCT category_id")
+
 #     used_categories = self.categories.visible.order(:name)
 #     used_categories << nil
     used_categories.each do |r|
@@ -337,7 +338,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :category_id => cat,
         :behavior => 'normal'
-      ).where("is_buyback != TRUE").sum(:total_cents)
+      ).where("is_buyback = FALSE OR is_buyback IS NULL").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
@@ -347,7 +348,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :category_id => cat,
         :behavior => 'normal'
-      ).where("is_buyback != TRUE").sum(:tax_amount_cents)
+      ).where("is_buyback = FALSE OR is_buyback IS NULL").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(
@@ -388,6 +389,7 @@ class Vendor < ActiveRecord::Base
         categories_sum[:neg][:gro] += categories[:neg][label][:gro]
       end
     end
+    
       
           
       
@@ -416,7 +418,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :tax => r.tax,
         :behavior => 'normal'
-      ).where("is_buyback != TRUE").sum(:total_cents)
+      ).where("is_buyback = FALSE OR is_buyback IS NULL").sum(:total_cents)
       pos_total = Money.new(pos_total_cents, self.currency)
       
       pos_tax_cents = self.order_items.visible.where(
@@ -426,7 +428,7 @@ class Vendor < ActiveRecord::Base
         :is_quote => nil,
         :tax => r.tax,
         :behavior => 'normal'
-      ).where("is_buyback != TRUE").sum(:tax_amount_cents)
+      ).where("is_buyback = FALSE OR is_buyback IS NULL").sum(:tax_amount_cents)
       pos_tax = Money.new(pos_tax_cents, self.currency)
       
       neg_total_cents = self.order_items.visible.where(

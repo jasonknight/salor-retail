@@ -56,16 +56,24 @@
 .clear
 
 .paper-invoice
-  %h2== #{ t '.title' }: #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day }<br />#{ @current_vendor.name }<br />#{ @user.name_with_username if @user }
+  %h2== #{ t '.title' }: #{ l @from, :format => :just_day } - #{ l @to, :format => :just_day } | #{ @current_vendor.name } | #{ @user.name_with_username if @user }
   
-  %p= l DateTime.now
-
-  %p== #{ t '.count_orders' }: #{ @report['count_orders'] }
-  %p== #{ t '.count_order_items' }: #{ @report['count_order_items'] }
+  %p
+    = l DateTime.now
+    |
+    == #{ t '.count_orders' }: #{ @report['count_orders'] }
+    |
+    == #{ t '.count_order_items' }: #{ @report['count_order_items'] }
+    |
+    = request.ip
+    |
+    = @current_user.username
+    |
+    = @current_register.name
 
 
   - [[:pos,'.sales'], [:neg,'.payments']].each do |i|
-    %hr
+    - next if categories[i[0]].to_a.size.zero?
     %h3= t i[1]
 
     %table.striped-table2
@@ -94,9 +102,7 @@
           %td.right= humanized_money_with_symbol t[1][:net]
           %td.right= humanized_money_with_symbol t[1][:gro] - t[1][:net]
 
-      
-      
-  %hr
+
   %h3= t '.revenue'
   .right
     %p
@@ -105,12 +111,7 @@
     %p
       == #{ t '.net' }:
       %b== #{ humanized_money_with_symbol revenue[:net] }
-    %hr
   
-  
-%div.paper-invoice
-    
-  %hr
   %h3= t('activerecord.models.payment_method.other')
   %table.striped-table2
     %tr
@@ -167,7 +168,6 @@
       
   
   - if proforma_pmis.any?
-    %hr
     %h3= t '.proforma_payments'
     %table.striped-table2
       %tr
@@ -193,7 +193,6 @@
 
 
   - if refund_order_items.any?
-    %hr
     %h3= t '.refunds'
     %table.striped-table2
       %tr
@@ -208,7 +207,6 @@
 
           
   - if transactions.any?
-    %hr
     %h3= t '.transactions'
     %table.striped-table2
       %tr
@@ -229,9 +227,6 @@
         == #{ t '.sum' }:
         %b== #{ humanized_money_with_symbol transactions_sum }
 
-  
-  
-  %hr
   %h3= t '.cash_drawer'
   .right
     - if @from.beginning_of_day == Time.now.beginning_of_day and @user # today and user
@@ -246,6 +241,3 @@
     - unless calculated_drawer_amount.zero?
       %p
         %b= t 'printr.eod_report.warning_drawer_amount_not_zero'
-
-  %hr
-  %p== (#{ request.ip }) (#{ @current_user.username }) (#{ @current_register.name })
