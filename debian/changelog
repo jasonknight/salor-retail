@@ -1,3 +1,9 @@
+salor-retail (4.0.2.106) wheezy; urgency=low
+
+  * fix for salor-bin css offsets for makeSelectWidget
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 25 Aug 2014 17:40:32 +0200
+
 salor-retail (4.0.2.105) wheezy; urgency=low
 
   * financial report: fix empty category, only one page if possible
