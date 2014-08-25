@@ -67,10 +67,18 @@ var shared = {
       });
       //mdiv.css({position: 'absolute'});
       $('body').append(mdiv);
-      mdiv.offset({
-        left: button.offset().left - 50,
-        top: button.offset().top + 30
-      });
+      if (sr.fn.salor_bin.is) {
+        // QtWebkit seems to have different offsets, make this a special case
+        mdiv.offset({
+          left: button.offset().left + 200,
+          top: button.offset().top + 220,
+        });
+      } else {
+        mdiv.offset({
+          left: button.offset().left - 50,
+          top: button.offset().top + 30,
+        });
+      }
       mdiv.on("click", function() {
         $(this).hide();
       });
