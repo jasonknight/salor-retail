@@ -1,3 +1,9 @@
+salor-retail (4.0.2.107) wheezy; urgency=low
+
+  * wider bottom margin for paper printing
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 07 Sep 2014 15:32:57 +0200
+
 salor-retail (4.0.2.106) wheezy; urgency=low
 
   * fix for salor-bin css offsets for makeSelectWidget
