@@ -756,6 +756,8 @@ el:
       cannot_edit_completed_order: Αυτή η παραγγελία ολοκληρώθηκε και δεν μπορεί να
         διαμορφωθεί.
       cannot_reorder: Κανένα προϊόν δεν πρέπει να αναπαραγγελθεί.
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
+        to buyback mode and enter a positive price.
       child_sku_must_exist: Πρέπει να υπάρχει SKU!
       coupon_cannot_be_buy_one_get_one: κουπόνι %{sku} δεν μπορεί να είναι αγοράστε_ένα_πάρτε_ένα
         όταν ισχύει %{applies}
@@ -763,6 +765,8 @@ el:
         αυτό
       csv_item_exists: Αντικείμενο %{sku} υπάρχει!
       csv_item_failed: ! '%{id} %{i} απέτυχε.'
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
+        instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: Η αποθήκευση του σετ δεν ήταν δυνατή. Παρακαλούμε όπως
         βεβαιωθείτε πως αντικείμενα αυτού του σετ υπάρχουν.
@@ -815,10 +819,8 @@ el:
         άκυρο;
       sku_must_be_unique: ! '%{sku} πρέπει να είναι μοναδικό'
       value_not_set: ΜηΚαθορισμένο
-      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
-        to buyback mode and enter a positive price.
-      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
-        instead.
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: η απογραφή ενημερώθηκε
     logged_in_as: συνδεδεμένοι ως

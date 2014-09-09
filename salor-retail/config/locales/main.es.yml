@@ -753,6 +753,8 @@ es:
         Rogamos cree manualmente un depósito en efectivo de comienzo del día.
       cannot_edit_completed_order: Ese pedido ha finalizado y no puede ser modificado.
       cannot_reorder: No ne necesita volver a encargar ningún artículo.
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
+        to buyback mode and enter a positive price.
       child_sku_must_exist: ¡Debe existir un artículo hijo!
       coupon_cannot_be_buy_one_get_one: El cupón %{sku} no puede ser compre_uno_reciba_uno_de
         regalo cuando se lo aplica a %{applies}
@@ -760,6 +762,8 @@ es:
         esto se aplique.
       csv_item_exists: ¡El artículo %{sku} ya existe!
       csv_item_failed: ! '%{id} %{i} ha fracasado.'
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
+        instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: No se ha podido grabar las partes. Asegúrese de que existan
         artículos con partes.
@@ -811,10 +815,8 @@ es:
       shipment_item_nil: El artículo volvió del envío. ¿Es una artículo vacío?
       sku_must_be_unique: ! '%{sku} debe ser único.'
       value_not_set: NoDeterminado
-      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
-        to buyback mode and enter a positive price.
-      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
-        instead.
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: Inventario actualizado
     logged_in_as: Conectado como

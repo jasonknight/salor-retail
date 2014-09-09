@@ -750,6 +750,8 @@ ru:
         Пожалуйста, создайте начало дня внесения наличных вручную.
       cannot_edit_completed_order: Этот заказ выполнен и не может быть изменён.
       cannot_reorder: Невозможно повторить заказ.
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
+        to buyback mode and enter a positive price.
       child_sku_must_exist: Товар-наследник должен существовать!
       coupon_cannot_be_buy_one_get_one: купон %{sku} не может be_buy_one_get_one когда
         применяется к %{applies}
@@ -757,6 +759,8 @@ ru:
         это
       csv_item_exists: Товар %{sku} существует!
       csv_item_failed: Ошибка чтения %{id} %{i}
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
+        instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: Невозможно сохранить комплект. Убедитесь, что выбранные
         товары существуют.
@@ -802,10 +806,8 @@ ru:
       shipment_item_nil: Товар, вернувшийся из поставки, пустой?
       sku_must_be_unique: ! '%{sku} должен быть уникальным'
       value_not_set: НеУказано
-      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
-        to buyback mode and enter a positive price.
-      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
-        instead.
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: проведен переучет товара
     logged_in_as: вошли как

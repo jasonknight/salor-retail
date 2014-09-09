@@ -745,7 +745,6 @@ en:
     add_payment_method: Add Method
     complete_sale: Complete
     errors:
-      deletion_of_item_when_order_completed: This order has already been completed at a differnt location. Please click the "New" button to start a new order.
       action_code_error: Code could not be executed because %{error}
       action_error: Action could not complute because %{error}
       auto_drop_failed: The system failed to auto drop, please manually create a beginning
@@ -760,6 +759,8 @@ en:
       coupon_not_enough_items: You have not purchased enough items for this to apply
       csv_item_exists: Item %{sku} exists!
       csv_item_failed: ! '%{id} %{i} failed.'
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field

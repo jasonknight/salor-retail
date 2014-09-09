@@ -741,11 +741,15 @@ cn:
       auto_drop_failed: 系統沒自動下拉，請手動創建一個開始一天的現金下降
       cannot_edit_completed_order: 該訂單完成後, 不能修改.
       cannot_reorder: 沒有任何產品必須重新排序.
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
+        to buyback mode and enter a positive price.
       child_sku_must_exist: 子項必須存在!
       coupon_cannot_be_buy_one_get_one: 優惠券 %{sku} 不能買一送一當應用到 %{applies}
       coupon_not_enough_items: 你還沒有購買足夠的產品申請
       csv_item_exists: 產品 %{sku} 存在!
       csv_item_failed: ! '%{id} %{i} 失敗.'
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
+        instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: 無法儲存的部分. 請檢查這些部分是否存在.
       gift_card_empty: 禮品卡是空的, 通知客戶, 並摧毀卡.
@@ -780,10 +784,8 @@ cn:
       shipment_item_nil: 產品 returned from_shipment_item 是零?
       sku_must_be_unique: ! '%{sku} 必須是唯一的'
       value_not_set: 未設置
-      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
-        to buyback mode and enter a positive price.
-      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
-        instead.
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: 庫存更新了
     logged_in_as: 登錄為

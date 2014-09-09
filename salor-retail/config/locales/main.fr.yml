@@ -755,6 +755,8 @@ fr:
       cannot_edit_completed_order: Cette commande a été finalisée et ne peut pas être
         modifiée.
       cannot_reorder: Pas d'articles à commander de nouveau.
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
+        to buyback mode and enter a positive price.
       child_sku_must_exist: L'article enfant doit exister !
       coupon_cannot_be_buy_one_get_one: Le coupon %{sku} ne peut pas être achetez_un_pour_le_prix_d_un
         lorsqu'il s'applique à %{applies}
@@ -762,6 +764,8 @@ fr:
         soit applicable
       csv_item_exists: L'article %{sku} existe déjà !
       csv_item_failed: ! '%{id} %{i} a échoué.'
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
+        instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: L'ensemble des parts n'ont pas pu être enregistrées. Veuillez
         vérifier qu'il existe bien des articles avec parts.
@@ -812,10 +816,8 @@ fr:
       shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
       sku_must_be_unique: ! '%{sku} doit être unique'
       value_not_set: PasDéfini
-      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
-        to buyback mode and enter a positive price.
-      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
-        instead.
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: Inventaie mis à jour
     logged_in_as: Connecté en tant que

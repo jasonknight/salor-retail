@@ -750,12 +750,16 @@ it:
         creare manualmente un inizio liquidazione cassa del giorno
       cannot_edit_completed_order: Questo ordine è comleto e non può essere modificato.
       cannot_reorder: Nessun articolo da riordinare.
+      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
+        to buyback mode and enter a positive price.
       child_sku_must_exist: Articolo Figlio deve esistere!
       coupon_cannot_be_buy_one_get_one: buono-sconto %{sku} non può essere un compra
         uno prendi uno quando applicato a %{applies}
       coupon_not_enough_items: Non hai comprato abbastanza articoli per procedere
       csv_item_exists: Articolo %{sku} esistente!
       csv_item_failed: ! '%{id} %{i} fallito.'
+      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
+        instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
@@ -802,10 +806,8 @@ it:
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
-      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
-        to buyback mode and enter a positive price.
-      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
-        instead.
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: inventario aggiornato
     logged_in_as: autenticato come

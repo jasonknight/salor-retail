@@ -747,7 +747,6 @@ gn:
     add_payment_method: Zahlungsmethode hinzufügen
     complete_sale: abschließen
     errors:
-      deletion_of_item_when_order_completed: Dieser Verkauf wurde an einem anderen Platz bereits abgeschlossen. Bitte klicken Sie auf den "Neu" Button um einen neuen Verkauf zu starten.
       action_code_error: Code could not be executed because %{error}
       action_error: Action could not complute because %{error}
       auto_drop_failed: The system failed to auto drop, please manually create a beginning
@@ -763,6 +762,9 @@ gn:
         werden kann.
       csv_item_exists: Item %{sku} existiert!
       csv_item_failed: ! '%{id} %{i} schlug fehl.'
+      deletion_of_item_when_order_completed: Dieser Verkauf wurde an einem anderen
+        Platz bereits abgeschlossen. Bitte klicken Sie auf den "Neu" Button um einen
+        neuen Verkauf zu starten.
       dont_use_negative_prices: Preise können nicht negativ sein. Verwenden Sie stattdessen
         positive Pfandpreise.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
@@ -869,13 +871,13 @@ gn:
       transaction_total: Gesamtbewegung
       transactions: Buchungen
     sales_statistics:
-      category: Kategorie
       from: Von
       item_name: Artikelname
       quantity: Verkaufsmenge
       sum: Summe
       title: Mengenstatistik
       to: Bis
+      category_name: Category name
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'
