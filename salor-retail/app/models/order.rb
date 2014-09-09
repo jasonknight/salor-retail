@@ -1147,7 +1147,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.user_id]
-    actual = self.order_items.visible.collect{ |oi| oi.user_id }.uniq
+    actual = self.order_items.collect{ |oi| oi.user_id }.uniq
     pass = should == actual
     msg = "OrderItems should have the same user_id as the Order"
     type = :orderOrderItemsUserMatch
@@ -1155,7 +1155,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.user_id]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.user_id }.uniq
+    actual = self.payment_method_items.collect{ |pmi| pmi.user_id }.uniq
     pass = should == actual
     msg = "PaymentMethodItems should have the same user_id as the Order"
     type = :orderPaymentMethodItemUserMatch
@@ -1164,7 +1164,7 @@ class Order < ActiveRecord::Base
     # ---
     if self.drawer_transactions.any?
       should = [self.user_id]
-      actual = self.drawer_transactions.visible.collect{ |dt| dt.user_id }.uniq
+      actual = self.drawer_transactions.collect{ |dt| dt.user_id }.uniq
       pass = should == actual
       msg = "DrawerTransactions should have the same user_id as the Order"
       type = :orderDrawerTransactionUserMatch
@@ -1176,7 +1176,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.drawer_id]
-    actual = self.order_items.visible.collect{ |oi| oi.drawer_id }.uniq
+    actual = self.order_items.collect{ |oi| oi.drawer_id }.uniq
     pass = should == actual
     msg = "OrderItems should have the same drawer_id as the Order"
     type = :orderOrderItemsDrawerMatch
@@ -1184,7 +1184,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.drawer_id]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.drawer_id }.uniq
+    actual = self.payment_method_items.collect{ |pmi| pmi.drawer_id }.uniq
     pass = should == actual
     msg = "PaymentMethodItems should have the same drawer_id as the Order"
     type = :orderPaymentMethodItemDrawerMatch
@@ -1193,7 +1193,7 @@ class Order < ActiveRecord::Base
     # ---
     if self.drawer_transactions.any?
       should = [self.drawer_id]
-      actual = self.drawer_transactions.visible.collect{ |dt| dt.drawer_id }.uniq
+      actual = self.drawer_transactions.collect{ |dt| dt.drawer_id }.uniq
       pass = should == actual
       msg = "DrawerTransactions should have the same drawer_id as the Order"
       type = :orderDrawerTransactionDrawerMatch
@@ -1205,7 +1205,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.paid]
-    actual = self.order_items.visible.collect{ |oi| oi.paid }.uniq
+    actual = self.order_items.collect{ |oi| oi.paid }.uniq
     pass = should == actual
     msg = "OrderItems should have the same paid flag as the Order"
     type = :orderOrderItemsPaidMatch
@@ -1213,7 +1213,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.paid]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.paid }.uniq
+    actual = self.payment_method_items.collect{ |pmi| pmi.paid }.uniq
     pass = should == actual
     msg = "PaymentMethodItems should have the same paid flag as the Order"
     type = :orderPaymentMethodItemsPaidMatch
@@ -1224,7 +1224,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.is_proforma]
-    actual = self.order_items.visible.collect{ |oi| oi.is_proforma }.uniq
+    actual = self.order_items.collect{ |oi| oi.is_proforma }.uniq
     pass = should == actual
     msg = "OrderItems should have the same is_proforma flag as the Order"
     type = :orderOrderItemsProformaMatch
@@ -1232,7 +1232,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.is_proforma]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.is_proforma }.uniq
+    actual = self.payment_method_items.collect{ |pmi| pmi.is_proforma }.uniq
     pass = should == actual
     msg = "PaymentMethodItems should have the same is_proforma flag as the Order"
     type = :orderPaymentMethodItemsProformaMatch
@@ -1243,7 +1243,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.is_unpaid]
-    actual = self.order_items.visible.collect{ |oi| oi.is_unpaid }.uniq
+    actual = self.order_items.collect{ |oi| oi.is_unpaid }.uniq
     pass = should == actual
     msg = "OrderItems should have the same is_unpaid flag as the Order"
     type = :orderOrderItemsUnpaidMatch
@@ -1251,7 +1251,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.is_unpaid]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.is_unpaid }.uniq
+    actual = self.payment_method_items.collect{ |pmi| pmi.is_unpaid }.uniq
     pass = should == actual
     msg = "PaymentMethodItems should have the same is_unpaid flag as the Order"
     type = :orderPaymentMethodItemsUnpaidMatch
@@ -1261,14 +1261,14 @@ class Order < ActiveRecord::Base
     # checks for completed_at timestamp
     
     should = [self.completed_at.strftime("%Y%m%d%H%M%S")]
-    actual = self.order_items.visible.collect{ |oi| oi.completed_at.strftime("%Y%m%d%H%M%S") }.uniq
+    actual = self.order_items.collect{ |oi| oi.completed_at.strftime("%Y%m%d%H%M%S") }.uniq
     pass = should == actual
     msg = "OrderItems should have the same completed_at timestamp as the Order"
     type = :orderOrderItemsCompletedAtMatch
     tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     
     should = [self.completed_at.strftime("%Y%m%d%H%M%S")]
-    actual = self.payment_method_items.visible.collect{ |pmi| pmi.completed_at.strftime("%Y%m%d%H%M%S") }.uniq
+    actual = self.payment_method_items.collect{ |pmi| pmi.completed_at.strftime("%Y%m%d%H%M%S") }.uniq
     pass = should == actual
     msg = "PaymentMethodItems should have the same completed_at timestamp as the Order"
     type = :orderPaymentMethodItemsCompletedAtMatch
@@ -1279,14 +1279,14 @@ class Order < ActiveRecord::Base
     
     unless self.paid_at.nil?
       should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
-      actual = self.order_items.visible.collect{ |oi| oi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
+      actual = self.order_items.collect{ |oi| oi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
       pass = should == actual
       msg = "OrderItems should have the same paid_at timestamp as the Order"
       type = :orderOrderItemsPaidAtMatch
       tests << {:model=>"Order", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
       
       should = [self.paid_at.strftime("%Y%m%d%H%M%S")]
-      actual = self.payment_method_items.visible.collect{ |pmi| pmi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
+      actual = self.payment_method_items.collect{ |pmi| pmi.paid_at.strftime("%Y%m%d%H%M%S") }.uniq
       pass = should == actual
       msg = "PaymentMethodItems should have the same paid_at timestamp as the Order"
       type = :orderPaymentMethodItemsPaidAtMatch
@@ -1298,7 +1298,7 @@ class Order < ActiveRecord::Base
     
     # ---
     should = [self.is_quote]
-    actual = self.order_items.visible.collect{ |oi| oi.is_quote }.uniq
+    actual = self.order_items.collect{ |oi| oi.is_quote }.uniq
     pass = should == actual
     msg = "OrderItems should have the same is_quote flag as the Order"
     type = :orderOrderItemsQuoteMatch

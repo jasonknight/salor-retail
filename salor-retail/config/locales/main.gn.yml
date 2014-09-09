@@ -747,6 +747,7 @@ gn:
     add_payment_method: Zahlungsmethode hinzufügen
     complete_sale: abschließen
     errors:
+      deletion_of_item_when_order_completed: Dieser Verkauf wurde an einem anderen Platz bereits abgeschlossen. Bitte klicken Sie auf den "Neu" Button um einen neuen Verkauf zu starten.
       action_code_error: Code could not be executed because %{error}
       action_error: Action could not complute because %{error}
       auto_drop_failed: The system failed to auto drop, please manually create a beginning

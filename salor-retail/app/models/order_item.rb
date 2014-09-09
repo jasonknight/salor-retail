@@ -77,6 +77,10 @@ class OrderItem < ActiveRecord::Base
   end
   
   def toggle_buyback=(x)
+    if self.order.completed_at
+      do_order_complete_warning
+      return
+    end
     self.is_buyback = ! self.is_buyback
     self.modify_price_for_buyback
     self.calculate_totals
@@ -87,6 +91,10 @@ class OrderItem < ActiveRecord::Base
   end
   
   def base_price=(p)
+    if self.order.completed_at
+      do_order_complete_warning
+      return
+    end
     if p.class == String
       # a string is sent from Vendor.edit_field_on_child
       p = Money.new(self.string_to_float(p, :locale => self.vendor.region) * 100.0, self.currency)
@@ -102,6 +110,10 @@ class OrderItem < ActiveRecord::Base
   end
   
   def tax=(value)
+    if self.order.completed_at
+      do_order_complete_warning
+      return
+    end
     tp = self.vendor.tax_profiles.visible.find_by_value(value)
     if tp.nil?
       msg = "A TaxProfile with value #{ value } has to be created before you can assign this value"
@@ -114,6 +126,10 @@ class OrderItem < ActiveRecord::Base
   end
   
   def tax_profile_id=(id)
+    if self.order.completed_at
+      do_order_complete_warning
+      return
+    end
     tp = self.vendor.tax_profiles.visible.find_by_id(id)
     if tp.nil?
       msg = "Could not find TaxProfile with id #{ id } for self's vendor."
@@ -195,6 +211,10 @@ class OrderItem < ActiveRecord::Base
 
 
   def price=(p)
+    if self.order.completed_at
+      do_order_complete_warning
+      return
+    end
     if p.class == String
       # a string is sent from Vendor.edit_field_on_child
       p = Money.new(self.string_to_float(p, :locale => self.vendor.region) * 100.0, self.currency)
@@ -473,6 +493,10 @@ class OrderItem < ActiveRecord::Base
   
   
   def quantity=(q)
+    if self.order.completed_at
+      do_order_complete_warning
+      return
+    end
     q = self.string_to_float(q, :locale => self.vendor.region)
     if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
       log_action "Cannot have more than 1 coupon or gift card"
@@ -484,6 +508,10 @@ class OrderItem < ActiveRecord::Base
   
   
   def hide(by)
+    if self.order.completed_at
+      do_order_complete_warning
+      return
+    end
     self.hidden = true
     self.hidden_by = by.id
     self.hidden_at = Time.now
@@ -561,7 +589,7 @@ class OrderItem < ActiveRecord::Base
         pass = should == actual
         msg = "total must be (price * quantity) - price reductions + tax_amount"
         type = :orderItemTotalCorrectNet
-        tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+        tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should.fractional, :a=>actual.fractional} if pass == false
         
       else
         should = Money.new((self.quantity * self.price_cents) - price_reductions, self.vendor.currency)
@@ -569,7 +597,7 @@ class OrderItem < ActiveRecord::Base
         pass = should == actual
         msg = "total must be (price * quantity) - price reductions"
         type = :orderItemTotalCorrect
-        tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+        tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should.fractional, :a=>actual.fractional} if pass == false
       end
     end
       
@@ -632,7 +660,7 @@ class OrderItem < ActiveRecord::Base
       pass = should == actual
       msg = "tax must be correct"
       type = :orderItemTaxCorrectNet
-      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should.fractional, :a=>actual.fractional} if pass == false
       
 #       pass = (should.fractional - actual.fractional).abs != 1
 #       msg = "1 cent rounding error"
@@ -645,12 +673,12 @@ class OrderItem < ActiveRecord::Base
       pass = should == actual
       msg = "tax must be correct"
       type = :orderItemTaxCorrect
-      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should.fractional, :a=>actual.fractional} if pass == false
       
       pass = (should.fractional - actual.fractional).abs != 1
       msg = "1 cent rounding error"
       type = :orderItemTaxRounding
-      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
+      tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should.fractional, :a=>actual.fractional} if pass == false
     end
     
     # ---
@@ -674,6 +702,28 @@ class OrderItem < ActiveRecord::Base
     end
     
     return tests
+  end
+  
+  private
+  
+  def do_order_complete_warning
+    $MESSAGES[:prompts] << I18n.t("system.errors.deletion_of_item_when_order_completed")
+    
+    if self.vendor.enable_technician_emails == true and not self.vendor.technician_email.blank?
+      subject = "Attempt to delete OrderItem #{ self.id } when Order is completed"
+      body = "order_id=" + self.order.id
+      UserMailer.technician_message(self.vendor, subject, body).deliver
+      em = Email.new
+      em.company = self.company
+      em.vendor = self.vendor
+      em.receipient = self.vendor.technician_email
+      em.subject = subject
+      em.body = body
+      em.user = self.user
+      em.technician = true
+      em.model = self
+      em.save
+    end
   end
 
 end
