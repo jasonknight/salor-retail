@@ -1,3 +1,10 @@
+salor-retail (4.0.2.108) wheezy; urgency=low
+
+  * protect against OrderItem modification when Order has been completed in the meantime
+  * updated translations
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 09 Sep 2014 18:24:41 +0200
+
 salor-retail (4.0.2.107) wheezy; urgency=low
 
   * wider bottom margin for paper printing
