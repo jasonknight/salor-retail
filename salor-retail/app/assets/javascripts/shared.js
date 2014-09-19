@@ -67,7 +67,7 @@ var shared = {
       });
       //mdiv.css({position: 'absolute'});
       $('body').append(mdiv);
-      if (sr.fn.salor_bin.is) {
+      if (sr.fn.salor_bin.is()) {
         // QtWebkit seems to have different offsets, make this a special case
         mdiv.offset({
           left: button.offset().left + 200,

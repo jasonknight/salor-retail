@@ -1,5 +1,5 @@
 sr.fn.salor_bin.is = function() {
-  return (typeof(Salor) != 'undefined' );
+  return (typeof(Salor) != "undefined" );
 }
 
 sr.fn.salor_bin.usePole = function() {
