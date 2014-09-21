@@ -1,3 +1,9 @@
+salor-retail (4.0.2.109) wheezy; urgency=low
+
+  * make_select_widget css fix
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sun, 21 Sep 2014 11:43:23 +0200
+
 salor-retail (4.0.2.108) wheezy; urgency=low
 
   * protect against OrderItem modification when Order has been completed in the meantime
