@@ -26,6 +26,11 @@
       </div>
     </li>
     <% end %>
+    <li>
+      <div align="center" id="btn-items-index" class="">
+        <%=  link_to raw(salor_icon(:order,{},32,I18n.t("activerecord.models.order.other"))), main_app.orders_path %>
+      </div>
+    </li>
     <% if @current_user and @current_register and @current_user.can(:cashier) %>
       <li>
         <div align="center" id="header_cash_drop" class="no-touchy cash-drop-header" onclick="sr.fn.drawer.showTransactionPopup();">

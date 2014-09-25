@@ -8,7 +8,7 @@ class BrokenItemsController < ApplicationController
   before_filter :check_role
 
   def index
-    @broken_items = @current_vendor.broken_items.visible.page(params[:page]).per(@current_vendor.pagination)
+    @broken_items = @current_vendor.broken_items.visible.order("created_at DESC").by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
   end
 
   def show

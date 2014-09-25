@@ -36,17 +36,17 @@ class OrdersController < ApplicationController
     params[:type] ||= 'normal'
     case params[:type]
     when 'normal'
-      @orders = @current_vendor.orders.visible.order("nr desc").where(:paid => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:paid => true).by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
     when 'proforma'
-      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_proforma => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_proforma => true).by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
     when 'unpaid'
-      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_unpaid => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("nr desc").where(:is_unpaid => true).by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
     when 'quote'
-      @orders = @current_vendor.orders.visible.order("qnr desc").where(:is_quote => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("qnr desc").where(:is_quote => true).by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
     when 'subscription'
-      @orders = @current_vendor.orders.visible.order("created_at DESC").where(:subscription => true).page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("created_at DESC").where(:subscription => true).by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
     else
-      @orders = @current_vendor.orders.visible.order("id desc").page(params[:page]).per(@current_vendor.pagination)
+      @orders = @current_vendor.orders.visible.order("id desc").by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination)
     end
   end
 
