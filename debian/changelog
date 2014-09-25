@@ -1,3 +1,10 @@
+salor-retail (4.0.2.110) wheezy; urgency=low
+
+  * disabled old refund method. now, refunds are just negative items
+  * broken items pagination, seach by keywords for orders and broken items, added orders to main menu
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 25 Sep 2014 12:19:33 +0200
+
 salor-retail (4.0.2.109) wheezy; urgency=low
 
   * make_select_widget css fix
