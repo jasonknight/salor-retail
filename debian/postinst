@@ -145,7 +145,8 @@ for lInstance in $gInstances; do
 
       echo "  postinst: creating symlinks"
       ln -sfn $app_root /usr/share/salor-retail/${lInstance}
-      rm -f $app_root/public/uploads/${lInstance} # remove symlink, then create a new one
+      rm -rf $app_root/public/uploads/${lInstance} # remove symlink, then create a new one
+      mkdir -p $rails_var/public/uploads/${lInstance}
       ln -sfn $rails_var/public/uploads/${lInstance} $app_root/public/uploads/${lInstance}
       rm -rf $app_root/tmp # remove real directory in case it was created by Rails
       ln -sfn /var/tmp/salor-retail $app_root/tmp

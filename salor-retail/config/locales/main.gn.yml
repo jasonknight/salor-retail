@@ -949,7 +949,7 @@ gn:
       model_edit: ! '%{model} wurde erfolgreich bearbeitet.'
       move_real_quantities_success: Artikelmengen wurden erfolgreich übernommen
       new_order: Neuer Verkauf angelegt
-      order_refund_dt: ! '#%{id}'
+      order_refund_dt: ! '%{name}, %{sku}, Verkauf Nr. %{id}'
       please_backup: Machen Sie regelmäßig Backups!
       save_before: Vor dem Verlassen speichern?
       wholesaler_upload_report: ! 'Aktualisiert: %{updated_items}, Erzeugt: %{created_items},

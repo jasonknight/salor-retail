@@ -51,8 +51,9 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = @current_vendor.orders.visible.find_by_id(params[:id])
-    @histories = @order.histories
+    redirect_to "/orders/#{ params[:id] }/print"
+    #@order = @current_vendor.orders.visible.find_by_id(params[:id])
+    #@histories = @order.histories
   end
 
   def new

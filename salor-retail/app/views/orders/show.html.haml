@@ -15,21 +15,16 @@
     %th= t("activerecord.attributes.rebate")
     %th= t("orders.report.net")
     %th= t("orders.report.gross")
-    %th
-    %th
   = render :partial => "line_item", :collection => @order.order_items.visible
   
   %tr
-    %td.right{ :colspan => 7 }= I18n.t("activerecord.attributes.total")
+    %td.right{ :colspan => 5 }= I18n.t("activerecord.attributes.total")
     %td.right= humanized_money_with_symbol @order.total
   
   - @order.payment_method_items.visible.each do |pmi|
     %tr.no-stripe
-      %td.right{ :colspan => 7 }= pmi.payment_method.name
+      %td.right{ :colspan => 5 }= pmi.payment_method.name
       %td.right= humanized_money_with_symbol pmi.amount
-   
-= t('menu.refund_payment_method')
-= select_tag 'refund_payment_method', options_from_collection_for_select(@current_vendor.payment_methods.visible.where(:change => nil, :quote => nil, :unpaid => nil).order('cash DESC'), :id, :name)
 
 = render :partial => "shared/histories", :locals => {:histories => @histories }
 

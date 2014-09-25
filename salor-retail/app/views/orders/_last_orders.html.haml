@@ -19,5 +19,4 @@
         %p.recent_price== #{ number_to_currency(o.total) } ➠ #{ number_to_currency(o.change) }
         %div.dark-background
           = salor_icon(:thermal_printer, { :onmousedown => "sr.fn.salor_bin.printOrder('#{o.id}');"}, 32)
-          = salor_icon(:edit, { :onmousedown => "window.location='/orders/#{ o.id }'" }, 32)
           = salor_icon(:a4print, { :onmousedown => "window.location='/orders/#{ o.id }/print'"}, 32)

@@ -939,7 +939,7 @@ en:
       model_edit: ! '%{model} was edited successfully'
       move_real_quantities_success: Item quantities were successfully updated
       new_order: New order created
-      order_refund_dt: ! '#%{id}'
+      order_refund_dt: ! '%{name}, %{sku}, Verkauf Nr. %{id}'
       please_backup: Please backup your system regularly!
       save_before: Save before leaving?
       wholesaler_upload_report: ! 'Updated items: %{updated_items}, Created items:

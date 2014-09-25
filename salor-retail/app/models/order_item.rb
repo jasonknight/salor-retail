@@ -174,7 +174,7 @@ class OrderItem < ActiveRecord::Base
       dt.user = user
       dt.refund = true
       dt.tag = 'OrderItemRefund'
-      dt.notes = I18n.t("views.notice.order_refund_dt", :id => self.id)
+      dt.notes = I18n.t("views.notice.order_refund_dt", :id => self.order.nr, :name => self.item.name, :sku => self.sku)
       dt.order = self.order
       dt.order_item_id = self.id
       dt.drawer = drawer
@@ -711,7 +711,7 @@ class OrderItem < ActiveRecord::Base
     
     if self.vendor.enable_technician_emails == true and not self.vendor.technician_email.blank?
       subject = "Attempt to delete OrderItem #{ self.id } when Order is completed"
-      body = "order_id=" + self.order.id
+      body = "order_id=" + self.order.id.to_s
       UserMailer.technician_message(self.vendor, subject, body).deliver
       em = Email.new
       em.company = self.company

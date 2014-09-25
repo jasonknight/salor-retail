@@ -5,12 +5,3 @@
   %td= number_to_percentage line_item.rebate
   %td= humanized_money_with_symbol line_item.net
   %td= humanized_money_with_symbol line_item.total
-  %td
-    - if line_item.quantity > 1
-      = salor_icon(:split, {:onclick => "window.location = '/orders/split_order_item?id=#{line_item.id}';"}, 32, t('menu.split'))
-  %td
-    - if @current_user.can(:edit_orders)
-      - if line_item.refunded
-        = salor_icon(:refunded, {}, 32)
-      - else
-        = salor_icon(:refund, {:onclick => "sr.fn.refund.go(#{ line_item.id });"}, 32, t('printr.eod_report.refund'))

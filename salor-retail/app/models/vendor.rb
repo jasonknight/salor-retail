@@ -613,8 +613,7 @@ class Vendor < ActiveRecord::Base
     drawer_transactions = self.drawer_transactions.visible.where(
       :created_at => from..to,
       :complete_order => nil,
-      :drawer_id => drawer,
-      :refund => nil
+      :drawer_id => drawer
     )
 
     drawer_transactions.each do |dt|
