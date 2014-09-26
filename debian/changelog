@@ -1,3 +1,11 @@
+salor-retail (4.0.2.111) wheezy; urgency=low
+
+  * moved check for completed order into controllers
+  * set no_inc for OrderItem for all but quantity change
+  * code cleanup
+
+ -- Michael Franzl <office@michaelfranzl.com>  Fri, 26 Sep 2014 11:03:45 +0200
+
 salor-retail (4.0.2.110) wheezy; urgency=low
 
   * disabled old refund method. now, refunds are just negative items
