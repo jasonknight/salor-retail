@@ -167,16 +167,22 @@ class VendorsController < ApplicationController
         end
         
         
-        if params[:field] == "price" and params[:value].include? "+"
-          # this is an arithmetrical expression. eval it!
-          evalstring = params[:value]
-          evalstring.gsub! ",", "." # replace europaean comma with ruby comma
-          evalstring.gsub! /[^0-9,.+]/, "" # security, allow only additions of numbers
-          begin
-            value = eval(evalstring)
-          rescue SyntaxError => se
-            value = 0
+        if params[:field] == "price"
+          if params[:value].include? "+"
+            # this is an arithmetrical expression. eval it!
+            evalstring = params[:value]
+            evalstring.gsub! ",", "." # replace europaean comma with ruby comma
+            evalstring.gsub! /[^0-9,.+]/, "" # security, allow only additions of numbers
+            begin
+              value = eval(evalstring)
+            rescue SyntaxError => se
+              value = 0
+            end
           end
+        end
+        
+        if params[:field] != "quantity"
+          @inst.no_inc = true
         end
       end
       
