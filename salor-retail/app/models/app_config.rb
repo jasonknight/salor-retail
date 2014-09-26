@@ -26,19 +26,4 @@ class AppConfig
   def self.respond_to?(sym,include_private=false)
     true
   end
-  
-#   def self.logo_check
-#     # puts "## IN CHECK LOGO"
-#     if self.logo and File.exists? self.logo then
-#       # puts "## LOGO IS SET"
-#       if not File.exists? ::Rails.root.to_s + '/public/images/logo-300.png' then
-#         # puts "## CREATING LINK"
-#         FileUtils.link(self.logo + '-300.png',::Rails.root.to_s + '/public/images/logo-300.png')
-#       end
-#       return true
-#     else
-#       # puts "## NO LOGO IS SET"
-#     end
-#     return false
-#   end
 end

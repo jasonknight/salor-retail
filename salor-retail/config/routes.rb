@@ -50,14 +50,11 @@ SalorRetail::Application.routes.draw do
   match "orders/print_order_receipt" => "orders#print_order_receipt"
   match "orders/print_confirmed" => "orders#print_confirmed"
   match "orders/render_order_receipt" => "orders#render_order_receipt"
-  match "orders/refund_item" => "orders#refund_item"
-  match "orders/refund_order" => "orders#refund_order"
   match "orders/last_five_orders" => "orders#last_five_orders"
   match "orders/clear" => "orders#clear"
   match "orders/remove_payment_method" => "orders#remove_payment_method"
   match "orders/bancomat" => "orders#bancomat"
   match "orders/offline" => "orders#offline"
-  match "order_items/index" => "order_items#index"
   match "orders/new_pos" => "orders#new_pos"
   match "orders/swap" => "orders#swap"
   match "orders/prev_order" => "orders#prev_order"
@@ -68,7 +65,6 @@ SalorRetail::Application.routes.draw do
   match "orders/update_pos_display" => "orders#update_pos_display"
   match "orders/delete_order_item" => "orders#delete_order_item"
   match "orders/connect_loyalty_card" => "orders#connect_loyalty_card"
-  match "orders/split_order_item" => "orders#split_order_item"
   match "orders/print_receipt" => "orders#print_receipt"
   match "orders/void" => "orders#void"
   match "orders/:id/print" => "orders#print"
@@ -177,7 +173,6 @@ SalorRetail::Application.routes.draw do
   resources :users
   resources :actions
   resources :plugins
-  resources :order_items
   resources :orders
   resources :items do
     get :new_action

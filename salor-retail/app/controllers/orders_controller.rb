@@ -275,18 +275,6 @@ class OrdersController < ApplicationController
     redirect_to new_order_path
   end
   
-  def split_order_item
-    @oi = @current_vendor.order_items.visible.find_by_id(params[:id])
-    @oi.split
-    redirect_to request.referer
-  end
-  
-  def refund_item
-    @oi = @current_vendor.order_items.visible.find_by_id(params[:id])
-    @oi.refund(params[:pm], @current_user)
-    redirect_to request.referer
-  end
-  
   def customer_display
     @order = @current_vendor.orders.visible.find_by_id(params[:id])
     @order_items = @order.order_items.visible.order('id ASC')
@@ -313,36 +301,6 @@ class OrdersController < ApplicationController
     view = 'default'
     render "orders/invoices/#{view}/page"
   end
-
-  
-#   def clear
-#     if not @current_user.can(:clear_orders) then
-#       #History.record(:failed_to_clear, @order, 1)
-#       render 'update_pos_display' and return
-#     end
-#     
-#     @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
-#     
-#     if @order then
-#       History.record("Destroying #{@order.order_items.visible.count} OrderItems", @order, 1)
-#       
-#       @order.order_items.visible.each do |oi|
-#         oi.hidden = 1
-#         oi.hidden_by = @current_user.id
-#         oi.save
-#       end
-#       
-#       @order.customer_id = nil
-#       @order.tag = nil
-#       @order.subtotal = 0
-#       @order.total = 0
-#       @order.tax = 0
-#       @order.save
-#     else
-#       History.record("cannot clear order because already paid", @order, 1)
-#     end
-#     render 'update_pos_display' and return
-#   end
   
   def create_all_recurring
     recurrable_orders = @current_vendor.recurrable_subscription_orders

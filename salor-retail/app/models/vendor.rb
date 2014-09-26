@@ -201,83 +201,9 @@ class Vendor < ActiveRecord::Base
     end
     return nr
   end
-  
-#   def self.reset_for_tests
-#     t = Time.now - 24.hours
-#     Drawer.update_all :amount => 0
-#     Order.where(:created_at => t...(Time.now)).delete_all
-#     OrderItem.where(:created_at => t...(Time.now)).delete_all
-#     DrawerTransaction.where(:created_at => t...(Time.now)).delete_all
-#     PaymentMethodItem.where(:created_at => t...(Time.now)).delete_all
-#     Category.update_all :cash_made => 0
-#     Category.update_all :quantity_sold => 0
-#     Location.update_all :cash_made => 0
-#     Location.update_all :quantity_sold => 0
-#     SalorConfiguration.update_all :calculate_tax => false
-#     CashRegister.update_all :require_password => false
-#   end
-  
-  # to set all sales related data to zero, useful when the system goes operational after a testing period
-  def self.nullify
-    Drawer.update_all :amount_cents => 0
-    Order.delete_all
-    OrderItem.delete_all
-    DrawerTransaction.delete_all
-    PaymentMethodItem.delete_all
-    ItemStock.delete_all
-    BrokenItem.delete_all
-    History.delete_all
-    StockTransaction.delete_all
-    UserLogin.delete_all
-    Vendor.update_all :largest_order_number => 0
-    Vendor.update_all :largest_quote_number => 0
-    Receipt.delete_all
-  end
-  
-  def self.debug_setup
-    i = 110
-    text = ""
-    User.all.each do |e|
-      e.update_attribute :password, i.to_s
-      text += "#{e.id} #{e.username}: #{i}\n"
-      i += 1
-    end
-    puts text
-  end
-  
-  def self.debug_user_info
-    text = ""
-    User.all.each do |e|
-      text += e.debug_info
-    end
-    puts text
-  end
-  
+
   def net_prices
     ['cc', 'us', 'ca'].include? self.country
-  end
-  
-  def self.debug_order_info(fname,limit=1000)
-    File.open(fname,"w+") do |f|
-      Order.order("created_at desc").limit(limit).each do |order|
-        pms = {}
-        order.payment_methods.each do |pm|
-          pms[pm.internal_type] ||= { :count => 0, :name => "", :values => []}
-          pms[pm.internal_type][:count] += 1
-          if pms[pm.internal_type][:count] > 1 then
-            f.write "!Problem: more than one of the same pm on an order\n"
-          end
-          pms[pm.internal_type][:name] = pm.name
-          pms[pm.internal_type][:values] << pm.amount
-        end
-        f.write "Order: #{order.id} with NR #{order.nr} or QNR #{order.qnr}\n"
-        f.write "\t Date: #{order.created_at}\n"
-        f.write "\t Owner: #{order.user.last_name}, #{order.user.first_name} as #{order.user.username}\n"
-        f.write "\t Order Items: #{order.order_items.visible.count} visible of #{order.order_items.count}\n"
-        f.write "\t Payment Methods: #{pms.to_json}\n"
-      end
-    end
-    return "Done"
   end
   
   def get_end_of_day_report(from=nil, to=nil, drawer=nil)
@@ -390,10 +316,6 @@ class Vendor < ActiveRecord::Base
       end
     end
     
-      
-          
-      
-    
     # Taxes
     taxes = {
       :pos => {},
@@ -475,12 +397,9 @@ class Vendor < ActiveRecord::Base
       :is_proforma => nil,
       :is_quote => nil,
     ).select("DISTINCT payment_method_id")
-    #used_payment_methods = self.payment_methods.visible.order(:name)
+
     used_payment_methods.each do |r|
       pm = self.payment_methods.find_by_id(r.payment_method_id)
-      #raise "#{ r.inspect }" if pm.nil?
-      
-      # next if pm.nil? # temporary fix for old db's
       
       next if pm.change # ignore change. we only consider cash (separately), and all others pms
       
@@ -657,7 +576,6 @@ class Vendor < ActiveRecord::Base
     gift_card_redeem_total = - Money.new(gift_cards_redeemed.sum(:total_cents), self.currency)
     
 
-    
     report = Hash.new
     report['categories'] = categories
     report['taxes'] = taxes
@@ -1104,8 +1022,6 @@ class Vendor < ActiveRecord::Base
     end
     
     return filtered_tests.join("\n")
-    
-    
   end
   
   def create_inventory_report

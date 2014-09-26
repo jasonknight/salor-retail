@@ -164,27 +164,6 @@ class Order < ActiveRecord::Base
   def net
     return self.total - self.tax_amount
   end
-  
-#   def skus=(list)
-#     list.each do |s|
-#       if s.class == Array then
-#         qty = s[1]
-#         s = s[0]
-#       end
-#       item = Item.get_by_code(s)
-#       if item then
-#         if item.class == LoyaltyCard then
-#           self.customer = item
-#         else
-#           oi = self.add_item(item)
-#           if qty then
-#             oi.quantity = qty
-#           end
-#         end
-#       end #if item
-#     end # end list.each
-#   end
-
 
   def add_order_item(params={})
     return nil if params[:sku].blank?
@@ -194,7 +173,6 @@ class Order < ActiveRecord::Base
     if self.completed_at then
       log_action "Order is completed already, cannot add items to it #{self.completed_at}"
     end
-    
     
     # get existing regular item
     oi = self.order_items.visible.where(:no_inc => nil, :sku => params[:sku]).first
@@ -301,13 +279,8 @@ class Order < ActiveRecord::Base
       item.save!
     end
   end
-  
 
-  
-  
-  
   def get_item_by_sku(sku)
-    
     item = self.vendor.items.visible.find_by_sku(sku)
     return item if item # a sku was entered
 
@@ -410,11 +383,6 @@ class Order < ActiveRecord::Base
       raise "Order Could Not Be Saved #{ self.errors.messages }"
     end
   end
-
-
-
-
-  
 
   def complete(params={})
     raise "cannot complete a paid order" if self.paid
@@ -543,8 +511,8 @@ class Order < ActiveRecord::Base
       self.payment_method_items << pmi
       
       # this is now done in update_associations
-#       self.is_quote = true if pm.quote == true
-#       self.is_unpaid = true if pm.unpaid == true
+      #       self.is_quote = true if pm.quote == true
+      #       self.is_unpaid = true if pm.unpaid == true
     end
     
     self.save!
@@ -887,23 +855,6 @@ class Order < ActiveRecord::Base
     }
     return report
   end
-  
- 
-  
-#   def inspectify
-#     txt = "Order[#{self.id}]"
-#     [:total,:subtotal,:tax,:gross].each do |f|
-#        txt += " #{f}=#{self.send(f)}"
-#     end
-#     self.order_items.each do |oi|
-#       txt += "\n\tOrderItem[#{oi.id}]"
-#       [:quantity,:price,:total,:gift_card_amount,:activated].each do |f|
-#         txt += " #{f}=#{oi.send(f)}"
-#       end
-#     end
-#     return txt
-#   end
-  
   
   def escpos_receipt
     report = self.report
@@ -1329,7 +1280,7 @@ class Order < ActiveRecord::Base
   # for better debugging in the console
   def self.last2
     id = Order.last.id
-    return Order.find_by_id id-1   
+    return Order.find_by_id id-1
   end
   
   def to_json

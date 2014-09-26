@@ -124,75 +124,6 @@ class OrderItem < ActiveRecord::Base
       write_attribute :tax, tp.value
     end
   end
-  
-
-  def refund(pmid, user)
-    return nil if self.refunded
-    
-    drawer = user.get_drawer
-    refund_payment_method = self.vendor.payment_methods.visible.find_by_id(pmid)
-    
-    pmi = PaymentMethodItem.new
-    pmi.vendor = self.vendor
-    pmi.company = self.company
-    pmi.currency = self.vendor.currency
-    pmi.order = self.order
-    pmi.user = user
-    pmi.drawer = drawer
-    pmi.amount = - self.total
-    pmi.payment_method = refund_payment_method
-    pmi.order_item_id = self.id
-    pmi.cash = refund_payment_method.cash
-    pmi.cash_register = self.order.cash_register
-    pmi.refund = true
-    result = pmi.save
-    if result != true
-      raise "Could not save PMI because #{ pmi.errors.messages }"
-    end
-    
-    if refund_payment_method.cash == true
-      dt = DrawerTransaction.new
-      dt.vendor = self.vendor
-      dt.company = self.company
-      dt.currency = self.vendor.currency
-      dt.user = user
-      dt.refund = true
-      dt.tag = 'OrderItemRefund'
-      dt.notes = I18n.t("views.notice.order_refund_dt", :id => self.order.nr, :name => self.item.name, :sku => self.sku)
-      dt.order = self.order
-      dt.order_item_id = self.id
-      dt.drawer = drawer
-      dt.drawer_amount = drawer.amount
-      dt.amount = - self.total
-      dt.save
-      
-      drawer.amount -= self.total
-      drawer.save
-    end
-    
-    self.refunded = true
-    self.refunded_by = user.id
-    self.refunded_at = Time.now
-    self.calculate_totals
-    
-    order = self.order
-    order.calculate_totals
-  end
-  
-  def split
-    order = self.order
-    order.paid = nil
-    order.save
-    noi = self.dup
-    self.quantity -= 1
-    self.calculate_totals
-    noi.quantity = 1
-    noi.calculate_totals
-    order.calculate_totals
-    order.paid = true
-    order.save
-  end
-
 
   def price=(p)
     if p.class == String
@@ -236,7 +167,7 @@ class OrderItem < ActiveRecord::Base
   
   # this method is just for documentation purposes: that total always includes tax. it is the physical money that has to be collected from the customer.
   def gross
-    log_action "XXXXXXXXX gross #{ self.total_cents.inspect }"
+    # log_action "gross #{ self.total_cents.inspect }"
     return self.total
   end
   
@@ -427,7 +358,7 @@ class OrderItem < ActiveRecord::Base
       if self.vendor.net_prices
         coitem.total = coitem.net - coitem.coupon_amount
       else
-        log_action "XXXXXXXXX #{ coitem.gross.inspect } #{ coitem.coupon_amount.inspect  }"
+        # log_action "XXXXXXXXX #{ coitem.gross.inspect } #{ coitem.coupon_amount.inspect  }"
         coitem.total = coitem.gross - coitem.coupon_amount
       end
       log_action "apply_coupon: OrderItem Total after coupon applied is: #{coitem.total_cents} and coupon_amount is #{coitem.coupon_amount_cents}"
@@ -469,9 +400,6 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
-
-  
-  
   def quantity=(q)
     q = self.string_to_float(q, :locale => self.vendor.region)
     if ( self.behavior == 'gift_card' or self.behavior == 'coupon' ) and q != 1
@@ -502,9 +430,7 @@ class OrderItem < ActiveRecord::Base
     end
     self.order.calculate_totals
   end
-  
-  
-  
+
   def to_json
     obj = {}
     if self.item then
