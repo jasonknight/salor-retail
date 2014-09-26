@@ -153,17 +153,30 @@ class VendorsController < ApplicationController
 
     value = params[:value]
     if @inst.respond_to?("#{ params[:field] }=".to_sym)
-      
-      
-      if @inst.class == OrderItem and params[:field] == "price" and params[:value].include? "+"
-        # this is an arithmetrical expression. eval it!
-        evalstring = params[:value]
-        evalstring.gsub! ",", "." # replace europaean comma with ruby comma
-        evalstring.gsub! /[^0-9,.+]/, "" # security, allow only additions of numbers
-        begin
-          value = eval(evalstring)
-        rescue SyntaxError => se
-          value = 0
+
+      if @inst.class == OrderItem
+        
+        if @inst.order.completed_at
+          # don't allow changing of items when order is completed. this may happen when store is operating several screens and lack of coordination.
+          $MESSAGES[:prompts] << I18n.t("system.errors.deletion_of_item_when_order_completed")
+          # render view
+          @order = @inst.order
+          @order_items = []
+          render 'orders/update_pos_display'
+          return
+        end
+        
+        
+        if params[:field] == "price" and params[:value].include? "+"
+          # this is an arithmetrical expression. eval it!
+          evalstring = params[:value]
+          evalstring.gsub! ",", "." # replace europaean comma with ruby comma
+          evalstring.gsub! /[^0-9,.+]/, "" # security, allow only additions of numbers
+          begin
+            value = eval(evalstring)
+          rescue SyntaxError => se
+            value = 0
+          end
         end
       end
       

@@ -145,10 +145,15 @@ class OrdersController < ApplicationController
 
 
   def delete_order_item
+    @order_items = []
     @order_item = @current_vendor.order_items.find_by_id(params[:id])
     @order = @order_item.order
+    if @order.completed_at
+      $MESSAGES[:prompts] << I18n.t("system.errors.deletion_of_item_when_order_completed")
+      render :update_pos_display
+      return
+    end
     @order_item.hide(@current_user)
-    @order_items = []
     if @order_item.behavior == 'coupon'
       @matching_coupon_item = @order.order_items.visible.find_by_sku(@order_item.item.coupon_applies)
       @order_items << @matching_coupon_item
