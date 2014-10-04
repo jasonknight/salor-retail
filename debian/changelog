@@ -1,3 +1,10 @@
+salor-retail (4.0.2.112) wheezy; urgency=low
+
+  * added plus and backspace to numpad
+  * onscreen keyboard for drawer transaction amount and notes, css improvements
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 04 Oct 2014 19:46:16 +0200
+
 salor-retail (4.0.2.111) wheezy; urgency=low
 
   * moved check for completed order into controllers
