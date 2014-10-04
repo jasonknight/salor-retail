@@ -83,11 +83,12 @@ sr.fn.onscreen_keyboard.setup = function() {
 
     $.keyboard.layouts['num'] = {
     'default' : [
+      "{b} +",
       "7 8 9",
       "4 5 6",
       "1 2 3",
       "{clear} 0 ,",
-      "{c} {a}"
+      "{c} {a}",
     ]
     };
 
