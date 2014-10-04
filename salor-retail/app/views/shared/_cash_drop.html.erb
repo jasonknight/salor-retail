@@ -33,11 +33,11 @@
             amount = SalorBase.number_with_precision(0, {:locale => @current_vendor.region, :precision => 2})
           end
         %>
-        <input id="cash_drop_amount" type="text" name="transaction[amount]" class="cash-drop-amount text-input " value="<%= amount %>" size=3 />
+        <input id="cash_drop_amount" type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="<%= amount %>" size=3 />
       </p>
       <p>
         <span class='cash_drop_label'><%= I18n.t("activerecord.attributes.notes") %></span>
-        <textarea name="transaction[notes]" id="cash-drop-notes-id" class="input" rows="3" size=1></textarea>
+        <textarea name="transaction[notes]" id="cash-drop-notes-id" class="input keyboardable" rows="3" size=1></textarea>
       </p>
 
             <% if @current_vendor.transaction_tags.visible.any? then %>

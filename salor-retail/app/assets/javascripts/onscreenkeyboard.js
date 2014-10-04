@@ -109,7 +109,7 @@ sr.fn.onscreen_keyboard.make = function(elem) {
   if (elem.hasClass('keyboardable-done')) {
     return;
   }
-  var kbd = $('<div id="' + elem.attr("id") + '_kbd"class="kbd-show-button">&crarr;</div>');
+  var kbd = $('<div id="' + elem.attr("id") + '_kbd" class="kbd-show-button">&crarr;</div>');
 
   kbd.mousedown(function () {
     elem.getkeyboard().reveal();
