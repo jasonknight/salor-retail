@@ -187,7 +187,11 @@ class Action < ActiveRecord::Base
         return action.execute_script(item, act);
       end
 
-      if action.afield == "price_cents"
+      if action.afield == "price_cents" &&
+          (action.behavior.to_sym == :add ||
+           action.behavior.to_sym == :substract ||
+           action.behavior.to_sym == :assign
+          )
         the_value = action.value * 100
       else
         the_value = action.value

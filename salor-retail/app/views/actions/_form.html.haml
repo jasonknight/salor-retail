@@ -50,3 +50,13 @@
       %td= f.text_area :js_code, :cols => 80, :rows => 12
     %tr
       %td{ :colspan => 2, :align => :right }= f.submit
+
+:javascript
+  $(function () {
+    // no form submission on enter key
+    $('input').keypress(function(e) {
+      if (e.which == 13) {
+        e.preventDefault();
+      }
+    });
+  });
