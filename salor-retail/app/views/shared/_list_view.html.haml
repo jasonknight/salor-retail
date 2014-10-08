@@ -43,11 +43,11 @@
             - else
               = val
       - if @current_user.can("edit_#{klass.table_name}")
-        %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:edit,{},16), "/#{entry.class.table_name}/#{entry.id}/edit" 
+        %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:edit,{},32), "/#{entry.class.table_name}/#{entry.id}/edit" 
       - else
         %td
       - if @current_user.can("destroy_#{klass.table_name}".to_sym)
-        %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:delete,{},16), "/#{entry.class.table_name}/#{entry.id}", :confirm => 'Are you sure?', :method => :delete 
+        %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:delete,{},32), "/#{entry.class.table_name}/#{entry.id}", :confirm => 'Are you sure?', :method => :delete 
       - else
         %td
 

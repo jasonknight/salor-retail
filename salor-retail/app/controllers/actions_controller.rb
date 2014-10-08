@@ -11,11 +11,9 @@ class ActionsController < ApplicationController
     if params[:keywords].blank?
       @actions = @current_vendor.actions.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
     else
-      items = @current_company.items.visible.by_keywords(params[:keywords]).page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+      items = @current_vendor.items.visible.by_keywords(params[:keywords])
       @actions = []
-      items.each do |i|
-        @actions += i.actions.visible
-      end
+      items.each { |i| @actions += i.actions.visible }
     end
   end
 
