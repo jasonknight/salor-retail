@@ -1,3 +1,10 @@
+salor-retail (4.0.2.113) wheezy; urgency=low
+
+  * fixed divide/multiply/assign actions for cent prices, prevent form submission when scanning barcode in actions form
+  * larger edit buttons, fixed actions search by keywords
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Oct 2014 08:05:14 +0200
+
 salor-retail (4.0.2.112) wheezy; urgency=low
 
   * added plus and backspace to numpad
