@@ -1,3 +1,9 @@
+salor-retail (4.0.2.114) wheezy; urgency=low
+
+  * larger new buttons, larger buttons for items index
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 08 Oct 2014 08:15:45 +0200
+
 salor-retail (4.0.2.113) wheezy; urgency=low
 
   * fixed divide/multiply/assign actions for cent prices, prevent form submission when scanning barcode in actions form
