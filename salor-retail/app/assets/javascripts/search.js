@@ -9,7 +9,8 @@ sr.fn.search_generic.setup = function() {
 }
 
 sr.fn.search_generic.go = function(caller) {
-  window.location = '?keywords=' + $('#generic_search_input').val();
+  var encoded_search_string = encodeURIComponent($('#generic_search_input').val());
+  window.location = '?keywords=' + encoded_search_string;
 }
 
 sr.fn.search_pos.showPopup = function() {

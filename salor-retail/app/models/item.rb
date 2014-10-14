@@ -43,8 +43,14 @@ class Item < ActiveRecord::Base
   accepts_nested_attributes_for :item_stocks, :allow_destroy => true #, :reject_if => lambda {|a| (a[:stock_location_quantity].to_f +  a[:location_quantity].to_f == 0.00) }
 
   validates_presence_of :sku, :item_type, :vendor_id, :company_id, :tax_profile_id, :currency
-  validate :sku_unique_in_visible, :not_selfloop, :not_too_long_child_chain, :not_too_long_parent_chain, :no_child_duplicate, :not_negative
-  validate :sku_is_not_weird
+  
+  validate :sku_unique_in_visible, :if => :sku_is_not_weird
+  validate :not_selfloop
+  validate :not_too_long_child_chain
+  validate :not_too_long_parent_chain
+  validate :no_child_duplicate
+  validate :not_negative
+  
   before_save :run_onsave_actions
   before_save :cache_behavior
   
@@ -69,9 +75,11 @@ class Item < ActiveRecord::Base
   end
   
   def sku_is_not_weird
-    if not self.sku == self.sku.gsub(/[^0-9a-zA-Z]/,'') then
+    if not self.sku == self.sku.gsub(/[^-0-9a-zA-Z]/,'') then
       errors.add(:sku, I18n.t('system.errors.dont_use_weird_skus'))
+      return false
     end
+    return true
   end
   
   def sku_unique_in_visible

@@ -32,11 +32,13 @@ module SalorScope
     end
   
     
-    klass.scope(:by_keywords, lambda { |words|
+    klass.scope(:by_keywords, lambda do |words|
       conds = []
       vals = []
       return nil if words.blank?
-                                      
+      
+      words.gsub! /[^-0-9a-zA-Z]/, ""
+
       if klass == Order then
         conds << "nr = '#{words}' OR qnr = '#{words}' OR tag LIKE '#{words}%'"  
         return klass.where(conds.join())
@@ -91,7 +93,7 @@ module SalorScope
       end
                                       
       klass.where(conds.join(" OR "))
-    })
+    end)
     
     
     rescue

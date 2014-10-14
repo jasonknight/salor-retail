@@ -107,8 +107,8 @@ class ItemsController < ApplicationController
     @item = @current_vendor.items.visible.find_by_id(params[:id])
     params[:item][:currency] = @current_vendor.currency
     
-    if @item.update_attributes(params[:item])
-      
+    @item.attributes = params[:item]
+    if @item.save == true
       @item.assign_parts(params[:part_skus])
       @item.item_stocks.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id
       @item.item_shippers.update_all :vendor_id => @item.vendor_id, :company_id => @item.company_id

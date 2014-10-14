@@ -877,7 +877,7 @@ gn:
       sum: Summe
       title: Mengenstatistik
       to: Bis
-      category_name: Category name
+      category: Kategorie
   views:
     advanced_field: Fortgeschritten
     cash_register_heading: ! '%{name} für %{store}'

@@ -763,7 +763,7 @@ en:
         at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
-      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+      dont_use_weird_skus: Only A-Z, a-z, 0-9 and - are permitted in the SKU field
       failed_to_save_parts: Konnte das Set nicht speichern. Bitte stellen Sie sicher,
         dass Set-Items existieren.
       gift_card_empty: Gift Card is Empty, notify client, and destroy card.
@@ -819,6 +819,7 @@ en:
       percent: ! '%'
     sign_up: sign up
   vendors:
+    
     clear_cache_button: clear cache
     clear_cache_header: cache
     form:
@@ -863,7 +864,7 @@ en:
       transaction_total: transaction total
       transactions: transactions
     sales_statistics:
-      category_name: Category name
+      category: Category
       from: From
       item_name: Item name
       quantity: Quantity
