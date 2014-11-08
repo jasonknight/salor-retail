@@ -1,3 +1,10 @@
+salor-retail (4.0.2.115) wheezy; urgency=medium
+
+  * protect against special chars in sku search, adapted sku validations
+  * fixed date format
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 08 Nov 2014 18:49:25 +0100
+
 salor-retail (4.0.2.114) wheezy; urgency=low
 
   * larger new buttons, larger buttons for items index
