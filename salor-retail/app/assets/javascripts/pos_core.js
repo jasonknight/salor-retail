@@ -2,7 +2,7 @@ sr.data.pos_core.highlight_attrs = ['sku', 'price', 'total'];
 
 sr.fn.pos_core.addItem = function(sku, additional_params) {
   if (sku == "") return
-  sku = sku.replace(/[^0-9a-zA-Z,\.]/g,'');
+  sku = sku.replace(/[^-0-9a-zA-Z,\.]/g,'');
   get('/orders/add_item_ajax?order_id=' + sr.data.pos_core.order.id + '&sku=' + sku + additional_params);
   $('#main_sku_field').val('');
 }
