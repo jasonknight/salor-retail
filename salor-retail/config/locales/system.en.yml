@@ -151,6 +151,6 @@ en:
       long: ! '%d. %B %Y %H:%M:%S'
       month_and_day: ! '%d. %B'
       salor: ! '%a, %b %d %H:%M'
-      short: ! '%d. %b. %y  %y %H:%M'
+      short: ! '%d. %b. %y  %H:%M'
       time_short: ! '%H:%M'
     pm: ''
