@@ -1,3 +1,9 @@
+salor-retail (4.0.2.116) wheezy; urgency=medium
+
+  * allow dashes in SKU filtered by javascript
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 08 Nov 2014 19:28:14 +0100
+
 salor-retail (4.0.2.115) wheezy; urgency=medium
 
   * protect against special chars in sku search, adapted sku validations
