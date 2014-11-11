@@ -426,8 +426,10 @@ en:
       subtotal_purchase_price: Subtotal Purchase Price
       subtotal_selling_price: Subtotal Selling Price
       title: Inventory Report
-      total_buying_price: Sum Purchase Price
-      total_selling_price: Sum Selling Price
+      sum_purchase_price: Sum Purchase Price
+      sum_selling_price: Sum Selling Price
+      total_purchase_price: Total Purchase Price
+      total_selling_price: Total Selling Price
     selection:
       print: Print
     show:

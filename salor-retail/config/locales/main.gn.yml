@@ -427,7 +427,9 @@ gn:
       subtotal_purchase_price: Gesamtsumme Einkaufspreis
       subtotal_selling_price: Gesamtsumme Verkaufspreis
       title: Inventurbericht
-      total_buying_price: Summe Kaufpreis
+      sum_purchase_price: Kaufpreis gesamt
+      sum_selling_price: Verkaufspreis gesamt
+      total_purchase_price: Summe Kaufpreis
       total_selling_price: Summe Verkaufspreis
     selection:
       print: Drucken

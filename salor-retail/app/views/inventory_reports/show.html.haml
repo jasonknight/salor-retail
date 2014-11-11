@@ -25,9 +25,15 @@
 
     - report_purchase_price_total = Money.new(0, @current_vendor.currency)
     - report_price_total = Money.new(0, @current_vendor.currency)
+
     - @tax_profiles = @current_vendor.tax_profiles.visible
-    - @category_ids.each do |cid|
-      - @tax_profiles.each do |tp|
+    - @tax_profiles.each do |tp|
+      - next if @items.where(:tax_profile_id => tp.id ).blank?
+      - tp_purchase_price_total = Money.new(0, @current_vendor.currency)
+      - tp_price_total = Money.new(0, @current_vendor.currency)
+      %hr
+      %h3= tp.name
+      - @category_ids.each do |cid|
         - items = @items.where(:category_id => cid, :tax_profile_id => tp.id )
         - next if items.blank?
         
@@ -36,7 +42,7 @@
         
         - cat = @current_vendor.categories.visible.find_by_id(cid)
         
-        %h4= cat ? "#{ cat.name } #{ tp.name }" : "#{ t('items.inventory_report.no_category') } #{ tp.name }"
+        %h4= cat ? cat.name : t('items.inventory_report.no_category')
         %table{ :class => 'striped-table2 has-total' }
           %tr
             %th SKU
@@ -44,8 +50,8 @@
             %th= t 'activerecord.attributes.real_quantity'
             %th= t 'activerecord.attributes.purchase_price'
             %th= t 'items.inventory_report.price'
-            %th= t 'items.inventory_report.total_buying_price'
-            %th= t 'items.inventory_report.total_selling_price'
+            %th= t 'items.inventory_report.sum_purchase_price'
+            %th= t 'items.inventory_report.sum_selling_price'
           - items.each do |i|
             - item_purchase_price_total = i.purchase_price * i.real_quantity
             - item_price_total = i.price * i.real_quantity
@@ -67,8 +73,19 @@
             
           - report_purchase_price_total += category_purchase_price_total
           - report_price_total += category_price_total
+          - tp_purchase_price_total += category_purchase_price_total
+          - tp_price_total += category_price_total
+          
+      .right
+        %p
+          == #{ t 'items.inventory_report.total_purchase_price' }:
+          %b= humanized_money_with_symbol tp_purchase_price_total
+        %p
+          == #{ t 'items.inventory_report.total_selling_price' }:
+          %b= humanized_money_with_symbol tp_price_total
           
 
+    %hr
     .right
       %p
         == #{ t 'items.inventory_report.subtotal_purchase_price' }:
