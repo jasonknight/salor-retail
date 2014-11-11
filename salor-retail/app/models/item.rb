@@ -234,7 +234,7 @@ class Item < ActiveRecord::Base
     parts = self.gs1_format.split(",")
     return Regexp.new "(\\d{#{ parts[0] }})(\\d{#{ parts[1] }})"
   end
-
+  
   def get_translated_name(locale=:en)
     locale = locale.to_s
     trans = read_attribute(:name_translations)
