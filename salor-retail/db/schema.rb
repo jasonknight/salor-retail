@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140111050554) do
+ActiveRecord::Schema.define(:version => 20141128175917) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -289,6 +289,7 @@ ActiveRecord::Schema.define(:version => 20140111050554) do
   add_index "drawer_transactions", ["created_at"], :name => "index_drawer_transactions_on_created_at"
   add_index "drawer_transactions", ["drawer_id"], :name => "index_drawer_transactions_on_drawer_id"
   add_index "drawer_transactions", ["hidden"], :name => "index_drawer_transactions_on_hidden"
+  add_index "drawer_transactions", ["order_id"], :name => "index_drawer_transactions_on_order_id"
   add_index "drawer_transactions", ["refund"], :name => "index_drawer_transactions_on_refund"
   add_index "drawer_transactions", ["user_id"], :name => "index_drawer_transactions_on_user_id"
   add_index "drawer_transactions", ["vendor_id"], :name => "index_drawer_transactions_on_vendor_id"
