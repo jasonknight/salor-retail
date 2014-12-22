@@ -1,3 +1,13 @@
+salor-retail (4.0.2.118) wheezy; urgency=medium
+
+  [ michael ]
+  * add index for drawer transactions order_id
+
+  [ Michael Franzl ]
+  * fix for nil error, moved subscription dates to orders#print
+
+ -- Michael Franzl <office@michaelfranzl.com>  Mon, 22 Dec 2014 10:37:51 +0100
+
 salor-retail (4.0.2.117) wheezy; urgency=medium
 
   * inventory report: separate tables for tax profiles
