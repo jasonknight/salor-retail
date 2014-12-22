@@ -36,6 +36,9 @@
 - item_pagination_count_one = @current_vendor.pagination_invoice_one
 - item_pagination_count_other = @current_vendor.pagination_invoice_other
 
+- if @order.subscription
+  = render :partial => 'details_subscription'
+
 .paper-invoice
   = render :partial => 'orders/invoices/default/header_page_one'
   
@@ -49,7 +52,8 @@
       %h2== #{ I18n.t("receipts.invoice") } #{ @order.nr }
     - elsif @order.is_quote
       %h2== #{ I18n.t("receipts.offer") } #{ @order.qnr }
-    %h3= I18n.l(@order.completed_at, :format => :just_day)
+    - if @order.completed_at
+      %h3= I18n.l(@order.completed_at, :format => :just_day)
     %p= text_area_tag 'invoice_comment', @order.invoice_comment
     %p= raw(Kramdown::Document.new(@report[:invoice_note][:header]).to_html) if @report[:invoice_note][:header]
     

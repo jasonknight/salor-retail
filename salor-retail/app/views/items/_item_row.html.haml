@@ -18,7 +18,7 @@
 %td
   - if item.parent
     == #{ item.quantity_with_stock.to_i } (#{ item.quantity_with_recursion.to_i })
-  - elsif item.quantity_with_stock == Integer(item.quantity_with_stock)
+  - elsif item.quantity_with_stock == Integer(item.quantity_with_stock.to_i)
     = item.quantity_with_stock.to_i
   - else
     = item.quantity_with_stock
