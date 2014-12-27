@@ -1,3 +1,9 @@
+salor-retail (4.0.2.119) wheezy; urgency=medium
+
+  * added missing migration for inventory report
+
+ -- Michael Franzl <office@michaelfranzl.com>  Sat, 27 Dec 2014 18:38:53 +0100
+
 salor-retail (4.0.2.118) wheezy; urgency=medium
 
   [ michael ]
