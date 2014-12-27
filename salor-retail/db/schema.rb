@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20141128175917) do
+ActiveRecord::Schema.define(:version => 20141227173637) do
 
   create_table "actions", :force => true do |t|
     t.string   "name"
@@ -376,6 +376,7 @@ ActiveRecord::Schema.define(:version => 20141128175917) do
     t.string   "name"
     t.string   "sku"
     t.string   "currency"
+    t.integer  "tax_profile_id"
   end
 
   add_index "inventory_report_items", ["inventory_report_id"], :name => "index_inventory_report_items_on_inventory_report_id"

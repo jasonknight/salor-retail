@@ -1049,6 +1049,7 @@ class Vendor < ActiveRecord::Base
           category_id,
           name,
           currency,
+          tax_profile_id,
           sku
          ) SELECT 
             ir.id,
@@ -1064,6 +1065,7 @@ class Vendor < ActiveRecord::Base
             i.category_id,
             i.name,
             i.currency,
+            i.tax_profile_id,
             i.sku FROM
           items AS i, 
           inventory_reports AS ir WHERE 
