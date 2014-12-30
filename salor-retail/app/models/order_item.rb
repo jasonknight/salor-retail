@@ -145,7 +145,7 @@ class OrderItem < ActiveRecord::Base
     end
     
     # don't allow negative inputs
-    if not self.is_buyback and p.fractional < 0
+    if p.fractional < 0 and (not self.is_buyback and self.item.item_type.behavior != "gift_card")
       $MESSAGES[:prompts] << I18n.t("system.errors.cannot_set_negative_price")
       p *= -1
       return
