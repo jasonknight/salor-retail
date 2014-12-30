@@ -13,16 +13,21 @@ class ItemsController < ApplicationController
   def index
     orderby = "id DESC"
     orderby ||= params[:order_by]
-    unless params[:keywords].blank?
-      # search function should display recursive items
-      @items = @current_vendor.items.by_keywords(params[:keywords]).visible.where("items.sku NOT LIKE 'DMY%'")
+    
+    if params[:keywords] and params[:keywords].blank?
+      # user has cleared the field
+      @keywords = session[:keywords] = nil
+    elsif not params[:keywords].blank?
+      @keywords = session[:keywords] = params[:keywords]
+    elsif not session[:keywords].blank?
+      @keywords = session[:keywords]
+    end
+    
+    if @keywords
+      @items = @current_vendor.items.by_keywords(@keywords).visible.where("items.sku NOT LIKE 'DMY%'")
       child_item_skus = []
       log_action "XXXXX[recursive find]: @items #{ @items.collect{ |i| i.sku } }"
       @items.each do |i|
-#         if i.parent.nil? and i.child.nil?
-#           child_item_skus << i.sku
-#           next
-#         end
         log_action "XXXXX[recursive find]: finding upmost parent for Item id #{ i.id }"
         upmost_parent_sku = i.recursive_parent_sku_chain.last
         log_action "XXXXX[recursive find]: upmost parent sku is #{ upmost_parent_sku }"
@@ -164,6 +169,7 @@ class ItemsController < ApplicationController
     @items = []
     @customers = []
     @orders = []
+    
     if params[:klass] == 'Item' then
       if params[:keywords].empty? then
         @items = @current_vendor.items.visible.page(params[:page]).per(@current_vendor.pagination)

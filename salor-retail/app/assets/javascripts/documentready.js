@@ -71,8 +71,6 @@ $(function () {
   jQuery.expr[':'].focus = function( elem ) {
     return elem === document.activeElement && ( elem.type || elem.href );
   };
-  
-  $('#generic_search_input').val('');
 
   $('.stripe-me tr:even').addClass('even');
   $('.stripe-me tr:odd').addClass('odd');
