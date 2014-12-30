@@ -111,7 +111,23 @@ class OrdersController < ApplicationController
 
 
   def add_item_ajax
-    @order = @current_vendor.orders.where(:paid => nil).find_by_id(params[:order_id])
+    @order = @current_vendor.orders.find_by_id(params[:order_id])
+    
+    unless @order.completed_at.nil?
+      # the requested order is already completed. We cannot edit that and rediect to #new.
+      $MESSAGES[:prompts] << I18n.t("views.notice.edit_completed_order")
+      render :update_pos_display
+      return
+    end
+    
+    user_which_has_requested_order = @current_vendor.users.visible.find_by_current_order_id(@order.id)
+    
+    if user_which_has_requested_order and user_which_has_requested_order != @current_user
+      # another user is editing this order. We cannot edit that and redirect to #new.
+      $MESSAGES[:prompts] << I18n.t("views.notice.edit_order_by_other_user", :username => user_which_has_requested_order.username)
+      render :update_pos_display
+      return
+    end
     
     @order_item, redraw_all_order_items = @order.add_order_item(params)
     @order_items = []
