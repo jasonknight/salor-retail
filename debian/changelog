@@ -1,3 +1,11 @@
+salor-retail (4.0.2.120) wheezy; urgency=medium
+
+  * make add_item_ajax more robust
+  * allow negative prices for gift cards
+  * remember last items#index search in session
+
+ -- Michael Franzl <office@michaelfranzl.com>  Tue, 30 Dec 2014 12:47:31 +0100
+
 salor-retail (4.0.2.119) wheezy; urgency=medium
 
   * added missing migration for inventory report
