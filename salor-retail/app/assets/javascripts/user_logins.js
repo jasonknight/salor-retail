@@ -8,28 +8,39 @@ sr.fn.user_logins.display = function() {
           timeFormat: 'HH:mm:ss',
           dateFormat: 'yy-mm-dd',
           onSelect: function (dateTimeText,picker) {
-            
+            var mid = $('#' + picker.id).attr('model_id');
+            if ( ! mid ) {
+              mid = $(picker.$input).attr('model_id')
+            }
+
+            //console.log("MID IS: ", mid)
+
             var string = '/vendors/edit_field_on_child?id=' +
-            $(picker.$input).attr('model_id') +'&klass=UserLogin' +
+            mid +'&klass=UserLogin' +
             '&field=login'+
             '&value=' + dateTimeText;
             $.get(string);
           }
         }
-            );
-            lout.datetimepicker(
-              {
-                timeFormat: 'HH:mm:ss',
-                dateFormat: 'yy-mm-dd',
-                onSelect: function (dateTimeText,picker) {
-                  
-                  var string = '/vendors/edit_field_on_child?id=' +
-                  $(picker.$input).attr('model_id') +'&klass=UserLogin' +
-                  '&field=logout'+
-                  '&value=' + dateTimeText;
-                  $.get(string);
-                }
+        );
+        lout.datetimepicker(
+          {
+            timeFormat: 'HH:mm:ss',
+            dateFormat: 'yy-mm-dd',
+            onSelect: function (dateTimeText,picker) {
+              var mid = $('#' + picker.id).attr('model_id');
+              if ( ! mid ) {
+                mid = $(picker.$input).attr('model_id')
               }
+
+              //console.log("MID IS: ", mid)
+              var string = '/vendors/edit_field_on_child?id=' +
+              mid +'&klass=UserLogin' +
+              '&field=logout'+
+              '&value=' + dateTimeText;
+              $.get(string);
+            }
+          }
       );
     } catch (e) { var e = '';}
   } // if user.role_cache
