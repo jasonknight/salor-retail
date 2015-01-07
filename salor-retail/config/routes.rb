@@ -128,6 +128,9 @@ SalorRetail::Application.routes.draw do
   
   match "shippers/update_all" => "shippers#update_all"
   
+  match 'translations' => 'translations#index'
+  match 'translations/set' => 'translations#set'
+  
   
   match "actions/create" => "actions#create"
   match "plugins/create" => "plugins#create"

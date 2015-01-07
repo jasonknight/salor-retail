@@ -3,19 +3,19 @@ fr-fr:
   number:
     currency:
       format:
-        delimiter: ! ','
+        delimiter: ! '.'
         format: ! '%u %n'
         friendly_unit: EUR
         pieces: 0.01,0.05,0.10,0.25,0.50,1,5,10,20,50,100
         precision: 2
-        separator: .
+        separator: ','
         unit: €
         significant: faux
         strip_insignificant_zeros: faux
     format:
-      delimiter: ! ','
+      delimiter: ! '.'
       precision: 3
-      separator: .
+      separator: ','
       significant: faux
       strip_insignificant_zeros: faux
     human:
@@ -49,7 +49,7 @@ fr-fr:
         precision: 0
     precision:
       format:
-        delimiter: ! ','
+        delimiter: ! '.'
         precision: 2
-        separator: .
+        separator: ','
 

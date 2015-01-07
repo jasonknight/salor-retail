@@ -425,8 +425,10 @@ fi:
       price: Myyntihinta
       subtotal_purchase_price: Ostohinnan välisumma
       subtotal_selling_price: Myyntihinnan välisumma
+      sum_purchase_price: Sum Purchase Price
+      sum_selling_price: Sum Selling Price
       title: Inventaarioraportti
-      total_buying_price: Ostohinnan loppusumma
+      total_purchase_price: Total Purchase Price
       total_selling_price: Myyntihinnan loppusumma
     selection:
       print: Tulosta
@@ -759,6 +761,8 @@ fi:
       coupon_not_enough_items: Et ole ostanut tarpeeksi nimikkeitä tämän soveltamiseksi
       csv_item_exists: Nimike %{sku} on jo olemassa!
       csv_item_failed: ! '%{id} %{i} epäonnistui.'
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
@@ -806,8 +810,6 @@ fi:
       shipment_item_nil: Nimike palautettu lähetyksestä oli nolla?
       sku_must_be_unique: ! '%{sku}  on oltava yksilöllinen'
       value_not_set: ei ole asetettu
-      deletion_of_item_when_order_completed: This order has already been completed
-        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: varasto päivitetty
     logged_in_as: kirjauttu nimella
@@ -865,7 +867,7 @@ fi:
       transaction_total: liiketoimen loppusumma
       transactions: liiketoimet
     sales_statistics:
-      category_name: Category name
+      category: Category
       from: From
       item_name: Item name
       quantity: Quantity

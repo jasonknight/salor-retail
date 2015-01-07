@@ -425,8 +425,10 @@ ru:
       price: Цена продажи
       subtotal_purchase_price: Подытог цены покупки
       subtotal_selling_price: Подытог цены продажи
+      sum_purchase_price: Sum Purchase Price
+      sum_selling_price: Sum Selling Price
       title: Инвентарный отчёт
-      total_buying_price: Суммарная цена покупки
+      total_purchase_price: Total Purchase Price
       total_selling_price: Суммарная цена продажи
     selection:
       print: Print
@@ -759,6 +761,8 @@ ru:
         это
       csv_item_exists: Товар %{sku} существует!
       csv_item_failed: Ошибка чтения %{id} %{i}
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
@@ -806,8 +810,6 @@ ru:
       shipment_item_nil: Товар, вернувшийся из поставки, пустой?
       sku_must_be_unique: ! '%{sku} должен быть уникальным'
       value_not_set: НеУказано
-      deletion_of_item_when_order_completed: This order has already been completed
-        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: проведен переучет товара
     logged_in_as: вошли как
@@ -865,7 +867,7 @@ ru:
       transaction_total: transaction total
       transactions: transactions
     sales_statistics:
-      category_name: Category name
+      category: Category
       from: From
       item_name: Item name
       quantity: Quantity

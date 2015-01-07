@@ -428,8 +428,10 @@ el:
       price: Τιμή πώλησης
       subtotal_purchase_price: Υποσύνολο Τιμής Αγοράς
       subtotal_selling_price: Υποσύνολο Τιμής Πώλησης
+      sum_purchase_price: Sum Purchase Price
+      sum_selling_price: Sum Selling Price
       title: Έκθεση Απογραφής
-      total_buying_price: Άθροισμα Τιμής Αγοράς
+      total_purchase_price: Total Purchase Price
       total_selling_price: Άθροισμα Τιμής Πώλησης
     selection:
       print: Print
@@ -765,6 +767,8 @@ el:
         αυτό
       csv_item_exists: Αντικείμενο %{sku} υπάρχει!
       csv_item_failed: ! '%{id} %{i} απέτυχε.'
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
@@ -819,8 +823,6 @@ el:
         άκυρο;
       sku_must_be_unique: ! '%{sku} πρέπει να είναι μοναδικό'
       value_not_set: ΜηΚαθορισμένο
-      deletion_of_item_when_order_completed: This order has already been completed
-        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: η απογραφή ενημερώθηκε
     logged_in_as: συνδεδεμένοι ως
@@ -878,7 +880,7 @@ el:
       transaction_total: transaction total
       transactions: transactions
     sales_statistics:
-      category_name: Category name
+      category: Category
       from: From
       item_name: Item name
       quantity: Quantity

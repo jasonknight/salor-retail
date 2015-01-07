@@ -28,7 +28,7 @@ fr:
         sticker_printer: Imprimante étiquette
       category_id: Catégorie
       cellphone: portable
-      change: Change
+      change: Monnaie
       child_sku: UGS enfant
       city: ville
       color: couleur
@@ -157,10 +157,10 @@ fr:
       salor_printer: Imprimer côté client
       scale: Balance
       shipment:
-        from: de
+        from: du
         paid: payé
         price: prix
-        to: à
+        to: au
       shipment_item:
         name: nom
         quantity: quantité
@@ -285,7 +285,7 @@ fr:
         one: Type de vente
         other: Types de ventes
       shipment:
-        default_name: Default Name
+        default_name: Nom par défaut
         one: Livraison
         other: Livraisons
       shipment_type:
@@ -299,31 +299,31 @@ fr:
         one: Emplacement du stock
         other: Emplacements du stock
       tax_profile:
-        one: Type de taxe
-        other: Type de taxes
+        one: Taux TVA
+        other: Taux TVA
       transaction_tag:
         one: Etiquette
         other: Etiquettes
       user:
-        one: Employee
-        other: Employees
+        one: Employé
+        other: Employés
       vendor:
-        one: Magazin
-        other: Magazins
+        one: Magasin
+        other: Magasins
   api:
     user_does_not_exist: L'utilisateur n'existe pas
-  are_you_sure: Are you sure you want to do this?
+  are_you_sure: Êtes-vous sûr de vouloir effectuer cette action ?
   behavior_list:
     add: additionner
     assign: assigner
-    discount_after_threshold: discount after threshold
+    discount_after_threshold: remise après seuil
     divide: diviser
-    execute: execute
+    execute: exécuter
     multiply: multiplier
     subtract: soustraire
   cash_registers:
     end_of_day:
-      cash_drawer: Causse
+      cash_drawer: Caisse
       counted: Compté
       difference: Différence
       end_of_day_thermal_report: Imprimer rapport
@@ -359,20 +359,20 @@ fr:
     edit_shipper: Editer livreur %{nom}
     expiring_soon: Périme bientôt
     export: Exporter
-    inventory_report: Inventory Report
+    inventory_report: Rapport inventaire
     item_selection: Sélection d'articles
     new_discount_for: Nouvelle remise de %{magasin}
-    notes: notes
+    notes: Notes
     order_validation: Validation de la commande
     paylife: Paylife(Hybride Artema)
     shipment_items: Articles livraison
     shipment_types: Types de livraison
     shipments: Livraisons
-    signup: Signup for a 14 day free trial!
-    time_sheet: Employee Time Sheet
+    signup: Essai gratuit pendant 14 jours !
+    time_sheet: Heures de travail employés
     update_location: mettre à jour emplacement
     update_real_quantity: mettre à jour quantité réelle
-    users: users
+    users: utilisateurs
   helpers:
     select:
       prompt: Choisissez
@@ -410,33 +410,35 @@ fr:
         sûr de vouloir continuer ?
       delete_unused_items: Effacer articles non utilisés !
       hidden: Articles déjà effacés
-      hidden_by_distiller: articles effacés par le filtre BDD
+      hidden_by_distiller: Articles effacés par le filtre BDD
       relevant_item_ids: Articles pertinents pour effacement
       unused_item_ids: Articles non utilisés
       used_item_ids: Articles utilisés
     index:
       database_distiller_warning: Cette fonction prendra environ 30 secondes dû au
         calcul de statistiques. Veuillez-vous continuer ?
-      inventory_report: Inventur
+      inventory_report: Rapport inventaire
       only_for_tobacco_stores: Cette fonction s'applique uniquement aux bureaux de
         tabac. Des articles Tabac seront créés et téléchargés et mis à jour. ceci
         peut prendre jusau'à 20 minutes. Êtes-vous sûr de vouloir continuer ?
-      report: Report
+      report: Rapport
     inventory_report:
-      no_category: No Category
+      no_category: Pas de catégorie
       price: Prix de vente
       subtotal_purchase_price: Sous-total du prix d'achat
       subtotal_selling_price: Sous-total du prix de vente
+      sum_purchase_price: Somme prix d'achat
+      sum_selling_price: Somme prix de vente
       title: Rapport inventaire
-      total_buying_price: Prix d'achat total
+      total_purchase_price: Prix d'achat total
       total_selling_price: Prix de vente total
     selection:
-      print: Print
+      print: Imprimer
     show:
-      from: De
+      from: Du
       quantity_sold: Quantité vendue
       query: Question !
-      to: à
+      to: au
     update_real_quantity:
       are_you_sure: Ceci copiéra les quantités d'inventaire dans la base de données,
         et réinitialisera le rapport d'inventaire. Désirez-vous continuer ?
@@ -461,10 +463,10 @@ fr:
     cash_registers: Caisses
     categories: Catégories
     clear_order: Effacer
-    close: Close
+    close: Fermer
     configuration: Config.
     contact: Contact
-    countries: Countries
+    countries: Pays
     current_order: ! 'Commande en cours : #%{id}'
     customer: Client
     customers: Clients
@@ -481,44 +483,44 @@ fr:
     edit_category: Editer catégorie
     edit_customer: Editer client
     edit_discount: Editer remise
-    edit_invoice_blurb: Edit text de facture
-    edit_invoice_note: Edit note de facture
+    edit_invoice_blurb: Editer texte de facture
+    edit_invoice_note: Editer note de facture
     edit_item: Editer article
     edit_location: Editer emplacement
-    edit_payment_method: Edit moyen de paiement
-    edit_sale_type: Edit type de vente
+    edit_payment_method: Editer moyen de paiement
+    edit_sale_type: Editer type de vente
     edit_shipment: Editer livraison
     edit_shipment_type: Editer type de livraison
     edit_shipper: Editer livreur %{nom}
     edit_tax_profile: Editer taxe
-    edit_user: Edituser
+    edit_user: Editer utilisateur
     edit_vendor: Editer vendeur
     end_day: Fin journée
-    enter_inventory_items: Enter
+    enter_inventory_items: Rentrer articles
     general_configuration: Configuration générale
-    gift_cards: Gift Cards
+    gift_cards: Cartes cadeau
     home: Accueil
     inventory_report: Raport inventaire
     invoice_blurbs: Textes factures
     invoice_notes: Notes factures
     item_types: Types d'articles
     items: Articles
-    labels: Labels
-    last_completed: Last completed
-    last_orders: Orders
-    last_uncompleted: Last uncompleted
+    labels: Etiquettes
+    last_completed: Ventes plus récentes
+    last_orders: Commandes plus récentes
+    last_uncompleted: Dernières ventes en attente
     law_reports: Télécharger rapport
     locations: Emplacements
     logos: Logos
     loyalty_cards: Cartes de fidélité
-    merge_into_current_order: Merge into current order
+    merge_into_current_order: Ajouter à la commande en cours
     move_shipment_item: Déplacer article de la livraison
     new_action: Nouvelle action
     new_broken_item: Nouvel article abîmé
     new_button: Nouveau bouton
     new_cash_register: Nouvelle caisse
     new_category: Nouvelle catégorie
-    new_country: Nouvelle pays
+    new_country: Nouveau pays
     new_customer: Nouveau client
     new_discount: Nouvelle remise
     new_invoice_blurb: Nouveau texte facture
@@ -533,22 +535,22 @@ fr:
     new_shipper: Nouveau livreur
     new_stock_location: Nouvel emplacement de stock
     new_tax_profile: Nouvelle taxe
-    new_transaction_tag: New Transaction Tag
-    new_user: Nouveau user
+    new_transaction_tag: Nouveau code transaction
+    new_user: Nouvel utilisateur
     new_vendor: Nouveau vendeur
     ok: OK
-    open_drawer: drawer
+    open_drawer: Ouvrir caisse
     order: Commande
     orders: Commandes
     overview: Vue d'ensemble
-    payment_methods: Payment Methods
+    payment_methods: Moyens de paiement
     points: Points
     pos: PDV
     print: Imprimer
-    print-dialog: print dialog
-    receipts: XXX Recommandez
-    refund_payment_method: refund payment method
-    regular_printer: regular printer
+    print-dialog: Fenêtre d'impression
+    receipts: Recommandez
+    refund_payment_method: moyen de paiement pour remboursement
+    regular_printer: Imprimante par défaut
     remote_service: Service à distance
     reorder: Passer nouvelle commande
     report: Rapport
@@ -556,8 +558,8 @@ fr:
     report_day_range: Rapport mensuel
     report_range: Détail rapport
     reports: Rapports
-    sale_types: Sale Types
-    salorlive: Salor Live !
+    sale_types: Types de vente
+    salorlive: Salor en ligne !
     salortrainer: Formateur Salor
     search: Rechercher
     shipment_types: Types de livraison
@@ -565,11 +567,11 @@ fr:
     shippers: Livreurs
     show: Afficher
     split: Diviser
-    statistics: Statistics
+    statistics: Statistiques
     stock_locations: Emplacements de stock
-    stock_management: Stock management
+    stock_management: Gérer le stock
     subscription: Subscription
-    support: Support
+    support: Service client
     tax_profiles: Taxes
     transaction_tags: Etiquettes de transaction
     update_gift_card: Mettre à jour carte cadeau
@@ -577,10 +579,10 @@ fr:
     update_real_quantity: Mettre à jour quantité réelle
     upload: Mettre en ligne
     usb_device: clé USB
-    users: users
+    users: Utilisateurs
     vendors: Vendeurs
     void: Détruire
-    weigh: weigh
+    weigh: poids
     wholesaler_update: Mettre à jour distributeur
   notifications:
     please_select_cash_register: Choisissez une Caisse
@@ -649,8 +651,8 @@ fr:
       transaction_total: Total de la transaction
       transactions: transactions
   plugins:
-    files_list: Files in this plugin
-    meta_fields: Meta Fields for this Plugin
+    files_list: Fichiers dans ce plugin
+    meta_fields: Paramètres pour ce plugin
   printr:
     eod_report:
       None: Sans nom
@@ -659,12 +661,12 @@ fr:
       calculated_drawer_amount: Montant caisse calculé
       cash-refunds: Remboursements en espèces
       cash_refunds_total: TOTAL
-      no_category: No Category
+      no_category: Pas de catégorie
       orders_total: Total vendu
       payment_method_total: TOTAL
       payments: Paiements
       refund: Remboursement
-      refunds: Refunds
+      refunds: Remboursements
       revenue: Profit
       revenue_total: TOTAL
       sales: Ventes
@@ -718,11 +720,11 @@ fr:
       sold: Vendu
   receipts:
     a_conto: Solde
-    delivery_note: Lieferschein
+    delivery_note: Bon de livraison
     invoice: Facture
     invoice_numer_X_at_time: Commande Nro. %{number} le %{datetime}
-    offer: Offer
-    proforma_invoice: Proforma Invoice
+    offer: Devis
+    proforma_invoice: Facture proforma
   reports:
     amount: Montant
     description: Description
@@ -734,16 +736,16 @@ fr:
     cashier: Caissière
     manager: Gérant
     stockboy: Magasinier
-  sales_statistics: Sale Statistics
+  sales_statistics: Statistiques ventes
   shipments:
     index:
       report: Rapport
     show:
-      move_into_stock: Move into stock!
-      need_tax_profile: Shipment Item needs tax profile!
+      move_into_stock: Déplacer vers le stock !
+      need_tax_profile: Choisissez le taux de TVA pour cet article !
       purchase_price_sum: Total prix achat
   sticker: autocollant
-  support: XXX
+  support: Service client
   system:
     add_payment_method: Ajouter moyen de paiement
     complete_sale: Finir
@@ -755,8 +757,7 @@ fr:
       cannot_edit_completed_order: Cette commande a été finalisée et ne peut pas être
         modifiée.
       cannot_reorder: Pas d'articles à commander de nouveau.
-      cannot_set_negative_price: Setting negative prices is not allowed. Please switch
-        to buyback mode and enter a positive price.
+      cannot_set_negative_price: Il n'est pas possible de choisir un prix négatif
       child_sku_must_exist: L'article enfant doit exister !
       coupon_cannot_be_buy_one_get_one: Le coupon %{sku} ne peut pas être achetez_un_pour_le_prix_d_un
         lorsqu'il s'applique à %{applies}
@@ -764,9 +765,10 @@ fr:
         soit applicable
       csv_item_exists: L'article %{sku} existe déjà !
       csv_item_failed: ! '%{id} %{i} a échoué.'
-      dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
-        instead.
-      dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
+      deletion_of_item_when_order_completed: Cette commande a déjà été finalisée depuis
+        un autre poste. Veuillez cliquer sur "nouveau" pour créer une nouvelle commande.
+      dont_use_negative_prices: Il n'est pas possible de choisir un prix négatif
+      dont_use_weird_skus: Seulement Aa-Zz et 0-9 sont autorisés dans le code de barres
       failed_to_save_parts: L'ensemble des parts n'ont pas pu être enregistrées. Veuillez
         vérifier qu'il existe bien des articles avec parts.
       gift_card_empty: La carte cadeau est vide. Veuillez notifier votre client et
@@ -811,18 +813,16 @@ fr:
       sanity_check: L'action demandée est impossible. Vérifiez le total de la commande
         et notifier le client de la correction.
       shipment_item_already_in_stock: L'article %{sku} est déjà en stock
-      shipment_item_move_failed: ! 'Larticle %{sku} n''a pas été déplacé. Erreur:
+      shipment_item_move_failed: ! 'L''article %{sku} n''a pas été déplacé. Erreur:
         %{error}'
       shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
       sku_must_be_unique: ! '%{sku} doit être unique'
-      value_not_set: PasDéfini
-      deletion_of_item_when_order_completed: This order has already been completed
-        at a differnt location. Please click the "New" button to start a new order.
-    finish_day: End of day
+      value_not_set: Pas défini
+    finish_day: Fin de la journée
     inventory_updated: Inventaie mis à jour
     logged_in_as: Connecté en tant que
-    login: Connect
-    logout: Décon
+    login: Se connecter
+    logout: Se déconnecter
     not_you: Ce n'est pas vous ?
     owner_mode: MODE PROPRIÉTAIRE
     owner_success: Les propriétés du propriétaire ont été mise à jour avec succès
@@ -847,11 +847,11 @@ fr:
       count_order_items: Total d'articles vendus
       count_orders: Total de commandes
       drop: Versement
-      from: De
+      from: Du
       gift_card_redeem_total: Réduction totale par chèque cadeau
       gift_card_sales_total: Total ventes chèque cadeau
-      gross: brut
-      net: net
+      gross: HT
+      net: TTC
       noncash-refunds: Remboursement pas en espèces
       open_contracts: Paiements en attente de contrats en cours
       payments: Paiements
@@ -861,8 +861,8 @@ fr:
       revenue: Profit
       sales: Ventes
       sum: Somme
-      sum_gross: Somme brut
-      sum_net: Somme net
+      sum_gross: Somme HT
+      sum_net: Somme TTC
       sum_transactions: Somme transactions
       sums_by_category: Sommes par catégorie
       sums_by_payment_methods: Sommes par moyen de paiement
@@ -870,18 +870,18 @@ fr:
       tax: Taxe
       time: Heure
       title: Rapport journalier
-      to: À
+      to: au
       transaction_tag: Etiquette transaction
       transaction_total: Total transaction
       transactions: transactions
     sales_statistics:
-      category_name: Category name
-      from: From
-      item_name: Item name
-      quantity: Quantity
-      sum: Sum
-      title: Sales Statistics
-      to: To
+      category: Category
+      from: Du
+      item_name: Nom de l'article
+      quantity: Quantité
+      sum: Somme
+      title: Statistiques des ventes
+      to: jusqu'au
   views:
     advanced_field: Champ avancé
     cash_register_heading: ! '%{name} pour %{store}'
@@ -889,7 +889,7 @@ fr:
     category_heading: catégorie %{name} pour %{store}
     change: Monnaie
     copies: Copies
-    create_new_item: xxx Create New Article
+    create_new_item: Créer un nouvel article
     customers: Clients
     download_may_last_long: Ce téléchargement peut durer longtemps. Désirez-vous continuer
       ?
@@ -940,14 +940,15 @@ fr:
     notice:
       cache_was_cleared: Fichiers cache effacés.
       csv_edit_starting: Début de l'édition des csv
-      delete_completed_order: This order is already completed. Cannot delete.
-      edit_completed_order: This order is already completed. Cannot edit it.
-      edit_order_by_other_user: This order is currently edited by user %{username}.
-        Cannot open it. User %{username} must click on the 'New' button, then try
-        again.
-      item_not_existing: This item did not exist. It has been created and the price
-        set to zero. You can change the price and it will be saved permanently in
-        the database.
+      delete_completed_order: Cette commande est déjà finalisée. Il est impossible
+        de l'effacer.
+      edit_completed_order: Cette commande est déjà finalisée. Il est impossible de
+        l'éditer..
+      edit_order_by_other_user: ! '%{username} est en train d''éditer cettte commande.
+        Vous ne pouvez pas l''ouvrir. %{username} doit cliquer sur "Nouveau", et réessayer.'
+      item_not_existing: ! 'Cet article n’éxistait pas. Il a été créé et son prix
+        mis à zéro. Vous pouvez modifier le prix, et il sera enregistré de façon permanente
+        dans la base de données. '
       model_create: ! '%{model} a été créé avec succès'
       model_edit: ! '%{model} a été édité avec succès'
       move_real_quantities_success: Les quantités d'articles ont été mises à jour
@@ -992,8 +993,8 @@ fr:
       destroy: Détruire
       download: Télécharger
       edit: Editer
-      from: De
-      gift_cards: XXX Gift Cards
+      from: Du
+      gift_cards: Cartes cadeau
       loading: Téléchargement en cours...
       new: Nouveau
       order: Commande
@@ -1002,11 +1003,11 @@ fr:
       saving: Enregistrement en cours...
       sku: UGS
       title: Titre
-      to: à
+      to: au
       top: Haut de la page
       waiting: En attente....
     sticky_ticket: Etiquette
-    stock_locations: Emplacements_de_stock
+    stock_locations: Emplacements de stock
     subtotal: Sous-total
     tax_profile: Type de taxe
     three_easy_ways: Trois façons faciles

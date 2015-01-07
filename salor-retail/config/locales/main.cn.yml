@@ -419,8 +419,10 @@ cn:
       price: 售價
       subtotal_purchase_price: 小計購買價格
       subtotal_selling_price: 小計銷售價格
+      sum_purchase_price: Sum Purchase Price
+      sum_selling_price: Sum Selling Price
       title: 庫存報告
-      total_buying_price: 總和購買價格
+      total_purchase_price: Total Purchase Price
       total_selling_price: 總和銷售價格
     selection:
       print: Print
@@ -748,6 +750,8 @@ cn:
       coupon_not_enough_items: 你還沒有購買足夠的產品申請
       csv_item_exists: 產品 %{sku} 存在!
       csv_item_failed: ! '%{id} %{i} 失敗.'
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
@@ -784,8 +788,6 @@ cn:
       shipment_item_nil: 產品 returned from_shipment_item 是零?
       sku_must_be_unique: ! '%{sku} 必須是唯一的'
       value_not_set: 未設置
-      deletion_of_item_when_order_completed: This order has already been completed
-        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: 庫存更新了
     logged_in_as: 登錄為
@@ -843,7 +845,7 @@ cn:
       transaction_total: transaction total
       transactions: transactions
     sales_statistics:
-      category_name: Category name
+      category: Category
       from: From
       item_name: Item name
       quantity: Quantity

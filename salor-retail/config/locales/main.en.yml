@@ -425,9 +425,9 @@ en:
       price: Selling price
       subtotal_purchase_price: Subtotal Purchase Price
       subtotal_selling_price: Subtotal Selling Price
-      title: Inventory Report
       sum_purchase_price: Sum Purchase Price
       sum_selling_price: Sum Selling Price
+      title: Inventory Report
       total_purchase_price: Total Purchase Price
       total_selling_price: Total Selling Price
     selection:
@@ -821,7 +821,6 @@ en:
       percent: ! '%'
     sign_up: sign up
   vendors:
-    
     clear_cache_button: clear cache
     clear_cache_header: cache
     form:

@@ -1,0 +1,12 @@
+= javascript_include_tag 'translations'
+
+.paper-invoice
+  %h2= t('various.translations')
+
+  %ul#translation_form
+
+
+:javascript
+  var translation = #{ @translation };
+  var translation_file = '#{ params[:f] }';
+  render_translation_inputs(0, [], translation, $('#translation_form'));

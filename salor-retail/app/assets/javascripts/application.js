@@ -41,6 +41,7 @@
 //= require complete-order
 //= require drawer-transaction
 //= require session
+//= require translations
 //= require jquery.modcoder.excolor
 //= require jquery.keyboard
 //= require jquery.checkbox

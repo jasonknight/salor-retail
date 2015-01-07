@@ -425,8 +425,10 @@ it:
       price: Prezzo di vendita
       subtotal_purchase_price: Subtotale Prezzo di Acquisto
       subtotal_selling_price: Subtotale Prezzo di Vendita
+      sum_purchase_price: Sum Purchase Price
+      sum_selling_price: Sum Selling Price
       title: Rapporto Inventario
-      total_buying_price: Somma Prezzo di Acquisto
+      total_purchase_price: Total Purchase Price
       total_selling_price: Somma Prezzo di Vendita
     selection:
       print: Print
@@ -758,6 +760,8 @@ it:
       coupon_not_enough_items: Non hai comprato abbastanza articoli per procedere
       csv_item_exists: Articolo %{sku} esistente!
       csv_item_failed: ! '%{id} %{i} fallito.'
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
@@ -806,8 +810,6 @@ it:
       shipment_item_nil: Item returned from_shipment_item was nil?
       sku_must_be_unique: ! '%{sku} must be unique'
       value_not_set: NotSet
-      deletion_of_item_when_order_completed: This order has already been completed
-        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: inventario aggiornato
     logged_in_as: autenticato come
@@ -865,7 +867,7 @@ it:
       transaction_total: transaction total
       transactions: transactions
     sales_statistics:
-      category_name: Category name
+      category: Category
       from: From
       item_name: Item name
       quantity: Quantity

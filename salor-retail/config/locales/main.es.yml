@@ -426,8 +426,10 @@ es:
       price: Precio de venta
       subtotal_purchase_price: Subtotal del precio de compra
       subtotal_selling_price: Subtotal del precio de venta
+      sum_purchase_price: Sum Purchase Price
+      sum_selling_price: Sum Selling Price
       title: Informe de inventario
-      total_buying_price: Total del precio de compra
+      total_purchase_price: Total Purchase Price
       total_selling_price: Total del precio de venta
     selection:
       print: Print
@@ -762,6 +764,8 @@ es:
         esto se aplique.
       csv_item_exists: ¡El artículo %{sku} ya existe!
       csv_item_failed: ! '%{id} %{i} ha fracasado.'
+      deletion_of_item_when_order_completed: This order has already been completed
+        at a differnt location. Please click the "New" button to start a new order.
       dont_use_negative_prices: Prices cannot be negative. Use positive buyback price
         instead.
       dont_use_weird_skus: Only Aa-Zz and 0-9 are permitted in the SKU field
@@ -815,8 +819,6 @@ es:
       shipment_item_nil: El artículo volvió del envío. ¿Es una artículo vacío?
       sku_must_be_unique: ! '%{sku} debe ser único.'
       value_not_set: NoDeterminado
-      deletion_of_item_when_order_completed: This order has already been completed
-        at a differnt location. Please click the "New" button to start a new order.
     finish_day: End of day
     inventory_updated: Inventario actualizado
     logged_in_as: Conectado como
@@ -874,7 +876,7 @@ es:
       transaction_total: transaction total
       transactions: transactions
     sales_statistics:
-      category_name: Category name
+      category: Category
       from: From
       item_name: Item name
       quantity: Quantity
