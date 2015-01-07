@@ -1,3 +1,12 @@
+salor-retail (4.0.2.125) wheezy; urgency=medium
+
+  [ Jason Knight ]
+  * Fixed day select for editing employee logins
+
+  [ Michael Franzl ]
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Jan 2015 20:13:39 +0100
+
 salor-retail (4.0.2.124) wheezy; urgency=medium
 
   * fixed datepicker in users#show
