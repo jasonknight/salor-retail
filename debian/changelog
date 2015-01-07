@@ -1,3 +1,9 @@
+salor-retail (4.0.2.124) wheezy; urgency=medium
+
+  * fixed datepicker in users#show
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Jan 2015 18:07:30 +0100
+
 salor-retail (4.0.2.123) wheezy; urgency=medium
 
   * fixed french translation
