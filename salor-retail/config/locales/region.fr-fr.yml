@@ -45,11 +45,12 @@ fr-fr:
           tb: TB
     percentage:
       format:
-        delimiter: ''
-        precision: 0
+        delimiter: '.'
+        precision: 3
+        separator: ','
     precision:
       format:
         delimiter: ! '.'
-        precision: 2
+        precision: 1
         separator: ','
 

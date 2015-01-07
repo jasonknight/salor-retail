@@ -80,7 +80,8 @@ sr.fn.math.toPercent = function(number) {
     return "";
   }
   var match, property, integerPart, fractionalPart;
-  var settings = {         precision: 0,
+  var settings = { 
+    precision: 1,
     unit: "%",
     separator: Region.number.currency.format.separator,
     delimiter : Region.number.currency.format.delimiter

@@ -102,7 +102,7 @@ class OrderItem < ActiveRecord::Base
   end
   
   def tax=(value)
-    tp = self.vendor.tax_profiles.visible.find_by_value(value)
+    tp = TaxProfile.find_by_percentage(value, self.vendor)
     if tp.nil?
       msg = "A TaxProfile with value #{ value } has to be created before you can assign this value"
       log_action msg
@@ -112,6 +112,8 @@ class OrderItem < ActiveRecord::Base
       write_attribute :tax, tp.value
     end
   end
+  
+  
   
   def tax_profile_id=(id)
     tp = self.vendor.tax_profiles.visible.find_by_id(id)

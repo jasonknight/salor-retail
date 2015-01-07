@@ -33,6 +33,15 @@ class TaxProfile < ActiveRecord::Base
       return super
     end
   end
+  
+  def self.find_by_percentage(perc, vendor)
+    perc = perc.to_s.gsub(",", ".")
+    lower = perc.to_f - 0.2
+    upper = perc.to_f + 0.2
+    tps = vendor.tax_profiles.visible.where("value between #{ lower } and #{ upper }")
+    return tps.first
+  end
+  
   def set_sku
     self.sku = "#{self.name}".gsub(/[^a-zA-Z0-9]+/,'')
   end

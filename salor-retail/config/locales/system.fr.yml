@@ -23,6 +23,7 @@ fr:
         too_long: est trop long (maximum %{count} characters)
         too_short: est trop court (minimum %{count} characters)
         wrong_length: longueur erronée (should be %{count} characters)
+        record_invalid: xxx
       template:
         body: ! 'Vérifiez les points suivants:'
         header:

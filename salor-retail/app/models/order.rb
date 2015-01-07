@@ -222,6 +222,7 @@ class Order < ActiveRecord::Base
     end
     oi.no_inc ||= params[:no_inc]
     log_action "no_inc is: #{oi.no_inc.inspect}"
+
     oi.save! # this is needed so that Action has the complete set of OrderItems taken from oi.order
     redraw_all_order_items = oi.modify_price
     oi.calculate_totals

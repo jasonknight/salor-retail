@@ -507,7 +507,7 @@ fr:
     items: Articles
     labels: Etiquettes
     last_completed: Ventes plus récentes
-    last_orders: Commandes plus récentes
+    last_orders: Commandes
     last_uncompleted: Dernières ventes en attente
     law_reports: Télécharger rapport
     locations: Emplacements
@@ -818,11 +818,11 @@ fr:
       shipment_item_nil: Article refusé dans la livraison. L'article était néant ?
       sku_must_be_unique: ! '%{sku} doit être unique'
       value_not_set: Pas défini
-    finish_day: Fin de la journée
+    finish_day: Fin journée
     inventory_updated: Inventaie mis à jour
     logged_in_as: Connecté en tant que
-    login: Se connecter
-    logout: Se déconnecter
+    login: Login
+    logout: Logout
     not_you: Ce n'est pas vous ?
     owner_mode: MODE PROPRIÉTAIRE
     owner_success: Les propriétés du propriétaire ont été mise à jour avec succès
