@@ -1,3 +1,9 @@
+salor-retail (4.0.2.122) wheezy; urgency=medium
+
+  * enabled non-integer taxes
+
+ -- Michael Franzl <office@michaelfranzl.com>  Wed, 07 Jan 2015 17:24:09 +0100
+
 salor-retail (4.0.2.121) wheezy; urgency=medium
 
   * added UI translation form, updated french translations and other languages
