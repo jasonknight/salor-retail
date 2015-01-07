@@ -850,8 +850,8 @@ fr:
       from: Du
       gift_card_redeem_total: Réduction totale par chèque cadeau
       gift_card_sales_total: Total ventes chèque cadeau
-      gross: HT
-      net: TTC
+      gross: TTC
+      net: HT
       noncash-refunds: Remboursement pas en espèces
       open_contracts: Paiements en attente de contrats en cours
       payments: Paiements
@@ -861,8 +861,8 @@ fr:
       revenue: Profit
       sales: Ventes
       sum: Somme
-      sum_gross: Somme HT
-      sum_net: Somme TTC
+      sum_gross: Somme TTC
+      sum_net: Somme HT
       sum_transactions: Somme transactions
       sums_by_category: Sommes par catégorie
       sums_by_payment_methods: Sommes par moyen de paiement
