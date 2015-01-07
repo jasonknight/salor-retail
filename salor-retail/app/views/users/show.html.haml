@@ -10,10 +10,10 @@
   %br
   = form_tag "/users/#{@user.id}", :method => :get do
     = label 'from', t('vendors.report_day.from')
-    = select_date(@from, :prefix => 'from')
+    = select_date(@from, :prefix => 'from', :order => [:day,:month,:year])
     %br
     = label 'to', t('vendors.report_day.to')
-    = select_date(@to, :prefix => 'to')
+    = select_date(@to, :prefix => 'to', :order => [:day,:month,:year])
     %br
     %br
     = submit_tag t('helpers.submit.ok'), :onclick => '$("#progress").show()'
