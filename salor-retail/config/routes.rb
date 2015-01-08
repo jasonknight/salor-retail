@@ -93,6 +93,7 @@ SalorRetail::Application.routes.draw do
 
   
   
+  
   match "items/search" => "items#search"
   match "items/report" => "items#report"
   match "items/export_broken_items" => "items#export_broken_items"
