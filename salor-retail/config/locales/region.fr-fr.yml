@@ -10,14 +10,14 @@ fr-fr:
         precision: 2
         separator: ','
         unit: €
-        significant: faux
-        strip_insignificant_zeros: faux
+        significant: false
+        strip_insignificant_zeros: false
     format:
       delimiter: ! '.'
       precision: 3
       separator: ','
-      significant: faux
-      strip_insignificant_zeros: faux
+      significant: false
+      strip_insignificant_zeros: false
     human:
       decimal_units:
         format: ! '%n %u'
@@ -45,12 +45,11 @@ fr-fr:
           tb: TB
     percentage:
       format:
-        delimiter: '.'
-        precision: 3
-        separator: ','
+        delimiter: ''
+        precision: 1
     precision:
       format:
         delimiter: ! '.'
-        precision: 1
+        precision: 3
         separator: ','
 

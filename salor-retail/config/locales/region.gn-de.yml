@@ -46,7 +46,7 @@ gn-de:
     percentage:
       format:
         delimiter: ''
-        precision: 0
+        precision: 1
     precision:
       format:
         delimiter: ! '.'

@@ -27,10 +27,11 @@
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
         <%
           # prefil amount if cash_drawer is empty
-          if @current_user and @current_user.get_drawer and @current_vendor.drawer_transactions.last and @current_user.get_drawer.amount_cents.zero? then
-            amount = number_with_precision @current_vendor.drawer_transactions.last.amount_cents.abs / 100.0, :precision => 4
+          last_dt = @current_vendor.drawer_transactions.last
+          if @current_user and @current_user.get_drawer and last_dt and @current_user.get_drawer.amount_cents.zero? then
+            amount = number_with_precision last_dt.amount_cents.abs / 100.0, :precision => 2
           else
-            amount = number_with_precision 0.0, :precision => 4
+            amount = number_with_precision 0.0, :precision => 2
           end
         %>
         <input id="cash_drop_amount" type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="<%= amount %>" size=3 />
