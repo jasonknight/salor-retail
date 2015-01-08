@@ -356,7 +356,7 @@ fr:
     database_distiller: Filtre BDD
     discount_for: Remise de %{store}
     discounts_for: Remises de %{store}
-    edit_shipper: Editer livreur %{nom}
+    edit_shipper: Editer livreur %{name}
     expiring_soon: Périme bientôt
     export: Exporter
     inventory_report: Rapport inventaire
@@ -491,7 +491,7 @@ fr:
     edit_sale_type: Editer type de vente
     edit_shipment: Editer livraison
     edit_shipment_type: Editer type de livraison
-    edit_shipper: Editer livreur %{nom}
+    edit_shipper: Editer livreur %{name}
     edit_tax_profile: Editer taxe
     edit_user: Editer utilisateur
     edit_vendor: Editer vendeur
