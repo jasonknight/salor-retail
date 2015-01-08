@@ -1,3 +1,11 @@
+salor-retail (4.0.2.126) wheezy; urgency=medium
+
+  * fix deletion of inventory reports, code cleanup, fix french translations, change currency and number display to rails methods
+  * fix for french number precisions
+  * fixed translation yaml keys
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 08 Jan 2015 10:32:39 +0100
+
 salor-retail (4.0.2.125) wheezy; urgency=medium
 
   [ Jason Knight ]
