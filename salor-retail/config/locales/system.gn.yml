@@ -3,7 +3,7 @@ gn:
   activerecord:
     errors:
       messages:
-        dont_use_weird_skus: XXX Only Aa-Zz and 0-9 are permitted in the SKU field
+        dont_use_weird_skus: Nur Aa-Zz und 0-9 sind erlaubt
         accepted: must be accepted
         blank: muss eingegeben werden
         confirmation: stimmt nicht überein
