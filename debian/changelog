@@ -1,3 +1,9 @@
+alor-retail (4.0.2.128) wheezy; urgency=medium
+
+  * fixed french translation interpolations
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 08 Jan 2015 16:35:56 +0100
+
 salor-retail (4.0.2.127) wheezy; urgency=medium
 
   * select first cash register on first login, keep cash register id in session
