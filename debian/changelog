@@ -1,3 +1,9 @@
+salor-retail (4.0.2.127) wheezy; urgency=medium
+
+  * select first cash register on first login, keep cash register id in session
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 08 Jan 2015 16:08:00 +0100
+
 salor-retail (4.0.2.126) wheezy; urgency=medium
 
   * fix deletion of inventory reports, code cleanup, fix french translations, change currency and number display to rails methods
