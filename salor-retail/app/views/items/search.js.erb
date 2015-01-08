@@ -19,7 +19,7 @@ $("#search_results").html('<table id="results_table" width="100%"></table>');
   
     var base_price = $('<td></td>');
     base_price.addClass('table-cell price');
-    base_price.html("<%= salor_number_to_currency(item.base_price) %>");
+    base_price.html("<%= humanized_money_with_symbol(item.base_price) %>");
   
     var btn = $('<td><div class="image-button"><img src="/images/icons/<%= icon(:add,32) %>" /></div></td>');
     btn.click(function () {

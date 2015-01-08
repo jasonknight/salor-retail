@@ -354,14 +354,14 @@ fr:
     best_selling_location: Emplacement le plus populaire
     crd: Heure,Montant,Type,Notes
     database_distiller: Filtre BDD
-    discount_for: Remise de %{magasin}
-    discounts_for: Remises de %{magasin}
+    discount_for: Remise de %{store}
+    discounts_for: Remises de %{store}
     edit_shipper: Editer livreur %{nom}
     expiring_soon: Périme bientôt
     export: Exporter
     inventory_report: Rapport inventaire
     item_selection: Sélection d'articles
-    new_discount_for: Nouvelle remise de %{magasin}
+    new_discount_for: Nouvelle remise de %{store}
     notes: Notes
     order_validation: Validation de la commande
     paylife: Paylife(Hybride Artema)
@@ -371,7 +371,7 @@ fr:
     signup: Essai gratuit pendant 14 jours !
     time_sheet: Heures de travail employés
     update_location: mettre à jour emplacement
-    update_real_quantity: mettre à jour quantité réelle
+    update_real_quantity: Quantité réelle
     users: utilisateurs
   helpers:
     select:
@@ -576,7 +576,7 @@ fr:
     transaction_tags: Etiquettes de transaction
     update_gift_card: Mettre à jour carte cadeau
     update_location: Mettre à jour emplacement
-    update_real_quantity: Mettre à jour quantité réelle
+    update_real_quantity: Quantité réelle
     upload: Mettre en ligne
     usb_device: clé USB
     users: Utilisateurs

@@ -6,7 +6,7 @@
 <form id="cash_drop_form">
   <input type="hidden" id="transaction_type" name="transaction[trans_type]" value=""/>
   <span class='cash_drop_label'><%= I18n.t("menu.cash_register") %>:</span>
-  <span class="pos-cash-register-amount"><%= salor_number_to_currency(@current_user.get_drawer.amount) if @current_user %></span>
+  <span class="pos-cash-register-amount"><%= humanized_money_with_symbol(@current_user.get_drawer.amount) if @current_user %></span>
 
   <% if @current_user and @current_user.can(:manager)  %>
       <p>
@@ -27,10 +27,10 @@
         <span class='cash_drop_label' style="font-weight:bold;font-size:1.5em;"><%= I18n.t("activerecord.attributes.amount") %></span>
         <%
           # prefil amount if cash_drawer is empty
-          if @current_user and @current_user.get_drawer and DrawerTransaction.last and @current_user.get_drawer.amount_cents.zero? then
-            amount = SalorBase.number_with_precision(DrawerTransaction.last.amount_cents.abs / 100.0, {:locale => @current_vendor.region, :precision => 2})
+          if @current_user and @current_user.get_drawer and @current_vendor.drawer_transactions.last and @current_user.get_drawer.amount_cents.zero? then
+            amount = number_with_precision @current_vendor.drawer_transactions.last.amount_cents.abs / 100.0, :precision => 4
           else
-            amount = SalorBase.number_with_precision(0, {:locale => @current_vendor.region, :precision => 2})
+            amount = number_with_precision 0.0, :precision => 4
           end
         %>
         <input id="cash_drop_amount" type="text" name="transaction[amount]" class="cash-drop-amount text-input keyboardable-int" value="<%= amount %>" size=3 />

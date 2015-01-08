@@ -8,5 +8,11 @@ class InventoryReport < ActiveRecord::Base
   
   validates_presence_of :vendor_id, :company_id
   
+  def hide(by)
+    self.hidden = true
+    self.hidden_at = Time.now
+    self.hidden_by = by
+    self.save!
+  end
   
 end

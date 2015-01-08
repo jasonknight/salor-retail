@@ -18,11 +18,11 @@
   </div>
   <div class="field">
     <%= f.label t("activerecord.attributes.start_date") %><br />
-    <%= f.datetime_select :start_date %>
+    <%= f.datetime_select :start_date, :order => [:day,:month,:year] %>
   </div>
   <div class="field">
     <%= f.label t("activerecord.attributes.end_date") %><br />
-    <%= f.datetime_select :end_date %>
+    <%= f.datetime_select :end_date, :order => [:day,:month,:year] %>
   </div>
   <div class="field">
     <%= f.label t("activerecord.attributes.applies_to") %><br />

@@ -25,6 +25,8 @@ class InventoryReportsController < ApplicationController
   end
   
   def destroy
+    @inventory_report = @current_vendor.inventory_reports.find_by_id(params[:id])
+    @inventory_report.hide(@current_user.id)
     redirect_to inventory_reports_path
   end
   

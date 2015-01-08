@@ -6,9 +6,7 @@
         <div class="tool-icon" align="center" onmousedown="window.location = '<%= new_item_path(:vendor_id => params[:vendor_id]) %>'">
           <%= link_to salor_icon(:add,{},24), new_item_path(:vendor_id => params[:vendor_id]) %><br /><span class='icon-caption'><%= I18n.t("menu.new_item") %></span>
         </div>
-        <div class="tool-icon" onmousedown="window.location = '/items/update_location'">
-          <%= link_to salor_icon(:location,{:class => 'pointer'},24),"/items/update_location" %><br /><span class='icon-caption'><%= I18n.t("menu.update_location") %></span>
-        </div>
+
         <div class="tool-icon">
           <%= link_to salor_icon(:inventory_report,{:class => 'pointer'},24), inventory_reports_path %><br /><span class='icon-caption'><%= I18n.t("menu.update_real_quantity") %></span>
         </div>
