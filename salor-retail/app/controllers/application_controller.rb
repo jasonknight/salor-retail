@@ -207,7 +207,9 @@ class ApplicationController < ActionController::Base
   def get_cash_register
     @current_register = @current_vendor.cash_registers.visible.find_by_id(session[:cash_register_id])
     if @current_register.blank?
-      redirect_to cash_registers_path
+      # happens only on first login into the system on a new browser/client
+      @current_register = @current_vendor.cash_registers.visible.first
+      session[:cash_register_id] = @current_register.id
     end
   end
   

@@ -52,7 +52,7 @@ class SessionsController < ApplicationController
       @current_user.current_sign_in_at = nil
       @current_user.current_sign_in_ip = nil
       @current_user = nil
-      [:user_id_hash, :vendor_id, :company_id, :locale, :cash_register_id].each do |k|
+      [:user_id_hash, :vendor_id, :company_id, :locale].each do |k|
         session[k] = nil
       end
     end
