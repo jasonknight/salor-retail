@@ -1,3 +1,9 @@
+salor-retail (4.0.2.129) wheezy; urgency=medium
+
+  * select general search input when on index page
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 15 Jan 2015 19:41:30 +0100
+
 salor-retail (4.0.2.128) wheezy; urgency=medium
 
   * fixed french translation interpolations
