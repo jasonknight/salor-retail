@@ -72,7 +72,7 @@ sr.fn.inventory = {
       sr.fn.debug.ajaxLog({
         action_taken:'confirmed_create_inventory_report_dialog'
       });
-      window.location = '/items/create_inventory_report';
+      window.location = '/inventory_reports/create_inventory_report';
     });
     dialog.append(okbutton);
   }
