@@ -9,6 +9,7 @@ class InventoryReportsController < ApplicationController
     @items = @current_vendor.items.visible.where(:real_quantity_updated => true)
     @category_ids = @items.select("DISTINCT category_id").collect{ |res| res.category_id }
     @category_ids << nil
+    @category_ids.uniq!
     render :show
   end
   
@@ -17,6 +18,7 @@ class InventoryReportsController < ApplicationController
     @items = @inventory_report.inventory_report_items
     @category_ids = @items.select("DISTINCT category_id").collect{ |res| res.category_id }
     @category_ids << nil
+    @category_ids.uniq!
   end
   
   def edit
