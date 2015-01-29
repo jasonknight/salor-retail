@@ -111,7 +111,7 @@ en:
       lp_per_dollar: loyalty points per dollar
       min_quantity: min quantity
       must_change_price: Change price on scan
-      name: name
+      name: Name
       no_print: Don't Print on Enter
       notes: notes
       nr: Number
@@ -430,6 +430,8 @@ en:
       title: Inventory Report
       total_purchase_price: Total Purchase Price
       total_selling_price: Total Selling Price
+      add_quantity: add quantity
+      current_quantity: Current quantity
     selection:
       print: Print
     show:

@@ -33,4 +33,27 @@ class InventoryReportsController < ApplicationController
   end
   
   
+  def update_real_quantity
+    @item = @current_vendor.items.visible.find_by_sku(params[:sku])
+    @item.real_quantity = @item.real_quantity.to_f + params[:real_quantity].gsub(",",".").to_f
+    @item.real_quantity ||= 0 # protect against errenous JS requests with missing 'real_quantity' param
+    @item.real_quantity_updated = true
+    result = @item.save
+    if result != true
+      raise "Could not save Item because #{ @item.errors.messages }"
+    end
+    render :json => {:status => 'success'}
+  end
+  
+  def inventory_json
+    @item = @current_vendor.items.visible.find_by_sku(params[:sku], :select => "name,sku,id,quantity,real_quantity")
+    render :json => @item.to_json
+  end
+  
+  def create_inventory_report
+    @current_vendor.create_inventory_report
+    redirect_to inventory_reports_path
+  end
+  
+  
 end

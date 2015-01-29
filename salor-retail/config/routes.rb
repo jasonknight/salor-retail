@@ -110,13 +110,15 @@ SalorRetail::Application.routes.draw do
   match "items/download" => "items#download"
   match "items/info" => "items#info"
   match "items/gift_cards" => "items#gift_cards"
-  match "items/inventory_json" => "items#inventory_json"
   match "items/create_ajax" => "items#create_ajax"
   match "items/render_label" => "items#render_label"
-  match "items/create_inventory_report" => "items#create_inventory_report"
-  get 'items/update_real_quantity'
   
-  match 'inventory_reports/current' => 'inventory_reports#current'
+  
+  
+  match "inventory_reports/current" => "inventory_reports#current"
+  match "inventory_reports/update_real_quantity" => "inventory_reports#update_real_quantity"
+  match "inventory_reports/create_inventory_report" => "inventory_reports#create_inventory_report"
+  match "inventory_reports/inventory_json" => "inventory_reports#inventory_json"
   
 
   

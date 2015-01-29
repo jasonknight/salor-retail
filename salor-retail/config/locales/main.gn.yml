@@ -431,6 +431,8 @@ gn:
       title: Inventurbericht
       total_purchase_price: Summe Kaufpreis
       total_selling_price: Summe Verkaufspreis
+      add_quantity: addiere
+      current_quantity: Menge gezählt
     selection:
       print: Drucken
     show:

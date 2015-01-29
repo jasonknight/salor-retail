@@ -128,28 +128,6 @@ class ItemsController < ApplicationController
   def gift_cards
     @gift_cards_sold = @current_vendor.order_items.visible.where(:behavior => "gift_card", :activated => nil, :paid => true)
   end
-  
-  def update_real_quantity
-    @item = @current_vendor.items.visible.find_by_sku(params[:sku])
-    @item.real_quantity = params[:real_quantity]
-    @item.real_quantity ||= 0 # protect against errenous JS requests with missing 'real_quantity' param
-    @item.real_quantity_updated = true
-    result = @item.save
-    if result != true
-      raise "Could not save Item because #{ @item.errors.messages }"
-    end
-    render :json => {:status => 'success'}
-  end
-  
-  def inventory_json
-    @item = @current_vendor.items.visible.find_by_sku(params[:sku], :select => "name,sku,id,quantity")
-    render :json => @item.to_json
-  end
-  
-  def create_inventory_report
-    @current_vendor.create_inventory_report
-    redirect_to inventory_reports_path
-  end
 
   def destroy
     @item = @current_vendor.items.visible.find_by_id(params[:id])
