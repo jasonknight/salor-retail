@@ -8,7 +8,7 @@
 height_metrics: MM,CM,DM,M
 length_metrics: MM,CM,DM,M
 width_metrics: MM,CM,DM,M
-weight_metrics: Piece,STK,BD,BT,CM,GR,KG,LT,LB,ML,MT,OZ,PA,PK,PT,RL,ST,TB,WG
-sales_metrics: Piece,STK,BD,BT,CM,GR,KG,LT,LB,ML,MT,OZ,PA,PK,PT,RL,ST,TB,WG
+weight_metrics: Piece,STK,BD,BT,CM,GR,DG,KG,LT,LB,ML,MT,OZ,PA,PK,PT,RL,ST,TB,WG
+sales_metrics: Piece,STK,BD,BT,CM,GR,DG,KG,LT,LB,ML,MT,OZ,PA,PK,PT,RL,ST,TB,WG
 :use_safe_device_path: false
 :tailor: false

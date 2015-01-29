@@ -603,13 +603,26 @@ class Order < ActiveRecord::Base
     tax_format = "   %s: %2i%% %7.2f %7.2f %8.2f\n"
 
     self.order_items.visible.each do |oi|
-      if oi.item
-        name = oi.item.get_translated_name(locale)
-      else
-        # fix for orders where the item was deleted (compatibility with old system)
-        name = ''
-      end
+      it = oi.item
+      name = it.get_translated_name(locale)
       taxletter = oi.tax_profile.letter
+      
+      oi_price = oi.price
+      oi_quantity = oi.quantity
+      
+      if ["GR", "DG"].include? it.sales_metric
+        # this is just for display purposes on customer screen and receipt
+        # oi.price and oi.item.price is always per KG
+        if it.sales_metric == "GR"
+          factor = 1000
+        elsif it.sales_metric == "DG"
+          factor = 10
+        end
+        oi_price /= factor
+        oi_quantity *= factor
+        name += " #{ it.sales_metric }"
+      end
+      
       
 
       # --- NORMAL ITEMS ---
@@ -619,15 +632,15 @@ class Order < ActiveRecord::Base
           list_of_items += integer_format % [
             taxletter,
             name,
-            oi.price,
-            oi.quantity,
+            oi_price,
+            oi_quantity,
             oi.total
           ]
           list_of_items_raw << to_list_of_items_raw([
                                                      taxletter,
                                                      name,
-                                                     oi.price,
-                                                     oi.quantity,
+                                                     oi_price,
+                                                     oi_quantity,
                                                      oi.total,
                                                      'integer'
                                                     ])
@@ -636,15 +649,15 @@ class Order < ActiveRecord::Base
           list_of_items += float_format % [
             taxletter,
             name,
-            oi.price,
-            oi.quantity,
+            oi_price,
+            oi_quantity,
             oi.total
           ]
           list_of_items_raw << to_list_of_items_raw([
                                                      taxletter,
                                                      name,
-                                                     oi.price,
-                                                     oi.quantity,
+                                                     oi_price,
+                                                     oi_quantity,
                                                      oi.total,
                                                      'float'
                                                     ])
