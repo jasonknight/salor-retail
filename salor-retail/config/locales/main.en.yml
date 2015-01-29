@@ -421,6 +421,8 @@ en:
         you really sure that you want to proceed?
       report: Barcode Sheet
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: No Category
       price: Selling price
       subtotal_purchase_price: Subtotal Purchase Price
@@ -430,8 +432,6 @@ en:
       title: Inventory Report
       total_purchase_price: Total Purchase Price
       total_selling_price: Total Selling Price
-      add_quantity: add quantity
-      current_quantity: Current quantity
     selection:
       print: Print
     show:

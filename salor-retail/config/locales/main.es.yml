@@ -431,6 +431,8 @@ es:
       title: Informe de inventario
       total_purchase_price: Total Purchase Price
       total_selling_price: Total del precio de venta
+      add_quantity: add quantity
+      current_quantity: Current quantity
     selection:
       print: Print
     show:

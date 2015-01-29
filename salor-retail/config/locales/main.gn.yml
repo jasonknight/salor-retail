@@ -422,6 +422,8 @@ gn:
         Sind Sie wirklich sicher, dass Sie fortfahren möchten?
       report: Bericht
     inventory_report:
+      add_quantity: addiere
+      current_quantity: Menge gezählt
       no_category: Keine Kategorie
       price: Verkaufspreis
       subtotal_purchase_price: Gesamtsumme Einkaufspreis
@@ -431,8 +433,6 @@ gn:
       title: Inventurbericht
       total_purchase_price: Summe Kaufpreis
       total_selling_price: Summe Verkaufspreis
-      add_quantity: addiere
-      current_quantity: Menge gezählt
     selection:
       print: Drucken
     show:

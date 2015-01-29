@@ -430,6 +430,8 @@ it:
       title: Rapporto Inventario
       total_purchase_price: Total Purchase Price
       total_selling_price: Somma Prezzo di Vendita
+      add_quantity: add quantity
+      current_quantity: Current quantity
     selection:
       print: Print
     show:

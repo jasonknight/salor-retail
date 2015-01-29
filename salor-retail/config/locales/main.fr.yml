@@ -432,6 +432,8 @@ fr:
       title: Rapport inventaire
       total_purchase_price: Prix d'achat total
       total_selling_price: Prix de vente total
+      add_quantity: add quantity
+      current_quantity: Current quantity
     selection:
       print: Imprimer
     show:

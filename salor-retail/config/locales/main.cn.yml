@@ -424,6 +424,8 @@ cn:
       title: 庫存報告
       total_purchase_price: Total Purchase Price
       total_selling_price: 總和銷售價格
+      add_quantity: add quantity
+      current_quantity: Current quantity
     selection:
       print: Print
     show:
