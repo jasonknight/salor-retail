@@ -1,3 +1,21 @@
+salor-retail (4.0.2.130) wheezy; urgency=medium
+
+  [ Michael Franzl ]
+  * fixed OrderItem test for gift card redeem
+  * display on customerscreen and receipt factored price of weighed items based on Item.sales_metric
+  * fixed duplicate nil category problem for inventoryReport
+  * new feature: counting inventory will add instead of overwrite real_quantity
+  * new feature: counting inventory will add instead of overwrite real_quantity
+
+  [ michael ]
+  * updated translations
+
+  [ Michael Franzl ]
+  * fix for changing item sku when child present
+  * allow spaces in by_keywords search
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 05 Feb 2015 10:19:38 +0100
+
 salor-retail (4.0.2.129) wheezy; urgency=medium
 
   * select general search input when on index page
