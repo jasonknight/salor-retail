@@ -198,10 +198,20 @@ class ItemsController < ApplicationController
   end
 
   def upload
-    if params[:file]
-      @uploader = FileUpload.new("salorretail", @current_vendor, params[:file].read)
-      @uploader.crunch
+    if params[:file] and params[:file].content_type == "text/csv" then
+      shipper = Shipper.new( :name => "Salor")
+      shipper.vendor = @current_vendor
+      shipper.company = @current_company
+
+      if shipper then
+        @uploader = FileUpload.new(shipper, params[:file].read)
+        @uploader.salor(true) #i.e. trusted
+      end
+    else
+      puts "items/upload/wtf?"
+      debugger
     end
+    render :text => "Done", :status => 200 and return
   end
   
   def download

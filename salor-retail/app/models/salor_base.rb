@@ -129,6 +129,7 @@ module SalorBase
 
   def self.string_to_float(str, options = { :locale => 'en-us' })
     return str if str.class == Float or str.class == Fixnum
+    str = "0" if str.nil?
     str.gsub!(/[^-\d.,]/, '') # cleanup
     str.gsub! I18n.t('number.currency.format.delimiter', :locale => options[:locale]), ''
     str.gsub! I18n.t('number.currency.format.separator', :locale => options[:locale]), '.'

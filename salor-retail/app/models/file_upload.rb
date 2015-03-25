@@ -631,6 +631,7 @@ class FileUpload
   # TODO: This needs to be made fit for SAAS: Scoping by Vendor and Company, for querying and creating new records
   def salor(trusted=true)
     csv = Kcsv.new(@lines, {:header => true,:separator => "\t"})
+
     csv.to_a.each do |rec|
       
       kls = Kernel.const_get(rec[:class])
@@ -655,31 +656,32 @@ class FileUpload
           end
         end
         rec.delete(:location_name)
-        item = Item.find_or_create_by_sku(rec[:sku])
+        item = @vendor.items.find_or_create_by_sku(rec[:sku])
         item.tax_profile = tp
         item.category = cat
         item.location = loc
+
         item.attributes = rec
-        item.base_price = rec[:base_price]
+        item.base_price = rec[:price]
 #           puts "\n\nITEM IS: #{item.inspect}"
-        created_items += 1 if item.new_record?
-        updated_items += 1 if not item.new_record?
+        @created_items += 1 if item.new_record?
+        @updated_items += 1 if not item.new_record?
         
       elsif kls == Button then
-        item = Button.find_or_create_by_sku(rec)
+        item = @vendore.buttons.find_or_create_by_sku(rec)
         item.attributes = rec
-      elsif kls == @vendor.categories.visible then
+      elsif kls == Category then
         item = @vendor.categories.visible.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
-        created_categories += 1 if item.new_record?
+        @created_categories += 1 if item.new_record?
       elsif kls == LoyaltyCard and trusted then
-        item = LoyaltyCard.find_or_create_by_sku(rec[:sku])
+        item = @vendor.loyalty_cards.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
       elsif kls == Customer and trusted then
-        item = Customer.find_or_create_by_sku(rec[:sku])
+        item = @vendor.customers.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
       elsif kls == Discount and trusted then
-        item = Discount.find_or_create_by_sku(rec[:sku])
+        item = @vendor.discounts.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
       end
 #         puts "Saving Item #{item.inspect}"

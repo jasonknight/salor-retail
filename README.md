@@ -57,7 +57,7 @@ Install Ruby 1.9.2
 
 Then install libmagickwand-dev
 
-    apt-get install libmagickwand-dev libxslt-dev libmysqlclient-dev
+    apt-get install libmagickwand-dev libxslt-dev libmysqlclient-dev barcode
 
 Now you should be able to continue with the main development setup!
 

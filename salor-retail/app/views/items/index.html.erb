@@ -28,14 +28,25 @@
             
           <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
         </div>
-
-
     </td>
   </tr>
 </table>
 
 <%= render :partial => "items_list" %>
+<table align="center" width="50%">
+  <tr>
+    <td>
+      <div id="dropzone"><form action="/items/upload" class="dropzone dz-clickable" id="items_upload">
 
+          <div class="dz-message">
+            Drop files here or click to upload.<br>
+            <span class="note">(Only .csv in the salor format accepted)</span>
+          </div>
+
+        </form></div>
+    </td>
+  </tr>
+</table>
 <div class="pagination" align="center">
   <%= paginate @items if @items %>
 </div>
