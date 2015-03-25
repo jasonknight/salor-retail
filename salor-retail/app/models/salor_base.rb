@@ -7,7 +7,30 @@
 
 module SalorBase
   
-  
+  # this converts a date time:min:sec into a utc time, because
+  # that is how we store them
+  def self.convert_times_to_utc(t) 
+    if t then
+      format = "%Y-%m-%d %H:%M:%S"
+      if t.is_a? Array then
+        return t if t.empty?
+        
+        t.map! { |e| 
+          if e.is_a? Array then
+            #if it's an array of arrays, like a return from scan, recursively call it
+            e = self.convert_times_to_utc(e) 
+          else
+            e = Time.strptime(e,format).utc.strftime(format) 
+          end
+        }
+      else
+        t = Time.strptime(t,format).utc.strftime(format)
+      end 
+      return t
+    else
+      return nil
+    end
+  end
   def self.symbolize_keys arg
     case arg
     when Array

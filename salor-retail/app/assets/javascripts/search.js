@@ -5,11 +5,16 @@ sr.fn.search_generic.setup = function() {
     if (e.keyCode == 13) {
       sr.fn.search_generic.go('#generic_search_input');
     }
+  });
+  $('#generic_search_wide_input').keyup(function(e) {
+    if (e.keyCode == 13) {
+      sr.fn.search_generic.go('#generic_search_wide_input');
+    }
   })
 }
 
 sr.fn.search_generic.go = function(caller) {
-  var encoded_search_string = encodeURIComponent($('#generic_search_input').val());
+  var encoded_search_string = encodeURIComponent($(caller).val());
   window.location = '?keywords=' + encoded_search_string;
 }
 

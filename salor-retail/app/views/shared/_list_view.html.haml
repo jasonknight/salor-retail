@@ -5,7 +5,8 @@
         = link_to(salor_icon(:add,{},32),"/#{klass.table_name}/new")
         %br
         %span.icon-caption=I18n.t('views.single_words.new')
-
+%br
+= render :partial => "shared/generic_search_wide", :locals => {:keywords => params[:keywords]} 
 - if collection.respond_to?(:current_page)
   %div.pagination= paginate collection if collection
 

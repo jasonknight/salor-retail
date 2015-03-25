@@ -21,6 +21,7 @@
   .tool-icon= link_to salor_icon(:subscription_order, {}, 32, t("activerecord.models.order.subscriptions")), '/orders?type=subscription'
   .tool-icon= link_to salor_icon(:thermal_printer, {}, 32, t("menu.receipts")), '/orders/receipts'
 
+
 - if params[:type] == 'subscription'
   = render :partial => 'shared/list_view', :locals => {  :klass => Order, :width => '60%',:collection => @orders, :columns => [:nr, :customer_name, :total, :subscription_start, :subscription_interval, :subscription_last, :subscription_next]}
   %p
