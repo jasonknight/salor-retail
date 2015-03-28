@@ -85,6 +85,7 @@ SalorRetail::Application.routes.draw do
   match "customers/labels" => "customers#labels"
   match "customers/render_label" => "customers#render_label"
   match "customers/download" => "customers#download"
+  match "customers/upload" => "customers#upload"
   match "customers/upload_optimalsoft" => "customers#upload_optimalsoft"
   
   
@@ -102,7 +103,6 @@ SalorRetail::Application.routes.draw do
   match "items/move_real_quantity" => "items#move_real_quantity"
   match "items/labels" => "items#labels"
   match "items/selection" => "items#selection"
-  match "items/upload" => "items#upload"
   match "items/upload" => "items#upload"
   match "items/upload_house_of_smoke" => "items#upload_house_of_smoke"
   match "items/upload_danczek_tobaccoland_plattner" => "items#upload_danczek_tobaccoland_plattner"

@@ -631,7 +631,6 @@ class FileUpload
   # TODO: This needs to be made fit for SAAS: Scoping by Vendor and Company, for querying and creating new records
   def salor(trusted=true)
     csv = Kcsv.new(@lines, {:header => true,:separator => "\t"})
-
     csv.to_a.each do |rec|
       
       kls = Kernel.const_get(rec[:class])
@@ -678,7 +677,12 @@ class FileUpload
         item = @vendor.loyalty_cards.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
       elsif kls == Customer and trusted then
-        item = @vendor.customers.find_or_create_by_sku(rec[:sku])
+        if rec[:id] and Customer.exists?(rec[:id]) then
+          item = @company.customers.find(rec[:id])
+        else
+          item = @company.customers.create
+        end
+        rec.delete(:id)
         item.attributes = rec
       elsif kls == Discount and trusted then
         item = @vendor.discounts.find_or_create_by_sku(rec[:sku])

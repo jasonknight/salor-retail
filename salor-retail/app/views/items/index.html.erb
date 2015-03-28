@@ -39,14 +39,15 @@
       <div id="dropzone"><form action="/items/upload" class="dropzone dz-clickable" id="items_upload">
 
           <div class="dz-message">
-            Drop files here or click to upload.<br>
-            <span class="note">(Only .csv in the salor format accepted)</span>
+            <%= I18n.t("views.drop_files_here")%><br>
+            <span class="note"><%= I18n.t("views.drop_files_only_csv") %></span>
           </div>
-
+          
         </form></div>
     </td>
   </tr>
 </table>
+
 <div class="pagination" align="center">
   <%= paginate @items if @items %>
 </div>

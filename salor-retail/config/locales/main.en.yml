@@ -884,6 +884,8 @@ en:
     create_new_item: Create New Article
     customers: customers
     download_may_last_long: This download may last long. Continue?
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
     dummy_item: dummy item
     edit_item_heading: Edititem heading
     email: email
