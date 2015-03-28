@@ -3,6 +3,7 @@
 %html
   %head
     %title SalorRetail
+    = tag 'meta', {:content => "width=device-width, initial-scale=1.0", :name => "viewport"}, true
     - if mobile?
       %link{ :rel => "apple-touch-icon", :href => "apple-touch-icon-57x57.png"}
       %link{ :rel => "apple-touch-icon", :sizes => "72x72", :href => "apple-touch-icon-72x72.png"}
