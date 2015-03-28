@@ -207,9 +207,6 @@ class ItemsController < ApplicationController
         @uploader = FileUpload.new(shipper, params[:file].read)
         @uploader.salor(true) #i.e. trusted
       end
-    else
-      puts "items/upload/wtf?"
-      debugger
     end
     render :text => "Done", :status => 200 and return
   end
