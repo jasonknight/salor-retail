@@ -106,6 +106,19 @@ class Action < ActiveRecord::Base
     self.model = self.vendor.categories.find_by_id(id)
   end
 
+  def location_id
+    if self.model.class == Location then
+      return self.model.id
+    else
+      return nil
+    end
+  end
+
+  def location_id=(id)
+    return if id.blank?
+    self.model = self.vendor.locations.find_by_id(id)
+  end
+
   def sku
     if self.model and self.model.class == Item
       return self.model.sku
@@ -141,6 +154,12 @@ class Action < ActiveRecord::Base
           redraw_all_pos_items = Action.apply_action(action, item, act)
         end
       end
+      debugger
+      if base_item.location then
+        base_item.location.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
+          redraw_all_pos_items = Action.apply_action(action, item, act)
+        end
+      end
       
     else
       the_vendor.actions.visible.where(:model_type => 'Vendor', :model_id => the_vendor.id).where(["whento = ? or whento = 'always'",act]).each do |action|
@@ -151,6 +170,7 @@ class Action < ActiveRecord::Base
   end
   
   def execute_script(item, act)
+    debugger
     return item if self.js_code.nil?
     the_user = User.find_by_id($USERID)
     if item.kind_of? ActiveRecord::Base and item.class != Vendor then
@@ -166,7 +186,7 @@ class Action < ActiveRecord::Base
     # have to do this to prevent access to the object from inside JS
     # but we want to be able to access it from other parts of the code
     secret = Digest::SHA2.hexdigest(the_user.encrypted_password)[0..8]
-    api = JsApi.new(self.name, act, the_vendor.company, the_vendor, the_user, secret)
+    api = JsApi.new(self.name + " Action", act, the_vendor.company, the_vendor, the_user, secret)
     api.set_object(item) # this is object that the script will operate on
     api.set_writeable(secret,false) if item.class == Vendor 
     api.evaluate_script(self.js_code)

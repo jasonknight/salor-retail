@@ -100,7 +100,7 @@ en:
         weight: Weight
       item_sku: item sku
       itemsviewlist: List View for Items
-      js_code: Javascript Code
+      js_code: V8 Javascript Code
       lang: Language
       language: Language
       last_name: last name
@@ -346,6 +346,7 @@ en:
     exception_in_files: ! 'The Error occurred in the following files:'
     oops_an_error_occurred: Oops! An Error occurred
   headings:
+    action_apply_to_area: Apply this action to
     almost_out: almost out
     bank_machine_types: supported bank machines
     best_sellers: bestsellers
@@ -988,6 +989,7 @@ en:
       gift_cards: Gift Cards
       loading: loading
       new: New
+      xor: OR
       order: order
       ordering: ordering
       processing: processing...
