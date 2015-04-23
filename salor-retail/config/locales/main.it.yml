@@ -372,6 +372,7 @@ it:
     update_location: aggiorna posizione
     update_real_quantity: aggiorna quantità reale
     users: users
+    action_apply_to_area: Apply this action to
   helpers:
     select:
       prompt: prego selezionare
@@ -421,6 +422,8 @@ it:
         è di 20 minuti. Sei veramente sicuro di procedere?
       report: Report
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: No Category
       price: Prezzo di vendita
       subtotal_purchase_price: Subtotale Prezzo di Acquisto
@@ -430,8 +433,6 @@ it:
       title: Rapporto Inventario
       total_purchase_price: Total Purchase Price
       total_selling_price: Somma Prezzo di Vendita
-      add_quantity: add quantity
-      current_quantity: Current quantity
     selection:
       print: Print
     show:
@@ -996,6 +997,7 @@ it:
       to: a
       top: alto
       waiting: in attesa...
+      xor: OR
     sticky_ticket: Etichetta adesiva
     stock_locations: stock_posizioni
     subtotal: subtotale
@@ -1005,6 +1007,8 @@ it:
     username: nome utente
     vendor: venditore
     wholesaler_refresh: Recupero aggiornamenti fornitori. Può richiedere diversi minuti.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: aggiungo ad ordine
     always: sempre

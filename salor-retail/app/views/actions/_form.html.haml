@@ -19,26 +19,32 @@
           =f.label :name
           %br
           =f.text_field :name
-    %tr
-      %td
-        %p
-          = f.label :sku
-          %br
-          = f.text_field :sku
+
     %tr
       %td
         %table
           %tr
-            %td{:colspan => 8}
+            %td{:colspan => 11}
               %h3=I18n.t("headings.action_apply_to_area")
+               
+                
           %tr
-            %td= f.label :category_id
+            %td SKU
+            %td= f.text_field :sku
+            
+            %td=I18n.t("views.single_words.xor")
+            
+            %td= Category.model_name.human
             %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
+            
             %td=I18n.t("views.single_words.xor")
-            %td= f.label :location
+            
+            %td= Location.model_name.human
             %td= f.collection_select :location_id, @action.vendor.locations.visible, :id, :name, :include_blank => true 
+            
             %td=I18n.t("views.single_words.xor")
-            %td= f.label :vendor_id
+            
+            %td= Vendor.model_name.human
             %td= f.select :vendor_model, options_for_select(@current_company.vendors.visible.collect{ |v| [v.name,"Vendor:#{v.id}"] },@action.vendor_model), :include_blank => true 
 
     %tr

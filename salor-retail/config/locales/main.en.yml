@@ -989,7 +989,6 @@ en:
       gift_cards: Gift Cards
       loading: loading
       new: New
-      xor: OR
       order: order
       ordering: ordering
       processing: processing...
@@ -999,6 +998,7 @@ en:
       to: to
       top: top
       waiting: waiting...
+      xor: OR
     sticky_ticket: Sticky label
     stock_locations: stock_locations
     subtotal: subtotal

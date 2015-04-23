@@ -373,6 +373,7 @@ es:
     update_location: Actualizar ubicación
     update_real_quantity: Actualizar cantidad real
     users: users
+    action_apply_to_area: Apply this action to
   helpers:
     select:
       prompt: Por favor seleccione
@@ -422,6 +423,8 @@ es:
         20 minutos. ¿Está seguro de continuar?
       report: Report
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: No Category
       price: Precio de venta
       subtotal_purchase_price: Subtotal del precio de compra
@@ -431,8 +434,6 @@ es:
       title: Informe de inventario
       total_purchase_price: Total Purchase Price
       total_selling_price: Total del precio de venta
-      add_quantity: add quantity
-      current_quantity: Current quantity
     selection:
       print: Print
     show:
@@ -1007,6 +1008,7 @@ es:
       to: A
       top: Arriba
       waiting: Esperando...
+      xor: OR
     sticky_ticket: Etiqueta adhesiva
     stock_locations: Ubicaciones_de_stock
     subtotal: Subtotal
@@ -1017,6 +1019,8 @@ es:
     vendor: Tienda
     wholesaler_refresh: Actualización del distribuidor en curso. Esto puede llevar
       algunos minutos.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: al añadir al pedido
     always: siempre

@@ -373,6 +373,7 @@ el:
     update_location: ενημέρωση τοποθεσίας
     update_real_quantity: ενημέρωση πραγματικής ποσότητας
     users: users
+    action_apply_to_area: Apply this action to
   helpers:
     select:
       prompt: παρακαλώ επιλέξτε
@@ -424,6 +425,8 @@ el:
         θα διαρκέσει περίπου 20 λεπτά. Είστε απόλυτα σίγουροι πως θέλετε να προχωρήσετε;
       report: Report
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: No Category
       price: Τιμή πώλησης
       subtotal_purchase_price: Υποσύνολο Τιμής Αγοράς
@@ -433,8 +436,6 @@ el:
       title: Έκθεση Απογραφής
       total_purchase_price: Total Purchase Price
       total_selling_price: Άθροισμα Τιμής Πώλησης
-      add_quantity: add quantity
-      current_quantity: Current quantity
     selection:
       print: Print
     show:
@@ -1011,6 +1012,7 @@ el:
       to: προς
       top: πάνω μέρος
       waiting: αναμονή...
+      xor: OR
     sticky_ticket: Αυτοκόλλητη ετικέτα
     stock_locations: τοποθεσίες_αποθέματος
     subtotal: υποσύνολο
@@ -1021,6 +1023,8 @@ el:
     vendor: προμηθευτής
     wholesaler_refresh: Ψάχνουμε για ενημερώσεις χονδρεμπόρου. Αυτό μπορεί να διαρκέσει
       λίγα λεπτά.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: προσθέστε για παραγγελία
     always: πάντα
