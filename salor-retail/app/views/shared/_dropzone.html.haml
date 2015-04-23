@@ -1,0 +1,9 @@
+%table
+  %tr
+    %td
+      %div#dropzone
+        %form.dropzone.dz-clickable{:action=> action}
+          .dz-message
+            = I18n.t("views.drop_files_here")
+            %br
+            %span.note=I18n.t("views.drop_files_only_csv")

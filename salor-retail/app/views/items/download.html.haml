@@ -1,0 +1,12 @@
+= Item.csv_headers.join("\t")
+- @items.each do |item|
+  - if item.parent
+    - depth = 0
+    - i = item
+    - until i.nil?
+      - depth += 1
+      - break if depth > 5
+      = raw i.to_csv
+      - i = i.parent
+  - else
+    = raw item.to_csv

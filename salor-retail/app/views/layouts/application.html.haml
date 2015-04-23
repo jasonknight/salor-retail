@@ -3,6 +3,7 @@
 %html
   %head
     %title SalorRetail
+    = tag 'meta', {:content => "width=device-width, initial-scale=1.0", :name => "viewport"}, true
     - if mobile?
       %link{ :rel => "apple-touch-icon", :href => "apple-touch-icon-57x57.png"}
       %link{ :rel => "apple-touch-icon", :sizes => "72x72", :href => "apple-touch-icon-72x72.png"}
@@ -10,12 +11,14 @@
     = stylesheet_link_tag 'print', :media => 'print'
     = stylesheet_link_tag 'ui-min.css'
     = stylesheet_link_tag 'generic'
+    = stylesheet_link_tag 'dropzone'
     = stylesheet_link_tag workstation? ? 'workstation' : 'mobile'
 
     = javascript_include_tag 'application'
+
     = javascript_include_tag "/jslocales/main.#{I18n.locale}.js"
     = javascript_include_tag "jquery.ui.datepicker-#{ I18n.locale }"
-     
+    = javascript_include_tag 'dropzone'
     - if @current_vendor
       = javascript_include_tag "/jslocales/region.#{@current_vendor.region}.js"
     - if @current_user

@@ -28,13 +28,25 @@
             
           <br /><span class='icon-caption'><%= I18n.t("menu.download") %></span>
         </div>
-
-
     </td>
   </tr>
 </table>
 
 <%= render :partial => "items_list" %>
+<table align="center" width="50%">
+  <tr>
+    <td>
+      <div id="dropzone"><form action="/items/upload" class="dropzone dz-clickable" id="items_upload">
+
+          <div class="dz-message">
+            <%= I18n.t("views.drop_files_here")%><br>
+            <span class="note"><%= I18n.t("views.drop_files_only_csv") %></span>
+          </div>
+          
+        </form></div>
+    </td>
+  </tr>
+</table>
 
 <div class="pagination" align="center">
   <%= paginate @items if @items %>

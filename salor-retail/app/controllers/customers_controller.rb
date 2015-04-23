@@ -7,13 +7,37 @@
 
 class CustomersController < ApplicationController
 
-  before_filter :check_role
+  before_filter :check_role, :except => [:info, :search]
   before_filter :update_devicenodes, :only => [:index]
   
   def download
-    @customers = @current_vendor.customers.visible
+    # @customers = @current_vendor.customers.visible
+    # data = render_to_string :layout => false
+    # send_data(data,:filename => 'customers.csv', :type => 'text/csv')
+
+    params[:page] ||= 1
+    params[:order_by] = "created_at DESC" if not params[:order_by] or params[:order_by].blank?
+    orderby ||= params[:order_by]
+    if params[:keywords].blank?
+      @customers = @current_company.customers.visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    else
+      @customers = @current_company.customers.by_keywords(params[:keywords]).visible.page(params[:page]).per(@current_vendor.pagination).order('created_at DESC')
+    end
     data = render_to_string :layout => false
     send_data(data,:filename => 'customers.csv', :type => 'text/csv')
+  end
+   def upload
+    if params[:file] and params[:file].content_type == "text/csv" then
+      shipper = Shipper.new( :name => "Salor")
+      shipper.vendor = @current_vendor
+      shipper.company = @current_company
+
+      if shipper then
+        @uploader = FileUpload.new(shipper, params[:file].read)
+        @uploader.salor(true) #i.e. trusted
+      end
+    end
+    render :text => "Done", :status => 200 and return
   end
   
   def index

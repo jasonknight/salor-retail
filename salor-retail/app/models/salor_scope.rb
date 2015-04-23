@@ -6,7 +6,8 @@
 # See license.txt for the license applying to all files within this software.
 
 module SalorScope
-  
+  # Ruby will pas in the Class variable when it called .included
+  # which is a kind of event
   def self.included(klass)
        
     
@@ -38,9 +39,21 @@ module SalorScope
       return nil if keywords.blank?
       
       words = keywords.gsub /[^-0-9a-zA-Z ]/, ""
-
+      # Support searching orders by date and time
+      # we need to convert those times to utc for searching, becuase
+      # that is how we are storing the dates and times in the database
+      
+      dates = SalorBase.convert_times_to_utc(keywords.scan(/(\d+\-\d+\-\d+) (\d+\-\d+\-\d+)/))
+      dates2 = SalorBase.convert_times_to_utc(keywords.scan(/(\d+-\d+-\d+ \d+:\d+:\d+) (\d+-\d+-\d+ \d+:\d+:\d+)/))
       if klass == Order then
-        conds << "nr = '#{words}' OR qnr = '#{words}' OR tag LIKE '#{words}%'"  
+
+        if not dates.empty? or not dates2.empty? then
+
+          conds << "completed_at between '#{dates[0][0]}' and '#{dates[0][1]}'" if not dates.empty?
+          conds << "completed_at between '#{dates2[0][0]}' and '#{dates2[0][1]}'" if not dates2.empty?
+        else
+          conds << "nr = '#{words}' OR qnr = '#{words}' OR tag LIKE '#{words}%'"
+        end
         return klass.where(conds.join())
       end
                                       

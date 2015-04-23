@@ -219,6 +219,10 @@ class Order < ActiveRecord::Base
     if params[:sku].include?('.') or params[:sku].include?(',')
       log_action "Setting no_inc since it is a price-only item."
       oi.no_inc = true
+      if params[:sku][0] == '-' then
+        #it's a negative price item, so set buyback
+        oi.is_buyback = true
+      end
     end
     oi.no_inc ||= params[:no_inc]
     log_action "no_inc is: #{oi.no_inc.inspect}"
@@ -294,11 +298,11 @@ class Order < ActiveRecord::Base
     
     # if nothing existing has been found, create a new item
     i = Item.new
+    i.vendor = self.vendor
+    i.company = self.company
     i.item_type = self.vendor.item_types.find_by_behavior('normal')
     i.behavior = i.item_type.behavior
     i.tax_profile = self.vendor.tax_profiles.visible.where(:default => true).first
-    i.vendor = self.vendor
-    i.company = self.company
     i.currency = self.vendor.currency
     i.created_by = -100 # magic number for created by POS screen
     i.name = sku
@@ -308,6 +312,11 @@ class Order < ActiveRecord::Base
       timestamp = Time.now.strftime("%y%m%d%H%M%S%L")
       i.sku = "DMY" + timestamp
       i.price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
+      if sku[0] == '-' then
+        #it's a negative price item, so set buyback
+        i.buy_price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
+        i.tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
+      end
     else
       # $MESSAGES[:prompts] << I18n.t("views.notice.item_not_existing")
       i.sku = sku

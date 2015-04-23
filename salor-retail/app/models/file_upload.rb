@@ -655,31 +655,37 @@ class FileUpload
           end
         end
         rec.delete(:location_name)
-        item = Item.find_or_create_by_sku(rec[:sku])
+        item = @vendor.items.find_or_create_by_sku(rec[:sku])
         item.tax_profile = tp
         item.category = cat
         item.location = loc
+
         item.attributes = rec
-        item.base_price = rec[:base_price]
+        item.base_price = rec[:price]
 #           puts "\n\nITEM IS: #{item.inspect}"
-        created_items += 1 if item.new_record?
-        updated_items += 1 if not item.new_record?
+        @created_items += 1 if item.new_record?
+        @updated_items += 1 if not item.new_record?
         
       elsif kls == Button then
-        item = Button.find_or_create_by_sku(rec)
+        item = @vendore.buttons.find_or_create_by_sku(rec)
         item.attributes = rec
-      elsif kls == @vendor.categories.visible then
+      elsif kls == Category then
         item = @vendor.categories.visible.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
-        created_categories += 1 if item.new_record?
+        @created_categories += 1 if item.new_record?
       elsif kls == LoyaltyCard and trusted then
-        item = LoyaltyCard.find_or_create_by_sku(rec[:sku])
+        item = @vendor.loyalty_cards.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
       elsif kls == Customer and trusted then
-        item = Customer.find_or_create_by_sku(rec[:sku])
+        if rec[:id] and Customer.exists?(rec[:id]) then
+          item = @company.customers.find(rec[:id])
+        else
+          item = @company.customers.create
+        end
+        rec.delete(:id)
         item.attributes = rec
       elsif kls == Discount and trusted then
-        item = Discount.find_or_create_by_sku(rec[:sku])
+        item = @vendor.discounts.find_or_create_by_sku(rec[:sku])
         item.attributes = rec
       end
 #         puts "Saving Item #{item.inspect}"

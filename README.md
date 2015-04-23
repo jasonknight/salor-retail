@@ -45,6 +45,33 @@ The user interface of Salor Retail has already been translated into French, Span
 
 ## Development Installation
 
+You will need to have the correct ruby system installed. We suggest using RVM for this see: [rvm.io](http://rvm.io)
+
+In this case we are working with a Debian based distro, for rpm based distros, you're on your own as we
+don't use or test on them. Sorry. (It shouldn't be so hard tho...you'll probably know the equivalent commands)
+
+Install Ruby 1.9.2
+
+    rvm install 2.2.
+    rvm use 1.9.2 --default
+
+If you are installing another version of ruby, you may run into a problem with bundler not having the
+ruby source code. You will need to:
+
+    rvm fetch 1.9.x
+    rvm reinstall 1.9.x --disable-binary
+
+
+
+Then install libmagickwand-dev
+
+    apt-get install libmagickwand-dev libxslt-dev libmysqlclient-dev barcode imagemagick libmagickwand-dev
+
+
+
+Now you should be able to continue with the main development setup!
+
+
 Clone the repository
 
     cd salor-retail/salor-retail

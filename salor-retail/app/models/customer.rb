@@ -39,7 +39,7 @@ class Customer < ActiveRecord::Base
     end
   end
   def self.csv_headers
-    return [:company_name,:first_name, :last_name,:email,:telephone, :cellphone,:tax_number,:street1,:street2,:city, :postalcode, :state,:country, :loyalty_card_sku]
+    return [:class, :id, :vendor_id, :company_name,:first_name, :last_name,:email,:telephone, :cellphone,:tax_number,:street1,:street2,:city, :postalcode, :state,:country, :loyalty_card_sku]
   end
   
 
@@ -55,7 +55,14 @@ class Customer < ActiveRecord::Base
   def set_sku
     self.sku = "#{self.company_name}#{self.first_name}#{self.last_name}".gsub(/[^a-zA-Z0-9]+/,'')
   end
-  
+  # This is for the upload facility, changing a single loyalty card
+  def loyalty_card_sku
+    self.loyalty_cards.first.sku
+  end
+  def loyalty_card_sku=(s)
+    self.loyalty_cards.first.update_attribute :sku, s
+  end
+
   def full_name    
     if not self.company_name.blank? then
       return "#{self.company_name} | #{self.first_name} #{self.last_name}"
