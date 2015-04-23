@@ -1,3 +1,44 @@
+salor-retail (4.0.2.132) wheezy; urgency=medium
+
+  [ Chris ]
+  * Adding Viewport
+
+  [ Jason Knight ]
+  * Expanded development intallation instructions:
+  * Adding a setup.rb file that installs the system, and adding some screenshots
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Added screenshot
+  * Upload and download
+  * Added dropzone.css
+  * Added a new generic search for the listview, also converted generic search to HAML
+
+  [ Jay ]
+  * Adding screen shots
+  * Adding upload/download support for customers
+
+  [ Jason Martin ]
+  * Clean up items_controller code
+  * Adding code to support JS Actions, working
+  * Actions working as a kind of discount strategy. Discounts will be deprecated.
+  * Adding screen shots, cleaning up css
+  * Adding screen shots
+
+  [ Michael Franzl ]
+  * dynamic css positioning fix for makeSelectWidget
+  * hiding upload field for now
+  * translation update
+
+ -- Michael Franzl <office@michaelfranzl.com>  Thu, 23 Apr 2015 20:39:02 +0200
+
 salor-retail (4.0.2.131) wheezy; urgency=medium
 
   * better fix for no_child_duplicate validation
