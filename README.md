@@ -6,7 +6,6 @@ Salor Retail is a Ruby-on-Rails based Point of Sale system that is intended for 
 
 To facilitate desktop deployment, all the components for Salor Retail are packaged as Debian .deb packages and can easily be installed on any Debian based distribution.
 
-For more information please study our [documentation page](http://documentation.thebigrede.net/retail).
 
 
 ## Main features
@@ -33,7 +32,6 @@ For more information please study our [documentation page](http://documentation.
 * Integration with the woocommerce webstore plugin for Wordpress
 * etc.
 
-For more information please study our [documentation page](http://documentation.thebigrede.net/retail).
 
 ## Technology
 
@@ -47,8 +45,7 @@ The user interface of Salor Retail has already been translated into French, Span
 
 You will need to have the correct ruby system installed. We suggest using RVM for this see: [rvm.io](http://rvm.io)
 
-In this case we are working with a Debian based distro, for rpm based distros, you're on your own as we
-don't use or test on them. Sorry. (It shouldn't be so hard tho...you'll probably know the equivalent commands)
+In this case we are working with a Debian based distro, for rpm based distros, you're on your own as we don't use or test on them. Sorry. (It shouldn't be so hard tho...you'll probably know the equivalent commands)
 
 Install Ruby 1.9.2
 
@@ -77,7 +74,7 @@ Clone the repository
     cd salor-retail/salor-retail
     bundle install
 
-Copy `config/database.yml.template` to `config/database.yml` and specify database name and database user.
+Copy `config/database.yml.default` to `config/database.yml` and specify database name and database user.
 
     rake db:create
     rake db:migrate
@@ -86,7 +83,6 @@ Copy `config/database.yml.template` to `config/database.yml` and specify databas
 
 Then browse to `http://localhost:3000`. The default password is 000.
 
-For production installations see our page [http:/documentation.thebigrede.net/retail/installation.html](http:/documentation.thebigrede.net/retail/installation.html).
 
 
 ## Demo
