@@ -1074,7 +1074,7 @@ class Vendor < ActiveRecord::Base
             i.hidden IS NULL
     ]
     Item.connection.execute(sql)
-    Item.connection.execute("UPDATE items SET quantity = real_quantity, real_quantity_updated = NULL WHERE real_quantity_updated IS TRUE AND vendor_id=#{ self.id} AND company_id=#{ self.company_id }")
+    Item.connection.execute("UPDATE items SET quantity = real_quantity, real_quantity_updated = NULL, real_quantity = 0 WHERE real_quantity_updated IS TRUE AND vendor_id=#{ self.id} AND company_id=#{ self.company_id }")
   end
   
   def recurrable_subscription_orders

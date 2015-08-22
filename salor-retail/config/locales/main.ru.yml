@@ -372,6 +372,7 @@ ru:
     update_location: обновить отдел
     update_real_quantity: обновить реальное количество
     users: users
+    action_apply_to_area: Apply this action to
   helpers:
     select:
       prompt: выберете пожалуйста
@@ -421,6 +422,8 @@ ru:
         хотите продолжить?
       report: Report
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: No Category
       price: Цена продажи
       subtotal_purchase_price: Подытог цены покупки
@@ -994,6 +997,7 @@ ru:
       to: кому
       top: верх
       waiting: ожидание...
+      xor: OR
     sticky_ticket: Наклейка
     stock_locations: расположения складов
     subtotal: подытог
@@ -1004,6 +1008,8 @@ ru:
     vendor: магазин
     wholesaler_refresh: Получение обновлений от оптового поставщика. Это может занять
       несколько минут.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: при добавлении к заказу
     always: всегда

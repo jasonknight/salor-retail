@@ -100,7 +100,7 @@ en:
         weight: Weight
       item_sku: item sku
       itemsviewlist: List View for Items
-      js_code: Javascript Code
+      js_code: V8 Javascript Code
       lang: Language
       language: Language
       last_name: last name
@@ -111,7 +111,7 @@ en:
       lp_per_dollar: loyalty points per dollar
       min_quantity: min quantity
       must_change_price: Change price on scan
-      name: name
+      name: Name
       no_print: Don't Print on Enter
       notes: notes
       nr: Number
@@ -346,6 +346,7 @@ en:
     exception_in_files: ! 'The Error occurred in the following files:'
     oops_an_error_occurred: Oops! An Error occurred
   headings:
+    action_apply_to_area: Apply this action to
     almost_out: almost out
     bank_machine_types: supported bank machines
     best_sellers: bestsellers
@@ -421,6 +422,8 @@ en:
         you really sure that you want to proceed?
       report: Barcode Sheet
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: No Category
       price: Selling price
       subtotal_purchase_price: Subtotal Purchase Price
@@ -882,6 +885,8 @@ en:
     create_new_item: Create New Article
     customers: customers
     download_may_last_long: This download may last long. Continue?
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
     dummy_item: dummy item
     edit_item_heading: Edititem heading
     email: email
@@ -993,6 +998,7 @@ en:
       to: to
       top: top
       waiting: waiting...
+      xor: OR
     sticky_ticket: Sticky label
     stock_locations: stock_locations
     subtotal: subtotal

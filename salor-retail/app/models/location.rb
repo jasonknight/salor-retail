@@ -16,6 +16,7 @@ class Location < ActiveRecord::Base
   has_many :shipment_items
   has_many :discounts
   has_many :item_stocks, :as => :location
+  has_many :actions, :as => :model, :order => "weight asc"
   
   before_create :set_sku
   scope :applies, lambda {|t| where(:applies_to => t)}

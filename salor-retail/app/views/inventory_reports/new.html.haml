@@ -9,15 +9,19 @@
 .new_inventory_box
   %table
     %tr
-      %td= I18n.t("activerecord.attributes.sku")
+      %td{ :style => "width: 300px; text-align: right;" }= I18n.t("activerecord.attributes.sku")
       %td= text_field_tag 'inventory_sku'
     %tr
-      %td
-      %td
-        #inventory_item_name &nbsp;
-        #inventory_item_sku &nbsp;
+      %td{ :style => "width: 300px; text-align: right;" }== #{ I18n.t("activerecord.attributes.name") }
+      %td#inventory_item_name &nbsp;
     %tr
-      %td= I18n.t("activerecord.attributes.quantity")
+      %td{ :style => "width: 300px; text-align: right;" }== #{ I18n.t("activerecord.attributes.sku") }
+      %td#inventory_item_sku &nbsp;
+    %tr
+      %td{ :style => "width: 300px; text-align: right;" }== #{ I18n.t("items.inventory_report.current_quantity") }
+      %td#inventory_item_current_quantity &nbsp;
+    %tr
+      %td{ :style => "width: 300px; text-align: right;" }= I18n.t("items.inventory_report.add_quantity")
       %td= text_field_tag 'inventory_quantity'
     %tr
       %td

@@ -370,6 +370,7 @@ cn:
     update_location: 更新位置
     update_real_quantity: 更新實際數量
     users: users
+    action_apply_to_area: Apply this action to
   helpers:
     select:
       prompt: 請選擇
@@ -415,6 +416,8 @@ cn:
       only_for_tobacco_stores: 此功能只有在煙草店. 煙草項目現在將被創建和更新. 這一行動將需要大約20分鐘. 你真的確定要繼續嗎?
       report: Report
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: No Category
       price: 售價
       subtotal_purchase_price: 小計購買價格
@@ -970,6 +973,7 @@ cn:
       to: 至
       top: 頂部
       waiting: 等候...
+      xor: OR
     sticky_ticket: 黏標籤
     stock_locations: 貨物位置
     subtotal: 小計
@@ -979,6 +983,8 @@ cn:
     username: 用戶名
     vendor: 供應商
     wholesaler_refresh: 取批發商更新. 這可能需要幾分鐘.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: 加入訂單
     always: 總是

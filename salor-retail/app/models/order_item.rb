@@ -541,7 +541,7 @@ class OrderItem < ActiveRecord::Base
       tests << {:model=>"OrderItem", :id=>self.id, :t=>type, :m=>msg, :s=>should, :a=>actual} if pass == false
     end
     
-    if self.is_buyback == nil
+    if self.is_buyback == nil and self.behavior != "gift_card"
       should = self.total_cents.abs
       actual = self.total_cents
       pass = should == actual

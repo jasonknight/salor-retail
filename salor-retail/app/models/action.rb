@@ -106,6 +106,19 @@ class Action < ActiveRecord::Base
     self.model = self.vendor.categories.find_by_id(id)
   end
 
+  def location_id
+    if self.model.class == Location then
+      return self.model.id
+    else
+      return nil
+    end
+  end
+
+  def location_id=(id)
+    return if id.blank?
+    self.model = self.vendor.locations.find_by_id(id)
+  end
+
   def sku
     if self.model and self.model.class == Item
       return self.model.sku
@@ -142,6 +155,12 @@ class Action < ActiveRecord::Base
         end
       end
       
+      if base_item.location then
+        base_item.location.actions.where(["whento = ? or whento = 'always'",act]).visible.each do |action|
+          redraw_all_pos_items = Action.apply_action(action, item, act)
+        end
+      end
+      
     else
       the_vendor.actions.visible.where(:model_type => 'Vendor', :model_id => the_vendor.id).where(["whento = ? or whento = 'always'",act]).each do |action|
         redraw_all_pos_items = action.execute_script(item)
@@ -151,6 +170,7 @@ class Action < ActiveRecord::Base
   end
   
   def execute_script(item, act)
+
     return item if self.js_code.nil?
     the_user = User.find_by_id($USERID)
     if item.kind_of? ActiveRecord::Base and item.class != Vendor then
@@ -166,7 +186,7 @@ class Action < ActiveRecord::Base
     # have to do this to prevent access to the object from inside JS
     # but we want to be able to access it from other parts of the code
     secret = Digest::SHA2.hexdigest(the_user.encrypted_password)[0..8]
-    api = JsApi.new(self.name, act, the_vendor.company, the_vendor, the_user, secret)
+    api = JsApi.new(self.name + " Action", act, the_vendor.company, the_vendor, the_user, secret)
     api.set_object(item) # this is object that the script will operate on
     api.set_writeable(secret,false) if item.class == Vendor 
     api.evaluate_script(self.js_code)
@@ -175,6 +195,7 @@ class Action < ActiveRecord::Base
   end
   
   def self.apply_action(action, item, act)
+
     SalorBase.log_action Action, "Action.apply_action " + action.name + " action_id:#{action.id}"
     
     redraw_all_pos_items = nil
@@ -223,13 +244,23 @@ class Action < ActiveRecord::Base
         eval("item.#{action.afield} = the_value")
         item.action_applied = true
         item.save!
-        
+      
+      # Welcome to one of the most complicated bits of code in the system.
+      # The basic idea:
+
+      # The action.value is a float from 0-1.0 That represents the amount of the
+      # price to discount once the threshold action.value2 is met.
+
+      # IF This action applies to a Category or a Location, then we need to get all the
+      # order items present in that Category or Location, and Discount the LEAST expensive
+      # item.
       when :discount_after_threshold
         SalorBase.log_action Action,"[Discount after threshold]: called"
-        
-        if action.model.class == Category
+
+        if action.model.class == Category or action.model.class == Location then
           SalorBase.log_action Action,"[Discount after threshold]: Is a category discount"
-          items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id)
+          items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id) if action.model.class == Category
+          items_in_cat = item.order.order_items.visible.where(:category_id => action.model.id) if action.model.class == Location
           return if items_in_cat.blank?
           total_quantity = items_in_cat.sum(:quantity)
           SalorBase.log_action Action,"[Discount after threshold]: Total quantity is #{ total_quantity }"
@@ -279,6 +310,10 @@ class Action < ActiveRecord::Base
           SalorBase.log_action Action,"[Discount after threshold]: Is regular"
           minimum_price = item.price_cents
           num_discountables = (item.quantity / action.value2).floor
+          minimum_price_item = item
+          minimum_price_item.coupon_amount_cents = action.value * num_discountables * minimum_price_item.price_cents
+          minimum_price_item.action_applied = true
+          minimum_price_item.calculate_totals
         end
         
 

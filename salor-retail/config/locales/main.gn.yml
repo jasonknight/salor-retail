@@ -16,7 +16,7 @@ gn:
       auto_drop: Auto-Buchung Tagesbeginn
       bank_machine_path: Bankomat
       base_price: Betrag
-      behavior: Verhalten
+      behavior: Dann
       body: Körper
       buyback_price: Pfandbetrag
       calculate_part_price: Setpreis berechnen
@@ -215,7 +215,7 @@ gn:
       weigh_compulsory: Wiegepflicht
       weight: Gewicht
       when: Wenn
-      whento: When
+      whento: Wenn
       width: Breite
     models:
       action:
@@ -372,6 +372,7 @@ gn:
     update_location: Lagerort aktualisieren
     update_real_quantity: Tatsächliche Menge aktualisieren
     users: Angestellte
+    action_apply_to_area: Aktion anwenden auf
   helpers:
     select:
       prompt: Bitte auswählen
@@ -422,6 +423,8 @@ gn:
         Sind Sie wirklich sicher, dass Sie fortfahren möchten?
       report: Bericht
     inventory_report:
+      add_quantity: addiere
+      current_quantity: Menge gezählt
       no_category: Keine Kategorie
       price: Verkaufspreis
       subtotal_purchase_price: Gesamtsumme Einkaufspreis
@@ -1002,6 +1005,7 @@ gn:
       to: An
       top: Hinauf
       waiting: Waiting...
+      xor: ODER
     sticky_ticket: Klebeetikett
     stock_locations: Lager
     subtotal: Gesamt
@@ -1012,6 +1016,8 @@ gn:
     vendor: Filiale
     wholesaler_refresh: Großhändlerdaten werden aktualisiert. Dies kann einige Minuten
       dauern.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: beim Verkauf
     always: immer

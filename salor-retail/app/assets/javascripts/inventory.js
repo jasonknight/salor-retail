@@ -18,7 +18,7 @@ sr.fn.inventory = {
   
   fetch_json: function(sku) {
     $.ajax({
-      url: "/items/inventory_json?sku=" + $("#inventory_sku").val(),
+      url: "/inventory_reports/inventory_json?sku=" + $("#inventory_sku").val(),
       dataType: 'json',
       success: sr.fn.inventory.fetch_json_success
     });
@@ -30,19 +30,19 @@ sr.fn.inventory = {
       $('#inventory_sku').val('');
       $('#inventory_item_name').html(data.name);
       $('#inventory_item_sku').html(data.sku);
-      //$('#inventory_item_name').effect('highlight');
-      //$('#inventory_item_sku').effect('highlight');
-      $('#inventory_quantity').val(data.quantity)
-      $('#inventory_quantity').select();
+      $('#inventory_item_current_quantity').html(data.real_quantity);
+      $('#inventory_quantity').focus();
     } else {
       $('#inventory_item_name').html("---");
+      $('#inventory_item_sku').html("---");
+      $('#inventory_item_current_quantity').html("---");
       $('#inventory_sku').focus();
     }
   },
   
   update_real_quantity: function(sku, quantity) {
     $.ajax({
-      url: "/items/update_real_quantity?sku=" + sku + "&real_quantity=" + quantity,
+      url: "/inventory_reports/update_real_quantity?sku=" + sku + "&real_quantity=" + quantity,
       dataType: 'json',
       success: sr.fn.inventory.update_real_quantity_success
     });
@@ -54,6 +54,7 @@ sr.fn.inventory = {
       $('#inventory_sku').val('');
       $('#inventory_item_name').html('&nbsp;');
       $('#inventory_item_sku').html('&nbsp;');
+      $('#inventory_item_current_quantity').html('&nbsp;');
       $('#inventory_sku').focus();
       $('#inventory_msg').html('✓');
       $('#inventory_msg').fadeIn(1000, function() {
@@ -71,7 +72,7 @@ sr.fn.inventory = {
       sr.fn.debug.ajaxLog({
         action_taken:'confirmed_create_inventory_report_dialog'
       });
-      window.location = '/items/create_inventory_report';
+      window.location = '/inventory_reports/create_inventory_report';
     });
     dialog.append(okbutton);
   }

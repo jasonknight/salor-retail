@@ -132,7 +132,7 @@ class Item < ActiveRecord::Base
     return if child_item.nil?
     
     c_id = child_item.id
-    items_which_have_this_child = self.vendor.items.visible.where("sku != '#{ self.sku }'").where(:child_id => c_id)
+    items_which_have_this_child = self.vendor.items.visible.where("sku != '#{ self.sku_was }'").where(:child_id => c_id)
     if items_which_have_this_child.any?
       info = items_which_have_this_child.collect {|i| [i.id, i.sku] }
       errors.add(:child_sku, "items #{ info.inspect } already have this child #{ self.child_sku }")
@@ -226,7 +226,11 @@ class Item < ActiveRecord::Base
   end
   
     def self.csv_headers
-    return [:class,:name,:sku,:price,:quantity,:quantity_sold,:tax_profile_name,:tax_profile_amount,:category_name,:location_name]
+    return [
+                :class, :name, :sku, :price, :quantity, :behavior, 
+                :child_sku, :tax_profile_name, :tax_profile_amount, 
+                :category_name, :location_name
+    ]
   end
   # ----- end CSV methods
 
@@ -271,6 +275,14 @@ class Item < ActiveRecord::Base
   
   def cache_behavior
     write_attribute :behavior, self.vendor.item_types.visible.find_by_id(self.item_type_id).behavior
+  end
+
+  def behavior=(b)
+    it = self.vendor.item_types.visible.find_by_behavior(b)
+    if it then
+      self.item_type = it
+      write_attribute :behavior, it.behavior
+    end
   end
   
   def parent_sku
@@ -362,7 +374,7 @@ class Item < ActiveRecord::Base
   end
   
   def tax_profile_amount=(amnt)
-    tp = self.vendor.tax_profiles.visible.find_by_value(SalorBase.to_float(amnt))
+    tp = self.vendor.tax_profiles.visible.find_by_value(SalorBase.string_to_float(amnt))
     if tp then
       self.tax_profile = tp
     end

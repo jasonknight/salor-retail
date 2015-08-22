@@ -28,7 +28,7 @@ sr.fn.focus.setup = function() {
     }
     
     if (sr.data.session.params.action == 'index') {
-      $("#generic_search_input").focus();
+      $("#generic_search_input").select();
     }
   } 
 }

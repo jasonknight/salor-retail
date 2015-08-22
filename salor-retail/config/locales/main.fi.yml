@@ -372,6 +372,7 @@ fi:
     update_location: päivitä sijaintipaikka
     update_real_quantity: päivitä todellinen määrä
     users: käyttäjät
+    action_apply_to_area: Apply this action to
   helpers:
     select:
       prompt: Valitse
@@ -421,6 +422,8 @@ fi:
         jatkaa?
       report: Raportti
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: Ei kategoriaa
       price: Myyntihinta
       subtotal_purchase_price: Ostohinnan välisumma
@@ -994,6 +997,7 @@ fi:
       to: asti
       top: yläosa
       waiting: odottaa...
+      xor: OR
     sticky_ticket: Tarra
     stock_locations: varastojen sijaintipaikat
     subtotal: välisumma
@@ -1003,6 +1007,8 @@ fi:
     username: käyttäjätunnus
     vendor: myyntipiste
     wholesaler_refresh: Haetaan tukkuliikepäivityksiä. Tämä voi kestää useita minuutteja.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: lisättäessä tilaukseen
     always: aina

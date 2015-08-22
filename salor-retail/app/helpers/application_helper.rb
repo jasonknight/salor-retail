@@ -172,6 +172,7 @@ module ApplicationHelper
       :transaction_tag => 'tag',
       :sale_type => 'pad',
       :save_download => 'save_download',
+      :save_upload => 'save_upload',
       :report => 'edit_pad'
     }
     return icons

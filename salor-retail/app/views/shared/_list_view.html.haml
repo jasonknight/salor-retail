@@ -5,7 +5,14 @@
         = link_to(salor_icon(:add,{},32),"/#{klass.table_name}/new")
         %br
         %span.icon-caption=I18n.t('views.single_words.new')
+      -if klass == Customer
+        .tool-icon
+          = link_to(salor_icon(:save_download,{},32),"/customers/download?page=#{params[:page]}&keywords=#{params[:keywords]}&order_by=#{params[:order_by]}")
+          %br
+          %span.icon-caption=I18n.t('menu.download')
 
+%br
+= render :partial => "shared/generic_search_wide", :locals => {:keywords => params[:keywords]} 
 - if collection.respond_to?(:current_page)
   %div.pagination= paginate collection if collection
 
@@ -50,6 +57,7 @@
         %td{:align=>:center, :width=>"64px"}=link_to salor_icon(:delete,{},32), "/#{entry.class.table_name}/#{entry.id}", :confirm => 'Are you sure?', :method => :delete 
       - else
         %td
-
+- if klass == Customer 
+  =render(:partial => "shared/dropzone", :locals => { :action => "/customers/upload"})
 - if collection.respond_to?(:current_page)
   %div.pagination= paginate collection

@@ -2,54 +2,94 @@
   %table{ :width => "80%", :align => "center"} 
     - if @action.errors.any? 
       %tr
-        %td{:colspan => 2}
+        %td
           #error_explanation
             %h2= I18n.t("activerecord.errors.template.header.other", :count => @action.errors.count,:model => t("activerecord.models.action.one"))
             - @action.errors.full_messages.each do |msg|
               %p= msg
     %tr
-      %td{:colspan => 2}
+      %td
         %h2= @action.model.name if @action.model
         %hr
     %tr
-      %td{ :colspan => 2, :align => :right }= f.submit
+      %td{  :align => :right }= f.submit
     %tr
-      %td= f.label :name
-      %td= f.text_field :name
-    %tr
-      %td= f.label :sku
-      %td= f.text_field :sku
-    %tr
-      %td= f.label :category_id
-      %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
-    %tr
-      %td= f.label :vendor_id
-      %td= f.select :vendor_model, options_for_select(@current_company.vendors.visible.collect{ |v| [v.name,"Vendor:#{v.id}"] },@action.vendor_model), :include_blank => true 
-    %tr
-      %td= f.label :whento
-      %td= f.select :whento, Action.when_list
-    %tr
-      %td= f.label :behavior
-      %td= f.select :behavior, Action.behavior_list
-    %tr
-      %td= f.label :afield
-      %td= f.select :afield, Action.afield_list
-    %tr
-      %td= f.label :value
-      %td= f.text_field :value, :value => salor_number_with_delimiter(f.object.value)
+      %td
+        %p
+          =f.label :name
+          %br
+          =f.text_field :name
 
     %tr
-      %td= f.label :field2
-      %td= f.select :field2, Action.afield_list
-    %tr
-      %td= f.label :value2
-      %td= f.text_field :value2
+      %td
+        %table
+          %tr
+            %td{:colspan => 11}
+              %h3=I18n.t("headings.action_apply_to_area")
+               
+                
+          %tr
+            %td SKU
+            %td= f.text_field :sku
+            
+            %td=I18n.t("views.single_words.xor")
+            
+            %td= Category.model_name.human
+            %td= f.collection_select :category_id, @action.vendor.categories.visible, :id, :name, :include_blank => true 
+            
+            %td=I18n.t("views.single_words.xor")
+            
+            %td= Location.model_name.human
+            %td= f.collection_select :location_id, @action.vendor.locations.visible, :id, :name, :include_blank => true 
+            
+            %td=I18n.t("views.single_words.xor")
+            
+            %td= Vendor.model_name.human
+            %td= f.select :vendor_model, options_for_select(@current_company.vendors.visible.collect{ |v| [v.name,"Vendor:#{v.id}"] },@action.vendor_model), :include_blank => true 
 
     %tr
-      %td= f.label :js_code
-      %td= f.text_area :js_code, :cols => 80, :rows => 12
+      %td
+        %table
+          %tr
+            %td= f.label :whento
+            %td= f.select :whento, Action.when_list
+            
+            %td= f.label :behavior
+            %td= f.select :behavior, Action.behavior_list
     %tr
-      %td{ :colspan => 2, :align => :right }= f.submit
+      %td
+        %table
+          %tr
+            %td
+              %p
+                = f.label :afield
+                %br
+                = f.select :afield, Action.afield_list
+
+            %td
+              %p
+                = f.label :value
+                %br
+                = f.text_field :value, :value => salor_number_with_delimiter(f.object.value)
+            %td
+              %p
+                = f.label :field2
+                %br
+                = f.select :field2, Action.afield_list
+            %td
+              %p
+                = f.label :value2
+                %br
+                = f.text_field :value2,:value => salor_number_with_delimiter(f.object.value2)
+      
+    %tr
+      %td
+        %p
+          = f.label :js_code
+          %br
+          = f.text_area :js_code, :cols => 55, :rows => 12
+    %tr
+      %td{  :align => :right }= f.submit
 
 :javascript
   $(function () {

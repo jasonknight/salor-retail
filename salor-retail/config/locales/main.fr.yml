@@ -373,6 +373,7 @@ fr:
     update_location: mettre à jour emplacement
     update_real_quantity: Quantité réelle
     users: utilisateurs
+    action_apply_to_area: Apply this action to
   helpers:
     select:
       prompt: Choisissez
@@ -423,6 +424,8 @@ fr:
         peut prendre jusau'à 20 minutes. Êtes-vous sûr de vouloir continuer ?
       report: Rapport
     inventory_report:
+      add_quantity: add quantity
+      current_quantity: Current quantity
       no_category: Pas de catégorie
       price: Prix de vente
       subtotal_purchase_price: Sous-total du prix d'achat
@@ -1006,6 +1009,7 @@ fr:
       to: au
       top: Haut de la page
       waiting: En attente....
+      xor: OR
     sticky_ticket: Etiquette
     stock_locations: Emplacements de stock
     subtotal: Sous-total
@@ -1016,6 +1020,8 @@ fr:
     vendor: Vendeur
     wholesaler_refresh: Recherche des mises à jour du distributeur. Ceci peut prendre
       quelques minutes.
+    drop_files_here: Drop files here or click to upload.
+    drop_files_only_csv: (Only .csv in the salor format accepted)
   when_list:
     add_to_order: Lors de l'ajout à une commande
     always: Toujours

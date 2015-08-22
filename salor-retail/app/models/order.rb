@@ -249,6 +249,10 @@ class Order < ActiveRecord::Base
     if params[:sku].include?('.') or params[:sku].include?(',')
       log_action "Setting no_inc since it is a price-only item."
       oi.no_inc = true
+      if params[:sku][0] == '-' then
+        #it's a negative price item, so set buyback
+        oi.is_buyback = true
+      end
     end
     oi.no_inc ||= params[:no_inc]
     log_action "no_inc is: #{oi.no_inc.inspect}"
@@ -324,11 +328,11 @@ class Order < ActiveRecord::Base
     
     # if nothing existing has been found, create a new item
     i = Item.new
+    i.vendor = self.vendor
+    i.company = self.company
     i.item_type = self.vendor.item_types.find_by_behavior('normal')
     i.behavior = i.item_type.behavior
     i.tax_profile = self.vendor.tax_profiles.visible.where(:default => true).first
-    i.vendor = self.vendor
-    i.company = self.company
     i.currency = self.vendor.currency
     i.created_by = -100 # magic number for created by POS screen
     i.name = sku
@@ -338,6 +342,11 @@ class Order < ActiveRecord::Base
       timestamp = Time.now.strftime("%y%m%d%H%M%S%L")
       i.sku = "DMY" + timestamp
       i.price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
+      if sku[0] == '-' then
+        #it's a negative price item, so set buyback
+        i.buy_price_cents = self.string_to_float(pm[1], :locale => self.vendor.region) * 100
+        i.tax_profile = self.vendor.tax_profiles.visible.where(:value => 0).first
+      end
     else
       # $MESSAGES[:prompts] << I18n.t("views.notice.item_not_existing")
       i.sku = sku
@@ -633,13 +642,26 @@ class Order < ActiveRecord::Base
     tax_format = "   %s: %2i%% %7.2f %7.2f %8.2f\n"
 
     self.order_items.visible.each do |oi|
-      if oi.item
-        name = oi.item.get_translated_name(locale)
-      else
-        # fix for orders where the item was deleted (compatibility with old system)
-        name = ''
-      end
+      it = oi.item
+      name = it.get_translated_name(locale)
       taxletter = oi.tax_profile.letter
+      
+      oi_price = oi.price
+      oi_quantity = oi.quantity
+      
+      if ["GR", "DG"].include? it.sales_metric
+        # this is just for display purposes on customer screen and receipt
+        # oi.price and oi.item.price is always per KG
+        if it.sales_metric == "GR"
+          factor = 1000
+        elsif it.sales_metric == "DG"
+          factor = 10
+        end
+        oi_price /= factor
+        oi_quantity *= factor
+        name += " #{ it.sales_metric }"
+      end
+      
       
 
       # --- NORMAL ITEMS ---
@@ -649,15 +671,15 @@ class Order < ActiveRecord::Base
           list_of_items += integer_format % [
             taxletter,
             name,
-            oi.price,
-            oi.quantity,
+            oi_price,
+            oi_quantity,
             oi.total
           ]
           list_of_items_raw << to_list_of_items_raw([
                                                      taxletter,
                                                      name,
-                                                     oi.price,
-                                                     oi.quantity,
+                                                     oi_price,
+                                                     oi_quantity,
                                                      oi.total,
                                                      'integer'
                                                     ])
@@ -666,15 +688,15 @@ class Order < ActiveRecord::Base
           list_of_items += float_format % [
             taxletter,
             name,
-            oi.price,
-            oi.quantity,
+            oi_price,
+            oi_quantity,
             oi.total
           ]
           list_of_items_raw << to_list_of_items_raw([
                                                      taxletter,
                                                      name,
-                                                     oi.price,
-                                                     oi.quantity,
+                                                     oi_price,
+                                                     oi_quantity,
                                                      oi.total,
                                                      'float'
                                                     ])
