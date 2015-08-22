@@ -63,7 +63,9 @@ class OrdersController < ApplicationController
     
     # get the user's current order
     @current_order = @current_vendor.orders.visible.where(:completed_at => nil).find_by_id(@current_user.current_order_id)
-
+    # Get the last completed order, period, not scoped by user.
+    # This is so that the API can notify the website.
+    @last_completed_order = @current_vendor.orders.visible.where('completed_at IS NOT NULL').order('completed_at DESC').first
     # create a new order if the previous fails
     unless @current_order
       @current_order = Order.new

@@ -1,5 +1,7 @@
 <script type="text/javascript">
   sr.data.pos_core.order = <%= raw @current_order.to_json %>;
+  sr.data.pos_core.last_completed_order = <%= raw @last_completed_order.as_plugin_hash.to_json %>;
+
   <%
     items = []
     @current_order.order_items.visible.each do |oi|

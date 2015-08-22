@@ -12,3 +12,4 @@ sr.data.pos_core.order.total = <%= @old_order.total %>;
 $('#payment_amount_0').select();
 <%= render :partial => '/shared/messagesjs.js' %>
 sr.fn.messages.displayMessages();
+sr.data.pos_core.last_completed_order = <%= raw @old_order.as_plugin_hash.to_json %>;

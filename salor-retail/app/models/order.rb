@@ -78,6 +78,36 @@ class Order < ActiveRecord::Base
       return super
     end
   end
+  def as_plugin_hash
+    o = {}
+    [:id,:total_cents,:lc_points,:is_proforma].each do |a|
+      o[a] = self.send(a)
+    end
+    #currency info for the order and order items, 
+    # lambda is an anon function, so instead of copying
+    # it into loops, we just put it here and reuse.
+    cgrabber = lambda do |keys,src|
+      dest = {} 
+      keys.each do |a|
+        dest[a] = src.send(a)
+      end
+      return dest
+    end
+    
+    o[:currency_info] = cgrabber.call([:decimal_mark,:id,:iso_code,:name,:symbol],self.total.currency)
+    
+    o[:order_items] = []
+
+    self.order_items.visible.each do |oi|
+      toi = {}
+      [:id, :total_cents].each {|a| toi[a] = oi.send(a)}
+      toi[:currency_info] = cgrabber.call([:decimal_mark,:id,:iso_code,:name,:symbol],oi.total.currency)
+      toi[:item] = cgrabber.call([:price_cents,:quantity,:name,:id,:category_id,:sku,:location_id,:description,:gift_card_amount_cents,:item_type_id, :created_at,:currency, :activated, :active,:hidden],oi.item)
+      toi[:item][:category] = cgrabber.call([:name,:id], oi.item.category)
+      o[:order_items].push(toi)
+    end
+    return o
+  end
   
   def as_csv
     return attributes
