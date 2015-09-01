@@ -89,7 +89,7 @@ class Order < ActiveRecord::Base
     cgrabber = lambda do |keys,src|
       dest = {} 
       keys.each do |a|
-        dest[a] = src.send(a)
+        dest[a] = src.send(a) if src.respond_to? a
       end
       return dest
     end
