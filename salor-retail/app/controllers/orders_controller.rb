@@ -66,6 +66,9 @@ class OrdersController < ApplicationController
     # Get the last completed order, period, not scoped by user.
     # This is so that the API can notify the website.
     @last_completed_order = @current_vendor.orders.visible.where('completed_at IS NOT NULL').order('completed_at DESC').first
+    if @last_completed_order.nil? then
+      @last_completed_order = Order.new
+    end
     # create a new order if the previous fails
     unless @current_order
       @current_order = Order.new
