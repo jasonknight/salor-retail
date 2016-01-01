@@ -49,7 +49,7 @@ In this case we are working with a Debian based distro, for rpm based distros, y
 
 Install Ruby 1.9.2
 
-    rvm install 2.2.
+    rvm install 2.2
     rvm use 1.9.2 --default
 
 If you are installing another version of ruby, you may run into a problem with bundler not having the
