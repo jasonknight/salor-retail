@@ -20,7 +20,7 @@ gem 'haml', '4.0.0' # wheezy's version 3.1.6 seems to be broken with sass '3.1.1
 gem 'mysql2'
 gem 'coffee-rails'
 gem 'therubyracer', '0.11.4', :require => 'v8'
-gem 'rubyzip', '0.9.9'
+gem 'rubyzip', '1.2.2'
 gem 'escper', '1.2.1'
 gem 'kaminari', '0.14.1'
 gem 'money', '5.1.1'
