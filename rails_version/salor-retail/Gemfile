@@ -16,7 +16,7 @@ gem 'serialport', '1.1.0'
 gem 'mechanize'
 
 # The following gems are already part of Debian Wheezy and DO cause a dependency to the online API of rubygems.org
-gem 'haml', '4.0.0' # wheezy's version 3.1.6 seems to be broken with sass '3.1.19'
+gem 'haml', '5.0.0' # wheezy's version 3.1.6 seems to be broken with sass '3.1.19'
 gem 'mysql2'
 gem 'coffee-rails'
 gem 'therubyracer', '0.11.4', :require => 'v8'
