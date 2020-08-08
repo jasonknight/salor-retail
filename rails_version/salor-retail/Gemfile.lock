@@ -67,7 +67,8 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    kramdown (0.13.7)
+    kramdown (2.3.0)
+      rexml
     libv8 (3.11.8.17)
     mail (2.4.4)
       i18n (>= 0.4.0)
@@ -122,6 +123,7 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
+    rexml (3.2.4)
     rmagick (2.13.4)
     rubyzip (0.9.9)
     sass (3.1.19)
@@ -163,7 +165,7 @@ DEPENDENCIES
   jquery-rails (= 2.0.2)
   json (= 1.7.3)
   kaminari (= 0.14.1)
-  kramdown (= 0.13.7)
+  kramdown (= 2.3.0)
   mechanize
   money (= 5.1.1)
   money-rails (= 0.8.1)
